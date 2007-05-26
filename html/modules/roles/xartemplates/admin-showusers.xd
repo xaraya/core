@@ -221,8 +221,8 @@
     <xar:else />
         <form method="post" action="&xar-modurl-roles-admin-updatestate;" name="state">
             <div class="xar-form-input-wrapper">
-                <label for="status" title="#xarML('TITLE')#" class="xar-form-label">
-                    <xar:mlstring>Change State Of Selected Users:</xar:mlstring>
+                <label for="status" title="#xarML('Change the state of the users who have been selected below')#" class="xar-form-label" style="width: 200px">
+                    <xar:mlstring>Change state of selected users:</xar:mlstring>
                 </label>
                 <select name="status" id="status" class="xar-margin-thickright">
                     <option value="#$stateinactive#"><xar:mlstring>Inactive</xar:mlstring></option>
@@ -271,7 +271,7 @@
                             <xar:mlstring>State</xar:mlstring>
                         </a>
                     </th>
-                    <th colspan="2">
+                    <th colspan="2" style="text-align: center">
                         <xar:mlstring>Action</xar:mlstring>
                     </th>
                 </tr>
@@ -350,11 +350,11 @@
     <!-- always show the new user link -->
     <p>
       <a href="&xar-modurl-roles-admin-new;&amp;ptype=0&amp;pparentid=#$groupuid#" title="#xarML('Add a new user')#">
-        <xar:mlstring>Add a New User to this Group</xar:mlstring>
+        <xar:mlstring>Add a new user to this group</xar:mlstring>
       </a>
       |
       <a href="&xar-modurl-roles-admin-createmail;">
-        <xar:mlstring>Email Users In This Group</xar:mlstring>
+        <xar:mlstring>Email users in this group</xar:mlstring>
       </a>
     </p>
 </div>
