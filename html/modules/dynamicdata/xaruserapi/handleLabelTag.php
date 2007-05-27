@@ -22,21 +22,45 @@
  */
 function dynamicdata_userapi_handleLabelTag($args)
 {
+    // remove BL handler stuff
+    if (isset($args['handler_type'])) {
+        unset($args['handler_type']);
+    }
+    if (isset($args['property'])) {
+        $property  = $args['property'];
+        unset($args['property']);
+    }
+    if (isset($args['object'])) {
+        $object  = $args['object'];
+        unset($args['object']);
+    }
+
+    $parts = array();
+    foreach ($args as $key => $val) {
+        if ($key == 'label') $key = 'for';
+        if (is_numeric($val) || substr($val,0,1) == '$') {
+            $parts[] = "'$key' => ".$val;
+        } else {
+            $parts[] = "'$key' => '".$val."'";
+        }
+    }
+    $pargs = 'array('.join(', ',$parts).')';
+
     if (!empty($args['object'])) {
-        return 'echo xarVarPrepForDisplay('.$args['object'].'->label); ';
-    } elseif (!empty($args['property'])) {
+        return 'echo xarVarPrepForDisplay('.$object.'->label); ';
+    } elseif (!empty($property)) {
         if (!empty($args['label'])) {
             if (substr($args['label'],0,1) == '$') {
-                return 'echo '.$args['property'].'->showLabel(array(\'for\' => '.$args['label'].')); ';
+                return 'echo '.$property.'->showLabel(' . $pargs . '); ';
             } else {
-                return 'echo '.$args['property'].'->showLabel(array(\'for\' => \''.$args['label'].'\')); ';
+                return 'echo '.$property.'->showLabel(' . $pargs . '); ';
             }
         } else {
-            return 'echo xarVarPrepForDisplay('.$args['property'].'->label); ';
+            return 'echo xarVarPrepForDisplay('.$property.'->label); ';
         }
     } elseif(isset($args['label'])) {
         // Plain label, we want to use the template nevertheless
-        $argsstring = "array('label'=>'".$args['label']."'";
+        $argsstring = "array('label'=>'".$args['label']."''title'=>'".$args['title'];
         if(isset($args['for'])){
             $argsstring.=",'for'=>'".$args['for']."'";
         }
