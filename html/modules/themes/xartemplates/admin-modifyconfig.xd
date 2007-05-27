@@ -27,7 +27,8 @@
                         Default Theme Directory:
                     </xar:mlstring>
                 </label>
-                <input type="text" id="themedir" name="themedir" value="#xarModVars::get('themes', 'themesdirectory')#" maxlength="100" class="xar-form-textlong" />
+                <xar:set name="value">xarModVars::get('themes', 'themesdirectory')</xar:set>
+                <input type="text" id="themedir" name="themedir" value="#$value#" maxlength="100" class="xar-form-textlong" />
             </div>
             <div class="xar-form-input-wrapper-after">
                 <xar:data-input type="checkbox" name="dashboard" checked="$dashboard" />
