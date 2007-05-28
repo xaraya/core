@@ -185,7 +185,8 @@
                                 Alt. Page Template Name:
                             </xar:mlstring>
                         </label>
-                        <input type="text" id="alternatepagetemplatename" name="alternatepagetemplatename" value="#xarModGetVar('base', 'AlternatePageTemplateName')#" class="xar-form-textlong" />
+                    <xar:set name="value">xarModVars::get('base', 'AlternatePageTemplateName')</xar:set>
+                        <input type="text" id="alternatepagetemplatename" name="alternatepagetemplatename" value="#$value#" class="xar-form-textlong" />
                     </div>
                 </xar:if>
                 <div class="xar-form-input-wrapper">
@@ -209,7 +210,8 @@
                             Default Module Function:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="defaultfunction" name="defaultfunction" value="#xarModVars::get('modules', 'defaultmodulefunction')#" maxlength="100" class="xar-form-textlong" />
+                    <xar:set name="value">xarModVars::get('modules', 'defaultfunction')</xar:set>
+                    <input type="text" id="defaultfunction" name="defaultfunction" value="#$value#" maxlength="100" class="xar-form-textlong" />
                 </div>
            </fieldset>
            <fieldset>
