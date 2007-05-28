@@ -17,6 +17,8 @@ interface IExceptionHandlers
 
 class ExceptionHandlers extends Object implements IExceptionHandlers
 {
+    private static $data = array();
+
     /**
      * Default Exception handler for unhandled exceptions
      *
@@ -31,6 +33,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
      * @todo Get rid of the redundant parts
      * @return void
      */
+    // Handler for displaying default
     public static function defaulthandler(Exception $e)
     {
         // Make an attempt to render the page, hoping we have everything in place still
@@ -40,23 +43,20 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
         //          in the bone handler
         try {
             // Try to get the full path location out of the trace
-            $trace = str_replace(sys::root(),'',$e->getTraceAsString());
-            $data = array('major'     => 'MAJOR TBD (Code was: '. $e->getCode().')',
-                          'type'      => get_class($e), // consider stripping of 'Exception'
-                          'title'     => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
-                          'short'     => htmlspecialchars($e->getMessage()),
-                          'long'      => 'LONG msg TBD',
-                          'hint'      => (method_exists($e,'getHint'))? htmlspecialchars($e->getHint()) : 'No hint available',
-                          'stack'     => htmlspecialchars($trace),
-                          'product'   => 'Product TBD',
-                          'component' => 'Component TBD');
+            self::$data = array_merge( self::$data,
+                                  array(
+                                  'major'     => 'MAJOR TBD (Code was: '. $e->getCode().')',
+                                  'type'      => get_class($e), // consider stripping of 'Exception'
+                                  'title'     => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
+                                  'short'     => htmlspecialchars($e->getMessage()),)
+                                );
             // If we have em, use em
             if(function_exists('xarTplGetThemeDir') && function_exists('xarTplFile')) {
                 $theme_dir = xarTplGetThemeDir(); $template="systemerror";
                 if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
-                    $msg = xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', $data);
+                    $msg = xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', self::$data);
                 } else {
-                    $msg = xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', $data);
+                    $msg = xarTplFile('modules/base/xartemplates/message-' . $template . '.xd', self::$data);
                 }
                 echo xarTpl_renderPage($msg);
             } else {
@@ -67,6 +67,21 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
             // Oh well, pick up the bones
             ExceptionHandlers::bone($e);
         }
+    }
+
+    // Handler with more information, for instance for the designated site admin
+    public static function debughandler(Exception $e)
+    {
+        $trace = str_replace(sys::root(),'',$e->getTraceAsString());
+        self::$data = array_merge( self::$data,
+                              array(
+                              'long'      => 'LONG msg TBD',
+                              'hint'      => (method_exists($e,'getHint'))? htmlspecialchars($e->getHint()) : 'No hint available',
+                              'stack'     => htmlspecialchars($trace),
+                              'product'   => 'Product TBD',
+                              'component' => 'Component TBD')
+                            );
+        self::defaulthandler($e);
     }
 
     // Lowest level handler, should always work, no assumptions whatsoever

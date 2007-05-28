@@ -22,21 +22,21 @@
 
     <p>#$short#</p>
 
-    <xar:if condition = "$long ne ''">
+    <xar:if condition = "isset($long) and $long ne ''">
         <h3>
             <xar:mlstring>Explanation:</xar:mlstring>
         </h3>
 
         <p>#$long#</p>
     </xar:if>
-    <xar:if condition = "$hint ne ''">
+    <xar:if condition = "isset($hint) and $hint ne ''">
         <h3>
             <xar:mlstring>Further Information:</xar:mlstring>
         </h3>
 
         <p>#$hint#</p>
     </xar:if>
-    <xar:if condition = "$stack ne ''">
+    <xar:if condition = "isset($stack) and $stack ne ''">
         <h3>
             <xar:mlstring>Stack:</xar:mlstring>
         </h3>
