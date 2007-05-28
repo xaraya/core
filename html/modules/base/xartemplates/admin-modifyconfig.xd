@@ -210,7 +210,7 @@
                             Default Module Function:
                         </xar:mlstring>
                     </label>
-                    <xar:set name="value">xarModVars::get('modules', 'defaultfunction')</xar:set>
+                    <xar:set name="value">xarModVars::get('modules', 'defaultmodulefunction')</xar:set>
                     <input type="text" id="defaultfunction" name="defaultfunction" value="#$value#" maxlength="100" class="xar-form-textlong" />
                 </div>
            </fieldset>
@@ -264,7 +264,7 @@
         </xar:set>
         <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
             <xar:base-include-javascript module="base" filename="orderitem.js" position="head" />
-<script type="text/javascript">
+            <script type="text/javascript">
                 xar_base_reorder_warn = '#xarML('You must select the authentication module you want to move.')#';
             </script>
         </xar:if>
