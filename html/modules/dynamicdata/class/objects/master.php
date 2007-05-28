@@ -1029,8 +1029,12 @@ class DataObjectMaster extends Object
     function &getBaseAncestor()
     {
         $ancestors = $this->getAncestors();
-        $ancestors = array_shift($ancestors);
-        return $ancestors;
+        if (empty($ancestors)) {
+            $ancestor = $this->toArray(); // FIXME: this is a bit sloppy, too many elements
+        } else {
+            $ancestor = array_shift($ancestors);
+        }
+        return $ancestor;
     }
 
     /**
