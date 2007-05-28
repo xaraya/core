@@ -1,12 +1,11 @@
 <?php
 /**
- * Modify the configuration parameters
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -17,21 +16,13 @@
  */
 function dynamicdata_admin_modifyconfig()
 {
-    // Initialise the $data variable that will hold the data to be used in
-    // the blocklayout template, and get the common menu configuration - it
-    // helps if all of the module pages have a standard menu at the top to
-    // support easy navigation
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
-    // Security check
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
-    // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
 
     if (!xarModAPILoad('dynamicdata', 'user')) return;
-
-    // Get the defined property types from somewhere...
     $data['fields'] = DataPropertyMaster::getPropertyTypes();
     if (!isset($data['fields']) || $data['fields'] == false) {
         $data['fields'] = array();
@@ -55,11 +46,6 @@ function dynamicdata_admin_modifyconfig()
                             'new' => xarML('New'),
                       );
 
-    // Specify some labels and values for display
-    $data['updatebutton'] = xarVarPrepForDisplay(xarML('Update Property Types'));
-
-    // Return the template variables defined in this function
     return $data;
 }
-
 ?>
