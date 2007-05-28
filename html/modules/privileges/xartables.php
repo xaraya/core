@@ -24,11 +24,8 @@ function privileges_xartables()
     $prefix = xarDB::getPrefix();
     $tables['privileges']     = $prefix . '_privileges';
     $tables['privmembers']    = $prefix . '_privmembers';
-    $tables['roles']          = $prefix . '_roles';
-    $tables['rolemembers']    = $prefix . '_rolemembers';
     $tables['security_acl']   = $prefix . '_security_acl';
     $tables['instances']      = $prefix . '_instances';
-    //$tables['security_privsets']  = $prefix . '_security_privsets';
     $tables['security_realms']    = $prefix . '_security_realms';
     $tables['security_instances'] = $prefix . '_security_instances';
 
