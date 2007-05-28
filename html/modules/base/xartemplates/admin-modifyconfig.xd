@@ -166,7 +166,7 @@
                         <xar:set name="filter">array('UserCapable' => 1)</xar:set>
                     </xar:if>
                     <xar:set name="value">xarModVars::get('modules', 'defaultmodule')</xar:set>
-                    <xar:data-input type="module" name="defaultmodule" id="defaultmodule" filter="$filter" value="$value" validation="displayname" />
+                    <xar:data-input type="module" name="defaultmodule" id="defaultmodule" filter="$filter" value="$value" validation="name" />
                 </div>
 
                 <xar:if condition="xarModVars::get('modules', 'defaultmodule') eq xarMod::getID('base')">
