@@ -331,25 +331,24 @@ class DataProperty extends Object implements iDataProperty
     /**
      * Show the label for this property
      *
-     * @param $args['label'] label of the property (default is the current label)
-     * @param $args['for'] label id to use for this property (id, name or nothing)
+     * @param $data['label'] label of the property (default is the current label)
+     * @param $data['for'] label id to use for this property (id, name or nothing)
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showLabel(Array $args = array())
+    function showLabel(Array $data=array())
     {
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return "";
 
-        if(empty($args))
+        if(empty($data))
         {
             // old syntax was showLabel($label = null)
         }
-        elseif(is_string($args))
-            $label = $args;
-        elseif(is_array($args))
-            extract($args);
+        elseif(is_string($data))
+            $label = $data;
+        elseif(is_array($data))
+            extract($data);
 
-        $data = array();
         $data['id']    = $this->id;
         $data['name']  = $this->name;
         $data['label'] = isset($label) ? xarVarPrepForDisplay($label) : xarVarPrepForDisplay($this->label);
@@ -357,16 +356,15 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($data['module']))   $data['module']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
-
         return xarTplProperty($data['module'], $data['template'], 'label', $data);
     }
 
     /**
      * Show a hidden field for this property
      *
-     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['value'] value of the field (default is the current value)
-     * @param $args['id'] id of the field
+     * @param $data['name'] name of the field (default is 'dd_NN' with NN the property id)
+     * @param $data['value'] value of the field (default is the current value)
+     * @param $data['id'] id of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
     function showHidden(Array $data = array())
