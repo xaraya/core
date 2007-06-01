@@ -13,7 +13,7 @@
             </div>
         </xar:if>
     </xar:foreach>
-    <xar:else />
+<xar:else />
     <div class="xar-form-input-wrapper-after">
         <textarea name="#$name#" rows="8" cols="50" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
     </div>
