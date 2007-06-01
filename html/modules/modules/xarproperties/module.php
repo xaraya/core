@@ -41,7 +41,7 @@ class ModuleProperty extends SelectProperty
     {
         if (count($this->options) == 0) {
             if ($this->validation == 'name') {
-                $key = 'displayname';
+                $key = 'name';
             } elseif ($this->validation == 'regid') {
                 $key = 'regid';
             } else {
