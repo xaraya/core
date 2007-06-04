@@ -99,7 +99,6 @@ function roles_admin_testprivileges()
     $data['pmodule'] = $module;
     $data['id'] = $id;
     $data['testlabel'] = xarML('Test');
-        echo "SSS";exit;
     $data['masks'] = xarMasks::getmasks($module);
     $data['authid'] = xarSecGenAuthKey();
     return $data;
