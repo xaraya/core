@@ -16,7 +16,7 @@
  * @param $args['order'] comma-separated list of order items; default 'name'
  * @param $args['selection'] extra coonditions passed into the where-clause
  * @param $args['group'] comma-separated list of group names or IDs, or
- * @param $args['uidlist'] array of user ids
+ * @param $args['idlist'] array of user ids
  * @returns array
  * @return array of users, or false on failure
  */
@@ -44,7 +44,7 @@ function roles_userapi_getall($args)
     } else {
         $order_clause = array();
         foreach (explode(',', $order) as $order_field) {
-            if (preg_match('/^[-]?(name|uname|email|uid|state|date_reg)$/', $order_field)) {
+            if (preg_match('/^[-]?(name|uname|email|id|state|date_reg)$/', $order_field)) {
                 if (strstr($order_field, '-')) {
                     $order_clause[] = 'roletab.' . str_replace('-', '', $order_field) . ' desc';
                 } else {
@@ -62,12 +62,12 @@ function roles_userapi_getall($args)
             $group = xarModAPIFunc(
                 'roles', 'user', 'get',
                 array(
-                    (is_numeric($group) ? 'uid' : 'name') => $group,
+                    (is_numeric($group) ? 'id' : 'name') => $group,
                     'type' => ROLES_GROUPTYPE
                 )
             );
-            if (isset($group['uid']) && is_numeric($group['uid'])) {
-                $group_list[] = (int) $group['uid'];
+            if (isset($group['id']) && is_numeric($group['id'])) {
+                $group_list[] = (int) $group['id'];
             }
         }
     }
@@ -123,19 +123,19 @@ function roles_userapi_getall($args)
     }
 
     // If we aren't including anonymous in the query,
-    // then find the anonymous user's uid and add
+    // then find the anonymous user's id and add
     // a where clause to the query.
     // By default, include both 'myself' and 'anonymous'.
     if (isset($include_anonymous) && !$include_anonymous) {
         $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'anonymous'));
         $where_clause[] = 'roletab.id <> ?';
-        $bindvars[] = (int) $thisrole['uid'];
+        $bindvars[] = (int) $thisrole['id'];
     }
     if (isset($include_myself) && !$include_myself) {
 
         $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'myself'));
         $where_clause[] = 'roletab.id <> ?';
-        $bindvars[] = (int) $thisrole['uid'];
+        $bindvars[] = (int) $thisrole['id'];
     }
 
     // Return only users (not groups).
@@ -149,8 +149,8 @@ function roles_userapi_getall($args)
         $query .= ' ' . $selection;
     }
 
-    if (isset($uidlist) && is_array($uidlist) && count($uidlist) > 0) {
-        $query .= ' AND roletab.id IN (' . join(',',$uidlist) . ') ';
+    if (isset($idlist) && is_array($idlist) && count($idlist) > 0) {
+        $query .= ' AND roletab.id IN (' . join(',',$idlist) . ') ';
     }
 
     // Add the order clause.
@@ -174,11 +174,11 @@ function roles_userapi_getall($args)
     // Put users into result array
     $roles = array();
     while($result->next()) {
-        list($uid, $uname, $name, $email, $pass, $state, $date_reg) = $result->fields;
+        list($id, $uname, $name, $email, $pass, $state, $date_reg) = $result->fields;
         if (xarSecurityCheck('ReadRole', 0, 'Roles', "$uname")) {
-            if (!empty($uidlist)) {
-                $roles[$uid] = array(
-                    'uid'       => (int) $uid,
+            if (!empty($idlist)) {
+                $roles[$id] = array(
+                    'id'       => (int) $id,
                     'uname'     => $uname,
                     'name'      => $name,
                     'email'     => $email,
@@ -188,7 +188,7 @@ function roles_userapi_getall($args)
                 );
             } else {
                 $roles[] = array(
-                    'uid'       => (int) $uid,
+                    'id'       => (int) $id,
                     'uname'     => $uname,
                     'name'      => $name,
                     'email'     => $email,
@@ -199,15 +199,15 @@ function roles_userapi_getall($args)
             }
         } elseif (xarSecurityCheck('ViewRoles', 0, 'Roles', "$uname")) {
             // If we only have overview privilege, then supply more restricted information.
-            if (!empty($uidlist)) {
-                $roles[$uid] = array(
-                    'uid'       => (int) $uid,
+            if (!empty($idlist)) {
+                $roles[$id] = array(
+                    'id'       => (int) $id,
                     'name'      => $name,
                     'date_reg'  => $date_reg
                 );
             } else {
                 $roles[] = array(
-                    'uid'       => (int) $uid,
+                    'id'       => (int) $id,
                     'name'      => $name,
                     'date_reg'  => $date_reg
                 );

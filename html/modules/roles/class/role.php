@@ -331,14 +331,14 @@ class Role extends DataObject
      */
     public function getAssignedPrivileges()
     {
-        static $stmt = null;  // For each uid, the query is the same, prepare it once.
+        static $stmt = null;  // For each id, the query is the same, prepare it once.
 
-        $cacheKey = "Privileges.ByUid";
+        $cacheKey = "Privileges.ById";
         if(xarVarIsCached($cacheKey,$this->properties['id']->value)) {
             return xarVarGetCached($cacheKey,$this->properties['id']->value);
         }
         // We'll have to get it.
-        xarLogMessage("ROLE: getting privileges for uid: $this->properties['id']->value");
+        xarLogMessage("ROLE: getting privileges for id: $this->properties['id']->value");
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
         $xartable = xarDB::getTables();
         $query = "SELECT  p.id, p.name, r.name, p.module_id,
@@ -486,10 +486,10 @@ class Role extends DataObject
         // arrange the data in an array of role objects
         $users = array();
         while ($result->next()) {
-            list($uid) = $result->fields;
+            list($id) = $result->fields;
 
             $role = DataObjectMaster::getObject(array('name' => 'roles_users'));
-            $role->getItem(array('itemid' => $uid));
+            $role->getItem(array('itemid' => $id));
             $users[] = $role;
         }
         // done
@@ -551,9 +551,9 @@ class Role extends DataObject
      */
     public function getParents()
     {
-        static $stmt = null;  // The query below is the same for each uid, prepare it once.
+        static $stmt = null;  // The query below is the same for each id, prepare it once.
 
-        $cacheKey = 'RoleParents.ByUid';
+        $cacheKey = 'RoleParents.ById';
         // create an array to hold the objects to be returned
         $parents = array();
         // if this is the root return an empty array
@@ -573,10 +573,10 @@ class Role extends DataObject
 
         // collect the table values and use them to create new role objects
         while ($result->next()) {
-            list($uid) = $result->fields;
+            list($id) = $result->fields;
 
             $role = DataObjectMaster::getObject(array('name' => 'roles_groups'));
-            $role->getItem(array('itemid' => $uid));
+            $role->getItem(array('itemid' => $id));
             $parents[] = $role;
         }
         // done
@@ -648,9 +648,9 @@ class Role extends DataObject
         }
         //Get the sub groups and go for another round
         foreach($groups as $group){
-            $role = xarRoles::get($group['uid']);
+            $role = xarRoles::get($group['id']);
             if ($grpflag) {
-                $ua[$group['uid']] = $role;
+                $ua[$group['id']] = $role;
             }
             $users = $role->getDescendants($state);
             foreach($users as $user){
@@ -663,7 +663,7 @@ class Role extends DataObject
     /**
      * isEqual: checks whether two roles are equal
      *
-     * Two role objects are considered equal if they have the same uid.
+     * Two role objects are considered equal if they have the same id.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $role

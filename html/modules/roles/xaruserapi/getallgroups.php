@@ -30,7 +30,7 @@ function roles_userapi_getallgroups($args)
     $q->addtable($xartable['roles'],'r');
     $q->addtable($xartable['rolemembers'], 'rm');
     $q->join('rm.id','r.id');
-    $q->addfields(array('r.id AS uid','r.name AS name','r.users AS users','rm.parentid AS parentid'));
+    $q->addfields(array('r.id AS id','r.name AS name','r.users AS users','rm.parentid AS parentid'));
 
     $conditions = array();
     // Restriction by group.
@@ -47,12 +47,12 @@ function roles_userapi_getallgroups($args)
             $group = xarModAPIFunc(
                 'roles', 'user', 'get',
                 array(
-                    (is_numeric($group) ? 'uid' : 'name') => trim($group),
+                    (is_numeric($group) ? 'id' : 'name') => trim($group),
                     'type' => ROLES_GROUPTYPE
                 )
             );
-            if (isset($group['uid']) && is_numeric($group['uid'])) {
-                $conditions[] = $q->eq('rm.parentid',$group['uid']);
+            if (isset($group['id']) && is_numeric($group['id'])) {
+                $conditions[] = $q->eq('rm.parentid',$group['id']);
             }
         }
     }

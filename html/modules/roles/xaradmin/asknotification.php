@@ -21,10 +21,10 @@ function roles_admin_asknotification($args)
     // Get parameters
     if (!xarVarFetch('phase',    'str:0:', $data['phase'],    'display', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('mailtype', 'str:0:', $data['mailtype'], 'blank', XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('uid',       'isset',  $uid,              NULL,    XARVAR_NOT_REQUIRED)) return;
+    if(!xarVarFetch('id',       'isset',  $id,              NULL,    XARVAR_NOT_REQUIRED)) return;
     //Maybe some kind of return url will make this function available for other modules
     if (!xarVarFetch('state',    'int:0:', $data['state'],  ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('groupuid', 'int:0:', $data['groupuid'], 0,    XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('groupid',  'int:0:', $data['groupid'], 0,    XARVAR_NOT_REQUIRED)) return;
     //optional value
     if (!xarVarFetch('pass',     'str:0:', $data['pass'],     NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ip',       'str:0:', $data['ip'],       NULL, XARVAR_NOT_REQUIRED)) return;
@@ -46,7 +46,7 @@ function roles_admin_asknotification($args)
                 if (!xarVarFetch('subject', 'str:1:', $data['subject'], $data['subject'], XARVAR_NOT_REQUIRED)) return;
                 if (!xarVarFetch('message', 'str:1:', $data['message'], $data['message'], XARVAR_NOT_REQUIRED)) return;
                 $data['authid'] = xarSecGenAuthKey();
-                $data['uid'] = base64_encode(serialize($uid));
+                $data['id'] = base64_encode(serialize($id));
 
                 // dynamic properties (if any)
                 $data['properties'] = null;
@@ -88,12 +88,12 @@ function roles_admin_asknotification($args)
             $data['message'] = str_replace('<br />',' ', $data['message']);
 
             //Send notification
-            $uid = unserialize(base64_decode($uid));
-            if (!xarModAPIFunc('roles','admin','senduseremail', array( 'uid' => $uid, 'mailtype' => $data['mailtype'], 'subject' => $data['subject'], 'message' => $data['message'], 'pass' => $data['pass'], 'ip' => $data['ip']))) {
+            $id = unserialize(base64_decode($id));
+            if (!xarModAPIFunc('roles','admin','senduseremail', array( 'id' => $id, 'mailtype' => $data['mailtype'], 'subject' => $data['subject'], 'message' => $data['message'], 'pass' => $data['pass'], 'ip' => $data['ip']))) {
                 return;
             }
             xarResponseRedirect(xarModURL('roles', 'admin', 'showusers',
-                              array('uid' => $data['groupuid'], 'state' => $data['state'])));
+                              array('id' => $data['groupid'], 'state' => $data['state'])));
            break;
     }
 }

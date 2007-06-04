@@ -14,25 +14,25 @@
  * Display user
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @param int uid
+ * @param int id
  * @return array
  */
 function roles_user_display($args)
 {
     extract($args);
 
-    if (!xarVarFetch('uid','id',$uid, xarUserGetVar('uid'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('id','id',$id, xarUserGetVar('id'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('itemtype', 'int', $itemtype, 1, XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('tplmodule', 'str', $args['tplmodule'], 'roles', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('template', 'str', $args['template'], '', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('layout', 'str', $args['layout'], '', XARVAR_NOT_REQUIRED)) {return;}
 
-    $uid = isset($itemid) ? $itemid : $uid;
+    $id = isset($itemid) ? $itemid : $id;
 
-    if ($uid) {
+    if ($id) {
         // Get role information
-        $role = xarRoles::get($uid);
+        $role = xarRoles::get($id);
 
         if (!$role) return;
 
@@ -40,7 +40,7 @@ function roles_user_display($args)
     // Security Check
         if(!xarSecurityCheck('ViewRoles',0,'Roles',$name)) return;
 
-        $data['uid'] = $role->getID();
+        $data['id'] = $role->getID();
         $itemtype = $role->getType();
         $data['itemtype'] = $itemtype;
         $data['name'] = $name;
@@ -58,14 +58,14 @@ function roles_user_display($args)
         $item = $data;
         $item['module'] = 'roles';
         $item['itemtype'] = $data['itemtype'];
-        $item['itemid']= $uid;
+        $item['itemid']= $id;
         $item['returnurl'] = xarModURL('roles', 'user', 'display',
-                                       array('uid' => $uid));
-        $data['hooks'] = xarModCallHooks('item', 'display', $uid, $item);
+                                       array('id' => $id));
+        $data['hooks'] = xarModCallHooks('item', 'display', $id, $item);
 
         xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
     } else {
-        $data['uid'] = $uid;
+        $data['id'] = $id;
     }
 
     $types = xarModAPIFunc('roles','user','getitemtypes');

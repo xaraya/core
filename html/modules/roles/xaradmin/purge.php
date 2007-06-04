@@ -43,7 +43,7 @@ function roles_admin_purge($args)
         if (!xarVarFetch('recallsubmit',   'str',    $recallsubmit,         NULL, XARVAR_DONT_SET)) return;
         if (!xarVarFetch('recallsearch',   'str',    $data['recallsearch'], NULL, XARVAR_DONT_SET)) return;
         if (!xarVarFetch('recallstartnum', 'int:1:', $recallstartnum,       1,    XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('recalluids',     'isset',  $recalluids,           array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('recallids',      'isset',  $recallids,           array(), XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('groupid',       'int:1',  $data['groupid'],     0,    XARVAR_NOT_REQUIRED)) return;
 
         if ($confirmation == xarML("Recall"))
@@ -51,7 +51,7 @@ function roles_admin_purge($args)
  // --- recall users and groups
             if(!xarSecurityCheck('DeleteRole')) return;
             if ($data['groupid'] != 0) $parentgroup = xarRoles::get($data['groupid']);
-            foreach ($recalluids as $id => $val) {
+            foreach ($recallids as $id => $val) {
                 $role = xarRoles::get($id);
                 $state = $role->getType() ? ROLES_STATE_ACTIVE : $data['recallstate'];
                 $recalled = xarModAPIFunc('roles','admin','recall',

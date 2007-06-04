@@ -16,23 +16,23 @@
  */
 function roles_admin_modify()
 {
-    if (!xarVarFetch('uid', 'id', $uid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('id', 'id', $id, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemid', 'id', $itemid, NULL, XARVAR_DONT_SET)) return;
-    $uid = isset($itemid) ? $itemid : $uid;
+    $id = isset($itemid) ? $itemid : $id;
 
 
 //    if (!xarVarFetch('itemtype', 'id', $itemtype, ROLES_USERTYPE, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('duvs', 'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
 
-    $object = xarRoles::get($uid);
+    $object = xarRoles::get($id);
     $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $object->getType()));
 
-//    $itemid = $object->getItem(array('itemid' => $uid));
+//    $itemid = $object->getItem(array('itemid' => $id));
 //    $values = $object->getFieldValues();
 //    $name = $values['name'];
 
-//    $role = xarRoles::get($uid);
+//    $role = xarRoles::get($id);
     // get the array of parents of this role
     // need to display this in the template
     // we also use this loop to fill the names array with groups that this group shouldn't be added to
@@ -57,9 +57,9 @@ function roles_admin_modify()
         $nam = $temp['name'];
         // TODO: this is very inefficient. Here we have the perfect use case for embedding security checks directly into the SQL calls
         if(!xarSecurityCheck('AttachRole',0,'Relation',$nam . ":" . $object->getName())) continue;
-        if (!in_array($nam, $names) && $temp['uid'] != $uid) {
+        if (!in_array($nam, $names) && $temp['id'] != $id) {
             $names[] = $nam;
-            $groups[] = array('duid' => $temp['uid'],
+            $groups[] = array('did' => $temp['id'],
                 'dname' => $temp['name']);
         }
     }
@@ -81,8 +81,8 @@ function roles_admin_modify()
     $item = $data;
     $item['module']= 'roles';
     $item['itemtype'] = $object->getType();
-    $item['itemid']= $uid;
-    $data['hooks'] = xarModCallHooks('item', 'modify', $uid, $item);
+    $item['itemid']= $id;
+    $data['hooks'] = xarModCallHooks('item', 'modify', $id, $item);
 
     $data['groups'] = $groups;
     $data['parents'] = $parents;

@@ -33,8 +33,8 @@ class RolesTreeProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
-        if (!isset($topuid)) $topuid = xarModVars::get('roles', 'everybody');
-        $node = new TreeNode($topuid);
+        if (!isset($topid)) $topid = xarModVars::get('roles', 'everybody');
+        $node = new TreeNode($topid);
         $tree = new RolesTree($node);
         $data['nodes'] = $node->depthfirstenumeration();
         return parent::showInput($data);
@@ -48,7 +48,7 @@ class RolesTree extends Tree
         $data = xarRoles::getgroups();
          foreach ($data as $row) {
             $nodedata = array(
-                'id' => $row['uid'],
+                'id' => $row['id'],
                 'parent' => $row['parentid'],
                 'name' => $row['name'],
                 'users' => $row['users'],

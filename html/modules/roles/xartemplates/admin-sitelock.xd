@@ -10,7 +10,7 @@
     </h2>
 
     <form action="&xar-modurl-roles-admin-sitelock;" method="post" enctype="application/x-www-form-urlencoded">
-        
+
         <fieldset>
             <legend>
                 <xar:mlstring>
@@ -49,22 +49,22 @@
                             #$loop:item['name']#
                         </label>
                         <xar:if condition="$loop:item['notify'] == 'true'">
-                            <input type="checkbox" name="notify[]" id="notify_#$loop:item['uid']#" value="#$loop:item['uid']#" checked="checked" />
+                            <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#" value="#$loop:item['id']#" checked="checked" />
                         <xar:else />
-                            <input type="checkbox" name="notify[]" id="notify_#$loop:item['uid']#" value="#$loop:item['uid']#" />
+                            <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#" value="#$loop:item['id']#" />
                         </xar:if>
-                        <label for="notify_#$loop:item['uid']#" title="xarML('Toggle notifications sent to this Group')#">
+                        <label for="notify_#$loop:item['id']#" title="xarML('Toggle notifications sent to this Group')#">
                             <xar:mlstring>notify</xar:mlstring>
                         </label>
-        
+
                         <xar:if condition="count($roles) gt 1">
-                            <input type="button" value="#$deletelabel#" onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;uid=#$loop:item['uid']#';this.form.submit();" class="xar-amrgin-thickleft" />
+                            <input type="button" value="#$deletelabel#" onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();" class="xar-amrgin-thickleft" />
                         <xar:else />
-                            <input type="button" value="#$deletelabel#" onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;uid=#$loop:item['uid']#';this.form.submit();" disabled="disabled" class="xar-amrgin-thickleft" />
+                            <input type="button" value="#$deletelabel#" onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();" disabled="disabled" class="xar-amrgin-thickleft" />
                         </xar:if>
                     </div>
                 </xar:loop>
-        
+
                 <div class="xar-form-input-wrapper">
                     <label for="newname" title="#xarML('Add a Group to the lock notification list')#" class="xar-form-label">
                         <xar:mlstring>Add Group:</xar:mlstring>

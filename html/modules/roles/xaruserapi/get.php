@@ -12,10 +12,10 @@
  */
 /**
  * get a specific user by any of his attributes
- * uname, uid and email are guaranteed to be unique,
+ * uname, id and email are guaranteed to be unique,
  * otherwise the first hit will be returned
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['uid'] id of user to get
+ * @param $args['id'] id of user to get
  * @param $args['uname'] user name of user to get
  * @param $args['name'] name of user to get
  * @param $args['email'] email of user to get
@@ -26,13 +26,13 @@ function roles_userapi_get($args)
 {
     // Get arguments from argument array
     extract($args);
-    if (empty($uid) && empty($name) && empty($uname) && empty($email)) {
-        throw new EmptyParameterException('uid or name or uname or email');
-    } elseif (!empty($uid) && !is_numeric($uid)) {
-        throw new VariableValidationException(array('uid',$uid,'numeric'));
+    if (empty($id) && empty($name) && empty($uname) && empty($email)) {
+        throw new EmptyParameterException('id or name or uname or email');
+    } elseif (!empty($id) && !is_numeric($id)) {
+        throw new VariableValidationException(array('id',$id,'numeric'));
     }
-    if ((empty($itemid) && !empty($uid))) {
-        $itemid = $uid;
+    if ((empty($itemid) && !empty($id))) {
+        $itemid = $id;
     }
 
     $xartable = xarDB::getTables();
@@ -42,7 +42,7 @@ function roles_userapi_get($args)
     sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery('SELECT',$rolestable);
     $q->addfields(array(
-                  'id', // UID is a reserved word in Oracle (cannot be redefined)
+                  'id',
                   'uname',
                   'name',
                   'type', // TYPE is a key word in several databases (avoid for the future)
@@ -52,8 +52,8 @@ function roles_userapi_get($args)
                   'valcode',
                   'state'
                 ));
-    if (!empty($uid) && is_numeric($uid)) {
-        $q->eq('id',(int)$uid);
+    if (!empty($id) && is_numeric($id)) {
+        $q->eq('id',(int)$id);
     }
     if (!empty($name)) {
         $q->eq('name',$name);
@@ -78,8 +78,8 @@ function roles_userapi_get($args)
     // Check for no rows found, and if so return
     $user = $q->row();
     if ($user == array()) return false;
-    // uid and type are reserved/key words in Oracle et al.
-    $user['uid'] = $user['id'];
+    // id and type are reserved/key words in Oracle et al.
+    $user['id'] = $user['id'];
     $user['type'] = $user['type'];
     return $user;
 }

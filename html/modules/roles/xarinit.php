@@ -95,7 +95,7 @@ function roles_init()
                                                                 'default'     => null)));
         $dbconn->Execute($query);
 
-        $index = array('name' => 'i_' . $prefix . '_rolememb_uid',
+        $index = array('name' => 'i_' . $prefix . '_rolememb_id',
                        'fields' => array('id'),
                        'unique' => false);
         $query = xarDBCreateIndex($tables['rolemembers'], $index);
@@ -148,7 +148,7 @@ function roles_activate()
     xarModVars::set('roles', 'itemsperpage', 20);
 
     /*
-    // set the current session information to the right anonymous uid
+    // set the current session information to the right anonymous id
     // TODO: make the setUserInfo a class static in xarSession.php
     xarSession_setUserInfo($role->getID(), 0);
     */
@@ -196,7 +196,7 @@ function roles_activate()
     $rolefields['uname'] = 'administrators';
     $rolefields['parentid'] = $topid;
     $admingroup = $group->createItem($rolefields);
-    $lockdata = array('roles' => array( array('uid' => $admingroup,
+    $lockdata = array('roles' => array( array('id' => $admingroup,
                                               'name' => $rolefields['name'],
                                               'notify' => TRUE)),
                                               'message' => '',

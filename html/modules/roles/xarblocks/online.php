@@ -97,7 +97,7 @@ function roles_onlineblock_display($blockinfo)
                 'name' => $aa['name'],
                 'userurl' => xarModURL(
                     'roles', 'user', 'display',
-                    array('uid' => $aa['uid'])
+                    array('id' => $aa['id'])
                 ),
                 'total' => '',
                 'unread' => '',
@@ -108,17 +108,17 @@ function roles_onlineblock_display($blockinfo)
                 if (xarModIsAvailable('messages')) {
                     $args['test1'][$key]['total'] = xarModAPIFunc(
                         'messages', 'user', 'count_total',
-                        array('uid'=>$aa['uid'])
+                        array('id'=>$aa['id'])
                     );
 
                     $args['test1'][$key]['unread'] = xarModAPIFunc(
                         'messages', 'user', 'count_unread',
-                        array('uid'=>$aa['uid'])
+                        array('id'=>$aa['id'])
                     );
 
                     $args['test1'][$key]['messagesurl'] =xarModURL(
                         'messages', 'user', 'display',
-                        array('uid'=>$aa['uid'])
+                        array('id'=>$aa['id'])
                     );
                 }
             }
@@ -156,21 +156,21 @@ function roles_onlineblock_display($blockinfo)
          $args['users'] = xarML('users');
     }
 
-    $uid = xarModVars::get('roles', 'lastuser');
+    $id = xarModVars::get('roles', 'lastuser');
 
     // Make sure we have a lastuser
-    if (!empty($uid)) {
-        if(!is_numeric($uid)) {
+    if (!empty($id)) {
+        if(!is_numeric($id)) {
         //Remove this further down the line
             $status = xarModAPIFunc(
             'roles', 'user', 'get',
-            array('uname' => $uid)
+            array('uname' => $id)
             );
 
         } else {
             $status = xarModAPIFunc(
             'roles', 'user', 'get',
-            array('uid' => $uid)
+            array('id' => $id)
             );
 
         }

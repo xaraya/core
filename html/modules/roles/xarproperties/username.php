@@ -35,7 +35,7 @@ class UsernameProperty extends DataProperty
             $value = $this->value;
         }
         if (empty($value)) {
-            $value = xarUserGetVar('uid');
+            $value = xarUserGetVar('id');
         }
         // check that the user exists, but dont except
         if (is_numeric($value)) {
@@ -67,7 +67,7 @@ class UsernameProperty extends DataProperty
     {
         extract($data);
         if (!isset($value)) $value = $this->value;
-        if (empty($value))  $value = xarUserGetVar('uid');
+        if (empty($value))  $value = xarUserGetVar('id');
 
         try {
             $user = xarUserGetVar('name', $value);
@@ -86,7 +86,7 @@ class UsernameProperty extends DataProperty
     {
         extract($data);
         if (!isset($value)) $value = $this->value;
-        if (empty($value))  $value = xarUserGetVar('uid');
+        if (empty($value))  $value = xarUserGetVar('id');
 
         try {
             $user = xarUserGetVar('name', $value);
@@ -100,7 +100,7 @@ class UsernameProperty extends DataProperty
         $data['value'] = $value;
 
         if ($this->validation) {
-            $data['linkurl'] = xarModURL('roles','user','display',array('uid' => $value));
+            $data['linkurl'] = xarModURL('roles','user','display',array('id' => $value));
         } else {
             $data['linkurl'] = "";
         }

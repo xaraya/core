@@ -56,7 +56,7 @@ class GroupListProperty extends SelectProperty
             $groups = xarModAPIFunc('roles', 'user', 'getallgroups', $select_options);
             $options = array();
             foreach ($groups as $group) {
-                $options[] = array('id' => $group['uid'], 'name' => $group['name']);
+                $options[] = array('id' => $group['id'], 'name' => $group['name']);
             }
             $this->options = $options;
         }
@@ -71,7 +71,7 @@ class GroupListProperty extends SelectProperty
         if (!empty($value)) {
             // check if this is a valid group id
             $group = xarModAPIFunc('roles','user','get',
-                                   array('uid' => $value,
+                                   array('id' => $value,
                                          'type' => 1)); // we're looking for a group here
             if (!empty($group)) {
                 $this->value = $value;
@@ -118,7 +118,7 @@ class GroupListProperty extends SelectProperty
             $groupname = '';
         } else {
             $group = xarModAPIFunc('roles','user','get',
-                                   array('uid' => $value,
+                                   array('id' => $value,
                                          'type' => ROLES_GROUPTYPE)); // we're looking for a group here
             if (empty($group) || empty($group['name'])) {
                 $groupname = '';

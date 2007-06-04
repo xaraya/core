@@ -38,7 +38,7 @@ function roles_userapi_getallroles($args)
         $q->addorder('r.name');
     } else {
         foreach (explode(',', $order) as $order_field) {
-            if (preg_match('/^[-]?(name|uname|email|uid|state|date_reg)$/', $order_field)) {
+            if (preg_match('/^[-]?(name|uname|email|id|state|date_reg)$/', $order_field)) {
                 if (strstr($order_field, '-')) {
                     $q->addorder('r.' . $order_field,'DESC');
                 } else {
@@ -60,7 +60,7 @@ function roles_userapi_getallroles($args)
         $q->ne('r.state',ROLES_STATE_DELETED);
     }
 
-    $q->addfield('r.id AS uid');
+    $q->addfield('r.id AS id');
     $q->addfield('r.name AS name');
     $q->addfield('r.type AS type');
     $q->addfield('r.users AS users');
@@ -129,11 +129,11 @@ function roles_userapi_getallroles($args)
     if (!$q->run()) return;
     $items['nativeitems'] = $q->output();
     $itemids = array();
-    foreach ($items['nativeitems'] as $item) $itemids[] = $item['uid'];
+    foreach ($items['nativeitems'] as $item) $itemids[] = $item['id'];
     $items['dditems'] = xarModAPIFunc('dynamicdata','user','getitems',array('moduleid' => 27, 'itemtype' => $itemtype, 'itemids' => $itemids,'getobject' => true));
 /*    for ($i = 0, $max = count($items); $i < $max; $i++) {
-        if (!isset($properties[$items[$i]['uid']])) continue;
-        $items[$i] = array_merge($items[$i],$properties[$items[$i]['uid']]);
+        if (!isset($properties[$items[$i]['id']])) continue;
+        $items[$i] = array_merge($items[$i],$properties[$items[$i]['id']]);
     }
 */    return $items;
 }

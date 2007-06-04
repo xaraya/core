@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:set name="uid">$object->getID()</xar:set>
+<xar:set name="id">$object->getID()</xar:set>
 <xar:set name="itemtype">$object->getType()</xar:set>
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
@@ -68,7 +68,7 @@
                             </xar:mlstring>
                         </label>
                         <xar:set name="value">
-                            xarModGetUserVar('roles','useremailformat',$uid)
+                            xarModGetUserVar('roles','useremailformat',$id)
                         </xar:set>
                         <xar:set name="options">
                             array(
@@ -86,7 +86,7 @@
                             <xar:mlstring>User Timezone:</xar:mlstring>
                         </label>
                         <xar:set name="value">
-                            xarModGetUserVar('roles','usertimezone',$uid)
+                            xarModGetUserVar('roles','usertimezone',$id)
                         </xar:set>
                         <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
                     </div>
@@ -99,7 +99,7 @@
                             Home:
                         </xar:mlstring>
                     </label>
-                    <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
+                    <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7" />
                 </div>
             </xar:if>
             <xar:foreach in="$hooks" key="$hookmodule">

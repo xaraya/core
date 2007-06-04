@@ -16,14 +16,14 @@ function roles_admin_showusers()
 
     if (!xarSecurityCheck('EditRole')) return;
 
-    if (xarVarIsCached('roles', 'defaultgroupuid')) {
-        $defaultgroupuid = xarVarGetCached('roles', 'defaultgroupuid');
+    if (xarVarIsCached('roles', 'defaultgroupid')) {
+        $defaultgroupid = xarVarGetCached('roles', 'defaultgroupid');
     } else {
-        $defaultgroupuid = xarModVars::get('roles','defaultgroup');
+        $defaultgroupid = xarModVars::get('roles','defaultgroup');
     }
-    xarVarSetCached('roles', 'defaultgroupuid', $defaultgroupuid);
+    xarVarSetCached('roles', 'defaultgroupid', $defaultgroupid);
 
-    if (!xarVarFetch('uid',      'int:0:', $uid,              $defaultgroupuid, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('id',       'int:0:', $id,              $defaultgroupid, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('startnum', 'int:1:', $startnum,         1,   XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state',    'int:0:', $data['state'],    ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('selstyle', 'isset',  $data['selstyle'], xarSession::getVar('rolesdisplay'), XARVAR_DONT_SET)) return;
@@ -37,19 +37,19 @@ function roles_admin_showusers()
 
     // Get information on the group we're at
     $data['groups']     = xarModAPIFunc('roles', 'user', 'getallgroups');
-    $data['groupuid']   = $uid;
+    $data['groupid']   = $id;
     $data['totalusers'] = xarModAPIFunc('roles','user','countall');
 
-    if ($uid != 0) {
+    if ($id != 0) {
         // Call the Roles class and get the role
-        $role      = xarRoles::get($uid);
+        $role      = xarRoles::get($id);
         $ancestors = $role->getRoleAncestors();
         $data['groupname'] = $role->getName();
         $data['title'] = '';
         $data['ancestors'] = array();
         foreach ($ancestors as $ancestor) {
             $data['ancestors'][] = array('name' => $ancestor->getName(),
-                                          'uid' => $ancestor->getID());
+                                          'id' => $ancestor->getID());
         }
     }
     else {
@@ -73,7 +73,7 @@ function roles_admin_showusers()
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
         $q->addfields(array(
-            'r.id AS uid',
+            'r.id AS id',
             'r.name AS name',
             'r.uname AS uname',
             'r.email AS email',
@@ -103,10 +103,10 @@ function roles_admin_showusers()
         else $q->eq('state',$data['state']);
 
         // If a group was chosen, get only the users of that group
-        if ($uid != 0) {
+        if ($id != 0) {
             $q->addtable($xartable['rolemembers'],'rm');
             $q->join('r.id','rm.id');
-            $q->eq('rm.parentid',$uid);
+            $q->eq('rm.parentid',$id);
         }
 
         // Save the query so we can reuse it somewhere
@@ -153,7 +153,7 @@ function roles_admin_showusers()
     foreach($q->output() as $user) {
         $users[] = array_merge($user, array('frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user['name'])));
     }
-    if ($uid != 0) $data['title'] .= " ".xarML('of group')." ";
+    if ($id != 0) $data['title'] .= " ".xarML('of group')." ";
 
     //selstyle
     $data['style'] = array('0' => xarML('Simple'),
@@ -162,13 +162,13 @@ function roles_admin_showusers()
                            );
 
     // Load Template
-    $data['uid']        = $uid;
+    $data['id']        = $id;
     $data['users']      = $users;
     $data['changestatuslabel'] = xarML('Change Status');
     $data['authid']     = xarSecGenAuthKey();
-    $data['removeurl']  = xarModURL('roles', 'admin','delete', array('roleid' => $uid));
+    $data['removeurl']  = xarModURL('roles', 'admin','delete', array('roleid' => $id));
     $filter['startnum'] = '%%';
-    $filter['uid']      = $uid;
+    $filter['id']      = $id;
     $filter['state']    = $data['state'];
     $filter['search']   = $data['search'];
     $filter['order']    = $data['order'];

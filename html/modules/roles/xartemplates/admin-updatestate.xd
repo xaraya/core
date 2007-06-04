@@ -17,11 +17,11 @@
                 <td colspan="2">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="updatephase" id="updatephase" value="notify" />
-                    <input type="hidden" name="groupuid" id="groupuid" value="#$groupuid#" />
+                    <input type="hidden" name="groupid" id="groupid" value="#$groupid#" />
                     <input type="hidden" name="state" id="state" value="#$state#" />
                     <input type="hidden" name="status" id="status" value="#$status#" />
-                    <input type="hidden" name="uids" id="uids" value="#$uids#" />                
-                    <a href="&xar-modurl-roles-admin-showusers;&amp;phase=#$state#&amp;uid=#$groupuid#">
+                    <input type="hidden" name="ids" id="ids" value="#$ids#" />
+                    <a href="&xar-modurl-roles-admin-showusers;&amp;phase=#$state#&amp;id=#$groupid#">
                         <xar:mlstring>Click here if you don't want to send any notification</xar:mlstring>
                     </a>
                 </td>

@@ -82,10 +82,10 @@
                        <td class="xar-align-center">
                            <select name="groupid" id="groupid">
                                <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
-                                    <xar:if condition="$groups[$i]['uid'] eq $groupid">
-                                        <option value="#$groups[$i]['uid']#" selected="selected">#$groups[$i]['name']#</option>
+                                    <xar:if condition="$groups[$i]['id'] eq $groupid">
+                                        <option value="#$groups[$i]['id']#" selected="selected">#$groups[$i]['name']#</option>
                                     <xar:else/>
-                                        <option value="#$groups[$i]['uid']#">#$groups[$i]['name']#</option>
+                                        <option value="#$groups[$i]['id']#">#$groups[$i]['name']#</option>
                                     </xar:if>
                                 </xar:for>
                             </select>
@@ -170,7 +170,7 @@
                                 </td>
                                 <td class="xar-align-center">
                                     <xar:if condition="$loop:item['unique'] eq 1">
-                                         <input type="checkbox" name="recalluids[#$loop:item['id']#]" id="recalluids_#$loop:item['id']#" />
+                                         <input type="checkbox" name="recallids[#$loop:item['id']#]" id="recallids_#$loop:item['id']#" />
                                     </xar:if>
                                 </td>
                             </tr>
@@ -322,7 +322,7 @@
                                 #$loop:item['state']#
                             </td>
                             <td class="xar-align-center">
-                               <input type="checkbox" name="purgeuids[#$loop:item['id']#]" id="purgeuids_#$loop:item['id']#" value="1"/>
+                               <input type="checkbox" name="purgeids[#$loop:item['id']#]" id="purgeids_#$loop:item['id']#" value="1"/>
                             </td>
                         </tr>
                     </xar:loop>

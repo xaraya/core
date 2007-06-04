@@ -39,22 +39,22 @@ function roles_adminapi_purge($args)
         $user = xarModAPIFunc('roles',
                 'user',
                 'get',
-                array('uid' => $item['uid']));
+                array('id' => $item['id']));
 
         // Security check
-        if (!xarSecurityCheck('DeleteRole',0,'Item',"$item[name]::$item[uid]")) return;
+        if (!xarSecurityCheck('DeleteRole',0,'Item',"$item[name]::$item[id]")) return;
 
         // Call the Roles class
-        $role = xarRoles::get($item['uid']);
+        $role = xarRoles::get($item['id']);
         if (!$role->purge()) {
             return;
         }
 
     // Let any hooks know that we have purged this user.
         $item['module'] = 'roles';
-        $item['itemid'] = $item['uid'];
+        $item['itemid'] = $item['id'];
         $item['method'] = 'purge';
-        xarModCallHooks('item', 'delete', $uid, $item);
+        xarModCallHooks('item', 'delete', $id, $item);
     }
 
     //finished successfully
