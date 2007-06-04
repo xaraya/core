@@ -109,7 +109,6 @@ function roles_admin_createmail()
         // open a connection and run the query
         $q->run();
 
-        var_dump($q->output());exit;
         foreach($q->output() as $role) {
                 $data['users'][$role['id']] =
                     array('id'      => $role['id'],
