@@ -110,8 +110,8 @@ function roles_admin_createmail()
         $q->run();
 
         foreach($q->output() as $role) {
-                $data['users'][$role['uid']] =
-                    array('uid'      => $role['uid'],
+                $data['users'][$role['id']] =
+                    array('uid'      => $role['id'],
                           'name'     => $role['name'],
                           'uname'    => $role['uname'],
                           'email'    => $role['email'],
