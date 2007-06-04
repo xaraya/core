@@ -767,7 +767,7 @@ class Role extends DataObject
     function getEmail() { return $this->properties['email']->value; }
     function getPass() { return $this->properties['password']->value; }
     function getState() { return $this->properties['state']->value; }
-    function getDateReg() { return $this->properties['datereg']->value; }
+    function getDateReg() { return $this->properties['regdate']->value; }
     function getValCode() { return $this->properties['valcode']->value; }
     function getAuthModule() { return $this->properties['authmodule']->value; }
     function getLevel()
