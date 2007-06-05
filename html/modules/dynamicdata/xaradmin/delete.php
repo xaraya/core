@@ -44,7 +44,9 @@ function dynamicdata_admin_delete($args)
     // Security check
     if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',$data['moduleid'].":".$data['itemtype'].":".$data['itemid'])) return;
 
+    // recover any session var information and remove it from the var
     $data = array_merge($data,xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule)));
+    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
     extract($data);
 
     if (!empty($noconfirm)) {

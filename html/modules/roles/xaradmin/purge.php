@@ -43,7 +43,7 @@ function roles_admin_purge($args)
         if (!xarVarFetch('recallsubmit',   'str',    $recallsubmit,         NULL, XARVAR_DONT_SET)) return;
         if (!xarVarFetch('recallsearch',   'str',    $data['recallsearch'], NULL, XARVAR_DONT_SET)) return;
         if (!xarVarFetch('recallstartnum', 'int:1:', $recallstartnum,       1,    XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('recalluids',     'isset',  $recalluids,           array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('recallids',      'isset',  $recallids,           array(), XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('groupid',       'int:1',  $data['groupid'],     0,    XARVAR_NOT_REQUIRED)) return;
 
         if ($confirmation == xarML("Recall"))
@@ -51,7 +51,7 @@ function roles_admin_purge($args)
  // --- recall users and groups
             if(!xarSecurityCheck('DeleteRole')) return;
             if ($data['groupid'] != 0) $parentgroup = xarRoles::get($data['groupid']);
-            foreach ($recalluids as $id => $val) {
+            foreach ($recallids as $id => $val) {
                 $role = xarRoles::get($id);
                 $state = $role->getType() ? ROLES_STATE_ACTIVE : $data['recallstate'];
                 $recalled = xarModAPIFunc('roles','admin','recall',
@@ -103,31 +103,26 @@ function roles_admin_purge($args)
             if (xarSecurityCheck('ReadRole', 0, 'All', $role['uname'] . ":All:" . $role['id'])) {
                 $skip = 0;
                 $unique = 1;
-                if ($role['type']) {
-                    $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $role['uname'], 'type' => ROLES_GROUPTYPE, 'state' => ROLES_STATE_CURRENT));
+                $thisrole = xarRoles::get($role['id']);
+                $baseancestor = $thisrole->getBaseAncestor();
+                $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $role['uname'], 'state' => ROLES_STATE_CURRENT));
+                if ($baseancestor['itemtype'] != ROLES_USERTYPE) {
                     if (is_array($existinguser)) $unique = 0;
                     $role['uname'] = "";
-                }
-                else {
+                } else {
                     $uname1 = explode($deleted,$role['uname']);
 // checking empty unames for code robustness :-)
                     if($uname1[0] == '') {
                         $existinguser = 0;
                         $skip = 1;
-                    }
-                    else
-                        $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $uname1[0], 'state' => ROLES_STATE_CURRENT));
+                    } else
                     if (is_array($existinguser)) $unique = 0;
                     $role['uname'] = $uname1[0];
-// remove [deleted] marker from email (fix for Bug 3484)
-                    $email = explode($deleted,$role['email']);
-                    $role['email']=$email[0];
 // now check that email is unique if this has to be checked (fix for nonexisting Bug)
                     if (xarModVars::get('roles', 'uniqueemail')) {
                         $existinguser = xarModAPIFunc('roles','user','get',array('email' => $email[0], 'state' => ROLES_STATE_CURRENT));
                         if (is_array($existinguser)) $unique = 0;
                     }
-
                }
                 if (!$skip) {
                     $types = xarModAPIFunc('roles','user','getitemtypes');

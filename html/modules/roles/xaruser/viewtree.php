@@ -26,9 +26,9 @@ function roles_user_viewtree()
 
     // Security Check
     if (!xarSecurityCheck('ViewRoles')) return;
-    // Define at which uid the tree starts
-    // If not set the uid becomes that of Everybody
-    if(!xarVarFetch('uid',     'int', $uid,    xarModVars::get('roles','everybody'), XARVAR_NOT_REQUIRED)) {return;}
+    // Define at which id the tree starts
+    // If not set the id becomes that of Everybody
+    if(!xarVarFetch('id',     'int', $id,    xarModVars::get('roles','everybody'), XARVAR_NOT_REQUIRED)) {return;}
     // Define the number of levels to be displayed
     // If not set then defaults to 0 (all the levels below the first node are displayed)
     if(!xarVarFetch('levels',  'int', $levels, 0, XARVAR_NOT_REQUIRED)) {return;}
@@ -62,15 +62,15 @@ function roles_user_viewtree()
     $mytree->setitem(1,'treeitem');
     // Add the display of the name (defined above) as the second item
     $mytree->setitem(2,'descriptionitem');
-    // Define at which uid the tree starts
-    // If not set the uid becomes that of Everybody
+    // Define at which id the tree starts
+    // If not set the id becomes that of Everybody
     $firstnode = xarFindRole('Everybody');
-    $firstuid = $firstnode->getID();
+    $firstid = $firstnode->getID();
     // Create the tree
-    $mytree->maketree($uid,$levels);
+    $mytree->maketree($id,$levels);
     $treedrawing = $mytree->drawtree();
     // Or alternatively, shorthand:
-    //$treedrawing = $mytree->drawtree($mytree->maketree($firstuid,$levels));
+    //$treedrawing = $mytree->drawtree($mytree->maketree($firstid,$levels));
     // Send the rendering to a template
     $data['chart'] = $treedrawing;
     return $data;

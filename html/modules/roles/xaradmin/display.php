@@ -15,12 +15,12 @@
 function roles_admin_display()
 {
     if (!xarVarFetch('itemtype','id',$itemtype, 1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('uid','int:1:',$uid)) return;
+    if (!xarVarFetch('id','int:1:',$id)) return;
 
 
     $data = array();
     sys::import('modules.roles.class.roles');
-    $role = xarRoles::get($uid);
+    $role = xarRoles::get($id);
 
     $data['itemtype'] = $role->getType();
     $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
@@ -28,7 +28,7 @@ function roles_admin_display()
     $object = xarModAPIFunc('dynamicdata','user','getobject',array('module'   => 'roles',
                                                 'itemtype' => $data['basetype']));
 
-    $itemid = $object->getItem(array('itemid' => $uid));
+    $itemid = $object->getItem(array('itemid' => $id));
 
     // get the array of parents of this role
     // need to display this in the template
@@ -45,7 +45,7 @@ function roles_admin_display()
     if (!xarSecurityCheck('EditRole',1,'Roles',$name)) return;
     $data['frozen'] = xarSecurityCheck('ViewRoles',0,'Roles',$name);
 
-    $data['uid'] = $uid;
+    $data['id'] = $id;
 
     $types = xarModAPIFunc('roles','user','getitemtypes');
 
@@ -55,9 +55,9 @@ function roles_admin_display()
     $item['module'] = 'roles';
     $item['itemtype'] = $data['itemtype']; // handle groups differently someday ?
     $item['returnurl'] = xarModURL('roles', 'user', 'display',
-                                   array('uid' => $uid));
+                                   array('id' => $id));
     $hooks = array();
-    $hooks = xarModCallHooks('item', 'display', $uid, $item);
+    $hooks = xarModCallHooks('item', 'display', $id, $item);
     $data['hooks'] = $hooks;
     $data['object'] = & $object;
     xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));

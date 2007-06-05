@@ -14,7 +14,7 @@
 function roles_admin_sendmail()
 {
     // Get parameters from whatever input we need
-    if (!xarVarFetch('uid',     'int:0:', $uid, 0)) return;
+    if (!xarVarFetch('id',     'int:0:', $id, 0)) return;
     if (!xarVarFetch('state',   'int:0:', $state, ROLES_STATE_CURRENT)) return;
     if (!xarVarFetch('message', 'str:1:', $message)) return;
     if (!xarVarFetch('subject', 'str:1',  $subject)) return;
@@ -31,7 +31,7 @@ function roles_admin_sendmail()
     $q = new xarQuery();
     $q = $q->sessiongetvar('rolesquery');
 
-    // only need the uid, name and email fields
+    // only need the id, name and email fields
     $q->clearfields();
     $q->addfields(array('r.id','r.name','r.uname','r.email'));
 
@@ -39,7 +39,7 @@ function roles_admin_sendmail()
     $q->run();
 
     foreach ($q->output() as $user) {
-        $users[$user['id']] = array('uid'      => $user['id'],
+        $users[$user['id']] = array('id'      => $user['id'],
                                     'name'     => $user['name'],
                                     'email'    => $user['email'],
                                     'username' => $user['uname']
@@ -49,12 +49,12 @@ function roles_admin_sendmail()
     // Check if we also want to send to subgroups
     // In this case we'll just pick out the descendants in the same state
     // Note the nice use of the array keys to overwrite users we already have
-    if ($uid != 0 && ($includesubgroups == 1)) {
-        $parentgroup = xarRoles::get($uid);
+    if ($id != 0 && ($includesubgroups == 1)) {
+        $parentgroup = xarRoles::get($id);
         $descendants = $parentgroup->getDescendants($state);
 
         while (list($key, $user) = each($descendants)) {
-            $users[$user->getID()] = array('uid' => $user->getID(),
+            $users[$user->getID()] = array('id' => $user->getID(),
                 'name'     => $user->getName(),
                 'email'    => $user->getEmail(),
                 'username' => $user->getUser()
@@ -83,7 +83,7 @@ function roles_admin_sendmail()
     // now send the mails
     foreach ($users as $user) {
         //Get the common search and replace values
-        $data['recipientuid']      = $user['uid'];
+        $data['recipientid']      = $user['id'];
         $data['recipientname']     = $user['name'];
         $data['recipientusername'] = $user['username'];
         $data['recipientemail']    = $user['email'];

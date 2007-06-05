@@ -16,7 +16,7 @@ sys::import('modules.base.xarproperties.textbox');
 class URLTitleProperty extends TextBoxProperty
 {
     public $id         = 41;
-    public $name       = 'urtitle';
+    public $name       = 'urltitle';
     public $desc       = 'URL + Title';
 
     function __construct(ObjectDescriptor $descriptor)

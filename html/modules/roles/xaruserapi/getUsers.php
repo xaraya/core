@@ -13,26 +13,26 @@
 /**
  * getUsers - view users in group
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['uid'] group id
- * @return $users array containing uname, uid
+ * @param $args['id'] group id
+ * @return $users array containing uname, id
  */
 function roles_userapi_getUsers($args)
 {
     extract($args);
 
-    if(!isset($uid)) throw new EmptyParameterException('uid');
+    if(!isset($id)) throw new EmptyParameterException('id');
 
 
 // Security Check
     if(!xarSecurityCheck('ReadRole')) return;
 
-    $role = xarRoles::get($uid);
+    $role = xarRoles::get($id);
 
     $users = $role->getUsers();
 
     $flatusers = array();
     foreach($users as $user) {
-        $flatusers[] = array('uid' => $user->getID(),
+        $flatusers[] = array('id' => $user->getID(),
                         'uname' => $user->getUser()
                         );
     }

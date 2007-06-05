@@ -24,7 +24,7 @@
         <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
           <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
             <dd>
-              <a href="&xar-modurl-roles-admin-showusers;&amp;uid=#$parents.$i.parentid#" title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a>
+              <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a>
             </dd>
           </xar:if>
           <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
@@ -46,7 +46,7 @@
         </label>
         <xar:set name="onchange">'this.form.submit();'</xar:set>
         <xar:data-input type="module" name="pmodule" id="pmodule" value="$pmodule" firstline="Choose" onchange="$onchange" />
-        <input type="hidden" name="uid" id="uid" value="#$uid#" />
+        <input type="hidden" name="id" id="id" value="#$id#" />
         <input type="submit" value="#xarML('Test Privileges')#" class="xar-margin-thickleft" />
       </div>
     </fieldset>
@@ -73,7 +73,7 @@
         <xar:foreach in="$masks" value="$mask">
           <tr>
             <td>
-              <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=&xar-var-uid;&amp;name=#$mask:getName()#&amp;test=true">
+              <a href="&xar-modurl-roles-admin-testprivileges;&amp;id=&xar-var-id;&amp;name=#$mask:getName()#&amp;test=true">
                 #$mask:getName()#
               </a>
             </td>
@@ -202,7 +202,7 @@
     <fieldset>
       <legend><xar:mlstring>Test Result</xar:mlstring></legend>
       <h4>
-        #$itemtypename# <a href="&xar-modurl-roles-admin-modify;&amp;uid=#$uid#">'#$pname#'</a>
+        #$itemtypename# <a href="&xar-modurl-roles-admin-modify;&amp;id=#$id#">'#$pname#'</a>
         <xar:if condition="$testresult eq false">
           <xar:mlstring>Is Not Permitted</xar:mlstring>
           <xar:else />

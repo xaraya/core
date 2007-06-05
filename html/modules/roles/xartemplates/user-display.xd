@@ -10,7 +10,7 @@
 </div>
 <div class="xar-mod-body">
     <xar:if condition="strtolower($uname) ne 'anonymous' and strtolower($uname) ne 'myself'">
-        <xar:if condition="xarModGetVar('roles', 'allowemail') and xarModGetUserVar('roles','allowemail',$uid)">
+        <xar:if condition="xarModGetVar('roles', 'allowemail') and xarModGetUserVar('roles','allowemail',$id)">
             <p>
                 <strong>
                     <xar:mlstring>
@@ -18,7 +18,7 @@
                     </xar:mlstring>
                 </strong>
                 :
-                <a href="&xar-modurl-roles-user-email;&amp;uid=#$uid#">
+                <a href="&xar-modurl-roles-user-email;&amp;id=#$id#">
                     <xar:ml>
                         <xar:mlstring>
                             Send an Email to #(1)
@@ -75,7 +75,7 @@
                 #$utimezone# (GMT #$offset#)
             </p>
         </xar:if>
-        <xar:data-getitem name="$properties" module="roles" itemtype="$itemtype" itemid="$uid" />
+        <xar:data-getitem name="$properties" module="roles" itemtype="$itemtype" itemid="$id" />
         <xar:if condition="isset($properties) and count($properties) gt 0">
             <xar:foreach in="$properties" key="$name">
                 <p>

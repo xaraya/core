@@ -6,8 +6,8 @@
 <xar:set name="account">
     &xar-modurl-roles-user-account;
 </xar:set>
-<xar:set name="uid">
-    xarUserGetVar('uid')
+<xar:set name="id">
+    xarUserGetVar('id')
 </xar:set>
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">

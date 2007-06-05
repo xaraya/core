@@ -99,7 +99,7 @@
 <xar:if condition="isset($lastuser)">
      <p>
          <xar:mlstring>Welcome to our latest member,</xar:mlstring>
-         <a href="&xar-modurl-roles-user-display;&amp;uid=#$lastuser['uid']#">
+         <a href="&xar-modurl-roles-user-display;&amp;id=#$lastuser['id']#">
              #xarVarPrepForDisplay($lastuser['name'])#
          </a>
      </p>

@@ -13,24 +13,24 @@
 /**
  * getancestors - get ancestors of a role
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['uid'] role id
- * @return $ancestors array containing name, uid
+ * @param $args['id'] role id
+ * @return $ancestors array containing name, id
  */
 function roles_userapi_getancestors($args)
 {
     extract($args);
 
-    if(!isset($uid)) throw new EmptyParameterException('uid');
+    if(!isset($id)) throw new EmptyParameterException('id');
 
     if(!xarSecurityCheck('ReadRole')) return;
 
-    $role = xarRoles::get($uid);
+    $role = xarRoles::get($id);
 
     $ancestors = $role->getRoleAncestors();
 
     $flatancestors = array();
     foreach($ancestors as $ancestor) {
-        $flatancestors[] = array('uid' => $ancestor->getID(),
+        $flatancestors[] = array('id' => $ancestor->getID(),
                         'name' => $ancestor->getName()
                         );
     }

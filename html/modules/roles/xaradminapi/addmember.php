@@ -13,7 +13,7 @@
 /**
  * insertuser - add a user to a group
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['uid'] user id
+ * @param $args['id'] user id
  * @param $args['gid'] group id
  * @return true on succes, false on failure
  */

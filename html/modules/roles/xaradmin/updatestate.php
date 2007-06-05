@@ -20,16 +20,16 @@ function roles_admin_updatestate()
     // Get parameters
     if (!xarVarFetch('status',      'int:0:', $data['status'],   NULL,    XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('state',       'int:0:', $data['state'],    0,       XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('groupuid',    'int:0:', $data['groupuid'], 1,       XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('groupid',    'int:0:', $data['groupid'], 1,       XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('updatephase', 'str:1:', $updatephase,      'update',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('uids',        'isset',  $uids,             NULL,    XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('ids',        'isset',  $ids,             NULL,    XARVAR_NOT_REQUIRED)) return;
 
     $data['authid'] = xarSecGenAuthKey();
     // invalid fields (we'll check this below)
     // check if the username is empty
     //Note : We should not provide xarML here. (should be in the template for better translation)
     //Might be additionnal advice about the invalid var (but no xarML..)
-    if (!isset($uids)) {
+    if (!isset($ids)) {
        $invalid = xarML('You must choose the users to change their state');
     }
      if (isset($invalid)) {
@@ -38,7 +38,7 @@ function roles_admin_updatestate()
                              array('authid'  => $data['authid'],
                                    'state'   => $data['state'],
                                    'invalid' => $invalid,
-                                   'uid'     => $data['groupuid'])));
+                                   'id'     => $data['groupid'])));
     }
     //Get the notice message
     switch ($data['status']) {
@@ -59,8 +59,8 @@ function roles_admin_updatestate()
         break;
     }
 
-    // Why so late? uids check never reaches this.
-    if ( (!isset($uids)) || (!isset($data['status']))
+    // Why so late? ids check never reaches this.
+    if ( (!isset($ids)) || (!isset($data['status']))
                          || (!is_numeric($data['status']))
                          || ($data['status'] < 1)
                          || ($data['status'] > 4) )       {
@@ -69,31 +69,31 @@ function roles_admin_updatestate()
         $vars = array('parameters', 'admin', 'updatestate', 'Roles');
         throw new BadParameterException($vars,$msg);
     }
-    $uidnotify = array();
-    foreach ($uids as $uid => $val) {
+    $idnotify = array();
+    foreach ($ids as $id => $val) {
         //check if the user must be updated :
-        $role = xarRoles::get($uid);
+        $role = xarRoles::get($id);
         if ($role->getState() != $data['status']) {
             if ($data['status'] == ROLES_STATE_NOTVALIDATED) $valcode = xarModAPIFunc('roles','user','makepass');
             else $valcode = null;
             //Update the user
             if (!xarModAPIFunc('roles', 'admin', 'stateupdate',
-                              array('uid'     => $uid,
+                              array('id'     => $id,
                                     'state'   => $data['status'],
                                     'valcode' => $valcode))) return;
-            $uidnotify[$uid] = 1;
+            $idnotify[$id] = 1;
         }
     }
-    $uids = $uidnotify;
+    $ids = $idnotify;
     // Success
-     if ((!xarModVars::get('roles', 'ask'.$mailtype.'email')) || (count($uidnotify) == 0)) {
+     if ((!xarModVars::get('roles', 'ask'.$mailtype.'email')) || (count($idnotify) == 0)) {
             xarResponseRedirect(xarModURL('roles', 'admin', 'showusers',
-                          array('uid' => $data['groupuid'], 'state' => $data['state'])));
+                          array('id' => $data['groupid'], 'state' => $data['state'])));
             return true;
      }
      else {
         xarResponseRedirect(xarModURL('roles', 'admin', 'asknotification',
-                          array('uid' => $uids, 'mailtype' => $mailtype, 'groupuid' => $data['groupuid'], 'state' => $data['state'])));
+                          array('id' => $ids, 'mailtype' => $mailtype, 'groupid' => $data['groupid'], 'state' => $data['state'])));
      }
 }
 ?>

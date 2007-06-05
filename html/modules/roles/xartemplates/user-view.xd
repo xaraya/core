@@ -5,7 +5,7 @@
         <legend>
             <xar:ml>
                 <xar:mlstring>
-                    #(1) List 
+                    #(1) List
                 </xar:mlstring>
                 <xar:mlvar>
                     #$itemtypename#
@@ -34,7 +34,7 @@
                             </xar:ml>
                         </td>
                     </tr>
-                <xar:else/>                
+                <xar:else/>
                     <xar:loop name="$items">
                         <xar:if condition="(($loop:index + 1) % 2)">
                             <xar:set name="item_class">'xar-norm'</xar:set>
@@ -47,18 +47,18 @@
                                 <td>#$field#
                                 </td>
                             </xar:foreach>
-                            <xar:set name="uid">#$loop:item['uid']#</xar:set>
+                            <xar:set name="id">#$loop:item['id']#</xar:set>
                             <xar:foreach in="$objectlists" value="$list">
                                 <xar:set name="items">$list->items</xar:set>
                                 <xar:set name="properties">$list->getProperties()</xar:set>
                                 <xar:foreach in="$properties" key="$key" value="$value">
-                                    <xar:if condition="isset($items[$uid][$key])">
+                                    <xar:if condition="isset($items[$id][$key])">
                                         <td>
-                                            <xar:data-output property="$properties[$key]" value="$items[$uid][$key]" />
+                                            <xar:data-output property="$properties[$key]" value="$items[$id][$key]" />
                                         </td>
                                     </xar:if>
-                                </xar:foreach>                        
-                            </xar:foreach>                        
+                                </xar:foreach>
+                            </xar:foreach>
                         </tr>
                     </xar:loop>
                 </xar:if>

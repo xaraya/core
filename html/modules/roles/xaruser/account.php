@@ -31,15 +31,15 @@ function roles_user_account()
         xarResponseRedirect(xarModURL($defaultloginmodname,'user','showloginform'));
     }
 
-    $data['uid']          = xarUserGetVar('uid');
+    $data['id']          = xarUserGetVar('id');
     $data['name']         = xarUserGetVar('name');
     $data['logoutmodule'] = $defaultlogoutmodname;
     $data['loginmodule']  = $defaultloginmodname;
     $data['authmodule']   = $defaultauthmodname;
-    if ($data['uid'] == XARUSER_LAST_RESORT) {
+    if ($data['id'] == XARUSER_LAST_RESORT) {
         $data['message'] = xarML('You are logged in as the last resort administrator.');
     } else  {
-        $data['current'] = xarModURL('roles', 'user', 'display', array('uid' => xarUserGetVar('uid')));
+        $data['current'] = xarModURL('roles', 'user', 'display', array('id' => xarUserGetVar('id')));
 
         $output = array();
         $item = array();

@@ -41,13 +41,13 @@ function roles_admin_sitelock($args)
         if (!xarVarFetch('toggle',       'str',   $toggle,       NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
         if (!xarVarFetch('notify',       'isset', $notify,       NULL, XARVAR_DONT_SET)) return;
         if(!isset($notify)) $notify = array();
-        for($i=0; $i<$rolesCount; $i++) $roles[$i]['notify'] = in_array($roles[$i]['uid'],$notify);
+        for($i=0; $i<$rolesCount; $i++) $roles[$i]['notify'] = in_array($roles[$i]['id'],$notify);
 
         if ($cmd == 'delete') {
-            if (!xarVarFetch('uid', 'int', $uid, NULL, XARVAR_DONT_SET)) return;
-            if (isset($uid)) {
+            if (!xarVarFetch('id', 'int', $id, NULL, XARVAR_DONT_SET)) return;
+            if (isset($id)) {
                 for($i=0; $i < $rolesCount; $i++) {
-                    if ($roles[$i]['uid'] == $uid) {
+                    if ($roles[$i]['id'] == $id) {
                         array_splice($roles,$i,1);
                         break;
                     }
@@ -67,13 +67,13 @@ function roles_admin_sitelock($args)
                 $r = xaruFindRole($newname);
                 if (!$r) $r = xarFindRole($newname);
                 if($r) {
-                    $newuid  = $r->getID();
+                    $newid  = $r->getID();
                     $newname = $r->isUser() ? $r->getUser() : $r->getName();
                 }
-                else $newuid = 0;
+                else $newid = 0;
 
-                $newelement = array('uid' => $newuid, 'name' => $newname , 'notify' => TRUE);
-                if ($newuid != 0 && !in_array($newelement,$roles))
+                $newelement = array('id' => $newid, 'name' => $newname , 'notify' => TRUE);
+                if ($newid != 0 && !in_array($newelement,$roles))
                     $roles[] = $newelement;
 
             // Write the configuration to disk
@@ -104,7 +104,7 @@ function roles_admin_sitelock($args)
             $rolesarray = array();
             for($i=0; $i < $rolesCount; $i++) {
                 if($roles[$i]['notify'] == 1) {
-                    $rolesarray[] = xarRoles::get($roles[$i]['uid']);
+                    $rolesarray[] = xarRoles::get($roles[$i]['id']);
                 }
             }
             //Check each if it is a user or a group
@@ -123,7 +123,7 @@ function roles_admin_sitelock($args)
 
             // Clear the active sessions
                 $spared = array();
-                for($i=0; $i < $rolesCount; $i++) $spared[] = $roles[$i]['uid'];
+                for($i=0; $i < $rolesCount; $i++) $spared[] = $roles[$i]['id'];
                 if(!xarModAPIFunc('roles','admin','clearsessions', $spared)) {
                     $msg = xarML('Could not clear sessions table');
                     throw new Exception($msg);
