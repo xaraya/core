@@ -24,18 +24,18 @@ function roles_userapi_getitemlinks($args)
     $itemlinks = array();
     if (!xarSecurityCheck('ViewRoles', 0)) {
         return $itemlinks;
-    } 
+    }
 
     foreach ($args['itemids'] as $itemid) {
         $item = xarModAPIFunc('roles', 'user', 'get',
-            array('uid' => $itemid));
+            array('id' => $itemid));
         if (!isset($item)) return;
         $itemlinks[$itemid] = array('url' => xarModURL('roles', 'user', 'display',
-                array('uid' => $itemid)),
+                array('id' => $itemid)),
             'title' => xarML('Display User'),
             'label' => xarVarPrepForDisplay($item['name']));
-    } 
+    }
     return $itemlinks;
-} 
+}
 
 ?>

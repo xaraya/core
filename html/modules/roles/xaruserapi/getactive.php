@@ -21,8 +21,8 @@ function roles_userapi_getactive($args)
 {
     extract($args);
 
-    if (!empty($uid) && !is_numeric($uid)) {
-        throw new VariableValidationException(array('uid',$uid,'numeric'));
+    if (!empty($id) && !is_numeric($id)) {
+        throw new VariableValidationException(array('id',$id,'numeric'));
     }
 
     if (empty($filter)){
@@ -44,15 +44,15 @@ function roles_userapi_getactive($args)
               FROM $sessioninfoTable
               WHERE last_use > ? AND role_id = ?";
     $stmt = $dbconn->prepareStatement($query);
-    $bindvars = array((int)$filter,(int)$uid);
+    $bindvars = array((int)$filter,(int)$id);
     $result = $stmt->executeQuery($bindvars);
 
     // Put users into result array
     while($result->next()) {
-        $uid = $result->fields;
+        $id = $result->fields;
         // FIXME: add some instances here
         if (xarSecurityCheck('ReadRole',0)) {
-            $sessions[] = array('uid'       => $uid);
+            $sessions[] = array('id'       => $id);
         }
     }
     $result->close();

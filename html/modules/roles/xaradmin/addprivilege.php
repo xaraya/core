@@ -57,7 +57,7 @@ function roles_admin_addprivilege()
 
     if (empty($return_url)) {
         $return_url = xarModURL('roles',  'admin', 'showprivileges',
-                                array('uid' => $roleid));
+                                array('id' => $roleid));
     }
 
     // redirect to the next page

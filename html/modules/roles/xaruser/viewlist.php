@@ -24,7 +24,7 @@ function roles_user_viewlist($args)
 
     if(!xarVarFetch('letter', 'str:1', $letter, NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('search', 'str:1:100', $search, NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('order', 'enum:name:uname:email:uid:state:date_reg', $order, 'name', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('order', 'enum:name:uname:email:id:state:date_reg', $order, 'name', XARVAR_NOT_REQUIRED)) {return;}
 
     // Bug 3338: disable 'selection' since it allows a user to manipulate the query directly
     //if(!xarVarFetch('selection', 'str', $selection, '', XARVAR_DONT_SET)) {return;}
@@ -172,25 +172,25 @@ function roles_user_viewlist($args)
             break;
     }
 
-    // keep track of the selected uid's
-    $data['uidlist'] = array();
+    // keep track of the selected id's
+    $data['idlist'] = array();
 
     // Check individual privileges for Edit / Delete
     for ($i = 0, $max = count($items); $i < $max; $i++) {
         $item = $items[$i];
-        $data['uidlist'][] = $item['uid'];
+        $data['idlist'][] = $item['id'];
 
         // Grab the list of groups this role belongs to
-        $groups = xarModAPIFunc('roles', 'user', 'getancestors', array('uid' => $item['uid']));
+        $groups = xarModAPIFunc('roles', 'user', 'getancestors', array('id' => $item['id']));
         foreach ($groups as $group) {
-            $items[$i]['groups'][$group['uid']] = $group['name'];
+            $items[$i]['groups'][$group['id']] = $group['name'];
         }
 
         // Change email to a human readible entry.  Anti-Spam protection.
         if (xarUserIsLoggedIn()) {
             $items[$i]['emailurl'] = xarModURL(
                 'roles', 'user', 'email',
-                array('uid' => $item['uid'])
+                array('id' => $item['id'])
             );
         } else {
             $items[$i]['emailurl'] = '';

@@ -14,7 +14,7 @@
 /* deletegroup - delete a group & info
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['uid']
+ * @param $args['id']
  * @return true on success, false otherwise
  * @todo Move this to sessions subssystem, doesnt belong here.
  */
@@ -35,12 +35,12 @@ function roles_adminapi_clearsessions($spared)
     try {
         $dbconn->begin();
         while ($result->next()) {
-            list($thissession, $thisuid) = $result->fields;
-            foreach ($spared as $uid) {
-                $thisrole = xarRoles::get($thisuid);
-                $thatrole = xarRoles::get($uid);
-                if (!$thisuid == $uid && !$thisrole->isParent($thatrole)) {
-                    $stmt->executeUpdate(array($thisuid));
+            list($thissession, $thisid) = $result->fields;
+            foreach ($spared as $id) {
+                $thisrole = xarRoles::get($thisid);
+                $thatrole = xarRoles::get($id);
+                if (!$thisid == $id && !$thisrole->isParent($thatrole)) {
+                    $stmt->executeUpdate(array($thisid));
                     break;
                 }
             }

@@ -79,13 +79,13 @@ class xarRoles extends Object
      * The repository contains an entry for each user and group.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @param integer $uid
+     * @param integer $id
      * @return array representing the group
      */
-    public static function getgroup($uid)
+    public static function getgroup($id)
     {
         $q = self::_getgroupsquery();
-        $q->eq('r.id',$uid);
+        $q->eq('r.id',$id);
         if (!$q->run()) return;
         if ($q->row() != array()) return $q->row();
         return false;
@@ -98,15 +98,15 @@ class xarRoles extends Object
      * We don't include users in the tree because there are too many to display
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @param int $uid
+     * @param int $id
      * @return array representing the subgroups of a group
      */
-    public static function getsubgroups($uid)
+    public static function getsubgroups($id)
     {
         $subgroups = array();
         $groups = self::getgroups();
         foreach($groups as $subgroup) {
-            if ($subgroup['parentid'] == $uid) {
+            if ($subgroup['parentid'] == $id) {
                 $subgroups[] = $subgroup;
             }
         }
@@ -114,31 +114,31 @@ class xarRoles extends Object
     }
 
     /**
-     * getRole: gets a single role
+     * get: gets a single role
      *
      * Retrieves a single role (user or group) from the roles repository
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @param integer $uid
+     * @param integer $id
      * @return object role
      */
-    public static function get($uid)
+    public static function get($id)
     {
-        $cacheKey = 'Roles.ByUid';
-        if(xarVarIsCached($cacheKey,$uid)) {
-            return xarVarGetCached($cacheKey,$uid);
+        $cacheKey = 'Roles.ById';
+        if(xarVarIsCached($cacheKey,$id)) {
+            return xarVarGetCached($cacheKey,$id);
         }
         // Need to get it from DB.
         // TODO: move caching to _lookuprole?
-        $r = self::_lookuprole('id',(int) $uid);
-        xarVarSetCached($cacheKey,$uid,$r);
+        $r = self::_lookuprole('id',(int) $id);
+        xarVarSetCached($cacheKey,$id,$r);
         return $r;
     }
 
     /**
      * Wrapper functions to support Xaraya 1 API for roles
      */
-    public static function getRole($uid) {return get::get($uid);}
+    public static function getRole($id) {return get::get($id);}
 
 
     /**
@@ -195,9 +195,9 @@ class xarRoles extends Object
         $result->first();
 
         // create the parent object
-        list($uid, $name, $type, $parentid, $uname, $email, $pass,
+        list($id, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
-/*        $args = array('uid' => $uid,
+/*        $args = array('id' => $id,
                        'name' => $name,
                        'type' => $type,
                        'parentid' => $parentid,
@@ -211,7 +211,7 @@ class xarRoles extends Object
                        */
         sys::import('modules.dynamicdata.class.objects.master');
         $parent = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
-        $parent->getItem(array('itemid' => $uid));
+        $parent->getItem(array('itemid' => $id));
 
         // retrieve the child's data from the repository
         // Execute the query, bail if an exception was thrown
@@ -219,9 +219,9 @@ class xarRoles extends Object
         $result->first();
 
         // create the child object
-        list($uid, $name, $type, $parentid, $uname, $email, $pass,
+        list($id, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
-/*        $args = array('uid' => $uid,
+/*        $args = array('id' => $id,
                        'name' => $name,
                        'type' => $type,
                        'parentid' => $parentid,
@@ -235,7 +235,7 @@ class xarRoles extends Object
                        */
         sys::import('modules.dynamicdata.class.objects.master');
         $child = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
-        $child->getItem(array('itemid' => $uid));
+        $child->getItem(array('itemid' => $id));
 
        // done
         return $parent->addMember($child);
@@ -262,11 +262,11 @@ class xarRoles extends Object
         $result = self::$dbconn->Execute($query,array($rootname));
 
         // create the entry
-        list($uid) = $result->fields;
+        list($id) = $result->fields;
         $query = "INSERT INTO " . self::$rolememberstable .
                 " VALUES (?,?)";
         // Execute the query, bail if an exception was thrown
-        self::$dbconn->Execute($query, array($uid,null));
+        self::$dbconn->Execute($query, array($id,null));
         // done
         return true;
     }
@@ -290,7 +290,7 @@ class xarRoles extends Object
         $q->addtable(self::$rolestable,'r');
         $q->addtable(self::$rolememberstable,'rm');
         $q->join('r.id','rm.id');
-        $q->addfield('r.id AS uid');
+        $q->addfield('r.id AS id');
         $q->addfield('r.name AS name');
         $q->addfield('r.users AS users');
         $q->addfield('rm.parentid AS parentid');
@@ -339,7 +339,7 @@ class xarRoles extends Object
             if (!empty($duv)) $duvs[$key] = $duv;
         }
 /*        $args = array(
-            'uid' =>         $row['id'],
+            'id' =>         $row['id'],
             'name' =>        $row['name'],
             'type' =>        $row['type'],
             'users' =>       $row['users'],

@@ -93,16 +93,16 @@ function roles_userapi_encode_shorturl($args)
 
           case 'display':
             // check for required parameters
-            if (isset($uid) && is_numeric($uid)) {
-                unset($args['uid']);
-                $path[] = $uid;
+            if (isset($id) && is_numeric($id)) {
+                unset($args['id']);
+                $path[] = $id;
             }
             break;
 
         default:
             break;
     }
-    
+
 
     // If no short URL path was obtained above, then there is no encoding.
     if (empty($path)) {

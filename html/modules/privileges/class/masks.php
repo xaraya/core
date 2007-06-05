@@ -110,11 +110,9 @@ class xarMasks extends Object
                 $bindvars = array($component,'All','None');
             }
         } else {
-            $modInfo = xarMod_GetBaseInfo(xarMod::GetName($modid));
-            $module_id = $modInfo['systemid'];
             if ($component == '' || $component == 'All') {
                 $query .= "WHERE module_id = ? ";
-                $bindvars = array($module_id);
+                $bindvars = array($modid);
             } else {
                 $query .= "WHERE  module_id = ? AND
                                  component IN (?,?,?) ";

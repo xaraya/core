@@ -56,17 +56,17 @@ function roles_userapi_countallactive($args)
     // TODO: this would be the place to add the bindvars applicable for $selection
 
     // if we aren't including anonymous in the query,
-    // then find the anonymous user's uid and add
+    // then find the anonymous user's id and add
     // a where clause to the query
     if (!$include_anonymous) {
         $anon = xarModAPIFunc('roles','user','get',array('uname'=>'anonymous'));
         $query .= " AND a.id != ?";
-        $bindvars[] = (int) $anon['uid'];
+        $bindvars[] = (int) $anon['id'];
     }
     if (!$include_myself) {
         $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'myself'));
         $query .= " AND a.id != ?";
-        $bindvars[] = (int) $thisrole['uid'];
+        $bindvars[] = (int) $thisrole['id'];
     }
 
     $query .= " AND type = ?";

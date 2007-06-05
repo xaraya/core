@@ -97,7 +97,7 @@
       <type>dropdown</type>
       <default>1</default>
       <source>xar_roles.state</source>
-      <status>65</status>
+      <status>33</status>
       <order>9</order>
       <validation>xarModAPIFunc('roles','user','getstates')</validation>
     </property>

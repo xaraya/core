@@ -8,10 +8,10 @@
     <h2>
         <a href="&xar-modurl-roles-admin-showusers;">
             <xar:mlstring>Member List</xar:mlstring>
-        </a>: 
+        </a>:
         <xar:ml>
         <xar:mlstring>Send #(1) notification</xar:mlstring>
-        <xar:mlvar>#$mailtype#</xar:mlvar>        
+        <xar:mlvar>#$mailtype#</xar:mlvar>
         </xar:ml>
     </h2>
 
@@ -35,7 +35,7 @@
     </xar:comment>
 
     <p>
-        <xar:mlstring>The changes have been made to the selected user(s), you can now send a notification by submitting the form or go back to the</xar:mlstring> <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#"><xar:mlstring>members list</xar:mlstring></a>.
+        <xar:mlstring>The changes have been made to the selected user(s), you can now send a notification by submitting the form or go back to the</xar:mlstring> <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;id=#$groupid#"><xar:mlstring>members list</xar:mlstring></a>.
     </p>
 
     <form action="&xar-modurl-roles-admin-asknotification;" method="post" enctype="application/x-www-form-urlencoded">
@@ -59,10 +59,10 @@
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="phase" id="phase" value="notify" />
                 <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />
-                <input type="hidden" name="uid" id="uid" value="#$uid#" />
+                <input type="hidden" name="id" id="id" value="#$id#" />
                 <input type="hidden" name="pass" id="pass" value="#xarVarPrepForDisplay($pass)#" />
                 <input type="hidden" name="ip" id="ip" value="#$ip#" />
-                <input type="hidden" name="groupuid" id="groupuid" value="#$groupuid#" />
+                <input type="hidden" name="groupid" id="groupid" value="#$groupid#" />
                 <input type="hidden" name="state" id="state" value="#$state#" />
                 <input type="submit" value="#xarML('Send')#" class="xar-margin-thickright" />
                 <input type="button" value="#xarML('Cancel')#" onclick="history.back(-1);" class="xar-margin-thickleft" />
@@ -110,7 +110,7 @@
                 </span>
             </div>
 
-        <xar:elseif condition="$mailtype eq 'password' or $mailtype eq 'reminder'"/>    
+        <xar:elseif condition="$mailtype eq 'password' or $mailtype eq 'reminder'"/>
 
             <div class="xar-form-input-wrapper">
                 <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">

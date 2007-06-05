@@ -8,7 +8,7 @@
         <a href="&xar-modurl-roles-user-viewlist;">
             <xar:mlstring>Member List</xar:mlstring>
         </a>&#160;&gt;&#160;
-        <a href="&xar-modurl-roles-user-display;&amp;uid=#$uid#">
+        <a href="&xar-modurl-roles-user-display;&amp;id=#$id#">
             #xarVarPrepForDisplay($name)#
         </a>&#160;&gt;&#160;
         <xar:mlstring>Send an Email to</xar:mlstring>
@@ -20,7 +20,7 @@
                 <div class="xar-error">#xarVarPrepForDisplay($error_message)#</div>
             </xar:if>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="uid" id="uid" value="#$uid#" />
+            <input type="hidden" name="id" id="id" value="#$id#" />
             <div>
                 <div><label for="subject"><xar:mlstring>Subject:</xar:mlstring></label></div>
                 <input type="text" name="subject" id="subject" size="40" maxlength="100" value="#xarVarPrepForDisplay($subject)#" />

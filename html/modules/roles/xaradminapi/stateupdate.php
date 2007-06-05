@@ -14,7 +14,7 @@
  * Update a user's state
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['uid'] user ID
+ * @param $args['id'] user ID
  * @param $args['name'] user real name
  * @param $args['uname'] user nick name
  * @param $args['email'] user email address
@@ -28,15 +28,15 @@ function roles_adminapi_stateupdate($args)
     extract($args);
     // Argument check - make sure that all required arguments are present,
     // if not then set an appropriate error message and return
-    if (!isset($uid))   throw new EmptyParameterException('uid');
+    if (!isset($id))   throw new EmptyParameterException('id');
     if (!isset($state)) throw new EmptyParameterException('state');
 
     $item = xarModAPIFunc('roles',
                           'user',
                           'get',
-                          array('uid' => $uid));
+                          array('id' => $id));
 
-    if ($item == false) throw new IDNotFoundException($uid);
+    if ($item == false) throw new IDNotFoundException($id);
 
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
@@ -50,7 +50,7 @@ function roles_adminapi_stateupdate($args)
         $bindvars[] = $valcode;
     }
     $query .= " WHERE id = ?";
-    $bindvars[] = $uid;
+    $bindvars[] = $id;
 
     $dbconn->Execute($query,$bindvars);
 

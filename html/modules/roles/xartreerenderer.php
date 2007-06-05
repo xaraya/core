@@ -80,12 +80,12 @@ class xarTreeRenderer extends Object
      * @throws none
      * @todo none
      */
-    function maketree($topuid='',$levels=0)
+    function maketree($topid='',$levels=0)
     {
         $this->levels = $levels;
-        if ($topuid == '') $topuid = xarModVars::get('roles', 'everybody');
+        if ($topid == '') $topid = xarModVars::get('roles', 'everybody');
         $initialnode = array(
-                    'parent' => $this->roles->getgroup($topuid),
+                    'parent' => $this->roles->getgroup($topid),
                     'level' => 1
                     );
 //        $this->tree = $this->addbranches($initialnode);
@@ -110,7 +110,7 @@ class xarTreeRenderer extends Object
         $level = $node['level'];
         $node['children'] = array();
         if ($level == $this->levels) return $node;
-        foreach($this->roles->getsubgroups($object['uid']) as $subnode) {
+        foreach($this->roles->getsubgroups($object['id']) as $subnode) {
             $nextnode = array(
                         'parent' => $subnode,
                         'level' => $level + 1
@@ -181,12 +181,12 @@ class xarTreeRenderer extends Object
         $object = $node['parent'];
         $this->treenode = $object;
         // check if we've aleady processed this entry
-        if (in_array($object['uid'], $this->alreadydone)) {
+        if (in_array($object['id'], $this->alreadydone)) {
             $this->drawchildren = false;
             $node['children'] = array();
         } else {
             $this->drawchildren = true;
-            $this->alreadydone[] = $object['uid'];
+            $this->alreadydone[] = $object['id'];
         }
         // is this a branch?
         $this->isbranch = count($node['children']) > 0 ? true : false;
@@ -262,7 +262,7 @@ class xarTreeRenderer extends Object
             return xarTplObject('roles', 'spacer', 'large');
         } else {
             $data['leafitemurl'] = xarModURL('roles', 'admin', 'showusers',
-                            array('uid' => $this->treenode['uid'], 'reload' => 1));
+                            array('id' => $this->treenode['id'], 'reload' => 1));
             $data['leafitemtitle'] = xarML('Show the Users in this Group');
             $data['leafitemimage'] = xarTplGetImage('users.png');
             return xarTplObject('roles', 'leaf', 'showuser', $data);
@@ -275,7 +275,7 @@ class xarTreeRenderer extends Object
             return xarTplObject('roles', 'spacer', 'large');
         } else {
             $data['leafitemurl'] = xarModURL('roles', 'admin', 'delete',
-                            array('uid' => $this->treenode['uid']));
+                            array('id' => $this->treenode['id']));
             $data['leafitemtitle'] = xarML('Delete this Group');
             $data['leafitemimage'] = xarTplGetImage('delete.png');
             return xarTplObject('roles', 'leaf', 'deleteuser', $data);
@@ -288,7 +288,7 @@ class xarTreeRenderer extends Object
             return xarTplObject('roles', 'spacer', 'large');
         } else {
             $data['leafitemurl'] = xarModURL('roles', 'admin', 'createmail',
-                            array('uid' => $this->treenode['uid']));
+                            array('id' => $this->treenode['id']));
             $data['leafitemtitle'] = xarML('Email the Users in this Group');
             $data['leafitemimage'] = xarTplGetImage('email.png');
             return xarTplObject('roles', 'leaf', 'email', $data);
@@ -301,7 +301,7 @@ class xarTreeRenderer extends Object
             return xarTplObject('roles', 'spacer', 'large');
         } else {
             $data['leafitemurl'] = xarModURL('roles', 'admin', 'showprivileges',
-                            array('uid' => $this->treenode['uid']));
+                            array('id' => $this->treenode['id']));
             $data['leafitemtitle'] = xarML('Show the Privileges assigned to this Group');
             $data['leafitemimage'] = xarTplGetImage('privileges.png');
             return xarTplObject('roles', 'leaf', 'showprivileges', $data);
@@ -314,7 +314,7 @@ class xarTreeRenderer extends Object
             return xarTplObject('roles', 'spacer', 'large');
         } else {
             $data['leafitemurl'] = xarModURL('roles', 'admin', 'testprivileges',
-                            array('uid' => $this->treenode['uid']));
+                            array('id' => $this->treenode['id']));
             $data['leafitemtitle'] = xarML("Test this Groups's Privileges");
             $data['leafitemimage'] = xarTplGetImage('test.png');
             return xarTplObject('roles', 'leaf', 'testprivileges', $data);
@@ -328,11 +328,11 @@ class xarTreeRenderer extends Object
             $data['leafitemtext'] = $this->treenode['name'];
             return xarTplObject('roles', 'leaf', 'placeholder', $data);
         } else {
-            $numofsubgroups = count($this->roles->getsubgroups($this->treenode['uid']));
+            $numofsubgroups = count($this->roles->getsubgroups($this->treenode['id']));
             $subgroups = $numofsubgroups == 1 ? xarML('subgroup') : xarML('subgroups');
             $users = $this->treenode['users'] == 1 ? xarML('user') : xarML('users');
             $data['leafitemurl'] = xarModURL('roles', 'admin', 'modify',
-                            array('uid' => $this->treenode['uid']));
+                            array('id' => $this->treenode['id']));
             $data['leafitemtitle'] = xarML("Modify this Group");
             $data['leafitemtext'] = $this->treenode['name'];
             $data['leafitemdescription'] = $numofsubgroups . " " . $subgroups . ' | ' . $this->treenode['users'] . " " . $users;

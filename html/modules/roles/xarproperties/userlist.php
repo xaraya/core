@@ -39,7 +39,7 @@ class UserListProperty extends SelectProperty
     *   showglue:string - string to join multiple fields together
     *   order:field[,field] - order the selection by the specified field
     * where
-    *   field - name|uname|email|uid
+    *   field - name|uname|email|id
     */
 
     function __construct(ObjectDescriptor $descriptor)
@@ -66,7 +66,7 @@ class UserListProperty extends SelectProperty
             if (empty($this->showlist)) {
                 // Simple case (default) -
                 foreach ($users as $user) {
-                    $this->options[] = array('id' => $user['uid'], 'name' => $user['name']);
+                    $this->options[] = array('id' => $user['id'], 'name' => $user['name']);
                 }
             } else {
                 // Complex case: allow specific fields to be selected.
@@ -75,7 +75,7 @@ class UserListProperty extends SelectProperty
                     foreach ($this->showlist as $showfield) {
                         $namevalue[] = $user[$showfield];
                     }
-                    $this->options[] = array('id' => $user['uid'], 'name' => implode($this->showglue, $namevalue));
+                    $this->options[] = array('id' => $user['id'], 'name' => implode($this->showglue, $namevalue));
                 }
             }
         }
@@ -157,7 +157,7 @@ class UserListProperty extends SelectProperty
                         $this->showlist = array_merge($this->showlist, explode(',', $option_value));
                         // Remove invalid elements (fields that are not valid).
                         $showfilter = create_function(
-                            '$a', 'return preg_match(\'/^[-]?(name|uname|email|uid|state|date_reg)$/\', $a);'
+                            '$a', 'return preg_match(\'/^[-]?(name|uname|email|id|state|date_reg)$/\', $a);'
                         );
                         $this->showlist = array_filter($this->showlist, $showfilter);
                     }
@@ -249,7 +249,7 @@ class UserListProperty extends SelectProperty
                     $templist = explode(',', $validation['showlist']);
                     // Remove invalid elements (fields that are not valid).
                     $showfilter = create_function(
-                        '$a', 'return preg_match(\'/^[-]?(name|uname|email|uid|state|date_reg)$/\', $a);'
+                        '$a', 'return preg_match(\'/^[-]?(name|uname|email|id|state|date_reg)$/\', $a);'
                     );
                     $templist = array_filter($templist, $showfilter);
                     if (count($templist) > 0) {

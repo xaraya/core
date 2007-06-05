@@ -99,13 +99,13 @@ function roles_user_search()
 
                 if (isset($items) && count($items) > 0) {
                 // TODO: combine retrieval of roles info above
-                    foreach (array_keys($items) as $uid) {
-                        if (isset($data['users'][$uid])) {
+                    foreach (array_keys($items) as $id) {
+                        if (isset($data['users'][$id])) {
                             continue;
                         }
                         // Get user information
-                        $data['users'][$uid] = xarModAPIFunc('roles', 'user', 'get',
-                                                       array('uid' => $uid));
+                        $data['users'][$id] = xarModAPIFunc('roles', 'user', 'get',
+                                                       array('id' => $id));
                     }
                 }
             }
@@ -150,11 +150,11 @@ function roles_user_search()
     // combine search results with DD
     if (!empty($users) && count($data['users']) > 0) {
         foreach ($users as $user) {
-            $uid = $user['uid'];
-            if (isset($data['users'][$uid])) {
+            $id = $user['id'];
+            if (isset($data['users'][$id])) {
                 continue;
             }
-            $data['users'][$uid] = $user;
+            $data['users'][$id] = $user;
         }
     } else {
         $data['users'] = $users;

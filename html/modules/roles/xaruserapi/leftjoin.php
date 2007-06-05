@@ -21,7 +21,7 @@
  *               AND $where
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['uids'] optional array of uids that we are selecting on
+ * @param $args['ids'] optional array of ids that we are selecting on
  * @returns array
  * @return array('table' => 'xar_roles',
  *               'field' => 'xar_roles.id',
@@ -36,16 +36,16 @@ function roles_userapi_leftjoin($args)
     extract($args);
 
     // Optional argument
-    if (!isset($uids)) {
-        $uids = array();
+    if (!isset($ids)) {
+        $ids = array();
     }
 
     // Security check
     if (!xarSecurityCheck('ViewRoles',0)) return;
 
 // TODO: check this !
-    foreach ($uids as $uid) {
-        if (!xarSecurityCheck('ReadRole',0,'All',"All:All:$uid")) return;
+    foreach ($ids as $id) {
+        if (!xarSecurityCheck('ReadRole',0,'All',"All:All:$id")) return;
     }
 
     // Table definition
@@ -57,23 +57,23 @@ function roles_userapi_leftjoin($args)
     // Specify LEFT JOIN ... ON ... [WHERE ...] parts
     $leftjoin['table'] = $rolestable;
     $leftjoin['field'] = $rolestable . '.id';
-    if (count($uids) > 0) {
-        $cleanuids = array();
-        foreach ($uids as $uid) {
-            $uid = intval($uid);
-            if (!is_int($uid) || $uid < 1) continue;
-            $cleanuids[] = $uid;
+    if (count($ids) > 0) {
+        $cleanids = array();
+        foreach ($ids as $id) {
+            $id = intval($id);
+            if (!is_int($id) || $id < 1) continue;
+            $cleanids[] = $id;
         }
-        $alluids = join(', ', $cleanuids);
+        $allids = join(', ', $cleanids);
         $leftjoin['where'] = $rolestable . '.id IN (' .
-                             $alluids . ')';
+                             $allids . ')';
     } else {
         $leftjoin['where'] = '';
     }
 
     // Add available columns in the roles table
     // note : we forget about pass and auth module for now :-)
-    $columns = array('uid','uname','name','email');
+    $columns = array('id','uname','name','email');
     foreach ($columns as $column) {
         $leftjoin[$column] = $rolestable . '.' . $column;
     }
