@@ -272,8 +272,8 @@ class xarMasks extends Object
     public static function xarSecurityCheck($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$pnrealm=0,$pnlevel=0)
     {
         self::initialize();
-        $userID = xarSession::getVar('uid');
-        xarLogMessage("PRIVS: uid in security check: $userID");
+        $userID = xarSession::getVar('role_id');
+        xarLogMessage("PRIVS: id in security check: $userID");
         if ($userID == XARUSER_LAST_RESORT) return true;
 
         $maskname = $mask;
@@ -375,11 +375,11 @@ class xarMasks extends Object
         // get the Roles class
         sys::import('modules.roles.class.roles');
 
-        // get the uid of the role we will check against
+        // get the id of the role we will check against
         // an empty role means take the current user
         if ($rolename == '') {
             // mrb: again?
-            $userID = xarSession::getVar('uid');
+            $userID = xarSession::getVar('role_id');
             if (empty($userID)) {
                 $userID = _XAR_ID_UNREGISTERED;
             }
@@ -554,7 +554,7 @@ class xarMasks extends Object
     */
     public static function testprivileges($mask,$privilegeset,$pass,$role='')
     {
-        $candebug = (xarSession::getVar('uid') == xarModVars::get('privileges','tester'));
+        $candebug = (xarSession::getVar('role_id') == xarModVars::get('privileges','tester'));
         $test = xarModVars::get('privileges','test') && $candebug;
         $testdeny = xarModVars::get('privileges','testdeny') && $candebug;
         $testmask = xarModVars::get('privileges','testmask');
