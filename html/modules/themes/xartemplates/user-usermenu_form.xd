@@ -25,7 +25,7 @@
 
         <div class="xar-align-center">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="uid" id="uid" value="#$uid#" />
+            <input type="hidden" name="id" id="id" value="#$id#" />
             <input type="hidden" name="phase" id="phase" value="update" />
             <input type="submit" value="#xarML('Set Default Theme')#" />
         </div>

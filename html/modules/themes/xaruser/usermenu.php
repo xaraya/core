@@ -44,23 +44,23 @@ function themes_user_usermenu($args)
             $defaulttheme = xarModGetUserVar('themes', 'default');
 
             $name = xarUserGetVar('name');
-            $uid = xarUserGetVar('uid');
+            $id = xarUserGetVar('id');
             $authid = xarSecGenAuthKey('themes');
             $data = xarTplModule('themes', 'user', 'usermenu_form', array('authid' => $authid,
                     'name' => $name,
-                    'uid' => $uid,
+                    'id' => $id,
                     'defaulttheme' => $defaulttheme,
                     'themes' => $data['themes']));
             break;
 
         case 'update':
-            if (!xarVarFetch('uid', 'int:1:', $uid)) return;
+            if (!xarVarFetch('id', 'int:1:', $id)) return;
             if (!xarVarFetch('defaulttheme', 'str:1:100', $defaulttheme, '', XARVAR_NOT_REQUIRED)) return;
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
             $themeInfo = xarThemeGetInfo($defaulttheme);
 
-            xarModSetUserVar('themes', 'default', $themeInfo['name'], $uid);
+            xarModSetUserVar('themes', 'default', $themeInfo['name'], $id);
             // Redirect
             xarResponseRedirect(xarModURL('roles', 'user', 'account', array('moduleload' => 'themes')));
 
