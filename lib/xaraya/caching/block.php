@@ -158,7 +158,7 @@ function xarBlockIsCached(array $args)
         $gidlist = xarCache_getParents();
         $factors .= join(';',$gidlist);
     } else {
-        $factors .= xarSessionGetVar('uid');
+        $factors .= xarSessionGetVar('id');
     }
 
     if (isset($blockinfo)) {

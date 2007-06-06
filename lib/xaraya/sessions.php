@@ -390,7 +390,7 @@ class xarSession extends Object implements IsessionHandler
         if ($result->first()) {
             // Already have this session
             $this->isNew = false;
-            list($XARSVuid, $this->ipAddress, $lastused, $vars) = $result->getRow();
+            list($XARSVid, $this->ipAddress, $lastused, $vars) = $result->getRow();
             // in case garbage collection didn't have the opportunity to do its job
             if (!empty($GLOBALS['xarSession_systemArgs']['securityLevel']) &&
                 $GLOBALS['xarSession_systemArgs']['securityLevel'] == 'High') {
@@ -403,7 +403,7 @@ class xarSession extends Object implements IsessionHandler
                 }
             }
         } else {
-            $_SESSION[self::PREFIX.'uid'] = _XAR_ID_UNREGISTERED;
+            $_SESSION[self::PREFIX.'role_id'] = _XAR_ID_UNREGISTERED;
 
             $this->ipAddress = '';
             $vars = '';
@@ -520,7 +520,7 @@ class xarSession extends Object implements IsessionHandler
 
         if (isset($_SESSION[$var])) {
             return $_SESSION[$var];
-        } elseif ($name == 'uid') {
+        } elseif ($name == 'role_id') {
             // mrb: why is this again?
             $_SESSION[$var] = _XAR_ID_UNREGISTERED;
             return $_SESSION[$var];
@@ -535,8 +535,8 @@ class xarSession extends Object implements IsessionHandler
     static function setVar($name, $value)
     {
         assert('!is_null($value); /* Not allowed to set variable to NULL value */');
-        // security checks : do not allow to set the uid or mess with the session serialization
-        if ($name == 'uid' || strpos($name,'|') !== false) return false;
+        // security checks : do not allow to set the id or mess with the session serialization
+        if ($name == 'role_id' || strpos($name,'|') !== false) return false;
 
         $var = self::PREFIX . $name;
         $_SESSION[$var] = $value;
@@ -549,7 +549,7 @@ class xarSession extends Object implements IsessionHandler
      */
     static function delVar($name)
     {
-        if ($name == 'uid') return false;
+        if ($name == 'role_id') return false;
 
         $var = self::PREFIX . $name;
 
@@ -591,7 +591,7 @@ class xarSession extends Object implements IsessionHandler
             throw $e;
         }
 
-        $_SESSION[self::PREFIX.'uid'] = $userId;
+        $_SESSION[self::PREFIX.'role_id'] = $userId;
         return true;
     }
 
