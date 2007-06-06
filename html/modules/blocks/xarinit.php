@@ -197,7 +197,7 @@ function blocks_init()
         // *_userblocks
         /* Removed Collapsing blocks to see if there is a better solution.
          $query = xarDBCreateTable($prefix . '_userblocks',
-         array('uid'         => array('type'    => 'integer',
+         array('id'         => array('type'    => 'integer',
          'null'    => false,
          'default' => '0'),
          'bid'         => array('type'    => 'varchar',
@@ -215,7 +215,7 @@ function blocks_init()
 
          $query = xarDBCreateIndex($prefix . '_userblocks',
          array('name'   => 'i_' . $prefix . '_userblocks',
-         'fields' => array('uid', 'bid'),
+         'fields' => array('id', 'bid'),
          'unique' => true));
          $result = $dbconn->Execute($query);
 
