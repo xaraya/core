@@ -253,9 +253,13 @@ function authsystem_user_login()
                 if (in_array('userhome', $settings)) {
                     $truecurrenturl = xarServerGetCurrentURL(array(), false);
                     $url = xarModAPIFunc('roles','user','getuserhome',array('itemid' => $user['id']));
-                    if (empty($url)) $url = '[base]';
-                    /* move the half page of code out to a Roles function. No need to repeat everytime it's used*/
-                    $urldata = xarModAPIFunc('roles','user','parseuserhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
+                    if (empty($url)) {
+                        $urldata['redirecturl'] = xarModURL(xarModVars::get('modules','defaultmodule'),xarModVars::get('modules','defaulttypename'),xarModVars::get('modules','defaultfuncname'));
+                        $urldata['externalurl'] = false;
+                    } else {
+                        /* move the half page of code out to a Roles function. No need to repeat everytime it's used*/
+                        $urldata = xarModAPIFunc('roles','user','parseuserhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
+                    }
                     $data = array();
                     if (!is_array($urldata) || !$urldata) {
                         $externalurl = false;
