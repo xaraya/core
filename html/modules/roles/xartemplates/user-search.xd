@@ -4,8 +4,8 @@
 <xar:if condition="!empty($users) and count($users) gt 0">
     <h3><xar:mlstring>Users Found</xar:mlstring>:</h3>
     <ul>
-        <xar:foreach in="$users" key="$uid" value="$user">
-            <li><a href="&xar-modurl-roles-user-display;&amp;uid=#$user.uid#">#xarVarPrepForDisplay($user['name'])#</a></li>
+        <xar:foreach in="$users" key="$id" value="$user">
+            <li><a href="&xar-modurl-roles-user-display;&amp;id=#$user.id#">#xarVarPrepForDisplay($user['name'])#</a></li>
         </xar:foreach>
     </ul>
 </xar:if>

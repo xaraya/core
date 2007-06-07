@@ -15,7 +15,7 @@
  *
  * @author  John Cox
  * @access  public
- * @param   uid is the uid of the user being sent
+ * @param   id is the id of the user being sent
  * @return  true on success or void on falure
  * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
  * @todo    handle empty subject and/or message?
@@ -30,7 +30,7 @@ function roles_user_email($args)
 
     extract($args);
 
-    if (!xarVarFetch('uid',   'id', $uid)) return;
+    if (!xarVarFetch('id',   'id', $id)) return;
     if (!xarVarFetch('phase', 'enum:modify:confirm', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
 
     // If this validation fails, then do NOT send an e-mail, but
@@ -58,7 +58,7 @@ function roles_user_email($args)
             // Get user information
             $data = xarModAPIFunc(
                 'roles', 'user', 'get',
-                array('uid' => $uid)
+                array('id' => $id)
             );
 
             if ($data == false) return;
@@ -92,10 +92,10 @@ function roles_user_email($args)
                 $femail = xarUserGetVar('email');
             }
 
-            list($message) = xarModCallHooks('item', 'transform', $uid, array($message));
+            list($message) = xarModCallHooks('item', 'transform', $id, array($message));
 
             // Get user information
-            $data = xarModAPIFunc('roles', 'user', 'get', array('uid' => $uid));
+            $data = xarModAPIFunc('roles', 'user', 'get', array('id' => $id));
 
             if ($data == false) return;
 

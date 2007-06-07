@@ -35,7 +35,7 @@ function roles_user_view($args)
     $items = $roles['nativeitems'];
     $objectlists = $roles['dditems'];
 
-    // keep track of the selected uid's
+    // keep track of the selected id's
 
     $itemlabels = array(xarML('ID'),xarML('Name'),xarML('Itemtype'),xarML('Users'),xarML('User Name'),xarML('Password'),xarML('Email'),xarML('Date Registered'),xarML('State'),xarML('Validation Code'),xarML('Created By'),);
     $ddlabels = xarModAPIFunc('dynamicdata','user','getitemfields',array('modid' => 27, 'itemtype' => $args['itemtype']));

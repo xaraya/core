@@ -52,26 +52,26 @@
             <xar:mlstring>If you want to get the dynamic properties and values for your items, and include them somewhere in your own view/list.</xar:mlstring>
         </p>
         <p>
-            <xar:mlstring>Available tags: (replace 'users', '&#36;uidlist' and '&#36;uid' with your own)</xar:mlstring>
+            <xar:mlstring>Available tags: (replace 'users', '&#36;idlist' and '&#36;id' with your own)</xar:mlstring>
         </p>
 
         <pre>
 <code>&lt;!-- <xar:mlstring>this retrieves the dynamic properties defined for the 'users' module,
-     and their value for all items listed in &#36;uidlist. You'll need to build
-     that uid list in your module function and pass it along to the template</xar:mlstring> --&gt;
+     and their value for all items listed in &#36;idlist. You'll need to build
+     that id list in your module function and pass it along to the template</xar:mlstring> --&gt;
 &lt;xar:data-getitems name="&#36;properties" value="&#36;values" module="users"
- itemids="&#36;uidlist" /&gt;
+ itemids="&#36;idlist" /&gt;
 
 &lt;!-- <xar:mlstring>this shows the label for dynamic property</xar:mlstring> '&#36;name' --&gt;
 &lt;xar:data-label property="&#36;properties[&#36;name]" /&gt;
 
-&lt;!-- <xar:mlstring>this shows the value of dynamic property '&#36;name' for item &#36;uid,
+&lt;!-- <xar:mlstring>this shows the value of dynamic property '&#36;name' for item &#36;id,
  formatted for output</xar:mlstring> --&gt;
-&lt;xar:data-output property="&#36;properties[&#36;name]" value="&#36;values[&#36;uid][&#36;name]" /&gt;
+&lt;xar:data-output property="&#36;properties[&#36;name]" value="&#36;values[&#36;id][&#36;name]" /&gt;
 
-&lt;!-- <xar:mlstring>this shows the value of dynamic property '&#36;name' for item &#36;uid,
+&lt;!-- <xar:mlstring>this shows the value of dynamic property '&#36;name' for item &#36;id,
  formatted for input</xar:mlstring> --&gt;
-&lt;xar:data-input property="&#36;properties[&#36;name]" value="&#36;values[&#36;uid][&#36;name]" /&gt;</code>
+&lt;xar:data-input property="&#36;properties[&#36;name]" value="&#36;values[&#36;id][&#36;name]" /&gt;</code>
         </pre>
         <p>
             <xar:mlstring>Sample use:</xar:mlstring>
@@ -84,7 +84,7 @@
         <pre>
 <code>
 &lt;xar:data-getitems name="&#36;properties" value="&#36;values" module="users"
- itemids="&#36;uidlist" /&gt;
+ itemids="&#36;idlist" /&gt;
 </code>
 </pre>
 
@@ -103,7 +103,7 @@
 </pre>
 
         <p>
-            <xar:mlstring>(when you're looping over the individual items, and you want to add the dynamic values for item &#36;uid)</xar:mlstring>
+            <xar:mlstring>(when you're looping over the individual items, and you want to add the dynamic values for item &#36;id)</xar:mlstring>
         </p>
 
         <pre>
@@ -112,9 +112,9 @@
         &lt;td class="xar-norm"&gt;
         &lt;!-- <xar:mlstring>avoid errors if the value isn't defined for this
  item (yet)</xar:mlstring> --&gt;
-        &lt;xar:if condition="isset(&#36;values[&#36;uid][&#36;name])"&gt;
+        &lt;xar:if condition="isset(&#36;values[&#36;id][&#36;name])"&gt;
             &lt;xar:data-output property="&#36;properties[&#36;name]"
- value="&#36;values[&#36;uid][&#36;name]" /&gt;
+ value="&#36;values[&#36;id][&#36;name]" /&gt;
         &lt;xar:else /&gt;
             &amp;nbsp;
         &lt;/xar:if&gt;
@@ -170,9 +170,9 @@
 
 <pre>
 <code>&lt;!-- <xar:mlstring>this retrieves the dynamic properties defined for the 'users' module
-     and item &#36;uid. Note that we don't use value="..." here, since we only
+     and item &#36;id. Note that we don't use value="..." here, since we only
      have one item</xar:mlstring> --&gt;
-&lt;xar:data-getitem name="&#36;properties" module="users" itemid="&#36;uid" /&gt;</code>
+&lt;xar:data-getitem name="&#36;properties" module="users" itemid="&#36;id" /&gt;</code>
 </pre>
 
         <p>
@@ -202,10 +202,10 @@
 &lt;xar:data-display module="example" itemid="&#36;exid" /&gt;
 
 &lt;!-- <xar:mlstring>this will use layout 'mylayout' of user-objectdisplay.xd</xar:mlstring> --&gt;
-&lt;xar:data-display module="users" itemid="&#36;uid" layout="mylayout" /&gt;
+&lt;xar:data-display module="users" itemid="&#36;id" layout="mylayout" /&gt;
 
 &lt;!-- <xar:mlstring>this will use the template user-objectdisplay-myusers.xd</xar:mlstring> --&gt;
-&lt;xar:data-display module="users" itemid="&#36;uid" template="myusers" /&gt;
+&lt;xar:data-display module="users" itemid="&#36;id" template="myusers" /&gt;
 
 &lt;xar:data-display object="&#36;object" /&gt;
 

@@ -12,10 +12,10 @@
 /**
  * get a specific deleted user by any of his attributes
  *
- * uname, uid and email are guaranteed to be unique,
+ * uname, id and email are guaranteed to be unique,
  * otherwise the first hit will be returned
  * @author Richard Cave <rcave@xaraya.com>
- * @param $args['uid'] id of user to get
+ * @param $args['id'] id of user to get
  * @param $args['uname'] user name of user to get
  * @param $args['name'] name of user to get
  * @param $args['email'] email of user to get
@@ -27,10 +27,10 @@ function roles_userapi_getdeleteduser($args)
     extract($args);
 
     // Argument checks
-    if (empty($uid) && empty($name) && empty($uname) && empty($email)) {
-        throw new EmptyParameterException('uid or name or uname or email');
-    } elseif (!empty($uid) && !is_numeric($uid)) {
-        throw new VariableValidationException(array('uid',$uid,'numeric'));
+    if (empty($id) && empty($name) && empty($uname) && empty($email)) {
+        throw new EmptyParameterException('id or name or uname or email');
+    } elseif (!empty($id) && !is_numeric($id)) {
+        throw new VariableValidationException(array('id',$id,'numeric'));
     }
 
     // Set type to user
@@ -60,9 +60,9 @@ function roles_userapi_getdeleteduser($args)
     $bindvars[] = 0;
     $bindvars[] = $type;
 
-    if (!empty($uid) && is_numeric($uid)) {
+    if (!empty($id) && is_numeric($id)) {
         $query .= " AND id = ?";
-        $bindvars[] = $uid;
+        $bindvars[] = $id;
     } elseif (!empty($name)) {
         $query .= " AND name = ?";
         $bindvars[] = $name;
@@ -81,11 +81,11 @@ function roles_userapi_getdeleteduser($args)
 
     if (!$result->first()) return false;
 
-    list($uid, $uname, $name, $email, $pass, $date, $valcode, $state) = $result->fields;
+    list($id, $uname, $name, $email, $pass, $date, $valcode, $state) = $result->fields;
     $result->close();
 
     // Create the user array
-    $user = array('uid'         => $uid,
+    $user = array('id'         => $id,
                   'uname'       => $uname,
                   'name'        => $name,
                   'email'       => $email,

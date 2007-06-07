@@ -89,8 +89,8 @@ function roles_userapi_decode_shorturl($params)
     } elseif (preg_match('/^(\d+)/',$params[1],$matches)) {
         // something that starts with a number must be for the display function
         // Note : make sure your encoding/decoding is consistent ! :-)
-        $uid = $matches[1];
-        $args['uid'] = $uid;
+        $id = $matches[1];
+        $args['id'] = $id;
         return array('display', $args);
 
     } else {

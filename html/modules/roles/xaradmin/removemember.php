@@ -38,7 +38,7 @@ function roles_admin_removemember()
     if(!xarSecurityCheck('RemoveRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
 
     // remove the child from the parent and bail if an error was thrown
-    if (!xarModAPIFUnc('roles','user','removemember', array('uid' => $childid, 'gid' => $parentid))) return;
+    if (!xarModAPIFUnc('roles','user','removemember', array('id' => $childid, 'gid' => $parentid))) return;
 
     // call item create hooks (for DD etc.)
     $pargs['module']   = 'roles';
@@ -47,6 +47,6 @@ function roles_admin_removemember()
     xarModCallHooks('item', 'unlink', $parentid, $pargs);
 
     // redirect to the next page
-    xarResponseRedirect(xarModURL('roles', 'admin', 'modify',  array('uid' => $childid)));
+    xarResponseRedirect(xarModURL('roles', 'admin', 'modify',  array('id' => $childid)));
 }
 ?>

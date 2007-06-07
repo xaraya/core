@@ -25,20 +25,20 @@ function mail_adminapi_replace($args)
     $siteurl    = xarServerGetBaseURL();
 
     $name = xarUserGetVar('name');
-    $uid = xarUserGetVar('uid');
+    $id = xarUserGetVar('id');
 
     $search = array('/%%name%%/',
                     '/%%sitename%%/',
                     '/%%siteslogan%%/',
                     '/%%siteurl%%/',
-                    '/%%uid%%/',
+                    '/%%id%%/',
                     '/%%siteadmin%%/');
 
     $replace = array("$name",
                      "$sitename",
                      "$siteslogan",
                      "$siteurl",
-                     "$uid",
+                     "$id",
                      "$siteadmin");
 
     $searchstrings = xarModGetVar('mail','searchstrings');

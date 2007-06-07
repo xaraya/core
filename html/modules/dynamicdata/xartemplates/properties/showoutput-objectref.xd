@@ -1,2 +1,3 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-#$option.name#</xar:template>
+#$option.name#
+</xar:template>

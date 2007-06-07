@@ -76,14 +76,14 @@ function privileges_admin_modifyconfig()
                      $grouplist=xarGetGroups();
                      $data['grouplist']=$grouplist;
 
-                     $testusers=xarModAPIFunc('roles','user','getUsers',array('uid'=>$testergroup));
-                     $defaultadminuid = xarModVars::get('roles','admin');
+                     $testusers=xarModAPIFunc('roles','user','getUsers',array('id'=>$testergroup));
+                     $defaultadminid = xarModVars::get('roles','admin');
 
                      $data['testusers']=$testusers; //array
 
-                     $settester=xarModVars::get('privileges','tester'); //uid
+                     $settester=xarModVars::get('privileges','tester'); //id
                      if (!isset($settester) || empty($settester)) {
-                         $settester=$defaultadminuid; //bug 5832 set it to the default admin, cannot assume it is Administrator
+                         $settester=$defaultadminid; //bug 5832 set it to the default admin, cannot assume it is Administrator
                      }
                      if (!isset($tester) || empty($tester)) {
                          $tester=$settester;

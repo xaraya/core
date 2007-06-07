@@ -75,7 +75,7 @@
                 <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked">xarModGetVar('roles', 'askvalidationemail')</xar:set>
                     <xar:data-input type="checkbox" name="askvalidationemail" id="askvalidationemail" checked="$checked" />
-                    <label for="askvalidationemail" title="#xarML('When user state is changed to \'not valuidated\'')#">
+                    <label for="askvalidationemail" title="#xarML('When user state is changed to \'not validated\'')#">
                         <xar:mlstring>Not Validated</xar:mlstring>
                     </label>
                 </div>

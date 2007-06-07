@@ -33,7 +33,7 @@ function roles_user_getvalidation()
     //We are going to send them to their account.
     if (xarUserIsLoggedIn()) {
        xarResponseRedirect(xarModURL('roles', 'user', 'account',
-                                      array('uid' => xarUserGetVar('uid'))));
+                                      array('id' => xarUserGetVar('id'))));
        return true;
     }
 
@@ -92,7 +92,7 @@ function roles_user_getvalidation()
 
         case 'getvalidate':
 
-            // check for user and grab uid if exists
+            // check for user and grab id if exists
             $status = xarModAPIFunc('roles', 'user', 'get', array('uname' => $uname));
 
             // Trick the system when a user has double validated.
@@ -106,7 +106,7 @@ function roles_user_getvalidation()
                 throw new DataNotFoundException(array(),'The validation codes do not match');
             }
 
-            if ($pending == 1 && ($status['uid'] != xarModVars::get('roles','admin')))  {
+            if ($pending == 1 && ($status['id'] != xarModVars::get('roles','admin')))  {
                 // Update the user status table to reflect a pending account.
                 if (!xarModAPIFunc('roles', 'user', 'updatestatus',
                                     array('uname' => $uname,
@@ -116,7 +116,7 @@ function roles_user_getvalidation()
                 if (!xarModAPIFunc( 'authentication',
                                 'admin',
                                 'sendpendingemail',
-                                array('uid'     => $status["uid"],
+                                array('id'     => $status["id"],
                                       'uname'    => $uname,
                                       'name'     => $status["name"],
                                       'email'    => $status["email"]))) {
@@ -131,7 +131,7 @@ function roles_user_getvalidation()
                 //send welcome email (option)
                 if (xarModVars::get($regmodule, 'sendwelcomeemail')) {
                     if (!xarModAPIFunc('roles','admin','senduseremail',
-                                    array('uid' => array($status['uid'] => '1'),
+                                    array('id' => array($status['id'] => '1'),
                                           'mailtype' => 'welcome'))) {
                         throw new GeneralException(null, 'Problem sending welcome email');
                     }
@@ -145,7 +145,7 @@ function roles_user_getvalidation()
             }
             /* Check if the user has logged in at all  - used for a workaround atm */
             $newuser=false;
-            $lastlogin =xarModGetUserVar('roles','userlastlogin',$status['uid']);
+            $lastlogin =xarModGetUserVar('roles','userlastlogin',$status['id']);
             if (!isset($lastlogin) || empty($lastlogin)) {
                 $newuser=true;
             }
@@ -169,7 +169,7 @@ function roles_user_getvalidation()
                                     'username'     => $status['uname'],
                                     'useremail'    => $status['email'],
                                     'terms'        => $terms,
-                                    'uid'          => $status['uid'],
+                                    'id'          => $status['id'],
                                     'userstatus'   => $status['state']
                                     );
                 if (!xarModAPIFunc('registration', 'user', 'notifyadmin', $emailargs)) {
@@ -194,18 +194,18 @@ function roles_user_getvalidation()
                                          'message' => $message))) return;
             }
 
-            xarModVars::set('roles', 'lastuser', $status['uid']);
+            xarModVars::set('roles', 'lastuser', $status['id']);
 
             $data = xarTplModule('roles','user', 'getvalidation', $tplvars);
 
             break;
 
         case 'resend':
-            // check for user and grab uid if exists
+            // check for user and grab id if exists
             $status = xarModAPIFunc('roles', 'user', 'get', array('uname' => $uname));
 
             if (!xarModAPIFunc( 'roles','admin','senduseremail',
-                                array('uid' => array($status['uid'] => '1'),
+                                array('id' => array($status['id'] => '1'),
                                       'mailtype' => 'confirmation',
                                       'ip' => xarML('Cannot resend IP'),
                                       'pass' => xarML('Can Not Resend Password')))) {

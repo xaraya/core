@@ -115,7 +115,12 @@
                             Xaraya Core:
                         </xar:mlstring>
                     </label>
-
+                    <!--
+                    <xar:set name="versionid">$XARCORE_VERSION_ID</xar:set>
+                    <xar:set name="versionnum">$XARCORE_VERSION_NUM</xar:set>
+                    <xar:set name="versionsub">$XARCORE_VERSION_SUB</xar:set>
+                    <xar:var name="versionid" /> version <xar:var name="versionnum" /> (<xar:var name="versionsub" />)
+                     -->
                     <xar:ml>
                         <xar:mlstring>#(1) version #(2) (#(3))</xar:mlstring>
                         <xar:mlvar>#$XARCORE_VERSION_ID#</xar:mlvar>

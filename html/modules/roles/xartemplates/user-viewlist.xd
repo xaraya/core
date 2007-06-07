@@ -96,7 +96,7 @@
         <p>#xarVarPrepForDisplay($message)#</p>
     <xar:else />
         <xar:if condition="xarModIsAvailable('dynamicdata')">
-            <xar:data-getitems name="$properties" value="$values" module="roles" itemids="$uidlist" />
+            <xar:data-getitems name="$properties" value="$values" module="roles" itemids="$idlist" />
         </xar:if>
         <table width="100%" border="0" cellspacing="0" cellpadding="2">
             <tr>
@@ -142,7 +142,7 @@
                 <tr class="#$item_class#">
                 <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
                     <td>
-                        <a href="&xar-modurl-roles-user-display;&amp;uid=#$loop:item.uid#">#xarVarPrepForDisplay($loop:item['name'])#</a>
+                        <a href="&xar-modurl-roles-user-display;&amp;id=#$loop:item.id#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                     </td>
                     <td class="xar-align-center">
                         <!-- TODO: add link to working whois service -->
@@ -151,7 +151,7 @@
                     <xar:else />
                     <td>
                         <xar:if condition="xarUserIsLoggedIn()">
-                            <a href="&xar-modurl-roles-user-display;&amp;uid=#$loop:item.uid#">#xarVarPrepForDisplay($loop:item['name'])#</a>
+                            <a href="&xar-modurl-roles-user-display;&amp;id=#$loop:item.id#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                         <xar:else />
                             #xarVarPrepForDisplay($loop:item['name'])#
                         </xar:if>
@@ -167,11 +167,11 @@
                     </td>
                 </xar:if>
                 <xar:if condition="isset($properties) and count($properties) gt 0">
-                    <xar:set name="uid">#$loop:item['uid']#</xar:set>
+                    <xar:set name="id">#$loop:item['id']#</xar:set>
                     <xar:foreach in="$properties" key="$key">
                         <td>
-                            <xar:if condition="isset($values[$uid][$key])">
-                                <xar:data-output property="$properties[$key]" value="$values[$uid][$key]" />
+                            <xar:if condition="isset($values[$id][$key])">
+                                <xar:data-output property="$properties[$key]" value="$values[$id][$key]" />
                             <xar:else />
                                 &#160;&#160;
                             </xar:if>

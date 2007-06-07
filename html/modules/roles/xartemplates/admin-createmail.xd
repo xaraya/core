@@ -95,7 +95,7 @@
                         </xar:mlstring>
                     </label>
                 </th>
-                <xar:if condition="$uid gt 0">
+                <xar:if condition="$id gt 0">
                     <th class="xar-nowrap">
                         <label for="filter" title="#xarML('Includes subgroups')#">
                             <xar:mlstring>
@@ -136,22 +136,22 @@
                     </select>
                 </td>
                 <td class="xar-align-center">
-                    <select name="uid" id="uid" onchange="this.form.submit()">
+                    <select name="id" id="id" onchange="this.form.submit()">
                         <xar:if condition="$type eq 'single'">
-                            <option value="#$uid#" selected="selected">
+                            <option value="#$id#" selected="selected">
                                 <xar:mlstring>
                                     Single user
                                 </xar:mlstring>
                             </option>
                         </xar:if>
-                        <xar:if condition="$uid eq -1">
-                            <option value="#$uid#" selected="selected">
+                        <xar:if condition="$id eq -1">
+                            <option value="#$id#" selected="selected">
                                 <xar:mlstring>
                                     -- choose --
                                 </xar:mlstring>
                             </option>
                         </xar:if>
-                        <xar:if condition="$uid eq 0">
+                        <xar:if condition="$id eq 0">
                             <option value="0" selected="selected">
                                 <xar:mlstring>
                                     All Users
@@ -169,12 +169,12 @@
                         </xar:set>
                         <xar:loop name="$groups">
                             <xar:if condition="$prevgroup ne $loop:item['name']">
-                                <xar:if condition="$uid eq $loop:item['uid']">
-                                    <option value="#$loop:item['uid']#" selected="selected">
+                                <xar:if condition="$id eq $loop:item['id']">
+                                    <option value="#$loop:item['id']#" selected="selected">
                                         #$loop:item['name']#
                                     </option>
                                     <xar:else />
-                                    <option value="#$loop:item['uid']#">
+                                    <option value="#$loop:item['id']#">
                                         #$loop:item['name']#
                                     </option>
                                 </xar:if>
@@ -189,7 +189,7 @@
                     <xar:set name="firstline">xarML('-- choose --')</xar:set>
                     <xar:data-input type="dropdown" name="state" tabindex="5" onchange="this.form.submit()" firstline="$firstline" options="$stateoptions" value="$state" />
                 </td>
-                <xar:if condition="$uid gt 0">
+                <xar:if condition="$id gt 0">
                     <td  class="xar-align-center xar-valign-middle">
                         <xar:set name="checked">$includesubgroups == 0</xar:set>
                         <xar:data-input type="checkbox" name="includesubgroups" id="includesubgroups" checked="$checked" onchange="this.form.submit()" />
@@ -305,7 +305,7 @@
                   #$loop:item['uname']#
                 </td>
                 <td>
-                  <a href="&xar-modurl-roles-admin-createmail;&amp;uid=#$loop:item.uid#" title="#xarML('Email this user')#">
+                  <a href="&xar-modurl-roles-admin-createmail;&amp;id=#$loop:item.id#" title="#xarML('Email this user')#">
                     #$loop:item['email']#
                   </a>
                 </td>
@@ -379,10 +379,10 @@
         <fieldset>
             <div class="xar-form-input-wrapper-after">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="uid" id="uid" value="#$uid#" />
+                <input type="hidden" name="id" id="id" value="#$id#" />
                 <input type="hidden" name="state" id="state" value="#$state#" />
                 <input type="hidden" name="includesubgroups" id="includesubgroups" value="#$includesubgroups#" />
-                <!--<input type="hidden" name="uids" id="uids" value="#$uids#" />-->
+                <!--<input type="hidden" name="ids" id="ids" value="#$ids#" />-->
                 <xar:if condition="!isset($users) or $users eq 0">
                     <input type="submit" value="#xarML('Send')#" disabled="disabled" class="xar-margin-thickright" />
                     <xar:else />

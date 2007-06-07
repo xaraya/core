@@ -50,7 +50,9 @@ function dynamicdata_admin_update($args)
 
     $isvalid = $myobject->checkInput();
 
+    // recover any session var information and remove it from the var
     $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
+    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
     extract($data);
 
     if (!empty($preview) || !$isvalid) {

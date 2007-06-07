@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:set name="uid">$object->getID()</xar:set>
+<xar:set name="id">$object->getID()</xar:set>
 <xar:set name="itemtype">$object->getType()</xar:set>
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:style scope="module" module="base" file="navtabs" />
@@ -27,7 +27,7 @@
                 <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                     <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                         <dd>
-                            <a href="&xar-modurl-roles-admin-showusers;&amp;uid=#$parents.$i.parentid#" title="#xarML('Show this group')#">
+                            <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#">
                                 #xarVarPrepForDisplay($parents[$i]['parentname'])#
                             </a>
                         </dd>
@@ -88,7 +88,7 @@
                             <xar:mlstring>Primary Parent Group:</xar:mlstring>
                         </label>
                         <xar:set name="value">
-                            xarModGetUserVar('roles','primaryparent',$uid)
+                            xarModGetUserVar('roles','primaryparent',$id)
                         </xar:set>
                         <xar:data-input type="grouplist" name="duvs[primaryparent]" id="duvs_primaryparent" value="$value" tabindex="8" />
                     </div>
@@ -99,7 +99,7 @@
                         <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
                             <xar:mlstring>Home:</xar:mlstring>
                         </label>
-                        <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
+                        <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7" />
                         <p class="xar-form-input-wrapper-after">
                             <xar:mlstring>You can use the module shortcut syntax available in the Base user menu block.</xar:mlstring>
                         </p>
@@ -115,7 +115,7 @@
                                 </xar:mlstring>
                             </label>
                             <xar:set name="value">
-                                xarModGetUserVar('roles','useremailformat',$uid)
+                                xarModGetUserVar('roles','useremailformat',$id)
                             </xar:set>
                             <xar:set name="options">
                                 array(
@@ -133,7 +133,7 @@
                                 <xar:mlstring>User Timezone:</xar:mlstring>
                             </label>
                             <xar:set name="value">
-                                xarModGetUserVar('roles','usertimezone',$uid)
+                                xarModGetUserVar('roles','usertimezone',$id)
                             </xar:set>
                             <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
                         </div>
@@ -141,7 +141,7 @@
 
                     <xar:if condition="in_array('allowemail',$settings)">
                         <div class="xar-form-input-wrapper-after">
-                            <xar:set name="checked">xarModGetUserVar('roles', 'allowemail',$uid)</xar:set>
+                            <xar:set name="checked">xarModGetUserVar('roles', 'allowemail',$id)</xar:set>
                             <xar:data-input type="checkbox" name="duvs[allowemail]" id="duvs_allowemail" checked="$checked" />
                             <label for="allowemail" title="#xarML('Allow users to send emails?')#">
                                <xar:mlstring>User has allowed other users to send them an email?</xar:mlstring>
@@ -154,7 +154,7 @@
                             <label class="xar-form-label">
                                 <xar:mlstring>Password last updated:</xar:mlstring>
                             </label>
-                            #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','passwordupdate',$uid))# #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','passwordupdate',$uid))#
+                            #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','passwordupdate',$id))# #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','passwordupdate',$id))#
                         </div>
                     </xar:if>
 
@@ -163,7 +163,7 @@
                             <label class="xar-form-label">
                                 <xar:mlstring>Last login time:</xar:mlstring>
                             </label>
-                                #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','userlastlogin',$uid))#  #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','userlastlogin',$uid))#
+                                #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','userlastlogin',$id))#  #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','userlastlogin',$id))#
                         </div>
                     </xar:if>
 
@@ -178,7 +178,7 @@
 
                 <div class="xar-align-center xar-clearboth">
                     <input type="hidden" name="object_objectid" id="objectid" value="#$object:objectid#" />
-                    <input type="hidden" name="object_itemid" id="itemid" value="#$uid#" />
+                    <input type="hidden" name="object_itemid" id="itemid" value="#$id#" />
                     <input type="hidden" name="object_tplmodule" id="tplmodule" value="roles" />
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#" />
                     <input type="submit" value="#xarML('Update')#" />
@@ -199,7 +199,7 @@
                 <tr>
                     <td>
                         <xar:if condition="$loop:item['parentid'] gt 4">
-                            <a href="&xar-modurl-roles-admin-modify;&amp;uid=#$loop:item['parentid']#">
+                            <a href="&xar-modurl-roles-admin-modify;&amp;id=#$loop:item['parentid']#">
                                 <xar:var name="loop:item.parentname" prep="true"/>
                             </a>
                         <xar:else />
@@ -208,7 +208,7 @@
                     </td>
                     <td class="xar-align-center">
                         <xar:if condition="count($parents) ne 1">
-                            <a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$uid#&amp;parentid=#$loop:item['parentid']#&amp;authid=#xarSecGenAuthKey()#">
+                            <a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$id#&amp;parentid=#$loop:item['parentid']#&amp;authid=#xarSecGenAuthKey()#">
                                 <xar:mlstring>Remove</xar:mlstring>
                             </a>
                         <xar:else />
@@ -233,12 +233,12 @@
                     </label>
                     <select name="roleid" id="roleid">
                         <xar:loop name="$groups">
-                            <option value="#$loop:item['duid']#">
+                            <option value="#$loop:item['did']#">
                                 <xar:var name="loop:item.dname" prep="true"/>
                             </option>
                         </xar:loop>
                     </select>
-                    <input type="hidden" name="uid" id="adduid" value="#$uid#" />
+                    <input type="hidden" name="id" id="addid" value="#$id#" />
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                     <input type="submit" value="#xarML('Add')#" />
                 </div>

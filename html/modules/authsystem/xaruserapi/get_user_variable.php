@@ -24,30 +24,30 @@ function authsystem_userapi_get_user_variable($args)
 
     extract($args);
 
-    if (!isset($uid) || !isset($name)) {
-        throw new BadParameterException(array($uid,$name),'Empty id (#(1)) or name (#(2))');
+    if (!isset($id) || !isset($name)) {
+        throw new BadParameterException(array($id,$name),'Empty id (#(1)) or name (#(2))');
     }
 
-    if (!isset($vars[$uid])) {
-        $vars[$uid] = array();
+    if (!isset($vars[$id])) {
+        $vars[$id] = array();
     }
 
-    if (!isset($vars[$uid][$name])) {
-        $vars[$uid][$name] = false;
+    if (!isset($vars[$id][$name])) {
+        $vars[$id][$name] = false;
 
         // ... retrieve the user variable somehow ...
 
         // throw back an exception if the user doesn't exist
         //if (...) {
-        //    throw new IDNotFoundException($uid,'User identified by id #(1) does not exist.');
+        //    throw new IDNotFoundException($id,'User identified by id #(1) does not exist.');
         //}
 
-        // $vars[$uid][$name] = $value;
+        // $vars[$id][$name] = $value;
     }
 
     // Return the variable
-    if (isset($vars[$uid][$name])) {
-        return $vars[$uid][$name];
+    if (isset($vars[$id][$name])) {
+        return $vars[$id][$name];
     } else {
         return false;
     }

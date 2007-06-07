@@ -17,12 +17,12 @@
  */
 function roles_admin_showprivileges()
 {
-    if (!xarVarFetch('uid', 'int:1:', $uid)) return;
+    if (!xarVarFetch('id', 'int:1:', $id)) return;
 
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;
     // Call the Roles class and get the role
-    $role = xarRoles::get($uid);
+    $role = xarRoles::get($id);
 
     // get the array of parents of this role
     // need to display this in the template
@@ -195,7 +195,7 @@ function roles_admin_showprivileges()
     $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
     $types = xarModAPIFunc('roles','user','getitemtypes');
     $data['itemtypename'] = $types[$data['itemtype']]['label'];
-    $data['roleid'] = $uid;
+    $data['roleid'] = $id;
     $data['inherited'] = $inherited;
     $data['privileges'] = $currentprivileges;
     $data['directassigned'] = $directassigned;
@@ -204,7 +204,7 @@ function roles_admin_showprivileges()
     $data['removeurl'] = xarModURL('roles',
         'admin',
         'removeprivilege',
-        array('roleid' => $uid));
+        array('roleid' => $id));
     $data['groupurl'] = xarModURL('roles',
         'admin',
         'showprivileges');

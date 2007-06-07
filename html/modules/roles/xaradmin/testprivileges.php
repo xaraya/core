@@ -27,7 +27,7 @@
 function roles_admin_testprivileges()
 {
     // Get Parameters
-    if (!xarVarFetch('uid', 'int:1:', $uid)) return;
+    if (!xarVarFetch('id', 'int:1:', $id)) return;
     if (!xarVarFetch('pmodule', 'int', $module, xarMasks::PRIVILEGES_ALL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('name', 'str:1', $name, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('test', 'str:1:35:', $test, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
@@ -36,7 +36,7 @@ function roles_admin_testprivileges()
     if (!xarSecurityCheck('EditRole')) return;
 
     // Call the Roles class and get the role
-    $role = xarRoles::get($uid);
+    $role = xarRoles::get($id);
 
     $types = xarModAPIFunc('roles','user','getitemtypes');
     $data['itemtypename'] = $types[$role->getType()]['label'];
@@ -97,7 +97,7 @@ function roles_admin_testprivileges()
     $types = xarModAPIFunc('roles','user','getitemtypes');
     $data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['pmodule'] = $module;
-    $data['uid'] = $uid;
+    $data['id'] = $id;
     $data['testlabel'] = xarML('Test');
     $data['masks'] = xarMasks::getmasks($module);
     $data['authid'] = xarSecGenAuthKey();

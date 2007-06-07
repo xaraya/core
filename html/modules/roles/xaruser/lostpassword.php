@@ -55,7 +55,7 @@ function roles_user_lostpassword()
                 throw new EmptyParameterException('$uname or $email');
             }
 
-            // check for user and grab uid if exists
+            // check for user and grab id if exists
             $user = xarModAPIFunc('roles','user','get',
                                    array('uname' => $uname,
                                          'email' => $email));
@@ -77,14 +77,14 @@ function roles_user_lostpassword()
             xarVarSetCached('Hooks.all','noupdate',1);
 
             //Update user password
-            // check for user and grab uid if exists
+            // check for user and grab id if exists
             if (!xarModAPIFunc('roles','admin','update',$user)) {
                 throw new DataNotFoundException(array(),'Problem updating the user information');
             }
               // Send Reminder Email
-            if (!xarModAPIFunc('roles', 'admin','senduseremail', array('uid' => array($user['uid'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;
+            if (!xarModAPIFunc('roles', 'admin','senduseremail', array('id' => array($user['id'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;
 
-            // Let user know that they have an email on the way.   
+            // Let user know that they have an email on the way.
             $data = xarTplModule('roles','user','requestpwconfirm');
           break;
     }

@@ -15,9 +15,9 @@
  * Send emails to users by mailtype
  *
  * Ex: Lost Password, Confirmation
- * @todo FIXME: change name of uid parameter to something that implies plurality, review why we need k => v array
+ * @todo FIXME: change name of id parameter to something that implies plurality, review why we need k => v array
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['uid'] array of uid of the user(s) array($uid => '1')
+ * @param $args['id'] array of id of the user(s) array($id => '1')
  * @param $args['mailtype'] type of the message to send (confirmation, deactivation, ...)
  * @param $args['message'] the message of the mail (optionnal)
  * @param $args['subject'] the subject of the mail (optionnal)
@@ -31,7 +31,7 @@ function roles_adminapi_senduseremail($args)
 {
     // Send Email
     extract($args);
-    if (!isset($uid)) throw new EmptyParameterException('uid');
+    if (!isset($id)) throw new EmptyParameterException('id');
     if (!isset($mailtype)) throw new EmptyParameterException('mailtype');
 
     // Get the predefined email if none is defined
@@ -43,10 +43,10 @@ function roles_adminapi_senduseremail($args)
     if (!isset($message)) $message = xarTplCompileString($vars . $strings['message']);
 
     //Get the common search and replace values
-    //if (is_array($uid)) {
-        foreach ($uid as $userid => $val) {
+    //if (is_array($id)) {
+        foreach ($id as $userid => $val) {
             ///get the user info
-            $user = xarModAPIFunc('roles','user','get', array('uid' => $userid, 'itemtype' => ROLES_USERTYPE));
+            $user = xarModAPIFunc('roles','user','get', array('id' => $userid, 'itemtype' => ROLES_USERTYPE));
             if (!isset($pass)) $pass = '';
             if (!isset($ip)) $ip = '';
             if (isset($user['valcode'])) $validationlink = xarServerGetBaseURL() . "val.php?v=".$user['valcode']."&u=".$userid;

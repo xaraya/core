@@ -14,7 +14,7 @@
  * addmember - add a role to a group
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['gid'] group id
- * @param $args['uid'] role id
+ * @param $args['id'] role id
  * @return true on success, false on failure
  */
 function roles_userapi_addmember($args)
@@ -22,12 +22,12 @@ function roles_userapi_addmember($args)
     extract($args);
 
     if (!isset($gid)) throw new EmptyParameterException('gid');
-    if (!isset($uid)) throw new EmptyParameterException('uid');
+    if (!isset($id)) throw new EmptyParameterException('id');
 
     $group = xarRoles::get($gid);
     if($group->isUser()) throw new IDNotFoundException($gid);
 
-    $user = xarRoles::get($uid);
+    $user = xarRoles::get($id);
 
 // Security Check
     if(!xarSecurityCheck('AttachRole',1,'Relation',$group->getName() . ":" . $user->getName())) return;

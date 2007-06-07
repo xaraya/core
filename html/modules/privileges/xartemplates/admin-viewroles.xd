@@ -112,7 +112,7 @@
                         </xar:if>
                     </td>
                     <td>
-                        <a href="&xar-modurl-roles-admin-modify;&amp;uid=#$role['roleid']#" title="#xarML('Go to this role')#">
+                        <a href="&xar-modurl-roles-admin-modify;&amp;id=#$role['roleid']#" title="#xarML('Go to this role')#">
                             #$role['name']#
                         </a>
                     </td>
@@ -133,7 +133,7 @@
             </label>
             <select name="roleid" id="roleid" class="xar-margin-thickright">
                 <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
-                    <option value="#$groups[$i]['uid']#">
+                    <option value="#$groups[$i]['id']#">
                         #$groups[$i]['name']# - #$groups[$i]['users']#
                     </option>
                 </xar:for>

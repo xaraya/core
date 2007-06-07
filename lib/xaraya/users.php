@@ -198,7 +198,7 @@ function xarUserLogOut()
         return true;
     }
     // get the current userid before logging out
-    $userId = xarSessionGetVar('uid');
+    $userId = xarSessionGetVar('id');
 
     // Reset user session information
     $res = xarSession_setUserInfo(_XAR_ID_UNREGISTERED, 0);
@@ -223,9 +223,9 @@ function xarUserLogOut()
 function xarUserIsLoggedIn()
 {
     // FIXME: restore "clean" code once uid+session issues are resolved
-    //return xarSessionGetVar('uid') != _XAR_ID_UNREGISTERED;
-    return (xarSessionGetVar('uid') != _XAR_ID_UNREGISTERED
-            && xarSessionGetVar('uid') != 0);
+    //return xarSessionGetVar('role_id') != _XAR_ID_UNREGISTERED;
+    return (xarSessionGetVar('role_id') != _XAR_ID_UNREGISTERED
+            && xarSessionGetVar('role_id') != 0);
 }
 
 /**
@@ -239,8 +239,8 @@ function xarUserGetNavigationThemeName()
     $themeName = xarTplGetThemeName();
 
     if (xarUserIsLoggedIn()){
-        $uid = xarUserGetVar('uid');
-        $userThemeName = xarModUserVars::get('themes', 'default', $uid);
+        $id = xarUserGetVar('role_id');
+        $userThemeName = xarModUserVars::get('themes', 'default', $id);
         if ($userThemeName) $themeName=$userThemeName;
     }
 
@@ -271,10 +271,10 @@ function xarUserGetNavigationLocale()
 {
     if (xarUserIsLoggedIn())
     {
-        $uid = xarUserGetVar('uid');
+        $id = xarUserGetVar('role_id');
           //last resort user is falling over on this uservar by setting multiple times
          //return true for last resort user - use default locale
-         if ($uid==XARUSER_LAST_RESORT) return true;
+         if ($id==XARUSER_LAST_RESORT) return true;
 
         $locale = xarModUserVars::get('roles', 'locale');
         if (!isset($locale)) {
@@ -358,10 +358,10 @@ $GLOBALS['xarUser_objectRef'] = null;
  * @param  integer $userId integer the user to get the variable for
  * @return mixed the value of the user variable if the variable exists, void if the variable doesn't exist
  * @throws EmptyParameterException, NotLoggedInException, BadParameterException, IDNotFoundException
- * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xarSessionGetVar('uid')) {
+ * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xarSessionGetVar('role_id')) {
  * @todo <marco FIXME: ignoring unknown user variables for now...
  * @todo redesign the delegation to auth* modules for handling user variables
- * @todo add some security for getting to user variables (at least from another uid)
+ * @todo add some security for getting to user variables (at least from another id)
  * @todo define clearly what the difference or similarity is with dd here
  */
 function xarUserGetVar($name, $userId = NULL)
@@ -369,13 +369,13 @@ function xarUserGetVar($name, $userId = NULL)
     if (empty($name)) throw new EmptyParameterException('name');
 
     if (empty($userId)) {
-        $userId = xarSessionGetVar('uid');
+        $userId = xarSessionGetVar('role_id');
     }
-    if ($name == 'uid') {
+    if ($name == 'id') {
         return $userId;
     }
     if ($userId == _XAR_ID_UNREGISTERED) {
-        // Anonymous user => only uid, name and uname allowed, for other variable names
+        // Anonymous user => only id, name and uname allowed, for other variable names
         // an exception of type NOT_LOGGED_IN is raised
         // CHECKME: if we're going the route of moditemvars, this doesn need to be the case
         if ($name == 'name' || $name == 'uname') {
@@ -395,10 +395,10 @@ function xarUserGetVar($name, $userId = NULL)
             }
             // retrieve the item from the roles module
             $userRole = xarModAPIFunc('roles',  'user',  'get',
-                                       array('uid' => $userId));
+                                       array('id' => $userId));
 
-            if (empty($userRole) || $userRole['uid'] != $userId) {
-                throw new IDNotFoundException($userId,'User identified by uid #(1) does not exist.');
+            if (empty($userRole) || $userRole['id'] != $userId) {
+                throw new IDNotFoundException($userId,'User identified by id #(1) does not exist.');
             }
 
             xarCore::setCached('User.Variables.'.$userId, 'uname', $userRole['uname']);
@@ -430,7 +430,7 @@ function xarUserGetVar($name, $userId = NULL)
             // retrieve the user item
             $itemid = $GLOBALS['xarUser_objectRef']->getItem(array('itemid' => $userId));
             if (empty($itemid) || $itemid != $userId) {
-                throw new IDNotFoundException($userId,'User identified by uid #(1) does not exist.');
+                throw new IDNotFoundException($userId,'User identified by id #(1) does not exist.');
             }
 
             // save the properties
@@ -473,12 +473,12 @@ function xarUserSetVar($name, $value, $userId = null)
 {
     // check that $name is valid
     if (empty($name)) throw new EmptyParameterException('name');
-    if ($name == 'uid' || $name == 'authenticationModule' || $name == 'pass') {
+    if ($name == 'id' || $name == 'authenticationModule' || $name == 'pass') {
         throw new BadParameterException('name');
     }
 
     if (empty($userId)) {
-        $userId = xarSessionGetVar('uid');
+        $userId = xarSessionGetVar('role_id');
     }
     if ($userId == _XAR_ID_UNREGISTERED) {
         // Anonymous user
@@ -501,7 +501,7 @@ function xarUserSetVar($name, $value, $userId = null)
         // retrieve the user item
         $itemid = $GLOBALS['xarUser_objectRef']->getItem(array('itemid' => $userId));
         if (empty($itemid) || $itemid != $userId) {
-            throw new IDNotFoundException($userId,'User identified by uid "#(1)" does not exist.');
+            throw new IDNotFoundException($userId,'User identified by id "#(1)" does not exist.');
         }
 
         // check if we need to update the item
@@ -562,7 +562,7 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
  */
 function xarUser__getAuthModule($userId)
 {
-    if ($userId == xarSessionGetVar('uid')) {
+    if ($userId == xarSessionGetVar('role_id')) {
         $authModName = xarSessionGetVar('authenticationModule');
         if (isset($authModName)) {
             return $authModName;

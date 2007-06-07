@@ -19,7 +19,7 @@
    <xar:template type="module" file="admin-menu" />
     <h2>
         #xarVarPrepForDisplay($title)#:
-        <a href="&xar-modurl-roles-admin-modify;&amp;uid=#$groupuid#" title="#xarML('Modify role')#">#xarVarPrepForDisplay($groupname)#</a>
+        <a href="&xar-modurl-roles-admin-modify;&amp;id=#$groupid#" title="#xarML('Modify role')#">#xarVarPrepForDisplay($groupname)#</a>
         <xar:if condition="$search ne ''">
             <xar:mlstring>matching</xar:mlstring>
             '#xarVarPrepForDisplay($search)#'
@@ -49,29 +49,29 @@
                     </xar:mlstring>
                     :
                 </dt>
-                <xar:if condition="$groupuid eq 0">
+                <xar:if condition="$groupid eq 0">
                     <dd class="active">
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;uid=0&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;id=0&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload">
                             <xar:mlstring>All Users</xar:mlstring> (#$totalusers#)</a>
                     </dd>
                 <xar:else/>
                     <dd>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;uid=0&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;id=0&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload">
                             <xar:mlstring>All Users </xar:mlstring> (#$totalusers#)</a>
                     </dd>
                 </xar:if>
                 <xar:set name="prevgroup">""</xar:set>
                 <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
                     <xar:if condition="$prevgroup ne $groups[$i]['name']">
-                        <xar:if condition="$groupuid eq $groups[$i]['uid']">
+                        <xar:if condition="$groupid eq $groups[$i]['id']">
                             <dd class="active">
-                                <a href="&xar-modurl-roles-admin-showusers;&amp;uid=#$groups[$i]['uid']#&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload" title="#xarML('Display the users in this group')#">
+                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$groups[$i]['id']#&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload" title="#xarML('Display the users in this group')#">
                                     #xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
                                 </a>
                             </dd>
                         <xar:else/>
                             <dd>
-                                <a href="&xar-modurl-roles-admin-showusers;&amp;uid=#$groups[$i]['uid']#&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload" title="#xarML('Display the users in this group')#">
+                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$groups[$i]['id']#&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload" title="#xarML('Display the users in this group')#">
                                     #xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
                                 </a>
                             </dd>
@@ -93,7 +93,7 @@
                     </label>
                 </th>
                 <th>
-                    <label for="groupuid" title="#xarML('Select a group to display its users')#">
+                    <label for="groupid" title="#xarML('Select a group to display its users')#">
                         <xar:mlstring>Groups</xar:mlstring>
                     </label>
                 </th>
@@ -125,8 +125,8 @@
                 </td>
                 <td class="xar-align-center">
                     <xar:set name="prevgroup">""</xar:set>
-                    <select name="uid" id="groupuid" onchange="this.form.submit()">
-                        <xar:if condition="$groupuid eq 0">
+                    <select name="id" id="groupid" onchange="this.form.submit()">
+                        <xar:if condition="$groupid eq 0">
                             <option value="0" selected="selected">
                                 <xar:mlstring>All Users</xar:mlstring> - #$totalusers#
                             </option>
@@ -137,12 +137,12 @@
                         </xar:if>
                         <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
                             <xar:if condition="$prevgroup ne $groups[$i]['name']">
-                                <xar:if condition="$groups[$i]['uid'] eq $groupuid">
-                                    <option value="#$groups[$i]['uid']#" selected="selected">
+                                <xar:if condition="$groups[$i]['id'] eq $groupid">
+                                    <option value="#$groups[$i]['id']#" selected="selected">
                                         #xarVarPrepForDisplay($groups[$i]['name'])# - #$groups[$i]['users']#
                                     </option>
                                 <xar:else/>
-                                    <option value="#$groups[$i]['uid']#">
+                                    <option value="#$groups[$i]['id']#">
                                         #xarVarPrepForDisplay($groups[$i]['name'])# - #$groups[$i]['users']#
                                     </option>
                                 </xar:if>
@@ -230,7 +230,7 @@
                     <option value="#$stateactive#" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
                     <option value="#$statepending#"><xar:mlstring>Pending</xar:mlstring></option>
                 </select>
-                <input type="hidden" name="groupuid" id="groupuid" value="#$groupuid#"/>
+                <input type="hidden" name="groupid" id="groupid" value="#$groupid#"/>
                 <input type="hidden" name="state" id="state" value="#$state#"/>
                 <input type="hidden" name="order" id="order" value="#$order#"/>
                 <input type="hidden" name="search" id="search" value="#xarVarPrepForDisplay($search)#"/>
@@ -247,27 +247,27 @@
             <table class="xar-fullwidth xar-clearboth">
                 <tr>
                     <th>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=name&amp;search=#$search#">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;id=#$groupid#&amp;order=name&amp;search=#$search#">
                             <xar:mlstring>Real name</xar:mlstring>
                         </a>
                     </th>
                     <th>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=uname&amp;search=#$search#">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;id=#$groupid#&amp;order=uname&amp;search=#$search#">
                             <xar:mlstring>Login</xar:mlstring>
                         </a>
                     </th>
                     <th>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=email&amp;search=#$search#">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;id=#$groupid#&amp;order=email&amp;search=#$search#">
                             <xar:mlstring>Email</xar:mlstring>
                         </a>
                     </th>
                     <th>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=date_reg&amp;search=#$search#">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;id=#$groupid#&amp;order=date_reg&amp;search=#$search#">
                             <xar:mlstring>Date Registered</xar:mlstring>
                         </a>
                     </th>
                     <th>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=state&amp;search=#$search#">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;id=#$groupid#&amp;order=state&amp;search=#$search#">
                             <xar:mlstring>State</xar:mlstring>
                         </a>
                     </th>
@@ -279,7 +279,7 @@
                     <tr>
                         <td>
                             <xar:if condition="!$loop:item['frozen']">
-                                <a href="&xar-modurl-roles-admin-display;&amp;uid=#$loop:item.uid#">#xarVarPrepForDisplay($loop:item['name'])#</a>
+                                <a href="&xar-modurl-roles-admin-display;&amp;id=#$loop:item.id#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                                 <xar:else/>
                                 <strong>#xarVarPrepForDisplay($loop:item['name'])#</strong>
                             </xar:if>
@@ -289,7 +289,7 @@
                         </td>
                         <td>
                             <xar:if condition="!$loop:item['frozen']">
-                                <a href="&xar-modurl-roles-admin-createmail;&amp;uid=#$loop:item.uid#" title="#xarML('Email this user')#">#xarVarPrepForDisplay($loop:item['email'])#</a>
+                                <a href="&xar-modurl-roles-admin-createmail;&amp;id=#$loop:item.id#" title="#xarML('Email this user')#">#xarVarPrepForDisplay($loop:item['email'])#</a>
                                 <xar:else/>
                                 <xar:mlstring>None</xar:mlstring>
                             </xar:if>
@@ -310,20 +310,20 @@
                         </td>
                         <td class="xar-align-center xar-nowrap">
                             <xar:if condition="!$loop:item['frozen']">
-                                <a href="&xar-modurl-roles-admin-createpassword;&amp;uid=#$loop:item.uid#&amp;state=#$state#&amp;groupuid=#$groupuid#" title="#xarML('Generate a new password for this User')#"><img src="modules/roles/xarimages/passicon.gif" class="xar-valign-middle"/></a>&#160;
-                                <a href="&xar-modurl-roles-admin-modify;&amp;uid=#$loop:item.uid#" title="#xarML('Modify this user')#"><img src="modules/roles/xarimages/infoicon.gif" class="xar-valign-middle"/></a>&#160;
-                                <a href="&xar-modurl-roles-admin-delete;&amp;uid=#$loop:item.uid#" title="#xarML('Delete this User')#"><img src="modules/roles/xarimages/delete.png" class="xar-valign-middle"/></a>&#160;
+                                <a href="&xar-modurl-roles-admin-createpassword;&amp;id=#$loop:item.id#&amp;state=#$state#&amp;groupid=#$groupid#" title="#xarML('Generate a new password for this User')#"><img src="modules/roles/xarimages/passicon.gif" class="xar-valign-middle"/></a>&#160;
+                                <a href="&xar-modurl-roles-admin-modify;&amp;id=#$loop:item.id#" title="#xarML('Modify this user')#"><img src="modules/roles/xarimages/infoicon.gif" class="xar-valign-middle"/></a>&#160;
+                                <a href="&xar-modurl-roles-admin-delete;&amp;id=#$loop:item.id#" title="#xarML('Delete this User')#"><img src="modules/roles/xarimages/delete.png" class="xar-valign-middle"/></a>&#160;
                             <xar:else />
                                 <img src="modules/roles/xarimages/passicon.gif" class="xar-valign-middle"/>&#160;
                                 <img src="modules/roles/xarimages/passicon.gif" class="xar-valign-middle"/>&#160;
                                 <img src="modules/roles/xarimages/passicon.gif" class="xar-valign-middle"/>&#160;
                             </xar:if>
-                            <a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$loop:item.uid#" title="#xarML('Show the Privileges assigned to this User')#"><img src="modules/roles/xarimages/privileges.png" class="xar-valign-middle"/></a>&#160;
-                            <a href="&xar-modurl-roles-admin-testprivileges;&amp;uid=#$loop:item.uid#" title="#xarML('Test the Privileges of this User')#"><img src="modules/roles/xarimages/test.png" class="xar-valign-middle"/></a>
+                            <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$loop:item.id#" title="#xarML('Show the Privileges assigned to this User')#"><img src="modules/roles/xarimages/privileges.png" class="xar-valign-middle"/></a>&#160;
+                            <a href="&xar-modurl-roles-admin-testprivileges;&amp;id=#$loop:item.id#" title="#xarML('Test the Privileges of this User')#"><img src="modules/roles/xarimages/test.png" class="xar-valign-middle"/></a>
                         </td>
                         <td class="xar-align-center">
                             <xar:if condition="!$loop:item['frozen']">
-                                <input type="checkbox" name="uids[#$loop:item['uid']#]" id="uids_#$loop:item['uid']#" value="1"/>
+                                <input type="checkbox" name="ids[#$loop:item['id']#]" id="ids_#$loop:item['id']#" value="1"/>
                             </xar:if>
                         </td>
                     </tr>
@@ -349,7 +349,7 @@
     </xar:if>
     <!-- always show the new user link -->
     <p>
-      <a href="&xar-modurl-roles-admin-new;&amp;ptype=0&amp;pparentid=#$groupuid#" title="#xarML('Add a new user')#">
+      <a href="&xar-modurl-roles-admin-new;&amp;ptype=0&amp;pparentid=#$groupid#" title="#xarML('Add a new user')#">
         <xar:mlstring>Add a new user to this group</xar:mlstring>
       </a>
       |

@@ -340,10 +340,10 @@
                     <select name="testergroup" id="testergroup" size="1" onchange="this.form.submit(testerform.phase.value='modify');" >
 
                     <xar:foreach in="$grouplist" key="$k" value="$testers" >
-                         <xar:if condition="$grouplist[$k]['uid'] eq $testergroup">
-                            <option value="#$grouplist[$k]['uid']#" selected="selected">#$grouplist[$k]['name']#</option>
+                         <xar:if condition="$grouplist[$k]['id'] eq $testergroup">
+                            <option value="#$grouplist[$k]['id']#" selected="selected">#$grouplist[$k]['name']#</option>
                         <xar:else />
-                            <option name="testgroup.#$grouplist[$k]#" value="#$grouplist[$k]['uid']#">#$grouplist[$k]['name']#</option>
+                            <option name="testgroup.#$grouplist[$k]#" value="#$grouplist[$k]['id']#">#$grouplist[$k]['name']#</option>
                         </xar:if>
                     </xar:foreach>
                     </select>
@@ -356,14 +356,14 @@
                     </label>
                     <select name="tester" id="tester" size="1">
                     <xar:foreach in="$testusers" key="$k" value="$testers" >
-                        <xar:if condition="$testusers[$k]['uid'] eq $tester">
-                            <option value="#$testusers[$k]['uid']#" selected="selected">#$testusers[$k]['uname']#</option>
+                        <xar:if condition="$testusers[$k]['id'] eq $tester">
+                            <option value="#$testusers[$k]['id']#" selected="selected">#$testusers[$k]['uname']#</option>
                         <xar:else />
-                            <option name="tester.#$testusers[$k]#" value="#$testusers[$k]['uid']#">#$testusers[$k]['uname']#</option>
+                            <option name="tester.#$testusers[$k]#" value="#$testusers[$k]['id']#">#$testusers[$k]['uname']#</option>
                         </xar:if>
                         </xar:foreach>
                     </select>
-                    <!--<xar:data-input type="userlist" name="tester" uid="4" value="$tester" />-->
+                    <!--<xar:data-input type="userlist" name="tester" id="4" value="$tester" />-->
 
                     <span class="xar-error">
                    <xar:ml>

@@ -1,10 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
-<xar:set name="statedeleted">ROLES_STATE_DELETED</xar:set>
-<xar:set name="stateinactive">ROLES_STATE_INACTIVE</xar:set>
-<xar:set name="statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
-<xar:set name="stateactive">ROLES_STATE_ACTIVE</xar:set>
-<xar:set name="statepending">ROLES_STATE_PENDING</xar:set>
 <xar:base-include-javascript module="base" filename="checkall.js" position="head" />
 <xar:style scope="module" module="base" file="navtabs" />
 <xar:style scope="module" file="privileges" />
@@ -82,37 +77,24 @@
                        <td class="xar-align-center">
                            <select name="groupid" id="groupid">
                                <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
-                                    <xar:if condition="$groups[$i]['uid'] eq $groupid">
-                                        <option value="#$groups[$i]['uid']#" selected="selected">#$groups[$i]['name']#</option>
+                                    <xar:if condition="$groups[$i]['id'] eq $groupid">
+                                        <option value="#$groups[$i]['id']#" selected="selected">#$groups[$i]['name']#</option>
                                     <xar:else/>
-                                        <option value="#$groups[$i]['uid']#">#$groups[$i]['name']#</option>
+                                        <option value="#$groups[$i]['id']#">#$groups[$i]['name']#</option>
                                     </xar:if>
                                 </xar:for>
                             </select>
                        </td>
                        <td class="xar-align-center">
-                            <select name="recallstate" id="recallstate" class="xar-margin-thickright">
-                                <xar:if condition="$recallstate eq $stateinactive">
-                                    <option value="#$stateinactive#" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
-                                <xar:else />
-                                    <option value="#$stateinactive#"><xar:mlstring>Inactive</xar:mlstring></option>
-                                </xar:if>
-                                <xar:if condition="$recallstate eq $statenotvalidated">
-                                    <option value="#$statenotvalidated#" selected="selected"><xar:mlstring>Not Validated</xar:mlstring></option>
-                                <xar:else />
-                                    <option value="#$statenotvalidated#"><xar:mlstring>Not Validated</xar:mlstring></option>
-                                </xar:if>
-                                <xar:if condition="$recallstate eq $stateactive">
-                                    <option value="#$stateactive#" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
-                                <xar:else />
-                                    <option value="#$stateactive#"><xar:mlstring>Active</xar:mlstring></option>
-                                </xar:if>
-                                <xar:if condition="$recallstate eq $statepending">
-                                    <option value="#$statepending#" selected="selected"><xar:mlstring>Pending</xar:mlstring></option>
-                                <xar:else />
-                                    <option value="#$statepending#"><xar:mlstring>Pending</xar:mlstring></option>
-                                </xar:if>
-                            </select>
+                            <xar:set name="options">
+                                array(
+                                    array('id' => ROLES_STATE_ACTIVE, 'name' => 'Active'),
+                                    array('id' => ROLES_STATE_INACTIVE, 'name' => 'Inactive'),
+                                    array('id' => ROLES_STATE_NOTVALIDATED, 'name' => 'Not Validated'),
+                                    array('id' => ROLES_STATE_PENDING, 'name' => 'Pending'),
+                                )
+                            </xar:set>
+                            <xar:data-input type="dropdown" name="recallstate" options="$options" value="$recallstate" />
                         </td>
                     </tr>
                 </table>
@@ -170,7 +152,7 @@
                                 </td>
                                 <td class="xar-align-center">
                                     <xar:if condition="$loop:item['unique'] eq 1">
-                                         <input type="checkbox" name="recalluids[#$loop:item['id']#]" id="recalluids_#$loop:item['id']#" />
+                                         <input type="checkbox" name="recallids[#$loop:item['id']#]" id="recallids_#$loop:item['id']#" />
                                     </xar:if>
                                 </td>
                             </tr>
@@ -233,38 +215,17 @@
                         <input type="submit" name="search" id="search_user" value="#xarML('Search')#" class="xar-margin-thickleft" />
                     </td>
                     <td class="xar-align-center">
-                        <select name="purgestate" id="purgestate" class="xar-margin-thickright">
-                            <xar:if condition="$purgestate eq -1">
-                                <option value="-1" selected="selected"></option>
-                            <xar:else />
-                                <option value="-1"></option>
-                            </xar:if>
-                            <xar:if condition="$purgestate eq $statedeleted">
-                                <option value="#$statedeleted#" selected="selected"><xar:mlstring>Delete</xar:mlstring></option>
-                            <xar:else />
-                                <option value="#$statedeleted#"><xar:mlstring>Delete</xar:mlstring></option>
-                            </xar:if>
-                            <xar:if condition="$purgestate eq $stateinactive">
-                                <option value="#$stateinactive#" selected="selected"><xar:mlstring>Inactive</xar:mlstring></option>
-                            <xar:else />
-                                <option value="#$stateinactive#"><xar:mlstring>Inactive</xar:mlstring></option>
-                            </xar:if>
-                            <xar:if condition="$purgestate eq $statenotvalidated">
-                                <option value="#$statenotvalidated#" selected="selected"><xar:mlstring>Not Validated</xar:mlstring></option>
-                            <xar:else />
-                                <option value="#$statenotvalidated#"><xar:mlstring>Not Validated</xar:mlstring></option>
-                            </xar:if>
-                            <xar:if condition="$purgestate eq $stateactive">
-                                 <option value="#$stateactive#" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
-                            <xar:else />
-                                 <option value="#$stateactive#"><xar:mlstring>Active</xar:mlstring></option>
-                            </xar:if>
-                            <xar:if condition="$purgestate eq $statepending">
-                                 <option value="#$statepending#" selected="selected"><xar:mlstring>Pending</xar:mlstring></option>
-                            <xar:else />
-                                 <option value="#$statepending#"><xar:mlstring>Pending</xar:mlstring></option>
-                            </xar:if>
-                        </select>
+                        <xar:set name="options">
+                            array(
+                                array('id' => -1, 'name' => ''),
+                                array('id' => ROLES_STATE_ACTIVE, 'name' => 'Active'),
+                                array('id' => ROLES_STATE_DELETED, 'name' => 'Deleted'),
+                                array('id' => ROLES_STATE_INACTIVE, 'name' => 'Inactive'),
+                                array('id' => ROLES_STATE_NOTVALIDATED, 'name' => 'Not Validated'),
+                                array('id' => ROLES_STATE_PENDING, 'name' => 'Pending'),
+                            )
+                        </xar:set>
+                        <xar:data-input type="dropdown" name="purgestate" options="$options" value="$purgestate" />
                         <input type="submit" name="search" id="search_state" value="#xarML('Search')#" class="xar-margin-thickright" />
                     </td>
                 </tr>
@@ -322,7 +283,7 @@
                                 #$loop:item['state']#
                             </td>
                             <td class="xar-align-center">
-                               <input type="checkbox" name="purgeuids[#$loop:item['id']#]" id="purgeuids_#$loop:item['id']#" value="1"/>
+                               <input type="checkbox" name="purgeids[#$loop:item['id']#]" id="purgeids_#$loop:item['id']#" value="1"/>
                             </td>
                         </tr>
                     </xar:loop>

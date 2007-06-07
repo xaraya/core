@@ -25,7 +25,7 @@
           <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
             <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
               <dd>
-                <a href="&xar-modurl-roles-admin-showusers;&amp;uid=#$parents.$i.parentid#" title="#xarML('Show this group')#">
+                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#">
                   <xar:var name="parents[$i].parentname"  prep="true"/>
                 </a>
               </dd>
@@ -38,7 +38,7 @@
 
     <xar:comment>TODO set the active tab here</xar:comment>
     <!-- Show the general tab list for roles -->
-    <xar:set name="uid">$roleid</xar:set>
+    <xar:set name="id">$roleid</xar:set>
     <xar:template file="tablist" />
     <fieldset>
       <legend>
@@ -93,7 +93,7 @@
                       </xar:if>
                     </td>
                     <td>
-                      <a href="#$groupurl#&amp;uid=#$loop:item['groupid']#">
+                      <a href="#$groupurl#&amp;id=#$loop:item['groupid']#">
                         <xar:var name="loop:item.groupname" prep="true"/>
                       </a>
                     </td>

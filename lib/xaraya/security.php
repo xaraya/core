@@ -14,10 +14,10 @@
 /**
  * Notes on security system
  *
- * Special UID and GIDS:
- *  UID -1 corresponds to 'all users', includes unregistered users
+ * Special ID and GIDS:
+ *  ID -1 corresponds to 'all users', includes unregistered users
  *  GID -1 corresponds to 'all groups', includes unregistered users
- *  UID 0 corresponds to unregistered users
+ *  ID 0 corresponds to unregistered users
  *  GID 0 corresponds to unregistered users
  *
  */
@@ -300,7 +300,7 @@ function xarUFindRole($name){ return xarRoles::ufindRole($name); }
 
 function xarCurrentRole()
 {
-    return xarRoles::getRole(xarSessionGetVar('uid'));
+    return xarRoles::getRole(xarSessionGetVar('role_id'));
 }
 
 function xarIsParent($name1, $name2)
