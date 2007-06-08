@@ -497,7 +497,8 @@ function installer_admin_bootstrap()
     xarVarSetCached('installer','installing', true);
 
     // load modules into *_modules table
-    if (!xarModAPIFunc('modules', 'admin', 'regenerate')) throw new Exception("regenerating module list failed");//return;
+    if (!xarModAPIFunc('modules', 'admin', 'regenerate'))
+        throw new Exception("regenerating module list failed");
 
      // Initialise and activate dynamic data
     $modlist = array('dynamicdata');
