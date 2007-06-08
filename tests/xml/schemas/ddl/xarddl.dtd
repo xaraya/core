@@ -51,6 +51,7 @@
         * change 'name' attribute of 'table' element to ID
         * made 'primary' a required sub of 'table', as a consequence, 'table' itself can have 0 or more 'column' tags
         * replaced the description attribute on some with a child 'description' tag of all.
+        * lowercasing attribute values of column.type
 -->
 
 <!-- Root element is 'schema' -->
@@ -73,14 +74,14 @@
 <!ATTLIST column
   name NMTOKEN #REQUIRED
   required (true|false) "false"
-  type (TINYINT|SMALLINT|BIGINT|INTEGER|
-        FLOAT|DECIMAL|NUMERIC|REAL|DOUBLE|
-        CHAR|VARCHAR|LONGVARCHAR|
-        DATE|TIME|TIMESTAMP|
-        BINARY|VARBINARY|LONGVARBINARY|BLOB|CLOB|
-        BOOLEAN|BIT|BOOLEANINT|BOOLEANCHAR|
-        OTHER
-       ) "VARCHAR"
+  type (tinyint|smallint|bigint|integer|
+        float|decimal|numeric|real|double|
+        char|varchar|longvarchar|
+        date|time|timestamp|
+        binary|varbinary|longvarbinary|blob|clob|
+        boolean|bit|booleanint|booleanchar|
+        other
+       ) "varchar"
   size CDATA #IMPLIED
   default CDATA #IMPLIED
   scale CDATA #IMPLIED

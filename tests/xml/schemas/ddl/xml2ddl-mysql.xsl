@@ -4,13 +4,13 @@
   information as the ddl XML
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
-  <!-- 
-      Import common templates, we use import instead of include so the 
+  <!--
+      Import common templates, we use import instead of include so the
       imported templates get a lower priority than the ones in this file,
       giving the ability here to override the imports
   -->
   <xsl:import href="xml2ddl-base.xsl"/>
-  
+
 <!-- Things to do before we start handling elements -->
 <xsl:template match="/">
   <xsl:call-template name="topheader">
@@ -33,7 +33,7 @@
   <xsl:call-template name="dynheader"/>
   <xsl:text>DROP TABLE IF EXISTS </xsl:text><xsl:value-of select="@name"/><xsl:text>;</xsl:text>
   <xsl:value-of select="$CR"/>
-  <xsl:text>CREATE TABLE </xsl:text><xsl:value-of select="@name"/> 
+  <xsl:text>CREATE TABLE </xsl:text><xsl:value-of select="@name"/>
   <xsl:text>(</xsl:text>
   <xsl:value-of select="$CR"/>
   <xsl:apply-templates select="primary/column | column"/>
@@ -53,7 +53,7 @@
   <xsl:text>  </xsl:text>
   <xsl:value-of select="@name"/><xsl:text> </xsl:text>
   <xsl:choose>
-    <xsl:when test="@type = 'LONGVARCHAR'">
+    <xsl:when test="@type = 'longvarchar'">
       <xsl:text>MEDIUMTEXT</xsl:text>
     </xsl:when>
     <xsl:otherwise>

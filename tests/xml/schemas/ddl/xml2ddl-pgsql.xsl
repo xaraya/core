@@ -62,7 +62,7 @@
   <xsl:text>  </xsl:text>
   <xsl:value-of select="@name"/><xsl:text> </xsl:text>
   <xsl:choose>
-    <xsl:when test="@type = 'LONGVARCHAR'">
+    <xsl:when test="@type = 'longvarchar'">
       <xsl:text>TEXT</xsl:text>
     </xsl:when>
     <xsl:when test="@autoincrement = 'true'">
