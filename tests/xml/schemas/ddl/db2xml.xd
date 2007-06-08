@@ -1,4 +1,4 @@
-<schema name="#$dbname#">
+<schema name="#$dbname#" xmlns:xar="http://xaraya.com/BL/2">
   <xar:foreach in="$tables" value="$table">
     <table name="#$table:getName()#">
       <xar:set name="columns">#$table:getColumns()#</xar:set>
@@ -8,7 +8,7 @@
         <xar:set name="prim_columns">#$primary:getColumns()#</xar:set>
       </xar:if>
       <xar:set name="dealt_with">array()</xar:set>
-      <xar:if condition="count($prim_columns)"> 
+      <xar:if condition="count($prim_columns)">
         <primary>
           <xar:foreach in="$prim_columns" value="$prim_column">
             <xar:set name="autoinc">'false'</xar:set>
@@ -20,11 +20,11 @@
               <xar:set name="required">'false'</xar:set>
             </xar:if>
             <xar:set name="type">CreoleTypes::getCreoleName($prim_column->getType())</xar:set>
-            <column name="#$prim_column:getName()#" description=""
+            <column name="#$prim_column:getName()#"
                     type="#$type#" size="#$prim_column:getSize()#" scale="#$prim_column:getScale()#"
                     default="#$prim_column:getDefaultValue()#" required="#$required#" autoincrement="#$autoinc#" />
             <xar:set name="elems">array_push($dealt_with,$prim_column->getName())</xar:set>
-          </xar:foreach> 
+          </xar:foreach>
         </primary>
       </xar:if>
       <xar:foreach in="$columns" value="$column">
@@ -40,7 +40,7 @@
           <xar:set name="required">'false'</xar:set>
         </xar:if>
         <xar:set name="type">CreoleTypes::getCreoleName($column->getType())</xar:set>
-        <column name="#$column:getName()#" description=""
+        <column name="#$column:getName()#"
                 type="#$type#" size="#$column:getSize()#" scale="#$column:getScale()#"
                 default="#$column:getDefaultValue()#" required="#$required#" autoincrement="#$autoinc#" />
       </xar:foreach>
@@ -54,9 +54,9 @@
         <index type="#$index_type#" name="#$index:getName()#">
           <xar:foreach in="$index_columns" value="$index_column">
             <column name="#$index_column:getName()#"/>
-          </xar:foreach>                          
+          </xar:foreach>
         </index>
-      </xar:foreach> 
+      </xar:foreach>
     </table>
   </xar:foreach>
 </schema>

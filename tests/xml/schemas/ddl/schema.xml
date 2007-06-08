@@ -5,15 +5,19 @@
   should react responsibly
 -->
 <schema name="devtest">
-  <table name="first" description="A nice table with some sort of description">
-    <column name="id" description="A unique id column" size="11" type="INTEGER"
-            autoincrement="true" required="true" />
-    <column name="ref_id" description="A reference to an id column" size="11" type="INTEGER"
-            required="true"/>
+  <description>Schema description can optionally be put here</description>
+  <table name="first">
+    <description>A nice table with some sort of description</description>
+    <column name="id" description="A unique id column" size="11" type="INTEGER"  autoincrement="true" required="true" />
+
+    <column name="ref_id" size="11" type="INTEGER" required="true">
+      <description>A reference to an id column</description>
+    </column>
     <primary>
       <column name="id"/>
     </primary>
     <index type="default" name="i_xar_block_group_instances">
+      <description>We index on the ref_id column because we can</description>
       <column name="ref_id"/>
     </index>
  </table>
