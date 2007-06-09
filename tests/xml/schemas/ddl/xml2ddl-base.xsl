@@ -4,26 +4,26 @@
   <xsl:output method="text" />
   <xsl:strip-space elements="*"/>
 
-  <!-- 
+  <!--
       We probably want to specify parameters at some point like:
       - vendor      - generate ddl compatible with $vendor backend
-      - version     - generate ddl compatible with $vendor-$version backend 
+      - version     - generate ddl compatible with $vendor-$version backend
       - drop4create - drop tables before creating them
       - createdb    - create the database too
       - tableprefix - self explanatory
       - etc.
-  -->  
+  -->
   <xsl:param name="vendor"  />
   <xsl:param name="version" />
   <xsl:param name="dbcreate"/>
   <xsl:param name="drop4create"/>
-  
+
   <!-- Variables, xslt style -->
   <xsl:variable name="CR">
 <xsl:text>
 </xsl:text>
   </xsl:variable>
-  
+
   <!-- File header -->
   <xsl:template name="topheader">
     <xsl:param name="dbname"/>
@@ -33,7 +33,7 @@
  * Name                : <xsl:value-of select="$dbname"/>
  * Vendor              : <xsl:value-of select="$vendor"/>
  * Date                : TODO
- * Remarks:            : 
+ * Remarks:            :
  *   <xsl:value-of select="$remarks"/>
  */
 </xsl:template>
@@ -42,7 +42,7 @@
 <xsl:template name="dynheader">
 /* ---------------------------------------------------------------------------
  * <xsl:value-of select="local-name()"/>: <xsl:value-of select="@name" />
- */  
+ */
 </xsl:template>
 
 <!-- Easy TODO inclusion -->
@@ -74,7 +74,7 @@
 <xsl:template match="table/index/column">
   <xsl:value-of select="@name"/>
   <xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if></xsl:template>
-  
+
 <!-- Primary key creation -->
 <xsl:template match="table/primary">
   <xsl:text>ALTER TABLE </xsl:text>
@@ -85,4 +85,7 @@
     <xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if>
   </xsl:for-each>);
 </xsl:template>
+
+<xsl:template match="schema/description"/> <!-- @todo : find out if this has a useful thing -->
+<xsl:template match="index/description"/> <!-- @todo : find out if this has a useful thing -->
 </xsl:stylesheet>
