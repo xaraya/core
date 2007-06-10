@@ -46,7 +46,7 @@ function dynamicdata_userapi_handleLabelTag($args)
     }
     $pargs = 'array('.join(', ',$parts).')';
 
-    if (!empty($args['object'])) {
+    if (!empty($object)) {
         return 'echo xarVarPrepForDisplay('.$object.'->label); ';
     } elseif (!empty($property)) {
         if (!empty($args['label'])) {
@@ -66,7 +66,7 @@ function dynamicdata_userapi_handleLabelTag($args)
         if(isset($args['for'])){
             $argsstring.=",'for'=>'".$args['for']."'";
         }
-        
+
         $argsstring.=")";
         return "echo xarTplProperty('dynamicdata','label','showoutput',$argsstring,'label');";
     } else {
