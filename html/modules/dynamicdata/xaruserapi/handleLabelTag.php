@@ -60,10 +60,12 @@ function dynamicdata_userapi_handleLabelTag($args)
         }
     } elseif(isset($args['label'])) {
         // Plain label, we want to use the template nevertheless
-        $argsstring = "array('label'=>'".$args['label']."''title'=>'".$args['title'];
+        $argsstring = "array('label'=>'".$args['label']."','title'=>'".$args['title']."'";
+
         if(isset($args['for'])){
             $argsstring.=",'for'=>'".$args['for']."'";
         }
+        
         $argsstring.=")";
         return "echo xarTplProperty('dynamicdata','label','showoutput',$argsstring,'label');";
     } else {
