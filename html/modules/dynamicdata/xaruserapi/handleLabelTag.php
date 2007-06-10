@@ -22,6 +22,7 @@
  */
 function dynamicdata_userapi_handleLabelTag($args)
 {
+
     // remove BL handler stuff
     if (isset($args['handler_type'])) {
         unset($args['handler_type']);
@@ -34,7 +35,6 @@ function dynamicdata_userapi_handleLabelTag($args)
         $object  = $args['object'];
         unset($args['object']);
     }
-
     $parts = array();
     foreach ($args as $key => $val) {
         if ($key == 'label') $key = 'for';
@@ -60,6 +60,7 @@ function dynamicdata_userapi_handleLabelTag($args)
         }
     } elseif(isset($args['label'])) {
         // Plain label, we want to use the template nevertheless
+        if (!isset($args['title'])) $args['title']='';
         $argsstring = "array('label'=>'".$args['label']."','title'=>'".$args['title']."'";
 
         if(isset($args['for'])){
