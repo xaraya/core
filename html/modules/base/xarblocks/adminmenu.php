@@ -134,10 +134,9 @@ function base_adminmenublock_display($blockinfo)
 
                     // For active module we need to display the mod functions links
                     // call the api function to obtain function links, but don't raise an exception if it's not there
-                    $menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array(), false);
+                    try {
+                        $menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array());
 
-                    // scan array and prepare the links
-                    if (!empty($menulinks)) {
                         foreach($menulinks as $menulink) {
                             $adminmods[$modname]['indlinks'][] = array(
                                 'adminlink'     => $menulink['url'],
@@ -146,6 +145,8 @@ function base_adminmenublock_display($blockinfo)
                                 'funcactive'    => ($menulink['url'] == $currenturl) ? 1 : 0
                             );
                         }
+                    } catch (FunctionNotFoundException $e) {
+                        $menulinks = array();
                     }
                 } // if
             } // foreach
@@ -192,10 +193,8 @@ function base_adminmenublock_display($blockinfo)
                     }
                     // For active module we need to display the mod functions links
                     // call the api function to obtain function links, but don't raise an exception if it's not there
-                    $menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array(), false);
-
-                    // scan array and prepare the links
-                    if (!empty($menulinks)) {
+                    try {
+                        $menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array());
                         foreach($menulinks as $menulink) {
                             $catmods[$cat][$modname]['indlinks'][] = array(
                                 'adminlink'     => $menulink['url'],
@@ -204,6 +203,8 @@ function base_adminmenublock_display($blockinfo)
                                 'funcactive'    => ($menulink['url'] == $currenturl) ? 1 : 0
                             );
                         }
+                    } catch (FunctionNotFoundException $e) {
+                        $menulinks = array();
                     }
                 } else {
                    // Why is this needed?
