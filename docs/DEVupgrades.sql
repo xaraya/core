@@ -446,6 +446,8 @@ ALTER TABLE `xar_rolemembers`
   KEY `i_xar_rolememb_uid` (`xar_uid`),
   KEY `i_xar_rolememb_parentid` (`xar_parentid`)
 
+/* TODO: change the uid reference(s) in the roles lockdata modvar to id */
+
 /* change date_reg to an int */
 ALTER TABLE `xar_roles` CHANGE `date_reg` `date_reg` INT( 11 ) NOT NULL DEFAULT '0';
 

@@ -107,9 +107,9 @@ function xarModDelVar($modName, $name)               {   return xarModVars::dele
 function xarModDelAllVars($modName)                  {   return xarModVars::delete_all($modName);         }
 function xarModGetVarId($modName, $name)             {   return xarModVars::getID($modName, $name);       }
 
-function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL){   return xarModUserVars::get($modName, $name, $uid, $prep);  }
-function xarModSetUserVar($modName, $name, $value, $uid=NULL)        {   return xarModUserVars::set($modName, $name, $value, $uid); }
-function xarModDelUserVar($modName, $name, $uid=NULL)                {   return xarModUserVars::delete($modName, $name, $uid);      }
+function xarModGetUserVar($modName, $name, $id = NULL, $prep = NULL){   return xarModUserVars::get($modName, $name, $id, $prep);  }
+function xarModSetUserVar($modName, $name, $value, $id=NULL)        {   return xarModUserVars::set($modName, $name, $value, $id); }
+function xarModDelUserVar($modName, $name, $id=NULL)                {   return xarModUserVars::delete($modName, $name, $id);      }
 
 
 /**

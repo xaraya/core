@@ -231,22 +231,22 @@ function xarCacheGetDirSize($dir = false)
  */
 function xarCache_getParents()
 {
-    $currentuid = xarSessionGetVar('uid');
-    if (xarCore::isCached('User.Variables.'.$currentuid, 'parentlist')) {
-        return xarCore::getCached('User.Variables.'.$currentuid, 'parentlist');
+    $currentid = xarSessionGetVar('role_id');
+    if (xarCore::isCached('User.Variables.'.$currentid, 'parentlist')) {
+        return xarCore::getCached('User.Variables.'.$currentid, 'parentlist');
     }
     $rolemembers = xarDB::getPrefix() . '_rolemembers';
     $dbconn = xarDB::getConn();
     $query = "SELECT parentid FROM $rolemembers WHERE id = ?";
     $stmt   = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuery(array($currentuid));
+    $result = $stmt->executeQuery(array($currentid));
 
     $gidlist = array();
     while($result->next()) {
         $gidlist[] = $result->getInt(1);
     }
     $result->Close();
-    xarCore::setCached('User.Variables.'.$currentuid, 'parentlist',$gidlist);
+    xarCore::setCached('User.Variables.'.$currentid, 'parentlist',$gidlist);
     return $gidlist;
 }
 

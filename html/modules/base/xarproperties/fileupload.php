@@ -88,21 +88,21 @@ class FileUploadProperty extends DataProperty
         if (!empty($this->basedir) && preg_match('/\{user\}/',$this->basedir)) {
             $uname = xarUserGetVar('uname');
             $uname = xarVarPrepForOS($uname);
-            $uid = xarUserGetVar('uid');
+            $id = xarUserGetVar('id');
             // Note: we add the userid just to make sure it's unique e.g. when filtering
             // out unwanted characters through xarVarPrepForOS, or if the database makes
             // a difference between upper-case and lower-case and the OS doesn't...
-            $udir = $uname . '_' . $uid;
+            $udir = $uname . '_' . $id;
             $this->basedir = preg_replace('/\{user\}/',$udir,$this->basedir);
         }
         if (!empty($this->importdir) && preg_match('/\{user\}/',$this->importdir)) {
             $uname = xarUserGetVar('uname');
             $uname = xarVarPrepForOS($uname);
-            $uid = xarUserGetVar('uid');
+            $id = xarUserGetVar('id');
             // Note: we add the userid just to make sure it's unique e.g. when filtering
             // out unwanted characters through xarVarPrepForOS, or if the database makes
             // a difference between upper-case and lower-case and the OS doesn't...
-            $udir = $uname . '_' . $uid;
+            $udir = $uname . '_' . $id;
             $this->importdir = preg_replace('/\{user\}/',$udir,$this->importdir);
         }
     }

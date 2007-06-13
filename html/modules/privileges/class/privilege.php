@@ -337,13 +337,13 @@ class xarPrivilege extends xarMask
         //      $ind = 0;
     sys::import('modules.dynamicdata.class.objects.master');
         while($result->next()) {
-            list($uid,$name,$type,$uname,$email,$pass,$auth_modid) = $result->fields;
+            list($id,$name,$type,$uname,$email,$pass,$auth_modid) = $result->fields;
             //          $ind = $ind + 1;
 
             $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
-            $role->getItem(array('itemid' => $uid));
+            $role->getItem(array('itemid' => $id));
             /*
-            $role = new xarRole(array('uid' => $uid,
+            $role = new xarRole(array('id' => $id,
                                       'name' => $name,
                                       'type' => $type,
                                       'uname' => $uname,

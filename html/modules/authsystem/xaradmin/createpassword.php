@@ -19,8 +19,8 @@ function authsystem_admin_createpassword()
     if (!xarSecurityCheck('EditAuthsystem')) return;
     // Get parameters
     if(!xarVarFetch('state', 'isset', $state, NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('groupuid', 'int:0:', $groupuid, 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('uid', 'isset', $uid)) {
+    if (!xarVarFetch('groupid', 'int:0:', $groupid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('id', 'isset', $id)) {
         throw new BadParameterException(array('parameters','admin','createpassword','roles'), xarML('Invalid #(1) for #(2) function #(3)() in module #(4)'));
     }
 
@@ -30,7 +30,7 @@ function authsystem_admin_createpassword()
      if (empty($pass)) {
             throw new BadParameterException(null,xarML('Problem generating new password'));
      }
-     $role = xarRoles::get($uid);
+     $role = xarRoles::get($id);
      $modifiedstatus = $role->setPass($pass);
      $modifiedrole = $role->updateItem();
      if (!$modifiedrole) {
@@ -38,14 +38,14 @@ function authsystem_admin_createpassword()
      }
      if (!xarModVars::get('roles', 'askpasswordemail')) {
         xarResponseRedirect(xarModURL('roles', 'admin', 'showusers',
-                      array('uid' => $data['groupuid'], 'state' => $data['state'])));
+                      array('id' => $data['groupid'], 'state' => $data['state'])));
         return true;
     }
     else {
 
         xarSession::setVar('tmppass',$pass);
         xarResponseRedirect(xarModURL('roles', 'admin', 'asknotification',
-        array('uid' => array($uid => '1'), 'mailtype' => 'password', 'groupuid' => $groupuid, 'state' => $state)));
+        array('id' => array($id => '1'), 'mailtype' => 'password', 'groupid' => $groupid, 'state' => $state)));
     }
 }
 ?>

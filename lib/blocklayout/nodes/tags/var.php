@@ -11,24 +11,24 @@ class VarTagNode extends TagNode implements EmptyElementTag
     {
         $scope = 'local';
         $prep = false;
-        $user = xarUserGetVar('uid');
+        $user = xarUserGetVar('role_id');
         extract($this->attributes);
-        
+
         if (!isset($name)) {
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:var> tag.');
             return;
         }
-        
+
         $prefix = ''; $postfix = '';
         if(strtolower($prep) == 'true') {
             $prep = true;
             $prefix = "xarVarPrepForDisplay(";
             $postfix = ")";
         }
-        
+
         // Allow specifying name="test" and name="$test" and deprecate the $ form over time
         if(substr($name,0,1) == XAR_TOKEN_VAR_START) $name = substr($name,1);
-        
+
         switch ($scope) {
             case 'config':
                 $value = "xarConfigGetVar('".$name."')";

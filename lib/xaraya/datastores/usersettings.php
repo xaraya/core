@@ -36,7 +36,7 @@ class UserSettingsDataStore extends BasicDataStore // Consider inheriting from M
     {
         if (empty($args['itemid'])) {
             // default is the current user (if any)
-            $itemid = xarUserGetVar('uid');
+            $itemid = xarUserGetVar('id');
         } else {
             $itemid = $args['itemid'];
         }
@@ -71,7 +71,7 @@ class UserSettingsDataStore extends BasicDataStore // Consider inheriting from M
     {
         if (empty($args['itemid'])) {
             // default is the current user (if any)
-            $itemid = xarUserGetVar('uid');
+            $itemid = xarUserGetVar('id');
         } else {
             $itemid = $args['itemid'];
         }
@@ -97,7 +97,7 @@ class UserSettingsDataStore extends BasicDataStore // Consider inheriting from M
     {
         if (empty($args['itemid'])) {
             // default is the current user (if any)
-            $itemid = xarUserGetVar('uid');
+            $itemid = xarUserGetVar('id');
         } else {
             $itemid = $args['itemid'];
         }

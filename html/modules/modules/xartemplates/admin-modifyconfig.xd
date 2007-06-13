@@ -1,28 +1,27 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
-<div class="xar-mod-head">
-    <span class="xar-mod-title">
-        <xar:mlstring>Modules Administration</xar:mlstring>
-    </span>
-</div>
-<div class="xar-mod-body">
-    <form method="post" action="&xar-modurl-modules-admin-updateconfig;">
-        <fieldset>
-            <legend><xar:mlstring>Configuration settings</xar:mlstring></legend>
-            <div class="xar-form-input-wrapper-after">
-                <xar:set name="checked">$disableoverview</xar:set>
-                <xar:data-input type="checkbox" name="disableoverview" id="disableoverview" checked="$checked" />
-                <label for="disableoverview" title="#xarML('Disable the display by default of all module overview pages.')#">
-                    <xar:mlstring>Disable the display by default of all module overview pages.</xar:mlstring>
-                </label>
-            </div>
-        </fieldset>
-        <fieldset>
-            <div class="xar-form-input-wrapper-after">
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
-            </div>
-        </fieldset>
-    </form>
-</div>
+    <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">
+            <xar:mlstring>Modules Administration</xar:mlstring>
+        </span>
+    </div>
+    <div class="xar-mod-body">
+        <form method="post" action="&xar-modurl-modules-admin-updateconfig;">
+            <fieldset>
+                <legend><xar:mlstring>Configuration settings</xar:mlstring></legend>
+                <div class="xar-form-input-wrapper-after">
+                    <xar:data-input type="checkbox" name="disableoverview" id="disableoverview" checked="$disableoverview" />
+                    <label for="disableoverview" title="#xarML('Disable the display by default of all module overview pages.')#">
+                        <xar:mlstring>Disable the display by default of all module overview pages.</xar:mlstring>
+                    </label>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </xar:template>
