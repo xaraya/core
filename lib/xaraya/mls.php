@@ -328,52 +328,17 @@ function xarMLS_userTime($time=null)
  */
 function xarMLS_userOffset($timestamp = null)
 {
-    static $offset; // minimal information for timezone offset handling
-    static $timezone; // more information for daylight saving
-
-    if (!isset($offset)) {
-    // CHECKME: use dynamicdata for roles, module user variable and/or session variable
-    //          (see also 'locale' in xarUserGetNavigationLocale())
-    //jojodee - do not use DD for roles 'variables' used in core functions. They can not be relied on - bug 5847
-        // get the correct timezone offset for this user
-        if (xarUserIsLoggedIn()) {
-            //User modvar 'duv' implemented at 1.1.2 for more reliably reference that free form DD 'timezone'
-            $offset = xarModGetUserVar('roles','usertimezone');
-
-            //Mark the following check for deprecation at next release. Now use usertimezone from 1.1.2
-            if (empty($offset) || !$offset) {
-              //see bug 5847 - now use this only if usertimezone is not set.
-              $offset = xarUserGetVar('timezone');
-            }
-            // get the actual timezone for the user (in addition to the timezone offset)
-            if (isset($offset) && !is_numeric($offset)) {
-                $info = @unserialize($offset);
-                if (!empty($info) && is_array($info)) {
-                    $offset = isset($info['offset']) ? $info['offset'] : null;
-                    $timezone = isset($info['timezone']) ? $info['timezone'] : null;
-                }
-            }
-        }
-
-        //bug 5847 - $offset will be false if the user is logged in, rather than NULL. Cannot check for !isset.
-        if (!($offset)) {
-            // use default time offset for this site
-            $offset = $GLOBALS['xarMLS_defaultTimeOffset'];
-            // use default timezone for this site
-            $timezone = $GLOBALS['xarMLS_defaultTimeZone'];
-        }
-    }
-    // this will depend on the current $timestamp
-    if (isset($timestamp) && !empty($timezone) && function_exists('xarModAPIFunc')) {
-        $adjust = xarModAPIFunc('base','user','dstadjust',
-                                array('timezone' => $timezone,
-                                      // pass the timestamp *with* the offset
-                                      'time'     => $timestamp + $offset * 3600));
-
+    sys::import('xaraya.structures.datetime');
+    $datetime = new XarDateTime();
+    $datetime->setTimeStamp($timestamp);
+    if (xarUserIsLoggedIn()) {
+        $usertz = xarModItemVars::get('roles','usertimezone',xarSession::getVar('role_id'));
     } else {
-        $adjust = 0;
+        $usertz = xarModVars::get('roles','usertimezone');
     }
-    return $offset + $adjust;
+    $useroffset = $datetime->getTZOffset($usertz);
+
+    return $useroffset/3600;
 }
 
 // PROTECTED FUNCTIONS

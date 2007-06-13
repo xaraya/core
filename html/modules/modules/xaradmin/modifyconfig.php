@@ -27,11 +27,11 @@ function modules_admin_modifyconfig()
     // Security Check
     if(!xarSecurityCheck('AdminModules')) return;
 
-    // Generate a one-time authorisation code for this operation
-    $data['authid'] = xarSecGenAuthKey();
-
     // Disable the overview pages?
     $data['disableoverview'] = xarModVars::get('modules', 'disableoverview');
+
+    // Generate a one-time authorisation code for this operation
+    $data['authid'] = xarSecGenAuthKey();
 
     // everything else happens in Template for now
     return $data;
