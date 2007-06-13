@@ -32,6 +32,8 @@ class XarDateTime extends DateTime
         $this->minute = $minute;
         $this->second = $second;
         $this->servertz = empty($timezone) ? xarConfigGetVar('Site.Core.TimeZone') : $timezone;
+        $this->setISODate($this->year,$this->month,$this->day);
+        $this->setTime($this->hour,$this->minute,$this->second);
     }
 
     function getTZOffset($timezone=null)
@@ -69,6 +71,8 @@ class XarDateTime extends DateTime
         $this->hour   = $datearray['hours'];
         $this->minute = $datearray['minutes'];
         $this->second = $datearray['seconds'];
+        $this->setISODate($this->year,$this->month,$this->day);
+        $this->setTime($this->hour,$this->minute,$this->second);
     }
 
     function DBtoTS($dbts)
@@ -137,10 +141,10 @@ class XarDateTime extends DateTime
     function setMinute($x) { $this->minute = $x; $this->regenerate(); }
     function setSecond($x) { $this->second = $x; $this->regenerate(); }
 
-    function addYears($x)   { $this->year   += $x; $this->regenerate();   }
-    function addMonths($x)  { $this->month  += $x; $this->regenerate();  }
-    function addDays($x)    { $this->day    += $x; $this->regenerate();    }
-    function addHours($x)   { $this->hour   += $x; $this->regenerate();   }
+    function addYears($x)   { $this->year   += $x; $this->regenerate(); }
+    function addMonths($x)  { $this->month  += $x; $this->regenerate(); }
+    function addDays($x)    { $this->day    += $x; $this->regenerate(); }
+    function addHours($x)   { $this->hour   += $x; $this->regenerate(); }
     function addMinutes($x) { $this->minute += $x; $this->regenerate(); }
     function addSeconds($x) { $this->second += $x; $this->regenerate(); }
 }
