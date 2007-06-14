@@ -52,26 +52,38 @@
         * made 'primary' a required sub of 'table', as a consequence, 'table' itself can have 0 or more 'column' tags
         * replaced the description attribute on some with a child 'description' tag of all.
         * lowercasing attribute values of column.type
+        * added id attribute to all tags (use more common entity syntax to describe it, later on)
 -->
 
 <!-- Root element is 'schema' -->
 <!ELEMENT schema (table+,description?)>
 <!ATTLIST schema
+  id   ID  #IMPLIED
   name NMTOKEN #IMPLIED
+>
+
+<!-- description element -->
+<!ATTLIST description
+  id   ID  #IMPLIED
 >
 
 <!-- table element -->
 <!ELEMENT table (primary,column*,index*,description?)>
 <!ATTLIST table
+  id   ID #IMPLIED
   name ID #REQUIRED
 >
 
 <!-- primary element -->
 <!ELEMENT primary (column+)>
+<!ATTLIST primary
+  id   ID  #IMPLIED
+>
 
 <!-- column element -->
 <!ELEMENT column (description?)>
 <!ATTLIST column
+  id   ID  #IMPLIED
   name NMTOKEN #REQUIRED
   required (true|false) "false"
   type (tinyint|smallint|bigint|integer|
@@ -91,6 +103,7 @@
 <!-- index element -->
 <!ELEMENT index (column+,description?)>
 <!ATTLIST index
+    id   ID  #IMPLIED
     name NMTOKEN #IMPLIED
     type (default|unique) "default"
 >
@@ -137,7 +150,7 @@
     generator can take this into account. Some databases may do this automatically, either
     explicit or implicit.
 
-    * an 'id' attribute on all tags supported.
+    * [DONE] an 'id' attribute on all tags supported.
 
     * vendor parameters *are* useful, add them back at some point, but only if
     we implement right away the support of those parameters (i.e. not only do the
