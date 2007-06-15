@@ -24,6 +24,7 @@ if(!xarUserLogin($user,$pass)) {
     echo "Authentication failed\n";
     return 1;
 }
+echo "Authenticated\n";
 
 // For now hardcoded, expose on the cmdline later
 $dsnArgs = array(
