@@ -55,57 +55,149 @@
         * added id attribute to all tags (use more common entity syntax to describe it, later on)
 -->
 
-<!-- Root element is 'schema' -->
+<!--
+  Define some common things and some stuff we may want to define more
+  clearly later on. A dtd has not got a strong notion of types, so we
+  need to help it a little
+-->
+<!ENTITY % common "id    ID    #IMPLIED
+                   xmlns CDATA #FIXED 'http://xaraya.com/2007/schema'">
+<!ENTITY % boolean        "(true|false)">
+<!ENTITY % positiveNumber "NMTOKEN">
+
+<!--
+  Element:
+    schema    -  root element for the schema ddl xml format
+  Attributes:
+    name      -  optional name of the schema. If schema's are used in the physical database,
+                 this name can be used to enclose the specified xml schema into the physical schema.
+-->
 <!ELEMENT schema (table+,description?)>
 <!ATTLIST schema
-  id   ID  #IMPLIED
+  %common;
   name NMTOKEN #IMPLIED
 >
 
-<!-- description element -->
-<!ATTLIST description
-  id   ID  #IMPLIED
->
+<!--
+  Element:
+    description   - give a, possibly lengthy, description of the surrounding element. The intention
+                    is to be able to embed other xml markup languages in this elements
+                    children (xhtml for example) so it lends itself for rich documentation
+  Attributes:
+-->
+<!ATTLIST description  %common;>
 
-<!-- table element -->
+<!--
+  Element:
+    table     -   a data table, be that physical, logical, dynamic or virtual. The generator and
+                  the framework in which that live is free to generate its table types of choice.
+  Attributes:
+    name      -   required name of this table, each table in a schema needs to have a unique name
+                  as such we let this attribute comply to the ID production. That is too much, but safe.
+-->
 <!ELEMENT table (primary,column*,index*,description?)>
 <!ATTLIST table
-  id   ID #IMPLIED
+  %common;
   name ID #REQUIRED
 >
 
-<!-- primary element -->
+<!--
+  Element:
+    number    - a number of any format
+  Attributes:
+    size      - required positive number indicating the number of positions in the number (before the decimal point, if any)
+    min       - the minimum value of the number, default:  none
+    max       - the maximum value of the number, default:  none
+    decimals  - number of positions behind the decimal comma, default 0
+-->
+<!ELEMENT number EMPTY>
+<!ATTLIST number
+  %common;
+  size     %positiveNumber #REQUIRED;
+  min      NMTOKEN
+  max      NMTOKEN
+  decimals NMTOKEN
+>
+
+<!--
+  Element:
+    text      - element describing a textual datatype
+  Attributes:
+    size      - required positive number indicating the number of characters in the text
+-->
+<!ELEMTN text #EMPTY>
+<!ATTLIST
+  %common;
+  size    %positiveNumber; #REQUIRED
+>
+
+<!--
+  Element:
+    boolean   - element describing a logical truth value
+  Attributes:
+-->
+<!ELEMENT boolean EMPTY>
+<!ATTLIST boolean %common;>
+
+
+<!--
+  primary element
+  @todo reformulate as constraint
+-->
 <!ELEMENT primary (column+)>
-<!ATTLIST primary
-  id   ID  #IMPLIED
+<!ATTLIST primary  %common;>
+
+
+<!--
+  The date datatype
+  @todo size means what exactly here?
+-->
+<!ELEMENT date EMPTY>
+<!ATTLIST date
+  %common;
+  size      %positiveNumber;
 >
 
-<!-- column element -->
-<!ELEMENT column (description?)>
+<!--
+  Element:
+    column    - a column in a data table. This element itself describes just
+                the characteristics of it being a column in the data table, it
+                should not describe properties of the value which will be stored
+                in that column. The different datatype elements are used for that.
+  Attributes:
+    name      - required name of the column
+    required  - does the value of this column need to be present, in other words is the 'non-value' NULL allowed?
+    auto      - automatically generate the value of this column; what this actually means, depends on the datatype
+
+
+  @todo an attribute 'optimze' with values like 'speed','size' etc. could make sense
+  @todo definition of the 'auto' attribute it pretty 'thin'
+              = autoincrement for number
+              = timestamp for date
+              = text?
+        we can also use a default attribute, which we probably need anyways
+    -->
+
+-->
+<!ELEMENT column (description?,(number|date|boolean|text|binary))>
 <!ATTLIST column
-  id   ID  #IMPLIED
+  %common;
   name NMTOKEN #REQUIRED
-  required (true|false) "false"
-  type (tinyint|smallint|bigint|integer|
-        float|decimal|numeric|real|double|
-        char|varchar|longvarchar|
-        date|time|timestamp|
-        binary|varbinary|longvarbinary|blob|clob|
-        boolean|bit|booleanint|booleanchar|
-        other
-       ) "varchar"
-  size CDATA #IMPLIED
-  default CDATA #IMPLIED
+  required %boolean; "false"
+  auto     %boolean; "false"
+  default  CDATA #IMPLIED
   scale CDATA #IMPLIED
-  autoincrement (true|false) "false"
 >
 
-<!-- index element -->
+<!--
+  index element
+  @todo reformulate as constraint?
+-->
 <!ELEMENT index (column+,description?)>
 <!ATTLIST index
-    id   ID  #IMPLIED
-    name NMTOKEN #IMPLIED
-    type (default|unique) "default"
+  %common;
+  name NMTOKEN #IMPLIED
+  type (default|unique) "default"
 >
 
 <!--
