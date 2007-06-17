@@ -556,8 +556,6 @@ function installer_admin_bootstrap()
                            array('regid'=> $regid)))
             throw new Exception("activation of $regid failed");//return;
     }
-    //now make sure we set default authmodule
-    xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
 
     // load themes into *_themes table
     if (!xarModAPIFunc('themes', 'admin', 'regenerate')) {
@@ -1575,7 +1573,7 @@ function installer_admin_upgrade2()
      xarModSetVar('authsystem', 'lockouttime', 15);
     xarModSetVar('authsystem', 'lockouttries', 3);
     xarModSetVar('authsystem', 'uselockout', false);
-    xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+    xarModSetVar('roles', 'defaultauthmodule', 'authsystem');
 
 
     $content .= "<p><strong>Removing Adminpanels module and move functions to other  modules</strong></p>";

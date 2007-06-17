@@ -64,8 +64,8 @@ function authsystem_upgrade($oldVersion)
 
            //Set the default authmodule if not already set
            $isdefaultauth = xarModVars::get('roles','defaultauthmodule');
-           if (!isset($isdefaultauth) || !is_integer($isdefaultauth)) {
-               xarModVars::get('roles', 'defaultauthmodule', xarMod::getID('authsystem'));
+           if (empty($isdefaultauth)) {
+               xarModVars::get('roles', 'defaultauthmodule', 'authsystem');
            }
 
            $dbconn =& xarDB::getConn();
