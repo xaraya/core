@@ -25,7 +25,7 @@ described in the schema.xml
 
 -> db2xml [dbspec] > dbschema.xml
 -> xmldiff2ddl schema.xml dbschema.xml > diffschema.ddl
-  
+
 
 Analysis
 --------
@@ -54,7 +54,7 @@ To be able to develop this, we need testdata:
 4   core1xschema.xml  - schema representation of core.1.x
     core2xschema.xml  - schema representation of core.2.x
                         The goal is obviously to create a db having
-                        core1xschema.xml as input and then use the created 
+                        core1xschema.xml as input and then use the created
                         solution to upgrade it to a core2x schema using
                         nothing but the xml file.
 
@@ -71,3 +71,83 @@ Design notes
 * the xml should not contain any explicit information for updates. (like
   oldname="whatever") if something has been renamed. The system should be
   smart enough to figure that out itself.
+
+
+Wishes
+------
+* [DONE] the 'type' attribute for the 'column' element should only
+  designate an 'abstract' type, not related  to the database types like
+  TINYINT or something.
+  The storage types used by different databases can be figured out by the
+  generator in combination with other information supplied in the xml.
+  This is basically what creole does, but the mapping they use is a set of
+  types (JDBC types actually) which are still close to the actual type of
+  the database. Since this code is in place, we might as well use it.
+
+    Example set of more abstract types:
+        char | binary | number | boolean | date | time
+
+  Ideally these would be children of the 'column' element so the attributes
+  can be defined on them specifically (e.g. 'precision' which only makes
+  sense for numbers and perhaps time)
+* [DONE] scale attribute is confusing, i'd rather use 'precision' or
+  'decimals' (also see previous point)
+* think about constraints, both on column and table level, they fit in
+  nicely as children of the 'column' or 'table' elements.
+* [DONE] the mixed case use of 'autoIncrement' is not needed, lead
+  to confusion only
+* [DONE] the elements 'index' and 'unique' are the same,
+  indextype='unique' would  be better imo. Similarly, unique-column and
+  index-column are then redundant, either to be replaced by just a
+  'index-column' element, or <column name="colname"/> to reference
+  a column in the table definition.
+* [DONE] an element 'primary' as a grouper around the 'column' element
+  would be nice
+    Example:
+          <table name="test">
+              <column name="normal" type="INTEGER" size="4"/>
+              <primary>
+                  <column name="ref_name" type="INTEGER" size="10"/>
+                  <column name="ref1_name" type="INTEGER" size="10"/>
+              </primary>
+          </table>
+* [IRRELEVANT] Primary keys are either automatically indexed, or should
+  always be indexed, the generator can take this into account. Some
+  databases may do this automatically, either explicit or implicit.
+* [DONE] an 'id' attribute on all tags supported.
+* vendor parameters *are* useful, add them back at some point, but only if
+  we implement right away the support of those parameters (i.e. not only do
+  the familiar mysql table type stuff, but also other parameters)
+* xaraya doesnt use foreign keys yet, doesnt mean we cant have support in
+  the schema for it though.
+    Example of how this could look:
+        <table name="test">
+            <column name="normal" type="INTEGER" size="4"/>
+            <primary>
+                <column name="ref_name" type="INTEGER" size="10"/>
+                <column name="ref1_name" type="INTEGER" size="10"/>
+            </primary>
+            <foreign remote="other_table"
+                ondelete="(cascade|restrict|setnull|none)"
+                onupdate="(cascade|restrict|setnull|none)">
+                <reference local="ref_name" remote="other_columns_name"/>
+            </foreign>
+        </table>
+  ondelete means:
+    what happens to the local record if the remote record gets deleted.
+  onupdate means:
+    what happens to the local columns if the remote columns get updated.
+  If a foreign key is composite, add more <reference/> elements.
+* other than the precise size="14" it could be comfortable to specify
+ 'qualitative' sizes.
+    For example:
+        small      64K  'c64'       'amoebe'
+        medium      1M  'pda'       'fly'
+        large      16M  'notebook'  'dog'
+        long      256M  'laptop'    'ape'
+        huge        4G  'desktop'   'human'
+  where the generator translates this into something for the backend that
+  fits. The second column would be comfortable from a developer perspective
+  without having to know what column type it actually translates into, it
+  guarantees to be capable of storing the specified size (at minimum)
+* [DONE] I dont like the capital attribute values for 'type'
