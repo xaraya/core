@@ -1736,10 +1736,10 @@ function installer_admin_upgrade2()
 
     //Ensure that registration module is set as default if it is installed,
     // if it is active and the default is currently not set
-    $defaultregmodule= xarModGetVar('roles','defaultregmodule');
-    if (!isset($defaultregmodule)) {
+    $defaultregmodule = xarModGetVar('roles','defaultregmodule');
+    if (empty($defaultregmodule)) {
         if (xarModIsAvailable('registration')) {
-            xarModSetVar('roles','defaultregmodule',xarModGetIDFromName('registration'));
+            xarModSetVar('roles','defaultregmodule', 'registration');
         }
     }
 
