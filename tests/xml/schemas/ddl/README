@@ -151,3 +151,60 @@ Wishes
   without having to know what column type it actually translates into, it
   guarantees to be capable of storing the specified size (at minimum)
 * [DONE] I dont like the capital attribute values for 'type'
+
+Compatibility notes
+-------------------
+Initial xarddl.dtd was based on:
+    Propel XML database schema DTD
+    $Id: database.dtd,v 1.7 2005/03/30 11:38:18 hlellelid Exp $
+Changelog in applied order (meaning, if you make a change, add to the bottom):
+* removed element 'reference'            - used in 'foreign-key' to specify
+  references
+* removed element 'foreign-key'      - to define foreign key relationships
+* removed element 'rule'                    - to define validation rules
+* removed element 'validator'     - grouped rule elements
+* removed element 'vendor'        - used for vendor specific definitions in
+  xml
+* removed element 'inheritance'      - used for linking code classes to the
+  columns
+* removed element 'parameter'     - used as child of the vendor element to
+  define parameters
+* removed element 'id-method-parameter' - used to customize id generation
+* removed attribute defaultPHPNameingMethod from 'database' element (including
+  referencing comments)
+* removed attribute heavyIndexing from 'database'+'column' element
+* removed attribute baseClass from 'database'+'column' element
+* removed attribute basePeer from 'database'+'column' element
+* removed attribute defaultIdMethod from 'database' element
+* removed attribute defaultTranslateMethode (with e?) from 'database' element
+* removed phpName, ideMethod, skipSql, readOnly, abstract, isTree, interface,
+  phpNamingMethod attributes from 'table' element
+* removed phpName, peerName, phpType, inheritance, inputValidator,
+  phpNamingMethod, lazyload attributes from 'column' element
+* where no child definitions were left due to removals, declared elements
+  EMPTY
+* removed element 'external-schema'
+* removed 'alias' attribute from 'table' element
+* removed 'package' attribute from 'database'+'table' elements
+* removed PHP_OBJECT, DISTINCT, STRUCT, ARRAY, REF, NULL from values for
+  'type' attribute for 'column' element
+* consolidated 'unique' and 'index' into 'index type="unique"'
+* removed elements 'unique' and 'unique-column'
+* added definition for 'primary' element.
+* removed attribute 'primaryKey' from 'column' element
+* removed element 'index-column', replaced it with 'column' to sync it up with
+  'primary' definition
+* rename element 'database' to 'schema' as that is more accurate
+* made attribute 'description' apply to schema, table and column
+* changed autoIncrement to autoincrement (all lower case)
+* made 'name' attributes of type CDATA
+* change 'name' attribute of 'table' element to ID
+* made 'primary' a required sub of 'table', as a consequence, 'table' itself
+  can have 0 or more 'column' tags
+* replaced the description attribute on some with a child 'description' tag of
+  all.
+* lowercasing attribute values of column.type
+* added id attribute to all tags (use more common entity syntax to describe
+  it, later on)
+
+June 2007 DECISION: we break compatibility with the original DTDs
