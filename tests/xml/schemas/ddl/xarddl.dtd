@@ -47,12 +47,14 @@
         * rename element 'database' to 'schema' as that is more accurate
         * made attribute 'description' apply to schema, table and column
         * changed autoIncrement to autoincrement (all lower case)
-        * made 'name' attributes of type NMTOKEN
+        * made 'name' attributes of type CDATA
         * change 'name' attribute of 'table' element to ID
         * made 'primary' a required sub of 'table', as a consequence, 'table' itself can have 0 or more 'column' tags
         * replaced the description attribute on some with a child 'description' tag of all.
         * lowercasing attribute values of column.type
         * added id attribute to all tags (use more common entity syntax to describe it, later on)
+
+        June 2007 DECISION: we break compatibility with the original DTDs
 -->
 
 <!--
@@ -60,10 +62,21 @@
   clearly later on. A dtd has not got a strong notion of types, so we
   need to help it a little
 -->
-<!ENTITY % common "id    ID    #IMPLIED
-                   xmlns CDATA #FIXED 'http://xaraya.com/2007/schema'">
-<!ENTITY % boolean        "(true|false)">
-<!ENTITY % positiveNumber "NMTOKEN">
+<!ENTITY % common          "id    ID        #IMPLIED
+                            xmlns CDATA     #FIXED     'http://xaraya.com/2007/schema'">
+
+<!-- Entities corresponding to the values for the datatypes -->
+<!ENTITY % textValue      "CDATA">
+<!ENTITY % binaryValue    "CDATA"> <!-- CDATA? then we need an encoding -->
+<!ENTITY % booleanValue   "(true|false)">
+<!ENTITY % timeValue      "CDATA">
+<!ENTITY % numberValue    "CDATA">
+
+<!-- Helpers for the specification of attributes -->
+<!ENTITY % anyNumber       "CDATA">
+<!ENTITY % anyInteger      "CDATA">
+<!ENTITY % positiveNumber  "CDATA">
+<!ENTITY % positiveInteger "CDATA">
 
 <!--
   Element:
@@ -75,7 +88,7 @@
 <!ELEMENT schema (table+,description?)>
 <!ATTLIST schema
   %common;
-  name NMTOKEN #IMPLIED
+  name CDATA #IMPLIED
 >
 
 <!--
@@ -83,8 +96,8 @@
     description   - give a, possibly lengthy, description of the surrounding element. The intention
                     is to be able to embed other xml markup languages in this elements
                     children (xhtml for example) so it lends itself for rich documentation
-  Attributes:
 -->
+<!ELEMENT description (#PCDATA)>
 <!ATTLIST description  %common;>
 
 <!--
@@ -98,64 +111,7 @@
 <!ELEMENT table (primary,column*,index*,description?)>
 <!ATTLIST table
   %common;
-  name ID #REQUIRED
->
-
-<!--
-  Element:
-    number    - a number of any format
-  Attributes:
-    size      - required positive number indicating the number of positions in the number (before the decimal point, if any)
-    min       - the minimum value of the number, default:  none
-    max       - the maximum value of the number, default:  none
-    decimals  - number of positions behind the decimal comma, default 0
--->
-<!ELEMENT number EMPTY>
-<!ATTLIST number
-  %common;
-  size     %positiveNumber #REQUIRED;
-  min      NMTOKEN
-  max      NMTOKEN
-  decimals NMTOKEN
->
-
-<!--
-  Element:
-    text      - element describing a textual datatype
-  Attributes:
-    size      - required positive number indicating the number of characters in the text
--->
-<!ELEMTN text #EMPTY>
-<!ATTLIST
-  %common;
-  size    %positiveNumber; #REQUIRED
->
-
-<!--
-  Element:
-    boolean   - element describing a logical truth value
-  Attributes:
--->
-<!ELEMENT boolean EMPTY>
-<!ATTLIST boolean %common;>
-
-
-<!--
-  primary element
-  @todo reformulate as constraint
--->
-<!ELEMENT primary (column+)>
-<!ATTLIST primary  %common;>
-
-
-<!--
-  The date datatype
-  @todo size means what exactly here?
--->
-<!ELEMENT date EMPTY>
-<!ATTLIST date
-  %common;
-  size      %positiveNumber;
+  name      ID  #REQUIRED
 >
 
 <!--
@@ -167,7 +123,7 @@
   Attributes:
     name      - required name of the column
     required  - does the value of this column need to be present, in other words is the 'non-value' NULL allowed?
-    auto      - automatically generate the value of this column; what this actually means, depends on the datatype
+    auto      - automatically generate the value of this column; what this actually means, depends on the data type used in the column
 
 
   @todo an attribute 'optimze' with values like 'speed','size' etc. could make sense
@@ -176,18 +132,102 @@
               = timestamp for date
               = text?
         we can also use a default attribute, which we probably need anyways
-    -->
-
 -->
-<!ELEMENT column (description?,(number|date|boolean|text|binary))>
+
+<!ELEMENT column (description?,(number|time|boolean|text|binary))>
 <!ATTLIST column
   %common;
-  name NMTOKEN #REQUIRED
-  required %boolean; "false"
-  auto     %boolean; "false"
-  default  CDATA #IMPLIED
-  scale CDATA #IMPLIED
+  name      CDATA           #REQUIRED
+  required  %booleanValue;  "false"
+  auto      %booleanValue;  "false"
 >
+
+<!--
+  Element:
+    number    - a number of any format
+  Attributes:
+    default   - default value
+    size      - required positive number indicating the number of positions in the number (before the decimal point, if any)
+    min       - the minimum value of the number, default:  none
+    max       - the maximum value of the number, default:  none
+    decimals  - number of positions behind the decimal comma, default 0
+  @todo figure out a way to specify big and small numbers like 1.000.000.000.000 (perhaps just use the scientific notation 1E12 ?)
+  @todo base default 10 ?
+-->
+<!ELEMENT number EMPTY>
+<!ATTLIST number
+  %common;
+  default  %numberValue;      #IMPLIED
+  min      %numberValue;      #IMPLIED
+  max      %numberValue;      #IMPLIED
+  size     %positiveInteger;  #REQUIRED
+  decimals %anyInteger;       "0"
+>
+
+<!--
+  Element:
+    text      - element describing a textual datatype
+  Attributes:
+    size      - required positive integer indicating the maximum number of characters in the text
+    default   - default value
+-->
+<!ELEMENT text EMPTY>
+<!ATTLIST text
+  %common;
+  default %textValue;       #IMPLIED
+  size    %positiveInteger; #REQUIRED
+>
+
+<!--
+  Element:
+    boolean   - element describing a logical truth value
+  Attributes:
+    default   - default value
+-->
+<!ELEMENT boolean EMPTY>
+<!ATTLIST boolean
+  %common;
+  default   %booleanValue;       #IMPLIED
+>
+
+<!--
+  Element:
+    time      -  a point in time representation.
+  Attributes:
+    default   - default value
+
+  @todo i see duration/interval as the generic form of time, how do we deal with this?
+-->
+<!ELEMENT time EMPTY>
+<!ATTLIST time
+  %common;
+  default   %timeValue;    #IMPLIED
+>
+
+<!--
+  Element:
+    binary    - element describing a b binary value
+  Attributes:
+    size      - required positive integer indidcatin the maximum number of bytes in the binary
+    default   - default value
+  @todo How are we going to specify default values for binary columns?
+    - inline with an encoding, say base64
+    - as URI?
+    - not at all (since most database wont allow it either)
+-->
+<!ELEMENT binary EMPTY>
+<!ATTLIST binary
+  %common;
+  size      %positiveInteger;   #REQUIRED
+  default   %binaryValue;       #IMPLIED
+>
+
+<!--
+  primary element
+  @todo reformulate as constraint
+-->
+<!ELEMENT primary (column+)>
+<!ATTLIST primary  %common;>
 
 <!--
   index element
@@ -196,13 +236,13 @@
 <!ELEMENT index (column+,description?)>
 <!ATTLIST index
   %common;
-  name NMTOKEN #IMPLIED
+  name CDATA #IMPLIED
   type (default|unique) "default"
 >
 
 <!--
     Wishes:
-    * the 'type' attribute for the 'column' element should only designate an
+    * [DONE] the 'type' attribute for the 'column' element should only designate an
     'abstract' type, not related  to the database types like TINYINT or something.
     The storage types used by different databases can be figured out by the
     generator in combination with other information supplied in the xml.
@@ -215,7 +255,7 @@
     Ideally these would be children of the 'column' element so the attributes
     can be defined on them specifically (e.g. 'precision' which only makes sense for numbers and perhaps time)
 
-    * scale attribute is confusing, i'd rather use 'precision' or 'decimals' (also see previous point)
+    * [DONE] scale attribute is confusing, i'd rather use 'precision' or 'decimals' (also see previous point)
 
     * think about constraints, both on column and table level, they fit in nicely as
     children of the 'column' or 'table' elements.
@@ -238,7 +278,7 @@
         </primary>
     </table>
 
-    * Primary keys are either automatically indexed, or should always be indexed, the
+    * [IRRELEVANT] Primary keys are either automatically indexed, or should always be indexed, the
     generator can take this into account. Some databases may do this automatically, either
     explicit or implicit.
 
