@@ -30,23 +30,7 @@ function dynamicdata_admin_new($args)
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('notfresh', 'isset', $notfresh,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule','str',   $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
 
-/*    if($modid == 182) {
-        // Dynamicdata module is special
-        $ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
-    } else {
-        if (isset($objectid)) {
-            $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
-        } elseif (isset($name)) {
-            $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('name' => $name));
-        } else {
-            $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
-        }
-    }
-    $itemtype = $ancestor['itemtype'];
-*/
-    // Security check
     if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$modid:$itemtype:All")) return;
 
     $data = xarModAPIFunc('dynamicdata','admin','menu');

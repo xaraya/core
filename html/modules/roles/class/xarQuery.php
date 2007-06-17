@@ -6,18 +6,12 @@
  */
 
 /**
- * Simple wrapper to avoid changing all callers until its fate is decided
- */
-class xarQuery extends Query
-{
-
-}
-
-/**
  * Query class for SQL abstraction
  * This version taken from com.xaraya.modules.query.unstable branch
+ * renamed to avoid conflict for now
+ * @todo what are we going to do with this long term?
  */
-class Query
+class xarQuery
 {
 
     public $version = "3.1";
