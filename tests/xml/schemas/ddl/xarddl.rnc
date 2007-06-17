@@ -1,0 +1,164 @@
+# DTD to define an XML variety to generate DDL for creating
+# storage objects (be it tables in an sql db or dd objects)
+#
+# The DTD is based on the propel XML database DTD which in turn was
+# based on the apache torque DTD. We keep a *very strict* log of
+# our changes. The propel framework has bits and pieces of code we
+# can reuse, and every deviation from their schema will induce a code
+# change.
+#
+# The initial goals were:
+# 1. [ABANDONED] to create an absolute minimal DTD to replace xartableddl and xardatadict
+# 2. [ABANDONED] stay compatible with the original DTD it was based on.
+# 3. be able to generate more structured schema's from the DTD (like RNG)
+# 4. be able to produce the xml from the database itself.
+#
+# See the README document on what we initially changed before we abandoned compatibility.
+
+default namespace = "http://xaraya.com/2007/schema"
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+
+# Define some common things and some stuff we may want to define more
+# clearly later on. A dtd has not got a strong notion of types, so we
+# need to help it a little
+common = attribute id { xsd:ID }?
+
+# Definitions corresponding to the values for the datatypes
+textValue    = string
+binaryValue  = string            # string? then we need an encoding
+booleanValue = "true" | "false"  # We dont use the XSD datatype since that gets approximated by trang to NMTOKEN
+timeValue    = string
+numberValue  = string
+
+# Helpers for the specification of attributes
+anyInteger = string
+sizeSpec = xsd:string
+# Element:
+#   schema    -  root element for the schema ddl xml format
+# Attributes:
+#   name      -  optional name of the schema. If schema's are used in the physical database,
+#                this name can be used to enclose the specified xml schema into the physical schema.
+schema = element schema { attlist.schema, table+, description? }
+attlist.schema &=
+  common,
+  attribute name { text }?
+# Element:
+#   description   - give a, possibly lengthy, description of the surrounding element. The intention
+#                   is to be able to embed other xml markup languages in this elements
+#                   children (xhtml for example) so it lends itself for rich documentation
+description = element description { attlist.description, text }
+attlist.description &= common
+# Element:
+#   table     -   a data table, be that physical, logical, dynamic or virtual. The generator and
+#                 the framework in which that live is free to generate its table types of choice.
+# Attributes:
+#   name      -   required name of this table, each table in a schema needs to have a unique name
+#                 as such we let this attribute comply to the ID production. That is too much, but safe.
+table =
+  element table {
+    attlist.table, primary, column*, index*, description?
+  }
+attlist.table &=
+  common,
+  attribute name { xsd:ID }
+# Element:
+#   column    - a column in a data table. This element itself describes just
+#               the characteristics of it being a column in the data table, it
+#               should not describe properties of the value which will be stored
+#               in that column. The different datatype elements are used for that.
+# Attributes:
+#   name      - required name of the column
+#   required  - does the value of this column need to be present, in other words is the 'non-value' NULL allowed?
+#   auto      - automatically generate the value of this column; what this actually means, depends on the data type used in the column
+#
+#
+# @todo an attribute 'optimze' with values like 'speed','size' etc. could make sense
+# @todo definition of the 'auto' attribute it pretty 'thin'
+#             = autoincrement for number
+#             = timestamp for date
+#             = text?
+#       we can also use a default attribute, which we probably need anyways
+column =
+  element column {
+    attlist.column,
+    description?,
+    (number | time | boolean | \text | binary)
+  }
+attlist.column &=
+  common,
+  attribute name { text },
+  [ a:defaultValue = "false" ] attribute required { booleanValue }?,
+  [ a:defaultValue = "false" ] attribute auto { booleanValue }?
+# Element:
+#   number    - a number of any format
+# Attributes:
+#   default   - default value
+#   size      - required positive number indicating the number of positions in the number (before the decimal point, if any)
+#   min       - the minimum value of the number, default:  none
+#   max       - the maximum value of the number, default:  none
+#   decimals  - number of positions behind the decimal comma, default 0
+# @todo figure out a way to specify big and small numbers like 1.000.000.000.000 (perhaps just use the scientific notation 1E12 ?)
+# @todo base default 10 ?
+number = element number { attlist.number, empty }
+attlist.number &=
+  common,
+  attribute default { numberValue }?,
+  attribute min { numberValue }?,
+  attribute max { numberValue }?,
+  attribute size { sizeSpec },
+  [ a:defaultValue = "0" ] attribute decimals { anyInteger }?
+# Element:
+#   text      - element describing a textual datatype
+# Attributes:
+#   size      - required positive integer indicating the maximum number of characters in the text
+#   default   - default value
+\text = element text { attlist.text, empty }
+attlist.text &=
+  common,
+  attribute default { textValue }?,
+  attribute size { sizeSpec }
+# Element:
+#   boolean   - element describing a logical truth value
+# Attributes:
+#   default   - default value
+boolean = element boolean { attlist.boolean, empty }
+attlist.boolean &=
+  common,
+  attribute default { booleanValue }?
+# Element:
+#   time      -  a point in time representation.
+# Attributes:
+#   default   - default value
+#
+# @todo i see duration/interval as the generic form of time, how do we deal with this?
+time = element time { attlist.time, empty }
+attlist.time &=
+  common,
+  attribute default { timeValue }?
+# Element:
+#   binary    - element describing a b binary value
+# Attributes:
+#   size      - required positive integer indidcatin the maximum number of bytes in the binary
+#   default   - default value
+# @todo How are we going to specify default values for binary columns?
+#   - inline with an encoding, say base64
+#   - as URI?
+#   - not at all (since most database wont allow it either)
+binary = element binary { attlist.binary, empty }
+attlist.binary &=
+  common,
+  attribute size { sizeSpec },
+  attribute default { binaryValue }?
+# primary element
+# @todo reformulate as constraint
+primary = element primary { attlist.primary, column+ }
+attlist.primary &= common
+# index element
+# @todo reformulate as constraint?
+index = element index { attlist.index, column+, description? }
+attlist.index &=
+  common,
+  attribute name { text }?,
+  [ a:defaultValue = "default" ]
+  attribute type { "default" | "unique" }?
+start = schema
