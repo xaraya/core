@@ -13,10 +13,10 @@
 TRANG=trang
 PHP=php5
 XSLTPROC=xsltproc
-SRC=rng
+SRC=rnc
 
 all: schemas xar-model.sql
-schemas: xarddl.dtd xarddl.xsd xarddl.rnc
+schemas: xarddl.dtd xarddl.xsd xarddl.rng
 test: schema.sql
 
 # Generating stuff from the DTD
@@ -41,4 +41,4 @@ xar-model.xml: db2xml db2xml.xd
 	$(XSLTPROC) --stringparam vendor mssql  xml2ddl-mssql.xsl $< > $(*F).mssql.sql
 
 clean:
-	$(RM) *.dtd *.xsd *.rnc *.sql xar-model.xml
+	$(RM) *.dtd *.rng *.xsd  *.sql xar-model.xml
