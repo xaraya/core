@@ -21,14 +21,10 @@ function roles_userapi_getdefaultauthdata()
 {
     $defaultauthdata=array();
 
-    $defaultauthmoduleid =xarModVars::get('roles','defaultauthmodule');
-
-    if (isset($defaultauthmoduleid) && !empty($defaultauthmoduleid)) {
-        $defaultauthmodulename =xarModGetNameFromId($defaultauthmoduleid);
-        //check the module is still available else we have no alternative to fall back
-        if (!xarModIsAvailable($defaultauthmodulename)) {
-           $defaultauthmodulename='authsystem'; //core authentication
-        }
+    $defaultauthmodulename = xarModVars::get('roles','defaultauthmodule');
+    //check the module is still available else we have no alternative to fall back
+    if (!xarModIsAvailable($defaultauthmodulename)) {
+       $defaultauthmodulename='authsystem'; //core authentication
     }
 
     // <jojodee> do we reset the default authmodule modvar here? Review - may only be non-active due to upgrade

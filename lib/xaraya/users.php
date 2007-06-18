@@ -239,7 +239,7 @@ function xarUserGetNavigationThemeName()
     $themeName = xarTplGetThemeName();
 
     if (xarUserIsLoggedIn()){
-        $id = xarUserGetVar('role_id');
+        $id = xarUserGetVar('id');
         $userThemeName = xarModUserVars::get('themes', 'default', $id);
         if ($userThemeName) $themeName=$userThemeName;
     }
@@ -271,7 +271,7 @@ function xarUserGetNavigationLocale()
 {
     if (xarUserIsLoggedIn())
     {
-        $id = xarUserGetVar('role_id');
+        $id = xarUserGetVar('id');
           //last resort user is falling over on this uservar by setting multiple times
          //return true for last resort user - use default locale
          if ($id==XARUSER_LAST_RESORT) return true;
