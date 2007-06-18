@@ -3,19 +3,6 @@
 <!-- TODO: multi-column output -->
 <div class="xar-fullwidth">
     <table class="xar-fullwidth">
-        <!-- Show the create new link only once, if at all -->
-        <xar:if condition="!empty($newlink)">
-            <tr>
-                <xar:set name="colspan">count($properties)+2</xar:set>
-                <th class="xar-align-left" colspan="#$colspan#">
-                    <a href="#$newlink#">
-                        <strong>
-                            <xar:mlstring>Create New</xar:mlstring>
-                        </strong>
-                    </a>
-                </th>
-            </tr>
-        </xar:if>
         <tr>
             <xar:foreach in="$properties" key="$name">
                         <th class="xar-form-textlong">
