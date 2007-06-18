@@ -41,7 +41,7 @@
                     <xar:if condition="empty($fields[$name])">
                        &#160;
                     <xar:elseif condition="!empty($linkfield) and $linkfield eq $name" />
-                        <a href="#$links[$itemid]['display']['olink']#">
+                        <a href="#xarModURL($urlmodule,$linktype,$linkfunc,array('itemtype' =&gt; $itemtype,$urlparam =&gt; $itemid))#">
                             <xar:data-output property="$properties[$name]" value="$fields[$name]" />
                         </a>
                     <xar:else />
