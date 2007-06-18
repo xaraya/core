@@ -25,7 +25,7 @@ described in the schema.xml
 
 -> db2xml [dbspec] > dbschema.xml
 -> xmldiff2ddl schema.xml dbschema.xml > diffschema.ddl
-  
+
 
 Analysis
 --------
@@ -54,7 +54,7 @@ To be able to develop this, we need testdata:
 4   core1xschema.xml  - schema representation of core.1.x
     core2xschema.xml  - schema representation of core.2.x
                         The goal is obviously to create a db having
-                        core1xschema.xml as input and then use the created 
+                        core1xschema.xml as input and then use the created
                         solution to upgrade it to a core2x schema using
                         nothing but the xml file.
 
@@ -71,3 +71,140 @@ Design notes
 * the xml should not contain any explicit information for updates. (like
   oldname="whatever") if something has been renamed. The system should be
   smart enough to figure that out itself.
+
+
+Wishes
+------
+* [DONE] the 'type' attribute for the 'column' element should only
+  designate an 'abstract' type, not related  to the database types like
+  TINYINT or something.
+  The storage types used by different databases can be figured out by the
+  generator in combination with other information supplied in the xml.
+  This is basically what creole does, but the mapping they use is a set of
+  types (JDBC types actually) which are still close to the actual type of
+  the database. Since this code is in place, we might as well use it.
+
+    Example set of more abstract types:
+        char | binary | number | boolean | date | time
+
+  Ideally these would be children of the 'column' element so the attributes
+  can be defined on them specifically (e.g. 'precision' which only makes
+  sense for numbers and perhaps time)
+* [DONE] scale attribute is confusing, i'd rather use 'precision' or
+  'decimals' (also see previous point)
+* think about constraints, both on column and table level, they fit in
+  nicely as children of the 'column' or 'table' elements.
+* [DONE] the mixed case use of 'autoIncrement' is not needed, lead
+  to confusion only
+* [DONE] the elements 'index' and 'unique' are the same,
+  indextype='unique' would  be better imo. Similarly, unique-column and
+  index-column are then redundant, either to be replaced by just a
+  'index-column' element, or <column name="colname"/> to reference
+  a column in the table definition.
+* [DONE] an element 'primary' as a grouper around the 'column' element
+  would be nice
+    Example:
+          <table name="test">
+              <column name="normal" type="INTEGER" size="4"/>
+              <primary>
+                  <column name="ref_name" type="INTEGER" size="10"/>
+                  <column name="ref1_name" type="INTEGER" size="10"/>
+              </primary>
+          </table>
+* [IRRELEVANT] Primary keys are either automatically indexed, or should
+  always be indexed, the generator can take this into account. Some
+  databases may do this automatically, either explicit or implicit.
+* [DONE] an 'id' attribute on all tags supported.
+* vendor parameters *are* useful, add them back at some point, but only if
+  we implement right away the support of those parameters (i.e. not only do
+  the familiar mysql table type stuff, but also other parameters)
+* xaraya doesnt use foreign keys yet, doesnt mean we cant have support in
+  the schema for it though.
+    Example of how this could look:
+        <table name="test">
+            <column name="normal" type="INTEGER" size="4"/>
+            <primary>
+                <column name="ref_name" type="INTEGER" size="10"/>
+                <column name="ref1_name" type="INTEGER" size="10"/>
+            </primary>
+            <foreign remote="other_table"
+                ondelete="(cascade|restrict|setnull|none)"
+                onupdate="(cascade|restrict|setnull|none)">
+                <reference local="ref_name" remote="other_columns_name"/>
+            </foreign>
+        </table>
+  ondelete means:
+    what happens to the local record if the remote record gets deleted.
+  onupdate means:
+    what happens to the local columns if the remote columns get updated.
+  If a foreign key is composite, add more <reference/> elements.
+* other than the precise size="14" it could be comfortable to specify
+ 'qualitative' sizes.
+    For example:
+        small      64K  'c64'       'amoebe'
+        medium      1M  'pda'       'fly'
+        large      16M  'notebook'  'dog'
+        long      256M  'laptop'    'ape'
+        huge        4G  'desktop'   'human'
+  where the generator translates this into something for the backend that
+  fits. The second column would be comfortable from a developer perspective
+  without having to know what column type it actually translates into, it
+  guarantees to be capable of storing the specified size (at minimum)
+* [DONE] I dont like the capital attribute values for 'type'
+
+Compatibility notes
+-------------------
+Initial xarddl.dtd was based on:
+    Propel XML database schema DTD
+    $Id: database.dtd,v 1.7 2005/03/30 11:38:18 hlellelid Exp $
+Changelog in applied order (meaning, if you make a change, add to the bottom):
+* removed element 'reference'            - used in 'foreign-key' to specify
+  references
+* removed element 'foreign-key'      - to define foreign key relationships
+* removed element 'rule'                    - to define validation rules
+* removed element 'validator'     - grouped rule elements
+* removed element 'vendor'        - used for vendor specific definitions in
+  xml
+* removed element 'inheritance'      - used for linking code classes to the
+  columns
+* removed element 'parameter'     - used as child of the vendor element to
+  define parameters
+* removed element 'id-method-parameter' - used to customize id generation
+* removed attribute defaultPHPNameingMethod from 'database' element (including
+  referencing comments)
+* removed attribute heavyIndexing from 'database'+'column' element
+* removed attribute baseClass from 'database'+'column' element
+* removed attribute basePeer from 'database'+'column' element
+* removed attribute defaultIdMethod from 'database' element
+* removed attribute defaultTranslateMethode (with e?) from 'database' element
+* removed phpName, ideMethod, skipSql, readOnly, abstract, isTree, interface,
+  phpNamingMethod attributes from 'table' element
+* removed phpName, peerName, phpType, inheritance, inputValidator,
+  phpNamingMethod, lazyload attributes from 'column' element
+* where no child definitions were left due to removals, declared elements
+  EMPTY
+* removed element 'external-schema'
+* removed 'alias' attribute from 'table' element
+* removed 'package' attribute from 'database'+'table' elements
+* removed PHP_OBJECT, DISTINCT, STRUCT, ARRAY, REF, NULL from values for
+  'type' attribute for 'column' element
+* consolidated 'unique' and 'index' into 'index type="unique"'
+* removed elements 'unique' and 'unique-column'
+* added definition for 'primary' element.
+* removed attribute 'primaryKey' from 'column' element
+* removed element 'index-column', replaced it with 'column' to sync it up with
+  'primary' definition
+* rename element 'database' to 'schema' as that is more accurate
+* made attribute 'description' apply to schema, table and column
+* changed autoIncrement to autoincrement (all lower case)
+* made 'name' attributes of type CDATA
+* change 'name' attribute of 'table' element to ID
+* made 'primary' a required sub of 'table', as a consequence, 'table' itself
+  can have 0 or more 'column' tags
+* replaced the description attribute on some with a child 'description' tag of
+  all.
+* lowercasing attribute values of column.type
+* added id attribute to all tags (use more common entity syntax to describe
+  it, later on)
+
+June 2007 DECISION: we break compatibility with the original DTDs
