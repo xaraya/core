@@ -1,24 +1,23 @@
 <?php
 /**
- * Delete a role
- *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
+
 /**
- * delete - delete a role
+ * Delete a role
+ *
  * prompts for confirmation
  */
 function roles_admin_delete()
 {
-    // get parameters
-    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('id', 'id', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemid', 'id', $itemid, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('returnurl', 'str', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
 
@@ -41,16 +40,15 @@ function roles_admin_delete()
 
     $name = $role->getName();
 
-// Security Check
     if (!xarSecurityCheck('DeleteRole',1,'Roles',$name)) return;
     $data['frozen'] = !xarSecurityCheck('DeleteRole',0,'Roles',$name);
 
-// Prohibit removal of any groups that have children
+    // Prohibit removal of any groups that have children
     if($role->countChildren()) {
         $msg = 'The group #(1) has children. If you want to remove this group you have to delete the children first.';
         throw new ForBiddenOperationException($role->getName(),$msg);
     }
-// Prohibit removal of any groups or users the system needs
+    // Prohibit removal of any groups or users the system needs
     if($id == xarModVars::get('roles','admin')) {
         $msg = 'The user #(1) is the designated site administrator. If you want to remove this user change the site admin in the roles configuration setting first.';
         throw new ForbiddenOperationException($role->getName(),$msg);
@@ -76,7 +74,6 @@ function roles_admin_delete()
         $data['returnurl'] = $returnurl;
         return $data;
     } else {
-        // Check for authorization code
         if (!xarSecConfirmAuthKey()) return;
         // Check to make sure the user is not active on the site.
         $check = xarModAPIFunc('roles',
