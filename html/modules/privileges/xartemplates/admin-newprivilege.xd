@@ -125,7 +125,7 @@
                         </xar:mlstring>
                     </label>
                     <xar:set name="onchange">"javascript:this.form.action = '" . xarModURl('privileges','admin','newprivilege') . "';this.form.submit();"</xar:set>
-                    <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="All" onchange="$onchange" />
+                    <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="All" onchange="$onchange" validation="regid" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="pcomponent" title="#xarML('Component to which this privilege applies')#" class="xar-form-label">
