@@ -1,4 +1,4 @@
-<schema name="#$dbname#" xmlns:xar="http://xaraya.com/2004/blocklayout">
+<schema name="#$dbname#" xmlns="http://xaraya.com/2007/schema" xmlns:xar="http://xaraya.com/2004/blocklayout">
   <description>Auto generated schema file for development purposes</description>
   <xar:foreach in="$tables" value="$table">
     <table name="#$table:getName()#">
@@ -7,6 +7,7 @@
           <!-- Determine the required and auto attribute and add these to the column tag -->
           <xar:attribute name="required">#!$column:isNullable()?'true':'false'#</xar:attribute>
           <xar:attribute name="auto">#$column:isAutoIncrement()?'true':'false'#</xar:attribute>
+
           <xar:if condition="#$types[$column:getType()] == 'boolean'#">
             <boolean>
               <xar:attribute name="default">#$column:getDefaultValue()#</xar:attribute>
@@ -35,11 +36,8 @@
           <xar:elseif condition="#$types[$column:getType()] == 'binary'#"/>
             <binary />
           </xar:if>
-          <description/>
-          <constraints/>
         </column>
       </xar:foreach>
-      <description />
       <constraints>
         <!-- Primary keys -->
         <xar:set name="primary">#$table:getPrimaryKey()#</xar:set>
@@ -71,6 +69,7 @@
           </xar:if>
         </xar:foreach>
       </constraints>
+      <description>End of #$table:getName()#</description>
     </table>
   </xar:foreach>
 </schema>
