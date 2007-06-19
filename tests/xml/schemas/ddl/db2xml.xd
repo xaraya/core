@@ -44,7 +44,7 @@
         <!-- Primary keys -->
         <xar:set name="primary">#$table:getPrimaryKey()#</xar:set>
         <xar:if condition="is_object($primary)">
-          <primary>
+          <primary name="#$primary:getName()#">
             <xar:foreach in="$primary:getColumns()" value="$primColumn">
               <columnref id="#$table:getName()#.#$primColumn:getName()#" />
             </xar:foreach>
