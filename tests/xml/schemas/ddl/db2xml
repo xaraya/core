@@ -10,6 +10,9 @@ $pass = '12345';
 $root = '/var/mt/xar/core/unstable';
 $tpl  = "$root/tests/xml/schemas/ddl/db2xml.xd";
 $x2p  = '/var/mt/xar/core/unstable/lib/blocklayout/xslt/xar2php.xsl';
+$dbpath= '/var/mt/xar/core/unstable/tests/xml/schemas/ddl';
+$dbname= 'ddltest.db';
+
 /* End configurable stuff */
 
 /* Make sure we're in the docroot */
@@ -29,11 +32,11 @@ fwrite(STDERR,"Authenticated\n");
 
 // For now hardcoded, expose on the cmdline later
 $dsnArgs = array(
-    'databaseType'  =>  'mysql',
-    'databaseHost'  =>  'dbserver.hsdev.com',
-    'databaseName'  =>  'core2x',
-    'userName'      =>  'xardbconn',
-    'password'      =>  '<!internal>'
+    'databaseType'  =>  'sqlite',
+    'databaseHost'  =>  $dbpath,
+    'databaseName'  =>  $dbname,
+    'userName'      =>  'dummy',
+    'password'      =>  'dummy'
     );
 $dbconn = xarDBNewConn($dsnArgs);
 $dbInfo = $dbconn->getDatabaseInfo();   // DatabaseInfo object
