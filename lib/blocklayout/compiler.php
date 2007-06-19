@@ -114,6 +114,7 @@ class DTDIdentifiers extends Object
 }
 
 /* This one exception depends on BL being inside Xaraya, try to correct this later */
+sys::import('xaraya.exceptions');
 class BLCompilerException extends xarExceptions
 {
 }
@@ -214,6 +215,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         }
 
         fclose($fp);
+        sys::import('xaraya.log');
         xarLogMessage("BL: compiling $fileName");
 
         $this->parser->setFileName($fileName);
@@ -229,6 +231,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         // use the new compiler or not?
         try {
           // @todo dont want this here! db dependency
+          sys::import('xaraya.variables.config');
           $what = xarConfigGetVar('Site.BL.CompilerVersion');
           $use_xsl = ($what == 'XAR_BL_USE_XSLT');
         } catch(Exception $e) {
