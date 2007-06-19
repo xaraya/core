@@ -63,29 +63,37 @@ class PassBoxProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
+        // FIXME: finish this
+        $confirm = 1;
+
         if (!isset($value)) {
-            $value = $this->value;
+            $value = "";
         }
-        if (is_array($value) && $value[0] == $value[1]) {
-            $value = $value[0];
-        } else {
-            $this->invalid = xarML('Passwords did not match');
-            $this->value = null;
-            return false;
+        if ($confirm) {
+            if (is_array($value) && $value[0] == $value[1]) {
+                $value = $value[0];
+            } else {
+                $this->invalid = xarML('Passwords did not match');
+                $this->value = null;
+                return false;
+            }
         }
 
-        if (!empty($value) && strlen($value) > $this->maxlength) {
-            $this->invalid = xarML('password: must be less than #(1) characters long',$this->max + 1);
-            $this->value = null;
-            return false;
-        } elseif (isset($this->min) && strlen($value) < $this->min) {
-            $this->invalid = xarML('password: must be at least #(1) characters long',$this->min);
-            $this->value = null;
-            return false;
-        } else {
-            $this->value = $value;
-            return true;
+        if (!(empty($value) && !empty($this->value))) {
+            if (!empty($value) && strlen($value) > $this->maxlength) {
+                $this->invalid = xarML('password: must be less than #(1) characters long', $this->max + 1);
+                $this->value = null;
+                return false;
+            } elseif (isset($this->min) && strlen($value) < $this->min) {
+                $this->invalid = xarML('password: must be at least #(1) characters long', $this->min);
+                $this->value = null;
+                return false;
+            } else {
+                $this->value = $value;
+                return true;
+            }
         }
+        return true;
     }
 
     public function encrypt($value = null)
