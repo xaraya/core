@@ -16,23 +16,27 @@
 # See the README document on what we initially changed before we abandoned compatibility.
 
 # Declare the namespace we need
+# scp xarddl.dtd xaraya.com:/var/www/ddf/www.xaraya.com/main/html/ddl/DTD/ddl-strict.dtd to get it there
 default namespace   = "http://xaraya.com/2007/schema"
         namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
 # Define some common things and some stuff we may want to define more
 # clearly later on. A dtd has not got a strong notion of types, so we
 # need to help it a little
-commonAtts = attribute id {xsd:ID}
+commonAtts =
+(
+    attribute id {xsd:ID}?
+)
 
 # Common child tags
 #   description   - give a, possibly lengthy, description of the surrounding element. The intention
 #                   is to be able to embed other xml markup languages in this elements
 #                   children (xhtml for example) so it lends itself for rich documentation
-commonTags =
-(
-    element description { commonAtts?, text }?
-)
-
+description =  element description
+{
+    commonAtts?,
+    text
+}
 
 
 # Definitions corresponding to the values for the datatypes
@@ -54,11 +58,12 @@ start = schema
 # Attributes:
 #   name      -  optional name of the schema. If schema's are used in the physical database,
 #                this name can be used to enclose the specified xml schema into the physical schema.
+# @todo we want to interleave description, table and constraints so order doesnt matter, but trang cant generate a dtd otherwise
 schema = element schema
 {
     commonAtts?,
-    commonTags,
     attribute name { text }?,
+    description?,
     table*,
     constraints?
 }
@@ -69,14 +74,16 @@ schema = element schema
 #                 the framework in which that live is free to generate its table types of choice.
 # Attributes:
 #   name      -   required name of this table, each table in a schema needs to have a unique name
-#                 as such we let this attribute comply to the ID production. That is too much, but safe.
+#                 we can't use the ID production anymore, since ID attributes can only occur once in
+#                 an element.
+# @todo we want to interleave description, column and constraints so order doesnt matter, but trang cant generate a dtd otherwise
 table = element table
 {
     commonAtts?,
-    commonTags,
-    attribute name { xsd:ID},
+    attribute name { xsd:NMTOKEN},
     column*,
-    constraints?
+    constraints?,
+    description?
 }
 
 # Element:
@@ -96,15 +103,16 @@ table = element table
 #             = timestamp for date
 #             = text?
 #       we can also use a default attribute, which we probably need anyways
+# @todo we want to interleave description, [type] and constraints so order doesnt matter, but trang cant generate a dtd otherwise
 column =  element column
 {
     commonAtts?,
-    commonTags,
     attribute name { text },
     [ a:defaultValue = "false" ] attribute required { booleanValue }?,
     [ a:defaultValue = "false" ] attribute auto { booleanValue }?,
-    (number | time | boolean | \text | binary),
-    constraints?
+    (number|time|boolean|\text|binary),
+    constraints?,
+    description?
 }
 
 
@@ -181,7 +189,7 @@ time = element time
 binary = element binary
 {
     commonAtts?,
-    attribute size { sizeSpec },
+    attribute size { sizeSpec }?,
     attribute default { binaryValue }?,
     empty
 }
@@ -203,7 +211,7 @@ index   = element index   { constraint }
 constraint =
 (
     commonAtts,
-    attribute name {xsd:ID},
+    attribute name {xsd:NMTOKEN},
     columnref+
 )
 
