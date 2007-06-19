@@ -5,10 +5,14 @@
 
 /* We need a (fake) ip address to run xar */
 putenv("REMOTE_ADDR=127.0.0.1");
-$user = 'Admin';
+$user = 'admin';
 $pass = '12345';
 $root = '/var/mt/xar/core/unstable';
 $tpl  = "$root/tests/xml/schemas/ddl/db2xml.xd";
+$x2p  = '/var/mt/xar/core/unstable/lib/blocklayout/xslt/xar2php.xsl';
+$dbpath= '/var/mt/xar/core/unstable/tests/xml/schemas/ddl';
+$dbname= 'ddltest.db';
+
 /* End configurable stuff */
 
 /* Make sure we're in the docroot */
@@ -21,24 +25,58 @@ xarCoreInit(XARCORE_SYSTEM_ALL);
 set_exception_handler(array('ExceptionHandlers','bone'));
 /* Authenticate */
 if(!xarUserLogin($user,$pass)) {
-    echo "Authentication failed\n";
+    fwrite(STDERR,"Authentication failed\n");
     return 1;
 }
-echo "Authenticated\n";
+fwrite(STDERR,"Authenticated\n");
 
 // For now hardcoded, expose on the cmdline later
 $dsnArgs = array(
-    'databaseType'  =>  'mysql',
-    'databaseHost'  =>  'dbserver.hsdev.com',
-    'databaseName'  =>  'core2x',
-    'userName'      =>  'xardbconn',
-    'password'      =>  '<!internal>'
+    'databaseType'  =>  'sqlite',
+    'databaseHost'  =>  $dbpath,
+    'databaseName'  =>  $dbname,
+    'userName'      =>  'dummy',
+    'password'      =>  'dummy'
     );
 $dbconn = xarDBNewConn($dsnArgs);
 $dbInfo = $dbconn->getDatabaseInfo();   // DatabaseInfo object
+sys::import('creole.CreoleTypes');
+$typeMap = array(
+    CreoleTypes::getCreoleCode('BOOLEAN')       => 'boolean',
+    CreoleTypes::getCreoleCode('VARCHAR')       => 'text',
+    CreoleTypes::getCreoleCode('LONGVARCHAR')   => 'text',
+    CreoleTypes::getCreoleCode('CHAR')          => 'text',
+    CreoleTypes::getCreoleCode('VARCHAR')       => 'text',
+    CreoleTypes::getCreoleCode('TEXT')          => 'text',
+    CreoleTypes::getCreoleCode('CLOB')          => 'text',
+    CreoleTypes::getCreoleCode('LONGVARCHAR')   => 'text',
+    CreoleTypes::getCreoleCode('INTEGER')       => 'number',
+    CreoleTypes::getCreoleCode('TINYINT')       => 'number',
+    CreoleTypes::getCreoleCode('BIGINT')        => 'number',
+    CreoleTypes::getCreoleCode('SMALLINT')      => 'number',
+    CreoleTypes::getCreoleCode('TINYINT')       => 'number',
+    CreoleTypes::getCreoleCode('INTEGER')       => 'number',
+    CreoleTypes::getCreoleCode('FLOAT')         => 'number',
+    CreoleTypes::getCreoleCode('NUMERIC')       => 'number',
+    CreoleTypes::getCreoleCode('DECIMAL')       => 'number',
+    CreoleTypes::getCreoleCode('YEAR')          => 'number',
+    CreoleTypes::getCreoleCode('REAL')          => 'number',
+    CreoleTypes::getCreoleCode('DOUBLE')        => 'number',
+    CreoleTypes::getCreoleCode('DATE')          => 'time',
+    CreoleTypes::getCreoleCode('TIME')          => 'time',
+    CreoleTypes::getCreoleCode('TIMESTAMP')     => 'time',
+    CreoleTypes::getCreoleCode('VARBINARY')     => 'binary',
+    CreoleTypes::getCreoleCode('VARBINARY')     => 'binary',
+    CreoleTypes::getCreoleCode('BLOB')          => 'binary',
+    CreoleTypes::getCreoleCode('BINARY')        => 'binary',
+    CreoleTypes::getCreoleCode('LONGVARBINARY') => 'binary'
+);
 $tplData = array(
     'dbname' => $dbInfo->getName(),     // string
-    'tables' => $dbInfo->getTables());  // array of TableInfo objects
+    'tables' => $dbInfo->getTables(),   // array of TableInfo objects
+    'types'  => $typeMap
+    );
+
 
 // Produce the xml
 $out = xarTplFile($tpl,$tplData);
