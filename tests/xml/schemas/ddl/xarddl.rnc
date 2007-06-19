@@ -22,7 +22,18 @@ default namespace   = "http://xaraya.com/2007/schema"
 # Define some common things and some stuff we may want to define more
 # clearly later on. A dtd has not got a strong notion of types, so we
 # need to help it a little
-common = attribute id { xsd:ID }?
+commonAtts = attribute id {xsd:ID}
+
+# Common child tags
+#   description   - give a, possibly lengthy, description of the surrounding element. The intention
+#                   is to be able to embed other xml markup languages in this elements
+#                   children (xhtml for example) so it lends itself for rich documentation
+commonTags =
+(
+    element description { commonAtts?, text }?
+)
+
+
 
 # Definitions corresponding to the values for the datatypes
 textValue    = string
@@ -45,20 +56,11 @@ start = schema
 #                this name can be used to enclose the specified xml schema into the physical schema.
 schema = element schema
 {
-    common,
+    commonAtts?,
+    commonTags,
     attribute name { text }?,
-    description?,
-    table*
-}
-
-# Element:
-#   description   - give a, possibly lengthy, description of the surrounding element. The intention
-#                   is to be able to embed other xml markup languages in this elements
-#                   children (xhtml for example) so it lends itself for rich documentation
-description = element description
-{
-    common,
-    text
+    table*,
+    constraints?
 }
 
 
@@ -70,12 +72,11 @@ description = element description
 #                 as such we let this attribute comply to the ID production. That is too much, but safe.
 table = element table
 {
-    common,
+    commonAtts?,
+    commonTags,
     attribute name { xsd:ID},
-    primary,
     column*,
-    index*,
-    description?
+    constraints?
 }
 
 # Element:
@@ -97,12 +98,13 @@ table = element table
 #       we can also use a default attribute, which we probably need anyways
 column =  element column
 {
-    common,
+    commonAtts?,
+    commonTags,
     attribute name { text },
     [ a:defaultValue = "false" ] attribute required { booleanValue }?,
     [ a:defaultValue = "false" ] attribute auto { booleanValue }?,
-    description?,
-    (number | time | boolean | \text | binary)
+    (number | time | boolean | \text | binary),
+    constraints?
 }
 
 
@@ -118,7 +120,7 @@ column =  element column
 # @todo attribute base default 10 ?
 number = element number
 {
-    common,
+    commonAtts?,
     attribute default { numberValue }?,
     attribute min { numberValue }?,
     attribute max { numberValue }?,
@@ -135,7 +137,7 @@ number = element number
 #   default   - default value
 \text = element text
 {
-    common,
+    commonAtts?,
     attribute default { textValue }?,
     attribute size { sizeSpec },
     empty
@@ -147,7 +149,7 @@ number = element number
 #   default   - default value
 boolean = element boolean
 {
-    common,
+    commonAtts?,
     attribute default { booleanValue }?,
     empty
 }
@@ -161,7 +163,7 @@ boolean = element boolean
 # @todo i see duration/interval as the generic form of time, how do we deal with this?
 time = element time
 {
-    common,
+    commonAtts?,
     attribute default { timeValue }?,
     empty
 }
@@ -178,22 +180,36 @@ time = element time
 
 binary = element binary
 {
-    common,
+    commonAtts?,
     attribute size { sizeSpec },
     attribute default { binaryValue }?,
     empty
 }
 
-# primary element
-# @todo reformulate as constraint
-primary = element primary { attlist.primary, column+ }
-attlist.primary &= common
-# index element
-# @todo reformulate as constraint?
-index = element index { attlist.index, column+, description? }
-attlist.index &=
-  common,
-  attribute name { text }?,
-  [ a:defaultValue = "default" ]
-  attribute type { "default" | "unique" }?
+constraints = element constraints
+{
+    commonAtts?,
+    primary,
+    foreign*,
+    unique*,
+    index*
+}
 
+primary = element primary { constraint }
+foreign = element foreign { constraint }
+unique  = element unique  { constraint }
+index   = element index   { constraint }
+
+constraint =
+(
+    commonAtts,
+    attribute name {xsd:ID},
+    columnref+
+)
+
+# Note: i want to call this element column and the attribute ref ideally, but then we cant generate a DTD anymore so, lets do
+# something else for now.
+columnref = element columnref
+{
+    attribute id { xsd:IDREF}
+}
