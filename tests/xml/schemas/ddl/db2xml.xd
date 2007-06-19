@@ -1,8 +1,9 @@
 <schema name="#$dbname#" xmlns:xar="http://xaraya.com/2004/blocklayout">
+  <description>Auto generated schema file for development purposes</description>
   <xar:foreach in="$tables" value="$table">
     <table name="#$table:getName()#">
       <xar:foreach in="#$table:getColumns()#" value="$column">
-        <column name="#$column:getName()#">
+        <column id="#$table:getName()#.#$column:getName()#" name="#$column:getName()#">
           <!-- Determine the required and auto attribute and add these to the column tag -->
           <xar:attribute name="required">#!$column:isNullable()?'true':'false'#</xar:attribute>
           <xar:attribute name="auto">#$column:isAutoIncrement()?'true':'false'#</xar:attribute>
@@ -35,8 +36,41 @@
             <binary />
           </xar:if>
           <description/>
+          <constraints/>
         </column>
       </xar:foreach>
+      <description />
+      <constraints>
+        <!-- Primary keys -->
+        <xar:set name="primary">#$table:getPrimaryKey()#</xar:set>
+        <xar:if condition="is_object($primary)">
+          <primary>
+            <xar:foreach in="$primary:getColumns()" value="$primColumn">
+              <columnref id="#$table:getName()#.#$primColumn:getName()#" />
+            </xar:foreach>
+          </primary>
+        <xar:else/>
+          <xar:comment>ERROR: the table has no primary key</xar:comment>
+        </xar:if>
+
+        <!-- Indexes -->
+        <xar:set name="indexes">#$table:getIndexes()#</xar:set>
+        <xar:foreach in="$indexes" value="$index">
+          <xar:if condition="$index:isUnique()">
+            <unique name="#$index:getName()#">
+              <xar:foreach in="#$index:getColumns()#" value="$indexColumn">
+                <columnref id="#$table:getName()#.#$indexColumn:getName()#" />
+              </xar:foreach>
+            </unique>
+          <xar:else/>
+            <index  name="#$index:getName()#">
+              <xar:foreach in="#$index:getColumns()#" value="$indexColumn">
+                <columnref id="#$table:getName()#.#$indexColumn:getName()#" />
+              </xar:foreach>
+            </index>
+          </xar:if>
+        </xar:foreach>
+      </constraints>
     </table>
   </xar:foreach>
 </schema>
