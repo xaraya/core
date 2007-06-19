@@ -40,5 +40,9 @@ xar-model.xml: db2xml db2xml.xd
 	$(XSLTPROC) --stringparam vendor oracle xml2ddl-oracle.xsl $< > $(*F).oracle.sql
 	$(XSLTPROC) --stringparam vendor mssql  xml2ddl-mssql.xsl $< > $(*F).mssql.sql
 
+%.db: %.sql
+	$(RM) $@
+	sqlite $@ < $<
+
 clean:
-	$(RM) *.dtd *.rng *.xsd  *.sql xar-model.xml
+	$(RM) *.dtd *.rng *.xsd  xar-model.xml ddltest.db

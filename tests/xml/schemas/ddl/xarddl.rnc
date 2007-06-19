@@ -15,8 +15,9 @@
 #
 # See the README document on what we initially changed before we abandoned compatibility.
 
-default namespace = "http://xaraya.com/2007/schema"
-namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+# Declare the namespace we need
+default namespace   = "http://xaraya.com/2007/schema"
+        namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
 # Define some common things and some stuff we may want to define more
 # clearly later on. A dtd has not got a strong notion of types, so we
@@ -26,7 +27,7 @@ common = attribute id { xsd:ID }?
 # Definitions corresponding to the values for the datatypes
 textValue    = string
 binaryValue  = string            # string? then we need an encoding
-booleanValue = "true" | "false"  # We dont use the XSD datatype since that gets approximated by trang to NMTOKEN
+booleanValue = "true" | "false"  # We dont use xsd:boolean since that gets approximated by trang to NMTOKEN
 timeValue    = string
 numberValue  = string
 
