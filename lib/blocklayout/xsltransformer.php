@@ -10,6 +10,7 @@
  * @author Marcel van der Boom <marcel@xaraya.com>
 **/
 
+sys::import('blocklayout.compiler'); // expression transformer
 class BlocklayoutXSLTProcessor extends Object
 {
     private $xslProc = null;    // Object representing the processor.

@@ -1,24 +1,25 @@
 <?xml version="1.0"?>
 <schema>
   <table name="themes">
-    <primary>
-      <column name="xar_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_name" size="64" required="true"/>
-    <column name="xar_regid" type="INTEGER" size="10" default="0" required="true"/>
-    <column name="xar_directory" size="64" required="true"/>
-    <column name="xar_mode" type="INTEGER" size="11" default="1" required="true"/>
-    <column name="xar_author" size="64" required="true"/>
-    <column name="xar_homepage" size="64" required="true"/>
-    <column name="xar_email" size="64" required="true"/>
-    <column name="xar_description" size="255" required="true"/>
-    <column name="xar_contactinfo" size="255" required="true"/>
-    <column name="xar_publishdate" size="32" required="true"/>
-    <column name="xar_license" size="255" required="true"/>
-    <column name="xar_version" size="10" required="true"/>
-    <column name="xar_xaraya_version" size="10" required="true"/>
-    <column name="xar_bl_version" size="10" required="true"/>
-    <column name="xar_class" type="INTEGER" size="10" default="0" required="true"/>
-    <column name="xar_state" type="INTEGER" size="11" default="1" required="true"/>
+    <column name="id" id="themes.id"  required="true" auto="true"><number size="10" default=""/></column>
+    <column name="name" required="true"><text size="64"/></column>
+    <column name="regid"><number size="10" default=""/></column>
+    <column name="directory" required="true"><text size="64"/></column>
+    <column name="author" required="true"><text size="64"/></column>
+    <column name="homepage" required="true"><text size="64"/></column>
+    <column name="email" required="true"><text size="64"/></column>
+    <column name="description" required="true"><text size="255"/></column>
+    <column name="contactinfo" required="true"><text size="255"/></column>
+    <column name="publishdate" required="true"><text size="32"/></column>
+    <column name="license" required="true"><text size="255"/></column>
+    <column name="version" required="true"><text size="10"/></column>
+    <column name="xaraya_version" required="true"><text size="10"/></column>
+    <column name="bl_version" required="true"><text size="10"/></column>
+    <column name="class" required="true"><number size="2" default="0"/></column>
+    <column name="state" required="true"><number size="1" default="1"/></column>
+
+    <constraints>
+      <primary><columnref id="themes.id"/></primary>
+    </constraints>
   </table>
 </schema>

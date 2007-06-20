@@ -105,6 +105,19 @@ TRIGGER support
 
 ==> SUPPORTED BY ALL, WORTH CONSIDERING
 
+CHECK constraint support
+------------------------
+- mysql   : yes
+- sqlite  : yes
+- postgres: yes
+- mssql   : yes
+- oracle  : yes
+
+==> SUPPORTED BY ALL, WORTH CONSIDERING
+Note: the expression syntax is likely to differ wildly between the backends.
+Value check might work, but it's hell to compare and document the different
+syntaxes. Keep this in mind and look it up when a check is needed.
+
 TRIGGER SYNTAX
 --------------
 
@@ -272,7 +285,7 @@ Current concept:
     - call genID before an insert, that delivers something back (no matter what it is)
     - call a SQL insert statement, putting whatever genID delivered back in the place of the column which should hold the ID
     - when needed call PO_Insert_ID to retrieve the actual value (and pray it is the right one) of the ID used.
-    
+
     [UPDATE: with a current Creole patch, the behaviour is now safe]
 
 Problems with this concept:
@@ -306,13 +319,13 @@ Alternative concept:
 
     1. the insert SQL should omit the ID column and responsibility of creating
     values for it transferred to the backend,
-    
+
     Thus this::
-    
+
         insert into test(id,name) values(genID(),'thename')
-    
+
     becomes::
-    
+
         insert into test(name) values ('thename')
 
     For this to work in both type of backends, both should be able to generate
@@ -322,16 +335,16 @@ Alternative concept:
 
     2. For the sequence based backends you explicitly have to tell the database
     to do it (same concept, but explicitly needed)
-    
+
     Say, for postgres, which is sequence based, this translates to::
-    
+
         create sequence test_id_seq;
         create table test {
             id integer NOT NULL DEFAULT nextval('test_id_seq'),
             name string
             primary key(id)
         }
-        
+
         [in recent versions: use the serial native type, which is almost equivalent]
 
     3. the last insert id retrieval needs to be reliable.
@@ -339,9 +352,9 @@ Alternative concept:
     or API function which does exactly that. Similarly, for the sequence based
     system, there are either SQL or API constructs to get the same information
     from the sequence.
-    
+
     Examples::
-    
+
             mysql: SELECT LAST_INSERT_ID()
             (not completely safe, because it is global on the session)
 

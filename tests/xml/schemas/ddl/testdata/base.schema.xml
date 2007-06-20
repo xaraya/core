@@ -1,47 +1,31 @@
 <?xml version="1.0"?>
 <schema>
-  <table name="template_tags">
-    <primary>
-      <column name="xar_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_name" size="255" required="true"/>
-    <column name="xar_modid" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_handler" size="255" required="true"/>
-    <column name="xar_data" type="LONGVARCHAR" size=""/>
-  </table>
   <table name="session_info">
-    <primary>
-      <column name="xar_sessid" size="32" required="true"/>
-    </primary>
-    <column name="xar_ipaddr" size="20" required="true"/>
-    <column name="xar_firstused" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_lastused" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_uid" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_vars" type="VARBINARY"/>
-    <column name="xar_remembersess" type="TINYINT" size="4" default="0"/>
-    <index name="i_xar_session_uid">
-      <column name="xar_uid"/>
-    </index>
-    <index name="i_xar_session_lastused">
-      <column name="xar_lastused"/>
-    </index>
+    <column id="session_info.id" name="id" required="true"><text size="32"/></column>
+    <!-- @todo ip4 needs 4x3=12, ip6 need 8x4=32 but 20 is what? -->
+    <column name="ip_addr" required="true"><text size="20"/></column>
+    <column name="first_use" required="true"><time default="0"/></column>
+    <column name="last_use" required="true"><time  default="0"/></column>
+    <column id="session_info.role_id" name="role_id" required="true"><number size="11" /></column>
+    <!-- @todo: is this really binary? -->
+    <column name="vars"><binary/></column>
+    <column name="remember"><boolean default="false"/></column>
   </table>
-  <table name="module_vars">
-    <primary>
-      <column name="xar_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_modid" type="INTEGER" size="11" required="true"/>
-    <column name="xar_name" size="64" required="true"/>
-    <column name="xar_value" type="LONGVARCHAR"/>
-    <index type="unique" name="i_xar_config_name">
-      <column name="xar_name"/>
-      <column name="xar_modid"/>
-    </index>
-    <index name="i_xar_module_vars_modid">
-      <column name="xar_modid"/>
-    </index>
-    <index name="i_xar_module_vars_name">
-      <column name="xar_name"/>
-    </index>
+
+  <table name="template_tags">
+    <column id="template_tags.id" name="id" required="true" auto="true"><number size="10" /></column>
+    <column name="name" required="true"><text size="255"/></column>
+    <column id="template_tags.module_id" name="module_id" required="true"><number size="10" default="0"/></column>
+    <column name="handler" required="true"><text size="255"/></column>
+    <column name="data"><text size="16K"/></column>
   </table>
+
+  <constraints>
+    <primary><columnref id="template_tags.id"/></primary>
+    <primary><columnref id="session_info.id"/></primary>
+
+    <index name="i_session_role_id"><columnref id="session_info.role_id"/></index>
+    <index name="i_session_last_use"><columnref id="session_info.last_use"/></index>
+    <index name="(session_info autoindex 1)"><columnref id="session_info.id"/></index>
+  </constraints>
 </schema>

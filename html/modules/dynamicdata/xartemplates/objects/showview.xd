@@ -11,6 +11,18 @@
     <xar:template file="catnavigation" />
 </xar:if>
 
+<xar:sec mask="AddDynamicDataItem" catch="false" component="Item" instance="$moduleid .':' . $itemtype.':All'">
+    <xar:if condition="!isset($newlink)">
+        <xar:set name="newlink">#xarModURL($urlmodule,'admin','new',array('itemtype' =&gt; $itemtype,'tplmodule' =&gt; $tplmodule))#</xar:set>
+    </xar:if>
+    <a href="#$newlink#">
+            <strong>
+                <xar:mlstring>
+                    Create New
+                </xar:mlstring>
+            </strong>
+     </a>
+</xar:sec>
 <xar:if condition="empty($layout)">
     <xar:set name="layout">'default'</xar:set>
 </xar:if>

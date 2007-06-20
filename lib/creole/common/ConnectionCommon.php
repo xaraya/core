@@ -336,29 +336,27 @@ abstract class ConnectionCommon {
 
     function __call($method, $args)
     {
-        switch($method) {
+        switch(strtolower($method)) {
             case 'qstr':
                 // Used in a couple of places where bind variable replacement is less than trivial
                 // (roles and dd only)
                 // DOH! we dont want this
                 return  "'".str_replace("'","\\'",$args[0])."'";
                 break;
-            case 'StartTrans':
+            case 'starttrans':
                 return $this->begin();
                 break;
-            case 'CompleteTrans':
+            case 'completetrans':
                 $this->commit();
                 return true;
                 break;
-            case 'Affected_Rows':
+            case 'affected_rows':
                 return $this->affected_rows;
                 break;
-            case 'GenId':
-            case 'GenID':
-            case 'genID':
+            case 'genid':
                 return $this->getNextId($args[0]);
                 break;
-            case 'PO_Insert_ID':
+            case 'po_insert_id':
                 return $this->getLastId($args[0]);
                 break;
             default:
@@ -384,10 +382,7 @@ abstract class ConnectionCommon {
      * Since we throw exceptions if we have an error, this just return 0
      * @todo remove when we can, only seen in modules
      */
-    function ErrorNo()
-    {
-        return 0;
-    }
+    function ErrorNo() { return 0;  }
     // END XARAYA MODIFICATION
 
     /**

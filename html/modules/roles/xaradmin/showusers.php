@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -51,17 +51,17 @@ function roles_admin_showusers()
             $data['ancestors'][] = array('name' => $ancestor->getName(),
                                           'id' => $ancestor->getID());
         }
-    }
-    else {
+    } else {
         $data['title'] = xarML('All ')." ";
         $data['groupname'] = '';
     }
 
     // Check if we already have a selection
-        sys::import('modules.roles.class.xarQuery');
-        $q = new xarQuery();
-        $q = $q->sessiongetvar('rolesquery');
-        $q = '';
+    sys::import('modules.roles.class.xarQuery');
+    $q = new xarQuery();
+    $q = $q->sessiongetvar('rolesquery');
+    $q = '';
+
     if (empty($q) || isset($reload)) {
         $types = xarModAPIFunc('roles','user','getitemtypes');
         $basetypes = array();
@@ -164,9 +164,8 @@ function roles_admin_showusers()
     // Load Template
     $data['id']        = $id;
     $data['users']      = $users;
-    $data['changestatuslabel'] = xarML('Change Status');
     $data['authid']     = xarSecGenAuthKey();
-    $data['removeurl']  = xarModURL('roles', 'admin','delete', array('roleid' => $id));
+    $data['removeurl']  = xarModURL('roles', 'admin','delete', array('id' => $id));
     $filter['startnum'] = '%%';
     $filter['id']      = $id;
     $filter['state']    = $data['state'];

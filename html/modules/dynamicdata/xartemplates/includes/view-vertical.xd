@@ -7,7 +7,7 @@
         <xar:if condition="empty($fields[$name])">
           &#160;
         <xar:elseif condition="!empty($linkfield) and $linkfield eq $name" />
-          <a href="#$links[$itemid]['display']['olink']#">
+          <a href="#xarModURL($urlmodule,$linktype,$linkfunc,array('itemtype' =&gt; $itemtype,$urlparam =&gt; $itemid))#">
             <xar:data-output property="$properties[$name]" value="$fields[$name]" />
           </a>
         <xar:else />
@@ -18,7 +18,7 @@
     <xar:if condition="empty($linkfield) and !empty($links[$itemid]) and count($links[$itemid]) gt 0">
       &#160;
       <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
-         #$option['ojoin']# 
+         #$option['ojoin']#
         <a href="#$option['olink']#">#$option['otitle']#</a>
       </xar:foreach>
     </xar:if>

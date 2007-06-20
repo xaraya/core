@@ -1,68 +1,63 @@
 <?xml version="1.0"?>
 <schema>
   <table name="block_group_instances">
-    <primary>
-      <column name="xar_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_group_id" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_instance_id" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_template" size="100"/>
-    <column name="xar_position" type="INTEGER" size="11" default="0" required="true"/>
-    <index name="i_xar_block_group_instances">
-      <column name="xar_group_id"/>
-    </index>
-    <index name="i_xar_block_group_instances_2">
-      <column name="xar_instance_id"/>
-    </index>
+    <column id="block_group_instances.id" name="id" required="true" auto="true"><number size="10" /></column>
+    <column id="block_group_instances.group_id" name="group_id" required="true"><number size="10" default="0"/></column>
+    <column id="block_group_instances.instance_id" name="instance_id" required="true"><number size="10" default="0"/></column>
+    <column id="block_group_instances.template" name="template"><text size="100"/></column>
+    <column id="block_group_instances.position" name="position" required="true"><number size="2" default="0"/></column>
   </table>
-  <table name="block_groups">
-    <primary>
-      <column name="xar_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_name" size="255" required="true"/>
-    <column name="xar_template" size="255" required="true"/>
-    <index type="unique" name="i_xar_block_groups">
-      <column name="xar_name"/>
-    </index>
+
+  <table name="block_groups"><column id="block_groups.id" name="id" required="true" auto="true"><number size="10"/></column>
+    <column id="block_groups.name" name="name" required="true"><text size="255"/></column>
+    <column id="block_groups.template" name="template" required="true"><text size="255"/></column>
   </table>
+
   <table name="block_instances">
-    <primary>
-      <column name="xar_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_type_id" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_name" size="100" required="true"/>
-    <column name="xar_title" size="255"/>
-    <column name="xar_content" type="LONGVARCHAR" required="true"/>
-    <column name="xar_template" size="255"/>
-    <column name="xar_state" type="TINYINT" size="4" default="2" required="true"/>
-    <column name="xar_refresh" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_last_update" type="INTEGER" size="11" default="0" required="true"/>
-    <index type="unique" name="i_xar_block_instances_u2">
-      <column name="xar_name"/>
-    </index>
-    <index name="i_xar_block_instances">
-      <column name="xar_type_id"/>
-    </index>
+    <column id="block_instances.id" name="id" required="true" auto="true"><number size="10"/></column>
+    <column id="block_instances.type_id" name="type_id" required="true"><number size="10" default="0"/></column>
+    <column id="block_instances.name" name="name" required="true"><text size="100"/></column>
+    <column id="block_instances.title" name="title"><text size="255"/></column>
+    <column id="block_instances.content" name="content" required="true"><text size="2K"/></column>
+    <column id="block_instances.template" name="template"><text size="255"/></column>
+    <column id="block_instances.state" name="state" required="true"><number size="1" default="2"/></column>
+    <column id="block_instances.refresh" name="refresh" required="true"><number size="10" default="0"/></column>
+    <column id="block_instances.last_update" name="last_update" required="true"><time default="0"/></column>
   </table>
+
   <table name="block_types">
-    <primary>
-      <column name="xar_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_type" size="64" required="true"/>
-    <column name="xar_modid" type="INTEGER" size="10" default="0" required="true"/>
-    <column name="xar_info" type="LONGVARCHAR"/>
-    <index type="unique" name="i_xar_block_types2">
-      <column name="xar_modid"/>
-      <column name="xar_type"/>
-    </index>
+    <column id="block_types.id" name="id" required="true" auto="true"><number size="10"/></column>
+    <column id="block_types.type" name="type" required="true"><text size="64"/></column>
+    <column id="block_types.modid" name="modid" required="true"><number size="10" default="0"/></column>
+    <column id="block_types.info" name="info"><text size=""/></column>
   </table>
+
   <table name="cache_blocks">
-    <primary>
-      <column name="xar_bid" type="INTEGER" size="11" default="0" required="true"/>
-    </primary>
-    <column name="xar_nocache" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_page" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_user" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_expire" type="INTEGER" size="11"/>
+    <column id="cache_blocks.id" name="id" required="true" auto="true"><number size="10"/></column>
+    <column id="cache_blocks.nocache" name="nocache" required="true"><number size="" default="0"/></column>
+    <column id="cache_blocks.page" name="page" required="true"><number size="" default="0"/></column>
+    <column id="cache_blocks.user" name="user" required="true"><number size="" default="0"/></column>
+    <column id="cache_blocks.expire" name="expire"><number size="" default=""/></column>
   </table>
+
+  <constraints>
+    <primary><columnref id="block_group_instances.id"/></primary>
+    <index name="i_block_group_instances_2"><columnref id="block_group_instances.instance_id"/></index>
+    <index name="i_block_group_instances"><columnref id="block_group_instances.group_id"/></index>
+
+    <primary><columnref id="block_groups.id"/></primary>
+    <index name="i_block_groups"><columnref id="block_groups.name"/></index>
+
+    <primary><columnref id="block_instances.id"/></primary>
+    <index name="i_block_instances_u2"><columnref id="block_instances.name"/></index>
+    <index name="i_block_instances"><columnref id="block_instances.type_id"/></index>
+
+    <primary><columnref id="block_types.id"/></primary>
+    <index name="i_block_types2">
+      <columnref id="block_types.modid"/>
+      <columnref id="block_types.type"/>
+    </index>
+
+    <primary><columnref id="cache_blocks.id"/></primary>
+  </constraints>
 </schema>

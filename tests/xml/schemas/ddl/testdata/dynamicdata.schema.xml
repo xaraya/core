@@ -1,91 +1,168 @@
 <?xml version="1.0"?>
 <schema>
   <table name="dynamic_data">
-    <primary>
-      <column name="xar_dd_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_dd_propid" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_dd_itemid" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_dd_value" type="LONGVARCHAR"/>
-    <index name="i_xar_dyndata_propid">
-      <column name="xar_dd_propid"/>
-    </index>
-    <index name="i_xar_dyndata_itemid">
-      <column name="xar_dd_itemid"/>
-    </index>
+    <column id="dynamic_data.dd_id" name="dd_id" required="true" auto="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_data.dd_propid" name="dd_propid" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_data.dd_itemid" name="dd_itemid" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_data.dd_value" name="dd_value">
+      <text size=""/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="dynamic_data.dd_id"/>
+      </primary>
+      <index name="i_dyndata_propid">
+        <columnref id="dynamic_data.dd_propid"/>
+      </index>
+      <index name="i_dyndata_itemid">
+        <columnref id="dynamic_data.dd_itemid"/>
+      </index>
+    </constraints>
   </table>
   <table name="dynamic_objects">
-    <primary>
-      <column name="xar_object_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_object_name" size="30" required="true"/>
-    <column name="xar_object_label" size="254" required="true"/>
-    <column name="xar_object_moduleid" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_object_itemtype" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_object_parent" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_object_urlparam" size="30" default="itemid" required="true"/>
-    <column name="xar_object_maxid" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_object_config" type="LONGVARCHAR"/>
-    <column name="xar_object_isalias" type="TINYINT" size="4" default="1" required="true"/>
-    <index type="unique" name="i_xar_dynobjects_combo">
-      <column name="xar_object_moduleid"/>
-      <column name="xar_object_itemtype"/>
-    </index>
-    <index type="unique" name="i_xar_dynobjects_name">
-      <column name="xar_object_name"/>
-    </index>
+    <column id="dynamic_objects.object_id" name="object_id" required="true" auto="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_objects.object_name" name="object_name" required="true">
+      <text size="30"/>
+    </column>
+    <column id="dynamic_objects.object_label" name="object_label" required="true">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_objects.object_moduleid" name="object_moduleid" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_objects.object_itemtype" name="object_itemtype" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_objects.object_parent" name="object_parent" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_objects.object_class" name="object_class" required="true">
+      <text size="255"/>
+    </column>
+    <column id="dynamic_objects.object_filepath" name="object_filepath" required="true">
+      <text size="255"/>
+    </column>
+    <column id="dynamic_objects.object_urlparam" name="object_urlparam" required="true">
+      <text size="30"/>
+    </column>
+    <column id="dynamic_objects.object_maxid" name="object_maxid" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_objects.object_config" name="object_config">
+      <text size=""/>
+    </column>
+    <column id="dynamic_objects.object_isalias" name="object_isalias" required="true">
+      <number size="10" default="1"/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="dynamic_objects.object_id"/>
+      </primary>
+      <index name="i_dynobjects_name">
+        <columnref id="dynamic_objects.object_name"/>
+      </index>
+      <index name="i_dynobjects_combo">
+        <columnref id="dynamic_objects.object_moduleid"/>
+        <columnref id="dynamic_objects.object_itemtype"/>
+      </index>
+    </constraints>
   </table>
   <table name="dynamic_properties">
-    <primary>
-      <column name="xar_prop_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_prop_name" size="30" required="true"/>
-    <column name="xar_prop_label" size="254" required="true"/>
-    <column name="xar_prop_objectid" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_prop_moduleid" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_prop_itemtype" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_prop_type" type="INTEGER" size="11" required="true"/>
-    <column name="xar_prop_default" size="254"/>
-    <column name="xar_prop_source" size="254" default="dynamic_data" required="true"/>
-    <column name="xar_prop_status" type="INTEGER" size="11" default="33" required="true"/>
-    <column name="xar_prop_order" type="TINYINT" size="4" default="0" required="true"/>
-    <column name="xar_prop_validation" type="LONGVARCHAR"/>
-    <index type="unique" name="i_xar_dynprops_combo">
-      <column name="xar_prop_moduleid"/>
-      <column name="xar_prop_itemtype"/>
-      <column name="xar_prop_name"/>
-    </index>
-    <index name="i_xar_dynprops_name">
-      <column name="xar_prop_name"/>
-    </index>
-    <index name="i_xar_dynprops_objectid">
-      <column name="xar_prop_objectid"/>
-    </index>
+    <column id="dynamic_properties.prop_id" name="prop_id" required="true" auto="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_properties.prop_name" name="prop_name" required="true">
+      <text size="30"/>
+    </column>
+    <column id="dynamic_properties.prop_label" name="prop_label" required="true">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties.prop_objectid" name="prop_objectid" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_properties.prop_type" name="prop_type" required="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="dynamic_properties.prop_default" name="prop_default">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties.prop_source" name="prop_source" required="true">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties.prop_status" name="prop_status" required="true">
+      <number size="10" default="33"/>
+    </column>
+    <column id="dynamic_properties.prop_order" name="prop_order" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_properties.prop_validation" name="prop_validation">
+      <text size=""/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="dynamic_properties.prop_id"/>
+      </primary>
+      <index name="i_dynprops_combo">
+        <columnref id="dynamic_properties.prop_objectid"/>
+        <columnref id="dynamic_properties.prop_name"/>
+      </index>
+    </constraints>
   </table>
   <table name="dynamic_properties_def">
-    <primary>
-      <column name="xar_prop_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_prop_name" size="254"/>
-    <column name="xar_prop_label" size="254"/>
-    <column name="xar_prop_parent" size="254"/>
-    <column name="xar_prop_filepath" size="254"/>
-    <column name="xar_prop_class" size="254"/>
-    <column name="xar_prop_validation" size="254"/>
-    <column name="xar_prop_source" size="254"/>
-    <column name="xar_prop_reqfiles" size="254"/>
-    <column name="xar_prop_reqmodules" size="254"/>
-    <column name="xar_prop_args" type="LONGVARCHAR"/>
-    <column name="xar_prop_aliases" size="254"/>
-    <column name="xar_prop_format" type="INTEGER" size="11" default="0"/>
-    <index name="i_xar_dynpropdef_mod">
-      <column name="xar_prop_reqmodules"/>
-    </index>
-  </table>
-  <table name="dynamic_relations">
-    <primary>
-      <column name="xar_relation_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_relation_todo" type="INTEGER" size="11" default="0" required="true"/>
+    <column id="dynamic_properties_def.prop_id" name="prop_id" required="true" auto="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_properties_def.prop_name" name="prop_name">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_label" name="prop_label">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_parent" name="prop_parent">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_filepath" name="prop_filepath">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_class" name="prop_class">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_validation" name="prop_validation">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_source" name="prop_source">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_reqfiles" name="prop_reqfiles">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_modid" name="prop_modid">
+      <number size="10" default=""/>
+    </column>
+    <column id="dynamic_properties_def.prop_args" name="prop_args" required="true">
+      <text size=""/>
+    </column>
+    <column id="dynamic_properties_def.prop_aliases" name="prop_aliases">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_format" name="prop_format">
+      <number size="10" default="0"/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="dynamic_properties_def.prop_id"/>
+      </primary>
+      <index name="i_dynpropdef_modid">
+        <columnref id="dynamic_properties_def.prop_modid"/>
+      </index>
+    </constraints>
   </table>
 </schema>
