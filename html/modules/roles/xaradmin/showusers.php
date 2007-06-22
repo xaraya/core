@@ -60,14 +60,13 @@ function roles_admin_showusers()
     sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery();
     $q = $q->sessiongetvar('rolesquery');
-    $q = '';
+    //$q = '';
 
     if (empty($q) || isset($reload)) {
         $types = xarModAPIFunc('roles','user','getitemtypes');
         $basetypes = array();
         foreach ($types as $key => $value) {
             $basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
-            if ($basetype['itemtype'] == ROLES_USERTYPE) $basetypes[] = $key;
         }
         $xartable = xarDB::getTables();
         $q = new xarQuery('SELECT');
@@ -83,19 +82,19 @@ function roles_admin_showusers()
         //Create the selection
         $c = array();
         if (!empty($data['search'])) {
-            $c[] = $q->like('name','%' . $data['search'] . '%');
-            $c[] = $q->like('uname','%' . $data['search'] . '%');
-            $c[] = $q->like('email','%' . $data['search'] . '%');
+
+            $c[] = $q->plike('name','%' . $data['search'] . '%');
+            $c[] = $q->plike('uname','%' . $data['search'] . '%');
+            $c[] = $q->plike('email','%' . $data['search'] . '%');
+
             $q->qor($c);
         }
 
-          // only look for "real" users right now
-          $q->eq('r.type',ROLES_USERTYPE);
-//        $c = array();
-//        foreach ($basetypes as $type) {
-//            $c[] = $q->eq('r.type',$type);
-//        }
-//        $q->qor($c);
+          $c = array();
+          foreach ($basetypes as $type) {
+              $c[] = $q->eq('r.type',$type);
+          }
+          $q->qor($c);
 
         // Add state
         if ($data['state'] == ROLES_STATE_CURRENT) $q->ne('state',ROLES_STATE_DELETED);
@@ -120,7 +119,9 @@ function roles_admin_showusers()
     $numitems = xarModVars::get('roles', 'itemsperpage');
     $q->setrowstodo($numitems);
     $q->setstartat($startnum);
+    $q->qecho();
     if(!$q->run()) return;
+
 
     $data['totalselect'] = $q->getrows();
 
@@ -160,6 +161,7 @@ function roles_admin_showusers()
                            '1' => xarML('Tree'),
                            '2' => xarML('Tabbed')
                            );
+
 
     // Load Template
     $data['id']        = $id;
