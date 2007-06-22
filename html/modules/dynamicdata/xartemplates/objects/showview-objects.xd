@@ -5,20 +5,15 @@
 <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
     <xar:template file="catnavigation" />
 </xar:if>
-
+<h3>
+    <a href="#xarModURL('dynamicdata','admin','new')#">
+        <xar:mlstring>Create New Data Object</xar:mlstring>
+    </a>
+</h3>
 <xar:if condition="empty($layout)">
     <xar:set name="layout">'default'</xar:set>
 </xar:if>
 <div class="xar-fullwidth">
-    <!-- Show the create new link only once, if at all -->
-    <xar:if condition="!empty($newlink)">
-        <h3>
-            <a href="#$newlink#">
-                <xar:mlstring>Create New Data Object</xar:mlstring>
-            </a>
-        </h3>
-        </xar:if>
-
     <table class="xar-fullwidth">
         <tr>
             <xar:foreach in="$properties" key="$name">
@@ -46,7 +41,7 @@
                     <xar:if condition="empty($fields[$name])">
                        &#160;
                     <xar:elseif condition="!empty($linkfield) and $linkfield eq $name" />
-                        <a href="#$links[$itemid]['display']['olink']#">
+                        <a href="#xarModURL($urlmodule,$linktype,$linkfunc,array('itemtype' =&gt; $itemtype,$urlparam =&gt; $itemid))#">
                             <xar:data-output property="$properties[$name]" value="$fields[$name]" />
                         </a>
                     <xar:else />

@@ -27,14 +27,14 @@
                     <label for="install_admin_name">
                         <xar:mlstring>Display Name</xar:mlstring>
                     </label>
-                    <input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="#xarML('Administrator')#" />
+                    <input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="#$install_admin_name#" />
                     <br class="clear" />
                 </p>
                 <p>
                     <label for="install_admin_username">
                         <xar:mlstring>Username</xar:mlstring>
                     </label>
-                    <input type="text" name="install_admin_username" id="install_admin_username" maxlength="80" value="#xarML('Admin')#" />
+                    <input type="text" name="install_admin_username" id="install_admin_username" maxlength="80" value="#$install_admin_username#" />
                     <br class="clear" />
                 </p>
                 <p>
@@ -55,7 +55,7 @@
                     <label for="install_admin_email">
                         <xar:mlstring>Email</xar:mlstring>
                     </label>
-                    <input type="text" name="install_admin_email" id="install_admin_email" maxlength="80" value="none@none.com" />
+                    <input type="text" name="install_admin_email" id="install_admin_email" maxlength="80" value="#$install_admin_email#" />
                     <br class="clear" />
                 </p>
 

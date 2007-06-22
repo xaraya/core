@@ -224,6 +224,7 @@ function roles_activate()
     // The Administrator
     $rolefields['name'] = 'Administrator';
     $rolefields['uname'] = 'admin';
+    $rolefields['email'] = 'none@none.com';
     $rolefields['parentid'] = $admingroup;
     $adminid = $user->createItem($rolefields);
     xarModVars::set('roles', 'admin', $adminid);

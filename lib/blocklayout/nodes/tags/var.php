@@ -11,7 +11,7 @@ class VarTagNode extends TagNode implements EmptyElementTag
     {
         $scope = 'local';
         $prep = false;
-        $user = xarUserGetVar('role_id');
+        $user = xarUserGetVar('id');
         extract($this->attributes);
 
         if (!isset($name)) {

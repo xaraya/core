@@ -1,40 +1,127 @@
 <?xml version="1.0"?>
 <schema>
   <table name="hooks">
-    <primary>
-      <column name="xar_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_object" size="64" required="true"/>
-    <column name="xar_action" size="64" required="true"/>
-    <column name="xar_smodid" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_stype" size="64" required="true"/>
-    <column name="xar_tarea" size="64" required="true"/>
-    <column name="xar_tmodid" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_ttype" size="64" required="true"/>
-    <column name="xar_tfunc" size="64" required="true"/>
-    <column name="xar_order" type="INTEGER" size="11" default="0" required="true"/>
+    <column id="hooks.id" name="id" required="true" auto="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="hooks.object" name="object" required="true">
+      <text size="64"/>
+    </column>
+    <column id="hooks.action" name="action" required="true">
+      <text size="64"/>
+    </column>
+    <column id="hooks.s_module_id" name="s_module_id">
+      <number size="10" default=""/>
+    </column>
+    <column id="hooks.s_type" name="s_type" required="true">
+      <text size="64"/>
+    </column>
+    <column id="hooks.t_area" name="t_area" required="true">
+      <text size="64"/>
+    </column>
+    <column id="hooks.t_module_id" name="t_module_id" required="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="hooks.t_type" name="t_type" required="true">
+      <text size="64"/>
+    </column>
+    <column id="hooks.t_func" name="t_func" required="true">
+      <text size="64"/>
+    </column>
+    <column id="hooks.priority" name="priority" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="hooks.id"/>
+      </primary>
+    </constraints>
   </table>
   <table name="module_itemvars">
-    <primary>
-      <column name="xar_mvid" type="INTEGER" size="11" required="true"/>
-      <column name="xar_itemid" type="INTEGER" size="10" required="true"/>
-    </primary>
-    <column name="xar_value" type="LONGVARCHAR"/>
+    <column id="module_itemvars.module_var_id" name="module_var_id" required="true" auto="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="module_itemvars.item_id" name="item_id" required="true" auto="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="module_itemvars.value" name="value">
+      <text size=""/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="module_itemvars.module_var_id"/>
+        <columnref id="module_itemvars.item_id"/>
+      </primary>
+      <index name="(module_itemvars autoindex 1)">
+        <columnref id="module_itemvars.module_var_id"/>
+        <columnref id="module_itemvars.item_id"/>
+      </index>
+    </constraints>
   </table>
-
+  <table name="module_vars">
+    <column id="module_vars.id" name="id" required="true" auto="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="module_vars.module_id" name="module_id">
+      <number size="10" default=""/>
+    </column>
+    <column id="module_vars.name" name="name" required="true">
+      <text size="64"/>
+    </column>
+    <column id="module_vars.value" name="value">
+      <text size=""/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="module_vars.id"/>
+      </primary>
+      <index name="i_module_vars_name">
+        <columnref id="module_vars.name"/>
+      </index>
+      <index name="i_module_vars_module_id">
+        <columnref id="module_vars.module_id"/>
+      </index>
+      <index name="i_config_name">
+        <columnref id="module_vars.name"/>
+        <columnref id="module_vars.module_id"/>
+      </index>
+    </constraints>
+  </table>
   <table name="modules">
-    <primary>
-      <column name="xar_id" type="INTEGER" size="11" required="true" autoincrement="true"/>
-    </primary>
-    <column name="xar_name" size="64" required="true"/>
-    <column name="xar_regid" type="INTEGER" size="10" default="0" required="true"/>
-    <column name="xar_directory" size="64" required="true"/>
-    <column name="xar_version" size="10" required="true"/>
-    <column name="xar_mode" type="SMALLINT" size="6" default="1" required="true"/>
-    <column name="xar_class" size="64" required="true"/>
-    <column name="xar_category" size="64" required="true"/>
-    <column name="xar_admin_capable" type="TINYINT" size="4" default="0" required="true"/>
-    <column name="xar_user_capable" type="TINYINT" size="4" default="0" required="true"/>
-    <column name="xar_state" type="INTEGER" size="11" default="1" required="true"/>
+    <column id="modules.id" name="id" required="true" auto="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="modules.name" name="name" required="true">
+      <text size="64"/>
+    </column>
+    <column id="modules.regid" name="regid">
+      <number size="10" default=""/>
+    </column>
+    <column id="modules.directory" name="directory" required="true">
+      <text size="64"/>
+    </column>
+    <column id="modules.version" name="version" required="true">
+      <text size="10"/>
+    </column>
+    <column id="modules.class" name="class" required="true">
+      <text size="64"/>
+    </column>
+    <column id="modules.category" name="category" required="true">
+      <text size="64"/>
+    </column>
+    <column id="modules.admin_capable" name="admin_capable" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="modules.user_capable" name="user_capable" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="modules.state" name="state" required="true">
+      <number size="10" default="1"/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="modules.id"/>
+      </primary>
+    </constraints>
   </table>
 </schema>

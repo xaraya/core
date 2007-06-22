@@ -19,4 +19,12 @@
   <xsl:apply-templates />
   <xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="@name"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 </xsl:template>
+
+<!-- This is *very* fragile -->
+<xsl:template match="xar:attribute">
+  <xsl:attribute name="{@name}">
+    <xsl:apply-templates />
+  </xsl:attribute>
+</xsl:template>
+
 </xsl:stylesheet>

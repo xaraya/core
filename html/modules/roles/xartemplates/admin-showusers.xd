@@ -1,10 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:set name="statecurrent">ROLES_STATE_CURRENT</xar:set>
-<xar:set name="stateinactive">ROLES_STATE_INACTIVE</xar:set>
-<xar:set name="statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
-<xar:set name="stateactive">ROLES_STATE_ACTIVE</xar:set>
-<xar:set name="statepending">ROLES_STATE_PENDING</xar:set>
+<xar:set name="statelist">xarModAPIFunc('roles','user','getstates')</xar:set>
 <xar:set name="modstatus">xarSession::getVar('statusmsg')</xar:set>
 <xar:base-include-javascript module="base" filename="checkall.js" position="head" />
 <xar:base-include-javascript module="roles" filename="xarTree.js" position="head" />
@@ -84,7 +80,7 @@
     </xar:if>
 
     <form method="post" action="&xar-modurl-roles-admin-showusers;&amp;reload=reload">
-        <xar:comment> Module List Sort and Filter Controls table </xar:comment>
+        <!-- User List Sort and Filter Controls table (taken from the modules module) @todo make this general -->
         <table class="xar-fullwidth">
             <tr>
                 <th>
@@ -152,53 +148,9 @@
                     </select>
                 </td>
                 <td class="xar-align-center">
-                    <select name="state" id="state" onchange="this.form.submit()">
-                        <xar:if condition="$state eq $statecurrent">
-                            <option value="#$statecurrent#" selected="selected">
-                                <xar:mlstring>All</xar:mlstring>
-                            </option>
-                        <xar:else/>
-                            <option value="#$statecurrent#">
-                                <xar:mlstring>All</xar:mlstring>
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$state eq $stateinactive">
-                            <option value="#$stateinactive#" selected="selected">
-                                <xar:mlstring>Inactive</xar:mlstring>
-                            </option>
-                            <xar:else/>
-                            <option value="#$stateinactive#">
-                                <xar:mlstring>Inactive</xar:mlstring>
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$state eq $statenotvalidated">
-                            <option value="#$statenotvalidated#" selected="selected">
-                                <xar:mlstring>Not Validated</xar:mlstring>
-                            </option>
-                        <xar:else/>
-                            <option value="#$statenotvalidated#">
-                                <xar:mlstring>Not Validated</xar:mlstring>
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$state eq $stateactive">
-                            <option value="#$stateactive#" selected="selected">
-                                <xar:mlstring>Active</xar:mlstring>
-                            </option>
-                        <xar:else/>
-                            <option value="#$stateactive#">
-                                <xar:mlstring>Active</xar:mlstring>
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$state eq $statepending">
-                            <option value="#$statepending#" selected="selected">
-                                <xar:mlstring>Pending</xar:mlstring>
-                            </option>
-                        <xar:else/>
-                            <option value="#$statepending#">
-                                <xar:mlstring>Pending</xar:mlstring>
-                            </option>
-                        </xar:if>
-                    </select>
+                    <xar:set name="dummy">$viewstates[ROLES_STATE_CURRENT] = 'All'; $viewstates = $viewstates + $statelist</xar:set>
+                    <!-- TODO: replace this with options attribute -->
+                    <xar:data-input type="dropdown" name="state" value="$state" validation="$viewstates" onchange="this.form.submit()" />
                 </td>
                 <td class="xar-align-center">
                     <input type="text" name="search" id="search" value="#$search#" maxlength="255" class="xar-form-textshort" />
@@ -210,7 +162,6 @@
         </table>
     </form>
 
-    <xar:comment> the Roles Lists table-based styles (borrow from the Modules list)</xar:comment>
     <xar:if condition="count($users) eq 0">
         <p>
             #$message#
@@ -224,12 +175,8 @@
                 <label for="status" title="#xarML('Change the state of the users who have been selected below')#" class="xar-form-label" style="width: 200px">
                     <xar:mlstring>Change state of selected users:</xar:mlstring>
                 </label>
-                <select name="status" id="status" class="xar-margin-thickright">
-                    <option value="#$stateinactive#"><xar:mlstring>Inactive</xar:mlstring></option>
-                    <option value="#$statenotvalidated#"><xar:mlstring>Not Validated</xar:mlstring></option>
-                    <option value="#$stateactive#" selected="selected"><xar:mlstring>Active</xar:mlstring></option>
-                    <option value="#$statepending#"><xar:mlstring>Pending</xar:mlstring></option>
-                </select>
+                <xar:data-input type="dropdown" name="status" id="status" validation="$statelist" class="xar-margin-thickright" />
+
                 <input type="hidden" name="groupid" id="groupid" value="#$groupid#"/>
                 <input type="hidden" name="state" id="state" value="#$state#"/>
                 <input type="hidden" name="order" id="order" value="#$order#"/>
@@ -298,15 +245,8 @@
                             #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#
                         </td>
                         <td class="xar-align-center">
-                            <xar:if condition="$loop:item['state'] eq $stateinactive">
-                                <xar:mlstring>Inactive</xar:mlstring>
-                                <xar:elseif condition="$loop:item['state'] eq $statenotvalidated"/>
-                                <xar:mlstring>Not Validated</xar:mlstring>
-                                <xar:elseif condition="$loop:item['state'] eq $stateactive"/>
-                                <xar:mlstring>Active</xar:mlstring>
-                                <xar:elseif condition="$loop:item['state'] eq $statepending"/>
-                                <xar:mlstring>Pending</xar:mlstring>
-                            </xar:if>
+                            <xar:set name="thisstate">#$loop:item['state']#</xar:set>
+                            <xar:data-output type="dropdown" value="$thisstate" validation="$statelist" />
                         </td>
                         <td class="xar-align-center xar-nowrap">
                             <xar:if condition="!$loop:item['frozen']">
@@ -347,7 +287,6 @@
             </xar:if>
         </form>
     </xar:if>
-    <!-- always show the new user link -->
     <p>
       <a href="&xar-modurl-roles-admin-new;&amp;ptype=0&amp;pparentid=#$groupid#" title="#xarML('Add a new user')#">
         <xar:mlstring>Add a new user to this group</xar:mlstring>

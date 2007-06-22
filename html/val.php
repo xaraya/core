@@ -16,7 +16,7 @@
  *  initialize the Xaraya core
  */
 set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
-include 'lib/bootstrap.php';
+include_once('lib/bootstrap.php');
 sys::import('xaraya.core');
 xarCoreInit();
 

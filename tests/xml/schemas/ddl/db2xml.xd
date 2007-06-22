@@ -1,62 +1,75 @@
-<schema name="#$dbname#" xmlns:xar="http://xaraya.com/BL/2">
+<schema name="#$dbname#" xmlns="http://xaraya.com/2007/schema" xmlns:xar="http://xaraya.com/2004/blocklayout">
+  <description>Auto generated schema file for development purposes</description>
   <xar:foreach in="$tables" value="$table">
     <table name="#$table:getName()#">
-      <xar:set name="columns">#$table:getColumns()#</xar:set>
-      <xar:set name="primary">#$table:getPrimaryKey()#</xar:set>
-      <xar:set name="prim_columns">array()</xar:set>
-      <xar:if condition="is_object($primary)">
-        <xar:set name="prim_columns">#$primary:getColumns()#</xar:set>
-      </xar:if>
-      <xar:set name="dealt_with">array()</xar:set>
-      <xar:if condition="count($prim_columns)">
-        <primary>
-          <xar:foreach in="$prim_columns" value="$prim_column">
-            <xar:set name="autoinc">'false'</xar:set>
-            <xar:if condition="#$prim_column:isAutoIncrement()#">
-              <xar:set name="autoinc">'true'</xar:set>
-            </xar:if>
-            <xar:set name="required">'true'</xar:set>
-            <xar:if condition="#$prim_column:isNullable()#">
-              <xar:set name="required">'false'</xar:set>
-            </xar:if>
-            <xar:set name="type">CreoleTypes::getCreoleName($prim_column->getType())</xar:set>
-            <column name="#$prim_column:getName()#"
-                    type="#strtolower($type)#" size="#$prim_column:getSize()#" scale="#$prim_column:getScale()#"
-                    default="#$prim_column:getDefaultValue()#" required="#$required#" autoincrement="#$autoinc#" />
-            <xar:set name="elems">array_push($dealt_with,$prim_column->getName())</xar:set>
-          </xar:foreach>
-        </primary>
-      </xar:if>
-      <xar:foreach in="$columns" value="$column">
-        <xar:if condition="#in_array($column:getName(),$dealt_with)#">
-          <xar:continue />
-        </xar:if>
-        <xar:set name="autoinc">'false'</xar:set>
-        <xar:if condition="#$column:isAutoIncrement()#">
-          <xar:set name="autoinc">'true'</xar:set>
-        </xar:if>
-        <xar:set name="required">'true'</xar:set>
-        <xar:if condition="#$column:isNullable()#">
-          <xar:set name="required">'false'</xar:set>
-        </xar:if>
-        <xar:set name="type">CreoleTypes::getCreoleName($column->getType())</xar:set>
-        <column name="#$column:getName()#"
-                type="#strtolower($type)#" size="#$column:getSize()#" scale="#$column:getScale()#"
-                default="#$column:getDefaultValue()#" required="#$required#" autoincrement="#$autoinc#" />
+      <xar:foreach in="#$table:getColumns()#" value="$column">
+        <column id="#$table:getName()#.#$column:getName()#" name="#$column:getName()#">
+          <!-- Determine the required and auto attribute and add these to the column tag -->
+          <xar:attribute name="required">#!$column:isNullable()?'true':'false'#</xar:attribute>
+          <xar:attribute name="auto">#$column:isAutoIncrement()?'true':'false'#</xar:attribute>
+
+          <xar:if condition="#$types[$column:getType()] == 'boolean'#">
+            <boolean>
+              <xar:attribute name="default">#$column:getDefaultValue()#</xar:attribute>
+            </boolean>
+          <xar:elseif condition="#$types[$column:getType()] == 'number'#"/>
+            <number>
+              <!-- Size should be easy, if creole has done it's job. No number without size -->
+              <xar:attribute name="size">#$column:getSize()#</xar:attribute>
+
+              <!-- This aint right, default value '' is valid but different from no default -->
+              <xar:attribute name="default">#$column:getDefaultValue()#</xar:attribute>
+
+              <!-- We call scale decimals -->
+              <xar:attribute name="decimals">#$column:getScale()?$column:getScale():0#</xar:attribute>
+            </number>
+          <xar:elseif condition="#$types[$column:getType()] == 'text'#"/>
+            <text>
+              <xar:attribute name="size">#$column:getSize()#</xar:attribute>
+            </text>
+          <xar:elseif condition="#$types[$column:getType()] == 'time'#"/>
+            <!-- well, yes, this originates from date, timestamp and other date related values -->
+            <!-- for now, we just copy the size attribute -->
+            <time>
+              <xar:attribute name="size">#$column:getSize()#</xar:attribute>
+            </time>
+          <xar:elseif condition="#$types[$column:getType()] == 'binary'#"/>
+            <binary />
+          </xar:if>
+        </column>
       </xar:foreach>
-      <xar:set name="indexes">#$table:getIndexes()#</xar:set>
-      <xar:foreach in="$indexes" value="$index">
-        <xar:set name="index_columns">#$index:getColumns()#</xar:set>
-        <xar:set name="index_type">'default'</xar:set>
-        <xar:if condition="#$index:isUnique()#">
-          <xar:set name="index_type">'unique'</xar:set>
+      <constraints>
+        <!-- Primary keys -->
+        <xar:set name="primary">#$table:getPrimaryKey()#</xar:set>
+        <xar:if condition="is_object($primary)">
+          <primary name="#$primary:getName()#">
+            <xar:foreach in="$primary:getColumns()" value="$primColumn">
+              <columnref id="#$table:getName()#.#$primColumn:getName()#" />
+            </xar:foreach>
+          </primary>
+        <xar:else/>
+          <xar:comment>ERROR: the table has no primary key</xar:comment>
         </xar:if>
-        <index type="#$index_type#" name="#$index:getName()#">
-          <xar:foreach in="$index_columns" value="$index_column">
-            <column name="#$index_column:getName()#"/>
-          </xar:foreach>
-        </index>
-      </xar:foreach>
+
+        <!-- Indexes -->
+        <xar:set name="indexes">#$table:getIndexes()#</xar:set>
+        <xar:foreach in="$indexes" value="$index">
+          <xar:if condition="$index:isUnique()">
+            <unique name="#$index:getName()#">
+              <xar:foreach in="#$index:getColumns()#" value="$indexColumn">
+                <columnref id="#$table:getName()#.#$indexColumn:getName()#" />
+              </xar:foreach>
+            </unique>
+          <xar:else/>
+            <index  name="#$index:getName()#">
+              <xar:foreach in="#$index:getColumns()#" value="$indexColumn">
+                <columnref id="#$table:getName()#.#$indexColumn:getName()#" />
+              </xar:foreach>
+            </index>
+          </xar:if>
+        </xar:foreach>
+      </constraints>
+      <description>End of #$table:getName()#</description>
     </table>
   </xar:foreach>
 </schema>
