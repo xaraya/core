@@ -82,11 +82,9 @@ function roles_admin_showusers()
         //Create the selection
         $c = array();
         if (!empty($data['search'])) {
-
             $c[] = $q->plike('name','%' . $data['search'] . '%');
             $c[] = $q->plike('uname','%' . $data['search'] . '%');
             $c[] = $q->plike('email','%' . $data['search'] . '%');
-
             $q->qor($c);
         }
 
@@ -119,7 +117,7 @@ function roles_admin_showusers()
     $numitems = xarModVars::get('roles', 'itemsperpage');
     $q->setrowstodo($numitems);
     $q->setstartat($startnum);
-    $q->qecho();
+
     if(!$q->run()) return;
 
 
@@ -150,7 +148,7 @@ function roles_admin_showusers()
     }
     // assemble the info for the display
     $users = array();
-    //debug($q->output);
+
     foreach($q->output() as $user) {
         $users[] = array_merge($user, array('frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user['name'])));
     }
