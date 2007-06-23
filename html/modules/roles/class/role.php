@@ -632,32 +632,36 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param int state get users in this state
-     * @param int $grpflag
-     * @return array list of users
-     * @todo evaluate performance of this (3 loops, of which 2 nested)
+     * @param int $groupflag
+     * @return array list of users with elements <objectid> => <object>
      */
-    public function getDescendants($state = ROLES_STATE_CURRENT, $grpflag=0)
+    public function getDescendants($state = ROLES_STATE_CURRENT, $groupflag=0)
     {
-        $users = $this->getUsers($state);
+        $groups = xarRoles::getgroups();
 
-        $groups = xarRoles::getSubGroups($this->getID());
-        $ua = array();
-        foreach($users as $user){
-            //using the ID as the key so that if a person is in more than one sub group they only get one email (mrb: email?)
-            $ua[$user->getID()] = $user;
+        $queue = array($this->getID());
+        while (true) {
+        	if (empty($queue)) break;
+        	$parent = array_shift($queue);
+        	$parents[] = $parent;
+        	foreach ($groups as $group) {
+        		if ($group['id'] == $parent) {unset($group); continue;}
+        		if ($group['parentid'] == $parent) {$queue[] = $group['id']; unset($group);}
+        	}
         }
-        //Get the sub groups and go for another round
-        foreach($groups as $group){
-            $role = xarRoles::get($group['id']);
-            if ($grpflag) {
-                $ua[$group['id']] = $role;
+        $descendants = array();
+        foreach($parents as $id){
+            $role = xarRoles::get($id);
+            if ($groupflag) {
+                $descendants[$id] = $role;
             }
-            $users = $role->getDescendants($state);
+	        $users = $role->getUsers($state);
             foreach($users as $user){
-                $ua[$user->getID()] = $user;
+                $descendants[$user->getID()] = $user;
             }
         }
-        return($ua);
+
+        return($descendants);
     }
 
     /**
