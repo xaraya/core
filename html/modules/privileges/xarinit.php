@@ -70,7 +70,7 @@ function privileges_init()
          *   id int(11) NOT NULL auto_increment,
          *   name varchar(100) NOT NULL default '',
          *   realm varchar(100) NOT NULL default '',
-         *   module_id varchar(100) NOT NULL default '',
+         *   module_id int(11) NOT NULL default '0',
          *   component varchar(100) NOT NULL default '',
          *   instance varchar(100) NOT NULL default '',
          *   level int(11) NOT NULL default '0',

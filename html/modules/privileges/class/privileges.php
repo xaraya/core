@@ -134,7 +134,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    duplicates parts of $privilege->add() method
     */
-    public static function register($name,$realm,$module_id=null,$component,$instance,$level,$description='')
+    public static function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
         parent::initialize();
 
@@ -143,6 +143,13 @@ class xarPrivileges extends xarMasks
             $stmt = parent::$dbconn->prepareStatement('SELECT id FROM '.parent::$realmstable .' WHERE name=?');
             $result = $stmt->executeQuery(array($realm),ResultSet::FETCHMODE_ASSOC);
             if($result->next()) $realmid = $result->getInt('id');
+        }
+        if($module == 'All') {
+        	$module_id = self::PRIVILEGES_ALL;
+        } elseif($module == null) {
+        	$module_id = null;
+        } else {
+        	$module_id = xarMod::getID($module);
         }
         $query = "INSERT INTO " . parent::$privilegestable . " (
                     name, realmid, module_id, component,

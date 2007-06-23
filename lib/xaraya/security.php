@@ -169,15 +169,7 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
     // Check if the privilege already exists
     $privilege = xarPrivileges::findPrivilege($name);
     if (!$privilege) {
-        if ($module == "All") {
-            $modid = xarMasks::PRIVILEGES_ALL;
-        } elseif ($module == null) {
-            $modid = null;
-        } else {
-            $modInfo = xarMod::getBaseInfo($module);
-            $modid = $modInfo['systemid'];
-        }
-        return xarPrivileges::register($name,$realm,$modid,$component,$instance,xarSecurityLevel($level),$description);
+        return xarPrivileges::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
     }
     return;
 }
@@ -460,13 +452,7 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
  */
 function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
 {
-    if ($module == "All") {
-        $modid = xarMasks::PRIVILEGES_ALL;
-    } else {
-        $modInfo = xarMod::getBaseInfo($module);
-        $modid = $modInfo['systemid'];
-    }
-    return xarMasks::register($name,$realm,$modid,$component,$instance,xarSecurityLevel($level),$description);
+    return xarMasks::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
 }
 
 /**
