@@ -120,7 +120,7 @@ function initializeSetup()
     * xarMasks::register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    xarMasks::register('AdminAll','All','All','All','All',xarSecurityLevel('ACCESS_ADMIN'));
+//    xarMasks::register('AdminAll','All','All','All','All',xarSecurityLevel('ACCESS_ADMIN'));
 
     xarMasks::register('ViewBaseBlocks','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_OVERVIEW'));
     xarMasks::register('ReadBaseBlock','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_READ'));

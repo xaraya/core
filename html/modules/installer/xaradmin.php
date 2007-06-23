@@ -386,10 +386,10 @@ function installer_admin_phase5()
                         $sql = xarDBDropTable($table,$dbType);
                         $dbconn->Execute($sql);
                     } catch(SQLException $dropfail) {
-                        // retry with drop view
-                        // TODO: this should be transparent in the API
-                        $ddl = "DROP VIEW $table";
-                        $dbconn->Execute($ddl);
+						// retry with drop view
+						// TODO: this should be transparent in the API
+						$ddl = "DROP VIEW $table";
+						$dbconn->Execute($ddl);
                     }
                 }
             }

@@ -25,7 +25,7 @@ class xarMasks extends Object
 {
     const PRIVILEGES_PRIVILEGETYPE = 2;
     const PRIVILEGES_MASKTYPE = 3;
-    const PRIVILEGES_ALL = 0;
+    const PRIVILEGES_ALL = null;
 
     public    static $levels;
     protected static $dbconn;
@@ -155,17 +155,18 @@ class xarMasks extends Object
      * @return  boolean
      * @todo    almost the same as privileges register method
     */
-    public static function register($name,$realm,$module_id,$component,$instance,$level,$description='')
+    public static function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
         self::initialize();
         // Check if the mask has already been registered, and update it if necessary.
         // FIXME: make mask names unique across modules (+ across realms) ?
         // FIXME: is module/name enough? Perhaps revisit this with realms in mind.
-        /*if($modid != self::PRIVILEGES_ALL) {
-            $modInfo = xarMod_GetBaseInfo(xarModGetNameFromId($modid));
-            $modid= $modInfo['systemid'];
+        if($module == null) {
+        	$module_id = self::PRIVILEGES_ALL;
+        } else {
+        	$module_id = xarMod::getID($module);
         }
-*/
+
         $realmid = null;
         if($realm != 'All') {
             $stmt = self::$dbconn->prepareStatement('SELECT id FROM '.self::$realmstable .' WHERE name=?');
