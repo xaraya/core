@@ -25,7 +25,7 @@ class xarMasks extends Object
 {
     const PRIVILEGES_PRIVILEGETYPE = 2;
     const PRIVILEGES_MASKTYPE = 3;
-    const PRIVILEGES_ALL = null;
+    const PRIVILEGES_ALL = 0;
 
     public    static $levels;
     protected static $dbconn;
@@ -161,8 +161,10 @@ class xarMasks extends Object
         // Check if the mask has already been registered, and update it if necessary.
         // FIXME: make mask names unique across modules (+ across realms) ?
         // FIXME: is module/name enough? Perhaps revisit this with realms in mind.
-        if($module == null) {
+        if($module == 'All') {
         	$module_id = self::PRIVILEGES_ALL;
+        } if($module == null) {
+        	$module_id = null;
         } else {
         	$module_id = xarMod::getID($module);
         }

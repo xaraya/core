@@ -144,8 +144,10 @@ class xarPrivileges extends xarMasks
             $result = $stmt->executeQuery(array($realm),ResultSet::FETCHMODE_ASSOC);
             if($result->next()) $realmid = $result->getInt('id');
         }
-        if($module == null) {
+        if($module == 'All') {
         	$module_id = self::PRIVILEGES_ALL;
+        } if($module == null) {
+        	$module_id = null;
         } else {
         	$module_id = xarMod::getID($module);
         }

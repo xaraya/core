@@ -1057,8 +1057,8 @@ function installer_admin_cleanup()
     }
 
 
-    xarModDelVar('roles','adminpass');
-    xarModDelVar('installer','modules');
+//    xarModDelVar('roles','adminpass');
+//    xarModDelVar('installer','modules');
 
     // Load up database
     $dbconn = xarDB::getConn();
