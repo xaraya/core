@@ -163,7 +163,7 @@ class xarMasks extends Object
         // FIXME: is module/name enough? Perhaps revisit this with realms in mind.
         if($module == 'All') {
         	$module_id = self::PRIVILEGES_ALL;
-        } if($module == null) {
+        } elseif($module == null) {
         	$module_id = null;
         } else {
         	$module_id = xarMod::getID($module);
