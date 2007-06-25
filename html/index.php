@@ -140,7 +140,7 @@ function xarMain()
 
         // Render page
         $pageOutput = xarTpl_renderPage($mainModuleOutput);
-
+echo xarTpl_renderPage($mainModuleOutput);exit;
         if ($pageCaching == 1) {
             // save the output in cache *before* sending it to the client
             xarPageSetCached($cacheKey, 'page', $pageOutput);
