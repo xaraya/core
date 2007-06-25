@@ -119,7 +119,6 @@ function roles_admin_showusers()
     $q->setrowstodo($numitems);
     $q->setstartat($startnum);
 
-    $q->qecho();
     if(!$q->run()) return;
 
 
