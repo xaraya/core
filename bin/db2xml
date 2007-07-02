@@ -1,44 +1,69 @@
 #!/usr/bin/php5
 <?php
-// Prototype to dump a database in XML format according to the schema
-// defined in this directory.
+/**
+ * Prototype to dump a database in XML format according to the schema
+ *
+ * @copyright (C) 2002-2007 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @subpackage cli
+ * @author Marcel van der Boom
+ */
 
+
+
+/**
+ * Set configuration options if necessary
+ *
+ * Defaults to using the db connection in the application
+ * and not logged in as a specific user
+ *
+ * @todo expose on the cmdline
+ * @todo add option to set the schema name
+ * @todo add option to specify a list of tables to get
+ * @todo move most of this into xaraya proper and make it runnable via cli interface (currently html/ls.php)
+ */
+$xaruser = '';
+$xarpass = '';
+$dbtype = 'sqlite';
+//$dbhost = '../tests/xml/schemas/ddl';
+$dbname= 'ddltest';
+$dbuser = '';
+$dbpass = '';
 /* We need a (fake) ip address to run xar */
 putenv("REMOTE_ADDR=127.0.0.1");
-$user = 'admin';
-$pass = '12345';
-$root = '/var/mt/xar/core/unstable';
-$tpl  = "$root/tests/xml/schemas/ddl/db2xml.xd";
-$x2p  = '/var/mt/xar/core/unstable/lib/blocklayout/xslt/xar2php.xsl';
-$dbpath= '/var/mt/xar/core/unstable/tests/xml/schemas/ddl';
-$dbname= 'ddltest.db';
-
 /* End configurable stuff */
 
 /* Make sure we're in the docroot */
-chdir("$root/html");
+chdir("../html");
 include '../lib/bootstrap.php';
 sys::import('xaraya.core');
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
 /* Make sure we handle boney instead of fancy */
 set_exception_handler(array('ExceptionHandlers','bone'));
-/* Authenticate */
-if(!xarUserLogin($user,$pass)) {
-    fwrite(STDERR,"Authentication failed\n");
-    return 1;
-}
-fwrite(STDERR,"Authenticated\n");
 
-// For now hardcoded, expose on the cmdline later
-$dsnArgs = array(
-    'databaseType'  =>  'sqlite',
-    'databaseHost'  =>  $dbpath,
-    'databaseName'  =>  $dbname,
-    'userName'      =>  'dummy',
-    'password'      =>  'dummy'
+if (!empty($xaruser)) {
+    /* Authenticate */
+    if (!xarUserLogin($xaruser,$xarpass)) {
+        fwrite(STDERR,"Authentication failed\n");
+        return 1;
+    }
+    fwrite(STDERR,"Authenticated\n");
+}
+
+if (!empty($dbhost)) {
+    $dsnArgs = array(
+        'databaseType'  =>  $dbtype,
+        'databaseHost'  =>  $dbhost,
+        'databaseName'  =>  $dbname,
+        'userName'      =>  $dbuser,
+        'password'      =>  $dbpass
     );
-$dbconn = xarDBNewConn($dsnArgs);
+    $dbconn = xarDBNewConn($dsnArgs);
+} else {
+    $dbconn = xarDB::getConn();
+}
 $dbInfo = $dbconn->getDatabaseInfo();   // DatabaseInfo object
 sys::import('creole.CreoleTypes');
 $typeMap = array(
@@ -79,6 +104,6 @@ $tplData = array(
 
 
 // Produce the xml
-$out = xarTplFile($tpl,$tplData);
+$out = xarTplFile('../tests/xml/schemas/ddl/db2xml.xd',$tplData);
 echo $out;
 ?>
