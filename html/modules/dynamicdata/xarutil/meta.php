@@ -46,7 +46,13 @@ function dynamicdata_util_meta($args)
     if ($export == 'ddl') {
         $dbInfo = $dbconn->getDatabaseInfo();
         $data['schemaName'] = $db;
-        $data['tables'] = array($dbInfo->getTable($table));
+
+        $data['tables'] = array();
+        if (empty($table)) {
+            $data['tables'] = $dbInfo->getTables();
+        } else {
+            $data['tables'] = array($dbInfo->getTable($table));
+        }
         $data['types']  = xarDB::getTypeMap();
     }
 
