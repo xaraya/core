@@ -64,13 +64,11 @@ function dynamicdata_utilapi_getmeta($args)
         $id = 1;
         $columns = array();
         foreach ($fields as $field) {
-            $fieldname = $field->getName();
+            $name = $field->getName();
             $datatype = $field->getNativeType();
             $size = $field->getSize();
             $default = $field->getDefaultValue();
 
-            // assign some default label for now, by removing the first part (xar_)
-            $name = preg_replace('/^.+?_/','',$fieldname);
             $label = strtr($name,'_',' ');
             $label = ucwords($label);
             if (isset($columns[$name])) {
@@ -148,7 +146,7 @@ function dynamicdata_utilapi_getmeta($args)
             // try to figure out if it's the item id
             // FIXME: this only deals with primary keys which consist of 1 column
             // The mod_uservars table as such will be wrongly identified
-            if(is_object($keyInfo) && $fieldname == $keyInfo->getName()) {
+            if(is_object($keyInfo) && $name == $keyInfo->getName()) {
                 // CHECKME: how are multiple tuples handled here?
                 // not allowed to modify primary key !
                 $proptype = 21; // Item ID
@@ -164,7 +162,7 @@ function dynamicdata_utilapi_getmeta($args)
                                    'type' => $proptype,
                                    'id' => $id,
                                    'default' => $default,
-                                   'source' => $curtable . '.' . $fieldname,
+                                   'source' => $curtable . '.' . $name,
                                    'status' => $status,
                                    'order' => $id,
                                    'validation' => $validation

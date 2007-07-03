@@ -64,46 +64,16 @@ if (!empty($dbhost)) {
 } else {
     $dbconn = xarDB::getConn();
 }
-$dbInfo = $dbconn->getDatabaseInfo();   // DatabaseInfo object
-sys::import('creole.CreoleTypes');
-$typeMap = array(
-    CreoleTypes::getCreoleCode('BOOLEAN')       => 'boolean',
-    CreoleTypes::getCreoleCode('VARCHAR')       => 'text',
-    CreoleTypes::getCreoleCode('LONGVARCHAR')   => 'text',
-    CreoleTypes::getCreoleCode('CHAR')          => 'text',
-    CreoleTypes::getCreoleCode('VARCHAR')       => 'text',
-    CreoleTypes::getCreoleCode('TEXT')          => 'text',
-    CreoleTypes::getCreoleCode('CLOB')          => 'text',
-    CreoleTypes::getCreoleCode('LONGVARCHAR')   => 'text',
-    CreoleTypes::getCreoleCode('INTEGER')       => 'number',
-    CreoleTypes::getCreoleCode('TINYINT')       => 'number',
-    CreoleTypes::getCreoleCode('BIGINT')        => 'number',
-    CreoleTypes::getCreoleCode('SMALLINT')      => 'number',
-    CreoleTypes::getCreoleCode('TINYINT')       => 'number',
-    CreoleTypes::getCreoleCode('INTEGER')       => 'number',
-    CreoleTypes::getCreoleCode('FLOAT')         => 'number',
-    CreoleTypes::getCreoleCode('NUMERIC')       => 'number',
-    CreoleTypes::getCreoleCode('DECIMAL')       => 'number',
-    CreoleTypes::getCreoleCode('YEAR')          => 'number',
-    CreoleTypes::getCreoleCode('REAL')          => 'number',
-    CreoleTypes::getCreoleCode('DOUBLE')        => 'number',
-    CreoleTypes::getCreoleCode('DATE')          => 'time',
-    CreoleTypes::getCreoleCode('TIME')          => 'time',
-    CreoleTypes::getCreoleCode('TIMESTAMP')     => 'time',
-    CreoleTypes::getCreoleCode('VARBINARY')     => 'binary',
-    CreoleTypes::getCreoleCode('VARBINARY')     => 'binary',
-    CreoleTypes::getCreoleCode('BLOB')          => 'binary',
-    CreoleTypes::getCreoleCode('BINARY')        => 'binary',
-    CreoleTypes::getCreoleCode('LONGVARBINARY') => 'binary'
-);
-$tplData = array(
-    'dbname' => $dbInfo->getName(),     // string
-    'tables' => $dbInfo->getTables(),   // array of TableInfo objects
-    'types'  => $typeMap
-    );
 
+$dbInfo = $dbconn->getDatabaseInfo();   // DatabaseInfo object
+
+$tplData = array(
+    'schemaName' => $dbInfo->getName(),     // string
+    'tables'     => $dbInfo->getTables(),   // array of TableInfo objects
+    'types'      => xarDB::getTypeMap()
+);
 
 // Produce the xml
-$out = xarTplFile('../tests/xml/schemas/ddl/db2xml.xd',$tplData);
+$out = xarTplFile('../html/modules/dynamicdata/xartemplates/includes/exportddl.xd',$tplData);
 echo $out;
 ?>

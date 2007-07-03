@@ -45,22 +45,26 @@
                     <tr>
                         <td>
                             <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$curtable#">
-                                #$curtable# 
+                                #$curtable#
                             </a>
                         </td>
                         <td class="xar-align-center">
                             <a href="&xar-modurl-dynamicdata-admin-view;&amp;table=#$curtable#">
                                 <xar:mlstring>View</xar:mlstring>
                             </a>
-                            | 
+                            |
                             <a href="&xar-modurl-dynamicdata-admin-query;&amp;table=#$curtable#">
                                 <xar:mlstring>Query</xar:mlstring>
                             </a>
-                            | 
-                            <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$curtable#&amp;export=1">
-                                <xar:mlstring>Export XML</xar:mlstring>
+                            |
+                            <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$curtable#&amp;export=object">
+                                <xar:mlstring>Export Object</xar:mlstring>
                             </a>
-                            | 
+                             |
+                            <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$curtable#&amp;export=ddl">
+                                <xar:mlstring>Export DDL</xar:mlstring>
+                            </a>
+                            |
                             <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$curtable#">
                                 <xar:mlstring>Add Relation</xar:mlstring>
                             </a>
@@ -77,22 +81,28 @@
                 <a href="&xar-modurl-dynamicdata-admin-view;&amp;table=#$table#">
                     <xar:mlstring>View</xar:mlstring>
                 </a>
-                | 
+                |
                 <a href="&xar-modurl-dynamicdata-admin-query;&amp;table=#$table#">
                     <xar:mlstring>
-                        Query 
+                        Query
                     </xar:mlstring>
                 </a>
-                | 
-                <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$table#&amp;export=1">
+                |
+                <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$table#&amp;export=object">
                     <xar:mlstring>
-                        Export XML 
+                        Export Object
                     </xar:mlstring>
                 </a>
-                | 
+                |
+                <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$table#&amp;export=ddl">
+                    <xar:mlstring>
+                        Export DDL
+                    </xar:mlstring>
+                </a>
+                |
                 <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$table#">
                     <xar:mlstring>
-                        Add Relation 
+                        Add Relation
                     </xar:mlstring>
                 </a>
             </p>
@@ -123,33 +133,37 @@
                         <xar:foreach in="$fields" value="$field">
                             <tr>
                                 <td>
-                                    #$field['name']# 
+                                    #$field['name']#
                                 </td>
                                 <td>
-                                    #$field['label']# 
+                                    #$field['label']#
                                 </td>
                                 <td>
                                     <xar:data-output property="$prop" value="$field['type']" />
                                 </td>
                                 <td>
-                                    #$field['default']# 
+                                    #$field['default']#
                                 </td>
                                 <td>
-                                    #$field['source']# 
+                                    #$field['source']#
                                 </td>
                                 <td>
-                                    #$field['validation']# 
+                                    #$field['validation']#
                                 </td>
                             </tr>
                         </xar:foreach>
                     </xar:if>
                 </xar:foreach>
             </table>
-        </xar:if>    
+        </xar:if>
 
         <p class="xar-align-center">
-            <a href="&xar-modurl-dynamicdata-util-meta;&amp;export=1">
-                <xar:mlstring>Export all tables to XML</xar:mlstring>
+            <a href="&xar-modurl-dynamicdata-util-meta;&amp;export=object">
+                <xar:mlstring>Export all tables to Objects</xar:mlstring>
+            </a>
+            |
+            <a href="&xar-modurl-dynamicdata-util-meta;&amp;export=ddl">
+                <xar:mlstring>Export all tables to DDL</xar:mlstring>
             </a>
             |
             <a href="&xar-modurl-dynamicdata-util-meta;&amp;showdb=1">
@@ -171,6 +185,9 @@
                     </label>
                     <div class="xar-form-container-after">
                         <textarea name="xml" id="xml" class="xar-form-textarealarge">
+                        <xar:if condition="$export eq 'ddl'">
+                            <xar:template file="exportddl" />
+                        <xar:else />
 &lt;objects&gt;
     <xar:foreach in="$tables" key="$curtable" value="$fields">
         <xar:set name="tablename">strtr($curtable,'.','_')</xar:set>
@@ -196,6 +213,7 @@
         &lt;/object&gt;
     </xar:foreach>
 &lt;/objects&gt;
+                        </xar:if>
                         </textarea>
                     </div>
                 </div>

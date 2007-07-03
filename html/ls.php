@@ -7,6 +7,9 @@
  * @link http://www.xaraya.com
  * @package entrypoint
  * @author Marcel van der Boom
+ * @todo move this into /bin
+ * @todo add site instance parameter
+ * @todo centralize user/password entry in here and outside the xarcliapi
  */
 set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 include 'lib/bootstrap.php';
@@ -29,7 +32,7 @@ exit(xarLocalServicesMain($argc, $argv));
  *
  * call sign: php ./ws.php <type> [args]
  *
- * @todo when this gets any more than this, use getOpt package from PEAR
+ * @todo use cli/argument parsing library (perhaps getOpt from PEAR)
 **/
 
 function xarLocalServicesMain($argc, $argv)
