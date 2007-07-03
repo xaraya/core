@@ -63,7 +63,7 @@ class PassBoxProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
-        // FIXME: finish this
+        //  FIXME: finish this
         $confirm = 1;
 
         if (!isset($value)) {
