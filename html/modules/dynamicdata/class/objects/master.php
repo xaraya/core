@@ -916,6 +916,13 @@ class DataObjectMaster extends Object
     {
 //        if(!xarSecurityCheck('ViewDynamicDataItems')) return;
 
+//        extract($args);
+
+/*        if (!(isset($moduleid) && isset($itemtype)) && !isset($objectid) && !isset($name)) {
+            $msg = xarML('Wrong arguments to DataObjectMaster::getAncestors.');
+            throw new BadParameterException(array(),$msg);
+        }
+*/
         $top = isset($top) ? $top : false;
         $base = isset($base) ? $base : true;
         $ancestors = array();
@@ -923,7 +930,33 @@ class DataObjectMaster extends Object
 
         $xartable = xarDB::getTables();
         $topobject = self::getObjectInfo(array('objectid' => $this->objectid));
-
+/*        // Get the info of this object
+        if (isset($objectid)) {
+            // We have an objectid - get the moduleid and itemtype
+            $topobject = self::getObjectInfo(array('objectid' => $objectid));
+            $moduleid = $topobject['moduleid'];
+            $itemtype = $topobject['itemtype'];
+        } else {
+            if (isset($name)) {
+                $topobject = self::getObjectInfo(array('name' => $name));
+                $moduleid = $topobject['moduleid'];
+                $itemtype = $topobject['itemtype'];
+            } else {
+                $topobject = self::getObjectInfo(array('moduleid' => $moduleid, 'itemtype' => $itemtype));
+            }
+            // We have a moduleid and itemtype - get the objectid
+            if (empty($topobject)) {
+                if ($base) {
+                    $types = self::getModuleItemTypes(array('moduleid' => $moduleid));
+                    $info = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => xarModGetNameFromID($moduleid));
+                    $ancestors[] = $info;
+                    return $ancestors;
+                }
+                return $ancestors;
+            }
+            $objectid = $topobject['objectid'];
+       }
+*/
         // Include the last descendant (this object) or not
         if ($top) {
             $ancestors[] = self::getObjectInfo(array('objectid' => $this->objectid));
@@ -948,13 +981,38 @@ class DataObjectMaster extends Object
         for(;;) {
             $thisobject     = $objects[$parentitemtype];
 
-			// This is a DD descendent object. add it to the ancestor array
-			$moduleid       = $thisobject['moduleid'];
-			$objectid       = $thisobject['objectid'];
-			$itemtype       = $thisobject['itemtype'];
-			$name           = $thisobject['objectname'];
-			$this->baseancestor = $objectid;
-			$ancestors[] = $thisobject;
+//            if ($parentitemtype >= 1000 || $this->moduleid == 182) {
+                // This is a DD descendent object. add it to the ancestor array
+                $moduleid       = $thisobject['moduleid'];
+                $objectid       = $thisobject['objectid'];
+                $itemtype       = $thisobject['itemtype'];
+                $name           = $thisobject['objectname'];
+//                $parentitemtype = $thisobject['parent'];
+                $this->baseancestor = $objectid;
+                $ancestors[] = $thisobject;
+/*            } else {
+
+                // This is a native itemtype. get ready to quit
+                $done = true;
+                $itemtype = $parentitemtype;
+                if ($itemtype) {
+                    if ($info = self::getObjectInfo(array('objectid' => $thisobject['objectid']))) {
+
+                        // A DD wrapper object exists, add it to the ancestor array
+                        if ($base) $ancestors[] = array('objectid' => $info['objectid'], 'itemtype' => $itemtype, 'name' => $info['name'], 'moduleid' => $moduleid);
+                    } else {
+
+                        // No DD wrapper object
+                        // This must be a native itemtype of some module - add it to the ancestor array if requested
+                        $types = self::getModuleItemTypes(array('moduleid' => $moduleid));
+                        $name = strtolower($types[$itemtype]['label']);
+                        if ($base) {$ancestors[] = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => $name, 'moduleid' => $moduleid);}
+                    }
+                } else {
+                    // Itemtype = 0. We're already at the bottom - do nothing
+                }
+            }
+            */
             if (!$thisobject['parent']) break;
         }
         $ancestors = array_reverse($ancestors, true);
