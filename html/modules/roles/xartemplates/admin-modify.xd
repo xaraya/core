@@ -88,9 +88,12 @@
                             <xar:mlstring>Primary Parent Group:</xar:mlstring>
                         </label>
                         <xar:set name="value">
-                            xarModGetUserVar('roles','primaryparent',$id)
+                            xarModAPIFunc('roles','user','getprimaryparent',array('itemid' => $id))
                         </xar:set>
-                        <xar:data-input type="grouplist" name="duvs[primaryparent]" id="duvs_primaryparent" value="$value" tabindex="8" />
+                        <xar:set name="options">
+                            xarModAPIFunc('roles','user','getancestors',array('id' => $id, 'parents' => 1))
+                        </xar:set>
+                        <xar:data-input type="dropdown" name="duvs[primaryparent]" id="duvs_primaryparent" options="$options" value="$value" tabindex="8" />
                     </div>
                 </xar:if>
 
