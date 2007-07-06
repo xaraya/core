@@ -52,7 +52,7 @@ class ModuleVariablesDataStore extends BasicDataStore
             // TODO: use $field.$itemid for modules with several itemtypes ? [like articles :)]
             $value = xarModVars::get($this->modname,$field);
             // set the value for this property
-            $this->fields[$field]->setValue($value);
+			$this->fields[$field]->value = $value;
         }
         return $itemid;
     }
