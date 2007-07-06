@@ -39,7 +39,7 @@ function dynamicdata_admin_create($args)
     if(!xarVarFetch('template',     'isset', $template,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule',    'isset', $tplmodule,   'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
 
-    if (!xarSecConfirmAuthKey()) return;
+    //if (!xarSecConfirmAuthKey()) return;
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'join'     => $join,
@@ -47,7 +47,7 @@ function dynamicdata_admin_create($args)
                                          'itemid'   => $itemid));
     $isvalid = $myobject->checkInput();
 
-	// recover any session var information and remove it from the var
+    // recover any session var information and remove it from the var
     $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
     xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
     extract($data);

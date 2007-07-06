@@ -15,7 +15,7 @@ sys::import('modules.roles.class.xarQuery');
  * Role: class for the role object
  *
  * Represents a single role (user or group)
- *
+ *et
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  */
@@ -638,7 +638,6 @@ class Role extends DataObject
     public function getDescendants($state = ROLES_STATE_CURRENT, $groupflag=0)
     {
         $groups = xarRoles::getgroups();
-
         $queue = array($this->getID());
         while (true) {
         	if (empty($queue)) break;
