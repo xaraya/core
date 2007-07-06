@@ -210,8 +210,9 @@ function dynamicdata_utilapi_import($args)
             $oldindex = 0;
             foreach($objectproperties as $propertyname => $property) {
                 if (isset($child->$propertyname)) {
-                    $value = (string)$child->$propertyname;
-                    $item[$propertyname] = $value;
+                	// Run the import value through the property's validation routine
+                    $check = $property->validateValue((string)$child->$propertyname);
+                    $item[$propertyname] = $property->value;
                 }
             }
             if (empty($keepitemid)) {
