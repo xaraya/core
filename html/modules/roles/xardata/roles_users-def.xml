@@ -77,7 +77,7 @@
       <type>calendar</type>
       <default>xarMLS_userTime()</default>
       <source>xar_roles.date_reg</source>
-      <status>67</status>
+      <status>66</status>
       <order>7</order>
       <validation></validation>
     </property>
