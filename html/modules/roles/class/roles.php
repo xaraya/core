@@ -140,7 +140,6 @@ class xarRoles extends Object
      */
     public static function getRole($id) {return get::get($id);}
 
-
     /**
      * findRole: finds a single role based on its name
      *
