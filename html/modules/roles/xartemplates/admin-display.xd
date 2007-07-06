@@ -48,7 +48,7 @@
     <xar:template file="tablist" />
     <fieldset>
       <legend><xar:mlstring>Role properties</xar:mlstring></legend>
-      <xar:set name="fields">array('id','name','uname','email','state')</xar:set>
+      <xar:set name="fields">array('id','name','uname','email','state','regdate')</xar:set>
       <xar:data-display object="$object" fieldlist="$fields" />
 
       <xar:if condition="$basetype eq ROLES_USERTYPE">
@@ -103,7 +103,7 @@
             #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','passwordupdate',$id))# #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','passwordupdate',$id))#
           </div>
       </xar:if>
-      <xar:if condition="xarModGetVar('roles','setusertimezone')">
+      <xar:if condition="in_array('usertimezone',$settings)">
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">
                 <xar:mlstring>User Timezone:</xar:mlstring>
