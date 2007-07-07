@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <!--
   Schema which contains all the tricks in the trade, to which the implementation
   should react responsibly
@@ -8,17 +7,28 @@
   <description>Schema description can optionally be put here</description>
   <table name="first">
     <description>A nice table with some sort of description</description>
-    <column name="id" description="A unique id column" size="11" type="integer"  autoincrement="true" required="true" />
-
-    <column name="ref_id" size="11" type="integer" required="true">
-      <description>A reference to an id column</description>
+    <column id="first.id" name="id" auto="true" required="true">
+       <description>A unique id column</description>
+       <number size="11" />
     </column>
-    <primary>
-      <column name="id"/>
-    </primary>
-    <index type="default" name="i_xar_block_group_instances">
-      <description>We index on the ref_id column because we can</description>
-      <column name="ref_id"/>
-    </index>
- </table>
+    <column id="first.ref_id" name="ref_id" required="true">
+       <description>A reference to an id column</description>
+       <number size="11" />
+    </column>
+    <column id="first.name" name="name" required="true">
+    <text size="255" />
+    </column>
+    <constraints>
+      <primary name="id">
+        <columnref id="first.id"/>
+      </primary>
+      <index name="ref_id">
+        <description>We index on the ref_id column because we can</description>
+        <columnref id="first.ref_id"/>
+      </index>
+      <unique name="name">
+        <columnref id="first.name"/>
+      </unique>
+    </constraints>
+  </table>
 </schema>
