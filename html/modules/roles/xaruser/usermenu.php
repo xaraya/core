@@ -149,9 +149,7 @@ function roles_user_usermenu($args)
                     }
                 }
             }
-            $pass = $object->properties['password']->getValue();
-
-            $newpass = $object->properties['password']->encrypt($pass);
+            $newpass = $object->properties['password']->getValue();
             $passchanged = false;
             if ($oldpass != $newpass) {
                 $passchanged = true;
