@@ -387,8 +387,7 @@ class xarMasks extends Object
                 $userID = _XAR_ID_UNREGISTERED;
             }
             $role = xarRoles::get($userID);
-        }
-        else {
+        } else {
             $role = xarRoles::findRole($rolename);
         }
         // check if we already have the irreducible set of privileges for the current user

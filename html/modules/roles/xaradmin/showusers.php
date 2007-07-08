@@ -67,6 +67,7 @@ function roles_admin_showusers()
         $basetypes = array();
         foreach ($types as $key => $value) {
             $basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
+	        if ($basetype['itemtype'] == ROLES_USERTYPE && !in_array($key,$basetypes)) $basetypes[] = $key;
         }
         $xartable = xarDB::getTables();
         $q = new xarQuery('SELECT');

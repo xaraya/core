@@ -89,7 +89,7 @@ class PassBoxProperty extends TextBoxProperty
                 $this->value = null;
                 return false;
             } else {
-                $this->value = $value;
+                $this->setValue($value);
                 return true;
             }
         }

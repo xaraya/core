@@ -18,7 +18,7 @@ class DummyDataStore extends BasicDataStore
     {
         $itemid = $args['itemid'];
         foreach (array_keys($this->fields) as $field) {
-            $this->fields[$field]->setValue($itemid);
+            $this->fields[$field]->value = $itemid;
         }
     }
 

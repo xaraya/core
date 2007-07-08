@@ -56,7 +56,7 @@ class VariableTableDataStore extends SQLDataStore
             list($propid, $value) = $result->getRow();
             if (isset($value)) {
                 // set the value for this property
-                $this->fields[$propid]->setValue($value);
+				$this->fields[$propid]->value = $value;
             }
         }
         $result->close();

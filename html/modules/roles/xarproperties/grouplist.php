@@ -42,25 +42,30 @@ class GroupListProperty extends SelectProperty
         $this->filepath   = 'modules/roles/xarproperties';
 
         if (count($this->options) == 0) {
-            $select_options = array();
-            if (!empty($this->ancestorlist)) {
-                $select_options['ancestor'] = implode(',', $this->ancestorlist);
-            }
-            if (!empty($this->parentlist)) {
-                $select_options['parent'] = implode(',', $this->parentlist);
-            }
-            if (!empty($this->grouplist)) {
-                $select_options['group'] = implode(',', $this->grouplist);
-            }
-            // TODO: handle large # of groups too (optional - less urgent than for users)
-            $groups = xarModAPIFunc('roles', 'user', 'getallgroups', $select_options);
-            $options = array();
-            foreach ($groups as $group) {
-                $options[] = array('id' => $group['id'], 'name' => $group['name']);
-            }
-            $this->options = $options;
+            $this->options = $this->getOptions();
         }
 
+    }
+
+    public function getOptions()
+    {
+        $select_options = array();
+        if (!empty($this->ancestorlist)) {
+            $select_options['ancestor'] = implode(',', $this->ancestorlist);
+        }
+        if (!empty($this->parentlist)) {
+            $select_options['parent'] = implode(',', $this->parentlist);
+        }
+        if (!empty($this->grouplist)) {
+            $select_options['group'] = implode(',', $this->grouplist);
+        }
+        // TODO: handle large # of groups too (optional - less urgent than for users)
+        $groups = xarModAPIFunc('roles', 'user', 'getallgroups', $select_options);
+        $options = array();
+        foreach ($groups as $group) {
+            $options[] = array('id' => $group['id'], 'name' => $group['name']);
+        }
+        return $options;
     }
 
     public function validateValue($value = null)
@@ -105,6 +110,14 @@ class GroupListProperty extends SelectProperty
                 }
             }
         }
+    }
+
+    public function showInput(Array $data = array())
+    {
+        if (!empty($data['validation']))
+            $this->parseValidation($data['validation']);
+            $this->options = $this->getOptions();
+        return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())

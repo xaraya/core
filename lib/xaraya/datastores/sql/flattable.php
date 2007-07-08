@@ -110,7 +110,7 @@ class FlatTableDataStore extends SQLDataStore
 
         foreach ($fieldlist as $field) {
             // set the value for this property
-            $this->fields[$field]->setValue(array_shift($values));
+            $this->fields[$field]->value = array_shift($values);
         }
         return $itemid;
     }
@@ -635,10 +635,10 @@ class FlatTableDataStore extends SQLDataStore
             return;
         }
 
-        $this->fields[$itemidfield]->setValue($itemid);
+		$this->fields[$itemidfield]->value = $itemid;
         foreach ($fieldlist as $field) {
             // set the value for this property
-            $this->fields[$field]->setValue(array_shift($values));
+			$this->fields[$field]->value = array_shift($values);
         }
         return $itemid;
     }
