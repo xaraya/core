@@ -498,8 +498,7 @@
             </fieldset>
             <fieldset>
                 <legend><xar:mlstring>User Homepage Options</xar:mlstring></legend>
-                <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
-                <xar:if condition="in_array('userhome',$settings)">
+                <xar:if condition="xarModGetVar('roles', 'setuserhome')">
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
                     <xar:set name="checked">xarModGetVar('roles', 'loginredirect')</xar:set>

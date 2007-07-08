@@ -60,6 +60,7 @@ function roles_admin_showusers()
     sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery();
     $q = $q->sessiongetvar('rolesquery');
+    $q = '';
 
     if (empty($q) || isset($reload)) {
         $types = xarModAPIFunc('roles','user','getitemtypes');
