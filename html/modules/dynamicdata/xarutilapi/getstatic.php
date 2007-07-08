@@ -89,11 +89,10 @@ function dynamicdata_utilapi_getstatic($args)
         $tblColumns = $tblInfo->getColumns();
         $table = $tblInfo->getName();
         foreach($tblColumns as $colInfo) {
-            $field = $colInfo->getName();
+            $name = $colInfo->getName();
             $id = $seq++;
             $default = $colInfo->getDefaultValue();
             // Construct name and label from the columnname
-            $name = preg_replace('/^.+?_/','',$field);
             $label = strtr($name,'_',' ');
             $label = ucwords($label);
             if(isset($static[$name])) {
@@ -180,7 +179,7 @@ function dynamicdata_utilapi_getstatic($args)
                                    'type' => $proptype,
                                    'id' => $id,
                                    'default' => $default,
-                                   'source' => $table . '.' . $field,
+                                   'source' => $table . '.' . $name,
                                    'status' => $status,
                                    'order' => $order,
                                    'validation' => $validation);

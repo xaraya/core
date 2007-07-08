@@ -2,11 +2,11 @@
 /**
  * Return static table information
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -15,21 +15,15 @@
  */
 function dynamicdata_util_static($args)
 {
-// Security Check
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     if(!xarVarFetch('module',   'isset', $module,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
-
-
-    if (!xarVarFetch('export', 'isset', $export,  NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('export',  'isset', $export,       0, XARVAR_DONT_SET)) {return;}
 
     extract($args);
-    if (empty($export)) {
-        $export = 0;
-    }
 
     $data = array();
     $data['menutitle'] = xarML('Dynamic Data Utilities');
@@ -40,6 +34,7 @@ function dynamicdata_util_static($args)
                                   'itemtype' => $itemtype,
                                   'table'    => $table));
 
+    //debug($static);
     if (!isset($static) || $static == false) {
         $data['tables'] = array();
     } else {
