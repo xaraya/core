@@ -27,7 +27,7 @@ class PassBoxProperty extends TextBoxProperty
 
     public $min = 5;
     public $max = null;
-    public password = null;
+    public $password = null;
 
     function __construct(ObjectDescriptor $descriptor)
     {
