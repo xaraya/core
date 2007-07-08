@@ -27,6 +27,7 @@ class PassBoxProperty extends TextBoxProperty
 
     public $min = 5;
     public $max = null;
+    public password = null;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -89,6 +90,7 @@ class PassBoxProperty extends TextBoxProperty
                 $this->value = null;
                 return false;
             } else {
+            	$this->password = $value;
                 $this->setValue($value);
                 return true;
             }
