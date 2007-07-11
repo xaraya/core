@@ -76,10 +76,8 @@ class FlatTableDataStore extends SQLDataStore
             }
         }
 
+        if (count($this->fields) < 1) return;
         $fieldlist = array_keys($this->fields);
-        if (count($fieldlist) < 1) {
-            return;
-        }
 
         $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
                     FROM " . join(', ', $tables) . $more . "
@@ -123,6 +121,7 @@ class FlatTableDataStore extends SQLDataStore
      **/
     function createItem(Array $args = array())
     {
+        if (count($this->fields) < 1) return;
         $itemid = $args['itemid'];
         $table = $this->name;
         $itemidfield = $this->primary;
@@ -197,6 +196,7 @@ class FlatTableDataStore extends SQLDataStore
     function updateItem(Array $args = array())
     {
         $itemid = $args['itemid'];
+        if (count($this->fields) < 1) return $itemid;
         $table = $this->name;
         $itemidfield = $this->primary;
 
