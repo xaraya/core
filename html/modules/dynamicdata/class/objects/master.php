@@ -236,15 +236,9 @@ class DataObjectMaster extends Object
             }
         }
 
-        // filter on property status if necessary
-        if(!empty($this->status) && count($this->fieldlist) == 0)
-        {
-            $this->fieldlist = array(); // why?
-            foreach($this->properties as $name => $property)
-                if($property->status && $this->status)
-//                if($property->status & $this->status)
-                    $this->fieldlist[] = $name;
-        }
+        // create the list of fields, filtering where necessary
+        $this->fieldlist = $this->getFieldList($this->fieldlist,$this->status);
+
         // build the list of relevant data stores where we'll get/set our data
         if(count($this->datastores) == 0 && count($this->properties) > 0)
            $this->getDataStores();
@@ -254,6 +248,30 @@ class DataObjectMaster extends Object
         $this->baseancestor = $this->objectid;
         if($this->extend) $this->addAncestors();
     }
+
+    private function getFieldList($fieldlist=array(),$status=null)
+    {
+        $properties = $this->properties;
+        $fields = array();
+        if(count($fieldlist) != 0) {
+			foreach($fieldlist as $field)
+				if($properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+					$fields[$properties[$field]->id] = $properties[$field]->name;
+        } else {
+			if ($status) {
+				// we have a status: filter on it
+				foreach($properties as $property)
+					if($property->status == $status)
+						$fields[$property->id] = $property->name;
+			} else {
+				// no status filter: return those that are not disabled
+				foreach($this->properties as $property)
+					if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+						$fields[$property->id] = $property->name;
+			}
+        }
+        return $fields;
+	}
 
     /**
      * Add the ancestors to this object
