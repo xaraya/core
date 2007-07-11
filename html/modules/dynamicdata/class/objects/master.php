@@ -261,7 +261,7 @@ class DataObjectMaster extends Object
 			if ($status) {
 				// we have a status: filter on it
 				foreach($properties as $property)
-					if($property->status == $status)
+					if($property->status && $this->status)
 						$fields[$property->id] = $property->name;
 			} else {
 				// no status filter: return those that are not disabled
