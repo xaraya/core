@@ -31,7 +31,7 @@ function roles_admin_showusers()
     if (!xarVarFetch('order',    'str:0:', $data['order'],    'name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('search',   'str:0:', $data['search'],   NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('reload',   'str:0:', $reload,           NULL,    XARVAR_DONT_SET)) return;
-
+    if (!xarVarFetch('numitems', 'int:1',  $numitems,        xarModGetVar('roles','itemsperpage'), XARVAR_DONT_SET)) return;
     if (empty($data['selstyle'])) $data['selstyle'] = 0;
     xarSession::setVar('rolesdisplay', $data['selstyle']);
 
@@ -71,13 +71,7 @@ function roles_admin_showusers()
         $xartable = xarDB::getTables();
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
-        $q->addfields(array(
-            'r.id AS id',
-            'r.name AS name',
-            'r.uname AS uname',
-            'r.email AS email',
-            'r.state AS state',
-            'r.date_reg AS date_reg'));
+        $q->addfields(array('r.id AS id','r.name AS name'));
 
         //Create the selection
         $c = array();
@@ -110,11 +104,10 @@ function roles_admin_showusers()
         $q->sessionsetvar('rolesquery');
     }
 
-    // Sort order
+    // Sort ye
     $q->setorder($data['order']);
 
     // Add limits
-    $numitems = xarModVars::get('roles', 'itemsperpage');
     $q->setrowstodo($numitems);
     $q->setstartat($startnum);
 
@@ -149,8 +142,11 @@ function roles_admin_showusers()
     // assemble the info for the display
     $users = array();
 
-    foreach($q->output() as $user) {
-        $users[] = array_merge($user, array('frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user['name'])));
+    $ids = array();
+
+    foreach($q->output() as $row) {
+        $users[$row['id']]['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$row['name']);
+        
     }
     if ($id != 0) $data['title'] .= " ".xarML('of group')." ";
 
@@ -160,10 +156,14 @@ function roles_admin_showusers()
                            '2' => xarML('Tabbed')
                            );
 
+    $object = xarModAPIFunc('dynamicdata','user','getobjectlist',array('name' => 'roles_users'));
 
+    $object->getItems(array('itemids' => array_keys($users)));
+    
     // Load Template
     $data['id']        = $id;
     $data['users']      = $users;
+    $data['object']     = $object;
     $data['authid']     = xarSecGenAuthKey();
     $data['removeurl']  = xarModURL('roles', 'admin','delete', array('id' => $id));
     $filter['startnum'] = '%%';
