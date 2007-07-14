@@ -33,10 +33,10 @@ class HookSubject extends BasicSubject
         xarModAPIFunc('modules','admin','disablehooks',array('callerModName' => $this->getmodule(), 'hookModName' => $observer->getmodule(), 'callerItemType' => $callerItemType));
     }
 
-    function getMessenger()
+    function getMessenger($itemid=0, $extrainfo=array())
     {
         sys::import('xaraya.structures.hooks.messenger');
-        $this->messenger = new HookMessenger($this->module, $this->itemtype);
+        $this->messenger = new HookMessenger($this->module, $this->itemtype, $itemid, $extrainfo);
         return $this->messenger;
     }
 
@@ -44,7 +44,8 @@ class HookSubject extends BasicSubject
     {
         if (empty($this->module)) $module = null;
         if ($this->itemtype == 'All') $itemtype = '';
-        return xarModCallHooks($this->messenger->gethookObject(), $this->messenger->gethookAction(), $this->messenger->getitemid(), $extraInfo = NULL, $this->module, $this->itemtype);
+
+        return xarModCallHooks($this->messenger->gethookObject(), $this->messenger->gethookAction(), $this->messenger->getitemid(), $this->messenger->getextraInfo(), $this->module, $this->itemtype);
     }
     function getHooklist()
     {
