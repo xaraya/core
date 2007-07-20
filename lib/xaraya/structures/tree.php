@@ -23,6 +23,8 @@ class TreeNode extends Object implements ITreeNode
         $data = $this->tree->treedata;
         if (empty($data)) return new BasicSet();
         uasort($data, array($this,"comparelevels"));
+        var_dump($data);
+        echo "<br /><br />";
 
         $nodeset = new BasicSet();
         foreach ($data as $value) {

@@ -5,4 +5,4 @@
 <xar:set name="adminmail">xarModGetVar('mail', 'adminmail')</xar:set>
 
 <xar:set name="myname">xarUserGetVar('name')</xar:set>
-<xar:set name="myuid">xarUserGetVar('uid')</xar:set>
+<xar:set name="myuid">xarUserGetVar('id')</xar:set>

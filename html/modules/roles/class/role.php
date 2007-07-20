@@ -775,16 +775,16 @@ class Role extends DataObject
         return $this->parentlevel;
     }
 
-    function setName($var) { $this->properties['name']->value = $var; }
-    function setUname($var) { $this->properties['name']->value = $var; }
-    function setParent($var) { $this->properties['parentid']->value = $var; }
-    function setUser($var) { $this->properties['uname']->value = $var; }
-    function setEmail($var) { $this->properties['email']->value = $var; }
-    function setPass($var) { $this->properties['password']->value = $var; }
-    function setState($var) { $this->properties['state']->value = $var; }
-    function setDateReg($var) { $this->properties['datereg']->value = $var; }
-    function setValCode($var) { $this->properties['valcode']->value = $var; }
-    function setAuthModule($var) { $this->properties['authmodule']->value = $var; }
+    function setName($var) { $this->properties['name']->setValue($var); }
+    function setUname($var) { $this->properties['name']->setValue($var); }
+    function setParent($var) { $this->properties['parentid']->setValue($var); }
+    function setUser($var) { $this->properties['uname']->setValue($var); }
+    function setEmail($var) { $this->properties['email']->setValue($var); }
+    function setPass($var) { $this->properties['password']->setValue($var); }
+    function setState($var) { $this->properties['state']->setValue($var); }
+    function setDateReg($var) { $this->properties['datereg']->setValue($var); }
+    function setValCode($var) { $this->properties['valcode']->setValue($var); }
+    function setAuthModule($var) { $this->properties['authmodule']->setValue($var); }
     function setLevel($var)
     {
         $this->parentlevel = $var;
