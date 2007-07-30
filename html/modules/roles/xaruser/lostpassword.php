@@ -79,14 +79,8 @@ function roles_user_lostpassword()
             //Update user password
 		    $role = xarRoles::get($user['id']);
 			$modifiedstatus = $role->setPass($user['pass']);
-			$modifiedrole = $role->updateItem();
-			if (!$modifiedrole) return;
-            // check for user and grab id if exists
-            /*
-            if (!xarModAPIFunc('roles','admin','update',$user)) {
-                throw new DataNotFoundException(array(),'Problem updating the user information');
-            }
-            */
+			if (!$role->updateItem()) return;
+
               // Send Reminder Email
             if (!xarModAPIFunc('roles', 'admin','senduseremail', array('id' => array($user['id'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;
 
