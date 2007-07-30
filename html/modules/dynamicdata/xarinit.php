@@ -298,7 +298,7 @@ function dynamicdata_init()
             array('source'    ,'Source'             ,$objectid[2],23,'dynamic_data',$dynamic_properties.'.prop_source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,'varchar (254)'),
             array('status'    ,'Status'             ,$objectid[2],25,'1'           ,$dynamic_properties.'.prop_status'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,'integer (tiny)'),
             array('order'     ,'Order'              ,$objectid[2],15,'0'           ,$dynamic_properties.'.prop_order'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11,'integer (tiny)'),
-            array('validation','Validation'         ,$objectid[2],2 ,''            ,$dynamic_properties.'.prop_validation',DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12,'varchar (254)'),
+            array('validation','Validation'         ,$objectid[2],3 ,''            ,$dynamic_properties.'.prop_validation',DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12,'text'),
 
             // Properties for the Sample DD object
             // @todo import this

@@ -293,7 +293,7 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($data['id']))          $data['id']   = $data['name'];
         // mod for the tpl and what tpl the prop wants.
 
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
 
@@ -302,7 +302,7 @@ class DataProperty extends Object implements iDataProperty
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid: #(1)', $this->invalid) :'';
         // debug($data);
         // Render it
-        return xarTplProperty($data['module'], $data['template'], 'showinput', $data);
+        return xarTplProperty($data['tplmodule'], $data['template'], 'showinput', $data);
     }
 
     /**
@@ -321,11 +321,11 @@ class DataProperty extends Object implements iDataProperty
 
         if(!isset($data['value'])) $data['value'] = $this->value;
         // TODO: does this hurt when it is an array?
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
 
-        return xarTplProperty($data['module'], $data['template'], 'showoutput', $data);
+        return xarTplProperty($data['tplmodule'], $data['template'], 'showoutput', $data);
     }
 
     /**
@@ -353,10 +353,10 @@ class DataProperty extends Object implements iDataProperty
         $data['name']  = $this->name;
         $data['label'] = isset($label) ? xarVarPrepForDisplay($label) : xarVarPrepForDisplay($this->label);
         $data['for']   = isset($for) ? $for : null;
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
-        return xarTplProperty($data['module'], $data['template'], 'label', $data);
+        return xarTplProperty($data['tplmodule'], $data['template'], 'label', $data);
     }
 
     /**
@@ -373,11 +373,11 @@ class DataProperty extends Object implements iDataProperty
         $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
         $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
 
-        return xarTplProperty($data['module'], $data['template'], 'showhidden', $data);
+        return xarTplProperty($data['tplmodule'], $data['template'], 'showhidden', $data);
     }
 
     /**
