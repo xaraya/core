@@ -613,7 +613,6 @@ class xarMasks extends Object
         }
 
         foreach ($privilegeset['privileges'] as $privilege) {
-            if($privilege->module == null && $privilege->name == "WIWMarketing") {var_dump($pass);continue;}
             if($test && ($testmask == $mask->getName() || $testmask == "All")) {
                 echo "Comparing <font color='blue'>[" . $privilege->present() . "]</font> and <font color='green'>[" . $mask->present() . "]</font>. ";
                 $msg = "Comparing \n  Privilege: ".$privilege->present().
@@ -672,7 +671,6 @@ class xarMasks extends Object
                 }
             }
         }
-        if(!empty($pass)){echo $privilege->name;}
         if (!$matched && ($privilegeset['children'] != array()))
             $pass = self::testprivileges($mask,$privilegeset['children'],$pass,$role);
         return $pass;
