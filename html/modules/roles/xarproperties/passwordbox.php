@@ -69,7 +69,7 @@ class PassBoxProperty extends TextBoxProperty
         if (!isset($value)) {
             $value = "";
         }
-       if ($confirm) {
+      // if ($confirm) { //jojo - until this is implemented correctly let's dispense with this check
             if (is_array($value) && $value[0] == $value[1]) {
                 $value = $value[0];
             } else {
@@ -77,8 +77,9 @@ class PassBoxProperty extends TextBoxProperty
                 $this->value = null;
                 return false;
             }
-      }
+     // }
 
+        //jojo - corrected syntax and leave out return true until after further checks, including regex
         if (!empty($value) && !empty($this->value)) {
             if (strlen($value) > $this->maxlength) {
                 $this->invalid = xarML('password: must be less than #(1) characters long', $this->max + 1);
@@ -91,9 +92,10 @@ class PassBoxProperty extends TextBoxProperty
             } else {
                 $this->password = $value;
                 $this->setValue($value);
-                return true;
+               // return true;
             }
         }
+
         if (!empty($this->regex) && !preg_match($this->regex, $value)) {
             $this->invalid = xarML('#(1) text: does not match regular expression', $this->name);
             $this->value = null;
