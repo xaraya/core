@@ -64,13 +64,12 @@ class PassBoxProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
-        // FIXME: finish this
         $confirm = 1;
 
         if (!isset($value)) {
             $value = "";
         }
-        if ($confirm) {
+       if ($confirm) {
             if (is_array($value) && $value[0] == $value[1]) {
                 $value = $value[0];
             } else {
@@ -78,10 +77,10 @@ class PassBoxProperty extends TextBoxProperty
                 $this->value = null;
                 return false;
             }
-        }
+      }
 
-        if (!(empty($value) && !empty($this->value))) {
-            if (!empty($value) && strlen($value) > $this->maxlength) {
+        if (!empty($value) && !empty($this->value)) {
+            if (strlen($value) > $this->maxlength) {
                 $this->invalid = xarML('password: must be less than #(1) characters long', $this->max + 1);
                 $this->value = null;
                 return false;
@@ -90,10 +89,15 @@ class PassBoxProperty extends TextBoxProperty
                 $this->value = null;
                 return false;
             } else {
-            	$this->password = $value;
+                $this->password = $value;
                 $this->setValue($value);
                 return true;
             }
+        }
+        if (!empty($this->regex) && !preg_match($this->regex, $value)) {
+            $this->invalid = xarML('#(1) text: does not match regular expression', $this->name);
+            $this->value = null;
+            return false;
         }
         return true;
     }
