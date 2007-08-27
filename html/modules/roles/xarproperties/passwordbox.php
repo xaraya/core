@@ -96,10 +96,13 @@ class PassBoxProperty extends TextBoxProperty
             }
         }
 
-        if (!empty($this->regex) && !preg_match($this->regex, $value)) {
-            $this->invalid = xarML('#(1) text: does not match regular expression', $this->name);
-            $this->value = null;
-            return false;
+        if (!empty($this->regex)){
+            preg_match($this->regex, $value,$matches);
+            if (empty($matches)){
+                $this->invalid = xarML('#(1) text: does not match regular expression', $this->name);
+                $this->value = null;
+                return false;
+            }
         }
         return true;
     }
