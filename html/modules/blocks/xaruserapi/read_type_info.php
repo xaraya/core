@@ -32,11 +32,7 @@ function blocks_userapi_read_type_info($args)
 
     if (function_exists($infofunc)) {
         return $infofunc();
-    }
-
-    $classpath = 'modules/' . $module . '/xarblocks/' . $type . '.php';
-    	// are we are using a block class?
-    if (!file_exists($classpath)) {
+    } else {
 		// Load and execute the info function of the block.
 		if (!xarModAPIFunc(
 			'blocks', 'admin', 'load',
@@ -45,10 +41,12 @@ function blocks_userapi_read_type_info($args)
 				'blockName' => $type,
 				'blockFunc' => 'info'
 			)
-		)) {return;}
+		)) {return false;}
     }
 
+    $classpath = 'modules/' . $module . '/xarblocks/' . $type . '.php';
     if (function_exists($infofunc)) {
+    	// we are using an old time block
         return $infofunc();
     } elseif (file_exists($classpath)) {
     	// we are using a block class
@@ -60,7 +58,7 @@ function blocks_userapi_read_type_info($args)
         return $block->getInfo();
     } else {
         // No block info function found.
-        return;
+        return false;
     }
 }
 

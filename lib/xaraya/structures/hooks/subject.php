@@ -42,8 +42,8 @@ class HookSubject extends BasicSubject
 
     function notify()
     {
-        if (empty($this->module)) $module = null;
-        if ($this->itemtype == 'All') $itemtype = '';
+        if (empty($this->module)) $this->module = null;
+        if ($this->itemtype == 'All') $this->itemtype = '';
 
         return xarModCallHooks($this->messenger->gethookObject(), $this->messenger->gethookAction(), $this->messenger->getitemid(), $this->messenger->getextraInfo(), $this->module, $this->itemtype);
     }
