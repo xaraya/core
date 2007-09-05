@@ -310,7 +310,7 @@ class Role extends DataObject
         $q->addfield('uname',$uname);
         $q->addfield('pass',$pass);
         $q->addfield('email',$email);
-        $q->addfield('date_reg',$date_reg);
+        $q->addfield('date_reg',time());
         $q->addfield('state',$state);
         $q->eq('id',$this->getID());
         if(!$q->run()) return;
