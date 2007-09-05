@@ -80,7 +80,7 @@ class PassBoxProperty extends TextBoxProperty
      // }
 
         //jojo - corrected syntax and leave out return true until after further checks, including regex
-        if (!empty($value) && !empty($this->value)) {
+        if (!(empty($value) && !empty($this->value))) {
             if (strlen($value) > $this->maxlength) {
                 $this->invalid = xarML('password: must be less than #(1) characters long', $this->max + 1);
                 $this->value = null;
@@ -90,18 +90,17 @@ class PassBoxProperty extends TextBoxProperty
                 $this->value = null;
                 return false;
             } else {
-                if (!empty($this->regex)){
-                    preg_match($this->regex, $value,$matches);
-                    if (empty($matches)){
-                        $this->invalid = xarML('#(1) text: does not match required pattern', $this->name);
-                        $this->value = null;
-                        return false;
-                    }
-                }
-
                 $this->password = $value;
                 $this->setValue($value);
             }
+            if (!empty($this->regex)){
+               preg_match($this->regex, $value,$matches);
+               if (empty($matches)){
+                   $this->invalid = xarML('#(1) text: does not match required pattern', $this->name);
+                   $this->value = null;
+                   return false;
+               }
+           }
         }
 
         return true;
