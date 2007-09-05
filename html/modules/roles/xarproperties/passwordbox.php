@@ -90,20 +90,20 @@ class PassBoxProperty extends TextBoxProperty
                 $this->value = null;
                 return false;
             } else {
+                if (!empty($this->regex)){
+                    preg_match($this->regex, $value,$matches);
+                    if (empty($matches)){
+                        $this->invalid = xarML('#(1) text: does not match required pattern', $this->name);
+                        $this->value = null;
+                        return false;
+                    }
+                }
+
                 $this->password = $value;
                 $this->setValue($value);
-               // return true;
             }
         }
 
-        if (!empty($this->regex)){
-            preg_match($this->regex, $value,$matches);
-            if (empty($matches)){
-                $this->invalid = xarML('#(1) text: does not match required pattern', $this->name);
-                $this->value = null;
-                return false;
-            }
-        }
         return true;
     }
 
