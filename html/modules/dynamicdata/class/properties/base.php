@@ -106,14 +106,14 @@ class DataProperty extends Object implements iDataProperty
                 // data available in user variables
                 // we'll keep a separate data store per module/itemtype here for now
                 // TODO: (don't) integrate user variable handling with DD
-                $storename = 'uservars_'.$this->moduleid.'_'.$this->itemtype; //FIXME change id
+                $storename = 'uservars_'.$this->_objectid.'_'.$this->type;
                 $storetype = 'uservars';
                 break;
             case 'module variables':
                 // data available in module variables
                 // we'll keep a separate data store per module/itemtype here for now
                 // TODO: (don't) integrate module variable handling with DD
-                $storename = 'modulevars_'.$this->moduleid.'_'.$this->itemtype; //FIXME change id
+                $storename = '_module variables_';
                 $storetype = 'modulevars';
                 break;
             case 'dummy':

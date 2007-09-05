@@ -513,7 +513,7 @@ class xarCore extends Object
     // The actual version information
     const VERSION_NUM = '[ongoing development version]';
     const VERSION_ID  = 'Xaraya 2 series';
-    const VERSION_SUB = 'etiam infractus';
+    const VERSION_SUB = 'post rabiem risus';
 
     private static $cacheCollection = array();
 

@@ -156,15 +156,15 @@ function dynamicdata_init()
         // create default objects for dynamic data
         $sql = "INSERT INTO $dynamic_objects (
                 object_name, object_label,
-                object_moduleid, object_itemtype, object_urlparam,
+                object_moduleid, object_itemtype, object_class, object_filepath, object_urlparam,
                 object_maxid, object_config, object_isalias)
-                VALUES (?,?,?,?,?,?,?,?)";
+                VALUES (?,?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         $objects = array(
-            array('objects'   ,'Dynamic Objects'   ,$modid,0,'itemid',0,''               ,0),
-            array('properties','Dynamic Properties',$modid,1,'itemid',0,''               ,0),
-            array('sample'    ,'Sample Object'     ,$modid,2,'itemid',3,'nothing much...',0)
+            array('objects'   ,'Dynamic Objects'   ,$modid,0,'','',                                               'itemid',0,''               ,0),
+            array('properties','Dynamic Properties',$modid,1,'DProperty','modules/dynamicdata/class/property.php','itemid',0,''               ,0),
+            array('sample'    ,'Sample Object'     ,$modid,2,'','',                                               'itemid',3,'nothing much...',0)
         );
 
         $objectid = array();
