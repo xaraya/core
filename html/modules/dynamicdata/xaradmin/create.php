@@ -30,7 +30,7 @@ function dynamicdata_admin_create($args)
 // FIXME: whatever, as long as it doesn't generate Variable "0" should not be empty exceptions
 //        or relies on $myobject or other stuff like that...
 
-    if (!xarVarFetch('objectid',    'isset',    $objectid,   NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('objectid',    'isset', $objectid,   NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('itemid',      'isset', $itemid,     0,    XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('preview',     'isset', $preview,    0,    XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('return_url',  'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
