@@ -95,7 +95,7 @@ function roles_user_usermenu($args)
 
             $id = xarUserGetVar('id');
             $uname = xarUserGetVar('uname');
-
+            $name = xarUserGetVar('name');
             $object = xarModAPIFunc('dynamicdata','user','getobject',
                               array('name' => 'roles_users'));
             $object->getItem(array('itemid' => $id));
@@ -109,9 +109,10 @@ function roles_user_usermenu($args)
             if (!$isvalid) {
                 $data = array();
                 $data['uname'] = $uname;
+                $data['name'] = $name;
                 $data['authid'] = xarSecGenAuthKey();
                 $data['object'] = & $object;
-
+                $data['current'] = xarModURL('roles', 'user', 'account', array('moduleload' => 'roles'));
                 //$data['preview'] = $preview;
                 $item = array();
                 $item['module'] = 'roles';
