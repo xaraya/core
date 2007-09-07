@@ -21,6 +21,10 @@ class FieldStatusProperty extends SelectProperty
     public $desc       = 'Field Status';
     public $reqmodules = array('dynamicdata');
 
+    // CHANGEME: make this a validation? How to deal with the display part?
+    public $default_display = 0;
+    public $default_input = DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
+
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
@@ -54,6 +58,8 @@ class FieldStatusProperty extends SelectProperty
 
         $valuearray['display'] = $value & DataPropertyMaster::DD_DISPLAYMASK;
         $valuearray['input'] = $value & 992;
+
+        if (empty($valuearray['input'])) $valuearray['input'] = $this->default_input;
 
         $data['value'] = $valuearray;
 
