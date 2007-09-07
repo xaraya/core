@@ -81,10 +81,10 @@ function dynamicdata_admin_create($args)
         return xarTplModule($tplmodule,'admin','new',$data,$template);
     }
 
-    // If we are here then the create is valid: reset the session var
-    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
-
     $itemid = $myobject->createItem();
+
+   // If we are here then the create is valid: reset the session var
+    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
 
     if (empty($itemid)) return; // throw back
 
