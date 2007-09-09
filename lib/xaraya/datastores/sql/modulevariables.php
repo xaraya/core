@@ -12,6 +12,7 @@
  * @package dynamicdata
  */
 sys::import('xaraya.datastores.sql.flattable');
+
 class ModuleVariablesDataStore extends FlatTableDataStore
 {
     public $modname;
@@ -59,8 +60,9 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 		$itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
 
         $fieldlist = array_keys($this->fields);
+        var_dump($args);exit;
         if (count($fieldlist) < 1) {
-            return;
+            return 0;
         }
 
         foreach ($fieldlist as $field) {
