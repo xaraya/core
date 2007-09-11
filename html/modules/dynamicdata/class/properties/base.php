@@ -113,7 +113,7 @@ class DataProperty extends Object implements iDataProperty
                 // data available in module variables
                 // we'll keep a separate data store per module/itemtype here for now
                 // TODO: (don't) integrate module variable handling with DD
-                $storename = '_module variables_';
+                $storename = 'module variables';
                 $storetype = 'modulevars';
                 break;
             case 'dummy':

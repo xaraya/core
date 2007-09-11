@@ -29,6 +29,11 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 		$this->modname = $namepart[2];
     }
 
+    function getFieldName(DataProperty &$property)
+    {
+		return $property->name;
+    }
+
     function getItem(Array $args = array())
     {
 		$itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
@@ -60,7 +65,6 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 		$itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
 
         $fieldlist = array_keys($this->fields);
-        var_dump($args);exit;
         if (count($fieldlist) < 1) {
             return 0;
         }
