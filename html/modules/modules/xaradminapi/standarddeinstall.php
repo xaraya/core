@@ -78,7 +78,7 @@ function modules_adminapi_standarddeinstall($args)
     xarTemplateTag::unregisterall($module);
     xarRemoveMasks($module);
     xarRemoveInstances($module);
-    xarModDelAllVars($module);
+    xarModVars::delete_all($module);
 
     // Deinstall successful
     return true;

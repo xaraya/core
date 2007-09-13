@@ -9,7 +9,8 @@
             if ($args['source'] == 'module variables') {
 				$namepart = explode('_',$args['name']);
 				if (empty($namepart[1])) $namepart[1] = 'dynamicdata';
-				xarModVars::set($namepart[1],$namepart[0],serialize(true));
+//				xarModVars::set($namepart[1],$namepart[0],true);
+				xarModVars::set($namepart[1],$namepart[0],true);
 			}
             $id = parent::createItem($args);
 			return $id;
