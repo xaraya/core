@@ -165,42 +165,41 @@ function dynamicdata_utilapi_import($args)
         $args['import'] = true;
 
         foreach($xmlobject->children() as $child) {
-echo "A";
+
             // pass on some generic values so that the class(es) will know where we are
             if ($index == 1) $args['position'] = 'first';
             elseif ($index == $count) $args['position'] = 'last';
             else $args['position'] = '';
 
-echo "B";
             $item = array();
             $item['name'] = $child->getName();
             $item['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
 
-echo "C";
             // set up the object the first time around in this loop
             if ($item['name'] != $currentobject) {
                 if (!empty($currentobject))
                     throw new Exception("The items imported must all belong to the same object");
                 $currentobject = $item['name'];
-                if (empty($objectname2objectid[$item['name']])) {
-                    $objectinfo = DataObjectMaster::getObjectInfo(array('name' => $item['name']));
+
+                /*
+                // Check that this is a real object
+                if (empty($objectnamelist[$currentobject])) {
+                    $objectinfo = DataObjectMaster::getObjectInfo(array('name' => $currentobject));
                     if (isset($objectinfo) && !empty($objectinfo['objectid'])) {
-                        $objectname2objectid[$item['name']] = $objectinfo['objectid'];
+                        $objectname2objectid[$currentobject] = $$currentobject;
                     } else {
                         $msg = 'Unknown #(1) "#(2)"';
                         $vars = array('object',xarVarPrepForDisplay($item['name']));
                         throw new BadParameterException($vars,$msg);
                     }
                 }
-echo "D";
-                $objectid = $objectname2objectid[$item['name']];
-
+                */
                 // Create the item
-                if (!isset($objectcache[$objectid])) {
-                    $objectcache[$objectid] = DataObjectMaster::getObject(array('objectid' => $objectid));
+                if (!isset($objectcache[$currentobject])) {
+                    $objectcache[$currentobject] = DataObjectMaster::getObject(array('name' => $currentobject));
                 }
-echo "D1";
-                $object =& $objectcache[$objectid];
+                $object =& $objectcache[$currentobject];
+                $objectid = $objectcache[$currentobject]->objectid;
                 /*
                 if (!isset($objectcache[$object->baseancestor])) {
                     $objectcache[$object->baseancestor] = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));
@@ -208,9 +207,7 @@ echo "D1";
                 $primaryobject =& $objectcache[$object->baseancestor];
                 */
                 // Get the properties for this object
-echo "D2";
                 $objectproperties = $object->properties;
-echo "E";
             }
 
             $oldindex = 0;
@@ -221,7 +218,6 @@ echo "E";
                     $item[$propertyname] = $property->value;
                 }
             }
-echo "F";
             if (empty($keepitemid)) {
                 // for dynamic objects, set the primary field to 0 too
                 if (isset($object->primary)) {
@@ -233,7 +229,6 @@ echo "F";
             }
             $args = array_merge($args,$item);
 
-echo "G";
             /* for the moment we only allow creates
             if (!empty($item['itemid'])) {
                 // check if the item already exists
@@ -250,7 +245,6 @@ echo "G";
                 // create the item
                 $itemid = $object->createItem($args);
 //            }
-echo "H";
             if (empty($itemid)) return;
 
             // keep track of the highest item id
