@@ -165,16 +165,18 @@ function dynamicdata_utilapi_import($args)
         $args['import'] = true;
 
         foreach($xmlobject->children() as $child) {
-
+echo "A";
             // pass on some generic values so that the class(es) will know where we are
             if ($index == 1) $args['position'] = 'first';
             elseif ($index == $count) $args['position'] = 'last';
             else $args['position'] = '';
 
+echo "B";
             $item = array();
             $item['name'] = $child->getName();
             $item['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
 
+echo "C";
             // set up the object the first time around in this loop
             if ($item['name'] != $currentobject) {
                 if (!empty($currentobject))
@@ -190,12 +192,14 @@ function dynamicdata_utilapi_import($args)
                         throw new BadParameterException($vars,$msg);
                     }
                 }
+echo "D";
                 $objectid = $objectname2objectid[$item['name']];
 
                 // Create the item
                 if (!isset($objectcache[$objectid])) {
                     $objectcache[$objectid] = DataObjectMaster::getObject(array('objectid' => $objectid));
                 }
+echo "D1";
                 $object =& $objectcache[$objectid];
                 /*
                 if (!isset($objectcache[$object->baseancestor])) {
@@ -204,7 +208,9 @@ function dynamicdata_utilapi_import($args)
                 $primaryobject =& $objectcache[$object->baseancestor];
                 */
                 // Get the properties for this object
+echo "D2";
                 $objectproperties = $object->properties;
+echo "E";
             }
 
             $oldindex = 0;
@@ -215,6 +221,7 @@ function dynamicdata_utilapi_import($args)
                     $item[$propertyname] = $property->value;
                 }
             }
+echo "F";
             if (empty($keepitemid)) {
                 // for dynamic objects, set the primary field to 0 too
                 if (isset($object->primary)) {
@@ -226,6 +233,7 @@ function dynamicdata_utilapi_import($args)
             }
             $args = array_merge($args,$item);
 
+echo "G";
             /* for the moment we only allow creates
             if (!empty($item['itemid'])) {
                 // check if the item already exists
@@ -242,6 +250,7 @@ function dynamicdata_utilapi_import($args)
                 // create the item
                 $itemid = $object->createItem($args);
 //            }
+echo "H";
             if (empty($itemid)) return;
 
             // keep track of the highest item id
