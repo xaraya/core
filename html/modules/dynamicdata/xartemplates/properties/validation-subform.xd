@@ -70,7 +70,7 @@
         <!-- the property of type 'itemid' is the link -->
         <xar:foreach in="$properties" key="$propname" value="$propinfo">
           <xar:if condition="!empty($propinfo['type']) and $propinfo['type'] eq 21">
-            #$propinfo.label#
+            #$propinfo:label#
             <xar:break/>
           </xar:if>
         </xar:foreach>
@@ -80,9 +80,9 @@
         <select name="#$name#[link]" id="#$id#_link">
         <xar:foreach in="$properties" key="$propname" value="$propinfo">
           <xar:if condition="!empty($link) and $link eq $propname">
-            <option value="#$propname#" selected="selected">#$propinfo.label#</option>
+            <option value="#$propname#" selected="selected">#$propinfo:label#</option>
           <xar:else/>
-            <option value="#$propname#">#$propinfo.label#</option>
+            <option value="#$propname#">#$propinfo:label#</option>
           </xar:if>
         </xar:foreach>
         </select>
@@ -149,7 +149,7 @@
         <xar:if condition="!empty($fieldlist) and in_array($propname,$fieldlist)">
           <option value="#$propname#" selected="selected">#$propinfo.label#</option>
         <xar:else/>
-          <option value="#$propname#">#$propinfo.label#</option>
+          <option value="#$propname#">#$propinfo:label#</option>
         </xar:if>
       </xar:foreach>
       </select>

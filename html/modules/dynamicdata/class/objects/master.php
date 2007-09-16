@@ -454,11 +454,11 @@ class DataObjectMaster extends Object
     {
         if(empty($args['fieldlist']))
         {
-            if(count($this->fieldlist) > 0)
+            if(count($this->fieldlist) > 0) {
                 $fieldlist = $this->fieldlist;
-            else
+            } else {
                 return $this->properties;
-//                $fieldlist = array_keys($this->properties);
+            }
         } else {
             $fieldlist = $args['fieldlist'];
         }
@@ -664,7 +664,7 @@ class DataObjectMaster extends Object
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
     **/
-    static function &getObjectList(Array $args)
+    static function &getObjectList(Array $args=array())
     {
         // Complete the info if this is a known object
         $info = self::getObjectInfo($args);
