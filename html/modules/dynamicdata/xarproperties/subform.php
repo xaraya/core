@@ -725,12 +725,10 @@ class SubFormProperty extends DataProperty
         foreach ($this->arguments as $item) {
             $data[$item] = $this->$item;
         }
-        // FIXME: needs to be a better way to convert between objectname and objectid
         if (!empty($this->objectname)) {
             $object = DataObjectMaster::getObject(array('name' => $this->objectname));
             $data['objectid'] = $object->objectid;
             $data['properties'] = $object->getProperties();
-//            var_dump($data['properties']);exit;
         } else {
             $this->objectid = 0;
             $data['objectid'] = 0;
