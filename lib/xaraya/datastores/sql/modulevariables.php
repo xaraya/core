@@ -325,12 +325,12 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 
             $dbtype = xarDB::getType();
             if (substr($dbtype,0,4) == 'oci8') {
-                $propval = 'TO_CHAR(dd_value)';
+                $propval = 'TO_CHAR(mi.value)';
             } elseif (substr($dbtype,0,5) == 'mssql') {
             // CHECKME: limited to 8000 characters ?
-                $propval = 'CAST(dd_value AS VARCHAR(8000))';
+                $propval = 'CAST(mi.value AS VARCHAR(8000))';
             } else {
-                $propval = 'dd_value';
+                $propval = 'mi.value';
             }
 
         /*
@@ -351,20 +351,35 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             }
         */
 
-            $query = "SELECT dd_itemid ";
-            foreach ($propids as $propid) {
-                $query .= ", MAX(CASE WHEN dd_propid = $propid THEN $propval ELSE '' END) AS dd_$propid \n";
-            }
-            $query .= " FROM $dynamicdata
-                       WHERE dd_propid IN (" . join(', ',$propids) . ")
-                    GROUP BY dd_itemid ";
+/*				$query = "SELECT DISTINCT m.name,
+								 mi.item_id,
+								 mi.value
+							FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
+						   WHERE m.name IN ($bindmarkers) AND m.module_id = $modid";
 
+*/
+			foreach ($fields as $field) {
+	            $namepart = explode('_',$field);
+				if (empty($namepart[1])) $modulefields['dynamicdata'][] = $namepart[0];
+				else $modulefields[$namepart[1]][] = $namepart[0];
+			}
+
+            foreach ($modulefields as $key => $values) {
+            	if (count($values)<1) continue;
+				$query = "SELECT mi.item_id ";
+				foreach ($values as $value) {
+					$query .= ", MAX(CASE WHEN m.name = '" . $value . "' THEN $propval ELSE '' END) AS dd_$value \n";
+				}
+				$bindmarkers = '?' . str_repeat(',?',count($values)-1);
+				$query .= " FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
+						   WHERE m.name IN ($bindmarkers)
+						GROUP BY mi.item_id ";
             if (count($this->where) > 0) {
                 $query .= " HAVING ";
                 foreach ($this->where as $whereitem) {
                     // Postgres does not support column aliases in HAVING clauses, but you can use the same aggregate function
                     if (substr($dbtype,0,8) == 'postgres') {
-                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'MAX(CASE WHEN dd_propid = ' . $whereitem['field'] . " THEN $propval ELSE '' END) " . $whereitem['clause'] . $whereitem['post'] . ' ';
+                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'MAX(CASE WHEN m.name = ' . $whereitem['field'] . " THEN $propval ELSE '' END) " . $whereitem['clause'] . $whereitem['post'] . ' ';
                     } else {
                         $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
                     }
@@ -388,7 +403,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                 $stmt->setOffset($startnum - 1);
             }
             // All prepared, run it
-            $result = $stmt->executeQuery();
+            $result = $stmt->executeQuery($values);
 
 
             $isgrouped = 0;
@@ -398,58 +413,59 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                 $combo = array();
                 $id = 0;
                 $process = array();
-                foreach ($propids as $propid) {
-                    if (in_array($propid,$this->groupby)) {
+                foreach ($values as $value) {
+                    if (in_array($field,$this->groupby)) {
                         continue;
-                    } elseif (empty($this->fields[$propid]->operation)) {
+                    } elseif (empty($this->fields[$field]->operation)) {
                         continue; // all fields should be either GROUP BY or have some operation
                     }
-                    array_push($process, $propid);
+                    array_push($process, $value);
                 }
             }
+			}
             while ($result->next()) {
                 $values = $result->getRow();
                 $itemid = array_shift($values);
                 // oops, something went seriously wrong here...
-                if (empty($itemid) || count($values) != count($propids)) {
+                if (empty($itemid) || count($values) != count($fields)) {
                     continue;
                 }
                 if (!$isgrouped) {
                     // add this itemid to the list
                     $this->_itemids[] = $itemid;
 
-                    foreach ($propids as $propid) {
+                    foreach ($fields as $field) {
                         // add the item to the value list for this property
-                        $this->fields[$propid]->setItemValue($itemid,array_shift($values));
+                        $this->fields[$field]->setItemValue($itemid,array_shift($values));
                     }
                 } else {
                     // TODO: use sub-query to do this in the database for MySQL 4.1+ and others ?
                     $propval = array();
-                    foreach ($propids as $propid) {
-                        $propval[$propid] = array_shift($values);
+                    foreach ($fields as $field) {
+                        $propval[$field] = array_shift($values);
                     }
                     $groupid = '';
-                    foreach ($this->groupby as $propid) {
-                        $groupid .= $propval[$propid] . '~';
+                    foreach ($this->groupby as $field) {
+                        $groupid .= $propval[$field] . '~';
                     }
                     if (!isset($combo[$groupid])) {
                         $id++;
                         $combo[$groupid] = $id;
                         // add this "itemid" to the list
                         $this->_itemids[] = $id;
-                        foreach ($this->groupby as $propid) {
+                        foreach ($this->groupby as $field) {
                             // add the item to the value list for this property
-                            $this->fields[$propid]->setItemValue($id,$propval[$propid]);
+                            $this->fields[$field]->setItemValue($id,$propval[$field]);
                         }
-                        foreach ($process as $propid) {
+                        foreach ($process as $field) {
                             // add the item to the value list for this property
-                            $this->fields[$propid]->setItemValue($id,null);
+                            $this->fields[$field]->setItemValue($id,null);
                         }
                     }
                     $curid = $combo[$groupid];
-                    foreach ($process as $propid) {
-                        $curval = $this->fields[$propid]->getItemValue($curid);
-                        switch ($this->fields[$propid]->operation) {
+                    foreach ($process as $field) {
+                        $curval = $this->fields[$field]->getItemValue($curid);
+                        switch ($this->fields[$field]->operation) {
                             case 'COUNT':
                                 if (!isset($curval)) {
                                     $curval = 0;
@@ -458,30 +474,30 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                                 break;
                             case 'SUM':
                                 if (!isset($curval)) {
-                                    $curval = $propval[$propid];
+                                    $curval = $propval[$field];
                                 } else {
-                                    $curval += $propval[$propid];
+                                    $curval += $propval[$field];
                                 }
                                 break;
                             case 'MIN':
                                 if (!isset($curval)) {
-                                    $curval = $propval[$propid];
-                                } elseif ($curval > $propval[$propid]) {
-                                    $curval = $propval[$propid];
+                                    $curval = $propval[$field];
+                                } elseif ($curval > $propval[$field]) {
+                                    $curval = $propval[$field];
                                 }
                                 break;
                             case 'MAX':
                                 if (!isset($curval)) {
-                                    $curval = $propval[$propid];
-                                } elseif ($curval < $propval[$propid]) {
-                                    $curval = $propval[$propid];
+                                    $curval = $propval[$field];
+                                } elseif ($curval < $propval[$field]) {
+                                    $curval = $propval[$field];
                                 }
                                 break;
                             case 'AVG':
                                 if (!isset($curval)) {
-                                    $curval = array('total' => $propval[$propid], 'count' => 1);
+                                    $curval = array('total' => $propval[$field], 'count' => 1);
                                 } else {
-                                    $curval['total'] += $propval[$propid];
+                                    $curval['total'] += $propval[$field];
                                     $curval['count']++;
                                 }
                                 // TODO: divide total by count afterwards
@@ -489,7 +505,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                             default:
                                 break;
                         }
-                        $this->fields[$propid]->setItemValue($curid,$curval);
+                        $this->fields[$field]->setItemValue($curid,$curval);
                     }
                 }
             }
@@ -498,18 +514,18 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             // divide total by count afterwards
             if ($isgrouped) {
                 $divide = array();
-                foreach ($process as $propid) {
-                    if ($this->fields[$propid]->operation == 'AVG') {
-                        $divide[] = $propid;
+                foreach ($process as $field) {
+                    if ($this->fields[$field]->operation == 'AVG') {
+                        $divide[] = $field;
                     }
                 }
                 if (count($divide) > 0) {
                     foreach ($this->_itemids as $curid) {
-                        foreach ($divide as $propid) {
-                            $curval = $this->fields[$propid]->getItemValue($curid);
+                        foreach ($divide as $field) {
+                            $curval = $this->fields[$field]->getItemValue($curid);
                             if (!empty($curval) && is_array($curval) && !empty($curval['count'])) {
                                 $newval = $curval['total'] / $curval['count'];
-                                $this->fields[$propid]->setItemValue($curid,$newval);
+                                $this->fields[$field]->setItemValue($curid,$newval);
                             }
                         }
                     }
