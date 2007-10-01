@@ -25,18 +25,18 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         // keep track of the concerned module for module settings
         // TODO: the concerned module is currently hiding in the third part of the data store name :)
         $namepart = explode('_',$name);
-		if (empty($namepart[2])) $namepart[2] = 'dynamicdata';
-		$this->modname = $namepart[2];
+        if (empty($namepart[2])) $namepart[2] = 'dynamicdata';
+        $this->modname = $namepart[2];
     }
 
     function getFieldName(DataProperty &$property)
     {
-		return $property->name;
+        return $property->name;
     }
 
     function getItem(Array $args = array())
     {
-		$itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
+        $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
 
         $fieldlist = array_keys($this->fields);
         if (count($fieldlist) < 1) {
@@ -50,7 +50,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 //            $value = unserialize(xarModItemVars::get($this->modname,$namepart[0],$itemid));
             $value = xarModItemVars::get($this->modname,$namepart[0],$itemid);
             // set the value for this property
-			$this->fields[$field]->value = $value;
+            $this->fields[$field]->value = $value;
         }
         return $itemid;
     }
@@ -63,7 +63,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 
     function updateItem(Array $args = array())
     {
-		$itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
+        $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
 
         $fieldlist = array_keys($this->fields);
         if (count($fieldlist) < 1) {
@@ -86,7 +86,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 
     function deleteItem(Array $args = array())
     {
-		$itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
+        $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
 
         $fieldlist = array_keys($this->fields);
         if (count($fieldlist) < 1) {
@@ -94,7 +94,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         }
 
         foreach ($fieldlist as $field) {
-			$namepart = explode('_',$field);
+            $namepart = explode('_',$field);
             xarModItemVars::delete($this->modname,$namepart[0],$itemid);
         }
 
@@ -131,69 +131,71 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         if (count($fields) < 1) {
             return;
         }
+//                    var_dump(array_keys($this->fields));
+//                    var_dump($this->groupby);exit;
 
         $modvars = $this->tables['module_vars'];
         $moditemvars = $this->tables['module_itemvars'];
 
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
-        	// split the fields to be gotten up by module
-        	$modulefields['dynamicdata'] = array();
-			foreach ($fields as $field) {
-	            $namepart = explode('_',$field);
-				if (empty($namepart[1])) $modulefields['dynamicdata'][] = $namepart[0];
-				else $modulefields[$namepart[1]][] = $namepart[0];
-			}
+            // split the fields to be gotten up by module
+            $modulefields['dynamicdata'] = array();
+            foreach ($fields as $field) {
+                $namepart = explode('_',$field);
+                if (empty($namepart[1])) $modulefields['dynamicdata'][] = $namepart[0];
+                else $modulefields[$namepart[1]][] = $namepart[0];
+            }
 
-			if (count($this->sort) > 0) {
-				$items = array();
-				$dosort = 1;
-			} else {
-				$dosort = 0;
-			}
+            if (count($this->sort) > 0) {
+                $items = array();
+                $dosort = 1;
+            } else {
+                $dosort = 0;
+            }
 
             foreach ($modulefields as $key => $values) {
-            	if (count($values)<1) continue;
-            	$modid = xarMod::getID($key);
-				$bindmarkers = '?' . str_repeat(',?',count($values)-1);
-				$query = "SELECT DISTINCT m.name,
-								 mi.item_id,
-								 mi.value
-							FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
-						   WHERE m.name IN ($bindmarkers) AND m.module_id = $modid";
+                if (count($values)<1) continue;
+                $modid = xarMod::getID($key);
+                $bindmarkers = '?' . str_repeat(',?',count($values)-1);
+                $query = "SELECT DISTINCT m.name,
+                                 mi.item_id,
+                                 mi.value
+                            FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
+                           WHERE m.name IN ($bindmarkers) AND m.module_id = $modid";
 
-				$bindvars = $values;
-				if (count($itemids) > 1) {
-					$bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
-					$query .= " AND mi.item_id IN ($bindmarkers) ";
-					foreach ($itemids as $itemid) {
-						$bindvars[] = (int) $itemid;
-					}
-				} else {
-					$query .= " AND mi.item_id = ?";
-					$bindvars[] = (int)$itemids[0];
-				}
-				$stmt = $this->db->prepareStatement($query);
-				$result = $stmt->executeQuery($bindvars);
+                $bindvars = $values;
+                if (count($itemids) > 1) {
+                    $bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
+                    $query .= " AND mi.item_id IN ($bindmarkers) ";
+                    foreach ($itemids as $itemid) {
+                        $bindvars[] = (int) $itemid;
+                    }
+                } else {
+                    $query .= " AND mi.item_id = ?";
+                    $bindvars[] = (int)$itemids[0];
+                }
+                $stmt = $this->db->prepareStatement($query);
+                $result = $stmt->executeQuery($bindvars);
 
-				$itemidlist = array();
-				while ($result->next()) {
-					list($field,$itemid,$value) = $result->getRow();
-					if ($key != 'dynamic_data') $field .= '_' . $key;
-					$itemidlist[$itemid] = 1;
-					if (isset($value)) {
-						if ($dosort) {
-							$items[$itemid][$propid] = $value;
-						} else {
-							// add the item to the value list for this property
-							$this->fields[$field]->setItemValue($itemid,$value);
-						}
-					}
-				}
-				// add the itemids to the list
-				$this->_itemids = array_keys($itemidlist);
-				$result->close();
-			}
+                $itemidlist = array();
+                while ($result->next()) {
+                    list($field,$itemid,$value) = $result->getRow();
+                    if ($key != 'dynamic_data') $field .= '_' . $key;
+                    $itemidlist[$itemid] = 1;
+                    if (isset($value)) {
+                        if ($dosort) {
+                            $items[$itemid][$propid] = $value;
+                        } else {
+                            // add the item to the value list for this property
+                            $this->fields[$field]->setItemValue($itemid,$value);
+                        }
+                    }
+                }
+                // add the itemids to the list
+                $this->_itemids = array_keys($itemidlist);
+                $result->close();
+            }
 
             if ($dosort) {
                 $code = '';
@@ -351,29 +353,22 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             }
         */
 
-/*				$query = "SELECT DISTINCT m.name,
-								 mi.item_id,
-								 mi.value
-							FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
-						   WHERE m.name IN ($bindmarkers) AND m.module_id = $modid";
+            foreach ($fields as $field) {
+                $namepart = explode('_',$field);
+                if (empty($namepart[1])) $modulefields['dynamicdata'][] = $namepart[0];
+                else $modulefields[$namepart[1]][] = $namepart[0];
+            }
 
-*/
-			foreach ($fields as $field) {
-	            $namepart = explode('_',$field);
-				if (empty($namepart[1])) $modulefields['dynamicdata'][] = $namepart[0];
-				else $modulefields[$namepart[1]][] = $namepart[0];
-			}
-
-            foreach ($modulefields as $key => $values) {
-            	if (count($values)<1) continue;
-				$query = "SELECT mi.item_id ";
-				foreach ($values as $value) {
-					$query .= ", MAX(CASE WHEN m.name = '" . $value . "' THEN $propval ELSE '' END) AS dd_$value \n";
-				}
-				$bindmarkers = '?' . str_repeat(',?',count($values)-1);
-				$query .= " FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
-						   WHERE m.name IN ($bindmarkers)
-						GROUP BY mi.item_id ";
+            foreach ($modulefields as $key => $fieldvalues) {
+                if (count($fieldvalues)<1) continue;
+                $query = "SELECT mi.item_id ";
+                foreach ($fieldvalues as $fieldvalue) {
+                    $query .= ", MAX(CASE WHEN m.name = '" . $fieldvalue . "' THEN $propval ELSE '' END) AS dd_$fieldvalue \n";
+                }
+                $bindmarkers = '?' . str_repeat(',?',count($fieldvalues)-1);
+                $query .= " FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
+                           WHERE m.name IN ($bindmarkers)
+                        GROUP BY mi.item_id ";
             if (count($this->where) > 0) {
                 $query .= " HAVING ";
                 foreach ($this->where as $whereitem) {
@@ -403,26 +398,30 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                 $stmt->setOffset($startnum - 1);
             }
             // All prepared, run it
-            $result = $stmt->executeQuery($values);
+            $result = $stmt->executeQuery($fieldvalues);
 
 
             $isgrouped = 0;
             if (count($this->groupby) > 0) {
+	            $groupbys = array();
+				foreach ($this->groupby as $groupby) {
+					$namepart = explode('_',$groupby);
+					$groupbys[] = $namepart[0];
+				}
                 $isgrouped = 1;
                 $items = array();
                 $combo = array();
                 $id = 0;
                 $process = array();
-                foreach ($values as $value) {
-                    if (in_array($field,$this->groupby)) {
+                foreach ($fieldvalues as $fieldvalue) {
+                    if (in_array($fieldvalue,$this->groupby)) {
                         continue;
-                    } elseif (empty($this->fields[$field]->operation)) {
+                    } elseif (empty($this->fields[$fieldvalue]->operation)) {
                         continue; // all fields should be either GROUP BY or have some operation
                     }
-                    array_push($process, $value);
+                    array_push($process, $fieldvalue);
                 }
             }
-			}
             while ($result->next()) {
                 $values = $result->getRow();
                 $itemid = array_shift($values);
@@ -434,18 +433,18 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                     // add this itemid to the list
                     $this->_itemids[] = $itemid;
 
-                    foreach ($fields as $field) {
+                    foreach ($fieldvalues as $fieldvalue) {
                         // add the item to the value list for this property
-                        $this->fields[$field]->setItemValue($itemid,array_shift($values));
+                        $this->fields[$fieldvalue]->setItemValue($itemid,array_shift($values));
                     }
                 } else {
                     // TODO: use sub-query to do this in the database for MySQL 4.1+ and others ?
                     $propval = array();
-                    foreach ($fields as $field) {
-                        $propval[$field] = array_shift($values);
+                    foreach ($fieldvalues as $fieldvalue) {
+                        $propval[$fieldvalue] = array_shift($values);
                     }
                     $groupid = '';
-                    foreach ($this->groupby as $field) {
+                    foreach ($groupbys as $field) {
                         $groupid .= $propval[$field] . '~';
                     }
                     if (!isset($combo[$groupid])) {
@@ -453,9 +452,10 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                         $combo[$groupid] = $id;
                         // add this "itemid" to the list
                         $this->_itemids[] = $id;
-                        foreach ($this->groupby as $field) {
+						foreach ($this->groupby as $field) {
                             // add the item to the value list for this property
-                            $this->fields[$field]->setItemValue($id,$propval[$field]);
+							$namepart = explode('_',$field);
+                            $this->fields[$field]->setItemValue($id,$propval[$namepart[0]]);
                         }
                         foreach ($process as $field) {
                             // add the item to the value list for this property
@@ -509,6 +509,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                     }
                 }
             }
+            }
             $result->close();
 
             // divide total by count afterwards
@@ -534,41 +535,41 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 
         // here we grab everyting
         } else {
-        	// split the fields to be gotten up by module
-        	$modulefields['dynamicdata'] = array();
-			foreach ($fields as $field) {
-	            $namepart = explode('_',$field);
-				if (empty($namepart[1])) $modulefields['dynamicdata'][] = $namepart[0];
-				else $modulefields[$namepart[1]][] = $namepart[0];
-			}
+            // split the fields to be gotten up by module
+            $modulefields['dynamicdata'] = array();
+            foreach ($fields as $field) {
+                $namepart = explode('_',$field);
+                if (empty($namepart[1])) $modulefields['dynamicdata'][] = $namepart[0];
+                else $modulefields[$namepart[1]][] = $namepart[0];
+            }
 
             foreach ($modulefields as $key => $values) {
-            	if (count($values)<1) continue;
-            	$modid = xarMod::getID($key);
-				$bindmarkers = '?' . str_repeat(',?',count($values)-1);
-				$query = "SELECT DISTINCT m.name,
-								 mi.item_id,
-								 mi.value
-							FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
-						   WHERE m.name IN ($bindmarkers) AND m.module_id = $modid";
+                if (count($values)<1) continue;
+                $modid = xarMod::getID($key);
+                $bindmarkers = '?' . str_repeat(',?',count($values)-1);
+                $query = "SELECT DISTINCT m.name,
+                                 mi.item_id,
+                                 mi.value
+                            FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
+                           WHERE m.name IN ($bindmarkers) AND m.module_id = $modid";
 
-				$stmt = $this->db->prepareStatement($query);
-				$result = $stmt->executeQuery($values);
+                $stmt = $this->db->prepareStatement($query);
+                $result = $stmt->executeQuery($values);
 
-				$itemidlist = array();
-				while ($result->next()) {
-					list($field,$itemid,$value) = $result->getRow();
-					if ($key != 'dynamic_data') $field .= '_' . $key;
-					$itemidlist[$itemid] = 1;
-					if (isset($value)) {
-						// add the item to the value list for this property
-						$this->fields[$field]->setItemValue($itemid,$value);
-					}
-				}
-				// add the itemids to the list
-				$this->_itemids = array_keys($itemidlist);
-				$result->close();
-			}
+                $itemidlist = array();
+                while ($result->next()) {
+                    list($field,$itemid,$value) = $result->getRow();
+                    if ($key != 'dynamic_data') $field .= '_' . $key;
+                    $itemidlist[$itemid] = 1;
+                    if (isset($value)) {
+                        // add the item to the value list for this property
+                        $this->fields[$field]->setItemValue($itemid,$value);
+                    }
+                }
+                // add the itemids to the list
+                $this->_itemids = array_keys($itemidlist);
+                $result->close();
+            }
         }
     }
 
@@ -597,7 +598,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             if($this->db->databaseType == 'sqlite') {
                 $query = "SELECT COUNT(*)
                           FROM (SELECT DISTINCT mi.item_id
-                          		FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
+                                FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
                                 WHERE mi.name IN ($bindmarkers) "; // WATCH OUT, STILL UNBALANCED
             } else {
                 $query = "SELECT COUNT(DISTINCT mi.item_id)
@@ -663,34 +664,34 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         // here we grab everyting
         } else {
 
-        	// split the fields to be gotten up by module
-        	$modulefields['dynamicdata'] = array();
-			foreach ($fields as $field) {
-	            $namepart = explode('_',$field);
-				if (empty($namepart[1])) $modulefields['dynamicdata'][] = $namepart[0];
-				else $modulefields[$namepart[1]][] = $namepart[0];
-			}
+            // split the fields to be gotten up by module
+            $modulefields['dynamicdata'] = array();
+            foreach ($fields as $field) {
+                $namepart = explode('_',$field);
+                if (empty($namepart[1])) $modulefields['dynamicdata'][] = $namepart[0];
+                else $modulefields[$namepart[1]][] = $namepart[0];
+            }
             $numitems = 0;
             foreach ($modulefields as $key => $values) {
-            	if (count($values)<1) continue;
-            	$modid = xarMod::getID($key);
-				$bindmarkers = '?' . str_repeat(',?',count($values)-1);
-				if($this->db->databaseType == 'sqlite' ) {
-					$query = "SELECT COUNT(*)
-							  FROM (SELECT DISTINCT mi.item_id FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
-							  WHERE m.name IN ($bindmarkers)) AND m.module_id = $modid";
-				} else {
-					$query = "SELECT COUNT(DISTINCT mi.item_id)
-							  FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
-							  WHERE m.name IN ($bindmarkers) AND m.module_id = $modid";
-				}
+                if (count($values)<1) continue;
+                $modid = xarMod::getID($key);
+                $bindmarkers = '?' . str_repeat(',?',count($values)-1);
+                if($this->db->databaseType == 'sqlite' ) {
+                    $query = "SELECT COUNT(*)
+                              FROM (SELECT DISTINCT mi.item_id FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
+                              WHERE m.name IN ($bindmarkers)) AND m.module_id = $modid";
+                } else {
+                    $query = "SELECT COUNT(DISTINCT mi.item_id)
+                              FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
+                              WHERE m.name IN ($bindmarkers) AND m.module_id = $modid";
+                }
 
-				$stmt = $this->db->prepareStatement($query);
-				$result = $stmt->executeQuery($values);
-				if (!$result->first()) return;
+                $stmt = $this->db->prepareStatement($query);
+                $result = $stmt->executeQuery($values);
+                if (!$result->first()) return;
 
-				$numitems += $result->getInt(1);
-				$result->close();
+                $numitems += $result->getInt(1);
+                $result->close();
             }
 
             return $numitems;
