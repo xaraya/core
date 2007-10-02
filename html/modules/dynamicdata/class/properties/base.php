@@ -32,7 +32,7 @@ class DataProperty extends Object implements iDataProperty
     public $order          = 0;
     public $format         = '0'; //<-- eh?
     public $filepath       = 'modules/dynamicdata/xarproperties';
-    public $class          = '';         // what class is this?
+    public $class          = '';         // this property's class
 
     // Attributes for runtime
     public $template = '';
@@ -49,6 +49,7 @@ class DataProperty extends Object implements iDataProperty
 
     // public $objectref = null; // object this property belongs to
     public $_objectid = null; // objectid this property belongs to
+    public $_fieldprefix = ''; // the object's fieldprefix
 
     public $_itemid;          // reference to $itemid in DataObject, where the current itemid is kept
     public $_items;           // reference to $items in DataObjectList, where the different item values are kept
@@ -289,7 +290,14 @@ class DataProperty extends Object implements iDataProperty
 
         // Our common items we need
         if(!isset($data['name']))        $data['name'] = 'dd_'.$this->id;
-        if(isset($data['fieldprefix']))  $data['name'] = $data['fieldprefix'] . '_' . $data['name'];
+
+        $name = $data['name'];
+        // Add the object's field prefix if there is one
+        if(!empty($this->_fieldprefix))  $name = $this->_fieldprefix . '_' . $data['name'];
+        // A field prefix added here can override the previous one
+        if(isset($data['fieldprefix']))  $name = $data['fieldprefix'] . '_' . $data['name'];
+        $data['name'] = $name;
+
         if(!isset($data['id']))          $data['id']   = $data['name'];
         // mod for the tpl and what tpl the prop wants.
 
@@ -370,6 +378,14 @@ class DataProperty extends Object implements iDataProperty
     function showHidden(Array $data = array())
     {
         $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
+
+        $name = $data['name'];
+        // Add the object's field prefix if there is one
+        if(!empty($this->_fieldprefix))  $name = $this->_fieldprefix . '_' . $data['name'];
+        // A field prefix added here can override the previous one
+        if(isset($data['fieldprefix']))  $name = $data['fieldprefix'] . '_' . $data['name'];
+        $data['name'] = $name;
+
         $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
         $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
