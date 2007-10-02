@@ -27,6 +27,12 @@ class RadioButtonsProperty extends SelectProperty
 
     }
 
+    public function showInput(Array $data = array())
+    {
+        if (!empty($data['checked'])) $data['value'] = $data['checked'];
+        return parent::showInput($data);
+    }
+
     public function showOutput(Array $data = array())
     {
         $this->template  = 'dropdown';
