@@ -12,11 +12,12 @@
 <span class="xar-error">
     <xar:ml>
         <xar:mlstring>
-            Warning: the template showinput-#(1).xd or showinput-#(2).xd
+            Warning: the template showinput-#(1).xd or showinput-#(2).xd in module #(3)
             is missing for this property!
         </xar:mlstring>
         <xar:mlvar>#$type#</xar:mlvar>
         <xar:mlvar>#$template#</xar:mlvar>
+        <xar:mlvar>#$tplmodule#</xar:mlvar>
     </xar:ml>
 </span>
 <br/>
