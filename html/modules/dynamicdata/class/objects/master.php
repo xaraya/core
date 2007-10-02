@@ -465,13 +465,23 @@ class DataObjectMaster extends Object
 
 
         $properties = array();
-        foreach($fieldlist as $name) {
-            if (isset($this->properties[$name])) {
-            	// Pass along a field prefix if there is one
-				$this->properties[$name]->_fieldprefix = $args['fieldprefix'];
-				$properties[$name] = &$this->properties[$name];
-            }
+        if (!empty($args['fieldprefix'])) {
+			foreach($fieldlist as $name) {
+				if (isset($this->properties[$name])) {
+					// Pass along a field prefix if there is one
+					$this->properties[$name]->_fieldprefix = $args['fieldprefix'];
+					$properties[$name] = &$this->properties[$name];
+				}
+			}
+        } else {
+			foreach($fieldlist as $name) {
+				if (isset($this->properties[$name])) {
+					// Pass along a field prefix if there is one
+					$properties[$name] = &$this->properties[$name];
+				}
+			}
         }
+
         return $properties;
     }
 
