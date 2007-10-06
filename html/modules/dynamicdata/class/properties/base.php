@@ -47,7 +47,7 @@ class DataProperty extends Object implements iDataProperty
     public $value = null;     // value of this property for a particular DataObject
     public $invalid = '';     // result of the checkInput/validateValue methods
 
-    // public $objectref = null; // object this property belongs to
+    public $objectref = null; // object this property belongs to
     public $_objectid = null; // objectid this property belongs to
     public $_fieldprefix = ''; // the object's fieldprefix
 
@@ -169,25 +169,14 @@ class DataProperty extends Object implements iDataProperty
      */
     public function fetchValue($name = '')
     {
-        $isvalid = true;
+        $found = false;
         $value = null;
-        xarVarFetch($name, 'isset', $namevalue,  NULL, XARVAR_DONT_SET);
+        xarVarFetch($name, 'isset', $namevalue, NULL, XARVAR_DONT_SET);
         if(isset($namevalue)) {
-            $value = $namevalue;
-        } else {
-            xarVarFetch($this->name, 'isset', $fieldvalue,  NULL, XARVAR_DONT_SET);
-            if(isset($fieldvalue)) {
-                $value = $fieldvalue;
-            } else {
-                xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_DONT_SET);
-                if(isset($ddvalue)) {
-                    $value = $ddvalue;
-                } else {
-                    $isvalid = false;
-                }
-            }
+			$found = true;
+			$value = $namevalue;
         }
-        return array($isvalid,$value);
+        return array($found,$value);
     }
 
     /**
@@ -198,11 +187,13 @@ class DataProperty extends Object implements iDataProperty
      */
     public function checkInput($name = '', $value = null)
     {
+        $this->invalid = '';
         if(!isset($value)) {
-            list($isvalid,$value) = $this->fetchValue($name);
-            if (!$isvalid) {
-                $this->invalid = xarML('no value found');
-                return false;
+            list($found,$value) = $this->fetchValue($name);
+            if (!$found) {
+                $this->invalid = xarML('no value found for #(1)', $name);
+                $this->objectref->missingfields[] = $this->name;
+                return null;
             }
 
             // store the fieldname for validations who need them (e.g. file uploads)

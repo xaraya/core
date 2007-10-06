@@ -131,6 +131,7 @@ class DataPropertyMaster extends Object
 
         // get a new property
         $property =& self::getProperty($args);
+        $property->objectref = $objectref;
 
         // for dynamic object lists, put a reference to the $items array in the property
         if(method_exists($objectref, 'getItems'))

@@ -38,7 +38,6 @@ class DummyDataStore extends BasicDataStore
         }
     }
 
-/*
     function createItem(array $args = array())
     {
         $itemid = $args['itemid'];
@@ -47,6 +46,7 @@ class DummyDataStore extends BasicDataStore
                 $this->fields[$field]->createValue($itemid);
             }
         }
+        return $itemid;
     }
 
     function updateItem(array $args = array())
@@ -57,6 +57,7 @@ class DummyDataStore extends BasicDataStore
                 $this->fields[$field]->updateValue($itemid);
             }
         }
+        return $itemid;
     }
 
     function deleteItem(array $args = array())
@@ -67,9 +68,8 @@ class DummyDataStore extends BasicDataStore
                 $this->fields[$field]->deleteValue($itemid);
             }
         }
+        return $itemid;
     }
-*/
-
 }
 
 ?>

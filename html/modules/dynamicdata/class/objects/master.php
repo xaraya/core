@@ -203,7 +203,7 @@ class DataObjectMaster extends Object
         // get the properties defined for this object
        if(count($this->properties) == 0 && isset($this->objectid)) {
             $args = $this->toArray();
-            $args['objectref'] = $this;
+            $args['objectref'] =& $this;
             if(!isset($args['allprops']))   //FIXME is this needed??
                 $args['allprops'] = null;
 
