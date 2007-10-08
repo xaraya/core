@@ -180,23 +180,26 @@ function dynamicdata_utilapi_import($args)
                 if (!empty($currentobject))
                     throw new Exception("The items imported must all belong to the same object");
                 $currentobject = $item['name'];
-                if (empty($objectname2objectid[$item['name']])) {
-                    $objectinfo = DataObjectMaster::getObjectInfo(array('name' => $item['name']));
+
+                /*
+                // Check that this is a real object
+                if (empty($objectnamelist[$currentobject])) {
+                    $objectinfo = DataObjectMaster::getObjectInfo(array('name' => $currentobject));
                     if (isset($objectinfo) && !empty($objectinfo['objectid'])) {
-                        $objectname2objectid[$item['name']] = $objectinfo['objectid'];
+                        $objectname2objectid[$currentobject] = $$currentobject;
                     } else {
                         $msg = 'Unknown #(1) "#(2)"';
                         $vars = array('object',xarVarPrepForDisplay($item['name']));
                         throw new BadParameterException($vars,$msg);
                     }
                 }
-                $objectid = $objectname2objectid[$item['name']];
-
+                */
                 // Create the item
-                if (!isset($objectcache[$objectid])) {
-                    $objectcache[$objectid] = DataObjectMaster::getObject(array('objectid' => $objectid));
+                if (!isset($objectcache[$currentobject])) {
+                    $objectcache[$currentobject] = DataObjectMaster::getObject(array('name' => $currentobject));
                 }
-                $object =& $objectcache[$objectid];
+                $object =& $objectcache[$currentobject];
+                $objectid = $objectcache[$currentobject]->objectid;
                 /*
                 if (!isset($objectcache[$object->baseancestor])) {
                     $objectcache[$object->baseancestor] = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));

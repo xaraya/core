@@ -6,10 +6,10 @@ function modules_adminapi_standardinstall($args)
     if (!isset($module)) return false;
     if (!isset($objects)) return false;
 
-    $existing_objects  = xarModAPIFunc('dynamicdata','user','getobjects');
+    $existing_objects  = DataObjectMaster::getObjects();
     foreach($existing_objects as $objectid => $objectinfo) {
         if(in_array($objectinfo['name'], $objects)) {
-            if(!xarModAPIFunc('dynamicdata','admin','deleteobject', array('objectid' => $objectid))) return;
+            if(!DataObjectMaster::deleteObject(array('objectid' => $objectid))) return;
         }
     }
     $dd_objects = array();
@@ -33,7 +33,7 @@ function modules_adminapi_standardinstall($args)
         if(file_exists($dat_file)) {
             $data['file'] = $dat_file;
             // And allow it to fail for now
-            xarModAPIFunc('dynamicdata','util','import', $data);
+            $objectid = xarModAPIFunc('dynamicdata','util','import', $data);
         }
     }
 

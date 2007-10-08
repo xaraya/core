@@ -203,7 +203,7 @@ class DataObjectMaster extends Object
         // get the properties defined for this object
        if(count($this->properties) == 0 && isset($this->objectid)) {
             $args = $this->toArray();
-            $args['objectref'] = $this;
+            $args['objectref'] =& $this;
             if(!isset($args['allprops']))   //FIXME is this needed??
                 $args['allprops'] = null;
 
@@ -454,20 +454,34 @@ class DataObjectMaster extends Object
     {
         if(empty($args['fieldlist']))
         {
-            if(count($this->fieldlist) > 0)
+            if(count($this->fieldlist) > 0) {
                 $fieldlist = $this->fieldlist;
-            else
+            } else {
                 return $this->properties;
-//                $fieldlist = array_keys($this->properties);
+            }
         } else {
             $fieldlist = $args['fieldlist'];
         }
 
 
         $properties = array();
-        foreach($fieldlist as $name) {
-            if (isset($this->properties[$name])) $properties[$name] = &$this->properties[$name];
+        if (!empty($args['fieldprefix'])) {
+			foreach($fieldlist as $name) {
+				if (isset($this->properties[$name])) {
+					// Pass along a field prefix if there is one
+					$this->properties[$name]->_fieldprefix = $args['fieldprefix'];
+					$properties[$name] = &$this->properties[$name];
+				}
+			}
+        } else {
+			foreach($fieldlist as $name) {
+				if (isset($this->properties[$name])) {
+					// Pass along a field prefix if there is one
+					$properties[$name] = &$this->properties[$name];
+				}
+			}
         }
+
         return $properties;
     }
 
@@ -664,7 +678,7 @@ class DataObjectMaster extends Object
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
     **/
-    static function &getObjectList(Array $args)
+    static function &getObjectList(Array $args=array())
     {
         // Complete the info if this is a known object
         $info = self::getObjectInfo($args);
