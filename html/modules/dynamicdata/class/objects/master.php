@@ -255,7 +255,8 @@ class DataObjectMaster extends Object
         $fields = array();
         if(count($fieldlist) != 0) {
 			foreach($fieldlist as $field)
-				if($properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+				// Ignore those disabled AND those that don't exist
+				if(isset($properties[$field]) && ($properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED))
 					$fields[$properties[$field]->id] = $properties[$field]->name;
         } else {
 			if ($status) {
