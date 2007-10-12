@@ -6,6 +6,7 @@ function modules_adminapi_standardinstall($args)
     if (!isset($module)) return false;
     if (!isset($objects)) return false;
 
+    sys::import('modules.dynamicdata.class.objects.master');
     $existing_objects  = DataObjectMaster::getObjects();
     foreach($existing_objects as $objectid => $objectinfo) {
         if(in_array($objectinfo['name'], $objects)) {
