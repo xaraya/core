@@ -218,8 +218,8 @@ function roles_activate()
     $rolefields['name'] = 'Anonymous';
     $rolefields['uname'] = 'anonymous';
     $rolefields['parentid'] = $topid;
-    $id = $user->createItem($rolefields);
-    xarConfigSetVar('Site.User.AnonymousUID', $topid);
+    $anonid = $user->createItem($rolefields);
+    xarConfigSetVar('Site.User.AnonymousUID', $anonid);
 
     // The Administrator
     $rolefields['name'] = 'Administrator';
