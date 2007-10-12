@@ -13,19 +13,7 @@ class xarPrivilege extends xarMask
 {
 
     public $id;           //the id of this privilege
-    public $name;          //the name of this privilege
-    public $realm;         //the realm of this privilege
-    public $module;        //the module of this privilege
-    public $component;     //the component of this privilege
-    public $instance;      //the instance of this privilege
-    public $level;         //the access level of this privilege
-    public $description;   //the long description of this privilege
     public $parentid;      //the id of the parent of this privilege
-
-    public $dbconn;
-    public $privilegestable;
-    public $privmemberstable;
-    public $realmstable;
 
     /**
      * xarPrivilege: constructor for the class
@@ -48,6 +36,7 @@ class xarPrivilege extends xarMask
         $this->rolestable = $xartable['roles'];
         $this->acltable = $xartable['security_acl'];
         $this->realmstable = $xartable['security_realms'];
+        $this->modulestable = $xartable['modules'];
 
 // CHECKME: id and description are undefined when adding a new privilege
         if (empty($id)) {
@@ -470,8 +459,9 @@ class xarPrivilege extends xarMask
         // create an array to hold the objects to be returned
         $children = array();
 
-        $query = "SELECT p.*, pm.parentid
-                    FROM $this->privilegestable p, $this->privmemberstable pm
+        $query = "SELECT p.*, pm.parentid, m.name
+                    FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.id
+                    LEFT JOIN $this->modulestable m ON p.module_id = m.id
                     WHERE p.id = pm.id";
         // retrieve all children of everyone at once
         //              AND pm.parentid = " . $cacheId;
@@ -479,16 +469,16 @@ class xarPrivilege extends xarMask
         $result = $this->dbconn->executeQuery($query);
 
         while($result->next()) {
-            list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$type,$parentid) = $result->fields;
+            list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$type,$parentid, $module) = $result->fields;
             if (!isset($children[$parentid])) $children[$parentid] = array();
-            $pargs = array('id'=>$id,
-                            'name'=>$name,
-                            'realm'=>$realm,
-                            'module'=>$module_id,
-                            'component'=>$component,
-                            'instance'=>$instance,
-                            'level'=>$level,
-                            'description'=>$description,
+            $pargs = array('id'=>           $id,
+                            'name'=>        $name,
+                            'realm'=>       $realm,
+                            'module'=>      $module_id != 0 ? $module : 'All',
+                            'component'=>   $component,
+                            'instance'=>    $instance,
+                            'level'=>       $level,
+                            'description'=> $description,
                             'parentid' => $parentid);
             $children[$parentid][] = new xarPrivilege($pargs);
         }

@@ -27,6 +27,9 @@ class xarMask extends Object
     public $dbconn;
     public $privilegestable;
     public $privmemberstable;
+    public $rolestable;
+    public $acltable;
+    public $modulestable;
 
     /**
      * xarMask: constructor for the class
