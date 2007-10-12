@@ -199,6 +199,44 @@ class xarPrivileges extends xarMasks
         return true;
     }
 
+    public static function getAssignments(Array $args=array())
+    {
+        parent::initialize();
+
+		$where = "WHERE p.type = " . self::PRIVILEGES_PRIVILEGETYPE;
+		if (!empty($args['privilege_id']))      $where .= ' AND p.id = ' . $args['privilege_id'];
+		if (!empty($args['role_id']))      $where .= ' AND r.id = ' . $args['role_id'];
+		if (!empty($args['module'])) {
+			if ($args['module'] == strtolower('All')) $where .= " AND p.module_id = " . 0;
+			else $where .= " AND p.module_id = " . xarMod::getID($args['module']);
+		}
+		$query = "SELECT p.id, p.name, r.id,r.type,r.name,
+						 p.module_id, p.component, p.instance,
+						 p.level,  p.description
+				  FROM " . parent::$privilegestable . " p INNER JOIN ". parent::$acltable . " a ON p.id = a.permid
+				  INNER JOIN ". parent::$rolestable . " r ON a.partid = r.id " .
+				  $where .
+				  " ORDER BY p.name";
+		$stmt = parent::$dbconn->prepareStatement($query);
+		// The fetchmode *needed* to be here, dunno why. Exception otherwise
+		$result = $stmt->executeQuery($query,ResultSet::FETCHMODE_NUM);
+        $allprivileges = array();
+		while($result->next()) {
+			list($id, $name, $role_id, $role_type, $role_name, $module, $component, $instance, $level,
+					$description) = $result->fields;
+			$allprivileges[] = array('id' => $id,
+							   'name' => $name,
+							   'role_id' => $role_id,
+							   'role_type' => $role_type,
+							   'role_name' => $role_name,
+							   'module' => $module,
+							   'component' => $component,
+							   'instance' => $instance,
+							   'level' => $level,
+							   'description' => $description);
+		}
+        return $allprivileges;
+    }
     /**
      * getprivileges: returns all the current privileges.
      *
@@ -214,36 +252,41 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    use associative fetching and one getrow statement.
     */
-    public static function getprivileges()
+    public static function getprivileges(Array $args=array())
     {
         parent::initialize();
-        static $allprivileges = array();
 
-        if (empty($allprivileges)) {
-            xarLogMessage('PRIV: getting all privs, once!');
-            $query = "SELECT p.id, p.name, r.name,
-                             m.name, p.component, p.instance,
-                             p.level,  p.description
-                      FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable . " r ON p.realmid = r.id
-                      LEFT JOIN ". parent::$modulestable . " m ON p.module_id = m.id
-                      WHERE type = " . self::PRIVILEGES_PRIVILEGETYPE .
-                      " ORDER BY p.name";
-            $stmt = parent::$dbconn->prepareStatement($query);
-            // The fetchmode *needed* to be here, dunno why. Exception otherwise
-            $result = $stmt->executeQuery($query,ResultSet::FETCHMODE_NUM);
-            while($result->next()) {
-                list($id, $name, $realm, $module, $component, $instance, $level,
-                        $description) = $result->fields;
-                $allprivileges[] = array('id' => $id,
-                                   'name' => $name,
-                                   'realm' => is_null($realm) ? 'All' : $realm,
-                                   'module' => $module,
-                                   'component' => $component,
-                                   'instance' => $instance,
-                                   'level' => $level,
-                                   'description' => $description);
-            }
-        }
+		xarLogMessage('PRIV: getting all privs, once!');
+		$where = "WHERE type = " . self::PRIVILEGES_PRIVILEGETYPE;
+		if (!empty($args['name']))      $where .= ' AND p.name = ' . $args['name'];
+		if (!empty($args['module'])) {
+			if ($args['module'] == strtolower('All')) $where .= " AND p.module_id = " . 0;
+			else $where .= " AND p.module_id = " . xarMod::getID($args['module']);
+		}
+		if (!empty($args['component'])) $where .= ' AND m.component = ' . $args['component'];
+		$query = "SELECT p.id, p.name, r.name,
+						 m.name, p.component, p.instance,
+						 p.level,  p.description
+				  FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable . " r ON p.realmid = r.id
+				  LEFT JOIN ". parent::$modulestable . " m ON p.module_id = m.id " .
+				  $where .
+				  " ORDER BY p.name";
+		$stmt = parent::$dbconn->prepareStatement($query);
+		// The fetchmode *needed* to be here, dunno why. Exception otherwise
+		$result = $stmt->executeQuery($query,ResultSet::FETCHMODE_NUM);
+        $allprivileges = array();
+		while($result->next()) {
+			list($id, $name, $realm, $module, $component, $instance, $level,
+					$description) = $result->fields;
+			$allprivileges[] = array('id' => $id,
+							   'name' => $name,
+							   'realm' => is_null($realm) ? 'All' : $realm,
+							   'module' => $module,
+							   'component' => $component,
+							   'instance' => $instance,
+							   'level' => $level,
+							   'description' => $description);
+		}
         return $allprivileges;
 
     }

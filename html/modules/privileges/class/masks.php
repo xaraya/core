@@ -38,6 +38,7 @@ class xarMasks extends Object
     protected static $instancestable;
     protected static $levelstable;
     protected static $privsetstable;
+    protected static $rolestable;
 
     protected static $privilegeset;
 
@@ -65,6 +66,7 @@ class xarMasks extends Object
         self::$acltable = $xartable['security_acl'];
         self::$instancestable = $xartable['security_instances'];
         self::$modulestable = $xartable['modules'];
+        self::$rolestable = $xartable['roles'];
 
         // @todo refactor callers to do this directly
         sys::import('modules.privileges.class.securitylevel');
