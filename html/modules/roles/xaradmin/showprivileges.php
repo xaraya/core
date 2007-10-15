@@ -70,7 +70,7 @@ function roles_admin_showprivileges()
                 $inherited[] = array('privid' => $priv->getID(),
                         'name' => $priv->getName(),
                         'realm' => $priv->getRealm(),
-                        'module' => $priv->module ? xarModGetNameFromID($priv->module) : 'All',
+                        'module' => $priv->module,
                         'component' => $priv->getComponent(),
                         'instance' => $priv->getInstance(),
                         'level' => xarPrivileges::$levels[$priv->getLevel()],
