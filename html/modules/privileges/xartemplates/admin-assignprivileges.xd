@@ -62,7 +62,7 @@
 
                     <xar:if condition="count($assignments) eq 0">
                         <tr>
-                            <td colspan="4" style="text-align: center"><xar:mlstring>No assignments to display</xar:mlstring></td>
+                            <td colspan="5" style="text-align: center"><xar:mlstring>No assignments to display</xar:mlstring></td>
                         </tr>
                     <xar:else />
                         <xar:loop name="$assignments">
@@ -130,7 +130,7 @@
 
                     <xar:if condition="count($assignments) eq 0">
                         <tr>
-                            <td colspan="4" style="text-align: center"><xar:mlstring>No assignments to display</xar:mlstring></td>
+                            <td colspan="5" style="text-align: center"><xar:mlstring>No assignments to display</xar:mlstring></td>
                         </tr>
                     <xar:else />
                         <xar:loop name="$assignments">
@@ -197,7 +197,7 @@
 
                     <xar:if condition="count($assignments) eq 0">
                         <tr>
-                            <td colspan="4" style="text-align: center"><xar:mlstring>No assignments to display</xar:mlstring></td>
+                            <td colspan="5" style="text-align: center"><xar:mlstring>No assignments to display</xar:mlstring></td>
                         </tr>
                     <xar:else />
                         <xar:loop name="$assignments">
