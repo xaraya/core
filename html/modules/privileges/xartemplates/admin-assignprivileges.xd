@@ -31,7 +31,7 @@
                 <xar:mlstring>
                     Privilege Assignments for #(1)
                 </xar:mlstring>
-                <xar:mlvar>$tabmodule</xar:mlvar>
+                <xar:mlvar>#$tabmodule#</xar:mlvar>
             </xar:ml>
         </h3>
         <form id="anonassignments" method="post" action="&xar-modurl-privileges-admin-assignprivileges;" enctype="application/x-www-form-urlencoded">
