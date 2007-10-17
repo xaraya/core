@@ -86,6 +86,34 @@ class DataObject extends DataObjectMaster implements iDataObject
         return $this->itemid;
     }
 
+    public function getInvalids(Array $args = array())
+    {
+        if (!empty($args['fields'])) {
+        	$fields = $args['fields'];
+        } else {
+			$fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+        }
+        $invalids = array();
+        foreach($fields as $name) {
+        	if (!empty($this->properties[$name]->invalid))
+        		$invalids[$name] = $this->properties[$name]->invalid;
+        }
+        return $invalids;
+    }
+
+    public function clearInvalids()
+    {
+        if (!empty($args['fields'])) {
+        	$fields = $args['fields'];
+        } else {
+			$fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+        }
+        foreach($fields as $name) {
+			$this->properties[$name]->invalid = '';
+        }
+        return true;
+    }
+
     /**
      * Check the different input values for this item
      */
@@ -106,7 +134,6 @@ class DataObject extends DataObjectMaster implements iDataObject
         } else {
 			$fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
         }
-        $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
 
         $this->missingfields = array();
         foreach($fields as $name) {
