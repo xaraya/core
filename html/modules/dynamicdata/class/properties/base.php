@@ -187,6 +187,9 @@ class DataProperty extends Object implements iDataProperty
      */
     public function checkInput($name = '', $value = null)
     {
+		// store the fieldname for validations who need them (e.g. file uploads)
+		$name = empty($name) ? 'dd_'.$this->id : $name;
+		$this->fieldname = $name;
         $this->invalid = '';
         if(!isset($value)) {
             list($found,$value) = $this->fetchValue($name);
@@ -196,9 +199,6 @@ class DataProperty extends Object implements iDataProperty
                 return null;
             }
 
-            // store the fieldname for validations who need them (e.g. file uploads)
-            $name = empty($name) ? 'dd_'.$this->id : $name;
-            $this->fieldname = $name;
         }
        return $this->validateValue($value);
     }
