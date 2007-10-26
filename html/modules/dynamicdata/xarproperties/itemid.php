@@ -33,8 +33,10 @@ class ItemIDProperty extends NumberBoxProperty
         $this->filepath   = 'modules/dynamicdata/xarproperties';
     }
 
-    public function checkInput($name = '', $value = null)
+/*    public function checkInput($name = '', $value = null)
     {
+//        var_dump($this);echo "<br /><br />";
+echo $this->name . " " .$name . " X";
         $name = empty($name) ? 'dd_'.$this->id : $name;
         // store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
@@ -43,6 +45,7 @@ class ItemIDProperty extends NumberBoxProperty
         }
         return $this->validateValue($value);
     }
+    */
 }
 
 ?>
