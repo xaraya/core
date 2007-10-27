@@ -54,7 +54,7 @@
     <property name="status">
       <id>493</id>
       <label>Status</label>
-      <type>integerlist</type>
+      <type>dropdown</type>
       <default>0</default>
       <source>dynamic_data</source>
       <status>33</status>
