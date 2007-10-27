@@ -151,6 +151,11 @@ class DataObject extends DataObjectMaster implements iDataObject
             	$name1 = $name;
             	$name2 = $ddname;
             }
+            if (!empty($args['priority']) && ($args['priority'] == 'dd')) {
+            	$temp = $name1;
+            	$name1 = $name2;
+            	$name2 = $temp;
+            }
             if(isset($args[$name])) {
                 // Name based check
                 $passed = $this->properties[$name]->checkInput($name1,$args[$name]);
