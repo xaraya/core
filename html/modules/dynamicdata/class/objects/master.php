@@ -461,6 +461,8 @@ class DataObjectMaster extends Object
                 return $this->properties;
             }
         } else {
+        	// Accept a list or an array
+        	if (!is_array($args['fieldlist'])) $args['fieldlist'] = explode(',',$args['fieldlist']);
             $fieldlist = $args['fieldlist'];
         }
 
