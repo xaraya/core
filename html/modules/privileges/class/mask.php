@@ -69,7 +69,10 @@ class xarMask extends Object
         $display = $this->getName();
         $display .= "-" . strtolower($this->getLevel());
         $display .= ":" . strtolower($this->getRealm());
-        $display .= ":" . $this->getModule();
+        // FIXME decide whether $this->module is a number or string
+		$module = strtolower($this->module);
+		if (!empty($module) && is_string($module) && ($module != 'all')) $module = xarMod::getID($module);
+        $display .= ":" . $module;
         $display .= ":" . strtolower($this->getComponent());
         $display .= ":" . strtolower($this->getInstance());
         return $display;
@@ -98,7 +101,10 @@ class xarMask extends Object
             $normalform = array();
             $normalform[] = strtolower($this->getLevel());
             $normalform[] = strtolower($this->getRealm());
-            $normalform[] = $this->getModule();
+	        // FIXME decide whether $this->module is a number or string
+            $module = strtolower($this->module);
+            if (!empty($module) && is_string($module) && ($module != 'all')) $module = xarMod::getID($module);
+            $normalform[] = $module;
             $normalform[] = strtolower($this->getComponent());
             $thisinstance = strtolower($this->getInstance());
             $thisinstance = str_replace('myself',xarSession::getVar('role_id'),$thisinstance);
