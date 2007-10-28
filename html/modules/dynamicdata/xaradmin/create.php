@@ -58,7 +58,6 @@ function dynamicdata_admin_create($args)
 
         $data['authid'] = xarSecGenAuthKey();
         $data['preview'] = $preview;
-//        $data['tplmodule'] = $tplmodule;
         if (!empty($return_url)) {
             $data['return_url'] = $return_url;
         }
