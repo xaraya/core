@@ -111,7 +111,6 @@ class UsernameProperty extends TextBoxProperty
     public function showInput(Array $data = array())
     {
         extract($data);
-//        echo "X".$this->rawvalue."X";//exit;
         if (isset($this->rawvalue)) {
         	$data['value'] = $this->rawvalue;
         	$data['user'] = $this->rawvalue;
