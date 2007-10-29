@@ -313,9 +313,11 @@ class DataObject extends DataObjectMaster implements iDataObject
     public function setFieldValues(Array $args = array(), $bypass = 0)
     {
         if ($bypass) {
-			foreach ($args as $key => $value) $this->properties[$key]->value = $value;
+			foreach ($args as $key => $value)
+				if (isset($this->properties[$key])) $this->properties[$key]->value = $value;
         } else {
-			foreach ($args as $key => $value) $this->properties[$key]->setValue($value);
+			foreach ($args as $key => $value)
+				if (isset($this->properties[$key]))  $this->properties[$key]->setValue($value);
         }
         return true;
     }
