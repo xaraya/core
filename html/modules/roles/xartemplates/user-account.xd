@@ -9,7 +9,7 @@
 
     <xar:template file="user-menu" />
 
-    <xar:if condition="$compare eq $account">bbb
+    <xar:if condition="$compare eq $account">
         <xar:module main="false" module="roles" type="user" func="display" />
     <xar:else />
         <xar:module main="false" module="$moduleload" type="user" func="usermenu" phase="form" />
