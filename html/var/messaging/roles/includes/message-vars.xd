@@ -1,8 +1,10 @@
-<xar:set name="sitename">xarModGetVar('themes', 'SiteName')</xar:set>
-<xar:set name="siteslogan">xarModGetVar('themes', 'SiteSlogan')</xar:set>
-<xar:set name="siteadmin">xarModGetVar('mail', 'adminname')</xar:set>
-<xar:set name="siteurl">xarServerGetBaseURL()</xar:set>
-<xar:set name="adminmail">xarModGetVar('mail', 'adminmail')</xar:set>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:set name="sitename">xarModGetVar('themes', 'SiteName')</xar:set>
+    <xar:set name="siteslogan">xarModGetVar('themes', 'SiteSlogan')</xar:set>
+    <xar:set name="siteadmin">xarModGetVar('mail', 'adminname')</xar:set>
+    <xar:set name="siteurl">xarServerGetBaseURL()</xar:set>
+    <xar:set name="adminmail">xarModGetVar('mail', 'adminmail')</xar:set>
 
-<xar:set name="myname">xarUserGetVar('name')</xar:set>
-<xar:set name="myuid">xarUserGetVar('id')</xar:set>
+    <xar:set name="myname">xarUserGetVar('name')</xar:set>
+    <xar:set name="myuid">xarUserGetVar('id')</xar:set>
+</xar:template>

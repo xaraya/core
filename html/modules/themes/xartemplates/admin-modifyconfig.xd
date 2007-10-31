@@ -61,7 +61,7 @@
             </div>
             <div class="xar-form-input-wrapper-after">
                 <xar:set name="checked">$adminpagemenu</xar:set>
-                <xar:data-input type="checkbox" name="adminpagemenu" id="adminpagemenu" checked="$checked" />
+                <xar:data-input type="checkbox" name="adminpagemenu" value="$checked" />
                 <label for="adminpagemenu" title="#xarML('Use submenus in the page for admin functions.')#">
                     <xar:mlstring>
                         Enable InPage Admin SubMenus
@@ -70,7 +70,7 @@
             </div>
             <div class="xar-form-input-wrapper-after">
                 <xar:set name="checked">xarModIsHooked('themes', 'roles')</xar:set>
-                <xar:data-input type="checkbox" name="usermenu" id="usermenu" checked="$checked" />
+                <xar:data-input type="checkbox" name="usermenu" checked="$checked" />
                 <label for="usermenu" title="#xarML('Allow users to select themes from their Account Details page.')#">
                     <xar:mlstring>
                         Allow users to set their theme in User Account page
