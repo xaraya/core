@@ -154,7 +154,7 @@ class DataObjectMaster extends Object
         $properties = $this->getPublicProperties();
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
         //FIXME where do we need to define the modname best?
-        $args['modname'] = xarModGetNameFromID($args['moduleid']); //FIXME change to systemid
+        if (!empty($args['moduleid'])) $args['modname'] = xarModGetNameFromID($args['moduleid']); //FIXME change to systemid
         return $args;
     }
 
