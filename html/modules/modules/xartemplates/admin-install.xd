@@ -97,6 +97,12 @@
                                 </xar:if>
                                 <br />
                                 <xar:mlstring>Install this module first, then try this installation again.</xar:mlstring>
+                            <xar:elseif condition="is_numeric($modInfo) AND isset($dependencyinfo[$modInfo])" />
+                                <xar:ml>
+                                    <xar:mlstring>Missing a module #(1) (ID #(2)).</xar:mlstring>
+                                    <xar:mlvar>#$dependencyinfo[$modInfo]#</xar:mlvar>
+                                    <xar:mlvar>#$modInfo#</xar:mlvar>
+                                </xar:ml>
                             <xar:else />
                                 <a href="http://www.php.net/manual-lookup.php?pattern=#$modInfo#">
                                     <xar:ml>
