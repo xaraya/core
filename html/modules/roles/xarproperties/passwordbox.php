@@ -23,10 +23,7 @@ class PassBoxProperty extends TextBoxProperty
     public $aliases    = array('id' => 461);
 
     public $size = 25;
-    public $maxlength = 254;
 
-    public $min = 5;
-    public $max = null;
     public $password = null;
 
     function __construct(ObjectDescriptor $descriptor)
