@@ -17,8 +17,11 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- module attribute has a value -->
-        <xsl:text>echo xarModFunc('</xsl:text>
-        <xsl:value-of select="@module"/><xsl:text>','</xsl:text>
+        <xsl:text>echo xarModFunc("</xsl:text>
+        <xsl:call-template name="resolvePHP">
+          <xsl:with-param name="expr" select="@module"/>
+        </xsl:call-template>
+        <xsl:text>",'</xsl:text>
         <xsl:choose>
           <xsl:when test="string-length(@type) = 0">
             <xsl:text>user</xsl:text>
@@ -38,7 +41,7 @@
         </xsl:choose>
         <!-- Add all other attributes -->
         <xsl:text>',array(</xsl:text>
-        <xsl:for-each select="@*">
+        <xsl:for-each select="@*[name()!='module' and name()!='func' and name()!='type']">
           <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>'</xsl:text>
           <xsl:text disable-output-escaping="yes">=&gt;'</xsl:text>
           <xsl:value-of select="."/><xsl:text>',</xsl:text>

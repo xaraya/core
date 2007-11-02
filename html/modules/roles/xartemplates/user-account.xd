@@ -71,6 +71,6 @@
 <xar:if condition="$compare eq $account">
     <xar:module main="false" module="roles" type="user" func="display" />
 <xar:else />
-    <xar:module main="false" module="$moduleload" type="user" func="usermenu" phase="form" />
+    <xar:module main="false" module="#$moduleload#" type="user" func="usermenu" phase="form" />
 </xar:if>
 </xar:template>
