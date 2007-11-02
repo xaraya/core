@@ -159,21 +159,21 @@ class DataObject extends DataObjectMaster implements iDataObject
             if(isset($args[$name])) {
                 // Name based check
                 $passed = $this->properties[$name]->checkInput($name1,$args[$name]);
-                if ($passed == null) {
+                if ($passed === null) {
                 	array_pop($this->missingfields);
                 	$passed = $this->properties[$name]->checkInput($name2,$args[$name]);
                 }
             } elseif(isset($args[$ddname])) {
                 // No name, check based on field
                 $passed = $this->properties[$name]->checkInput($name1,$args[$ddname]);
-                if ($passed == null) {
+                if ($passed === null) {
                 	array_pop($this->missingfields);
                 	$passed = $this->properties[$name]->checkInput($name2,$args[$ddname]);
                 }
             } else {
             	// Check without values
                 $passed = $this->properties[$name]->checkInput($name1);
-                if ($passed == null) {
+                if ($passed === null) {
 					array_pop($this->missingfields);
 					$passed = $this->properties[$name]->checkInput($name2);
                 }
