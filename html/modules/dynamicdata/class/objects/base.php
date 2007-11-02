@@ -178,7 +178,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 					$passed = $this->properties[$name]->checkInput($name2);
                 }
             }
-            if (($passed == null) || ($passed === false)) $isvalid = false;
+            if (($passed === null) || ($passed === false)) $isvalid = false;
         }
         if (!empty($this->missingfields) && !$suppress) {
             throw new VariableNotFoundException(array($this->name,implode(', ',$this->missingfields)),'The following fields were not found: #(1): [#(2)]');
