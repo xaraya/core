@@ -114,7 +114,7 @@
         </xsl:call-template>
         <xsl:text>);</xsl:text>
         <!-- the name attribute holds a variable name, not good, but it is like that -->
-        <xsl:value-of select="@name"/><xsl:text>=&amp; $object-&gt;getProperties();</xsl:text>
+        <xsl:value-of select="@name"/><xsl:text>= $object-&gt;getProperties();</xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <!-- We do have one, invoke the getItem method on it -->
@@ -123,12 +123,43 @@
           <xsl:with-param name="nodeset" select="@*[name() != 'name']"/>
         </xsl:call-template>
         <xsl:text>);</xsl:text>
-        <xsl:value-of select="@name"/><xsl:text>=&gt;</xsl:text>
+        <xsl:value-of select="@name"/><xsl:text>=</xsl:text>
         <xsl:value-of select="@object"/><xsl:text>->getProperties();</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:processing-instruction>
 </xsl:template>
+
+<xsl:template match="xar:data-getitems">
+    <xsl:processing-instruction name="php">
+      <xsl:choose>
+          <xsl:when test="not(@object)">
+            <!-- No object gotta make one -->
+            <xsl:text>list(</xsl:text>
+            <xsl:value-of select="@name"/>
+            <xsl:text>,</xsl:text>
+            <xsl:value-of select="@value"/>
+            <xsl:text>) = xarModApiFunc('dynamicdata','user','getitemsforview',</xsl:text>
+            <xsl:call-template name="atts2args">
+              <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='value']"/>
+            </xsl:call-template>
+            <xsl:text>);</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- We do have an object, invoke the getItems method on it -->
+            <xsl:value-of select="@value"/><xsl:text>=</xsl:text>
+            <xsl:value-of select="@object"/><xsl:text>-&gt;getItems(</xsl:text>
+            <xsl:call-template name="atts2args">
+              <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='value']"/>
+            </xsl:call-template>
+            <xsl:text>);</xsl:text>
+            <xsl:value-of select="@name"/><xsl:text>=</xsl:text>
+            <xsl:value-of select="@object"/><xsl:text>->getProperties();</xsl:text>
+          </xsl:otherwise>
+      </xsl:choose>
+    </xsl:processing-instruction>
+</xsl:template>
+
 
 <xsl:template match="xar:data-input">
   <xsl:processing-instruction name="php">
