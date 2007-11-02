@@ -458,18 +458,27 @@ class Role extends DataObject
         $query = "SELECT r.id, r.name, r.type, r.uname,
                          r.email, r.pass, r.date_reg,
                          r.valcode, r.state,r.auth_modid
-                  FROM $this->rolestable r, $this->rolememberstable rm
-                  WHERE r.id = rm.id AND
+                  FROM $this->rolestable r, $this->rolememberstable rm ";
+        // set up the query and get the data
+        if ($state == ROLES_STATE_CURRENT) {
+        	$where = "WHERE r.id = rm.id AND
                         r.type = ? AND
                         r.state != ? AND
                         rm.parentid = ?";
-        // set up the query and get the data
-        if ($state == ROLES_STATE_CURRENT) {
              $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->getID());
-
+        } elseif ($state == ROLES_STATE_ALL) {
+        	$where = "WHERE r.id = rm.id AND
+                        r.type = ? AND
+                        rm.parentid = ?";
+             $bindvars = array(ROLES_USERTYPE,$this->getID());
         } else {
              $bindvars = array(ROLES_USERTYPE, $state, $this->properties['id']->value);
+        	$where = "WHERE r.id = rm.id AND
+                        r.type = ? AND
+                        r.state = ? AND
+                        rm.parentid = ?";
         }
+        $query .= $where;
         if (isset($selection)) $query .= $selection;
         $query .= " ORDER BY " . $order;
         // Prepare the query

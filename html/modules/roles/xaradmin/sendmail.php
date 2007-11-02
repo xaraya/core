@@ -25,7 +25,6 @@ function roles_admin_sendmail()
     // Security check
     if (!xarSecurityCheck('MailRoles')) return;
     // Get user information
-
     // Get the current query
     sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery();
@@ -35,6 +34,8 @@ function roles_admin_sendmail()
     $q->clearfields();
     $q->addfields(array('r.id','r.name','r.uname','r.email'));
 
+    $q->qecho();
+die("X");
     // Open a connection and run the query
     $q->run();
 
