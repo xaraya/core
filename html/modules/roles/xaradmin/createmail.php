@@ -58,8 +58,7 @@ function roles_admin_createmail()
                             'r.date_reg AS date_reg'));
         $q->eq('r.id',$id);
         $q->sessionsetvar('rolesquery');
-    }
-    else {
+    } else {
         if ($selstyle == 0) $selstyle = 1;
 
         // Get the current query or create a new one if need be
@@ -67,7 +66,7 @@ function roles_admin_createmail()
             $q = new xarQuery();
             $q = $q->sessiongetvar('rolesquery');
         }
-        if(empty($q)) {
+        if(empty($q->tables)) {
             $q = new xarQuery('SELECT');
             $q->addtable($xartable['roles'],'r');
             $q->addfields(array('r.id AS id',
