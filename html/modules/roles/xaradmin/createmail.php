@@ -58,14 +58,14 @@ function roles_admin_createmail()
                             'r.state AS state',
                             'r.date_reg AS date_reg'));
         $q->eq('r.id',$id);
-        $q->sessionsetvar('rolesquery');
+        xarSession::setVar('rolesquery',serialize($q));
     } else {
         if ($selstyle == 0) $selstyle = 1;
 
         // Get the current query or create a new one if need be
         if ($id == -1) {
             $q = new xarQuery();
-            $q = $q->sessiongetvar('rolesquery');
+		    $q = unserialize(xarSession::getVar('rolesquery'));
         }
         if(empty($q->tables)) {
             $q = new xarQuery('SELECT');
@@ -106,7 +106,7 @@ function roles_admin_createmail()
         }
 
         // Save the query so we can reuse it somewhere
-        $q->sessionsetvar('rolesquery');
+        xarSession::setVar('rolesquery',serialize($q));
         // open a connection and run the query
         $q->run();
 
