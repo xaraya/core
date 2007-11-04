@@ -120,7 +120,8 @@ function xarDBGetSiteTablePrefix() { return xarDBGetSystemTablePrefix(); }
  */
 function &xarDBNewDataDict(Connection &$dbconn, $mode = 'READONLY')
 {
-    throw new ApiDeprecationException(array('xarDBNewDataDict',''));
+    sys::import('xaraya.legacy');
+    throw new ApiDeprecationException(array('xarDBNewDataDict','[TO BE DETERMINED]'));
 }
 
 /**
