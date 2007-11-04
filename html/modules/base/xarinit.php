@@ -141,23 +141,23 @@ function base_init()
                             'marquee'=>0, 'ol'=>2, 'p'=>2, 'pre'=> 2, 'span'=>0,'strong'=>2,
                             'tt'=>2, 'ul'=>2, 'table'=>2, 'td'=>2, 'th'=>2, 'tr'=> 2);
 
-    xarConfigSetVar('Site.Core.AllowableHTML',$allowableHTML);
+    xarConfigVars::Set(null, 'Site.Core.AllowableHTML',$allowableHTML);
     /****************************************************************
      * Set System Configuration Variables
      *****************************************************************/
-    xarConfigSetVar('System.Core.TimeZone', 'Etc/UTC');
-    xarConfigSetVar('System.Core.VersionNum', xarCore::VERSION_NUM);
-    xarConfigSetVar('System.Core.VersionId', xarCore::VERSION_ID);
-    xarConfigSetVar('System.Core.VersionSub', xarCore::VERSION_SUB);
+    xarConfigVars::Set(null, 'System.Core.TimeZone', 'Etc/UTC');
+    xarConfigVars::Set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
+    xarConfigVars::Set(null, 'System.Core.VersionId', xarCore::VERSION_ID);
+    xarConfigVars::Set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
     $allowedAPITypes = array();
     /*****************************************************************
      * Set site configuration variables
      ******************************************************************/
-    xarConfigSetVar('Site.BL.CacheTemplates',true);
-    xarConfigSetVar('Site.BL.CompilerVersion','XAR_BL_USE_XSLT');
-    xarConfigSetVar('Site.Core.FixHTMLEntities',true);
-    xarConfigSetVar('Site.Core.TimeZone', 'Etc/UTC');
-    xarConfigSetVar('Site.Core.EnableShortURLsSupport', false);
+    xarConfigVars::Set(null, 'Site.BL.CacheTemplates',true);
+    xarConfigVars::Set(null, 'Site.BL.CompilerVersion','XAR_BL_USE_XSLT');
+    xarConfigVars::Set(null, 'Site.Core.FixHTMLEntities',true);
+    xarConfigVars::Set(null, 'Site.Core.TimeZone', 'Etc/UTC');
+    xarConfigVars::Set(null, 'Site.Core.EnableShortURLsSupport', false);
     // when installing via https, we assume that we want to support that :)
     $HTTPS = xarServerGetVar('HTTPS');
     /* jojodee - monitor this fix.
@@ -168,36 +168,36 @@ function base_init()
     $REQ_URI = parse_url(xarServerGetVar('HTTP_REFERER'));
     // IIS seems to set HTTPS = off for some reason (cfr. xarServerGetProtocol)
     if (!empty($HTTPS) && $HTTPS != 'off' && $REQ_URI['scheme'] == 'https') {
-        xarConfigSetVar('Site.Core.EnableSecureServer', true);
+        xarConfigVars::Set(null, 'Site.Core.EnableSecureServer', true);
     } else {
-        xarConfigSetVar('Site.Core.EnableSecureServer', false);
+        xarConfigVars::Set(null, 'Site.Core.EnableSecureServer', false);
     }
 
-    xarConfigSetVar('Site.Core.LoadLegacy', false);
-    xarConfigSetVar('Site.Session.SecurityLevel', 'Medium');
-    xarConfigSetVar('Site.Session.Duration', 7);
-    xarConfigSetVar('Site.Session.InactivityTimeout', 90);
+    xarConfigVars::Set(null, 'Site.Core.LoadLegacy', false);
+    xarConfigVars::Set(null, 'Site.Session.SecurityLevel', 'Medium');
+    xarConfigVars::Set(null, 'Site.Session.Duration', 7);
+    xarConfigVars::Set(null, 'Site.Session.InactivityTimeout', 90);
     // use current defaults in includes/xarSession.php
-    xarConfigSetVar('Site.Session.CookieName', '');
-    xarConfigSetVar('Site.Session.CookiePath', '');
-    xarConfigSetVar('Site.Session.CookieDomain', '');
-    xarConfigSetVar('Site.Session.RefererCheck', '');
-    xarConfigSetVar('Site.MLS.TranslationsBackend', 'xml2php');
+    xarConfigVars::Set(null, 'Site.Session.CookieName', '');
+    xarConfigVars::Set(null, 'Site.Session.CookiePath', '');
+    xarConfigVars::Set(null, 'Site.Session.CookieDomain', '');
+    xarConfigVars::Set(null, 'Site.Session.RefererCheck', '');
+    xarConfigVars::Set(null, 'Site.MLS.TranslationsBackend', 'xml2php');
     // FIXME: <marco> Temporary config vars, ask them at install time
-    xarConfigSetVar('Site.MLS.MLSMode', 'SINGLE');
+    xarConfigVars::Set(null, 'Site.MLS.MLSMode', 'SINGLE');
 
     // The installer should now set the default locale based on the
     // chose language, let's make sure that is true
     if(!xarConfigVars::Get(null, 'Site.MLS.DefaultLocale')) {
-        xarConfigSetVar('Site.MLS.DefaultLocale', 'en_US.utf-8');
+        xarConfigVars::Set(null, 'Site.MLS.DefaultLocale', 'en_US.utf-8');
         $allowedLocales = array('en_US.utf-8');
-        xarConfigSetVar('Site.MLS.AllowedLocales', $allowedLocales);
+        xarConfigVars::Set(null, 'Site.MLS.AllowedLocales', $allowedLocales);
     }
     // Minimal information for timezone offset handling (see also Site.Core.TimeZone)
-    xarConfigSetVar('Site.MLS.DefaultTimeOffset', 0);
+    xarConfigVars::Set(null, 'Site.MLS.DefaultTimeOffset', 0);
 
     $authModules = array('authsystem');
-    xarConfigSetVar('Site.User.AuthenticationModules',$authModules);
+    xarConfigVars::Set(null, 'Site.User.AuthenticationModules',$authModules);
 
     $templateTagsTable = $prefix . '_template_tags';
     /*********************************************************************

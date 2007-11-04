@@ -30,7 +30,7 @@ function modules_adminapi_delete_module_alias($args)
     // don't remove alias if it's already assigned to some other module !
     if ($aliases[$aliasModName] != $modName) return false;
     unset($aliases[$aliasModName]);
-    xarConfigSetVar('System.ModuleAliases',$aliases);
+    xarConfigVars::Set(null, 'System.ModuleAliases',$aliases);
 
     return true;
 }

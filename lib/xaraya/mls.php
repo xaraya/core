@@ -384,7 +384,7 @@ function xarMLS_setCurrentLocale($locale)
         // To be able to continue, we set the mode to BOXED
         if ($curCharset != "utf-8") {
             xarLogMessage("Resetting MLS mode to BOXED");
-            xarConfigSetVar('Site.MLS.MLSMode','BOXED');
+            xarConfigVars::Set(null, 'Site.MLS.MLSMode','BOXED');
         } else {
             if (!xarFuncIsDisabled('ini_set')) ini_set('mbstring.func_overload', 7);
             mb_internal_encoding($curCharset);

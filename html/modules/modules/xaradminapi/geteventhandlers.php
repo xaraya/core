@@ -68,7 +68,7 @@ function modules_adminapi_geteventhandlers()
         }
     }
     // this gets serialized internally
-    xarConfigSetVar('Site.Evt.Handlers',$handlers);
+    xarConfigVars::Set(null, 'Site.Evt.Handlers',$handlers);
 
     $check = true;
 

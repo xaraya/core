@@ -47,7 +47,7 @@ function modules_adminapi_add_module_alias($args)
 
     // the direction is fake module name -> true module, not the reverse !
     $aliases[$aliasModName] = $modName;
-    xarConfigSetVar('System.ModuleAliases', $aliases);
+    xarConfigVars::Set(null, 'System.ModuleAliases', $aliases);
 
     return true;
 }

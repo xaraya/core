@@ -470,7 +470,7 @@ function installer_admin_phase5()
 
     $a = array();
     xarVar_init($a);
-    xarConfigSetVar('Site.MLS.DefaultLocale', $install_language);
+    xarConfigVars::Set(null, 'Site.MLS.DefaultLocale', $install_language);
 
     // Set the allowed locales to our "C" locale and the one used during installation
     // TODO: make this a bit more friendly.
@@ -478,7 +478,7 @@ function installer_admin_phase5()
     $install_locale  = array($install_language);
     $allowed_locales = array_merge($necessaryLocale, $install_locale);
 
-    xarConfigSetVar('Site.MLS.AllowedLocales',$allowed_locales);    $data['language'] = $install_language;
+    xarConfigVars::Set(null, 'Site.MLS.AllowedLocales',$allowed_locales);    $data['language'] = $install_language;
 
     $data['phase'] = 5;
     $data['phase_label'] = xarML('Step Five');
@@ -1171,8 +1171,8 @@ function installer_admin_finish()
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'modules', 'objects' => $objects))) return;
 
     $machinetz = date_default_timezone_get();
-    xarConfigSetVar('System.Core.TimeZone', $machinetz);
-    xarConfigSetVar('Site.Core.TimeZone', $machinetz);
+    xarConfigVars::Set(null, 'System.Core.TimeZone', $machinetz);
+    xarConfigVars::Set(null, 'Site.Core.TimeZone', $machinetz);
 
     switch ($returnurl) {
         case ('modules'):
@@ -1244,22 +1244,22 @@ function installer_admin_upgrade2()
 
     $cookiename = xarConfigVars::Get(null, 'Site.Session.CookieName');
     if (!isset($cookiename)) {
-        xarConfigSetVar('Site.Session.CookieName', '');
+        xarConfigVars::Set(null, 'Site.Session.CookieName', '');
         $content .= "<p>Site.Session.CookieName incorrect, attempting to set.... done!</p>";
     }
     $cookiepath = xarConfigVars::Get(null, 'Site.Session.CookiePath');
     if (!isset($cookiepath)) {
-        xarConfigSetVar('Site.Session.CookiePath', '');
+        xarConfigVars::Set(null, 'Site.Session.CookiePath', '');
         $content .= "<p>Site.Session.CookiePath incorrect, attempting to set.... done!</p>";
     }
     $cookiedomain = xarConfigVars::Get(null, 'Site.Session.CookieDomain');
     if (!isset($cookiedomain)) {
-        xarConfigSetVar('Site.Session.CookieDomain', '');
+        xarConfigVars::Set(null, 'Site.Session.CookieDomain', '');
         $content .= "<p>Site.Session.CookieDomain incorrect, attempting to set.... done!</p>";
     }
     $referercheck = xarConfigVars::Get(null, 'Site.Session.RefererCheck');
     if (!isset($referercheck)) {
-        xarConfigSetVar('Site.Session.RefererCheck', '');
+        xarConfigVars::Set(null, 'Site.Session.RefererCheck', '');
         $content .= "<p>Site.Session.RefererCheck incorrect, attempting to set.... done!</p>";
     }
 
@@ -1778,7 +1778,7 @@ function installer_admin_upgrade3()
             if ($currentvar == $var['set']){
                 $content .= "<p>$var[name] is set, proceeding to next check</p>";
             } else {
-                xarConfigSetVar($var['name'], $var['set']);
+                xarConfigVars::Set(null, $var['name'], $var['set']);
                 $content .= "<p>$var[name] incorrect, attempting to set.... done!</p>";
             }
         }
