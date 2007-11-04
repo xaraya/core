@@ -26,7 +26,7 @@ function roles_userapi_getallactive($args)
     $include_anonymous = true;
     $startnum = 1; $numitems = -1;
     $order = "name";
-    $filter = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
+    $filter = time() - (xarConfigVars::Get(null, 'Site.Session.Duration') * 60);
 
     // See if the arguments said otherwise
     extract($args);

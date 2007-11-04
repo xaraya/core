@@ -6,6 +6,7 @@ function modules_adminapi_standardinstall($args)
     if (!isset($module)) return false;
     if (!isset($objects)) return false;
 
+    // FIXME: Data loss risk!!
     $existing_objects  = xarModAPIFunc('dynamicdata','user','getobjects');
     foreach($existing_objects as $objectid => $objectinfo) {
         if(in_array($objectinfo['name'], $objects)) {
@@ -14,6 +15,7 @@ function modules_adminapi_standardinstall($args)
     }
     $dd_objects = array();
 
+    // @todo dont hardcode our naming convention here, nor the path 
     foreach($objects as $dd_object) {
         $name = is_array($dd_object) ? $dd_object['name'] : $dd_object;
         $def_file = 'modules/' . $module . '/xardata/'.$name.'-def.xml';

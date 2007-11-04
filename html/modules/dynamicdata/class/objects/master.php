@@ -13,9 +13,9 @@ sys::import('xaraya.structures.descriptor');
 sys::import('modules.dynamicdata.class.datastores');
 sys::import('modules.dynamicdata.class.properties');
 
-/**
+/*
  * generate the variables necessary to instantiate a DataObject or DataProperty class
- */
+*/
 class DataObjectDescriptor extends ObjectDescriptor
 {
     function __construct(Array $args=array())
@@ -258,7 +258,7 @@ class DataObjectMaster extends Object
     /**
      * Add the ancestors to this object
      * This is adding the properties and datastores of all the ancestors to this object
-     */
+    **/
     private function addAncestors($object=null)
     {
         /*
@@ -302,7 +302,7 @@ class DataObjectMaster extends Object
      * @todo can we use the type hinting for the parameter?
      * @todo pass $object by ref?
      * @todo stricten the interface, either an object or an id, not both.
-     */
+    **/
     private function addObject($object=null)
     {
         if(is_numeric($object))
@@ -332,7 +332,7 @@ class DataObjectMaster extends Object
 
     /**
      * Get the data stores where the dynamic properties of this object are kept
-     */
+    **/
     function &getDataStores($reset = false)
     {
         // if we already have the datastores
@@ -415,7 +415,7 @@ class DataObjectMaster extends Object
      *
      * @param $name the name for the data store
      * @param $type the type of data store
-     */
+    **/
     function addDataStore($name = '_dynamic_data_', $type='data')
     {
         // get a new data store
@@ -465,7 +465,7 @@ class DataObjectMaster extends Object
      *
      * @todo why not keep the scope here and do this:
      *       $this->properties[$args['id']] = new Property($args); (with a reference probably)
-     */
+    **/
     function addProperty($args)
     {
         // TODO: find some way to have unique IDs across all objects if necessary
@@ -478,7 +478,7 @@ class DataObjectMaster extends Object
      * Class method to retrieve information about all DataObjects
      *
      * @return array of object definitions
-     */
+    **/
     static function &getObjects(Array $args=array())
     {
         extract($args);
@@ -528,16 +528,16 @@ class DataObjectMaster extends Object
     /**
      * Class method to retrieve information about a Dynamic Object
      *
-     * @param $args['objectid'] id of the object you're looking for, or
-     * @param $args['name'] name of the object you're looking for, or
-     * @param $args['moduleid'] module id of the object you're looking for +
-     * @param $args['itemtype'] item type of the object you're looking for
+     * @param $args['objectid'] id of the object you're looking for, OR
+     * @param $args['name'] name of the object you're looking for, OR
+     * @param $args['moduleid'] module id of the object you're looking for + $args['itemtype'] item type of the object you're looking for
      * @return array containing the name => value pairs for the object
      * @todo cache on id/name/modid ?
      * @todo when we had a constructor which was more passive, this could be non-static. (cheap construction is a good rule of thumb)
      * @todo no ref return?
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
-     */
+     * @todo THE PARAM INFORMATION ABOVE ARE LIES SO FAR, SEE IMPLEMENTATION
+    **/
     static function getObjectInfo(Array $args=array())
     {
         $args = DataObjectDescriptor::getObjectID($args);
@@ -604,8 +604,7 @@ class DataObjectMaster extends Object
      * (= the same as creating a new Dynamic Object with itemid = null)
      *
      * @param $args['objectid'] id of the object you're looking for, or
-     * @param $args['moduleid'] module id of the object to retrieve +
-     * @param $args['itemtype'] item type of the object to retrieve
+     * @param $args['moduleid'] module id of the object to retrieve + $args['itemtype'] item type of the object to retrieve
      * @param $args['class'] optional classname (e.g. <module>_DataObject)
      * @return object the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
@@ -617,6 +616,7 @@ class DataObjectMaster extends Object
 
         // Complete the info if this is a known object
         $info = self::getObjectInfo($args);
+
         if ($info != null) $args = array_merge($args,$info);
 
         if(!empty($args['filepath'])) include_once($args['filepath']);
@@ -630,6 +630,7 @@ class DataObjectMaster extends Object
         }
         // here we can use our own classes to retrieve this
         $descriptor = new DataObjectDescriptor($args);
+
         $object = new $args['class']($descriptor);
         return $object;
     }
@@ -911,7 +912,7 @@ class DataObjectMaster extends Object
       * @param int    args[objectid]
       * @param bool args[top]
       * @param bool  args[base]
-      */
+    **/
     function getAncestors()
     {
 //        if(!xarSecurityCheck('ViewDynamicDataItems')) return;

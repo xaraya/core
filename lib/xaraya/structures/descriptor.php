@@ -1,4 +1,13 @@
 <?php
+/**
+ * Generic descriptor for a Data Object in the Dynamic Data sense
+ *
+ * @todo this does not belong here
+**/
+
+/**
+ * Define DocBlock
+ **/
 
 class ObjectDescriptor extends DataContainer
 {

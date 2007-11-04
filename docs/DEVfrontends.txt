@@ -1,0 +1,19 @@
+Notes on different frontends and their capabilities.
+
+
+Requirements for a front end (js) library
+-----------------------------------------
+- widget (or controls) is our immediate direct need to lighten the
+  burden on template/theme maintenance
+- having events on the controls to asynchronously load other data is
+  the second need (master detail relations, repopulation combo's etc.)
+- specifying the controls should be a 3 step process maximal:
+  1. include on js entry point for the request
+  2. write the controls inside a xar-template
+  3. (optional) customize the default behaviour to the applications need.
+
+Whether the tags used are compiled/transformed on the server or
+through a js callback is irrelevant for us.
+
+UPDATE: there was a statement earlier we adopted jquery as our standard?
+

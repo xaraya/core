@@ -159,7 +159,7 @@ CHANGED API
 ===========
 
 * $throwException parameter in xarModAPIFunc, the api function will now raise
-  an excpeption always. The occurances of these were not found. If there are
+  an exception always. The occurances of these were not found. If there are
   such usages (i.e. calls explicitly suppressing the exception) they can do so
   again by using a try/catch block around the call. (occurances found have
   been adapted)
@@ -287,8 +287,8 @@ design work can begin.
   be not needed anymore now, as an exception will already be raised so the statement
   will never be reached. Also look at cases where an exception is not raised
   where it probably should (i.e. adapt caller with try/catch)
-* take a decision on query abstraction, xarQuery we have, marc is a fan of it it
-  can help (mostly) in the modules arena. Should we offer it from core?
+* take a decision on query abstraction, xarQuery we have, marc is a fan of it 
+  it can help (mostly) in the modules arena. Should we offer it from core?
 * reqmodules in the registration class is now a bit moot, can only contain one
   module and its always the owning module. Didnt feel like going over all the props
   again, so made current code work as is.
@@ -323,22 +323,6 @@ KNOWN ISSUES
   sys::import('modules.base.xarproperties.Dynamic_Select_Property') this
   exposes an issue in how we name the property classes themselves and the name
   stored in the database
-
-
-Requirements for a front end (js) library
------------------------------------------
-
-- widget (or controls) is our immediate direct need to lighten the
-  burden on template/theme maintenance
-- having events on the controls to asynchronously load other data is
-  the second need (master detail relations, repopulation combo's etc.)
-- specifying the controls should be a 3 step process maximal:
-  1. include on js entry point for the request
-  2. write the controls inside a xar-template
-  3. (optional) customize the default behaviour to the applications need.
-
-Whether the tags used are compiled/transformed on the server or
-through a js callback is irrelevant for us.
 
 
 Encoding of pseudo values:
@@ -382,9 +366,7 @@ Possible new QA checks for 2.x code branch
 - add new deprecation info (on wrapped API methods) (a lot!)
     - [DONE] PO_insert_ID
     - [DONE] xarPreCoreGetVarDirPath
-    -
 - no use of GenID method (no need, leave id columns alone as much as possible)
-
 
 
 Naming conventions and stuff:
@@ -404,7 +386,7 @@ Hammered: (as in, at least 2 people agreed to this)
 * prevent underscores as much as possible (goes for classes, interfaces,
 * methods and variables)
 * use typehinting as much as possible, prefer interfaces over classes when
-* possible for this
+  possible for this
 * filenames are lowercase.php
 * use scope identifiers *always* even if public (for clarity, reflection
 * and phpdoc)

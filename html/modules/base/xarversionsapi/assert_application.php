@@ -33,7 +33,7 @@ function base_versionsapi_assert_application($args)
     $result = xarModAPIfunc('base', 'versions', 'compare',
         array(
             'ver1' => $ver,
-            'ver2' => xarConfigGetVar('System.Core.VersionNum'),
+            'ver2' => xarConfigVars::Get(null, 'System.Core.VersionNum'),
             'normalize' => 'numeric'
         )
     );

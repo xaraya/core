@@ -34,7 +34,7 @@ function dynamicdata_userapi_handleGetItemTag($args)
     }
 
     $out = '';
-    // if we already have an object, we simply invoke its showView() method
+    // if we already have an object, we simply invoke its getItem() method
     if (!empty($args)) {
         $parts = array();
         foreach ($args as $key => $val) {

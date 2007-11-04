@@ -136,7 +136,7 @@ function roles_activate()
     xarModVars::set('roles', 'userhome', 'undefined');
     xarModVars::set('roles', 'userlastlogin', '');
     xarModVars::set('roles', 'passwordupdate', '');
-    xarModVars::set('roles', 'usertimezone', xarConfigGetVar('Site.Core.TimeZone'));
+    xarModVars::set('roles', 'usertimezone', xarConfigVars::Get(null, 'Site.Core.TimeZone'));
     xarModVars::set('roles', 'useremailformat', 'text');
     xarModVars::set('roles', 'displayrolelist', false);
     xarModVars::set('roles', 'usereditaccount', true);

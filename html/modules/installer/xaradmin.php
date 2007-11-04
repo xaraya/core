@@ -386,10 +386,10 @@ function installer_admin_phase5()
                         $sql = xarDBDropTable($table,$dbType);
                         $dbconn->Execute($sql);
                     } catch(SQLException $dropfail) {
-						// retry with drop view
-						// TODO: this should be transparent in the API
-						$ddl = "DROP VIEW $table";
-						$dbconn->Execute($ddl);
+                        // retry with drop view
+                        // TODO: this should be transparent in the API
+                        $ddl = "DROP VIEW $table";
+                        $dbconn->Execute($ddl);
                     }
                 }
             }
@@ -1188,9 +1188,9 @@ function installer_admin_finish()
 
 function installer_admin_upgrade1()
 {
-    $data['xarProduct'] = xarConfigGetVar('System.Core.VersionId');
-    $data['xarVersion'] = xarConfigGetVar('System.Core.VersionNum');
-    $data['xarRelease'] = xarConfigGetVar('System.Core.VersionSub');
+    $data['xarProduct'] = xarConfigVars::Get(null, 'System.Core.VersionId');
+    $data['xarVersion'] = xarConfigVars::Get(null, 'System.Core.VersionNum');
+    $data['xarRelease'] = xarConfigVars::Get(null, 'System.Core.VersionSub');
     $data['descr'] = xarML('Now preparing to run an upgrade from prior #(1) Version <strong>#(2)</strong> (release #(3))
                     to #(4) version <strong>#(5)</strong> (release #(6))',
                     $data['xarProduct'],$data['xarVersion'],$data['xarRelease'],
@@ -1225,9 +1225,9 @@ function installer_admin_upgrade1()
 function installer_admin_upgrade2()
 {
      $thisdata['finishearly']=0;
-     $thisdata['xarProduct'] = xarConfigGetVar('System.Core.VersionId');
-     $thisdata['xarVersion'] = xarConfigGetVar('System.Core.VersionNum');
-     $thisdata['xarRelease'] = xarConfigGetVar('System.Core.VersionSub');
+     $thisdata['xarProduct'] = xarConfigVars::Get(null, 'System.Core.VersionId');
+     $thisdata['xarVersion'] = xarConfigVars::Get(null, 'System.Core.VersionNum');
+     $thisdata['xarRelease'] = xarConfigVars::Get(null, 'System.Core.VersionSub');
 
      //Load this early
      sys::import('xaraya.tableddl');
@@ -1242,22 +1242,22 @@ function installer_admin_upgrade2()
 
     $content = "<p><strong>Checking Site Configuration Variables Structure</strong></p>";
 
-    $cookiename = xarConfigGetVar('Site.Session.CookieName');
+    $cookiename = xarConfigVars::Get(null, 'Site.Session.CookieName');
     if (!isset($cookiename)) {
         xarConfigSetVar('Site.Session.CookieName', '');
         $content .= "<p>Site.Session.CookieName incorrect, attempting to set.... done!</p>";
     }
-    $cookiepath = xarConfigGetVar('Site.Session.CookiePath');
+    $cookiepath = xarConfigVars::Get(null, 'Site.Session.CookiePath');
     if (!isset($cookiepath)) {
         xarConfigSetVar('Site.Session.CookiePath', '');
         $content .= "<p>Site.Session.CookiePath incorrect, attempting to set.... done!</p>";
     }
-    $cookiedomain = xarConfigGetVar('Site.Session.CookieDomain');
+    $cookiedomain = xarConfigVars::Get(null, 'Site.Session.CookieDomain');
     if (!isset($cookiedomain)) {
         xarConfigSetVar('Site.Session.CookieDomain', '');
         $content .= "<p>Site.Session.CookieDomain incorrect, attempting to set.... done!</p>";
     }
-    $referercheck = xarConfigGetVar('Site.Session.RefererCheck');
+    $referercheck = xarConfigVars::Get(null, 'Site.Session.RefererCheck');
     if (!isset($referercheck)) {
         xarConfigSetVar('Site.Session.RefererCheck', '');
         $content .= "<p>Site.Session.RefererCheck incorrect, attempting to set.... done!</p>";
@@ -1761,9 +1761,9 @@ function installer_admin_upgrade2()
 function installer_admin_upgrade3()
 {
     $content='';
-    $thisdata['xarProduct'] = xarConfigGetVar('System.Core.VersionId');
-    $thisdata['xarVersion'] = xarConfigGetVar('System.Core.VersionNum');
-    $thisdata['xarRelease'] = xarConfigGetVar('System.Core.VersionSub');
+    $thisdata['xarProduct'] = xarConfigVars::Get(null, 'System.Core.VersionId');
+    $thisdata['xarVersion'] = xarConfigVars::Get(null, 'System.Core.VersionNum');
+    $thisdata['xarRelease'] = xarConfigVars::Get(null, 'System.Core.VersionSub');
     $content='';
 
     // Set Config Vars - add those that need to be set each upgrade here.
@@ -1774,7 +1774,7 @@ function installer_admin_upgrade3()
     $content .=  "<h3><strong>Updating Required Configuration Variables</strong></h3>";
     foreach($configvars as $configvar){
         foreach($configvar as $var){
-            $currentvar = xarConfigGetVar("$var[name]");
+            $currentvar = xarConfigVars::Get(null, "$var[name]");
             if ($currentvar == $var['set']){
                 $content .= "<p>$var[name] is set, proceeding to next check</p>";
             } else {
@@ -1837,9 +1837,9 @@ function installer_admin_upgrade3()
 function installer_admin_upgrade4()
 {
     $content='';
-    $thisdata['xarProduct'] = xarConfigGetVar('System.Core.VersionId');
-    $thisdata['xarVersion'] = xarConfigGetVar('System.Core.VersionNum');
-    $thisdata['xarRelease'] = xarConfigGetVar('System.Core.VersionSub');
+    $thisdata['xarProduct'] = xarConfigVars::Get(null, 'System.Core.VersionId');
+    $thisdata['xarVersion'] = xarConfigVars::Get(null, 'System.Core.VersionNum');
+    $thisdata['xarRelease'] = xarConfigVars::Get(null, 'System.Core.VersionSub');
     $thisdata['content']=$content;
     $thisdata['phase'] = 4;
     $thisdata['phase_label'] = xarML('Step Four');

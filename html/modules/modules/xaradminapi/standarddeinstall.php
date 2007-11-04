@@ -11,8 +11,8 @@ sys::import('modules.roles.class.xarQuery');
  * Perform standard module removal actions
  *
  * @author Marc Lutolf (mfl@netspan.ch)
- * @returns boolean result of action
- */
+ * @return boolean result of action
+**/
 function modules_adminapi_standarddeinstall($args)
 {
     extract($args);
@@ -22,6 +22,7 @@ function modules_adminapi_standarddeinstall($args)
     $xartables =& xarDB::getTables();
 
     //Remove database tables
+    // FIXME: this assumes modules name their tables prefixed by their own name!!
     xarMod::apiLoad($module);
     try {
         $tablenameprefix = xarDB::getPrefix() . '_' . $module;
@@ -37,6 +38,7 @@ function modules_adminapi_standarddeinstall($args)
     /*
      * Delete the base group created by this module
      *Move the descendants to the Users group
+     * @todo this assumes ad hoc group naming, bad!
      */
     try {
         $role = xarFindRole(ucfirst($module) . 'Group');

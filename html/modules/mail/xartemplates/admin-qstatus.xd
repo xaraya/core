@@ -27,7 +27,7 @@
         <xar:foreach in="$queues" key="$index" value="$qinfo">
             <xar:set name="rowclass">$index % 2?'xar-alt':''</xar:set>
             <ul class="qstatus #$rowclass#" style="background-image: url(#xarTplGetImage($qinfo.status .'.gif')#);">
-                <li style="width: 16px;"><img style="vertical-align: middle;" src="#xarTplGetImage('qtype_'.$qinfo['type'].'.gif')#"/></li>
+                <li style="width: 16px;"><img style="vertical-align: middle;" src="#xarTplGetImage('qtype_'.$qinfo['qtype'].'.gif')#"/></li>
                 <li style="width: 5em;">#$qinfo.name#</li>
                 <li style="width: 12em; text-align: right;">#$qinfo.count# items</li>
                 <li>#$qinfo.msg#</li>
@@ -41,7 +41,7 @@
              <a href="&xar-modurl-mail-admin-qstatus;">
                  <img src="#xarTplGetImage('reprocess.gif')#"/>
                  <xar:mlstring>Reprocess queues</xar:mlstring>
-             </a> 
+             </a>
         </div>
     </fieldset>
     <fieldset class="qslip">
@@ -53,14 +53,14 @@
                         <xar:foreach in="$measure" value="$action">
                             <xar:set name="bckgrndimg">xarTplGetImage($action['action']).'.gif'</xar:set>
                             <li style="background-image: url($bckgrndimg)">
-                                <a style="text-decoration: none; font-size: 0.85em;" 
+                                <a style="text-decoration: none; font-size: 0.85em;"
                                    href="#xarModUrl('mail','admin',$action['action'],array('name' => $qname, 'authid' => $authid))#">#$action.text#</a></li>
                         </xar:foreach>
                     </ul>
                 </li>
             </ul>
         </xar:foreach>
-        
+
     </fieldset>
 
     <fieldset class="qslip" style="margin-left: 5pt;">

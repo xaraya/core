@@ -24,7 +24,7 @@
       <order>2</order>
       <validation>1:12:/\w+/</validation>
     </property>
-    <property name="type">
+    <property name="qtype">
       <label>Type</label>
       <type>dropdown</type>
       <default></default>

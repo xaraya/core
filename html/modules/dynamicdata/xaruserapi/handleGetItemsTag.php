@@ -22,7 +22,7 @@
  */
 function dynamicdata_userapi_handleGetItemsTag($args)
 {
-    // if we already have an object, we simply invoke its showView() method
+    // if we already have an object, we simply invoke its getItems() method
     if (!empty($args['object'])) {
         if (count($args) > 1) {
             $parts = array();
@@ -43,11 +43,7 @@ function dynamicdata_userapi_handleGetItemsTag($args)
     }
 
     // if we don't have an object yet, we'll make one below
-    $out = 'list('.$args['name'].','.$args['value'] . ") = xarModAPIFunc('dynamicdata',
-                   'user',
-                   'getitemsforview',\n";
-    // PHP >= 4.2.0 only
-    //$out .= var_export($args);
+    $out = 'list('.$args['name'].','.$args['value'] . ") = xarModAPIFunc('dynamicdata','user','getitemsforview',\n";
     $out .= "                   array(\n";
     foreach ($args as $key => $val) {
         if ($key == 'name' || $key == 'value') continue;

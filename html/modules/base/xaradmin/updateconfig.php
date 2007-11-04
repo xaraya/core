@@ -38,7 +38,7 @@ function base_admin_updateconfig()
             if (!xarVarFetch('shorturl','checkbox',$enableShortURLs,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('baseshorturl','checkbox',$enableBaseShortURLs,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('htmlenitites','checkbox',$FixHTMLEntities,false,XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('compilerversion','str:1:',$compilerversion,xarConfigGetVar('Site.BL.CompilerVersion'),XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('compilerversion','str:1:',$compilerversion,xarConfigVars::Get(null, 'Site.BL.CompilerVersion'),XARVAR_NOT_REQUIRED)) return;
             xarConfigSetVar('Site.BL.CompilerVersion', $compilerversion);
 
             xarModVars::set('modules', 'defaultmodule', $defaultModuleName);

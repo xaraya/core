@@ -26,7 +26,7 @@ class HtmlValidation extends ValueValidations
         }
 
         $allowedTags = array();
-        foreach (xarConfigGetVar('Site.Core.AllowableHTML') as $k=>$v) {
+        foreach (xarConfigVars::Get(null,'Site.Core.AllowableHTML') as $k=>$v) {
             if ($v) {
                 $allowedTags[] = $k;
             }

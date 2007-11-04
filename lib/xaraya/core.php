@@ -255,7 +255,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Before anything fancy is loaded, let's start the legacy systems
      *
      */
-    if (xarConfigGetVar('Site.Core.LoadLegacy') == true) {
+    if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
         sys::import('xaraya.legacy');
     }
 
@@ -270,7 +270,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     sys::import('xaraya.server');
-    $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
+    $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
                         'generateXMLURLs' => true);
 
     xarServer::init($systemArgs);
@@ -283,13 +283,13 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     sys::import('xaraya.mls');
     // FIXME: Site.MLS.MLSMode is NULL during install
-    $systemArgs = array('MLSMode'             => xarConfigGetVar('Site.MLS.MLSMode'),
-//                        'translationsBackend' => xarConfigGetVar('Site.MLS.TranslationsBackend'),
+    $systemArgs = array('MLSMode'             => xarConfigVars::get(null, 'Site.MLS.MLSMode'),
+//                      'translationsBackend' => xarConfigVars::get(null, 'Site.MLS.TranslationsBackend'),
                         'translationsBackend' => 'xml2php',
-                        'defaultLocale'       => xarConfigGetVar('Site.MLS.DefaultLocale'),
-                        'allowedLocales'      => xarConfigGetVar('Site.MLS.AllowedLocales'),
-                        'defaultTimeZone'     => xarConfigGetVar('Site.Core.TimeZone'),
-                        'defaultTimeOffset'   => xarConfigGetVar('Site.MLS.DefaultTimeOffset'),
+                        'defaultLocale'       => xarConfigVars::get(null, 'Site.MLS.DefaultLocale'),
+                        'allowedLocales'      => xarConfigVars::get(null, 'Site.MLS.AllowedLocales'),
+                        'defaultTimeZone'     => xarConfigVars::get(null, 'Site.Core.TimeZone'),
+                        'defaultTimeOffset'   => xarConfigVars::get(null, 'Site.MLS.DefaultTimeOffset'),
                         );
     xarMLS_init($systemArgs);
 
@@ -299,7 +299,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * We deal with users through the sessions subsystem
      *
      */
-    $anonid = xarConfigGetVar('Site.User.AnonymousUID');
+    $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID');
     // fall back to default id 2 during installation (cfr. bootstrap function)
     // @todo this kind of thing should a.) not be happening and b.) not be done here
     $anonid = !empty($anonid) ? $anonid : 2;
@@ -310,13 +310,13 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         sys::import('xaraya.sessions');
 
         $systemArgs = array(
-            'securityLevel'     => xarConfigGetVar('Site.Session.SecurityLevel'),
-            'duration'          => xarConfigGetVar('Site.Session.Duration'),
-            'inactivityTimeout' => xarConfigGetVar('Site.Session.InactivityTimeout'),
-            'cookieName'        => xarConfigGetVar('Site.Session.CookieName'),
-            'cookiePath'        => xarConfigGetVar('Site.Session.CookiePath'),
-            'cookieDomain'      => xarConfigGetVar('Site.Session.CookieDomain'),
-            'refererCheck'      => xarConfigGetVar('Site.Session.RefererCheck'));
+            'securityLevel'     => xarConfigVars::get(null, 'Site.Session.SecurityLevel'),
+            'duration'          => xarConfigVars::get(null, 'Site.Session.Duration'),
+            'inactivityTimeout' => xarConfigVars::get(null, 'Site.Session.InactivityTimeout'),
+            'cookieName'        => xarConfigVars::get(null, 'Site.Session.CookieName'),
+            'cookiePath'        => xarConfigVars::get(null, 'Site.Session.CookiePath'),
+            'cookieDomain'      => xarConfigVars::get(null, 'Site.Session.CookieDomain'),
+            'refererCheck'      => xarConfigVars::get(null, 'Site.Session.RefererCheck'));
         xarSession_init($systemArgs);
 
         $whatToLoad ^= XARCORE_BIT_SESSION;
@@ -349,7 +349,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     **/
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
         sys::import('xaraya.modules');
-        $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
+        $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => true);
         xarMod::init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_MODULES;
@@ -363,7 +363,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     sys::import('xaraya.templates');
 
     $systemArgs = array(
-        'enableTemplatesCaching' => xarConfigGetVar('Site.BL.CacheTemplates'),
+        'enableTemplatesCaching' => xarConfigVars::get(null, 'Site.BL.CacheTemplates'),
         'themesBaseDirectory'    => xarModVars::get('themes', 'themesdirectory'),
         'defaultThemeDir'        => xarModVars::get('themes','default'),
         'generateXMLURLs'        => true
@@ -384,7 +384,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         sys::import('xaraya.security');
 
         // Start User System
-        $systemArgs = array('authenticationModules' => xarConfigGetVar('Site.User.AuthenticationModules'));
+        $systemArgs = array('authenticationModules' => xarConfigVars::get(null, 'Site.User.AuthenticationModules'));
         xarUser_init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_USER;
     }
@@ -511,7 +511,7 @@ class xarCore extends Object
 {
     const GENERATION = 2;
     // The actual version information
-    const VERSION_NUM = '[ongoing development version]';
+    const VERSION_NUM = XARCORE_VERSION_REV;
     const VERSION_ID  = 'Xaraya 2 series';
     const VERSION_SUB = 'etiam infractus';
 

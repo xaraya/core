@@ -43,6 +43,7 @@ class BLException extends xarExceptions
 function xarTpl_init(&$args)
 {
     $table['template_tags'] = xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix') . '_template_tags';
+    sys::import('xaraya.database');
     xarDB::importTables($table);
 
     $GLOBALS['xarTpl_themesBaseDir']   = $args['themesBaseDirectory'];
@@ -75,13 +76,14 @@ function xarTpl_init(&$args)
  * @access public
  * @global xarTpl_themeName string
  * @return string themename
+ * @todo   the method_exists / function_exists should be in the xaraya scope, so we can deal with it's oddities
  */
 function xarTplGetThemeName()
 {
     if(isset($GLOBALS['xarTpl_themeName'])) return  $GLOBALS['xarTpl_themeName'];
     // If it is not set, set it return the default theme.
     // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
-    if (function_exists('xarModGetVar')) {
+    if (method_exists('xarModVars','Get')) {
         $defaultTheme = xarModVars::get('themes', 'default');
         if (!empty($defaultTheme)) xarTplSetThemeName($defaultTheme);
     }
@@ -228,7 +230,7 @@ function xarTplSetPageTitle($title = NULL, $module = NULL)
 {
     xarLogMessage("TPL: Setting pagetitle to $title");
     // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable!!!
-    if (!function_exists('xarModGetVar')){
+    if (!method_exists('xarModVars','Get')){
         $GLOBALS['xarTpl_pageTitle'] = $title;
     } else {
         $order      = xarModVars::get('themes', 'SiteTitleOrder');
@@ -362,7 +364,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     // 2. Create a page in the themes module with an interface
     // 3. Use 1. to link to 2.
     // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
-    if (function_exists('xarModGetVar')){
+    if (method_exists('xarModVars','Get')){
         $var_dump = xarModVars::get('themes', 'var_dump');
         if ($var_dump == true){
             if (function_exists('var_export')) {
@@ -1095,7 +1097,7 @@ function xarTpl_outputPHPCommentBlockInTemplates()
         $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
         // CHECKME: not sure if this is needed, e.g. during installation
         // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
-        if (function_exists('xarModGetVar')){
+        if (method_exists('xarModVars','Get')){
             $showphpcbit = xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates');
             if (!empty($showphpcbit)) {
                 $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
@@ -1122,7 +1124,7 @@ function xarTpl_outputTemplateFilenames()
         $GLOBALS['xarTpl_showTemplateFilenames'] = 0;
         // CHECKME: not sure if this is needed, e.g. during installation
         // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
-        if (function_exists('xarModGetVar')){
+        if (method_exists('xarModVars','Get')){
             $showtemplates = xarModVars::get('themes', 'ShowTemplates');
             if (!empty($showtemplates)) {
                 $GLOBALS['xarTpl_showTemplateFilenames'] = 1;

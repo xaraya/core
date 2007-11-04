@@ -11,8 +11,8 @@
 
 sys::import('xaraya.structures.descriptor');
 sys::import('modules.dynamicdata.class.properties');
-sys::import('modules.dynamicdata.class.objects.master');
 sys::import('modules.dynamicdata.class.objects.interfaces');
+sys::import('modules.dynamicdata.class.objects.master');
 
 /**
  * DataObject Base class

@@ -28,14 +28,6 @@ class ConfigurationException extends ConfigurationExceptions
     protected $message = 'There is an unknown configuration error detected.';
 }
 
-/*
- * Wrapper functions to support Xaraya 1 API for modvars
- * NOTE: the $prep in the signature has been dropped!!
- */
-sys::import('xaraya.variables.config');
-function xarConfigSetVar($name, $value) { return xarConfigVars::set(null, $name, $value); }
-function xarConfigGetVar($name)         { return xarConfigVars::get(null, $name); }
-
 /**
  * Interface declaration for classes dealing with sets of variables
  *
@@ -100,8 +92,9 @@ function xarVar_init(&$args)
     xarDB::importTables($tables);
 
     // Initialise the variable cache
-    $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
-    $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigGetVar('Site.Core.FixHTMLEntities');
+    sys::import('xaraya.variables.config');
+    $GLOBALS['xarVar_allowableHTML'] = xarConfigVars::Get(null, 'Site.Core.AllowableHTML');
+    $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigVars::Get(null, 'Site.Core.FixHTMLEntities');
 
     return true;
 }

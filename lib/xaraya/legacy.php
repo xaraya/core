@@ -76,4 +76,13 @@ function xarDBGetHost() { return xarDB::getHost(); }
  * @see xarDB::getName();
  */
 function xarDBGetName() { return xarDB::getName(); }
+
+/*
+ * Wrapper functions to support Xaraya 1 API for configvars
+ * NOTE: the $prep in the signature has been dropped!!
+ */
+sys::import('xaraya.variables.config');
+function xarConfigSetVar($name, $value) { return xarConfigVars::set(null, $name, $value); }
+function xarConfigGetVar($name)         { return xarConfigVars::get(null, $name); }
+
 ?>

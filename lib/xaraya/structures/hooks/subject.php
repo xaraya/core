@@ -4,20 +4,12 @@ sys::import('xaraya.structures.hooks.request');
 
 class BasicSubject extends RequestObject implements SplSubject
 {
-
-    function attach(SplObserver $observer)
-    {
-
-    }
-    function detach(SplObserver $observer)
-    {
-
-    }
-    function notify()
-    {
-
-    }
+    function attach(SplObserver $observer)  { }
+    function detach(SplObserver $observer)  { }
+    function notify() { }
 }
+
+
 class HookSubject extends BasicSubject
 {
     private $messenger;

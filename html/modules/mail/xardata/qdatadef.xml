@@ -1,7 +1,7 @@
 <object name="mailqdata">
   <label>datastorage for mailqueue</label>
   <moduleid>771</moduleid>
-  <itemtype>-1</itemtype>
+  <itemtype></itemtype>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <config></config>
