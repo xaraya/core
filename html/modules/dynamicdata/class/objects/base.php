@@ -141,6 +141,9 @@ class DataObject extends DataObjectMaster implements iDataObject
             if($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
                 continue;
 
+            // Give the property this object's reference so it can send back info on missing fields
+            $this->properties[$name]->objectref =& $this;
+
             // We need to check both the given name and the dd_ name
             // checking for any transitory name given a property via $args needs to be done at the property level
             $ddname = 'dd_' . $this->properties[$name]->id;

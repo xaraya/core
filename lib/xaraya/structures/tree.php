@@ -113,7 +113,7 @@ class Tree extends Object implements ITree
         if (!is_object($inputdata)) $inputdata = new ArrayObject($inputdata);
 
         // Get the toplevel elements..can there be more than 1?
-        for($iterator = $inputdata->getIterator();$iterator->valid();$iterator->next()) {           ;
+        for($iterator = $inputdata->getIterator();$iterator->valid();$iterator->next()) {
             $thiskey = $iterator->key();
             $thisvalue = $iterator->current();
             if ($thisvalue['id'] == $node->id) {
@@ -132,7 +132,7 @@ class Tree extends Object implements ITree
             $thisidsdone = array();
             $nodelevel += 1;
             $inputdata = new ArrayObject($tempdata);
-            for($iterator = $inputdata->getIterator();$iterator->valid();$iterator->next()) {           ;
+            for($iterator = $inputdata->getIterator();$iterator->valid();$iterator->next()) {
                 $thiskey = $iterator->key();
                 $thisvalue = $iterator->current();
                 if (in_array($thisvalue['parent'],$lastidsdone)) {
@@ -148,7 +148,7 @@ class Tree extends Object implements ITree
 
             // Bail if we haven't removed any elements, or if there's nothing left to look at
             $thiscount = count($tempdata);
-            if (($lastcount == $thiscount) || ($thiscount == 0)) {
+            if (($thiscount == 0)) {
                 break;
             } else {
                 $lastcount = $thiscount;
