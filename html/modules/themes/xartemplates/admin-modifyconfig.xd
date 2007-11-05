@@ -158,7 +158,7 @@
                     Template Debugging options
                 </xar:mlstring>
             </legend>
-            <xar:if condition="xarConfigGetVar('Site.BL.CacheTemplates')">
+            <xar:if condition="xarConfigVars::Get(null,'Site.BL.CacheTemplates')">
                 <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked">xarModGetVar('themes', 'ShowPHPCommentBlockInTemplates')</xar:set>
                     <xar:data-input type="checkbox" name="showphpcbit" id="showphpcbit" checked="$checked" />
@@ -179,7 +179,7 @@
                 </label>
             </div>
             <div class="xar-form-input-wrapper-after">
-                <xar:set name="checked">xarConfigGetVar('Site.BL.CacheTemplates')</xar:set>
+                <xar:set name="checked"><xar:var scope="config" name="Site.BL.CacheTemplates"/></xar:set>
                 <xar:data-input type="checkbox" name="cachetemplates" id="cachetemplates" checked="$checked" />
                 <label for="cachetemplates">
                     <xar:mlstring>

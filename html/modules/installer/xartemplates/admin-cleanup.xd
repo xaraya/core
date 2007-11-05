@@ -7,7 +7,9 @@
 
     <h3>
         <xar:mlstring>Congratulations, you have successfully installed</xar:mlstring>
-        #xarConfigGetVar('System.Core.VersionId')# #xarConfigGetVar('System.Core.VersionNum')# ("#xarConfigGetVar('System.Core.VersionSub')#")!
+        <xar:var scope="config" name="System.Core.VersionId"/> 
+        <xar:var scope="config" name="System.Core.VersionNum"/>
+        (<xar:var scope="config" name="System.Core.VersionSub"/>)!
     </h3>
 
     <p>

@@ -141,7 +141,7 @@
                         )
                     </xar:set>
                     <xar:set name="value">
-                        xarConfigGetVar('Site.BL.CompilerVersion')
+                        <xar:var scope="config" name="Site.BL.CompilerVersion"/>
                     </xar:set>
                     <xar:data-input type="radio" name="compilerversion" value="$value" options="$options" />
                 </div>
@@ -226,7 +226,7 @@
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarConfigGetVar('Site.Core.EnableShortURLsSupport')</xar:set>
+                    <xar:set name="checked"><xar:var scope="config" name="Site.Core.EnableShortURLsSupport"/></xar:set>
                     <xar:data-input type="checkbox" name="shorturl" id="shorturl" checked="$checked" />
                     <label for="shorturl" title="#xarML('Enable short url support throughout Xaraya.')#">
                         <xar:mlstring>
@@ -244,7 +244,7 @@
                     </label>
                 </div>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarConfigGetVar('Site.Core.FixHTMLEntities')</xar:set>
+                    <xar:set name="checked"><xar:var scope="config" name="Site.Core.FixHTMLEntities"/></xar:set>
                     <xar:data-input type="checkbox" name="htmlenitites" id="htmlenitites" checked="$checked" />
                     <label for="htmlenitites" title="#xarML('Change HTML Entities to readible entities.')#">
                         <xar:mlstring>
@@ -265,7 +265,7 @@
         <!-- Begin Security Options -->
         <xar:elseif condition="$tab eq 'security'" />
         <xar:set name="authmodules">
-            #xarConfigGetVar('Site.User.AuthenticationModules')#
+            <xar:var scope="config" name="Site.User.AuthenticationModules"/>
         </xar:set>
         <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
             <xar:base-include-javascript module="base" filename="orderitem.js" position="head" />
@@ -281,7 +281,7 @@
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarConfigGetVar('Site.Core.EnableSecureServer')</xar:set>
+                    <xar:set name="checked"><xar:var scope="config" name="Site.Core.EnableSecureServer"/></xar:set>
                     <xar:data-input type="checkbox" name="secureserver" id="secureserver" checked="$checked" />
                     <label for="secureserver" title="#xarML('Configure to run on a secure server.')#">
                         <xar:mlstring>
@@ -296,7 +296,7 @@
                         </xar:mlstring>
                     </label>
                     <select name="securitylevel" id="securitylevel" size="1">
-                        <xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'High'">
+                        <xar:if condition="xarConfigVars::Get(null,'Site.Session.SecurityLevel') eq 'High'">
                             <option value="High" selected="selected">
                                 High
                             </option>
@@ -306,7 +306,7 @@
                             <option value="Low">
                                 Low
                             </option>
-                            <xar:elseif condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Medium'" />
+                            <xar:elseif condition="xarConfigVars::Get(null,'Site.Session.SecurityLevel') eq 'Medium'" />
                             <option value="High">
                                 High
                             </option>
@@ -316,7 +316,7 @@
                             <option value="Low">
                                 Low
                             </option>
-                            <xar:elseif condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Low'" />
+                            <xar:elseif condition="xarConfigVars::Get(null,'Site.Session.SecurityLevel') eq 'Low'" />
                             <option value="High">
                                 High
                             </option>
@@ -329,14 +329,14 @@
                         </xar:if>
                     </select>
                 </div>
-                <xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Medium'">
+                <xar:if condition="xarConfigVars::Get(null,'Site.Session.SecurityLevel') eq 'Medium'">
                     <div class="xar-form-input-wrapper">
                         <label for="sessionduration" title="#xarML('How long to allow the session to last in days')#" class="xar-form-label">
                             <xar:mlstring>
                                 Session Duration (In Days):
                             </xar:mlstring>
                         </label>
-                        <input type="text" id="sessionduration" name="sessionduration" value="#xarConfigGetVar('Site.Session.Duration')#" maxlength="3" class="xar-form-textshort" />
+                        <input type="text" id="sessionduration" name="sessionduration" value="#xarConfigVars::Get(null,'Site.Session.Duration')#" maxlength="3" class="xar-form-textshort" />
                     </div>
                 </xar:if>
                 <div class="xar-form-input-wrapper">
@@ -345,7 +345,7 @@
                             Session Inactivity Time Out:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="sessiontimeout" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" maxlength="3" class="xar-form-textshort" />
+                    <input type="text" id="sessiontimeout" name="sessiontimeout" value="#xarConfigVars::Get(null,'Site.Session.InactivityTimeout')#" maxlength="3" class="xar-form-textshort" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="authmodules" title="#xarML('Change the order of authentication')#" class="xar-form-label">
@@ -387,7 +387,7 @@
                             Cookie Name:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="cookiename" name="cookiename" value="#xarConfigGetVar('Site.Session.CookieName')#" maxlength="20" class="xar-form-textmedium" />
+                    <input type="text" id="cookiename" name="cookiename" value="#xarConfigVars::Get(null,'Site.Session.CookieName')#" maxlength="20" class="xar-form-textmedium" />
                     &#160;<xar:mlstring>Default: XARAYASID</xar:mlstring>
                 </div>
                 <div class="xar-form-input-wrapper">
@@ -396,7 +396,7 @@
                             Cookie Path:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="cookiepath" name="cookiepath" value="#xarConfigGetVar('Site.Session.CookiePath')#" maxlength="20" class="xar-form-textmedium" />
+                    <input type="text" id="cookiepath" name="cookiepath" value="#xarConfigVars::Get(null,'Site.Session.CookiePath')#" maxlength="20" class="xar-form-textmedium" />
                     &#160;<xar:ml><xar:mlstring>Default: #(1) (limited to the Xaraya directory)</xar:mlstring><xar:mlvar>#xarServerGetBaseURI()#</xar:mlvar></xar:ml>
                 </div>
                 <div class="xar-form-input-wrapper">
@@ -405,7 +405,7 @@
                             Cookie Domain:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="cookiedomain" name="cookiedomain" value="#xarConfigGetVar('Site.Session.CookieDomain')#" maxlength="20" class="xar-form-textmedium" />
+                    <input type="text" id="cookiedomain" name="cookiedomain" value="#xarConfigVars::Get(null,'Site.Session.CookieDomain')#" maxlength="20" class="xar-form-textmedium" />
                     &#160;<xar:mlstring>Default: none (not shared across hosts)</xar:mlstring>
                 </div>
                 <div class="xar-form-input-wrapper">
@@ -414,7 +414,7 @@
                             Referer Check:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="referercheck" name="referercheck" value="#xarConfigGetVar('Site.Session.RefererCheck')#" maxlength="40" class="xar-form-textmedium" />
+                    <input type="text" id="referercheck" name="referercheck" value="#xarConfigVars::Get(null, 'Site.Session.RefererCheck')#" maxlength="40" class="xar-form-textmedium" />
                     &#160;<xar:ml><xar:mlstring>Default: #(1) for security level 'High'</xar:mlstring><xar:mlvar>#xarServerGetVar('HTTP_HOST')#</xar:mlvar></xar:ml>
                 </div>
             </fieldset>
@@ -468,7 +468,7 @@
                     </select>
                 </div>
                 <div class="xar-form-input-wrapper-after xar-padding-topthick">
-                    <xar:set name="checked">xarConfigGetVar('Site.Core.LoadLegacy')</xar:set>
+                    <xar:set name="checked"><xar:var scope="config" name="Site.Core.LoadLegacy"/></xar:set>
                     <xar:data-input type="checkbox" name="loadlegacy" id="loadlegacy" checked="$checked" />
                     <label for="loadlegacy" title="#xarML('Load Legacy Support for Postnuke (7.1x, 7.2x)')#">
                         <xar:mlstring>
@@ -515,14 +515,14 @@
                     <label for="defaulttimezone" title="#xarML('This is the timezone your operating system is set to.')#" class="xar-form-label">
                         <xar:mlstring>Host Timezone:</xar:mlstring>
                     </label>
-                    <xar:set name="timezone">#xarConfigGetVar('System.Core.TimeZone')#</xar:set>
+                    <xar:set name="timezone"><xar:var scope="config" name="System.Core.TimeZone"/></xar:set>
                     <xar:data-input type="timezone" name="defaultsystemtimezone" id="defaultsystemtimezone" value="$timezone" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="defaulttimezone" title="#xarML('This is the timezone the server/site is based in.')#" class="xar-form-label">
                         <xar:mlstring>Server Timezone:</xar:mlstring>
                     </label>
-                    <xar:set name="timezone">#xarConfigGetVar('Site.Core.TimeZone')#</xar:set>
+                    <xar:set name="timezone"><xar:var scope="config" name="Site.Core.TimeZone"/></xar:set>
                     <xar:data-input type="timezone" name="defaulttimezone" id="defaulttimezone" value="$timezone" />
                 </div>
                 <div class="xar-form-input-wrapper">

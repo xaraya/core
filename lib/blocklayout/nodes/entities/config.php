@@ -3,7 +3,7 @@
  * ConfigEntityNode
  *
  * Configuration entities, treated as BL expression, basically
- * a wrapping to xarConfigGetVar()
+ * a wrapping to xarConfigVars::Get()
  *
  * @package blocklayout
  * @access private
