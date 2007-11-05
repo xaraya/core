@@ -570,7 +570,7 @@ class xarMasks extends Object
             if($thistest) {
                 echo "Comparing <font color='blue'>[" . $privilege->present() . "]</font> against  <font color='green'>[". $mask->present() . "]</font> <b>for deny</b>. ";
                 if (($privilege->level == 0) && ($privilege->includes($mask))) echo "<font color='blue'>[" . $privilege->getName() . "]</font> matches. ";
-                else echo "no match found. ";
+                else echo "<font color='red'>no match</font>";
                 /* debugging output */
                 $msg = "Comparing for DENY.<font color='blue'>".$privilege->present(). "</blue>\n  ".
                     $mask->present();
