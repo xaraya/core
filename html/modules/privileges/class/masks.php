@@ -130,16 +130,16 @@ class xarMasks extends Object
 
         $masks = array();
         while($result->next()) {
-            list($sid, $name, $realm, $module_id, $component, $instance, $level,
+            list($id, $name, $realm, $module_id, $component, $instance, $level,
                     $description) = $result->fields;
-            $pargs = array('sid' => $sid,
-                               'name' => $name,
-                               'realm' => is_null($realm) ? 'All' : $realm,
-                               'module' => $module_id,
-                               'component' => $component,
-                               'instance' => $instance,
-                               'level' => $level,
-                               'description' => $description);
+            $pargs = array('id' => $id,
+						   'name' => $name,
+						   'realm' => is_null($realm) ? 'All' : $realm,
+						   'module' => $module_id,
+						   'component' => $component,
+						   'instance' => $instance,
+						   'level' => $level,
+						   'description' => $description);
             array_push($masks, new xarMask($pargs));
         }
         return $masks;
@@ -185,14 +185,14 @@ class xarMasks extends Object
         try {
             self::$dbconn->begin();
             if ($result->first()) {
-                list($sid) = $result->fields;
+                list($id) = $result->fields;
                 $query = "UPDATE " . self::$privilegestable .
                           " SET realmid = ?, component = ?,
                               instance = ?, level = ?,
                               description = ?, type= ?
                           WHERE id = ?";
                 $bindvars = array($realmid, $component, $instance, $level,
-                                  $description, self::PRIVILEGES_MASKTYPE, $sid);
+                                  $description, self::PRIVILEGES_MASKTYPE, $id);
             } else {
                 $query = "INSERT INTO " . self::$privilegestable .
                           " (name, realmid, module_id, component, instance, level, description, type)
@@ -696,7 +696,7 @@ class xarMasks extends Object
         self::initialize();
         if ($suppresscache || !xarVarIsCached('Security.Masks',$name)) {
             $bindvars = array();
-            $query = "SELECT masks.id AS sid, masks.name AS name, realms.name AS realm,
+            $query = "SELECT masks.id AS id, masks.name AS name, realms.name AS realm,
                              module_id AS module_id, modules.name as module, masks.component as component, masks.instance AS instance,
                              masks.level AS level, masks.description AS description
                       FROM " . self::$privilegestable . " masks LEFT JOIN " . self::$realmstable .  " realms ON masks.realmid = realms.id INNER JOIN  " . self::$modulestable . " modules ON masks.module_id = modules.id

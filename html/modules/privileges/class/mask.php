@@ -14,7 +14,7 @@ class xarMask extends Object
     const PRIVILEGES_PRIVILEGETYPE = 2;
     const PRIVILEGES_MASKTYPE = 3;
 
-    public $sid;          		//the id of this privilege/mask
+    public $id;          		//the id of this privilege/mask
     public $name;         		//the name of this privilege/mask
     public $realm;        		//the realm of this privilege/mask
     public $module;        		//the module name of this privilege/mask
@@ -55,7 +55,7 @@ class xarMask extends Object
         $this->rolestable = $xartable['roles'];
         $this->acltable = $xartable['security_acl'];
 
-        $this->sid          = (int) $sid;
+        $this->id          = (int)$id;
         $this->name         = $name;
         $this->realm        = $realm;
         $this->module       = $module;
@@ -265,7 +265,7 @@ class xarMask extends Object
         return $match && ($this->getLevel() >= $mask->getLevel()) && ($mask->getLevel() > 0);
     }
 
-    function getID() 				{ return $this->sid; }
+    function getID() 				{ return $this->id; }
     function getName() 				{ return $this->name; }
     function getRealm() 			{ return ($this->realm == null) ? "All" : $this->realm; }
     function getModule() 			{ return $this->module; }
