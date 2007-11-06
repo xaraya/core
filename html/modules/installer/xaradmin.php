@@ -1554,8 +1554,7 @@ function installer_admin_upgrade2()
     xarRegisterMask('AdminPanel','All','base','All','All','ACCESS_ADMIN');
     // Test for existance of privilege already assigned to priv group
     // If not add it
-    $privileges = new xarPrivileges();
-    $thispriv= $privileges->findPrivilege('ViewAuthsystem');
+    $thispriv= xarPrivileges::findPrivilege('ViewAuthsystem');
     $parents= $thispriv->getparents();
     $casual=false;
     $readcore=false;
