@@ -29,8 +29,7 @@ function privileges_adminapi_removemember($args)
 
 // call the Privileges class and get the parent and child objects
     sys::import('modules.privileges.class.privileges');
-    $privs = new xarPrivileges();
-    $priv = $privs->getPrivilege($parentid);
+    $priv = xarPrivileges::getPrivilege($parentid);
     $member = $privs->getPrivilege($childid);
 
 // assign the child to the parent and bail if an error was thrown

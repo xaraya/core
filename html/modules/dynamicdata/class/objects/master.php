@@ -154,7 +154,7 @@ class DataObjectMaster extends Object
         $properties = $this->getPublicProperties();
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
         //FIXME where do we need to define the modname best?
-        $args['modname'] = xarModGetNameFromID($args['moduleid']); //FIXME change to systemid
+        if (!empty($args['moduleid'])) $args['modname'] = xarModGetNameFromID($args['moduleid']); //FIXME change to systemid
         return $args;
     }
 
@@ -203,7 +203,7 @@ class DataObjectMaster extends Object
         // get the properties defined for this object
        if(count($this->properties) == 0 && isset($this->objectid)) {
             $args = $this->toArray();
-            $args['objectref'] = $this;
+            $args['objectref'] =& $this;
             if(!isset($args['allprops']))   //FIXME is this needed??
                 $args['allprops'] = null;
 
@@ -236,15 +236,9 @@ class DataObjectMaster extends Object
             }
         }
 
-        // filter on property status if necessary
-        if(!empty($this->status) && count($this->fieldlist) == 0)
-        {
-            $this->fieldlist = array(); // why?
-            foreach($this->properties as $name => $property)
-                if($property->status && $this->status)
-//                if($property->status & $this->status)
-                    $this->fieldlist[] = $name;
-        }
+        // create the list of fields, filtering where necessary
+        $this->fieldlist = $this->getFieldList($this->fieldlist,$this->status);
+
         // build the list of relevant data stores where we'll get/set our data
         if(count($this->datastores) == 0 && count($this->properties) > 0)
            $this->getDataStores();
@@ -254,6 +248,31 @@ class DataObjectMaster extends Object
         $this->baseancestor = $this->objectid;
         if($this->extend) $this->addAncestors();
     }
+
+    private function getFieldList($fieldlist=array(),$status=null)
+    {
+        $properties = $this->properties;
+        $fields = array();
+        if(count($fieldlist) != 0) {
+			foreach($fieldlist as $field)
+				// Ignore those disabled AND those that don't exist
+				if(isset($properties[$field]) && ($properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED))
+					$fields[$properties[$field]->id] = $properties[$field]->name;
+        } else {
+			if ($status) {
+				// we have a status: filter on it
+				foreach($properties as $property)
+					if($property->status && $this->status)
+						$fields[$property->id] = $property->name;
+			} else {
+				// no status filter: return those that are not disabled
+				foreach($this->properties as $property)
+					if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+						$fields[$property->id] = $property->name;
+			}
+        }
+        return $fields;
+	}
 
     /**
      * Add the ancestors to this object
@@ -436,20 +455,36 @@ class DataObjectMaster extends Object
     {
         if(empty($args['fieldlist']))
         {
-            if(count($this->fieldlist) > 0)
+            if(count($this->fieldlist) > 0) {
                 $fieldlist = $this->fieldlist;
-            else
+            } else {
                 return $this->properties;
-//                $fieldlist = array_keys($this->properties);
+            }
         } else {
+        	// Accept a list or an array
+        	if (!is_array($args['fieldlist'])) $args['fieldlist'] = explode(',',$args['fieldlist']);
             $fieldlist = $args['fieldlist'];
         }
 
 
         $properties = array();
-        foreach($fieldlist as $name) {
-            if (isset($this->properties[$name])) $properties[$name] = &$this->properties[$name];
+        if (!empty($args['fieldprefix'])) {
+			foreach($fieldlist as $name) {
+				if (isset($this->properties[$name])) {
+					// Pass along a field prefix if there is one
+					$this->properties[$name]->_fieldprefix = $args['fieldprefix'];
+					$properties[$name] = &$this->properties[$name];
+				}
+			}
+        } else {
+			foreach($fieldlist as $name) {
+				if (isset($this->properties[$name])) {
+					// Pass along a field prefix if there is one
+					$properties[$name] = &$this->properties[$name];
+				}
+			}
         }
+
         return $properties;
     }
 
@@ -647,7 +682,7 @@ class DataObjectMaster extends Object
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
     **/
-    static function &getObjectList(Array $args)
+    static function &getObjectList(Array $args=array())
     {
         // Complete the info if this is a known object
         $info = self::getObjectInfo($args);

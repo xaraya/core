@@ -51,6 +51,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
                                   'short'     => htmlspecialchars($e->getMessage()),)
                                 );
             // If we have em, use em
+
             if(function_exists('xarTplGetThemeDir') && function_exists('xarTplFile')) {
                 $theme_dir = xarTplGetThemeDir(); $template="systemerror";
                 if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {

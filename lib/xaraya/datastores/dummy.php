@@ -14,15 +14,15 @@
  */
 class DummyDataStore extends BasicDataStore
 {
-    function getItem(array $args = array())
+    function getItem(Array $args = array())
     {
         $itemid = $args['itemid'];
         foreach (array_keys($this->fields) as $field) {
-            $this->fields[$field]->setValue($itemid);
+            $this->fields[$field]->value = $itemid;
         }
     }
 
-    function getItems(array $args = array())
+    function getItems(Array $args = array())
     {
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
@@ -38,8 +38,7 @@ class DummyDataStore extends BasicDataStore
         }
     }
 
-/*
-    function createItem(array $args = array())
+    function createItem(Array $args = array())
     {
         $itemid = $args['itemid'];
         foreach (array_keys($this->fields) as $field) {
@@ -47,9 +46,10 @@ class DummyDataStore extends BasicDataStore
                 $this->fields[$field]->createValue($itemid);
             }
         }
+        return $itemid;
     }
 
-    function updateItem(array $args = array())
+    function updateItem(Array $args = array())
     {
         $itemid = $args['itemid'];
         foreach (array_keys($this->fields) as $field) {
@@ -57,9 +57,10 @@ class DummyDataStore extends BasicDataStore
                 $this->fields[$field]->updateValue($itemid);
             }
         }
+        return $itemid;
     }
 
-    function deleteItem(array $args = array())
+    function deleteItem(Array $args = array())
     {
         $itemid = $args['itemid'];
         foreach (array_keys($this->fields) as $field) {
@@ -67,9 +68,8 @@ class DummyDataStore extends BasicDataStore
                 $this->fields[$field]->deleteValue($itemid);
             }
         }
+        return $itemid;
     }
-*/
-
 }
 
 ?>

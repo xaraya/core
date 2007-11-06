@@ -88,9 +88,12 @@
                             <xar:mlstring>Primary Parent Group:</xar:mlstring>
                         </label>
                         <xar:set name="value">
-                            xarModGetUserVar('roles','primaryparent',$id)
+                            xarModAPIFunc('roles','user','getprimaryparent',array('itemid' => $id))
                         </xar:set>
-                        <xar:data-input type="grouplist" name="duvs[primaryparent]" id="duvs_primaryparent" value="$value" tabindex="8" />
+                        <xar:set name="options">
+                            xarModAPIFunc('roles','user','getancestors',array('id' => $id, 'parents' => 1))
+                        </xar:set>
+                        <xar:data-input type="dropdown" name="duvs[primaryparent]" id="duvs_primaryparent" options="$options" value="$value" tabindex="8" />
                     </div>
                 </xar:if>
 
@@ -177,9 +180,10 @@
                 </xar:if>
 
                 <div class="xar-align-center xar-clearboth">
-                    <input type="hidden" name="object_objectid" id="objectid" value="#$object:objectid#" />
-                    <input type="hidden" name="object_itemid" id="itemid" value="#$id#" />
-                    <input type="hidden" name="object_tplmodule" id="tplmodule" value="roles" />
+                    <input type="hidden" name="parents" id="parents" value="#$parents#" />
+                    <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#" />
+                    <input type="hidden" name="itemid" id="itemid" value="#$id#" />
+                    <input type="hidden" name="tplmodule" id="tplmodule" value="roles" />
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#" />
                     <input type="submit" value="#xarML('Update')#" />
                     <input type="hidden" name="return_url" value="#xarModURL('roles','admin','modify',array('name' => $object->name))#" />

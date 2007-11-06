@@ -1,9 +1,11 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<xar:if condition="!empty($value)">
-    #$value#
-<xar:else />
-    <xar:mlstring>Auto allocated</xar:mlstring>
-</xar:if>
+    <xar:if condition="!empty($value)">
+        #$value#
+        <input type="hidden" name="#$name#" id="#$id#" value="#$value#"/>
+    <xar:else />
+        <xar:mlstring>Auto allocated</xar:mlstring>
+        <input type="hidden" name="#$name#" id="#$id#" value="0"/>
+    </xar:if>
 </xar:template>

@@ -1,0 +1,240 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:comment>
+        License: GPL http://www.gnu.org/copyleft/gpl.html
+    </xar:comment>
+    <xar:set name="options">
+        xarPrivileges::getPrivileges(array('module' => $tab))
+    </xar:set>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">
+            <xar:if condition="xarModGetVar('privileges','useModuleAlias')">
+                #xarModGetVar('listings','aliasname')#
+            <xar:else />
+                <xar:mlstring>Privileges Administration</xar:mlstring>
+            </xar:if>
+        </span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>
+            <xar:mlstring>
+                Assign Privileges
+            </xar:mlstring>
+        </h2>
+        <xar:template module="privileges" file="admin-menu" />
+
+        <div>
+            <xar:template file="headerconfig" type="module"/>
+        </div>
+
+        <h3>
+            <xar:ml>
+                <xar:mlstring>
+                    Privilege Assignments for #(1)
+                </xar:mlstring>
+                <xar:mlvar>#$tabmodule#</xar:mlvar>
+            </xar:ml>
+        </h3>
+        <form id="anonassignments" method="post" action="&xar-modurl-privileges-admin-assignprivileges;" enctype="application/x-www-form-urlencoded">
+            <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Privileges on the anonymous user
+                    </xar:mlstring>
+                </legend>
+                <table border="0" name="list" id="list" width="100%" cellpadding="2" cellspacing="2">
+                    <tr>
+                        <th>
+                            Role
+                        </th>
+                        <th>
+                            Component
+                        </th>
+                        <th>
+                            Access
+                        </th>
+                        <th>
+                            Privilege
+                        </th>
+                        <th style="text-align: center;">
+                            Action
+                        </th>
+                    </tr>
+
+                    <xar:if condition="count($assignments) eq 0">
+                        <tr>
+                            <td colspan="5" style="text-align: center"><xar:mlstring>No assignments to display</xar:mlstring></td>
+                        </tr>
+                    <xar:else />
+                        <xar:loop name="$assignments">
+                            <xar:if condition="$loop:item['role_id'] ne xarConfigGetVar('Site.User.AnonymousUID')">
+                                <xar:continue />
+                            </xar:if>
+                            <xar:if condition="(($loop:index + 1) % 2)">
+                                <xar:set name="displayclass">'xar-norm'</xar:set>
+                            <xar:else />
+                                <xar:set name="displayclass">'xar-accent'</xar:set>
+                            </xar:if>
+                            <xar:set name="row">#$loop:item#</xar:set>
+                            <xar:set name="subdata">array('displayclass' => $displayclass,'row' => $row)</xar:set>
+                            <xar:template file="assignmentrow" subdata="$subdata" />
+                        </xar:loop>
+                    </xar:if>
+                </table>
+                <fieldset>
+                    <div class="xar-form-input-wrapper">
+                        <label title="#xarML('Assign a privilege to a user or group.')#" class="xar-form-label">
+                            Add an assignment
+                        </label>
+                    </div>
+                    &#160;
+                    Assign &#160;
+                    <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" style="width: 200px" /> &#160;
+                    to &#160;
+                    the Anonymous (unregistered) user
+                    <input type="hidden" name="role" value="#xarConfigGetVar('Site.User.AnonymousUID')#" />    
+                </fieldset>
+                <div class="xar-form-input-wrapper-after" style="margin-top: 10px">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="phase" id="phase" value="update" />
+                    <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                    <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#" />
+                    <input type="submit" value="#xarML('Update Assignments')#" />
+                </div>
+            </fieldset>
+        </form>
+        <form id="userassignments" method="post" action="&xar-modurl-privileges-admin-assignprivileges;" enctype="application/x-www-form-urlencoded">
+            <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Privileges on other users
+                    </xar:mlstring>
+                </legend>
+                <table border="0" name="list" id="list" width="100%" cellpadding="2" cellspacing="2">
+                    <tr>
+                        <th>
+                            Role
+                        </th>
+                        <th>
+                            Component
+                        </th>
+                        <th>
+                            Access
+                        </th>
+                        <th>
+                            Privilege
+                        </th>
+                        <th style="text-align: center;">
+                            Action
+                        </th>
+                    </tr>
+
+                    <xar:if condition="count($assignments) eq 0">
+                        <tr>
+                            <td colspan="5" style="text-align: center"><xar:mlstring>No assignments to display</xar:mlstring></td>
+                        </tr>
+                    <xar:else />
+                        <xar:loop name="$assignments">
+                            <xar:if condition="($loop:item['role_type'] ne xarRoles::ROLES_USERTYPE) OR ($loop:item['role_id'] eq xarConfigGetVar('Site.User.AnonymousUID'))">
+                                <xar:continue />
+                            </xar:if>
+                            <xar:if condition="(($loop:index + 1) % 2)">
+                                <xar:set name="displayclass">'xar-norm'</xar:set>
+                            <xar:else />
+                                <xar:set name="displayclass">'xar-accent'</xar:set>
+                            </xar:if>
+                            <xar:set name="row">#$loop:item#</xar:set>
+                            <xar:set name="subdata">array('displayclass' => $displayclass,'row' => $row)</xar:set>
+                            <xar:template file="assignmentrow" subdata="$subdata" />
+                        </xar:loop>
+                    </xar:if>
+                </table>
+                <fieldset>
+                    <div class="xar-form-input-wrapper">
+                        <label title="#xarML('Assign a privilege to a user or group.')#" class="xar-form-label">
+                            Add an assignment
+                        </label>
+                    </div>
+                    &#160;
+                    Assign &#160;
+                    <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" style="width: 200px" /> &#160;
+                    to &#160;
+                    <input type="text" name="rolename" value="Enter a user name" style="width: 200px"/>    
+                </fieldset>
+                <div class="xar-form-input-wrapper-after" style="margin-top: 10px">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="phase" id="phase" value="update" />
+                    <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                    <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#" />
+                    <input type="submit" value="#xarML('Update Assignments')#" />
+                </div>
+            </fieldset>
+        </form>
+        <form id="groupassignments" method="post" action="&xar-modurl-privileges-admin-assignprivileges;" enctype="application/x-www-form-urlencoded">
+            <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Privileges on groups
+                    </xar:mlstring>
+                </legend>
+                <table border="0" name="list" id="list" width="100%" cellpadding="2" cellspacing="2">
+                    <tr>
+                        <th>
+                            Role
+                        </th>
+                        <th>
+                            Component
+                        </th>
+                        <th>
+                            Access
+                        </th>
+                        <th>
+                            Privilege
+                        </th>
+                        <th style="text-align: center;">
+                            Action
+                        </th>
+                    </tr>
+
+                    <xar:if condition="count($assignments) eq 0">
+                        <tr>
+                            <td colspan="5" style="text-align: center"><xar:mlstring>No assignments to display</xar:mlstring></td>
+                        </tr>
+                    <xar:else />
+                        <xar:loop name="$assignments">
+                            <xar:if condition="$loop:item['role_type'] ne xarRoles::ROLES_GROUPTYPE">
+                                <xar:continue />
+                            </xar:if>
+                            <xar:if condition="(($loop:index + 1) % 2)">
+                                <xar:set name="displayclass">'xar-norm'</xar:set>
+                            <xar:else />
+                                <xar:set name="displayclass">'xar-accent'</xar:set>
+                            </xar:if>
+                            <xar:set name="row">#$loop:item#</xar:set>
+                            <xar:set name="subdata">array('displayclass' => $displayclass,'row' => $row)</xar:set>
+                            <xar:template file="assignmentrow" subdata="$subdata" />
+                        </xar:loop>
+                    </xar:if>
+                </table>
+                <fieldset>
+                    <div class="xar-form-input-wrapper">
+                        <label title="#xarML('Assign a privilege to a user or group.')#" class="xar-form-label">
+                            Add an assignment
+                        </label>
+                    </div>
+                    &#160;
+                    Assign &#160;
+                    <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" style="width: 200px" /> &#160;
+                    to &#160;
+                    <xar:data-input type="grouplist" name="role" firstline="Select a group" style="width: 200px" />    
+                </fieldset>
+                <div class="xar-form-input-wrapper-after" style="margin-top: 10px">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="phase" id="phase" value="update" />
+                    <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                    <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#" />
+                    <input type="submit" value="#xarML('Update Assignments')#" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</xar:template>

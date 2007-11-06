@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage math
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
  * @author Marc Lutolf <mfl@netspan.ch>
  */
