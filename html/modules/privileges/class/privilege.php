@@ -241,11 +241,10 @@ class xarPrivilege extends xarMask
         $result = $stmt->executeQuery(array($this->getID()));
 
         // remove this child from all the parents
-        $perms = new xarPrivileges();
         while($result->next()) {
             list($parentid) = $result->fields;
             if ($parentid != 0) {
-                $parentperm = $perms->getPrivilege($parentid);
+                $parentperm = xarPrivileges::getPrivilege($parentid);
                 $parentperm->removeMember($this);
             }
         }
@@ -382,18 +381,19 @@ class xarPrivilege extends xarMask
 
         // perform a SELECT on the privmembers table
         $query = "SELECT p.*
-                  FROM $this->privilegestable p, $this->privmemberstable pm
-                  WHERE p.id = pm.parentid
-                    AND pm.id = ?";
+                  FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.parentid
+                  LEFT JOIN $this->modulestable m ON p.module_id = m.id
+                  AND pm.id = ?";
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
         // collect the table values and use them to create new role objects
         while($result->next()) {
-            list($id,$name,$realm,$module_id,$component,$instance,$level,$description) = $result->fields;
+            list($id,$name,$realm,$module_id,$module, $component,$instance,$level,$description) = $result->fields;
             $pargs = array('id'=>$id,
                             'name'=>$name,
                             'realm'=>$realm,
-                            'module'=>$module_id,
+                            'module'=>$module,
+                            'module_id'=>$module_id,
                             'component'=>$component,
                             'instance'=>$instance,
                             'level'=>$level,
@@ -421,7 +421,7 @@ class xarPrivilege extends xarMask
         $parents = $this->getParents();
 
         //Get the parent field for each parent
-        $masks = new xarMasks();
+//        $masks = new xarMasks();
         while (list($key, $parent) = each($parents)) {
             $ancestors = $parent->getParents();
             foreach ($ancestors as $ancestor) {
@@ -474,7 +474,8 @@ class xarPrivilege extends xarMask
             $pargs = array('id'=>           $id,
                             'name'=>        $name,
                             'realm'=>       $realm,
-                            'module'=>      $module_id != 0 ? $module : 'All',
+                            'module_id'=>   $module_id,
+                            'module'=>      $module,
                             'component'=>   $component,
                             'instance'=>    $instance,
                             'level'=>       $level,
@@ -507,7 +508,7 @@ class xarPrivilege extends xarMask
         $children = $this->getChildren();
 
         //Get the child field for each child
-        $masks = new xarMasks();
+//        $masks = new xarMasks();
         while (list($key, $child) = each($children)) {
             $descendants = $child->getChildren();
             foreach ($descendants as $descendant) {

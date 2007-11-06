@@ -697,9 +697,9 @@ class xarMasks extends Object
         if ($suppresscache || !xarVarIsCached('Security.Masks',$name)) {
             $bindvars = array();
             $query = "SELECT masks.id AS sid, masks.name AS name, realms.name AS realm,
-                             module_id AS module, masks.component as component, masks.instance AS instance,
+                             module_id AS module_id, modules.name as module, masks.component as component, masks.instance AS instance,
                              masks.level AS level, masks.description AS description
-                      FROM " . self::$privilegestable . " masks LEFT JOIN " . self::$realmstable .  " realms ON masks.realmid = realms.id
+                      FROM " . self::$privilegestable . " masks LEFT JOIN " . self::$realmstable .  " realms ON masks.realmid = realms.id INNER JOIN  " . self::$modulestable . " modules ON masks.module_id = modules.id
                       WHERE  masks.name = ? ";
             $bindvars[] = $name;
             if(!empty($modid)) {

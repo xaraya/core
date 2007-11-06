@@ -63,6 +63,13 @@ class xarMask extends Object
         $this->instance     = $instance;
         $this->level        = (int) $level;
         $this->description  = $description;
+        if (!isset($module_id)) {
+        	if (strtolower($module) == 'all') $this->module_id = 0;
+        	elseif ($module === null) $this->module_id = null;
+        	else xarMod::getID($module);
+        } else {
+			$this->module_id    = $module_id;
+        }
     }
 
     function present()
@@ -266,89 +273,23 @@ class xarMask extends Object
         return $match && ($this->getLevel() >= $mask->getLevel()) && ($mask->getLevel() > 0);
     }
 
-    function getID()
-    {
-        return $this->sid;
-    }
+    function getID() 				{ return $this->sid; }
+    function getName() 				{ return $this->name; }
+    function getRealm() 			{ return ($this->realm == null) ? "All" : $this->realm; }
+    function getModule() 			{ return $this->module; }
 
-    function getName()
-    {
-        return $this->name;
-    }
+    function getModuleID()			{ return $this->module_id; }
+    function getComponent() 		{ return $this->component; }
+    function getInstance() 			{ return $this->instance; }
+    function getLevel() 			{ return $this->level; }
+    function getDescription()		{ return $this->description; }
 
-    function getRealm()
-    {
-        return ($this->realm == null) ? "All" : $this->realm;
-    }
-
-    function getModule()
-    {
-        return $this->module;
-    }
-
-    function getModuleID()
-    {
-        $xartable = xarDB::getTables();
-        $q = new xarQuery('SELECT',$xartable['modules'],'regid AS regid');
-        $q->eq('id', $this->getModule());
-        if (!$q->run()) return;
-        $row = $q->row();
-        return $row['regid'];
-    }
-
-    function getComponent()
-    {
-        return $this->component;
-    }
-
-    function getInstance()
-    {
-        return $this->instance;
-    }
-
-    function getLevel()
-    {
-        return $this->level;
-    }
-
-    function getDescription()
-    {
-        return $this->description;
-    }
-
-    function setName($var)
-    {
-        $this->name = $var;
-    }
-
-    function setRealm($var)
-    {
-        $this->realm = $var;
-    }
-
-    function setModule($var)
-    {
-        $this->module = $var;
-    }
-
-    function setComponent($var)
-    {
-        $this->component = $var;
-    }
-
-    function setInstance($var)
-    {
-        $this->instance = $var;
-    }
-
-    function setLevel($var)
-    {
-        $this->level = $var;
-    }
-
-    function setDescription($var)
-    {
-        $this->description = $var;
-    }
+    function setName($var) 			{ $this->name = $var; }
+    function setRealm($var) 		{ $this->realm = $var; }
+    function setModule($var) 		{ $this->module = $var; }
+    function setComponent($var) 	{ $this->component = $var; }
+    function setInstance($var) 		{ $this->instance = $var; }
+    function setLevel($var) 		{ $this->level = $var; }
+    function setDescription($var) 	{ $this->description = $var; }
 }
 ?>
