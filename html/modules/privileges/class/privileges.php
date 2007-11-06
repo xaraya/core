@@ -519,12 +519,11 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    this isn't really the right place for this function
     */
-    public static function getinstances($modid=null, $component)
+    public static function getinstances($module=null, $component)
     {
-        if (is_null($modid)) return array();
-        if (!empty($modid)) {
-            $modInfo = xarMod_GetBaseInfo(xarModGetNameFromID($modid));
-            $modid = $modInfo['systemid'];
+        if (is_null($module)) return array();
+        if (!empty($module)) {
+            $modid = xarMod::getID($module);
         }
 
         parent::initialize();
