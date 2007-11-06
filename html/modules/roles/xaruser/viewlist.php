@@ -101,7 +101,7 @@ function roles_user_viewlist($args)
     switch(strtolower($phase)) {
         case 'active':
             $data['phase'] = 'active';
-            $filter = time() - (xarConfigVars::Get(null, 'Site.Session.Duration') * 60);
+            $filter = time() - (xarConfigVars::get(null, 'Site.Session.Duration') * 60);
             $data['title'] = xarML('Online Members');
 
             $data['total'] = xarModAPIFunc(

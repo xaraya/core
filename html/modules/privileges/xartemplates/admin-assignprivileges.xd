@@ -66,7 +66,7 @@
                         </tr>
                     <xar:else />
                         <xar:loop name="$assignments">
-                            <xar:if condition="$loop:item['role_id'] ne xarConfigGetVar('Site.User.AnonymousUID')">
+                            <xar:if condition="$loop:item['role_id'] ne xarConfigVars::get(null,'Site.User.AnonymousUID')">
                                 <xar:continue />
                             </xar:if>
                             <xar:if condition="(($loop:index + 1) % 2)">
@@ -91,7 +91,8 @@
                     <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" style="width: 200px" /> &#160;
                     to &#160;
                     the Anonymous (unregistered) user
-                    <input type="hidden" name="role" value="#xarConfigGetVar('Site.User.AnonymousUID')#" />    
+                    <xar:set name="anon">xarConfigVars::get(null,'Site.User.AnonymousUID')</xar:set>
+                    <input type="hidden" name="role" value="#$anon#" />    
                 </fieldset>
                 <div class="xar-form-input-wrapper-after" style="margin-top: 10px">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -134,7 +135,7 @@
                         </tr>
                     <xar:else />
                         <xar:loop name="$assignments">
-                            <xar:if condition="($loop:item['role_type'] ne xarRoles::ROLES_USERTYPE) OR ($loop:item['role_id'] eq xarConfigGetVar('Site.User.AnonymousUID'))">
+                            <xar:if condition="($loop:item['role_type'] ne xarRoles::ROLES_USERTYPE) OR ($loop:item['role_id'] eq xarConfigVars::get(null,'Site.User.AnonymousUID'))">
                                 <xar:continue />
                             </xar:if>
                             <xar:if condition="(($loop:index + 1) % 2)">
