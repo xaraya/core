@@ -68,7 +68,7 @@ function privileges_admin_addprivilege()
 //Call the Privileges class
     sys::import('modules.privileges.class.privilege');
     $priv = new xarPrivilege($pargs);
-var_dump($pargs);die("C");
+
 //Try to add the privilege and bail if an error was thrown
     if (!$priv->add()) {return;}
 
