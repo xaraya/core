@@ -422,6 +422,9 @@ class xarMasks extends Object
                 xarResponseRedirect(xarModURL('authsystem','user','showloginform',array('redirecturl'=> $requrl),false));
             } else {
                 $msg = xarML("You don't have the correct privileges for this operation");
+				$candebug = (xarSession::getVar('role_id') == xarModVars::get('privileges','tester'));
+				$test = xarModVars::get('privileges','test') && $candebug;
+				if ($test) $msg .= ": " . $maskname;
                 throw new Exception($msg);
             }
         }

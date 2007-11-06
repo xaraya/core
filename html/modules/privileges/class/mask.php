@@ -14,15 +14,16 @@ class xarMask extends Object
     const PRIVILEGES_PRIVILEGETYPE = 2;
     const PRIVILEGES_MASKTYPE = 3;
 
-    public $sid;           //the id of this privilege
-    public $name;          //the name of this privilege
-    public $realm;         //the realm of this privilege
-    public $module;        //the module of this privilege
-    public $component;     //the component of this privilege
-    public $instance;      //the instance of this privilege
-    public $level;         //the access level of this privilege
-    public $description;   //the long description of this privilege
-    public $normalform;    //the normalized form of this privilege
+    public $sid;           //the id of this privilege/mask
+    public $name;          //the name of this privilege/mask
+    public $realm;         //the realm of this privilege/mask
+    public $module;        //the module name of this privilege/mask
+    public $module_id;     //the module ID name of this privilege/mask
+    public $component;     //the component of this privilege/mask
+    public $instance;      //the instance of this privilege/mask
+    public $level;         //the access level of this privilege/mask
+    public $description;   //the long description of this privilege/mask
+    public $normalform;    //the normalized form of this privilege/mask
 
     public $dbconn;
     public $privilegestable;
@@ -204,7 +205,6 @@ class xarMask extends Object
         } else {
             $p2 = $mask->normalize();
         }
-
         // match realm. bail if no match.
         switch(xarModVars::get('privileges', 'realmcomparison')) {
             case "contains":
