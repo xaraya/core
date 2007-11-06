@@ -14,16 +14,16 @@ class xarMask extends Object
     const PRIVILEGES_PRIVILEGETYPE = 2;
     const PRIVILEGES_MASKTYPE = 3;
 
-    public $sid;           //the id of this privilege/mask
-    public $name;          //the name of this privilege/mask
-    public $realm;         //the realm of this privilege/mask
-    public $module;        //the module name of this privilege/mask
-    public $module_id;     //the module ID name of this privilege/mask
-    public $component;     //the component of this privilege/mask
-    public $instance;      //the instance of this privilege/mask
-    public $level;         //the access level of this privilege/mask
-    public $description;   //the long description of this privilege/mask
-    public $normalform;    //the normalized form of this privilege/mask
+    public $sid;          		//the id of this privilege/mask
+    public $name;         		//the name of this privilege/mask
+    public $realm;        		//the realm of this privilege/mask
+    public $module;        		//the module name of this privilege/mask
+    public $module_id;    		//the module ID name of this privilege/mask
+    public $component;    		//the component of this privilege/mask
+    public $instance;      		//the instance of this privilege/mask
+    public $level;         		//the access level of this privilege/mask
+    public $description = '';   //the long description of this privilege/mask
+    public $normalform;    		//the normalized form of this privilege/mask
 
     public $dbconn;
     public $privilegestable;
@@ -63,10 +63,8 @@ class xarMask extends Object
         $this->instance     = $instance;
         $this->level        = (int) $level;
         $this->description  = $description;
-        if (!isset($module_id)) {
-        	if (strtolower($module) == 'all') $this->module_id = 0;
-        	elseif ($module === null) $this->module_id = null;
-        	else xarMod::getID($module);
+        if (!isset($module_id) || (in_array(strtolower($module), array('all','empty')))) {
+			$this->setModuleID($module);
         } else {
 			$this->module_id    = $module_id;
         }
@@ -77,10 +75,7 @@ class xarMask extends Object
         $display = $this->getName();
         $display .= "-" . strtolower($this->getLevel());
         $display .= ":" . strtolower($this->getRealm());
-        // FIXME decide whether $this->module is a number or string
-		$module = strtolower($this->module);
-		if (!empty($module) && is_string($module) && ($module != 'all')) $module = xarMod::getID($module);
-        $display .= ":" . $module;
+        $display .= ":" . strtolower($this->getModule());
         $display .= ":" . strtolower($this->getComponent());
         $display .= ":" . strtolower($this->getInstance());
         return $display;
@@ -109,10 +104,7 @@ class xarMask extends Object
             $normalform = array();
             $normalform[] = strtolower($this->getLevel());
             $normalform[] = strtolower($this->getRealm());
-	        // FIXME decide whether $this->module is a number or string
-            $module = strtolower($this->module);
-            if (!empty($module) && is_string($module) && ($module != 'all')) $module = xarMod::getID($module);
-            $normalform[] = $module;
+            $normalform[] = $this->module_id;
             $normalform[] = strtolower($this->getComponent());
             $thisinstance = strtolower($this->getInstance());
             $thisinstance = str_replace('myself',xarSession::getVar('role_id'),$thisinstance);
@@ -287,9 +279,16 @@ class xarMask extends Object
     function setName($var) 			{ $this->name = $var; }
     function setRealm($var) 		{ $this->realm = $var; }
     function setModule($var) 		{ $this->module = $var; }
+    function setModuleID($var) {
+		if (strtolower($var) == 'all') $this->module_id = xarMasks::PRIVILEGES_ALL;
+		elseif (($var === null) || (strtolower($var) == 'empty')) $this->module_id = null;
+		else $this->module_id = xarMod::getID($var);
+	}
     function setComponent($var) 	{ $this->component = $var; }
     function setInstance($var) 		{ $this->instance = $var; }
     function setLevel($var) 		{ $this->level = $var; }
     function setDescription($var) 	{ $this->description = $var; }
+
+
 }
 ?>

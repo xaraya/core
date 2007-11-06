@@ -12,8 +12,8 @@ sys::import('modules.privileges.class.mask');
 class xarPrivilege extends xarMask
 {
 
-    public $id;           //the id of this privilege
-    public $parentid;      //the id of the parent of this privilege
+    public $id 		 = 0;      //the id of this privilege
+    public $parentid = 0;      //the id of the parent of this privilege
 
     /**
      * xarPrivilege: constructor for the class
@@ -38,23 +38,20 @@ class xarPrivilege extends xarMask
         $this->realmstable = $xartable['security_realms'];
         $this->modulestable = $xartable['modules'];
 
-// CHECKME: id and description are undefined when adding a new privilege
-        if (empty($id)) {
-            $id = 0;
-        }
-        if (empty($description)) {
-            $description = '';
-        }
-
-        $this->id          = (int) $id;
+        $this->id          = isset($id) ? (int) $id : 0;
         $this->name         = $name;
         $this->realm        = $realm;
         $this->module       = $module;
         $this->component    = $component;
         $this->instance     = $instance;
         $this->level        = (int) $level;
-        $this->description  = $description;
+        if (isset($description)) $this->description  = $description;
         $this->parentid     = (int) $parentid;
+        if (!isset($module_id) || (in_array(strtolower($module), array('all','empty')))) {
+			$this->setModuleID($module);
+        } else {
+			$this->module_id    = $module_id;
+        }
     }
 
     /**
@@ -83,10 +80,10 @@ class xarPrivilege extends xarMask
             if($result->next()) $realmid = $result->getInt('id');
         }
         $query = "INSERT INTO $this->privilegestable
-                    (name, realmid, module_id, component, instance, level, type)
-                  VALUES (?,?,?,?,?,?,?)";
-        $bindvars = array($this->name, $realmid, $this->module,
-                          $this->component, $this->instance, $this->level, self::PRIVILEGES_PRIVILEGETYPE);
+                    (name, realmid, module_id, component, instance, level, type, description)
+                  VALUES (?,?,?,?,?,?,?,?)";
+        $bindvars = array($this->name, $realmid, $this->module_id,
+                          $this->component, $this->instance, $this->level, self::PRIVILEGES_PRIVILEGETYPE, $this->description);
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
         // the insert created a new index value
@@ -380,7 +377,7 @@ class xarPrivilege extends xarMask
         $parents = array();
 
         // perform a SELECT on the privmembers table
-        $query = "SELECT p.*
+        $query = "SELECT p.*, m.name
                   FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.parentid
                   LEFT JOIN $this->modulestable m ON p.module_id = m.id
                   AND pm.id = ?";
@@ -388,7 +385,7 @@ class xarPrivilege extends xarMask
         $result = $stmt->executeQuery(array($this->getID()));
         // collect the table values and use them to create new role objects
         while($result->next()) {
-            list($id,$name,$realm,$module_id,$module, $component,$instance,$level,$description) = $result->fields;
+            list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$module) = $result->fields;
             $pargs = array('id'=>$id,
                             'name'=>$name,
                             'realm'=>$realm,

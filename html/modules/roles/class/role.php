@@ -30,6 +30,7 @@ class Role extends DataObject
     public $privilegestable;
     public $acltable;
     public $realmstable;
+    public $modulestable;
 
     public $allprivileges;
 
@@ -60,6 +61,7 @@ class Role extends DataObject
         $this->privilegestable = $xartable['privileges'];
         $this->acltable = $xartable['security_acl'];
         $this->realmstable = $xartable['security_realms'];
+        $this->modulestable = $xartable['modules'];
 
         $this->parentlevel = 0;
         $ancestor = $this->getBaseAncestor();
@@ -341,10 +343,12 @@ class Role extends DataObject
         xarLogMessage("ROLE: getting privileges for id: $this->properties['id']->value");
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
         $xartable = xarDB::getTables();
-        $query = "SELECT  p.id, p.name, r.name, p.module_id,
+        $query = "SELECT  p.id, p.name, r.name, p.module_id, m.name,
                           component, instance, level, description
                   FROM    $this->acltable acl,
-                          $this->privilegestable p LEFT JOIN $this->realmstable r ON p.realmid = r.id
+                          $this->privilegestable p
+                          LEFT JOIN $this->realmstable r ON p.realmid = r.id
+                          LEFT JOIN $this->modulestable m ON p.module_id = m.id
                   WHERE   p.id = acl.permid AND
                           acl.partid = ?";
 //                          echo $query;exit;
@@ -354,12 +358,13 @@ class Role extends DataObject
         sys::import('modules.privileges.class.privilege');
         $privileges = array();
         while ($result->next()) {
-            list($id, $name, $realm, $module_id, $component, $instance, $level,
+            list($id, $name, $realm, $module_id, $module, $component, $instance, $level,
                 $description) = $result->fields;
             $perm = new xarPrivilege(array('id' => $id,
                     'name' => $name,
                     'realm' => is_null($realm) ? 'All' : $realm,
-                    'module' => $module_id,
+                    'module' => $module,
+                    'module_id' => $module_id,
                     'component' => $component,
                     'instance' => $instance,
                     'level' => $level,
