@@ -11,8 +11,6 @@ sys::import('modules.privileges.class.mask');
 
 class xarPrivilege extends xarMask
 {
-
-    public $id 		 = 0;      //the id of this privilege
     public $parentid = 0;      //the id of the parent of this privilege
 
     /**
@@ -27,31 +25,8 @@ class xarPrivilege extends xarMask
     */
     function __construct($pargs)
     {
-        extract($pargs);
-
-        $this->dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
-        $this->privilegestable = $xartable['privileges'];
-        $this->privmemberstable = $xartable['privmembers'];
-        $this->rolestable = $xartable['roles'];
-        $this->acltable = $xartable['security_acl'];
-        $this->realmstable = $xartable['security_realms'];
-        $this->modulestable = $xartable['modules'];
-
-        $this->id          = isset($id) ? (int) $id : 0;
-        $this->name         = $name;
-        $this->realm        = $realm;
-        $this->module       = $module;
-        $this->component    = $component;
-        $this->instance     = $instance;
-        $this->level        = (int) $level;
-        if (isset($description)) $this->description  = $description;
-        $this->parentid     = (int) $parentid;
-        if (!isset($module_id) || (in_array(strtolower($module), array('all','empty')))) {
-			$this->setModuleID($module);
-        } else {
-			$this->module_id    = $module_id;
-        }
+        parent::__construct($pargs);
+        $this->parentid     = isset($parentid) ? (int) $parentid : 0;
     }
 
     /**

@@ -54,15 +54,17 @@ class xarMask extends Object
         $this->privmemberstable = $xartable['privmembers'];
         $this->rolestable = $xartable['roles'];
         $this->acltable = $xartable['security_acl'];
+        $this->realmstable = $xartable['security_realms'];
+        $this->modulestable = $xartable['modules'];
 
-        $this->id          = (int)$id;
+        $this->id          = isset($id) ? (int) $id : 0;
         $this->name         = $name;
         $this->realm        = $realm;
         $this->module       = $module;
         $this->component    = $component;
         $this->instance     = $instance;
         $this->level        = (int) $level;
-        $this->description  = $description;
+        if (isset($description)) $this->description  = $description;
         if (!isset($module_id) || (in_array(strtolower($module), array('all','empty')))) {
 			$this->setModuleID($module);
         } else {
