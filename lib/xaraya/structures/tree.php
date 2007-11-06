@@ -148,7 +148,7 @@ class Tree extends Object implements ITree
 
             // Bail if we haven't removed any elements, or if there's nothing left to look at
             $thiscount = count($tempdata);
-            if (($thiscount == 0)) {
+            if (($lastcount == $thiscount) || ($thiscount == 0)) {
                 break;
             } else {
                 $lastcount = $thiscount;

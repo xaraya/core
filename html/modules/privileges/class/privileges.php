@@ -645,6 +645,7 @@ class xarPrivileges extends xarMasks
             $priv->setName($name);
             $priv->setRealm($realm);
             $priv->setModule($module);
+            $priv->setModuleID($module_id);
             $priv->setComponent($component);
             $priv->setInstance($instance);
             $priv->setLevel($level);

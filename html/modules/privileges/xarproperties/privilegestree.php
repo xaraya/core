@@ -54,7 +54,7 @@ class PrivilegesTree extends Tree
 {
     function createnodes(TreeNode $node)
     {
-        //FIXME this is too unwieldy and largely duplicating a similar query inxarPrivileges
+        //FIXME this is too unwieldy and largely duplicating a similar query in xarPrivileges
         $dbconn = xarDB::getConn();
         $xartable = xarDB::getTables();
         $query = "SELECT p.id, p.name, r.name,
@@ -82,22 +82,6 @@ class PrivilegesTree extends Tree
                                'parent' => $parentid,);
             $this->treedata[] = $nodedata;
         }
-
-/*        $data = xarPrivileges::getprivileges();
-         foreach ($data as $row) {
-            $nodedata = array(
-                'id' => $row['id'],
-                'parent' => $row['parentid'],
-                'name' => $row['name'],
-                'realm' => $row['realm'],
-                'module' => $row['module'],
-                'component' => $row['component'],
-                'instance' => $row['instance'],
-                'level' => $row['level'],
-                'description' => $row['description'],
-            );
-            $this->treedata[] = $nodedata;
-        }*/
         parent::createnodes($node);
     }
 }
