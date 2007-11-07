@@ -170,13 +170,13 @@
                     <xar:else />
                         <xar:set name="filter">array('UserCapable' => 1)</xar:set>
                     </xar:if>
-                    <xar:set name="value">xarModVars::get('modules', 'defaultmodule')</xar:set>
+                    <xar:set name="value"><xar:var scope="module" module="modules" name="defaultmodule"/></xar:set>
                     <xar:data-input type="module" name="defaultmodule" id="defaultmodule" filter="$filter" value="$value" validation="name" />
                 </div>
 
                 <xar:if condition="xarModVars::get('modules', 'defaultmodule') eq xarMod::getID('base')">
                     <div class="xar-form-input-wrapper-after">
-                        <xar:set name="checked">xarModGetVar('base', 'UseAlternatePageTemplate')</xar:set>
+                        <xar:set name="checked"><xar:var scope="module" module="base" name="UseAlternatePageTemplate"/></xar:set>
                         <xar:data-input type="checkbox" name="alternatepagetemplate" id="alternatepagetemplate" checked="$checked" />
                         <label for="alternatepagetemplate" title="#xarML('Use an alternate default page template.')#">
                             <xar:mlstring>
@@ -190,7 +190,7 @@
                                 Alt. Page Template Name:
                             </xar:mlstring>
                         </label>
-                    <xar:set name="value">xarModVars::get('base', 'AlternatePageTemplateName')</xar:set>
+                    <xar:set name="value"><xar:var scope="module" module="base" name="AlternatePageTemplateName"/></xar:set>
                         <input type="text" id="alternatepagetemplatename" name="alternatepagetemplatename" value="#$value#" class="xar-form-textlong" />
                     </div>
                 </xar:if>
@@ -206,7 +206,7 @@
                             array('id' => 'user', 'name' => 'User'),
                         )
                     </xar:set>
-                    <xar:set name="value">xarModVars::get('modules', 'defaultmoduletype')</xar:set>
+                    <xar:set name="value"><xar:var scope="module" module="modules" name="defaultmoduletype"/></xar:set>
                     <xar:data-input type="dropdown" name="defaulttype" id="defaulttype" options="$options" value="$value" />
                 </div>
                 <div class="xar-form-input-wrapper">
@@ -215,7 +215,7 @@
                             Default Module Function:
                         </xar:mlstring>
                     </label>
-                    <xar:set name="value">xarModVars::get('modules', 'defaultmodulefunction')</xar:set>
+                    <xar:set name="value"><xar:var scope="module" module="modules" name="defaultmodulefunction"/></xar:set>
                     <input type="text" id="defaultfunction" name="defaultfunction" value="#$value#" maxlength="100" class="xar-form-textlong" />
                 </div>
            </fieldset>
@@ -235,7 +235,7 @@
                     </label>
                 </div>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarModGetVar('base', 'SupportShortURLs')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="base" name="SupportShortURLs"/></xar:set>
                     <xar:data-input type="checkbox" name="baseshorturl" id="baseshorturl" checked="$checked" />
                     <label for="baseshorturl" title="#xarML('Enable short URL support in the base module.')#">
                         <xar:mlstring>
@@ -494,7 +494,7 @@
                             Proxy Server:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="proxyhost" name="proxyhost" value="#xarModGetVar('base','proxyhost')#" maxlength="100" class="xar-form-inputlong" />
+                    <input type="text" id="proxyhost" name="proxyhost" value="#xarModVars::Get('base','proxyhost')#" maxlength="100" class="xar-form-inputlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="proxyport" title="#xarML('Proxy server port to use')#" class="xar-form-label">
@@ -502,7 +502,7 @@
                             Proxy Port:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="proxyport" name="proxyport" value="#xarModGetVar('base','proxyport')#" maxlength="10" class="xar-form-textshort" />
+                    <input type="text" id="proxyport" name="proxyport" value="#xarModVars::Get('base','proxyport')#" maxlength="10" class="xar-form-textshort" />
                 </div>
             </fieldset>
 

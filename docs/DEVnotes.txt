@@ -185,7 +185,7 @@ Public (this MAY affect someone)
 * xarModAPIFunc('dynamicdata','user','getsources') : never used
 * xarModAPIFunc('dynamicdata','admin','syncprops') : never used
 * xarModAPIFunc('dynamicdata','user','getmodule') : never used
-* xarModAPIFunc('roles','user','getdefaultgroup'): use xarModGetVar('roles','defaultgroup');
+* xarModAPIFunc('roles','user','getdefaultgroup'): use xarModVars::Get('roles','defaultgroup');
 * xarModAPIFunc('roles','admin','getallgroups'): use xarModAPIFunc('roles','user','getallgroups')
 
 DIFFERENCES BETWEEN PHP 5.0/5.1/5.2
@@ -287,7 +287,7 @@ design work can begin.
   be not needed anymore now, as an exception will already be raised so the statement
   will never be reached. Also look at cases where an exception is not raised
   where it probably should (i.e. adapt caller with try/catch)
-* take a decision on query abstraction, xarQuery we have, marc is a fan of it 
+* take a decision on query abstraction, xarQuery we have, marc is a fan of it
   it can help (mostly) in the modules arena. Should we offer it from core?
 * reqmodules in the registration class is now a bit moot, can only contain one
   module and its always the owning module. Didnt feel like going over all the props

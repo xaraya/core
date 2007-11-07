@@ -44,7 +44,7 @@ function base_admin_modifyconfig()
     $dateobject->setTimezone($tzobject);
     $data['localnow'] = $dateobject->format("r");
 
-    $data['editor'] = xarModGetVar('base','editor');
+    $data['editor'] = xarModVars::Get('base','editor');
     $data['editors'] = array(array('displayname' => xarML('none')));
     if(xarModIsAvailable('htmlarea')) $data['editors'][] = array('displayname' => 'htmlarea');
     if(xarModIsAvailable('fckeditor')) $data['editors'][] = array('displayname' => 'fckeditor');
@@ -55,7 +55,7 @@ function base_admin_modifyconfig()
         else $active = false;
         $data['locales'][] = array('name' => $locale, 'active' => $active);
     }
-    $releasenumber=xarModGetVar('base','releasenumber');
+    $releasenumber=xarModVars::Get('base','releasenumber');
     $data['releasenumber']=isset($releasenumber) ? $releasenumber:10;
 
     // TODO: delete after new backend testing

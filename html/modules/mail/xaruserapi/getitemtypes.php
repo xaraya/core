@@ -17,7 +17,7 @@ function mail_userapi_getitemtypes($args)
     // to a specific queue.
     //
     // Use dd to retrieve the items of the mailqueue object
-    $qdefName = xarModGetVar('mail','queue-definition');
+    $qdefName = xarModVars::Get('mail','queue-definition');
     if(!$qdefName) {
         return $itemtypes;
         throw new Exception('Mail queue definition does not exist');

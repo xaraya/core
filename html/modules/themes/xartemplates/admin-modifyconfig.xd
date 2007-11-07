@@ -27,7 +27,7 @@
                         Default Theme Directory:
                     </xar:mlstring>
                 </label>
-                <xar:set name="value">xarModVars::get('themes', 'themesdirectory')</xar:set>
+                <xar:set name="value"><xar:var scope="module" module="themes" name="themesdirectory"/></xar:set>
                 <input type="text" id="themedir" name="themedir" value="#$value#" maxlength="100" class="xar-form-textlong" />
             </div>
             <div class="xar-form-input-wrapper-after">
@@ -91,7 +91,7 @@
                         Site Name
                     </xar:mlstring>
                 </label>
-                <input type="text" name="sitename" id="sitename" value="#xarModGetVar('themes', 'SiteName', 1)#" size="30" maxlength="100" />
+                <input type="text" name="sitename" id="sitename" value="#xarModVars::Get('themes', 'SiteName', 1)#" size="30" maxlength="100" />
             </div>
             <div class="xar-form-input-wrapper">
                 <label for="slogan" class="xar-form-label">
@@ -99,7 +99,7 @@
                         Site Slogan
                     </xar:mlstring>
                 </label>
-                <input type="text" name="slogan" id="slogan" value="#xarModGetVar('themes', 'SiteSlogan', 1)#" size="30" maxlength="100" />
+                <input type="text" name="slogan" id="slogan" value="#xarModVars::Get('themes', 'SiteSlogan', 1)#" size="30" maxlength="100" />
             </div>
             <div class="xar-form-input-wrapper">
                 <label for="copyright" class="xar-form-label">
@@ -107,7 +107,7 @@
                         Copyright
                     </xar:mlstring>
                 </label>
-                <input type="text" name="copyright" id="copyright" value="#xarModGetVar('themes', 'SiteCopyRight', 1)#" size="30" maxlength="100" />
+                <input type="text" name="copyright" id="copyright" value="#xarModVars::Get('themes', 'SiteCopyRight', 1)#" size="30" maxlength="100" />
             </div>
             #xarVarDelCached('Mod.Variables.themes','SiteCopyRight')#
             <div class="xar-form-input-wrapper">
@@ -117,7 +117,7 @@
                     </xar:mlstring>
                 </label>
                 <div class="xar-form-container-after">
-                    <textarea name="footer" id="footer" cols="60" rows="5" class="xar-form-textareamedium">#xarModGetVar('themes', 'SiteFooter', 1)#</textarea>
+                    <textarea name="footer" id="footer" cols="60" rows="5" class="xar-form-textareamedium">#xarModVars::Get('themes', 'SiteFooter', 1)#</textarea>
                 </div>
             </div>
             #xarVarDelCached('Mod.Variables.themes','SiteFooter')#
@@ -128,7 +128,7 @@
                         Page Title Separator
                     </xar:mlstring>
                 </label>
-                <input type="text" name="separator" id="separator" value="#xarModGetVar('themes', 'SiteTitleSeparator', 1)#" size="10" maxlength="15" />
+                <input type="text" name="separator" id="separator" value="#xarModVars::Get('themes', 'SiteTitleSeparator', 1)#" size="10" maxlength="15" />
             </div>
             <div class="xar-form-input-wrapper">
                 <xar:set name="options">
@@ -142,7 +142,7 @@
                     )
                 </xar:set>
                 <xar:set name="value">
-                    xarModGetVar('themes','SiteTitleOrder')
+                   <xar:var scope="module" module="themes" name="SiteTitleOrder"/>
                 </xar:set>
                 <label for="pagetitle" class="xar-form-label">
                     <xar:mlstring>
@@ -160,7 +160,7 @@
             </legend>
             <xar:if condition="xarConfigVars::Get(null,'Site.BL.CacheTemplates')">
                 <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarModGetVar('themes', 'ShowPHPCommentBlockInTemplates')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="themes" name="ShowPHPCommentBlockInTemplates"/></xar:set>
                     <xar:data-input type="checkbox" name="showphpcbit" id="showphpcbit" checked="$checked" />
                     <label for="showphpcbit">
                         <xar:mlstring>
@@ -170,7 +170,7 @@
                 </div>
             </xar:if>
             <div class="xar-form-input-wrapper-after">
-                <xar:set name="checked">xarModGetVar('themes', 'ShowTemplates')</xar:set>
+                <xar:set name="checked"><xar:var scope="module" module="themes" name="ShowTemplates"/></xar:set>
                 <xar:data-input type="checkbox" name="showtemplates" id="showtemplates" checked="$checked" />
                 <label for="showtemplates">
                     <xar:mlstring>
@@ -188,7 +188,7 @@
                 </label>
             </div>
             <div class="xar-form-input-wrapper-after">
-                <xar:set name="checked">xarModVars::get('themes', 'var_dump')</xar:set>
+                <xar:set name="checked"><xar:var scope="module" module="themes" name="var_dump"/></xar:set>
                 <xar:data-input type="checkbox" name="var_dump" id="var_dump" checked="$checked" />
                 <label for="var_dump">
                     <xar:mlstring>
@@ -204,7 +204,7 @@
                             Atom Tag
                         </xar:mlstring>
                     </label>
-                    <input type="text" name="AtomTag" id="AtomTag" value="#xarModGetVar('themes', 'AtomTag', 1)#" size="30" maxlength="100" />
+                    <input type="text" name="AtomTag" id="AtomTag" value="#xarModVars::Get('themes', 'AtomTag', 1)#" size="30" maxlength="100" />
                 </div>
             </xar:if>
         </fieldset>

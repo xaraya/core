@@ -85,4 +85,10 @@ sys::import('xaraya.variables.config');
 function xarConfigSetVar($name, $value) { return xarConfigVars::set(null, $name, $value); }
 function xarConfigGetVar($name)         { return xarConfigVars::get(null, $name); }
 
+sys::import('xaraya.variables.module');
+sys::import('xaraya.variables.moduser');
+/**
+ * Wrapper functions to support Xaraya 1 API for modvars and moduservars
+**/
+function xarModGetVar($modName, $name, $prep = NULL) {   return xarModVars::get($modName, $name, $prep);  }
 ?>

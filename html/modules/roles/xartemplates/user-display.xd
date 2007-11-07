@@ -10,7 +10,7 @@
 </div>
 <div class="xar-mod-body">
     <xar:if condition="strtolower($uname) ne 'anonymous' and strtolower($uname) ne 'myself'">
-        <xar:if condition="xarModGetVar('roles', 'allowemail') and xarModGetUserVar('roles','allowemail',$id)">
+        <xar:if condition="xarModVars::Get('roles', 'allowemail') and xarModGetUserVar('roles','allowemail',$id)">
             <p>
                 <strong>
                     <xar:mlstring>

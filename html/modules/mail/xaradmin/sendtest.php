@@ -38,10 +38,10 @@ function mail_admin_sendtest()
     if (!xarSecurityCheck('AdminMail')) return;
 
     if (empty($email)) {
-        $email = xarModGetVar('mail', 'adminmail');
+        $email = xarModVars::Get('mail', 'adminmail');
     }
     if (empty($name)) {
-        $name = xarModGetVar('mail', 'adminname');
+        $name = xarModVars::Get('mail', 'adminname');
     }
 
     if (!xarVarFetch('when', 'str:1', $when, '', XARVAR_NOT_REQUIRED)) return;

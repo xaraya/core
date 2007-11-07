@@ -90,7 +90,7 @@ function base_adminmenublock_display($blockinfo)
     // SETTING 2: Menustyle
     if(!isset($vars['menustyle'])) {
         // If it is not set, revert to the default setting
-        $vars['menustyle'] = xarModGetVar('modules', 'menustyle');
+        $vars['menustyle'] = xarModVars::Get('modules', 'menustyle');
     }
 
 

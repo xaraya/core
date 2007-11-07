@@ -135,9 +135,9 @@ function base_userapi_getfile($args)
     }
 
     // see if we need to go through a proxy
-    $proxyhost = xarModGetVar('base','proxyhost');
+    $proxyhost = xarModVars::Get('base','proxyhost');
     if (!empty($proxyhost) && !$islocal) {
-        $proxyport = xarModGetVar('base','proxyport');
+        $proxyport = xarModVars::Get('base','proxyport');
         $fp = @fsockopen($proxyhost,$proxyport,$errno,$errstr,10);
         if (!$fp) {
             if (!$superrors) 

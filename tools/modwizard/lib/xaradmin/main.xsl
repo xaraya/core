@@ -50,7 +50,7 @@ function <xsl:value-of select="$module_prefix" />_admin_main()
     // The admin system looks for a var to be set to skip the introduction
     // page altogether.  This allows you to add sparse documentation about the
     // module, and allow the site admins to turn it on and off as they see fit. </xsl:if>
-    if (xarModGetVar('adminpanels', 'overview') == 0) {
+    if (xarModVars::Get('adminpanels', 'overview') == 0) {
 
         // Yes we should
         $data = xarModAPIFunc(

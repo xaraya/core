@@ -3,7 +3,7 @@
 <?xar type="page"?>
 <xar:blocklayout version="1.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
 <xar:set name="themedir">#xarTplGetThemeDir()#</xar:set>
-<xar:set name="sitename">xarModGetVar('themes', 'SiteName')</xar:set>
+<xar:set name="sitename"><xar:var scope="module" module="themes" name="SiteName"/></xar:set>
 <xar:set name="adminnav"><xar:block module="base" type="adminmenu" template="mainnavbubble;top" /> </xar:set>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">

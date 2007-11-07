@@ -41,7 +41,7 @@
  */
 function mail_adminapi__sendmail($args)
 {
-    if (xarModGetVar('mail', 'suppresssending')) return true;
+    if (xarModVars::Get('mail', 'suppresssending')) return true;
 // Get arguments from argument array
 
     extract($args);
@@ -87,26 +87,26 @@ function mail_adminapi__sendmail($args)
     $mail->SetLanguage("en", "modules/mail/xarclass/language/");
 
     // Get type of mail server
-    $serverType = xarModGetVar('mail', 'server');
+    $serverType = xarModVars::Get('mail', 'server');
 
     switch($serverType) {
         case 'smtp':
             $mail->IsSMTP(); // telling the class to use SMTP
-            $mail->Host = xarModGetVar('mail', 'smtpHost'); // SMTP server
-            $mail->Port = xarModGetVar('mail', 'smtpPort'); // SMTP Port default 25.
+            $mail->Host = xarModVars::Get('mail', 'smtpHost'); // SMTP server
+            $mail->Port = xarModVars::Get('mail', 'smtpPort'); // SMTP Port default 25.
             $mail->Helo = xarServerGetVar('SERVER_NAME'); // identification string sent to MTA at smtpHost
 
             // the smtp server might require authentication
-            if (xarModGetVar('mail', 'smtpAuth')) {
+            if (xarModVars::Get('mail', 'smtpAuth')) {
                 $mail->SMTPAuth = true; // turn on SMTP authentication
-                $mail->Username = xarModGetVar('mail', 'smtpUserName'); // SMTP username
-                $mail->Password = xarModGetVar('mail', 'smtpPassword'); // SMTP password
+                $mail->Username = xarModVars::Get('mail', 'smtpUserName'); // SMTP username
+                $mail->Password = xarModVars::Get('mail', 'smtpPassword'); // SMTP password
             }
             break;
 
         case 'sendmail':
             $mail->IsSendmail();
-            $mail->Sendmail = xarModGetVar('mail', 'sendmailpath'); // Use the correct path to sendmail
+            $mail->Sendmail = xarModVars::Get('mail', 'sendmailpath'); // Use the correct path to sendmail
             break;
 
         case 'qmail':
@@ -126,8 +126,8 @@ function mail_adminapi__sendmail($args)
     $mail->Sender = $from;
     $mail->FromName = $fromname;
 
-    if (xarModGetVar('mail', 'replyto')) {
-        $mail->AddReplyTo(xarModGetVar('mail', 'replytoemail'), xarModGetVar('mail', 'replytoname'));
+    if (xarModVars::Get('mail', 'replyto')) {
+        $mail->AddReplyTo(xarModVars::Get('mail', 'replytoemail'), xarModVars::Get('mail', 'replytoname'));
     }
 
     // The parameters below are the bare minimum sent to the API.
@@ -136,10 +136,10 @@ function mail_adminapi__sendmail($args)
     // $subject = The subject of the mail
     // $message = The body of the email
     // $name = name of person receiving email (not required)
-    if (xarModGetVar('mail','redirectsending')) {
+    if (xarModVars::Get('mail','redirectsending')) {
         $mail->ClearAddresses();
         $recipients = array();
-        $redirectaddress = xarModGetVar('mail','redirectaddress');
+        $redirectaddress = xarModVars::Get('mail','redirectaddress');
         if (!empty($redirectaddress)) {
             $info = $redirectaddress;
             $name = xarML('Xaraya Mail Debugging');
@@ -171,7 +171,7 @@ function mail_adminapi__sendmail($args)
     }// if
 
     // Add a "CC" address
-    if (xarModGetVar('mail','redirectsending')) {
+    if (xarModVars::Get('mail','redirectsending')) {
         $mail->ClearCCs();
         $ccrecipients = array();
     }
@@ -199,7 +199,7 @@ function mail_adminapi__sendmail($args)
     }// if
 
     // Add a "BCC" address
-    if (xarModGetVar('mail','redirectsending')) {
+    if (xarModVars::Get('mail','redirectsending')) {
         $mail->ClearBCCs();
         $bccrecipients = array();
     }
@@ -232,7 +232,7 @@ function mail_adminapi__sendmail($args)
     // Set IsHTML - this is true for HTML mail
     $mail->IsHTML($htmlmail);
 
-    $mailShowTemplates  = xarModGetVar('mail', 'ShowTemplates');
+    $mailShowTemplates  = xarModVars::Get('mail', 'ShowTemplates');
 
     // If mailShowTemplates is undefined, then the modvar is missing for some reason
     // If so, we assume off, since the GUI will also show off in this case
@@ -243,7 +243,7 @@ function mail_adminapi__sendmail($args)
 
     // go ahead and override the show *theme* templates value,
     // using the mail modules settings instead :-)
-    $oldShowTemplates = xarModGetVar('themes', 'ShowTemplates');
+    $oldShowTemplates = xarModVars::Get('themes', 'ShowTemplates');
     xarModVars::set('themes', 'ShowTemplates', $mailShowTemplates);
 
     // Check if this is HTML mail and set Body appropriately

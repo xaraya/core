@@ -98,7 +98,7 @@
             #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','passwordupdate',$id))# #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','passwordupdate',$id))#
           </div>
       </xar:if>
-      <xar:if condition="xarModGetVar('roles','setusertimezone')">
+      <xar:if condition="xarModVars::Get('roles','setusertimezone')">
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">
                 <xar:mlstring>User Timezone:</xar:mlstring>

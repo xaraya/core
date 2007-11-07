@@ -5,7 +5,6 @@
  *
  */
 sys::import('xaraya.variables');
-sys::import('xaraya.variables.module');
 sys::import('xaraya.variables.moditem');
 
 class xarThemeVars extends xarModItemVars implements IxarModItemVars

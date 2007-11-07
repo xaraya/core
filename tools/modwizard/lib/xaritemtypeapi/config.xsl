@@ -120,7 +120,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
     $data['itemtype']       = <xsl:value-of select="@itemtype" />;
     $data['itemtype_label'] = <xsl:value-of select="@itemtype" />;
-    $data['itemsperpage']   = xarModGetVar(
+    $data['itemsperpage']   = xarModVars::Get(
         '<xsl:value-of select="$module_prefix" />'
         ,'itemsperpage.' . '<xsl:value-of select="@itemtype" />' );
 

@@ -130,10 +130,10 @@
                             Users Per Page:
                         </xar:mlstring>
                     </label>
-                    <input type="text" name="itemsperpage" id="itemsperpage" value="#xarModGetVar('roles', 'itemsperpage')#" maxlength="3" class="xar-form-textshort" />
+                    <input type="text" name="itemsperpage" id="itemsperpage" value="#xarModVars::Get('roles', 'itemsperpage')#" maxlength="3" class="xar-form-textshort" />
                 </div>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarModGetVar('roles', 'SupportShortURLs')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="roles" name="SupportShortURLs"/></xar:set>
                     <xar:data-input type="checkbox" name="shorturls" id="shorturls" checked="$checked" />
                     <label for="shorturls" title="#xarML('Enable short URLs for Roles module')#">
                         <xar:mlstring>
@@ -156,7 +156,7 @@
                     </label>
                     <select name="siteadmin" id="siteadmin">
                         <xar:loop name="$siteadmins">
-                            <xar:if condition="$loop:item['id'] eq xarModGetVar('roles','admin')">
+                            <xar:if condition="$loop:item['id'] eq xarModVars::Get('roles','admin')">
                                 <option name="#$loop:item['id']#" id="#$loop:item['id']#" value="#$loop:item['id']#" selected="selected">
                                     #$loop:item['name']#
                                 </option>
@@ -428,7 +428,7 @@
                 </legend>
 
                 <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarModGetVar('roles', 'searchbyemail')">
+                    <xar:if condition="xarModVars::Get('roles', 'searchbyemail')">
                         <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" checked="checked" />
                         <xar:else />
                         <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" />
@@ -445,7 +445,7 @@
                     </xar:mlstring>
                 </p>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarModGetVar('roles', 'allowemail')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="roles" name="allowemail"/></xar:set>
                     <xar:data-input type="checkbox" name="allowemail" id="allowemail" checked="$checked" />
                     <label for="allowemail" title="#xarML('Allow users to send emails?')#">
                         <strong><xar:mlstring>
@@ -458,7 +458,7 @@
                 </p>
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                    <xar:set name="checked">xarModGetVar('roles', 'usereditaccount')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="roles" name="usereditaccount"/></xar:set>
                     <xar:data-input type="checkbox" name="usereditaccount" id="usereditaccount" checked="$checked" />
                     <label for="usereditaccount" title="#xarML('Allow users to edit their account details')#">
                         <strong><xar:mlstring>
@@ -472,7 +472,7 @@
                     </xar:mlstring>
                 </p>
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                    <xar:set name="checked">xarModGetVar('roles', 'requirevalidation')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="roles" name="requirevalidation"/></xar:set>
                     <xar:data-input type="checkbox" name="requirevalidation" id="requirevalidation" checked="$checked" />
                     <label for="requirevalidation" title="#xarML('Require users to revalidate when they change email address?')#">
                         <strong><xar:mlstring>
@@ -483,7 +483,7 @@
 
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                    <xar:set name="checked">xarModGetVar('roles', 'displayrolelist')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="roles" name="displayrolelist"/></xar:set>
                     <xar:data-input type="checkbox" name="displayrolelist" id="displayrolelist" checked="$checked" />
                     <label for="displayrolelist" title="#xarML('Display roles (memberlist) in user menu?')#">
                         <strong><xar:mlstring>
@@ -498,10 +498,10 @@
             </fieldset>
             <fieldset>
                 <legend><xar:mlstring>User Homepage Options</xar:mlstring></legend>
-                <xar:if condition="xarModGetVar('roles', 'setuserhome')">
+                <xar:if condition="xarModVars::Get('roles', 'setuserhome')">
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                    <xar:set name="checked">xarModGetVar('roles', 'loginredirect')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="roles" name="loginredirect"/></xar:set>
                     <xar:data-input type="checkbox" name="loginredirect" id="loginredirect" checked="$checked" />
                     <label for="loginredirect" title="#xarML('Redirect users to Home Page on login?')#">
                         <strong><xar:mlstring>
@@ -511,7 +511,7 @@
                 </div>
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                    <xar:set name="checked">xarModGetVar('roles', 'allowuserhomeedit')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="roles" name="allowuserhomeedit"/></xar:set>
                     <xar:data-input type="checkbox" name="userhomeedit" id="userhomeedit" checked="$checked" />
                     <label for="userhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
                         <strong><xar:mlstring>
@@ -521,7 +521,7 @@
                 </div>
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                    <xar:set name="checked">xarModGetVar('roles', 'allowexternalurl')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="roles" name="allowexternalurl"/></xar:set>
                     <xar:data-input type="checkbox" name="allowexternalurl" id="allowexternalurl" checked="$checked" />
                     <label for="allowexternalurl" title="#xarML('Allow users to set external URLS for their user home page')#">
                         <strong><xar:mlstring>

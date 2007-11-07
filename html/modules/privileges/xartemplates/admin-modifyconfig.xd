@@ -52,7 +52,7 @@
                     </a>
                 </dd>
             </xar:if>
-            <xar:if condition="xarModGetVar('privileges','lastresort')">
+            <xar:if condition="xarModVars::Get('privileges','lastresort')">
                 <xar:if condition="$tab eq 'lastresort'">
                     <dd class="active">
                         <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=lastresort">
@@ -108,7 +108,7 @@
                     <label for="exceptionredirect" title="#xarML('Show exceptions messages or redirect to a login screen')#" class="xar-form-label">
                         <xar:mlstring>Exception Redirect:</xar:mlstring>
                     </label>
-                    <xar:set name="checked">xarModGetVar('privileges', 'exceptionredirect')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="privileges" name="exceptionredirect"/></xar:set>
                     <xar:data-input type="checkbox" name="exceptionredirect" id="exceptionredirect" checked="$checked" />
                     <xar:mlstring>This redirects a non-logged in user to the login screen if they don't have the proper privileges. </xar:mlstring>
                 </div>
@@ -119,7 +119,7 @@
                     <label for="inheritdeny" title="#xarML('Enable or disable inheritance of deny privileges')#" class="xar-form-label">
                         <xar:mlstring>Inherit Deny Privileges:</xar:mlstring>
                     </label>
-                    <xar:set name="checked">xarModGetVar('privileges', 'inheritdeny')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="privileges" name="inheritdeny"/></xar:set>
                     <xar:data-input type="checkbox" name="inheritdeny" id="inheritdeny" checked="$checked" />
                     <xar:mlstring>Warning: This setting affects the way privileges work on your site. If changed you should retest all the privileges on your site.</xar:mlstring>
                 </div>
@@ -135,7 +135,7 @@
                     <label for="lastresort" title="#xarML('Enable or disable an administrator of last resort')#" class="xar-form-label">
                         <xar:mlstring>Last Resort Admin:</xar:mlstring>
                     </label>
-                    <xar:set name="checked">xarModGetVar('privileges', 'lastresort')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="privileges" name="lastresort"/></xar:set>
                     <xar:data-input type="checkbox" name="lastresort" id="lastresort" checked="$checked" />
                     <xar:mlstring>Warning: This setting opens a tab to enable you to create an administrator whose privileges cannot be removed.</xar:mlstring>
                 </div>
@@ -165,12 +165,12 @@
                             Enable Realms
                         </xar:mlstring>
                     </label>
-                    <xar:set name="checked">xarModGetVar('privileges', 'showrealms')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="privileges" name="showrealms"/></xar:set>
                     <xar:data-input type="checkbox" name="enablerealms" id="enablerealms" checked="$checked" />
                     <xar:mlstring>Checking this enables the Manage Realms item on the Privileges menu</xar:mlstring>
                 </div>
             </fieldset>
-            <xar:if condition="xarModGetVar('privileges', 'showrealms')">
+            <xar:if condition="xarModVars::Get('privileges', 'showrealms')">
                 <fieldset>
                     <legend>
                         <xar:mlstring>
@@ -221,7 +221,7 @@
                                                 array('id' => 'exact', 'name' => 'Exact Match'),
                                                 array('id' => 'contains', 'name' => 'Privilege Contains Mask Name'),)
                                                 </xar:set>
-                        <xar:set name="realmcomparison">xarModGetVar('privileges', 'realmcomparison')</xar:set>
+                        <xar:set name="realmcomparison"><xar:var scope="module" module="privileges" name="realmcomparison"/></xar:set>
                          <div class="xar-form-container-after">
                             <xar:data-input type="radio" name="realmcomparison" id="realmvalue" options="$options" value="$realmcomparison" layout="vertical" />
                         </div>
@@ -242,7 +242,7 @@
         </form>
     </xar:if>
     <!-- Begin Last Resort -->
-    <xar:if condition="$tab eq 'lastresort' AND xarModGetVar('privileges','lastresort')">
+    <xar:if condition="$tab eq 'lastresort' AND xarModVars::Get('privileges','lastresort')">
         <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
             <fieldset>
                 <legend>
@@ -386,7 +386,7 @@
                             Non-DENY checks
                         </xar:mlstring>
                     </label>
-                    <xar:set name="checked">xarModGetVar('privileges', 'test')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="privileges" name="test"/></xar:set>
                     <xar:data-input type="checkbox" name="test" id="test" checked="$checked" />
                     <xar:mlstring>Show checks not involving DENYs</xar:mlstring>
                 </div>
@@ -396,7 +396,7 @@
                             DENY checks
                         </xar:mlstring>
                     </label>
-                    <xar:set name="checked">xarModGetVar('privileges', 'testdeny')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="privileges" name="testdeny"/></xar:set>
                     <xar:data-input type="checkbox" name="testdeny" id="testdeny" checked="$checked" />
                     <xar:mlstring>Show checks involving DENYs</xar:mlstring>
                 </div>

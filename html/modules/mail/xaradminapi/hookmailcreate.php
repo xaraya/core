@@ -55,15 +55,15 @@ function mail_adminapi_hookmailcreate($args)
 //    if (!xarSecurityCheck('CreateMail', 0, 'All', "$modname::$objectid", 'mail')) return;
 
     // Set up variables
-    $wordwrap = xarModGetVar('mail', 'wordwrap');
-    $priority = xarModGetVar('mail', 'priority');
-    $encoding = xarModGetVar('mail', 'encoding');
+    $wordwrap = xarModVars::Get('mail', 'wordwrap');
+    $priority = xarModVars::Get('mail', 'priority');
+    $encoding = xarModVars::Get('mail', 'encoding');
     if (empty($encoding)) {
         $encoding = '8bit';
         xarModVars::set('mail', 'encoding', $encoding);
     }
-    $from = xarModGetVar('mail', 'adminmail');
-    $fromname = xarModGetVar('mail', 'adminname');
+    $from = xarModVars::Get('mail', 'adminmail');
+    $fromname = xarModVars::Get('mail', 'adminname');
 
 // Get the templates for this message
     $strings = xarModAPIFunc('mail','admin','getmessagestrings',
@@ -105,7 +105,7 @@ function mail_adminapi_hookmailcreate($args)
                       'from' => $from,
                       'fromname' => $fromname);
     // Check if HTML mail has been configured by the admin
-    if (xarModGetVar('mail', 'html')) {
+    if (xarModVars::Get('mail', 'html')) {
         xarModAPIFunc('mail', 'admin', 'sendhtmlmail', $mailargs);
     } else {
         xarModAPIFunc('mail', 'admin', 'sendmail', $mailargs);

@@ -95,7 +95,7 @@
       <id>47</id>
       <label>Auth. Module</label>
       <type>integerbox</type>
-      <default>xarModGetVar('roles', 'defaultauthmodule')</default>
+      <default>xarModVars::Get('roles', 'defaultauthmodule')</default>
       <source>xar_roles.auth_modid</source>
       <status>67</status>
       <order>9</order>

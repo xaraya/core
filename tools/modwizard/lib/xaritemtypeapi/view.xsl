@@ -54,7 +54,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,'type' => $type
             ));
 
-    $itemsperpage = xarModGetVar(
+    $itemsperpage = xarModVars::Get(
             '<xsl:value-of select="$module_prefix" />'
             ,'itemsperpage.' . <xsl:value-of select="@itemtype" /> );
 
