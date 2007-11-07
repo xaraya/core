@@ -728,7 +728,7 @@ class xarPrivileges extends xarMasks
 
         parent::initialize();
         $query = "SELECT p.*, m.name FROM " . parent::$privilegestable . " p
-        LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE type = ? AND name = ?";
+        LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.type = ? AND p.name = ?";
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
 
         //Execute the query, bail if an exception was thrown
@@ -772,7 +772,7 @@ class xarPrivileges extends xarMasks
         parent::initialize();
         $privileges = array();
         $query = "SELECT p.*, m.name FROM " . parent::$privilegestable . " p
-        LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE type = ? AND module_id = ?";
+        LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.type = ? AND p.module_id = ?";
         //Execute the query, bail if an exception was thrown
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, $module));

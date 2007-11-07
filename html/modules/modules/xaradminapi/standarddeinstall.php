@@ -42,9 +42,8 @@ function modules_adminapi_standarddeinstall($args)
         }
     } catch (Exception $e) {}
 
-     // Delete the base group created by this module
+     // Delete the base group created by this module if it exists
      // Move the descendants to the Users group
-     * @todo this assumes ad hoc group naming, bad!
     try {
         $role = xarFindRole(ucfirst($module) . 'Group');
         if (!empty($role)) {
