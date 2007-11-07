@@ -31,7 +31,7 @@ class VarTagNode extends TagNode implements EmptyElementTag
 
         switch ($scope) {
             case 'config':
-                $value = "xarConfigVars::Get('".$name."')";
+                $value = "xarConfigVars::get(null,'".$name."')";
                 break;
             case 'session':
                 $value = "xarSessionGetVar('".$name."')";

@@ -131,7 +131,7 @@
       </xsl:when>
       <!-- Config vars -->
       <xsl:when test="@scope = 'config'">
-        <xsl:text>xarConfigVars::get('','</xsl:text>
+        <xsl:text>xarConfigVars::get(null,'</xsl:text>
         <xsl:value-of select="@name"/>
         <xsl:text>')</xsl:text>
       </xsl:when>
