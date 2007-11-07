@@ -336,7 +336,8 @@
                                 Session Duration (In Days):
                             </xar:mlstring>
                         </label>
-                        <input type="text" id="sessionduration" name="sessionduration" value="#xarConfigVars::Get(null,'Site.Session.Duration')#" maxlength="3" class="xar-form-textshort" />
+                        <xar:set name="value"><xar:var scope="config" name="Site.Session.Duration"/></xar:set>
+                        <input type="text" id="sessionduration" name="sessionduration" value="#$value#" maxlength="3" class="xar-form-textshort" />
                     </div>
                 </xar:if>
                 <div class="xar-form-input-wrapper">
@@ -345,7 +346,8 @@
                             Session Inactivity Time Out:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="sessiontimeout" name="sessiontimeout" value="#xarConfigVars::Get(null,'Site.Session.InactivityTimeout')#" maxlength="3" class="xar-form-textshort" />
+                    <xar:set name="value"><xar:var scope="config" name="Site.Session.InactivityTimeout"/></xar:set>
+                    <input type="text" id="sessiontimeout" name="sessiontimeout" value="#$value#" maxlength="3" class="xar-form-textshort" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="authmodules" title="#xarML('Change the order of authentication')#" class="xar-form-label">
@@ -387,7 +389,8 @@
                             Cookie Name:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="cookiename" name="cookiename" value="#xarConfigVars::Get(null,'Site.Session.CookieName')#" maxlength="20" class="xar-form-textmedium" />
+                    <xar:set name="value"><xar:var scope="config" name="Site.Session.CookieName"/></xar:set>
+                    <input type="text" id="cookiename" name="cookiename" value="#$value#" maxlength="20" class="xar-form-textmedium" />
                     &#160;<xar:mlstring>Default: XARAYASID</xar:mlstring>
                 </div>
                 <div class="xar-form-input-wrapper">
@@ -396,7 +399,8 @@
                             Cookie Path:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="cookiepath" name="cookiepath" value="#xarConfigVars::Get(null,'Site.Session.CookiePath')#" maxlength="20" class="xar-form-textmedium" />
+                    <xar:set name="value"><xar:var scope="config" name="Site.Session.CookiePath"/></xar:set>
+                    <input type="text" id="cookiepath" name="cookiepath" value="#$value#" maxlength="20" class="xar-form-textmedium" />
                     &#160;<xar:ml><xar:mlstring>Default: #(1) (limited to the Xaraya directory)</xar:mlstring><xar:mlvar>#xarServerGetBaseURI()#</xar:mlvar></xar:ml>
                 </div>
                 <div class="xar-form-input-wrapper">
@@ -405,7 +409,8 @@
                             Cookie Domain:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="cookiedomain" name="cookiedomain" value="#xarConfigVars::Get(null,'Site.Session.CookieDomain')#" maxlength="20" class="xar-form-textmedium" />
+                    <xar:set name="value"><xar:var scope="config" name="Site.Session.CookieDomain"/></xar:set>
+                    <input type="text" id="cookiedomain" name="cookiedomain" value="#$value#" maxlength="20" class="xar-form-textmedium" />
                     &#160;<xar:mlstring>Default: none (not shared across hosts)</xar:mlstring>
                 </div>
                 <div class="xar-form-input-wrapper">
@@ -414,7 +419,8 @@
                             Referer Check:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="referercheck" name="referercheck" value="#xarConfigVars::Get(null, 'Site.Session.RefererCheck')#" maxlength="40" class="xar-form-textmedium" />
+                    <xar:set name="value"><xar:var scope="config" name="Site.Session.RefererCheck"/></xar:set>
+                    <input type="text" id="referercheck" name="referercheck" value="#$value#" maxlength="40" class="xar-form-textmedium" />
                     &#160;<xar:ml><xar:mlstring>Default: #(1) for security level 'High'</xar:mlstring><xar:mlvar>#xarServerGetVar('HTTP_HOST')#</xar:mlvar></xar:ml>
                 </div>
             </fieldset>
