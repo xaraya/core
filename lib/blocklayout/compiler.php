@@ -232,7 +232,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         try {
           // @todo dont want this here! db dependency
           sys::import('xaraya.variables.config');
-          $what = xarConfigVars::Get('Site.BL.CompilerVersion');
+          $what = xarConfigVars::get(null,'Site.BL.CompilerVersion');
           $use_xsl = ($what == 'XAR_BL_USE_XSLT');
         } catch(Exception $e) {
             $use_xsl = true;
