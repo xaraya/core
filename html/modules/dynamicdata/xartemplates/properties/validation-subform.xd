@@ -48,9 +48,9 @@
         <option value="">[ <xar:mlstring>no dropdown list</xar:mlstring> ]</option>
       <xar:foreach in="$properties" key="$propname" value="$propinfo">
         <xar:if condition="!empty($title) and $title eq $propname">
-          <option value="#$propname#" selected="selected">#$propinfo.label#</option>
+          <option value="#$propname#" selected="selected">#$propinfo:label#</option>
         <xar:else/>
-          <option value="#$propname#">#$propinfo.label#</option>
+          <option value="#$propname#">#$propinfo:label#</option>
         </xar:if>
       </xar:foreach>
       </select>
@@ -70,7 +70,7 @@
         <!-- the property of type 'itemid' is the link -->
         <xar:foreach in="$properties" key="$propname" value="$propinfo">
           <xar:if condition="!empty($propinfo['type']) and $propinfo['type'] eq 21">
-            #$propinfo.label#
+            #$propinfo:label#
             <xar:break/>
           </xar:if>
         </xar:foreach>
@@ -80,9 +80,9 @@
         <select name="#$name#[link]" id="#$id#_link">
         <xar:foreach in="$properties" key="$propname" value="$propinfo">
           <xar:if condition="!empty($link) and $link eq $propname">
-            <option value="#$propname#" selected="selected">#$propinfo.label#</option>
+            <option value="#$propname#" selected="selected">#$propinfo:label#</option>
           <xar:else/>
-            <option value="#$propname#">#$propinfo.label#</option>
+            <option value="#$propname#">#$propinfo:label#</option>
           </xar:if>
         </xar:foreach>
         </select>
@@ -147,9 +147,9 @@
       <select name="#$name#[fieldlist][]" id="#$name#_fieldlist" multiple="multiple">
       <xar:foreach in="$properties" key="$propname" value="$propinfo">
         <xar:if condition="!empty($fieldlist) and in_array($propname,$fieldlist)">
-          <option value="#$propname#" selected="selected">#$propinfo.label#</option>
+          <option value="#$propname#" selected="selected">#$propinfo:label#</option>
         <xar:else/>
-          <option value="#$propname#">#$propinfo.label#</option>
+          <option value="#$propname#">#$propinfo:label#</option>
         </xar:if>
       </xar:foreach>
       </select>

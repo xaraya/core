@@ -26,7 +26,7 @@ function roles_userapi_getactive($args)
     }
 
     if (empty($filter)){
-        $filter = time() - (xarConfigVars::Get(null, 'Site.Session.Duration') * 60);
+        $filter = time() - (xarConfigVars::get(null, 'Site.Session.Duration') * 60);
     }
 
     $roles = array();

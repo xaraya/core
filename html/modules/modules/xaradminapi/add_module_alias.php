@@ -37,7 +37,7 @@ function modules_adminapi_add_module_alias($args)
     if (!xarMod_getBaseInfo($modName)) return;
 
     // Get the list of current aliases
-    $aliases = xarConfigVars::Get(null, 'System.ModuleAliases');
+    $aliases = xarConfigVars::get(null, 'System.ModuleAliases');
     if (!isset($aliases)) {
         $aliases = array();
     }
@@ -47,7 +47,7 @@ function modules_adminapi_add_module_alias($args)
 
     // the direction is fake module name -> true module, not the reverse !
     $aliases[$aliasModName] = $modName;
-    xarConfigVars::Set(null, 'System.ModuleAliases', $aliases);
+    xarConfigVars::set(null, 'System.ModuleAliases', $aliases);
 
     return true;
 }

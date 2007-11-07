@@ -136,7 +136,7 @@ function roles_activate()
     xarModVars::set('roles', 'userhome', 'undefined');
     xarModVars::set('roles', 'userlastlogin', '');
     xarModVars::set('roles', 'passwordupdate', '');
-    xarModVars::set('roles', 'usertimezone', xarConfigVars::Get(null, 'Site.Core.TimeZone'));
+    xarModVars::set('roles', 'usertimezone', xarConfigVars::get(null, 'Site.Core.TimeZone'));
     xarModVars::set('roles', 'useremailformat', 'text');
     xarModVars::set('roles', 'displayrolelist', false);
     xarModVars::set('roles', 'usereditaccount', true);
@@ -218,8 +218,8 @@ function roles_activate()
     $rolefields['name'] = 'Anonymous';
     $rolefields['uname'] = 'anonymous';
     $rolefields['parentid'] = $topid;
-    $id = $user->createItem($rolefields);
-    xarConfigVars::Set(null, 'Site.User.AnonymousUID', $topid);
+    $anonid = $user->createItem($rolefields);
+    xarConfigVars::set(null, 'Site.User.AnonymousUID', $topid);
 
     // The Administrator
     $rolefields['name'] = 'Administrator';

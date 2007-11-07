@@ -237,8 +237,8 @@ function modules_admin_list()
             $statelabel = xarML('Missing');
             $listrows[$i]['state'] = XARMOD_STATE_MISSING_FROM_UNINITIALISED;
 
-            $listrows[$i]['actionlabel']        = xarML('Remove');
-            $listrows[$i]['actionlabel2']       = xarML('Remove');
+            $listrows[$i]['actionlabel']        = xarML('Remove (missing)');
+            $listrows[$i]['actionlabel2']       = xarML('Remove (missing)');
             $listrows[$i]['actionurl']          = $removeurl;
             $listrows[$i]['removeurl']          = $removeurl;
 

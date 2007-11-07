@@ -25,12 +25,12 @@ function modules_adminapi_delete_module_alias($args)
 
     if (empty($aliasModName)) throw new EmptyParameterException('aliasModName');
 
-    $aliases = xarConfigVars::Get(null, 'System.ModuleAliases');
+    $aliases = xarConfigVars::get(null, 'System.ModuleAliases');
     if (!isset($aliases[$aliasModName])) return false;
     // don't remove alias if it's already assigned to some other module !
     if ($aliases[$aliasModName] != $modName) return false;
     unset($aliases[$aliasModName]);
-    xarConfigVars::Set(null, 'System.ModuleAliases',$aliases);
+    xarConfigVars::set(null, 'System.ModuleAliases',$aliases);
 
     return true;
 }

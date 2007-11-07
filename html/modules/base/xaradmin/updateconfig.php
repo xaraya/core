@@ -38,8 +38,8 @@ function base_admin_updateconfig()
             if (!xarVarFetch('shorturl','checkbox',$enableShortURLs,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('baseshorturl','checkbox',$enableBaseShortURLs,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('htmlenitites','checkbox',$FixHTMLEntities,false,XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('compilerversion','str:1:',$compilerversion,xarConfigVars::Get(null, 'Site.BL.CompilerVersion'),XARVAR_NOT_REQUIRED)) return;
-            xarConfigVars::Set(null, 'Site.BL.CompilerVersion', $compilerversion);
+            if (!xarVarFetch('compilerversion','str:1:',$compilerversion,xarConfigVars::get(null, 'Site.BL.CompilerVersion'),XARVAR_NOT_REQUIRED)) return;
+            xarConfigVars::set(null, 'Site.BL.CompilerVersion', $compilerversion);
 
             xarModVars::set('modules', 'defaultmodule', $defaultModuleName);
             xarModVars::set('modules', 'defaultmoduletype',$defaultModuleType);
@@ -48,10 +48,10 @@ function base_admin_updateconfig()
             xarModVars::set('base','AlternatePageTemplateName', $alternatePageTemplateName);
 
             xarModSetUserVar('roles','userhome', xarModURL($defaultModuleName, $defaultModuleType, $defaultModuleFunction),1);
-            xarConfigVars::Set(null, 'Site.Core.EnableShortURLsSupport', $enableShortURLs);
+            xarConfigVars::set(null, 'Site.Core.EnableShortURLsSupport', $enableShortURLs);
             // enable short urls for the base module itself too
             xarModVars::set('base','SupportShortURLs', ($enableBaseShortURLs ? 1 : 0));
-            xarConfigVars::Set(null, 'Site.Core.FixHTMLEntities', $FixHTMLEntities);
+            xarConfigVars::set(null, 'Site.Core.FixHTMLEntities', $FixHTMLEntities);
             break;
         case 'security':
             if (!xarVarFetch('secureserver','checkbox',$secureServer,true,XARVAR_NOT_REQUIRED)) return;
@@ -64,22 +64,22 @@ function base_admin_updateconfig()
             if (!xarVarFetch('cookiedomain','str:1:',$cookieDomain,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('referercheck','str:1:',$refererCheck,'',XARVAR_NOT_REQUIRED)) return;
 
-            xarConfigVars::Set(null, 'Site.Core.EnableSecureServer', $secureServer);
+            xarConfigVars::set(null, 'Site.Core.EnableSecureServer', $secureServer);
 
             //Filtering Options
             // Security Levels
-            xarConfigVars::Set(null, 'Site.Session.SecurityLevel', $securityLevel);
-            xarConfigVars::Set(null, 'Site.Session.Duration', $sessionDuration);
-            xarConfigVars::Set(null, 'Site.Session.InactivityTimeout', $sessionTimeout);
-            xarConfigVars::Set(null, 'Site.Session.CookieName', $cookieName);
-            xarConfigVars::Set(null, 'Site.Session.CookiePath', $cookiePath);
-            xarConfigVars::Set(null, 'Site.Session.CookieDomain', $cookieDomain);
-            xarConfigVars::Set(null, 'Site.Session.RefererCheck', $refererCheck);
+            xarConfigVars::set(null, 'Site.Session.SecurityLevel', $securityLevel);
+            xarConfigVars::set(null, 'Site.Session.Duration', $sessionDuration);
+            xarConfigVars::set(null, 'Site.Session.InactivityTimeout', $sessionTimeout);
+            xarConfigVars::set(null, 'Site.Session.CookieName', $cookieName);
+            xarConfigVars::set(null, 'Site.Session.CookiePath', $cookiePath);
+            xarConfigVars::set(null, 'Site.Session.CookieDomain', $cookieDomain);
+            xarConfigVars::set(null, 'Site.Session.RefererCheck', $refererCheck);
 
             // Authentication modules
             if (!empty($authmodule_order)) {
                 $authmodules = explode(';', $authmodule_order);
-                xarConfigVars::Set(null, 'Site.User.AuthenticationModules', $authmodules);
+                xarConfigVars::set(null, 'Site.User.AuthenticationModules', $authmodules);
             }
             break;
         case 'locales':
@@ -99,9 +99,9 @@ function base_admin_updateconfig()
             }
 
             // Locales
-            xarConfigVars::Set(null, 'Site.MLS.MLSMode', $MLSMode);
-            xarConfigVars::Set(null, 'Site.MLS.DefaultLocale', $defaultLocale);
-            xarConfigVars::Set(null, 'Site.MLS.AllowedLocales', $localesList);
+            xarConfigVars::set(null, 'Site.MLS.MLSMode', $MLSMode);
+            xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $defaultLocale);
+            xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $localesList);
 
             break;
         case 'other':
@@ -115,7 +115,7 @@ function base_admin_updateconfig()
             xarModVars::set('base','proxyhost',$proxyhost);
             xarModVars::set('base','proxyport',$proxyport);
             xarModVars::set('base','releasenumber', $releasenumber);
-            xarConfigVars::Set(null, 'Site.Core.LoadLegacy', $loadLegacy);
+            xarConfigVars::set(null, 'Site.Core.LoadLegacy', $loadLegacy);
             xarModVars::set('base','editor',$editor);
 
             // Timezone, offset and DST
@@ -124,18 +124,18 @@ function base_admin_updateconfig()
 
             $tzobject = new DateTimezone($defaultsystemtimezone);
             if (!empty($tzobject)) {
-                xarConfigVars::Set(null, 'System.Core.TimeZone', $defaultsystemtimezone);
+                xarConfigVars::set(null, 'System.Core.TimeZone', $defaultsystemtimezone);
             } else {
-                xarConfigVars::Set(null, 'System.Core.TimeZone', "UTC");
+                xarConfigVars::set(null, 'System.Core.TimeZone', "UTC");
             }
             $tzobject = new DateTimezone($defaulttimezone);
             if (!empty($tzobject)) {
                 $datetime = new DateTime();
-                xarConfigVars::Set(null, 'Site.Core.TimeZone', $defaulttimezone);
-                xarConfigVars::Set(null, 'Site.MLS.DefaultTimeOffset', $tzobject->getOffset($datetime));
+                xarConfigVars::set(null, 'Site.Core.TimeZone', $defaulttimezone);
+                xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', $tzobject->getOffset($datetime));
             } else {
-                xarConfigVars::Set(null, 'Site.Core.TimeZone', "UTC");
-                xarConfigVars::Set(null, 'Site.MLS.DefaultTimeOffset', 0);
+                xarConfigVars::set(null, 'Site.Core.TimeZone', "UTC");
+                xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', 0);
             }
 
             break;

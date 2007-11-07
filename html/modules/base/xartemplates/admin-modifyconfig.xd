@@ -296,7 +296,7 @@
                         </xar:mlstring>
                     </label>
                     <select name="securitylevel" id="securitylevel" size="1">
-                        <xar:if condition="xarConfigVars::Get(null,'Site.Session.SecurityLevel') eq 'High'">
+                        <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'High'">
                             <option value="High" selected="selected">
                                 High
                             </option>
@@ -306,7 +306,7 @@
                             <option value="Low">
                                 Low
                             </option>
-                            <xar:elseif condition="xarConfigVars::Get(null,'Site.Session.SecurityLevel') eq 'Medium'" />
+                            <xar:elseif condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Medium'" />
                             <option value="High">
                                 High
                             </option>
@@ -316,7 +316,7 @@
                             <option value="Low">
                                 Low
                             </option>
-                            <xar:elseif condition="xarConfigVars::Get(null,'Site.Session.SecurityLevel') eq 'Low'" />
+                            <xar:elseif condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Low'" />
                             <option value="High">
                                 High
                             </option>
@@ -329,14 +329,16 @@
                         </xar:if>
                     </select>
                 </div>
-                <xar:if condition="xarConfigVars::Get(null,'Site.Session.SecurityLevel') eq 'Medium'">
+                <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Medium'">
                     <div class="xar-form-input-wrapper">
                         <label for="sessionduration" title="#xarML('How long to allow the session to last in days')#" class="xar-form-label">
                             <xar:mlstring>
                                 Session Duration (In Days):
                             </xar:mlstring>
                         </label>
-                        <xar:set name="value"><xar:var scope="config" name="Site.Session.Duration"/></xar:set>
+                        <xar:set name="value">
+                            <xar:var scope="config" name="Site.Session.Duration" />
+                        </xar:set>
                         <input type="text" id="sessionduration" name="sessionduration" value="#$value#" maxlength="3" class="xar-form-textshort" />
                     </div>
                 </xar:if>
@@ -346,7 +348,9 @@
                             Session Inactivity Time Out:
                         </xar:mlstring>
                     </label>
-                    <xar:set name="value"><xar:var scope="config" name="Site.Session.InactivityTimeout"/></xar:set>
+                        <xar:set name="value">
+                            <xar:var scope="config" name="Site.Session.InactivityTimeout" />
+                        </xar:set>
                     <input type="text" id="sessiontimeout" name="sessiontimeout" value="#$value#" maxlength="3" class="xar-form-textshort" />
                 </div>
                 <div class="xar-form-input-wrapper">
@@ -389,7 +393,9 @@
                             Cookie Name:
                         </xar:mlstring>
                     </label>
-                    <xar:set name="value"><xar:var scope="config" name="Site.Session.CookieName"/></xar:set>
+                    <xar:set name="value">
+                        <xar:var scope="config" name="Site.Session.CookieName" />
+                    </xar:set>
                     <input type="text" id="cookiename" name="cookiename" value="#$value#" maxlength="20" class="xar-form-textmedium" />
                     &#160;<xar:mlstring>Default: XARAYASID</xar:mlstring>
                 </div>
@@ -399,7 +405,9 @@
                             Cookie Path:
                         </xar:mlstring>
                     </label>
-                    <xar:set name="value"><xar:var scope="config" name="Site.Session.CookiePath"/></xar:set>
+                    <xar:set name="value">
+                        <xar:var scope="config" name="Site.Session.CookiePath" />
+                    </xar:set>
                     <input type="text" id="cookiepath" name="cookiepath" value="#$value#" maxlength="20" class="xar-form-textmedium" />
                     &#160;<xar:ml><xar:mlstring>Default: #(1) (limited to the Xaraya directory)</xar:mlstring><xar:mlvar>#xarServerGetBaseURI()#</xar:mlvar></xar:ml>
                 </div>
@@ -409,7 +417,9 @@
                             Cookie Domain:
                         </xar:mlstring>
                     </label>
-                    <xar:set name="value"><xar:var scope="config" name="Site.Session.CookieDomain"/></xar:set>
+                    <xar:set name="value">
+                        <xar:var scope="config" name="Site.Session.CookieDomain" />
+                    </xar:set>
                     <input type="text" id="cookiedomain" name="cookiedomain" value="#$value#" maxlength="20" class="xar-form-textmedium" />
                     &#160;<xar:mlstring>Default: none (not shared across hosts)</xar:mlstring>
                 </div>
@@ -419,7 +429,9 @@
                             Referer Check:
                         </xar:mlstring>
                     </label>
-                    <xar:set name="value"><xar:var scope="config" name="Site.Session.RefererCheck"/></xar:set>
+                    <xar:set name="value">
+                        <xar:var scope="config" name="Site.Session.RefererCheck" />
+                    </xar:set>
                     <input type="text" id="referercheck" name="referercheck" value="#$value#" maxlength="40" class="xar-form-textmedium" />
                     &#160;<xar:ml><xar:mlstring>Default: #(1) for security level 'High'</xar:mlstring><xar:mlvar>#xarServerGetVar('HTTP_HOST')#</xar:mlvar></xar:ml>
                 </div>

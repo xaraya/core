@@ -36,7 +36,7 @@ function base_admin_modifyconfig()
 
     sys::import('xaraya.structures.datetime');
     $dateobject = new XarDateTime();
-    $tzobject = new DateTimeZone(xarConfigVars::Get(null, 'System.Core.TimeZone'));
+    $tzobject = new DateTimeZone(xarConfigVars::get(null, 'System.Core.TimeZone'));
     $dateobject->setTimezone($tzobject);
     $data['hostnow'] = $dateobject->format("r");
 
@@ -49,7 +49,7 @@ function base_admin_modifyconfig()
     if(xarModIsAvailable('htmlarea')) $data['editors'][] = array('displayname' => 'htmlarea');
     if(xarModIsAvailable('fckeditor')) $data['editors'][] = array('displayname' => 'fckeditor');
     if(xarModIsAvailable('tinymce')) $data['editors'][] = array('displayname' => 'tinymce');
-    $allowedlocales = xarConfigVars::Get(null, 'Site.MLS.AllowedLocales');
+    $allowedlocales = xarConfigVars::get(null, 'Site.MLS.AllowedLocales');
     foreach($locales as $locale) {
         if (in_array($locale, $allowedlocales)) $active = true;
         else $active = false;
@@ -59,7 +59,7 @@ function base_admin_modifyconfig()
     $data['releasenumber']=isset($releasenumber) ? $releasenumber:10;
 
     // TODO: delete after new backend testing
-    // $data['translationsBackend'] = xarConfigVars::Get(null, 'Site.MLS.TranslationsBackend');
+    // $data['translationsBackend'] = xarConfigVars::get(null, 'Site.MLS.TranslationsBackend');
     $data['authid'] = xarSecGenAuthKey();
     $data['updatelabel'] = xarML('Update Base Configuration');
     $data['XARCORE_VERSION_NUM'] = xarCore::VERSION_NUM;
