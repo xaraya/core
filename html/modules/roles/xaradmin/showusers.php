@@ -31,7 +31,7 @@ function roles_admin_showusers()
     if (!xarVarFetch('order',    'str:0:', $data['order'],    'name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('search',   'str:0:', $data['search'],   NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('reload',   'str:0:', $reload,           NULL,    XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('numitems', 'int:1',  $numitems,        xarModGetVar('roles','itemsperpage'), XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('numitems', 'int:1',  $numitems,        xarModVars::Get('roles','itemsperpage'), XARVAR_DONT_SET)) return;
     if (empty($data['selstyle'])) $data['selstyle'] = 0;
     xarSession::setVar('rolesdisplay', $data['selstyle']);
 

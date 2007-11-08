@@ -43,7 +43,7 @@ function mail_admin_viewq($args)
                 if (!xarVarFetch('id','str', $id, '')) return;
                 if (!empty($id)) {
                     // retrieve the mail data
-                    $maildata = xarModGetVar('mail',$id);
+                    $maildata = xarModVars::Get('mail',$id);
                     if (!empty($maildata)) {
                         $data['id'] = $id;
                         $data['mail'] = unserialize($maildata);
@@ -55,7 +55,7 @@ function mail_admin_viewq($args)
                 if (!xarVarFetch('id','str', $id, '')) return;
                 if (!empty($id)) {
                     // get the waiting queue
-                    $serialqueue = xarModGetVar('mail','queue');
+                    $serialqueue = xarModVars::Get('mail','queue');
                     if (!empty($serialqueue)) {
                         $queue = unserialize($serialqueue);
                     } else {
@@ -83,7 +83,7 @@ function mail_admin_viewq($args)
 
 // TODO: use separate xar_mail_queue table here someday
     // get the waiting queue
-    $serialqueue = xarModGetVar('mail','queue');
+    $serialqueue = xarModVars::Get('mail','queue');
     if (!empty($serialqueue)) {
         $queue = unserialize($serialqueue);
     } else {

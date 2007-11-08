@@ -40,7 +40,7 @@ function mail_adminapi__queuemail($args)
     xarModVars::set('mail',$id,$data);
 
     // put it in the waiting queue, together with when it should be sent
-    $serialqueue = xarModGetVar('mail','queue');
+    $serialqueue = xarModVars::Get('mail','queue');
     if (!empty($serialqueue)) {
         $queue = unserialize($serialqueue);
     } else {

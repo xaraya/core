@@ -46,7 +46,7 @@ function xarMain()
     list($modName, $modType, $funcName) = xarRequestGetInfo();
 
     // Default Page Title
-    $SiteSlogan = xarModGetVar('themes', 'SiteSlogan');
+    $SiteSlogan = xarModVars::Get('themes', 'SiteSlogan');
     xarTplSetPageTitle(xarVarPrepForDisplay($SiteSlogan));
 
     // Theme Override
@@ -119,8 +119,8 @@ function xarMain()
         }
 
         // Set page template
-        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default' && xarModGetVar('themes', 'usedashboard')) {
-            $dashtemplate=xarModGetVar('themes','dashtemplate');
+        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default' && xarModVars::Get('themes', 'usedashboard')) {
+            $dashtemplate=xarModVars::Get('themes','dashtemplate');
             //if dashboard is enabled, use the dashboard template else fallback on the normal template override system for admin templates
               if (!xarTplSetPageTemplateName($dashtemplate.'-'.$modName)) {
                 xarTplSetPageTemplateName($dashtemplate);

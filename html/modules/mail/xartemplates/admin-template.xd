@@ -1,6 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:if condition="xarModGetVar('base','editor') eq 'htmlarea'">
+<xar:if condition="xarModVars::Get('base','editor') eq 'htmlarea'">
     <xar:template file="htmlarea_insert" module="htmlarea" type="module" />
 </xar:if>
 <xar:set name="messagetitle">
@@ -87,10 +87,10 @@
                             This email will be sent to #(1) [ #(2) ] when a hooked item is created. 
                         </xar:mlstring>
                         <xar:mlvar>
-                            #xarModGetVar('mail', 'adminname')# 
+                            <xar:var scope="module" module="mail" name="adminname"/> 
                         </xar:mlvar>
                         <xar:mlvar>
-                            #xarModGetVar('mail', 'adminmail')# 
+                            <xar:var scope="module" module="mail" name="adminmail"/> 
                         </xar:mlvar>
                     </xar:ml>
                     <xar:elseif condition="$mailtype eq 'changehook'" />
@@ -99,10 +99,10 @@
                             This email will be sent to #(1) [ #(2) ] when a hooked item is updated. 
                         </xar:mlstring>
                         <xar:mlvar>
-                            #xarModGetVar('mail', 'adminname')# 
+                            <xar:var scope="module" module="mail" name="adminname"/> 
                         </xar:mlvar>
                         <xar:mlvar>
-                            #xarModGetVar('mail', 'adminmail')# 
+                            <xar:var scope="module" module="mail" name="adminmail"/> 
                         </xar:mlvar>
                     </xar:ml>
                     <xar:elseif condition="$mailtype eq 'deletehook'" />
@@ -111,10 +111,10 @@
                             This email will be sent to #(1) [ #(2) ] when a hooked item is deleted. 
                         </xar:mlstring>
                         <xar:mlvar>
-                            #xarModGetVar('mail', 'adminname')# 
+                            <xar:var scope="module" module="mail" name="adminname" /> 
                         </xar:mlvar>
                         <xar:mlvar>
-                            #xarModGetVar('mail', 'adminmail')# 
+                            <xar:var scope="module" module="mail" name="adminmail"/> 
                         </xar:mlvar>
                     </xar:ml>
                     <xar:else />
@@ -123,10 +123,10 @@
                             This email will be sent to #(1) [ #(2) ]. 
                         </xar:mlstring>
                         <xar:mlvar>
-                            #xarModGetVar('mail', 'adminname')# 
+                            <xar:var scope="module" module="mail" name="adminname"/> 
                         </xar:mlvar>
                         <xar:mlvar>
-                            #xarModGetVar('mail', 'adminmail')# 
+                            <xar:var scope="module" module="mail" name="adminmail"/> 
                         </xar:mlvar>
                     </xar:ml>
                 </xar:if>

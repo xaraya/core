@@ -28,7 +28,7 @@ function base_adminmenublock_modify($blockinfo)
     // Defaults
     if(empty($vars['showlogout'])) $vars['showlogout'] = 0;
     if(empty($vars['showmarker'])) $vars['showmarker'] = 0;
-    if(empty($vars['menustyle']))  $vars['menustyle'] = 'bycat'; //xarModGetVar('base','menustyle');
+    if(empty($vars['menustyle']))  $vars['menustyle'] = 'bycat'; //xarModVars::Get('base','menustyle');
     if(empty($vars['showhelp'])) $vars['showhelp'] = 0;
 
     // Set the config values

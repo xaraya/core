@@ -49,7 +49,7 @@
                     Admin will also be notified when status is changed automatically by the system (eg when an account is set to pending and requires approval):</xar:mlstring>
             </p>
             <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarModGetVar('roles', 'askpendingemail')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="roles" name="askpendingemail"/></xar:set>
                     <xar:data-input type="checkbox" name="askpendingemail" id="askpendingemail" checked="$checked" />
                     <label for="askpendingemail" title="#xarML('When user state is changed to \'pending\'')#">
                         <xar:mlstring>Pending</xar:mlstring>
@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarModGetVar('roles', 'askwelcomeemail')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="roles" name="askwelcomeemail"/></xar:set>
                     <xar:data-input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" checked="$checked" />
                     <label for="askwelcomeemail" title="#xarML('When user state is changed to \'active\'')#">
                         <xar:mlstring>Active</xar:mlstring>
@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarModGetVar('roles', 'askdeactivationemail')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="roles" name="askdeactivationemail"/></xar:set>
                     <xar:data-input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" checked="$checked" />
                     <label for="askdeactivationemail" title="#xarML('When user state is changed to \'inactive\'')#">
                         <xar:mlstring>Inactive</xar:mlstring>
@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarModGetVar('roles', 'askvalidationemail')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="roles" name="askvalidationemail"/></xar:set>
                     <xar:data-input type="checkbox" name="askvalidationemail" id="askvalidationemail" checked="$checked" />
                     <label for="askvalidationemail" title="#xarML('When user state is changed to \'not validated\'')#">
                         <xar:mlstring>Not Validated</xar:mlstring>
@@ -85,7 +85,7 @@
                 </p>
 
                 <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarModGetVar('roles', 'askpasswordemail')</xar:set>
+                    <xar:set name="checked"><xar:var scope="module" module="roles" name="askpasswordemail"/></xar:set>
                     <xar:data-input type="checkbox" name="askpasswordemail" id="askpasswordemail" checked="$checked" />
                     <label for="askpasswordemail" title="#xarML('When administrator changes a user\'s password')#">
                         <xar:mlstring>Changes A User's Password</xar:mlstring>

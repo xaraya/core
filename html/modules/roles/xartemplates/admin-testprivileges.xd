@@ -62,7 +62,7 @@
       <table class="xar-fullwidth">
         <tr>
           <th><xar:mlstring>Mask</xar:mlstring></th>
-          <xar:if condition="xarModGetVar('privileges','showrealms')">
+          <xar:if condition="xarModVars::Get('privileges','showrealms')">
             <th><xar:mlstring>Realm</xar:mlstring></th>
           </xar:if>
           <th><xar:mlstring>Module</xar:mlstring></th>
@@ -77,7 +77,7 @@
                 #$mask:getName()#
               </a>
             </td>
-            <xar:if condition="xarModGetVar('privileges','showrealms')">
+            <xar:if condition="xarModVars::Get('privileges','showrealms')">
               <td>#$mask:getRealm()#</td>
             </xar:if>
             <td>#$mask:getModule()#</td>
@@ -99,7 +99,7 @@
           <th>
             <xar:mlstring>Mask</xar:mlstring>
           </th>
-          <xar:if condition="xarModGetVar('privileges','showrealms')">
+          <xar:if condition="xarModVars::Get('privileges','showrealms')">
             <th>
               <xar:mlstring>Realm</xar:mlstring>
             </th>
@@ -122,7 +122,7 @@
             <td>
               #$loop:item['sname']#
             </td>
-            <xar:if condition="xarModGetVar('privileges','showrealms')">
+            <xar:if condition="xarModVars::Get('privileges','showrealms')">
               <td>
                 #$loop:item['srealm']#
               </td>
@@ -152,7 +152,7 @@
             <th>
               <xar:mlstring>Privilege</xar:mlstring>
             </th>
-            <xar:if condition="xarModGetVar('privileges','showrealms')">
+            <xar:if condition="xarModVars::Get('privileges','showrealms')">
               <th>
                 <xar:mlstring>Realm</xar:mlstring>
               </th>
@@ -174,7 +174,7 @@
             <td>
               #$rname#
             </td>
-            <xar:if condition="xarModGetVar('privileges','showrealms')">
+            <xar:if condition="xarModVars::Get('privileges','showrealms')">
               <td>
                 #$rrealm#
               </td>

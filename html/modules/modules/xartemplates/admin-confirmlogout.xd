@@ -12,7 +12,7 @@
     </p>
 
     <div class="xar-align-center">
-        <xar:set name="authmodule">xarModGetVar('roles','defaultauthmodule')</xar:set>
+        <xar:set name="authmodule"><xar:var scope="module" module="roles" name="defaultauthmodule"/></xar:set>
         <xar:if condition="!empty($authmodule)">
             <xar:set name="authmodule">xarModGetNameFromID($authmodule)</xar:set>
             [<a href="#xarModURL($authmodule,'user','logout')#"><xar:mlstring>Logout</xar:mlstring></a>] 

@@ -881,7 +881,7 @@ function installer_admin_confirm_configuration()
     $data['phase_label'] = xarML('Choose configuration options');
 
     include $configuration;
-    $fileModules = unserialize(xarModGetVar('installer','modulelist'));
+    $fileModules = unserialize(xarModVars::Get('installer','modulelist'));
     $func = "installer_" . basename(strval($configuration),'.conf.php') . "_moduleoptions";
     $modules = $func();
     $availablemodules = $awolmodules = $installedmodules = array();
@@ -1048,8 +1048,8 @@ function installer_admin_cleanup()
 
     xarUserLogOut();
     // log in admin user
-    $uname = xarModGetVar('roles','lastuser');
-    $pass = xarModGetVar('roles','adminpass');
+    $uname = xarModVars::Get('roles','lastuser');
+    $pass = xarModVars::Get('roles','adminpass');
 
     if (!xarUserLogIn($uname, $pass, 0)) {
         $msg = xarML('Cannot log in the default administrator. Check your setup.');
@@ -1461,7 +1461,7 @@ function installer_admin_upgrade2()
                           );
     foreach($modvars as $modvar){
         foreach($modvar as $var){
-            $currentvar = xarModGetVar("$var[module]", "$var[name]");
+            $currentvar = xarModVars::Get("$var[module]", "$var[name]");
             if (isset($currentvar)){
                 if (isset($var['override'])) {
                     xarModSetVar($var['module'], $var['name'], $var['set']);
@@ -1495,7 +1495,7 @@ function installer_admin_upgrade2()
     $content .= "<p><strong>Updating Roles and Authsystem for changes in User Login and Authentication</strong></p>";
 
     //Check for allow registration in existing Roles module
-    $allowregistration =xarModGetVar('roles','allowregistration');
+    $allowregistration =xarModVars::Get('roles','allowregistration');
     if (isset($allowregistration) && ($allowregistration==1)) {
         //We need to tell user about the new Registration module - let's just warn them for now
         if (!xarModIsAvailable('registration')){
@@ -1675,7 +1675,7 @@ function installer_admin_upgrade2()
 
      foreach($delmodvars as $delmodvar){
         foreach($delmodvar as $var){
-            $currentvar = xarModGetVar("$var[module]", "$var[name]");
+            $currentvar = xarModVars::Get("$var[module]", "$var[name]");
             if (!isset($currentvar)){
                 $content .= "<p>$var[module] -> $var[name] is deleted, proceeding to next check</p>";
             } else {
@@ -1735,7 +1735,7 @@ function installer_admin_upgrade2()
 
     //Ensure that registration module is set as default if it is installed,
     // if it is active and the default is currently not set
-    $defaultregmodule = xarModGetVar('roles','defaultregmodule');
+    $defaultregmodule = xarModVars::Get('roles','defaultregmodule');
     if (empty($defaultregmodule)) {
         if (xarModIsAvailable('registration')) {
             xarModSetVar('roles','defaultregmodule', 'registration');

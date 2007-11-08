@@ -30,8 +30,8 @@ function mail_admin_modifyconfig()
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
     // Quick Check for E_ALL
-    $searchstrings = xarModGetVar('mail', 'searchstrings');
-    $replacestrings = xarModGetVar('mail', 'replacestrings');
+    $searchstrings = xarModVars::Get('mail', 'searchstrings');
+    $replacestrings = xarModVars::Get('mail', 'replacestrings');
     if (empty($searchstrings)){
         $searchstrings = serialize('%%Search%%');
         xarModVars::set('mail', 'searchstrings', $searchstrings);
@@ -41,14 +41,14 @@ function mail_admin_modifyconfig()
         xarModVars::set('mail', 'replacestrings', $replacestrings);
     }
     $data['createlabel'] = xarML('Submit');
-    $data['searchstrings'] = unserialize(xarModGetVar('mail', 'searchstrings'));
-    $data['replacestrings'] = unserialize(xarModGetVar('mail', 'replacestrings'));
+    $data['searchstrings'] = unserialize(xarModVars::Get('mail', 'searchstrings'));
+    $data['replacestrings'] = unserialize(xarModVars::Get('mail', 'replacestrings'));
 
     // Get encoding
-    $data['encoding'] = xarModGetVar('mail', 'encoding');
+    $data['encoding'] = xarModVars::Get('mail', 'encoding');
 
     //redirect address - ensure it's set
-    $redirectaddress = trim(xarModGetVar('mail', 'redirectaddress'));
+    $redirectaddress = trim(xarModVars::Get('mail', 'redirectaddress'));
     if (isset($redirectaddress) && !empty($redirectaddress)){
         $data['redirectaddress']=xarVarPrepForDisplay($redirectaddress);
     }else{
@@ -78,7 +78,7 @@ function mail_admin_modifyconfig()
             $data['interval'] = $job['interval'];
         }
         // get the waiting queue
-        $serialqueue = xarModGetVar('mail','queue');
+        $serialqueue = xarModVars::Get('mail','queue');
         if (!empty($serialqueue)) {
             $queue = unserialize($serialqueue);
         } else {

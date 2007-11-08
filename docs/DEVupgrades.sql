@@ -490,3 +490,10 @@ INSERT INTO `xar_module_vars` (module_id, name, value)
 INSERT INTO `xar_module_vars` (module_id, name, value)
     SELECT mods.id, 'themesdirectory', modvars.value FROM xar_module_vars modvars, xar_modules mods
     WHERE  mods.name = 'themes' AND modvars.name = 'Site.BL.ThemesDirectory';
+
+/* 
+ @todo:
+    Find the data in the dynamic data tables where deprecated functions are used
+    like: xarModGetVar etc. and change them or enable Legacy if it is the case
+    during upgrade
+*/

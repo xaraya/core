@@ -82,23 +82,23 @@ function mail_adminapi_sendhtmlmail($args)
     }
     // Check from
     if (empty($from)) {
-        $from = xarModGetVar('mail', 'adminmail');
+        $from = xarModVars::Get('mail', 'adminmail');
     }
     // Check fromname
     if (empty($fromname)) {
-        $fromname = xarModGetVar('mail', 'adminname');
+        $fromname = xarModVars::Get('mail', 'adminname');
     }
     // Check wordwrap
     if (!isset($wordwrap)) {
-        $wordwrap = xarModGetVar('mail', 'wordwrap');
+        $wordwrap = xarModVars::Get('mail', 'wordwrap');
     }
     // Check priority
     if (!isset($priority)) {
-        $priority = xarModGetVar('mail', 'priority');
+        $priority = xarModVars::Get('mail', 'priority');
     }
     // Check encoding
     if (!isset($encoding)) {
-        $encoding = xarModGetVar('mail', 'encoding');
+        $encoding = xarModVars::Get('mail', 'encoding');
     }
     // Check if using mail templates - default is true
     if (!isset($usetemplates)) {
@@ -112,11 +112,11 @@ function mail_adminapi_sendhtmlmail($args)
         // Set the html version of the message
 
         // Check if headers/footers have been configured by the admin
-        $htmlheadfoot = xarModGetVar('mail', 'htmluseheadfoot');
+        $htmlheadfoot = xarModVars::Get('mail', 'htmluseheadfoot');
 
-        $parsedmessage .= $htmlheadfoot ? xarModGetVar('mail', 'htmlheader') : '';
+        $parsedmessage .= $htmlheadfoot ? xarModVars::Get('mail', 'htmlheader') : '';
         $parsedmessage .= $htmlmessage;
-        $parsedmessage .= $htmlheadfoot ? xarModGetVar('mail', 'htmlfooter') : '';
+        $parsedmessage .= $htmlheadfoot ? xarModVars::Get('mail', 'htmlfooter') : '';
 
     } else {
         // If the module did not send us an html version of the
@@ -124,12 +124,12 @@ function mail_adminapi_sendhtmlmail($args)
         // then we have to play around with this one a bit by adding some <pre> tags
 
         // Check if headers/footers have been configured by the admin
-        $textheadfoot = xarModGetVar('mail', 'textuseheadfoot');
+        $textheadfoot = xarModVars::Get('mail', 'textuseheadfoot');
 
         $parsedmessage .= '<pre>';
-        $parsedmessage .= $textheadfoot ? xarModGetVar('mail', 'textheader') : '';
+        $parsedmessage .= $textheadfoot ? xarModVars::Get('mail', 'textheader') : '';
         $parsedmessage .= $message;
-        $parsedmessage .= $textheadfoot ? xarModGetVar('mail', 'textfooter') : '';
+        $parsedmessage .= $textheadfoot ? xarModVars::Get('mail', 'textfooter') : '';
         $parsedmessage .= '</pre>';
 
     }

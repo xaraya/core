@@ -58,7 +58,7 @@
                             Items Listed per Page View: 
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="itemsperpage" name="itemsperpage" value="#xarModGetVar('blocks', 'itemsperpage')#" class="xar-form-textshort" />
+                    <input type="text" id="itemsperpage" name="itemsperpage" value="#xarModVars::Get('blocks', 'itemsperpage')#" class="xar-form-textshort" />
                 </div>
             </fieldset>
             <fieldset>
