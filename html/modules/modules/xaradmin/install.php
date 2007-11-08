@@ -48,7 +48,6 @@ function modules_admin_install()
     //Only show the status screen if there are dependencies that cannot be satisfied
     if (!$command && !empty($data['dependencies']['unsatisfiable'])) {
         //Let's make a nice GUI to show the user the options
-        $data = array();
         $data['id'] = $id;
         //They come in 3 arrays: satisfied, satisfiable and unsatisfiable
         //First 2 have $modInfo under them foreach module,

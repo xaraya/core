@@ -11,21 +11,7 @@ sys::import('modules.privileges.class.mask');
 
 class xarPrivilege extends xarMask
 {
-
-    public $id;           //the id of this privilege
-    public $name;          //the name of this privilege
-    public $realm;         //the realm of this privilege
-    public $module;        //the module of this privilege
-    public $component;     //the component of this privilege
-    public $instance;      //the instance of this privilege
-    public $level;         //the access level of this privilege
-    public $description;   //the long description of this privilege
-    public $parentid;      //the id of the parent of this privilege
-
-    public $dbconn;
-    public $privilegestable;
-    public $privmemberstable;
-    public $realmstable;
+    public $parentid = 0;      //the id of the parent of this privilege
 
     /**
      * xarPrivilege: constructor for the class
@@ -39,33 +25,8 @@ class xarPrivilege extends xarMask
     */
     function __construct($pargs)
     {
-        extract($pargs);
-
-        $this->dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
-        $this->privilegestable = $xartable['privileges'];
-        $this->privmemberstable = $xartable['privmembers'];
-        $this->rolestable = $xartable['roles'];
-        $this->acltable = $xartable['security_acl'];
-        $this->realmstable = $xartable['security_realms'];
-
-// CHECKME: id and description are undefined when adding a new privilege
-        if (empty($id)) {
-            $id = 0;
-        }
-        if (empty($description)) {
-            $description = '';
-        }
-
-        $this->id          = (int) $id;
-        $this->name         = $name;
-        $this->realm        = $realm;
-        $this->module       = $module;
-        $this->component    = $component;
-        $this->instance     = $instance;
-        $this->level        = (int) $level;
-        $this->description  = $description;
-        $this->parentid     = (int) $parentid;
+        parent::__construct($pargs);
+        $this->parentid     = isset($parentid) ? (int) $parentid : 0;
     }
 
     /**
@@ -94,10 +55,10 @@ class xarPrivilege extends xarMask
             if($result->next()) $realmid = $result->getInt('id');
         }
         $query = "INSERT INTO $this->privilegestable
-                    (name, realmid, module_id, component, instance, level, type)
-                  VALUES (?,?,?,?,?,?,?)";
-        $bindvars = array($this->name, $realmid, $this->module,
-                          $this->component, $this->instance, $this->level, self::PRIVILEGES_PRIVILEGETYPE);
+                    (name, realmid, module_id, component, instance, level, type, description)
+                  VALUES (?,?,?,?,?,?,?,?)";
+        $bindvars = array($this->name, $realmid, $this->module_id,
+                          $this->component, $this->instance, $this->level, self::PRIVILEGES_PRIVILEGETYPE, $this->description);
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
         // the insert created a new index value
@@ -252,11 +213,10 @@ class xarPrivilege extends xarMask
         $result = $stmt->executeQuery(array($this->getID()));
 
         // remove this child from all the parents
-        $perms = new xarPrivileges();
         while($result->next()) {
             list($parentid) = $result->fields;
             if ($parentid != 0) {
-                $parentperm = $perms->getPrivilege($parentid);
+                $parentperm = xarPrivileges::getPrivilege($parentid);
                 $parentperm->removeMember($this);
             }
         }
@@ -392,19 +352,20 @@ class xarPrivilege extends xarMask
         $parents = array();
 
         // perform a SELECT on the privmembers table
-        $query = "SELECT p.*
-                  FROM $this->privilegestable p, $this->privmemberstable pm
-                  WHERE p.id = pm.parentid
-                    AND pm.id = ?";
+        $query = "SELECT p.*, m.name
+                  FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.parentid
+                  LEFT JOIN $this->modulestable m ON p.module_id = m.id
+                  AND pm.id = ?";
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
         // collect the table values and use them to create new role objects
         while($result->next()) {
-            list($id,$name,$realm,$module_id,$component,$instance,$level,$description) = $result->fields;
+            list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$module) = $result->fields;
             $pargs = array('id'=>$id,
                             'name'=>$name,
                             'realm'=>$realm,
-                            'module'=>$module_id,
+                            'module'=>$module,
+                            'module_id'=>$module_id,
                             'component'=>$component,
                             'instance'=>$instance,
                             'level'=>$level,
@@ -432,7 +393,7 @@ class xarPrivilege extends xarMask
         $parents = $this->getParents();
 
         //Get the parent field for each parent
-        $masks = new xarMasks();
+//        $masks = new xarMasks();
         while (list($key, $parent) = each($parents)) {
             $ancestors = $parent->getParents();
             foreach ($ancestors as $ancestor) {
@@ -470,8 +431,9 @@ class xarPrivilege extends xarMask
         // create an array to hold the objects to be returned
         $children = array();
 
-        $query = "SELECT p.*, pm.parentid
-                    FROM $this->privilegestable p, $this->privmemberstable pm
+        $query = "SELECT p.*, pm.parentid, m.name
+                    FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.id
+                    LEFT JOIN $this->modulestable m ON p.module_id = m.id
                     WHERE p.id = pm.id";
         // retrieve all children of everyone at once
         //              AND pm.parentid = " . $cacheId;
@@ -479,16 +441,17 @@ class xarPrivilege extends xarMask
         $result = $this->dbconn->executeQuery($query);
 
         while($result->next()) {
-            list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$type,$parentid) = $result->fields;
+            list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$type,$parentid, $module) = $result->fields;
             if (!isset($children[$parentid])) $children[$parentid] = array();
-            $pargs = array('id'=>$id,
-                            'name'=>$name,
-                            'realm'=>$realm,
-                            'module'=>$module_id,
-                            'component'=>$component,
-                            'instance'=>$instance,
-                            'level'=>$level,
-                            'description'=>$description,
+            $pargs = array('id'=>           $id,
+                            'name'=>        $name,
+                            'realm'=>       $realm,
+                            'module_id'=>   $module_id,
+                            'module'=>      $module,
+                            'component'=>   $component,
+                            'instance'=>    $instance,
+                            'level'=>       $level,
+                            'description'=> $description,
                             'parentid' => $parentid);
             $children[$parentid][] = new xarPrivilege($pargs);
         }
@@ -517,7 +480,7 @@ class xarPrivilege extends xarMask
         $children = $this->getChildren();
 
         //Get the child field for each child
-        $masks = new xarMasks();
+//        $masks = new xarMasks();
         while (list($key, $child) = each($children)) {
             $descendants = $child->getChildren();
             foreach ($descendants as $descendant) {

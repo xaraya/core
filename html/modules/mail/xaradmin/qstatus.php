@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
  * Queue status management
  *
  */
@@ -49,7 +49,7 @@ function mail_admin_qstatus($args)
 
                 $queues[$index]['msg'] ='No msg yet';
             }
-         
+
         }
     }
     $data['authid'] = xarSecGenAuthKey();

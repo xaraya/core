@@ -17,7 +17,7 @@ class ConfigEntityNode extends EntityNode
             return;
         }
         $name = $this->parameters[0];
-        return "xarConfigVars::get('".$name."')";
+        return "xarConfigVars::get(null,'".$name."')";
     }
 }
 ?>

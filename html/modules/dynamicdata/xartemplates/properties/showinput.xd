@@ -1,29 +1,30 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<xar:if condition="!isset($type)">
-    <xar:set name="type">xarML('[unknown type]')</xar:set>
-</xar:if>
+    <xar:if condition="!isset($type)">
+        <xar:set name="type">xarML('[unknown type]')</xar:set>
+    </xar:if>
 
-<xar:if condition="!isset($template) or empty($template)">
-    <xar:set name="template">xarML('[unspecified template]')</xar:set>
-</xar:if>
+    <xar:if condition="!isset($template) or empty($template)">
+        <xar:set name="template">xarML('[unspecified template]')</xar:set>
+    </xar:if>
 
-<span class="xar-error">
-    <xar:ml>
-        <xar:mlstring>
-            Warning: the template showinput-#(1).xd or showinput-#(2).xd
-            is missing for this property!
-        </xar:mlstring>
-        <xar:mlvar>#$type#</xar:mlvar>
-        <xar:mlvar>#$template#</xar:mlvar>
-    </xar:ml>
-</span>
-<br/>
-<input type="text" id="#$id#" name="#$name#" value="#$value#" />
+    <span class="xar-error">
+        <xar:ml>
+            <xar:mlstring>
+                Warning: the template showinput-#(1).xd or showinput-#(2).xd in module #(3)
+                is missing for the property!
+            </xar:mlstring>
+            <xar:mlvar>#$type#</xar:mlvar>
+            <xar:mlvar>#$template#</xar:mlvar>
+            <xar:mlvar>#$tplmodule#</xar:mlvar>
+        </xar:ml>
+    </span>
+    <br/>
+    <input type="text" id="#$id#" name="#$name#" value="#$value#" />
 
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <xar:if condition="!empty($invalid)">
+        <span class="xar-error">#$invalid#</span>
+    </xar:if>
 
 </xar:template>
