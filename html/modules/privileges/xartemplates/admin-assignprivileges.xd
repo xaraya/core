@@ -7,8 +7,8 @@
     </xar:set>
     <div class="xar-mod-head">
         <span class="xar-mod-title">
-            <xar:if condition="xarModGetVar('privileges','useModuleAlias')">
-                #xarModGetVar('listings','aliasname')#
+            <xar:if condition="xarModVars::get('privileges','useModuleAlias')">
+                <xar:var scope="module" module="privileges" name="aliasname" />
             <xar:else />
                 <xar:mlstring>Privileges Administration</xar:mlstring>
             </xar:if>
