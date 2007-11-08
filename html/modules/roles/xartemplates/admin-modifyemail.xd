@@ -1,7 +1,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!-- @todo make this editor configurable -->
-<xar:if condition="xarModVars::Get('base','editor') eq 'htmlarea'">
+<xar:if condition="xarModVars::get('base','editor') eq 'htmlarea'">
     <xar:template file="htmlarea_insert" module="htmlarea" type="module" />
 </xar:if>
 <xar:style scope="module" module="base" file="navtabs" />

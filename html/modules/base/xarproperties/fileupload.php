@@ -351,7 +351,7 @@ class FileUploadProperty extends DataProperty
             $this->methods = $methods;
             $this->basedir = $basedir;
             $this->importdir = $importdir;
-            $this->maxsize = xarModVars::Get('uploads', 'file.maxsize');
+            $this->maxsize = xarModVars::get('uploads', 'file.maxsize');
 
         } elseif (!empty($validation)) {
             // specify base directory and optional file types in validation

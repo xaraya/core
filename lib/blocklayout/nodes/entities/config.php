@@ -3,7 +3,7 @@
  * ConfigEntityNode
  *
  * Configuration entities, treated as BL expression, basically
- * a wrapping to xarConfigVars::Get()
+ * a wrapping to xarConfigVars::get()
  *
  * @package blocklayout
  * @access private
@@ -17,7 +17,7 @@ class ConfigEntityNode extends EntityNode
             return;
         }
         $name = $this->parameters[0];
-        return "xarConfigVars::Get('".$name."')";
+        return "xarConfigVars::get('".$name."')";
     }
 }
 ?>

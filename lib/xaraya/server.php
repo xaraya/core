@@ -151,7 +151,7 @@ class xarServer extends Object
     static function getProtocol()
     {
         if (method_exists('xarConfigVars','Get')) {
-            if (xarConfigVars::Get(null, 'Site.Core.EnableSecureServer') == true) {
+            if (xarConfigVars::get(null, 'Site.Core.EnableSecureServer') == true) {
                 if (preg_match('/^http:/', self::getVar('REQUEST_URI'))) {
                     return 'http';
                 }
@@ -493,7 +493,7 @@ class xarRequest extends Object
      */
     private static function resolveModuleAlias($var)
     {
-        $aliasesMap = xarConfigVars::Get(null, 'System.ModuleAliases');
+        $aliasesMap = xarConfigVars::get(null, 'System.ModuleAliases');
         return (!empty($aliasesMap[$var])) ? $aliasesMap[$var] : $var;
     }
 }

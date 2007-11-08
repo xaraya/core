@@ -40,7 +40,7 @@ for examples and instructions on overriding error message templates
     </xar:if>
 </div>
     <p>
-        <xar:set name="contactus">'mailto:'.xarModVars::Get('mail', 'adminmail',1)</xar:set>
+        <xar:set name="contactus">'mailto:'.xarModVars::get('mail', 'adminmail',1)</xar:set>
         <xar:ml>
         <xar:mlstring>Please review the information above and try logging in again.
         If you continue to have difficulty with logging in and you believe your account

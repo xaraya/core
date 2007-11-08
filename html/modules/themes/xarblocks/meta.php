@@ -113,9 +113,9 @@ function themes_metablock_display($blockinfo)
 
     // Character Set
     $meta['charset'] = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
-    $meta['generator'] = xarConfigVars::Get(null, 'System.Core.VersionId');
+    $meta['generator'] = xarConfigVars::get(null, 'System.Core.VersionId');
     $meta['generator'] .= ' :: ';
-    $meta['generator'] .= xarConfigVars::Get(null, 'System.Core.VersionNum');
+    $meta['generator'] .= xarConfigVars::get(null, 'System.Core.VersionNum');
 
     // Geo Url
     $meta['longitude'] = $vars['longitude'];

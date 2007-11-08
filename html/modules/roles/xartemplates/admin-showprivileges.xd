@@ -59,7 +59,7 @@
             <table class="xar-fullwidth">
                 <tr>
                     <th><xar:mlstring>Name</xar:mlstring></th>
-                    <xar:if condition="xarModVars::Get('privileges','showrealms')">
+                    <xar:if condition="xarModVars::get('privileges','showrealms')">
                         <th><xar:mlstring>Realm</xar:mlstring></th>
                     </xar:if>
                     <th><xar:mlstring>Module</xar:mlstring></th>
@@ -76,7 +76,7 @@
                         <xar:var name="loop:item.name" prep="true"/>
                       </a>
                     </td>
-                    <xar:if condition="xarModVars::Get('privileges','showrealms')">
+                    <xar:if condition="xarModVars::get('privileges','showrealms')">
                       <td><xar:var name="loop:item.realm" prep="true"/></td>
                     </xar:if>
                     <td>#$loop:item.module#</td>
@@ -126,7 +126,7 @@
         <table class="xar-fullwidth">
           <tr>
             <th><xar:mlstring>Name</xar:mlstring></th>
-            <xar:if condition="xarModVars::Get('privileges','showrealms')">
+            <xar:if condition="xarModVars::get('privileges','showrealms')">
               <th><xar:mlstring>Realm</xar:mlstring></th>
             </xar:if>
             <th><xar:mlstring>Module</xar:mlstring></th>
@@ -143,7 +143,7 @@
                   <xar:var name="loop:item.name" prep="true"/>
                 </a>
               </td>
-              <xar:if condition="xarModVars::Get('privileges','showrealms')">
+              <xar:if condition="xarModVars::get('privileges','showrealms')">
                 <td class="xar-align-center">
                   <xar:var name="loop:item.realm" prep="true"/>
                 </td>

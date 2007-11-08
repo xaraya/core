@@ -24,9 +24,9 @@
 function mail_admin_compose()
 {
     // Security Check
-    if (!xarSecurityCheck('AdminMail')) return; 
+    if (!xarSecurityCheck('AdminMail')) return;
     // Generate a one-time authorisation code for this operation
-    $data['authid']         = xarSecGenAuthKey(); 
+    $data['authid']         = xarSecGenAuthKey();
 
     // Include 'formcheck' JavaScript.
     // TODO: move this to a template widget when available.
@@ -36,12 +36,12 @@ function mail_admin_compose()
     );
 
     // Get the admin email address
-    $data['email']  = xarModVars::Get('mail', 'adminmail');
-    $data['name']   = xarModVars::Get('mail', 'adminname');
-    $data['email']  = xarModVars::Get('mail', 'adminmail');
-    $data['name']   = xarModVars::Get('mail', 'adminname');
-     
+    $data['email']  = xarModVars::get('mail', 'adminmail');
+    $data['name']   = xarModVars::get('mail', 'adminname');
+    $data['email']  = xarModVars::get('mail', 'adminmail');
+    $data['name']   = xarModVars::get('mail', 'adminname');
+
     // everything else happens in Template for now
     return $data;
-} 
+}
 ?>

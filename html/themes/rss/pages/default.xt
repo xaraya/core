@@ -13,7 +13,7 @@
         <dc:language>en-us</dc:language>
         <dc:creator><xar:var scope="module" module="mail" name="adminname"/></dc:creator>
         <admin:generatorAgent rdf:resource="http://www.xaraya.org" />
-        <admin:errorReportsTo rdf:resource="mailto:#xarModVars::Get('mail', 'adminmail')#" />
+        <admin:errorReportsTo rdf:resource="mailto:#xarModVars::get('mail', 'adminmail')#" />
         <sy:updatePeriod>hourly</sy:updatePeriod>
         <sy:updateFrequency>1</sy:updateFrequency>
         <docs>http://backend.userland.com/rss</docs>

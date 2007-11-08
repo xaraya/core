@@ -197,7 +197,7 @@
                     </label>
                 </div>
 
-                <xar:if condition="xarModVars::Get('mail', 'textuseheadfoot')">
+                <xar:if condition="xarModVars::get('mail', 'textuseheadfoot')">
                     <div class="xar-form-input-wrapper">
                         <label for="textheader" title="#xarML('Enter the header that you wish displayed in your HTML emails.')#" class="xar-form-label">
                             <xar:mlstring>Text Email Header:</xar:mlstring>
@@ -267,7 +267,7 @@
                         </label>
                     </div>
 
-                    <xar:if condition="xarModVars::Get('mail', 'smtpAuth')">
+                    <xar:if condition="xarModVars::get('mail', 'smtpAuth')">
                         <div class="xar-form-input-wrapper">
                             <label for="smtpUserName" title="#xarML('Enter your SMTP username.')#" class="xar-form-label">
                                 <xar:mlstring>SMTP Username:</xar:mlstring>
@@ -338,7 +338,7 @@
                     <label for="redirectaddress" title="#xarML('Redirect Address is the email address that all emails are sent to in debugging mode.')#" class="xar-form-label">
                         <xar:mlstring>Redirect Address:</xar:mlstring>
                     </label>
-                    <input type="text" name="redirectaddress" id="redirectaddress" value="#xarModVars::Get('mail', 'redirectaddress', 1)#" maxlength="100" class="xar-form-textxlong" />
+                    <input type="text" name="redirectaddress" id="redirectaddress" value="#xarModVars::get('mail', 'redirectaddress', 1)#" maxlength="100" class="xar-form-textxlong" />
                 </div>
 
                 <div class="xar-form-input-wrapper-after">

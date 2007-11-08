@@ -26,8 +26,8 @@ function base_user_main($args)
         /* Cache the custom page name so it is accessible elsewhere */
         xarVarSetCached('Base.pages','page',$page);
     } else {
-        $pageTemplate = xarModVars::Get('base', 'AlternatePageTemplateName');
-        if (xarModVars::Get('base', 'UseAlternatePageTemplate') != '' &&
+        $pageTemplate = xarModVars::get('base', 'AlternatePageTemplateName');
+        if (xarModVars::get('base', 'UseAlternatePageTemplate') != '' &&
             $pageTemplate != '') {
             xarTplSetPageTemplateName($pageTemplate);
         }

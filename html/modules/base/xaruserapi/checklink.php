@@ -64,9 +64,9 @@ function base_userapi_checklink($args)
     }
 
     // see if we need to go through a proxy
-    $proxyhost = xarModVars::Get('base','proxyhost');
+    $proxyhost = xarModVars::get('base','proxyhost');
     if (!empty($proxyhost) && !$islocal) {
-        $proxyport = xarModVars::Get('base','proxyport');
+        $proxyport = xarModVars::get('base','proxyport');
         $fp = @fsockopen($proxyhost,$proxyport,$errno,$errstr,10);
         if (!$fp) {
             return xarML('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);

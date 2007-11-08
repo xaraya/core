@@ -31,7 +31,7 @@ class XarDateTime extends DateTime
         $this->hour = $hour;
         $this->minute = $minute;
         $this->second = $second;
-        $this->servertz = empty($timezone) ? xarConfigVars::Get(null, 'Site.Core.TimeZone') : $timezone;
+        $this->servertz = empty($timezone) ? xarConfigVars::get(null, 'Site.Core.TimeZone') : $timezone;
         $this->setISODate($this->year,$this->month,$this->day);
         $this->setTime($this->hour,$this->minute,$this->second);
     }

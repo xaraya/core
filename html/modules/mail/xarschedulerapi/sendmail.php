@@ -22,7 +22,7 @@ function mail_schedulerapi_sendmail($args)
 
 // TODO: use separate xar_mail_queue table here someday
     // get the waiting queue
-    $serialqueue = xarModVars::Get('mail','queue');
+    $serialqueue = xarModVars::get('mail','queue');
     if (!empty($serialqueue)) {
         $queue = unserialize($serialqueue);
     } else {
@@ -36,7 +36,7 @@ function mail_schedulerapi_sendmail($args)
 
         $log .= xarML('Sending mail #(1)', $id) . ' ';
         // retrieve the mail data
-        $data = xarModVars::Get('mail',$id);
+        $data = xarModVars::get('mail',$id);
         if (empty($data)) {
             $log .= xarML('empty') . "\n";
             $sent[] = $id;
@@ -69,7 +69,7 @@ function mail_schedulerapi_sendmail($args)
     xarVarDelCached('Mod.Variables.mail', 'queue');
 
     // get the current waiting queue
-    $serialqueue = xarModVars::Get('mail','queue');
+    $serialqueue = xarModVars::get('mail','queue');
     if (!empty($serialqueue)) {
         $queue = unserialize($serialqueue);
     } else {

@@ -25,7 +25,7 @@ function base_admin_release()
     if(!xarSecurityCheck('EditModules')) return;
 
     //number of releases to show
-    $releasenumber=(int)xarModVars::Get('base','releasenumber');
+    $releasenumber=(int)xarModVars::get('base','releasenumber');
 
     if (!isset($releasenumber) || $releasenumber ==0) {
          $releasenumber=10;

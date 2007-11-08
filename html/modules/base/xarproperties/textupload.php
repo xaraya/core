@@ -201,7 +201,7 @@ class TextUploadProperty extends DataProperty
 
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
             // relevant input fields are handled directly by the uploads module
-            //$extensions = xarModVars::Get('uploads','allowed_types');
+            //$extensions = xarModVars::get('uploads','allowed_types');
             $data['extensions']= '';
             $allowed = '';
             // set override for the upload/import paths if necessary
@@ -257,7 +257,7 @@ class TextUploadProperty extends DataProperty
             $this->methods = $methods;
             $this->basedir = $basedir;
             $this->importdir = $importdir;
-            $this->maxsize = xarModVars::Get('uploads', 'file.maxsize');
+            $this->maxsize = xarModVars::get('uploads', 'file.maxsize');
 
         } else {
             // nothing interesting here

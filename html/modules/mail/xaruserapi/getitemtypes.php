@@ -17,16 +17,16 @@ function mail_userapi_getitemtypes($args)
     // to a specific queue.
     //
     // Use dd to retrieve the items of the mailqueue object
-    $qdefName = xarModVars::Get('mail','queue-definition');
+    $qdefName = xarModVars::get('mail','queue-definition');
     if(!$qdefName) {
         return $itemtypes;
         throw new Exception('Mail queue definition does not exist');
     }
     $qdefObjectInfo = xarModApiFunc('dynamicdata','user','getobjectinfo',array('name' => $qdefName));
-    if(!$qdefObjectInfo) 
+    if(!$qdefObjectInfo)
         return $itemtypes;
 
-    // Shamelessly pasted from DD 
+    // Shamelessly pasted from DD
     // (we should takes this as a baseline/augmentation for getitemtypes for all mods really)
 
     // Get objects
@@ -43,6 +43,6 @@ function mail_userapi_getitemtypes($args)
                                                 'info'  => $object
                                                );
     }
-    return $itemtypes;   
+    return $itemtypes;
 }
 ?>

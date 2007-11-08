@@ -2,7 +2,7 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:comment>Common Administration menu</xar:comment>
 
-<xar:if condition="xarModVars::Get('themes','adminpagemenu')">
+<xar:if condition="xarModVars::get('themes','adminpagemenu')">
     <xar:style scope="module" module="base" file="navtabs" />
 
     <xar:set name="urlinfo">xarRequestGetInfo()</xar:set>

@@ -470,7 +470,7 @@ function installer_admin_phase5()
 
     $a = array();
     xarVar_init($a);
-    xarConfigVars::Set(null, 'Site.MLS.DefaultLocale', $install_language);
+    xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
 
     // Set the allowed locales to our "C" locale and the one used during installation
     // TODO: make this a bit more friendly.
@@ -478,7 +478,7 @@ function installer_admin_phase5()
     $install_locale  = array($install_language);
     $allowed_locales = array_merge($necessaryLocale, $install_locale);
 
-    xarConfigVars::Set(null, 'Site.MLS.AllowedLocales',$allowed_locales);    $data['language'] = $install_language;
+    xarConfigVars::set(null, 'Site.MLS.AllowedLocales',$allowed_locales);    $data['language'] = $install_language;
 
     $data['phase'] = 5;
     $data['phase_label'] = xarML('Step Five');
@@ -881,7 +881,7 @@ function installer_admin_confirm_configuration()
     $data['phase_label'] = xarML('Choose configuration options');
 
     include $configuration;
-    $fileModules = unserialize(xarModVars::Get('installer','modulelist'));
+    $fileModules = unserialize(xarModVars::get('installer','modulelist'));
     $func = "installer_" . basename(strval($configuration),'.conf.php') . "_moduleoptions";
     $modules = $func();
     $availablemodules = $awolmodules = $installedmodules = array();
@@ -1048,8 +1048,8 @@ function installer_admin_cleanup()
 
     xarUserLogOut();
     // log in admin user
-    $uname = xarModVars::Get('roles','lastuser');
-    $pass = xarModVars::Get('roles','adminpass');
+    $uname = xarModVars::get('roles','lastuser');
+    $pass = xarModVars::get('roles','adminpass');
 
     if (!xarUserLogIn($uname, $pass, 0)) {
         $msg = xarML('Cannot log in the default administrator. Check your setup.');
@@ -1171,8 +1171,8 @@ function installer_admin_finish()
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'modules', 'objects' => $objects))) return;
 
     $machinetz = date_default_timezone_get();
-    xarConfigVars::Set(null, 'System.Core.TimeZone', $machinetz);
-    xarConfigVars::Set(null, 'Site.Core.TimeZone', $machinetz);
+    xarConfigVars::set(null, 'System.Core.TimeZone', $machinetz);
+    xarConfigVars::set(null, 'Site.Core.TimeZone', $machinetz);
 
     switch ($returnurl) {
         case ('modules'):
@@ -1188,9 +1188,9 @@ function installer_admin_finish()
 
 function installer_admin_upgrade1()
 {
-    $data['xarProduct'] = xarConfigVars::Get(null, 'System.Core.VersionId');
-    $data['xarVersion'] = xarConfigVars::Get(null, 'System.Core.VersionNum');
-    $data['xarRelease'] = xarConfigVars::Get(null, 'System.Core.VersionSub');
+    $data['xarProduct'] = xarConfigVars::get(null, 'System.Core.VersionId');
+    $data['xarVersion'] = xarConfigVars::get(null, 'System.Core.VersionNum');
+    $data['xarRelease'] = xarConfigVars::get(null, 'System.Core.VersionSub');
     $data['descr'] = xarML('Now preparing to run an upgrade from prior #(1) Version <strong>#(2)</strong> (release #(3))
                     to #(4) version <strong>#(5)</strong> (release #(6))',
                     $data['xarProduct'],$data['xarVersion'],$data['xarRelease'],
@@ -1225,9 +1225,9 @@ function installer_admin_upgrade1()
 function installer_admin_upgrade2()
 {
      $thisdata['finishearly']=0;
-     $thisdata['xarProduct'] = xarConfigVars::Get(null, 'System.Core.VersionId');
-     $thisdata['xarVersion'] = xarConfigVars::Get(null, 'System.Core.VersionNum');
-     $thisdata['xarRelease'] = xarConfigVars::Get(null, 'System.Core.VersionSub');
+     $thisdata['xarProduct'] = xarConfigVars::get(null, 'System.Core.VersionId');
+     $thisdata['xarVersion'] = xarConfigVars::get(null, 'System.Core.VersionNum');
+     $thisdata['xarRelease'] = xarConfigVars::get(null, 'System.Core.VersionSub');
 
      //Load this early
      sys::import('xaraya.tableddl');
@@ -1242,24 +1242,24 @@ function installer_admin_upgrade2()
 
     $content = "<p><strong>Checking Site Configuration Variables Structure</strong></p>";
 
-    $cookiename = xarConfigVars::Get(null, 'Site.Session.CookieName');
+    $cookiename = xarConfigVars::get(null, 'Site.Session.CookieName');
     if (!isset($cookiename)) {
-        xarConfigVars::Set(null, 'Site.Session.CookieName', '');
+        xarConfigVars::set(null, 'Site.Session.CookieName', '');
         $content .= "<p>Site.Session.CookieName incorrect, attempting to set.... done!</p>";
     }
-    $cookiepath = xarConfigVars::Get(null, 'Site.Session.CookiePath');
+    $cookiepath = xarConfigVars::get(null, 'Site.Session.CookiePath');
     if (!isset($cookiepath)) {
-        xarConfigVars::Set(null, 'Site.Session.CookiePath', '');
+        xarConfigVars::set(null, 'Site.Session.CookiePath', '');
         $content .= "<p>Site.Session.CookiePath incorrect, attempting to set.... done!</p>";
     }
-    $cookiedomain = xarConfigVars::Get(null, 'Site.Session.CookieDomain');
+    $cookiedomain = xarConfigVars::get(null, 'Site.Session.CookieDomain');
     if (!isset($cookiedomain)) {
-        xarConfigVars::Set(null, 'Site.Session.CookieDomain', '');
+        xarConfigVars::set(null, 'Site.Session.CookieDomain', '');
         $content .= "<p>Site.Session.CookieDomain incorrect, attempting to set.... done!</p>";
     }
-    $referercheck = xarConfigVars::Get(null, 'Site.Session.RefererCheck');
+    $referercheck = xarConfigVars::get(null, 'Site.Session.RefererCheck');
     if (!isset($referercheck)) {
-        xarConfigVars::Set(null, 'Site.Session.RefererCheck', '');
+        xarConfigVars::set(null, 'Site.Session.RefererCheck', '');
         $content .= "<p>Site.Session.RefererCheck incorrect, attempting to set.... done!</p>";
     }
 
@@ -1461,7 +1461,7 @@ function installer_admin_upgrade2()
                           );
     foreach($modvars as $modvar){
         foreach($modvar as $var){
-            $currentvar = xarModVars::Get("$var[module]", "$var[name]");
+            $currentvar = xarModVars::get("$var[module]", "$var[name]");
             if (isset($currentvar)){
                 if (isset($var['override'])) {
                     xarModSetVar($var['module'], $var['name'], $var['set']);
@@ -1495,7 +1495,7 @@ function installer_admin_upgrade2()
     $content .= "<p><strong>Updating Roles and Authsystem for changes in User Login and Authentication</strong></p>";
 
     //Check for allow registration in existing Roles module
-    $allowregistration =xarModVars::Get('roles','allowregistration');
+    $allowregistration =xarModVars::get('roles','allowregistration');
     if (isset($allowregistration) && ($allowregistration==1)) {
         //We need to tell user about the new Registration module - let's just warn them for now
         if (!xarModIsAvailable('registration')){
@@ -1676,7 +1676,7 @@ function installer_admin_upgrade2()
 
      foreach($delmodvars as $delmodvar){
         foreach($delmodvar as $var){
-            $currentvar = xarModVars::Get("$var[module]", "$var[name]");
+            $currentvar = xarModVars::get("$var[module]", "$var[name]");
             if (!isset($currentvar)){
                 $content .= "<p>$var[module] -> $var[name] is deleted, proceeding to next check</p>";
             } else {
@@ -1736,7 +1736,7 @@ function installer_admin_upgrade2()
 
     //Ensure that registration module is set as default if it is installed,
     // if it is active and the default is currently not set
-    $defaultregmodule = xarModVars::Get('roles','defaultregmodule');
+    $defaultregmodule = xarModVars::get('roles','defaultregmodule');
     if (empty($defaultregmodule)) {
         if (xarModIsAvailable('registration')) {
             xarModSetVar('roles','defaultregmodule', 'registration');
@@ -1761,9 +1761,9 @@ function installer_admin_upgrade2()
 function installer_admin_upgrade3()
 {
     $content='';
-    $thisdata['xarProduct'] = xarConfigVars::Get(null, 'System.Core.VersionId');
-    $thisdata['xarVersion'] = xarConfigVars::Get(null, 'System.Core.VersionNum');
-    $thisdata['xarRelease'] = xarConfigVars::Get(null, 'System.Core.VersionSub');
+    $thisdata['xarProduct'] = xarConfigVars::get(null, 'System.Core.VersionId');
+    $thisdata['xarVersion'] = xarConfigVars::get(null, 'System.Core.VersionNum');
+    $thisdata['xarRelease'] = xarConfigVars::get(null, 'System.Core.VersionSub');
     $content='';
 
     // Set Config Vars - add those that need to be set each upgrade here.
@@ -1774,11 +1774,11 @@ function installer_admin_upgrade3()
     $content .=  "<h3><strong>Updating Required Configuration Variables</strong></h3>";
     foreach($configvars as $configvar){
         foreach($configvar as $var){
-            $currentvar = xarConfigVars::Get(null, "$var[name]");
+            $currentvar = xarConfigVars::get(null, "$var[name]");
             if ($currentvar == $var['set']){
                 $content .= "<p>$var[name] is set, proceeding to next check</p>";
             } else {
-                xarConfigVars::Set(null, $var['name'], $var['set']);
+                xarConfigVars::set(null, $var['name'], $var['set']);
                 $content .= "<p>$var[name] incorrect, attempting to set.... done!</p>";
             }
         }
@@ -1837,9 +1837,9 @@ function installer_admin_upgrade3()
 function installer_admin_upgrade4()
 {
     $content='';
-    $thisdata['xarProduct'] = xarConfigVars::Get(null, 'System.Core.VersionId');
-    $thisdata['xarVersion'] = xarConfigVars::Get(null, 'System.Core.VersionNum');
-    $thisdata['xarRelease'] = xarConfigVars::Get(null, 'System.Core.VersionSub');
+    $thisdata['xarProduct'] = xarConfigVars::get(null, 'System.Core.VersionId');
+    $thisdata['xarVersion'] = xarConfigVars::get(null, 'System.Core.VersionNum');
+    $thisdata['xarRelease'] = xarConfigVars::get(null, 'System.Core.VersionSub');
     $thisdata['content']=$content;
     $thisdata['phase'] = 4;
     $thisdata['phase_label'] = xarML('Step Four');

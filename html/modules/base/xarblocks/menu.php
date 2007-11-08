@@ -249,8 +249,8 @@ function base_menublock_display($blockinfo)
                 if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$blockinfo['name']. ":" . $mod['name'])) continue;
                 /* Check for active module alias */
                 /* jojodee -  We need to review the module alias functions and, thereafter it's use here */
-                $useAliasName = xarModVars::Get($mod['name'], 'useModuleAlias');
-                $aliasname = xarModVars::Get($mod['name'],'aliasname');
+                $useAliasName = xarModVars::get($mod['name'], 'useModuleAlias');
+                $aliasname = xarModVars::get($mod['name'],'aliasname');
                 /* use the alias name if it exists for the label */
                 if (isset($useAliasName) && $useAliasName==1 && isset($aliasname) && !empty($aliasname)) {
                     $label = $aliasname;

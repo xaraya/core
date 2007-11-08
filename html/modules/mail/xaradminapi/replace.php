@@ -19,9 +19,9 @@ function mail_adminapi_replace($args)
 {
     extract ($args);
 
-    $sitename   = xarModVars::Get('themes', 'SiteName');
-    $siteslogan = xarModVars::Get('themes', 'SiteSlogan');
-    $siteadmin  = xarModVars::Get('mail', 'adminname');
+    $sitename   = xarModVars::get('themes', 'SiteName');
+    $siteslogan = xarModVars::get('themes', 'SiteSlogan');
+    $siteadmin  = xarModVars::get('mail', 'adminname');
     $siteurl    = xarServerGetBaseURL();
 
     $name = xarUserGetVar('name');
@@ -41,7 +41,7 @@ function mail_adminapi_replace($args)
                      "$id",
                      "$siteadmin");
 
-    $searchstrings = xarModVars::Get('mail','searchstrings');
+    $searchstrings = xarModVars::get('mail','searchstrings');
     if (!empty($searchstrings)) {
         $searchstrings = unserialize($searchstrings);
         $searchstrings = explode("\r\n", $searchstrings);
@@ -50,7 +50,7 @@ function mail_adminapi_replace($args)
         }
     }
 
-    $replacestrings = xarModVars::Get('mail','replacestrings');
+    $replacestrings = xarModVars::get('mail','replacestrings');
     if (!empty($replacestrings)) {
         $replacestrings = unserialize($replacestrings);
         $replacestrings = explode("\r\n", $replacestrings);

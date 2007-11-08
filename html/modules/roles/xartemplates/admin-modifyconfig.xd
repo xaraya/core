@@ -130,7 +130,7 @@
                             Users Per Page:
                         </xar:mlstring>
                     </label>
-                    <input type="text" name="itemsperpage" id="itemsperpage" value="#xarModVars::Get('roles', 'itemsperpage')#" maxlength="3" class="xar-form-textshort" />
+                    <input type="text" name="itemsperpage" id="itemsperpage" value="#xarModVars::get('roles', 'itemsperpage')#" maxlength="3" class="xar-form-textshort" />
                 </div>
                 <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked"><xar:var scope="module" module="roles" name="SupportShortURLs"/></xar:set>
@@ -156,7 +156,7 @@
                     </label>
                     <select name="siteadmin" id="siteadmin">
                         <xar:loop name="$siteadmins">
-                            <xar:if condition="$loop:item['id'] eq xarModVars::Get('roles','admin')">
+                            <xar:if condition="$loop:item['id'] eq xarModVars::get('roles','admin')">
                                 <option name="#$loop:item['id']#" id="#$loop:item['id']#" value="#$loop:item['id']#" selected="selected">
                                     #$loop:item['name']#
                                 </option>
@@ -428,7 +428,7 @@
                 </legend>
 
                 <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarModVars::Get('roles', 'searchbyemail')">
+                    <xar:if condition="xarModVars::get('roles', 'searchbyemail')">
                         <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" checked="checked" />
                         <xar:else />
                         <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" />
@@ -498,7 +498,7 @@
             </fieldset>
             <fieldset>
                 <legend><xar:mlstring>User Homepage Options</xar:mlstring></legend>
-                <xar:if condition="xarModVars::Get('roles', 'setuserhome')">
+                <xar:if condition="xarModVars::get('roles', 'setuserhome')">
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
                     <xar:set name="checked"><xar:var scope="module" module="roles" name="loginredirect"/></xar:set>

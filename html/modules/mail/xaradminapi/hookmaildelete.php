@@ -56,15 +56,15 @@ function mail_adminapi_hookmaildelete($args)
 //    if (!xarSecurityCheck('DeleteMail', 0, 'All', "$modname::$objectid", 'mail')) return;
 
     // Set up variables
-    $wordwrap = xarModVars::Get('mail', 'wordwrap');
-    $priority = xarModVars::Get('mail', 'priority');
-    $encoding = xarModVars::Get('mail', 'encoding');
+    $wordwrap = xarModVars::get('mail', 'wordwrap');
+    $priority = xarModVars::get('mail', 'priority');
+    $encoding = xarModVars::get('mail', 'encoding');
     if (empty($encoding)) {
         $encoding = '8bit';
         xarModVars::set('mail', 'encoding', $encoding);
     }
-    $from = xarModVars::Get('mail', 'adminmail');
-    $fromname = xarModVars::Get('mail', 'adminname');
+    $from = xarModVars::get('mail', 'adminmail');
+    $fromname = xarModVars::get('mail', 'adminname');
 
 // Get the templates for this message
     $strings = xarModAPIFunc('mail','admin','getmessagestrings',
@@ -106,7 +106,7 @@ function mail_adminapi_hookmaildelete($args)
                       'from' => $from,
                       'fromname' => $fromname);
 // Check if HTML mail has been configured by the admin
-    if (xarModVars::Get('mail', 'html')) {
+    if (xarModVars::get('mail', 'html')) {
         xarModAPIFunc('mail', 'admin', 'sendhtmlmail', $mailargs);
     } else {
         xarModAPIFunc('mail', 'admin', 'sendmail', $mailargs);

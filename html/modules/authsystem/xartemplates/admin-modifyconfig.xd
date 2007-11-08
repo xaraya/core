@@ -40,7 +40,7 @@
                 </xar:mlstring>
             </legend>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarModVars::Get('authsystem', 'uselockout')">
+                    <xar:if condition="xarModVars::get('authsystem', 'uselockout')">
                         <input type="checkbox" name="uselockout" id="uselockout" value="1" checked="checked" />
                         <xar:else />
                         <input type="checkbox" name="uselockout" id="uselockout" value="1" />
@@ -58,7 +58,7 @@
                         </xar:mlstring>
                         : 
                     </label>
-                    <input type="text" name="lockouttries" id="lockouttries" value="#xarModVars::Get('authsystem', 'lockouttries')#" size="2" maxlength="2" />
+                    <input type="text" name="lockouttries" id="lockouttries" value="#xarModVars::get('authsystem', 'lockouttries')#" size="2" maxlength="2" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="lockouttime" class="xar-form-label">
@@ -67,7 +67,7 @@
                         </xar:mlstring>
                         : 
                     </label>
-                    <input type="text" name="lockouttime" id="lockouttime" value="#xarModVars::Get('authsystem', 'lockouttime')#" size="2" maxlength="2" />
+                    <input type="text" name="lockouttime" id="lockouttime" value="#xarModVars::get('authsystem', 'lockouttime')#" size="2" maxlength="2" />
                 </div>
         </fieldset>
         <fieldset>

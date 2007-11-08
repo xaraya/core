@@ -118,7 +118,7 @@
                         </a>
                     </th>
                 </xar:if>
-                <xar:if condition="xarModVars::Get('roles', 'allowemail')">
+                <xar:if condition="xarModVars::get('roles', 'allowemail')">
                     <th>
                         <xar:mlstring>Email</xar:mlstring>
                     </th>
@@ -157,7 +157,7 @@
                         </xar:if>
                     </td>
                 </xar:if>
-                <xar:if condition="xarModVars::Get('roles', 'allowemail')">
+                <xar:if condition="xarModVars::get('roles', 'allowemail')">
                     <td class="xar-align-center">
                         <xar:if condition="empty($loop:item['emailurl']) || !xarUserIsLoggedIn()">
                             <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/>

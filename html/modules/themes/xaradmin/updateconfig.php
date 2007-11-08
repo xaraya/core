@@ -54,7 +54,7 @@ function themes_admin_updateconfig()
     xarModVars::set('themes', 'usedashboard', ($dashboard) ? 1 : 0);
     xarModVars::set('themes', 'adminpagemenu', ($adminpagemenu) ? 1 : 0);
     xarModVars::set('themes', 'dashtemplate', $dashtemplate);
-    xarConfigVars::Set(null, 'Site.BL.CacheTemplates',$cachetemplates);
+    xarConfigVars::set(null, 'Site.BL.CacheTemplates',$cachetemplates);
 
     // make sure we dont miss empty variables (which were not passed thru)
     if (empty($selstyle)) $selstyle = 'plain';

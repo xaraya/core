@@ -52,7 +52,7 @@
                     </a>
                 </dd>
             </xar:if>
-            <xar:if condition="xarModVars::Get('privileges','lastresort')">
+            <xar:if condition="xarModVars::get('privileges','lastresort')">
                 <xar:if condition="$tab eq 'lastresort'">
                     <dd class="active">
                         <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=lastresort">
@@ -170,7 +170,7 @@
                     <xar:mlstring>Checking this enables the Manage Realms item on the Privileges menu</xar:mlstring>
                 </div>
             </fieldset>
-            <xar:if condition="xarModVars::Get('privileges', 'showrealms')">
+            <xar:if condition="xarModVars::get('privileges', 'showrealms')">
                 <fieldset>
                     <legend>
                         <xar:mlstring>
@@ -242,7 +242,7 @@
         </form>
     </xar:if>
     <!-- Begin Last Resort -->
-    <xar:if condition="$tab eq 'lastresort' AND xarModVars::Get('privileges','lastresort')">
+    <xar:if condition="$tab eq 'lastresort' AND xarModVars::get('privileges','lastresort')">
         <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
             <fieldset>
                 <legend>

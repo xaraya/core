@@ -96,7 +96,7 @@
                         </xar:loop>
                     </select>
                 </div>
-                <xar:if condition="xarModVars::Get('privileges','showrealms')">
+                <xar:if condition="xarModVars::get('privileges','showrealms')">
                     <div class="xar-form-input-wrapper">
                         <label for="prealm" title="#xarML('Realm in which this privilege applies')#" class="xar-form-label">
                             <xar:mlstring>

@@ -93,8 +93,8 @@ function xarVar_init(&$args)
 
     // Initialise the variable cache
     sys::import('xaraya.variables.config');
-    $GLOBALS['xarVar_allowableHTML'] = xarConfigVars::Get(null, 'Site.Core.AllowableHTML');
-    $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigVars::Get(null, 'Site.Core.FixHTMLEntities');
+    $GLOBALS['xarVar_allowableHTML'] = xarConfigVars::get(null, 'Site.Core.AllowableHTML');
+    $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigVars::get(null, 'Site.Core.FixHTMLEntities');
 
     return true;
 }

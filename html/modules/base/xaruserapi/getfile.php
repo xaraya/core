@@ -50,7 +50,7 @@ function base_userapi_getfile($args)
 
     $invalid = false;
     $islocal = false;
-    
+
     if (empty($url)) {
         $invalid = true;
     } elseif (strstr($url,'://')) {
@@ -135,12 +135,12 @@ function base_userapi_getfile($args)
     }
 
     // see if we need to go through a proxy
-    $proxyhost = xarModVars::Get('base','proxyhost');
+    $proxyhost = xarModVars::get('base','proxyhost');
     if (!empty($proxyhost) && !$islocal) {
-        $proxyport = xarModVars::Get('base','proxyport');
+        $proxyport = xarModVars::get('base','proxyport');
         $fp = @fsockopen($proxyhost,$proxyport,$errno,$errstr,10);
         if (!$fp) {
-            if (!$superrors) 
+            if (!$superrors)
                 throw new BadParameterException(array($errno,$errstr,$url),'Socket error #(1) : #(2) while retrieving URL #(3)');
         }
         $baseurl = xarServerGetBaseURL();

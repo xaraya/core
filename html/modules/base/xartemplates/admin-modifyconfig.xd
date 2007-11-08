@@ -296,7 +296,7 @@
                         </xar:mlstring>
                     </label>
                     <select name="securitylevel" id="securitylevel" size="1">
-                        <xar:if condition="xarConfigVars::Get(null,'Site.Session.SecurityLevel') eq 'High'">
+                        <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'High'">
                             <option value="High" selected="selected">
                                 High
                             </option>
@@ -306,7 +306,7 @@
                             <option value="Low">
                                 Low
                             </option>
-                            <xar:elseif condition="xarConfigVars::Get(null,'Site.Session.SecurityLevel') eq 'Medium'" />
+                            <xar:elseif condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Medium'" />
                             <option value="High">
                                 High
                             </option>
@@ -316,7 +316,7 @@
                             <option value="Low">
                                 Low
                             </option>
-                            <xar:elseif condition="xarConfigVars::Get(null,'Site.Session.SecurityLevel') eq 'Low'" />
+                            <xar:elseif condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Low'" />
                             <option value="High">
                                 High
                             </option>
@@ -329,7 +329,7 @@
                         </xar:if>
                     </select>
                 </div>
-                <xar:if condition="xarConfigVars::Get(null,'Site.Session.SecurityLevel') eq 'Medium'">
+                <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Medium'">
                     <div class="xar-form-input-wrapper">
                         <label for="sessionduration" title="#xarML('How long to allow the session to last in days')#" class="xar-form-label">
                             <xar:mlstring>
@@ -500,7 +500,7 @@
                             Proxy Server:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="proxyhost" name="proxyhost" value="#xarModVars::Get('base','proxyhost')#" maxlength="100" class="xar-form-inputlong" />
+                    <input type="text" id="proxyhost" name="proxyhost" value="#xarModVars::get('base','proxyhost')#" maxlength="100" class="xar-form-inputlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="proxyport" title="#xarML('Proxy server port to use')#" class="xar-form-label">
@@ -508,7 +508,7 @@
                             Proxy Port:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="proxyport" name="proxyport" value="#xarModVars::Get('base','proxyport')#" maxlength="10" class="xar-form-textshort" />
+                    <input type="text" id="proxyport" name="proxyport" value="#xarModVars::get('base','proxyport')#" maxlength="10" class="xar-form-textshort" />
                 </div>
             </fieldset>
 

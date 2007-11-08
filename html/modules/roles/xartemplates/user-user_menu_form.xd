@@ -26,7 +26,7 @@
                     User Details
                 </xar:mlstring>
             </legend>
-            <xar:if condition="xarModVars::Get('roles', 'requirevalidation')">
+            <xar:if condition="xarModVars::get('roles', 'requirevalidation')">
                 <div class="xar-form-input-wrapper">
                     <label for="email">
                         <xar:mlstring>
@@ -36,7 +36,7 @@
                 </div>
             </xar:if>
             <xar:data-form object="$object" />
-            <xar:if condition="xarModVars::Get('roles','allowemail')">
+            <xar:if condition="xarModVars::get('roles','allowemail')">
                 <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked">xarModGetUserVar('roles', 'allowemail',$id)</xar:set>
                     <xar:data-input type="checkbox" name="allowemail" id="allowemail" checked="$checked" tabindex="2" />
@@ -48,7 +48,7 @@
                     <xar:mlstring>Note your email address is never disclosed or displayed in this process.</xar:mlstring>
                 </p>
             </xar:if>
-            <xar:if condition="xarModVars::Get('roles','setuserhome') and xarModVars::Get('roles','allowuserhomeedit')">
+            <xar:if condition="xarModVars::get('roles','setuserhome') and xarModVars::get('roles','allowuserhomeedit')">
                 <div class="xar-form-input-wrapper">
                     <label for="home" class="xar-form-label">
                         <xar:mlstring>
@@ -57,10 +57,10 @@
                     </label>
                     <input type="text" name="home" id="home" value="#$home#" size="40" maxlength="100" />
                 </div>
-            <xar:elseif condition="xarModVars::Get('roles','setuserhome')" />
+            <xar:elseif condition="xarModVars::get('roles','setuserhome')" />
                  <input type="hidden" name="home" id="home" value="#$home#" />
             </xar:if>
-            <xar:if condition="xarModVars::Get('roles','setpasswordupdate')">
+            <xar:if condition="xarModVars::get('roles','setpasswordupdate')">
                     <div class="xar-form-input-wrapper">
                         <label for="upasswordupdate" class="xar-form-label">
                             <xar:mlstring>Password last updated:</xar:mlstring>
@@ -68,7 +68,7 @@
                         #xarLocaleGetFormattedDate('medium', $upasswordupdate)# #xarLocaleGetFormattedTime('medium', $upasswordupdate)#
                     </div>
             </xar:if>
-            <xar:if condition="xarModVars::Get('roles','setuserlastlogin')">
+            <xar:if condition="xarModVars::get('roles','setuserlastlogin')">
                 <xar:if condition="!empty($usercurrentlogin)">
                     <div class="xar-form-input-wrapper">
                         <label for="thislogin" class="xar-form-label">
@@ -87,7 +87,7 @@
                 </xar:if>
             </xar:if>
 
-            <xar:if condition="xarModVars::Get('roles','setusertimezone')">
+            <xar:if condition="xarModVars::get('roles','setusertimezone')">
                 <xar:if condition="!empty($utimezone)">
                     <div class="xar-form-input-wrapper">
                         <label for="utimezone" class="xar-form-label">

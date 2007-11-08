@@ -31,7 +31,7 @@ function roles_admin_showusers()
     if (!xarVarFetch('order',    'str:0:', $data['order'],    'name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('search',   'str:0:', $data['search'],   NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('reload',   'str:0:', $reload,           NULL,    XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('numitems', 'int:1',  $numitems,        xarModVars::Get('roles','itemsperpage'), XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('numitems', 'int:1',  $numitems,        xarModVars::get('roles','itemsperpage'), XARVAR_DONT_SET)) return;
     if (empty($data['selstyle'])) $data['selstyle'] = 0;
     xarSession::setVar('rolesdisplay', $data['selstyle']);
 
@@ -146,7 +146,7 @@ function roles_admin_showusers()
 
     foreach($q->output() as $row) {
         $users[$row['id']]['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$row['name']);
-        
+
     }
     if ($id != 0) $data['title'] .= " ".xarML('of group')." ";
 
@@ -159,7 +159,7 @@ function roles_admin_showusers()
     $object = xarModAPIFunc('dynamicdata','user','getobjectlist',array('name' => 'roles_users'));
 
     $object->getItems(array('itemids' => array_keys($users)));
-    
+
     // Load Template
     $data['id']        = $id;
     $data['users']      = $users;
