@@ -240,7 +240,7 @@ function authsystem_user_login()
                 }
             }
             //FR for last login - first capture the last login for this user
-            $thislastlogin =xarModGetUserVar('roles','userlastlogin');
+            $thislastlogin =xarModUserVars::get('roles','userlastlogin');
             if (!empty($thislastlogin)) {
                 //move this to a session var for this user
                     xarSession::setVar('roles_thislastlogin',$thislastlogin);

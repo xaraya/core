@@ -263,7 +263,7 @@
                             Dynamic Roles Variables
                         </xar:mlstring>
                     </legend>
-                    <p> <xar:mlstring>Optional in a user role. Once activated they can be retrieved as <strong>xarModGetUserVar('roles','varname','id')</strong></xar:mlstring>
+                    <p> <xar:mlstring>Optional in a user role. Once activated they can be retrieved as <strong>xarModUserVars::get('roles','varname','id')</strong></xar:mlstring>
                     </p>
                     <br />
                     <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>

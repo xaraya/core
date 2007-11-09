@@ -41,16 +41,16 @@ function roles_user_usermenu($args)
 
             $email = xarUserGetVar('email');
             $role = xarUFindRole($uname);
-            $home = xarModGetUserVar('roles','userhome');
-            $allowemail = xarModGetUserVar('roles','allowemail',$id); //allow someone to send an email to the user via a form
+            $home = xarModUserVars::get('roles','userhome');
+            $allowemail = xarModUserVars::get('roles','allowemail',$id); //allow someone to send an email to the user via a form
             if (xarModVars::get('roles','setuserlastlogin')) {
             //only display it for current user or admin
                 if (xarUserIsLoggedIn() && xarUserGetVar('id')==$id) { //they should be but ..
                     $userlastlogin = xarSession::getVar('roles_thislastlogin');
-                    $usercurrentlogin = xarModGetUserVar('roles','userlastlogin',$id);
-                }elseif (xarSecurityCheck('AdminRole',0,'Roles',$name) && xarModGetUserVar('roles','userlastlogin',$id)){
+                    $usercurrentlogin = xarModUserVars::get('roles','userlastlogin',$id);
+                }elseif (xarSecurityCheck('AdminRole',0,'Roles',$name) && xarModUserVars::get('roles','userlastlogin',$id)){
                     $usercurrentlogin = '';
-                    $userlastlogin = xarModGetUserVar('roles','userlastlogin',$id);
+                    $userlastlogin = xarModUserVars::get('roles','userlastlogin',$id);
                 }else{
                     $userlastlogin = '';
                     $usercurrentlogin = '';
@@ -61,8 +61,8 @@ function roles_user_usermenu($args)
             }
             $authid = xarSecGenAuthKey();
 
-            $upasswordupdate = xarModGetUserVar('roles','passwordupdate');
-            $usertimezonedata = xarModGetUserVar('roles','usertimezone');
+            $upasswordupdate = xarModUserVars::get('roles','passwordupdate');
+            $usertimezonedata = xarModUserVars::get('roles','usertimezone');
             $utimezone = $usertimezonedata['timezone'];
 
             $item['module'] = 'roles';

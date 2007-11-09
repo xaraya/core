@@ -43,7 +43,7 @@ function dynamicdata_util_migrate($args)
     if (empty($from) && empty($to)) {
         $steps = array();
     } else {
-        $steps = xarModGetUserVar('dynamicdata','migratesteps');
+        $steps = xarModUserVars::get('dynamicdata','migratesteps');
         if (!empty($steps)) {
             $steps = unserialize($steps);
         } else {

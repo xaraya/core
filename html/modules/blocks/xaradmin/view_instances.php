@@ -33,7 +33,7 @@ function blocks_admin_view_instances()
                                                                  'rowstodo' => $rowstodo,
                                                                  'startat' => $startat));
     // Get current style.
-    $data['selstyle'] = xarModGetUserVar('blocks', 'selstyle');
+    $data['selstyle'] = xarModUserVars::get('blocks', 'selstyle');
 
     // Create extra links and confirmation text.
     foreach ($instances as $index => $instance) {

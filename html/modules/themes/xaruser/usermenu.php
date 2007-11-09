@@ -41,7 +41,7 @@ function themes_user_usermenu($args)
                 'getlist',
                 $filter);
 
-            $defaulttheme = xarModGetUserVar('themes', 'default');
+            $defaulttheme = xarModUserVars::get('themes', 'default');
 
             $name = xarUserGetVar('name');
             $id = xarUserGetVar('id');
