@@ -125,7 +125,7 @@ class DataStoreFactory extends Object
                 $datastore = new UserSettingsDataStore($name);
                 break;
             case 'modulevars':
-                sys::import('xaraya.datastores.modulevariables');
+                sys::import('xaraya.datastores.sql.modulevariables');
                 // TODO: integrate module variable handling with DD
                 $datastore = new ModuleVariablesDataStore($name);
                 break;

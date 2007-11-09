@@ -23,8 +23,7 @@ function privileges_admin_displayprivilege()
 
 //Call the Privileges class and get the privilege to be modified
     sys::import('modules.privileges.class.privileges');
-    $privs = new xarPrivileges();
-    $priv = $privs->getPrivilege($id);
+    $priv = xarPrivileges::getPrivilege($id);
 
 //Get the array of parents of this privilege
     $parents = array();
@@ -44,7 +43,7 @@ function privileges_admin_displayprivilege()
     $data['pcomponent'] = $priv->getComponent();
     $data['plevel'] = $priv->getLevel();
 
-    $instances = $privs->getinstances($data['pmodule'],$data['pcomponent']);
+    $instances = xarPrivileges::getinstances($data['pmodule'],$data['pcomponent']);
     $numInstances = count($instances); // count the instances to use in later loops
 
     $default = array();

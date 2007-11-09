@@ -48,7 +48,8 @@
     <xar:template file="tablist" />
     <fieldset>
       <legend><xar:mlstring>Role properties</xar:mlstring></legend>
-      <xar:data-display object="$object" />
+      <xar:set name="fields">array('id','name','uname','email','state','regdate')</xar:set>
+      <xar:data-display object="$object" fieldlist="$fields" />
 
       <xar:if condition="$basetype eq ROLES_USERTYPE">
     <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
@@ -73,14 +74,18 @@
         </div>
         </xar:if>
         <div class="xar-form-input-wrapper">
-            <label class="xar-form-label">
+            <label for="duvs_primaryparent" title="#xarML('Primary parent group')#" class="xar-form-label">
                 <xar:mlstring>Primary Parent Group:</xar:mlstring>
             </label>
-            #xarVarPrepForDisplay($primaryparent)#
+            <xar:set name="value">
+                xarModAPIFunc('roles','user','getprimaryparent',array('itemid' => $id))
+            </xar:set>
+            <xar:set name="options">
+                xarModAPIFunc('roles','user','getancestors',array('id' => $id, 'parents' => 1))
+            </xar:set>
+            <xar:data-output type="dropdown" name="duvs[primaryparent]" id="duvs_primaryparent" options="$options" value="$value" tabindex="8" />
         </div>
     </xar:if>
-
-
 
       <xar:if condition="in_array('userlastlogin',$settings)">
         <div class="xar-form-input-wrapper">
@@ -98,7 +103,7 @@
             #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))# #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
           </div>
       </xar:if>
-      <xar:if condition="xarModVars::get('roles','setusertimezone')">
+      <xar:if condition="in_array('usertimezone',$settings)">
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">
                 <xar:mlstring>User Timezone:</xar:mlstring>

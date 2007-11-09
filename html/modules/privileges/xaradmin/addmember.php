@@ -43,9 +43,8 @@ function privileges_admin_addmember()
 
 // call the Privileges class and get the parent and child objects
     sys::import('modules.privileges.class.privileges');
-    $privs = new xarPrivileges();
-    $priv = $privs->getPrivilege($id);
-    $member = $privs->getPrivilege($privid);
+    $priv = xarPrivileges::getPrivilege($id);
+    $member = xarPrivileges::getPrivilege($privid);
 
 // we bail if there is a loop: the child is already an ancestor of the parent
     $found = false;
