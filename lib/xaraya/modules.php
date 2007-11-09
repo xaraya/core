@@ -101,9 +101,6 @@ sys::import('xaraya.variables.moduser');
 /**
  * Wrapper functions to support Xaraya 1 API for modvars and moduservars
 **/
-function xarModSetVar($modName, $name, $value)       {   return xarModVars::set($modName, $name, $value); }
-function xarModDelVar($modName, $name)               {   return xarModVars::delete($modName, $name);      }
-function xarModDelAllVars($modName)                  {   return xarModVars::delete_all($modName);         }
 function xarModGetVarId($modName, $name)             {   return xarModVars::getID($modName, $name);       }
 
 function xarModGetUserVar($modName, $name, $id = NULL, $prep = NULL){   return xarModUserVars::get($modName, $name, $id, $prep);  }

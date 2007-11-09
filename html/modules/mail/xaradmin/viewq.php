@@ -62,7 +62,7 @@ function mail_admin_viewq($args)
                         $queue = array();
                     }
                     // delete the mail data
-                    xarModDelVar('mail',$id);
+                    xarModVars::delete('mail',$id);
                     // remove the selected mail from the queue
                     if (isset($queue[$id])) {
                         unset($queue[$id]);

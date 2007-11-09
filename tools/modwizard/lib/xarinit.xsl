@@ -73,7 +73,7 @@
      * REGISTER THE MODULE VARIABLES
      */
     <xsl:for-each select="configuration/modvars/var">
-    xarModSetVar(
+    xarModVars::Set(
         '<xsl:value-of select="$module_prefix" />'
         ,'<xsl:value-of select="@name" />'
         ,'<xsl:value-of select="text()" />' );
@@ -384,7 +384,7 @@
     </xsl:for-each>
 
     // MODULE WARIABLES FOR THIS TABLE
-    xarModSetVar(
+    xarModVars::set(
         '<xsl:value-of select="$module_prefix" />'
         ,'itemsperpage.<xsl:value-of select="@itemtype" />'
         ,10 );
@@ -439,7 +439,7 @@ function <xsl:value-of select="$module_prefix" />_init()
     /*
      * Module Variable for ShortURLSupport!
      */
-    xarModSetVar(
+    xarModVars::set(
         '<xsl:value-of select="$module_prefix" />'
         ,'SupportShortURLs'
         ,0 );
@@ -621,7 +621,7 @@ function <xsl:value-of select="$module_prefix" />_delete()
     /*
      * REMOVE MODULE VARS
      */
-    if ( !xarModDelAllVars( '<xsl:value-of select="$module_prefix" />' ) )
+    if ( !xarModVars::delete_all( '<xsl:value-of select="$module_prefix" />' ) )
         return;
 
     <!-- Delete the blocks -->

@@ -113,7 +113,7 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args )
             $supportshorturls = 0;
         }
 
-        xarModSetVar(
+        xarModVars::Set(
             '<xsl:value-of select="$module_prefix" />'
             ,'SupportShortURLs'
             ,$supportshorturls );

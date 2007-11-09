@@ -311,7 +311,7 @@ class xarRoles extends Object
         $duvarray = array('userhome','primaryparent','passwordupdate','userlastlogin','usertimezone');
         $duvs = array();
         foreach ($duvarray as $key) {
-            $duv = xarModGetUserVar('roles',$key,$row['id']);
+            $duv = xarModUserVars::Get('roles',$key,$row['id']);
             if (!empty($duv)) $duvs[$key] = $duv;
         }
         // create and return the role object

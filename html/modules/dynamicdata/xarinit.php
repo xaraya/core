@@ -659,7 +659,7 @@ function dynamicdata_delete()
     /**
      * Delete module variables
      */
-    xarModDelVar('dynamicdata', 'SupportShortURLs');
+    xarModVars::delete('dynamicdata', 'SupportShortURLs');
 
     /**
      * Unregister blocks

@@ -103,7 +103,7 @@ function privileges_admin_modifyconfig()
                     if (!xarVarFetch('lastresort', 'checkbox', $lastresort, false, XARVAR_NOT_REQUIRED)) return;
                     xarModVars::set('privileges', 'lastresort', $lastresort);
                     if (!$lastresort) {
-                        xarModDelVar('privileges', 'lastresort',$lastresort);
+                        xarModVars::delete('privileges', 'lastresort',$lastresort);
                     }
                     if (!xarVarFetch('exceptionredirect', 'checkbox', $data['exceptionredirect'], false, XARVAR_NOT_REQUIRED)) return;
                     xarModVars::set('privileges', 'exceptionredirect', $data['exceptionredirect']);
