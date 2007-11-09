@@ -47,7 +47,7 @@ function base_admin_updateconfig()
             xarModVars::set('base','UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
             xarModVars::set('base','AlternatePageTemplateName', $alternatePageTemplateName);
 
-            xarModSetUserVar('roles','userhome', xarModURL($defaultModuleName, $defaultModuleType, $defaultModuleFunction),1);
+            xarModUserVars::set('roles','userhome', xarModURL($defaultModuleName, $defaultModuleType, $defaultModuleFunction),1);
             xarConfigVars::set(null, 'Site.Core.EnableShortURLsSupport', $enableShortURLs);
             // enable short urls for the base module itself too
             xarModVars::set('base','SupportShortURLs', ($enableBaseShortURLs ? 1 : 0));

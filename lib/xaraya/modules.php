@@ -103,7 +103,6 @@ sys::import('xaraya.variables.moduser');
 **/
 function xarModGetVarId($modName, $name)             {   return xarModVars::getID($modName, $name);       }
 
-function xarModSetUserVar($modName, $name, $value, $id=NULL)        {   return xarModUserVars::set($modName, $name, $value, $id); }
 function xarModDelUserVar($modName, $name, $id=NULL)                {   return xarModUserVars::delete($modName, $name, $id);      }
 
 

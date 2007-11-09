@@ -122,7 +122,7 @@ function roles_user_usermenu($args)
                 return xarTplModule('roles','user','account', $data);
             }
             //set emailing options for the user
-            xarModSetUserVar('roles','allowemail',$allowemail,$id);
+            xarModUserVars::set('roles','allowemail',$allowemail,$id);
 
 
             //adjust the timezone value for saving
@@ -132,7 +132,7 @@ function roles_user_usermenu($args)
                $offset = (float) $hours + (float) $minutes / 60;
                $timeinfoarray = array('timezone' => $utimezone, 'offset' => $offset);
                 $usertimezone = serialize($timeinfoarray);
-                xarModSetUserVar('roles','usertimezone',$usertimezone);
+                xarModUserVars::set('roles','usertimezone',$usertimezone);
             }
             if (xarModVars::get('roles','userhome') && (isset($home))) {
                 /* Check if external urls are allowed in home page */

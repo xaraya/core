@@ -245,7 +245,7 @@ function authsystem_user_login()
                 //move this to a session var for this user
                     xarSession::setVar('roles_thislastlogin',$thislastlogin);
             }
-            xarModSetUserVar('roles','userlastlogin',time()); //this is what everyone else will see
+            xarModUserVars::set('roles','userlastlogin',time()); //this is what everyone else will see
 
             $externalurl=false; //used as a flag for userhome external url
             if (xarModVars::get('roles', 'loginredirect')) { //only redirect to home page if this option is set

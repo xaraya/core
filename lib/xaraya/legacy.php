@@ -96,6 +96,7 @@ function xarModDelVar($modName, $name)               {   return xarModVars::dele
 function xarModDelAllVars($modName)                  {   return xarModVars::delete_all($modName);         }
 
 function xarModGetUserVar($modName, $name, $id = NULL, $prep = NULL){   return xarModUserVars::get($modName, $name, $id, $prep);  }
+function xarModSetUserVar($modName, $name, $value, $id=NULL)        {   return xarModUserVars::set($modName, $name, $value, $id); }
 
 
 ?>
