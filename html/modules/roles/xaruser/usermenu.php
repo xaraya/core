@@ -24,6 +24,8 @@ function roles_user_usermenu($args)
     $hooks = array();
     switch(strtolower($phase)) {
         case 'menu':
+        	// This is the usual point of entry. Delete any sessionvar left from previous attempts. Start over!
+			xarSession::delVar('user_object');
             $iconbasic = xarTplGetImage('home.gif', 'roles');
             $current = xarModURL('roles', 'user', 'account', array('moduleload' => 'roles'));
             $data = xarTplModule('roles','user', 'user_menu_icon', array('iconbasic'    => $iconbasic,
@@ -32,9 +34,14 @@ function roles_user_usermenu($args)
         case 'form':
         case 'formbasic':
             $id = xarUserGetVar('id');
-            $object = xarModAPIFunc('dynamicdata','user','getobject',
-                              array('name' => 'roles_users'));
-            $object->getItem(array('itemid' => $id));
+            $object = xarSession::getVar('user_object');
+            if ($object == null) {
+				$object = xarModAPIFunc('dynamicdata','user','getobject',
+								  array('name' => 'roles_users'));
+				$object->getItem(array('itemid' => $id));
+			} else {
+				$object = unserialize($object);
+			}
 
             $uname = xarUserGetVar('uname');
             $name = xarUserGetVar('name');
@@ -95,7 +102,7 @@ function roles_user_usermenu($args)
 
             $id = xarUserGetVar('id');
             $uname = xarUserGetVar('uname');
-
+            $name = xarUserGetVar('name');
             $object = xarModAPIFunc('dynamicdata','user','getobject',
                               array('name' => 'roles_users'));
             $object->getItem(array('itemid' => $id));
@@ -109,9 +116,10 @@ function roles_user_usermenu($args)
             if (!$isvalid) {
                 $data = array();
                 $data['uname'] = $uname;
+                $data['name'] = $name;
                 $data['authid'] = xarSecGenAuthKey();
                 $data['object'] = & $object;
-
+                $data['current'] = xarModURL('roles', 'user', 'account', array('moduleload' => 'roles'));
                 //$data['preview'] = $preview;
                 $item = array();
                 $item['module'] = 'roles';
@@ -119,10 +127,20 @@ function roles_user_usermenu($args)
                 $data['hooks'] = xarModCallHooks('item','modify','',$item);
 
                 $data['moduleload'] = 'roles';
+
+				$defaultauthdata      = xarModAPIFunc('roles','user','getdefaultauthdata');
+				$defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
+				$data['logoutmodule'] = $defaultlogoutmodname;
+
+	            xarSession::setVar('user_object',serialize($object));
                 return xarTplModule('roles','user','account', $data);
             }
-            //set emailing options for the user
-            xarModSetUserVar('roles','allowemail',$allowemail,$id);
+
+			// We succedded in updating. Delete the session var
+			xarSession::delVar('user_object');
+
+			//set emailing options for the user
+			xarModSetUserVar('roles','allowemail',$allowemail,$id);
 
 
             //adjust the timezone value for saving
@@ -149,9 +167,7 @@ function roles_user_usermenu($args)
                     }
                 }
             }
-            $pass = $object->properties['password']->getValue();
-
-            $newpass = $object->properties['password']->encrypt($pass);
+            $newpass = $object->properties['password']->getValue();
             $passchanged = false;
             if ($oldpass != $newpass) {
                 $passchanged = true;
@@ -228,6 +244,7 @@ function roles_user_usermenu($args)
 
             xarResponseRedirect(xarModURL('roles', 'user', 'account'));
     }
+//    var_dump($data);exit;
     return $data;
 }
 ?>

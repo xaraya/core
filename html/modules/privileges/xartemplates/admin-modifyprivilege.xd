@@ -105,7 +105,7 @@
             <xar:data-input type="radio" name="ptype" id="ptype" options="$options" value="$ptype" onclick="$onclick" />
         </div>
         -->
-        <xar:if condition="$ptype eq null">
+        <xar:if condition="$ptype eq 'empty'">
           <div class="xar-form-input-wrapper-after">
             <input type="radio" name="ptype" id="ptype1_empty" value="empty" checked="checked" onclick="" />
             <label for="ptype1_empty" title="#xarML('This privilege has no children')#">
