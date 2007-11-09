@@ -68,7 +68,7 @@
                             </xar:mlstring>
                         </label>
                         <xar:set name="value">
-                            xarModGetUserVar('roles','useremailformat',$id)
+                            xarModUserVars::get('roles','useremailformat',$id)
                         </xar:set>
                         <xar:set name="options">
                             array(
@@ -86,7 +86,7 @@
                             <xar:mlstring>User Timezone:</xar:mlstring>
                         </label>
                         <xar:set name="value">
-                            xarModGetUserVar('roles','usertimezone',$id)
+                            xarModUserVars::get('roles','usertimezone',$id)
                         </xar:set>
                         <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
                     </div>
@@ -99,7 +99,7 @@
                             Home:
                         </xar:mlstring>
                     </label>
-                    <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7" />
+                    <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModUserVars::get('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7" />
                 </div>
             </xar:if>
             <xar:foreach in="$hooks" key="$hookmodule">

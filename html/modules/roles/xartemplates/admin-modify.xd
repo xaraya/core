@@ -88,7 +88,7 @@
                             <xar:mlstring>Primary Parent Group:</xar:mlstring>
                         </label>
                         <xar:set name="value">
-                            xarModGetUserVar('roles','primaryparent',$id)
+                            xarModUserVars::get('roles','primaryparent',$id)
                         </xar:set>
                         <xar:data-input type="grouplist" name="duvs[primaryparent]" id="duvs_primaryparent" value="$value" tabindex="8" />
                     </div>
@@ -99,7 +99,7 @@
                         <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
                             <xar:mlstring>Home:</xar:mlstring>
                         </label>
-                        <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7" />
+                        <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModUserVars::get('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7" />
                         <p class="xar-form-input-wrapper-after">
                             <xar:mlstring>You can use the module shortcut syntax available in the Base user menu block.</xar:mlstring>
                         </p>
@@ -115,7 +115,7 @@
                                 </xar:mlstring>
                             </label>
                             <xar:set name="value">
-                                xarModGetUserVar('roles','useremailformat',$id)
+                                xarModUserVars::get('roles','useremailformat',$id)
                             </xar:set>
                             <xar:set name="options">
                                 array(
@@ -133,7 +133,7 @@
                                 <xar:mlstring>User Timezone:</xar:mlstring>
                             </label>
                             <xar:set name="value">
-                                xarModGetUserVar('roles','usertimezone',$id)
+                                xarModUserVars::get('roles','usertimezone',$id)
                             </xar:set>
                             <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
                         </div>
@@ -141,7 +141,7 @@
 
                     <xar:if condition="in_array('allowemail',$settings)">
                         <div class="xar-form-input-wrapper-after">
-                            <xar:set name="checked">xarModGetUserVar('roles', 'allowemail',$id)</xar:set>
+                            <xar:set name="checked">xarModUserVars::get('roles', 'allowemail',$id)</xar:set>
                             <xar:data-input type="checkbox" name="duvs[allowemail]" id="duvs_allowemail" checked="$checked" />
                             <label for="allowemail" title="#xarML('Allow users to send emails?')#">
                                <xar:mlstring>User has allowed other users to send them an email?</xar:mlstring>
@@ -154,7 +154,7 @@
                             <label class="xar-form-label">
                                 <xar:mlstring>Password last updated:</xar:mlstring>
                             </label>
-                            #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','passwordupdate',$id))# #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','passwordupdate',$id))#
+                            #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))# #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
                         </div>
                     </xar:if>
 
@@ -163,7 +163,7 @@
                             <label class="xar-form-label">
                                 <xar:mlstring>Last login time:</xar:mlstring>
                             </label>
-                                #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','userlastlogin',$id))#  #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','userlastlogin',$id))#
+                                #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#  #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
                         </div>
                     </xar:if>
 

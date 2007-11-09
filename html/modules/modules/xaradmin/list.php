@@ -37,11 +37,11 @@ function modules_admin_list()
     //if(empty($selsort)) $selsort                = 'namedesc';
 
     // pass tru some of the form variables (we dont store them anywhere, atm)
-    $data['hidecore']                               = xarModGetUserVar('modules', 'hidecore');
+    $data['hidecore']                               = xarModUserVars::get('modules', 'hidecore');
     $data['regen']                                  = $regen;
-    $data['selstyle']                               = xarModGetUserVar('modules', 'selstyle');
-    $data['selfilter']                              = xarModGetUserVar('modules', 'selfilter');
-    $data['selsort']                                = xarModGetUserVar('modules', 'selsort');
+    $data['selstyle']                               = xarModUserVars::get('modules', 'selstyle');
+    $data['selfilter']                              = xarModUserVars::get('modules', 'selfilter');
+    $data['selsort']                                = xarModUserVars::get('modules', 'selsort');
 
     // select vars for drop-down menus
     $data['style']['plain']                         = xarML('Plain');

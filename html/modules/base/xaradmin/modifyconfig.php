@@ -40,7 +40,7 @@ function base_admin_modifyconfig()
     $dateobject->setTimezone($tzobject);
     $data['hostnow'] = $dateobject->format("r");
 
-    $tzobject = new DateTimeZone(xarModGetUserVar('roles','usertimezone'));
+    $tzobject = new DateTimeZone(xarModUserVars::get('roles','usertimezone'));
     $dateobject->setTimezone($tzobject);
     $data['localnow'] = $dateobject->format("r");
 

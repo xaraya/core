@@ -34,12 +34,12 @@ function themes_admin_list()
     $authid = xarSecGenAuthKey();
 
     // pass tru some of the form variables (we dont store them anywhere, atm)
-    $data['hidecore']                               = xarModGetUserVar('themes', 'hidecore');
+    $data['hidecore']                               = xarModUserVars::get('themes', 'hidecore');
     $data['regen']                                  = $regen;
-    $data['selstyle']                               = xarModGetUserVar('themes', 'selstyle');
-    $data['selfilter']                              = xarModGetUserVar('themes', 'selfilter');
-    $data['selclass']                               = xarModGetUserVar('themes', 'selclass');
-    $data['useicons']                               = xarModGetUserVar('themes', 'useicons');
+    $data['selstyle']                               = xarModUserVars::get('themes', 'selstyle');
+    $data['selfilter']                              = xarModUserVars::get('themes', 'selfilter');
+    $data['selclass']                               = xarModUserVars::get('themes', 'selclass');
+    $data['useicons']                               = xarModUserVars::get('themes', 'useicons');
 
     // select vars for drop-down menus
     $data['style']['plain']                         = xarML('Plain');

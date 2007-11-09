@@ -286,22 +286,22 @@ function roles_upgrade($oldVersion)
                 xarModVars::set('authentication', 'disallowedips', xarModVars::get('roles', 'disallowedips'));
 
                 // delete the old roles modvars
-                xarModDelVar('roles', 'allowregistration');
-                xarModDelVar('roles', 'requirevalidation');
-                xarModDelVar('roles', 'rolesperpage');
-                xarModDelVar('roles', 'uniqueemail');
-                xarModDelVar('roles', 'askwelcomeemail');
-                xarModDelVar('roles', 'askvalidationemail');
-                xarModDelVar('roles', 'askdeactivationemail');
-                xarModDelVar('roles', 'askpendingemail');
-                xarModDelVar('roles', 'askpasswordemail');
-                xarModDelVar('roles', 'defaultgroup');
-                xarModDelVar('roles', 'lockouttime');
-                xarModDelVar('roles', 'lockouttries');
-                xarModDelVar('roles', 'minage');
-                xarModDelVar('roles', 'disallowednames');
-                xarModDelVar('roles', 'disallowedemails');
-                xarModDelVar('roles', 'disallowedips');
+                xarModVars::delete('roles', 'allowregistration');
+                xarModVars::delete('roles', 'requirevalidation');
+                xarModVars::delete('roles', 'rolesperpage');
+                xarModVars::delete('roles', 'uniqueemail');
+                xarModVars::delete('roles', 'askwelcomeemail');
+                xarModVars::delete('roles', 'askvalidationemail');
+                xarModVars::delete('roles', 'askdeactivationemail');
+                xarModVars::delete('roles', 'askpendingemail');
+                xarModVars::delete('roles', 'askpasswordemail');
+                xarModVars::delete('roles', 'defaultgroup');
+                xarModVars::delete('roles', 'lockouttime');
+                xarModVars::delete('roles', 'lockouttries');
+                xarModVars::delete('roles', 'minage');
+                xarModVars::delete('roles', 'disallowednames');
+                xarModVars::delete('roles', 'disallowedemails');
+                xarModVars::delete('roles', 'disallowedips');
 
                 // create one new roles modvar
                 xarModVars::set('roles', 'defaultauthmodule', xarModGetIDFromName('authentication'));
@@ -359,7 +359,7 @@ function roles_delete()
         /**
          * Remove modvars, instances and masks
          */
-        xarModDelAllVars('roles');
+        xarModVars::delete_all('roles');
         xarRemoveMasks('roles');
         xarRemoveInstances('roles');
 

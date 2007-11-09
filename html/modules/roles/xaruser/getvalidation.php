@@ -143,7 +143,7 @@ function roles_user_getvalidation()
             }
             /* Check if the user has logged in at all  - used for a workaround atm */
             $newuser=false;
-            $lastlogin =xarModGetUserVar('roles','userlastlogin',$status['id']);
+            $lastlogin =xarModUserVars::get('roles','userlastlogin',$status['id']);
             if (!isset($lastlogin) || empty($lastlogin)) {
                 $newuser=true;
             }

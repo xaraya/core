@@ -462,7 +462,7 @@ function installer_admin_phase5()
     xarTplRegisterTag('base', 'base-render-javascript', array(),'base_javascriptapi_handlerenderjavascript');
 
     // TODO: is this is correct place for a default value for a modvar?
-    xarModSetVar('base', 'AlternatePageTemplate', 'homepage');
+    xarModVars::set('base', 'AlternatePageTemplate', 'homepage');
 
     // If we are here, the base system has completed
     // We can now pass control to xaraya.
@@ -639,9 +639,9 @@ function installer_admin_create_administrator()
     if (!xarVarFetch('install_admin_password1','str:4:100',$pass1)) return;
     if (!xarVarFetch('install_admin_email','str:1:100',$email)) return;
 
-    xarModSetVar('mail', 'adminname', $name);
-    xarModSetVar('mail', 'adminmail', $email);
-    xarModSetVar('themes', 'SiteCopyRight', '&copy; Copyright ' . date("Y") . ' ' . $name);
+    xarModVars::set('mail', 'adminname', $name);
+    xarModVars::set('mail', 'adminmail', $email);
+    xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright ' . date("Y") . ' ' . $name);
 
     if ($pass != $pass1) {
         $msg = xarML('The passwords do not match');
@@ -672,8 +672,8 @@ function installer_admin_create_administrator()
                    'password'   => $pass,
                    'state'      => ROLES_STATE_ACTIVE);
 
-    xarModSetVar('roles', 'lastuser', $userName);
-    xarModSetVar('roles', 'adminpass', $pass);// <-- come again? why store the pass?
+    xarModVars::set('roles', 'lastuser', $userName);
+    xarModVars::set('roles', 'adminpass', $pass);// <-- come again? why store the pass?
 
     //Try to update the role to the repository and bail if an error was thrown
     $modifiedrole = $role->updateItem($args);
@@ -823,7 +823,7 @@ function installer_admin_choose_configuration()
         return $data;
     }
 
-    xarModSetVar('installer','modulelist',serialize($fileModules));
+    xarModVars::set('installer','modulelist',serialize($fileModules));
     if (count($fileModules) == 0){
     // No non-core modules present. Show only the minimal configuration
         $names = array();
@@ -1033,7 +1033,7 @@ function installer_admin_confirm_configuration()
             }
         }
      //TODO: Check why this var is being reset to null in sqlite install - reset here for now to be sure
-     //xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+     //xarModVars::set('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
 
         xarResponseRedirect(xarModURL('installer', 'admin', 'cleanup'));
     }
@@ -1057,8 +1057,8 @@ function installer_admin_cleanup()
     }
 
 
-//    xarModDelVar('roles','adminpass');
-//    xarModDelVar('installer','modules');
+//    xarModVars::delete('roles','adminpass');
+//    xarModVars::delete('installer','modules');
 
     // Load up database
     $dbconn = xarDB::getConn();
@@ -1272,7 +1272,7 @@ function installer_admin_upgrade2()
     }
 
     // Bug 3164, store locale in ModUSerVar
-    xarModSetVar('roles', 'locale', '');
+    xarModVars::set('roles', 'locale', '');
 
   $content .= "<p><strong>Checking <strong>include/properties</strong> directory for moved DD properties</strong></p>";
     //From 1.0.0rc2 propsinplace was merged and dd propertie began to move to respective modules
@@ -1464,12 +1464,12 @@ function installer_admin_upgrade2()
             $currentvar = xarModVars::get("$var[module]", "$var[name]");
             if (isset($currentvar)){
                 if (isset($var['override'])) {
-                    xarModSetVar($var['module'], $var['name'], $var['set']);
+                    xarModVars::set($var['module'], $var['name'], $var['set']);
                     $content .= "<p>$var[module] -> $var[name] has been overridden, proceeding to next check</p>";
                 }
                 else $content .= "<p>$var[module] -> $var[name] is set, proceeding to next check</p>";
             } else {
-                xarModSetVar($var['module'], $var['name'], $var['set']);
+                xarModVars::set($var['module'], $var['name'], $var['set']);
                 $content .= "<p>$var[module] -> $var[name] empty, attempting to set.... done!</p>";
             }
         }
@@ -1569,10 +1569,10 @@ function installer_admin_upgrade2()
     }
 
       // Define Module vars
-     xarModSetVar('authsystem', 'lockouttime', 15);
-    xarModSetVar('authsystem', 'lockouttries', 3);
-    xarModSetVar('authsystem', 'uselockout', false);
-    xarModSetVar('roles', 'defaultauthmodule', 'authsystem');
+     xarModVars::set('authsystem', 'lockouttime', 15);
+    xarModVars::set('authsystem', 'lockouttries', 3);
+    xarModVars::set('authsystem', 'uselockout', false);
+    xarModVars::set('roles', 'defaultauthmodule', 'authsystem');
 
 
     $content .= "<p><strong>Removing Adminpanels module and move functions to other  modules</strong></p>";
@@ -1587,8 +1587,8 @@ function installer_admin_upgrade2()
                        array('callerModName' => 'base', 'hookModName' => 'articles'));
     }
     //Safest way is to just set the dash off for now
-    xarModSetVar('themes','usedashboard',false);
-    xarModSetVar('themes','dashtemplate','admin');
+    xarModVars::set('themes','usedashboard',false);
+    xarModVars::set('themes','dashtemplate','admin');
 
     $table_name['admin_menu']=$prefix . '_admin_menu';
     $upgrade['admin_menu'] = xarModAPIFunc('installer',
@@ -1679,7 +1679,7 @@ function installer_admin_upgrade2()
             if (!isset($currentvar)){
                 $content .= "<p>$var[module] -> $var[name] is deleted, proceeding to next check</p>";
             } else {
-                xarModDelVar($var['module'], $var['name']);
+                xarModVars::delete($var['module'], $var['name']);
                 $content .= "<p>$var[module] -> $var[name] has value, attempting to delete.... done!</p>";
             }
         }
@@ -1718,9 +1718,9 @@ function installer_admin_upgrade2()
 /* End of Version 1.1.0 Release Upgrades */
 
 /* Version 1.1.x Release Upgrades */
-    xarModSetVar('themes', 'adminpagemenu', 1); //New variables to switch admin in page menus (tabs) on and off
-    xarModSetVar('privileges', 'inheritdeny', true); //Was not set in privileges activation in 1.1, isrequired, maybe missing in new installs
-    xarModSetVar('roles', 'requirevalidation', true); //reuse this older var for user email changes, this validation is separate to registration validation
+    xarModVars::set('themes', 'adminpagemenu', 1); //New variables to switch admin in page menus (tabs) on and off
+    xarModVars::set('privileges', 'inheritdeny', true); //Was not set in privileges activation in 1.1, isrequired, maybe missing in new installs
+    xarModVars::set('roles', 'requirevalidation', true); //reuse this older var for user email changes, this validation is separate to registration validation
 /* End of Version 1.1.1 Release Upgrades */
 /* Version 1.1.2 Release Upgrades */
     //Module Upgrades should take care of most
@@ -1728,17 +1728,17 @@ function installer_admin_upgrade2()
 
     //We are allowing setting var that is reliably referenced for the xarMLS calculations (instead of using a variably named DD property which was the case)
     // This var becomes one of the roles 'duv' modvars
-    xarModSetVar('roles', 'setusertimezone',false); //new modvar - let's make sure it's set
-    xarModDelVar('roles', 'settimezone');//this is no longer used, be more explicit and user setusertimezone
-    xarModSetVar('roles', 'usertimezone',''); //new modvar - initialize it
-    xarModSetVar('roles','allowemail', false); //old modvar returns. Let's make sure it's set false as it allows users to send emails
+    xarModVars::set('roles', 'setusertimezone',false); //new modvar - let's make sure it's set
+    xarModVars::delete('roles', 'settimezone');//this is no longer used, be more explicit and user setusertimezone
+    xarModVars::set('roles', 'usertimezone',''); //new modvar - initialize it
+    xarModVars::set('roles','allowemail', false); //old modvar returns. Let's make sure it's set false as it allows users to send emails
 
     //Ensure that registration module is set as default if it is installed,
     // if it is active and the default is currently not set
     $defaultregmodule = xarModVars::get('roles','defaultregmodule');
     if (empty($defaultregmodule)) {
         if (xarModIsAvailable('registration')) {
-            xarModSetVar('roles','defaultregmodule', 'registration');
+            xarModVars::set('roles','defaultregmodule', 'registration');
         }
     }
 

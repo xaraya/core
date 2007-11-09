@@ -45,7 +45,7 @@ function modules_adminapi_remove($args)
             // Delete any module variables that the module cleanup function might
             // have missed.
             // This needs to be done before the module entry is removed.
-            xarModDelAllVars($modinfo['name']);
+            xarModVars::delete_all($modinfo['name']);
 
             // Remove the module itself
             $query = "DELETE FROM $tables[modules] WHERE regid = ?";
@@ -58,7 +58,7 @@ function modules_adminapi_remove($args)
             // Delete any module variables that the module cleanup function might have missed.
             // This needs to be done before the module entry is removed.
             // <mikespub> But *after* the delete() function of the module !
-            xarModDelAllVars($modinfo['name']);
+            xarModVars::delete_all($modinfo['name']);
 
             // Update state of module
             xarModAPIFunc('modules', 'admin', 'setstate',

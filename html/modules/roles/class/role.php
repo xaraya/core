@@ -95,7 +95,7 @@ class Role extends DataObject
         $id = parent::createItem($data);
 
         // Set the email useage for this user to false
-        xarModSetUserVar('roles','allowemail', false, $id);
+        xarModUserVars::set('roles','allowemail', false, $id);
 
         // Get a value for the parent id
         if (empty($data['parentid'])) xarVarFetch('parentid',  'int', $data['parentid'],  NULL, XARVAR_DONT_SET);
@@ -109,7 +109,7 @@ class Role extends DataObject
         // add the duvs
         if (!xarVarFetch('duvs','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
         foreach($duvs as $key => $value) {
-            xarModSetUserVar('roles',$key, $value, $id);
+            xarModUserVars::set('roles',$key, $value, $id);
         }
 
         // Let any hooks know that we have created a new user.
@@ -126,7 +126,7 @@ class Role extends DataObject
         $id = parent::updateItem($data);
         if (!xarVarFetch('duvs','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
         foreach($duvs as $key => $value) {
-            xarModSetUserVar('roles',$key, $value, $id);
+            xarModUserVars::set('roles',$key, $value, $id);
         }
         $item['module'] = 'roles';
         $item['itemtype'] = $this->getType();
@@ -641,13 +641,13 @@ class Role extends DataObject
 
         $queue = array($this->getID());
         while (true) {
-        	if (empty($queue)) break;
-        	$parent = array_shift($queue);
-        	$parents[] = $parent;
-        	foreach ($groups as $group) {
-        		if ($group['id'] == $parent) {unset($group); continue;}
-        		if ($group['parentid'] == $parent) {$queue[] = $group['id']; unset($group);}
-        	}
+            if (empty($queue)) break;
+            $parent = array_shift($queue);
+            $parents[] = $parent;
+            foreach ($groups as $group) {
+                if ($group['id'] == $parent) {unset($group); continue;}
+                if ($group['parentid'] == $parent) {$queue[] = $group['id']; unset($group);}
+            }
         }
         $descendants = array();
         foreach($parents as $id){
@@ -655,7 +655,7 @@ class Role extends DataObject
             if ($groupflag) {
                 $descendants[$id] = $role;
             }
-	        $users = $role->getUsers($state);
+            $users = $role->getUsers($state);
             foreach($users as $user){
                 $descendants[$user->getID()] = $user;
             }

@@ -426,7 +426,7 @@ function dynamicdata_admin_query($args)
         if (count($data['queries']) >= 20) {
             $dropquery = array_pop($data['queries']);
             if (!empty($dropquery)) {
-                xarModDelVar('dynamicdata','query.'.$dropquery);
+                xarModVars::delete('dynamicdata','query.'.$dropquery);
             }
             xarModVars::set('dynamicdata','querylist',serialize($data['queries']));
         }

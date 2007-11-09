@@ -47,12 +47,12 @@ function mail_schedulerapi_sendmail($args)
         // send it with the internal _sendmail API function
         if (xarModAPIFunc('mail','admin','_sendmail',$args)) {
             $log .= xarML('succeeded');
-            xarModDelVar('mail',$id);
+            xarModVars::delete('mail',$id);
             $sent[] = $id;
         } else {
             $log .= xarML('failed');
         // CHECKME: do we try again later or not ? That should probably depend on the error ;)
-            xarModDelVar('mail',$id);
+            xarModVars::delete('mail',$id);
             $sent[] = $id;
         }
         $log .= "\n";

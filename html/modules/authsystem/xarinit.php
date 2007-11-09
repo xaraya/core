@@ -120,7 +120,7 @@ function authsystem_delete()
     }
 
     /* Remove modvars, instances and masks */
-    xarModDelAllVars('authsystem');
+    xarModVars::delete_all('authsystem');
     xarRemoveMasks('authsystem');
     xarRemoveInstances('authsystem');
 

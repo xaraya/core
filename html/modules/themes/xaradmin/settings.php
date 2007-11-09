@@ -26,11 +26,11 @@ function themes_admin_settings()
     if (!xarVarFetch('regen',     'str:1:', $regen,     false,                XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('useicons',  'checkbox', $useicons, 'XARTHEME_STATE_ANY', XARVAR_NOT_REQUIRED)) return;
 
-    if (!xarModSetUserVar('themes', 'hidecore', $hidecore)) return;
-    if (!xarModSetUserVar('themes', 'selstyle', $selstyle)) return;
-    if (!xarModSetUserVar('themes', 'selfilter', $selfilter)) return;
-    if (!xarModSetUserVar('themes', 'selclass', $selclass)) return;
-    if (!xarModSetUserVar('themes', 'useicons', $useicons)) return;
+    if (!xarModUserVars::set('themes', 'hidecore', $hidecore)) return;
+    if (!xarModUserVars::set('themes', 'selstyle', $selstyle)) return;
+    if (!xarModUserVars::set('themes', 'selfilter', $selfilter)) return;
+    if (!xarModUserVars::set('themes', 'selclass', $selclass)) return;
+    if (!xarModUserVars::set('themes', 'useicons', $useicons)) return;
 
     xarResponseRedirect(xarModURL('themes', 'admin', 'list', array('regen' => $regen = 1)));
 }

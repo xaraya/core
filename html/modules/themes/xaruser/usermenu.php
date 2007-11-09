@@ -41,7 +41,7 @@ function themes_user_usermenu($args)
                 'getlist',
                 $filter);
 
-            $defaulttheme = xarModGetUserVar('themes', 'default');
+            $defaulttheme = xarModUserVars::get('themes', 'default');
 
             $name = xarUserGetVar('name');
             $id = xarUserGetVar('id');
@@ -60,7 +60,7 @@ function themes_user_usermenu($args)
             if (!xarSecConfirmAuthKey()) return;
             $themeInfo = xarThemeGetInfo($defaulttheme);
 
-            xarModSetUserVar('themes', 'default', $themeInfo['name'], $id);
+            xarModUserVars::set('themes', 'default', $themeInfo['name'], $id);
             // Redirect
             xarResponseRedirect(xarModURL('roles', 'user', 'account', array('moduleload' => 'themes')));
 

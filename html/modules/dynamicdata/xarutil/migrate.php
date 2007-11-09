@@ -43,7 +43,7 @@ function dynamicdata_util_migrate($args)
     if (empty($from) && empty($to)) {
         $steps = array();
     } else {
-        $steps = xarModGetUserVar('dynamicdata','migratesteps');
+        $steps = xarModUserVars::get('dynamicdata','migratesteps');
         if (!empty($steps)) {
             $steps = unserialize($steps);
         } else {
@@ -326,7 +326,7 @@ function dynamicdata_util_migrate($args)
     // preserve current step
     $steps[$step] = array('from' => $data['from'], 'to' => $data['to'],
                           'fieldmap' => $data['fieldmap'], 'hookmap' => $data['hookmap']);
-    xarModSetUserVar('dynamicdata','migratesteps',serialize($steps));
+    xarModUserVars::set('dynamicdata','migratesteps',serialize($steps));
     $data['step'] = $step;
 
     // see if we have everything we need to finish if necessary

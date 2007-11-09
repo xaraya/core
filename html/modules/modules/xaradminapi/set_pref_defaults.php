@@ -20,14 +20,14 @@
 function modules_adminapi_set_pref_defaults()
 {
     // no beating around the bush here
-    if(xarModGetUserVar('modules', 'hidecore'))     xarModDelUserVar('modules', 'hidecore');
-    if(xarModGetUserVar('modules', 'regen'))        xarModDelUserVar('modules', 'regen');
-    if(xarModGetUserVar('modules', 'selstyle'))     xarModDelUserVar('modules', 'selstyle');
-    if(xarModGetUserVar('modules', 'selfilter'))    xarModDelUserVar('modules', 'selfilter');
-    if(xarModGetUserVar('modules', 'selsort'))      xarModDelUserVar('modules', 'selsort');
-    if(xarModGetUserVar('modules', 'hidestats'))    xarModDelUserVar('modules', 'hidestats');
-    if(xarModGetUserVar('modules', 'selmax'))       xarModDelUserVar('modules', 'selmax');
-    if(xarModGetUserVar('modules', 'startpage'))    xarModDelUserVar('modules', 'startpage');
+    if(xarModUserVars::get('modules', 'hidecore'))     xarModDelUserVar('modules', 'hidecore');
+    if(xarModUserVars::get('modules', 'regen'))        xarModDelUserVar('modules', 'regen');
+    if(xarModUserVars::get('modules', 'selstyle'))     xarModDelUserVar('modules', 'selstyle');
+    if(xarModUserVars::get('modules', 'selfilter'))    xarModDelUserVar('modules', 'selfilter');
+    if(xarModUserVars::get('modules', 'selsort'))      xarModDelUserVar('modules', 'selsort');
+    if(xarModUserVars::get('modules', 'hidestats'))    xarModDelUserVar('modules', 'hidestats');
+    if(xarModUserVars::get('modules', 'selmax'))       xarModDelUserVar('modules', 'selmax');
+    if(xarModUserVars::get('modules', 'startpage'))    xarModDelUserVar('modules', 'startpage');
         
     // all done
     return true;
