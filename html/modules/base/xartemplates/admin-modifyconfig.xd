@@ -476,7 +476,7 @@
                 <div class="xar-form-input-wrapper-after xar-padding-topthick">
                     <xar:set name="checked"><xar:var scope="config" name="Site.Core.LoadLegacy"/></xar:set>
                     <xar:data-input type="checkbox" name="loadlegacy" id="loadlegacy" checked="$checked" />
-                    <label for="loadlegacy" title="#xarML('Load Legacy Support for Postnuke (7.1x, 7.2x)')#">
+                    <label for="loadlegacy" title="#xarML('Load Legacy Support for Xaraya1x/BlockLayout1 functions')#">
                         <xar:mlstring>
                             Load Legacy Support for Postnuke
                         </xar:mlstring>
