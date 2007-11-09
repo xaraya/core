@@ -14,6 +14,7 @@ class ApiInstructionNode extends InstructionNode
         if (strlen($this->instruction) <= 1) {
             $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid API reference instruction.');
         }
+        // pretty weak, but sufficient in many cases
         $funcName = substr($this->instruction, 0, strpos($this->instruction, '('));
 
         // FIXME: Temporary hack for bug 5369
@@ -26,7 +27,10 @@ class ApiInstructionNode extends InstructionNode
             $instruction = $this->instruction;
         }
 
-        if(!function_exists($funcName)) {
+        // The funcname can take the shape of:
+        // 1. a normal function call :  xarFuncName()
+        // 2. a static function call :  xarClassName::xarFuncName()
+        if(!is_callable($funcName)) {
             $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid API reference instruction or invalid function syntax.');
             return;
         }
