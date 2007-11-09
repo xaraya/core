@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * Read a block's type info.
  *
  * @package modules
@@ -21,7 +21,7 @@
 function blocks_userapi_read_type_info($args)
 {
     extract($args);
-    
+
     if (empty($module) && empty($type)) {
         // No identifier provided.
         throw new EmptyParameterException('module or type');

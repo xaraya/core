@@ -4,17 +4,17 @@
  *
  * @package modules
  * @subpackage blocks
- * @return array 
+ * @return array
  * @author Marcel van der Boom <mrb@hsdev.com>
  * @param  string $name name of the block to render
  */
 function blocks_user_display($args)
 {
     extract($args);
-    
+
     // Get all the available blocks
     $benum = 'enum';  $data = array();
-    foreach(xarModAPIfunc('blocks', 'user', 'getall') as $bid => $binfo) 
+    foreach(xarModAPIfunc('blocks', 'user', 'getall') as $bid => $binfo)
     {
         $benum .= ':'.$binfo['name'];
     }
