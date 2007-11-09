@@ -6,38 +6,17 @@
         <xar:mlstring>Block Expiration:</xar:mlstring>
     </label>
     <xar:set name="expireseconds">$expirein * 3600</xar:set>
-    <select name="expire" id="expire#$blockid#">
-        <xar:if condition="$expireseconds eq 86400">
-            <option value="86400" selected="selected"><xar:mlstring>1 Day</xar:mlstring></option>
-        <xar:else />
-            <option value="86400"><xar:mlstring>1 Day</xar:mlstring></option>
-        </xar:if>
-        <xar:if condition="$expireseconds eq 172800">
-            <option value="172800" selected="selected"><xar:mlstring>2 Days</xar:mlstring></option>
-        <xar:else />
-            <option value="172800"><xar:mlstring>2 Days</xar:mlstring></option>
-        </xar:if>
-        <xar:if condition="$expireseconds eq 432000">
-            <option value="432000" selected="selected"><xar:mlstring>5 Days</xar:mlstring></option>
-        <xar:else />
-            <option value="432000"><xar:mlstring>5 Days</xar:mlstring></option>
-        </xar:if>
-        <xar:if condition="$expireseconds eq 1296000">
-            <option value="1296000" selected="selected"><xar:mlstring>15 Days</xar:mlstring></option>
-        <xar:else />
-            <option value="1296000"><xar:mlstring>15 Days</xar:mlstring></option>
-        </xar:if>
-        <xar:if condition="$expireseconds eq 2592000">
-            <option value="2592000" selected="selected"><xar:mlstring>30 Days</xar:mlstring></option>
-        <xar:else />
-            <option value="2592000"><xar:mlstring>30 Days</xar:mlstring></option>
-        </xar:if>
-        <xar:if condition="$expireseconds eq 0">
-            <option value="0" selected="selected"><xar:mlstring>Unlimited</xar:mlstring></option>
-        <xar:else />
-            <option value="0"><xar:mlstring>Unlimited</xar:mlstring></option>
-        </xar:if>
-    </select>
+    <xar:set name="options">
+        array(
+            array('id' => 86400, 'name' => '1 Day'),
+            array('id' => 172800, 'name' => '2 Days'),
+            array('id' => 432000, 'name' => '5 Days'),
+            array('id' => 1296000, 'name' => '15 Days'),
+            array('id' => 2592000, 'name' => '30 Days'),
+            array('id' => 0, 'name' => 'Unlimited'),
+        )
+    </xar:set>    
+    <xar:data-input type="dropdown" name="expire" id="expire#$blockid#" options="$options" value="$expireseconds" />
 </div>
 
 <xar:if condition="$expirein ne 0">

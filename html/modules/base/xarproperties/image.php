@@ -22,6 +22,7 @@ class ImageProperty extends TextBoxProperty
     public $inputtype  = 'url';
     public $basedir    = 'var/uploads';
     public $extensions    = 'gif,jpg,jpeg,png,bmp';
+    public $imagetext  = 'no image';
 
     // this is used by DataPropertyMaster::addProperty() to set the $object->upload flag
     public $upload = false;
@@ -76,6 +77,7 @@ class ImageProperty extends TextBoxProperty
         if (($this->inputtype == 'local') || ($this->inputtype == 'upload')) {
             $data['value'] = $this->basedir . "/" . $data['value'];
         }
+        $data['imagetext'] = $this->imagetext;
 
         return parent::showOutput($data);
     }

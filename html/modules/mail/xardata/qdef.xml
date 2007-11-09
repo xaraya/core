@@ -1,53 +1,63 @@
 <object name="mailqueues">
+  <objectid>51</objectid>
   <label>mail-queues</label>
+  <parent>0</parent>
   <moduleid>771</moduleid>
-  <itemtype>-1</itemtype>
+  <itemtype>1000</itemtype>
+  <class>DataObject</class>
+  <filepath></filepath>
   <urlparam>itemid</urlparam>
+  <maxid>2</maxid>
   <config></config>
   <isalias>0</isalias>
   <properties>
     <property name="id">
+      <id>489</id>
       <label>ID</label>
       <type>itemid</type>
       <default></default>
       <source>dynamic_data</source>
-      <status>1</status>
+      <status>67</status>
       <order>1</order>
       <validation></validation>
     </property>
     <property name="name">
+      <id>490</id>
       <label>Name</label>
       <type>textbox</type>
       <default></default>
       <source>dynamic_data</source>
-      <status>1</status>
+      <status>33</status>
       <order>2</order>
       <validation>1:12:/\w+/</validation>
     </property>
     <property name="qtype">
+      <id>491</id>
       <label>Type</label>
       <type>dropdown</type>
       <default></default>
       <source>dynamic_data</source>
-      <status>1</status>
+      <status>33</status>
       <order>3</order>
       <validation>xarModApiFunc('mail','user','getqueuetypes')</validation>
     </property>
     <property name="description">
+      <id>492</id>
       <label>Description</label>
       <type>textarea_medium</type>
       <default></default>
       <source>dynamic_data</source>
-      <status>1</status>
+      <status>34</status>
       <order>4</order>
       <validation></validation>
     </property>
     <property name="status">
+      <id>493</id>
       <label>Status</label>
-      <type>integerlist</type>
+      <type>dropdown</type>
       <default>0</default>
       <source>dynamic_data</source>
-      <status>2</status>
+      <status>33</status>
       <order>5</order>
       <validation>0,inactive;1,active</validation>
     </property>

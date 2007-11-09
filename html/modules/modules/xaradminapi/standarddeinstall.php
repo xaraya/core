@@ -6,7 +6,7 @@
  * @link http://www.xaraya.com *
  * @subpackage modules
  */
-sys::import('modules.roles.class.xarQuery');
+
 /**
  * Perform standard module removal actions
  *
@@ -18,10 +18,17 @@ function modules_adminapi_standarddeinstall($args)
     extract($args);
     if (!isset($module)) return false;
 
+    // Delete all DD objects created by this module
+    try {
+        $dd_objects = unserialize(xarModVars::get($module,'dd_objects'));
+        foreach ($dd_objects as $key => $value)
+            $result = DataObjectMaster::deleteObject(array('objectid' => $value));
+    } catch (Exception $e) {}
+
     $dbconn = xarDB::getConn();
     $xartables =& xarDB::getTables();
 
-    //Remove database tables
+    // Remove database tables
     // FIXME: this assumes modules name their tables prefixed by their own name!!
     xarMod::apiLoad($module);
     try {
@@ -35,11 +42,8 @@ function modules_adminapi_standarddeinstall($args)
         }
     } catch (Exception $e) {}
 
-    /*
-     * Delete the base group created by this module
-     *Move the descendants to the Users group
-     * @todo this assumes ad hoc group naming, bad!
-     */
+     // Delete the base group created by this module if it exists
+     // Move the descendants to the Users group
     try {
         $role = xarFindRole(ucfirst($module) . 'Group');
         if (!empty($role)) {
@@ -54,21 +58,14 @@ function modules_adminapi_standarddeinstall($args)
         }
     } catch (Exception $e) {}
 
-    //Delete all DD objects created by this module
-    try {
-        $dd_objects = unserialize(xarModVars::get($module,'dd_objects'));
-        foreach ($dd_objects as $key => $value)
-            $result = xarModAPIFunc('dynamicdata','admin','deleteobject',array('objectid' => $value));
-    } catch (Exception $e) {}
-
-// Remove the categories created by this module
+	// Remove the categories created by this module
     try {
         xarModAPIFunc('categories', 'admin', 'deletecat',
                              array('cid' => xarModVars::get($module, 'basecategory'))
                             );
     } catch (Exception $e) {}
 
-    //Remove hooks
+    // Remove hooks
     $modInfo = xarMod::getBaseInfo($module);
     $modId = $modInfo['systemid'];
     $query = "DELETE FROM " . $xartables['hooks'] .
@@ -76,11 +73,11 @@ function modules_adminapi_standarddeinstall($args)
              " OR t_module_id = " . $modId;
     $dbconn->Execute($query);
 
-    //Remove custom tags, modvars, masks and privilege instances
+    // Remove custom tags, modvars, masks and privilege instances
     xarTemplateTag::unregisterall($module);
     xarRemoveMasks($module);
     xarRemoveInstances($module);
-    xarModDelAllVars($module);
+    xarModVars::delete_all($module);
 
     // Deinstall successful
     return true;

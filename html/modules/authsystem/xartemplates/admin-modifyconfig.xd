@@ -58,7 +58,8 @@
                         </xar:mlstring>
                         : 
                     </label>
-                    <input type="text" name="lockouttries" id="lockouttries" value="#xarModVars::get('authsystem', 'lockouttries')#" size="2" maxlength="2" />
+                    <xar:set name="value"><xar:var scope="module" module="authsystem" name="lockouttries"/></xar:set>
+                    <input type="text" name="lockouttries" id="lockouttries" value="#$value#" size="2" maxlength="2" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="lockouttime" class="xar-form-label">
@@ -67,7 +68,8 @@
                         </xar:mlstring>
                         : 
                     </label>
-                    <input type="text" name="lockouttime" id="lockouttime" value="#xarModVars::get('authsystem', 'lockouttime')#" size="2" maxlength="2" />
+                    <xar:set name="value"><xar:var scope="module" module="authsystem" name="lockouttime"/></xar:set>
+                    <input type="text" name="lockouttime" id="lockouttime" value="#$value#" size="2" maxlength="2" />
                 </div>
         </fieldset>
         <fieldset>
