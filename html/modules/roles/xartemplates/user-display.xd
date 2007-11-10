@@ -20,7 +20,7 @@
             <label class="xar-form-label">
                 <xar:mlstring>Last Login</xar:mlstring>
             </label>
-            #xarLocaleGetFormattedDate('medium', xarModItemVars::get('roles','userlastlogin',$id))#  #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','userlastlogin',$id))#
+            #xarLocaleGetFormattedDate('medium', xarModItemVars::get('roles','userlastlogin',$id))#  #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
         </div>
       </xar:if>
 
@@ -55,7 +55,7 @@
                 <xar:mlstring>User Timezone:</xar:mlstring>
             </label>
             <xar:set name="value">
-                xarModGetUserVar('roles','usertimezone',$id)
+                xarModUserVars::get('roles','usertimezone',$id)
             </xar:set>
             <xar:data-output type="timezone" value="$value" />
         </div>
