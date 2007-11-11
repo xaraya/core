@@ -30,6 +30,7 @@ class Role extends DataObject
     public $privilegestable;
     public $acltable;
     public $realmstable;
+    public $modulestable;
 
     public $allprivileges;
 
@@ -60,6 +61,7 @@ class Role extends DataObject
         $this->privilegestable = $xartable['privileges'];
         $this->acltable = $xartable['security_acl'];
         $this->realmstable = $xartable['security_realms'];
+        $this->modulestable = $xartable['modules'];
 
         $this->parentlevel = 0;
         $ancestor = $this->getBaseAncestor();
@@ -310,7 +312,7 @@ class Role extends DataObject
         $q->addfield('uname',$uname);
         $q->addfield('pass',$pass);
         $q->addfield('email',$email);
-        $q->addfield('date_reg',$date_reg);
+        $q->addfield('date_reg',time());
         $q->addfield('state',$state);
         $q->eq('id',$this->getID());
         if(!$q->run()) return;
@@ -341,10 +343,12 @@ class Role extends DataObject
         xarLogMessage("ROLE: getting privileges for id: $this->properties['id']->value");
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
         $xartable = xarDB::getTables();
-        $query = "SELECT  p.id, p.name, r.name, p.module_id,
+        $query = "SELECT  p.id, p.name, r.name, p.module_id, m.name,
                           component, instance, level, description
                   FROM    $this->acltable acl,
-                          $this->privilegestable p LEFT JOIN $this->realmstable r ON p.realmid = r.id
+                          $this->privilegestable p
+                          LEFT JOIN $this->realmstable r ON p.realmid = r.id
+                          LEFT JOIN $this->modulestable m ON p.module_id = m.id
                   WHERE   p.id = acl.permid AND
                           acl.partid = ?";
 //                          echo $query;exit;
@@ -354,12 +358,13 @@ class Role extends DataObject
         sys::import('modules.privileges.class.privilege');
         $privileges = array();
         while ($result->next()) {
-            list($id, $name, $realm, $module_id, $component, $instance, $level,
+            list($id, $name, $realm, $module_id, $module, $component, $instance, $level,
                 $description) = $result->fields;
             $perm = new xarPrivilege(array('id' => $id,
                     'name' => $name,
                     'realm' => is_null($realm) ? 'All' : $realm,
-                    'module' => $module_id,
+                    'module' => $module,
+                    'module_id' => $module_id,
                     'component' => $component,
                     'instance' => $instance,
                     'level' => $level,
@@ -458,18 +463,27 @@ class Role extends DataObject
         $query = "SELECT r.id, r.name, r.type, r.uname,
                          r.email, r.pass, r.date_reg,
                          r.valcode, r.state,r.auth_modid
-                  FROM $this->rolestable r, $this->rolememberstable rm
-                  WHERE r.id = rm.id AND
+                  FROM $this->rolestable r, $this->rolememberstable rm ";
+        // set up the query and get the data
+        if ($state == ROLES_STATE_CURRENT) {
+        	$where = "WHERE r.id = rm.id AND
                         r.type = ? AND
                         r.state != ? AND
                         rm.parentid = ?";
-        // set up the query and get the data
-        if ($state == ROLES_STATE_CURRENT) {
              $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->getID());
-
+        } elseif ($state == ROLES_STATE_ALL) {
+        	$where = "WHERE r.id = rm.id AND
+                        r.type = ? AND
+                        rm.parentid = ?";
+             $bindvars = array(ROLES_USERTYPE,$this->getID());
         } else {
              $bindvars = array(ROLES_USERTYPE, $state, $this->properties['id']->value);
+        	$where = "WHERE r.id = rm.id AND
+                        r.type = ? AND
+                        r.state = ? AND
+                        rm.parentid = ?";
         }
+        $query .= $where;
         if (isset($selection)) $query .= $selection;
         $query .= " ORDER BY " . $order;
         // Prepare the query
@@ -632,36 +646,32 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param int state get users in this state
-     * @param int $groupflag
-     * @return array list of users with elements <objectid> => <object>
+     * @param int $grpflag
+     * @return array list of users
+     * @todo evaluate performance of this (3 loops, of which 2 nested)
      */
-    public function getDescendants($state = ROLES_STATE_CURRENT, $groupflag=0)
+    public function getDescendants($state = ROLES_STATE_CURRENT, $grpflag=0)
     {
-        $groups = xarRoles::getgroups();
+        $users = $this->getUsers($state);
 
-        $queue = array($this->getID());
-        while (true) {
-            if (empty($queue)) break;
-            $parent = array_shift($queue);
-            $parents[] = $parent;
-            foreach ($groups as $group) {
-                if ($group['id'] == $parent) {unset($group); continue;}
-                if ($group['parentid'] == $parent) {$queue[] = $group['id']; unset($group);}
-            }
+        $groups = xarRoles::getSubGroups($this->getID());
+        $ua = array();
+        foreach($users as $user){
+            //using the ID as the key so that if a person is in more than one sub group they only get one email (mrb: email?)
+            $ua[$user->getID()] = $user;
         }
-        $descendants = array();
-        foreach($parents as $id){
-            $role = xarRoles::get($id);
-            if ($groupflag) {
-                $descendants[$id] = $role;
+        //Get the sub groups and go for another round
+        foreach($groups as $group){
+            $role = xarRoles::get($group['id']);
+            if ($grpflag) {
+                $ua[$group['id']] = $role;
             }
-            $users = $role->getUsers($state);
+            $users = $role->getDescendants($state);
             foreach($users as $user){
-                $descendants[$user->getID()] = $user;
+                $ua[$user->getID()] = $user;
             }
         }
-
-        return($descendants);
+        return($ua);
     }
 
     /**
@@ -779,16 +789,16 @@ class Role extends DataObject
         return $this->parentlevel;
     }
 
-    function setName($var) { $this->properties['name']->value = $var; }
-    function setUname($var) { $this->properties['name']->value = $var; }
-    function setParent($var) { $this->properties['parentid']->value = $var; }
-    function setUser($var) { $this->properties['uname']->value = $var; }
-    function setEmail($var) { $this->properties['email']->value = $var; }
-    function setPass($var) { $this->properties['password']->value = $var; }
-    function setState($var) { $this->properties['state']->value = $var; }
-    function setDateReg($var) { $this->properties['datereg']->value = $var; }
-    function setValCode($var) { $this->properties['valcode']->value = $var; }
-    function setAuthModule($var) { $this->properties['authmodule']->value = $var; }
+    function setName($var) { $this->properties['name']->setValue($var); }
+    function setUname($var) { $this->properties['name']->setValue($var); }
+    function setParent($var) { $this->properties['parentid']->setValue($var); }
+    function setUser($var) { $this->properties['uname']->setValue($var); }
+    function setEmail($var) { $this->properties['email']->setValue($var); }
+    function setPass($var) { $this->properties['password']->setValue($var); }
+    function setState($var) { $this->properties['state']->setValue($var); }
+    function setDateReg($var) { $this->properties['datereg']->setValue($var); }
+    function setValCode($var) { $this->properties['valcode']->setValue($var); }
+    function setAuthModule($var) { $this->properties['authmodule']->setValue($var); }
     function setLevel($var)
     {
         $this->parentlevel = $var;

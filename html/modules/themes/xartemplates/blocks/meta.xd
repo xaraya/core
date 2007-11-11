@@ -16,9 +16,10 @@
     <meta http-equiv="refresh" content="#$refreshtime#;URL=#$refreshurl#" />
 </xar:if>
 
+<xar:set name="sitename"><xar:var scope="module" module="themes" name="SiteName" /></xar:set>
 <xar:if condition="!empty($latitude)">
     <meta name="ICBM" content="#$latitude#, #$longitude#" />
-    <meta name="DC.title" content="#xarModVars::get('themes', 'SiteName', 1)#" />
+    <meta name="DC.title" content="#$sitename#" />
 </xar:if>
 
 <!-- Linking for Mozilla and related browser site tab -->
@@ -44,7 +45,7 @@
 <link rel="pingback" href="&xar-baseurl;ws.php" />
 <link rel="Top" type="text/html" href="#$baseurl#" />
 <link rel="Parent" type="text/html" href="#$baseurl#" />
-<link rel="author" href="#xarModVars::get('themes', 'SiteName', 1)#" />
+<link rel="author" href="#$sitename#" />
 
 <xar:if condition="!empty($copyrightpage)">
     <link rel="copyright" type="text/html" href="#$copyrightpage#" />

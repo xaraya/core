@@ -199,6 +199,44 @@ class xarPrivileges extends xarMasks
         return true;
     }
 
+    public static function getAssignments(Array $args=array())
+    {
+        parent::initialize();
+
+		$where = "WHERE p.type = " . self::PRIVILEGES_PRIVILEGETYPE;
+		if (!empty($args['privilege_id']))      $where .= ' AND p.id = ' . $args['privilege_id'];
+		if (!empty($args['role_id']))      $where .= ' AND r.id = ' . $args['role_id'];
+		if (!empty($args['module'])) {
+			if ($args['module'] == strtolower('All')) $where .= " AND p.module_id = " . 0;
+			else $where .= " AND p.module_id = " . xarMod::getID($args['module']);
+		}
+		$query = "SELECT p.id, p.name, r.id,r.type,r.name,
+						 p.module_id, p.component, p.instance,
+						 p.level,  p.description
+				  FROM " . parent::$privilegestable . " p INNER JOIN ". parent::$acltable . " a ON p.id = a.permid
+				  INNER JOIN ". parent::$rolestable . " r ON a.partid = r.id " .
+				  $where .
+				  " ORDER BY p.name";
+		$stmt = parent::$dbconn->prepareStatement($query);
+		// The fetchmode *needed* to be here, dunno why. Exception otherwise
+		$result = $stmt->executeQuery($query,ResultSet::FETCHMODE_NUM);
+        $allprivileges = array();
+		while($result->next()) {
+			list($id, $name, $role_id, $role_type, $role_name, $module, $component, $instance, $level,
+					$description) = $result->fields;
+			$allprivileges[] = array('id' => $id,
+							   'name' => $name,
+							   'role_id' => $role_id,
+							   'role_type' => $role_type,
+							   'role_name' => $role_name,
+							   'module' => $module,
+							   'component' => $component,
+							   'instance' => $instance,
+							   'level' => $level,
+							   'description' => $description);
+		}
+        return $allprivileges;
+    }
     /**
      * getprivileges: returns all the current privileges.
      *
@@ -214,36 +252,41 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    use associative fetching and one getrow statement.
     */
-    public static function getprivileges()
+    public static function getprivileges(Array $args=array())
     {
         parent::initialize();
-        static $allprivileges = array();
 
-        if (empty($allprivileges)) {
-            xarLogMessage('PRIV: getting all privs, once!');
-            $query = "SELECT p.id, p.name, r.name,
-                             m.name, p.component, p.instance,
-                             p.level,  p.description
-                      FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable . " r ON p.realmid = r.id
-                      LEFT JOIN ". parent::$modulestable . " m ON p.module_id = m.id
-                      WHERE type = " . self::PRIVILEGES_PRIVILEGETYPE .
-                      " ORDER BY p.name";
-            $stmt = parent::$dbconn->prepareStatement($query);
-            // The fetchmode *needed* to be here, dunno why. Exception otherwise
-            $result = $stmt->executeQuery($query,ResultSet::FETCHMODE_NUM);
-            while($result->next()) {
-                list($id, $name, $realm, $module, $component, $instance, $level,
-                        $description) = $result->fields;
-                $allprivileges[] = array('id' => $id,
-                                   'name' => $name,
-                                   'realm' => is_null($realm) ? 'All' : $realm,
-                                   'module' => $module,
-                                   'component' => $component,
-                                   'instance' => $instance,
-                                   'level' => $level,
-                                   'description' => $description);
-            }
-        }
+		xarLogMessage('PRIV: getting all privs, once!');
+		$where = "WHERE type = " . self::PRIVILEGES_PRIVILEGETYPE;
+		if (!empty($args['name']))      $where .= ' AND p.name = ' . $args['name'];
+		if (!empty($args['module'])) {
+			if ($args['module'] == strtolower('All')) $where .= " AND p.module_id = " . 0;
+			else $where .= " AND p.module_id = " . xarMod::getID($args['module']);
+		}
+		if (!empty($args['component'])) $where .= ' AND m.component = ' . $args['component'];
+		$query = "SELECT p.id, p.name, r.name,
+						 m.name, p.component, p.instance,
+						 p.level,  p.description
+				  FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable . " r ON p.realmid = r.id
+				  LEFT JOIN ". parent::$modulestable . " m ON p.module_id = m.id " .
+				  $where .
+				  " ORDER BY p.name";
+		$stmt = parent::$dbconn->prepareStatement($query);
+		// The fetchmode *needed* to be here, dunno why. Exception otherwise
+		$result = $stmt->executeQuery($query,ResultSet::FETCHMODE_NUM);
+        $allprivileges = array();
+		while($result->next()) {
+			list($id, $name, $realm, $module, $component, $instance, $level,
+					$description) = $result->fields;
+			$allprivileges[] = array('id' => $id,
+							   'name' => $name,
+							   'realm' => is_null($realm) ? 'All' : $realm,
+							   'module' => $module,
+							   'component' => $component,
+							   'instance' => $instance,
+							   'level' => $level,
+							   'description' => $description);
+		}
         return $allprivileges;
 
     }
@@ -476,13 +519,11 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    this isn't really the right place for this function
     */
-    public static function getinstances($modid=null, $component)
+    public static function getinstances($module=null, $component)
     {
-        if (is_null($modid)) return array();
-        if (!empty($modid)) {
-            $modInfo = xarMod_GetBaseInfo(xarModGetNameFromID($modid));
-            $modid = $modInfo['systemid'];
-        }
+        if (is_null($module)) return array();
+        $modid = 0;
+        if (!empty($module)) $modid = xarMod::getID($module);
 
         parent::initialize();
 
@@ -598,11 +639,11 @@ class xarPrivileges extends xarMasks
         }
         else {
             sys::import('modules.privileges.class.privileges');
-            $privs = new xarPrivileges();
-            $priv = $privs->getPrivilege($id);
+            $priv = xarPrivileges::getPrivilege($id);
             $priv->setName($name);
             $priv->setRealm($realm);
             $priv->setModule($module);
+            $priv->setModuleID($module);
             $priv->setComponent($component);
             $priv->setInstance($instance);
             $priv->setLevel($level);
@@ -631,11 +672,11 @@ class xarPrivileges extends xarMasks
         static $stmt = null;  // Statement only needs to be prepared once.
 
         $cacheKey = 'Privilege.ByPid';
-        if(xarVarIsCached($cacheKey,$id)) {
-            return xarVarGetCached($cacheKey,$id);
+        if(xarCore::isCached($cacheKey,$id)) {
+            return xarCore::getCached($cacheKey,$id);
         }
         // Need to get it
-        $query = "SELECT p.id, p.name, r.name, m.regid, p.component, p.instance, p.level, p.description
+        $query = "SELECT p.id, p.name, r.name, p.module_id, m.name, p.component, p.instance, p.level, p.description
                   FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable ." r ON p.realmid = r.id
                   LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id
                   WHERE type = ?";
@@ -647,11 +688,12 @@ class xarPrivileges extends xarMasks
         $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE,$id),ResultSet::FETCHMODE_NUM);
 
         if ($result->next()) {
-            list($id,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
+            list($id,$name,$realm,$module_id,$module,$component,$instance,$level,$description) = $result->fields;
             $pargs = array('id'=>$id,
                            'name'=>$name,
                            'realm'=> is_null($realm) ? 'All' : $realm,
                            'module'=>$module,
+                           'module_id'=>$module_id,
                            'component'=>$component,
                            'instance'=>$instance,
                            'level'=>$level,
@@ -660,7 +702,7 @@ class xarPrivileges extends xarMasks
 
             sys::import('modules.privileges.class.privilege');
             $priv = new xarPrivilege($pargs);
-            xarVarSetCached($cacheKey,$id,$priv);
+            xarCore::setCached($cacheKey,$id,$priv);
             return $priv;
         } else {
             return null;
@@ -685,18 +727,20 @@ class xarPrivileges extends xarMasks
         static $stmt = null;
 
         parent::initialize();
-        $query = "SELECT * FROM " . parent::$privilegestable . " WHERE type = ? AND name = ?";
+        $query = "SELECT p.*, m.name FROM " . parent::$privilegestable . " p
+        LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.type = ? AND p.name = ?";
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
 
         //Execute the query, bail if an exception was thrown
         $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, $name));
 
         if ($result->first()) {
-            list($id,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
+            list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$module) = $result->fields;
             $pargs = array('id'=>$id,
                            'name'=>$name,
                            'realm'=>$realm,
                            'module'=>$module,
+                           'module_id'=>$module_id,
                            'component'=>$component,
                            'instance'=>$instance,
                            'level'=>$level,
@@ -727,18 +771,20 @@ class xarPrivileges extends xarMasks
 
         parent::initialize();
         $privileges = array();
-        $query = "SELECT * FROM " . parent::$privilegestable . " WHERE type = ? AND module_id = ?";
+        $query = "SELECT p.*, m.name FROM " . parent::$privilegestable . " p
+        LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.type = ? AND p.module_id = ?";
         //Execute the query, bail if an exception was thrown
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, $module));
 
         while ($result->next()) {
-            list($id,$name,$realm,$module_id,$component,$instance,$level,$description) = $result->fields;
+            list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$module) = $result->fields;
             $pargs = array(
                 'id'         => $id,
                 'name'        => $name,
                 'realm'       => $realm,
-                'module'      => $module_id,
+                'module_id'   => $module_id,
+                'module'      => $module,
                 'component'   => $component,
                 'instance'    => $instance,
                 'level'       => $level,
@@ -768,51 +814,8 @@ class xarPrivileges extends xarMasks
     */
     public static function makeMember($childname,$parentname)
     {
-        $parent = self::getPrivilege($parentname);
-        $child = self::getPrivilege($childname);
-        return $parent->addMember($child);
-
-        parent::initialize();
-        // get the data for the parent object
-        $query = "SELECT *
-                  FROM " . parent::$privilegestable . " WHERE type = ? AND name = ?";
-        //Execute the query, bail if an exception was thrown
-        $result = parent::$dbconn->Execute($query,array(self::PRIVILEGES_PRIVILEGETYPE, $parentname));
-
-
-// create the parent object
-        list($id,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
-        $pargs = array('id'=>$id,
-                        'name'=>$name,
-                        'realm'=>$realm,
-                        'module'=>$module,
-                        'component'=>$component,
-                        'instance'=>$instance,
-                        'level'=>$level,
-                        'description'=>$description,
-                        'parentid'=>0);
-        $parent =  new xarPrivilege($pargs);
-
-// get the data for the child object
-        $query = "SELECT * FROM " . parent::$privilegestable . " WHERE type = ? AND name = ?";
-        //Execute the query, bail if an exception was thrown
-        $result = parent::$dbconn->Execute($query,array(self::PRIVILEGES_PRIVILEGETYPE, $childname));
-
-
-// create the child object
-        list($id,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
-        $pargs = array('id'=>$id,
-                        'name'=>$name,
-                        'realm'=>$realm,
-                        'module'=>$module,
-                        'component'=>$component,
-                        'instance'=>$instance,
-                        'level'=>$level,
-                        'description'=>$description,
-                        'parentid'=>0);
-        $child =  new xarPrivilege($pargs);
-
-// done
+        $parent = self::findPrivilege($parentname);
+        $child = self::findPrivilege($childname);
         return $parent->addMember($child);
     }
 

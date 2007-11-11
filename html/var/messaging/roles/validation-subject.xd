@@ -1,1 +1,3 @@
-Validate your account #$myname# at #$sitename#
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    Validate your account #$myname# at #$sitename#
+</xar:template>
