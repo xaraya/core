@@ -672,8 +672,8 @@ class xarPrivileges extends xarMasks
         static $stmt = null;  // Statement only needs to be prepared once.
 
         $cacheKey = 'Privilege.ByPid';
-        if(xarVarIsCached($cacheKey,$id)) {
-            return xarVarGetCached($cacheKey,$id);
+        if(xarCore::isCached($cacheKey,$id)) {
+            return xarCore::getCached($cacheKey,$id);
         }
         // Need to get it
         $query = "SELECT p.id, p.name, r.name, p.module_id, m.name, p.component, p.instance, p.level, p.description
@@ -702,7 +702,7 @@ class xarPrivileges extends xarMasks
 
             sys::import('modules.privileges.class.privilege');
             $priv = new xarPrivilege($pargs);
-            xarVarSetCached($cacheKey,$id,$priv);
+            xarCore::setCached($cacheKey,$id,$priv);
             return $priv;
         } else {
             return null;

@@ -593,6 +593,12 @@ class DataObjectMaster extends Object
             return $info;
         }
 
+        $cacheKey = 'DynamicData.ObjectInfo';
+        $infoid = (int)$args['objectid'];
+        if(xarCore::isCached($cacheKey,$infoid)) {
+            return xarCore::getCached($cacheKey,$infoid);
+        }
+
         $dbconn = xarDB::getConn();
         $xartable = xarDB::getTables();
 
@@ -631,6 +637,7 @@ class DataObjectMaster extends Object
         {
             $info['label'] .= ' + ' . $args['join'];
         }
+		xarCore::setCached($cacheKey,$$infoid,$info);
         return $info;
     }
 
