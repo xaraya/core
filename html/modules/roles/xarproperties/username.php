@@ -39,8 +39,8 @@ class UsernameProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
-		// Save the incoming value until validation is successful
-		$this->rawvalue = $value;
+        // Save the incoming value until validation is successful
+        $this->rawvalue = $value;
 
         // Validate as a text box
         if (!parent::validateValue($value)) return false;
@@ -53,58 +53,31 @@ class UsernameProperty extends TextBoxProperty
         if (empty($value)) {
             $value = xarUserGetVar('id');
         }
-		*/
+        */
 
         if (empty($value)) return true;
 
         $role = xarRoles::ufindRole($value);
 
         switch ((int)$this->existrule) {
-        	case 1:
+            case 1:
             if (!empty($role)) {
-	            $this->invalid = xarML('user #(1) already exists', $value);
-				return false;
+                $this->invalid = xarML('user #(1) already exists', $value);
+                return false;
             }
-        	break;
+            break;
 
-        	case 2:
+            case 2:
             if (empty($role)) {
-	            $this->invalid = xarML('user #(1) does not exist', $value);
-				return false;
+                $this->invalid = xarML('user #(1) does not exist', $value);
+                return false;
             }
-        	break;
+            break;
 
-        	case 0:
-        	default:
+            case 0:
+            default:
         }
-
-        /*
-        // check that the user exists, but dont except
-        if (is_numeric($value)) {
-            try {
-                $user = xarUserGetVar('uname', $value);
-            } catch (NotFoundExceptions $e) {
-                // Nothing to do?
-            }
-        } else {
-            $role = xarRoles::findRole($value);
-            if (!empty($role)) xarRoles::ufindRole($value);
-            try {
-                $user = $value;
-                $value = $role->getID();
-            } catch (NotFoundExceptions $e) {}
-        }
-
-        if (!is_numeric($value) || empty($user)) {
-            $this->invalid = xarML('user: #(1)', $this->name);
-            $this->value = null;
-            return false;
-        } else {
-            $this->value = $value;
-            return true;
-        }
-        */
-		$this->value = empty($role) ? 0 : $role->getID();;
+        $this->value = empty($role) ? 0 : $role->getID();;
         return true;
     }
 
@@ -112,25 +85,25 @@ class UsernameProperty extends TextBoxProperty
     {
         extract($data);
         if (isset($this->rawvalue)) {
-        	$data['value'] = $this->rawvalue;
-        	$data['user'] = $this->rawvalue;
+            $data['value'] = $this->rawvalue;
+            $data['user'] = $this->rawvalue;
         } else {
-			if (!isset($value)) $value = $this->value;
-			if (empty($value))  {
-				$data['user'] = '';
-				$data['value']= 0;
-			} else {
-				try {
-					$user = xarUserGetVar('name', $value);
-					if (empty($user))
-						$user = xarUserGetVar('uname', $value);
-				} catch(NotFoundExceptions $e) {
-					$user = $value;
-				}
+            if (!isset($value)) $value = $this->value;
+            if (empty($value))  {
+                $data['user'] = '';
+                $data['value']= 0;
+            } else {
+                try {
+                    $user = xarUserGetVar('name', $value);
+                    if (empty($user))
+                        $user = xarUserGetVar('uname', $value);
+                } catch(NotFoundExceptions $e) {
+                    $user = $value;
+                }
 
-				$data['user'] = xarVarprepForDisplay($user);
-				$data['value']= $value;
-			}
+                $data['user'] = xarVarprepForDisplay($user);
+                $data['value']= $value;
+            }
         }
 
         return parent::showInput($data);
@@ -139,30 +112,30 @@ class UsernameProperty extends TextBoxProperty
     public function showOutput(Array $data = array())
     {
         if (isset($this->rawvalue)) {
-        	$data['value'] = $this->rawvalue;
-        	$data['user'] = $this->rawvalue;
+            $data['value'] = $this->rawvalue;
+            $data['user'] = $this->rawvalue;
         } else {
-			extract($data);
-			if (!isset($value)) $value = $this->value;
-			if (empty($value))  $value = xarUserGetVar('id');
+            extract($data);
+            if (!isset($value)) $value = $this->value;
+            if (empty($value))  $value = xarUserGetVar('id');
 
-			try {
-				$user = xarUserGetVar('name', $value);
-				if (empty($user))
-					$user = xarUserGetVar('uname', $value);
-			} catch(NotFoundExceptions $e) {
-				$user = $value;
-			}
+            try {
+                $user = xarUserGetVar('name', $value);
+                if (empty($user))
+                    $user = xarUserGetVar('uname', $value);
+            } catch(NotFoundExceptions $e) {
+                $user = $value;
+            }
 
-			$data['user']  = xarVarPrepForDisplay($user);
-			$data['value'] = $value;
+            $data['user']  = xarVarPrepForDisplay($user);
+            $data['value'] = $value;
 
-			if ($this->validation) {
-				$data['linkurl'] = xarModURL('roles','user','display',array('id' => $value));
-			} else {
-				$data['linkurl'] = "";
-			}
-		}
+            if ($this->validation) {
+                $data['linkurl'] = xarModURL('roles','user','display',array('id' => $value));
+            } else {
+                $data['linkurl'] = "";
+            }
+        }
         return parent::showOutput($data);
     }
 
@@ -197,7 +170,7 @@ class UsernameProperty extends TextBoxProperty
             $this->parseValidation($validation);
         }
         foreach ($this->validationargs as $validationarg) {
-        	$data[$validationarg] = $this->$validationarg;
+            $data[$validationarg] = $this->$validationarg;
         }
 
         // allow template override by child classes
