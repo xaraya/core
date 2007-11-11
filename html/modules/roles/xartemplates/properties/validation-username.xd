@@ -1,24 +1,62 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<table class="xar-norm">
-  <tr>
-    <td>
-      <xar:mlstring>Show a link if this condition is met</xar:mlstring>
-    </td>
-    <td>
-      <xar:if condition="!isset($value)">
-         <xar:if condition="isset($validation)">
-           <xar:set name="value">$validation</xar:set>
-         <xar:elseif condition="isset($other)"/>
-           <xar:set name="value">$other</xar:set>
-         <xar:else/>
-           <xar:set name="value">''</xar:set>
-         </xar:if>
-      </xar:if>
-      <input type="text" name="#$name#" id="#$id#" value="#$value#" size="#$size#" maxlength="#$maxlength#" tabindex="#$tabindex#" />
-    </td>
-  </tr>
-</table>
+    <div class="xar-form-input-wrapper">
+        <label for="#$name#'[min]" title="#xarML('Minimum length the user name must have')#" class="xar-form-label">
+            <xar:mlstring>
+                Minimum length:
+            </xar:mlstring>
+        </label>
+        <input type="text" name="#$name#[min]" id="#$id#_min" value="#$min#" size="4" tabindex="#$tabindex#" />
+    </div>
+    <div class="xar-form-input-wrapper">
+        <label for="#$name#'[max]" title="#xarML('Maximum length the user name can have')#" class="xar-form-label">
+            <xar:mlstring>
+                Maximum length:
+            </xar:mlstring>
+        </label>
+        <input type="text" name="#$name#[max]" id="#$id#_max" value="#$max#" size="4" tabindex="#$tabindex#" />
+    </div>
+    <div class="xar-form-input-wrapper">
+        <label for="#$name#'[regex]" title="#xarML('A regular expression the user name must conform to')#" class="xar-form-label">
+            <xar:mlstring>
+                Regular Expression:
+            </xar:mlstring>
+        </label>
+        <input type="text" name="#$name#[regex]" id="#$id#_regex" value="#$regex#" size="30" tabindex="#$tabindex#" />
+        <xar:mlstring>PCRE syntax, e.g. /^[A-Z]+\d*$/</xar:mlstring>
+    </div>
+    <div class="xar-form-input-wrapper">
+        <label for="#$name#'[linkrule]" title="#xarML('Show a link if this condition is met')#" class="xar-form-label">
+            <xar:mlstring>
+                Link to Profile:
+            </xar:mlstring>
+        </label>
+        <xar:set name="existname">$name . "[linkrule]"</xar:set>
+        <xar:set name="options">
+            array(
+                array('id' => 0, 'name' => xarML('Mo rule')),
+                array('id' => 1, 'name' => xarML('User must not already exist')),
+                array('id' => 2, 'name' => xarML('User must already exist')),
+            )
+        </xar:set>
+        <input type="text" name="#$name#[linkrule]" id="#$id#_linkrule" value="#$linkrule#" size="#$size#" tabindex="#$tabindex#" />
+    </div>
+    <div class="xar-form-input-wrapper">
+        <label for="#$name#'[existrule]" title="#xarML('Checks whether the user exists already')#" class="xar-form-label">
+            <xar:mlstring>
+                Existence Check:
+            </xar:mlstring>
+        </label>
+        <xar:set name="existname">$name . "[existrule]"</xar:set>
+        <xar:set name="options">
+            array(
+                array('id' => 0, 'name' => xarML('No rule')),
+                array('id' => 1, 'name' => xarML('User must not already exist')),
+                array('id' => 2, 'name' => xarML('User must already exist')),
+            )
+        </xar:set>
+        <xar:data-input type="dropdown" name="$existname" options="$options" value="$existrule" />
+    </div>
 
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
