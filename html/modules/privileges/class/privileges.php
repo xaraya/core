@@ -145,11 +145,11 @@ class xarPrivileges extends xarMasks
             if($result->next()) $realmid = $result->getInt('id');
         }
         if($module == 'All') {
-        	$module_id = self::PRIVILEGES_ALL;
+            $module_id = self::PRIVILEGES_ALL;
         } elseif($module == null) {
-        	$module_id = null;
+            $module_id = null;
         } else {
-        	$module_id = xarMod::getID($module);
+            $module_id = xarMod::getID($module);
         }
         $query = "INSERT INTO " . parent::$privilegestable . " (
                     name, realmid, module_id, component,
