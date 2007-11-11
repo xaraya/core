@@ -252,11 +252,10 @@ class xarPrivilege extends xarMask
         $result = $stmt->executeQuery(array($this->getID()));
 
         // remove this child from all the parents
-        $perms = new xarPrivileges();
         while($result->next()) {
             list($parentid) = $result->fields;
             if ($parentid != 0) {
-                $parentperm = $perms->getPrivilege($parentid);
+                $parentperm = xarPrivileges::getPrivilege($parentid);
                 $parentperm->removeMember($this);
             }
         }

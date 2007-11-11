@@ -23,8 +23,7 @@ function privileges_admin_displayprivilege()
 
 //Call the Privileges class and get the privilege to be modified
     sys::import('modules.privileges.class.privileges');
-    $privs = new xarPrivileges();
-    $priv = $privs->getPrivilege($id);
+    $priv = xarPrivileges::getPrivilege($id);
 
 //Get the array of parents of this privilege
     $parents = array();
