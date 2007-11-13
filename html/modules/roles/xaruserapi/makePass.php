@@ -45,7 +45,7 @@ function _make_seed()
     return (float) $sec + ((float) $usec * 100000);
 }
 
-function roles_userapi_makePass()
+function roles_userapi_makepass()
 {
     // init some
     $result = '';
