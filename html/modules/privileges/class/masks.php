@@ -133,13 +133,13 @@ class xarMasks extends Object
             list($id, $name, $realm, $module_id, $component, $instance, $level,
                     $description) = $result->fields;
             $pargs = array('id' => $id,
-						   'name' => $name,
-						   'realm' => is_null($realm) ? 'All' : $realm,
-						   'module' => $module_id,
-						   'component' => $component,
-						   'instance' => $instance,
-						   'level' => $level,
-						   'description' => $description);
+                           'name' => $name,
+                           'realm' => is_null($realm) ? 'All' : $realm,
+                           'module' => $module_id,
+                           'component' => $component,
+                           'instance' => $instance,
+                           'level' => $level,
+                           'description' => $description);
             array_push($masks, new xarMask($pargs));
         }
         return $masks;
@@ -164,11 +164,11 @@ class xarMasks extends Object
         // FIXME: make mask names unique across modules (+ across realms) ?
         // FIXME: is module/name enough? Perhaps revisit this with realms in mind.
         if($module == 'All') {
-        	$module_id = self::PRIVILEGES_ALL;
+            $module_id = self::PRIVILEGES_ALL;
         } elseif($module == null) {
-        	$module_id = null;
+            $module_id = null;
         } else {
-        	$module_id = xarMod::getID($module);
+            $module_id = xarMod::getID($module);
         }
 
         $realmid = null;
@@ -422,9 +422,9 @@ class xarMasks extends Object
                 xarResponseRedirect(xarModURL('authsystem','user','showloginform',array('redirecturl'=> $requrl),false));
             } else {
                 $msg = xarML("You don't have the correct privileges for this operation");
-				$candebug = (xarSession::getVar('role_id') == xarModVars::get('privileges','tester'));
-				$test = xarModVars::get('privileges','test') && $candebug;
-				if ($test) $msg .= ": " . $maskname;
+                $candebug = (xarSession::getVar('role_id') == xarModVars::get('privileges','tester'));
+                $test = xarModVars::get('privileges','test') && $candebug;
+                if ($test) $msg .= ": " . $maskname;
                 throw new Exception($msg);
             }
         }

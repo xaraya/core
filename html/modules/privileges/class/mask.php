@@ -14,16 +14,16 @@ class xarMask extends Object
     const PRIVILEGES_PRIVILEGETYPE = 2;
     const PRIVILEGES_MASKTYPE = 3;
 
-    public $id;          		//the id of this privilege/mask
-    public $name;         		//the name of this privilege/mask
-    public $realm;        		//the realm of this privilege/mask
-    public $module;        		//the module name of this privilege/mask
-    public $module_id;    		//the module ID name of this privilege/mask
-    public $component;    		//the component of this privilege/mask
-    public $instance;      		//the instance of this privilege/mask
-    public $level;         		//the access level of this privilege/mask
-    public $description = '';   //the long description of this privilege/mask
-    public $normalform;    		//the normalized form of this privilege/mask
+    public $id;                    //the id of this privilege/mask
+    public $name;                  //the name of this privilege/mask
+    public $realm;                 //the realm of this privilege/mask
+    public $module;                //the module name of this privilege/mask
+    public $module_id;             //the module ID name of this privilege/mask
+    public $component;             //the component of this privilege/mask
+    public $instance;              //the instance of this privilege/mask
+    public $level;                 //the access level of this privilege/mask
+    public $description = '';      //the long description of this privilege/mask
+    public $normalform;            //the normalized form of this privilege/mask
 
     public $dbconn;
     public $privilegestable;
@@ -66,9 +66,9 @@ class xarMask extends Object
         $this->level        = (int) $level;
         if (isset($description)) $this->description  = $description;
         if (!isset($module_id) || (in_array(strtolower($module), array('all','empty')))) {
-			$this->setModuleID($module);
+            $this->setModuleID($module);
         } else {
-			$this->module_id    = $module_id;
+            $this->module_id    = $module_id;
         }
     }
 
@@ -267,29 +267,29 @@ class xarMask extends Object
         return $match && ($this->getLevel() >= $mask->getLevel()) && ($mask->getLevel() > 0);
     }
 
-    function getID() 				{ return $this->id; }
-    function getName() 				{ return $this->name; }
-    function getRealm() 			{ return ($this->realm == null) ? "All" : $this->realm; }
-    function getModule() 			{ return $this->module; }
+    function getID()                 { return $this->id; }
+    function getName()                 { return $this->name; }
+    function getRealm()             { return ($this->realm == null) ? "All" : $this->realm; }
+    function getModule()             { return $this->module; }
+    function getModuleID()            { return $this->module_id; }
+    function getComponent()         { return $this->component; }
+    function getInstance()             { return $this->instance; }
+    function getLevel()             { return $this->level; }
+    function getDescription()        { return $this->description; }
 
-    function getModuleID()			{ return $this->module_id; }
-    function getComponent() 		{ return $this->component; }
-    function getInstance() 			{ return $this->instance; }
-    function getLevel() 			{ return $this->level; }
-    function getDescription()		{ return $this->description; }
-
-    function setName($var) 			{ $this->name = $var; }
-    function setRealm($var) 		{ $this->realm = $var; }
-    function setModule($var) 		{ $this->module = $var; }
-    function setModuleID($var) {
-		if (strtolower($var) == 'all') $this->module_id = xarMasks::PRIVILEGES_ALL;
-		elseif (($var === null) || (strtolower($var) == 'empty')) $this->module_id = null;
-		else $this->module_id = xarMod::getID($var);
-	}
-    function setComponent($var) 	{ $this->component = $var; }
-    function setInstance($var) 		{ $this->instance = $var; }
-    function setLevel($var) 		{ $this->level = $var; }
-    function setDescription($var) 	{ $this->description = $var; }
+    function setName($var)             { $this->name = $var; }
+    function setRealm($var)         { $this->realm = $var; }
+    function setModule($var)         { $this->module = $var; }
+    function setModuleID($var)
+    {
+        if (strtolower($var) == 'all') $this->module_id = xarMasks::PRIVILEGES_ALL;
+        elseif (($var === null) || (strtolower($var) == 'empty')) $this->module_id = null;
+        else $this->module_id = xarMod::getID($var);
+    }
+    function setComponent($var)     { $this->component = $var; }
+    function setInstance($var)         { $this->instance = $var; }
+    function setLevel($var)         { $this->level = $var; }
+    function setDescription($var)     { $this->description = $var; }
 
 
 }

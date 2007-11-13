@@ -254,25 +254,25 @@ class DataObjectMaster extends Object
         $properties = $this->properties;
         $fields = array();
         if(count($fieldlist) != 0) {
-			foreach($fieldlist as $field)
-				// Ignore those disabled AND those that don't exist
-				if(isset($properties[$field]) && ($properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED))
-					$fields[$properties[$field]->id] = $properties[$field]->name;
+            foreach($fieldlist as $field)
+                // Ignore those disabled AND those that don't exist
+                if(isset($properties[$field]) && ($properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED))
+                    $fields[$properties[$field]->id] = $properties[$field]->name;
         } else {
-			if ($status) {
-				// we have a status: filter on it
-				foreach($properties as $property)
-					if($property->status && $this->status)
-						$fields[$property->id] = $property->name;
-			} else {
-				// no status filter: return those that are not disabled
-				foreach($this->properties as $property)
-					if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
-						$fields[$property->id] = $property->name;
-			}
+            if ($status) {
+                // we have a status: filter on it
+                foreach($properties as $property)
+                    if($property->status && $this->status)
+                        $fields[$property->id] = $property->name;
+            } else {
+                // no status filter: return those that are not disabled
+                foreach($this->properties as $property)
+                    if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                        $fields[$property->id] = $property->name;
+            }
         }
         return $fields;
-	}
+    }
 
     /**
      * Add the ancestors to this object
@@ -461,28 +461,28 @@ class DataObjectMaster extends Object
                 return $this->properties;
             }
         } else {
-        	// Accept a list or an array
-        	if (!is_array($args['fieldlist'])) $args['fieldlist'] = explode(',',$args['fieldlist']);
+            // Accept a list or an array
+            if (!is_array($args['fieldlist'])) $args['fieldlist'] = explode(',',$args['fieldlist']);
             $fieldlist = $args['fieldlist'];
         }
 
 
         $properties = array();
         if (!empty($args['fieldprefix'])) {
-			foreach($fieldlist as $name) {
-				if (isset($this->properties[$name])) {
-					// Pass along a field prefix if there is one
-					$this->properties[$name]->_fieldprefix = $args['fieldprefix'];
-					$properties[$name] = &$this->properties[$name];
-				}
-			}
+            foreach($fieldlist as $name) {
+                if (isset($this->properties[$name])) {
+                    // Pass along a field prefix if there is one
+                    $this->properties[$name]->_fieldprefix = $args['fieldprefix'];
+                    $properties[$name] = &$this->properties[$name];
+                }
+            }
         } else {
-			foreach($fieldlist as $name) {
-				if (isset($this->properties[$name])) {
-					// Pass along a field prefix if there is one
-					$properties[$name] = &$this->properties[$name];
-				}
-			}
+            foreach($fieldlist as $name) {
+                if (isset($this->properties[$name])) {
+                    // Pass along a field prefix if there is one
+                    $properties[$name] = &$this->properties[$name];
+                }
+            }
         }
 
         return $properties;
@@ -637,7 +637,7 @@ class DataObjectMaster extends Object
         {
             $info['label'] .= ' + ' . $args['join'];
         }
-		xarCore::setCached($cacheKey,$$infoid,$info);
+        xarCore::setCached($cacheKey,$infoid,$info);
         return $info;
     }
 

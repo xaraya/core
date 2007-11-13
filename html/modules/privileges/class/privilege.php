@@ -393,7 +393,6 @@ class xarPrivilege extends xarMask
         $parents = $this->getParents();
 
         //Get the parent field for each parent
-//        $masks = new xarMasks();
         while (list($key, $parent) = each($parents)) {
             $ancestors = $parent->getParents();
             foreach ($ancestors as $ancestor) {
@@ -480,7 +479,6 @@ class xarPrivilege extends xarMask
         $children = $this->getChildren();
 
         //Get the child field for each child
-//        $masks = new xarMasks();
         while (list($key, $child) = each($children)) {
             $descendants = $child->getChildren();
             foreach ($descendants as $descendant) {
