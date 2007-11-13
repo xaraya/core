@@ -4,7 +4,7 @@
 </xar:comment>
 <xar:set name="stateoptions">
     array(
-        array('id' => ROLES_STATE_CURRENT, 'name' => xarML('All')),
+        array('id' => ROLES_STATE_ALL, 'name' => xarML('All')),
         array('id' => ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')),
         array('id' => ROLES_STATE_NOTVALIDATED, 'name' => xarML('Not Validated')),
         array('id' => ROLES_STATE_ACTIVE, 'name' => xarML('Active')),
@@ -191,8 +191,7 @@
                 </td>
                 <xar:if condition="$id gt 0">
                     <td  class="xar-align-center xar-valign-middle">
-                        <xar:set name="checked">$includesubgroups == 0</xar:set>
-                        <xar:data-input type="checkbox" name="includesubgroups" id="includesubgroups" checked="$checked" onchange="this.form.submit()" />
+                        <xar:data-input type="checkbox" name="includesubgroups" id="includesubgroups" checked="$includesubgroups" onchange="this.form.submit()" />
                     </td>
                 </xar:if>
                 <td class="xar-align-center">

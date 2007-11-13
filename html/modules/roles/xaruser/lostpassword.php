@@ -81,6 +81,8 @@ function roles_user_lostpassword()
             $modifiedstatus = $role->setPass($user['pass']);
             if (!$role->updateItem()) return;
 
+            /*
+            */
               // Send Reminder Email
             if (!xarModAPIFunc('roles', 'admin','senduseremail', array('id' => array($user['id'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;
 

@@ -99,7 +99,6 @@ class DataPropertyMaster extends Object
                 }
 //            }
         }
-
         return $properties;
     }
 
@@ -131,6 +130,8 @@ class DataPropertyMaster extends Object
 
         // get a new property
         $property =& self::getProperty($args);
+// This must not be automatic. Instead, explicitly set this when and where necessary (like checkInput)
+//        $property->objectref = $objectref;
 
         // for dynamic object lists, put a reference to the $items array in the property
         if(method_exists($objectref, 'getItems'))
