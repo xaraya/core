@@ -38,6 +38,7 @@ class xarMasks extends Object
     protected static $instancestable;
     protected static $levelstable;
     protected static $privsetstable;
+    protected static $rolestable;
 
     protected static $privilegeset;
 
@@ -65,6 +66,7 @@ class xarMasks extends Object
         self::$acltable = $xartable['security_acl'];
         self::$instancestable = $xartable['security_instances'];
         self::$modulestable = $xartable['modules'];
+        self::$rolestable = $xartable['roles'];
 
         // @todo refactor callers to do this directly
         sys::import('modules.privileges.class.securitylevel');
@@ -128,16 +130,16 @@ class xarMasks extends Object
 
         $masks = array();
         while($result->next()) {
-            list($sid, $name, $realm, $module_id, $component, $instance, $level,
+            list($id, $name, $realm, $module_id, $component, $instance, $level,
                     $description) = $result->fields;
-            $pargs = array('sid' => $sid,
-                               'name' => $name,
-                               'realm' => is_null($realm) ? 'All' : $realm,
-                               'module' => $module_id,
-                               'component' => $component,
-                               'instance' => $instance,
-                               'level' => $level,
-                               'description' => $description);
+            $pargs = array('id' => $id,
+                           'name' => $name,
+                           'realm' => is_null($realm) ? 'All' : $realm,
+                           'module' => $module_id,
+                           'component' => $component,
+                           'instance' => $instance,
+                           'level' => $level,
+                           'description' => $description);
             array_push($masks, new xarMask($pargs));
         }
         return $masks;
@@ -162,11 +164,11 @@ class xarMasks extends Object
         // FIXME: make mask names unique across modules (+ across realms) ?
         // FIXME: is module/name enough? Perhaps revisit this with realms in mind.
         if($module == 'All') {
-        	$module_id = self::PRIVILEGES_ALL;
+            $module_id = self::PRIVILEGES_ALL;
         } elseif($module == null) {
-        	$module_id = null;
+            $module_id = null;
         } else {
-        	$module_id = xarMod::getID($module);
+            $module_id = xarMod::getID($module);
         }
 
         $realmid = null;
@@ -183,14 +185,14 @@ class xarMasks extends Object
         try {
             self::$dbconn->begin();
             if ($result->first()) {
-                list($sid) = $result->fields;
+                list($id) = $result->fields;
                 $query = "UPDATE " . self::$privilegestable .
                           " SET realmid = ?, component = ?,
                               instance = ?, level = ?,
                               description = ?, type= ?
                           WHERE id = ?";
                 $bindvars = array($realmid, $component, $instance, $level,
-                                  $description, self::PRIVILEGES_MASKTYPE, $sid);
+                                  $description, self::PRIVILEGES_MASKTYPE, $id);
             } else {
                 $query = "INSERT INTO " . self::$privilegestable .
                           " (name, realmid, module_id, component, instance, level, description, type)
@@ -387,8 +389,7 @@ class xarMasks extends Object
                 $userID = _XAR_ID_UNREGISTERED;
             }
             $role = xarRoles::get($userID);
-        }
-        else {
+        } else {
             $role = xarRoles::findRole($rolename);
         }
         // check if we already have the irreducible set of privileges for the current user
@@ -421,6 +422,9 @@ class xarMasks extends Object
                 xarResponseRedirect(xarModURL('authsystem','user','showloginform',array('redirecturl'=> $requrl),false));
             } else {
                 $msg = xarML("You don't have the correct privileges for this operation");
+                $candebug = (xarSession::getVar('role_id') == xarModVars::get('privileges','tester'));
+                $test = xarModVars::get('privileges','test') && $candebug;
+                if ($test) $msg .= ": " . $maskname;
                 throw new Exception($msg);
             }
         }
@@ -569,7 +573,7 @@ class xarMasks extends Object
             if($thistest) {
                 echo "Comparing <font color='blue'>[" . $privilege->present() . "]</font> against  <font color='green'>[". $mask->present() . "]</font> <b>for deny</b>. ";
                 if (($privilege->level == 0) && ($privilege->includes($mask))) echo "<font color='blue'>[" . $privilege->getName() . "]</font> matches. ";
-                else echo "no match found. ";
+                else echo "<font color='red'>no match</font>";
                 /* debugging output */
                 $msg = "Comparing for DENY.<font color='blue'>".$privilege->present(). "</blue>\n  ".
                     $mask->present();
@@ -692,10 +696,10 @@ class xarMasks extends Object
         self::initialize();
         if ($suppresscache || !xarVarIsCached('Security.Masks',$name)) {
             $bindvars = array();
-            $query = "SELECT masks.id AS sid, masks.name AS name, realms.name AS realm,
-                             module_id AS module, masks.component as component, masks.instance AS instance,
+            $query = "SELECT masks.id AS id, masks.name AS name, realms.name AS realm,
+                             module_id AS module_id, modules.name as module, masks.component as component, masks.instance AS instance,
                              masks.level AS level, masks.description AS description
-                      FROM " . self::$privilegestable . " masks LEFT JOIN " . self::$realmstable .  " realms ON masks.realmid = realms.id
+                      FROM " . self::$privilegestable . " masks LEFT JOIN " . self::$realmstable .  " realms ON masks.realmid = realms.id INNER JOIN  " . self::$modulestable . " modules ON masks.module_id = modules.id
                       WHERE  masks.name = ? ";
             $bindvars[] = $name;
             if(!empty($modid)) {
