@@ -24,7 +24,12 @@ class RadioButtonsProperty extends SelectProperty
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'radio';
+    }
 
+    public function showInput(Array $data = array())
+    {
+        if (!empty($data['checked'])) $data['value'] = $data['checked'];
+        return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
