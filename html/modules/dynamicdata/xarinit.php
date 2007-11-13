@@ -156,15 +156,15 @@ function dynamicdata_init()
         // create default objects for dynamic data
         $sql = "INSERT INTO $dynamic_objects (
                 object_name, object_label,
-                object_moduleid, object_itemtype, object_urlparam,
+                object_moduleid, object_itemtype, object_class, object_filepath, object_urlparam,
                 object_maxid, object_config, object_isalias)
-                VALUES (?,?,?,?,?,?,?,?)";
+                VALUES (?,?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         $objects = array(
-            array('objects'   ,'Dynamic Objects'   ,$modid,0,'itemid',0,''               ,0),
-            array('properties','Dynamic Properties',$modid,1,'itemid',0,''               ,0),
-            array('sample'    ,'Sample Object'     ,$modid,2,'itemid',3,'nothing much...',0)
+            array('objects'   ,'Dynamic Objects'   ,$modid,0,'','',                                               'itemid',0,''               ,0),
+            array('properties','Dynamic Properties',$modid,1,'DProperty','modules/dynamicdata/class/property.php','itemid',0,''               ,0),
+            array('sample'    ,'Sample Object'     ,$modid,2,'','',                                               'itemid',3,'nothing much...',0)
         );
 
         $objectid = array();
@@ -278,7 +278,7 @@ function dynamicdata_init()
             array('objectid'  ,'Id'                 ,$objectid[1],21,''            ,$dynamic_objects.'.object_id'         ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,1 ,'DataPropertyMaster::integer'),
             array('name'      ,'Name'               ,$objectid[1],2 ,''            ,$dynamic_objects.'.object_name'       ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
             array('label'     ,'Label'              ,$objectid[1],2 ,''            ,$dynamic_objects.'.object_label'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
-            array('parent'    ,'Parent',             $objectid[1],600,'0'          ,$dynamic_objects.'.object_parent'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
+            array('parent'    ,'Parent',             $objectid[1],24,'0'          ,$dynamic_objects.'.object_parent'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'a:2:{s:10:"validation";s:7:"integer";s:8:"override";s:1:"1";}'),
             array('moduleid'  ,'Module'             ,$objectid[1],19,'182'         ,$dynamic_objects.'.object_moduleid'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,5 ,'regid'), // FIXME: change this validation when we move from regid to systemid
             array('itemtype'  ,'Item Type'          ,$objectid[1],20,'0'           ,$dynamic_objects.'.object_itemtype'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,6 ,'integer'),
             array('class'     ,'Class'              ,$objectid[1],2 ,'DataObject'  ,$dynamic_objects.'.object_class'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'varchar (255)'),
@@ -298,7 +298,7 @@ function dynamicdata_init()
             array('source'    ,'Source'             ,$objectid[2],23,'dynamic_data',$dynamic_properties.'.prop_source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,'varchar (254)'),
             array('status'    ,'Status'             ,$objectid[2],25,'1'           ,$dynamic_properties.'.prop_status'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,'integer (tiny)'),
             array('order'     ,'Order'              ,$objectid[2],15,'0'           ,$dynamic_properties.'.prop_order'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11,'integer (tiny)'),
-            array('validation','Validation'         ,$objectid[2],2 ,''            ,$dynamic_properties.'.prop_validation',DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12,'varchar (254)'),
+            array('validation','Validation'         ,$objectid[2],3 ,''            ,$dynamic_properties.'.prop_validation',DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12,'text'),
 
             // Properties for the Sample DD object
             // @todo import this

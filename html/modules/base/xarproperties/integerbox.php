@@ -38,7 +38,7 @@ class NumberBoxProperty extends TextBoxProperty
             } elseif (isset($this->max)) {
                 $this->value = $this->max;
             } else {
-                $this->value = 0;
+                $this->value = null;
             }
         } elseif (is_numeric($value)) {
             $value = intval($value);
