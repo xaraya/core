@@ -428,7 +428,16 @@ function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elem
     // Get the right source filename
     $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $ddName, $elements);
 
-    // Final fall-back to default template in dynamicdata
+    // Property fall-back to default template in the module the property belongs to
+    if ((empty($sourceFileName) || !file_exists($sourceFileName)) &&
+        $elements == 'properties') {
+		$fallbackmodule = DataPropertyMaster::getProperty(array('type' => $ddName))->tplmodule;
+		if ($fallbackmodule != $modName) {
+			$sourceFileName = xarTpl__GetSourceFileName($fallbackmodule, $templateBase, $ddName, $elements);
+		}
+    }
+
+    // Final fall-back to default template in dynamicdata for both objects and properties
     if ((empty($sourceFileName) || !file_exists($sourceFileName)) &&
         $modName != 'dynamicdata') {
         $sourceFileName = xarTpl__GetSourceFileName('dynamicdata', $templateBase, $ddName, $elements);

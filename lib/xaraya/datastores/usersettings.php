@@ -52,7 +52,7 @@ class UserSettingsDataStore extends BasicDataStore // Consider inheriting from M
 
             // set the value for this property
             if (isset($value)) {
-                $this->fields[$field]->setValue($value);
+				$this->fields[$field]->value = $value;
             //} else {
                 // use the equivalent module variable as default
             //    $this->fields[$field]->setValue(xarModVars::get($this->modname,$field));

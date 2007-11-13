@@ -34,8 +34,7 @@ function roles_admin_removeprivilege()
     $data['parents'] = $parents;
 
     // Call the Privileges class and get the privilege
-    $privs = new xarPrivileges();
-    $priv = $privs->getPrivilege($privid);
+    $priv = xarPrivileges::getPrivilege($privid);
     // some assignments can't be removed, for your own good
     if ((($roleid == 1) && ($privid == 1)) ||
         (($roleid == 2) && ($privid == 6)) ||
