@@ -1,7 +1,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<xar:if condition="empty($layout) or $layout eq 'default'">
+<xar:if condition="empty($layout) or $layout eq 'horizontal' or $layout eq 'default'">
     <xar:if condition="isset($onchange)">
       <xar:set name="evt_change">$onchange</xar:set>
     <xar:else/>
