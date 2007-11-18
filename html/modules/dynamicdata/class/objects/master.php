@@ -203,7 +203,7 @@ class DataObjectMaster extends Object
         // get the properties defined for this object
        if(count($this->properties) == 0 && isset($this->objectid)) {
             $args = $this->toArray();
-            $args['objectref'] = $this;
+            $args['objectref'] =& $this;
             if(!isset($args['allprops']))   //FIXME is this needed??
                 $args['allprops'] = null;
 
@@ -436,12 +436,14 @@ class DataObjectMaster extends Object
     {
         if(empty($args['fieldlist']))
         {
-            if(count($this->fieldlist) > 0)
+            if(count($this->fieldlist) > 0) {
                 $fieldlist = $this->fieldlist;
-            else
+            } else {
                 return $this->properties;
-//                $fieldlist = array_keys($this->properties);
+            }
         } else {
+            // Accept a list or an array
+            if (!is_array($args['fieldlist'])) $args['fieldlist'] = explode(',',$args['fieldlist']);
             $fieldlist = $args['fieldlist'];
         }
 
@@ -647,7 +649,7 @@ class DataObjectMaster extends Object
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
     **/
-    static function &getObjectList(Array $args)
+    static function &getObjectList(Array $args=array())
     {
         // Complete the info if this is a known object
         $info = self::getObjectInfo($args);
