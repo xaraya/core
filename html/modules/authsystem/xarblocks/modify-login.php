@@ -29,7 +29,7 @@ function authsystem_loginblock_modify($blockinfo)
         $vars['showlogout'] = 0;
     }
     if (empty($vars['logouttitle'])) {
-        $var['logouttitle'] = '';
+        $vars['logouttitle'] = '';
     }
 
     $args['showlogout'] = $vars['showlogout'];
