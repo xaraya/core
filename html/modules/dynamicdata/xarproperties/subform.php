@@ -489,7 +489,6 @@ class SubFormProperty extends DataProperty
             } else {
                 $data['dropdown'] = array();
             }
-                echo $this->title;
         }
 
         return parent::showInput($data);
@@ -726,12 +725,10 @@ class SubFormProperty extends DataProperty
         foreach ($this->arguments as $item) {
             $data[$item] = $this->$item;
         }
-        // FIXME: needs to be a better way to convert between objectname and objectid
         if (!empty($this->objectname)) {
-            $info = DataObjectMaster::getObjectInfo(array('name' => $this->objectname));
-            $this->objectid = $info['objectid'];
-            $data['objectid'] = $info['objectid'];
-            $data['properties'] = DataPropertyMaster::getProperties(array('objectid' => $info['objectid']));
+            $object = DataObjectMaster::getObject(array('name' => $this->objectname));
+            $data['objectid'] = $object->objectid;
+            $data['properties'] = $object->getProperties();
         } else {
             $this->objectid = 0;
             $data['objectid'] = 0;
