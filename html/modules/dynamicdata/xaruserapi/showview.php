@@ -55,6 +55,10 @@ function dynamicdata_userapi_showview($args)
         if (!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_DONT_SET)) {return;}
     }
 
+    if (isset($table)) {
+        $table = xarDB::getPrefix() . '_' . $table;
+    }
+
     // don't try getting the where clause via input variables, obviously !
     if (empty($where)) $where = '';
     if (empty($groupby)) $groupby = '';
@@ -83,6 +87,7 @@ function dynamicdata_userapi_showview($args)
                                            'sort' => $sort,
                                            'numitems' => $numitems,
                                            'startnum' => $startnum,
+                                           'table'      => $table,
                                            'where' => $where,
                                            'fieldlist' => $myfieldlist,
                                            'catid' => $catid,
