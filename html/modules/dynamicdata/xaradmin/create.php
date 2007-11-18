@@ -30,7 +30,7 @@ function dynamicdata_admin_create($args)
 // FIXME: whatever, as long as it doesn't generate Variable "0" should not be empty exceptions
 //        or relies on $myobject or other stuff like that...
 
-    if (!xarVarFetch('objectid',    'isset',    $objectid,   NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('objectid',    'isset', $objectid,   NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('itemid',      'isset', $itemid,     0,    XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('preview',     'isset', $preview,    0,    XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('return_url',  'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
@@ -39,7 +39,7 @@ function dynamicdata_admin_create($args)
     if(!xarVarFetch('template',     'isset', $template,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule',    'isset', $tplmodule,   'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
 
-    //if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) return;
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'join'     => $join,
@@ -47,7 +47,7 @@ function dynamicdata_admin_create($args)
                                          'itemid'   => $itemid));
     $isvalid = $myobject->checkInput();
 
-    // recover any session var information and remove it from the var
+    // recover any session var information
     $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
     xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
     extract($data);
@@ -59,7 +59,6 @@ function dynamicdata_admin_create($args)
 
         $data['authid'] = xarSecGenAuthKey();
         $data['preview'] = $preview;
-//        $data['tplmodule'] = $tplmodule;
         if (!empty($return_url)) {
             $data['return_url'] = $return_url;
         }
