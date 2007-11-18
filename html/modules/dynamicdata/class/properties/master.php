@@ -99,7 +99,6 @@ class DataPropertyMaster extends Object
                 }
 //            }
         }
-
         return $properties;
     }
 
