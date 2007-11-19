@@ -61,8 +61,8 @@ class FieldStatusProperty extends SelectProperty
 
         // if the input part is 0 then we need to display default values
         if (empty($valuearray['input'])) {
-			$valuearray['display'] = $this->default_display;
-			$valuearray['input'] = $this->default_input;
+            $valuearray['display'] = $this->default_display;
+            $valuearray['input'] = $this->default_input;
         }
 
         $data['value'] = $valuearray;

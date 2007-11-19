@@ -56,7 +56,7 @@ function dynamicdata_userapi_showview($args)
     }
 
     if (isset($table)) {
-    	$table = xarDB::getPrefix() . '_' . $table;
+        $table = xarDB::getPrefix() . '_' . $table;
     }
 
     // don't try getting the where clause via input variables, obviously !
@@ -87,7 +87,7 @@ function dynamicdata_userapi_showview($args)
                                            'sort' => $sort,
                                            'numitems' => $numitems,
                                            'startnum' => $startnum,
-                                           'table'	  => $table,
+                                           'table'      => $table,
                                            'where' => $where,
                                            'fieldlist' => $myfieldlist,
                                            'catid' => $catid,

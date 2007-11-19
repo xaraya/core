@@ -195,18 +195,6 @@ class xarRoles extends Object
         // create the parent object
         list($id, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
-/*        $args = array('id' => $id,
-                       'name' => $name,
-                       'type' => $type,
-                       'parentid' => $parentid,
-                       'uname' => $uname,
-                       'email' => $email,
-                       'pass' => $pass,
-                       'date_reg' => $date_reg,
-                       'val_code' => $val_code,
-                       'state' => $state,
-                       'auth_module' => $auth_module);
-                       */
         sys::import('modules.dynamicdata.class.objects.master');
         $parent = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
         $parent->getItem(array('itemid' => $id));
@@ -219,18 +207,6 @@ class xarRoles extends Object
         // create the child object
         list($id, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
-/*        $args = array('id' => $id,
-                       'name' => $name,
-                       'type' => $type,
-                       'parentid' => $parentid,
-                       'uname' => $uname,
-                       'email' => $email,
-                       'pass' => $pass,
-                       'date_reg' => $date_reg,
-                       'val_code' => $val_code,
-                       'state' => $state,
-                       'auth_module' => $auth_module);
-                       */
         sys::import('modules.dynamicdata.class.objects.master');
         $child = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
         $child->getItem(array('itemid' => $id));
@@ -336,20 +312,6 @@ class xarRoles extends Object
             $duv = xarModUserVars::Get('roles',$key,$row['id']);
             if (!empty($duv)) $duvs[$key] = $duv;
         }
-/*        $args = array(
-            'id' =>         $row['id'],
-            'name' =>        $row['name'],
-            'type' =>        $row['type'],
-            'users' =>       $row['users'],
-            'uname' =>       $row['uname'],
-            'email' =>       $row['email'],
-            'pass' =>        $row['pass'],
-            'date_reg' =>    $row['date_reg'],
-            'val_code' =>    $row['valcode'],
-            'state' =>       $row['state'],
-            'auth_module' => $row['auth_modid'],
-            'duvs'          => $duvs    );
-            */
         // create and return the role object
         sys::import('modules.dynamicdata.class.objects.master');
         $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $row['type']));
