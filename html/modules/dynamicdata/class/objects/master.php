@@ -20,7 +20,8 @@ class DataObjectDescriptor extends ObjectDescriptor
 {
     function __construct(Array $args=array())
     {
-        $args = $this->getObjectID($args);
+        if (!isset($args['objectid']) || (is_null($args['objectid'])))
+            $args = self::getObjectID($args);
         parent::__construct($args);
     }
 
@@ -575,7 +576,8 @@ class DataObjectMaster extends Object
     **/
     static function getObjectInfo(Array $args=array())
     {
-        $args = DataObjectDescriptor::getObjectID($args);
+        if (!isset($args['objectid']) || (is_null($args['objectid'])))
+            $args = DataObjectDescriptor::getObjectID($args);
         if(!empty($args['table']))
         {
             $info = array();
@@ -653,8 +655,7 @@ class DataObjectMaster extends Object
     **/
     static function &getObject(Array $args=array())
     {
-        if(!isset($args['itemid']))
-            $args['itemid'] = null;
+        if(!isset($args['itemid'])) $args['itemid'] = null;
 
         // Complete the info if this is a known object
         $info = self::getObjectInfo($args);

@@ -145,6 +145,7 @@ function modules_adminapi_installwithdependencies ($args)
                 throw new Exception($msg);
             }
 
+            if(!xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('dirs' => 'modules/' . $modInfo['directory'] . '/xarproperties', 'flush' => true))) return false;
             if (empty($modstack)) {
                 // Looks like we're done
                 xarSessionDelVar('modulestoinstall');
@@ -163,7 +164,6 @@ function modules_adminapi_installwithdependencies ($args)
                 if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid' => array_pop($modstack), 'phase' => 0))) return;
             }
             // Flush the property cache
-            if(!xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('dirs' => 'modules/' . $modInfo['directory'] . '/xarproperties', 'flush' => true))) return false;
             return true;
 
         default:
