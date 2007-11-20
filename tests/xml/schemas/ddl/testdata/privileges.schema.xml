@@ -7,7 +7,7 @@
     <column id="privileges.name" name="name" required="true">
       <text size="100"/>
     </column>
-    <column id="privileges.realmid" name="realmid">
+    <column id="privileges.realm_id" name="realm_id">
       <number size="10" default=""/>
     </column>
     <column id="privileges.module_id" name="module_id">
@@ -32,8 +32,8 @@
       <primary>
         <columnref id="privileges.id"/>
       </primary>
-      <index name="i_privileges_realmid">
-        <columnref id="privileges.realmid"/>
+      <index name="i_privileges_realm_id">
+        <columnref id="privileges.realm_id"/>
       </index>
       <index name="i_privileges_name">
         <columnref id="privileges.name"/>

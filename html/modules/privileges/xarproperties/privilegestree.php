@@ -57,7 +57,7 @@ class PrivilegesTree extends Tree
         $query = "SELECT p.id, p.name, r.name,
                          m.name, p.component, p.instance,
                          p.level,  p.description, pm.parentid
-                  FROM " . $xartable['privileges'] . " p LEFT JOIN ". $xartable['realms'] . " r ON p.realmid = r.id
+                  FROM " . $xartable['privileges'] . " p LEFT JOIN ". $xartable['realms'] . " r ON p.realm_id = r.id
                   LEFT JOIN ". $xartable['modules'] . " m ON p.module_id = m.id
                   LEFT JOIN ". $xartable['privmembers'] . " pm ON p.id = pm.id
                   WHERE type = " . xarPrivileges::PRIVILEGES_PRIVILEGETYPE .

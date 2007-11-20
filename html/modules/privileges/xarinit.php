@@ -81,7 +81,7 @@ function privileges_init()
 
         $fields = array('id'   => array('type' => 'integer', 'null' => false, 'default' => '0','increment' => true, 'primary_key' => true),
                         'name'  => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
-                        'realmid'=>array('type' => 'integer', 'null' => true, 'default' => null),
+                        'realm_id'=>array('type' => 'integer', 'null' => true, 'default' => null),
                         'module_id'=>array('type' => 'integer', 'null' => true, 'default' => null),
                         'component' => array('type'  => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
                         'instance' => array('type'   => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
@@ -97,8 +97,8 @@ function privileges_init()
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$prefix.'_privileges_realmid',
-                       'fields'    => array('realmid'),
+        $index = array('name'      => 'i_'.$prefix.'_privileges_realm_id',
+                       'fields'    => array('realm_id'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);

@@ -152,7 +152,7 @@ class xarPrivileges extends xarMasks
             $module_id = xarMod::getID($module);
         }
         $query = "INSERT INTO " . parent::$privilegestable . " (
-                    name, realmid, module_id, component,
+                    name, realm_id, module_id, component,
                     instance, level, description, type)
                   VALUES (?,?,?,?,?,?,?,?)";
         $bindvars = array($name, $realmid, $module_id, $component,
@@ -267,7 +267,7 @@ class xarPrivileges extends xarMasks
         $query = "SELECT p.id, p.name, r.name,
                          m.name, p.component, p.instance,
                          p.level,  p.description
-                  FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable . " r ON p.realmid = r.id
+                  FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable . " r ON p.realm_id = r.id
                   LEFT JOIN ". parent::$modulestable . " m ON p.module_id = m.id " .
                   $where .
                   " ORDER BY p.name";
@@ -315,7 +315,7 @@ class xarPrivileges extends xarMasks
                          p.module_id,  p.component, p.instance,
                          p.level, p.description, pm.parentid
                   FROM " . parent::$privmemberstable . " pm, " .
-                           parent::$privilegestable  . " p LEFT JOIN " . parent::$realmstable . " r ON p.realmid = r.id";
+                           parent::$privilegestable  . " p LEFT JOIN " . parent::$realmstable . " r ON p.realm_id = r.id";
 
         if($arg == "all") {
              $query .= " WHERE p.id = pm.id AND
@@ -677,7 +677,7 @@ class xarPrivileges extends xarMasks
         }
         // Need to get it
         $query = "SELECT p.id, p.name, r.name, p.module_id, m.name, p.component, p.instance, p.level, p.description
-                  FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable ." r ON p.realmid = r.id
+                  FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable ." r ON p.realm_id = r.id
                   LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id
                   WHERE type = ?";
         if(is_numeric($id)) $query .= " AND p.id = ?";
