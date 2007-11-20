@@ -34,14 +34,24 @@ function dynamicdata_admin_modifyprop()
     if(!xarVarFetch('details',  'isset', $details,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('layout',   'str:1', $layout,   'default', XARVAR_NOT_REQUIRED)) {return;}
 
-    $objectinfo = DataObjectMaster::getObjectInfo(
-                                    array('objectid' => $itemid));
+    if (!isset($args['itemid']) || (is_null($args['itemid']))) {
+        $args = DataObjectDescriptor::getObjectID(
+            array(
+                'objectid' => $itemid,
+                'moduleid' => $modid,
+                'itemtype' => $itemtype,
+            )
+        );
+    }
+    $objectinfo = DataObjectMaster::getObjectInfo($args);
 
     if (isset($objectinfo)) {
         $objectid = $objectinfo['objectid'];
         $modid = $objectinfo['moduleid'];
         $itemtype = $objectinfo['itemtype'];
         $label =  $objectinfo['label'];
+    } else {
+        $objectid = null;
     }
     $data['modid'] = $modid;
     $data['itemtype'] = $itemtype;
@@ -51,7 +61,7 @@ function dynamicdata_admin_modifyprop()
 
     $modinfo = xarModGetInfo($modid);
     if (!isset($objectinfo)) {
-        $data['objectid'] = 0;
+        $data['objectid'] = null;
         if (!empty($itemtype)) {
             $data['label'] = xarML('for module #(1) - item type #(2)', $modinfo['displayname'], $itemtype);
         } else {
@@ -67,7 +77,9 @@ function dynamicdata_admin_modifyprop()
     }
 
     $data['fields'] = xarModAPIFunc('dynamicdata','user','getprop',
-                                   array('objectid' => $itemid,
+                                   array('objectid' => $objectid,
+                                            'moduleid' => $modid,
+                                            'itemtype' => $itemtype,
                                          'allprops' => true));
     if (!isset($data['fields']) || $data['fields'] == false) {
         $data['fields'] = array();
