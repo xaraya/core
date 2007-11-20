@@ -19,6 +19,7 @@ sys::import('modules.dynamicdata.class.objects.master');
  */
 class DataObject extends DataObjectMaster implements iDataObject
 {
+
     protected $descriptor  = null;      // descriptor object of this class
 
     public $itemid = 0;

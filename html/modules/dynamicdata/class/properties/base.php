@@ -32,7 +32,7 @@ class DataProperty extends Object implements iDataProperty
     public $order          = 0;
     public $format         = '0'; //<-- eh?
     public $filepath       = 'modules/dynamicdata/xarproperties';
-    public $class          = '';         // what class is this?
+    public $class          = '';         // this property's class
 
     // Attributes for runtime
     public $template = '';
