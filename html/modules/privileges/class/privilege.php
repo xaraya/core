@@ -55,7 +55,7 @@ class xarPrivilege extends xarMask
             if($result->next()) $realmid = $result->getInt('id');
         }
         $query = "INSERT INTO $this->privilegestable
-                    (name, realmid, module_id, component, instance, level, type, description)
+                    (name, realm_id, module_id, component, instance, level, type, description)
                   VALUES (?,?,?,?,?,?,?,?)";
         $bindvars = array($this->name, $realmid, $this->module_id,
                           $this->component, $this->instance, $this->level, self::PRIVILEGES_PRIVILEGETYPE, $this->description);
@@ -174,7 +174,7 @@ class xarPrivilege extends xarMask
         }
 
         $query =    "UPDATE " . $this->privilegestable .
-                    ' SET name = ?,     realmid = ?,
+                    ' SET name = ?,     realm_id = ?,
                           module_id = ?,   component = ?,
                           instance = ?, level = ?, type = ?
                       WHERE id = ?';

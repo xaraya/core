@@ -34,7 +34,7 @@
       <label>Realm</label>
       <type>textbox</type>
       <default></default>
-      <source>xar_privileges.realmid</source>
+      <source>xar_privileges.realm_id</source>
       <status>33</status>
       <order>3</order>
       <validation></validation>

@@ -11,7 +11,7 @@ CREATE TABLE xar_hooks (id INTEGER  NOT NULL  , object VARCHAR(64)  NOT NULL  , 
 CREATE TABLE xar_module_itemvars (module_var_id INTEGER  NOT NULL  , item_id INTEGER UNSIGNED NOT NULL  , value TEXT    , PRIMARY KEY (module_var_id,item_id));
 CREATE TABLE xar_module_vars (id INTEGER  NOT NULL  , module_id INTEGER    , name VARCHAR(64)  NOT NULL  , value TEXT    , PRIMARY KEY (id));
 CREATE TABLE xar_modules (id INTEGER  NOT NULL  , name VARCHAR(64)  NOT NULL  , regid INTEGER    , directory VARCHAR(64)  NOT NULL  , version VARCHAR(10)  NOT NULL  , class VARCHAR(64)  NOT NULL  , category VARCHAR(64)  NOT NULL  , admin_capable INTEGER  NOT NULL DEFAULT '0' , user_capable INTEGER  NOT NULL DEFAULT '0' , state INTEGER  NOT NULL DEFAULT '1' , PRIMARY KEY (id));
-CREATE TABLE xar_privileges (id INTEGER  NOT NULL DEFAULT '0' , name VARCHAR(100)  NOT NULL DEFAULT '' , realmid INTEGER    , module_id INTEGER    , component VARCHAR(100)  NOT NULL DEFAULT '' , instance VARCHAR(100)  NOT NULL DEFAULT '' , level INTEGER  NOT NULL DEFAULT '0' , description VARCHAR(255)  NOT NULL DEFAULT '' , type INTEGER  NOT NULL DEFAULT '0' , PRIMARY KEY (id));
+CREATE TABLE xar_privileges (id INTEGER  NOT NULL DEFAULT '0' , name VARCHAR(100)  NOT NULL DEFAULT '' , realm_id INTEGER    , module_id INTEGER    , component VARCHAR(100)  NOT NULL DEFAULT '' , instance VARCHAR(100)  NOT NULL DEFAULT '' , level INTEGER  NOT NULL DEFAULT '0' , description VARCHAR(255)  NOT NULL DEFAULT '' , type INTEGER  NOT NULL DEFAULT '0' , PRIMARY KEY (id));
 CREATE TABLE xar_privmembers (id INTEGER    , parentid INTEGER    );
 CREATE TABLE xar_rolemembers (id INTEGER    , parentid INTEGER    );
 CREATE TABLE xar_roles (id INTEGER  NOT NULL DEFAULT '0' , name VARCHAR(255)  NOT NULL DEFAULT '' , type INTEGER  NOT NULL DEFAULT '0' , users INTEGER  NOT NULL DEFAULT '0' , uname VARCHAR(255)  NOT NULL DEFAULT '' , email VARCHAR(255)  NOT NULL DEFAULT '' , pass VARCHAR(100)  NOT NULL DEFAULT '' , date_reg INTEGER  NOT NULL DEFAULT '0' , valcode VARCHAR(35)  NOT NULL DEFAULT '' , state INTEGER  NOT NULL DEFAULT '3' , auth_modid INTEGER  NOT NULL DEFAULT '0' , PRIMARY KEY (id));
@@ -40,7 +40,7 @@ CREATE INDEX i_xar_module_vars_name ON xar_module_vars (name);
 CREATE INDEX i_xar_privileges_level ON xar_privileges (level);
 CREATE INDEX i_xar_privileges_module ON xar_privileges (module_id);
 CREATE UNIQUE INDEX i_xar_privileges_name ON xar_privileges (name,module_id,type);
-CREATE INDEX i_xar_privileges_realmid ON xar_privileges (realmid);
+CREATE INDEX i_xar_privileges_realm_id ON xar_privileges (realmid);
 CREATE INDEX i_xar_privmembers_parentid ON xar_privmembers (parentid);
 CREATE INDEX i_xar_privmembers_pid ON xar_privmembers (id);
 CREATE INDEX i_xar_rolememb_id ON xar_rolemembers (id);

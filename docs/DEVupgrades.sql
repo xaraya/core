@@ -491,6 +491,12 @@ INSERT INTO `xar_module_vars` (module_id, name, value)
     SELECT mods.id, 'themesdirectory', modvars.value FROM xar_module_vars modvars, xar_modules mods
     WHERE  mods.name = 'themes' AND modvars.name = 'Site.BL.ThemesDirectory';
 
+ALTER TABLE `xar_privileges`
+  CHANGE COLUMN `realmid` `realm_id` INTEGER default NULL,
+
+/* TODO: fix  key */
+  KEY `i_xar_privileges_realm_id` (`realm_id`),
+
 /* 
  @todo:
     Find the data in the dynamic data tables where deprecated functions are used

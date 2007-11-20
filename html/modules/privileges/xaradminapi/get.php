@@ -13,7 +13,7 @@ function privileges_adminapi_get($args)
     }
 
     $xartable = xarDB::getTables();
-    $query = "SELECT p.id, p.name, p.realmid,
+    $query = "SELECT p.id, p.name, p.realm_id,
                      m.regid, p.component, p.instance,
                      p.level,  p.description
               FROM " . $xartable['privileges'] . " p

@@ -102,7 +102,7 @@ class xarMasks extends Object
                   modules.name, masks.component, masks.instance,
                   masks.level, masks.description
                   FROM " . self::$privilegestable . " AS masks
-                  LEFT JOIN " . self::$realmstable. " AS realms ON masks.realmid = realms.id
+                  LEFT JOIN " . self::$realmstable. " AS realms ON masks.realm_id = realms.id
                   LEFT JOIN " . self::$modulestable. " AS modules ON masks.module_id = modules.id ";
         if ($modid == self::PRIVILEGES_ALL) {
             if ($component == '' || $component == 'All') {
@@ -187,7 +187,7 @@ class xarMasks extends Object
             if ($result->first()) {
                 list($id) = $result->fields;
                 $query = "UPDATE " . self::$privilegestable .
-                          " SET realmid = ?, component = ?,
+                          " SET realm_id = ?, component = ?,
                               instance = ?, level = ?,
                               description = ?, type= ?
                           WHERE id = ?";
@@ -195,7 +195,7 @@ class xarMasks extends Object
                                   $description, self::PRIVILEGES_MASKTYPE, $id);
             } else {
                 $query = "INSERT INTO " . self::$privilegestable .
-                          " (name, realmid, module_id, component, instance, level, description, type)
+                          " (name, realm_id, module_id, component, instance, level, description, type)
                           VALUES (?,?,?,?,?,?,?,?)";
                 $bindvars = array(
                                   $name, $realmid, $module_id, $component, $instance, $level,
@@ -699,7 +699,7 @@ class xarMasks extends Object
             $query = "SELECT masks.id AS id, masks.name AS name, realms.name AS realm,
                              module_id AS module_id, modules.name as module, masks.component as component, masks.instance AS instance,
                              masks.level AS level, masks.description AS description
-                      FROM " . self::$privilegestable . " masks LEFT JOIN " . self::$realmstable .  " realms ON masks.realmid = realms.id INNER JOIN  " . self::$modulestable . " modules ON masks.module_id = modules.id
+                      FROM " . self::$privilegestable . " masks LEFT JOIN " . self::$realmstable .  " realms ON masks.realm_id = realms.id INNER JOIN  " . self::$modulestable . " modules ON masks.module_id = modules.id
                       WHERE  masks.name = ? ";
             $bindvars[] = $name;
             if(!empty($modid)) {

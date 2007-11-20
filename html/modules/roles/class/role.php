@@ -347,7 +347,7 @@ class Role extends DataObject
                           component, instance, level, description
                   FROM    $this->acltable acl,
                           $this->privilegestable p
-                          LEFT JOIN $this->realmstable r ON p.realmid = r.id
+                          LEFT JOIN $this->realmstable r ON p.realm_id = r.id
                           LEFT JOIN $this->modulestable m ON p.module_id = m.id
                   WHERE   p.id = acl.permid AND
                           acl.partid = ?";
