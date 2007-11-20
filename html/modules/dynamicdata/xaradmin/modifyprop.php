@@ -59,7 +59,7 @@ function dynamicdata_admin_modifyprop()
 
     $modinfo = xarModGetInfo($modid);
     if (!isset($objectinfo)) {
-        $data['objectid'] = 0;
+        $data['objectid'] = null;
         if (!empty($itemtype)) {
             $data['label'] = xarML('for module #(1) - item type #(2)', $modinfo['displayname'], $itemtype);
         } else {
@@ -76,6 +76,8 @@ function dynamicdata_admin_modifyprop()
 
     $data['fields'] = xarModAPIFunc('dynamicdata','user','getprop',
                                    array('objectid' => $objectid,
+                                            'moduleid' => $modid,
+                                            'itemtype' => $itemtype,
                                          'allprops' => true));
     if (!isset($data['fields']) || $data['fields'] == false) {
         $data['fields'] = array();

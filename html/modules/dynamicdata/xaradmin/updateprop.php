@@ -35,7 +35,11 @@ function dynamicdata_admin_updateprop()
     if (!xarSecConfirmAuthKey()) return;
 
     $objectinfo = DataObjectMaster::getObjectInfo(
-                                    array('objectid' => $objectid));
+                                    array(
+                                    'objectid' => $objectid,
+                                    'moduleid' => $modid,
+                                    'itemtype' => $itemtype,
+                                    ));
 
     if (isset($objectinfo)) {
         $objectid = $objectinfo['objectid'];
