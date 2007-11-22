@@ -63,6 +63,7 @@ class DataPropertyMaster extends Object
         $query .= " WHERE prop_objectid = ?";
         $bindvars[] = (int) $args['objectid'];
 
+        $anonymous = empty($args['anonymous']) ? 0 : 1;
         if(empty($args['allprops']))
             $query .= " AND prop_status > 0 ";
 
@@ -89,6 +90,7 @@ class DataPropertyMaster extends Object
                     'validation'    => $validation,
                     // some internal variables
                     '_objectid'     => $_objectid,
+                    'anonymous'     => $anonymous,
                     'class'         => ''
                 );
                 if(isset($args['objectref'])) {

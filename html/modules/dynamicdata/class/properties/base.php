@@ -40,19 +40,20 @@ class DataProperty extends Object implements iDataProperty
     public $tplmodule = 'dynamicdata';
     public $validation = '';
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
+    public $anonymous = 0;        // if true the name, rather than the dd_xx designation is used in displaying the property
     public $args         = array();
 
-    public $datastore = '';   // name of the data store where this property comes from
+    public $datastore = '';    // name of the data store where this property comes from
 
-    public $value = null;     // value of this property for a particular DataObject
-    public $invalid = '';     // result of the checkInput/validateValue methods
+    public $value = null;      // value of this property for a particular DataObject
+    public $invalid = '';      // result of the checkInput/validateValue methods
 
-    public $objectref = null; // object this property belongs to
-    public $_objectid = null; // objectid this property belongs to
+    public $objectref = null;  // object this property belongs to
+    public $_objectid = null;  // objectid this property belongs to
     public $_fieldprefix = ''; // the object's fieldprefix
 
-    public $_itemid;          // reference to $itemid in DataObject, where the current itemid is kept
-    public $_items;           // reference to $items in DataObjectList, where the different item values are kept
+    public $_itemid;           // reference to $itemid in DataObject, where the current itemid is kept
+    public $_items;            // reference to $items in DataObjectList, where the different item values are kept
 
     /**
      * Default constructor setting the variables
@@ -173,8 +174,8 @@ class DataProperty extends Object implements iDataProperty
         $value = null;
         xarVarFetch($name, 'isset', $namevalue, NULL, XARVAR_DONT_SET);
         if(isset($namevalue)) {
-			$found = true;
-			$value = $namevalue;
+            $found = true;
+            $value = $namevalue;
         }
         return array($found,$value);
     }
@@ -187,9 +188,9 @@ class DataProperty extends Object implements iDataProperty
      */
     public function checkInput($name = '', $value = null)
     {
-		// store the fieldname for validations who need them (e.g. file uploads)
-		$name = empty($name) ? 'dd_'.$this->id : $name;
-		$this->fieldname = $name;
+        // store the fieldname for validations who need them (e.g. file uploads)
+        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $this->fieldname = $name;
         $this->invalid = '';
         if(!isset($value)) {
             list($found,$value) = $this->fetchValue($name);
@@ -279,10 +280,13 @@ class DataProperty extends Object implements iDataProperty
             return $this->showOutput($data) . $this->showHidden($data);
         }
 
-        // Our common items we need
-        if(!isset($data['name']))        $data['name'] = 'dd_'.$this->id;
-
+        // Display directove for the name
+        if(!isset($data['name'])) {
+            if ($this->anonymous == true) $data['name'] = $this->name;
+            else $data['name'] = 'dd_'.$this->id;
+        }
         $name = $data['name'];
+
         // Add the object's field prefix if there is one
         if(!empty($this->_fieldprefix))  $name = $this->_fieldprefix . '_' . $data['name'];
         // A field prefix added here can override the previous one

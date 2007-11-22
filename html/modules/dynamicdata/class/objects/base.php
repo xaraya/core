@@ -89,14 +89,14 @@ class DataObject extends DataObjectMaster implements iDataObject
     public function getInvalids(Array $args = array())
     {
         if (!empty($args['fields'])) {
-        	$fields = $args['fields'];
+            $fields = $args['fields'];
         } else {
-			$fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+            $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
         }
         $invalids = array();
         foreach($fields as $name) {
-        	if (!empty($this->properties[$name]->invalid))
-        		$invalids[$name] = $this->properties[$name]->invalid;
+            if (!empty($this->properties[$name]->invalid))
+                $invalids[$name] = $this->properties[$name]->invalid;
         }
         return $invalids;
     }
@@ -104,12 +104,12 @@ class DataObject extends DataObjectMaster implements iDataObject
     public function clearInvalids()
     {
         if (!empty($args['fields'])) {
-        	$fields = $args['fields'];
+            $fields = $args['fields'];
         } else {
-			$fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+            $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
         }
         foreach($fields as $name) {
-			$this->properties[$name]->invalid = '';
+            $this->properties[$name]->invalid = '';
         }
         return true;
     }
@@ -132,9 +132,9 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         $isvalid = true;
         if (!empty($args['fields'])) {
-        	$fields = $args['fields'];
+            $fields = $args['fields'];
         } else {
-			$fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+            $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
         }
 
         $this->missingfields = array();
@@ -150,37 +150,37 @@ class DataObject extends DataObjectMaster implements iDataObject
             // checking for any transitory name given a property via $args needs to be done at the property level
             $ddname = 'dd_' . $this->properties[$name]->id;
             if (!empty($args['fieldprefix'])) {
-            	$name1 = $args['fieldprefix'] . "_" .$name;
-            	$name2 = $args['fieldprefix'] . "_" .$ddname;
+                $name1 = $args['fieldprefix'] . "_" .$name;
+                $name2 = $args['fieldprefix'] . "_" .$ddname;
             } else {
-            	$name1 = $name;
-            	$name2 = $ddname;
+                $name1 = $name;
+                $name2 = $ddname;
             }
             if (!empty($args['priority']) && ($args['priority'] == 'dd')) {
-            	$temp = $name1;
-            	$name1 = $name2;
-            	$name2 = $temp;
+                $temp = $name1;
+                $name1 = $name2;
+                $name2 = $temp;
             }
             if(isset($args[$name])) {
                 // Name based check
                 $passed = $this->properties[$name]->checkInput($name1,$args[$name]);
                 if ($passed === null) {
-                	array_pop($this->missingfields);
-                	$passed = $this->properties[$name]->checkInput($name2,$args[$name]);
+                    array_pop($this->missingfields);
+                    $passed = $this->properties[$name]->checkInput($name2,$args[$name]);
                 }
             } elseif(isset($args[$ddname])) {
                 // No name, check based on field
                 $passed = $this->properties[$name]->checkInput($name1,$args[$ddname]);
                 if ($passed === null) {
-                	array_pop($this->missingfields);
-                	$passed = $this->properties[$name]->checkInput($name2,$args[$ddname]);
+                    array_pop($this->missingfields);
+                    $passed = $this->properties[$name]->checkInput($name2,$args[$ddname]);
                 }
             } else {
-            	// Check without values
+                // Check without values
                 $passed = $this->properties[$name]->checkInput($name1);
                 if ($passed === null) {
-					array_pop($this->missingfields);
-					$passed = $this->properties[$name]->checkInput($name2);
+                    array_pop($this->missingfields);
+                    $passed = $this->properties[$name]->checkInput($name2);
                 }
             }
             if (($passed === null) || ($passed === false)) $isvalid = false;
@@ -318,11 +318,11 @@ class DataObject extends DataObjectMaster implements iDataObject
     public function setFieldValues(Array $args = array(), $bypass = 0)
     {
         if ($bypass) {
-			foreach ($args as $key => $value)
-				if (isset($this->properties[$key])) $this->properties[$key]->value = $value;
+            foreach ($args as $key => $value)
+                if (isset($this->properties[$key])) $this->properties[$key]->value = $value;
         } else {
-			foreach ($args as $key => $value)
-				if (isset($this->properties[$key]))  $this->properties[$key]->setValue($value);
+            foreach ($args as $key => $value)
+                if (isset($this->properties[$key]))  $this->properties[$key]->setValue($value);
         }
         return true;
     }

@@ -121,6 +121,7 @@ class DataObjectMaster extends Object
     public $fieldorder  = array();      // displayorder for the properties
     public $fieldprefix = '';           // prefix to use in field names etc.
     public $status      = 65;           // inital status is active and can add/modify
+    public $anonymous   = 0;            // if true forces display of names of properties instead of dd_xx designations
 
     public $layout = 'default';         // optional layout inside the templates
     public $template = '';              // optional sub-template, e.g. user-objectview-[template].xd (defaults to the object name)
@@ -474,6 +475,8 @@ class DataObjectMaster extends Object
                     // Pass along a field prefix if there is one
                     $this->properties[$name]->_fieldprefix = $args['fieldprefix'];
                     $properties[$name] = &$this->properties[$name];
+                    // Pass along the directive of what property name to display
+                    if (isset($args['anonymous'])) $this->properties[$name]->anonymous = $args['anonymous'];
                 }
             }
         } else {
@@ -481,6 +484,8 @@ class DataObjectMaster extends Object
                 if (isset($this->properties[$name])) {
                     // Pass along a field prefix if there is one
                     $properties[$name] = &$this->properties[$name];
+                    // Pass along the directive of what property name to display
+                    if (isset($args['anonymous'])) $this->properties[$name]->anonymous = $args['anonymous'];
                 }
             }
         }
