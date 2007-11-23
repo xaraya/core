@@ -38,17 +38,6 @@ class PassBoxProperty extends TextBoxProperty
         $this->tplmodule = 'roles';
         $this->template ='password';
         $this->filepath   = 'modules/roles/xarproperties';
-
-        // check validation for allowed min/max length (or values)
-        if (!empty($this->validation) && strchr($this->validation,':')) {
-            list($min,$max) = explode(':',$this->validation);
-            if ($min !== '' && is_numeric($min)) {
-                $this->min = $min;
-            }
-            if ($max !== '' && is_numeric($max)) {
-                $this->max = $max;
-            }
-        }
     }
 
     function aliases()
@@ -77,16 +66,15 @@ class PassBoxProperty extends TextBoxProperty
                 $this->value = null;
                 return false;
             }
-      }
+        }
 
-        //jojo - corrected syntax and leave out return true until after further checks, including regex
         if (!(empty($value) && !empty($this->value))) {
-            if (strlen($value) > $this->maxlength) {
-                $this->invalid = xarML('password: must be less than #(1) characters long', $this->max + 1);
+            if (strlen($value) > $this->config_max) {
+                $this->invalid = xarML('password: must be less than #(1) characters long', $this->config_max + 1);
                 $this->value = null;
                 return false;
-            } elseif (isset($this->min) && strlen($value) < $this->min) {
-                $this->invalid = xarML('password: must be at least #(1) characters long', $this->min);
+            } elseif (isset($this->config_min) && strlen($value) < $this->config_min) {
+                $this->invalid = xarML('password: must be at least #(1) characters long', $this->config_min);
                 $this->value = null;
                 return false;
             } else {
