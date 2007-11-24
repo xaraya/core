@@ -73,6 +73,7 @@
                 #$output#
             </xar:foreach>
         </xar:if>
+        
       </fieldset>
       <fieldset>
         <div class="xar-align-center">
