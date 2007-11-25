@@ -20,8 +20,7 @@ class DataObjectDescriptor extends ObjectDescriptor
 {
     function __construct(Array $args=array())
     {
-        if (!isset($args['objectid']) || (is_null($args['objectid'])))
-            $args = self::getObjectID($args);
+        $args = self::getObjectID($args);
         parent::__construct($args);
     }
 
