@@ -83,7 +83,7 @@ function dynamicdata_utilapi_import($args)
 
         // Treat parents where the module is DD differently. Put in numeric itemtype
 //        if ($args['moduleid'] == 182) {
-			$args['parent'] = empty($args['parent']) ? 0 : $args['parent'];
+            $args['parent'] = empty($args['parent']) ? 0 : $args['parent'];
             $infobaseobject = DataObjectMaster::getObjectInfo(array('name' => $args['parent']));
             $args['parent'] = $infobaseobject['itemtype'];
 //        }
@@ -95,10 +95,10 @@ function dynamicdata_utilapi_import($args)
         unset($args['objectid']);
 
         // Add an item to the object
-        if ($args['moduleid'] == 182) {
+//        if ($args['moduleid'] == 182) {
             $args['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
                                            array('modid' => $args['moduleid']));
-        }
+//        }
 
         // Create the DataProperty object we will use to create items of
         $dataproperty = DataObjectMaster::getObject(array('objectid' => 2));
@@ -214,7 +214,7 @@ function dynamicdata_utilapi_import($args)
             $oldindex = 0;
             foreach($objectproperties as $propertyname => $property) {
                 if (isset($child->$propertyname)) {
-                	// Run the import value through the property's validation routine
+                    // Run the import value through the property's validation routine
                     $check = $property->validateValue((string)$child->$propertyname);
                     $item[$propertyname] = $property->value;
                 }
