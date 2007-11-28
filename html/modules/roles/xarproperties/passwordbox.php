@@ -58,7 +58,7 @@ class PassBoxProperty extends TextBoxProperty
     {
         if (!isset($value)) $value = "";
 
-       if ($this->confirm) {
+       if ($this->config_confirm) {
             if (is_array($value) && $value[0] == $value[1]) {
                 $value = $value[0];
             } else {
