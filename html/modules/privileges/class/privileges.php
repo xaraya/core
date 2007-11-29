@@ -621,6 +621,7 @@ class xarPrivileges extends xarMasks
             $pargs = array('name' => $name,
                            'realm' => $realm,
                            'module' => $module,
+                           'module_id'=>xarMod::getID($module),
                            'component' => $component,
                            'instance' => $instance,
                            'level' => $level,
@@ -628,12 +629,8 @@ class xarPrivileges extends xarMasks
                            );
             sys::import('modules.privileges.class.privilege');
             $priv = new xarPrivilege($pargs);
-            if ($priv->add()) {
-                return $priv->getID();
-            }
-            return;
-        }
-        else {
+            if ($priv->add()) return $priv->getID();
+        } else {
             sys::import('modules.privileges.class.privileges');
             $priv = xarPrivileges::getPrivilege($id);
             $priv->setName($name);
@@ -643,11 +640,9 @@ class xarPrivileges extends xarMasks
             $priv->setComponent($component);
             $priv->setInstance($instance);
             $priv->setLevel($level);
-            if ($priv->update()) {
-                return $priv->getID();
-            }
-            return;
+            if ($priv->update()) return $priv->getID();
         }
+        return;
     }
 
     /**
@@ -779,8 +774,8 @@ class xarPrivileges extends xarMasks
                 'id'         => $id,
                 'name'        => $name,
                 'realm'       => $realm,
-                'module_id'   => $module_id,
                 'module'      => $module,
+                'module_id'   => $module_id,
                 'component'   => $component,
                 'instance'    => $instance,
                 'level'       => $level,
