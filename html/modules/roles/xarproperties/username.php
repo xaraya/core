@@ -94,9 +94,10 @@ class UsernameProperty extends TextBoxProperty
                 $data['value']= 0;
             } else {
                 try {
-                    $user = xarUserGetVar('name', $value);
+                    $user = xarUserGetVar('uname', $value);
+                    // Does this make sense? The user should already have been checked before storing
                     if (empty($user))
-                        $user = xarUserGetVar('uname', $value);
+                        $user = xarUserGetVar('name', $value);
                 } catch(NotFoundExceptions $e) {
                     $user = $value;
                 }

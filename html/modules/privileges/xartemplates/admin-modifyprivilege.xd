@@ -178,9 +178,6 @@
             <label for="plevel" title="#xarML('Level of access')#" class="xar-form-label">
             <xar:mlstring>Level:</xar:mlstring>
             </label>
-            <xar:set name="option">
-                SecurityLevel::$displayMap
-            </xar:set>
             <xar:set name="levels">
                 SecurityLevel::$displayMap
             </xar:set>
