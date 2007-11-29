@@ -459,10 +459,7 @@ class xarPrivileges extends xarMasks
     public static function getcomponents($modid=null)
     {
         if (is_null($modid)) return array();
-        if (!empty($modid)) {
-            $modInfo = xarMod_GetBaseInfo(xarModGetNameFromID($modid));
-            $modid = $modInfo['systemid'];
-        }
+        if (!empty($modid)) $modid = xarMod::getID(xarModGetNameFromID($modid));
 
         parent::initialize();
         $query = "SELECT DISTINCT component
@@ -519,11 +516,10 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    this isn't really the right place for this function
     */
-    public static function getinstances($module=null, $component)
+    public static function getinstances($modid=null, $component)
     {
-        if (is_null($module)) return array();
-        $modid = 0;
-        if (!empty($module)) $modid = xarMod::getID($module);
+        if (is_null($modid)) return array();
+        if (!empty($modid)) $modid = xarMod::getID(xarModGetNameFromID($modid));
 
         parent::initialize();
 
@@ -554,7 +550,7 @@ class xarPrivileges extends xarMasks
 
             // check if the query is there
             if ($selection =='') {
-                $msg = xarML('A query is missing in component #(1) of module #(2)', $component, $module);
+                $msg = xarML('A query is missing in component #(1) of module #(2)', $component, xarModGetNameFromID($modid));
                 // TODO: make it descendent from xarExceptions.
                 throw new Exception($msg);
             }
