@@ -26,23 +26,18 @@ class PassBoxProperty extends TextBoxProperty
 
     public $password = null;
 
+    public $config_min     = 4;
+    public $config_max     = 30;
+    public $config_regex   = null;
+    public $config_other   = null;
+    public $config_confirm = 0;
+
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template ='password';
         $this->filepath   = 'modules/roles/xarproperties';
-
-        // check validation for allowed min/max length (or values)
-        if (!empty($this->validation) && strchr($this->validation,':')) {
-            list($min,$max) = explode(':',$this->validation);
-            if ($min !== '' && is_numeric($min)) {
-                $this->min = $min;
-            }
-            if ($max !== '' && is_numeric($max)) {
-                $this->max = $max;
-            }
-        }
     }
 
     function aliases()
@@ -61,12 +56,9 @@ class PassBoxProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
-        $confirm = 1;
+        if (!isset($value)) $value = "";
 
-        if (!isset($value)) {
-            $value = "";
-        }
-      // if ($confirm) { //jojo - until this is implemented correctly let's dispense with this check
+       if ($this->config_confirm) {
             if (is_array($value) && $value[0] == $value[1]) {
                 $value = $value[0];
             } else {
@@ -74,16 +66,15 @@ class PassBoxProperty extends TextBoxProperty
                 $this->value = null;
                 return false;
             }
-     // }
+        }
 
-        //jojo - corrected syntax and leave out return true until after further checks, including regex
         if (!(empty($value) && !empty($this->value))) {
-            if (strlen($value) > $this->maxlength) {
-                $this->invalid = xarML('password: must be less than #(1) characters long', $this->max + 1);
+            if (strlen($value) > $this->config_max) {
+                $this->invalid = xarML('password: must be less than #(1) characters long', $this->config_max + 1);
                 $this->value = null;
                 return false;
-            } elseif (isset($this->min) && strlen($value) < $this->min) {
-                $this->invalid = xarML('password: must be at least #(1) characters long', $this->min);
+            } elseif (isset($this->config_min) && strlen($value) < $this->config_min) {
+                $this->invalid = xarML('password: must be at least #(1) characters long', $this->config_min);
                 $this->value = null;
                 return false;
             } else {
@@ -109,21 +100,14 @@ class PassBoxProperty extends TextBoxProperty
         return md5($value);
     }
 
-
     public function showInput(Array $data = array())
     {
         extract($data);
 
-        if (empty($maxlength) && isset($this->max)) {
-            $this->maxlength = $this->max;
-            if ($this->size > $this->maxlength) {
-                $this->size = $this->maxlength;
-            }
-        }
-
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['confirm']  = isset($confirm) ? $confirm : true;
-
+        // Get the properties for the form
+        $properties = $this->getConfigProperties();
+        foreach ($properties as $name => $configarg)
+            $data[$name]   = $configarg;
         return parent::showInput($data);
     }
 
@@ -133,6 +117,86 @@ class PassBoxProperty extends TextBoxProperty
         $data['value'] = ' ';
 
         return parent::showOutput($data);
+    }
+
+    public function parseValidation($validation = '')
+    {
+        if (is_array($validation)) {
+            $fields = $validation;
+        } elseif (empty($validation)) {
+            return true;
+        } else {
+            $fields = unserialize($validation);
+        }
+        if (!empty($fields) && is_array($fields)) {
+            $properties = $this->getConfigProperties();
+            foreach ($properties as $name => $configarg) {
+                if (isset($fields[$name])) {
+                    $fullname = 'config_' . $name;
+                    $this->$fullname = $fields[$name];
+                }
+            }
+        }
+    }
+
+    public function showValidation(Array $args = array())
+    {
+        extract($args);
+        $data = array();
+        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
+        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
+        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
+        $data['size']       = !empty($size) ? $size : 50;
+        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+        if (!isset($validation)) $validation = $this->validation;
+        $this->parseValidation($validation);
+        $properties = $this->getConfigProperties();
+        foreach ($properties as $name => $configarg) {
+            $data[$name] = $configarg;
+        }
+        // allow template override by child classes
+        $module    = empty($module)   ? $this->getModule()   : $module;
+        $template  = empty($template) ? $this->getTemplate() : $template;
+
+        return xarTplProperty($module, $template, 'validation', $data);
+    }
+
+    public function updateValidation(Array $args = array())
+    {
+        extract($args);
+
+        // in case we need to process additional input fields based on the name
+        $name = empty($name) ? 'dd_'.$this->id : $name;
+
+        // do something with the validation and save it in $this->validation
+        if (isset($validation)) {
+            if (is_array($validation)) {
+                $data = array();
+                $properties = $this->getConfigProperties();
+                foreach ($properties as $name => $configarg) {
+                    if (isset($validation[$name])) {
+                        $data[$name] = $validation[$name];
+                    }
+                }
+                $this->validation = serialize($data);
+
+            } else {
+                $this->validation = $validation;
+            }
+        }
+        return true;
+    }
+
+    public function getConfigProperties()
+    {
+        $configproperties = array();
+        $properties = $this->getPublicProperties();
+        foreach ($properties as $name => $configarg) {
+            if (substr($name,0,7) != 'config_') continue;
+            $configproperties[substr($name,7)] = $configarg;
+        }
+        return $configproperties;
     }
 }
 ?>
