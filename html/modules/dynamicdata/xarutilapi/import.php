@@ -95,10 +95,10 @@ function dynamicdata_utilapi_import($args)
         unset($args['objectid']);
 
         // Add an item to the object
-        if ($args['moduleid'] == 182) {
+//        if ($args['moduleid'] == 182 || $args['moduleid'] == 27) {
             $args['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
                                            array('modid' => $args['moduleid']));
-        }
+//        }
 
         // Create the DataProperty object we will use to create items of
         $dataproperty = DataObjectMaster::getObject(array('objectid' => 2));
