@@ -22,31 +22,6 @@ class CountryListProperty extends SelectProperty
     public $name       = 'countrylisting';
     public $desc       = 'Country Dropdown';
 
-    function __construct(ObjectDescriptor $descriptor)
-    {
-        parent::__construct($descriptor);
-        $this->tplmodule = 'base';
-    }
-
-    public function validateValue($value = null)
-    {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (!empty($value)) {
-            if (is_string($value)) {
-                $this->value = $value;
-            } else {
-                $this->invalid = xarML('Country Listing: #(1)', $this->name);
-                $this->value = null;
-                return false;
-            }
-        } else {
-            $this->value = '';
-        }
-
-        return true;
-    }
    /**
     * Country list according to ISO 3166
     *
