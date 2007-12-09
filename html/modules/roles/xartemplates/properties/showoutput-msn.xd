@@ -1,7 +1,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:set name="msnm"><xar:mlstring>MSNM</xar:mlstring></xar:set>
-<a href="#$link#">
-  <img src="#$image#" alt="#$msnm#" width="18" height="18"/>
-</a>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="msnm"><xar:mlstring>MSNM</xar:mlstring></xar:set>
+    <a href="#$link#">
+      <img src="#$image#" alt="#$msnm#" width="18" height="18"/>
+    </a>
 </xar:template>

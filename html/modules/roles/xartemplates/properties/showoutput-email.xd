@@ -1,10 +1,10 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<!--<xar:if condition="!empty($link)">
-    <a href="mailto:#$value#"><xar:var name="value" prep="true"/></a>
-<xar:else />
-    <xar:var name="value" prep="true"/>
-</xar:if>
--->
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!--<xar:if condition="!empty($link)">
+        <a href="mailto:#$value#"><xar:var name="value" prep="true"/></a>
+    <xar:else />
+        <xar:var name="value" prep="true"/>
+    </xar:if>
+    -->
     <a href="mailto:#$value#"><xar:var name="value" prep="true"/></a>
 </xar:template>

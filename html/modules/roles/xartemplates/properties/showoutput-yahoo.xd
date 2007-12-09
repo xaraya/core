@@ -1,9 +1,9 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:set name="yahoo"><xar:mlstring>Yahoo Messenger</xar:mlstring></xar:set>
-<xar:if condition="!empty($link)">
-    <a href="#$link#">
-      <img src="#$image#" alt="#$yahoo#" width="18" height="18" />
-    </a>
-</xar:if>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="yahoo"><xar:mlstring>Yahoo Messenger</xar:mlstring></xar:set>
+    <xar:if condition="!empty($link)">
+        <a href="#$link#">
+          <img src="#$image#" alt="#$yahoo#" width="18" height="18" />
+        </a>
+    </xar:if>
 </xar:template>
