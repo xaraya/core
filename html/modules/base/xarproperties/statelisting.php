@@ -22,31 +22,6 @@ class StateListProperty extends SelectProperty
     public $name       = 'statelisting';
     public $desc       = 'State Dropdown';
 
-    function __construct(ObjectDescriptor $descriptor)
-    {
-        parent::__construct($descriptor);
-        $this->template = 'statelist';
-    }
-
-    public function validateValue($value = null)
-    {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (!empty($value)) {
-            if (is_string($value)) {
-                $this->value = $value;
-            } else {
-                $this->invalid = xarML('State Listing: #(1)', $this->name);
-                $this->value = null;
-                return false;
-            }
-        } else {
-            $this->value = '';
-        }
-        return true;
-    }
-
    function getOptions()
    {
         $soptions = array();
