@@ -1,9 +1,9 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<xar:if condition="$value gt '1'" >
-    <a href="&xar-modurl-roles-user-display;&amp;id=#$value#">#$groupname#</a>
-<xar:else />
-    #$groupname#
-</xar:if>
+    <xar:if condition="$value gt '1'" >
+        <a href="&xar-modurl-roles-user-display;&amp;id=#$value#">#$groupname#</a>
+    <xar:else />
+        #$groupname#
+    </xar:if>
 </xar:template>
