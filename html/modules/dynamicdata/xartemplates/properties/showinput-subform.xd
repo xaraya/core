@@ -151,7 +151,6 @@
             </td>
           </tr>
       <xar:elseif condition="$style eq 'parentid'" />
-
           <xar:if condition="$repeat">
               <!--
                   Use a field prefix for all input fields of the object, so that
@@ -159,7 +158,7 @@
               -->
               <xar:for start="$i = 0" test="$i lt $repeat" iter="$i++">
                   <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
-                  <xar:data-form object="$object" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
+                  <xar:data-form object="$object" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" tplmodule="$tplmodule" />
               </xar:for>
           <xar:else />
           </xar:if>
@@ -169,15 +168,14 @@
         <input type="hidden" name="#$name#_old" id="#$id#_old" value="#xarVarPrepForDisplay($value)#" />
         <input type="hidden" name="#$name#_new" id="#$id#_new" value="1" />
       </xar:if>
-
       <xar:if condition="$style eq 'childlist' or (!empty($dropdown) and !empty($count)) or !empty($value)">
       <tr>
         <td colspan="2">
           <xar:if condition="!empty($input)">
-            <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" fieldlist="$fieldlist" />
+            <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" fieldlist="$fieldlist" tplmodule="$tplmodule" />
             <strong>TODO: allow removal/deleting of child items</strong>
           <xar:else/>
-            <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" fieldlist="$fieldlist" />
+            <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" fieldlist="$fieldlist" tplmodule="$tplmodule" />
           </xar:if>
         </td>
       </tr>
@@ -189,6 +187,6 @@
 </xar:if>
 
 <xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
+    &#160;<span class="xar-error">#$invalid#</span>
 </xar:if>
 </xar:template>
