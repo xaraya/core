@@ -69,7 +69,7 @@
       <source>xar_roles.pass</source>
       <status>33</status>
       <order>6</order>
-      <validation>confirm</validation>
+      <validation></validation>
     </property>
     <property name="regdate">
       <id>35</id>
