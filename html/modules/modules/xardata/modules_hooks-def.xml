@@ -13,90 +13,90 @@
       <id>142</id>
       <label>ID</label>
       <type>itemid</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_hooks.id</source>
       <status>67</status>
-      <order>1</order>
+      <seq>1</seq>
       <validation></validation>
     </property>
     <property name="object">
       <id>143</id>
       <label>Object</label>
       <type>textbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_hooks.object</source>
       <status>65</status>
-      <order>2</order>
+      <seq>2</seq>
       <validation></validation>
     </property>
     <property name="action">
       <id>144</id>
       <label>Action</label>
       <type>textbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_hooks.action</source>
       <status>65</status>
-      <order>3</order>
+      <seq>3</seq>
       <validation></validation>
     </property>
     <property name="subject_module">
       <id>145</id>
       <label>Subject Module</label>
       <type>module</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_hooks.s_module_id</source>
       <status>65</status>
-      <order>4</order>
+      <seq>4</seq>
       <validation></validation>
     </property>
     <property name="subject_type">
       <id>146</id>
       <label>Subject Type</label>
       <type>integerbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_hooks.s_type</source>
       <status>65</status>
-      <order>5</order>
+      <seq>5</seq>
       <validation></validation>
     </property>
     <property name="area">
       <id>147</id>
       <label>Area</label>
       <type>textbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_hooks.t_area</source>
       <status>65</status>
-      <order>6</order>
+      <seq>6</seq>
       <validation></validation>
     </property>
     <property name="observer_module">
       <id>148</id>
       <label>Observer Module</label>
       <type>module</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_hooks.t_module_id</source>
       <status>65</status>
-      <order>7</order>
+      <seq>7</seq>
       <validation></validation>
     </property>
     <property name="observer_type">
       <id>149</id>
       <label>Observer Type</label>
       <type>integerbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_hooks.t_type</source>
       <status>65</status>
-      <order>8</order>
+      <seq>8</seq>
       <validation></validation>
     </property>
     <property name="observer_function">
       <id>150</id>
       <label>Observer Function</label>
       <type>textbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_hooks.t_func</source>
       <status>65</status>
-      <order>9</order>
+      <seq>9</seq>
       <validation></validation>
     </property>
   </properties>
