@@ -769,7 +769,7 @@ function dynamicdata_createPropDefTable()
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
 
     $propdefs = array(
-        'prop_id'     => array(
+        'id'     => array(
             'type'        => 'integer',
             'null'        => false,
             'default'     => '0',
@@ -777,73 +777,73 @@ function dynamicdata_createPropDefTable()
             'primary_key' => true
         ),
         /* the name of this property */
-        'prop_name'   => array(
+        'name'   => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* the label of this property */
-        'prop_label'  => array(
+        'label'  => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* this property's parent */
-        'prop_parent' => array(
+        'parent' => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* path to the file defining this property */
-        'prop_filepath' => array(
+        'filepath' => array(
             'type'          => 'varchar',
             'size'          => 254,
             'default'       => null
         ),
         /* name of the Class to be instantiated for this property */
-        'prop_class'  => array(
+        'class'  => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* the default validation string for this property - no need to use text here... */
-        'prop_validation'   => array(
+        'validation'   => array(
             'type'              => 'varchar',
             'size'              => 254,
             'default'           => null
         ),
         /* the source of this property */
-        'prop_source'   => array(
+        'source'   => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* the semi-colon seperated list of file required to be present before this property is active */
-        'prop_reqfiles'   => array(
+        'reqfiles'   => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* the ID of the module owning this property */
-        'prop_modid'  => array(
+        'modid'  => array(
             'type'        => 'integer',
             'null'        => true,
             'default'     => null
         ),
         /* the default args for this property -- serialized array */
-        'prop_args'    => array(
+        'args'    => array(
             'type'        => 'text',
             'size'        => 'medium',
             'null'        => false
         ),
         /* the aliases for this property -- serialized array */
-        'prop_aliases'   => array(
+        'aliases'   => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /*  */
-        'prop_format'   => array(
+        'format'   => array(
             'type'        => 'integer',
             'default'     => '0'
         ),
@@ -856,7 +856,7 @@ function dynamicdata_createPropDefTable()
         $dynamic_properties_def,
         array(
             'name'   => 'i_' . $prefix . '_dynpropdef_modid',
-            'fields' => array('prop_modid')
+            'fields' => array('modid')
         )
     );
     $dbconn->Execute($query);

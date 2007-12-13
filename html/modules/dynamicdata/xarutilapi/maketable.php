@@ -21,7 +21,7 @@
  * Next steps to finish the move from xar_dynamic_data to a dedicated table :
  * 2. export all items to an XML file (Admin - DynamicData - View Objects - Edit - Export to XML - Export all items to file)
  * 3. UPDATE [prefix]_dynamic_properties
- *       SET prop_source=CONCAT('[prefix]_dd_[objectname].',name)
+ *       SET source=CONCAT('[prefix]_dd_[objectname].',name)
  *     WHERE objectid = [objectid]
  * 4. add an itemid property to the object if it's an extension (see above)
  * 5. import all items from the XML file (Admin - DynamicData - Utilities - Import - change dir)
