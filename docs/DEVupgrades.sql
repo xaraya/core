@@ -503,3 +503,30 @@ ALTER TABLE `xar_privileges`
     like: xarModGetVar etc. and change them or enable Legacy if it is the case
     during upgrade
 */
+
+ALTER TABLE `xar_dynamic_properties`
+  CHANGE COLUMN `prop_id` `id` INTEGER NOT NULL AUTO_INCREMENT,
+  CHANGE COLUMN `prop_name` `name` varchar(30) NOT NULL default '',
+  CHANGE COLUMN `prop_label` `label` varchar(254) NOT NULL default '',
+  CHANGE COLUMN `prop_objectid` `objectid` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `prop_type` `type` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `prop_default` `defaultvalue` varchar(254) default NULL,
+  CHANGE COLUMN `prop_source` `source` varchar(254) NOT NULL default 'dynamic_data',
+  CHANGE COLUMN `prop_status` `status` INTEGER NOT NULL default '33',
+  CHANGE COLUMN `prop_order` `seq` tinyint(4) NOT NULL default '0',
+  CHANGE COLUMN `prop_validation` `validation` text;
+
+ALTER TABLE `xar_dynamic_properties_def`
+  CHANGE COLUMN `prop_id` `id` INTEGER NOT NULL auto_increment,
+  CHANGE COLUMN `prop_name` `name` varchar(254) default NULL,
+  CHANGE COLUMN `prop_label` `label` varchar(254) default NULL,
+  CHANGE COLUMN `prop_parent` `parent` varchar(254) default NULL,
+  CHANGE COLUMN `prop_filepath` `filepath` varchar(254) default NULL,
+  CHANGE COLUMN `prop_class` `class` varchar(254) default NULL,
+  CHANGE COLUMN `prop_validation` `validation` varchar(254) default NULL,
+  CHANGE COLUMN `prop_source` `source` varchar(254) default NULL,
+  CHANGE COLUMN `prop_reqfiles` `reqfiles` varchar(254) default NULL,
+  CHANGE COLUMN `prop_modid` `modid` INTEGER default NULL,
+  CHANGE COLUMN `prop_args` `args` mediumtext NOT NULL,
+  CHANGE COLUMN `prop_aliases` `aliases` varchar(254) default NULL,
+  CHANGE COLUMN `prop_format` `format` INTEGER default '0';
