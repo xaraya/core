@@ -187,6 +187,6 @@
 </xar:if>
 
 <xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
+    &#160;<span class="xar-error">#$invalid#</span>
 </xar:if>
 </xar:template>
