@@ -137,7 +137,7 @@
                         <xar:data-output property="$fieldtypeprop" name="static_type['.$field['id'].']" value="$field['type']" />
                     </td>
                     <td>
-                        #$field['default']#
+                        #$field['defaultvalue']#
                     </td>
                     <td>
                         #$field['source']#

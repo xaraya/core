@@ -16,7 +16,7 @@
  * @param $args['modid'] module id for the original item
  * @param $args['itemtype'] item type of the original item
  * @param $args['itemid'] item id of the original item
- * @param $args['values'] array of prop_id => value, or
+ * @param $args['values'] array of id => value, or
  * @param $args['fields'] array containing the field definitions and values
  * @returns mixed
  * @return item id on success, null on failure

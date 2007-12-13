@@ -10,7 +10,7 @@
 
           <xar:if condition="#$types[$column:getType()] == 'boolean'#">
             <boolean>
-              <xar:attribute name="default">#$column:getDefaultValue()#</xar:attribute>
+              <xar:attribute name="defaultvalue">#$column:getDefaultValue()#</xar:attribute>
             </boolean>
           <xar:elseif condition="#$types[$column:getType()] == 'number'#"/>
             <number>
@@ -18,7 +18,7 @@
               <xar:attribute name="size">#$column:getSize()#</xar:attribute>
 
               <!-- This aint right, default value '' is valid but different from no default -->
-              <xar:attribute name="default">#$column:getDefaultValue()#</xar:attribute>
+              <xar:attribute name="defaultvalue">#$column:getDefaultValue()#</xar:attribute>
 
               <!-- We call scale decimals -->
               <xar:attribute name="decimals">#$column:getScale()?$column:getScale():0#</xar:attribute>

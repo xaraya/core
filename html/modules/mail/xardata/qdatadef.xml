@@ -10,28 +10,28 @@
     <property name="id">
       <label>id</label>
       <type>itemid</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>1</order>
+      <seq>1</seq>
       <validation></validation>
     </property>
     <property name="data">
       <label>data</label>
       <type>textarea_large</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>2</status>
-      <order>2</order>
+      <seq>2</seq>
       <validation></validation>
     </property>
     <property name="nextid">
       <label>nextid</label>
       <type>integerbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>3</order>
+      <seq>3</seq>
       <validation></validation>
     </property>
   </properties>

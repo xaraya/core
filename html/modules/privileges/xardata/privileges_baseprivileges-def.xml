@@ -13,10 +13,10 @@
       <id>48</id>
       <label>ID</label>
       <type>itemid</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_privileges.id</source>
       <status>65</status>
-      <order>1</order>
+      <seq>1</seq>
       <validation></validation>
     </property>
   </properties>

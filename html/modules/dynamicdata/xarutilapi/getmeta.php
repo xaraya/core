@@ -161,10 +161,10 @@ function dynamicdata_utilapi_getmeta($args)
                                    'label' => $label,
                                    'type' => $proptype,
                                    'id' => $id,
-                                   'default' => $default,
+                                   'defaultvalue' => $default,
                                    'source' => $curtable . '.' . $name,
                                    'status' => $status,
-                                   'order' => $id,
+                                   'seq' => $id,
                                    'validation' => $validation
                                    //'primary' => isset($field->primary_key)?$field->primary_key : '',
                                    //'autoincrement' => isset($field->auto_increment))? $field->auto_increment : ''

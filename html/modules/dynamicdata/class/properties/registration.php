@@ -93,10 +93,10 @@ class PropertyRegistration extends DataContainer
         if($this->format == 0) $this->format = $this->id;
 
         $sql = "INSERT INTO $propdefTable
-                (prop_id, prop_name, prop_label,
-                 prop_parent, prop_filepath, prop_class,
-                 prop_format, prop_validation, prop_source,
-                 prop_reqfiles, prop_modid, prop_args, prop_aliases)
+                (id, name, label,
+                 parent, filepath, class,
+                 format, validation, source,
+                 reqfiles, modid, args, aliases)
                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         if(!isset($stmt))
             $stmt = $dbconn->prepareStatement($sql);
@@ -132,14 +132,14 @@ class PropertyRegistration extends DataContainer
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
         // Sort by required module(s) and then by name
-        $query = "SELECT  p.prop_id, p.prop_name, p.prop_label,
-                          p.prop_parent, p.prop_filepath, p.prop_class,
-                          p.prop_format, p.prop_validation, p.prop_source,
-                          p.prop_reqfiles, m.name, p.prop_args,
-                          p.prop_aliases
+        $query = "SELECT  p.id, p.name, p.label,
+                          p.parent, p.filepath, p.class,
+                          p.format, p.validation, p.source,
+                          p.reqfiles, m.name, p.args,
+                          p.aliases
                   FROM    $tables[dynamic_properties_def] p INNER JOIN $tables[modules] m
-                  ON      p.prop_modid = m.id
-                  ORDER BY m.name, prop_name";
+                  ON      p.modid = m.id
+                  ORDER BY m.name, p.name";
         $result = $dbconn->executeQuery($query);
         $proptypes = array();
         if($result->RecordCount() == 0 ) {

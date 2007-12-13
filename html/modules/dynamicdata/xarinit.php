@@ -180,7 +180,7 @@ function dynamicdata_init()
          * Dynamic Properties table
          */
         $propfields = array(
-            'prop_id'     => array(
+            'id'     => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0',
@@ -188,59 +188,59 @@ function dynamicdata_init()
                 'primary_key' => true
             ),
             /* the name used to reference a particular property, e.g. in function calls and templates */
-            'prop_name'       => array(
+            'name'       => array(
                 'type'        => 'varchar',
                 'size'        => 30,
                 'null'        => false,
                 'default'     => ''
             ),
             /* the label used for display */
-            'prop_label'      => array(
+            'label'      => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
                 'default'     => ''
             ),
             /* the object this property belong to */
-            'prop_objectid'   => array(
+            'objectid'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the property type of this property */
-            'prop_type'       => array(
+            'type'       => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => null
             ),
             /* the default value for this property */
-            'prop_default'    => array(
+            'defaultvalue'    => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'default'     => null
             ),
             /* the data source for this property (dynamic data, static table, hook, user function, LDAP (?), file, ... */
-            'prop_source'     => array(
+            'source'     => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
                 'default'     => 'dynamic_data'
             ),
             /* is this property active ? (unused at the moment) */
-            'prop_status'     => array(
+            'status'     => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '33'
             ),
             /* the order of this property */
-            'prop_order'      => array(
+            'seq'      => array(
                 'type'        => 'integer',
                 'size'        => 'tiny',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* specific validation rules for this property (e.g. basedir, size, ...) */
-            'prop_validation' => array(
+            'validation' => array(
                 'type'        => 'text'
             )
         );
@@ -252,7 +252,7 @@ function dynamicdata_init()
             $dynamic_properties,
             array(
                 'name'   => 'i_' . $prefix . '_dynprops_combo',
-                'fields' => array('prop_objectid', 'prop_name'),
+                'fields' => array('objectid', 'name'),
                 'unique' => 'true'
             )
         );
@@ -265,9 +265,9 @@ function dynamicdata_init()
 
         // create default properties for dynamic data objects
         $sql = "INSERT INTO $dynamic_properties (
-                prop_name, prop_label, prop_objectid,
-                prop_type, prop_default, prop_source,
-                prop_status, prop_order, prop_validation)
+                name, label, objectid,
+                type, defaultvalue, source,
+                status, seq, validation)
             VALUES (?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
@@ -289,16 +289,16 @@ function dynamicdata_init()
             array('isalias'   ,'Alias in short URLs',$objectid[1],14,'1'           ,$dynamic_objects.'.object_isalias'    ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12 ,'integer (tiny)'),
 
             // Properties for the Properties DD object
-            array('id'        ,'Id'                 ,$objectid[2],21,''            ,$dynamic_properties.'.prop_id'        ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,1 ,'integer'),
-            array('name'      ,'Name'               ,$objectid[2],2 ,''            ,$dynamic_properties.'.prop_name'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
-            array('label'     ,'Label'              ,$objectid[2],2 ,''            ,$dynamic_properties.'.prop_label'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
-            array('objectid'  ,'Object'             ,$objectid[2],24,''            ,$dynamic_properties.'.prop_objectid'  ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
-            array('type'      ,'Property Type'      ,$objectid[2],22,''            ,$dynamic_properties.'.prop_type'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'integer'),
-            array('default'   ,'Default'            ,$objectid[2],3 ,''            ,$dynamic_properties.'.prop_default'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (254)'),
-            array('source'    ,'Source'             ,$objectid[2],23,'dynamic_data',$dynamic_properties.'.prop_source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,'varchar (254)'),
-            array('status'    ,'Status'             ,$objectid[2],25,'1'           ,$dynamic_properties.'.prop_status'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,'integer (tiny)'),
-            array('order'     ,'Order'              ,$objectid[2],15,'0'           ,$dynamic_properties.'.prop_order'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11,'integer (tiny)'),
-            array('validation','Validation'         ,$objectid[2],3 ,''            ,$dynamic_properties.'.prop_validation',DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12,'text'),
+            array('id'        ,'Id'                 ,$objectid[2],21,''            ,$dynamic_properties.'.id'        ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,1 ,'integer'),
+            array('name'      ,'Name'               ,$objectid[2],2 ,''            ,$dynamic_properties.'.name'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
+            array('label'     ,'Label'              ,$objectid[2],2 ,''            ,$dynamic_properties.'.label'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
+            array('objectid'  ,'Object'             ,$objectid[2],24,''            ,$dynamic_properties.'.objectid'  ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
+            array('type'      ,'Property Type'      ,$objectid[2],22,''            ,$dynamic_properties.'.type'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'integer'),
+            array('default'   ,'Default'            ,$objectid[2],3 ,''            ,$dynamic_properties.'.defaultvalue'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (254)'),
+            array('source'    ,'Source'             ,$objectid[2],23,'dynamic_data',$dynamic_properties.'.source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,'varchar (254)'),
+            array('status'    ,'Status'             ,$objectid[2],25,'1'           ,$dynamic_properties.'.status'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,'integer (tiny)'),
+            array('order'     ,'Order'              ,$objectid[2],15,'0'           ,$dynamic_properties.'.seq'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11,'integer (tiny)'),
+            array('validation','Validation'         ,$objectid[2],3 ,''            ,$dynamic_properties.'.validation',DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12,'text'),
 
             // Properties for the Sample DD object
             // @todo import this
@@ -769,7 +769,7 @@ function dynamicdata_createPropDefTable()
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
 
     $propdefs = array(
-        'prop_id'     => array(
+        'id'     => array(
             'type'        => 'integer',
             'null'        => false,
             'default'     => '0',
@@ -777,73 +777,73 @@ function dynamicdata_createPropDefTable()
             'primary_key' => true
         ),
         /* the name of this property */
-        'prop_name'   => array(
+        'name'   => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* the label of this property */
-        'prop_label'  => array(
+        'label'  => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* this property's parent */
-        'prop_parent' => array(
+        'parent' => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* path to the file defining this property */
-        'prop_filepath' => array(
+        'filepath' => array(
             'type'          => 'varchar',
             'size'          => 254,
             'default'       => null
         ),
         /* name of the Class to be instantiated for this property */
-        'prop_class'  => array(
+        'class'  => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* the default validation string for this property - no need to use text here... */
-        'prop_validation'   => array(
+        'validation'   => array(
             'type'              => 'varchar',
             'size'              => 254,
             'default'           => null
         ),
         /* the source of this property */
-        'prop_source'   => array(
+        'source'   => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* the semi-colon seperated list of file required to be present before this property is active */
-        'prop_reqfiles'   => array(
+        'reqfiles'   => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* the ID of the module owning this property */
-        'prop_modid'  => array(
+        'modid'  => array(
             'type'        => 'integer',
             'null'        => true,
             'default'     => null
         ),
         /* the default args for this property -- serialized array */
-        'prop_args'    => array(
+        'args'    => array(
             'type'        => 'text',
             'size'        => 'medium',
             'null'        => false
         ),
         /* the aliases for this property -- serialized array */
-        'prop_aliases'   => array(
+        'aliases'   => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /*  */
-        'prop_format'   => array(
+        'format'   => array(
             'type'        => 'integer',
             'default'     => '0'
         ),
@@ -856,7 +856,7 @@ function dynamicdata_createPropDefTable()
         $dynamic_properties_def,
         array(
             'name'   => 'i_' . $prefix . '_dynpropdef_modid',
-            'fields' => array('prop_modid')
+            'fields' => array('modid')
         )
     );
     $dbconn->Execute($query);

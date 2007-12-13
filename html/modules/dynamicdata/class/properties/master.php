@@ -49,10 +49,10 @@ class DataPropertyMaster extends Object
         $dynamicprop = $xartable['dynamic_properties'];
 
         $bindvars = array();
-        $query = "SELECT prop_name, prop_label, prop_type,
-                         prop_id, prop_default, prop_source,
-                         prop_status, prop_order, prop_validation,
-                         prop_objectid FROM $dynamicprop ";
+        $query = "SELECT name, label, type,
+                         id, defaultvalue, source,
+                         status, seq, validation,
+                         objectid FROM $dynamicprop ";
         if(empty($args['objectid']))
         {
             $doargs['moduleid'] = $args['moduleid'];
@@ -60,21 +60,21 @@ class DataPropertyMaster extends Object
             $info = DataObjectDescriptor::getObjectID($doargs);
         }
 
-        $query .= " WHERE prop_objectid = ?";
+        $query .= " WHERE objectid = ?";
         $bindvars[] = (int) $args['objectid'];
 
         if(empty($args['allprops']))
-            $query .= " AND prop_status > 0 ";
+            $query .= " AND status > 0 ";
 
-        $query .= " ORDER BY prop_order ASC, prop_id ASC";
+        $query .= " ORDER BY seq ASC, id ASC";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
 
         $properties = array();
         while ($result->next()) {
             list(
-                $name, $label, $type, $id, $default, $source, $fieldstatus,
-                $order, $validation, $_objectid
+                $name, $label, $type, $id, $defaultvalue, $source, $fieldstatus,
+                $seq, $validation, $_objectid
                 ) = $result->fields;
 //            if (xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id")) {
                 $property = array(
@@ -82,10 +82,10 @@ class DataPropertyMaster extends Object
                     'label'         => $label,
                     'type'          => $type,
                     'id'            => $id,
-                    'default'       => $default,
+                    'defaultvalue'  => $defaultvalue,
                     'source'        => $source,
                     'status'        => $fieldstatus,
-                    'order'         => $order,
+                    'seq'         => $seq,
                     'validation'    => $validation,
                     // some internal variables
                     '_objectid'     => $_objectid,

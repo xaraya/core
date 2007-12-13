@@ -31,7 +31,7 @@
   
   <div class="xar-form-input-wrapper">
     <label for="dd_default_0" class="xar-form-label">
-      #$labels['default']#:
+      #$labels['defaultvalue']#:
     </label>
     <input type="text" name="dd_default[0]" id="dd_default_0" class="xar-form-textmedium" />
   </div>

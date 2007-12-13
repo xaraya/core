@@ -57,7 +57,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             if($args['itemid'] != $this->itemid)
                 // initialise the properties again
                 foreach(array_keys($this->properties) as $name)
-                    $this->properties[$name]->value = $this->properties[$name]->default;
+                    $this->properties[$name]->value = $this->properties[$name]->defaultvalue;
 
             $this->itemid = $args['itemid'];
         }

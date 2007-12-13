@@ -60,7 +60,7 @@ function dynamicdata_adminapi_removehook($args)
 
     $dynamicprop = $xartable['dynamic_properties'];
 
-    $sql = "SELECT prop_id FROM $dynamicprop WHERE prop_moduleid = ?";
+    $sql = "SELECT id FROM $dynamicprop WHERE moduleid = ?";
     $stmt = $dbconn->prepareStatement($sql);
     $result = $stmt->executeQuery(array($modid));
 
@@ -90,7 +90,7 @@ function dynamicdata_adminapi_removehook($args)
         $stmt->executeUpdate($ids);
 
         // Delete the properties
-        $sql = "DELETE FROM $dynamicprop WHERE prop_id IN ($bindmarkers)";
+        $sql = "DELETE FROM $dynamicprop WHERE id IN ($bindmarkers)";
         $stmt = $dbconn->prepareStatement($sql);
         $stmt->executeUpdate($ids);
         $dbconn->commit();

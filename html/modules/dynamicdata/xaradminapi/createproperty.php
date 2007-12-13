@@ -19,10 +19,10 @@
  * @param $args['moduleid'] module id of the property to create
  * @param $args['itemtype'] item type of the property to create
  * @param $args['type'] type of the property to create
- * @param $args['default'] default of the property to create
+ * @param $args['defaultvalue'] default of the property to create
  * @param $args['source'] data source for the property (dynamic_data table or other)
  * @param $args['status'] status of the property to create (disabled/active/...)
- * @param $args['order'] order of the property to create
+ * @param $args['seq'] order of the property to create
  * @param $args['validation'] validation of the property to create
  * @returns int
  * @return property ID on success, null on failure

@@ -54,9 +54,9 @@
         
         <div class="xar-form-input-wrapper">
             <label for="dd_default_#$field.id#" class="xar-form-label">
-                #$labels['default']#:
+                #$labels['defaultvalue']#:
             </label>
-            <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVarPrepForDisplay($field['default'])#" class="xar-form-textmedium" />
+            <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVarPrepForDisplay($field['defaultvalue'])#" class="xar-form-textmedium" />
         </div>
         
         <div class="xar-form-input-wrapper">

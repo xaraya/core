@@ -223,7 +223,7 @@
                         <xar:data-output property="$prop" value="$type" />
                     </td>
                     <td>
-                        #$property:default# 
+                        #$property:defaultvalue# 
                     </td>
                     <td>
                         #$property:source# 

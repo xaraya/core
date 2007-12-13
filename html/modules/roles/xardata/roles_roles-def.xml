@@ -15,20 +15,20 @@
       <id>27</id>
       <label>ID</label>
       <type>itemid</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_roles.id</source>
       <status>65</status>
-      <order>1</order>
+      <seq>1</seq>
       <validation></validation>
     </property>
     <property name="role_type">
       <id>28</id>
       <label>Type</label>
       <type>itemtype</type>
-      <default>1</default>
+      <defaultvalue>1</defaultvalue>
       <source>xar_roles.type</source>
       <status>67</status>
-      <order>3</order>
+      <seq>3</seq>
       <validation>roles</validation>
     </property>
   </properties>

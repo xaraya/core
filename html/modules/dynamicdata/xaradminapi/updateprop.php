@@ -13,11 +13,11 @@
  * update a property field
  *
  * @author the DynamicData module development team
- * @param $args['prop_id'] property id of the item field to update
+ * @param $args['id'] property id of the item field to update
  * @param $args['name'] name of the field to update (optional)
  * @param $args['label'] label of the field to update
  * @param $args['type'] type of the field to update
- * @param $args['default'] default of the field to update (optional)
+ * @param $args['defaultvalue'] default of the field to update (optional)
  * @param $args['source'] data source of the field to update (optional)
  * @param $args['status'] status of the field to update (optional)
  * @param $args['validation'] validation of the field to update (optional)
@@ -30,7 +30,7 @@ function dynamicdata_adminapi_updateprop($args)
 
     // Required arguments
     $invalid = array();
-    if (!isset($prop_id) || !is_numeric($prop_id)) {
+    if (!isset($id) || !is_numeric($id)) {
         $invalid[] = 'property id';
     }
     if (!isset($label) || !is_string($label)) {
@@ -48,9 +48,9 @@ function dynamicdata_adminapi_updateprop($args)
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
     if (isset($name) && is_string($name)) {
-    if(!xarSecurityCheck('EditDynamicDataField',1,'Field',"$name:$type:$prop_id")) return;
+    if(!xarSecurityCheck('EditDynamicDataField',1,'Field',"$name:$type:$id")) return;
     } else {
-    if(!xarSecurityCheck('EditDynamicDataField',1,'Field',"All:$type:$prop_id")) return;
+    if(!xarSecurityCheck('EditDynamicDataField',1,'Field',"All:$type:$id")) return;
     }
 
     // Get database setup - note that xarDB::getConn()
@@ -66,32 +66,32 @@ function dynamicdata_adminapi_updateprop($args)
     $dynamicprop = $xartable['dynamic_properties'];
 
     $bindvars = array();
-    $sql = "UPDATE $dynamicprop SET prop_label = ?, prop_type = ?";
+    $sql = "UPDATE $dynamicprop SET label = ?, type = ?";
     $bindvars[] = $label; $bindvars[] = $type;
     if (isset($default) && is_string($default)) {
-        $sql .= ", prop_default = ?";
+        $sql .= ", defaultvalue = ?";
         $bindvars[] = $default;
     }
     // TODO: verify that the data source exists
     if (isset($source) && is_string($source)) {
-        $sql .= ", prop_source = ?";
+        $sql .= ", source = ?";
         $bindvars[] = $source;
     }
     if (isset($validation) && is_string($validation)) {
-        $sql .= ", prop_validation = ?";
+        $sql .= ", validation = ?";
         $bindvars[] = $validation;
     }
     if (isset($name) && is_string($name)) {
-        $sql .= ", prop_name = ?";
+        $sql .= ", name = ?";
         $bindvars[] = $name;
     }
     if (isset($status) && is_numeric($status)) {
-        $sql .= ", prop_status = ?";
+        $sql .= ", status = ?";
         $bindvars[] = $status;
     }
 
-    $sql .= " WHERE prop_id = ?";
-    $bindvars[] = $prop_id;
+    $sql .= " WHERE id = ?";
+    $bindvars[] = $id;
     $dbconn->Execute($sql,$bindvars);
 
     return true;
