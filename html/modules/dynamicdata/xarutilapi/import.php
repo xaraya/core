@@ -153,7 +153,7 @@ function dynamicdata_utilapi_import($args)
             // Force a new itemid to be created for this property
             $dataproperty->properties[$dataproperty->primary]->setValue(0);
             // Create the property
-            $prop_id = $dataproperty->createItem($propertyargs);
+            $id = $dataproperty->createItem($propertyargs);
         }
     } elseif ($roottag == 'items') {
 

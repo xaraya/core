@@ -81,7 +81,7 @@ function dynamicdata_admin_updateprop()
         if (empty($dd_label[$id])) {
             // delete property (and corresponding data) in xaradminapi.php
             if (!xarModAPIFunc('dynamicdata','admin','deleteprop',
-                              array('prop_id' => $id))) {
+                              array('id' => $id))) {
                 return;
             }
         } else {
@@ -105,12 +105,12 @@ function dynamicdata_admin_updateprop()
             }
             $dd_status[$id] = $display_dd_status[$id] + $input_dd_status[$id];
             if (!xarModAPIFunc('dynamicdata','admin','updateprop',
-                              array('prop_id' => $id,
+                              array('id' => $id,
                               //      'modid' => $modid,
                               //      'itemtype' => $itemtype,
                                     'label' => $dd_label[$id],
                                     'type' => $dd_type[$id],
-                                    'default' => $dd_default[$id],
+                                    'defaultvalue' => $dd_default[$id],
                               //      'source' => $dd_source[$id],
                                     'status' => $dd_status[$id],
                                     'validation' => $dd_validation[$id]))) {
@@ -135,19 +135,19 @@ function dynamicdata_admin_updateprop()
             $input_dd_status[0] = DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
         }
         $dd_status[0] = $display_dd_status[0] + $input_dd_status[0];
-        $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
+        $id = xarModAPIFunc('dynamicdata','admin','createproperty',
                                 array('name' => $name,
                                       'label' => $dd_label[0],
                                       'objectid' => $objectid,
                                       'moduleid' => $modid,
                                       'itemtype' => $itemtype,
                                       'type' => $dd_type[0],
-                                      'default' => $dd_default[0],
+                                      'defaultvalue' => $dd_default[0],
                                       'source' => $dd_source[0],
                                       'status' => $dd_status[0],
-                                      'order' => $i,
+                                      'seq' => $i,
                                       'validation' => $dd_validation[0]));
-        if (empty($prop_id)) {
+        if (empty($id)) {
             return;
         }
         if ($dd_type[0] == 21) { // item id

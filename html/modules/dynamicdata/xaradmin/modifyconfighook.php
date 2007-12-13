@@ -59,7 +59,7 @@ function dynamicdata_admin_modifyconfighook($args)
                     'name' => xarML('Name'),
                     'label' => xarML('Label'),
                     'type' => xarML('Field Format'),
-                    'default' => xarML('Default'),
+                    'defaultvalue' => xarML('Default'),
                     'source' => xarML('Data Source'),
                     'validation' => xarML('Validation'),
                    );

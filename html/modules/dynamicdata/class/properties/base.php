@@ -26,10 +26,10 @@ class DataProperty extends Object implements iDataProperty
     public $desc           = 'propertyDescription';
     public $label          = 'Property Label';
     public $type           = 1;
-    public $default        = '';
+    public $defaultvalue   = '';
     public $source         = 'dynamic_data';
     public $status         = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
-    public $order          = 0;
+    public $seq            = 0;
     public $format         = '0'; //<-- eh?
     public $filepath       = 'modules/dynamicdata/xarproperties';
     public $class          = '';         // this property's class
@@ -69,15 +69,15 @@ class DataProperty extends Object implements iDataProperty
             // if the default field looks like <something>(...), we'll assume that this
             // a function call that returns some dynamic default value
             // Expression stolen from http://php.net/functions
-            if(!empty($this->default) && preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/',$this->default)) {
-                eval('$value = ' . $this->default .';');
+            if(!empty($this->defaultvalue) && preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/',$this->defaultvalue)) {
+                eval('$value = ' . $this->defaultvalue .';');
                 if(isset($value)) {
-                    $this->default = $value;
+                    $this->defaultvalue = $value;
                 } else {
-                    $this->default = null;
+                    $this->defaultvalue = null;
                 }
             }
-            $this->value = $this->default;
+            $this->value = $this->defaultvalue;
         }
     }
 

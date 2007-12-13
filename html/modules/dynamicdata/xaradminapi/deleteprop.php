@@ -13,14 +13,14 @@
  * delete a property field
  *
  * @author the DynamicData module development team
- * @param $args['prop_id'] property id of the item field to delete
+ * @param $args['id'] property id of the item field to delete
 // TODO: do we want those for security check ? Yes, but the original values...
  * @param $args['modid'] module id of the item field to delete
  * @param $args['itemtype'] item type of the item field to delete
  * @param $args['name'] name of the field to delete
  * @param $args['label'] label of the field to delete
  * @param $args['type'] type of the field to delete
- * @param $args['default'] default of the field to delete
+ * @param $args['defaultvalue'] default of the field to delete
  * @param $args['source'] data source of the field to delete
  * @param $args['validation'] validation of the field to delete
  * @returns bool
@@ -33,7 +33,7 @@ function dynamicdata_adminapi_deleteprop($args)
 
     // Required arguments
     $invalid = array();
-    if (!isset($prop_id) || !is_numeric($prop_id)) {
+    if (!isset($id) || !is_numeric($id)) {
         $invalid[] = 'property id';
     }
     if (count($invalid) > 0) {
@@ -45,7 +45,7 @@ function dynamicdata_adminapi_deleteprop($args)
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
     // TODO: check based on other arguments too
-    if(!xarSecurityCheck('DeleteDynamicDataField',1,'Field',"All:All:$prop_id")) return;
+    if(!xarSecurityCheck('DeleteDynamicDataField',1,'Field',"All:All:$id")) return;
 
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
@@ -56,14 +56,14 @@ function dynamicdata_adminapi_deleteprop($args)
 
     try {
         $dbconn->begin();
-        $sql = "DELETE FROM $dynamicprop WHERE prop_id = ?";
-        $dbconn->Execute($sql,array($prop_id));
+        $sql = "DELETE FROM $dynamicprop WHERE id = ?";
+        $dbconn->Execute($sql,array($id));
 
         // TODO: don't delete if the data source is not in dynamic_data
         // delete all data too !
         $dynamicdata = $xartable['dynamic_data'];
         $sql = "DELETE FROM $dynamicdata WHERE dd_propid = ?";
-        $dbconn->Execute($sql,array($prop_id));
+        $dbconn->Execute($sql,array($id));
         $dbconn->commit();
     } catch (SQLException $e) {
         $dbconn->rollback();

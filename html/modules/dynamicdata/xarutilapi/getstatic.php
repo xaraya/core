@@ -178,10 +178,10 @@ function dynamicdata_utilapi_getstatic($args)
                                    'label' => $label,
                                    'type' => $proptype,
                                    'id' => $id,
-                                   'default' => $default,
+                                   'defaultvalue' => $default,
                                    'source' => $table . '.' . $name,
                                    'status' => $status,
-                                   'order' => $order,
+                                   'seq' => $order,
                                    'validation' => $validation);
             $order++;
         } // next column

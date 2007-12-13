@@ -73,19 +73,19 @@ function dynamicdata_utilapi_importproperties($args)
 
     // create new properties
     foreach ($fields as $name => $field) {
-        $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
+        $id = xarModAPIFunc('dynamicdata','admin','createproperty',
                                 array('name'       => $name,
                                       'label'      => $field['label'],
                                       'objectid'   => $objectid,
                                       'moduleid'   => $modid,
                                       'itemtype'   => $itemtype,
                                       'type'       => $field['type'],
-                                      'default'    => $field['default'],
+                                      'defaultvalue'=> $field['default'],
                                       'source'     => $field['source'],
                                       'status'     => $field['status'],
-                                      'order'      => $field['order'],
+                                      'seq'      => $field['seq'],
                                       'validation' => $field['validation']));
-        if (empty($prop_id)) {
+        if (empty($id)) {
             return;
         }
     }

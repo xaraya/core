@@ -69,7 +69,7 @@
                             <xar:data-output type="fieldtype" name="dummy" value="$field['type']" />
                         </td>
                         <td>
-                            #$field['default']# 
+                            #$field['defaultvalue']# 
                         </td>
                         <td>
                             #$field['source']# 

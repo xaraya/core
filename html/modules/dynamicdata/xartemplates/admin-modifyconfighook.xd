@@ -13,7 +13,7 @@
             <th>#$labels.name#</th>
             <th>#$labels.label#</th>
             <th>#$labels.type#</th>
-            <th>#$labels.default#</th>
+            <th>#$labels.defaultvalue#</th>
             <th>#$labels.source#</th>
             <th>#$labels.validation#</th>
         </tr>
@@ -25,7 +25,7 @@
                 <td>
                     <xar:data-output property="$fieldtypeprop" value="$field['type']" />
                 </td>
-                <td><xar:var name="field.default" prep="true"/></td>
+                <td><xar:var name="field.defaultvalue" prep="true"/></td>
                 <td>#$field.source#</td>
                 <td><xar:var name="field.validation" prep="true"/></td>
             </tr>

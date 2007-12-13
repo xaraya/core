@@ -12,530 +12,530 @@
       <id>30</id>
       <label>Static Text</label>
       <type>static</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>1</order>
+      <seq>1</seq>
       <validation></validation>
     </property>
     <property name="text_box">
       <id>31</id>
       <label>Text Box</label>
       <type>textbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>2</order>
+      <seq>2</seq>
       <validation></validation>
     </property>
     <property name="small_text_area">
       <id>32</id>
       <label>Small Text Area</label>
       <type>textarea_small</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>3</order>
+      <seq>3</seq>
       <validation></validation>
     </property>
     <property name="medium_text_area">
       <id>33</id>
       <label>Medium Text Area</label>
       <type>textarea_medium</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>4</order>
+      <seq>4</seq>
       <validation></validation>
     </property>
     <property name="large_text_area">
       <id>34</id>
       <label>Large Text Area</label>
       <type>textarea_large</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>5</order>
+      <seq>5</seq>
       <validation></validation>
     </property>
     <property name="dropdown_list">
       <id>35</id>
       <label>Dropdown List</label>
       <type>dropdown</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>6</order>
+      <seq>6</seq>
       <validation></validation>
     </property>
     <property name="username">
       <id>36</id>
       <label>Username</label>
       <type>username</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>7</order>
+      <seq>7</seq>
       <validation></validation>
     </property>
     <property name="calendar">
       <id>37</id>
       <label>Calendar</label>
       <type>calendar</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>8</order>
+      <seq>8</seq>
       <validation></validation>
     </property>
     <property name="file_upload">
       <id>38</id>
       <label>File Upload</label>
       <type>fileupload</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>9</order>
+      <seq>9</seq>
       <validation></validation>
     </property>
     <property name="status">
       <id>39</id>
       <label>Status</label>
       <type>status</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>10</order>
+      <seq>10</seq>
       <validation></validation>
     </property>
     <property name="url">
       <id>40</id>
       <label>URL</label>
       <type>url</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>11</order>
+      <seq>11</seq>
       <validation></validation>
     </property>
     <property name="image">
       <id>41</id>
       <label>Image</label>
       <type>image</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>12</order>
+      <seq>12</seq>
       <validation></validation>
     </property>
     <property name="html_page">
       <id>42</id>
       <label>HTML Page</label>
       <type>webpage</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>13</order>
+      <seq>13</seq>
       <validation></validation>
     </property>
     <property name="checkbox">
       <id>43</id>
       <label>Checkbox</label>
       <type>checkbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>14</order>
+      <seq>14</seq>
       <validation></validation>
     </property>
     <property name="number_box">
       <id>44</id>
       <label>Number Box</label>
       <type>integerbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>15</order>
+      <seq>15</seq>
       <validation></validation>
     </property>
     <property name="number_list">
       <id>45</id>
       <label>Number List</label>
       <type>integerlist</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>16</order>
+      <seq>16</seq>
       <validation></validation>
     </property>
     <property name="number_box_float">
       <id>46</id>
       <label>Number Box (float)</label>
       <type>floatbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>17</order>
+      <seq>17</seq>
       <validation></validation>
     </property>
     <property name="hidden">
       <id>47</id>
       <label>Hidden</label>
       <type>hidden</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>18</order>
+      <seq>18</seq>
       <validation></validation>
     </property>
     <property name="module">
       <id>48</id>
       <label>Module</label>
       <type>module</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>19</order>
+      <seq>19</seq>
       <validation></validation>
     </property>
     <property name="item_type">
       <id>49</id>
       <label>Item Type</label>
       <type>itemtype</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>20</order>
+      <seq>20</seq>
       <validation></validation>
     </property>
     <property name="item_id">
       <id>50</id>
       <label>Item ID</label>
       <type>itemid</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>21</order>
+      <seq>21</seq>
       <validation></validation>
     </property>
     <property name="field_type">
       <id>51</id>
       <label>Field Type</label>
       <type>fieldtype</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>22</order>
+      <seq>22</seq>
       <validation></validation>
     </property>
     <property name="data_source">
       <id>52</id>
       <label>Data Source</label>
       <type>datasource</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>23</order>
+      <seq>23</seq>
       <validation></validation>
     </property>
     <property name="object">
       <id>53</id>
       <label>Object</label>
       <type>object</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>24</order>
+      <seq>24</seq>
       <validation></validation>
     </property>
     <property name="field_status">
       <id>54</id>
       <label>Field Status</label>
       <type>fieldstatus</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>25</order>
+      <seq>25</seq>
       <validation></validation>
     </property>
     <property name="e_mail">
       <id>55</id>
       <label>E-Mail</label>
       <type>email</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>26</order>
+      <seq>26</seq>
       <validation></validation>
     </property>
     <property name="url_icon">
       <id>56</id>
       <label>URL Icon</label>
       <type>urlicon</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>27</order>
+      <seq>27</seq>
       <validation></validation>
     </property>
     <property name="icq_number">
       <id>57</id>
       <label>ICQ Number</label>
       <type>icq</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>28</order>
+      <seq>28</seq>
       <validation></validation>
     </property>
     <property name="aim_address">
       <id>58</id>
       <label>AIM Address</label>
       <type>aim</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>29</order>
+      <seq>29</seq>
       <validation></validation>
     </property>
     <property name="msn_messenger">
       <id>59</id>
       <label>MSN Messenger</label>
       <type>msn</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>30</order>
+      <seq>30</seq>
       <validation></validation>
     </property>
     <property name="yahoo_messenger">
       <id>60</id>
       <label>Yahoo Messenger</label>
       <type>yahoo</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>31</order>
+      <seq>31</seq>
       <validation></validation>
     </property>
     <property name="time_zone">
       <id>61</id>
       <label>Time Zone</label>
       <type>timezone</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>32</order>
+      <seq>32</seq>
       <validation></validation>
     </property>
     <property name="date_format">
       <id>62</id>
       <label>Date Format</label>
       <type>dateformat</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>33</order>
+      <seq>33</seq>
       <validation></validation>
     </property>
     <property name="radio_buttons">
       <id>63</id>
       <label>Radio Buttons</label>
       <type>radio</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>34</order>
+      <seq>34</seq>
       <validation></validation>
     </property>
     <property name="image_list">
       <id>64</id>
       <label>Image List</label>
       <type>imagelist</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>35</order>
+      <seq>35</seq>
       <validation></validation>
     </property>
     <property name="language_list">
       <id>65</id>
       <label>Language List</label>
       <type>language</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>36</order>
+      <seq>36</seq>
       <validation></validation>
     </property>
     <property name="user_list">
       <id>66</id>
       <label>User List</label>
       <type>userlist</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>37</order>
+      <seq>37</seq>
       <validation></validation>
     </property>
     <property name="text_upload">
       <id>67</id>
       <label>Text Upload</label>
       <type>textupload</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>38</order>
+      <seq>38</seq>
       <validation></validation>
     </property>
     <property name="multi_select">
       <id>68</id>
       <label>Multi Select</label>
       <type>multiselect</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>39</order>
+      <seq>39</seq>
       <validation></validation>
     </property>
     <property name="affero_username">
       <id>69</id>
       <label>Affero Username</label>
       <type>affero</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>40</order>
+      <seq>40</seq>
       <validation></validation>
     </property>
     <property name="url_title">
       <id>70</id>
       <label>URL + Title</label>
       <type>urltitle</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>41</order>
+      <seq>41</seq>
       <validation></validation>
     </property>
     <property name="country_dropdown">
       <id>71</id>
       <label>Country Dropdown</label>
       <type>countrylisting</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>42</order>
+      <seq>42</seq>
       <validation></validation>
     </property>
     <property name="state_dropdown">
       <id>72</id>
       <label>State Dropdown</label>
       <type>statelisting</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>43</order>
+      <seq>43</seq>
       <validation></validation>
     </property>
     <property name="tigra_color_picker">
       <id>73</id>
       <label>Tigra Color Picker</label>
       <type>tcolorpicker</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>44</order>
+      <seq>44</seq>
       <validation></validation>
     </property>
     <property name="group_list">
       <id>74</id>
       <label>Group List</label>
       <type>grouplist</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>45</order>
+      <seq>45</seq>
       <validation></validation>
     </property>
     <property name="categories">
       <id>75</id>
       <label>Categories</label>
       <type>categories</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>46</order>
+      <seq>46</seq>
       <validation></validation>
     </property>
     <property name="hit_count">
       <id>76</id>
       <label>Hit Count</label>
       <type>hitcount</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>47</order>
+      <seq>47</seq>
       <validation></validation>
     </property>
     <property name="rating">
       <id>77</id>
       <label>Rating</label>
       <type>ratings</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>48</order>
+      <seq>48</seq>
       <validation></validation>
     </property>
     <property name="comments">
       <id>78</id>
       <label>Comments</label>
       <type>comments</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>49</order>
+      <seq>49</seq>
       <validation></validation>
     </property>
     <property name="_of_comments">
       <id>79</id>
       <label># of Comments</label>
       <type>numcomments</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>50</order>
+      <seq>50</seq>
       <validation></validation>
     </property>
     <property name="password_text_box">
       <id>88</id>
       <label>Password Text Box</label>
       <type>password</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>51</order>
+      <seq>51</seq>
       <validation></validation>
     </property>
     <property name="extended_date">
       <id>89</id>
       <label>Extended Date</label>
       <type>extendeddate</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>52</order>
+      <seq>52</seq>
       <validation></validation>
     </property>
     <property name="logging_level">
       <id>90</id>
       <label>Logging Level</label>
       <type>loglevel</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>1</status>
-      <order>53</order>
+      <seq>53</seq>
       <validation></validation>
     </property>
   </properties>

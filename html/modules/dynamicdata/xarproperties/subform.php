@@ -647,7 +647,7 @@ class SubFormProperty extends DataProperty
                     } else {
                         // initialise the properties again
                         foreach (array_keys($myobject->properties) as $propname) {
-                            $myobject->properties[$propname]->value = $myobject->properties[$propname]->default;
+                            $myobject->properties[$propname]->value = $myobject->properties[$propname]->defaultvalue;
                         }
                     }
                     $repeats = $this->repeat ? $this->repeat : 1;
