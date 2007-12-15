@@ -530,3 +530,11 @@ ALTER TABLE `xar_dynamic_properties_def`
   CHANGE COLUMN `prop_args` `args` mediumtext NOT NULL,
   CHANGE COLUMN `prop_aliases` `aliases` varchar(254) default NULL,
   CHANGE COLUMN `prop_format` `format` INTEGER default '0';
+  
+ALTER TABLE `xar_dynamic_data`
+  CHANGE COLUMN `dd_id` `id` INTEGER NOT NULL AUTO_INCREMENT,
+  CHANGE COLUMN `dd_propid` `propid` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `dd_itemid` `itemid` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `dd_value` `value` mediumtext;
+
+

@@ -278,7 +278,7 @@ function dynamicdata_init()
             array('objectid'  ,'Id'                 ,$objectid[1],21,''            ,$dynamic_objects.'.object_id'         ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,1 ,'DataPropertyMaster::integer'),
             array('name'      ,'Name'               ,$objectid[1],2 ,''            ,$dynamic_objects.'.object_name'       ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
             array('label'     ,'Label'              ,$objectid[1],2 ,''            ,$dynamic_objects.'.object_label'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
-            array('parent'    ,'Parent',             $objectid[1],24,'0'          ,$dynamic_objects.'.object_parent'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'a:2:{s:10:"validation";s:7:"integer";s:8:"override";s:1:"1";}'),
+            array('parent'    ,'Parent',             $objectid[1],24,'0'           ,$dynamic_objects.'.object_parent'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'a:2:{s:10:"validation";s:7:"integer";s:8:"override";s:1:"1";}'),
             array('moduleid'  ,'Module'             ,$objectid[1],19,'182'         ,$dynamic_objects.'.object_moduleid'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,5 ,'regid'), // FIXME: change this validation when we move from regid to systemid
             array('itemtype'  ,'Item Type'          ,$objectid[1],20,'0'           ,$dynamic_objects.'.object_itemtype'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,6 ,'integer'),
             array('class'     ,'Class'              ,$objectid[1],2 ,'DataObject'  ,$dynamic_objects.'.object_class'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'varchar (255)'),
@@ -321,7 +321,7 @@ function dynamicdata_init()
          * Dynamic Data table (= one of the possible data sources for properties)
          */
         $datafields = array(
-            'dd_id'   => array(
+            'id'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0',
@@ -329,19 +329,19 @@ function dynamicdata_init()
                 'primary_key' => true
             ),
             /* the property this dynamic data belongs to */
-            'dd_propid'   => array(
+            'propid'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the item id this dynamic data belongs to */
-            'dd_itemid'   => array(
+            'itemid'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the value of this dynamic data */
-            'dd_value'    => array(
+            'value'    => array(
                 'type'        => 'text', // or blob when storing binary data (but not for PostgreSQL - see bug 1324)
                 'size'        => 'medium',
                 'null'        => 'false'
@@ -357,7 +357,7 @@ function dynamicdata_init()
             $dynamic_data,
             array(
                 'name'   => 'i_' . $prefix . '_dyndata_propid',
-                'fields' => array('dd_propid')
+                'fields' => array('propid')
             )
         );
         $dbconn->Execute($query);
@@ -366,7 +366,7 @@ function dynamicdata_init()
             $dynamic_data,
             array(
                 'name'   => 'i_' . $prefix . '_dyndata_itemid',
-                'fields' => array('dd_itemid')
+                'fields' => array('itemid')
             )
         );
         $dbconn->Execute($query);
@@ -379,7 +379,7 @@ function dynamicdata_init()
         // we don't really need to create an object and properties for the dynamic data table
 
         // create some sample data for the sample object
-        $sql = "INSERT INTO $dynamic_data (dd_propid, dd_itemid, dd_value)
+        $sql = "INSERT INTO $dynamic_data (propid, itemid, value)
             VALUES (?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
@@ -570,7 +570,7 @@ function dynamicdata_upgrade($oldVersion)
                           array(),
                           'dynamicdata_userapi_handleGetItemsTag');
 
-        // for the switch from blob to text of the dd_value field, no upgrade is necessary for MySQL,
+        // for the switch from blob to text of the value field, no upgrade is necessary for MySQL,
         // and no simple upgrade is possible for PostgreSQL
     case '1.1':
         // Fall through to next upgrade

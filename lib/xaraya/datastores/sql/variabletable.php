@@ -42,10 +42,10 @@ class VariableTableDataStore extends SQLDataStore
         $dynamicdata = $this->tables['dynamic_data'];
 
         $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
-        $query = "SELECT dd_propid, dd_value
+        $query = "SELECT propid, value
                   FROM $dynamicdata
-                  WHERE dd_propid IN ($bindmarkers) AND
-                        dd_itemid = ?";
+                  WHERE propid IN ($bindmarkers) AND
+                        itemid = ?";
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
         $stmt = $this->db->prepareStatement($query);
@@ -95,7 +95,7 @@ class VariableTableDataStore extends SQLDataStore
                 continue;
             }
 
-            $query = "INSERT INTO $dynamicdata (dd_propid,dd_itemid,dd_value)
+            $query = "INSERT INTO $dynamicdata (propid,itemid,value)
                       VALUES (?,?,?)";
             $bindvars = array($propid,$itemid, (string) $value);
             $stmt = $this->db->prepareStatement($query);
@@ -122,10 +122,10 @@ class VariableTableDataStore extends SQLDataStore
 
         // get the current dynamic data fields for all properties of this item
         $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
-        $query = "SELECT dd_id, dd_propid
+        $query = "SELECT id, propid
                   FROM $dynamicdata
-                  WHERE dd_propid IN ($bindmarkers) AND
-                        dd_itemid = ?";
+                  WHERE propid IN ($bindmarkers) AND
+                        itemid = ?";
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
 
@@ -134,8 +134,8 @@ class VariableTableDataStore extends SQLDataStore
 
         $datafields = array();
         while ($result->next()) {
-            list($dd_id,$propid) = $result->getRow();
-            $datafields[$propid] = $dd_id;
+            list($id,$propid) = $result->getRow();
+            $datafields[$propid] = $id;
         }
         $result->close();
 
@@ -150,12 +150,12 @@ class VariableTableDataStore extends SQLDataStore
 
             // update the dynamic data field if it exists
             if (!empty($datafields[$propid])) {
-                $query = "UPDATE $dynamicdata SET dd_value = ? WHERE dd_id = ?";
+                $query = "UPDATE $dynamicdata SET value = ? WHERE id = ?";
                 $bindvars = array((string) $value, $datafields[$propid]);
             // or create it if necessary (e.g. when you add properties afterwards etc.)
             } else {
                 $query = "INSERT INTO $dynamicdata
-                            (dd_propid, dd_itemid, dd_value)
+                            (propid, itemid, value)
                           VALUES (?,?,?)";
                 $bindvars = array($propid,$itemid, (string) $value);
             }
@@ -179,8 +179,8 @@ class VariableTableDataStore extends SQLDataStore
         // get the current dynamic data fields for all properties of this item
         $bindmarkers = '?' . str_repeat(',?', count($propids) -1);
         $query = "DELETE FROM $dynamicdata
-                  WHERE dd_propid IN ($bindmarkers) AND
-                        dd_itemid = ?";
+                  WHERE propid IN ($bindmarkers) AND
+                        itemid = ?";
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
         $stmt = $this->db->prepareStatement($query);
@@ -222,19 +222,19 @@ class VariableTableDataStore extends SQLDataStore
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
-            $query = "SELECT dd_itemid, dd_propid, dd_value
+            $query = "SELECT itemid, propid, value
                       FROM $dynamicdata
-                      WHERE dd_propid IN ($bindmarkers) ";
+                      WHERE propid IN ($bindmarkers) ";
             $bindvars = $propids;
 
             if (count($itemids) > 1) {
                 $bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
-                $query .= " AND dd_itemid IN ($bindmarkers) ";
+                $query .= " AND itemid IN ($bindmarkers) ";
                 foreach ($itemids as $itemid) {
                     $bindvars[] = (int) $itemid;
                 }
             } else {
-                $query .= " AND dd_itemid = ?";
+                $query .= " AND itemid = ?";
                 $bindvars[] = (int)$itemids[0];
             }
 
@@ -304,7 +304,7 @@ class VariableTableDataStore extends SQLDataStore
                     $fields[] = $field;
                 }
                 if (!empty($info['key'])) {
-                    $keys[] = $info['key'] . ' = dd_itemid';
+                    $keys[] = $info['key'] . ' = itemid';
                 }
                 if (!empty($info['where'])) {
                     $where[] = '(' . $info['where'] . ')';
@@ -317,12 +317,12 @@ class VariableTableDataStore extends SQLDataStore
                 }
                 // TODO: sort clauses for the joined table ?
             }
-            $query = "SELECT DISTINCT dd_itemid, dd_propid, dd_value";
+            $query = "SELECT DISTINCT itemid, propid, value";
             if (count($fields) > 0) {
                 $query .= ", " . join(', ',$fields);
             }
             $query .= " FROM $dynamicdata, " . join(', ',$tables) . $more . "
-                       WHERE dd_propid IN (" . join(', ',$propids) . ") ";
+                       WHERE propid IN (" . join(', ',$propids) . ") ";
             if (count($keys) > 0) {
                 $query .= " AND " . join(' AND ', $keys);
             }
@@ -334,7 +334,7 @@ class VariableTableDataStore extends SQLDataStore
                 // we're looking for combinations (propid + where clause) here - only OR is supported !
                 // TODO: support pre- and post-parts here too ? (cfr. bug 3090)
                 foreach ($this->where as $whereitem) {
-                    $query .= $whereitem['join'] . " (dd_propid = " . $whereitem['field'] . ' AND dd_value ' . $whereitem['clause'] . ') ';
+                    $query .= $whereitem['join'] . " (propid = " . $whereitem['field'] . ' AND value ' . $whereitem['clause'] . ') ';
                 }
                 $query .= " )";
             }
@@ -345,7 +345,7 @@ class VariableTableDataStore extends SQLDataStore
             // TODO: combine with sort someday ? Not sure if that's possible in this way...
             if ($numitems > 0) {
                 // <mrb> Why is this only here?
-                $query .= ' ORDER BY dd_itemid, dd_propid';
+                $query .= ' ORDER BY itemid, propid';
                 $stmt = $this->db->prepareStatement($query);
 
                 // Note : this assumes that every property of the items is stored in the table
@@ -392,48 +392,48 @@ class VariableTableDataStore extends SQLDataStore
 
             $dbtype = xarDB::getType();
             if (substr($dbtype,0,4) == 'oci8') {
-                $propval = 'TO_CHAR(dd_value)';
+                $propval = 'TO_CHAR(value)';
             } elseif (substr($dbtype,0,5) == 'mssql') {
             // CHECKME: limited to 8000 characters ?
-                $propval = 'CAST(dd_value AS VARCHAR(8000))';
+                $propval = 'CAST(value AS VARCHAR(8000))';
             } else {
-                $propval = 'dd_value';
+                $propval = 'value';
             }
 
         /*
             Note : Alternate syntax for Postgres if contrib/tablefunc.sql is installed
 
             $query = "SELECT * FROM crosstab(
-                'SELECT dd_itemid, dd_propid, dd_value
+                'SELECT itemid, propid, value
                  FROM $dynamicdata
-                 WHERE dd_propid IN (" . join(', ',$propids) . ")
-                 ORDER BY dd_itemid, dd_propid;', " . count($propids) . ")
-            AS dd(itemid int, dd_" . join(' text, dd_',$propids) . " text)";
+                 WHERE propid IN (" . join(', ',$propids) . ")
+                 ORDER BY itemid, propid;', " . count($propids) . ")
+            AS dd(itemid int, " . join(' text, ',$propids) . " text)";
 
             if (count($this->where) > 0) {
                 $query .= " WHERE ";
                 foreach ($this->where as $whereitem) {
-                    $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
+                    $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
                 }
             }
         */
 
-            $query = "SELECT dd_itemid ";
+            $query = "SELECT itemid ";
             foreach ($propids as $propid) {
-                $query .= ", MAX(CASE WHEN dd_propid = $propid THEN $propval ELSE '' END) AS dd_$propid \n";
+                $query .= ", MAX(CASE WHEN propid = $propid THEN $propval ELSE '' END) AS $propid \n";
             }
             $query .= " FROM $dynamicdata
-                       WHERE dd_propid IN (" . join(', ',$propids) . ")
-                    GROUP BY dd_itemid ";
+                       WHERE propid IN (" . join(', ',$propids) . ")
+                    GROUP BY itemid ";
 
             if (count($this->where) > 0) {
                 $query .= " HAVING ";
                 foreach ($this->where as $whereitem) {
                     // Postgres does not support column aliases in HAVING clauses, but you can use the same aggregate function
                     if (substr($dbtype,0,8) == 'postgres') {
-                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'MAX(CASE WHEN dd_propid = ' . $whereitem['field'] . " THEN $propval ELSE '' END) " . $whereitem['clause'] . $whereitem['post'] . ' ';
+                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'MAX(CASE WHEN propid = ' . $whereitem['field'] . " THEN $propval ELSE '' END) " . $whereitem['clause'] . $whereitem['post'] . ' ';
                     } else {
-                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
+                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
                     }
                 }
             }
@@ -442,7 +442,7 @@ class VariableTableDataStore extends SQLDataStore
                 $query .= " ORDER BY ";
                 $join = '';
                 foreach ($this->sort as $sortitem) {
-                    $query .= $join . 'dd_' . $sortitem['field'] . ' ' . $sortitem['sortorder'];
+                    $query .= $join . $sortitem['field'] . ' ' . $sortitem['sortorder'];
                     $join = ', ';
                 }
             }
@@ -586,11 +586,11 @@ class VariableTableDataStore extends SQLDataStore
         // here we grab everyting
         } else {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
-            $query = "SELECT DISTINCT dd_propid,
-                             dd_itemid,
-                             dd_value
+            $query = "SELECT DISTINCT propid,
+                             itemid,
+                             value
                         FROM $dynamicdata
-                       WHERE dd_propid IN ($bindmarkers)";
+                       WHERE propid IN ($bindmarkers)";
 
             $stmt = $this->db->prepareStatement($query);
             $result = $stmt->executeQuery($propids);
@@ -633,23 +633,23 @@ class VariableTableDataStore extends SQLDataStore
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             if($this->db->databaseType == 'sqlite') {
                 $query = "SELECT COUNT(*)
-                          FROM (SELECT DISTINCT dd_itemid
-                                WHERE dd_propid IN ($bindmarkers) "; // WATCH OUT, STILL UNBALANCED
+                          FROM (SELECT DISTINCT itemid
+                                WHERE propid IN ($bindmarkers) "; // WATCH OUT, STILL UNBALANCED
             } else {
-                $query = "SELECT COUNT(DISTINCT dd_itemid)
+                $query = "SELECT COUNT(DISTINCT itemid)
                         FROM $dynamicdata
-                       WHERE dd_propid IN ($bindmarkers) ";
+                       WHERE propid IN ($bindmarkers) ";
             }
             $bindvars = $propids;
 
             if (count($itemids) > 1) {
                 $bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
-                $query .= " AND dd_itemid IN ($bindmarkers) ";
+                $query .= " AND itemid IN ($bindmarkers) ";
                 foreach ($itemids as $itemid) {
                     $bindvars[] = (int) $itemid;
                 }
             } else {
-                $query .= " AND dd_itemid = ? ";
+                $query .= " AND itemid = ? ";
                 $bindvars[] = (int)$itemids[0];
             }
 
@@ -671,16 +671,16 @@ class VariableTableDataStore extends SQLDataStore
             // TODO: this only works for OR conditions !!!
             if($this->db->databaseType == 'sqlite') {
                 $query = "SELECT COUNT(*)
-                          FROM ( SELECT DISTINCT dd_itemid FROM $dynamicdata WHERE "; // WATCH OUT, STILL UNBALANCED
+                          FROM ( SELECT DISTINCT itemid FROM $dynamicdata WHERE "; // WATCH OUT, STILL UNBALANCED
             } else {
-                $query = "SELECT COUNT(DISTINCT dd_itemid)
+                $query = "SELECT COUNT(DISTINCT itemid)
                         FROM $dynamicdata
                        WHERE ";
             }
             // only grab the fields we're interested in here...
             // TODO: support pre- and post-parts here too ? (cfr. bug 3090)
             foreach ($this->where as $whereitem) {
-                $query .= $whereitem['join'] . ' (dd_propid = ' . $whereitem['field'] . ' AND dd_value ' . $whereitem['clause'] . ') ';
+                $query .= $whereitem['join'] . ' (propid = ' . $whereitem['field'] . ' AND value ' . $whereitem['clause'] . ') ';
             }
 
             // Balance parentheses.
@@ -700,12 +700,12 @@ class VariableTableDataStore extends SQLDataStore
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             if($this->db->databaseType == 'sqlite' ) {
                 $query = "SELECT COUNT(*)
-                          FROM (SELECT DISTINCT dd_itemid FROM $dynamicdata
-                          WHERE dd_propid IN ($bindmarkers)) ";
+                          FROM (SELECT DISTINCT itemid FROM $dynamicdata
+                          WHERE propid IN ($bindmarkers)) ";
             } else {
-                $query = "SELECT COUNT(DISTINCT dd_itemid)
+                $query = "SELECT COUNT(DISTINCT itemid)
                           FROM $dynamicdata
-                          WHERE dd_propid IN ($bindmarkers) ";
+                          WHERE propid IN ($bindmarkers) ";
             }
 
             $stmt = $this->db->prepareStatement($query);
