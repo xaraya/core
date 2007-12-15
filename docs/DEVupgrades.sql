@@ -537,4 +537,16 @@ ALTER TABLE `xar_dynamic_data`
   CHANGE COLUMN `dd_itemid` `itemid` INTEGER NOT NULL default '0',
   CHANGE COLUMN `dd_value` `value` mediumtext;
 
+ALTER TABLE `xar_dynamic_objects`
+  CHANGE COLUMN `object_id` `id` INTEGER NOT NULL AUTO_INCREMENT,
+  CHANGE COLUMN `object_name` `name` varchar(30) NOT NULL default '',
+  CHANGE COLUMN `object_label` `label` varchar(254) NOT NULL default '',
+  CHANGE COLUMN `object_moduleid` `moduleid` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `object_itemtype` `itemtype` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `object_parent` `parent` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `object_urlparam` `urlparam` varchar(30) NOT NULL default 'itemid',
+  CHANGE COLUMN `object_maxid` `maxid` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `object_config` `config` text,
+  CHANGE COLUMN `object_isalias` `isalias` tinyint(4) NOT NULL default '1';
+
 

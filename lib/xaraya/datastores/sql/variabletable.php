@@ -747,17 +747,17 @@ class VariableTableDataStore extends SQLDataStore
         // - does a transaction help here? (esp. considering they are mostly emulated)
         $bindvars = array();
         $query = "UPDATE $dynamicobjects
-                     SET object_maxid = object_maxid + 1 ";
-            $query .= "WHERE object_id = ? ";
+                     SET maxid = maxid + 1 ";
+            $query .= "WHERE id = ? ";
             $bindvars[] = (int)$objectid;
         $stmt = $this->db->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
 
         // get it back (WARNING : this is *not* guaranteed to be unique on heavy-usage sites !)
         $bindvars = array();
-        $query = "SELECT object_maxid
+        $query = "SELECT maxid
                     FROM $dynamicobjects ";
-            $query .= "WHERE object_id = ? ";
+            $query .= "WHERE id = ? ";
             $bindvars[] = (int)$objectid;
         $stmt = $this->db->prepareStatement($query);
         $result= $stmt->executeQuery($bindvars);
