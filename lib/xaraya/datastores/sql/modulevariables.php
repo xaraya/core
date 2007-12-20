@@ -239,7 +239,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                     $fields[] = $field;
                 }
                 if (!empty($info['key'])) {
-                    $keys[] = $info['key'] . ' = dd_itemid';
+                    $keys[] = $info['key'] . ' = itemid';
                 }
                 if (!empty($info['where'])) {
                     $where[] = '(' . $info['where'] . ')';
@@ -252,12 +252,12 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                 }
                 // TODO: sort clauses for the joined table ?
             }
-            $query = "SELECT DISTINCT dd_itemid, dd_propid, dd_value";
+            $query = "SELECT DISTINCT itemid, propid, value";
             if (count($fields) > 0) {
                 $query .= ", " . join(', ',$fields);
             }
             $query .= " FROM $dynamicdata, " . join(', ',$tables) . $more . "
-                       WHERE dd_propid IN (" . join(', ',$propids) . ") ";
+                       WHERE propid IN (" . join(', ',$propids) . ") ";
             if (count($keys) > 0) {
                 $query .= " AND " . join(' AND ', $keys);
             }
@@ -269,7 +269,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                 // we're looking for combinations (propid + where clause) here - only OR is supported !
                 // TODO: support pre- and post-parts here too ? (cfr. bug 3090)
                 foreach ($this->where as $whereitem) {
-                    $query .= $whereitem['join'] . " (dd_propid = " . $whereitem['field'] . ' AND dd_value ' . $whereitem['clause'] . ') ';
+                    $query .= $whereitem['join'] . " (propid = " . $whereitem['field'] . ' AND value ' . $whereitem['clause'] . ') ';
                 }
                 $query .= " )";
             }
@@ -280,7 +280,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             // TODO: combine with sort someday ? Not sure if that's possible in this way...
             if ($numitems > 0) {
                 // <mrb> Why is this only here?
-                $query .= ' ORDER BY dd_itemid, dd_propid';
+                $query .= ' ORDER BY itemid, propid';
                 $stmt = $this->db->prepareStatement($query);
 
                 // Note : this assumes that every property of the items is stored in the table
@@ -339,16 +339,16 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             Note : Alternate syntax for Postgres if contrib/tablefunc.sql is installed
 
             $query = "SELECT * FROM crosstab(
-                'SELECT dd_itemid, dd_propid, dd_value
+                'SELECT itemid, propid, value
                  FROM $dynamicdata
-                 WHERE dd_propid IN (" . join(', ',$propids) . ")
-                 ORDER BY dd_itemid, dd_propid;', " . count($propids) . ")
-            AS dd(itemid int, dd_" . join(' text, dd_',$propids) . " text)";
+                 WHERE propid IN (" . join(', ',$propids) . ")
+                 ORDER BY itemid, propid;', " . count($propids) . ")
+            AS dd(itemid int, " . join(' text, ',$propids) . " text)";
 
             if (count($this->where) > 0) {
                 $query .= " WHERE ";
                 foreach ($this->where as $whereitem) {
-                    $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
+                    $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
                 }
             }
         */
@@ -363,7 +363,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                 if (count($fieldvalues)<1) continue;
                 $query = "SELECT mi.item_id ";
                 foreach ($fieldvalues as $fieldvalue) {
-                    $query .= ", MAX(CASE WHEN m.name = '" . $fieldvalue . "' THEN $propval ELSE '' END) AS dd_$fieldvalue \n";
+                    $query .= ", MAX(CASE WHEN m.name = '" . $fieldvalue . "' THEN $propval ELSE '' END) AS $fieldvalue \n";
                 }
                 $bindmarkers = '?' . str_repeat(',?',count($fieldvalues)-1);
                 $query .= " FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
@@ -376,7 +376,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                     if (substr($dbtype,0,8) == 'postgres') {
                         $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'MAX(CASE WHEN m.name = ' . $whereitem['field'] . " THEN $propval ELSE '' END) " . $whereitem['clause'] . $whereitem['post'] . ' ';
                     } else {
-                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
+                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
                     }
                 }
             }
@@ -385,7 +385,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                 $query .= " ORDER BY ";
                 $join = '';
                 foreach ($this->sort as $sortitem) {
-                    $query .= $join . 'dd_' . $sortitem['field'] . ' ' . $sortitem['sortorder'];
+                    $query .= $join . $sortitem['field'] . ' ' . $sortitem['sortorder'];
                     $join = ', ';
                 }
             }
@@ -403,11 +403,11 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 
             $isgrouped = 0;
             if (count($this->groupby) > 0) {
-	            $groupbys = array();
-				foreach ($this->groupby as $groupby) {
-					$namepart = explode('_',$groupby);
-					$groupbys[] = $namepart[0];
-				}
+                $groupbys = array();
+                foreach ($this->groupby as $groupby) {
+                    $namepart = explode('_',$groupby);
+                    $groupbys[] = $namepart[0];
+                }
                 $isgrouped = 1;
                 $items = array();
                 $combo = array();
@@ -452,9 +452,9 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                         $combo[$groupid] = $id;
                         // add this "itemid" to the list
                         $this->_itemids[] = $id;
-						foreach ($this->groupby as $field) {
+                        foreach ($this->groupby as $field) {
                             // add the item to the value list for this property
-							$namepart = explode('_',$field);
+                            $namepart = explode('_',$field);
                             $this->fields[$field]->setItemValue($id,$propval[$namepart[0]]);
                         }
                         foreach ($process as $field) {

@@ -152,12 +152,7 @@ function dynamicdata_utilapi_maketable($args)
         $fields[$field] = $definition;
     }
     if (!$isprimary) {
-        if (empty($fields['itemid'])) {
-             $field = 'itemid';
-        } else {
-             $field = 'dd_itemid';
-        }
-        $fields[$field] = array('type'        => 'integer',
+        $fields['itemid'] = array('type'      => 'integer',
                                 'null'        => false,
                                 'default'     => '0',
                                 'increment'   => false, // unique id depends on other object/table here

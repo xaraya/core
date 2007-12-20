@@ -137,7 +137,7 @@ function dynamicdata_utilapi_updatehooks($args)
 
             case 'subitems':
                 // TODO: retrieve old/new subitems objects from subitems_ddobjects, then
-                //       copy DD from old to new object, and update dd_id in subitems_ddids
+                //       copy DD from old to new object, and update id in subitems_ddids
                 $table = '';
                 continue;
                 break;

@@ -41,7 +41,7 @@ function dynamicdata_init()
          * DataObjects table
          */
         $objectfields = array(
-            'object_id' => array(
+            'id' => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0',
@@ -49,70 +49,70 @@ function dynamicdata_init()
                 'primary_key' => true
             ),
             /* the name used to reference an object */
-            'object_name'     => array(
+            'name'     => array(
                 'type'        => 'varchar',
                 'size'        => 30,
                 'null'        => false,
                 'default'     => ''
             ),
             /* the label used for display */
-            'object_label'    => array(
+            'label'    => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
                 'default'     => ''
             ),
             /* the module this object relates to */
-            'object_moduleid' => array(
+            'moduleid' => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the optional item type within this module */
-            'object_itemtype' => array(
+            'itemtype' => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the item type of the parent of this object */
-            'object_parent' => array(
+            'parent' => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the class this object belongs to*/
-            'object_class'     => array(
+            'class'     => array(
                 'type'        => 'varchar',
                 'size'        => 255,
                 'null'        => false,
                 'default'     => 'DataObject'
             ),
             /* the location where the class file lives*/
-            'object_filepath'     => array(
+            'filepath'     => array(
                 'type'        => 'varchar',
                 'size'        => 255,
                 'null'        => false,
                 'default'     => 'modules/dynamicdata/class/objects/base.php'
             ),
             /* the URL parameter used to pass on the item id to the original module */
-            'object_urlparam' => array(
+            'urlparam' => array(
                 'type'        => 'varchar',
                 'size'        => 30,
                 'null'        => false,
                 'default'     => 'itemid'
             ),
             /* the highest item id for this object (used if the object has a dynamic item id field) */
-            'object_maxid'    => array(
+            'maxid'    => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* any configuration settings for this object (future) */
-            'object_config'   => array(
+            'config'   => array(
                 'type'=>'text'
             ),
             /* use the name of this object as alias for short URLs */
-            'object_isalias'  => array(
+            'isalias'  => array(
                 'type'        => 'integer',
                 'size'        => 'tiny',
                 'null'        => false,
@@ -129,7 +129,7 @@ function dynamicdata_init()
             $dynamic_objects,
             array(
                 'name'   => 'i_' . $prefix . '_dynobjects_combo',
-                'fields' => array('object_moduleid','object_itemtype'),
+                'fields' => array('moduleid','itemtype'),
                 'unique' => 'true'
             )
         );
@@ -140,7 +140,7 @@ function dynamicdata_init()
             $dynamic_objects,
             array(
                 'name'   => 'i_' . $prefix . '_dynobjects_name',
-                'fields' => array('object_name'),
+                'fields' => array('name'),
                 'unique' => 'true'
             )
         );
@@ -155,9 +155,9 @@ function dynamicdata_init()
 
         // create default objects for dynamic data
         $sql = "INSERT INTO $dynamic_objects (
-                object_name, object_label,
-                object_moduleid, object_itemtype, object_class, object_filepath, object_urlparam,
-                object_maxid, object_config, object_isalias)
+                name, label,
+                moduleid, itemtype, class, filepath, urlparam,
+                maxid, config, isalias)
                 VALUES (?,?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
@@ -275,18 +275,18 @@ function dynamicdata_init()
         sys::import('modules.dynamicdata.class.properties');
         $properties = array(
             // Properties for the Objects DD object
-            array('objectid'  ,'Id'                 ,$objectid[1],21,''            ,$dynamic_objects.'.object_id'         ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,1 ,'DataPropertyMaster::integer'),
-            array('name'      ,'Name'               ,$objectid[1],2 ,''            ,$dynamic_objects.'.object_name'       ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
-            array('label'     ,'Label'              ,$objectid[1],2 ,''            ,$dynamic_objects.'.object_label'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
-            array('parent'    ,'Parent',             $objectid[1],24,'0'          ,$dynamic_objects.'.object_parent'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'a:2:{s:10:"validation";s:7:"integer";s:8:"override";s:1:"1";}'),
-            array('moduleid'  ,'Module'             ,$objectid[1],19,'182'         ,$dynamic_objects.'.object_moduleid'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,5 ,'regid'), // FIXME: change this validation when we move from regid to systemid
-            array('itemtype'  ,'Item Type'          ,$objectid[1],20,'0'           ,$dynamic_objects.'.object_itemtype'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,6 ,'integer'),
-            array('class'     ,'Class'              ,$objectid[1],2 ,'DataObject'  ,$dynamic_objects.'.object_class'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'varchar (255)'),
-            array('filepath'  ,'Location'           ,$objectid[1],2 ,''            ,$dynamic_objects.'.object_filepath'   ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (255)'),
-            array('urlparam'  ,'URL Param'          ,$objectid[1],2 ,'itemid'      ,$dynamic_objects.'.object_urlparam'   ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,9 ,'varchar (30)'),
-            array('maxid'     ,'Max Id'             ,$objectid[1],15,'0'           ,$dynamic_objects.'.object_maxid'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10 ,'integer'),
-            array('config'    ,'Config'             ,$objectid[1],4 ,''            ,$dynamic_objects.'.object_config'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11 ,'text'),
-            array('isalias'   ,'Alias in short URLs',$objectid[1],14,'1'           ,$dynamic_objects.'.object_isalias'    ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12 ,'integer (tiny)'),
+            array('objectid'  ,'Id'                 ,$objectid[1],21,''            ,$dynamic_objects.'.id'         ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,1 ,'DataPropertyMaster::integer'),
+            array('name'      ,'Name'               ,$objectid[1],2 ,''            ,$dynamic_objects.'.name'       ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
+            array('label'     ,'Label'              ,$objectid[1],2 ,''            ,$dynamic_objects.'.label'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
+            array('parent'    ,'Parent',             $objectid[1],24,'0'           ,$dynamic_objects.'.parent'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'a:2:{s:10:"validation";s:7:"integer";s:8:"override";s:1:"1";}'),
+            array('moduleid'  ,'Module'             ,$objectid[1],19,'182'         ,$dynamic_objects.'.moduleid'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,5 ,'regid'), // FIXME: change this validation when we move from regid to systemid
+            array('itemtype'  ,'Item Type'          ,$objectid[1],20,'0'           ,$dynamic_objects.'.itemtype'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,6 ,'integer'),
+            array('class'     ,'Class'              ,$objectid[1],2 ,'DataObject'  ,$dynamic_objects.'.class'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'varchar (255)'),
+            array('filepath'  ,'Location'           ,$objectid[1],2 ,''            ,$dynamic_objects.'.filepath'   ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (255)'),
+            array('urlparam'  ,'URL Param'          ,$objectid[1],2 ,'itemid'      ,$dynamic_objects.'.urlparam'   ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,9 ,'varchar (30)'),
+            array('maxid'     ,'Max Id'             ,$objectid[1],15,'0'           ,$dynamic_objects.'.maxid'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10 ,'integer'),
+            array('config'    ,'Config'             ,$objectid[1],4 ,''            ,$dynamic_objects.'.config'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11 ,'text'),
+            array('isalias'   ,'Alias in short URLs',$objectid[1],14,'1'           ,$dynamic_objects.'.isalias'    ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12 ,'integer (tiny)'),
 
             // Properties for the Properties DD object
             array('id'        ,'Id'                 ,$objectid[2],21,''            ,$dynamic_properties.'.id'        ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,1 ,'integer'),
@@ -321,7 +321,7 @@ function dynamicdata_init()
          * Dynamic Data table (= one of the possible data sources for properties)
          */
         $datafields = array(
-            'dd_id'   => array(
+            'id'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0',
@@ -329,19 +329,19 @@ function dynamicdata_init()
                 'primary_key' => true
             ),
             /* the property this dynamic data belongs to */
-            'dd_propid'   => array(
+            'propid'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the item id this dynamic data belongs to */
-            'dd_itemid'   => array(
+            'itemid'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the value of this dynamic data */
-            'dd_value'    => array(
+            'value'    => array(
                 'type'        => 'text', // or blob when storing binary data (but not for PostgreSQL - see bug 1324)
                 'size'        => 'medium',
                 'null'        => 'false'
@@ -357,7 +357,7 @@ function dynamicdata_init()
             $dynamic_data,
             array(
                 'name'   => 'i_' . $prefix . '_dyndata_propid',
-                'fields' => array('dd_propid')
+                'fields' => array('propid')
             )
         );
         $dbconn->Execute($query);
@@ -366,7 +366,7 @@ function dynamicdata_init()
             $dynamic_data,
             array(
                 'name'   => 'i_' . $prefix . '_dyndata_itemid',
-                'fields' => array('dd_itemid')
+                'fields' => array('itemid')
             )
         );
         $dbconn->Execute($query);
@@ -379,7 +379,7 @@ function dynamicdata_init()
         // we don't really need to create an object and properties for the dynamic data table
 
         // create some sample data for the sample object
-        $sql = "INSERT INTO $dynamic_data (dd_propid, dd_itemid, dd_value)
+        $sql = "INSERT INTO $dynamic_data (propid, itemid, value)
             VALUES (?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
@@ -570,7 +570,7 @@ function dynamicdata_upgrade($oldVersion)
                           array(),
                           'dynamicdata_userapi_handleGetItemsTag');
 
-        // for the switch from blob to text of the dd_value field, no upgrade is necessary for MySQL,
+        // for the switch from blob to text of the value field, no upgrade is necessary for MySQL,
         // and no simple upgrade is possible for PostgreSQL
     case '1.1':
         // Fall through to next upgrade

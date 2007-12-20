@@ -64,13 +64,13 @@ class DataObjectDescriptor extends ObjectDescriptor
         $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
         $q->open();
         if (isset($args['name'])) {
-            $q->eq('object_name',$args['name']);
+            $q->eq('name',$args['name']);
         } elseif (!empty($args['objectid'])) {
-            $q->eq('object_id',(int)$args['objectid']);
+            $q->eq('id',(int)$args['objectid']);
         } else {
             $args = self::getModID($args);
-            $q->eq('object_moduleid', $args['moduleid']);
-            $q->eq('object_itemtype', $args['itemtype']);
+            $q->eq('moduleid', $args['moduleid']);
+            $q->eq('itemtype', $args['itemtype']);
         }
         if (!$q->run()) return;
         $row = $q->row();
@@ -80,10 +80,10 @@ class DataObjectDescriptor extends ObjectDescriptor
             $args['objectid'] = isset($args['objectid']) ? $args['objectid'] : null;
             $args['name'] = isset($args['name']) ? $args['name'] : null;
         } else {
-            $args['moduleid'] = $row['object_moduleid'];
-            $args['itemtype'] = $row['object_itemtype'];
-            $args['objectid'] = $row['object_id'];
-            $args['name'] = $row['object_name'];
+            $args['moduleid'] = $row['moduleid'];
+            $args['itemtype'] = $row['itemtype'];
+            $args['objectid'] = $row['id'];
+            $args['name'] = $row['name'];
         }
         if (empty($args['tplmodule'])) $args['tplmodule'] = xarMod::getName($args['moduleid']); //FIXME: go to systemid
         if (empty($args['template'])) $args['template'] = $args['name'];
@@ -492,20 +492,20 @@ class DataObjectMaster extends Object
 
         $bindvars = array();
         xarLogMessage("DB: query in getObjects");
-        $query = "SELECT object_id,
-                         object_name,
-                         object_label,
-                         object_moduleid,
-                         object_itemtype,
-                         object_parent,
-                         object_urlparam,
-                         object_maxid,
-                         object_config,
-                         object_isalias
+        $query = "SELECT id,
+                         name,
+                         label,
+                         moduleid,
+                         itemtype,
+                         parent,
+                         urlparam,
+                         maxid,
+                         config,
+                         isalias
                   FROM $dynamicobjects ";
         if(isset($moduleid))
         {
-            $query .= "WHERE object_moduleid = ?";
+            $query .= "WHERE moduleid = ?";
             $bindvars[] = $moduleid;
         }
         $stmt = $dbconn->prepareStatement($query);
@@ -569,20 +569,20 @@ class DataObjectMaster extends Object
 
         $bindvars = array();
         xarLogMessage('DD: query in getObjectInfo');
-        $query = "SELECT object_id,
-                         object_name,
-                         object_label,
-                         object_moduleid,
-                         object_itemtype,
-                         object_parent,
-                         object_class,
-                         object_filepath,
-                         object_urlparam,
-                         object_maxid,
-                         object_config,
-                         object_isalias
+        $query = "SELECT id,
+                         name,
+                         label,
+                         moduleid,
+                         itemtype,
+                         parent,
+                         class,
+                         filepath,
+                         urlparam,
+                         maxid,
+                         config,
+                         isalias
                   FROM $dynamicobjects ";
-        $query .= " WHERE object_id = ? ";
+        $query .= " WHERE id = ? ";
         $bindvars[] = (int) $args['objectid'];
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
@@ -883,7 +883,7 @@ class DataObjectMaster extends Object
                     throw new BadParameterException($vars,$msg);
                 }
                 // for many-to-1 relationships where you specify the foreign key in the original table here
-                // (e.g. properties joined to xar_dynamic_objects -> where object_id eq objectid)
+                // (e.g. properties joined to xar_dynamic_objects -> where id eq objectid)
                 if(
                     !empty($pieces[1]) &&
                     is_string($pieces[1]) &&
@@ -970,8 +970,8 @@ class DataObjectMaster extends Object
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
 //        $q->open();
-        $q->addfields(array('object_id AS objectid','object_name AS objectname','object_moduleid AS moduleid','object_itemtype AS itemtype','object_parent AS parent'));
-        $q->eq('object_moduleid',$this->moduleid);
+        $q->addfields(array('id AS objectid','name AS objectname','moduleid AS moduleid','itemtype AS itemtype','parent AS parent'));
+        $q->eq('moduleid',$this->moduleid);
         if (!$q->run()) return;
 
         // Put in itemtype as key for easier manipulation
@@ -1082,8 +1082,8 @@ class DataObjectMaster extends Object
             $xartable = xarDB::getTables();
             sys::import('modules.roles.class.xarQuery');
             $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-            $q->addfields(array('object_id AS objectid','object_label AS objectlabel','object_moduleid AS moduleid','object_itemtype AS itemtype','object_parent AS parent'));
-            $q->eq('object_moduleid',$moduleid);
+            $q->addfields(array('id AS objectid','label AS objectlabel','moduleid AS moduleid','itemtype AS itemtype','parent AS parent'));
+            $q->eq('moduleid',$moduleid);
             if (!$q->run()) return;
 
             // put in itemtype as key for easier manipulation
