@@ -21,26 +21,30 @@
         <xsl:call-template name="resolvePHP">
           <xsl:with-param name="expr" select="@module"/>
         </xsl:call-template>
-        <xsl:text>",'</xsl:text>
+        <xsl:text>","</xsl:text>
         <xsl:choose>
           <xsl:when test="string-length(@type) = 0">
             <xsl:text>user</xsl:text>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="@type"/>
+            <xsl:call-template name="resolvePHP">
+              <xsl:with-param name="expr" select="@type"/>
+            </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>','</xsl:text>
+        <xsl:text>","</xsl:text>
         <xsl:choose>
           <xsl:when test="string-length(@func) = 0">
             <xsl:text>main</xsl:text>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="@func"/>
+            <xsl:call-template name="resolvePHP">
+              <xsl:with-param name="expr" select="@func"/>
+            </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
         <!-- Add all other attributes -->
-        <xsl:text>',array(</xsl:text>
+        <xsl:text>",array(</xsl:text>
         <xsl:for-each select="@*[name()!='module' and name()!='func' and name()!='type']">
           <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>'</xsl:text>
           <xsl:text disable-output-escaping="yes">=&gt;'</xsl:text>
