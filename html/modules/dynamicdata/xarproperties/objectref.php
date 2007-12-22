@@ -41,8 +41,6 @@ class ObjectRefProperty extends SelectProperty
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $this->template = 'objectref';
-        $this->tplmodule = 'dynamicdata';
         $this->filepath   = 'modules/dynamicdata/xarproperties';
     }
 

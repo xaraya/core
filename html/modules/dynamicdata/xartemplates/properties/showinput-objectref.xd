@@ -1,3 +1,0 @@
-<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:data-input type="dropdown" value="$value" options="$options" name="$name" id="$id" tabindex="$tabindex"/>
-</xar:template>
