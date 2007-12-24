@@ -21,7 +21,7 @@ function xarServerGetBaseURI()  { return xarServer::getBaseURI();  }
 function xarServerGetHost()     { return xarServer::getHost();     }
 function xarServerGetProtocol() { return xarServer::getProtocol(); }
 function xarServerGetBaseURL()  { return xarServer::getBaseURL();  }
-function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL) { return xarServer::getCurrentUrl($args, $generateXMLURL, $target); }
+function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL) { return xarServer::getCurrentURL($args, $generateXMLURL, $target); }
 function xarRequestGetVar($name, $allowOnlyMethod = NULL) { return xarRequest::getVar($name, $allowOnlyMethod);}
 function xarRequestGetInfo()                              { return xarRequest::getInfo();        }
 function xarRequestIsLocalReferer()                       { return xarRequest::IsLocalReferer(); }
@@ -192,7 +192,7 @@ class xarServer extends Object
      * @return string current URL
      * @todo cfr. BaseURI() for other possible ways, or try PHP_SELF
      */
-    static function getCurrentUrl($args = array(), $generateXMLURL = NULL, $target = NULL)
+    static function getCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL)
     {
         $server   = self::getHost();
         $protocol = self::getProtocol();
