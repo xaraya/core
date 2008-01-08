@@ -547,6 +547,8 @@ ALTER TABLE `xar_dynamic_objects`
   CHANGE COLUMN `object_urlparam` `urlparam` varchar(30) NOT NULL default 'itemid',
   CHANGE COLUMN `object_maxid` `maxid` INTEGER NOT NULL default '0',
   CHANGE COLUMN `object_config` `config` text,
-  CHANGE COLUMN `object_isalias` `isalias` tinyint(4) NOT NULL default '1';
+  CHANGE COLUMN `object_isalias` `isalias` tinyint(4) NOT NULL default '1',
+  CHANGE COLUMN `object_class` 'class' varchar(255) NOT NULL default 'DataObject',
+  CHANGE COLUMN `object_filepath` 'filepath' varchar(255) NOT NULL default 'modules/dynamicdata/class/objects/base.php';
 
 
