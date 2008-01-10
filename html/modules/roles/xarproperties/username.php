@@ -24,7 +24,7 @@ class UsernameProperty extends TextBoxProperty
 
     public $rawvalue   = null;
 
-    public $initialization_linkrule                = 1;
+    public $initialization_linkrule                = 0;
     public $initialization_existrule               = 0;
 
     function __construct(ObjectDescriptor $descriptor)
@@ -76,7 +76,7 @@ class UsernameProperty extends TextBoxProperty
             case 0:
             default:
         }
-        $this->value = empty($role) ? 0 : $role->getID();;
+        $this->value = empty($role) ? '' : $role->getUname();
         return true;
     }
 

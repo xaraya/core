@@ -69,7 +69,7 @@
       <source>xar_roles.pass</source>
       <status>33</status>
       <seq>6</seq>
-      <validation></validation>
+      <validation>a:8:{s:12:&quot;display_size&quot;;s:2:&quot;25&quot;;s:17:&quot;display_maxlength&quot;;s:3:&quot;254&quot;;s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:21:&quot;validation_min_length&quot;;s:1:&quot;4&quot;;s:21:&quot;validation_max_length&quot;;s:2:&quot;30&quot;;s:16:&quot;validation_regex&quot;;s:0:&quot;&quot;;s:31:&quot;initialization_password_confirm&quot;;s:1:&quot;1&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</validation>
     </property>
     <property name="regdate">
       <id>35</id>
@@ -99,7 +99,7 @@
       <source>xar_roles.state</source>
       <status>33</status>
       <seq>9</seq>
-      <validation>xarModAPIFunc('roles','user','getstates')</validation>
+      <validation>a:6:{s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:23:&quot;initialization_function&quot;;s:41:&quot;xarModAPIFunc('roles','user','getstates')&quot;;s:19:&quot;initialization_file&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_collection&quot;;s:0:&quot;&quot;;s:22:&quot;initialization_options&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</validation>
     </property>
     <property name="authmodule">
       <id>38</id>
