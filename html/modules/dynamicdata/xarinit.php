@@ -30,6 +30,7 @@ function dynamicdata_init()
     $dynamic_objects = $xartable['dynamic_objects'];
     $dynamic_properties = $xartable['dynamic_properties'];
     $dynamic_data = $xartable['dynamic_data'];
+    $dynamic_configurations = $xartable['dynamic_configurations'];
     $dynamic_relations = $xartable['dynamic_relations'];
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
     $modulestable = $xartable['modules'];
@@ -278,7 +279,7 @@ function dynamicdata_init()
             array('objectid'  ,'Id'                 ,$objectid[1],21,''            ,$dynamic_objects.'.id'         ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,1 ,'DataPropertyMaster::integer'),
             array('name'      ,'Name'               ,$objectid[1],2 ,''            ,$dynamic_objects.'.name'       ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
             array('label'     ,'Label'              ,$objectid[1],2 ,''            ,$dynamic_objects.'.label'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
-            array('parent'    ,'Parent',             $objectid[1],24,'0'           ,$dynamic_objects.'.parent'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'a:2:{s:10:"validation";s:7:"integer";s:8:"override";s:1:"1";}'),
+            array('parent'    ,'Parent',             $objectid[1],24,'0'          ,$dynamic_objects.'.parent'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,''),
             array('moduleid'  ,'Module'             ,$objectid[1],19,'182'         ,$dynamic_objects.'.moduleid'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,5 ,'regid'), // FIXME: change this validation when we move from regid to systemid
             array('itemtype'  ,'Item Type'          ,$objectid[1],20,'0'           ,$dynamic_objects.'.itemtype'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,6 ,'integer'),
             array('class'     ,'Class'              ,$objectid[1],2 ,'DataObject'  ,$dynamic_objects.'.class'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'varchar (255)'),
@@ -372,37 +373,48 @@ function dynamicdata_init()
         $dbconn->Execute($query);
 
         /**
-         * Note : here we *could* start using the dynamicdata APIs, but since
-         *        the module isn't activated yet, Xaraya doesn't like that either :-)
+         * Configurations table
          */
 
-        // we don't really need to create an object and properties for the dynamic data table
-
-        // create some sample data for the sample object
-        $sql = "INSERT INTO $dynamic_data (propid, itemid, value)
-            VALUES (?,?,?)";
-        $stmt = $dbconn->prepareStatement($sql);
-
-        $dataentries = array(
-            array($propid[23],1,'1'),
-            array($propid[24],1,'Johnny'),
-            array($propid[25],1,'32'),
-            array($propid[26],1,'http://mikespub.net/xaraya/images/cuernos1.jpg'),
-
-            array($propid[23],2,'2'),
-            array($propid[24],2,'Nancy'),
-            array($propid[25],2,'29'),
-            array($propid[26],2,'http://mikespub.net/xaraya/images/agra1.jpg'),
-
-            array($propid[23],3,'3'),
-            array($propid[24],3,'Baby'),
-            array($propid[25],3,'1'),
-            array($propid[26],3,'http://mikespub.net/xaraya/images/sydney1.jpg')
+        $configfields = array(
+            'id'   => array(
+                'type'        => 'integer',
+                'null'        => false,
+                'default'     => '0',
+                'increment'   => true,
+                'primary_key' => true
+            ),
+            'name'      => array(
+                'type'        => 'varchar',
+                'size'        => 254,
+                'null'        => false,
+                'default'     => ''
+            ),
+            'description'     => array(
+                'type'        => 'varchar',
+                'size'        => 254,
+                'null'        => false,
+                'default'     => ''
+            ),
+            'property_id'     => array(
+                'type'        => 'integer',
+                'null'        => false,
+                'default'     => '0'
+            ),
+            'label'     => array(
+                'type'        => 'varchar',
+                'size'        => 254,
+                'null'        => false,
+                'default'     => ''
+            ),
+            'configuration'   => array(
+                'type'        => 'text',
+                'size'        => 'medium',
+                'null'        => 'false'
+            )
         );
-
-        foreach ($dataentries as &$dataentry) {
-            $stmt->executeUpdate($dataentry);
-        }
+        $query = xarDBCreateTable($dynamic_configurations,$configfields);
+        $dbconn->Execute($query);
 
         // Add Dynamic Data Properties Definition Table
         dynamicdata_createPropDefTable();

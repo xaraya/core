@@ -44,12 +44,12 @@
     <property name="uname">
       <id>32</id>
       <label>User Name</label>
-      <type>textbox</type>
-      <defaultvalue></defaultvalue>
+      <type>username</type>
+      <default></default>
       <source>xar_roles.uname</source>
       <status>33</status>
-      <seq>4</seq>
-      <validation>::/[[:^space:]]/</validation>
+      <order>4</order>
+      <validation></validation>
     </property>
     <property name="email">
       <id>33</id>

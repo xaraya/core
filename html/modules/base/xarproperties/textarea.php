@@ -18,10 +18,9 @@ class TextAreaProperty extends DataProperty
     public $name       = 'textarea';
     public $desc       = 'Small Text Area';
     public $reqmodules = array('base');
-    public $args       = array('rows' => 2);
 
-    public $rows = 8;
-    public $cols = 35;
+    public $display_rows = 2;
+    public $display_columns = 35;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -31,8 +30,12 @@ class TextAreaProperty extends DataProperty
         $this->template = 'textarea';
         $this->filepath   = 'modules/base/xarproperties';
 
-        if(isset($args['rows'])) $this->rows = $args['rows'];
-        if(isset($args['cols'])) $this->cols = $args['cols'];
+        $args = array();
+        try {
+            $args = unserialize($args);
+        } catch (Exception $e) {}
+        if(!empty($args['rows'])) $this->display_rows = $args['rows'];
+        if(!empty($args['cols'])) $this->display_columns = $args['cols'];
 
         // check validation for allowed rows/cols (or values)
         if (!empty($this->validation)) {
@@ -69,31 +72,28 @@ class TextAreaProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
-        extract($data);
-
-        // Prepare
-        $data['value'] = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         // TODO: the way the template is organized now, this only works when an id is set.
-        $data['rows']  = !empty($rows) ? $rows : $this->rows;
-        $data['cols']  = !empty($cols) ? $cols : $this->cols;
+        $data['value'] = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
+        if(empty($data['rows'])) $data['rows'] = $this->display_rows;
+        if(empty($data['cols'])) $data['cols'] = $this->display_columns;
 
-        // Let parent deal with the rest
         return parent::showInput($data);
     }
 
     // check validation for allowed rows/cols (or values)
-    public function parseValidation($validation = '')
+    /*public function parseValidation($validation = '')
     {
         if (is_string($validation) && strchr($validation,':')) {
             list($rows,$cols) = explode(':',$validation);
             if ($rows !== '' && is_numeric($rows)) {
-                $this->rows = $rows;
+                $this->display_rows = $rows;
             }
             if ($cols !== '' && is_numeric($cols)) {
-                $this->cols = $cols;
+                $this->display_columns = $cols;
             }
         }
     }
+    */
 
     /**
      * Show the current validation rule in a specific form for this property type
@@ -105,7 +105,7 @@ class TextAreaProperty extends DataProperty
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showValidation(Array $args = array())
+    /*public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -138,6 +138,7 @@ class TextAreaProperty extends DataProperty
         }
         return xarTplProperty('base', $template, 'validation', $data);
     }
+    */
 
     /**
      * Update the current validation rule in a specific way for each property type
@@ -148,7 +149,7 @@ class TextAreaProperty extends DataProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    public function updateValidation(Array $args = array())
+/*    public function updateValidation(Array $args = array())
      {
          extract($args);
 
@@ -187,6 +188,7 @@ class TextAreaProperty extends DataProperty
          // tell the calling function that everything is OK
          return true;
      }
+     */
 
 }
 

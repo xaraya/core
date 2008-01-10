@@ -515,6 +515,16 @@ function installer_admin_bootstrap()
     }
 
 # --------------------------------------------------------
+# Create DD configuration and sample objects
+#
+    $objects = array(
+                   'configurations',
+                   'sample',
+                     );
+
+    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'dynamicdata', 'objects' => $objects))) return;
+
+# --------------------------------------------------------
 # Create wrapper DD overlay objects for the roles module
 #
     $objects = array(

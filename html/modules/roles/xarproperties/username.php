@@ -24,9 +24,8 @@ class UsernameProperty extends TextBoxProperty
 
     public $rawvalue   = null;
 
-    public $linkrule   = 1;
-    public $existrule  = 0;
-    public $validationargs   = array('min','max','regex','linkrule','existrule');
+    public $initialization_linkrule                = 1;
+    public $initialization_existrule               = 0;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -93,16 +92,20 @@ class UsernameProperty extends TextBoxProperty
                 $data['user'] = '';
                 $data['value']= 0;
             } else {
-                try {
-                    $user = xarUserGetVar('name', $value);
-                    if (empty($user))
+                if(is_numeric($value)) {
+                    try {
                         $user = xarUserGetVar('uname', $value);
-                } catch(NotFoundExceptions $e) {
+                        // Does this make sense? The user should already have been checked before storing
+                        if (empty($user))
+                            $user = xarUserGetVar('name', $value);
+                    } catch(NotFoundExceptions $e) {
+                        $user = $value;
+                    }
+                } else {
                     $user = $value;
                 }
-
-                $data['user'] = xarVarprepForDisplay($user);
-                $data['value']= $value;
+                    $data['user'] = xarVarprepForDisplay($user);
+                    $data['value']= $value;
             }
         }
 
@@ -118,12 +121,15 @@ class UsernameProperty extends TextBoxProperty
             extract($data);
             if (!isset($value)) $value = $this->value;
             if (empty($value))  $value = xarUserGetVar('id');
-
-            try {
-                $user = xarUserGetVar('name', $value);
-                if (empty($user))
-                    $user = xarUserGetVar('uname', $value);
-            } catch(NotFoundExceptions $e) {
+            if(is_numeric($value)) {
+                try {
+                    $user = xarUserGetVar('name', $value);
+                    if (empty($user))
+                        $user = xarUserGetVar('uname', $value);
+                } catch(NotFoundExceptions $e) {
+                    $user = $value;
+                }
+            } else {
                 $user = $value;
             }
 
@@ -137,72 +143,6 @@ class UsernameProperty extends TextBoxProperty
             }
         }
         return parent::showOutput($data);
-    }
-
-    public function parseValidation($validation = '')
-    {
-        if (is_array($validation)) {
-            $fields = $validation;
-        } else {
-            $fields = unserialize($validation);
-        }
-        if (!empty($fields) && is_array($fields)) {
-            foreach ($this->validationargs as $validationarg) {
-                if (isset($fields[$validationarg])) {
-                    $this->$validationarg = $fields[$validationarg];
-                }
-            }
-        }
-    }
-
-    public function showValidation(Array $args = array())
-    {
-        extract($args);
-        $data = array();
-        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
-        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
-        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
-        $data['size']       = !empty($size) ? $size : 50;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-
-        if (isset($validation)) {
-            $this->validation = $validation;
-            $this->parseValidation($validation);
-        }
-        foreach ($this->validationargs as $validationarg) {
-            $data[$validationarg] = $this->$validationarg;
-        }
-
-        // allow template override by child classes
-        $module    = empty($module)   ? $this->getModule()   : $module;
-        $template  = empty($template) ? $this->getTemplate() : $template;
-
-        return xarTplProperty($module, $template, 'validation', $data);
-    }
-
-    public function updateValidation(Array $args = array())
-    {
-        extract($args);
-
-        // in case we need to process additional input fields based on the name
-        $name = empty($name) ? 'dd_'.$this->id : $name;
-
-        // do something with the validation and save it in $this->validation
-        if (isset($validation)) {
-            if (is_array($validation)) {
-                $data = array();
-                foreach ($this->validationargs as $validationarg) {
-                    if (isset($validation[$validationarg])) {
-                        $data[$validationarg] = $validation[$validationarg];
-                    }
-                }
-                $this->validation = serialize($data);
-
-            } else {
-                $this->validation = $validation;
-            }
-        }
-        return true;
     }
 }
 ?>

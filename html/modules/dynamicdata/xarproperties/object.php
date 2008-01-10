@@ -13,7 +13,7 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.dropdown');
+sys::import('modules.dynamicdata.xarproperties.objectref');
 
 /**
  * Handle the object property
@@ -25,18 +25,19 @@ sys::import('modules.base.xarproperties.dropdown');
  * option-types:
  *   static:true - add modules to the list
  */
-class ObjectProperty extends SelectProperty
+class ObjectProperty extends ObjectRefProperty
 {
     public $id         = 24;
     public $name       = 'object';
     public $desc       = 'Object';
     public $reqmodules = array('dynamicdata');
 
+    public $initialization_store_prop   = 'objectid';       // Name of the property we want to use for storage
+
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $this->filepath   = 'modules/dynamicdata/xarproperties';
-
+/*
         if (!empty($this->validation)) {
             foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
                 // Semi-colons can be escaped with a '\' prefix.
@@ -72,6 +73,7 @@ class ObjectProperty extends SelectProperty
                 }
             }
 //        }
+*/
     }
 }
 

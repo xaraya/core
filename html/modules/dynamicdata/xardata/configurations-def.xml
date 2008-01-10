@@ -1,0 +1,75 @@
+<object name="configurations">
+  <objectid>67</objectid>
+  <label>Dynamic Configurations</label>
+  <parent>objects</parent>
+  <moduleid>182</moduleid>
+  <itemtype>31</itemtype>
+  <class>DataObject</class>
+  <filepath></filepath>
+  <urlparam>itemid</urlparam>
+  <maxid>26</maxid>
+  <config></config>
+  <isalias>0</isalias>
+  <properties>
+    <property name="id">
+      <id>610</id>
+      <label>ID</label>
+      <type>itemid</type>
+      <default></default>
+      <source>xar_dynamic_configurations.id</source>
+      <status>33</status>
+      <order>1</order>
+      <validation></validation>
+    </property>
+    <property name="name">
+      <id>611</id>
+      <label>Name</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_dynamic_configurations.name</source>
+      <status>33</status>
+      <order>2</order>
+      <validation></validation>
+    </property>
+    <property name="description">
+      <id>612</id>
+      <label>Description</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_dynamic_configurations.description</source>
+      <status>34</status>
+      <order>3</order>
+      <validation></validation>
+    </property>
+    <property name="property_id">
+      <id>613</id>
+      <label>Property</label>
+      <type>fieldtype</type>
+      <default></default>
+      <source>xar_dynamic_configurations.property_id</source>
+      <status>33</status>
+      <order>4</order>
+      <validation>a:7:{s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:24:&quot;initialization_refobject&quot;;s:1:&quot;2&quot;;s:23:&quot;initialization_function&quot;;s:0:&quot;&quot;;s:19:&quot;initialization_file&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_collection&quot;;s:0:&quot;&quot;;s:22:&quot;initialization_options&quot;;s:0:&quot;&quot;;s:20:&quot;initialization_other&quot;;s:0:&quot;&quot;;}</validation>
+    </property>
+    <property name="label">
+      <id>614</id>
+      <label>Label</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_dynamic_configurations.label</source>
+      <status>33</status>
+      <order>5</order>
+      <validation></validation>
+    </property>
+    <property name="configuration">
+      <id>589</id>
+      <label>Configuration</label>
+      <type>validation</type>
+      <default></default>
+      <source>xar_dynamic_configurations.configuration</source>
+      <status>34</status>
+      <order>6</order>
+      <validation></validation>
+    </property>
+  </properties>
+</object>

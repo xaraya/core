@@ -21,12 +21,11 @@ class TextBoxProperty extends DataProperty
     public $desc       = 'Text Box';
     public $reqmodules = array('base');
 
-    public $size      = 50;
-    public $maxlength = 254;
-
-    public $min       = null;
-    public $max       = null;
-    public $regex     = null;
+    public $display_size                    = 50;
+    public $display_maxlength               = 254;
+    public $validation_min_length           = null;
+    public $validation_max_length           = null;
+    public $validation_regex                = null;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -45,21 +44,24 @@ class TextBoxProperty extends DataProperty
 
     public function validateValue($value = null)
     {
+        if (!parent::validateValue($value)) return false;
+
         if (!isset($value)) {
             $value = $this->value;
         } elseif (is_array($value)) {
             $value = serialize($value);
         }
-        if (!empty($value) && strlen($value) > $this->maxlength) {
-            $this->invalid = xarML('#(1) text: must be less than #(2) characters long', $this->name,$this->max + 1);
+
+        if (isset($this->validation_max_length)  && strlen($value) > $this->display_maxlength) {
+            $this->invalid = xarML('#(1) #(3): must be less than #(2) characters long', $this->name,$this->validation_max_length + 1, $this->desc);
             $this->value = null;
             return false;
-        } elseif (isset($this->min) && strlen($value) < $this->min) {
-            $this->invalid = xarML('#(1) text: must be at least #(2) characters long', $this->name,$this->min);
+        } elseif (isset($this->validation_min_length) && strlen($value) < $this->validation_min_length) {
+            $this->invalid = xarML('#(1) #(3): must be at least #(2) characters long', $this->name,$this->validation_min_length, $this->desc);
             $this->value = null;
             return false;
-        } elseif (!empty($this->regex) && !preg_match($this->regex, $value)) {
-            $this->invalid = xarML('#(1) text: does not match regular expression', $this->name);
+        } elseif (!empty($this->validation_regex) && !preg_match($this->validation_regex, $value)) {
+            $this->invalid = xarML('#(1) #(2): does not match required pattern', $this->name, $this->desc);
             $this->value = null;
             return false;
         } else {
@@ -72,17 +74,17 @@ class TextBoxProperty extends DataProperty
     public function showInput(Array $data = array())
     {
         // Process the parameters
-        if (!isset($data['maxlength']) && isset($this->max)) {
-            $this->maxlength = $this->max;
-            if ($this->size > $this->maxlength) {
-                $this->size = $this->maxlength;
+        if (!isset($data['maxlength']) && isset($this->validation_max_length)) {
+            $this->display_maxlength = $this->validation_max_length;
+            if ($this->display_size > $this->display_maxlength) {
+                $this->display_size = $this->display_maxlength;
             }
         }
 
         // Prepare for templating
         $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
-        if(!isset($data['maxlength'])) $data['maxlength'] = $this->maxlength;
-        if(!isset($data['size']))      $data['size']      = $this->size;
+//        if(!isset($data['maxlength'])) $data['maxlength'] = $this->display_maxlength;
+//        if(!isset($data['size']))      $data['size']      = $this->display_size;
         if(!isset($data['onfocus']))   $data['onfocus']   = null;
 
         // Let parent deal with the rest
@@ -90,7 +92,7 @@ class TextBoxProperty extends DataProperty
     }
 
     // check validation for allowed min/max length (or values)
-    public function parseValidation($validation = '')
+/*    public function parseValidation($validation = '')
     {
         if (is_string($validation) && strchr($validation,':')) {
             $fields = explode(':',$validation);
@@ -107,7 +109,7 @@ class TextBoxProperty extends DataProperty
             }
         }
     }
-
+*/
     /**
      * Show the current validation rule in a specific form for this property type
      *
@@ -117,7 +119,7 @@ class TextBoxProperty extends DataProperty
      * @param $args['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showValidation(Array $data = array())
+/*    public function showValidation(Array $data = array())
     {
         extract($data);
 
@@ -147,7 +149,7 @@ class TextBoxProperty extends DataProperty
         }
         return xarTplProperty('base', $template, 'validation', $data);
     }
-
+*/
     /**
      * Update the current validation rule in a specific way for each property type
      *
@@ -157,7 +159,7 @@ class TextBoxProperty extends DataProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    public function updateValidation(Array $args = array())
+/*    public function updateValidation(Array $args = array())
      {
          extract($args);
 
@@ -204,6 +206,6 @@ class TextBoxProperty extends DataProperty
          // tell the calling function that everything is OK
          return true;
      }
-}
+*/}
 
 ?>
