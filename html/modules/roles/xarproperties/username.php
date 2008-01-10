@@ -58,7 +58,7 @@ class UsernameProperty extends TextBoxProperty
 
         $role = xarRoles::ufindRole($value);
 
-        switch ((int)$this->existrule) {
+        switch ((int)$this->initialization_existrule) {
             case 1:
             if (!empty($role)) {
                 $this->invalid = xarML('user #(1) already exists', $value);
