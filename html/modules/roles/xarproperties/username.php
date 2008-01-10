@@ -76,7 +76,7 @@ class UsernameProperty extends TextBoxProperty
             case 0:
             default:
         }
-        $this->value = empty($role) ? '' : $role->getUname();
+
         return true;
     }
 
