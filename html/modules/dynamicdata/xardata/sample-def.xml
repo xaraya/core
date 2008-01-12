@@ -18,7 +18,7 @@
       <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>34</status>
-      <seq>0</seq>
+      <seq>1</seq>
       <validation></validation>
     </property>
     <property name="name">
@@ -28,7 +28,7 @@
       <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>33</status>
-      <seq>0</seq>
+      <seq>2</seq>
       <validation>a:7:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:1:"1";s:21:"validation_max_length";s:2:"30";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</validation>
     </property>
     <property name="age">
@@ -38,7 +38,7 @@
       <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>33</status>
-      <seq>0</seq>
+      <seq>3</seq>
       <validation>a:9:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:20:"validation_min_value";s:1:"0";s:20:"validation_max_value";s:3:"125";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</validation>
     </property>
     <property name="location">
@@ -48,7 +48,7 @@
       <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>34</status>
-      <seq>0</seq>
+      <seq>4</seq>
       <validation></validation>
     </property>
   </properties>
