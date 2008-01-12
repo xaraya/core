@@ -1,54 +1,54 @@
 <object name="sample">
-  <objectid>3</objectid>
+  <objectid>5</objectid>
   <label>Sample Object</label>
   <parent>objects</parent>
   <moduleid>182</moduleid>
-  <itemtype>2</itemtype>
+  <itemtype>3</itemtype>
   <class>DataObject</class>
   <filepath></filepath>
   <urlparam>itemid</urlparam>
-  <maxid>3</maxid>
+  <maxid>7</maxid>
   <config>nothing much...</config>
   <isalias>0</isalias>
   <properties>
     <property name="id">
-      <id>23</id>
+      <id>29</id>
       <label>Id</label>
       <type>itemid</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>34</status>
-      <order>1</order>
+      <seq>0</seq>
       <validation></validation>
     </property>
     <property name="name">
-      <id>24</id>
+      <id>30</id>
       <label>Name</label>
       <type>textbox</type>
-      <default>please enter your name...</default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>33</status>
-      <order>2</order>
-      <validation>1:30</validation>
+      <seq>0</seq>
+      <validation>a:7:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:1:"1";s:21:"validation_max_length";s:2:"30";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</validation>
     </property>
     <property name="age">
-      <id>25</id>
+      <id>31</id>
       <label>Age</label>
       <type>integerbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>33</status>
-      <order>3</order>
-      <validation>0:125</validation>
+      <seq>0</seq>
+      <validation>a:9:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:20:"validation_min_value";s:1:"0";s:20:"validation_max_value";s:3:"125";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</validation>
     </property>
     <property name="location">
-      <id>26</id>
+      <id>32</id>
       <label>Location</label>
       <type>image</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>dynamic_data</source>
       <status>34</status>
-      <order>4</order>
+      <seq>0</seq>
       <validation></validation>
     </property>
   </properties>
