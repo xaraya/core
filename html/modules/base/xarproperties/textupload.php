@@ -45,7 +45,7 @@ class TextUploadProperty extends DataProperty
         $this->filepath   = 'modules/base/xarproperties';
 
         // always parse validation to preset methods here
-        $this->parseValidation($this->configuration);
+        $this->parseConfiguration($this->configuration);
 
         // Note : {user} will be replaced by the current user uploading the file - e.g. var/uploads/{user} -&gt; var/uploads/myusername_123
         if (!empty($this->basedir) && preg_match('/\{user\}/',$this->basedir)) {
@@ -246,7 +246,7 @@ class TextUploadProperty extends DataProperty
         parent::showInput($data);
     }
 
-    public function parseValidation($validation = '')
+    public function parseConfiguration($validation = '')
     {
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality
@@ -264,7 +264,7 @@ class TextUploadProperty extends DataProperty
         }
     }
 
-    public function showValidation(Array $args = array())
+    public function showConfiguration(Array $args = array())
     {
         extract($args);
 
@@ -279,7 +279,7 @@ class TextUploadProperty extends DataProperty
 
         if (isset($validation)) {
             $this->configuration = $validation;
-            $this->parseValidation($validation);
+            $this->parseConfiguration($validation);
         }
 
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
@@ -303,7 +303,7 @@ class TextUploadProperty extends DataProperty
         return xarTplProperty('base', $template, 'validation', $data);
     }
 
-    public function updateValidation(Array $args = array())
+    public function updateConfiguration(Array $args = array())
     {
         extract($args);
 

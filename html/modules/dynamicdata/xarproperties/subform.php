@@ -41,7 +41,7 @@ class SubFormProperty extends DataProperty
 
         // check validation for object, style etc.
         if (!empty($this->configuration)) {
-            $this->parseValidation($this->configuration);
+            $this->parseConfiguration($this->configuration);
         }
     }
 
@@ -419,7 +419,7 @@ class SubFormProperty extends DataProperty
     {
         extract($data);
 
-        if (!empty($validation)) $this->parseValidation($validation);
+        if (!empty($validation)) $this->parseConfiguration($validation);
 
         if (!isset($value)) $value = $this->value;
         if (!isset($name)) $name = 'dd_'.$this->id;
@@ -675,7 +675,7 @@ class SubFormProperty extends DataProperty
         return $myobject;
     }
 
-    public function parseValidation($validation = '')
+    public function parseConfiguration($validation = '')
     {
         if (is_array($validation)) {
             $fields = $validation;
@@ -708,7 +708,7 @@ class SubFormProperty extends DataProperty
      * @param $args['repetitions'] number of repetitions of this subform to be displayed on forms
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showValidation(Array $args = array())
+    public function showConfiguration(Array $args = array())
     {
         extract($args);
         $data = array();
@@ -720,7 +720,7 @@ class SubFormProperty extends DataProperty
 
         if (isset($validation)) {
             $this->configuration = $validation;
-            $this->parseValidation($validation);
+            $this->parseConfiguration($validation);
         }
         foreach ($this->arguments as $item) {
             $data[$item] = $this->$item;
@@ -756,7 +756,7 @@ class SubFormProperty extends DataProperty
      * @param $args['id'] id of the field
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    public function updateValidation(Array $args = array())
+    public function updateConfiguration(Array $args = array())
     {
         extract($args);
 

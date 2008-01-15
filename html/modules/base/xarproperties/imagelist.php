@@ -31,7 +31,7 @@ class ImageListProperty extends SelectProperty
         $this->template  = 'imagelist';
 
         if (empty($this->basedir) && !empty($this->configuration)) {
-            $this->parseValidation($this->configuration);
+            $this->parseConfiguration($this->configuration);
         }
         // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/Xaraya_Classic/images
         if (!empty($this->basedir) && preg_match('/\{theme\}/',$this->basedir)) {
@@ -125,7 +125,7 @@ class ImageListProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
-    public function parseValidation($validation = '')
+    public function parseConfiguration($validation = '')
     {
         if (empty($validation)) return;
         // specify base directory in validation field, or basedir|baseurl (not ; to avoid conflicts with old behaviour)
@@ -142,7 +142,7 @@ class ImageListProperty extends SelectProperty
         }
     }
 
-    public function showValidation(Array $args = array())
+    public function showConfiguration(Array $args = array())
     {
         extract($args);
 
@@ -157,7 +157,7 @@ class ImageListProperty extends SelectProperty
 
         if (isset($validation)) {
             $this->configuration = $validation;
-            $this->parseValidation($validation);
+            $this->parseConfiguration($validation);
         }
 
         $data['basedir'] = $this->basedir;
@@ -182,7 +182,7 @@ class ImageListProperty extends SelectProperty
         return xarTplProperty('base', $template, 'validation', $data);
     }
 
-    public function updateValidation(Array $args = array())
+    public function updateConfiguration(Array $args = array())
     {
         extract($args);
 

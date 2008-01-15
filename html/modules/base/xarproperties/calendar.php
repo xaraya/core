@@ -146,7 +146,7 @@ class CalendarProperty extends DataProperty
         return parent::showOutput($data);
     }
 
-    public function showValidation(Array $args = array())
+    public function showConfiguration(Array $args = array())
     {
         extract($args);
 
@@ -176,7 +176,7 @@ class CalendarProperty extends DataProperty
         return xarTplProperty('base', $template, 'validation', $data);
     }
 
-    public function updateValidation(Array $args = array())
+    public function updateConfiguration(Array $args = array())
     {
         extract($args);
 

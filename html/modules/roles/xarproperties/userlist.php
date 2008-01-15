@@ -133,10 +133,10 @@ class UserListProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
-    public function parseValidation($validation = '')
+    public function parseConfiguration($validation = '')
     {
         if (preg_match('/^xarModAPIFunc/i',$validation)) {
-            return parent::parseValidation($validation);
+            return parent::parseConfiguration($validation);
         } else {
             foreach(preg_split('/(?<!\\\);/', $validation) as $option) {
                 // Semi-colons can be escaped with a '\' prefix.
@@ -179,7 +179,7 @@ class UserListProperty extends SelectProperty
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showValidation(Array $args = array())
+    public function showConfiguration(Array $args = array())
     {
         extract($args);
 
@@ -193,7 +193,7 @@ class UserListProperty extends SelectProperty
         if (isset($validation)) {
             $this->configuration = $validation;
         // CHECKME: reset grouplist et al. first if we call this from elsewhere ?
-            $this->parseValidation($validation);
+            $this->parseConfiguration($validation);
         }
 
     // TODO: adapt if the template uses a multi-select for groups
@@ -221,7 +221,7 @@ class UserListProperty extends SelectProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    public function updateValidation(Array $args = array())
+    public function updateConfiguration(Array $args = array())
     {
         extract($args);
 

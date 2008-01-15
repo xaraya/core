@@ -68,7 +68,7 @@ function dynamicdata_admin_showpropval($args)
         // pass the current value as configuration rule
         $data['configuration'] = isset($configuration) ? $configuration : '';
 
-        $isvalid = $property->updateValidation($data);
+        $isvalid = $property->updateConfiguration($data);
 
         if ($isvalid) {
             // store the updated configuration rule back in the value
@@ -106,8 +106,8 @@ function dynamicdata_admin_showpropval($args)
     }
     $data['configuration'] = $value;
 
-    // call its showValidation() method and return
-    $data['showval'] = $property->showValidation($data);
+    // call its showConfiguration() method and return
+    $data['showval'] = $property->showConfiguration($data);
     $data['itemid'] = $itemid;
     $data['object'] =& $myobject;
 

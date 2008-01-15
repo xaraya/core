@@ -442,7 +442,7 @@ class DataProperty extends Object implements iDataProperty
      *
      * @param string $configuration
      */
-    public function parseValidation($configuration = '')
+    public function parseConfiguration($configuration = '')
     {
         if (is_array($configuration)) {
             $fields = $configuration;
@@ -493,7 +493,7 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showValidation(Array $data = array())
+    public function showConfiguration(Array $data = array())
     {
         if (!isset($data['configuration'])) $data['configuration'] = $this->configuration;
         $this->parseValidation($data['configuration']);
@@ -525,7 +525,7 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['id'] id of the field
      * @return bool true if the configuration rule could be processed, false otherwise
      */
-    public function updateValidation(Array $data = array())
+    public function updateConfiguration(Array $data = array())
     {
         extract($data);
         $valid = false;
@@ -552,6 +552,13 @@ class DataProperty extends Object implements iDataProperty
         }
         return $valid;
     }
+
+    /**
+     * Deprecated methods
+     */
+    public function parseValidation(Array $data = array())  { return $this->parseValidation($data); }
+    public function showValidation(Array $data = array())   { return $this->showValidation($data); }
+    public function updateValidation(Array $data = array()) { return $this->updateValidation($data); }
 
     /**
      * Return the configuration options for this property

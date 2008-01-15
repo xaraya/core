@@ -55,7 +55,7 @@ class ValidationProperty extends TextBoxProperty
 
         if (!xarVarFetch($data['name'],'isset',$data['validation'],NULL,XARVAR_NOT_REQUIRED)) return;
 
-        if (!$property->updateValidation($data)) return false;
+        if (!$property->updateConfiguration($data)) return false;
         $this->value = $property->validation;
 
         return true;
@@ -97,7 +97,7 @@ class ValidationProperty extends TextBoxProperty
         // pass the current value as validation rule
         $data['validation'] = isset($value) ? $value : $this->value;
 
-        $isvalid = $property->updateValidation($data);
+        $isvalid = $property->updateConfiguration($data);
 
         if ($isvalid) {
             // store the updated validation rule back in the value and return
@@ -142,10 +142,10 @@ class ValidationProperty extends TextBoxProperty
 
         $property =& DataPropertyMaster::getProperty($data);
         $property->id = $this->id;
-        $property->parseValidation($this->value);
+        $property->parseConfiguration($this->value);
 
-        // call its showValidation() method and return
-        return $property->showValidation($data);
+        // call its showConfiguration() method and return
+        return $property->showConfiguration($data);
     }
 
     public function showOutput(Array $args = array())

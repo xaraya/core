@@ -63,10 +63,10 @@ class ObjectRefProperty extends SelectProperty
         return $options;
     }
 
-    public function showValidation(Array $data = array())
+    public function showConfiguration(Array $data = array())
     {
         if (!isset($data['validation'])) $data['validation'] = $this->configuration;
-        $this->parseValidation($data['validation']);
+        $this->parseConfiguration($data['validation']);
         if (!isset($data['initialization'])) $data['initialization'] = $this->getConfigProperties('initialization',1);
 
         if (!empty($data['initialization']['initialization_store_prop']['configuration'])) {
@@ -79,7 +79,7 @@ class ObjectRefProperty extends SelectProperty
             $temp = str_replace  ('#(1)', "'" . $this->initialization_refobject  . "'", $temp);
             $data['initialization']['initialization_display_prop']['configuration'] = serialize($temp);
         }
-        return parent::showValidation($data);
+        return parent::showConfiguration($data);
     }
 
 }

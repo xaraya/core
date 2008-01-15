@@ -33,7 +33,7 @@ class UsernameProperty extends TextBoxProperty
         $this->tplmodule = 'roles';
         $this->template = 'username';
         $this->filepath   = 'modules/roles/xarproperties';
-        $this->parseValidation($this->configuration);
+        $this->parseConfiguration($this->configuration);
     }
 
     public function validateValue($value = null)

@@ -37,7 +37,7 @@ class ItemTypeProperty extends NumberBoxProperty
 
         // options may be set in one of the child classes
         if (count($this->options) == 0 && !empty($this->configuration)) {
-            $this->parseValidation($this->configuration);
+            $this->parseConfiguration($this->configuration);
         }
     }
 
@@ -147,7 +147,7 @@ class ItemTypeProperty extends NumberBoxProperty
      *
      *   TODO: support 2nd API call to retrieve the item in case getitemlinks() isn't supported
      */
-    public function parseValidation($validation = '')
+    public function parseConfiguration($validation = '')
     {
         // see if the validation field contains a valid module name
         if (preg_match('/^\w+$/',$validation) &&
@@ -290,7 +290,7 @@ class ItemTypeProperty extends NumberBoxProperty
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showValidation(Array $args = array())
+    public function showConfiguration(Array $args = array())
     {
         extract($args);
 
@@ -303,7 +303,7 @@ class ItemTypeProperty extends NumberBoxProperty
 
         if (isset($validation)) {
             $this->configuration = $validation;
-            $this->parseValidation($validation);
+            $this->parseConfiguration($validation);
         }
 
         $data['modname']   = '';
@@ -342,7 +342,7 @@ class ItemTypeProperty extends NumberBoxProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    public function updateValidation(Array $args = array())
+    public function updateConfiguration(Array $args = array())
     {
         extract($args);
 

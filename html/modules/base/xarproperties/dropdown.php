@@ -43,7 +43,7 @@ class SelectProperty extends DataProperty
         }
         // options may be set in one of the child classes
         if (count($this->options) == 0 && !empty($this->configuration)) {
-            $this->parseValidation($this->configuration);
+            $this->parseConfiguration($this->configuration);
         }
     }
 
@@ -74,7 +74,7 @@ class SelectProperty extends DataProperty
 
         if (!isset($data['options']) || count($data['options']) == 0) {
             if (isset($data['configuration'])) {
-                $this->parseValidation($data['configuration']);
+                $this->parseConfiguration($data['configuration']);
             }
             $data['options'] = $this->getOptions();
         }

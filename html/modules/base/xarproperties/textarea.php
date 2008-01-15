@@ -39,7 +39,7 @@ class TextAreaProperty extends DataProperty
 
         // check validation for allowed rows/cols (or values)
         if (!empty($this->configuration)) {
-            $this->parseValidation($this->configuration);
+            $this->parseConfiguration($this->configuration);
         }
     }
 
@@ -81,7 +81,7 @@ class TextAreaProperty extends DataProperty
     }
 
     // check validation for allowed rows/cols (or values)
-    /*public function parseValidation($validation = '')
+    /*public function parseConfiguration($validation = '')
     {
         if (is_string($validation) && strchr($validation,':')) {
             list($rows,$cols) = explode(':',$validation);
@@ -105,7 +105,7 @@ class TextAreaProperty extends DataProperty
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    /*public function showValidation(Array $args = array())
+    /*public function showConfiguration(Array $args = array())
     {
         extract($args);
 
@@ -122,7 +122,7 @@ class TextAreaProperty extends DataProperty
         if (isset($validation)) {
             $this->configuration = $validation;
             // check validation for allowed rows/cols (or values)
-            $this->parseValidation($validation);
+            $this->parseConfiguration($validation);
         }
         $data['rows'] = ($this->rows != $data['defaultrows']) ? $this->rows : '';
         $data['cols'] = ($this->cols != $data['defaultcols']) ? $this->cols : '';
@@ -149,7 +149,7 @@ class TextAreaProperty extends DataProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-/*    public function updateValidation(Array $args = array())
+/*    public function updateConfiguration(Array $args = array())
      {
          extract($args);
 

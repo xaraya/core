@@ -59,7 +59,7 @@ class FileUploadProperty extends DataProperty
         }
 
         // always parse configuration to preset methods here
-        $this->parseValidation($this->configuration);
+        $this->parseConfiguration($this->configuration);
 
         if(xarServerGetVar('PATH_TRANSLATED')) {
             $base_directory = dirname(realpath(xarServerGetVar('PATH_TRANSLATED')));
@@ -342,7 +342,7 @@ class FileUploadProperty extends DataProperty
         }
     }
 
-    public function parseValidation($validation = '')
+    public function parseConfiguration($validation = '')
     {
         if ($this->UploadsModule_isHooked == TRUE) {
             list($multiple, $methods, $basedir, $importdir) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $validation);
@@ -371,7 +371,7 @@ class FileUploadProperty extends DataProperty
         }
     }
 
-    public function showValidation(Array $args = array())
+    public function showConfiguration(Array $args = array())
     {
         extract($args);
 
@@ -386,7 +386,7 @@ class FileUploadProperty extends DataProperty
 
         if (isset($validation)) {
             $this->configuration = $validation;
-            $this->parseValidation($validation);
+            $this->parseConfiguration($validation);
         }
 
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
@@ -424,7 +424,7 @@ class FileUploadProperty extends DataProperty
         return xarTplProperty('base', $template, 'validation', $data);
     }
 
-    public function updateValidation(Array $args = array())
+    public function updateConfiguration(Array $args = array())
     {
         extract($args);
 
