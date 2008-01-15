@@ -38,8 +38,8 @@ class ObjectProperty extends ObjectRefProperty
     {
         parent::__construct($descriptor);
 /*
-        if (!empty($this->validation)) {
-            foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
+        if (!empty($this->configuration)) {
+            foreach(preg_split('/(?<!\\\);/', $this->configuration) as $option) {
                 // Semi-colons can be escaped with a '\' prefix.
                 $option = str_replace('\;', ';', $option);
                 // An option comes in two parts: option-type:option-value

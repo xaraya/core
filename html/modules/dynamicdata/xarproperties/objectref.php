@@ -32,7 +32,7 @@ class ObjectRefProperty extends SelectProperty
     public $reqmodules = array('dynamicdata');
 
     // We explicitly use names here instead of id's, so we are independent of
-    // how dd assigns them at a given time. Otherwise the validation is not
+    // how dd assigns them at a given time. Otherwise the configuration is not
     // exportable to other sites.
     public $initialization_refobject    = 'objects';    // ID of the object we want to reference
     public $initialization_store_prop   = 'name';       // Name of the property we want to use for storage
@@ -65,7 +65,7 @@ class ObjectRefProperty extends SelectProperty
 
     public function showValidation(Array $data = array())
     {
-        if (!isset($data['validation'])) $data['validation'] = $this->validation;
+        if (!isset($data['validation'])) $data['validation'] = $this->configuration;
         $this->parseValidation($data['validation']);
         if (!isset($data['initialization'])) $data['initialization'] = $this->getConfigProperties('initialization',1);
 

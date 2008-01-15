@@ -191,7 +191,7 @@ class UserListProperty extends SelectProperty
         $data['size']       = !empty($size) ? $size : 50;
 
         if (isset($validation)) {
-            $this->validation = $validation;
+            $this->configuration = $validation;
         // CHECKME: reset grouplist et al. first if we call this from elsewhere ?
             $this->parseValidation($validation);
         }
@@ -227,13 +227,13 @@ class UserListProperty extends SelectProperty
 
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // do something with the validation and save it in $this->validation
+        // do something with the validation and save it in $this->configuration
         if (isset($validation)) {
             if (!is_array($validation)) {
-                $this->validation = $validation;
+                $this->configuration = $validation;
 
             } elseif (!empty($validation['other'])) {
-                $this->validation = $validation['other'];
+                $this->configuration = $validation['other'];
 
             } else {
                 $options = array();
@@ -264,7 +264,7 @@ class UserListProperty extends SelectProperty
                     $validation['showglue'] = str_replace(';', '\;', $validation['showglue']);
                     $options[] = 'showglue:' . $validation['showglue'];
                 }
-                $this->validation = join(';', $options);
+                $this->configuration = join(';', $options);
             }
         }
 

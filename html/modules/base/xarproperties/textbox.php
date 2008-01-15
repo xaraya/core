@@ -37,8 +37,8 @@ class TextBoxProperty extends DataProperty
         $this->filepath   = 'modules/base/xarproperties';
 
         // check validation for allowed min/max length (or values)
-        if (!empty($this->validation)) {
-            $this->parseValidation($this->validation);
+        if (!empty($this->configuration)) {
+            $this->parseValidation($this->configuration);
         }
     }
 
@@ -129,7 +129,7 @@ class TextBoxProperty extends DataProperty
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
         if (isset($validation)) {
-            $this->validation = $validation;
+            $this->configuration = $validation;
             // check validation for allowed min/max length (or values)
             $this->parseValidation($validation);
         }
@@ -139,7 +139,7 @@ class TextBoxProperty extends DataProperty
         $data['other'] = '';
         // if we didn't match the above format
         if (!isset($this->min) && !isset($this->max) && !isset($this->regex)) {
-            $data['other'] = xarVarPrepForDisplay($this->validation);
+            $data['other'] = xarVarPrepForDisplay($this->configuration);
         }
 
     // FIXME: this won't work when called by a property from a different module
@@ -166,7 +166,7 @@ class TextBoxProperty extends DataProperty
          // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
 
-         // do something with the validation and save it in $this->validation
+         // do something with the validation and save it in $this->configuration
          if (isset($validation)) {
              if (is_array($validation)) {
                  if (isset($validation['min']) && $validation['min'] !== '' && is_numeric($validation['min'])) {
@@ -186,20 +186,20 @@ class TextBoxProperty extends DataProperty
                  }
                  // we have some minimum and/or maximum length and/or regular expression
                  if ($min !== '' || $max !== '' || $regex !== '') {
-                     $this->validation = $min .':'. $max;
+                     $this->configuration = $min .':'. $max;
                      if (!empty($regex)) {
-                         $this->validation .= ':'. $regex;
+                         $this->configuration .= ':'. $regex;
                      }
 
                  // we have some other rule
                  } elseif (!empty($validation['other'])) {
-                     $this->validation = $validation['other'];
+                     $this->configuration = $validation['other'];
 
                  } else {
-                     $this->validation = '';
+                     $this->configuration = '';
                  }
              } else {
-                 $this->validation = $validation;
+                 $this->configuration = $validation;
              }
          }
 

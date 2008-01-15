@@ -93,7 +93,7 @@
         <xar:if condition="!empty($objectid) and $objectid eq 2">
             <p>
                 <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#">
-                    <xar:mlstring>Edit validation</xar:mlstring>
+                    <xar:mlstring>Edit configuration</xar:mlstring>
                 </a>
             </p>
         </xar:if>

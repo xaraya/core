@@ -40,9 +40,9 @@ class ModuleProperty extends SelectProperty
     function getOptions()
     {
         if (count($this->options) == 0) {
-            if ($this->validation == 'name') {
+            if ($this->configuration == 'name') {
                 $key = 'name';
-            } elseif ($this->validation == 'regid') {
+            } elseif ($this->configuration == 'regid') {
                 $key = 'regid';
             } else {
                 $key = 'systemid';

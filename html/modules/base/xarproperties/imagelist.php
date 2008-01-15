@@ -30,8 +30,8 @@ class ImageListProperty extends SelectProperty
         $this->tplmodule = 'base';
         $this->template  = 'imagelist';
 
-        if (empty($this->basedir) && !empty($this->validation)) {
-            $this->parseValidation($this->validation);
+        if (empty($this->basedir) && !empty($this->configuration)) {
+            $this->parseValidation($this->configuration);
         }
         // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/Xaraya_Classic/images
         if (!empty($this->basedir) && preg_match('/\{theme\}/',$this->basedir)) {
@@ -156,7 +156,7 @@ class ImageListProperty extends SelectProperty
         $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
 
         if (isset($validation)) {
-            $this->validation = $validation;
+            $this->configuration = $validation;
             $this->parseValidation($validation);
         }
 
@@ -188,19 +188,19 @@ class ImageListProperty extends SelectProperty
 
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // do something with the validation and save it in $this->validation
+        // do something with the validation and save it in $this->configuration
         if (isset($validation)) {
             if (is_array($validation)) {
                 if (!empty($validation['other'])) {
-                    $this->validation = $validation['other'];
+                    $this->configuration = $validation['other'];
 
                 } else {
-                    $this->validation = '';
+                    $this->configuration = '';
                     if (!empty($validation['basedir'])) {
-                        $this->validation = $validation['basedir'];
+                        $this->configuration = $validation['basedir'];
                     }
                     if (!empty($validation['baseurl'])) {
-                        $this->validation .= '|' . $validation['baseurl'];
+                        $this->configuration .= '|' . $validation['baseurl'];
                     }
                     if (!empty($validation['filetype'])) {
                         $todo = array();
@@ -209,14 +209,14 @@ class ImageListProperty extends SelectProperty
                             $todo[] = $ext;
                         }
                         if (count($todo) > 0) {
-                            $this->validation .= '|(';
-                            $this->validation .= join('|',$todo);
-                            $this->validation .= ')';
+                            $this->configuration .= '|(';
+                            $this->configuration .= join('|',$todo);
+                            $this->configuration .= ')';
                         }
                     }
                 }
             } else {
-                $this->validation = $validation;
+                $this->configuration = $validation;
             }
         }
 

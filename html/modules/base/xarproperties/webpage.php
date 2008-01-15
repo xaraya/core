@@ -28,14 +28,14 @@ class HTMLPageProperty extends SelectProperty
         $this->tplmodule = 'base';
         $this->template = 'webpage';
         // specify base directory in validation field
-        if (empty($this->basedir) && !empty($this->validation)) {
+        if (empty($this->basedir) && !empty($this->configuration)) {
             // Hack for passing this thing into transform hooks
             // validation may start with 'transform:' and we
             // obviously dont want that in basedir
-            if(substr($this->validation,0,10) == 'transform:') {
-                $basedir = substr($this->validation,10,strlen($this->validation)-10);
+            if(substr($this->configuration,0,10) == 'transform:') {
+                $basedir = substr($this->configuration,10,strlen($this->configuration)-10);
             } else {
-                $basedir = $this->validation;
+                $basedir = $this->configuration;
             }
             $this->basedir = $basedir;
         }

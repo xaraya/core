@@ -24,8 +24,8 @@ class NumberListProperty extends SelectProperty
         parent::__construct($descriptor);
 
         // check validation for allowed min/max values
-        if (count($this->options) == 0 && !empty($this->validation) && strchr($this->validation,':')) {
-            list($min,$max) = explode(':',$this->validation);
+        if (count($this->options) == 0 && !empty($this->configuration) && strchr($this->configuration,':')) {
+            list($min,$max) = explode(':',$this->configuration);
             if ($min !== '' && is_numeric($min)) {
                 $this->min = intval($min);
             }

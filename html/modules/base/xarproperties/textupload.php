@@ -45,7 +45,7 @@ class TextUploadProperty extends DataProperty
         $this->filepath   = 'modules/base/xarproperties';
 
         // always parse validation to preset methods here
-        $this->parseValidation($this->validation);
+        $this->parseValidation($this->configuration);
 
         // Note : {user} will be replaced by the current user uploading the file - e.g. var/uploads/{user} -&gt; var/uploads/myusername_123
         if (!empty($this->basedir) && preg_match('/\{user\}/',$this->basedir)) {
@@ -278,7 +278,7 @@ class TextUploadProperty extends DataProperty
         $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
 
         if (isset($validation)) {
-            $this->validation = $validation;
+            $this->configuration = $validation;
             $this->parseValidation($validation);
         }
 
@@ -309,14 +309,14 @@ class TextUploadProperty extends DataProperty
 
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // do something with the validation and save it in $this->validation
+        // do something with the validation and save it in $this->configuration
         if (isset($validation)) {
             if (is_array($validation)) {
                 if (!empty($validation['other'])) {
-                    $this->validation = $validation['other'];
+                    $this->configuration = $validation['other'];
 
                 } elseif (xarVarGetCached('Hooks.uploads','ishooked')) {
-                    $this->validation = '';
+                    $this->configuration = '';
 // CHECKME: verify format of methods(...) part
                     if (!empty($validation['methods'])) {
                         $todo = array();
@@ -328,23 +328,23 @@ class TextUploadProperty extends DataProperty
                             }
                         }
                         if (count($todo) > 0) {
-                            $this->validation .= ';methods(';
-                            $this->validation .= join(',',$todo);
-                            $this->validation .= ')';
+                            $this->configuration .= ';methods(';
+                            $this->configuration .= join(',',$todo);
+                            $this->configuration .= ')';
                         }
                     }
                     if (!empty($validation['basedir'])) {
-                        $this->validation .= ';basedir(' . $validation['basedir'] . ')';
+                        $this->configuration .= ';basedir(' . $validation['basedir'] . ')';
                     }
                     if (!empty($validation['importdir'])) {
-                        $this->validation .= ';importdir(' . $validation['importdir'] . ')';
+                        $this->configuration .= ';importdir(' . $validation['importdir'] . ')';
                     }
                 } else {
-                    $this->validation = '';
+                    $this->configuration = '';
                     // nothing interesting here
                 }
             } else {
-                $this->validation = $validation;
+                $this->configuration = $validation;
             }
         }
 

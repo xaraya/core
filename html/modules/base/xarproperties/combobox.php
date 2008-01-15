@@ -42,7 +42,7 @@ class ComboProperty extends SelectProperty
         } else {
             // Default to checking the selection box.
 
-            // store the fieldname for validations who need them (e.g. file uploads)
+            // store the fieldname for configurations who need them (e.g. file uploads)
             $this->fieldname = $name;
             if (!isset($value))
             {

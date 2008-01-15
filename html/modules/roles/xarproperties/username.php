@@ -33,7 +33,7 @@ class UsernameProperty extends TextBoxProperty
         $this->tplmodule = 'roles';
         $this->template = 'username';
         $this->filepath   = 'modules/roles/xarproperties';
-        $this->parseValidation($this->validation);
+        $this->parseValidation($this->configuration);
     }
 
     public function validateValue($value = null)
@@ -136,7 +136,7 @@ class UsernameProperty extends TextBoxProperty
             $data['user']  = xarVarPrepForDisplay($user);
             $data['value'] = $value;
 
-            if ($this->validation) {
+            if ($this->configuration) {
                 $data['linkurl'] = xarModURL('roles','user','display',array('id' => $value));
             } else {
                 $data['linkurl'] = "";

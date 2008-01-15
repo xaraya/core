@@ -38,7 +38,7 @@ class DataProperty extends Object implements iDataProperty
     public $template = '';
     public $layout = '';
     public $tplmodule = 'dynamicdata';
-    public $validation = '';
+    public $configuration = '';
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
     public $args         = array();
 
@@ -105,7 +105,7 @@ class DataProperty extends Object implements iDataProperty
                 $storetype = 'hook';
                 break;
             case 'user function':
-                // data managed by some user function (specified in validation for now)
+                // data managed by some user function (specified in configuration for now)
                 $storename = '_functions_';
                 $storetype = 'function';
                 break;
@@ -211,7 +211,7 @@ class DataProperty extends Object implements iDataProperty
                 return false;
             }
 
-            // store the fieldname for validations who need them (e.g. file uploads)
+            // store the fieldname for configurations who need them (e.g. file uploads)
             $name = empty($name) ? 'dd_'.$this->id : $name;
             $this->fieldname = $name;
         }
@@ -438,9 +438,9 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
-     * Parse the validation rule
+     * Parse the configuration rule
      *
-     * @param string $validation
+     * @param string $configuration
      */
     public function parseValidation($configuration = '')
     {
@@ -469,14 +469,14 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
-     * The following methods provide an interface to show and update validation rules
+     * The following methods provide an interface to show and update configuration rules
      * when editing dynamic properties. They should be customized for each property
-     * type, based on its specific format and interpretation of the validation rules.
+     * type, based on its specific format and interpretation of the configuration rules.
      *
-     * This allows property type developers to support more complex validation rules,
+     * This allows property type developers to support more complex configuration rules,
      * while keeping them easy to modify for the site admins afterwards.
      *
-     * If no validation methods are specified for a particular property type, the
+     * If no configuration methods are specified for a particular property type, the
      * corresponding methods from its parent class will be used.
      *
      * Note: the methods can be called by DD's showpropval() function, or if you set the
@@ -485,21 +485,21 @@ class DataProperty extends Object implements iDataProperty
      */
 
     /**
-     * Show the current validation rule in a specific form for this property type
+     * Show the current configuration rule in a specific form for this property type
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['validation'] validation rule (default is the current validation)
+     * @param $args['configuration'] configuration rule (default is the current configuration)
      * @param $args['id'] id of the field
      * @param $args['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
     public function showValidation(Array $data = array())
     {
-        if (!isset($data['validation'])) $data['validation'] = $this->validation;
-        $this->parseValidation($data['validation']);
+        if (!isset($data['configuration'])) $data['configuration'] = $this->configuration;
+        $this->parseValidation($data['configuration']);
 
         // remove this next line once we have changed "validation" to "configuration" everywhere
-        unset($data['validation']);
+        //unset($data['validation']);
         if (!isset($data['name']))  $data['name'] = 'dd_'.$this->id;
         if (!isset($data['id']))  $data['id'] = 'dd_'.$this->id;
         if (!isset($data['tabindex']))  $data['tabindex'] = 0;
@@ -518,12 +518,12 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
-     * Update the current validation rule in a specific way for this property
+     * Update the current configuration rule in a specific way for this property
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['validation'] validation rule (default is the current validation)
+     * @param $args['configuration'] configuration rule (default is the current configuration)
      * @param $args['id'] id of the field
-     * @return bool true if the validation rule could be processed, false otherwise
+     * @return bool true if the configuration rule could be processed, false otherwise
      */
     public function updateValidation(Array $data = array())
     {
@@ -532,22 +532,22 @@ class DataProperty extends Object implements iDataProperty
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
 
-        // do something with the validation and save it in $this->validation
-        if (isset($validation) && is_array($validation)) {
-            $configuration = array();
+        // do something with the configuration and save it in $this->configuration
+        if (isset($configuration) && is_array($configuration)) {
+            $storableconfiguration = array();
             foreach ($this->configurationtypes as $configtype) {
                 $properties = $this->getConfigProperties($configtype,1);
                 foreach ($properties as $name => $configarg) {
-                    if (isset($validation[$name])) {
-                        $configuration[$name] = $validation[$name];
+                    if (isset($configuration[$name])) {
+                        $storableconfiguration[$name] = $configuration[$name];
                     }
                 }
             }
-            $this->validation = serialize($configuration);
+            $this->configuration = serialize($storableconfiguration);
             $valid = true;
 
         } else {
-            $this->validation = serialize(array());
+            $this->configuration = serialize(array());
             $valid = true;
         }
         return $valid;

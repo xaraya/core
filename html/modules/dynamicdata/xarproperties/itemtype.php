@@ -36,8 +36,8 @@ class ItemTypeProperty extends NumberBoxProperty
         $this->filepath   = 'modules/dynamicdata/xarproperties';
 
         // options may be set in one of the child classes
-        if (count($this->options) == 0 && !empty($this->validation)) {
-            $this->parseValidation($this->validation);
+        if (count($this->options) == 0 && !empty($this->configuration)) {
+            $this->parseValidation($this->configuration);
         }
     }
 
@@ -302,7 +302,7 @@ class ItemTypeProperty extends NumberBoxProperty
         $data['invalid']   = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
         if (isset($validation)) {
-            $this->validation = $validation;
+            $this->configuration = $validation;
             $this->parseValidation($validation);
         }
 
@@ -349,27 +349,27 @@ class ItemTypeProperty extends NumberBoxProperty
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
 
-        // do something with the validation and save it in $this->validation
+        // do something with the validation and save it in $this->configuration
         if (isset($validation)) {
             if (is_array($validation)) {
-                $this->validation = '';
+                $this->configuration = '';
                 if (!empty($validation['modid'])) {
                     $modinfo = xarModGetInfo($validation['modid']);
                     if (empty($modinfo)) return false;
-                    $this->validation = $modinfo['name'];
+                    $this->configuration = $modinfo['name'];
                     if (!empty($validation['itemtype'])) {
-                        $this->validation .= '.' . $validation['itemtype'];
+                        $this->configuration .= '.' . $validation['itemtype'];
                         if (!empty($validation['func'])) {
-                            $this->validation .= ':' . $validation['func'];
+                            $this->configuration .= ':' . $validation['func'];
                         }
                     }
 
                 } elseif (!empty($validation['other'])) {
-                    $this->validation = $validation['other'];
+                    $this->configuration = $validation['other'];
                 }
 
             } else {
-                $this->validation = $validation;
+                $this->configuration = $validation;
             }
         }
         // tell the calling function that everything is OK

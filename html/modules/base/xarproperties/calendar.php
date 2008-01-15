@@ -63,10 +63,10 @@ class CalendarProperty extends DataProperty
         }
         // TODO: improve this
         // store values in a datetime field
-        if ($this->validation == 'datetime') {
+        if ($this->configuration == 'datetime') {
             $this->value = gmdate('Y-m-d H:i:s', $this->value);
         // store values in a date field
-        } elseif ($this->validation == 'date') {
+        } elseif ($this->configuration == 'date') {
             $this->value = gmdate('Y-m-d', $this->value);
         }
         return true;
@@ -94,7 +94,7 @@ class CalendarProperty extends DataProperty
         }
         if (!isset($dateformat)) {
             $dateformat = '%Y-%m-%d %H:%M:%S';
-            if ($this->validation == 'date') {
+            if ($this->configuration == 'date') {
                 $dateformat = '%Y-%m-%d';
             } else {
                 $dateformat = '%Y-%m-%d %H:%M:%S';
@@ -157,14 +157,14 @@ class CalendarProperty extends DataProperty
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
         if (isset($validation)) {
-            $this->validation = $validation;
+            $this->configuration = $validation;
         }
-        if (empty($this->validation) || $this->validation == 'datetime' || $this->validation == 'date') {
-            $data['dbformat'] = $this->validation;
+        if (empty($this->configuration) || $this->configuration == 'datetime' || $this->configuration == 'date') {
+            $data['dbformat'] = $this->configuration;
             $data['other'] = '';
         } else {
             $data['dbformat'] = '';
-            $data['other'] = $this->validation;
+            $data['other'] = $this->configuration;
         }
         // Note : timestamp is not an option for ExtendedDate
         $data['class'] = get_class($this);
@@ -182,20 +182,20 @@ class CalendarProperty extends DataProperty
 
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // do something with the validation and save it in $this->validation
+        // do something with the validation and save it in $this->configuration
         if (isset($validation)) {
             if (is_array($validation)) {
                 if (!empty($validation['other'])) {
-                    $this->validation = $validation['other'];
+                    $this->configuration = $validation['other'];
 
                 } elseif (isset($validation['dbformat'])) {
-                    $this->validation = $validation['dbformat'];
+                    $this->configuration = $validation['dbformat'];
 
                 } else {
-                    $this->validation = '';
+                    $this->configuration = '';
                 }
             } else {
-                $this->validation = $validation;
+                $this->configuration = $validation;
             }
         }
 

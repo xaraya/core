@@ -58,8 +58,8 @@ class FileUploadProperty extends DataProperty
             }
         }
 
-        // always parse validation to preset methods here
-        $this->parseValidation($this->validation);
+        // always parse configuration to preset methods here
+        $this->parseValidation($this->configuration);
 
         if(xarServerGetVar('PATH_TRANSLATED')) {
             $base_directory = dirname(realpath(xarServerGetVar('PATH_TRANSLATED')));
@@ -110,7 +110,7 @@ class FileUploadProperty extends DataProperty
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // store the fieldname for validations who need them (e.g. file uploads)
+        // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
             if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
@@ -385,7 +385,7 @@ class FileUploadProperty extends DataProperty
         $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
 
         if (isset($validation)) {
-            $this->validation = $validation;
+            $this->configuration = $validation;
             $this->parseValidation($validation);
         }
 
@@ -430,18 +430,18 @@ class FileUploadProperty extends DataProperty
 
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // do something with the validation and save it in $this->validation
+        // do something with the validation and save it in $this->configuration
         if (isset($validation)) {
             if (is_array($validation)) {
                 if (!empty($validation['other'])) {
-                    $this->validation = $validation['other'];
+                    $this->configuration = $validation['other'];
 
                 } elseif ($this->UploadsModule_isHooked) {
-                    $this->validation = '';
+                    $this->configuration = '';
                     if (!empty($validation['multiple'])) {
-                        $this->validation = 'multiple';
+                        $this->configuration = 'multiple';
                     } else {
-                        $this->validation = 'single';
+                        $this->configuration = 'single';
                     }
 // CHECKME: verify format of methods(...) part
                     if (!empty($validation['methods'])) {
@@ -454,21 +454,21 @@ class FileUploadProperty extends DataProperty
                             }
                         }
                         if (count($todo) > 0) {
-                            $this->validation .= ';methods(';
-                            $this->validation .= join(',',$todo);
-                            $this->validation .= ')';
+                            $this->configuration .= ';methods(';
+                            $this->configuration .= join(',',$todo);
+                            $this->configuration .= ')';
                         }
                     }
                     if (!empty($validation['basedir'])) {
-                        $this->validation .= ';basedir(' . $validation['basedir'] . ')';
+                        $this->configuration .= ';basedir(' . $validation['basedir'] . ')';
                     }
                     if (!empty($validation['importdir'])) {
-                        $this->validation .= ';importdir(' . $validation['importdir'] . ')';
+                        $this->configuration .= ';importdir(' . $validation['importdir'] . ')';
                     }
                 } else {
-                    $this->validation = '';
+                    $this->configuration = '';
                     if (!empty($validation['basedir'])) {
-                        $this->validation = $validation['basedir'];
+                        $this->configuration = $validation['basedir'];
                     }
                     if (!empty($validation['filetype'])) {
                         $todo = array();
@@ -477,20 +477,20 @@ class FileUploadProperty extends DataProperty
                             $todo[] = $ext;
                         }
                         if (count($todo) > 0) {
-                            $this->validation .= ';(';
-                            $this->validation .= join('|',$todo);
-                            $this->validation .= ')';
+                            $this->configuration .= ';(';
+                            $this->configuration .= join('|',$todo);
+                            $this->configuration .= ')';
                         }
                     }
                     if (!empty($validation['maxsize'])) {
                         if (empty($todo)) {
-                            $this->validation .= ';';
+                            $this->configuration .= ';';
                         }
-                        $this->validation .= ';' . $validation['maxsize'];
+                        $this->configuration .= ';' . $validation['maxsize'];
                     }
                 }
             } else {
-                $this->validation = $validation;
+                $this->configuration = $validation;
             }
         }
 

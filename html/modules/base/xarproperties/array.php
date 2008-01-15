@@ -31,8 +31,8 @@ class ArrayProperty extends DataProperty
         $this->filepath   = 'modules/base/xarproperties';
 
         // check validation for list of fields (optional)
-        if (!empty($this->validation) && strchr($this->validation,';')) {
-            $this->fields = explode(';',$this->validation);
+        if (!empty($this->configuration) && strchr($this->configuration,';')) {
+            $this->fields = explode(';',$this->configuration);
         }
     }
 

@@ -111,7 +111,7 @@ function dynamicdata_utilapi_export($args)
                     $val = $properties[$name][$key];
                     $val = preg_replace("/^$prefix/",'xar_',$val);
                     $xml .= "      <$key>".xarVarPrepForDisplay($val)."</$key>\n";
-                } elseif ($key == 'validation') {
+                } elseif ($key == 'configuration') {
                     // don't replace anything in the erialized value
                     $val = $properties[$name][$key];
                     $xml .= "      <$key>" . $val . "</$key>\n";

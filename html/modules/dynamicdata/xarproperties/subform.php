@@ -40,15 +40,15 @@ class SubFormProperty extends DataProperty
         parent::__construct($descriptor);
 
         // check validation for object, style etc.
-        if (!empty($this->validation)) {
-            $this->parseValidation($this->validation);
+        if (!empty($this->configuration)) {
+            $this->parseValidation($this->configuration);
         }
     }
 
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // store the fieldname for validations who need them (e.g. file uploads)
+        // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
             if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
@@ -719,7 +719,7 @@ class SubFormProperty extends DataProperty
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
         if (isset($validation)) {
-            $this->validation = $validation;
+            $this->configuration = $validation;
             $this->parseValidation($validation);
         }
         foreach ($this->arguments as $item) {
@@ -763,7 +763,7 @@ class SubFormProperty extends DataProperty
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
 
-        // do something with the validation and save it in $this->validation
+        // do something with the validation and save it in $this->configuration
         if (isset($validation)) {
             if (is_array($validation)) {
                 $data = array();
@@ -779,10 +779,10 @@ class SubFormProperty extends DataProperty
                         $data[$item] = $validation[$item];
                     }
                 }
-                $this->validation = serialize($data);
+                $this->configuration = serialize($data);
 
             } else {
-                $this->validation = $validation;
+                $this->configuration = $validation;
             }
         }
 

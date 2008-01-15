@@ -21,7 +21,7 @@ class FieldStatusProperty extends SelectProperty
     public $desc       = 'Field Status';
     public $reqmodules = array('dynamicdata');
 
-    // CHANGEME: make this a validation?
+    // CHANGEME: make this a configuration?
     public $initialization_display_status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     public $initialization_input_status   = DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
 
@@ -70,7 +70,7 @@ class FieldStatusProperty extends SelectProperty
             $inputname = 'input_'.$name;
             $displayname = 'display_'.$name;
         }
-        // store the fieldname for validations who need them (e.g. file uploads)
+        // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
             if(!xarVarFetch($displayname, 'isset', $display_status, NULL, XARVAR_DONT_SET)) {return;}

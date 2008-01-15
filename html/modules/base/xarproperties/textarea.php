@@ -38,8 +38,8 @@ class TextAreaProperty extends DataProperty
         if(!empty($args['cols'])) $this->display_columns = $args['cols'];
 
         // check validation for allowed rows/cols (or values)
-        if (!empty($this->validation)) {
-            $this->parseValidation($this->validation);
+        if (!empty($this->configuration)) {
+            $this->parseValidation($this->configuration);
         }
     }
 
@@ -120,7 +120,7 @@ class TextAreaProperty extends DataProperty
         $data['defaultcols'] = $this->cols;
 
         if (isset($validation)) {
-            $this->validation = $validation;
+            $this->configuration = $validation;
             // check validation for allowed rows/cols (or values)
             $this->parseValidation($validation);
         }
@@ -129,7 +129,7 @@ class TextAreaProperty extends DataProperty
         $data['other'] = '';
         // if we didn't match the above format
         if ($data['rows'] === '' &&  $data['cols'] === '') {
-            $data['other'] = xarVarPrepForDisplay($this->validation);
+            $data['other'] = xarVarPrepForDisplay($this->configuration);
         }
 
         // allow template override by child classes
@@ -156,7 +156,7 @@ class TextAreaProperty extends DataProperty
          // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
 
-         // do something with the validation and save it in $this->validation
+         // do something with the validation and save it in $this->configuration
          if (isset($validation)) {
              if (is_array($validation)) {
                  if (isset($validation['rows']) && $validation['rows'] !== '' && is_numeric($validation['rows'])) {
@@ -171,17 +171,17 @@ class TextAreaProperty extends DataProperty
                  }
                  // we have some rows and/or columns
                  if ($rows !== '' || $cols !== '') {
-                     $this->validation = $rows .':'. $cols;
+                     $this->configuration = $rows .':'. $cols;
 
                  // we have some other rule
                  } elseif (!empty($validation['other'])) {
-                     $this->validation = $validation['other'];
+                     $this->configuration = $validation['other'];
 
                  } else {
-                     $this->validation = '';
+                     $this->configuration = '';
                  }
              } else {
-                 $this->validation = $validation;
+                 $this->configuration = $validation;
              }
          }
 

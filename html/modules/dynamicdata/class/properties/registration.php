@@ -25,7 +25,7 @@ class PropertyRegistration extends DataContainer
     public $type       = 1;
     public $parent     = '';                     // this type is derived from?
     public $class      = '';                     // what is the class?
-    public $validation = '';                     // what is its default validation?
+    public $configuration = '';                     // what is its default configuration?
     public $source     = 'dynamic_data';         // what source is default for this type?
     public $reqfiles   = array();                // do we require some files to be present?
     public $reqmodules = array();                // do we require some modules to be present?
@@ -95,7 +95,7 @@ class PropertyRegistration extends DataContainer
         $sql = "INSERT INTO $propdefTable
                 (id, name, label,
                  parent, filepath, class,
-                 format, validation, source,
+                 format, configuration, source,
                  reqfiles, modid, args, aliases)
                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         if(!isset($stmt))
@@ -104,7 +104,7 @@ class PropertyRegistration extends DataContainer
         $bindvars = array(
             (int) $this->id, $this->name, $this->desc,
             $this->parent, $this->filepath, $this->class,
-            $this->format, $this->validation, $this->source,
+            $this->format, $this->configuration, $this->source,
             serialize($this->reqfiles), $modId, is_array($this->args) ? serialize($this->args) : $this->args, serialize($this->aliases)
         );
         $res = $stmt->executeUpdate($bindvars);
@@ -134,7 +134,7 @@ class PropertyRegistration extends DataContainer
         // Sort by required module(s) and then by name
         $query = "SELECT  p.id, p.name, p.label,
                           p.parent, p.filepath, p.class,
-                          p.format, p.validation, p.source,
+                          p.format, p.configuration, p.source,
                           p.reqfiles, m.name, p.args,
                           p.aliases
                   FROM    $tables[dynamic_properties_def] p INNER JOIN $tables[modules] m
@@ -149,7 +149,7 @@ class PropertyRegistration extends DataContainer
             {
                 list(
                     $id,$name,$label,$parent,$filepath,$class,$format,
-                    $validation,$source,$reqfiles,$modname,$args,$aliases
+                    $configuration,$source,$reqfiles,$modname,$args,$aliases
                 ) = $result->fields;
 
                 $property['id']             = $id;
@@ -157,7 +157,7 @@ class PropertyRegistration extends DataContainer
                 $property['label']          = $label;
                 $property['format']         = $format;
                 $property['filepath']       = $filepath;
-                $property['validation']     = $validation;
+                $property['configuration']  = $configuration;
                 $property['source']         = $source;
                 $property['dependancies']   = unserialize($reqfiles);
                 $property['requiresmodule'] = $modname;
