@@ -37,7 +37,7 @@ class TextAreaProperty extends DataProperty
         if(!empty($args['rows'])) $this->display_rows = $args['rows'];
         if(!empty($args['cols'])) $this->display_columns = $args['cols'];
 
-        // check validation for allowed rows/cols (or values)
+        // check configuration for allowed rows/cols (or values)
         if (!empty($this->configuration)) {
             $this->parseConfiguration($this->configuration);
         }

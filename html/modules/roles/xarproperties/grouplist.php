@@ -96,8 +96,8 @@ class GroupListProperty extends SelectProperty
 
     public function showInput(Array $data = array())
     {
-        if (!empty($data['validation']))
-            $this->parseConfiguration($data['validation']);
+        if (!empty($data['configuration']))
+            $this->parseConfiguration($data['configuration']);
         $this->options = $this->getOptions();
         return parent::showInput($data);
     }

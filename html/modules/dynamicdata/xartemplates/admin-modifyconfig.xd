@@ -67,7 +67,7 @@
                         <xar:data-output property="$fieldtypeprop" value="$field['format']" />
                     </td>
                     <td>
-                        <input type="text" name="validation[#$field['id']#]" id="validation_#$field['id']#" value="#$field['configuration']#" class="xar-form-textmedium" />
+                        <input type="text" name="configuration[#$field['id']#]" id="configuration_#$field['id']#" value="#$field['configuration']#" class="xar-form-textmedium" />
                     </td>
                 </tr>
             </xar:foreach>

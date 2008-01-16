@@ -13,7 +13,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>1</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="name">
       <label>Name</label>
@@ -22,7 +22,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>2</seq>
-      <validation>1:12:/\w+/</validation>
+      <configuration>1:12:/\w+/</configuration>
     </property>
     <property name="qtype">
       <label>Type</label>
@@ -31,7 +31,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>3</seq>
-      <validation>xarModApiFunc('mail','user','getqueuetypes')</validation>
+      <configuration>xarModApiFunc('mail','user','getqueuetypes')</configuration>
     </property>
     <property name="description">
       <label>Description</label>
@@ -40,7 +40,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>4</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="status">
       <label>Status</label>
@@ -49,7 +49,7 @@
       <source>dynamic_data</source>
       <status>2</status>
       <seq>5</seq>
-      <validation>0,inactive;1,active</validation>
+      <configuration>0,inactive;1,active</configuration>
     </property>
   </properties>
 </object>

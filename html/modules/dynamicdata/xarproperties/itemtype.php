@@ -147,21 +147,21 @@ class ItemTypeProperty extends NumberBoxProperty
      *
      *   TODO: support 2nd API call to retrieve the item in case getitemlinks() isn't supported
      */
-    public function parseConfiguration($validation = '')
+    public function parseConfiguration($configuration = '')
     {
-        // see if the validation field contains a valid module name
-        if (preg_match('/^\w+$/',$validation) &&
-            xarModIsAvailable($validation)) {
+        // see if the configuration field contains a valid module name
+        if (preg_match('/^\w+$/',$configuration) &&
+            xarModIsAvailable($configuration)) {
 
-            $this->module = $validation;
+            $this->module = $configuration;
 
-        } elseif (preg_match('/^(\w+)\.(\d+)$/',$validation,$matches) &&
+        } elseif (preg_match('/^(\w+)\.(\d+)$/',$configuration,$matches) &&
                   xarModIsAvailable($matches[1])) {
 
             $this->module = $matches[1];
             $this->itemtype = $matches[2];
 
-        } elseif (preg_match('/^(\w+)\.(\d+):(xarModAPIFunc.*)$/i',$validation,$matches) &&
+        } elseif (preg_match('/^(\w+)\.(\d+):(xarModAPIFunc.*)$/i',$configuration,$matches) &&
                   xarModIsAvailable($matches[1])) {
 
             $this->module = $matches[1];

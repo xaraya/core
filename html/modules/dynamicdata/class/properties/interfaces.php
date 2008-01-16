@@ -11,7 +11,7 @@ interface iDataProperty
     public function fetchValue($name = '');
     public static function getRegistrationInfo();
     public function getValue();
-    public function parseConfiguration($validation = '');
+    public function parseConfiguration($configuration = '');
     public function showConfiguration(Array $data = array());
     public function updateConfiguration(Array $data = array());
     public function setValue($value);

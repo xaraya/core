@@ -29,12 +29,12 @@ class URLIconProperty extends URLProperty
     {
         parent::__construct($descriptor);
         $this->template = 'urlicon';
-        // check validation field for icon to use !
+        // check configuration field for icon to use !
         if (!empty($this->configuration)) {
            $this->initialization_icon_url = $this->configuration;
         } else {
            /* We need to keep this empty now if we want favicon to display if nothing set here
-              $this->icon = xarML('Please specify the icon to use in the validation field');
+              $this->icon = xarML('Please specify the icon to use in the configuration field');
            */
            //$this->icon='';
         }

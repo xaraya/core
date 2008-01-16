@@ -33,7 +33,7 @@ class ModuleProperty extends SelectProperty
     function showInput(Array $data=array())
     {
         if (!empty($data['filter'])) $this->filter = $data['filter'];
-        if (!empty($data['validation'])) $this->parseConfiguration($data['validation']);
+        if (!empty($data['configuration'])) $this->parseConfiguration($data['configuration']);
         return parent::showInput($data);
     }
 

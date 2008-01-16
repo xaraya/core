@@ -19,7 +19,7 @@
       <source>xar_roles.id</source>
       <status>65</status>
       <seq>1</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="name">
       <id>40</id>
@@ -29,7 +29,7 @@
       <source>xar_roles.name</source>
       <status>33</status>
       <seq>2</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="role_type">
       <id>41</id>
@@ -39,7 +39,7 @@
       <source>xar_roles.type</source>
       <status>67</status>
       <seq>3</seq>
-      <validation>roles</validation>
+      <configuration>roles</configuration>
     </property>
     <property name="users">
       <id>42</id>
@@ -49,7 +49,7 @@
       <source>xar_roles.users</source>
       <status>67</status>
       <seq>4</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="uname">
       <id>43</id>
@@ -59,7 +59,7 @@
       <source>xar_roles.uname</source>
       <status>67</status>
       <seq>5</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="regdate">
       <id>44</id>
@@ -69,7 +69,7 @@
       <source>xar_roles.date_reg</source>
       <status>67</status>
       <seq>6</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="valcode">
       <id>45</id>
@@ -79,7 +79,7 @@
       <source>xar_roles.valcode</source>
       <status>67</status>
       <seq>7</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="state">
       <id>46</id>
@@ -89,7 +89,7 @@
       <source>xar_roles.state</source>
       <status>67</status>
       <seq>8</seq>
-      <validation>xarModAPIFunc('roles','user','getstates')</validation>
+      <configuration>xarModAPIFunc('roles','user','getstates')</configuration>
     </property>
     <property name="authmodule">
       <id>47</id>
@@ -99,7 +99,7 @@
       <source>xar_roles.auth_modid</source>
       <status>67</status>
       <seq>9</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
   </properties>
 </object>

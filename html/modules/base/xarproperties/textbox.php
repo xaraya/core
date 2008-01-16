@@ -36,7 +36,7 @@ class TextBoxProperty extends DataProperty
         $this->template = 'textbox';
         $this->filepath   = 'modules/base/xarproperties';
 
-        // check validation for allowed min/max length (or values)
+        // check configuration for allowed min/max length (or values)
         if (!empty($this->configuration)) {
             $this->parseConfiguration($this->configuration);
         }

@@ -27,7 +27,7 @@ class HTMLPageProperty extends SelectProperty
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template = 'webpage';
-        // specify base directory in validation field
+        // specify base directory in configuration field
         if (empty($this->basedir) && !empty($this->configuration)) {
             // Hack for passing this thing into transform hooks
             // validation may start with 'transform:' and we

@@ -60,10 +60,10 @@
         </div>
         
         <div class="xar-form-input-wrapper">
-            <label for="dd_validation_#$field.id#" class="xar-form-label">
+            <label for="dd_configuration_#$field.id#" class="xar-form-label">
                 #$labels['configuration']#:
             </label>
-            <input type="text" name="dd_validation[#$field['id']#]" id="dd_validation_#$field['id']#" value="#xarVarPrepForDisplay($field['configuration'])#" class="xar-form-textmedium" />
+            <input type="text" name="dd_validation[#$field['id']#]" id="dd_configuration_#$field['id']#" value="#xarVarPrepForDisplay($field['configuration'])#" class="xar-form-textmedium" />
             <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$field.id#" title="#xarVarPrepForDisplay($editconfiguration)#">
                 <xar:mlstring>Edit Configuration</xar:mlstring>
             </a>

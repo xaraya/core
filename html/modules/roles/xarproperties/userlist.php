@@ -133,12 +133,12 @@ class UserListProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
-    public function parseConfiguration($validation = '')
+    public function parseConfiguration($configuration = '')
     {
-        if (preg_match('/^xarModAPIFunc/i',$validation)) {
-            return parent::parseConfiguration($validation);
+        if (preg_match('/^xarModAPIFunc/i',$configuration)) {
+            return parent::parseConfiguration($configuration);
         } else {
-            foreach(preg_split('/(?<!\\\);/', $validation) as $option) {
+            foreach(preg_split('/(?<!\\\);/', $configuration) as $option) {
                 // Semi-colons can be escaped with a '\' prefix.
                 $option = str_replace('\;', ';', $option);
                 // An option comes in two parts: option-type:option-value

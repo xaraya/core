@@ -100,8 +100,8 @@ class ValidationProperty extends TextBoxProperty
         $isvalid = $property->updateConfiguration($data);
 
         if ($isvalid) {
-            // store the updated validation rule back in the value and return
-            $this->value = $property->validation;
+            // store the updated configuration rule back in the value and return
+            $this->value = $property->configuration;
             return true;
         }
 
