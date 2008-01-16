@@ -735,7 +735,7 @@ function installer_admin_create_administrator()
                            array('title'    => 'Admin',
                                  'name'     => 'adminpanel',
                                  'type'     => $adminBlockTypeId,
-                                 'groups'   => array(array('gid'      => $leftBlockGroup,
+                                 'groups'   => array(array('id'      => $leftBlockGroup,
                                                            'template' => '')),
                                  'template' => '',
                                  'state'    =>  2))) {
@@ -761,7 +761,7 @@ function installer_admin_create_administrator()
                                  'name'     => 'reminder',
                                  'content'  => $msg,
                                  'type'     => $htmlBlockTypeId,
-                                 'groups'   => array(array('gid'      => $leftBlockGroup,
+                                 'groups'   => array(array('id'      => $leftBlockGroup,
                                                            'template' => '')),
                                  'template' => '',
                                  'state'    => 2))) {
@@ -1024,7 +1024,7 @@ function installer_admin_confirm_configuration()
                           array('title' => 'Main Menu',
                                 'name'  => 'mainmenu',
                                 'type'  => $menuBlockTypeId,
-                                'groups' => array(array('gid' => $leftBlockGroup,
+                                'groups' => array(array('id' => $leftBlockGroup,
                                                         'template' => '',)),
                                 'template' => '',
                                 'content' => serialize($content),
@@ -1094,7 +1094,7 @@ function installer_admin_cleanup()
                            array('title'    => 'Login',
                                  'name'     => 'login',
                                  'type'     => $loginBlockTypeId,
-                                 'groups'    => array(array('gid'     => $rightBlockGroup,
+                                 'groups'    => array(array('id'     => $rightBlockGroup,
                                                            'template' => '')),
                                  'template' => '',
                                  'state'    => 2))) {
@@ -1129,7 +1129,7 @@ function installer_admin_cleanup()
                            array('title'    => 'Meta',
                                  'name'     => 'meta',
                                  'type'     => $metaBlockTypeId,
-                                 'groups'    => array(array('gid'      => $headerBlockGroup,
+                                 'groups'    => array(array('id'      => $headerBlockGroup,
                                                            'template' => '')),
                                  'template' => '',
                                  'state'    => 2))) {
@@ -1811,7 +1811,7 @@ function installer_admin_upgrade3()
                 'name'     => 'reminder',
                 'content'  => $varshtml,
                 'type'     => $htmlBlockType['tid'],
-                'groups'   => array(array('gid' => $topgroup['gid'])),
+                'groups'   => array(array('id' => $topgroup['id'])),
                 'state'    => 2))) {
             return;
         }
