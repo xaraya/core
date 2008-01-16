@@ -19,6 +19,8 @@ class MultiSelectProperty extends SelectProperty
     public $name       = 'multiselect';
     public $desc       = 'Multiselect';
 
+    public $validation_single = true;
+
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
@@ -28,19 +30,10 @@ class MultiSelectProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $value = array();
-        } elseif (!is_array($value)) {
-            $tmp = @unserialize($value);
-            if ($tmp === false) {
-                $value = array($value);
-            } else {
-                $value = $tmp;
-            }
-        }
+        if (!parent::validateValue($value)) return false;
+        if (!isset($value)) $value = $this->value;
+
+        $value = $this->getSerializedValue($value);
         $validlist = array();
         $options = $this->getOptions();
         foreach ($options as $option) {
@@ -59,39 +52,31 @@ class MultiSelectProperty extends SelectProperty
 
     public function showInput(Array $data = array())
     {
-        if (!isset($data['value'])) {
-            $data['value'] = $this->value;
-        }
-        if (!isset($data['allowempty'])) {
-            $data['allowempty'] = true;
-        }
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        if (!isset($data['allowempty'])) $data['allowempty'] = true;
         if (!isset($data['options']) || count($data['options']) == 0) {
             $data['options'] = $this->getOptions();
         }
-        if (empty($data['value'])) {
-            $data['value'] = array();
-        } elseif (!is_array($data['value'])) {
-            $tmp = @unserialize($data['value']);
-            if ($tmp === false) {
-                $data['value'] = array($data['value']);
-            } else {
-                $data['value'] = $tmp;
-            }
-        }
-
-        $data['single'] = isset($data['single']) ? true : false;
+        $data['value'] = $this->getSerializedValue($data['value']);
+        if (!isset($data['single'])) $data['single'] = $this->validation_single;
 
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
-        extract($data);
+        if (!isset($data['value'])) $data['value'] = $this->value;
 
-        if (!isset($value)) $value = $this->value;
+        $data['value'] = $this->getSerializedValue($data['value']);
+        if (!isset($data['options'])) $data['options'] = $this->getOptions();
 
+        return parent::showOutput($data);
+    }
+
+    public function getSerializedValue($value)
+    {
         if (empty($value)) {
-            $value = array();
+            return array();
         } elseif (!is_array($value)) {
             $tmp = @unserialize($value);
             if ($tmp === false) {
@@ -99,13 +84,8 @@ class MultiSelectProperty extends SelectProperty
             } else {
                 $value = $tmp;
             }
+            return $value;
         }
-        if (!isset($options)) $options = $this->getOptions();
-
-        $data['value']= $value;
-        $data['options']= $options;
-
-        return parent::showOutput($data);
     }
 }
 ?>

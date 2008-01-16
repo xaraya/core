@@ -49,9 +49,7 @@ class SelectProperty extends DataProperty
 
     public function validateValue($value = null)
     {
-        if (isset($value)) {
-            $this->value = $value;
-        }
+        if (isset($value)) $this->value = $value;
 
         // check if this option really exists
         $isvalid = $this->getOption(true);

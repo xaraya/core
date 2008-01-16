@@ -56,7 +56,7 @@ class ValidationProperty extends TextBoxProperty
         if (!xarVarFetch($data['name'],'isset',$data['validation'],NULL,XARVAR_NOT_REQUIRED)) return;
 
         if (!$property->updateConfiguration($data)) return false;
-        $this->value = $property->validation;
+        $this->value = $property->configuration;
 
         return true;
         return $this->validateValue($value);

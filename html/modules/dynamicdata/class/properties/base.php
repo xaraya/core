@@ -556,9 +556,9 @@ class DataProperty extends Object implements iDataProperty
     /**
      * Deprecated methods
      */
-    public function parseValidation(Array $data = array())  { return $this->parseValidation($data); }
-    public function showValidation(Array $data = array())   { return $this->showValidation($data); }
-    public function updateValidation(Array $data = array()) { return $this->updateValidation($data); }
+    public function parseValidation($configuration='')  { return $this->parseConfiguration($configuration); }
+    public function showValidation(Array $data = array())   { return $this->showConfiguration($data); }
+    public function updateValidation(Array $data = array()) { return $this->updateConfiguration($data); }
 
     /**
      * Return the configuration options for this property
