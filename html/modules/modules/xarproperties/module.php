@@ -25,7 +25,8 @@ class ModuleProperty extends ObjectRefProperty
     public $filter = array();
 
     public $initialization_refobject    = 'modules_modules';    // ID of the object we want to reference
-    public $initialization_store_prop   = 'regid';              // Name of the property we want to use for storage
+    public $initialization_store_prop   = 'systemid';                // Name of the property we want to use for storage
+    public $initialization_display_prop = 'displayname';      // Name of the property we want to use for storage
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -36,7 +37,7 @@ class ModuleProperty extends ObjectRefProperty
     function showInput(Array $data=array())
     {
         if (!empty($data['filter'])) $this->filter = $data['filter'];
-        if (!empty($data['configuration'])) $this->parseConfiguration($data['configuration']);
+        if (!empty($data['store_prop'])) $this->initialization_store_prop = $data['store_prop'];
         return parent::showInput($data);
     }
 
