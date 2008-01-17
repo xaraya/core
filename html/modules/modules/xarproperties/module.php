@@ -9,13 +9,13 @@
  * @link http://xaraya.com/index.php/release/1.html
  */
 
-/* include the base class */
-sys::import('modules.base.xarproperties.dropdown');
+sys::import('modules.dynamicdata.xarproperties.objectref');
+
 /**
  * Handle module property
  * @author mikespub
  */
-class ModuleProperty extends SelectProperty
+class ModuleProperty extends ObjectRefProperty
 {
     public $id         = 19;
     public $name       = 'module';
@@ -23,6 +23,9 @@ class ModuleProperty extends SelectProperty
     public $reqmodules = array('modules');
 
     public $filter = array();
+
+    public $initialization_refobject    = 'modules_modules';    // ID of the object we want to reference
+    public $initialization_store_prop   = 'regid';              // Name of the property we want to use for storage
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -39,34 +42,12 @@ class ModuleProperty extends SelectProperty
 
     function getOptions()
     {
-        if (count($this->options) == 0) {
-            if ($this->configuration == 'name') {
-                $key = 'name';
-            } elseif ($this->configuration == 'regid') {
-                $key = 'regid';
-            } else {
-                $key = 'systemid';
-            }
-            // TODO: wasnt here an $args earlier? where did this go?
-            $modlist = xarModAPIFunc('modules', 'admin', 'getlist',array('filter' => $this->filter));
-            foreach ($modlist as $modinfo) {
-                $this->options[] = array('id' => $modinfo[$key], 'name' => $modinfo['displayname']);
-            }
+        $items = xarModAPIFunc('modules', 'admin', 'getlist',array('filter' => $this->filter));
+        $options = array();
+        foreach($items as $item) {
+            $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
         }
-        return $this->options;
+        return $options;
     }
-
-    /**
-     * Get Option
-     * @todo finish this once we're able to get modinfo by systemid
-     */
-    /*function getOption($check = false)
-    {
-        debug($this);
-        if (!isset($this->value)) {
-             if ($check) return true;
-             return null;
-        }
-    }*/
 }
 ?>
