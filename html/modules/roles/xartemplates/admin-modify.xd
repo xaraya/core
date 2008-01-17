@@ -77,7 +77,7 @@
                                 <xar:mlstring>Type:</xar:mlstring>
                         </label>
                         <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
-                        <xar:data-input type="itemtype" name="itemtype" value="$itemtype" validation="roles" onchange="$onchange" />
+                        <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" />
                     </div>
                 </xar:if>
                 <xar:data-form object="$object" />

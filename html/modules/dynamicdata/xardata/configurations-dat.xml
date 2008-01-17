@@ -258,4 +258,28 @@ upload,file upload;
     <label>Columns</label>
     <configuration>a:9:{s:12:&quot;display_size&quot;;s:2:&quot;10&quot;;s:17:&quot;display_maxlength&quot;;s:2:&quot;30&quot;;s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:20:&quot;validation_min_value&quot;;s:0:&quot;&quot;;s:20:&quot;validation_max_value&quot;;s:0:&quot;&quot;;s:21:&quot;validation_min_length&quot;;s:0:&quot;&quot;;s:21:&quot;validation_max_length&quot;;s:0:&quot;&quot;;s:16:&quot;validation_regex&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</configuration>
   </configurations>
+  <configurations itemid="33">
+    <id>33</id>
+    <name>validation_single</name>
+    <description>This field can have only a single value</description>
+    <property_id>14</property_id>
+    <label>Single Only</label>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="34">
+    <id>34</id>
+    <name>initialization_module</name>
+    <description>The module tthis field gets its value from</description>
+    <property_id>19</property_id>
+    <label>Module</label>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="35">
+    <id>35</id>
+    <name>initialization_itemtype</name>
+    <description>The itemtype tthis field gets its value from</description>
+    <property_id>15</property_id>
+    <label>Itemtype</label>
+    <configuration>a:0:{}</configuration>
+  </configurations>
 </items>
