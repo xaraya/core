@@ -1,0 +1,95 @@
+<object name="modules_modules">
+  <objectid>11</objectid>
+  <label>Modules</label>
+  <parent>objects</parent>
+  <moduleid>182</moduleid>
+  <itemtype>4</itemtype>
+  <class>DataObject</class>
+  <filepath></filepath>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>1</isalias>
+  <properties>
+    <property name="id">
+      <id>64</id>
+      <label>ID</label>
+      <type>itemid</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.id</source>
+      <status>65</status>
+      <seq>1</seq>
+      <configuration></configuration>
+    </property>
+    <property name="name">
+      <id>65</id>
+      <label>Name</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.name</source>
+      <status>33</status>
+      <seq>2</seq>
+      <configuration></configuration>
+    </property>
+    <property name="regid">
+      <id>66</id>
+      <label>Regid</label>
+      <type>integerbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.regid</source>
+      <status>33</status>
+      <seq>3</seq>
+      <configuration></configuration>
+    </property>
+    <property name="directory">
+      <id>67</id>
+      <label>Directory</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.directory</source>
+      <status>34</status>
+      <seq>4</seq>
+      <configuration></configuration>
+    </property>
+    <property name="class">
+      <id>68</id>
+      <label>Class</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.class</source>
+      <status>33</status>
+      <seq>5</seq>
+      <configuration></configuration>
+    </property>
+    <property name="category">
+      <id>69</id>
+      <label>Category</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.category</source>
+      <status>33</status>
+      <seq>6</seq>
+      <configuration></configuration>
+    </property>
+    <property name="admin_capable">
+      <id>70</id>
+      <label>Admin Capable</label>
+      <type>checkbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.admin_capable</source>
+      <status>34</status>
+      <seq>7</seq>
+      <configuration></configuration>
+    </property>
+    <property name="user_capable">
+      <id>71</id>
+      <label>User Capable</label>
+      <type>checkbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.user_capable</source>
+      <status>34</status>
+      <seq>8</seq>
+      <configuration></configuration>
+    </property>
+  </properties>
+</object>
