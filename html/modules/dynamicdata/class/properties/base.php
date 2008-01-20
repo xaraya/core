@@ -72,6 +72,11 @@ class DataProperty extends Object implements iDataProperty
 
         $descriptor->refresh($this);
 
+        // load the configuration, if one exists
+        if (!empty($this->configuration)) {
+            $this->parseConfiguration($this->configuration);
+        }
+
         if(!isset($args['value'])) {
             // if the default field looks like <something>(...), we'll assume that this
             // a function call that returns some dynamic default value

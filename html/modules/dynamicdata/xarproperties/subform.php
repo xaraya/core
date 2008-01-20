@@ -35,16 +35,6 @@ class SubFormProperty extends DataProperty
     public $arguments = array('objectname','style','title','link','where','input','display','fieldlist','repeat');
     public $warnings  = '';
 
-    function __construct(ObjectDescriptor $descriptor)
-    {
-        parent::__construct($descriptor);
-
-        // check validation for object, style etc.
-        if (!empty($this->configuration)) {
-            $this->parseConfiguration($this->configuration);
-        }
-    }
-
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? 'dd_'.$this->id : $name;

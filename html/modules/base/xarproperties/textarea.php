@@ -36,11 +36,6 @@ class TextAreaProperty extends DataProperty
         } catch (Exception $e) {}
         if(!empty($args['rows'])) $this->display_rows = $args['rows'];
         if(!empty($args['cols'])) $this->display_columns = $args['cols'];
-
-        // check configuration for allowed rows/cols (or values)
-        if (!empty($this->configuration)) {
-            $this->parseConfiguration($this->configuration);
-        }
     }
 
     function aliases()
