@@ -303,7 +303,7 @@ class DataProperty extends Object implements iDataProperty
 
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
-        if(!isset($data['layout']))   $data['layout']   = $this->layout;
+        if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
 
         if(!isset($data['tabindex'])) $data['tabindex'] = 0;
         if(!isset($data['value']))    $data['value']    = '';
@@ -342,7 +342,7 @@ class DataProperty extends Object implements iDataProperty
         // TODO: does this hurt when it is an array?
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
-        if(!isset($data['layout']))   $data['layout']   = $this->layout;
+        if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
 
         return xarTplProperty($data['tplmodule'], $data['template'], 'showoutput', $data);
     }
