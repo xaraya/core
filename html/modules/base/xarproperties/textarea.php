@@ -20,22 +20,19 @@ class TextAreaProperty extends DataProperty
     public $reqmodules = array('base');
 
     public $display_rows = 2;
-    public $display_columns = 35;
+    public $display_columns = 50;
 
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-
         $this->tplmodule = 'base';
         $this->template = 'textarea';
         $this->filepath   = 'modules/base/xarproperties';
 
-        $args = array();
-        try {
-            $args = unserialize($args);
-        } catch (Exception $e) {}
-        if(!empty($args['rows'])) $this->display_rows = $args['rows'];
-        if(!empty($args['cols'])) $this->display_columns = $args['cols'];
+        // Add in the alias information
+        if (!empty($this->args)) {
+            $this->display_rows = $this->args['rows'];
+        }
     }
 
     function aliases()
@@ -74,117 +71,6 @@ class TextAreaProperty extends DataProperty
 
         return parent::showInput($data);
     }
-
-    // check validation for allowed rows/cols (or values)
-    /*public function parseConfiguration($validation = '')
-    {
-        if (is_string($validation) && strchr($validation,':')) {
-            list($rows,$cols) = explode(':',$validation);
-            if ($rows !== '' && is_numeric($rows)) {
-                $this->display_rows = $rows;
-            }
-            if ($cols !== '' && is_numeric($cols)) {
-                $this->display_columns = $cols;
-            }
-        }
-    }
-    */
-
-    /**
-     * Show the current validation rule in a specific form for this property type
-     *
-     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['validation'] validation rule (default is the current validation)
-     * @param $args['id'] id of the field
-     * @param $args['tabindex'] tab index of the field
-     * @returns string
-     * @return string containing the HTML (or other) text to output in the BL template
-     */
-    /*public function showConfiguration(Array $args = array())
-    {
-        extract($args);
-
-        $data = array();
-        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
-        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
-        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-
-        // get the original values first
-        $data['defaultrows'] = $this->rows;
-        $data['defaultcols'] = $this->cols;
-
-        if (isset($validation)) {
-            $this->configuration = $validation;
-            // check validation for allowed rows/cols (or values)
-            $this->parseConfiguration($validation);
-        }
-        $data['rows'] = ($this->rows != $data['defaultrows']) ? $this->rows : '';
-        $data['cols'] = ($this->cols != $data['defaultcols']) ? $this->cols : '';
-        $data['other'] = '';
-        // if we didn't match the above format
-        if ($data['rows'] === '' &&  $data['cols'] === '') {
-            $data['other'] = xarVarPrepForDisplay($this->configuration);
-        }
-
-        // allow template override by child classes
-        if (empty($template)) {
-            $template = 'textarea';
-        }
-        return xarTplProperty('base', $template, 'validation', $data);
-    }
-    */
-
-    /**
-     * Update the current validation rule in a specific way for each property type
-     *
-     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['validation'] new validation rule
-     * @param $args['id'] id of the field
-     * @returns bool
-     * @return bool true if the validation rule could be processed, false otherwise
-     */
-/*    public function updateConfiguration(Array $args = array())
-     {
-         extract($args);
-
-         // in case we need to process additional input fields based on the name
-        $name = empty($name) ? 'dd_'.$this->id : $name;
-
-         // do something with the validation and save it in $this->configuration
-         if (isset($validation)) {
-             if (is_array($validation)) {
-                 if (isset($validation['rows']) && $validation['rows'] !== '' && is_numeric($validation['rows'])) {
-                     $rows = $validation['rows'];
-                 } else {
-                     $rows = '';
-                 }
-                 if (isset($validation['cols']) && $validation['cols'] !== '' && is_numeric($validation['cols'])) {
-                     $cols = $validation['cols'];
-                 } else {
-                     $cols = '';
-                 }
-                 // we have some rows and/or columns
-                 if ($rows !== '' || $cols !== '') {
-                     $this->configuration = $rows .':'. $cols;
-
-                 // we have some other rule
-                 } elseif (!empty($validation['other'])) {
-                     $this->configuration = $validation['other'];
-
-                 } else {
-                     $this->configuration = '';
-                 }
-             } else {
-                 $this->configuration = $validation;
-             }
-         }
-
-         // tell the calling function that everything is OK
-         return true;
-     }
-     */
-
 }
 
 ?>

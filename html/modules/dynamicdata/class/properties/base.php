@@ -40,7 +40,7 @@ class DataProperty extends Object implements iDataProperty
     public $tplmodule = 'dynamicdata';
     public $configuration = '';
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
-    public $args         = array();
+    public $args         = array(); //args that hold alias info
 
     public $datastore = '';    // name of the data store where this property comes from
 
@@ -68,10 +68,8 @@ class DataProperty extends Object implements iDataProperty
         $this->descriptor = $descriptor;
         $args = $descriptor->getArgs();
         $this->template = $this->getTemplate();
-//        $this->args = serialize(array());
 
         $descriptor->refresh($this);
-
         // load the configuration, if one exists
         if (!empty($this->configuration)) {
             $this->parseConfiguration($this->configuration);
@@ -90,6 +88,12 @@ class DataProperty extends Object implements iDataProperty
                 }
             }
             $this->value = $this->defaultvalue;
+        }
+        // do the minimum for alias info, let the single property do the rest
+        if (!empty($this->args)) {
+            try {
+                $this->args = unserialize($this->args);
+            } catch (Exception $e) {}
         }
     }
 

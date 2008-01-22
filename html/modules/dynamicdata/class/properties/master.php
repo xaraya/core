@@ -205,6 +205,8 @@ class DataPropertyMaster extends Object
 
             $clazz = $propertyClass;
         }
+        // Add the alias information to the class
+        $args['args'] = $propertyInfo['args'];
         // DataProperty or the determined one
         $descriptor = new ObjectDescriptor($args);
         $property = new $clazz($descriptor);
