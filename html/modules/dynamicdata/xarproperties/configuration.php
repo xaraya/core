@@ -18,11 +18,11 @@ sys::import('modules.base.xarproperties.textbox');
 /**
  * Handle the validation property
  */
-class ValidationProperty extends TextBoxProperty
+class ConfigurationProperty extends TextBoxProperty
 {
     public $id         = 998;
-    public $name       = 'validation';
-    public $desc       = 'Validation';
+    public $name       = 'configuration';
+    public $desc       = 'Configuration';
     public $reqmodules = array('dynamicdata');
 
     public $proptype = null;
@@ -53,7 +53,7 @@ class ValidationProperty extends TextBoxProperty
         $property =& DataPropertyMaster::getProperty($data);
         if (empty($property)) return;
 
-        if (!xarVarFetch($data['name'],'isset',$data['validation'],NULL,XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch($data['name'],'isset',$data['configuration'],NULL,XARVAR_NOT_REQUIRED)) return;
 
         if (!$property->updateConfiguration($data)) return false;
         $this->value = $property->configuration;
@@ -94,8 +94,8 @@ class ValidationProperty extends TextBoxProperty
         $data['id']         = $this->id;
         $property =& DataPropertyMaster::getProperty($data);
 
-        // pass the current value as validation rule
-        $data['validation'] = isset($value) ? $value : $this->value;
+        // pass the current value as configuration rule
+        $data['configuration'] = isset($value) ? $value : $this->value;
 
         $isvalid = $property->updateConfiguration($data);
 

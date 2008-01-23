@@ -67,13 +67,6 @@ class ItemTypeProperty extends ComboProperty
             $data['options'] = $this->getOptions();
         }
         return parent::showInput($data);
-/*        if (empty($data['options'])) {
-            $integerbox = DataPropertyMaster::getProperty(array('name' => 'integerbox'));
-            return $integerbox->showInput($data);
-        } else {
-            return parent::showInput($data);
-        }
-        */
     }
 
     /**

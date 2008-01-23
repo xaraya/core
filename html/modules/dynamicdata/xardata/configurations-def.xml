@@ -64,7 +64,7 @@
     <property name="configuration">
       <id>589</id>
       <label>Configuration</label>
-      <type>validation</type>
+      <type>configuration</type>
       <default></default>
       <source>xar_dynamic_configurations.configuration</source>
       <status>34</status>

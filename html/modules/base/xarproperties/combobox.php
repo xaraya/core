@@ -20,6 +20,8 @@ class ComboProperty extends SelectProperty
     public $name       = 'combobox';
     public $desc       = 'Combo Dropdown Box';
 
+    public $display_combo_mode       = 'both';
+
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
