@@ -65,8 +65,8 @@ class ObjectRefProperty extends SelectProperty
 
     public function showConfiguration(Array $data = array())
     {
-        if (!isset($data['validation'])) $data['validation'] = $this->configuration;
-        $this->parseConfiguration($data['validation']);
+        if (!isset($data['configuration'])) $data['configuration'] = $this->configuration;
+        $this->parseConfiguration($data['configuration']);
         if (!isset($data['initialization'])) $data['initialization'] = $this->getConfigProperties('initialization',1);
 
         if (!empty($data['initialization']['initialization_store_prop']['configuration'])) {
