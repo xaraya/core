@@ -4,32 +4,20 @@
 <xar:set name="optionSelected">false</xar:set>
 
 <xar:if condition="count($options) gt 0">
-    <select name="#$name#" id="#$id#" tabindex="#$tabindex#" >
-        <xar:foreach in="$options" value="$option" >
-            <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
-                <xar:if condition="$option['id'] eq $value" >
-                    <option value="#$option['id']#" selected="selected">#$option['name']#</option>
-                    <xar:set name="optionSelected">true</xar:set>
-                <xar:else />
-                    <option value="#$option['id']#">#$option['name']#</option>
-                </xar:if>
-            <xar:elseif condition="$option['id'] eq $value" />
-                <option selected="selected">#$option['name']#</option>
-                <xar:set name="optionSelected">true</xar:set>
-            <xar:else />
-                <option>#$option['name']#</option>
-            </xar:if>
-        </xar:foreach>
-        <xar:if condition="($optionSelected eq false) and !empty($value)">
-            <option value="" selected="selected">Text Specified ==&gt;</option>
-        </xar:if>
-    </select>
+    <xar:if condition="($optionSelected eq false) and !empty($value)">
+        <xar:set name="firstline">'Text Specified ==&gt;'</xar:set>
+        <option value="" selected="selected"></option>
+    <xar:else />
+        <xar:set name="firstline">''</xar:set>
+    </xar:if>
+    <xar:data-input type="dropdown" name="$name" options="$options" value="$value" tabindex="$tabindex" firstline="$firstline" />
 </xar:if>
 
+<xar:set name="name">$name . '_tb'</xar:set>
 <xar:if condition="$optionSelected eq false">
-    <input class="xar-form-textlong" type="text" name="#$name#_tb" id="#$id#_tb" value="#$value#" />
+    <xar:data-input type="textbox" name="$name" value="$value" />
 <xar:else />
-    <input class="xar-form-textlong" type="text" name="#$name#_tb" id="#$id#_tb" />
+    <xar:data-input type="textbox" name="$name" />
 </xar:if>
 
 <xar:if condition="!empty($invalid)">

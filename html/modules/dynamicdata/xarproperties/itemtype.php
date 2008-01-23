@@ -34,19 +34,19 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.dropdown');
+sys::import('modules.base.xarproperties.combobox');
 
 /**
  * Handle the item type property
  */
-class ItemTypeProperty extends SelectProperty
+class ItemTypeProperty extends ComboProperty
 {
     public $id         = 20;
     public $name       = 'itemtype';
     public $desc       = 'Item Type';
     public $reqmodules = array('dynamicdata');
 
-    public $initialization_module   = 'dynamicdata'; // get itemtypes for this module with getitemtypes()
+    public $initialization_module   = ''; // get itemtypes for this module with getitemtypes()
     public $initialization_itemtype = 0;             // get items for this module+itemtype with getitemlinks()
 
     function __construct(ObjectDescriptor $descriptor)
@@ -67,6 +67,13 @@ class ItemTypeProperty extends SelectProperty
             $data['options'] = $this->getOptions();
         }
         return parent::showInput($data);
+/*        if (empty($data['options'])) {
+            $integerbox = DataPropertyMaster::getProperty(array('name' => 'integerbox'));
+            return $integerbox->showInput($data);
+        } else {
+            return parent::showInput($data);
+        }
+        */
     }
 
     /**
