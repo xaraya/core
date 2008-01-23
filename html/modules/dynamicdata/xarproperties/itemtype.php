@@ -39,7 +39,7 @@ sys::import('modules.base.xarproperties.dropdown');
 /**
  * Handle the item type property
  */
-class ItemTypeProperty extends NumberBoxProperty
+class ItemTypeProperty extends SelectProperty
 {
     public $id         = 20;
     public $name       = 'itemtype';

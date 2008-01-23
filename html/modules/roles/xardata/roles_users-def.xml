@@ -45,7 +45,7 @@
       <id>38</id>
       <label>User Name</label>
       <type>username</type>
-      <defaultvalue>2</defaultvalue>
+      <defaultvalue></defaultvalue>
       <source>xar_roles.uname</source>
       <status>33</status>
       <seq>3</seq>
