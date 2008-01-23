@@ -24,9 +24,9 @@ class ModuleProperty extends ObjectRefProperty
 
     public $filter = array();
 
-    public $initialization_refobject    = 'modules_modules';    // ID of the object we want to reference
-    public $initialization_store_prop   = 'systemid';                // Name of the property we want to use for storage
-    public $initialization_display_prop = 'displayname';      // Name of the property we want to use for storage
+    public $initialization_refobject    = 'modules';            // ID of the object we want to reference
+    public $initialization_store_prop   = 'systemid';           // Name of the property we want to use for storage
+    public $initialization_display_prop = 'displayname';        // Name of the property we want to use for storage
 
     function __construct(ObjectDescriptor $descriptor)
     {

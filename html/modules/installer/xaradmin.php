@@ -1167,19 +1167,19 @@ function installer_admin_finish()
 # Create wrapper DD overlay objects for the modules and privileges modules
 #
     $objects = array(
-                   'privileges_baseprivileges',
-                   'privileges_privileges',
-                     );
-
-    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'privileges', 'objects' => $objects))) return;
-
-    $objects = array(
-//                   'modules_modules',
+                   'modules',
 //                   'modules_hooks',
 //                   'modules_modvars',
                      );
 
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'modules', 'objects' => $objects))) return;
+
+    $objects = array(
+                   'privileges_baseprivileges',
+                   'privileges_privileges',
+                     );
+
+    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'privileges', 'objects' => $objects))) return;
 
     $machinetz = date_default_timezone_get();
     xarConfigVars::set(null, 'System.Core.TimeZone', $machinetz);

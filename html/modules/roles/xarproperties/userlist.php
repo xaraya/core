@@ -27,6 +27,13 @@ class UserListProperty extends SelectProperty
     public $orderlist = array();
     public $showglue = '; ';
 
+    public $initialization_user_state = ROLES_STATE_ALL;
+    public $initialization_group_list = '';
+    public $initialization_userlist = '';
+    public $initialization_orderlist = '';
+    public $display_showfields = '';
+    public $display_showglue = '';
+
     /*
     * Options available to user selection
     * ===================================
@@ -51,28 +58,23 @@ class UserListProperty extends SelectProperty
 
         if (count($this->options) == 0) {
             $select_options = array();
-            if ($this->userstate <> -1) {
-                $select_options['state'] = $this->userstate;
-            }
-            if (!empty($this->orderlist)) {
-                $select_options['order'] = implode(',', $this->orderlist);
-            }
-            if (!empty($this->grouplist)) {
-                $select_options['group'] = implode(',', $this->grouplist);
-            }
+            if (($this->initialization_user_state <> ROLES_STATE_ALL)) $select_options['state'] = $this->initialization_user_state;
+            if (!empty($this->initialization_orderlist)) $select_options['order'] = implode(',', $this->initialization_orderlist);
+            if (!empty($this->initialization_group_list)) $select_options['group'] = implode(',', $this->initialization_group_list);
             $users = xarModAPIFunc('roles', 'user', 'getall', $select_options);
 
             // Loop for each user retrived and populate the options array.
-            if (empty($this->showlist)) {
+            if (empty($this->display_showfields)) {
                 // Simple case (default) -
                 foreach ($users as $user) {
                     $this->options[] = array('id' => $user['id'], 'name' => $user['name']);
                 }
             } else {
+                $showfields = explode(',',$this->display_showfields);
                 // Complex case: allow specific fields to be selected.
                 foreach ($users as $user) {
                     $namevalue = array();
-                    foreach ($this->showlist as $showfield) {
+                    foreach ($showfields as $showfield) {
                         $namevalue[] = $user[$showfield];
                     }
                     $this->options[] = array('id' => $user['id'], 'name' => implode($this->showglue, $namevalue));
@@ -107,7 +109,7 @@ class UserListProperty extends SelectProperty
         return false;
     }
 
-    // TODO: format the output according to the 'showlist'.
+    // TODO: format the output according to the 'showfields'.
     // TODO: provide an option to allow admin to decide whether to wrap the user
     // in a link or not.
     public function showOutput(Array $data = array())
@@ -133,7 +135,7 @@ class UserListProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
-    public function parseConfiguration($configuration = '')
+    /*public function parseConfiguration($configuration = '')
     {
         if (preg_match('/^xarModAPIFunc/i',$configuration)) {
             return parent::parseConfiguration($configuration);
@@ -168,7 +170,7 @@ class UserListProperty extends SelectProperty
             }
         }
     }
-
+*/
     /**
      * Show the current validation rule in a specific form for this property type
      *
@@ -179,7 +181,7 @@ class UserListProperty extends SelectProperty
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showConfiguration(Array $args = array())
+    /*public function showConfiguration(Array $args = array())
     {
         extract($args);
 
@@ -211,7 +213,7 @@ class UserListProperty extends SelectProperty
 
         return xarTplProperty($module, $template, 'validation', $data);
     }
-
+*/
     /**
      * Update the current validation rule in a specific way for this property type
      *
@@ -221,7 +223,7 @@ class UserListProperty extends SelectProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    public function updateConfiguration(Array $args = array())
+    /*public function updateConfiguration(Array $args = array())
     {
         extract($args);
 
@@ -270,6 +272,6 @@ class UserListProperty extends SelectProperty
 
         // tell the calling function that everything is OK
         return true;
-    }
+    }*/
 }
 ?>
