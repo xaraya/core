@@ -31,10 +31,6 @@ class CountryListProperty extends SelectProperty
     */
    function getOptions()
    {
-        //allow overriding
-        $options = parent::getOptions();
-        if (!empty($options)) return $options;
-
         $options = array();
         $options[] = array('id' =>'af', 'name'=>xarML('Afghanistan'));
         $options[] = array('id' =>'ax', 'name'=>xarML('&#197;land Islands'));

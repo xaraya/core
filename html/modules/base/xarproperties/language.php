@@ -21,10 +21,6 @@ class LanguageListProperty extends SelectProperty
 
     function getOptions()
     {
-        //allow overriding
-        $options = parent::getOptions();
-        if (!empty($options)) return $options;
-
         $list = xarMLSListSiteLocales();
         asort($list);
 

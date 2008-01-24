@@ -30,9 +30,6 @@ class ImageListProperty extends SelectProperty
         $this->tplmodule = 'base';
         $this->template  = 'imagelist';
 
-//        if (empty($this->basedir) && !empty($this->configuration)) {
-//            $this->parseConfiguration($this->configuration);
-//        }
         // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/Xaraya_Classic/images
         if (!empty($this->basedir) && preg_match('/\{theme\}/',$this->basedir)) {
             $curtheme = xarTplGetThemeDir();

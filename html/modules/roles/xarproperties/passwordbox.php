@@ -85,7 +85,6 @@ class PassBoxProperty extends TextBoxProperty
     {
         //we don't really want to show the password, do we?
         $data['value'] = ' ';
-
         return parent::showOutput($data);
     }
 

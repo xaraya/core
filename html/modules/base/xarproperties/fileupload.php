@@ -58,9 +58,6 @@ class FileUploadProperty extends DataProperty
             }
         }
 
-        // always parse configuration to preset methods here
-        $this->parseConfiguration($this->configuration);
-
         if(xarServerGetVar('PATH_TRANSLATED')) {
             $base_directory = dirname(realpath(xarServerGetVar('PATH_TRANSLATED')));
         } elseif(xarServerGetVar('SCRIPT_FILENAME')) {
@@ -75,9 +72,8 @@ class FileUploadProperty extends DataProperty
             $this->basedir = 'var/uploads';
         }
 
-        if (empty($this->filetype)) {
-            $this->filetype = '';
-        }
+        if (empty($this->filetype)) $this->filetype = '';
+
         // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/Xaraya_Classic/images
         if (!empty($this->basedir) && preg_match('/\{theme\}/',$this->basedir)) {
             $curtheme = xarTplGetThemeDir();

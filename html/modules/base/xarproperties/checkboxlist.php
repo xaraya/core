@@ -86,6 +86,7 @@ class CheckboxListProperty extends SelectProperty
         if (is_array($data['value']) ) $data['value'] = implode(',',$data['value']);
         return parent::showOutput($data);
     }
+
     public function getOptions()
     {
         $options = parent::getOptions();

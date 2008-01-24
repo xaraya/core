@@ -44,9 +44,6 @@ class TextUploadProperty extends DataProperty
         $this->template  = 'textupload';
         $this->filepath   = 'modules/base/xarproperties';
 
-        // always parse configuration to preset methods here
-        $this->parseConfiguration($this->configuration);
-
         // Note : {user} will be replaced by the current user uploading the file - e.g. var/uploads/{user} -&gt; var/uploads/myusername_123
         if (!empty($this->basedir) && preg_match('/\{user\}/',$this->basedir)) {
             $uname = xarUserGetVar('uname');

@@ -46,10 +46,6 @@ class FilePickerProperty extends SelectProperty
 
     function getOptions()
     {
-        //allow overriding
-        $options = parent::getOptions();
-        if (!empty($options)) return $options;
-
         if (empty($this->basedir)) return array();
         $dir = new RelativeDirectoryIterator($this->basedir);
 

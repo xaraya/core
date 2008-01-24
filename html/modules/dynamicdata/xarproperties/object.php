@@ -33,48 +33,6 @@ class ObjectProperty extends ObjectRefProperty
     public $reqmodules = array('dynamicdata');
 
     public $initialization_store_prop   = 'objectid';       // Name of the property we want to use for storage
-
-    function __construct(ObjectDescriptor $descriptor)
-    {
-        parent::__construct($descriptor);
-/*
-        if (!empty($this->configuration)) {
-            foreach(preg_split('/(?<!\\\);/', $this->configuration) as $option) {
-                // Semi-colons can be escaped with a '\' prefix.
-                $option = str_replace('\;', ';', $option);
-                // An option comes in two parts: option-type:option-value
-                if (strchr($option, ':')) {
-                    list($option_type, $option_value) = explode(':', $option, 2);
-                    if ($option_type == 'static' && $option_value == 1) {
-                        $includestatics = true;
-                        $modlist = xarModAPIFunc('modules',
-                                         'admin',
-                                         'GetList');
-                        foreach ($modlist as $modinfo) {
-                            $this->options[] = array('id' => $modinfo['regid'], 'name' => $modinfo['displayname']);
-                        }
-                    }
-                }
-            }
-        }
-//        if (count($this->options) == 0) {
-            $objects =& DataObjectMaster::getObjects();
-            if (!isset($objects)) {
-                $objects = array();
-            }
-            foreach ($objects as $objectid => $object) {
-                if (!empty($includestatics)) {
-                    $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $objectid, 'top' => false));
-                    $name ="";
-                    foreach ($ancestors as $parent) $name .= $parent['name'] . ".";
-                    $this->options[] = array('id' => '182.' . $objectid, 'name' => $name . $object['name']);
-                } else {
-                    $this->options[] = array('id' => $objectid, 'name' => $object['name']);
-                }
-            }
-//        }
-*/
-    }
 }
 
 ?>

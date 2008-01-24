@@ -24,10 +24,6 @@ class StateListProperty extends SelectProperty
 
    function getOptions()
    {
-        //allow overriding
-        $options = parent::getOptions();
-        if (!empty($options)) return $options;
-
         $options = array();
         $options[] = array('id' =>'Alabama', 'name' =>'Alabama');
         $options[] = array('id' =>'Alaska', 'name' =>'Alaska');

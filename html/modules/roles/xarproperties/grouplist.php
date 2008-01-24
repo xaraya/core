@@ -39,11 +39,6 @@ class GroupListProperty extends SelectProperty
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/roles/xarproperties';
-
-        if (count($this->options) == 0) {
-            $this->options = $this->getOptions();
-        }
-
     }
 
     public function getOptions()
@@ -94,14 +89,6 @@ class GroupListProperty extends SelectProperty
         return false;
     }
 
-/*    public function showInput(Array $data = array())
-    {
-        if (!empty($data['configuration']))
-            $this->parseConfiguration($data['configuration']);
-        $this->options = $this->getOptions();
-        return parent::showInput($data);
-    }
-*/
     public function showOutput(Array $data = array())
     {
         extract($data);

@@ -62,15 +62,6 @@ class FloatBoxProperty extends TextBoxProperty
         }
         return true;
     }
-
-    public function showConfiguration(Array $args = array())
-    {
-        extract($args);
-        // allow template override by child classes
-        $template  = empty($template) ? $this->getTemplate() : $template;
-
-        return parent::showConfiguration($args);
-    }
 }
 
 ?>

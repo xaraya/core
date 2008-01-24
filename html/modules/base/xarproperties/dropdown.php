@@ -20,10 +20,7 @@ class SelectProperty extends DataProperty
     public $reqmodules = array('base');
 
     public $options;
-    public $func;
-    public $itemfunc;
-    public $file;
-    public $override = false; // allow values other than those in the options
+    public $itemfunc;   // CHECKME: how is this best implemented?
 
     public $initialization_function         = null;
     public $initialization_file             = null;

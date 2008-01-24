@@ -59,10 +59,10 @@ class ConfigurationProperty extends TextBoxProperty
         $this->value = $property->configuration;
 
         return true;
-        return $this->validateValue($value);
+//        return $this->validateValue($value);
     }
 
-    public function validateValue($value = null)
+/*    public function validateValue($value = null)
     {
         // get the property type we're currently dealing with
         if (!xarVarIsCached('dynamicdata','currentproptype')) {
@@ -109,7 +109,7 @@ class ConfigurationProperty extends TextBoxProperty
         $this->invalid = $property->invalid;
         return false;
     }
-
+*/
     public function showInput(Array $data = array())
     {
         /*
