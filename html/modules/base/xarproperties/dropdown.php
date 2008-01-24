@@ -38,7 +38,7 @@ class SelectProperty extends DataProperty
         $this->tplmodule = 'base';
         $this->filepath   = 'modules/base/xarproperties';
 
-        if (empty($this->options)) $this->options = $this->getOptions();
+//        if (empty($this->options)) $this->options = $this->getOptions();
     }
 
     public function validateValue($value = null)
@@ -62,7 +62,7 @@ class SelectProperty extends DataProperty
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
-        if (!isset($data['options'])) $data['options'] = $this->options;
+        if (!isset($data['options'])) $data['options'] = $this->getOptions();
         if (!isset($data['override'])) $data['override'] = $this->validation_override;
 
         // check if we need to add the current value to the options

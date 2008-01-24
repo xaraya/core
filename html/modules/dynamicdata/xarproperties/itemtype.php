@@ -60,9 +60,6 @@ class ItemTypeProperty extends ComboProperty
         if (!empty($data['module'])) $this->initialization_module = $data['module'];
         if (!empty($data['itemtype'])) $this->initialization_itemtype = $data['itemtype'];
 
-        // Redo the options, since the params might change them
-        $data['options'] = $this->getOptions();
-
         return parent::showInput($data);
     }
 

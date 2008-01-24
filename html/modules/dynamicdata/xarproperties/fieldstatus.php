@@ -52,10 +52,6 @@ class FieldStatusProperty extends SelectProperty
 
         $data['value'] = $valuearray;
 
-        if (!isset($data['options']) || count($data['options']) == 0) {
-            $data['options'] = $this->getOptions();
-        }
-
         if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
         $data['extraparams'] =!empty($extraparams) ? $extraparams : "";
         return parent::showInput($data);
