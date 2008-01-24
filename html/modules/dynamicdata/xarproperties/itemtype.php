@@ -46,8 +46,8 @@ class ItemTypeProperty extends ComboProperty
     public $desc       = 'Item Type';
     public $reqmodules = array('dynamicdata');
 
-    public $initialization_module   = ''; // get itemtypes for this module with getitemtypes()
-    public $initialization_itemtype = 0;             // get items for this module+itemtype with getitemlinks()
+    public $initialization_module   = '';         // get itemtypes for this module with getitemtypes()
+    public $initialization_itemtype = 0;          // get items for this module+itemtype with getitemlinks()
 
     function __construct(ObjectDescriptor $descriptor)
     {
