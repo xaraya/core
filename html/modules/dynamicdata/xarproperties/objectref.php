@@ -49,13 +49,40 @@ class ObjectRefProperty extends SelectProperty
     {
         // The object we need to query is in $this->initialization_refobject, we display the value of
         // the property in $this->display_prop and the id comes from $this->store_prop
-        $object  = DataObjectMaster::getObjectList(array('name' => $this->initialization_refobject));
 
-        // TODO: do we need to check whether the properties are actually in the object?
-        $items =  $object->getItems(array (
-                                    'sort'     => $this->initialization_display_prop,
-                                    'fieldlist'=> array($this->initialization_display_prop,$this->initialization_store_prop))
-                             );
+        if ($this->initialization_refobject == 'objects') {
+            // In this case need to go directly (rather than get a DD object) to avoid recursion
+            $dbconn = xarDB::getConn();
+            $xartable = xarDB::getTables();
+            $q = "SELECT * from " . $xartable['dynamic_objects'];
+            $result = $dbconn->Execute($q);
+            $items = array();
+            while ($result->next()) {
+            list($objectid, $name, $label, $parent, $moduleid, $itemtype, $class,
+                $filepath, $urlparam, $maxid, $config, $isalias) = $result->fields;
+
+            $items[] = array('objectid' => $objectid,
+                             'name'    => $name,
+                             'label'   => $label,
+                             'parent' => $parent,
+                             'moduleid' => $moduleid,
+                             'itemtype' => $itemtype,
+                             'class'   => $class,
+                             'filepath'   => $filepath,
+                             'urlparam'   => $urlparam,
+                             'maxid'   => $maxid,
+                             'config'   => $config,
+                             'isalias'   => $isalias);
+            }
+        } else {
+            $object  = DataObjectMaster::getObjectList(array('name' => $this->initialization_refobject));
+
+            // TODO: do we need to check whether the properties are actually in the object?
+            $items =  $object->getItems(array (
+                                        'sort'     => $this->initialization_display_prop,
+                                        'fieldlist'=> array($this->initialization_display_prop,$this->initialization_store_prop))
+                                 );
+        }
         $options = array();
         foreach($items as $item) {
             $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
