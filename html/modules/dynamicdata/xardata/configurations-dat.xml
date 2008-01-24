@@ -93,7 +93,7 @@
     <description>The object this field refers to</description>
     <property_id>507</property_id>
     <label>Reference Object</label>
-    <configuration>a:6:{s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:23:&quot;initialization_function&quot;;s:0:&quot;&quot;;s:19:&quot;initialization_file&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_collection&quot;;s:0:&quot;&quot;;s:22:&quot;initialization_options&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</configuration>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="13">
     <id>13</id>
@@ -101,7 +101,7 @@
     <description>The object property used in the dropdown display </description>
     <property_id>6</property_id>
     <label>Display Property</label>
-    <configuration>a:6:{s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:23:&quot;initialization_function&quot;;s:73:&quot;xarModAPIFunc('dynamicdata','user','getitemfields',array('name' =&gt; #(1)))&quot;;s:19:&quot;initialization_file&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_collection&quot;;s:0:&quot;&quot;;s:22:&quot;initialization_options&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</configuration>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:73:"xarModAPIFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="14">
     <id>14</id>
@@ -109,7 +109,7 @@
     <description>The object property used for storing the value of this field</description>
     <property_id>6</property_id>
     <label>Storage Prioperty</label>
-    <configuration>a:6:{s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:23:&quot;initialization_function&quot;;s:73:&quot;xarModAPIFunc('dynamicdata','user','getitemfields',array('name' =&gt; #(1)))&quot;;s:19:&quot;initialization_file&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_collection&quot;;s:0:&quot;&quot;;s:22:&quot;initialization_options&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</configuration>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:73:"xarModAPIFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="15">
     <id>15</id>
@@ -173,7 +173,7 @@
     <description>A rule to decide whether to show a link to this field</description>
     <property_id>6</property_id>
     <label>Link Rule</label>
-    <configuration>a:6:{s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:23:&quot;initialization_function&quot;;s:0:&quot;&quot;;s:19:&quot;initialization_file&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_collection&quot;;s:0:&quot;&quot;;s:22:&quot;initialization_options&quot;;s:66:&quot;0,No rule;1,User must not already exist;2,User must already exist;&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</configuration>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:66:"0,No rule;1,User must not already exist;2,User must already exist;";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="23">
     <id>23</id>
@@ -181,7 +181,7 @@
     <description>A rule to use for checking the existence of this field</description>
     <property_id>6</property_id>
     <label>Existence Rule</label>
-    <configuration>a:6:{s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:23:&quot;initialization_function&quot;;s:0:&quot;&quot;;s:19:&quot;initialization_file&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_collection&quot;;s:0:&quot;&quot;;s:22:&quot;initialization_options&quot;;s:66:&quot;0,No rule;1,User must not already exist;2,User must already exist;&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</configuration>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:66:"0,No rule;1,User must not already exist;2,User must already exist;";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="24">
     <id>24</id>
@@ -197,10 +197,7 @@
     <description>The source type where this field gets its input</description>
     <property_id>34</property_id>
     <label>Image Source</label>
-    <configuration>a:6:{s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:23:&quot;initialization_function&quot;;s:0:&quot;&quot;;s:19:&quot;initialization_file&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_collection&quot;;s:0:&quot;&quot;;s:22:&quot;initialization_options&quot;;s:54:&quot;local,local location;
-url,url;
-upload,file upload;
-&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</configuration>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:48:"local,local location;url,url;upload,file upload;";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="26">
     <id>26</id>
@@ -208,7 +205,7 @@ upload,file upload;
     <description>The file extensions allowed for this field</description>
     <property_id>2</property_id>
     <label>File Extensions</label>
-    <configuration>a:7:{s:12:&quot;display_size&quot;;s:2:&quot;50&quot;;s:17:&quot;display_maxlength&quot;;s:3:&quot;254&quot;;s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:21:&quot;validation_min_length&quot;;s:0:&quot;&quot;;s:21:&quot;validation_max_length&quot;;s:0:&quot;&quot;;s:16:&quot;validation_regex&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</configuration>
+    <configuration>a:7:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="27">
     <id>27</id>
@@ -240,7 +237,7 @@ upload,file upload;
     <description>Icon URL</description>
     <property_id>2</property_id>
     <label>Icon URL</label>
-    <configuration>a:7:{s:12:&quot;display_size&quot;;s:2:&quot;50&quot;;s:17:&quot;display_maxlength&quot;;s:3:&quot;254&quot;;s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:21:&quot;validation_min_length&quot;;s:0:&quot;&quot;;s:21:&quot;validation_max_length&quot;;s:0:&quot;&quot;;s:16:&quot;validation_regex&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</configuration>
+    <configuration>a:7:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="31">
     <id>31</id>
@@ -248,7 +245,7 @@ upload,file upload;
     <description>The number of rows this field displays with</description>
     <property_id>15</property_id>
     <label>Rows</label>
-    <configuration>a:9:{s:12:&quot;display_size&quot;;s:2:&quot;10&quot;;s:17:&quot;display_maxlength&quot;;s:2:&quot;30&quot;;s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:20:&quot;validation_min_value&quot;;s:0:&quot;&quot;;s:20:&quot;validation_max_value&quot;;s:0:&quot;&quot;;s:21:&quot;validation_min_length&quot;;s:0:&quot;&quot;;s:21:&quot;validation_max_length&quot;;s:0:&quot;&quot;;s:16:&quot;validation_regex&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</configuration>
+    <configuration>a:9:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:20:"validation_min_value";s:0:"";s:20:"validation_max_value";s:0:"";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="32">
     <id>32</id>
@@ -256,7 +253,7 @@ upload,file upload;
     <description>The number of columns this field displays with</description>
     <property_id>15</property_id>
     <label>Columns</label>
-    <configuration>a:9:{s:12:&quot;display_size&quot;;s:2:&quot;10&quot;;s:17:&quot;display_maxlength&quot;;s:2:&quot;30&quot;;s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:20:&quot;validation_min_value&quot;;s:0:&quot;&quot;;s:20:&quot;validation_max_value&quot;;s:0:&quot;&quot;;s:21:&quot;validation_min_length&quot;;s:0:&quot;&quot;;s:21:&quot;validation_max_length&quot;;s:0:&quot;&quot;;s:16:&quot;validation_regex&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</configuration>
+    <configuration>a:9:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:20:"validation_min_value";s:0:"";s:20:"validation_max_value";s:0:"";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="33">
     <id>33</id>
@@ -288,8 +285,6 @@ upload,file upload;
     <description>This field displays as a dropdown or a textbox or both</description>
     <property_id>34</property_id>
     <label>Combo Mode</label>
-    <configuration>a:6:{s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:23:&quot;initialization_function&quot;;s:0:&quot;&quot;;s:19:&quot;initialization_file&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_collection&quot;;s:0:&quot;&quot;;s:22:&quot;initialization_options&quot;;s:33:&quot;1,Dropdown;
-2,Text Box;
-3,Both;&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</configuration>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:29:"1,Dropdown;2,Text Box;3,Both;";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
 </items>

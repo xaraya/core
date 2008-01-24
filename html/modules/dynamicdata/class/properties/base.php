@@ -320,7 +320,7 @@ class DataProperty extends Object implements iDataProperty
 
         // Add the configuration options if they have not been overridden
         if(isset($data['configuration'])) {
-            $this->parseValidation($data['configuration']);
+            $this->parseConfiguration($data['configuration']);
             unset($data['configuration']);
         }
         foreach ($this->configurationtypes as $configtype) {
@@ -505,7 +505,7 @@ class DataProperty extends Object implements iDataProperty
     public function showConfiguration(Array $data = array())
     {
         if (!isset($data['configuration'])) $data['configuration'] = $this->configuration;
-        $this->parseValidation($data['configuration']);
+        $this->parseConfiguration($data['configuration']);
 
         if (!isset($data['name']))  $data['name'] = 'dd_'.$this->id;
         if (!isset($data['id']))  $data['id'] = 'dd_'.$this->id;

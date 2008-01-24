@@ -66,6 +66,7 @@ sys::import('modules.base.xarproperties.dropdown');
         public function showInput(Array $data = array())
         {
             if (empty($data['mode'])) $data['mode'] = $this->display_combo_mode;
+            echo $this->display_combo_mode;
             return parent::showInput($data);
         }
 

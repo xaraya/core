@@ -62,8 +62,25 @@ class SelectProperty extends DataProperty
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
-        if (!isset($data['options'])) $data['options'] = $this->getOptions();
         if (!isset($data['override'])) $data['override'] = $this->validation_override;
+
+        // If we have options passed, take them. Otherwise generate them
+        if (!isset($data['options'])) {
+
+        // Parse a configuration if one was passed
+            if(isset($data['configuration'])) {
+                $this->parseConfiguration($data['configuration']);
+                unset($data['configuration']);
+            }
+
+        // Allow overriding by specific parameters
+            if (isset($data['function']))   $this->initialization_function = $data['function'];
+            if (isset($data['file']))       $this->initialization_file = $data['file'];
+            if (isset($data['collection'])) $this->initialization_collection = $data['collection'];
+
+        // Finally generate the options
+            $data['options'] = $this->getOptions();
+        }
 
         // check if we need to add the current value to the options
         if (!empty($data['value']) && $this->validation_override) {
