@@ -282,4 +282,14 @@ upload,file upload;
     <label>Itemtype</label>
     <configuration>a:0:{}</configuration>
   </configurations>
+  <configurations itemid="36">
+    <id>36</id>
+    <name>display_combo_mode</name>
+    <description>This field displays as a dropdown or a textbox or both</description>
+    <property_id>34</property_id>
+    <label>Combo Mode</label>
+    <configuration>a:6:{s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:23:&quot;initialization_function&quot;;s:0:&quot;&quot;;s:19:&quot;initialization_file&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_collection&quot;;s:0:&quot;&quot;;s:22:&quot;initialization_options&quot;;s:33:&quot;1,Dropdown;
+2,Text Box;
+3,Both;&quot;;s:25:&quot;initialization_other_rule&quot;;s:0:&quot;&quot;;}</configuration>
+  </configurations>
 </items>

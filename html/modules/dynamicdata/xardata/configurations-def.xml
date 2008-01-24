@@ -1,9 +1,9 @@
 <object name="configurations">
-  <objectid>67</objectid>
+  <objectid>4</objectid>
   <label>Dynamic Configurations</label>
   <parent>objects</parent>
   <moduleid>182</moduleid>
-  <itemtype>31</itemtype>
+  <itemtype>2</itemtype>
   <class>DataObject</class>
   <filepath></filepath>
   <urlparam>itemid</urlparam>
@@ -12,60 +12,60 @@
   <isalias>0</isalias>
   <properties>
     <property name="id">
-      <id>610</id>
+      <id>23</id>
       <label>ID</label>
       <type>itemid</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_dynamic_configurations.id</source>
       <status>33</status>
       <seq>1</seq>
       <configuration></configuration>
     </property>
     <property name="name">
-      <id>611</id>
+      <id>24</id>
       <label>Name</label>
       <type>textbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_dynamic_configurations.name</source>
       <status>33</status>
       <seq>2</seq>
       <configuration></configuration>
     </property>
     <property name="description">
-      <id>612</id>
+      <id>25</id>
       <label>Description</label>
       <type>textbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_dynamic_configurations.description</source>
       <status>34</status>
       <seq>3</seq>
       <configuration></configuration>
     </property>
     <property name="property_id">
-      <id>613</id>
+      <id>26</id>
       <label>Property</label>
       <type>fieldtype</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_dynamic_configurations.property_id</source>
       <status>33</status>
       <seq>4</seq>
-      <configuration>a:7:{s:14:&quot;display_layout&quot;;s:7:&quot;default&quot;;s:24:&quot;initialization_refobject&quot;;s:1:&quot;2&quot;;s:23:&quot;initialization_function&quot;;s:0:&quot;&quot;;s:19:&quot;initialization_file&quot;;s:0:&quot;&quot;;s:25:&quot;initialization_collection&quot;;s:0:&quot;&quot;;s:22:&quot;initialization_options&quot;;s:0:&quot;&quot;;s:20:&quot;initialization_other&quot;;s:0:&quot;&quot;;}</configuration>
+      <configuration>a:7:{s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:1:"2";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:20:"initialization_other";s:0:"";}</configuration>
     </property>
     <property name="label">
-      <id>614</id>
+      <id>27</id>
       <label>Label</label>
       <type>textbox</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_dynamic_configurations.label</source>
       <status>33</status>
       <seq>5</seq>
       <configuration></configuration>
     </property>
     <property name="configuration">
-      <id>589</id>
+      <id>28</id>
       <label>Configuration</label>
       <type>configuration</type>
-      <default></default>
+      <defaultvalue></defaultvalue>
       <source>xar_dynamic_configurations.configuration</source>
       <status>34</status>
       <seq>6</seq>
