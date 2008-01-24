@@ -521,7 +521,7 @@ class DataProperty extends Object implements iDataProperty
         if (!isset($data['validation'])) $data['validation'] = $this->getConfigProperties('validation',1);
         if (!isset($data['initialization'])) $data['initialization'] = $this->getConfigProperties('initialization',1);
 
-        return xarTplProperty($data['module'], $data['template'], 'validation', $data);
+        return xarTplProperty($data['module'], $data['template'], 'configuration', $data);
     }
 
     /**
