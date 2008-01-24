@@ -300,7 +300,7 @@ class TextUploadProperty extends DataProperty
         if (empty($template)) {
             $template = 'textupload';
         }
-        return xarTplProperty('base', $template, 'validation', $data);
+        return xarTplProperty('base', $template, 'configuration', $data);
     }
 
     public function updateConfiguration(Array $args = array())

@@ -173,7 +173,7 @@ class CalendarProperty extends DataProperty
         if (empty($template)) {
             $template = 'calendar';
         }
-        return xarTplProperty('base', $template, 'validation', $data);
+        return xarTplProperty('base', $template, 'configuration', $data);
     }
 
     public function updateConfiguration(Array $args = array())

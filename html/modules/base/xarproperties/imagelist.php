@@ -179,7 +179,7 @@ class ImageListProperty extends SelectProperty
         // allow template override by child classes
         $template  = empty($template) ? $this->getTemplate() : $template;
 
-        return xarTplProperty('base', $template, 'validation', $data);
+        return xarTplProperty('base', $template, 'configuration', $data);
     }
 
     public function updateConfiguration(Array $args = array())
