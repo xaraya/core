@@ -38,11 +38,7 @@ class SelectProperty extends DataProperty
         $this->tplmodule = 'base';
         $this->filepath   = 'modules/base/xarproperties';
 
-        $this->parseConfiguration($this->configuration);
-        if (empty($this->options)) {$this->options = $this->getOptions();}
-        echo $this->name . $this->configuration. "<br />";
-        echo $this->initialization_options. "<br />";
-        var_dump($this->options);echo  "<br /><br />";
+        if (empty($this->options)) $this->options = $this->getOptions();
     }
 
     public function validateValue($value = null)

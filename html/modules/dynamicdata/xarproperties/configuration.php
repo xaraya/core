@@ -16,7 +16,7 @@
 sys::import('modules.base.xarproperties.textbox');
 
 /**
- * Handle the validation property
+ * Handle the configuration property
  */
 class ConfigurationProperty extends TextBoxProperty
 {
