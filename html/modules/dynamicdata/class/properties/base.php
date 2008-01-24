@@ -489,7 +489,7 @@ class DataProperty extends Object implements iDataProperty
      * corresponding methods from its parent class will be used.
      *
      * Note: the methods can be called by DD's showpropval() function, or if you set the
-     *       type of the 'validation' property (21) to ValidationProperty also
+     *       type of the 'configuration' property (21) to ConfigurationProperty also
      *       via DD's modify() and update() functions if you edit some dynamic property.
      */
 
@@ -507,8 +507,6 @@ class DataProperty extends Object implements iDataProperty
         if (!isset($data['configuration'])) $data['configuration'] = $this->configuration;
         $this->parseValidation($data['configuration']);
 
-        // remove this next line once we have changed "validation" to "configuration" everywhere
-        //unset($data['validation']);
         if (!isset($data['name']))  $data['name'] = 'dd_'.$this->id;
         if (!isset($data['id']))  $data['id'] = 'dd_'.$this->id;
         if (!isset($data['tabindex']))  $data['tabindex'] = 0;

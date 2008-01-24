@@ -1,26 +1,39 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<xar:set name="optionSelected">false</xar:set>
-
-<xar:if condition="count($options) gt 0">
-    <xar:if condition="($optionSelected eq false) and !empty($value)">
-        <xar:set name="firstline">'Text Specified ==&gt;'</xar:set>
-        <option value="" selected="selected"></option>
-    <xar:else />
-        <xar:set name="firstline">''</xar:set>
+    <xar:if condition="isset($onchange)">
+      <xar:set name="evt_change">$onchange</xar:set>
+    <xar:else/>
+      <xar:set name="evt_change">'return true;'</xar:set>
     </xar:if>
-    <xar:data-input type="dropdown" name="$name" options="$options" value="$value" tabindex="$tabindex" firstline="$firstline" />
-</xar:if>
 
-<xar:set name="name">$name . '_tb'</xar:set>
-<xar:if condition="$optionSelected eq false">
-    <xar:data-input type="textbox" name="$name" value="$value" />
-<xar:else />
-    <xar:data-input type="textbox" name="$name" />
-</xar:if>
+    <xar:if condition="!isset($style)">
+        <xar:set name="style">''</xar:set>
+    </xar:if>
+    
+    <xar:set name="optionSelected">false</xar:set>
 
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <xar:if condition="($mode eq 1) OR ($mode eq 3)">
+        <xar:if condition="count($options) gt 0">
+            <xar:if condition="($optionSelected eq false) AND !empty($value) AND ($mode eq 3)">
+                <xar:set name="firstline">'Text Specified ==&gt;'</xar:set>
+                <xar:data-input type="dropdown" name="$name" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
+            <xar:else />
+                <xar:data-input type="dropdown" name="$name" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" />
+            </xar:if>
+        </xar:if>
+    </xar:if>
+
+    <xar:if condition="($mode eq 2) OR ($mode eq 3)">
+        <xar:set name="name">$name . '_tb'</xar:set>
+        <xar:if condition="$optionSelected eq false">
+            <xar:data-input type="textbox" name="$name" value="$value" />
+        <xar:else />
+            <xar:data-input type="textbox" name="$name" />
+        </xar:if>
+
+        <xar:if condition="!empty($invalid)">
+            <span class="xar-error">#$invalid#</span>
+        </xar:if>
+    </xar:if>
 </xar:template>

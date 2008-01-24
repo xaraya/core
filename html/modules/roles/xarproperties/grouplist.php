@@ -94,14 +94,14 @@ class GroupListProperty extends SelectProperty
         return false;
     }
 
-    public function showInput(Array $data = array())
+/*    public function showInput(Array $data = array())
     {
         if (!empty($data['configuration']))
             $this->parseConfiguration($data['configuration']);
         $this->options = $this->getOptions();
         return parent::showInput($data);
     }
-
+*/
     public function showOutput(Array $data = array())
     {
         extract($data);

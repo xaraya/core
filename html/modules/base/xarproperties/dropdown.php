@@ -38,13 +38,11 @@ class SelectProperty extends DataProperty
         $this->tplmodule = 'base';
         $this->filepath   = 'modules/base/xarproperties';
 
-        if (!isset($this->options)) {
-            $this->options = array();
-        }
-        // options may be set in one of the child classes
-        if (count($this->options) == 0 && !empty($this->configuration)) {
-            $this->parseConfiguration($this->configuration);
-        }
+        $this->parseConfiguration($this->configuration);
+        if (empty($this->options)) {$this->options = $this->getOptions();}
+        echo $this->name . $this->configuration. "<br />";
+        echo $this->initialization_options. "<br />";
+        var_dump($this->options);echo  "<br /><br />";
     }
 
     public function validateValue($value = null)
@@ -68,14 +66,8 @@ class SelectProperty extends DataProperty
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
-//        if (isset($data['override'])) $this->validation_override = $data['override'];
-
-        if (!isset($data['options']) || count($data['options']) == 0) {
-            if (isset($data['configuration'])) {
-                $this->parseConfiguration($data['configuration']);
-            }
-            $data['options'] = $this->getOptions();
-        }
+        if (!isset($data['options'])) $data['options'] = $this->options;
+        if (!isset($data['override'])) $data['override'] = $this->validation_override;
 
         // check if we need to add the current value to the options
         if (!empty($data['value']) && $this->validation_override) {

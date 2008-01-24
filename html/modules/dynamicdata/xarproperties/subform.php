@@ -409,7 +409,7 @@ class SubFormProperty extends DataProperty
     {
         extract($data);
 
-        if (!empty($validation)) $this->parseConfiguration($validation);
+        if (!empty($configuration)) $this->parseConfiguration($configuration);
 
         if (!isset($value)) $value = $this->value;
         if (!isset($name)) $name = 'dd_'.$this->id;
@@ -665,12 +665,12 @@ class SubFormProperty extends DataProperty
         return $myobject;
     }
 
-    public function parseConfiguration($validation = '')
+    public function parseConfiguration($configuration = '')
     {
-        if (is_array($validation)) {
-            $fields = $validation;
+        if (is_array($configuration)) {
+            $fields = $configuration;
         } else {
-            $fields = unserialize($validation);
+            $fields = unserialize($configuration);
         }
         if (!empty($fields) && is_array($fields)) {
             foreach ($this->arguments as $item) {
@@ -689,10 +689,10 @@ class SubFormProperty extends DataProperty
     }
 
     /**
-     * Show the current validation rule in a specific form for this property type
+     * Show the current configuration rule in a specific form for this property type
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['validation'] validation rule (default is the current validation)
+     * @param $args['configuration'] configuration rule (default is the current configuration)
      * @param $args['id'] id of the field
      * @param $args['tabindex'] tab index of the field
      * @param $args['repetitions'] number of repetitions of this subform to be displayed on forms
@@ -708,9 +708,9 @@ class SubFormProperty extends DataProperty
         $data['size']       = !empty($size) ? $size : 50;
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        if (isset($validation)) {
-            $this->configuration = $validation;
-            $this->parseConfiguration($validation);
+        if (isset($configuration)) {
+            $this->configuration = $configuration;
+            $this->parseConfiguration($configuration);
         }
         foreach ($this->arguments as $item) {
             $data[$item] = $this->$item;
@@ -735,16 +735,16 @@ class SubFormProperty extends DataProperty
         $module    = empty($module)   ? $this->getModule()   : $module;
         $template  = empty($template) ? $this->getTemplate() : $template;
 
-        return xarTplProperty($module, $template, 'validation', $data);
+        return xarTplProperty($module, $template, 'configuration', $data);
     }
 
     /**
-     * Update the current validation rule in a specific way for this property type
+     * Update the current configuration rule in a specific way for this property type
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['validation'] validation rule (default is the current validation)
+     * @param $args['configuration'] configuration rule (default is the current configuration)
      * @param $args['id'] id of the field
-     * @return bool true if the validation rule could be processed, false otherwise
+     * @return bool true if the configuration rule could be processed, false otherwise
      */
     public function updateConfiguration(Array $args = array())
     {
@@ -753,26 +753,26 @@ class SubFormProperty extends DataProperty
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
 
-        // do something with the validation and save it in $this->configuration
-        if (isset($validation)) {
-            if (is_array($validation)) {
+        // do something with the configuration and save it in $this->configuration
+        if (isset($configuration)) {
+            if (is_array($configuration)) {
                 $data = array();
                 foreach ($this->arguments as $item) {
-                    if (isset($validation[$item])) {
+                    if (isset($configuration[$item])) {
                         // FIXME: needs to be a better way to convert between objectname and objectid
                         if ($item == 'objectname') {
-                            $info = DataObjectMaster::getObjectInfo(array('objectid' => $validation[$item]));
-                            $validation[$item] = $info['name'];
+                            $info = DataObjectMaster::getObjectInfo(array('objectid' => $configuration[$item]));
+                            $configuration[$item] = $info['name'];
                         }
-                        $data[$item] = $validation[$item];
-                    } elseif ($item == 'input' && isset($validation[$item])) {
-                        $data[$item] = $validation[$item];
+                        $data[$item] = $configuration[$item];
+                    } elseif ($item == 'input' && isset($configuration[$item])) {
+                        $data[$item] = $configuration[$item];
                     }
                 }
                 $this->configuration = serialize($data);
 
             } else {
-                $this->configuration = $validation;
+                $this->configuration = $configuration;
             }
         }
 
