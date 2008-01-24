@@ -72,7 +72,7 @@ class ImageListProperty extends SelectProperty
         if (!isset($data['value'])) {
             $data['value'] = $this->value;
         }
-        if (!isset($data['options']) || count($data['options']) == 0) {
+/*        if (!isset($data['options']) || count($data['options']) == 0) {
             $data['options'] = $this->getOptions();
         }
         if (count($data['options']) == 0 && !empty($this->basedir)) {
@@ -90,7 +90,7 @@ class ImageListProperty extends SelectProperty
             }
             unset($files);
         }
-
+*/
         $data['basedir'] = $this->basedir;
         $data['baseurl'] = isset($this->baseurl) ? $this->baseurl : $this->basedir;
 
@@ -123,6 +123,27 @@ class ImageListProperty extends SelectProperty
         $data['filetype'] = $filetype;
         $data['srcpath']  = $srcpath;
         return parent::showOutput($data);
+    }
+
+    public function getOptions()
+    {
+        $options = parent::getOptions();
+        if (count($options) == 0 && !empty($this->basedir)) {
+            $files = xarModAPIFunc('dynamicdata','admin','browse',
+                                   array('basedir' => $this->basedir,
+                                         'filetype' => $this->filetype));
+            if (!isset($files)) {
+               $files = array();
+            }
+            natsort($files);
+            array_unshift($files,'');
+            foreach ($files as $file) {
+                $options[] = array('id' => $file,
+                                   'name' => $file);
+            }
+            unset($files);
+        }
+        return $options;
     }
 
     public function parseConfiguration($validation = '')

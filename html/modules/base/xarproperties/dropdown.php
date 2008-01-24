@@ -37,8 +37,6 @@ class SelectProperty extends DataProperty
         $this->template  = 'dropdown';
         $this->tplmodule = 'base';
         $this->filepath   = 'modules/base/xarproperties';
-
-//        if (empty($this->options)) $this->options = $this->getOptions();
     }
 
     public function validateValue($value = null)

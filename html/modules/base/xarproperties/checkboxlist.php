@@ -60,6 +60,7 @@ class CheckboxListProperty extends SelectProperty
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
+        else $this->value = $data['value'];
 
         if (empty($data['value'])) {
             $data['value'] = array();
@@ -67,7 +68,7 @@ class CheckboxListProperty extends SelectProperty
             $data['value'] = explode(',', $data['value']);
         }
 
-        if (!isset($data['options']) || count($data['options']) == 0) {
+/*        if (!isset($data['options']) || count($data['options']) == 0) {
             $options = $this->getOptions();
         } else {
             $options = $data['options'];
@@ -76,7 +77,7 @@ class CheckboxListProperty extends SelectProperty
             $option['checked'] = in_array($option['id'],$data['value']);
             $data['options'][$key] = $option;
         }
-        return parent::showInput($data);
+*/        return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
@@ -84,6 +85,15 @@ class CheckboxListProperty extends SelectProperty
         if (!isset($data['value'])) $data['value'] = $this->value;
         if (is_array($data['value']) ) $data['value'] = implode(',',$data['value']);
         return parent::showOutput($data);
+    }
+    public function getOptions()
+    {
+        $options = parent::getOptions();
+        foreach ($options as $key => $option) {
+            $option['checked'] = in_array($option['id'],$this->value);
+            $options[$key] = $option;
+        }
+        return $options;
     }
 }
 
