@@ -112,7 +112,7 @@ class ConfigurationProperty extends TextBoxProperty
 */
     public function showInput(Array $data = array())
     {
-        /*
+        /* CHECKME: do wew need this? Doesn't seem so.
         // get the property type we're currently dealing with
         if (!xarVarIsCached('dynamicdata','currentproptype')) {
             // tell the caller that we don't have a property type

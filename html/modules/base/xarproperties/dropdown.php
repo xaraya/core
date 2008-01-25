@@ -62,7 +62,6 @@ class SelectProperty extends DataProperty
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
-        if (!isset($data['override'])) $data['override'] = $this->validation_override;
 
         // If we have options passed, take them. Otherwise generate them
         if (!isset($data['options'])) {
