@@ -69,7 +69,7 @@
       <source>xar_roles.pass</source>
       <status>33</status>
       <seq>6</seq>
-      <configuration>a:8:{s:12:"display_size";s:2:"25";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:1:"4";s:21:"validation_max_length";s:2:"30";s:16:"validation_regex";s:0:"";s:31:"initialization_password_confirm";s:1:"1";s:25:"initialization_other_rule";s:0:"";}</configuration>
+      <configuration>a:8:{s:12:"display_size";s:2:"25";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:1:"4";s:21:"validation_max_length";s:2:"30";s:27:"validation_password_confirm";s:1:"1";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
     <property name="regdate">
       <id>41</id>
