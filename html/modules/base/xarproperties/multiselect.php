@@ -20,6 +20,7 @@ class MultiSelectProperty extends SelectProperty
     public $desc       = 'Multiselect';
 
     public $validation_single = true;
+    public $validation_single_invalid; // CHECKME: is this a validation or something else?
 
     function __construct(ObjectDescriptor $descriptor)
     {

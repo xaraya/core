@@ -41,7 +41,7 @@
   </configurations>
   <configurations itemid="6">
     <id>6</id>
-    <name>initialization_password_confirm</name>
+    <name>validation_password_confirm</name>
     <description>Show a second password field to be filled in</description>
     <property_id>14</property_id>
     <label>Confirm Password</label>

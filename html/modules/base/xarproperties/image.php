@@ -24,6 +24,7 @@ class ImageProperty extends TextBoxProperty
     public $initialization_image_source  = 'url';
     public $initialization_basedirectory  = 'var/uploads';
     public $validation_file_extensions  = 'gif,jpg,jpeg,png,bmp';
+    public $validation_file_extensions_invalid;    // TODO: not yet implemented
 
     // this is used by DataPropertyMaster::addProperty() to set the $object->upload flag
     public $upload = false;

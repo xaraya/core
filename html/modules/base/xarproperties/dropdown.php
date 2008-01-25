@@ -27,6 +27,7 @@ class SelectProperty extends DataProperty
     public $initialization_collection       = null;
     public $initialization_options          = null;
     public $validation_override             = false;
+    public $validation_override_invalid;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -49,7 +50,11 @@ class SelectProperty extends DataProperty
         if ($this->validation_override) {
             return true;
         }
-        $this->invalid = xarML('unallowed selection: #(1)', $this->name);
+        if (!empty($this->validation_override_invalid)) {
+            $this->invalid = xarML($this->validation_override_invalid);
+        } else {
+            $this->invalid = xarML('unallowed selection: #(1)', $this->name);
+        }
         $this->value = null;
         return false;
     }

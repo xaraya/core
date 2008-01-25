@@ -27,7 +27,8 @@ class PassBoxProperty extends TextBoxProperty
     public $display_size                    = 25;
     public $validation_min_length           = 4;
     public $validation_max_length           = 30;
-    public $initialization_password_confirm = 0;
+    public $validation_password_confirm = 0;
+    public $validation_password_confirm_invalid;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -55,11 +56,15 @@ class PassBoxProperty extends TextBoxProperty
     {
         if (!isset($value)) $value = "";
 
-        if ($this->initialization_password_confirm) {
+        if ($this->validation_password_confirm) {
             if (is_array($value) && $value[0] == $value[1]) {
                 $value = $value[0];
             } else {
-                $this->invalid = xarML('Passwords did not match');
+                if (!empty($this->validation_password_confirm_invalid)) {
+                    $this->invalid = xarML($this->validation_password_confirm_invalid);
+                } else {
+                    $this->invalid = xarML('Passwords did not match');
+                }
                 $this->value = null;
                 return false;
             }

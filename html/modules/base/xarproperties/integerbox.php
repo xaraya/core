@@ -20,7 +20,9 @@ class NumberBoxProperty extends TextBoxProperty
     public $desc       = 'Number Box';
 
     public $validation_min_value           = null;
+    public $validation_min_value_invalid;
     public $validation_max_value           = null;
+    public $validation_max_value_invalid;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -49,11 +51,19 @@ class NumberBoxProperty extends TextBoxProperty
                 $this->value = null;
                 return false;
             } elseif (isset($this->min) && $this->validation_min_value > $value) {
-                $this->invalid = xarML('integer : must be #(1) or more',$this->validation_min_value);
+                if (!empty($this->validation_min_value_invalid)) {
+                    $this->invalid = xarML($this->validation_min_value_invalid);
+                } else {
+                    $this->invalid = xarML('integer : must be #(1) or more',$this->validation_min_value);
+                }
                 $this->value = null;
                 return false;
             } elseif (isset($this->validation_max_value) && $this->validation_max_value < $value) {
-                $this->invalid = xarML('integer : must be #(1) or less',$this->validation_max_value);
+                if (!empty($this->validation_max_value_invalid)) {
+                    $this->invalid = xarML($this->validation_max_value_invalid);
+                } else {
+                    $this->invalid = xarML('integer : must be #(1) or less',$this->validation_max_value);
+                }
                 $this->value = null;
                 return false;
             }
