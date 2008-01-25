@@ -125,16 +125,13 @@ class ItemTypeProperty extends ComboProperty
              if ($check) return true;
              return null;
         }
-        if (count($this->options) > 0) {
-            foreach ($this->options as $option) {
-                if ($option['id'] == $this->value) {
-                    if ($check) return true;
-                    return $option['name'];
-                }
-            }
-            if ($check) return false;
+        // we don't want to check empty values for items
+        if (empty($this->value)) {
+             if ($check) return true;
+             return $this->value;
         }
-        if (empty($this->module)) {
+
+        if (empty($this->initialization_module)) {
             if ($check) return true;
             return $this->value;
         }
@@ -151,21 +148,16 @@ class ItemTypeProperty extends ComboProperty
             return $this->value;
         }
 
-        // we don't want to check empty values for items
-        if (empty($this->value)) {
-             if ($check) return true;
-             return $this->value;
-        }
-
         // we're interested in one of the items for module+itemtype
-        $itemlinks = xarModAPIFunc($this->module,'user','getitemlinks',
-                                   // don't throw an exception if this function doesn't exist
-                                   array('itemtype' => $this->itemtype,
-                                         'itemids' => array($this->value)), 0);
-        if (!empty($itemlinks) && !empty($itemlinks[$this->value])) {
-            if ($check) return true;
-            return $itemlinks[$this->value]['label'];
-        }
+        try {
+            $itemlinks = xarModAPIFunc($this->module,'user','getitemlinks',
+                                       array('itemtype' => $this->itemtype,
+                                             'itemids' => array($this->value)));
+            if (!empty($itemlinks) && !empty($itemlinks[$this->value])) {
+                if ($check) return true;
+                return $itemlinks[$this->value]['label'];
+            }
+        } catch (Exception $e) {}
         if ($check) return false;
         return $this->value;
     }

@@ -32,9 +32,8 @@ class ICQProperty extends URLIconProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (!empty($value)) {
             if (is_numeric($value)) {
                 $this->value = $value;

@@ -68,9 +68,8 @@ class GroupListProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (!empty($value)) {
             // check if this is a valid group id
             $group = xarModAPIFunc('roles','user','get',

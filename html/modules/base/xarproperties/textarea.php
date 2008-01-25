@@ -54,9 +54,8 @@ class TextAreaProperty extends DataProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         // TODO: allowable HTML ?
         $this->value = $value;
         return true;

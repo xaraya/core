@@ -28,9 +28,8 @@ class CalendarProperty extends DataProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         // default time is unspecified
         if (empty($value)) {
               $this->value = -1;

@@ -39,7 +39,7 @@ class SelectProperty extends DataProperty
 
     public function validateValue($value = null)
     {
-        if (isset($value)) $this->value = $value;
+        if (!parent::validateValue($value)) return false;
 
         // check if this option really exists
         $isvalid = $this->getOption(true);
@@ -189,6 +189,14 @@ class SelectProperty extends DataProperty
 
     /**
      * Retrieve or check an individual option on demand
+     *
+     * @param  $check boolean
+     * @return if check == false:
+     *                - display value, if found, of an option whose store value is $this->value
+     *                - $this->value, if not found
+     * @return if check == true:
+     *                - true, if an option exists whose store value is $this->value
+     *                - false, if no such option exists
      */
     function getOption($check = false)
     {
@@ -196,32 +204,35 @@ class SelectProperty extends DataProperty
              if ($check) return true;
              return null;
         }
-        if (empty($this->itemfunc)) {
-            // we're interested in one of the known options (= default behaviour)
-            $options = $this->getOptions();
-            foreach ($options as $option) {
-                if ($option['id'] == $this->value) {
-                    if ($check) return true;
-                    return $option['name'];
-                }
-            }
-            if ($check) return false;
-            return $this->value;
-        }
         // most API functions throw exceptions for empty ids, so we skip those here
         if (empty($this->value)) {
              if ($check) return true;
              return $this->value;
         }
-        // use $value as argument for your API function : array('whatever' => $value, ...)
-        $value = $this->value;
-        eval('$result = ' . $this->itemfunc .';');
-        if (isset($result)) {
-            if ($check) return true;
-            return $result;
+        // we're interested in one of the known options (= default behaviour)
+        $options = $this->getOptions();
+        foreach ($options as $option) {
+            if ($option['id'] == $this->value) {
+                if ($check) return true;
+                return $option['name'];
+            }
         }
         if ($check) return false;
         return $this->value;
+
+        /* I don't see how this works, so I've moved it aside here for now (random)
+        if (!empty($this->itemfunc)) {
+            // use $value as argument for your API function : array('whatever' => $value, ...)
+            $value = $this->value;
+            eval('$result = ' . $this->itemfunc .';');
+            if (isset($result)) {
+                if ($check) return true;
+                return $result;
+            }
+        }
+        if ($check) return false;
+        return $this->value;
+        */
     }
 }
 

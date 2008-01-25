@@ -44,9 +44,8 @@ class NumberListProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (!isset($value) || $value === '') {
             if (isset($this->min)) {
                 $this->value = $this->min;

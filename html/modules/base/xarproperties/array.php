@@ -38,9 +38,8 @@ class ArrayProperty extends DataProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (empty($value)) {
             $value = array('');
         } elseif (!is_array($value)) {

@@ -71,9 +71,8 @@ class TextUploadProperty extends DataProperty
     {
         // the variable corresponding to the file upload field is no longer set in PHP 4.2.1+
         // but we're using a textarea field to keep track of any previously uploaded file here
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (isset($this->fieldname)) {
             $name = $this->fieldname;
         } else {

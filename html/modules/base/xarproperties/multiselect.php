@@ -32,7 +32,6 @@ class MultiSelectProperty extends SelectProperty
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
-        if (!isset($value)) $value = $this->value;
 
         $value = $this->getSerializedValue($value);
         $validlist = array();

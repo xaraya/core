@@ -49,6 +49,8 @@ class SubFormProperty extends DataProperty
 
     public function validateValue($value = null)
     {
+        if (!parent::validateValue($value)) return false;
+
         if (empty($this->objectid)) {
             // nothing to do here
             return true;

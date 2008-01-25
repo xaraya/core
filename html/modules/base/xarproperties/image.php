@@ -44,7 +44,8 @@ class ImageProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) $value = $this->value;
+        if (!parent::validateValue($value)) return false;
+
         if ($this->initialization_image_source == 'url') {
             $prop = DataPropertyMaster::getProperty(array('type' => 'url'));
             $prop->validateValue($value);

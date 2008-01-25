@@ -29,9 +29,7 @@ class CheckboxMaskProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
 
         if(is_array($value)) {
             $this->value = maskImplode($value);

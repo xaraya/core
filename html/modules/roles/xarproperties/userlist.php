@@ -86,9 +86,8 @@ class UserListProperty extends SelectProperty
     // TODO: validate the selected user against the specified group(s).
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (!empty($value)) {
             // check if this is a valid user id
             try {

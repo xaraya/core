@@ -45,12 +45,14 @@ class ExtendedDateProperty extends CalendarProperty
      */
     public function validateValue($value = null)
     {
+        /* CHECKME: need to translate this to the new format
         if (empty($this->configuration)) {
             $this->configuration = 'datetime';
         }
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        */
+
+        if (!parent::validateValue($value)) return false;
+
         if (empty($value)) {
             $this->value = $value;
             return true;

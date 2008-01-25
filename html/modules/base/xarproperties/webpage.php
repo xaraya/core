@@ -43,9 +43,8 @@ class HTMLPageProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         $basedir = $this->basedir;
         $filetype = $this->filetype;
         if (!empty($value) &&

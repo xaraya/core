@@ -54,12 +54,9 @@ sys::import('modules.base.xarproperties.dropdown');
 
         public function validateValue($value = null)
         {
-            if (!isset($value))
-            {
-                $value = $this->value;
-            }
-            $this->value = $value;
+            if (!parent::validateValue($value)) return false;
 
+            $this->value = $value;
             return true;
         }
 
