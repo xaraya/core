@@ -64,14 +64,14 @@
                 <label for="block_groups" title="#xarML('Initial block group to place this block into (optional)')#" class="xar-form-label">
                     <xar:mlstring>Block Group (optional):</xar:mlstring>
                 </label>
-                <select name="block_groups[][gid]" id="block_groups">
+                <select name="block_groups[][id]" id="block_groups">
                     <option value="">
                         --
                         <xar:mlstring>no group</xar:mlstring>
                         --
                     </option>
                     <xar:loop name="$block_groups">
-                        <option value="#$loop:item['gid']#">
+                        <option value="#$loop:item['id']#">
                             #xarVarPrepForDisplay($loop:item['name'])#
                         </option>
                     </xar:loop>

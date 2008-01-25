@@ -319,7 +319,7 @@ class DataProperty extends Object implements iDataProperty
         $data['id']   = $this->id;
         $data['name'] = $this->name;
 
-        if(!isset($data['value'])) $data['value'] = $this->value;
+        if(!isset($data['value'])) $data['value'] = $this->getValue();
         // TODO: does this hurt when it is an array?
         if(!isset($data['module']))   $data['module']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
@@ -371,7 +371,7 @@ class DataProperty extends Object implements iDataProperty
     {
         $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
         $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
-        $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
+        $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->getValue());
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         if(!isset($data['module']))   $data['module']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;

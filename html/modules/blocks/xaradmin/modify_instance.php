@@ -83,10 +83,10 @@ function blocks_admin_modify_instance()
     // In the modify form, we want to provide an array of checkboxes: one for each group.
     // Also a field for the overriding template name for each group instance.
     foreach ($block_groups as $key => $block_group) {
-        $gid = $block_group['gid'];
-        if (isset($instance['groups'][$gid])) {
+        $id = $block_group['id'];
+        if (isset($instance['groups'][$id])) {
             $block_groups[$key]['selected'] = true;
-            $block_groups[$key]['template'] = $instance['groups'][$gid]['group_inst_template'];
+            $block_groups[$key]['template'] = $instance['groups'][$id]['group_inst_template'];
         } else {
             $block_groups[$key]['selected'] = false;
             $block_groups[$key]['template'] = '';

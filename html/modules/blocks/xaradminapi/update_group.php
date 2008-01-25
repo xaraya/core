@@ -14,7 +14,7 @@
  *
  * @author Jim McDonald, Paul Rosania
  * @param $args['id'] the ID of the group to update (deprec)
- * @param $args['gid'] the ID of the group to update
+ * @param $args['id'] the ID of the group to update
  * @param $args['name'] the new name of the group
  * @param $args['template'] the new default template of the group
  * @param $args['instance_order'] the new instance sequence (array of bid)
@@ -28,12 +28,12 @@ function blocks_adminapi_update_group($args)
 
     if (!empty($id)) {
         // Legacy.
-        $gid = $id;
+        $id = $id;
     }
 
     // Security.
     // FIXME: this doesn't seem right - it is a block group, not a block instance here.
-    if (!xarSecurityCheck('EditBlock', 1, 'Block', "$name::$gid")) {return;}
+    if (!xarSecurityCheck('EditBlock', 1, 'Block', "$name::$id")) {return;}
 
     if (!is_numeric($id)) {return;}
 
@@ -46,7 +46,7 @@ function blocks_adminapi_update_group($args)
     $query = "UPDATE $block_groups_table
               SET name = ?, template = ?
               WHERE id = ?";
-    $dbconn->Execute($query, array($name, $template, $gid));
+    $dbconn->Execute($query, array($name, $template, $id));
 
     if (!empty($instance_order)) {
         $position = 1;
@@ -57,7 +57,7 @@ function blocks_adminapi_update_group($args)
                             group_id = ? AND
                             position <> ?";
             if (is_numeric($instance_id)) {
-                $dbconn->Execute($query, array($position, $instance_id, $gid, $position));
+                $dbconn->Execute($query, array($position, $instance_id, $id, $position));
             }
 
             $position += 1;
@@ -65,7 +65,7 @@ function blocks_adminapi_update_group($args)
 
         // Do a resequence tidy-up, in case the instance list passed in was not complete.
         // Limit the reorder to just this group to avoid updating more than is necessary.
-        xarModAPIfunc('blocks', 'admin', 'resequence', array('gid' => $gid));
+        xarModAPIfunc('blocks', 'admin', 'resequence', array('id' => $id));
     }
 
     return true;
