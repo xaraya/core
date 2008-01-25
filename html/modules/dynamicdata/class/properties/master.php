@@ -204,6 +204,8 @@ class DataPropertyMaster extends Object
             sys::import($dp);
 
             $clazz = $propertyClass;
+        } else {
+            throw new BadParameterException($args['type'], 'The dataproperty #(1) does not exist');
         }
         // Add the alias information to the class
         $args['args'] = $propertyInfo['args'];

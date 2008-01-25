@@ -169,15 +169,15 @@
   </configurations>
   <configurations itemid="22">
     <id>22</id>
-    <name>initialization_linkrule</name>
+    <name>display_linkrule</name>
     <description>A rule to decide whether to show a link to this field</description>
     <property_id>6</property_id>
-    <label>Link Rule</label>
+    <label>Display Link</label>
     <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:66:"0,No rule;1,User must not already exist;2,User must already exist;";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="23">
     <id>23</id>
-    <name>initialization_existrule</name>
+    <name>validation_existrule</name>
     <description>A rule to use for checking the existence of this field</description>
     <property_id>6</property_id>
     <label>Existence Rule</label>

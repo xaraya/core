@@ -472,6 +472,10 @@ class DataProperty extends Object implements iDataProperty
                     if (isset($fields[$name])) {
                         $this->$name = $fields[$name];
                     }
+                    $msgname = $name . '_invalid';
+                    if (isset($fields[$msgname])) {
+                        $this->$msgname = $fields[$msgname];
+                    }
                 }
             }
         }
@@ -521,6 +525,12 @@ class DataProperty extends Object implements iDataProperty
         if (!isset($data['validation'])) $data['validation'] = $this->getConfigProperties('validation',1);
         if (!isset($data['initialization'])) $data['initialization'] = $this->getConfigProperties('initialization',1);
 
+        // Collect the invalid messages for the validations
+        foreach ($data['validation'] as $validationitem) {
+            $msgname = $validationitem['name'] . '_invalid';
+            if (isset($this->$msgname)) $data['validation'][$msgname] = $this->$msgname;
+            else $data['validation'][$msgname] = '';
+        }
         return xarTplProperty($data['module'], $data['template'], 'configuration', $data);
     }
 
@@ -547,6 +557,11 @@ class DataProperty extends Object implements iDataProperty
                 foreach ($properties as $name => $configarg) {
                     if (isset($configuration[$name])) {
                         $storableconfiguration[$name] = $configuration[$name];
+                    }
+                    // Invalid messages only get stored if they are non-empty. For all others we check whether they exist (for now)
+                    $msgname = $name . '_invalid';
+                    if (isset($configuration[$msgname]) && !empty($configuration[$msgname])) {
+                        $storableconfiguration[$msgname] = $configuration[$msgname];
                     }
                 }
             }
