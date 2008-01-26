@@ -75,6 +75,5 @@ class NumberBoxProperty extends TextBoxProperty
         }
         return true;
     }
-    */
 }
 ?>

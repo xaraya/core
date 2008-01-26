@@ -542,34 +542,6 @@ class DataProperty extends Object implements iDataProperty
 
         return xarTplProperty($data['module'], $data['template'], 'validation', $data);
     }
-*/
-    public function showValidation(Array $data = array())
-    {
-        if (!isset($data['validation'])) $data['validation'] = $this->validation;
-        $this->parseValidation($data['validation']);
-
-        // remove this next line once we have changed "validation" to "configuration" everywhere
-        unset($data['validation']);
-        if (!isset($data['name']))  $data['name'] = 'dd_'.$this->id;
-        if (!isset($data['id']))  $data['id'] = 'dd_'.$this->id;
-        if (!isset($data['tabindex']))  $data['tabindex'] = 0;
-        if (!isset($this->invalid))  $data['invalid'] = xarML('Invalid #(1)', $this->invalid);
-        else $data['invalid'] = '';
-        if (isset($data['required']) && $data['required']) $data['required'] = true;
-        else $data['required'] = false;
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
-        if(!isset($data['template'])) $data['template'] = $this->template;
-        if (!isset($data['display'])) $data['display'] = $this->getConfigProperties('display',1);
-        if (!isset($data['validation'])) $data['validation'] = $this->getConfigProperties('validation',1);
-        if (!isset($data['initialization'])) $data['initialization'] = $this->getConfigProperties('initialization',1);
-        // Collect the invalid messages for the validations
-        foreach ($data['validation'] as $validationitem) {
-            $msgname = $validationitem['name'] . '_invalid';
-            if (isset($this->$msgname)) $data['validation'][$msgname] = $this->$msgname;
-            else $data['validation'][$msgname] = '';
-        }
-        return xarTplProperty($data['module'], $data['template'], 'configuration', $data);
-    }
 
     /**
      * Update the current configuration rule in a specific way for this property
