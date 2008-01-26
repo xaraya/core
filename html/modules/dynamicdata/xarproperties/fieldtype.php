@@ -13,35 +13,40 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.dropdown');
+sys::import('modules.dynamicdata.xarproperties.objectref');
 
 /**
  * Handle field type property
  */
-class FieldTypeProperty extends SelectProperty
+class FieldTypeProperty extends ObjectRefProperty
 {
     public $id         = 22;
     public $name       = 'fieldtype';
     public $desc       = 'Field Type';
-    public $reqmodules = array('dynamicdata');
 
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
-
-        if (count($this->options) == 0) {
-            $proptypes = DataPropertyMaster::getPropertyTypes();
-            if (!isset($proptypes)) $proptypes = array();
-
-            foreach ($proptypes as $propid => $proptype) {
-                // TODO: label isnt guaranteed to be unique, if not, leads to some surprises.
-                $this->options[$proptype['label']] = array('id' => $propid, 'name' => $proptype['label']);
-            }
-        }
-        // sort em by name
-        ksort($this->options);
+//        $this->initialization_refobject    = 'properties';
+        $this->initialization_store_prop   = 'id';
+        $this->initialization_display_prop = 'label';
     }
+    function getOptions()
+    {
+        $proptypes = DataPropertyMaster::getPropertyTypes();
+        if (!isset($proptypes)) $proptypes = array();
+
+        $options = array();
+        foreach ($proptypes as $propid => $proptype) {
+            // TODO: label isnt guaranteed to be unique, if not, leads to some surprises.
+            $options[$proptype[$this->initialization_display_prop]] = array('id' => $proptype[$this->initialization_store_prop], 'name' => $proptype[$this->initialization_display_prop]);
+        }
+        // sort by name
+        ksort($options);
+        return $options;
+    }
+
     public function checkInput($name = '', $value = null)
     {
        return parent::checkInput('dd_'.$this->id);

@@ -28,15 +28,15 @@ class ObjectRefProperty extends SelectProperty
 {
     public $id         = 507;
     public $name       = 'objectref';
-    public $desc       = 'Select value from other object';
+    public $desc       = 'Object Dropdown';
     public $reqmodules = array('dynamicdata');
 
     // We explicitly use names here instead of id's, so we are independent of
-    // how dd assigns them at a given time. Otherwise the validation is not
+    // how dd assigns them at a given time. Otherwise the configuration is not
     // exportable to other sites.
-    public $refobject    = 'objects';    // Name of the object we want to reference
-    public $store_prop   = 'objectid';   // Name of the property we want to use for storage
-    public $display_prop = 'name';       // Name of the property we want to use for displaying.
+    public $initialization_refobject    = 'objects';    // ID of the object we want to reference
+    public $initialization_store_prop   = 'name';       // Name of the property we want to use for storage
+    public $initialization_display_prop = 'name';       // Name of the property we want to use for displaying.
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -47,131 +47,67 @@ class ObjectRefProperty extends SelectProperty
     // Return a list of array(id => value) for the possible options
     function getOptions()
     {
-        // The object we need to query is in $this->refobject, we display the value of
+        // The object we need to query is in $this->initialization_refobject, we display the value of
         // the property in $this->display_prop and the id comes from $this->store_prop
-        $objInfo  = DataObjectMaster::getObjectInfo(array('name' => $this->refobject));
 
-        // TODO: do we need to check whether the properties are actually in the object?
-        $items =  xarModApiFunc('dynamicdata', 'user', 'getitems', array (
-                                    'modid'    => $objInfo['moduleid'],
-                                    'itemtype' => $objInfo['itemtype'],
-                                    'sort'     => $this->display_prop,
-                                    'fieldlist'=> $this->display_prop . ',' . $this->store_prop)
-                             );
+        if ($this->initialization_refobject == 'objects') {
+            // In this case need to go directly (rather than get a DD object) to avoid recursion
+            $dbconn = xarDB::getConn();
+            $xartable = xarDB::getTables();
+            $q = "SELECT * from " . $xartable['dynamic_objects'];
+            $result = $dbconn->Execute($q);
+            $items = array();
+            while ($result->next()) {
+            list($objectid, $name, $label, $parent, $moduleid, $itemtype, $class,
+                $filepath, $urlparam, $maxid, $config, $isalias) = $result->fields;
+
+            $items[] = array('objectid' => $objectid,
+                             'name'    => $name,
+                             'label'   => $label,
+                             'parent' => $parent,
+                             'moduleid' => $moduleid,
+                             'itemtype' => $itemtype,
+                             'class'   => $class,
+                             'filepath'   => $filepath,
+                             'urlparam'   => $urlparam,
+                             'maxid'   => $maxid,
+                             'config'   => $config,
+                             'isalias'   => $isalias);
+            }
+        } else {
+            $object  = DataObjectMaster::getObjectList(array('name' => $this->initialization_refobject));
+
+            // TODO: do we need to check whether the properties are actually in the object?
+            $items =  $object->getItems(array (
+                                        'sort'     => $this->initialization_display_prop,
+                                        'fieldlist'=> array($this->initialization_display_prop,$this->initialization_store_prop))
+                                 );
+        }
         $options = array();
         foreach($items as $item) {
-            $options[] = array('id' => $item[$this->store_prop], 'name' => $item[$this->display_prop]);
+            $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
         }
-        //$this->options = $options;
         return $options;
     }
 
-
-    // Produce option(id,value) and value to pass to template
-    // We cant trust the parent right now because that is using xarTplModule and not xarTplProperty
-    public function showOutput(Array $data = array())
+    public function showConfiguration(Array $data = array())
     {
-        if (isset($data['value'])) $this->value = $data['value'];
+        if (!isset($data['configuration'])) $data['configuration'] = $this->configuration;
+        $this->parseConfiguration($data['configuration']);
+        if (!isset($data['initialization'])) $data['initialization'] = $this->getConfigProperties('initialization',1);
 
-        $data['value'] = $this->value;
-        // get the option corresponding to this value
-        $result = $this->getOption();
-        // only apply xarVarPrepForDisplay on strings, not arrays et al.
-        if (!empty($result) && is_string($result)) $result = xarVarPrepForDisplay($result);
-        $data['option'] = array('id' => $this->value, 'name' => $result);
-        return parent::showOutput($data);
+        if (!empty($data['initialization']['initialization_store_prop']['configuration'])) {
+            $temp = unserialize($data['initialization']['initialization_store_prop']['configuration']);
+            $temp = str_replace  ('#(1)', "'" . $this->initialization_refobject  . "'", $temp);
+            $data['initialization']['initialization_store_prop']['configuration'] = serialize($temp);
+        }
+        if (!empty($data['initialization']['initialization_display_prop']['configuration'])) {
+            $temp = unserialize($data['initialization']['initialization_display_prop']['configuration']);
+            $temp = str_replace  ('#(1)', "'" . $this->initialization_refobject  . "'", $temp);
+            $data['initialization']['initialization_display_prop']['configuration'] = serialize($temp);
+        }
+        return parent::showConfiguration($data);
     }
 
-    // Show the validation output.
-    public function showValidation(Array $args = array())
-    {
-        $data = array(); $template = null;  $data['properties'] = array();
-        extract($args);
-
-        // If we have a value, store an parse it, so our values are current
-        if (isset($validation)) {
-            $this->validation = $validation;
-            $this->parseValidation($validation);
-        }
-
-        // Determine the objectid, so we can produce the combobox automatically.
-        $object = DataObjectMaster::getObjectInfo(array('name' => $this->refobject));
-        $data['objectid'] = $object['objectid'];
-        $data['name']     = !empty($name) ? $name : 'dd_'.$this->id;
-
-        // Get the properties which belong to this object to display in the second dropdown
-        $props = DataPropertyMaster::getProperties(array('objectid' => $object['objectid']));
-        $data['properties'] = $props;
-
-        if(isset($props[$this->display_prop])) {
-            $data['display_propid'] = $props[$this->display_prop]['id'];
-        } else {
-            // Just take the first
-            $first = array_shift($props);
-            $data['display_propid'] = $first['id'];
-            array_unshift($props, $first);
-        }
-
-        if(isset($props[$this->store_prop])) {
-            $data['store_propid'] = $props[$this->store_prop]['id'];
-        } else {
-            // Just take the first
-            $first = array_shift($props);
-            $data['store_propid'] = $first['id'];
-        }
-        return xarTplProperty('dynamicdata','objectref','validation',$data, $template);
-    }
-
-    // Parse the validation string and set the appropriate values to the variables of this class
-    public function parseValidation($validation = '')
-    {
-        // Validation is supposed to be objectname:display_propname:store_propname
-        // See class variables on top for description
-        $sep = ':';
-        if(is_string($validation) && strchr($validation,$sep)) {
-            list($objectname,$display_prop,$store_prop) = explode($sep,$validation);
-            if($objectname != '' && is_string($objectname)) $this->refobject = $objectname;
-            if($display_prop != '' && is_string($display_prop)) $this->display_prop = $display_prop;
-            if($store_prop != '' && is_string($store_prop)) $this->store_prop = $store_prop;
-        }
-    }
-
-    // Get the modified values and update the validation
-    public function updateValidation(Array $args = array())
-    {
-        $sep = ':';
-        extract($args['validation']);
-
-        if(isset($objectid))  {
-            $object = DataObjectMaster::getObjectInfo(array('objectid' => $objectid));
-            $this->refobject = $object['name'];
-
-            // This gets a name index array of the props
-            $props =  DataPropertyMaster::getProperties(array('objectid' => $objectid));
-            // Traverse them in reverse order, so we end up with the first if object and proplist dont match up
-            $props = array_reverse($props,true);
-
-            if(isset($display_propid)) {
-                foreach($props as $propinfo) {
-                    $data['display_propid'] = $propinfo['id'];
-                    $this->display_prop = $propinfo['name'];
-                    if($propinfo['id'] == $display_propid) {
-                        break;
-                    }
-                }
-            }
-            if(isset($store_propid)) {
-                foreach($props as $propinfo) {
-                    $data['store_propid'] = $propinfo['id'];
-                    $this->store_prop = $propinfo['name'];
-                    if($propinfo['id'] == $store_propid) {
-                        break;
-                    }
-                }
-            }
-        }
-        $this->validation = $this->refobject.$sep.$this->display_prop.$sep.$this->store_prop;
-        return true;
-    }
 }
 ?>

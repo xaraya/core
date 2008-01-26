@@ -110,7 +110,7 @@ function dynamicdata_utilapi_getstatic($args)
             //            $datatype = $colInfo->getNativeType();
             $size = $colInfo->getSize();
 
-            // TODO: improve this based on property type validations
+            // TODO: improve this based on property type configurations
             $validation = $datatype;
             $validation .= empty($size) ? '' : ' (' . $size . ')';
 

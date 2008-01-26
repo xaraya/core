@@ -58,7 +58,7 @@ class Dynamic_Function_DataStore extends BasicDataStore
                                              'objectid' => $itemid));
                 // see if we got something interesting in return
                 if (isset($value)) {
-                    $this->fields[$function]->setValue($value);
+		            $this->fields[$function]->value = $value;
                 }
             } else {
             // TODO: don't we want auto-loading for xarModFunc too ???
@@ -76,7 +76,7 @@ class Dynamic_Function_DataStore extends BasicDataStore
                                           'objectid' => $itemid));
                 // see if we got something interesting in return
                 if (isset($value)) {
-                    $this->fields[$function]->setValue($value);
+		            $this->fields[$function]->value = $value;
                 }
             }
         }
