@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:set name="editvalidation">xarML('Edit validation for property "#(1)"',$field['name'])</xar:set>
+<xar:set name="editconfiguration">xarML('Edit configuration for property "#(1)"',$field['name'])</xar:set>
 <xar:set name="otherfields">xarML('Edit property "#(1)"',$field['name'])</xar:set>
 <fieldset>
     <legend>
@@ -23,6 +23,9 @@
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">#$labels.name#</label>
             #$field.name#
+            <a href="&xar-modurl-dynamicdata-admin-modify;&amp;objectid=2&amp;itemid=#$field.id#">
+                <xar:var name="otherfields" prep="true"/>
+            </a>
         </div>
 
         <div class="xar-form-input-wrapper">
@@ -37,12 +40,6 @@
                 #$labels['source']#:
             </label>
             #$field['source']#
-        </div>
-
-        <div class="xar-form-input-wrapper-after">
-            <a href="&xar-modurl-dynamicdata-admin-modify;&amp;objectid=2&amp;itemid=#$field.id#">
-                <xar:var name="otherfields" prep="true"/>
-            </a>
         </div>
       
         <div class="xar-form-input-wrapper">
@@ -60,12 +57,12 @@
         </div>
         
         <div class="xar-form-input-wrapper">
-            <label for="dd_validation_#$field.id#" class="xar-form-label">
-                #$labels['validation']#:
+            <label for="dd_configuration_#$field.id#" class="xar-form-label">
+                #$labels['configuration']#:
             </label>
-            <input type="text" name="dd_validation[#$field['id']#]" id="dd_validation_#$field['id']#" value="#xarVarPrepForDisplay($field['validation'])#" class="xar-form-textmedium" />
-            <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$field.id#" title="#xarVarPrepForDisplay($editvalidation)#">
-                <xar:mlstring>Edit Validation</xar:mlstring>
+            <input type="text" name="dd_configuration[#$field['id']#]" id="dd_configuration_#$field['id']#" value="#xarVarPrepForDisplay($field['configuration'])#" class="xar-form-textmedium" />
+            <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$field.id#" title="#xarVarPrepForDisplay($editconfiguration)#">
+                <xar:mlstring>Edit Configuration</xar:mlstring>
             </a>
         </div>
         

@@ -1,76 +1,17 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:set name="compare">
-    xarServerGetCurrentURL()
-</xar:set>
-<xar:set name="account">
-    &xar-modurl-roles-user-account;
-</xar:set>
-<xar:set name="id">
-    xarUserGetVar('id')
-</xar:set>
-<xar:style scope="module" module="base" file="navtabs" />
-<div class="xar-mod-head">
-    <span class="xar-mod-title">
-        <xar:mlstring>
-            Account Information
-        </xar:mlstring>
-    </span>
-</div>
-<div class="xar-mod-body">
-    <h2>
-        #xarVarPrepForDisplay($name)#
-    </h2>
-    <xar:if condition="!empty($message)">
-        #$message#
-        <xar:else />
-        <div>
-            <dl class="xar-tabs">
-                <dt class="help">
-                    <xar:mlstring>
-                        Your Profile
-                    </xar:mlstring>
-                    :
-                </dt>
-                <xar:if condition="($compare eq $current) or ($compare eq $account)">
-                    <dd class="active">
-                        <a href="#xarServerGetCurrentURL()#">
-                            <xar:mlstring>
-                                Display your profile
-                            </xar:mlstring>
-                        </a>
-                    </dd>
-                    <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-roles-user-account;">
-                            <xar:mlstring>
-                                Display your profile
-                            </xar:mlstring>
-                        </a>
-                    </dd>
-                </xar:if>
-                <xar:if condition="!empty($output)">
-                    <xar:foreach in="$output" key="$module" value="$hookoutput">
-                        #$hookoutput#
-                    </xar:foreach>
-                </xar:if>
-                <xar:if condition="!empty($logoutmodule)">
-                    <dd>
-                        <a href="#xarModURL($logoutmodule,'user','logout')#">
-                            <xar:mlstring>
-                                Logout
-                            </xar:mlstring>
-                        </a>
-                    </dd>
-                </xar:if>
-            </dl>
-        </div>
-    </xar:if>
-</div>
+    <xar:set name="compare">
+        xarServerGetCurrentURL()
+    </xar:set>
+    <xar:set name="account">
+        &xar-modurl-roles-user-account;
+    </xar:set>
 
-<xar:if condition="$compare eq $account">
-    <xar:module main="false" module="roles" type="user" func="display" />
-<xar:else />
+    <xar:template file="user-menu" />
+
+    <xar:if condition="$compare eq $account">
+        <xar:module main="false" module="roles" type="user" func="display" />
+    <xar:else />
     <xar:module main="false" module="#$moduleload#" type="user" func="usermenu" phase="form" />
-</xar:if>
+    </xar:if>
 </xar:template>

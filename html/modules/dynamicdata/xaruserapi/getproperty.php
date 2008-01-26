@@ -18,7 +18,7 @@
  * @param $args['label'] label for the property (optional)
  * @param $args['defaultvalue'] default for the property (optional)
  * @param $args['source'] data source for the property (optional)
- * @param $args['validation'] validation for the property (optional)
+ * @param $args['configuration'] configuration for the property (optional)
  * @returns object
  * @return a particular DataProperty
  */

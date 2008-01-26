@@ -32,9 +32,8 @@ class TimeZoneProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (empty($value)) {
             // no timezone selected
             $this->value = $value;

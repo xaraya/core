@@ -37,12 +37,9 @@ class PrivilegesTreeProperty extends DataProperty
         if (!isset($data['show'])) $data['show'] = 'assigned';
         $trees = array();
         foreach ($this->privs->gettoplevelprivileges($data['show']) as $entry) {
-           $node = new TreeNode($entry['id']);
-            $tree = new PrivilegesTree($node);
-            $trees[] = $node->depthfirstenumeration();
-//            var_dump($tree);echo "<br/><br/>";
-//            var_dump($node);echo "<br/><br/>";
-//            var_dump($node->depthfirstenumeration());echo "<br/><br/>";
+			$node = new TreeNode($entry['id']);
+			$tree = new PrivilegesTree($node);
+			$trees[] = $node->depthfirstenumeration();
         }
         $data['trees'] = $trees;
         return parent::showInput($data);
@@ -54,7 +51,7 @@ class PrivilegesTree extends Tree
 {
     function createnodes(TreeNode $node)
     {
-        //FIXME this is too unwieldy and largely duplicating a similar query inxarPrivileges
+        //FIXME this is too unwieldy and largely duplicating a similar query in xarPrivileges
         $dbconn = xarDB::getConn();
         $xartable = xarDB::getTables();
         $query = "SELECT p.id, p.name, r.name,
@@ -82,22 +79,6 @@ class PrivilegesTree extends Tree
                                'parent' => $parentid,);
             $this->treedata[] = $nodedata;
         }
-
-/*        $data = xarPrivileges::getprivileges();
-         foreach ($data as $row) {
-            $nodedata = array(
-                'id' => $row['id'],
-                'parent' => $row['parentid'],
-                'name' => $row['name'],
-                'realm' => $row['realm'],
-                'module' => $row['module'],
-                'component' => $row['component'],
-                'instance' => $row['instance'],
-                'level' => $row['level'],
-                'description' => $row['description'],
-            );
-            $this->treedata[] = $nodedata;
-        }*/
         parent::createnodes($node);
     }
 }

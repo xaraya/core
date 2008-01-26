@@ -127,7 +127,7 @@ function dynamicdata_admin_modifyprop()
                             'defaultvalue' => xarML('Default'),
                             'source' => xarML('Data Source'),
                             'status' => xarML('Status'),
-                            'validation' => xarML('Validation'),
+                            'configuration' => xarML('Configuration'),
                             'new' => xarML('New'),
                       );
 

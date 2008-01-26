@@ -33,9 +33,8 @@ class AfferoProperty extends URLIconProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (!empty($value)) {
             if (is_string($value)) {
                 $this->value = $value;
