@@ -24,6 +24,7 @@ class ImageProperty extends TextBoxProperty
     public $initialization_image_source  = 'url';
     public $initialization_basedirectory  = 'var/uploads';
     public $validation_file_extensions  = 'gif,jpg,jpeg,png,bmp';
+    public $validation_file_extensions_invalid;    // TODO: not yet implemented
 
     // this is used by DataPropertyMaster::addProperty() to set the $object->upload flag
     public $upload = false;
@@ -32,7 +33,7 @@ class ImageProperty extends TextBoxProperty
     {
         parent::__construct($descriptor);
         $this->template  = 'image';
-        $this->parseValidation($this->validation);
+
         // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/Xaraya_Classic/images
         if (!empty($this->initialization_basedirectory) && preg_match('/\{theme\}/',$this->initialization_basedirectory)) {
             $curtheme = xarTplGetThemeDir();
@@ -43,7 +44,8 @@ class ImageProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) $value = $this->value;
+        if (!parent::validateValue($value)) return false;
+
         if ($this->initialization_image_source == 'url') {
             $prop = DataPropertyMaster::getProperty(array('type' => 'url'));
             $prop->validateValue($value);

@@ -29,9 +29,7 @@ class CheckboxMaskProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
 
         if(is_array($value)) {
             $this->value = maskImplode($value);
@@ -44,11 +42,10 @@ class CheckboxMaskProperty extends SelectProperty
 
     public function showInput(Array $data = array())
     {
-        if (!isset($data['value'])) {
-            $data['value'] = $this->value;
-        }
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        else $this->value = $data['value'];
 
-        if (!is_array($data['value']) && is_string($data['value'])) {
+/*        if (!is_array($data['value']) && is_string($data['value'])) {
             $data['value'] = maskExplode($data['value']);
         }
 
@@ -60,7 +57,7 @@ class CheckboxMaskProperty extends SelectProperty
                 $data['options'][$key] = $option;
             }
         }
-
+*/
         return parent::showInput($data);
     }
 
@@ -87,6 +84,16 @@ class CheckboxMaskProperty extends SelectProperty
         $data['numOptionsSelected'] = $numOptionsSelected;
 
         return parent::showOutput($data);
+    }
+
+    public function getOptions()
+    {
+        $options = parent::getOptions();
+        foreach ($options as $key => $option) {
+            $option['checked'] = in_array($option['id'],$this->value);
+            $options[$key] = $option;
+        }
+        return $options;
     }
 
 }

@@ -39,11 +39,6 @@ class GroupListProperty extends SelectProperty
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/roles/xarproperties';
-
-        if (count($this->options) == 0) {
-            $this->options = $this->getOptions();
-        }
-
     }
 
     public function getOptions()
@@ -73,9 +68,8 @@ class GroupListProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (!empty($value)) {
             // check if this is a valid group id
             $group = xarModAPIFunc('roles','user','get',
@@ -92,14 +86,6 @@ class GroupListProperty extends SelectProperty
         $this->invalid = xarML('selection: #(1)', $this->name);
         $this->value = null;
         return false;
-    }
-
-    public function showInput(Array $data = array())
-    {
-        if (!empty($data['validation']))
-            $this->parseValidation($data['validation']);
-        $this->options = $this->getOptions();
-        return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())

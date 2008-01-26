@@ -21,7 +21,7 @@ class FieldStatusProperty extends SelectProperty
     public $desc       = 'Field Status';
     public $reqmodules = array('dynamicdata');
 
-    // CHANGEME: make this a validation?
+    // CHANGEME: make this a configuration?
     public $initialization_display_status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     public $initialization_input_status   = DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
 
@@ -52,10 +52,6 @@ class FieldStatusProperty extends SelectProperty
 
         $data['value'] = $valuearray;
 
-        if (!isset($data['options']) || count($data['options']) == 0) {
-            $data['options'] = $this->getOptions();
-        }
-
         if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
         $data['extraparams'] =!empty($extraparams) ? $extraparams : "";
         return parent::showInput($data);
@@ -70,7 +66,7 @@ class FieldStatusProperty extends SelectProperty
             $inputname = 'input_'.$name;
             $displayname = 'display_'.$name;
         }
-        // store the fieldname for validations who need them (e.g. file uploads)
+        // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
             if(!xarVarFetch($displayname, 'isset', $display_status, NULL, XARVAR_DONT_SET)) {return;}
@@ -82,9 +78,8 @@ class FieldStatusProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (empty($value)) {
             $value = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE + DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
         }

@@ -20,7 +20,9 @@ class NumberBoxProperty extends TextBoxProperty
     public $desc       = 'Number Box';
 
     public $validation_min_value           = null;
+    public $validation_min_value_invalid;
     public $validation_max_value           = null;
+    public $validation_max_value_invalid;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -32,9 +34,8 @@ class NumberBoxProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (!isset($value) || $value === '') {
             if (isset($this->validation_min_value)) {
                 $this->value = $this->validation_min_value;
@@ -50,11 +51,19 @@ class NumberBoxProperty extends TextBoxProperty
                 $this->value = null;
                 return false;
             } elseif (isset($this->min) && $this->validation_min_value > $value) {
-                $this->invalid = xarML('integer : must be #(1) or more',$this->validation_min_value);
+                if (!empty($this->validation_min_value_invalid)) {
+                    $this->invalid = xarML($this->validation_min_value_invalid);
+                } else {
+                    $this->invalid = xarML('integer : must be #(1) or more',$this->validation_min_value);
+                }
                 $this->value = null;
                 return false;
             } elseif (isset($this->validation_max_value) && $this->validation_max_value < $value) {
-                $this->invalid = xarML('integer : must be #(1) or less',$this->validation_max_value);
+                if (!empty($this->validation_max_value_invalid)) {
+                    $this->invalid = xarML($this->validation_max_value_invalid);
+                } else {
+                    $this->invalid = xarML('integer : must be #(1) or less',$this->validation_max_value);
+                }
                 $this->value = null;
                 return false;
             }
@@ -65,19 +74,6 @@ class NumberBoxProperty extends TextBoxProperty
             return false;
         }
         return true;
-    }
-
-/*    // Trick: use the parent method with a different template :-)
-    public function showValidation(Array $args = array())
-    {
-        // allow template override by child classes
-        if (!isset($args['template'])) {
-            // can't use this yet, need to decide on a name
-            //$args['template'] = $this->getTemplate();
-            $args['template'] = 'numberbox';
-        }
-
-        return parent::showValidation($args);
     }
     */
 }

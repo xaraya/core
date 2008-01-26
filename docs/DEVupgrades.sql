@@ -551,5 +551,11 @@ ALTER TABLE `xar_dynamic_objects`
   CHANGE COLUMN `object_config` `config` text,
   CHANGE COLUMN `object_isalias` `isalias` tinyint(4) NOT NULL default '1';
 
+ALTER TABLE `xar_dynamic_properties`
+  CHANGE COLUMN `validation` `configuration` text;
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_objects.object_", "xar_dynamic_objects.");
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.prop_", "xar_dynamic_properties.");
+
+ALTER TABLE `xar_dynamic_properties_def`
+  CHANGE COLUMN `validation` `configuration` varchar(254) default NULL,
+  

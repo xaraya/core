@@ -30,17 +30,16 @@ class ArrayProperty extends DataProperty
         $this->template = 'array';
         $this->filepath   = 'modules/base/xarproperties';
 
-        // check validation for list of fields (optional)
-        if (!empty($this->validation) && strchr($this->validation,';')) {
-            $this->fields = explode(';',$this->validation);
+        // check configuration for list of fields (optional)
+        if (!empty($this->configuration) && strchr($this->configuration,';')) {
+            $this->fields = explode(';',$this->configuration);
         }
     }
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (empty($value)) {
             $value = array('');
         } elseif (!is_array($value)) {

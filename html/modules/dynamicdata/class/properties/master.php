@@ -51,7 +51,7 @@ class DataPropertyMaster extends Object
         $bindvars = array();
         $query = "SELECT name, label, type,
                          id, defaultvalue, source,
-                         status, seq, validation,
+                         status, seq, configuration,
                          objectid FROM $dynamicprop ";
         if(empty($args['objectid']))
         {
@@ -75,7 +75,7 @@ class DataPropertyMaster extends Object
         while ($result->next()) {
             list(
                 $name, $label, $type, $id, $defaultvalue, $source, $fieldstatus,
-                $seq, $validation, $_objectid
+                $seq, $configuration, $_objectid
                 ) = $result->fields;
 //            if (xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id")) {
                 $property = array(
@@ -86,8 +86,8 @@ class DataPropertyMaster extends Object
                     'defaultvalue'  => $defaultvalue,
                     'source'        => $source,
                     'status'        => $fieldstatus,
-                    'seq'         => $seq,
-                    'validation'    => $validation,
+                    'seq'           => $seq,
+                    'configuration' => $configuration,
                     // some internal variables
                     '_objectid'     => $_objectid,
                     'anonymous'     => $anonymous,
@@ -206,7 +206,11 @@ class DataPropertyMaster extends Object
             sys::import($dp);
 
             $clazz = $propertyClass;
+        } else {
+            throw new BadParameterException($args['type'], 'The dataproperty #(1) does not exist');
         }
+        // Add the alias information to the class
+        $args['args'] = $propertyInfo['args'];
         // DataProperty or the determined one
         $descriptor = new ObjectDescriptor($args);
         $property = new $clazz($descriptor);

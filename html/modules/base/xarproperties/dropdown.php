@@ -20,16 +20,14 @@ class SelectProperty extends DataProperty
     public $reqmodules = array('base');
 
     public $options;
-    public $func;
-    public $itemfunc;
-    public $file;
-    public $override = false; // allow values other than those in the options
+    public $itemfunc;   // CHECKME: how is this best implemented?
 
     public $initialization_function         = null;
     public $initialization_file             = null;
     public $initialization_collection       = null;
     public $initialization_options          = null;
     public $validation_override             = false;
+    public $validation_override_invalid;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -37,21 +35,11 @@ class SelectProperty extends DataProperty
         $this->template  = 'dropdown';
         $this->tplmodule = 'base';
         $this->filepath   = 'modules/base/xarproperties';
-
-        if (!isset($this->options)) {
-            $this->options = array();
-        }
-        // options may be set in one of the child classes
-        if (count($this->options) == 0 && !empty($this->validation)) {
-            $this->parseValidation($this->validation);
-        }
     }
 
     public function validateValue($value = null)
     {
-        if (isset($value)) {
-            $this->value = $value;
-        }
+        if (!parent::validateValue($value)) return false;
 
         // check if this option really exists
         $isvalid = $this->getOption(true);
@@ -62,7 +50,11 @@ class SelectProperty extends DataProperty
         if ($this->validation_override) {
             return true;
         }
-        $this->invalid = xarML('unallowed selection: #(1)', $this->name);
+        if (!empty($this->validation_override_invalid)) {
+            $this->invalid = xarML($this->validation_override_invalid);
+        } else {
+            $this->invalid = xarML('unallowed selection: #(1)', $this->name);
+        }
         $this->value = null;
         return false;
     }
@@ -70,12 +62,22 @@ class SelectProperty extends DataProperty
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
-//        if (isset($data['override'])) $this->validation_override = $data['override'];
 
-        if (!isset($data['options']) || count($data['options']) == 0) {
-            if (isset($data['configuration'])) {
-                $this->parseValidation($data['configuration']);
+        // If we have options passed, take them. Otherwise generate them
+        if (!isset($data['options'])) {
+
+        // Parse a configuration if one was passed
+            if(isset($data['configuration'])) {
+                $this->parseConfiguration($data['configuration']);
+                unset($data['configuration']);
             }
+
+        // Allow overriding by specific parameters
+            if (isset($data['function']))   $this->initialization_function = $data['function'];
+            if (isset($data['file']))       $this->initialization_file = $data['file'];
+            if (isset($data['collection'])) $this->initialization_collection = $data['collection'];
+
+        // Finally generate the options
             $data['options'] = $this->getOptions();
         }
 
@@ -110,58 +112,6 @@ class SelectProperty extends DataProperty
         return parent::showOutput($data);
     }
 
-/*    public function parseValidation($validation = '')
-    {
-        parent::parseValidation($validation);
-//        $this->options = $this->getOptions();
-    }
-    public function parseValidation($validation = '')
-    {
-        // if the validation field is an array, we'll assume that this is an array of id => name
-        if (is_array($validation)) {
-            foreach($validation as $id => $name) {
-                array_push($this->initialization_options, array('id' => $id, 'name' => $name));
-            }
-        // if the validation field starts with xarModAPIFunc, we'll assume that this is
-        // a function call that returns an array of names, or an array of id => name
-        } elseif (preg_match('/^xarModAPIFunc/i',$validation)) {
-            // if the validation field contains two ;-separated xarModAPIFunc calls,
-            // the second one is used to get/check the result for a single $value
-            if (preg_match('/^(xarModAPIFunc.+)\s*;\s*(xarModAPIFunc.+)$/i',$validation,$matches)) {
-                $this->initialization_function = $matches[1];
-                $this->itemfunc = $matches[2];
-            } else {
-                $this->initialization_function = $validation;
-            }
-            // or if it contains a ; or a , we'll assume that this is a list of name1;name2;name3 or id1,name1;id2,name2;id3,name3
-        } elseif (strchr($validation,';') || strchr($validation,',')) {
-            // allow escaping \; for values that need a semi-colon
-            $options = preg_split('/(?<!\\\);/', $validation);
-            foreach ($options as $option) {
-                $option = strtr($option,array('\;' => ';'));
-                // allow escaping \, for values that need a comma
-                if (preg_match('/(?<!\\\),/', $option)) {
-                    // if the option contains a , we'll assume it's an id,name combination
-                    list($id,$name) = preg_split('/(?<!\\\),/', $option);
-                    $id = strtr($id,array('\,' => ','));
-                    $name = strtr($name,array('\,' => ','));
-                    array_push($this->initialization_options, array('id' => $id, 'name' => $name));
-                } else {
-                    // otherwise we'll use the option for both id and name
-                    $option = strtr($option,array('\,' => ','));
-                    array_push($this->initialization_options, array('id' => $option, 'name' => $option));
-                }
-            }
-
-        // or if it contains a data file path, load the options from the file.  File will contain one or more lines each containing a list specified as name1;name2;name3 or id1,name1;id2,name2;id3,name3
-        } elseif (preg_match('/^{file:(.*)}/',$validation, $fileMatch)) {
-            $filePath = $fileMatch[1];
-            $this->initialization_file = $filePath;
-        // otherwise we'll leave it alone, for use in any subclasses (e.g. min:max in NumberList, or basedir for ImageList, or ...)
-        } else {
-        }
-    }
-*/
     /**
      * Retrieve the list of options on demand
      * N.B. the code below is repetitive, but lets leave it clearly separated for each type of input for the moment
@@ -239,6 +189,14 @@ class SelectProperty extends DataProperty
 
     /**
      * Retrieve or check an individual option on demand
+     *
+     * @param  $check boolean
+     * @return if check == false:
+     *                - display value, if found, of an option whose store value is $this->value
+     *                - $this->value, if not found
+     * @return if check == true:
+     *                - true, if an option exists whose store value is $this->value
+     *                - false, if no such option exists
      */
     function getOption($check = false)
     {
@@ -246,163 +204,36 @@ class SelectProperty extends DataProperty
              if ($check) return true;
              return null;
         }
-        if (empty($this->itemfunc)) {
-            // we're interested in one of the known options (= default behaviour)
-            $options = $this->getOptions();
-            foreach ($options as $option) {
-                if ($option['id'] == $this->value) {
-                    if ($check) return true;
-                    return $option['name'];
-                }
-            }
-            if ($check) return false;
-            return $this->value;
-        }
         // most API functions throw exceptions for empty ids, so we skip those here
         if (empty($this->value)) {
              if ($check) return true;
              return $this->value;
         }
-        // use $value as argument for your API function : array('whatever' => $value, ...)
-        $value = $this->value;
-        eval('$result = ' . $this->itemfunc .';');
-        if (isset($result)) {
-            if ($check) return true;
-            return $result;
+        // we're interested in one of the known options (= default behaviour)
+        $options = $this->getOptions();
+        foreach ($options as $option) {
+            if ($option['id'] == $this->value) {
+                if ($check) return true;
+                return $option['name'];
+            }
         }
         if ($check) return false;
         return $this->value;
+
+        /* I don't see how this works, so I've moved it aside here for now (random)
+        if (!empty($this->itemfunc)) {
+            // use $value as argument for your API function : array('whatever' => $value, ...)
+            $value = $this->value;
+            eval('$result = ' . $this->itemfunc .';');
+            if (isset($result)) {
+                if ($check) return true;
+                return $result;
+            }
+        }
+        if ($check) return false;
+        return $this->value;
+        */
     }
-
-    /**
-     * Show the current validation rule in a specific form for this property type
-     *
-     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['validation'] validation rule (default is the current validation)
-     * @param $args['id'] id of the field
-     * @param $args['tabindex'] tab index of the field
-     * @return string containing the HTML (or other) text to output in the BL template
-     */
-/*    public function showValidation(Array $args = array())
-    {
-        extract($args);
-
-        $data = array();
-        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
-        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
-        $data['tabindex']   = !empty($tabindex) ? $tabindex : 1;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-
-        // hard-coded options etc.
-        $data['static'] = count($this->initialization_options);
-
-        if (isset($validation)) {
-            // split up the  override and the validation proper
-            try  {
-                $validationarray = unserialize($validation);
-                $validation = $validationarray['validation'];
-                $this->validation_override = $validationarray['override'];
-            } catch(Exception $e) {}
-            $this->validation = $validation;
-            $this->parseValidation($validation);
-        }
-        // new number of options
-        $numoptions = count($this->initialization_options);
-
-        $data['func'] = '';
-        $data['itemfunc'] = '';
-        $data['file'] = '';
-        $data['options'] = array();
-        $data['other'] = '';
-        if (!empty($this->initialization_function)) {
-            $data['func'] = xarVarPrepForDisplay($this->initialization_function);
-            // only supported when we use func too
-            if (!empty($this->itemfunc)) {
-                $data['itemfunc'] = xarVarPrepForDisplay($this->itemfunc);
-            }
-        } elseif (!empty($this->initialization_file)) {
-            $data['file'] = xarVarPrepForDisplay($this->initialization_file);
-        } elseif ($numoptions > 0 && $numoptions != $data['static']) {
-            $data['options'] = $this->initialization_options;
-        } else {
-            $data['other'] = xarVarPrepForDisplay($this->validation);
-        }
-        // read-only value set by the property type (for now)
-        $data['override'] = $this->validation_override;
-
-    // FIXME: this won't work when called by a property from a different module
-        // allow template override by child classes (or in BL tags/API calls)
-        if (empty($template)) {
-            $template = 'dropdown';
-        }
-        return xarTplProperty('base', $template, 'validation', $data);
-    }*/
-
-    /**
-     * Update the current validation rule in a specific way for this property type
-     *
-     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['validation'] validation rule (default is the current validation)
-     * @param $args['id'] id of the field
-     * @returns bool
-     * @return bool true if the validation rule could be processed, false otherwise
-     */
-    /*public function updateValidation(Array $args = array())
-    {
-        extract($args);
-
-        // in case we need to process additional input fields based on the name
-        $name = empty($name) ? 'dd_'.$this->id : $name;
-        // do something with the validation and save it in $this->validation
-        if (isset($validation)) {
-            if (is_array($validation)) {
-                if (!empty($validation['func']) && preg_match('/^xarModAPIFunc/i',$validation['func'])) {
-                    $this->validation = $validation['func'];
-                    // only supported when we use func too
-                    if (!empty($validation['itemfunc']) && preg_match('/^xarModAPIFunc/i',$validation['itemfunc'])) {
-                        $this->validation .= ';' . $validation['itemfunc'];
-                    }
-
-                } elseif (!empty($validation['file']) && file_exists($validation['file'])) {
-                    $this->validation = '{file:' . $validation['file'] . '}';
-
-                } elseif (!empty($validation['other'])) {
-                    $this->validation = $validation['other'];
-
-                } elseif (!empty($validation['options'])) {
-                    // remove last option if empty
-                    $last = count($validation['options']) - 1;
-                    if (empty($validation['options'][$last]['name'])) {
-                        array_pop($validation['options']);
-                    }
-                    $options = array();
-                    foreach ($validation['options'] as $id => $option) {
-                        $option['name'] = strtr($option['name'],array(';' => '\;', ',' => '\,'));
-                        if (!isset($option['id'])) {
-                            $options[] = $option['name'];
-                        } else {
-                            $option['id'] = strtr($option['id'],array(';' => '\;', ',' => '\,'));
-                            $options[] = $option['id'].','.$option['name'];
-                        }
-                    }
-                    $this->validation = join(';',$options);
-
-                } else {
-                    $this->validation = '';
-                }
-            } else {
-                $this->validation = $validation;
-            }
-        }
-        $validationarray['validation'] = $this->validation;
-
-        $validationarray['override'] = isset($validation['override']) ? $validation['override'] :0;
-        $this->validation = serialize($validationarray);
-
-        // tell the calling function that everything is OK
-        return true;
-    }*/
-
 }
 
 ?>

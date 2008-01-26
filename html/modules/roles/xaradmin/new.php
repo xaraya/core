@@ -19,8 +19,8 @@ function roles_admin_new()
     if (!xarSecurityCheck('AddRole')) return;
 
     if (!xarVarFetch('return_url',  'isset', $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('parentid',   'id', $data['parentid'], xarModVars::get('roles','defaultgroup'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemtype',    'int',    $itemtype, ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('parentid',    'id',    $data['parentid'], xarModVars::get('roles','defaultgroup'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemtype',    'int',   $itemtype, ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('duvs',        'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
     $data['object'] = DataObjectMaster::getObject(array('module'   => 'roles', 'itemtype' => $itemtype));

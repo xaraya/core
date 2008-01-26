@@ -16,13 +16,13 @@
 sys::import('modules.base.xarproperties.textbox');
 
 /**
- * Handle the validation property
+ * Handle the configuration property
  */
-class ValidationProperty extends TextBoxProperty
+class ConfigurationProperty extends TextBoxProperty
 {
     public $id         = 998;
-    public $name       = 'validation';
-    public $desc       = 'Validation';
+    public $name       = 'configuration';
+    public $desc       = 'Configuration';
     public $reqmodules = array('dynamicdata');
 
     public $proptype = null;
@@ -37,7 +37,7 @@ class ValidationProperty extends TextBoxProperty
     public function checkInput($name = '', $value = null)
     {
         if (!isset($newtype)) {
-            $newtype = $this->objectref->properties['property']->value;
+            $newtype = $this->objectref->properties['property_id']->value;
         }
 
         // get a new property of the right type
@@ -53,16 +53,16 @@ class ValidationProperty extends TextBoxProperty
         $property =& DataPropertyMaster::getProperty($data);
         if (empty($property)) return;
 
-        if (!xarVarFetch($data['name'],'isset',$data['validation'],NULL,XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch($data['name'],'isset',$data['configuration'],NULL,XARVAR_NOT_REQUIRED)) return;
 
-        if (!$property->updateValidation($data)) return false;
-        $this->value = $property->validation;
+        if (!$property->updateConfiguration($data)) return false;
+        $this->value = $property->configuration;
 
         return true;
-        return $this->validateValue($value);
+//        return $this->validateValue($value);
     }
 
-    public function validateValue($value = null)
+/*    public function validateValue($value = null)
     {
         // get the property type we're currently dealing with
         if (!xarVarIsCached('dynamicdata','currentproptype')) {
@@ -94,14 +94,14 @@ class ValidationProperty extends TextBoxProperty
         $data['id']         = $this->id;
         $property =& DataPropertyMaster::getProperty($data);
 
-        // pass the current value as validation rule
-        $data['validation'] = isset($value) ? $value : $this->value;
+        // pass the current value as configuration rule
+        $data['configuration'] = isset($value) ? $value : $this->value;
 
-        $isvalid = $property->updateValidation($data);
+        $isvalid = $property->updateConfiguration($data);
 
         if ($isvalid) {
-            // store the updated validation rule back in the value and return
-            $this->value = $property->validation;
+            // store the updated configuration rule back in the value and return
+            $this->value = $property->configuration;
             return true;
         }
 
@@ -109,10 +109,10 @@ class ValidationProperty extends TextBoxProperty
         $this->invalid = $property->invalid;
         return false;
     }
-
+*/
     public function showInput(Array $data = array())
     {
-        /*
+        /* CHECKME: do wew need this? Doesn't seem so.
         // get the property type we're currently dealing with
         if (!xarVarIsCached('dynamicdata','currentproptype')) {
             // tell the caller that we don't have a property type
@@ -128,7 +128,7 @@ class ValidationProperty extends TextBoxProperty
 //        if (!xarVarFetch($propid,'id',$newtype,NULL,XARVAR_NOT_REQUIRED)) return;
 
         if (!isset($newtype)) {
-            $newtype = $this->objectref->properties['property']->value;
+            $newtype = $this->objectref->properties['property_id']->value;
         }
 
         // get a new property of the right type
@@ -142,10 +142,10 @@ class ValidationProperty extends TextBoxProperty
 
         $property =& DataPropertyMaster::getProperty($data);
         $property->id = $this->id;
-        $property->parseValidation($this->value);
+        $property->parseConfiguration($this->value);
 
-        // call its showValidation() method and return
-        return $property->showValidation($data);
+        // call its showConfiguration() method and return
+        return $property->showConfiguration($data);
     }
 
     public function showOutput(Array $args = array())

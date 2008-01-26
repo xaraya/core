@@ -32,7 +32,7 @@ class ObjectRefProperty extends SelectProperty
     public $reqmodules = array('dynamicdata');
 
     // We explicitly use names here instead of id's, so we are independent of
-    // how dd assigns them at a given time. Otherwise the validation is not
+    // how dd assigns them at a given time. Otherwise the configuration is not
     // exportable to other sites.
     public $initialization_refobject    = 'objects';    // ID of the object we want to reference
     public $initialization_store_prop   = 'name';       // Name of the property we want to use for storage
@@ -49,13 +49,40 @@ class ObjectRefProperty extends SelectProperty
     {
         // The object we need to query is in $this->initialization_refobject, we display the value of
         // the property in $this->display_prop and the id comes from $this->store_prop
-        $object  = DataObjectMaster::getObjectList(array('name' => $this->initialization_refobject));
 
-        // TODO: do we need to check whether the properties are actually in the object?
-        $items =  $object->getItems(array (
-                                    'sort'     => $this->initialization_display_prop,
-                                    'fieldlist'=> array($this->initialization_display_prop,$this->initialization_store_prop))
-                             );
+        if ($this->initialization_refobject == 'objects') {
+            // In this case need to go directly (rather than get a DD object) to avoid recursion
+            $dbconn = xarDB::getConn();
+            $xartable = xarDB::getTables();
+            $q = "SELECT * from " . $xartable['dynamic_objects'];
+            $result = $dbconn->Execute($q);
+            $items = array();
+            while ($result->next()) {
+            list($objectid, $name, $label, $parent, $moduleid, $itemtype, $class,
+                $filepath, $urlparam, $maxid, $config, $isalias) = $result->fields;
+
+            $items[] = array('objectid' => $objectid,
+                             'name'    => $name,
+                             'label'   => $label,
+                             'parent' => $parent,
+                             'moduleid' => $moduleid,
+                             'itemtype' => $itemtype,
+                             'class'   => $class,
+                             'filepath'   => $filepath,
+                             'urlparam'   => $urlparam,
+                             'maxid'   => $maxid,
+                             'config'   => $config,
+                             'isalias'   => $isalias);
+            }
+        } else {
+            $object  = DataObjectMaster::getObjectList(array('name' => $this->initialization_refobject));
+
+            // TODO: do we need to check whether the properties are actually in the object?
+            $items =  $object->getItems(array (
+                                        'sort'     => $this->initialization_display_prop,
+                                        'fieldlist'=> array($this->initialization_display_prop,$this->initialization_store_prop))
+                                 );
+        }
         $options = array();
         foreach($items as $item) {
             $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
@@ -63,10 +90,10 @@ class ObjectRefProperty extends SelectProperty
         return $options;
     }
 
-    public function showValidation(Array $data = array())
+    public function showConfiguration(Array $data = array())
     {
-        if (!isset($data['validation'])) $data['validation'] = $this->validation;
-        $this->parseValidation($data['validation']);
+        if (!isset($data['configuration'])) $data['configuration'] = $this->configuration;
+        $this->parseConfiguration($data['configuration']);
         if (!isset($data['initialization'])) $data['initialization'] = $this->getConfigProperties('initialization',1);
 
         if (!empty($data['initialization']['initialization_store_prop']['configuration'])) {
@@ -79,7 +106,8 @@ class ObjectRefProperty extends SelectProperty
             $temp = str_replace  ('#(1)', "'" . $this->initialization_refobject  . "'", $temp);
             $data['initialization']['initialization_display_prop']['configuration'] = serialize($temp);
         }
-        return parent::showValidation($data);
+        return parent::showConfiguration($data);
     }
+
 }
 ?>

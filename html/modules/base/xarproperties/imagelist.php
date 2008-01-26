@@ -30,9 +30,6 @@ class ImageListProperty extends SelectProperty
         $this->tplmodule = 'base';
         $this->template  = 'imagelist';
 
-        if (empty($this->basedir) && !empty($this->validation)) {
-            $this->parseValidation($this->validation);
-        }
         // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/Xaraya_Classic/images
         if (!empty($this->basedir) && preg_match('/\{theme\}/',$this->basedir)) {
             $curtheme = xarTplGetThemeDir();
@@ -45,9 +42,8 @@ class ImageListProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         $basedir = $this->basedir;
         $filetype = $this->filetype;
         if (!empty($value) &&
@@ -72,7 +68,7 @@ class ImageListProperty extends SelectProperty
         if (!isset($data['value'])) {
             $data['value'] = $this->value;
         }
-        if (!isset($data['options']) || count($data['options']) == 0) {
+/*        if (!isset($data['options']) || count($data['options']) == 0) {
             $data['options'] = $this->getOptions();
         }
         if (count($data['options']) == 0 && !empty($this->basedir)) {
@@ -90,7 +86,7 @@ class ImageListProperty extends SelectProperty
             }
             unset($files);
         }
-
+*/
         $data['basedir'] = $this->basedir;
         $data['baseurl'] = isset($this->baseurl) ? $this->baseurl : $this->basedir;
 
@@ -125,7 +121,28 @@ class ImageListProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
-    public function parseValidation($validation = '')
+    public function getOptions()
+    {
+        $options = parent::getOptions();
+        if (count($options) == 0 && !empty($this->basedir)) {
+            $files = xarModAPIFunc('dynamicdata','admin','browse',
+                                   array('basedir' => $this->basedir,
+                                         'filetype' => $this->filetype));
+            if (!isset($files)) {
+               $files = array();
+            }
+            natsort($files);
+            array_unshift($files,'');
+            foreach ($files as $file) {
+                $options[] = array('id' => $file,
+                                   'name' => $file);
+            }
+            unset($files);
+        }
+        return $options;
+    }
+
+    public function parseConfiguration($validation = '')
     {
         if (empty($validation)) return;
         // specify base directory in validation field, or basedir|baseurl (not ; to avoid conflicts with old behaviour)
@@ -142,7 +159,7 @@ class ImageListProperty extends SelectProperty
         }
     }
 
-    public function showValidation(Array $args = array())
+    public function showConfiguration(Array $args = array())
     {
         extract($args);
 
@@ -156,8 +173,8 @@ class ImageListProperty extends SelectProperty
         $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
 
         if (isset($validation)) {
-            $this->validation = $validation;
-            $this->parseValidation($validation);
+            $this->configuration = $validation;
+            $this->parseConfiguration($validation);
         }
 
         $data['basedir'] = $this->basedir;
@@ -179,28 +196,28 @@ class ImageListProperty extends SelectProperty
         // allow template override by child classes
         $template  = empty($template) ? $this->getTemplate() : $template;
 
-        return xarTplProperty('base', $template, 'validation', $data);
+        return xarTplProperty('base', $template, 'configuration', $data);
     }
 
-    public function updateValidation(Array $args = array())
+    public function updateConfiguration(Array $args = array())
     {
         extract($args);
 
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // do something with the validation and save it in $this->validation
+        // do something with the validation and save it in $this->configuration
         if (isset($validation)) {
             if (is_array($validation)) {
                 if (!empty($validation['other'])) {
-                    $this->validation = $validation['other'];
+                    $this->configuration = $validation['other'];
 
                 } else {
-                    $this->validation = '';
+                    $this->configuration = '';
                     if (!empty($validation['basedir'])) {
-                        $this->validation = $validation['basedir'];
+                        $this->configuration = $validation['basedir'];
                     }
                     if (!empty($validation['baseurl'])) {
-                        $this->validation .= '|' . $validation['baseurl'];
+                        $this->configuration .= '|' . $validation['baseurl'];
                     }
                     if (!empty($validation['filetype'])) {
                         $todo = array();
@@ -209,14 +226,14 @@ class ImageListProperty extends SelectProperty
                             $todo[] = $ext;
                         }
                         if (count($todo) > 0) {
-                            $this->validation .= '|(';
-                            $this->validation .= join('|',$todo);
-                            $this->validation .= ')';
+                            $this->configuration .= '|(';
+                            $this->configuration .= join('|',$todo);
+                            $this->configuration .= ')';
                         }
                     }
                 }
             } else {
-                $this->validation = $validation;
+                $this->configuration = $validation;
             }
         }
 

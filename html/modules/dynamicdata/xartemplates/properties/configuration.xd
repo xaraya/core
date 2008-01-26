@@ -25,8 +25,17 @@
             <legend><xar:mlstring>Validation options</xar:mlstring></legend>
             <xar:if condition="is_array($validation)">
                 <xar:foreach in="$validation" key="$key" value="$init">
+                
+                    <!-- Ignore the invalid messages in the loop. We'll get them directly from the $validation array -->
+                    <xar:if condition="(substr($key,strlen($key) - 8) eq '_invalid')">
+                        <xar:continue />
+                    </xar:if>
+
                     <xar:set name="fieldname">$name . '[' . $key . ']'</xar:set>
                     <xar:set name="fieldid">$id . '_' . $key</xar:set>
+                    <xar:set name="invalidname">$name . '[' . $key . '_invalid]'</xar:set>
+                    <xar:set name="invalidid">$fieldid . '_invalid'</xar:set>
+                    <xar:set name="invalidvalue">$validation[$key . '_invalid']</xar:set>
                     <xar:if condition="isset($init['configuration'])">
                         <xar:set name="configuration">$init['configuration']</xar:set>
                     <xar:else />
@@ -37,6 +46,13 @@
                             #$init['label']#
                         </label>
                         <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']" />
+                    </div>
+                    <!-- #$key# -->
+                    <div class="xar-form-input-wrapper">
+                        <label for="#$invalidname#" title="An optional error message for #$init['label']#" class="xar-form-label">
+                            #$init['label']# Message
+                        </label>
+                        <xar:data-input type="textarea" name="$invalidname" id="$invalidid" value="$invalidvalue" />
                     </div>
                 </xar:foreach>
             <xar:else />

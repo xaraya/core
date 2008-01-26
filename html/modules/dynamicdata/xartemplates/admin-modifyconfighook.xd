@@ -15,7 +15,7 @@
             <th>#$labels.type#</th>
             <th>#$labels.defaultvalue#</th>
             <th>#$labels.source#</th>
-<!--            <th>#$labels.validation#</th> -->
+            <th>#$labels.configuration#</th>
         </tr>
         <xar:foreach in="$fields" value="$field">
             <tr class="xar-align-left xar-valign-middle">
@@ -27,7 +27,7 @@
                 </td>
                 <td><xar:var name="field.defaultvalue" prep="true"/></td>
                 <td>#$field.source#</td>
-<!--                <td><xar:var name="field.validation" prep="true"/></td>  -->
+                <td><xar:var name="field.configuration" prep="true"/></td>
             </tr>
         </xar:foreach>
     </xar:if>

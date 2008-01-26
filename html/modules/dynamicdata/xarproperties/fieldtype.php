@@ -13,12 +13,12 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.dropdown');
+sys::import('modules.dynamicdata.xarproperties.objectref');
 
 /**
  * Handle field type property
  */
-class FieldTypeProperty extends SelectProperty
+class FieldTypeProperty extends ObjectRefProperty
 {
     public $id         = 22;
     public $name       = 'fieldtype';

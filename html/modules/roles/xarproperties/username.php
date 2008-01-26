@@ -24,8 +24,9 @@ class UsernameProperty extends TextBoxProperty
 
     public $rawvalue   = null;
 
-    public $initialization_linkrule                = 0;
-    public $initialization_existrule               = 0;
+    public $display_linkrule                = 0;
+    public $validation_existrule            = 0;
+    public $validation_existrule_invalid;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -33,7 +34,6 @@ class UsernameProperty extends TextBoxProperty
         $this->tplmodule = 'roles';
         $this->template = 'username';
         $this->filepath   = 'modules/roles/xarproperties';
-        $this->parseValidation($this->validation);
     }
 
     public function validateValue($value = null)
@@ -58,17 +58,25 @@ class UsernameProperty extends TextBoxProperty
 
         $role = xarRoles::ufindRole($value);
 
-        switch ((int)$this->initialization_existrule) {
+        switch ((int)$this->validation_existrule) {
             case 1:
             if (!empty($role)) {
-                $this->invalid = xarML('user #(1) already exists', $value);
+                if (!empty($this->validation_existrule_invalid)) {
+                    $this->invalid = xarML($this->validation_existrule_invalid);
+                } else {
+                    $this->invalid = xarML('user #(1) already exists', $value);
+                }
                 return false;
             }
             break;
 
             case 2:
             if (empty($role)) {
-                $this->invalid = xarML('user #(1) does not exist', $value);
+                if (!empty($this->validation_existrule_invalid)) {
+                    $this->invalid = xarML($this->validation_existrule_invalid);
+                } else {
+                    $this->invalid = xarML('user #(1) does not exist', $value);
+                }
                 return false;
             }
             break;
@@ -136,7 +144,7 @@ class UsernameProperty extends TextBoxProperty
             $data['user']  = xarVarPrepForDisplay($user);
             $data['value'] = $value;
 
-            if ($this->validation) {
+            if ($this->configuration) {
                 $data['linkurl'] = xarModURL('roles','user','display',array('id' => $value));
             } else {
                 $data['linkurl'] = "";
