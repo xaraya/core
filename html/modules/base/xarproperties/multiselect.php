@@ -59,15 +59,6 @@ class MultiSelectProperty extends SelectProperty
 
     public function showInput(Array $data = array())
     {
-        if (!isset($data['value'])) {
-            $data['value'] = $this->value;
-        }
-        if (!isset($data['allowempty'])) {
-            $data['allowempty'] = true;
-        }
-        if (!isset($data['options']) || count($data['options']) == 0) {
-            $data['options'] = $this->getOptions();
-        }
         if (empty($data['value'])) {
             $data['value'] = array();
         } elseif (!is_array($data['value'])) {

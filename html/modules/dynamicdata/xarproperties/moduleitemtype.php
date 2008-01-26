@@ -76,14 +76,18 @@ class ModuleItemtypeProperty extends SelectProperty
     // Return a list of array(id => value) for the possible options
     function getOptions()
     {
-        $this->options = array();
+        //allow overriding
+        $options = parent::getOptions();
+        if (!empty($options)) return $options;
+
+        $options = array();
         $types = DataObjectMaster::getModuleItemTypes(array('moduleid' => $this->referencemoduleid));
         if ($types != array()) {
-            foreach ($types as $key => $value) $this->options[] = array('id' => $key, 'name' => $value['label']);
+            foreach ($types as $key => $value) $options[] = array('id' => $key, 'name' => $value['label']);
         } else {
-            $this->options[] = array('id' => 0, 'name' => xarML('no itemtypes defined'));
+            $options[] = array('id' => 0, 'name' => xarML('no itemtypes defined'));
         }
-        return $this->options;
+        return $options;
     }
 }
 ?>

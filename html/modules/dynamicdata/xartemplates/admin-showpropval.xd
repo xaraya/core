@@ -23,12 +23,9 @@
         <xar:set name="fieldlist">array('name','label','objectid','type','validation')</xar:set>
         <xar:data-display object="$object" fieldlist="$fieldlist" />
       </fieldset>
-      <fieldset>
-        <legend><xar:mlstring>Validation options</xar:mlstring></legend>
         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
         <input type="hidden" name="itemid" id="itemid" value="#$itemid#" />
-        <div>#$showval#</div>
-      </fieldset>
+        #$showval#
       <fieldset>
         <div class="xar-align-center">
           <input type="submit" name="preview" value="#xarML('Preview')#" /> 

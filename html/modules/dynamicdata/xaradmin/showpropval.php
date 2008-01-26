@@ -63,10 +63,10 @@ function dynamicdata_admin_showpropval($args)
     if (empty($property)) return;
 
     if (!empty($preview) || !empty($confirm)) {
-        if (!xarVarFetch($data['name'],'isset',$value,NULL,XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch($data['name'],'isset',$configuration,NULL,XARVAR_NOT_REQUIRED)) return;
 
         // pass the current value as validation rule
-        $data['validation'] = isset($value) ? $value : '';
+        $data['validation'] = isset($configuration) ? $configuration : '';
 
         $isvalid = $property->updateValidation($data);
 

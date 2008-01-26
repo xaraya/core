@@ -25,15 +25,41 @@ class ValidationProperty extends TextBoxProperty
     public $desc       = 'Validation';
     public $reqmodules = array('dynamicdata');
 
-    public $size      = 50;
-    public $maxlength = 254;
-
     public $proptype = null;
 
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
+        $this->include_reference = 1;
+    }
+
+    public function checkInput($name = '', $value = null)
+    {
+        if (!isset($newtype)) {
+            $newtype = $this->objectref->properties['property']->value;
+        }
+
+        // get a new property of the right type
+        if (!empty($newtype)) {
+            $data['type'] = $newtype;
+        } elseif (!empty($proptype->value)) {
+            $data['type'] = $proptype->value;
+        } else {
+            $data['type'] = 1; // default DataProperty class
+        }
+
+        $data['name'] = !empty($name) ? $name : 'dd_'.$this->id;
+        $property =& DataPropertyMaster::getProperty($data);
+        if (empty($property)) return;
+
+        if (!xarVarFetch($data['name'],'isset',$data['validation'],NULL,XARVAR_NOT_REQUIRED)) return;
+
+        if (!$property->updateValidation($data)) return false;
+        $this->value = $property->validation;
+
+        return true;
+        return $this->validateValue($value);
     }
 
     public function validateValue($value = null)
@@ -84,45 +110,39 @@ class ValidationProperty extends TextBoxProperty
         return false;
     }
 
-    public function showInput(Array $args = array())
+    public function showInput(Array $data = array())
     {
-        extract($args);
+        /*
         // get the property type we're currently dealing with
         if (!xarVarIsCached('dynamicdata','currentproptype')) {
             // tell the caller that we don't have a property type
             $this->invalid = xarML('property type');
             // let the TextBox property type handle the rest
-            return parent::showInput($args);
+            return parent::showInput($data);
         }
         $proptype = xarVarGetCached('dynamicdata','currentproptype');
+        */
 
         // check if the property type was changed via user input
-        $propid = 'dd_' . $proptype->id;
-        if (!xarVarFetch($propid,'id',$newtype,NULL,XARVAR_NOT_REQUIRED)) return;
+//        $propid = 'dd_' . $proptype->id;
+//        if (!xarVarFetch($propid,'id',$newtype,NULL,XARVAR_NOT_REQUIRED)) return;
 
-        $data = array();
+        if (!isset($newtype)) {
+            $newtype = $this->objectref->properties['property']->value;
+        }
+
         // get a new property of the right type
         if (!empty($newtype)) {
             $data['type'] = $newtype;
         } elseif (!empty($proptype->value)) {
             $data['type'] = $proptype->value;
         } else {
-            $data['type'] = 0; // default DataProperty class
+            $data['type'] = 1; // default DataProperty class
         }
-        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
-        // pass the actual id for the property here
-        $data['id']         = $this->id;
-        // pass the original invalid value here
-        $data['invalid']    = !empty($this->invalid) ? $this->invalid :'';
-        $property =& DataPropertyMaster::getProperty($data);
 
-        // pass the id for the input field here
-        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
-        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
-        $data['maxlength']  = !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']       = !empty($size) ? $size : $this->size;
-        // pass the current value as validation rule
-        $data['validation'] = isset($value) ? $value : $this->value;
+        $property =& DataPropertyMaster::getProperty($data);
+        $property->id = $this->id;
+        $property->parseValidation($this->value);
 
         // call its showValidation() method and return
         return $property->showValidation($data);
