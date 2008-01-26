@@ -54,7 +54,7 @@ class VariableTableDataStore extends SQLDataStore
             list($propid, $value) = $result->getRow();
             if (isset($value)) {
                 // set the value for this property
-				$this->fields[$propid]->value = $value;
+                $this->fields[$propid]->value = $value;
             }
         }
         $result->close();
@@ -436,7 +436,7 @@ class VariableTableDataStore extends SQLDataStore
                 $query .= " ORDER BY ";
                 $join = '';
                 foreach ($this->sort as $sortitem) {
-                    $query .= $join . $sortitem['field'] . ' ' . $sortitem['sortorder'];
+                    $query .= $join . 'dd_' . $sortitem['field'] . ' ' . $sortitem['sortorder'];
                     $join = ', ';
                 }
             }
