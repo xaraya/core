@@ -17,18 +17,18 @@
 function blocks_userapi_getgroup($args)
 {
     extract($args);
-    
-    if (!xarVarValidate('int:1', $gid, true)) {$gid = 0;}
+
+    if (!xarVarValidate('int:1', $id, true)) {$id = 0;}
     if (!xarVarValidate('str:1', $name, true)) {$name = '';}
-    
-    if (empty($gid) && empty($name)) {
+
+    if (empty($id) && empty($name)) {
         // No identifier provided.
-        throw new EmptyParameterException('name or gid');
+        throw new EmptyParameterException('name or id');
     }
 
     // The getall function does the main work.
-    if (!empty($gid)) {
-        $group = xarModAPIfunc('blocks', 'user', 'getallgroups', array('gid' => $gid));
+    if (!empty($id)) {
+        $group = xarModAPIfunc('blocks', 'user', 'getallgroups', array('id' => $id));
     } else {
         $group = xarModAPIfunc('blocks', 'user', 'getallgroups', array('name' => $name));
     }

@@ -12,7 +12,7 @@
 /**
  * delete a group
  * @author Jim McDonald, Paul Rosania
- * @param $args['gid'] the ID of the block group to delete
+ * @param $args['id'] the ID of the block group to delete
  * @returns bool
  * @return true on success, false on failure
  */
@@ -22,10 +22,10 @@ function blocks_adminapi_delete_group($args)
     extract($args);
 
     // Argument check
-    if (!isset($gid) || !is_numeric($gid)) throw new BadParameterException('gid');
+    if (!isset($id) || !is_numeric($id)) throw new BadParameterException('id');
 
     // Security
-    if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$gid")) {return;}
+    if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$id")) {return;}
 
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
@@ -37,12 +37,12 @@ function blocks_adminapi_delete_group($args)
         $dbconn->begin();
         $query = "DELETE FROM $block_group_instances_table  WHERE group_id = ?";
         $stmt = $dbconn->prepareStatement($query);
-        $stmt->executeUpdate(array($gid));
+        $stmt->executeUpdate(array($id));
 
         // Delete block group definition
         $query = "DELETE FROM $block_groups_table WHERE id = ?";
         $stmt = $dbconn->prepareStatement($query);
-        $stmt->executeUpdate(array($gid));
+        $stmt->executeUpdate(array($id));
         $dbconn->commit();
     } catch (SQLException $e) {
         $dbconn->rollback();

@@ -32,12 +32,10 @@ class VariableTableDataStore extends SQLDataStore
      */
     function getItem(array $args = array())
     {
+        if (count($this->fields) < 1) return;
         $itemid = $args['itemid'];
 
         $propids = array_keys($this->fields);
-        if (count($propids) < 1) {
-            return;
-        }
 
         $dynamicdata = $this->tables['dynamic_data'];
 
@@ -56,7 +54,7 @@ class VariableTableDataStore extends SQLDataStore
             list($propid, $value) = $result->getRow();
             if (isset($value)) {
                 // set the value for this property
-                $this->fields[$propid]->setValue($value);
+                $this->fields[$propid]->value = $value;
             }
         }
         $result->close();
@@ -68,6 +66,7 @@ class VariableTableDataStore extends SQLDataStore
      */
     function createItem(array $args = array())
     {
+        if (count($this->fields) < 1) return;
         extract($args);
 
         // we need to manage our own item ids here, and we can't use some sequential field
@@ -80,9 +79,6 @@ class VariableTableDataStore extends SQLDataStore
         }
 
         $propids = array_keys($this->fields);
-        if (count($propids) < 1) {
-            return $itemid;
-        }
 
         $dynamicdata = $this->tables['dynamic_data'];
 
@@ -112,11 +108,9 @@ class VariableTableDataStore extends SQLDataStore
     function updateItem(array $args = array())
     {
         $itemid = $args['itemid'];
+        if (count($this->fields) < 1) return $itemid;
 
         $propids = array_keys($this->fields);
-        if (count($propids) < 1) {
-            return $itemid;
-        }
 
         $dynamicdata = $this->tables['dynamic_data'];
 
@@ -420,7 +414,7 @@ class VariableTableDataStore extends SQLDataStore
 
             $query = "SELECT itemid ";
             foreach ($propids as $propid) {
-                $query .= ", MAX(CASE WHEN propid = $propid THEN $propval ELSE '' END) AS $propid \n";
+                $query .= ", MAX(CASE WHEN propid = $propid THEN $propval ELSE '' END) AS dd_$propid \n";
             }
             $query .= " FROM $dynamicdata
                        WHERE propid IN (" . join(', ',$propids) . ")
@@ -442,7 +436,7 @@ class VariableTableDataStore extends SQLDataStore
                 $query .= " ORDER BY ";
                 $join = '';
                 foreach ($this->sort as $sortitem) {
-                    $query .= $join . $sortitem['field'] . ' ' . $sortitem['sortorder'];
+                    $query .= $join . 'dd_' . $sortitem['field'] . ' ' . $sortitem['sortorder'];
                     $join = ', ';
                 }
             }

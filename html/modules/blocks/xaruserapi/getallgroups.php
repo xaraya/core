@@ -11,9 +11,9 @@
 /*
  * Get a single block type.
  *
- * @param gid Group ID (optional)
+ * @param id Group ID (optional)
  * @param name Group name (optional)
- * @returns array of block groups, keyed on block group ID (gid)
+ * @returns array of block groups, keyed on block group ID (id)
  * @author Jason Judge
  */
 
@@ -24,9 +24,9 @@ function blocks_userapi_getallgroups($args)
     $where = array();
     $bind = array();
 
-    if (!empty($gid)) {
+    if (!empty($id)) {
         $where[] = 'id = ?';
-        $bind[] = $gid;
+        $bind[] = $id;
     }
 
     if (!empty($name)) {
@@ -51,7 +51,7 @@ function blocks_userapi_getallgroups($args)
     $xartable = xarDB::getTables();
 
     $block_groups_table =& $xartable['block_groups'];
-    $query = 'SELECT id as gid, name as name, template as template'
+    $query = 'SELECT id as id, name as name, template as template'
         . ' FROM ' . $block_groups_table . $where_clause . $orderby;
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bind,ResultSet::FETCHMODE_ASSOC);
@@ -59,7 +59,7 @@ function blocks_userapi_getallgroups($args)
     $block_groups = array();
     while($result->next()) {
         $group = $result->fields;
-        $block_groups[$group['gid']] = $group;
+        $block_groups[$group['id']] = $group;
     }
 
     return $block_groups;
