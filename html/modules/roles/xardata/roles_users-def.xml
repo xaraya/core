@@ -69,7 +69,7 @@
       <source>xar_roles.pass</source>
       <status>33</status>
       <seq>6</seq>
-      <validation></validation>
+      <validation>a:5:{s:3:&quot;min&quot;;s:1:&quot;4&quot;;s:3:&quot;max&quot;;s:2:&quot;30&quot;;s:5:&quot;regex&quot;;s:0:&quot;&quot;;s:5:&quot;other&quot;;s:0:&quot;&quot;;s:7:&quot;confirm&quot;;s:1:&quot;1&quot;;}</validation>
     </property>
     <property name="regdate">
       <id>35</id>
@@ -77,7 +77,7 @@
       <type>calendar</type>
       <defaultvalue>xarMLS_userTime()</defaultvalue>
       <source>xar_roles.date_reg</source>
-      <status>67</status>
+      <status>66</status>
       <seq>7</seq>
       <validation></validation>
     </property>

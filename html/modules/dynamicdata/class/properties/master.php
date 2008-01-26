@@ -63,6 +63,7 @@ class DataPropertyMaster extends Object
         $query .= " WHERE objectid = ?";
         $bindvars[] = (int) $args['objectid'];
 
+        $anonymous = empty($args['anonymous']) ? 0 : 1;
         if(empty($args['allprops']))
             $query .= " AND status > 0 ";
 
@@ -89,6 +90,7 @@ class DataPropertyMaster extends Object
                     'validation'    => $validation,
                     // some internal variables
                     '_objectid'     => $_objectid,
+                    'anonymous'     => $anonymous,
                     'class'         => ''
                 );
                 if(isset($args['objectref'])) {
@@ -141,6 +143,12 @@ class DataPropertyMaster extends Object
         // add it to the list of properties
         $objectref->properties[$property->name] =& $property;
 
+        // if the property wants a reference, give it
+        if ($property->include_reference) {
+            $objectref->properties[$property->name]->objectref = $objectref;
+        }
+
+        // if the property involves upload, tell its object
         if(isset($property->upload))
             $objectref->upload = true;
     }

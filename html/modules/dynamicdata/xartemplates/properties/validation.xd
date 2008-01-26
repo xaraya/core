@@ -1,26 +1,76 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<table class="xar-norm">
-  <tr>
-    <td>
-      <xar:mlstring>Rule</xar:mlstring>
-    </td>
-    <td>
-      <xar:if condition="!isset($value)">
-         <xar:if condition="isset($validation)">
-           <xar:set name="value">$validation</xar:set>
-         <xar:elseif condition="isset($other)"/>
-           <xar:set name="value">$other</xar:set>
-         <xar:else/>
-           <xar:set name="value">''</xar:set>
-         </xar:if>
-      </xar:if>
-      <input type="text" name="#$name#" id="#$id#" value="#$value#" size="#$size#" maxlength="#$maxlength#" tabindex="#$tabindex#" />
-    </td>
-  </tr>
-</table>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="!empty($initialization)">
+        <fieldset>
+            <legend><xar:mlstring>Initialization options</xar:mlstring></legend>
+            <xar:foreach in="$initialization" key="$key" value="$init">
+                <xar:set name="fieldname">$name . '[' . $key . ']'</xar:set>
+                <xar:set name="fieldid">$id . '_' . $key</xar:set>
+                <xar:if condition="isset($init['configuration'])">
+                    <xar:set name="configuration">$init['configuration']</xar:set>
+                <xar:else />
+                    <xar:set name="configuration">''</xar:set>
+                </xar:if>
+                <div class="xar-form-input-wrapper">
+                    <label for="#$fieldname#" title="#$init['description']#" class="xar-form-label">
+                        #$init['label']#
+                    </label>
+                    <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']" />
+                </div>
+            </xar:foreach>
+        </fieldset>
+    </xar:if>
+    <xar:if condition="!empty($validation)">
+        <fieldset>
+            <legend><xar:mlstring>Validation options</xar:mlstring></legend>
+            <xar:if condition="is_array($validation)">
+                <xar:foreach in="$validation" key="$key" value="$init">
+                    <xar:set name="fieldname">$name . '[' . $key . ']'</xar:set>
+                    <xar:set name="fieldid">$id . '_' . $key</xar:set>
+                    <xar:if condition="isset($init['configuration'])">
+                        <xar:set name="configuration">$init['configuration']</xar:set>
+                    <xar:else />
+                        <xar:set name="configuration">''</xar:set>
+                    </xar:if>
+                    <div class="xar-form-input-wrapper">
+                        <label for="#$fieldname#" title="#$init['description']#" class="xar-form-label">
+                            #$init['label']#
+                        </label>
+                        <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']" />
+                    </div>
+                </xar:foreach>
+            <xar:else />
+                <div class="xar-form-input-wrapper">
+                    <label for="#$fieldname#" title="#$init['description']#" class="xar-form-label">
+                        #$init['label']#
+                    </label>
+                    <xar:data-input type="textbox" name="" id="" value="$validation" />
+                </div>
+            </xar:if>
+        </fieldset>
+    </xar:if>
+    <xar:if condition="!empty($display)">
+        <fieldset>
+            <legend><xar:mlstring>Display options</xar:mlstring></legend>
+            <xar:foreach in="$display" key="$key" value="$init">
+                <xar:set name="fieldname">$name . '[' . $key . ']'</xar:set>
+                <xar:set name="fieldid">$id . '_' . $key</xar:set>
+                <xar:if condition="isset($init['configuration'])">
+                    <xar:set name="configuration">$init['configuration']</xar:set>
+                <xar:else />
+                    <xar:set name="configuration">''</xar:set>
+                </xar:if>
+                <div class="xar-form-input-wrapper">
+                    <label for="#$fieldname#" title="#$init['description']#" class="xar-form-label">
+                        #$init['label']#
+                    </label>
+                    <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']" />
+                </div>
+            </xar:foreach>
+        </fieldset>
+    </xar:if>
 
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <xar:if condition="!empty($invalid)">
+        <span class="xar-error">#$invalid#</span>
+    </xar:if>
 </xar:template>

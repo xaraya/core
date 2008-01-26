@@ -3,7 +3,7 @@
 <!-- You can use different admin-modifyconfighook-[objectname].xd templates for different objects -->
 <table class="xar-fullwidth">
     <tr>
-      <th class="xar-align-center" colspan="7">
+      <th class="xar-align-center" colspan="6">
         #$labels.dynamicdata# [ <a href="#$link#">#$labels.config#</a>]
       </th>
     </tr>
@@ -15,7 +15,7 @@
             <th>#$labels.type#</th>
             <th>#$labels.defaultvalue#</th>
             <th>#$labels.source#</th>
-            <th>#$labels.validation#</th>
+<!--            <th>#$labels.validation#</th> -->
         </tr>
         <xar:foreach in="$fields" value="$field">
             <tr class="xar-align-left xar-valign-middle">
@@ -27,7 +27,7 @@
                 </td>
                 <td><xar:var name="field.defaultvalue" prep="true"/></td>
                 <td>#$field.source#</td>
-                <td><xar:var name="field.validation" prep="true"/></td>
+<!--                <td><xar:var name="field.validation" prep="true"/></td>  -->
             </tr>
         </xar:foreach>
     </xar:if>

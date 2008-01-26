@@ -719,7 +719,7 @@ class xarQuery
                 return $condition['field1'] . " IS NULL";
         }
 
-        if ($condition['op'] == 'in' || $condition['op'] == 'IN') {
+        if (in_array(strtolower($condition['op']),array('in','not in'))) {
             if (is_array($condition['field2'])) {
                 $elements = array();
                 if ($this->usebinding) {
@@ -1374,7 +1374,7 @@ class xarQuery
     {
         $q = $this;
         unset($q->dbconn);
-        xarSession::setVar($x, serialize($q));
+        xarSession::setVar($x, serialize($this));
     }
     function setdistinct($x = 1)
     {

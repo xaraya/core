@@ -21,10 +21,9 @@ class GroupListProperty extends SelectProperty
     public $desc       = 'Group List';
     public $reqmodules = array('roles');
 
-    public $ancestorlist = array();
-    public $parentlist   = array();
-    public $grouplist    = array();
-
+    public $initialization_ancestorgroup_list  = null;
+    public $initialization_parentgroup_list    = null;
+    public $initialization_group_list          = null;
     /*
     * Options available to group selection
     * ===================================
@@ -49,15 +48,19 @@ class GroupListProperty extends SelectProperty
 
     public function getOptions()
     {
+        //allow overriding
+        $options = parent::getOptions();
+        if (!empty($options)) return $options;
+
         $select_options = array();
-        if (!empty($this->ancestorlist)) {
-            $select_options['ancestor'] = implode(',', $this->ancestorlist);
+        if (!empty($this->initialization_ancestorgroup_list)) {
+            $select_options['ancestor'] = $this->initialization_ancestorgroup_list;
         }
-        if (!empty($this->parentlist)) {
-            $select_options['parent'] = implode(',', $this->parentlist);
+        if (!empty($this->initialization_parentgroup_list)) {
+            $select_options['parent'] = $this->initialization_parentgroup_list;
         }
-        if (!empty($this->grouplist)) {
-            $select_options['group'] = implode(',', $this->grouplist);
+        if (!empty($this->initialization_group_list)) {
+            $select_options['group'] = $this->initialization_group_list;
         }
         // TODO: handle large # of groups too (optional - less urgent than for users)
         $groups = xarModAPIFunc('roles', 'user', 'getallgroups', $select_options);
@@ -91,32 +94,11 @@ class GroupListProperty extends SelectProperty
         return false;
     }
 
-    public function parseValidation($validation = '')
-    {
-        foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
-            // Semi-colons can be escaped with a '\' prefix.
-            $option = str_replace('\;', ';', $option);
-            // An option comes in two parts: option-type:option-value
-            if (strchr($option, ':')) {
-                list($option_type, $option_value) = explode(':', $option, 2);
-                if ($option_type == 'ancestor') {
-                    $this->ancestorlist = array_merge($this->ancestorlist, explode(',', $option_value));
-                }
-                if ($option_type == 'parent') {
-                    $this->parentlist = array_merge($this->parentlist, explode(',', $option_value));
-                }
-                if ($option_type == 'group') {
-                    $this->grouplist = array_merge($this->grouplist, explode(',', $option_value));
-                }
-            }
-        }
-    }
-
     public function showInput(Array $data = array())
     {
         if (!empty($data['validation']))
             $this->parseValidation($data['validation']);
-            $this->options = $this->getOptions();
+        $this->options = $this->getOptions();
         return parent::showInput($data);
     }
 

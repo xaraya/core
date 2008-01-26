@@ -49,7 +49,7 @@ class HookDataStore extends BasicDataStore
                                              'objectid' => $itemid));
                 // see if we got something interesting in return
                 if (isset($value)) {
-                    $this->fields[$hook]->setValue($value);
+		            $this->fields[$hook]->value = $value;
                 }
             }
         }
