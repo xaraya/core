@@ -414,7 +414,7 @@ class VariableTableDataStore extends SQLDataStore
 
             $query = "SELECT itemid ";
             foreach ($propids as $propid) {
-                $query .= ", MAX(CASE WHEN propid = $propid THEN $propval ELSE '' END) AS $propid \n";
+                $query .= ", MAX(CASE WHEN propid = $propid THEN $propval ELSE '' END) AS dd_$propid \n";
             }
             $query .= " FROM $dynamicdata
                        WHERE propid IN (" . join(', ',$propids) . ")
