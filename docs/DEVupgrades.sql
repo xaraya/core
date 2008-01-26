@@ -563,7 +563,7 @@ UPDATE `xar_dynamic_properties` SET objectid = 24 WHERE name = 'parent' AND obje
 ALTER TABLE `xar_dynamic_properties`
   CHANGE COLUMN `validation` `configuration` text;
 ALTER TABLE `xar_dynamic_properties_def`
-  CHANGE COLUMN `validation` `configuration` varchar(254) default NULL,
+  CHANGE COLUMN `validation` `configuration` varchar(254) default NULL;
 
 UPDATE `xar_dynamic_properties` SET name = 'configuration' WHERE name = 'validation' AND objectid = 2;
 UPDATE `xar_dynamic_properties` SET label = 'Configuration' WHERE label = 'Validation' AND objectid = 2;
