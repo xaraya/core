@@ -16,8 +16,8 @@
         public $text_type_long      = 'base';
         public $func_update         = null;
         public $allow_multiple      = false;
-        public $form_content        = false;	// display textarea for content in the admin UI
-        public $form_refresh        = false;	// display UI for periodic refreshing of the block
+        public $form_content        = false;    // display textarea for content in the admin UI
+        public $form_refresh        = false;    // display UI for periodic refreshing of the block
         public $show_preview        = false;
 
         public function __construct(ObjectDescriptor $descriptor)
@@ -36,25 +36,27 @@
             return $this->getPublicProperties();
         }
 
-		function display(Array $data=array())
-		{
-			// Get variables from content block
-			if (!is_array($data['content'])) $data['content'] = unserialize($data['content']);
-			if (empty($data['content'])) $data['content'] = array();
-			return $data;
-		}
+        function display(Array $data=array())
+        {
+            // Get variables from content block
+            if (!is_array($data['content'])) $data['content'] = unserialize($data['content']);
+            if (empty($data['content'])) $data['content'] = array();
+            return $data;
+        }
 
-		public function modify(Array $data=array())
-		{
-			// Get current content
-			if (!is_array($data['content'])) {
-				$vars = @unserialize($data['content']);
-			} else {
-				$vars = $data['content'];
-			}
-			$vars['blockid'] = $data['bid'];
-			return $vars;
-		}
+        public function modify(Array $data=array())
+        {
+            // Get current content
+            if (!is_array($data['content'])) {
+                $exploded = @unserialize($data['content']);
+                if (is_array($exploded))
+                    $data = array_merge($data,$exploded);
+            } else {
+                $data = array_merge($data,$data['content']);
+            }
+            $data['blockid'] = $data['bid'];
+            return $data;
+        }
 
         public function update(Array $data=array())
         {
@@ -64,15 +66,15 @@
                 $vars = $data['content'];
             }
 
-        	if ($this->form_refresh) {
-				if (!xarVarFetch('expire', 'int', $expire, 0, XARVAR_NOT_REQUIRED)) {return;}
-				if ($expire > 0) $vars['expire'] = $expire + time();
-				if (!isset($vars['expire'])) $vars['expire'] = 0;
-        	}
-        	if ($this->form_content) {
-				if (!xarVarFetch('text_content', 'str:1', $text_content, '', XARVAR_DONT_SET)) {return;}
-				$vars['text_content'] = $text_content;
-        	}
+            if ($this->form_refresh) {
+                if (!xarVarFetch('expire', 'int', $expire, 0, XARVAR_NOT_REQUIRED)) {return;}
+                if ($expire > 0) $vars['expire'] = $expire + time();
+                if (!isset($vars['expire'])) $vars['expire'] = 0;
+            }
+            if ($this->form_content) {
+                if (!xarVarFetch('text_content', 'str:1', $text_content, '', XARVAR_DONT_SET)) {return;}
+                $vars['text_content'] = $text_content;
+            }
 
             $data['content'] = $vars;
             return $data;

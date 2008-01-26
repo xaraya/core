@@ -25,6 +25,12 @@ class SelectProperty extends DataProperty
     public $file;
     public $override = false; // allow values other than those in the options
 
+    public $initialization_function         = null;
+    public $initialization_file             = null;
+    public $initialization_collection       = null;
+    public $initialization_options          = null;
+    public $validation_override             = false;
+
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
@@ -37,14 +43,6 @@ class SelectProperty extends DataProperty
         }
         // options may be set in one of the child classes
         if (count($this->options) == 0 && !empty($this->validation)) {
-            // split up the  override and the validation proper
-            try  {
-                $validationarray = unserialize($this->validation);
-                $this->validation = $validationarray['validation'];
-                $this->override = $validationarray['override'];
-            } catch(Exception $e) {
-
-            }
             $this->parseValidation($this->validation);
         }
     }
@@ -61,7 +59,7 @@ class SelectProperty extends DataProperty
             return true;
         }
         // check if we allow values other than those in the options
-        if ($this->override) {
+        if ($this->validation_override) {
             return true;
         }
         $this->invalid = xarML('unallowed selection: #(1)', $this->name);
@@ -72,14 +70,17 @@ class SelectProperty extends DataProperty
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
-        if (isset($data['override'])) $this->override = $data['override'];
+//        if (isset($data['override'])) $this->validation_override = $data['override'];
 
         if (!isset($data['options']) || count($data['options']) == 0) {
+            if (isset($data['configuration'])) {
+                $this->parseValidation($data['configuration']);
+            }
             $data['options'] = $this->getOptions();
         }
 
         // check if we need to add the current value to the options
-        if (!empty($data['value']) && $this->override) {
+        if (!empty($data['value']) && $this->validation_override) {
             $found = false;
             foreach ($data['options'] as $option) {
                 if ($option['id'] == $data['value']) {
@@ -98,26 +99,28 @@ class SelectProperty extends DataProperty
 
     public function showOutput(Array $data = array())
     {
-        extract($data);
         if (isset($data['value'])) $this->value = $data['value'];
 
         // get the option corresponding to this value
         $result = $this->getOption();
         // only apply xarVarPrepForDisplay on strings, not arrays et al.
-        if (!empty($result) && is_string($result)) {
-            $result = xarVarPrepForDisplay($result);
-        }
+        if (!empty($result) && is_string($result)) $result = xarVarPrepForDisplay($result);
         $data['option'] = array('id' => $this->value, 'name' => $result);
 
         return parent::showOutput($data);
     }
 
+/*    public function parseValidation($validation = '')
+    {
+        parent::parseValidation($validation);
+//        $this->options = $this->getOptions();
+    }
     public function parseValidation($validation = '')
     {
         // if the validation field is an array, we'll assume that this is an array of id => name
         if (is_array($validation)) {
             foreach($validation as $id => $name) {
-                array_push($this->options, array('id' => $id, 'name' => $name));
+                array_push($this->initialization_options, array('id' => $id, 'name' => $name));
             }
         // if the validation field starts with xarModAPIFunc, we'll assume that this is
         // a function call that returns an array of names, or an array of id => name
@@ -125,10 +128,10 @@ class SelectProperty extends DataProperty
             // if the validation field contains two ;-separated xarModAPIFunc calls,
             // the second one is used to get/check the result for a single $value
             if (preg_match('/^(xarModAPIFunc.+)\s*;\s*(xarModAPIFunc.+)$/i',$validation,$matches)) {
-                $this->func = $matches[1];
+                $this->initialization_function = $matches[1];
                 $this->itemfunc = $matches[2];
             } else {
-                $this->func = $validation;
+                $this->initialization_function = $validation;
             }
             // or if it contains a ; or a , we'll assume that this is a list of name1;name2;name3 or id1,name1;id2,name2;id3,name3
         } elseif (strchr($validation,';') || strchr($validation,',')) {
@@ -142,58 +145,47 @@ class SelectProperty extends DataProperty
                     list($id,$name) = preg_split('/(?<!\\\),/', $option);
                     $id = strtr($id,array('\,' => ','));
                     $name = strtr($name,array('\,' => ','));
-                    array_push($this->options, array('id' => $id, 'name' => $name));
+                    array_push($this->initialization_options, array('id' => $id, 'name' => $name));
                 } else {
                     // otherwise we'll use the option for both id and name
                     $option = strtr($option,array('\,' => ','));
-                    array_push($this->options, array('id' => $option, 'name' => $option));
+                    array_push($this->initialization_options, array('id' => $option, 'name' => $option));
                 }
             }
 
         // or if it contains a data file path, load the options from the file.  File will contain one or more lines each containing a list specified as name1;name2;name3 or id1,name1;id2,name2;id3,name3
         } elseif (preg_match('/^{file:(.*)}/',$validation, $fileMatch)) {
             $filePath = $fileMatch[1];
-            $this->file = $filePath;
+            $this->initialization_file = $filePath;
         // otherwise we'll leave it alone, for use in any subclasses (e.g. min:max in NumberList, or basedir for ImageList, or ...)
         } else {
         }
     }
-
+*/
     /**
      * Retrieve the list of options on demand
+     * N.B. the code below is repetitive, but lets leave it clearly separated for each type of input for the moment
      */
     function getOptions()
     {
         if (count($this->options) > 0) {
             return $this->options;
         }
-
-        $this->options = array();
-        if (!empty($this->func)) {
-            // we have some specific function to retrieve the options here
-            eval('$items = ' . $this->func .';');
-            if (isset($items) && is_object($items)){
-                sys::import('xaraya.structures.sets.collection');
-                $iter = $items->getIterator();
-                while($iter->valid()) {
-                    $obj = $iter->current();
-                    $this->options[] = $obj->toArray();
-                    $iter->next();
+        $options = array();
+        if (!empty($this->initialization_function)) {
+            eval('$items = ' . $this->initialization_function .';');
+            if (isset($items[0]) && is_array($items[0])) {
+                foreach($items as $id => $name) {
+                    $options[] = array('id' => $name['id'], 'name' => $name['name']);
                 }
-            } elseif (isset($items) && is_array($items) && count($items) > 0) {
-                if (isset($items[0]) && is_array($items[0])) {
-                    foreach($items as $id => $name) {
-                        $this->options[] = array('id' => $name['id'], 'name' => $name['name']);
-                    }
-                } else {
-                    foreach ($items as $id => $name) {
-                        $this->options[] = array('id' => $id, 'name' => $name);
-                    }
+            } else {
+                foreach ($items as $id => $name) {
+                    $options[] = array('id' => $id, 'name' => $name);
                 }
-                unset($items);
             }
-        } elseif (!empty($this->file) && file_exists($this->file)) {
-            $fileLines = file($this->file);
+            unset($items);
+        } elseif (!empty($this->initialization_file) && file_exists($this->initialization_file)) {
+            $fileLines = file($this->initialization_file);
             foreach ($fileLines as $option)
             {
                 // allow escaping \, for values that need a comma
@@ -202,19 +194,47 @@ class SelectProperty extends DataProperty
                     list($id,$name) = preg_split('/(?<!\\\),/', $option);
                     $id = strtr($id,array('\,' => ','));
                     $name = strtr($name,array('\,' => ','));
-                    array_push($this->options, array('id' => $id, 'name' => $name));
+                    array_push($options, array('id' => $id, 'name' => $name));
                 } else {
                     // otherwise we'll use the option for both id and name
                     $option = strtr($option,array('\,' => ','));
-                    array_push($this->options, array('id' => $option, 'name' => $option));
+                    array_push($options, array('id' => $option, 'name' => $option));
                 }
             }
-
-        } else {
-
+        } elseif (!empty($this->initialization_options)) {
+            $lines = explode(';',$this->initialization_options);
+            // remove the last (empty) element
+            array_pop($lines);
+            foreach ($lines as $option)
+            {
+                // allow escaping \, for values that need a comma
+                if (preg_match('/(?<!\\\),/', $option)) {
+                    // if the option contains a , we'll assume it's an id,name combination
+                    list($id,$name) = preg_split('/(?<!\\\),/', $option);
+                    $id = trim(strtr($id,array('\,' => ',')));
+                    $name = trim(strtr($name,array('\,' => ',')));
+                    array_push($options, array('id' => $id, 'name' => $name));
+                } else {
+                    // otherwise we'll use the option for both id and name
+                    $option = trim(strtr($option,array('\,' => ',')));
+                    array_push($options, array('id' => $option, 'name' => $option));
+                }
+            }
+        } elseif (!empty($this->initialization_collection)) {
+            eval('$items = ' . $this->initialization_collection .';');
+            if (isset($items) && is_object($items)){
+                sys::import('xaraya.structures.sets.collection');
+                $iter = $items->getIterator();
+                while($iter->valid()) {
+                    $obj = $iter->current();
+                    $options[] = $obj->toArray();
+                    $iter->next();
+                }
+            }
+            unset($items);
         }
 
-        return $this->options;
+        return $options;
     }
 
     /**
@@ -263,7 +283,7 @@ class SelectProperty extends DataProperty
      * @param $args['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showValidation(Array $args = array())
+/*    public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -274,41 +294,41 @@ class SelectProperty extends DataProperty
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
         // hard-coded options etc.
-        $data['static'] = count($this->options);
+        $data['static'] = count($this->initialization_options);
 
         if (isset($validation)) {
             // split up the  override and the validation proper
             try  {
                 $validationarray = unserialize($validation);
                 $validation = $validationarray['validation'];
-                $this->override = $validationarray['override'];
+                $this->validation_override = $validationarray['override'];
             } catch(Exception $e) {}
             $this->validation = $validation;
             $this->parseValidation($validation);
         }
         // new number of options
-        $numoptions = count($this->options);
+        $numoptions = count($this->initialization_options);
 
         $data['func'] = '';
         $data['itemfunc'] = '';
         $data['file'] = '';
         $data['options'] = array();
         $data['other'] = '';
-        if (!empty($this->func)) {
-            $data['func'] = xarVarPrepForDisplay($this->func);
+        if (!empty($this->initialization_function)) {
+            $data['func'] = xarVarPrepForDisplay($this->initialization_function);
             // only supported when we use func too
             if (!empty($this->itemfunc)) {
                 $data['itemfunc'] = xarVarPrepForDisplay($this->itemfunc);
             }
-        } elseif (!empty($this->file)) {
-            $data['file'] = xarVarPrepForDisplay($this->file);
+        } elseif (!empty($this->initialization_file)) {
+            $data['file'] = xarVarPrepForDisplay($this->initialization_file);
         } elseif ($numoptions > 0 && $numoptions != $data['static']) {
-            $data['options'] = $this->options;
+            $data['options'] = $this->initialization_options;
         } else {
             $data['other'] = xarVarPrepForDisplay($this->validation);
         }
         // read-only value set by the property type (for now)
-        $data['override'] = $this->override;
+        $data['override'] = $this->validation_override;
 
     // FIXME: this won't work when called by a property from a different module
         // allow template override by child classes (or in BL tags/API calls)
@@ -316,7 +336,7 @@ class SelectProperty extends DataProperty
             $template = 'dropdown';
         }
         return xarTplProperty('base', $template, 'validation', $data);
-    }
+    }*/
 
     /**
      * Update the current validation rule in a specific way for this property type
@@ -327,7 +347,7 @@ class SelectProperty extends DataProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    public function updateValidation(Array $args = array())
+    /*public function updateValidation(Array $args = array())
     {
         extract($args);
 
@@ -381,7 +401,7 @@ class SelectProperty extends DataProperty
 
         // tell the calling function that everything is OK
         return true;
-    }
+    }*/
 
 }
 

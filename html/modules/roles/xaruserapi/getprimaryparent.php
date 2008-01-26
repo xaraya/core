@@ -23,16 +23,16 @@ function roles_userapi_getprimaryparent($args)
         throw new VariableValidationException(array('itemid',$itemid,'numeric'));
     }
 
-	$parentid = xarModItemVars::get('roles','primaryparent',$itemid);
-	$role = xarRoles::get($itemid);
-	$parents = $role->getParents();
-	//CHECKME: the better way would be to have the default primary parent modvar be null, rather than Everybody
-	// then this looping would be unnecessary
-	$validparent = false;
-	foreach ($parents as $parent) {
-		if ($parentid == $parent->getID()) $validparent = true;
-	}
-	if (!$validparent) $parentid = $parents[0]->getID();
+    $parentid = xarModItemVars::get('roles','primaryparent',$itemid);
+    $role = xarRoles::get($itemid);
+    $parents = $role->getParents();
+    //CHECKME: the better way would be to have the default primary parent modvar be null, rather than Everybody
+    // then this looping would be unnecessary
+    $validparent = false;
+    foreach ($parents as $parent) {
+        if ($parentid == $parent->getID()) $validparent = true;
+    }
+    if (!$validparent) $parentid = $parents[0]->getID();
 
     return $parentid;
 }

@@ -46,6 +46,10 @@ class FilePickerProperty extends SelectProperty
 
     function getOptions()
     {
+        //allow overriding
+        $options = parent::getOptions();
+        if (!empty($options)) return $options;
+
         if (empty($this->basedir)) return array();
         $dir = new RelativeDirectoryIterator($this->basedir);
 
@@ -56,9 +60,9 @@ class FilePickerProperty extends SelectProperty
             $name = $dir->getFileName() . "." . $dir->getExtension();
             if (!$this->fullname) $name = substr($name, 0, strlen($name) - strlen($dir->getExtension()) - 1);
             if(!empty($this->matches) && (strpos($name,$this->matches) === false)) continue;
-            $this->options[] = array('id' => $name, 'name' => $name);
+            $options[] = array('id' => $name, 'name' => $name);
         }
-        return $this->options;
+        return $options;
     }
 }
 ?>

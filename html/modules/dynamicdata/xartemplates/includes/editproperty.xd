@@ -23,6 +23,9 @@
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">#$labels.name#</label>
             #$field.name#
+            <a href="&xar-modurl-dynamicdata-admin-modify;&amp;objectid=2&amp;itemid=#$field.id#">
+                <xar:var name="otherfields" prep="true"/>
+            </a>
         </div>
 
         <div class="xar-form-input-wrapper">
@@ -37,12 +40,6 @@
                 #$labels['source']#:
             </label>
             #$field['source']#
-        </div>
-
-        <div class="xar-form-input-wrapper-after">
-            <a href="&xar-modurl-dynamicdata-admin-modify;&amp;objectid=2&amp;itemid=#$field.id#">
-                <xar:var name="otherfields" prep="true"/>
-            </a>
         </div>
       
         <div class="xar-form-input-wrapper">

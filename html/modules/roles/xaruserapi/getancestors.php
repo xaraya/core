@@ -27,9 +27,9 @@ function roles_userapi_getancestors($args)
     $role = xarRoles::get($id);
 
     if (empty($args['parents'])) {
-	    $ancestors = $role->getRoleAncestors();
+        $ancestors = $role->getRoleAncestors();
     } else {
-	    $ancestors = $role->getParents();
+        $ancestors = $role->getParents();
     }
 
     $flatancestors = array();

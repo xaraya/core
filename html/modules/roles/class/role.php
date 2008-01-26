@@ -91,7 +91,7 @@ class Role extends DataObject
         if (!$q->run()) return;
 
         if ($q->getrows() > 0) {
-            throw new DuplicateException(array('role',($this->basetype == ROLES_GROUPTYPE)?$this->getName():$this->getUser()));
+            throw new DuplicateException(array('role',($this->basetype == ROLES_GROUPTYPE)?$this->getName():$this->getUname()));
         }
 
         $id = parent::createItem($data);
@@ -466,19 +466,19 @@ class Role extends DataObject
                   FROM $this->rolestable r, $this->rolememberstable rm ";
         // set up the query and get the data
         if ($state == ROLES_STATE_CURRENT) {
-        	$where = "WHERE r.id = rm.id AND
+            $where = "WHERE r.id = rm.id AND
                         r.type = ? AND
                         r.state != ? AND
                         rm.parentid = ?";
              $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->getID());
         } elseif ($state == ROLES_STATE_ALL) {
-        	$where = "WHERE r.id = rm.id AND
+            $where = "WHERE r.id = rm.id AND
                         r.type = ? AND
                         rm.parentid = ?";
              $bindvars = array(ROLES_USERTYPE,$this->getID());
         } else {
              $bindvars = array(ROLES_USERTYPE, $state, $this->properties['id']->value);
-        	$where = "WHERE r.id = rm.id AND
+            $where = "WHERE r.id = rm.id AND
                         r.type = ? AND
                         r.state = ? AND
                         rm.parentid = ?";

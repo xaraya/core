@@ -21,7 +21,7 @@ function blocks_admin_view_groups()
     $block_groups = xarModAPIfunc(
         'blocks', 'user', 'getallgroups', array('order' => 'name')
     );
-    
+
     // Load up groups array
     foreach($block_groups as $index => $block_group) {
         // Get details on current group

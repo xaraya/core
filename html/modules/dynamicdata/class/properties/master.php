@@ -55,7 +55,6 @@ class DataPropertyMaster extends Object
                          prop_objectid FROM $dynamicprop ";
         if(empty($args['objectid']))
         {
-        var_dump($args);exit;
             $doargs['moduleid'] = $args['moduleid'];
             $doargs['itemtype'] = $args['itemtype'];
             $info = DataObjectDescriptor::getObjectID($doargs);
@@ -144,6 +143,12 @@ class DataPropertyMaster extends Object
         // add it to the list of properties
         $objectref->properties[$property->name] =& $property;
 
+        // if the property wants a reference, give it
+        if ($property->include_reference) {
+            $objectref->properties[$property->name]->objectref = $objectref;
+        }
+
+        // if the property involves upload, tell its object
         if(isset($property->upload))
             $objectref->upload = true;
     }
