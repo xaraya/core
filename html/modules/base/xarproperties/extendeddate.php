@@ -38,19 +38,21 @@ class ExtendedDateProperty extends CalendarProperty
     }
 
     /**
-     * We allow two validations: date, and datetime (corresponding to the
+     * We allow two configurations: date, and datetime (corresponding to the
      * database's date and datetime data types.
      *
      * We also don't make any modifications for the timezone (too hard).
      */
     public function validateValue($value = null)
     {
-        if (empty($this->validation)) {
-            $this->validation = 'datetime';
+        /* CHECKME: need to translate this to the new format
+        if (empty($this->configuration)) {
+            $this->configuration = 'datetime';
         }
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        */
+
+        if (!parent::validateValue($value)) return false;
+
         if (empty($value)) {
             $this->value = $value;
             return true;
@@ -61,7 +63,7 @@ class ExtendedDateProperty extends CalendarProperty
                 if (is_numeric($value['year']) && is_numeric($value['mon']) && is_numeric($value['day']) &&
                     $value['mon'] > 0 && $value['mon'] < 13 && $value['day'] > 0 && $value['day'] < 32) {
                     $this->value = sprintf('%04d-%02d-%02d',$value['year'],$value['mon'],$value['day']);
-                    if ($this->validation == 'datetime') {
+                    if ($this->configuration == 'datetime') {
                         if (isset($value['hour']) && isset($value['min']) && isset($value['sec']) &&
                             is_numeric($value['hour']) && is_numeric($value['min']) && is_numeric($value['sec']) &&
                             $value['hour'] > -1 && $value['hour'] < 24 && $value['min'] > -1 && $value['min'] < 61 && $value['sec'] > -1 && $value['sec'] < 61) {
@@ -86,10 +88,10 @@ class ExtendedDateProperty extends CalendarProperty
         } elseif (is_string($value) &&
 
             /* check it matches the correct regexp */
-            ($this->validation == 'date' &&
+            ($this->configuration == 'date' &&
             preg_match('/\d{4}-\d{1,2}-\d{1,2}/', $value)) ||
 
-            ($this->validation == 'datetime' &&
+            ($this->configuration == 'datetime' &&
             preg_match('/\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}/', $value))
             ) {
 
@@ -124,13 +126,13 @@ class ExtendedDateProperty extends CalendarProperty
         if (empty($data['value'])) {
             $data['value'] = '';
 
-        } elseif ($this->validation == 'date' &&
+        } elseif ($this->configuration == 'date' &&
             preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];
 
-        } elseif ($this->validation == 'datetime' &&
+        } elseif ($this->configuration == 'datetime' &&
             preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
@@ -139,10 +141,10 @@ class ExtendedDateProperty extends CalendarProperty
             $data['min']  = $matches[5];
             $data['sec']  = $matches[6];
         }
-        $data['format']   = $this->validation;
+        $data['format']   = $this->configuration;
 
         if (!isset($data['dateformat'])) {
-            if ($this->validation == 'date') {
+            if ($this->configuration == 'date') {
                 $data['dateformat'] = '%Y-%m-%d';
             } else {
                 $data['dateformat'] = '%Y-%m-%d %H:%M:%S';
@@ -172,13 +174,13 @@ class ExtendedDateProperty extends CalendarProperty
         if (empty($data['value'])) {
             $data['value'] = '';
 
-        } elseif ($this->validation == 'date' &&
+        } elseif ($this->configuration == 'date' &&
             preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];
 
-        } elseif ($this->validation == 'datetime' &&
+        } elseif ($this->configuration == 'datetime' &&
             preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
@@ -187,10 +189,10 @@ class ExtendedDateProperty extends CalendarProperty
             $data['min']  = $matches[5];
             $data['sec']  = $matches[6];
         }
-        $data['format']   = $this->validation;
+        $data['format']   = $this->configuration;
 
         if (!isset($data['dateformat'])) {
-            if ($this->validation == 'date') {
+            if ($this->configuration == 'date') {
                 $data['dateformat'] = '%a, %d %B %Y %Z';
             } else {
                 $data['dateformat'] = '%a, %d %B %Y %H:%M:%S %Z';

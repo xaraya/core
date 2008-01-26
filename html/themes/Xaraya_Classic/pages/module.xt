@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE blocklayout PUBLIC "-//XAR//DTD BL 1.0 Strict//EN" "http://xaraya.com/bl1/DTD/bl1-strict.dtd">
 <?xar type="page" ?>
-<xar:blocklayout version="1.0" content="text/xml" xmlns:xar="http://xaraya.com/2004/blocklayout">
-  <xar:module main="true" />
-  <xar:comment> 
-    Delivers the main module in XML contenttype for DOM manipulation and remote 
-    module content (note the contenttype above). 
-  </xar:comment>
+<xar:blocklayout version="1.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+        <head>
+            <!-- prepare some other common local variables which may be used in the theme -->
+            <xar:set name="classicthemedir">#xarTplGetThemeDir()#</xar:set>
+            <xar:set name="sitename"><xar:var scope="module" module="themes" name="SiteName" /></xar:set>
+            <!-- Type of styleswitcher to use (if any). Supported values are 'none', 'javascript' or 'php' (not yet). -->
+            <xar:set name="styleswitchertype">'javascript'</xar:set>
+            <xar:template file="headtagcontent" type="theme" />
+        </head>
+        <body>
+            <xar:module main="true" />
+            <xar:comment> 
+                Delivers the main module in XML contenttype for DOM manipulation and remote 
+                module content (note the contenttype above). 
+            </xar:comment>
+        </body>
+    </html>
 </xar:blocklayout>

@@ -553,8 +553,17 @@ ALTER TABLE `xar_dynamic_objects`
 
 UPDATE `xar_dynamic_properties` SET name = 'defaultvalue' WHERE name = 'default' AND objectid = 2;
 UPDATE `xar_dynamic_properties` SET name = 'seq' WHERE name = 'order' AND objectid = 2;
+UPDATE `xar_dynamic_properties` SET name = 'configuration' WHERE name = 'validation' AND objectid = 2;
+UPDATE `xar_dynamic_properties` SET label = 'Configuration' WHERE label = 'Validation' AND objectid = 2;
+
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_objects.object_", "xar_dynamic_objects.");
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.prop_", "xar_dynamic_properties.");
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.default", "xar_dynamic_properties.defaultvalue");
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.order", "xar_dynamic_properties.seq");
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.validation", "xar_dynamic_properties.configuration");
 
+ALTER TABLE `xar_dynamic_properties`
+  CHANGE COLUMN `validation` `configuration` text;
+ALTER TABLE `xar_dynamic_properties_def`
+  CHANGE COLUMN `validation` `configuration` varchar(254) default NULL,
+  

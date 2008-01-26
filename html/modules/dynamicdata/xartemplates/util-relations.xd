@@ -204,7 +204,7 @@
                 </th>
                 <th>
                     <xar:mlstring>
-                        Validation 
+                        Configuration 
                     </xar:mlstring>
                 </th>
             </tr>
@@ -229,7 +229,7 @@
                         #$property:source# 
                     </td>
                     <td>
-                        #$property:validation# 
+                        #$property:configuration# 
                     </td>
                 </tr>
             </xar:foreach>

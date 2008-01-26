@@ -105,7 +105,7 @@
             <xar:data-input type="radio" name="ptype" id="ptype" options="$options" value="$ptype" onclick="$onclick" />
         </div>
         -->
-        <xar:if condition="$ptype eq null">
+        <xar:if condition="$ptype eq 'empty'">
           <div class="xar-form-input-wrapper-after">
             <input type="radio" name="ptype" id="ptype1_empty" value="empty" checked="checked" onclick="" />
             <label for="ptype1_empty" title="#xarML('This privilege has no children')#">
@@ -156,7 +156,7 @@
           <label for="pmodule" title="#xarML('Module which holds the target component')#" class="xar-form-label">
             <xar:mlstring>Module:</xar:mlstring>
           </label>
-            <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="All" onchange="$onclick" validation="regid" />
+            <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="All" onchange="$onclick" store_prop="regid" />
         </div>
 
         <div class="xar-form-input-wrapper">
@@ -175,56 +175,24 @@
         </div>
 
         <div class="xar-form-input-wrapper">
-          <label for="plevel" title="#xarML('Level of access')#" class="xar-form-label">
+            <label for="plevel" title="#xarML('Level of access')#" class="xar-form-label">
             <xar:mlstring>Level:</xar:mlstring>
-          </label>
-          <select name="plevel" id="plevel" size="1" tabindex="6">
-            <xar:if condition="$plevel eq 0">
-              <option value="0" selected="selected"><xar:mlstring>None</xar:mlstring></option>
-              <xar:else />
-              <option value="0"><xar:mlstring>None</xar:mlstring></option>
-            </xar:if>
-            <xar:if condition="$plevel eq 100">
-              <option value="100" selected="selected"><xar:mlstring>Overview</xar:mlstring></option>
-              <xar:else />
-              <option value="100"><xar:mlstring>Overview</xar:mlstring></option>
-            </xar:if>
-            <xar:if condition="$plevel eq 200">
-              <option value="200" selected="selected"><xar:mlstring>Read</xar:mlstring></option>
-              <xar:else />
-              <option value="200"><xar:mlstring>Read</xar:mlstring></option>
-            </xar:if>
-            <xar:if condition="$plevel eq 300">
-              <option value="300" selected="selected"><xar:mlstring>Comment</xar:mlstring></option>
-              <xar:else />
-              <option value="300"><xar:mlstring>Comment</xar:mlstring></option>
-            </xar:if>
-            <xar:if condition="$plevel eq 400">
-              <option value="400" selected="selected"><xar:mlstring>Moderate</xar:mlstring></option>
-              <xar:else />
-              <option value="400"><xar:mlstring>Moderate</xar:mlstring></option>
-            </xar:if>
-            <xar:if condition="$plevel eq 500">
-              <option value="500" selected="selected"><xar:mlstring>Edit</xar:mlstring></option>
-              <xar:else />
-              <option value="500"><xar:mlstring>Edit</xar:mlstring></option>
-            </xar:if>
-            <xar:if condition="$plevel eq 600">
-              <option value="600" selected="selected"><xar:mlstring>Add</xar:mlstring></option>
-              <xar:else />
-              <option value="600"><xar:mlstring>Add</xar:mlstring></option>
-            </xar:if>
-            <xar:if condition="$plevel eq 700">
-              <option value="700" selected="selected"><xar:mlstring>Delete</xar:mlstring></option>
-              <xar:else />
-              <option value="700"><xar:mlstring>Delete</xar:mlstring></option>
-            </xar:if>
-            <xar:if condition="$plevel eq 800">
-              <option value="800" selected="selected"><xar:mlstring>Admin</xar:mlstring></option>
-              <xar:else />
-              <option value="800"><xar:mlstring>Admin</xar:mlstring></option>
-            </xar:if>
-          </select>
+            </label>
+            <xar:set name="levels">
+                SecurityLevel::$displayMap
+            </xar:set>
+            <xar:set name="foo">
+                1; array_shift($levels)
+            </xar:set>
+            <xar:set name="options">
+                array()
+            </xar:set>
+            <xar:foreach in="$levels" key="$key" value="$value" >
+                <xar:set name="foo">1;
+                    $options[] = array('id' => $key * 100, 'name' => $value)
+                </xar:set>
+            </xar:foreach>
+            <xar:data-input type="dropdown" name="plevel" value="$plevel" options="$options" tabindex="6" />
         </div>
       </xar:if>
 

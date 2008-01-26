@@ -27,15 +27,15 @@ class HTMLPageProperty extends SelectProperty
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template = 'webpage';
-        // specify base directory in validation field
-        if (empty($this->basedir) && !empty($this->validation)) {
+        // specify base directory in configuration field
+        if (empty($this->basedir) && !empty($this->configuration)) {
             // Hack for passing this thing into transform hooks
             // validation may start with 'transform:' and we
             // obviously dont want that in basedir
-            if(substr($this->validation,0,10) == 'transform:') {
-                $basedir = substr($this->validation,10,strlen($this->validation)-10);
+            if(substr($this->configuration,0,10) == 'transform:') {
+                $basedir = substr($this->configuration,10,strlen($this->configuration)-10);
             } else {
-                $basedir = $this->validation;
+                $basedir = $this->configuration;
             }
             $this->basedir = $basedir;
         }
@@ -43,9 +43,8 @@ class HTMLPageProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         $basedir = $this->basedir;
         $filetype = $this->filetype;
         if (!empty($value) &&
@@ -69,7 +68,7 @@ class HTMLPageProperty extends SelectProperty
         if (!isset($data['value'])) {
             $data['value'] = $this->value;
         }
-        if (!isset($data['options']) || count($data['options']) == 0) {
+/*        if (!isset($data['options']) || count($data['options']) == 0) {
             $data['options'] = $this->getOptions();
         }
         if (count($data['options']) == 0 && !empty($this->basedir)) {
@@ -87,7 +86,7 @@ class HTMLPageProperty extends SelectProperty
             }
             unset($files);
         }
-
+*/
         return parent::showInput($data);
     }
 
@@ -113,6 +112,26 @@ class HTMLPageProperty extends SelectProperty
         $data['filetype'] = $filetype;
         $data['srcpath']  = $srcpath;
         return parent::showOutput($data);
+    }
+    public function getOptions()
+    {
+        $options = parent::getOptions();
+        if (count($options) == 0 && !empty($this->basedir)) {
+            $files = xarModAPIFunc('dynamicdata','admin','browse',
+                                   array('basedir' => $this->basedir,
+                                         'filetype' => $this->filetype));
+            if (!isset($files)) {
+                $files = array();
+            }
+            natsort($files);
+            array_unshift($files,'');
+            foreach ($files as $file) {
+                $options[] = array('id' => $file,
+                                   'name' => $file);
+            }
+            unset($files);
+        }
+        return $options;
     }
 }
 ?>

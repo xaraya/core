@@ -21,31 +21,16 @@ class FieldStatusProperty extends SelectProperty
     public $desc       = 'Field Status';
     public $reqmodules = array('dynamicdata');
 
-    // CHANGEME: make this a validation?
-    public $default_display = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
-    public $default_input   = DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
+    // CHANGEME: make this a configuration?
+    public $initialization_display_status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
+    public $initialization_input_status   = DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
 
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
-        $this->tplmodule =  'dynamicdata';
-        $this->template =  'status';
-
-        if (count($this->options) == 0) {
-            $this->options['display'] = array(
-                                 array('id' => DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE, 'name' => xarML('Active')),
-                                 array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISABLED, 'name' => xarML('Disabled')),
-                                 array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY, 'name' => xarML('Display only')),
-                                 array('id' => DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN, 'name' => xarML('Hidden')),
-                             );
-            $this->options['input'] = array(
-                                 array('id' => DataPropertyMaster::DD_INPUTSTATE_NOINPUT, 'name' => xarML('No input allowed')),
-                                 array('id' => DataPropertyMaster::DD_INPUTSTATE_ADD, 'name' => xarML('Can be added')),
-                                 array('id' => DataPropertyMaster::DD_INPUTSTATE_MODIFY, 'name' => xarML('Can be changed')),
-                                 array('id' => DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY, 'name' => xarML('Can be added/changed')),
-                             );
-        }
+        $this->tplmodule  =  'dynamicdata';
+        $this->template   =  'fieldstatus';
     }
 
     public function showInput(Array $data = array())
@@ -61,15 +46,11 @@ class FieldStatusProperty extends SelectProperty
 
         // if the input part is 0 then we need to display default values
         if (empty($valuearray['input'])) {
-            $valuearray['display'] = $this->default_display;
-            $valuearray['input'] = $this->default_input;
+            $valuearray['display'] = $this->initialization_display_status;
+            $valuearray['input'] = $this->initialization_input_status;
         }
 
         $data['value'] = $valuearray;
-
-        if (!isset($data['options']) || count($data['options']) == 0) {
-            $data['options'] = $this->getOptions();
-        }
 
         if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
         $data['extraparams'] =!empty($extraparams) ? $extraparams : "";
@@ -85,21 +66,20 @@ class FieldStatusProperty extends SelectProperty
             $inputname = 'input_'.$name;
             $displayname = 'display_'.$name;
         }
-        // store the fieldname for validations who need them (e.g. file uploads)
+        // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            if(!xarVarFetch($displayname, 'isset', $display_dd_status, NULL, XARVAR_DONT_SET)) {return;}
-            if(!xarVarFetch($inputname,   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
+            if(!xarVarFetch($displayname, 'isset', $display_status, NULL, XARVAR_DONT_SET)) {return;}
+            if(!xarVarFetch($inputname,   'isset', $input_status,   NULL, XARVAR_DONT_SET)) {return;}
         }
-        $value = $display_dd_status + $input_dd_status;
+        $value = $display_status + $input_status;
         return $this->validateValue($value);
     }
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (empty($value)) {
             $value = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE + DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
         }
@@ -112,6 +92,22 @@ class FieldStatusProperty extends SelectProperty
         return false;
     }
 
+    function getOptions()
+    {
+        $options['display'] = array(
+                             array('id' => DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE, 'name' => xarML('Active')),
+                             array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISABLED, 'name' => xarML('Disabled')),
+                             array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY, 'name' => xarML('Display only')),
+                             array('id' => DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN, 'name' => xarML('Hidden')),
+                         );
+        $options['input'] = array(
+                             array('id' => DataPropertyMaster::DD_INPUTSTATE_NOINPUT, 'name' => xarML('No input allowed')),
+                             array('id' => DataPropertyMaster::DD_INPUTSTATE_ADD, 'name' => xarML('Can be added')),
+                             array('id' => DataPropertyMaster::DD_INPUTSTATE_MODIFY, 'name' => xarML('Can be changed')),
+                             array('id' => DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY, 'name' => xarML('Can be added/changed')),
+                         );
+        return $options;
+    }
     function getOption($check = false)
     {
         //TODO: get this working
