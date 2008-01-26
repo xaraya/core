@@ -109,19 +109,7 @@
       <source>xar_modules.state</source>
       <status>33</status>
       <seq>11</seq>
-      <configuration>a:7:{s:14:"display_layout";s:7:"default";s:19:"validation_override";s:1:"1";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:237:"1,Unititialized;
-2,Inactive;
-3,Active;
-4,Missing Uninitialized;
-5,Upgraded;
-6,Installed;
-7,Missing Inactive;
-8,Missing Active;
-9,Missing Upgraded;
-10,Error Uninitialized;
-11,Error Inactive;
-12,Error Active;
-13,Error Upgraded;";s:25:"initialization_other_rule";s:0:"";}</configuration>
+      <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:213:"1,Unititialized;2,Inactive;3,Active;4,Missing Uninitialized;5,Upgraded;6,Installed;7,Missing Inactive;8,Missing Active;9,Missing Upgraded;10,Error Uninitialized;11,Error Inactive;12,Error Active;13,Error Upgraded;";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
   </properties>
 </object>
