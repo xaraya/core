@@ -442,7 +442,7 @@ class VariableTableDataStore extends SQLDataStore
                 $query .= " ORDER BY ";
                 $join = '';
                 foreach ($this->sort as $sortitem) {
-                    $query .= $join . $sortitem['field'] . ' ' . $sortitem['sortorder'];
+                    $query .= $join . 'dd_' . $sortitem['field'] . ' ' . $sortitem['sortorder'];
                     $join = ', ';
                 }
             }
