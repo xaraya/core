@@ -119,6 +119,7 @@ class ItemTypeProperty extends ComboProperty
     /**
      * Retrieve or check an individual option on demand
      */
+    /* Use the parent method for now
     function getOption($check = false)
     {
         if (!isset($this->value)) {
@@ -161,6 +162,7 @@ class ItemTypeProperty extends ComboProperty
         if ($check) return false;
         return $this->value;
     }
+    */
 }
 
 ?>

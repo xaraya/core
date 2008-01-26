@@ -21,6 +21,7 @@ sys::import('modules.base.xarproperties.dropdown');
         public $desc       = 'Combo Dropdown Box';
 
         public $display_combo_mode       = 3;
+        public $validation_override      = true;
 
         function __construct(ObjectDescriptor $descriptor)
         {
@@ -38,26 +39,20 @@ sys::import('modules.base.xarproperties.dropdown');
 
             if( isset($tbvalue) && ($tbvalue != '') )
             {
+                // store the fieldname for configurations who need them (e.g. file uploads)
+                $this->fieldname = $tbname;
+
+                // check as a textbox
                 $value = $tbvalue;
+                $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
+                return $textbox->checkInput($tbname, $tbvalue);
             } else {
-                // Default to checking the selection box.
+                // store the fieldname for configurations who need them (e.g. file uploads)
+                $this->fieldname = $name;
 
-                if (!isset($value))
-                {
-                    if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
-                }
+                // check as a dropdown
+                return parent::checkInput($name, $value);
             }
-            // store the fieldname for configurations who need them (e.g. file uploads)
-            $this->fieldname = $name;
-            return $this->validateValue($value);
-        }
-
-        public function validateValue($value = null)
-        {
-            if (!parent::validateValue($value)) return false;
-
-            $this->value = $value;
-            return true;
         }
 
         public function showInput(Array $data = array())

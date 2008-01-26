@@ -53,7 +53,7 @@ class SelectProperty extends DataProperty
         if (!empty($this->validation_override_invalid)) {
             $this->invalid = xarML($this->validation_override_invalid);
         } else {
-            $this->invalid = xarML('unallowed selection: #(1)', $this->name);
+            $this->invalid = xarML('unallowed selection: #(1) for #(2)', $value, $this->name);
         }
         $this->value = null;
         return false;

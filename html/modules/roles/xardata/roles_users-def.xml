@@ -39,7 +39,7 @@
       <source>xar_roles.type</source>
       <status>67</status>
       <seq>3</seq>
-      <configuration>a:9:{s:18:"display_combo_mode";s:1:"2";s:14:"display_layout";s:7:"default";s:21:"initialization_module";s:1:"4";s:23:"initialization_itemtype";s:1:"0";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+      <configuration></configuration>
     </property>
     <property name="uname">
       <id>38</id>
