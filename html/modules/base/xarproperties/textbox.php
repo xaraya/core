@@ -83,18 +83,15 @@ class TextBoxProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
-        // Process the parameters
-        if (!isset($data['maxlength']) && isset($this->validation_max_length)) {
-            $this->display_maxlength = $this->validation_max_length;
-            if ($this->display_size > $this->display_maxlength) {
-                $this->display_size = $this->display_maxlength;
-            }
+        // Should we be doing this? (random)
+        if(!isset($data['maxlength'])) $data['maxlength'] = $this->display_maxlength;
+        if(!isset($data['size']))      $data['size']      = $this->display_size;
+        if ($data['size'] > $data['maxlength']) {
+            $data['size'] = $data['maxlength'];
         }
 
         // Prepare for templating
         $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
-//        if(!isset($data['maxlength'])) $data['maxlength'] = $this->display_maxlength;
-//        if(!isset($data['size']))      $data['size']      = $this->display_size;
         if(!isset($data['onfocus']))   $data['onfocus']   = null;
 
         return parent::showInput($data);
