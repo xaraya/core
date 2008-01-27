@@ -215,8 +215,9 @@ function dynamicdata_utilapi_import($args)
             foreach($objectproperties as $propertyname => $property) {
                 if (isset($child->$propertyname)) {
                     // Run the import value through the property's validation routine
-                    $check = $property->validateValue((string)$child->$propertyname);
-                    $item[$propertyname] = $check;
+                    //$check = $property->validateValue((string)$child->$propertyname);
+                    $value = (string)$child->$propertyname;
+                    $item[$propertyname] = $value;
                 }
             }
             if (empty($keepitemid)) {
