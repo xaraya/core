@@ -287,4 +287,19 @@
     <label>Combo Mode</label>
     <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:29:"1,Dropdown;2,Text Box;3,Both;";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
-</items>
+  <configurations itemid="37">
+    <id>37</id>
+    <name>display_required</name>
+    <description>Whether this field is tagged as &quot;required&quot; or not</description>
+    <property_id>14</property_id>
+    <label>Required</label>
+    <configuration>a:2:{s:14:"display_layout";s:7:"default";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="38">
+    <id>38</id>
+    <name>display_tooltip</name>
+    <description>The tooltip text for this field</description>
+    <property_id>3</property_id>
+    <label>Tooltip</label>
+    <configuration>a:2:{s:14:"display_layout";s:7:"default";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations></items>
