@@ -561,3 +561,11 @@ UPDATE `xar_dynamic_properties` SET name = 'configuration' WHERE name = 'validat
 UPDATE `xar_dynamic_properties` SET label = 'Configuration' WHERE label = 'Validation' AND objectid = 2;
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.validation", "xar_dynamic_properties.configuration");
   
+CREATE TABLE `xar_dynamic_configurations` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(254) NOT NULL default '',
+  `description` varchar(254) NOT NULL default '',
+  `property_id` int(11) NOT NULL default '0',
+  `label` varchar(254) NOT NULL default '',
+  `configuration` mediumtext,
+  PRIMARY KEY  (`id`));
