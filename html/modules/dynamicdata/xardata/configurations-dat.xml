@@ -295,4 +295,11 @@
     <label>Required</label>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
-</items>
+  <configurations itemid="38">
+    <id>38</id>
+    <name>display_tooltip</name>
+    <description>The tooltip text for this field</description>
+    <property_id>3</property_id>
+    <label>Tooltip</label>
+    <configuration>a:2:{s:14:"display_layout";s:7:"default";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations></items>
