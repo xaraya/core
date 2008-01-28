@@ -52,10 +52,8 @@ class HTMLPageProperty extends SelectProperty
             preg_match("/$filetype$/",$value) &&
             file_exists($basedir.'/'.$value) &&
             is_file($basedir.'/'.$value)) {
-            $this->value = $value;
             return true;
         } elseif (empty($value)) {
-            $this->value = $value;
             return true;
         }
         $this->invalid = xarML('selection: #(1)', $this->name);

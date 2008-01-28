@@ -57,8 +57,6 @@ class ImageProperty extends TextBoxProperty
             $prop->fieldname = $this->fieldname;
             $prop->validateValue($value);
             $this->value = $prop->value;
-        } else {
-            $this->value = $value;
         }
         return true;
     }

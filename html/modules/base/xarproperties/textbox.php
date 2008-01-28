@@ -44,9 +44,7 @@ class TextBoxProperty extends DataProperty
     {
         if (!parent::validateValue($value)) return false;
 
-        if (!isset($value)) {
-            $value = $this->value;
-        } elseif (is_array($value)) {
+        if (is_array($value)) {
             $value = serialize($value);
         }
 
@@ -76,7 +74,6 @@ class TextBoxProperty extends DataProperty
             return false;
         } else {
     // TODO: allowable HTML ?
-            $this->value = $value;
             return true;
         }
     }

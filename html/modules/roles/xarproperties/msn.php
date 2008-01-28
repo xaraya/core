@@ -37,9 +37,7 @@ class MSNProperty extends URLIconProperty
         if (!empty($value)) {
             // cfr. pnVarValidate in pnLegacy.php
             $regexp = '/^(?:[^\s\000-\037\177\(\)<>@,;:\\"\[\]]\.?)+@(?:[^\s\000-\037\177\(\)<>@,;:\\\"\[\]]\.?)+\.[a-z]{2,6}$/Ui'; // TODO: verify this !
-            if (preg_match($regexp,$value)) {
-                $this->value = $value;
-            } else {
+            if (!preg_match($regexp,$value)) {
                 $this->invalid = xarML('MSN Messenger: #(1)', $this->name);
                 $this->value = null;
                 return false;

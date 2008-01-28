@@ -43,7 +43,6 @@ class TColorPickerProperty extends DataProperty
                 return false;
             }
         }
-        $this->value = $value;
         return true;
     }
 

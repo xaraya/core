@@ -52,15 +52,6 @@ class TextAreaProperty extends DataProperty
         return array($a1, $a2);
     }
 
-    public function validateValue($value = null)
-    {
-        if (!parent::validateValue($value)) return false;
-
-        // TODO: allowable HTML ?
-        $this->value = $value;
-        return true;
-    }
-
     public function showInput(Array $data = array())
     {
         // TODO: the way the template is organized now, this only works when an id is set.

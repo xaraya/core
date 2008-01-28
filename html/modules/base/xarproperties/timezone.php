@@ -36,12 +36,10 @@ class TimeZoneProperty extends SelectProperty
 
         if (empty($value)) {
             // no timezone selected
-            $this->value = $value;
             return true;
 
         } elseif (is_numeric($value)) {
             // keep old numeric format
-            $this->value = $value;
             return true;
 
         } elseif (is_string($value)) {

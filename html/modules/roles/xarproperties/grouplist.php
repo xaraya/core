@@ -76,11 +76,9 @@ class GroupListProperty extends SelectProperty
                                    array('id' => $value,
                                          'type' => 1)); // we're looking for a group here
             if (!empty($group)) {
-                $this->value = $value;
                 return true;
             }
         } elseif (empty($value)) {
-            $this->value = $value;
             return true;
         }
         $this->invalid = xarML('selection: #(1)', $this->name);

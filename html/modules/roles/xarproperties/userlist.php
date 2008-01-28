@@ -93,14 +93,12 @@ class UserListProperty extends SelectProperty
             try {
                 $uname = xarUserGetVar('uname', $value);
                 if (isset($uname)) {
-                    $this->value = $value;
                     return true;
                 }
             } catch (NotFoundExceptions $e) {
                 // Nothing to do?
             }
         } elseif (empty($value)) {
-            $this->value = $value;
             return true;
         }
         $this->invalid = xarML('selection: #(1)', $this->name);

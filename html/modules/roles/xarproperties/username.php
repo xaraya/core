@@ -44,10 +44,6 @@ class UsernameProperty extends TextBoxProperty
         // Validate as a text box
         if (!parent::validateValue($value)) return false;
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-
         /* CHECKME: was this good for anything?
         if (empty($value)) {
             $value = xarUserGetVar('id');
@@ -84,7 +80,6 @@ class UsernameProperty extends TextBoxProperty
             case 0:
             default:
         }
-
         return true;
     }
 

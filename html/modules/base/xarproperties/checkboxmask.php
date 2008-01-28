@@ -33,8 +33,6 @@ class CheckboxMaskProperty extends SelectProperty
 
         if(is_array($value)) {
             $this->value = maskImplode($value);
-        } else {
-            $this->value = $value;
         }
 
         return true;

@@ -46,10 +46,5 @@ class FieldTypeProperty extends ObjectRefProperty
         ksort($options);
         return $options;
     }
-
-    public function checkInput($name = '', $value = null)
-    {
-       return parent::checkInput('dd_'.$this->id);
-    }
 }
 ?>

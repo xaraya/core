@@ -34,7 +34,6 @@ class CalendarProperty extends DataProperty
         if (empty($value)) {
               $this->value = -1;
         } elseif (is_numeric($value)) {
-            $this->value = $value;
         } elseif (is_array($value) && !empty($value['year'])) {
             if (!isset($value['sec'])) {
                 $value['sec'] = 0;

@@ -36,9 +36,7 @@ class AfferoProperty extends URLIconProperty
         if (!parent::validateValue($value)) return false;
 
         if (!empty($value)) {
-            if (is_string($value)) {
-                $this->value = $value;
-            } else {
+            if (!is_string($value)) {
                 $this->invalid = xarML('Affero Name: #(1)', $this->name);
                 $this->value = null;
                 return false;

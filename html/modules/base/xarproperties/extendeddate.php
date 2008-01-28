@@ -54,7 +54,6 @@ class ExtendedDateProperty extends CalendarProperty
         if (!parent::validateValue($value)) return false;
 
         if (empty($value)) {
-            $this->value = $value;
             return true;
 
         } elseif (is_array($value)) {

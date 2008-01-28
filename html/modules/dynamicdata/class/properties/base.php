@@ -57,7 +57,7 @@ class DataProperty extends Object implements iDataProperty
 
     public $configurationtypes = array('display','validation','initialization');
 //    public $display_template                = "";
-    public $display_layout                  = "default";
+    public $display_layout                  = "default";       // we display the default layout of a template
     public $initialization_other_rule       = null;
 
     /**
@@ -234,7 +234,8 @@ class DataProperty extends Object implements iDataProperty
      */
     public function validateValue($value = null)
     {
-        if(!isset($value)) $value = $this->value;
+        if(!isset($value)) $value = $this->getValue();
+        else $this->setValue($value);
 
 //        $this->value = null;
 //        $this->invalid = xarML('unknown property');

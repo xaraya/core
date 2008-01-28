@@ -350,7 +350,9 @@ class DataObject extends DataObjectMaster implements iDataObject
                     // add the primary to the data store fields if necessary
                     if(!empty($this->fieldlist) && !in_array($primaryobject->primary,$this->fieldlist))
                         $this->datastores[$primarystore]->addField($this->properties[$this->primary]); // use reference to original property
-                    $this->itemid = $this->datastores[$primarystore]->createItem($this->toArray());
+                    $args = $this->getFieldValues();
+                    $args['itemid'] = $this->itemid;
+                    $this->itemid = $this->datastores[$primarystore]->createItem($args);
                 } else {
                     $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
                     $vars = array('primary key datastore', 'Dynamic Object', 'createItem', 'DynamicData');

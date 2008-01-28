@@ -83,7 +83,7 @@ class FieldStatusProperty extends SelectProperty
         if (empty($value)) {
             $value = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE + DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
         }
-        $this->value = $value;
+
         // Just really check whether we're in bounds. Don't think more is required
         if (($value >= DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) &&
             ($value <= DataPropertyMaster::DD_INPUTSTATE_MODIFY)) {

@@ -67,7 +67,6 @@ class NumberBoxProperty extends TextBoxProperty
                 $this->value = null;
                 return false;
             }
-            $this->value = $value;
         } else {
             $this->invalid = xarML('integer: #(1)', $this->name);
             $this->value = null;
