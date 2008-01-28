@@ -59,19 +59,19 @@ function blocks_admin_update_instance()
 
     // Pick up the block instance groups and templates.
     $groups = array();
-    foreach($block_groups as $gid => $block_group) {
+    foreach($block_groups as $id => $block_group) {
         // Set the block group so long as the 'remove' checkbox is not set.
-        if (!isset($block_remove_groups[$gid]) || $block_remove_groups[$gid] == false) {
+        if (!isset($block_remove_groups[$id]) || $block_remove_groups[$id] == false) {
             $groups[] = array(
-                'gid' => $gid,
-                'template' => $group_templates[$gid]
+                'id' => $id,
+                'template' => $group_templates[$id]
             );
         }
     }
     // The block was added to a new block group using the drop-down.
     if (!empty($block_new_group)) {
         $groups[] = array(
-            'gid' => $block_new_group,
+            'id' => $block_new_group,
             'template' => ''
         );
     }
@@ -91,9 +91,17 @@ function blocks_admin_update_instance()
     // Do block-specific update
     $usname = preg_replace('/ /', '_', $blockinfo['module']);
     $updatefunc = $usname . '_' . $blockinfo['type'] . 'block_update';
+    $classpath = 'modules/' . $blockinfo['module'] . '/xarblocks/' . $blockinfo['type'] . '.php';
 
     if (function_exists($updatefunc)) {
         $blockinfo = $updatefunc($blockinfo);
+    } elseif (file_exists($classpath)) {
+        sys::import('modules.' . $blockinfo['module'] . '.xarblocks.' . $blockinfo['type']);
+        sys::import('xaraya.structures.descriptor');
+        $name = ucfirst($blockinfo['type']) . "Block";
+        $descriptor = new ObjectDescriptor(array());
+        $block = new $name($descriptor);
+        $blockinfo = $block->update($blockinfo);
     } else {
         $blockinfofunc = $usname . '_' . $blockinfo['type'] . 'block_info';
         $blockdesc = $blockinfofunc();

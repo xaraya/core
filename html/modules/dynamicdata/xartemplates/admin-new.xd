@@ -33,11 +33,14 @@
         <legend><xar:mlstring>Item details</xar:mlstring></legend>
         <xar:data-form object="$object" />
 
+        <!-- Remove hooks from DD for now
         <xar:if condition="!empty($hooks)">
             <xar:foreach in="$hooks" key="$module" value="$output">
                 #$output#
             </xar:foreach>
         </xar:if>
+        -->
+        
       </fieldset>
       <fieldset>
         <div class="xar-align-center">

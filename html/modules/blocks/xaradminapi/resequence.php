@@ -23,9 +23,9 @@ function blocks_adminapi_resequence($args)
     $bind = array();
     $where_clause = '';
 
-    if (!empty($gid) && is_numeric($gid)) {
+    if (!empty($id) && is_numeric($id)) {
         $where_clause .= ' WHERE group_id = ?';
-        $bind[] = $gid;
+        $bind[] = $id;
     }
 
     $block_group_instances_table =& $xartable['block_group_instances'];
@@ -46,11 +46,11 @@ function blocks_adminapi_resequence($args)
     $last_gid = null;
     // Fix sequence numbers
     while ($qresult->next()) {
-        list($link_id, $gid, $old_position) = $qresult->fields;
+        list($link_id, $id, $old_position) = $qresult->fields;
 
         // Reset sequence number if we've changed the group we're sorting
-        if ($last_gid != $gid) {
-            $last_gid = $gid;
+        if ($last_gid != $id) {
+            $last_gid = $id;
             $position = 1;
         }
         if ($position != $old_position) {

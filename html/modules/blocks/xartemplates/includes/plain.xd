@@ -38,7 +38,7 @@
             <td>
                 <xar:if condition="!empty($loop:item.groups)">
                     <xar:loop name="$loop:item.groups" id="groups">
-                        <a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$loop:groups:item.gid#">
+                        <a href="&xar-modurl-blocks-admin-modify_group;&amp;id=#$loop:groups:item.id#">
                             #$loop:groups:item.name# 
                         </a>
                     </xar:loop>

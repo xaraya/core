@@ -106,19 +106,19 @@ function blocks_userapi_getall($args)
         // Fetch group details - there may be none, one or many groups.
         $resultgroup = $grpStmt->executeQuery(array($bid));
         while ($resultgroup->next()) {
-            list($giid, $gid, $position, $group_inst_template, $name, $group_template) = $resultgroup->fields;
+            list($giid, $id, $position, $group_inst_template, $name, $group_template) = $resultgroup->fields;
 
             // TODO: if we use assoc fetching we get this for free
             $group_instance = array(
                 'giid'      => $giid,
-                'gid'       => $gid,
+                'id'       => $id,
                 'position'  => $position,
                 'name'      => $name,
                 // Return the original templates values as well as the over-riding templates.
                 'group_template'      => $group_template,
                 'group_inst_template' => $group_inst_template
             );
-            $instance['groups'][$gid] = $group_instance;
+            $instance['groups'][$id] = $group_instance;
         }
         // Close group query.
         $resultgroup->close();
