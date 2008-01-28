@@ -16,7 +16,7 @@
     <form action="#xarModURL('blocks', 'admin', 'update_group')#" method="post" enctype="application/x-www-form-urlencoded" >
 
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
-        <input type="hidden" name="gid" id="gid" value="#$group['id']#" />
+        <input type="hidden" name="id" id="id" value="#$group['id']#" />
         <input type="hidden" name="group_instance_order" id="group_instance_order" value="" />
 
         <fieldset>
