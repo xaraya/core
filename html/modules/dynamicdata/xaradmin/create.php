@@ -49,7 +49,6 @@ function dynamicdata_admin_create($args)
 
     // recover any session var information
     $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
-    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
     extract($data);
 
     if (!empty($preview) || !$isvalid) {
@@ -63,7 +62,9 @@ function dynamicdata_admin_create($args)
             $data['return_url'] = $return_url;
         }
 
-        $modinfo = xarModGetInfo($myobject->moduleid);
+        // Makes this hooks call explictly from DD
+        //$modinfo = xarModGetInfo($myobject->moduleid);
+        $modinfo = xarModGetInfo(182);
         $item = array();
         foreach (array_keys($myobject->properties) as $name) {
             $item[$name] = $myobject->properties[$name]->value;
@@ -82,6 +83,9 @@ function dynamicdata_admin_create($args)
     }
 
     $itemid = $myobject->createItem();
+
+   // If we are here then the create is valid: reset the session var
+    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
 
     if (empty($itemid)) return; // throw back
 
