@@ -248,19 +248,27 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
-     * Get the value of this property's display status
+     * Get and set the value of this property's display status
      */
     function getDisplayStatus()
     {
         return ($this->status & DataPropertyMaster::DD_DISPLAYMASK);
     }
+    function setDisplayStatus($status)
+    {
+        $this->status = $status & DataPropertyMaster::DD_DISPLAYMASK;
+    }
 
     /**
-     * Get the value of this property's input status
+     * Get and set the value of this property's input status
      */
     function getInputStatus()
     {
         return $this->status - $this->getDisplayStatus();
+    }
+    function setInputStatus($status)
+    {
+        $this->status = $status - $this->getDisplayStatus();
     }
 
     /**
@@ -280,7 +288,17 @@ class DataProperty extends Object implements iDataProperty
         if(!empty($data['preset']))
             return $this->_showPreset($data);
 
-        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN || !empty($data['hidden']))
+        if (!empty($data['hidden'])) {
+            if ($data['hidden'] == 'active') {
+                $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE);
+            } elseif ($data['hidden'] == 'display') {
+                $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY);
+            } elseif ($data['hidden'] == 'hidden') {
+                $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN);
+            }
+        }
+
+        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($data);
 
         if($this->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_NOINPUT) {
@@ -291,7 +309,6 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($data['name']))        $data['name'] = 'dd_'.$this->id;
         if(isset($data['fieldprefix']))  $data['name'] = $data['fieldprefix'] . '_' . $data['name'];
         if(!isset($data['id']))          $data['id']   = $data['name'];
-        // mod for the tpl and what tpl the prop wants.
 
         if(!isset($data['module']))   $data['module']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
@@ -300,7 +317,7 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($data['tabindex'])) $data['tabindex'] = 0;
         if(!isset($data['value']))    $data['value']    = '';
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid: #(1)', $this->invalid) :'';
-        // debug($data);
+
         // Render it
         return xarTplProperty($data['module'], $data['template'], 'showinput', $data);
     }
@@ -313,6 +330,16 @@ class DataProperty extends Object implements iDataProperty
      */
     public function showOutput(Array $data = array())
     {
+        if (!empty($data['hidden'])) {
+            if ($data['hidden'] == 'active') {
+                $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE);
+            } elseif ($data['hidden'] == 'display') {
+                $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY);
+            } elseif ($data['hidden'] == 'hidden') {
+                $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN);
+            }
+        }
+
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($data);
 
