@@ -299,7 +299,7 @@ class DataProperty extends Object implements iDataProperty
             return $this->showOutput($data) . $this->showHidden($data);
         }
 
-        // Display directove for the name
+        // Display directive for the name
         if(!isset($data['name'])) {
             if ($this->anonymous == true) $data['name'] = $this->name;
             else $data['name'] = 'dd_'.$this->id;

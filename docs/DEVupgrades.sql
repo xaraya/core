@@ -504,7 +504,7 @@ ALTER TABLE `xar_privileges`
     during upgrade
 */
 
-/* DynamicData table changes  */
+/* DynamicData table changes */
 
 ALTER TABLE `xar_dynamic_properties`
   CHANGE COLUMN `prop_id` `id` INTEGER NOT NULL AUTO_INCREMENT,
