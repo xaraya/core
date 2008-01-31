@@ -105,14 +105,14 @@ function dynamicdata_utilapi_getstatic($args)
             }
             $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
 
-            // assign some default validation for now
+            // assign some default configuration for now
             $datatype = strtolower(CreoleTypes::getCreoleName($colInfo->getType()));
             //            $datatype = $colInfo->getNativeType();
             $size = $colInfo->getSize();
 
             // TODO: improve this based on property type configurations
-            $validation = $datatype;
-            $validation .= empty($size) ? '' : ' (' . $size . ')';
+            $configuration = $datatype;
+            $configuration .= empty($size) ? '' : ' (' . $size . ')';
 
             // (try to) assign some default property type for now
             // = obviously limited to basic data types in this case
@@ -122,7 +122,7 @@ function dynamicdata_utilapi_getstatic($args)
             case 'varchar':
                 $proptype = 2; // Text Box
                 if (!empty($size)) {
-                    $validation = "0:$size";
+                    $configuration = "0:$size";
                 }
                 break;
             case 'smallint':
@@ -151,7 +151,7 @@ function dynamicdata_utilapi_getstatic($args)
             case 'clob':
                 $proptype = 4; // Medium Text Area
                 $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
-                $validation ='';
+                $configuration ='';
                 break;
             case 'longvarbinary':
             case 'varbinary':
@@ -171,7 +171,7 @@ function dynamicdata_utilapi_getstatic($args)
             if ($colInfo->isAutoIncrement()) {
                 // not allowed to modify primary key !
                 $proptype = 21; // Item ID
-                $validation ='';
+                $configuration ='';
             }
 
             $static[$name] = array('name' => $name,
@@ -182,7 +182,7 @@ function dynamicdata_utilapi_getstatic($args)
                                    'source' => $table . '.' . $name,
                                    'status' => $status,
                                    'seq' => $order,
-                                   'validation' => $validation);
+                                   'configuration' => $configuration);
             $order++;
         } // next column
     } // next table
