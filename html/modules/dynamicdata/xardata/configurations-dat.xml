@@ -302,4 +302,13 @@
     <property_id>3</property_id>
     <label>Tooltip</label>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:25:"initialization_other_rule";s:0:"";}</configuration>
-  </configurations></items>
+  </configurations>
+    <configurations itemid="39">
+    <id>39</id>
+    <name>validation_allowempty</name>
+    <description>Whether this field accepts no input as valid</description>
+    <property_id>14</property_id>
+    <label>Allow empty</label>
+    <configuration>a:2:{s:14:"display_layout";s:7:"default";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  </items>
