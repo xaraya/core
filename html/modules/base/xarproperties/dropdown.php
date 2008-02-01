@@ -123,7 +123,8 @@ class SelectProperty extends DataProperty
         }
         $options = array();
         if (!empty($this->initialization_function)) {
-            eval('$items = ' . $this->initialization_function .';');
+            @eval('$items = ' . $this->initialization_function .';');
+            if (!isset($items) || !is_array($items)) $items = array();
             if (isset($items[0]) && is_array($items[0])) {
                 foreach($items as $id => $name) {
                     $options[] = array('id' => $name['id'], 'name' => $name['name']);
