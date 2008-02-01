@@ -3,9 +3,11 @@
 <!-- You can use different admin-modifyhook-[objectname].xd templates for different objects -->
 <!-- Contrary to admin-newhook.xd, it is not recommended to use preset="yes" here -->
 <xar:foreach in="$properties" key="$name">
-    <div class="xar-form-input-wrapper">
-        <xar:data-label property="$properties[$name]" label="id" />
-        <xar:data-input property="$properties[$name]" />
-    </div>
+    <xar:if condition="$properties[$name]:getDisplayStatus() ne DataPropertyMaster::DD_DISPLAYSTATE_DISABLED" >
+        <div class="xar-form-input-wrapper">
+            <xar:data-label property="$properties[$name]" label="id" />
+            <xar:data-input property="$properties[$name]" />
+        </div>
+    </xar:if>
 </xar:foreach>
 </xar:template>

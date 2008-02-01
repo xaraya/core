@@ -338,7 +338,8 @@
                     <label for="redirectaddress" title="#xarML('Redirect Address is the email address that all emails are sent to in debugging mode.')#" class="xar-form-label">
                         <xar:mlstring>Redirect Address:</xar:mlstring>
                     </label>
-                    <input type="text" name="redirectaddress" id="redirectaddress" value="#xarModVars::get('mail', 'redirectaddress', 1)#" maxlength="100" class="xar-form-textxlong" />
+                    <xar:set name="value"><xar:var scope="module" module="mail" name="redirectaddress"/></xar:set>
+                    <input type="text" name="redirectaddress" id="redirectaddress" value="#$value#" maxlength="100" class="xar-form-textxlong" />
                 </div>
 
                 <div class="xar-form-input-wrapper-after">
