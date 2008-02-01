@@ -10,6 +10,6 @@
 
     <a href="javascript:xar_base_calendar_init('#$id#','#$baseuri#')"><img src="modules/base/xarimages/calendar.gif" width="16" height="16" border="0" alt="#$alttext#" /></a>
 
-    <xar:template file="dataproperty_additions" module="base">
+    <xar:template file="dataproperty_additions" module="base" />
 
 </xar:template>

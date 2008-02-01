@@ -22,5 +22,5 @@
         </xar:foreach>
     </select>
 
-    <xar:template file="dataproperty_additions" module="base">
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

@@ -8,5 +8,5 @@
     <a href="javascript:TCP.popup(document.getElementById('#$id#'), 1)">
     <img src="#$pickerimage#" class="xar-noborder" alt="#$alttext#" /></a>
 
-    <xar:template file="dataproperty_additions" module="base">
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>
