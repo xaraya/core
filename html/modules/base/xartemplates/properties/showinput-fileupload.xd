@@ -11,5 +11,5 @@
         <br /><xar:ml><xar:mlstring>Allowed file types : #(1)</xar:mlstring><xar:mlvar>#$extensions#</xar:mlvar></xar:ml>
     </xar:if>
 
-    <xar:template file="dataproperty_additions" module="base">
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

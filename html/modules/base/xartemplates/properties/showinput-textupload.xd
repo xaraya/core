@@ -10,5 +10,5 @@
             <span class="xar-error">#$invalid#</span>
         </xar:if>
     </div>
-    <xar:template file="dataproperty_additions" module="base">
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

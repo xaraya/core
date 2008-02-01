@@ -3,5 +3,5 @@
 
     <input type="hidden" name="#$name#" id="#$id#" value="#$value#"/>
 
-    <xar:template file="dataproperty_additions" module="base">
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

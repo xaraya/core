@@ -33,5 +33,5 @@ FIXME:  The target="" needs to be replaced by something that works in xhtml.
 -->
     <input type="text" name="#$name#" id="#$id#" value="#$user#" style="#$style#" size="#$size#" maxlength="#$maxlength#" tabindex="#$tabindex#" class="#$class#" onfocus="#$onfocus#"/>
 
-    <xar:template file="dataproperty_additions" module="base">
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

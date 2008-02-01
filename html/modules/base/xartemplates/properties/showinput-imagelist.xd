@@ -20,5 +20,5 @@
         <span id="#$id#"><xar:mlstring>Options not specified in the configuration.</xar:mlstring></span>
     </xar:if>
  
-    <xar:template file="dataproperty_additions" module="base">
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>
