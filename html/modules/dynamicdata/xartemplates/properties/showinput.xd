@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
     <xar:if condition="!isset($type)">
         <xar:set name="type">xarML('[unknown type]')</xar:set>
@@ -23,8 +23,6 @@
     <br/>
     <input type="text" id="#$id#" name="#$name#" value="#$value#" />
 
-    <xar:if condition="!empty($invalid)">
-        &#160;<span class="xar-error">#$invalid#</span>
-    </xar:if>
+    <xar:template file="dataproperty_additions" module="base">
 
 </xar:template>

@@ -1,9 +1,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
     <input type="hidden" name="#$name#" id="#$id#" value="#$value#"/>
 
-    <xar:if condition="!empty($invalid)">
-        &#160;<span class="xar-error">#$invalid#</span>
-    </xar:if>
+    <xar:template file="dataproperty_additions" module="base">
 </xar:template>

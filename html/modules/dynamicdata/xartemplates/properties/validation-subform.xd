@@ -213,8 +213,6 @@
   </tr>
 </table>
 
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <xar:template file="dataproperty_additions" module="base">
 
 </xar:template>

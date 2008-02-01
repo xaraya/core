@@ -47,7 +47,5 @@ textarea#'.$id.' {
 '</xar:set>
 <xar:style method="embed" source="'.$textareasource.'" media="all" />
     <textarea name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#" class="#$class#">#$value#</textarea>
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <xar:template file="dataproperty_additions" module="base">
 </xar:template>

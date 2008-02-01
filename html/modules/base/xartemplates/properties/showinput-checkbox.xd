@@ -1,19 +1,17 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<xar:if condition="isset($onchange)">
-  <xar:set name="evt_change">$onchange</xar:set>
-<xar:else/>
- <xar:set name="evt_change">'return true;'</xar:set>
-</xar:if>
+    <xar:if condition="isset($onchange)">
+      <xar:set name="evt_change">$onchange</xar:set>
+    <xar:else/>
+     <xar:set name="evt_change">'return true;'</xar:set>
+    </xar:if>
 
-<xar:if condition="$checked">
-  <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" checked="checked" />
-<xar:else/>
-  <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" />
-</xar:if>
+    <xar:if condition="$checked">
+      <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" checked="checked" />
+    <xar:else/>
+      <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" />
+    </xar:if>
 
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <xar:template file="dataproperty_additions" module="base">
 </xar:template>
