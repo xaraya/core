@@ -55,7 +55,7 @@ function blocks_adminapi_update_instance($args)
     // Legacy support of group_id
     if (!isset($groups) && isset($group_id)) {
         $groups = array(
-            array('gid' => $group_id, 'template' => '')
+            array('id' => $group_id, 'template' => '')
         );
     }
 

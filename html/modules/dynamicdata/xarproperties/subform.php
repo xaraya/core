@@ -474,8 +474,8 @@ class SubFormProperty extends DataProperty
                     $data['count'] = $data['object']->primary;
                 }
                 // get the number of items per link field value
-                $mylist =& DataObjectMaster::getObjectList(array('objectid'  => $this->objectid,
-                                                                      'fieldlist' => array($this->link,'COUNT('.$data['count'].')'),
+                $mylist = DataObjectMaster::getObjectList(array('objectid'  => $this->objectid,
+                                                                      'fieldlist' => array($this->link),
                                                                       'groupby'   => array($this->link)));
                 $data['dropdown'] = $mylist->getItems();
             } else {

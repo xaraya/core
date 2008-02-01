@@ -1,1 +1,3 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 Pending state of #$recipientname# at #$sitename#
+</xar:template>

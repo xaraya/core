@@ -27,9 +27,9 @@ function blocks_adminapi_groupgetinfo($args)
 
     return xarModAPIFunc(
         'blocks', 'user', 'groupgetinfo',
-        array('gid' => $blockGroupId)
+        array('id' => $blockGroupId)
     );
-   
+
 }
 
 ?>
