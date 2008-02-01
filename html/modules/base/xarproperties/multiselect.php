@@ -19,7 +19,7 @@ class MultiSelectProperty extends SelectProperty
     public $name       = 'multiselect';
     public $desc       = 'Multiselect';
 
-    public $validation_single = true;
+    public $validation_single = false;
     public $validation_single_invalid; // CHECKME: is this a validation or something else?
 
     function __construct(ObjectDescriptor $descriptor)
@@ -52,10 +52,10 @@ class MultiSelectProperty extends SelectProperty
 
     public function showInput(Array $data = array())
     {
+        if (!empty($data['single'])) $this->validation_single = $data['single'];
         if (!isset($data['value'])) $data['value'] = $this->value;
         if (!isset($data['allowempty'])) $data['allowempty'] = true;
         $data['value'] = $this->getSerializedValue($data['value']);
-        if (!isset($data['single'])) $data['single'] = $this->validation_single;
 
         return parent::showInput($data);
     }
