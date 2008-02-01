@@ -63,8 +63,10 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
                 // Rethrow it, we cant handle it.
                 throw $e;
             }
-        } catch( Exception $e) {
-            // Oh well, pick up the bones
+        } catch( Exception $e_internal) {
+            // Oh well, pick up the bones, but pick them up from the original exception
+            // otherwise the message can be rather confusing
+            // @todo: do we care about what $e_internal is?
             ExceptionHandlers::bone($e);
         }
     }
