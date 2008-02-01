@@ -1,20 +1,18 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<xar:if condition="$image_source eq 'upload'">
-    <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#"  />
-    &#160;<xar:data-input type="fileupload" name="$name" validation="var/uploads|(gif|(jpg|jpeg|png|bmp)" />
-<xar:elseif condition="$image_source eq 'url'" />
-    <xar:data-input type="url" name="$name" value="$value" />
-<xar:else />
-    <xar:data-input type="filepicker" name="$name" value="$value" basedir="$basedirectory" extensions="gif,jpg,jpeg,png,bmp" />
-    <xar:set name="showlabel"><xar:mlstring>check</xar:mlstring></xar:set>
-    <xar:if condition="!empty($value)">
-        [ <a href="#$basedirectory#/#$value#" target="preview">#$showlabel#</a> ]
+    <xar:if condition="$image_source eq 'upload'">
+        <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#"  />
+        &#160;<xar:data-input type="fileupload" name="$name" validation="var/uploads|(gif|(jpg|jpeg|png|bmp)" />
+    <xar:elseif condition="$image_source eq 'url'" />
+        <xar:data-input type="url" name="$name" value="$value" />
+    <xar:else />
+        <xar:data-input type="filepicker" name="$name" value="$value" basedir="$basedirectory" extensions="gif,jpg,jpeg,png,bmp" />
+        <xar:set name="showlabel"><xar:mlstring>check</xar:mlstring></xar:set>
+        <xar:if condition="!empty($value)">
+            [ <a href="#$basedirectory#/#$value#" target="preview">#$showlabel#</a> ]
+        </xar:if>
     </xar:if>
-</xar:if>
 
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <xar:template file="dataproperty_additions" module="base">
 </xar:template>

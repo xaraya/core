@@ -1,14 +1,12 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:set name="alttext"><xar:mlstring>Click Here to select a color</xar:mlstring></xar:set>
-<xar:set name="pickerimage">xarTplGetImage('tcolorpicker.gif', 'base')</xar:set>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="alttext"><xar:mlstring>Click Here to select a color</xar:mlstring></xar:set>
+    <xar:set name="pickerimage">xarTplGetImage('tcolorpicker.gif', 'base')</xar:set>
 
-<input type="text" name="#$name#" id="#$id#" value="#$value#" size="#$size#" maxlength="#$maxlength#" />
+    <input type="text" name="#$name#" id="#$id#" value="#$value#" size="#$size#" maxlength="#$maxlength#" />
 
-<a href="javascript:TCP.popup(document.getElementById('#$id#'), 1)">
-<img src="#$pickerimage#" class="xar-noborder" alt="#$alttext#" /></a>
+    <a href="javascript:TCP.popup(document.getElementById('#$id#'), 1)">
+    <img src="#$pickerimage#" class="xar-noborder" alt="#$alttext#" /></a>
 
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <xar:template file="dataproperty_additions" module="base">
 </xar:template>

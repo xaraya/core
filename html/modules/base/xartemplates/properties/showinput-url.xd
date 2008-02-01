@@ -1,16 +1,14 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<xar:set name="check"><xar:mlstring>check</xar:mlstring></xar:set>
-<xar:set name="preview"><xar:mlstring>preview</xar:mlstring></xar:set>
+    <xar:set name="check"><xar:mlstring>check</xar:mlstring></xar:set>
+    <xar:set name="preview"><xar:mlstring>preview</xar:mlstring></xar:set>
 
-<input class="xar-form-textlong" type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" />
+    <input class="xar-form-textlong" type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" />
 
-<xar:if condition="!empty($value) and ($value ne 'http://')">
-    [ <a href="#$value#" target="#$preview#">#$check#</a> ]
-</xar:if>
+    <xar:if condition="!empty($value) and ($value ne 'http://')">
+        [ <a href="#$value#" target="#$preview#">#$check#</a> ]
+    </xar:if>
 
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <xar:template file="dataproperty_additions" module="base">
 </xar:template>
