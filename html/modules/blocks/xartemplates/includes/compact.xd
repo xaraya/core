@@ -22,7 +22,7 @@
                     [
                     <xar:if condition="!empty($loop:item.groups)">
                         <xar:loop name="$loop:item.groups" id="groupsl">
-                            <a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$loop:groupsl:item.gid#" title="#xarML('Edit group')#">
+                            <a href="&xar-modurl-blocks-admin-modify_group;&amp;id=#$loop:groupsl:item.id#" title="#xarML('Edit group')#">
                                 #$loop:groupsl:item.name#
                             </a>
                         </xar:loop>
@@ -81,7 +81,7 @@
                     [
                     <xar:if condition="!empty($loop:item.groups)">
                         <xar:loop name="$loop:item.groups" id="groupsr">
-                            <a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$loop:groupsr:item.gid#" title="#xarML('Edit group')#">
+                            <a href="&xar-modurl-blocks-admin-modify_group;&amp;id=#$loop:groupsr:item.id#" title="#xarML('Edit group')#">
                                 #$loop:groupsr:item.name#
                             </a>
                         </xar:loop>

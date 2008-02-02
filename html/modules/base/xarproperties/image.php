@@ -74,11 +74,11 @@ class ImageProperty extends TextBoxProperty
 
     public function showOutput(Array $data = array())
     {
-        $data['value'] = isset($data['value']) ? $data['value'] : $this->value;
+        if (empty($data['value'])) $data['value'] = $this->value;
         if (($this->initialization_image_source == 'local') || ($this->initialization_image_source == 'upload')) {
             $data['value'] = $this->initialization_basedirectory . "/" . $data['value'];
         }
-        $data['imagetext'] = $this->imagetext;
+        if (empty($data['imagetext'])) $data['imagetext'] = $this->imagetext;
 
         return parent::showOutput($data);
     }

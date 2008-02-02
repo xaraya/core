@@ -3,97 +3,69 @@
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:ml>
-            <xar:mlstring>#(1) Information</xar:mlstring>
+            <xar:mlstring>#(1) #(2) Information</xar:mlstring>
             <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$uname#</xar:mlvar>
         </xar:ml>
     </span>
 </div>
 <div class="xar-mod-body">
     <xar:if condition="strtolower($uname) ne 'anonymous' and strtolower($uname) ne 'myself'">
-        <xar:if condition="xarModVars::get('roles', 'allowemail') and xarModUserVars::get('roles','allowemail',$id)">
-            <p>
-                <strong>
-                    <xar:mlstring>
-                        Email
-                    </xar:mlstring>
-                </strong>
-                :
-                <a href="&xar-modurl-roles-user-email;&amp;id=#$id#">
-                    <xar:ml>
-                        <xar:mlstring>
-                            Send an Email to #(1)
-                        </xar:mlstring>
-                        <xar:mlvar>
-                            #xarVarPrepForDisplay($name)#
-                        </xar:mlvar>
-                    </xar:ml>
-                </a>
-            </p>
-            <xar:else />
-            <p>
-                <strong>
-                    <xar:mlstring>
-                        Name
-                    </xar:mlstring>
-                </strong>
-                :
-                #xarVarPrepForDisplay($name)#
-            </p>
+        <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
+      <xar:set name="fields">array('name','uname','state','regdate')</xar:set>
+      <xar:data-display module="roles" itemtype="$itemtype" fieldlist="$fields" itemid="$id" />
 
-            </xar:if>
+      <xar:if condition="in_array('userlastlogin',$settings)">
+        <div class="xar-form-input-wrapper">
+            <label class="xar-form-label">
+                <xar:mlstring>Last Login</xar:mlstring>
+            </label>
+            #xarLocaleGetFormattedDate('medium', xarModItemVars::get('roles','userlastlogin',$id))#  #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
+        </div>
+      </xar:if>
 
-           <xar:if condition="!empty($userlastlogin)">
-            <p>
-                <strong>
+    <xar:if condition="xarModVars::get('roles', 'allowemail') AND xarModItemVars::get('roles','allowemail',$id)">
+        <div class="xar-form-input-wrapper">
+            <label class="xar-form-label">
+                <xar:mlstring>Email</xar:mlstring>
+            </label>
+            <a href="&xar-modurl-roles-user-email;&amp;id=#$id#">
+                <xar:ml>
                     <xar:mlstring>
-                        Time of Last Login
+                        Send an Email to #(1)
                     </xar:mlstring>
-                </strong>
-                :
-                #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#
-            </p>
-            </xar:if>
-            <xar:if condition="!empty($homelink)">
-            <p>
-                <strong>
-                    <xar:mlstring>
-                        Home Page
-                    </xar:mlstring>
-                </strong>
-                :
-                <a href="#$homelink#" title="#xarML('Home Page')#">#$homelink#</a>
-            </p>
-        </xar:if>
-        <xar:if condition="!empty($utimezone)">
-            <p>
-                <strong>
-                    <xar:mlstring>
-                        Timezone
-                    </xar:mlstring>
-                </strong>
-                :
-                #$utimezone# (GMT #$offset#)
-            </p>
-        </xar:if>
-        <xar:data-getitem name="$properties" module="roles" itemtype="$itemtype" itemid="$id" />
-        <xar:if condition="isset($properties) and count($properties) gt 0">
-            <xar:foreach in="$properties" key="$name">
-                <p>
-                    <strong>
-                        <xar:data-label property="$properties[$name]" />
-                    </strong>
-                    :
-                    <xar:data-output property="$properties[$name]" />
-                </p>
-            </xar:foreach>
-        </xar:if>
+                    <xar:mlvar>
+                        #xarVarPrepForDisplay($name)#
+                    </xar:mlvar>
+                </xar:ml>
+            </a>
+        </div>
     </xar:if>
-    <p>
+    <xar:if condition="in_array('userhome',$settings)">
+        <div class="xar-form-input-wrapper">
+            <label class="xar-form-label">
+                <xar:mlstring>Home Page</xar:mlstring>
+            </label>
+            <!-- <a href="#$homelink#" title="#xarML('Home Page')#">#$homelink#</a> -->
+        </div>
+    </xar:if>
+      <xar:if condition="in_array('usertimezone',$settings)">
+        <div class="xar-form-input-wrapper">
+            <label class="xar-form-label">
+                <xar:mlstring>User Timezone:</xar:mlstring>
+            </label>
+            <xar:set name="value">
+                xarModUserVars::get('roles','usertimezone',$id)
+            </xar:set>
+            <xar:data-output type="timezone" value="$value" />
+        </div>
+      </xar:if>
+
+    </xar:if>
     <xar:if condition="!empty($hooks)">
         <xar:foreach in="$hooks" key="$module" value="$output">
             #$output#
         </xar:foreach>
     </xar:if>
-    </p>
 </div>
 </xar:template>

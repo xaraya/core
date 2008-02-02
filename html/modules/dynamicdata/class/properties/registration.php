@@ -113,10 +113,10 @@ class PropertyRegistration extends DataContainer
         {
             foreach($this->aliases as $aliasInfo)
             {
-                $aliasInfo->filepath = $this->filepath; // Make sure
-                $aliasInfo->class = $this->class;
-                $aliasInfo->format = $this->format;
-                $aliasInfo->reqmodules = $this->reqmodules;
+                if (!isset($aliasInfo['filepath'])) $aliasInfo['filepath'] = $this->filepath;
+                if (!isset($aliasInfo['class'])) $aliasInfo['class'] = $this->class;
+                if (!isset($aliasInfo['format'])) $aliasInfo['format'] = $this->format;
+                if (!isset($aliasInfo['reqmodules'])) $aliasInfo['reqmodules'] = $this->reqmodules;
                 // Recursive!!
                 $res = $aliasInfo->Register();
             }

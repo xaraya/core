@@ -18,7 +18,7 @@ function blocks_admin_delete_group()
     // Security Check
     if(!xarSecurityCheck('DeleteBlock', 0, 'Instance')) {return;}
 
-    if (!xarVarFetch('gid', 'int:1:', $gid)) {return;}
+    if (!xarVarFetch('id', 'int:1:', $id)) {return;}
     if (!xarVarFetch('confirm', 'str:1:', $confirm, '', XARVAR_NOT_REQUIRED)) {return;}
 
     // Check for confirmation
@@ -28,7 +28,7 @@ function blocks_admin_delete_group()
         // Get details on current group
         $group = xarModAPIFunc(
             'blocks', 'admin', 'groupgetinfo',
-            array('blockGroupId' => $gid)
+            array('blockGroupId' => $id)
         );
 
         if ($group == NULL) {return;}
@@ -45,7 +45,7 @@ function blocks_admin_delete_group()
 
     // Pass to API
     xarModAPIFunc(
-        'blocks', 'admin', 'delete_group', array('gid' => $gid)
+        'blocks', 'admin', 'delete_group', array('id' => $id)
     );
 
     xarResponseRedirect(xarModURL('blocks', 'admin', 'view_groups'));
