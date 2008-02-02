@@ -58,7 +58,7 @@ class DataProperty extends Object implements iDataProperty
     public $configurationtypes = array('display','validation','initialization');
 //    public $display_template                = "";
     public $display_layout                  = "default";       // we display the default layout of a template
-    public $display_required                = false;           // the field is not required for input
+    public $display_required                = false;           // the field is not tagged as "required" for input
     public $display_tooltip                 = "";              // there is no tooltip text, and so no tooltip
     public $initialization_other_rule       = null;
 
