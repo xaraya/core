@@ -86,6 +86,12 @@ class PassBoxProperty extends TextBoxProperty
         return md5($value);
     }
 
+    public function showInput(Array $data = array())
+    {
+        if (isset($data['confirm'])) $this->validation_password_confirm = $data['confirm'];
+        return parent::showInput($data);
+    }
+
     public function showOutput(Array $data = array())
     {
         //we don't really want to show the password, do we?
