@@ -128,9 +128,11 @@ function modules_adminapi_installwithdependencies ($args)
                 // Finally, now that dependencies are dealt with, initialize the module
                 // Begin by flushing the property cache otherwise you will
                 // get errors on displaying the property.
+                /*
                 if(!xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true))) {
                     return false; //FIXME: Do we want an exception here if flushing fails?
                 }
+                */
                 if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $mainId))) {
                     $msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
                     throw new Exception($msg);
@@ -143,6 +145,7 @@ function modules_adminapi_installwithdependencies ($args)
                 throw new Exception($msg);
             }
 
+            if(!xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('dirs' => 'modules/' . $modInfo['directory'] . '/xarproperties', 'flush' => true))) return false;
             if (empty($modstack)) {
                 // Looks like we're done
                 xarSessionDelVar('modulestoinstall');
@@ -160,6 +163,7 @@ function modules_adminapi_installwithdependencies ($args)
                 // Do the next module
                 if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid' => array_pop($modstack), 'phase' => 0))) return;
             }
+            // Flush the property cache
             return true;
 
         default:
