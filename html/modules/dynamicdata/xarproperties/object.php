@@ -30,7 +30,6 @@ class ObjectProperty extends ObjectRefProperty
     public $id         = 24;
     public $name       = 'object';
     public $desc       = 'Object';
-    public $reqmodules = array('dynamicdata');
 
     public $initialization_store_prop   = 'objectid';       // Name of the property we want to use for storage
 }
