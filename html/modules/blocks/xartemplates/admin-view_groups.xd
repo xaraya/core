@@ -47,7 +47,7 @@
                     </xar:if>
                 </td>
                 <td class="xar-align-center">
-                    <a href="#xarModUrl('blocks', 'admin', 'modify_group', array('gid' => $loop:item['id']))#"><xar:mlstring>Edit</xar:mlstring></a>
+                    <a href="#xarModUrl('blocks', 'admin', 'modify_group', array('id' => $loop:item['id']))#"><xar:mlstring>Edit</xar:mlstring></a>
                     | <a href="#$loop:item['deleteurl']#" onclick="return xar_base_confirmLink(this, '#$loop:item['deleteconfirm']#')"><xar:mlstring>Delete</xar:mlstring></a>
                 </td>
             </tr>

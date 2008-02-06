@@ -1,0 +1,74 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Login Error</xar:mlstring></span></div>
+    <div class="xar-mod-body">
+        <fieldset>
+            <legend><xar:mlstring>Problem Logging In</xar:mlstring></legend>
+                <img src="#xarTplGetImage('sysmessage.jpg','base')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon" />
+                <xar:if condition="!isset($layout)">
+                    <div style="margin-top: 20px">
+                        No error message is available.
+                        <br />
+                        Please contact the system administrator.
+                    </div>                    
+                <xar:elseif condition="$layout eq 'no_cookies'" />
+                    <div style="margin-top: 20px">
+                        You must enable cookies on your browser to run Xaraya.
+                        <br />
+                        Check the browser configuration options to make sure cookies are enabled.
+                    </div>
+                <xar:elseif condition="$layout eq 'locked_out'" />
+                    <div style="margin-top: 20px">
+                        Your account has been locked for #$lockouttime# minutes.
+                    </div>
+                <xar:elseif condition="$layout eq 'bad_data'" />
+                    <div style="margin-top: 20px">
+                        The username or password entered is not valid.
+                        <br />
+                        Try logging in again or contact the system administrator if you think this is an error.
+                    </div>
+                <xar:elseif condition="$layout eq 'account_deleted'" />
+                    <div style="margin-top: 20px">
+                        Your account has been terminated at your request or 
+                        <br />
+                        at the adminstrator\'s discretion.
+                    </div>
+                <xar:elseif condition="$layout eq 'account_inactive'" />
+                    <div style="margin-top: 20px">
+                        Your account has been marked as inactive. 
+                        <br />
+                        Contact the system adminstrator for further details.
+                    </div>
+                <xar:elseif condition="$layout eq 'bad_try'" />
+                    <div style="margin-top: 20px">
+                        The username or password entered is not valid.
+                        <br />
+                        You have tried to log in #$attempts# times.
+                    </div>
+                <xar:elseif condition="$layout eq 'bad_tries_exceeded'" />
+                    <div style="margin-top: 20px">
+                        The username or password entered is not valid. 
+                        <br />
+                        Your account has been locked for #$lockouttime# minutes.
+                    </div>
+                <xar:elseif condition="$layout eq 'account_pending'" />
+                    <div style="margin-top: 20px">
+                        Your account has not yet been activated
+                        <br />
+                        Contact the system adminstrator for further details.
+                    </div>
+                <xar:elseif condition="$layout eq 'site_locked'" />
+                    <div style="margin-top: 20px">
+                        #$message#
+                    </div>
+                <xar:else />
+                    <div style="margin-top: 20px">
+                        No error message is available.
+                        <br />
+                        Please contact the system administrator.
+                    </div>                    
+                </xar:if>
+                
+        </fieldset>
+    </div>
+</xar:template>

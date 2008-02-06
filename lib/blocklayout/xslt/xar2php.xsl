@@ -159,28 +159,36 @@
   <!--
     <xsl:text>[EXPR]</xsl:text><xsl:value-of select="$expr"/><xsl:text>[END EXPR]</xsl:text>
   -->
-  <xsl:variable name="nrOfHashes"
-      select="string-length($expr) - string-length(translate($expr, '#', ''))"/>
+  <xsl:variable name="beginDelimiter" select="'#'"/>
+  <xsl:variable name="endDelimiter" select="'#'"/>
+  <xsl:variable name="nrOfDelimiters"
+      select="string-length($expr) - string-length(translate($expr, $beginDelimiter, ''))"/>
 
-  <xsl:choose>
+<xsl:choose>
     <!-- If we have zero or one hash, just output the text node -->
-    <xsl:when test="$nrOfHashes &lt; 2">
+    <xsl:when test="$nrOfDelimiters &lt; 2">
+      <xsl:processing-instruction name="php">
+        <xsl:text>echo xarML('</xsl:text>
         <xsl:value-of select="$expr"/>
+        <xsl:text>');</xsl:text>
+      </xsl:processing-instruction>
     </xsl:when>
     <!-- Resolve left to right -->
     <xsl:otherwise>
       <!-- more than two, so in general ....#....#....#....#.... etc. -->
 
       <!-- [....]#....#.... : get the first part out of the way -->
-      <xsl:value-of select="substring-before($expr,'#')"/>
+    <xsl:call-template name="resolveText">
+      <xsl:with-param name="expr" select="substring-before($expr,$beginDelimiter)"/>
+    </xsl:call-template>
 
       <!-- Resolve the part in between -->
       <!-- Left at this point: ....#[....]#.... -->
-      <xsl:if test="substring-before(substring-after($expr,'#'),'#') !=''">
+      <xsl:if test="substring-before(substring-after($expr,$beginDelimiter),$endDelimiter) !=''">
         <xsl:processing-instruction name="php">
           <xsl:text>echo </xsl:text>
           <xsl:call-template name="resolvePHP">
-              <xsl:with-param name="expr" select="substring-before(substring-after($expr,'#'),'#')"/>
+              <xsl:with-param name="expr" select="substring-before(substring-after($expr,$beginDelimiter),$endDelimiter)"/>
           </xsl:call-template>
           <xsl:text>;</xsl:text>
         </xsl:processing-instruction>
@@ -188,7 +196,7 @@
 
       <!-- ....#....#[....#....#....etc.] -->
       <xsl:call-template name="resolveText">
-        <xsl:with-param name="expr" select="substring-after(substring-after($expr,'#'),'#')"/>
+        <xsl:with-param name="expr" select="substring-after(substring-after($expr,$beginDelimiter),$endDelimiter)"/>
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
@@ -198,13 +206,12 @@
   For all text nodes, resolve expressions within
 -->
 <!--
-  <xsl:template match="text()">
+<xsl:template match="text()">
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
 </xsl:template>
 -->
-
 
 <!-- Expression resolving in nodes-->
 <xsl:template name="resolvePHP">

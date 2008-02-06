@@ -31,15 +31,15 @@ function authsystem_user_login()
     global $xarUser_authenticationModules;
 
     if (!$_COOKIE) {
-        throw new BadParameterException(null,xarML('You must enable cookies on your browser to run Xaraya. Check the browser configuration options to make sure cookies are enabled, click on  the "Back" button of the browser and try again.'));
+        return xarTplModule('authsystem','user','login_errors',array('layout' => 'no_cookies'));
     }
 
     $unlockTime  = (int) xarSession::getVar('authsystem.login.lockedout');
-    $lockouttime=xarModVars::get('authsystem','lockouttime')? xarModVars::get('authsystem','lockouttime') : 15;
-    $lockouttries =xarModVars::get('authsystem','lockouttries') ? xarModVars::get('authsystem','lockouttries') : 3;
+    $lockouttime = xarModVars::get('authsystem','lockouttime')? xarModVars::get('authsystem','lockouttime') : 15;
+    $lockouttries = xarModVars::get('authsystem','lockouttries') ? xarModVars::get('authsystem','lockouttries') : 3;
 
-    if ((time() < $unlockTime) && (xarModVars::get('authsystem','uselockout')==true)) {
-        throw new ForbiddenOperationException($lockouttime,xarML('Your account has been locked for #(1) minutes.'));
+    if ((time() < $unlockTime) && (xarModVars::get('authsystem','uselockout') == true)) {
+        return xarTplModule('authsystem','user','login_errors',array('layout' => 'locked_out', 'lockouttime' => $lockouttime));
     }
 
     if (!xarVarFetch('uname','str:1:100',$uname)) {
@@ -112,7 +112,7 @@ function authsystem_user_login()
                 // Make sure we haven't already found authldap module
                 if (empty($user) && ($extAuthentication == false))
                 {
-                    throw new BadParameterException(null,xarML('Problem logging in: Invalid username or password.'));
+                    return xarTplModule('authsystem','user','login_errors',array('layout' => 'bad_data'));
                 } elseif (empty($user)) {
                     // Check if user has been deleted.
                     try {
@@ -155,13 +155,13 @@ function authsystem_user_login()
         case ROLES_STATE_DELETED:
 
             // User is deleted by all means.  Return a message that says the same.
-            throw new ForbiddenOperationException(null,xarML('Your account has been terminated by your request or at the adminstrator\'s discretion.'));
+            return xarTplModule('authsystem','user','login_errors',array('layout' => 'account_deleted'));
             break;
 
         case ROLES_STATE_INACTIVE:
 
             // User is inactive.  Return message stating.
-                throw new ForbiddenOperationException(null,xarML('Your account has been marked as inactive.  Contact the adminstrator with further questions.'));
+            return xarTplModule('authsystem','user','login_errors',array('layout' => 'account_inactive'));
             break;
 
         case ROLES_STATE_NOTVALIDATED:
@@ -208,8 +208,7 @@ function authsystem_user_login()
                 }
 
                 if (!$letthru) {
-                    // This is *not* an error condition, consider making a template
-                    throw new GeneralException(null,$lockvars['message']);
+                    return xarTplModule('authsystem','user','login_errors',array('layout' => 'site_locked', 'message'  => $lockvars['message']));
                 }
             }
 
@@ -231,12 +230,11 @@ function authsystem_user_login()
                     // set the time for fifteen minutes from now
                     xarSession::setVar('authsystem.login.lockedout', time() + (60 * $lockouttime));
                     xarSession::setVar('authsystem.login.attempts', 0);
-                    throw new ForbiddenOperationException($lockouttime,xarML('Problem logging in: Invalid username or password.  Your account has been locked for #(1) minutes.'));
+                    return xarTplModule('authsystem','user','login_errors',array('layout' => 'bad_tries_exceeded', 'lockouttime' => $lockouttime));
                 } else{
                     $newattempts = $attempts + 1;
                     xarSession::setVar('authsystem.login.attempts', $newattempts);
-                    throw new ForbiddenOperationException($newattempts,xarML('Problem logging in: Invalid username or password.  You have tried to log in #(1) times.'));
-                    return;
+                    return xarTplModule('authsystem','user','login_errors',array('layout' => 'bad_try', 'attempts' => $newattempts));
                 }
             }
             //FR for last login - first capture the last login for this user
@@ -286,7 +284,7 @@ function authsystem_user_login()
         case ROLES_STATE_PENDING:
 
             // User is pending activation
-                    throw new ForbiddenOperationException(null,xarML('Your account has not yet been activated by the site administrator'));
+                return xarTplModule('authsystem','user','login_errors',array('layout' => 'account_pending'));
             break;
     }
 
