@@ -72,6 +72,8 @@ class NumberBoxProperty extends TextBoxProperty
             $this->value = null;
             return false;
         }
+        // Need this to ensure we have an integer type
+        $this->setValue($value);
         return true;
     }
 }
