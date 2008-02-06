@@ -26,7 +26,7 @@ function dynamicdata_admin_updateprop()
     if(!xarVarFetch('table',             'isset', $table,             NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_label',          'isset', $dd_label,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_type',           'isset', $dd_type,           NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_default',        'isset', $dd_default,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_default',        'isset', $dd_defaultvalue,        NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_source',         'isset', $dd_source,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('display_dd_status', 'isset', $display_dd_status, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('input_dd_status',   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
@@ -87,12 +87,12 @@ function dynamicdata_admin_updateprop()
         } else {
              // TODO : only if necessary
             // update property in xaradminapi.php
-            if (!isset($dd_default[$id])) {
-                $dd_default[$id] = null;
-            } elseif (!empty($dd_default[$id]) && preg_match('/\[LF\]/',$dd_default[$id])) {
+            if (!isset($dd_defaultvalue[$id])) {
+                $dd_defaultvalue[$id] = null;
+            } elseif (!empty($dd_defaultvalue[$id]) && preg_match('/\[LF\]/',$dd_defaultvalue[$id])) {
                 // replace [LF] with line-feed again
                 $lf = chr(10);
-                $dd_default[$id] = preg_replace('/\[LF\]/',$lf,$dd_default[$id]);
+                $dd_defaultvalue[$id] = preg_replace('/\[LF\]/',$lf,$dd_defaultvalue[$id]);
             }
             if (!isset($dd_validation[$id])) {
                 $dd_validation[$id] = null;
@@ -110,7 +110,7 @@ function dynamicdata_admin_updateprop()
                               //      'itemtype' => $itemtype,
                                     'label' => $dd_label[$id],
                                     'type' => $dd_type[$id],
-                                    'defaultvalue' => $dd_default[$id],
+                                    'defaultvalue' => $dd_defaultvalue[$id],
                               //      'source' => $dd_source[$id],
                                     'status' => $dd_status[$id],
                                     'validation' => $dd_validation[$id]))) {
@@ -142,7 +142,7 @@ function dynamicdata_admin_updateprop()
                                       'moduleid' => $modid,
                                       'itemtype' => $itemtype,
                                       'type' => $dd_type[0],
-                                      'defaultvalue' => $dd_default[0],
+                                      'defaultvalue' => $dd_defaultvalue[0],
                                       'source' => $dd_source[0],
                                       'status' => $dd_status[0],
                                       'seq' => $i,
