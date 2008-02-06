@@ -21,19 +21,19 @@ function blocks_admin_view_groups()
     $block_groups = xarModAPIfunc(
         'blocks', 'user', 'getallgroups', array('order' => 'name')
     );
-    
+
     // Load up groups array
     foreach($block_groups as $index => $block_group) {
         // Get details on current group
         $block_groups[$index] = xarModAPIFunc(
             'blocks', 'admin', 'groupgetinfo',
-            array('blockGroupId' => $block_groups[$index]['gid'])
+            array('blockGroupId' => $block_groups[$index]['id'])
         );
         $block_groups[$index]['name'] = $block_group['name'];
-        $block_groups[$index]['id'] = $block_group['gid']; // Legacy
+        $block_groups[$index]['id'] = $block_group['id']; // Legacy
         $block_groups[$index]['membercount'] = count($block_groups[$index]['instances']);
         $block_groups[$index]['deleteconfirm'] = xarML('Delete group #(1)?', $block_group['name']);
-        $block_groups[$index]['deleteurl'] = xarModUrl('blocks', 'admin', 'delete_group', array('gid' => $block_group['gid'], 'authid' => $authid));
+        $block_groups[$index]['deleteurl'] = xarModUrl('blocks', 'admin', 'delete_group', array('id' => $block_group['id'], 'authid' => $authid));
     }
     return array('block_groups' => $block_groups);
 }
