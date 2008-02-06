@@ -54,7 +54,8 @@ class ObjectRefProperty extends SelectProperty
             // In this case need to go directly (rather than get a DD object) to avoid recursion
             $dbconn = xarDB::getConn();
             $xartable = xarDB::getTables();
-            $q = "SELECT * FROM " . $xartable['dynamic_objects'];
+            $q = "SELECT id, name, label, parent, moduleid, itemtype, class, filepath,
+                urlparam, maxid, config, isalias FROM " . $xartable['dynamic_objects'];
             $result = $dbconn->executeQuery($q);
             $items = array();
             while ($result->next()) {
