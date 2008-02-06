@@ -34,6 +34,9 @@ class UsernameProperty extends TextBoxProperty
         $this->tplmodule = 'roles';
         $this->template = 'username';
         $this->filepath   = 'modules/roles/xarproperties';
+
+        // Cater to a common case
+        if ($this->value == 'myself') $this->value = xarUserGetVar('id');        
     }
 
     public function validateValue($value = null)
@@ -44,15 +47,15 @@ class UsernameProperty extends TextBoxProperty
         // Validate as a text box
         if (!parent::validateValue($value)) return false;
 
-        /* CHECKME: was this good for anything?
-        if (empty($value)) {
-            $value = xarUserGetVar('id');
-        }
-        */
-
-        if (empty($value)) return true;
+        // We set an empty value to the id of the current user
+        if (empty($value) || ($value == 'myself')) $value = xarUserGetVar('uname');
 
         $role = xarRoles::ufindRole($value);
+        
+        if (empty($role)) {
+            $this->invalid = xarML('user #(1) does not exist', $value);
+            return false;
+        }
 
         switch ((int)$this->validation_existrule) {
             case 1:
@@ -80,35 +83,39 @@ class UsernameProperty extends TextBoxProperty
             case 0:
             default:
         }
+        $this->value = $role->getID();
         return true;
     }
 
     public function showInput(Array $data = array())
     {
-        extract($data);
+        // Cater to a common case
+        if ((isset($data['user']) && $data['user'] == 'myself') || (isset($data['value']) && $data['value'] == 'myself')) {
+            $this->value = xarUserGetVar('id');        
+        }
+
         if (isset($this->rawvalue)) {
             $data['value'] = $this->rawvalue;
             $data['user'] = $this->rawvalue;
         } else {
-            if (!isset($value)) $value = $this->value;
-            if (empty($value))  {
+            if (!isset($data['value'])) $data['value'] = $this->value;
+            if (empty($data['value']))  {
                 $data['user'] = '';
                 $data['value']= 0;
             } else {
-                if(is_numeric($value)) {
+                if(is_numeric($data['value'])) {
                     try {
-                        $user = xarUserGetVar('uname', $value);
+                        $user = xarUserGetVar('uname', $data['value']);
                         // Does this make sense? The user should already have been checked before storing
                         if (empty($user))
-                            $user = xarUserGetVar('name', $value);
+                            $user = xarUserGetVar('name', $data['value']);
                     } catch(NotFoundExceptions $e) {
-                        $user = $value;
+                        $user = $data['value'];
                     }
                 } else {
-                    $user = $value;
+                    $user = $data['value'];
                 }
                     $data['user'] = xarVarprepForDisplay($user);
-                    $data['value']= $value;
             }
         }
 
