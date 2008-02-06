@@ -487,7 +487,7 @@ class PHPMailer extends Object
         $smtp_from = ($this->Sender == "") ? $this->From : $this->Sender;
         if(!$this->smtp->Mail($smtp_from))
         {
-            $error = $this->Lang("from_failed") . $smtp_from;
+            $error = $this->Lang("from_failed") . ": " . $smtp_from;
             $this->SetError($error);
             $this->smtp->Reset();
             return false;

@@ -1,5 +1,4 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:var name="value" prep="true"/>
-
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:var name="value" prep="true"/>
 </xar:template>

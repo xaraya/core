@@ -1,0 +1,314 @@
+<items>
+  <configurations itemid="1">
+    <id>1</id>
+    <name>display_layout</name>
+    <description>The layout for this field</description>
+    <property_id>2</property_id>
+    <label>Template Layout</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="2">
+    <id>2</id>
+    <name>validation_min_length</name>
+    <description>Minimun length for this field</description>
+    <property_id>15</property_id>
+    <label>Minimum Length</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="3">
+    <id>3</id>
+    <name>validation_max_length</name>
+    <description>Maximum length for this field</description>
+    <property_id>15</property_id>
+    <label>Maximum Length</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="4">
+    <id>4</id>
+    <name>initialization_other_rule</name>
+    <description>Any other rule for this field</description>
+    <property_id>2</property_id>
+    <label>Other Rule</label>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="5">
+    <id>5</id>
+    <name>validation_regex</name>
+    <description>A regex the contents of this field must validate against</description>
+    <property_id>2</property_id>
+    <label>Regex Filter</label>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="6">
+    <id>6</id>
+    <name>validation_password_confirm</name>
+    <description>Show a second password field to be filled in</description>
+    <property_id>14</property_id>
+    <label>Confirm Password</label>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="7">
+    <id>7</id>
+    <name>display_size</name>
+    <description>Length of this input box</description>
+    <property_id>15</property_id>
+    <label>Size</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="8">
+    <id>8</id>
+    <name>display_maxlength</name>
+    <description>The maximum length of input to this input box</description>
+    <property_id>15</property_id>
+    <label>Max Lemgth</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="9">
+    <id>9</id>
+    <name>display_template</name>
+    <description>The template used to display this field</description>
+    <property_id>2</property_id>
+    <label>Property Template</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="10">
+    <id>10</id>
+    <name>validation_min_value</name>
+    <description>This field must have a value greater than this</description>
+    <property_id>15</property_id>
+    <label>Minimum Value</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="11">
+    <id>11</id>
+    <name>validation_max_value</name>
+    <description>This field must have a value smaller than this</description>
+    <property_id>15</property_id>
+    <label>Maximum Value</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="12">
+    <id>12</id>
+    <name>initialization_refobject</name>
+    <description>The object this field refers to</description>
+    <property_id>507</property_id>
+    <label>Reference Object</label>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="13">
+    <id>13</id>
+    <name>initialization_display_prop</name>
+    <description>The object property used in the dropdown display </description>
+    <property_id>6</property_id>
+    <label>Display Property</label>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:73:"xarModAPIFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="14">
+    <id>14</id>
+    <name>initialization_store_prop</name>
+    <description>The object property used for storing the value of this field</description>
+    <property_id>6</property_id>
+    <label>Storage Prioperty</label>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:73:"xarModAPIFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="15">
+    <id>15</id>
+    <name>initialization_function</name>
+    <description>A function used to generate the options for  this field</description>
+    <property_id>2</property_id>
+    <label>Function</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="16">
+    <id>16</id>
+    <name>initialization_file</name>
+    <description>A file containing the options for  this field</description>
+    <property_id>2</property_id>
+    <label>File</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="17">
+    <id>17</id>
+    <name>initialization_options</name>
+    <description>A list of options options for  this field</description>
+    <property_id>3</property_id>
+    <label>Options</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="18">
+    <id>18</id>
+    <name>validation_override</name>
+    <description>Accept values not in the list of options for this field?</description>
+    <property_id>14</property_id>
+    <label>Override</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="19">
+    <id>19</id>
+    <name>initialization_collection</name>
+    <description>A collection object representing the options for this field</description>
+    <property_id>2</property_id>
+    <label>Collection</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="20">
+    <id>20</id>
+    <name>initialization_display_status</name>
+    <description>The default display status for this field</description>
+    <property_id>15</property_id>
+    <label>Display Status</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="21">
+    <id>21</id>
+    <name>initialization_input_status</name>
+    <description>The default input status for this field</description>
+    <property_id>15</property_id>
+    <label>Input Status</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="22">
+    <id>22</id>
+    <name>display_linkrule</name>
+    <description>A rule to decide whether to show a link to this field</description>
+    <property_id>6</property_id>
+    <label>Display Link</label>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:66:"0,No rule;1,User must not already exist;2,User must already exist;";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="23">
+    <id>23</id>
+    <name>validation_existrule</name>
+    <description>A rule to use for checking the existence of this field</description>
+    <property_id>6</property_id>
+    <label>Existence Rule</label>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:66:"0,No rule;1,User must not already exist;2,User must already exist;";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="24">
+    <id>24</id>
+    <name>initialization_basedirectory</name>
+    <description>The directory this field gets input from</description>
+    <property_id>2</property_id>
+    <label>Base Directory</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="25">
+    <id>25</id>
+    <name>initialization_image_source</name>
+    <description>The source type where this field gets its input</description>
+    <property_id>34</property_id>
+    <label>Image Source</label>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:48:"local,local location;url,url;upload,file upload;";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="26">
+    <id>26</id>
+    <name>validation_file_extensions</name>
+    <description>The file extensions allowed for this field</description>
+    <property_id>2</property_id>
+    <label>File Extensions</label>
+    <configuration>a:7:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="27">
+    <id>27</id>
+    <name>initialization_group_list</name>
+    <description>A list of groups to chow in this field</description>
+    <property_id>2</property_id>
+    <label>Group List</label>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="28">
+    <id>28</id>
+    <name>initialization_parentgroup_list</name>
+    <description>A list of parent groups whose children are shown in this field</description>
+    <property_id>2</property_id>
+    <label>Parent Groups</label>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="29">
+    <id>29</id>
+    <name>initialization_ancestorgroup_list</name>
+    <description>A list of ancestor groups whose children are shown in this field</description>
+    <property_id>2</property_id>
+    <label>Ancestor Groups</label>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="30">
+    <id>30</id>
+    <name>initialization_icon_url</name>
+    <description>Icon URL</description>
+    <property_id>2</property_id>
+    <label>Icon URL</label>
+    <configuration>a:7:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="31">
+    <id>31</id>
+    <name>display_rows</name>
+    <description>The number of rows this field displays with</description>
+    <property_id>15</property_id>
+    <label>Rows</label>
+    <configuration>a:9:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:20:"validation_min_value";s:0:"";s:20:"validation_max_value";s:0:"";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="32">
+    <id>32</id>
+    <name>display_columns</name>
+    <description>The number of columns this field displays with</description>
+    <property_id>15</property_id>
+    <label>Columns</label>
+    <configuration>a:9:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:20:"validation_min_value";s:0:"";s:20:"validation_max_value";s:0:"";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="33">
+    <id>33</id>
+    <name>validation_single</name>
+    <description>This field can have only a single value</description>
+    <property_id>14</property_id>
+    <label>Single Only</label>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="34">
+    <id>34</id>
+    <name>initialization_module</name>
+    <description>The module tthis field gets its value from</description>
+    <property_id>19</property_id>
+    <label>Module</label>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="35">
+    <id>35</id>
+    <name>initialization_itemtype</name>
+    <description>The itemtype tthis field gets its value from</description>
+    <property_id>15</property_id>
+    <label>Itemtype</label>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="36">
+    <id>36</id>
+    <name>display_combo_mode</name>
+    <description>This field displays as a dropdown or a textbox or both</description>
+    <property_id>34</property_id>
+    <label>Combo Mode</label>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:29:"1,Dropdown;2,Text Box;3,Both;";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="37">
+    <id>37</id>
+    <name>display_required</name>
+    <description>Whether this field is tagged as &quot;required&quot; or not</description>
+    <property_id>14</property_id>
+    <label>Required</label>
+    <configuration>a:2:{s:14:"display_layout";s:7:"default";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="38">
+    <id>38</id>
+    <name>display_tooltip</name>
+    <description>The tooltip text for this field</description>
+    <property_id>3</property_id>
+    <label>Tooltip</label>
+    <configuration>a:2:{s:14:"display_layout";s:7:"default";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+    <configurations itemid="39">
+    <id>39</id>
+    <name>validation_allowempty</name>
+    <description>Whether this field accepts no input as valid</description>
+    <property_id>14</property_id>
+    <label>Allow empty</label>
+    <configuration>a:2:{s:14:"display_layout";s:7:"default";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  </items>

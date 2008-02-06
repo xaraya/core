@@ -1,5 +1,27 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="!empty($class)">
+    <xar:elseif condition="empty($size)"/>
+        <xar:set name="class">'xar-form-textlong'</xar:set>
+    <xar:elseif condition="$size gt 48"/>
+        <xar:set name="class">'xar-form-textxlong'</xar:set>
+    <xar:elseif condition="$size lt 12"/>
+        <xar:set name="class">'xar-form-textshort'</xar:set>
+    <xar:elseif condition="$size lt 30"/>
+        <xar:set name="class">'xar-form-textmedium'</xar:set>
+    <xar:else/>
+        <xar:set name="class">'xar-form-textlong'</xar:set>
+    </xar:if>
+    <xar:if condition="!isset($style)">
+        <xar:set name="style">''</xar:set>
+    </xar:if>
+    
+    <!-- On focus event -->
+    <xar:if condition="!isset($onfocus)">
+      <xar:set name="onfocus">'return true;'</xar:set>
+    </xar:if>
+    
 
 <!--
 FIXME:  The target="" needs to be replaced by something that works in xhtml.
@@ -9,9 +31,7 @@ FIXME:  The target="" needs to be replaced by something that works in xhtml.
         #$user#
     </xar:if>
 -->
-    <input type="text" name="#$name#" id="#$id#" value="#$user#" />
+    <input type="text" name="#$name#" id="#$id#" value="#$user#" style="#$style#" size="#$size#" maxlength="#$maxlength#" tabindex="#$tabindex#" class="#$class#" onfocus="#$onfocus#"/>
 
-    <xar:if condition="!empty($invalid)">
-        &#160;<span class="xar-error">#$invalid#</span>
-    </xar:if>
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

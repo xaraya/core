@@ -19,62 +19,62 @@ class NumberBoxProperty extends TextBoxProperty
     public $name       = 'integerbox';
     public $desc       = 'Number Box';
 
+    public $validation_min_value           = null;
+    public $validation_min_value_invalid;
+    public $validation_max_value           = null;
+    public $validation_max_value_invalid;
+
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
 
-        $this->size      = 10;
-        $this->maxlength = 30;
+        $this->display_size      = 10;
+        $this->display_maxlength = 30;
     }
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (!isset($value) || $value === '') {
-            if (isset($this->min)) {
-                $this->value = $this->min;
-            } elseif (isset($this->max)) {
-                $this->value = $this->max;
+            if (isset($this->validation_min_value)) {
+                $this->value = $this->validation_min_value;
+            } elseif (isset($this->validation_max_value)) {
+                $this->value = $this->validation_max_value;
             } else {
                 $this->value = null;
             }
         } elseif (is_numeric($value)) {
             $value = intval($value);
-            if (isset($this->min) && isset($this->max) && ($this->min > $value || $this->max < $value)) {
-                $this->invalid = xarML('integer : allowed range is between #(1) and #(2)',$this->min,$this->max);
+            if (isset($this->min) && isset($this->validation_max_value) && ($this->validation_min_value > $value || $this->validation_max_value < $value)) {
+                $this->invalid = xarML('integer : allowed range is between #(1) and #(2)',$this->validation_min_value,$this->validation_max_value);
                 $this->value = null;
                 return false;
-            } elseif (isset($this->min) && $this->min > $value) {
-                $this->invalid = xarML('integer : must be #(1) or more',$this->min);
+            } elseif (isset($this->min) && $this->validation_min_value > $value) {
+                if (!empty($this->validation_min_value_invalid)) {
+                    $this->invalid = xarML($this->validation_min_value_invalid);
+                } else {
+                    $this->invalid = xarML('integer : must be #(1) or more',$this->validation_min_value);
+                }
                 $this->value = null;
                 return false;
-            } elseif (isset($this->max) && $this->max < $value) {
-                $this->invalid = xarML('integer : must be #(1) or less',$this->max);
+            } elseif (isset($this->validation_max_value) && $this->validation_max_value < $value) {
+                if (!empty($this->validation_max_value_invalid)) {
+                    $this->invalid = xarML($this->validation_max_value_invalid);
+                } else {
+                    $this->invalid = xarML('integer : must be #(1) or less',$this->validation_max_value);
+                }
                 $this->value = null;
                 return false;
             }
-            $this->value = $value;
         } else {
             $this->invalid = xarML('integer: #(1)', $this->name);
             $this->value = null;
             return false;
         }
+        // Need this to ensure we have an integer type
+        $this->setValue($value);
         return true;
-    }
-
-    // Trick: use the parent method with a different template :-)
-    public function showValidation(Array $args = array())
-    {
-        // allow template override by child classes
-        if (!isset($args['template'])) {
-            // can't use this yet, need to decide on a name
-            //$args['template'] = $this->getTemplate();
-            $args['template'] = 'numberbox';
-        }
-
-        return parent::showValidation($args);
     }
 }
 ?>

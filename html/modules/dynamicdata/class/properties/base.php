@@ -38,20 +38,30 @@ class DataProperty extends Object implements iDataProperty
     public $template = '';
     public $layout = '';
     public $tplmodule = 'dynamicdata';
-    public $validation = '';
+    public $configuration = '';
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
-    public $args         = array();
+    public $args         = array(); //args that hold alias info
+    public $anonymous = 0;        // if true the name, rather than the dd_xx designation is used in displaying the property
 
-    public $datastore = '';   // name of the data store where this property comes from
+    public $datastore = '';    // name of the data store where this property comes from
 
-    public $value = null;     // value of this property for a particular DataObject
-    public $invalid = '';     // result of the checkInput/validateValue methods
+    public $value = null;      // value of this property for a particular DataObject
+    public $invalid = '';      // result of the checkInput/validateValue methods
 
-    // public $objectref = null; // object this property belongs to
-    public $_objectid = null; // objectid this property belongs to
+    public $include_reference = 0; // tells the object this property belongs whether to add a reference of itself to me
+    public $objectref = null;  // object this property belongs to
+    public $_objectid = null;  // objectid this property belongs to
+    public $_fieldprefix = ''; // the object's fieldprefix
 
-    public $_itemid;          // reference to $itemid in DataObject, where the current itemid is kept
-    public $_items;           // reference to $items in DataObjectList, where the different item values are kept
+    public $_itemid;           // reference to $itemid in DataObject, where the current itemid is kept
+    public $_items;            // reference to $items in DataObjectList, where the different item values are kept
+
+    public $configurationtypes = array('display','validation','initialization');
+//    public $display_template                = "";
+    public $display_layout                  = "default";       // we display the default layout of a template
+    public $display_required                = false;           // the field is not tagged as "required" for input
+    public $display_tooltip                 = "";              // there is no tooltip text, and so no tooltip
+    public $initialization_other_rule       = null;
 
     /**
      * Default constructor setting the variables
@@ -61,9 +71,12 @@ class DataProperty extends Object implements iDataProperty
         $this->descriptor = $descriptor;
         $args = $descriptor->getArgs();
         $this->template = $this->getTemplate();
-        $this->args = serialize(array());
 
         $descriptor->refresh($this);
+        // load the configuration, if one exists
+        if (!empty($this->configuration)) {
+            $this->parseConfiguration($this->configuration);
+        }
 
         if(!isset($args['value'])) {
             // if the default field looks like <something>(...), we'll assume that this
@@ -78,6 +91,12 @@ class DataProperty extends Object implements iDataProperty
                 }
             }
             $this->value = $this->defaultvalue;
+        }
+        // do the minimum for alias info, let the single property do the rest
+        if (!empty($this->args)) {
+            try {
+                $this->args = unserialize($this->args);
+            } catch (Exception $e) {}
         }
     }
 
@@ -98,7 +117,7 @@ class DataProperty extends Object implements iDataProperty
                 $storetype = 'hook';
                 break;
             case 'user function':
-                // data managed by some user function (specified in validation for now)
+                // data managed by some user function (specified in configuration for now)
                 $storename = '_functions_';
                 $storetype = 'function';
                 break;
@@ -106,14 +125,14 @@ class DataProperty extends Object implements iDataProperty
                 // data available in user variables
                 // we'll keep a separate data store per module/itemtype here for now
                 // TODO: (don't) integrate user variable handling with DD
-                $storename = 'uservars_'.$this->moduleid.'_'.$this->itemtype; //FIXME change id
+                $storename = 'uservars_'.$this->_objectid.'_'.$this->type;
                 $storetype = 'uservars';
                 break;
             case 'module variables':
                 // data available in module variables
                 // we'll keep a separate data store per module/itemtype here for now
                 // TODO: (don't) integrate module variable handling with DD
-                $storename = 'modulevars_'.$this->moduleid.'_'.$this->itemtype; //FIXME change id
+                $storename = 'module variables_'.$this->name;
                 $storetype = 'modulevars';
                 break;
             case 'dummy':
@@ -168,25 +187,14 @@ class DataProperty extends Object implements iDataProperty
      */
     public function fetchValue($name = '')
     {
-        $isvalid = true;
+        $found = false;
         $value = null;
-        xarVarFetch($name, 'isset', $namevalue,  NULL, XARVAR_DONT_SET);
+        xarVarFetch($name, 'isset', $namevalue, NULL, XARVAR_DONT_SET);
         if(isset($namevalue)) {
+            $found = true;
             $value = $namevalue;
-        } else {
-            xarVarFetch($this->name, 'isset', $fieldvalue,  NULL, XARVAR_DONT_SET);
-            if(isset($fieldvalue)) {
-                $value = $fieldvalue;
-            } else {
-                xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_DONT_SET);
-                if(isset($ddvalue)) {
-                    $value = $ddvalue;
-                } else {
-                    $isvalid = false;
-                }
-            }
         }
-        return array($isvalid,$value);
+        return array($found,$value);
     }
 
     /**
@@ -197,16 +205,18 @@ class DataProperty extends Object implements iDataProperty
      */
     public function checkInput($name = '', $value = null)
     {
+        // store the fieldname for validations who need them (e.g. file uploads)
+        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $this->fieldname = $name;
+        $this->invalid = '';
         if(!isset($value)) {
-            list($isvalid,$value) = $this->fetchValue($name);
-            if (!$isvalid) {
-                $this->invalid = xarML('no value found');
-                return false;
+            list($found,$value) = $this->fetchValue($name);
+            if (!$found) {
+            // store the fieldname for configurations who need them (e.g. file uploads)
+                $this->objectref->missingfields[] = $this->name;
+                return null;
             }
 
-            // store the fieldname for validations who need them (e.g. file uploads)
-            $name = empty($name) ? 'dd_'.$this->id : $name;
-            $this->fieldname = $name;
         }
        return $this->validateValue($value);
     }
@@ -218,11 +228,13 @@ class DataProperty extends Object implements iDataProperty
      */
     public function validateValue($value = null)
     {
-        if(!isset($value)) $value = $this->value;
+        if(!isset($value)) $value = $this->getValue();
+        else $this->setValue($value);
 
-        $this->value = null;
-        $this->invalid = xarML('unknown property');
-        return false;
+//        $this->value = null;
+//        $this->invalid = xarML('unknown property');
+//        return false;
+        return true;
     }
 
     /**
@@ -305,21 +317,42 @@ class DataProperty extends Object implements iDataProperty
             return $this->showOutput($data) . $this->showHidden($data);
         }
 
-        // Our common items we need
-        if(!isset($data['name']))        $data['name'] = 'dd_'.$this->id;
-        if(isset($data['fieldprefix']))  $data['name'] = $data['fieldprefix'] . '_' . $data['name'];
+        // Display directive for the name
+        if(!isset($data['name'])) {
+            if ($this->anonymous == true) $data['name'] = $this->name;
+            else $data['name'] = 'dd_'.$this->id;
+        }
+        $name = $data['name'];
+
+        // Add the object's field prefix if there is one
+        if(!empty($this->_fieldprefix))  $name = $this->_fieldprefix . '_' . $data['name'];
+        // A field prefix added here can override the previous one
+        if(isset($data['fieldprefix']))  $name = $data['fieldprefix'] . '_' . $data['name'];
+        $data['name'] = $name;
+
         if(!isset($data['id']))          $data['id']   = $data['name'];
 
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
-        if(!isset($data['layout']))   $data['layout']   = $this->layout;
+        if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
 
         if(!isset($data['tabindex'])) $data['tabindex'] = 0;
         if(!isset($data['value']))    $data['value']    = '';
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid: #(1)', $this->invalid) :'';
 
-        // Render it
-        return xarTplProperty($data['module'], $data['template'], 'showinput', $data);
+        // Add the configuration options if they have not been overridden
+        if(isset($data['configuration'])) {
+            $this->parseConfiguration($data['configuration']);
+            unset($data['configuration']);
+        }
+        foreach ($this->configurationtypes as $configtype) {
+            $properties = $this->getConfigProperties($configtype,1);
+            foreach ($properties as $name => $configarg) {
+                if (!isset($data[$configarg['shortname']]))
+                    $data[$configarg['shortname']] = $this->{$configarg['fullname']};
+            }
+        }
+        return xarTplProperty($data['tplmodule'], $data['template'], 'showinput', $data);
     }
 
     /**
@@ -348,11 +381,11 @@ class DataProperty extends Object implements iDataProperty
 
         if(!isset($data['value'])) $data['value'] = $this->getValue();
         // TODO: does this hurt when it is an array?
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
-        if(!isset($data['layout']))   $data['layout']   = $this->layout;
+        if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
 
-        return xarTplProperty($data['module'], $data['template'], 'showoutput', $data);
+        return xarTplProperty($data['tplmodule'], $data['template'], 'showoutput', $data);
     }
 
     /**
@@ -380,10 +413,10 @@ class DataProperty extends Object implements iDataProperty
         $data['name']  = $this->name;
         $data['label'] = isset($label) ? xarVarPrepForDisplay($label) : xarVarPrepForDisplay($this->label);
         $data['for']   = isset($for) ? $for : null;
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
-        return xarTplProperty($data['module'], $data['template'], 'label', $data);
+        return xarTplProperty($data['tplmodule'], $data['template'], 'label', $data);
     }
 
     /**
@@ -397,14 +430,22 @@ class DataProperty extends Object implements iDataProperty
     function showHidden(Array $data = array())
     {
         $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
+
+        $name = $data['name'];
+        // Add the object's field prefix if there is one
+        if(!empty($this->_fieldprefix))  $name = $this->_fieldprefix . '_' . $data['name'];
+        // A field prefix added here can override the previous one
+        if(isset($data['fieldprefix']))  $name = $data['fieldprefix'] . '_' . $data['name'];
+        $data['name'] = $name;
+
         $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
         $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->getValue());
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
 
-        return xarTplProperty($data['module'], $data['template'], 'showhidden', $data);
+        return xarTplProperty($data['tplmodule'], $data['template'], 'showhidden', $data);
     }
 
     /**
@@ -446,106 +487,192 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
-     * Parse the validation rule
+     * Parse the configuration rule
      *
-     * @param string $validation
+     * @param string $configuration
      */
-    public function parseValidation($validation = '')
+    public function parseConfiguration($configuration = '')
     {
-        // if(... $validation ...) {
-        //     $this->whatever = ...;
-        // }
+        if (is_array($configuration)) {
+            $fields = $configuration;
+        } elseif (empty($configuration)) {
+            return true;
+        } else {
+            try {
+                $fields = unserialize($configuration);
+            } catch (Exception $e) {
+                // if the configuration is malformed just return an empty configuration
+                $fields = array();
+            }
+        }
+        if (!empty($fields) && is_array($fields)) {
+            foreach ($this->configurationtypes as $configtype) {
+                $properties = $this->getConfigProperties($configtype,1);
+                foreach ($properties as $name => $configarg) {
+                    if (isset($fields[$name])) {
+                        $this->$name = $fields[$name];
+                    }
+                    $msgname = $name . '_invalid';
+                    if (isset($fields[$msgname])) {
+                        $this->$msgname = $fields[$msgname];
+                    }
+                }
+            }
+        }
     }
 
     /**
-     * The following methods provide an interface to show and update validation rules
+     * The following methods provide an interface to show and update configuration rules
      * when editing dynamic properties. They should be customized for each property
-     * type, based on its specific format and interpretation of the validation rules.
+     * type, based on its specific format and interpretation of the configuration rules.
      *
-     * This allows property type developers to support more complex validation rules,
+     * This allows property type developers to support more complex configuration rules,
      * while keeping them easy to modify for the site admins afterwards.
      *
-     * If no validation methods are specified for a particular property type, the
+     * If no configuration methods are specified for a particular property type, the
      * corresponding methods from its parent class will be used.
      *
      * Note: the methods can be called by DD's showpropval() function, or if you set the
-     *       type of the 'validation' property (21) to ValidationProperty also
+     *       type of the 'configuration' property (21) to ConfigurationProperty also
      *       via DD's modify() and update() functions if you edit some dynamic property.
      */
 
     /**
-     * Show the current validation rule in a specific form for this property type
+     * Show the current configuration rule in a specific form for this property type
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['validation'] validation rule (default is the current validation)
+     * @param $args['configuration'] configuration rule (default is the current configuration)
      * @param $args['id'] id of the field
      * @param $args['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showValidation(Array $args = array())
+    public function showConfiguration(Array $data = array())
     {
-        extract($args);
+        if (!isset($data['configuration'])) $data['configuration'] = $this->configuration;
+        $this->parseConfiguration($data['configuration']);
 
-        $data = array();
-        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
-        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
-        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
-        $data['size']       = !empty($size) ? $size : 50;
-        $data['required']   = isset($required) && $required ? true : false;
+        if (!isset($data['name']))  $data['name'] = 'dd_'.$this->id;
+        if (!isset($data['id']))  $data['id'] = 'dd_'.$this->id;
+        if (!isset($data['tabindex']))  $data['tabindex'] = 0;
+        if (!isset($this->invalid))  $data['invalid'] = xarML('Invalid #(1)', $this->invalid);
+        else $data['invalid'] = '';
+        if (isset($data['required']) && $data['required']) $data['required'] = true;
+        else $data['required'] = false;
         if(!isset($data['module']))   $data['module']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
 
-        if(isset($validation))
-        {
-            $this->validation = $validation;
-            $this->parseValidation($validation);
-        }
-        // some known validation rule format
-        // if(... $this->whatever ...) {
-        //     $data['whatever'] = ...
-        //
-        // if we didn't match the above format
-        // } else {
-        $data['other'] = xarVarPrepForDisplay($this->validation);
-        // }
+        if (!isset($data['display'])) $data['display'] = $this->getConfigProperties('display',1);
+        if (!isset($data['validation'])) $data['validation'] = $this->getConfigProperties('validation',1);
+        if (!isset($data['initialization'])) $data['initialization'] = $this->getConfigProperties('initialization',1);
 
-        return xarTplProperty($data['module'], $data['template'], 'validation', $data);
+        // Collect the invalid messages for the validations
+        foreach ($data['validation'] as $validationitem) {
+            $msgname = $validationitem['name'] . '_invalid';
+            if (isset($this->$msgname)) $data['validation'][$msgname] = $this->$msgname;
+            else $data['validation'][$msgname] = '';
+        }
+        return xarTplProperty($data['module'], $data['template'], 'configuration', $data);
     }
 
     /**
-     * Update the current validation rule in a specific way for this property
+     * Update the current configuration rule in a specific way for this property
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['validation'] validation rule (default is the current validation)
+     * @param $args['configuration'] configuration rule (default is the current configuration)
      * @param $args['id'] id of the field
-     * @return bool true if the validation rule could be processed, false otherwise
+     * @return bool true if the configuration rule could be processed, false otherwise
      */
-    public function updateValidation(Array $args = array())
+    public function updateConfiguration(Array $data = array())
     {
-        extract($args);
-
+        extract($data);
+        $valid = false;
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
 
-        // do something with the validation and save it in $this->validation
-        if(isset($validation))
-        {
-            if(is_array($validation))
-            {
-                // handle arrays as you like in your property type
-                // $this->validation = serialize($validation);
-                $this->validation = '';
-                $this->invalid = 'array';
-                return false;
+        // do something with the configuration and save it in $this->configuration
+        if (isset($configuration) && is_array($configuration)) {
+            $storableconfiguration = array();
+            foreach ($this->configurationtypes as $configtype) {
+                $properties = $this->getConfigProperties($configtype,1);
+                foreach ($properties as $name => $configarg) {
+                    if (isset($configuration[$name])) {
+                        $storableconfiguration[$name] = $configuration[$name];
+                    }
+                    // Invalid messages only get stored if they are non-empty. For all others we check whether they exist (for now)
+                    $msgname = $name . '_invalid';
+                    if (isset($configuration[$msgname]) && !empty($configuration[$msgname])) {
+                        $storableconfiguration[$msgname] = $configuration[$msgname];
+                    }
+                }
             }
-            else
-                $this->validation = $validation;
-        }
+            $this->configuration = serialize($storableconfiguration);
+            $valid = true;
 
-        // tell the calling function that everything is OK
-        return true;
+        } else {
+            $this->configuration = serialize(array());
+            $valid = true;
+        }
+        return $valid;
+    }
+
+    /**
+     * Deprecated methods
+     */
+    public function parseValidation($configuration='')  { return $this->parseConfiguration($configuration); }
+    public function showValidation(Array $data = array())   { return $this->showConfiguration($data); }
+    public function updateValidation(Array $data = array()) { return $this->updateConfiguration($data); }
+
+    /**
+     * Return the configuration options for this property
+     *
+     * @param $type:  type of option (display, initialization, validation)
+     * @param $fullname: return the full name asa key, e.g. "display_size
+     * @return array of configuration options
+     */
+    public function getConfigProperties($type="", $fullname=0)
+    {
+        static $allconfigproperties;
+
+        if (empty($allconfigproperties)) {
+            $xartable = xarDB::getTables();
+            $q = new xarQuery('SELECT',$xartable['dynamic_configurations']);
+            if (!$q->run()) return;
+            $allconfigproperties = $q->output();
+
+            // Use this if we have DD storage
+//            sys::import('modules.query.class.ddquery');
+//            $q = new DDQuery('configurations');
+//            if (!$q->run()) return;
+//            $allconfigproperties = $q->output();
+
+            // Can't use DD methods here as we go into a recursion loop
+//            $object = DataObjectMaster::getObjectList(array('name' => 'configurations'));
+//            $allconfigproperties = $object->getItems();
+        }
+        $config = array();
+        foreach ($allconfigproperties as $item) $config[$item['name']] = $item;
+        // if no items found, bail
+        if (empty($config)) return $config;
+
+        $configproperties = array();
+        $properties = $this->getPublicProperties();
+        foreach ($properties as $name => $arg) {
+            if (!isset($config[$name])) continue;
+            $pos = strpos($name, "_");
+            if (!$pos || (substr($name,0,$pos) != $type)) continue;
+            if ($fullname) {
+                $configproperties[$name] = $config[$name];
+                $configproperties[$name]['value'] = $arg;
+                $configproperties[$name]['shortname'] = substr($name,$pos+1);
+                $configproperties[$name]['fullname'] = $name;
+            } else {
+                $configproperties[substr($name,$pos+1)] = $config[$name];
+                $configproperties[substr($name,$pos+1)]['value'] = $arg;
+                $configproperties[substr($name,$pos+1)]['shortname'] = substr($name,$pos+1);
+                $configproperties[substr($name,$pos+1)]['fullname'] = $name;
+            }
+        }
+        return $configproperties;
     }
 
     /**

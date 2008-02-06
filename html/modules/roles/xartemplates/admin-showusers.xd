@@ -148,9 +148,8 @@
                     </select>
                 </td>
                 <td class="xar-align-center">
-                    <xar:set name="dummy">$viewstates[ROLES_STATE_CURRENT] = 'All'; $viewstates = $viewstates + $statelist</xar:set>
-                    <!-- TODO: replace this with options attribute -->
-                    <xar:data-input type="dropdown" name="state" value="$state" validation="$viewstates" onchange="this.form.submit()" />
+                    <xar:set name="firstline">array('id' => ROLES_STATE_CURRENT, 'name' => 'All')</xar:set>
+                    <xar:data-input type="dropdown" name="state" value="$state" options="$statelist" firstline="$firstline" onchange="this.form.submit()" />
                 </td>
                 <td class="xar-align-center">
                     <input type="text" name="search" id="search" value="#$search#" maxlength="255" class="xar-form-textshort" />
@@ -175,7 +174,7 @@
                 <label for="status" title="#xarML('Change the state of the users who have been selected below')#" class="xar-form-label" style="width: 200px">
                     <xar:mlstring>Change state of selected users:</xar:mlstring>
                 </label>
-                <xar:data-input type="dropdown" name="status" id="status" validation="$statelist" class="xar-margin-thickright" />
+                <xar:data-input type="dropdown" name="status" id="status" options="$statelist" class="xar-margin-thickright" />
 
                 <input type="hidden" name="groupid" id="groupid" value="#$groupid#"/>
                 <input type="hidden" name="state" id="state" value="#$state#"/>

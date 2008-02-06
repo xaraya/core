@@ -22,7 +22,8 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     protected $descriptor  = null;      // descriptor object of this class
 
-    public $itemid = 0;
+    public $itemid         = 0;
+    public $missingfields  = array();      // reference to fields not found by checkInput
 
     /**
      * Inherits from DataObjectMaster and sets the requested item id
@@ -85,10 +86,38 @@ class DataObject extends DataObjectMaster implements iDataObject
         return $this->itemid;
     }
 
+    public function getInvalids(Array $args = array())
+    {
+        if (!empty($args['fields'])) {
+            $fields = $args['fields'];
+        } else {
+            $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+        }
+        $invalids = array();
+        foreach($fields as $name) {
+            if (!empty($this->properties[$name]->invalid))
+                $invalids[$name] = $this->properties[$name]->invalid;
+        }
+        return $invalids;
+    }
+
+    public function clearInvalids()
+    {
+        if (!empty($args['fields'])) {
+            $fields = $args['fields'];
+        } else {
+            $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+        }
+        foreach($fields as $name) {
+            $this->properties[$name]->invalid = '';
+        }
+        return true;
+    }
+
     /**
      * Check the different input values for this item
      */
-    public function checkInput(Array $args = array())
+    public function checkInput(Array $args = array(), $suppress=0)
     {
         if(!empty($args['itemid']) && $args['itemid'] != $this->itemid) {
             $this->itemid = $args['itemid'];
@@ -97,46 +126,67 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         if(empty($args['fieldprefix'])) {
             $args['fieldprefix'] = $this->fieldprefix;
+        } else {
+            $this->fieldprefix = $args['fieldprefix'];
         }
 
         $isvalid = true;
-        $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
-        $missing = array();
+        if (!empty($args['fields'])) {
+            $fields = $args['fields'];
+        } else {
+            $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+        }
 
+        $this->missingfields = array();
         foreach($fields as $name) {
             // Ignore disabled properties
             if($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
                 continue;
 
-            $field = 'dd_' . $this->properties[$name]->id;
-            if(!empty($args['fieldprefix'])) {
-                // No field, but prefix given, use that
-                // cfr. prefix layout in objects/showform template
-                    $field = $args['fieldprefix'] . '_' . $field;
-                    $passed = $this->properties[$name]->checkInput($field);
-                    if (!$passed) {
-                        $field = $args['fieldprefix'] . '_' . $name;
-                        $passed = $this->properties[$name]->checkInput($field);
-                    }
-            // for hooks, use the values passed via $extrainfo if available
-            } elseif(isset($args[$name])) {
-                // Name based check
-                $passed = $this->properties[$name]->checkInput($name,$args[$name]);
-            } elseif(isset($args[$field])) {
-                // No name, check based on field
-                $passed = $this->properties[$name]->checkInput($field,$args[$field]);
+            // Give the property this object's reference so it can send back info on missing fields
+            $this->properties[$name]->objectref =& $this;
+
+            // We need to check both the given name and the dd_ name
+            // checking for any transitory name given a property via $args needs to be done at the property level
+            $ddname = 'dd_' . $this->properties[$name]->id;
+            if (!empty($args['fieldprefix'])) {
+                $name1 = $args['fieldprefix'] . "_" .$name;
+                $name2 = $args['fieldprefix'] . "_" .$ddname;
             } else {
-                // Ok, try without anything
-                $passed = $this->properties[$name]->checkInput();
+                $name1 = $name;
+                $name2 = $ddname;
             }
-
-            // FIXME: find a better way to get this without passing an object ref to the property?
-            if($this->properties[$name]->invalid == xarML('no value found')) $missing[] = $name;
-
-            if(!$passed) $isvalid = false;
+            if (!empty($args['priority']) && ($args['priority'] == 'dd')) {
+                $temp = $name1;
+                $name1 = $name2;
+                $name2 = $temp;
+            }
+            if(isset($args[$name])) {
+                // Name based check
+                $passed = $this->properties[$name]->checkInput($name1,$args[$name]);
+                if ($passed === null) {
+                    array_pop($this->missingfields);
+                    $passed = $this->properties[$name]->checkInput($name2,$args[$name]);
+                }
+            } elseif(isset($args[$ddname])) {
+                // No name, check based on field
+                $passed = $this->properties[$name]->checkInput($name1,$args[$ddname]);
+                if ($passed === null) {
+                    array_pop($this->missingfields);
+                    $passed = $this->properties[$name]->checkInput($name2,$args[$ddname]);
+                }
+            } else {
+                // Check without values
+                $passed = $this->properties[$name]->checkInput($name1);
+                if ($passed === null) {
+                    array_pop($this->missingfields);
+                    $passed = $this->properties[$name]->checkInput($name2);
+                }
+            }
+            if (($passed === null) || ($passed === false)) $isvalid = false;
         }
-        if (!empty($missing)) {
-            throw new VariableNotFoundException(implode(', ',$missing),'The following properties were not found: #(1)');
+        if (!empty($this->missingfields) && !$suppress) {
+            throw new VariableNotFoundException(array($this->name,implode(', ',$this->missingfields)),'The following fields were not found: #(1): [#(2)]');
         }
         return $isvalid;
     }
@@ -260,6 +310,18 @@ class DataObject extends DataObjectMaster implements iDataObject
             }
         }
         return $fields;
+    }
+
+    public function setFieldValues(Array $args = array(), $bypass = 0)
+    {
+        if ($bypass) {
+            foreach ($args as $key => $value)
+                if (isset($this->properties[$key])) $this->properties[$key]->value = $value;
+        } else {
+            foreach ($args as $key => $value)
+                if (isset($this->properties[$key]))  $this->properties[$key]->setValue($value);
+        }
+        return true;
     }
 
     /**
