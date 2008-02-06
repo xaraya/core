@@ -78,7 +78,9 @@ class FieldStatusProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        // FIXME: rework the dataproperty so that the output of getOptions has a correct form
+        // and ew can call the parent method here
+        // if (!parent::validateValue($value)) return false;
 
         if (empty($value)) {
             $value = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE + DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
