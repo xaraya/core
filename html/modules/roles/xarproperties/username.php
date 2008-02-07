@@ -22,8 +22,6 @@ class UsernameProperty extends TextBoxProperty
     public $desc       = 'Username';
     public $reqmodules = array('roles');
 
-    public $rawvalue   = null;
-
     public $display_linkrule                = 0;
     public $validation_existrule            = 0;
     public $validation_existrule_invalid;
@@ -41,9 +39,6 @@ class UsernameProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
-        // Save the incoming value until validation is successful
-        $this->rawvalue = $value;
-
         // Validate as a text box
         if (!parent::validateValue($value)) return false;
 
@@ -89,62 +84,52 @@ class UsernameProperty extends TextBoxProperty
 
     public function showInput(Array $data = array())
     {
-        // Cater to a common case
-        if ((isset($data['user']) && $data['user'] == 'myself') || (isset($data['value']) && $data['value'] == 'myself')) {
-            $this->value = xarUserGetVar('id');        
-        }
-
-        if (isset($this->rawvalue)) {
-            $data['value'] = $this->rawvalue;
-            $data['user'] = $this->rawvalue;
-        } else {
-            if (!isset($data['value'])) $data['value'] = $this->value;
-            if (empty($data['value']))  {
-                $data['user'] = '';
-                $data['value']= 0;
+        // The user param is a name
+        if (isset($data['user'])) {
+            // Cater to a common case
+            if ($data['user'] == 'myself') {
+                $this->value = xarUserGetVar('id');
+                $data['value'] = $this->getValue();
             } else {
-                if(is_numeric($data['value'])) {
-                    try {
-                        $user = xarUserGetVar('uname', $data['value']);
-                        // Does this make sense? The user should already have been checked before storing
-                        if (empty($user))
-                            $user = xarUserGetVar('name', $data['value']);
-                    } catch(NotFoundExceptions $e) {
-                        $user = $data['value'];
-                    }
-                } else {
-                    $user = $data['value'];
-                }
-                    $data['user'] = xarVarprepForDisplay($user);
+                $data['value'] = $data['user'];
             }
+        } else {
+            // The value param is a user ID
+            if (isset($data['value'])) $this->value = $data['value'];
+            if (empty($this->value))  {
+                $this->value = '';
+            } else {
+                if(!is_numeric($this->value)) {
+                    throw new BadParameterException($this->value, 'is not a user ID');
+                }
+            }
+            $data['value'] = $this->getValue();
         }
-
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
-        if (isset($this->rawvalue)) {
-            $data['value'] = $this->rawvalue;
-            $data['user'] = $this->rawvalue;
-        } else {
-            extract($data);
-            if (!isset($value)) $value = $this->value;
-            if (empty($value))  $value = xarUserGetVar('id');
-            if(is_numeric($value)) {
-                try {
-                    $user = xarUserGetVar('name', $value);
-                    if (empty($user))
-                        $user = xarUserGetVar('uname', $value);
-                } catch(NotFoundExceptions $e) {
-                    $user = $value;
-                }
+        // The user param is a name
+        if (isset($data['user'])) {
+            // Cater to a common case
+            if ($data['user'] == 'myself') {
+                $this->value = xarUserGetVar('id');
+                $data['value'] = $this->getValue();
             } else {
-                $user = $value;
+                $data['value'] = $data['user'];
             }
-
-            $data['user']  = xarVarPrepForDisplay($user);
-            $data['value'] = $value;
+        } else {
+            // The value param is a user ID
+            if (isset($data['value'])) $this->value = $data['value'];
+            if (empty($this->value))  {
+                $this->value = '';
+            } else {
+                if(!is_numeric($this->value)) {
+                    throw new BadParameterException($this->value, 'is not a user ID');
+                }
+            }
+            $data['value'] = $this->getValue();
 
             if ($this->configuration) {
                 $data['linkurl'] = xarModURL('roles','user','display',array('id' => $value));
@@ -153,6 +138,17 @@ class UsernameProperty extends TextBoxProperty
             }
         }
         return parent::showOutput($data);
+    }
+    
+    public function getValue()
+    {
+        return xarUserGetVar('uname',$this->value);
+    }
+
+    public function setValue($uname)
+    {
+        $role = xarRoles::ufindRole($uname);
+        $this->value = $role->getID();
     }
 }
 ?>
