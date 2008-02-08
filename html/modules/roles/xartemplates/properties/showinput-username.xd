@@ -26,12 +26,12 @@
 <!--
 FIXME:  The target="" needs to be replaced by something that works in xhtml.
     <xar:if condition="!empty($linkurl)">
-        #$user# [ <a href="#$linkurl#" target="#$preview#">#$profile#</a> ]
+        #$value# [ <a href="#$linkurl#" target="#$preview#">#$profile#</a> ]
     <xar:else />
-        #$user#
+        #$value#
     </xar:if>
 -->
-    <input type="text" name="#$name#" id="#$id#" value="#$user#" style="#$style#" size="#$size#" maxlength="#$maxlength#" tabindex="#$tabindex#" class="#$class#" onfocus="#$onfocus#"/>
+    <input type="text" name="#$name#" id="#$id#" value="#$value#" style="#$style#" size="#$size#" maxlength="#$maxlength#" tabindex="#$tabindex#" class="#$class#" onfocus="#$onfocus#"/>
 
     <xar:template file="dataproperty_additions" module="base" />
 </xar:template>
