@@ -2,8 +2,8 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
     <xar:if condition="!empty($linkurl)">
-        <a href="#$linkurl#">#$user#</a>
+        <a href="#$linkurl#">#$value#</a>
     <xar:else />
-        #$user#
+        #$value#
     </xar:if>
 </xar:template>
