@@ -216,7 +216,6 @@ class DataProperty extends Object implements iDataProperty
                 $this->objectref->missingfields[] = $this->name;
                 return null;
             }
-
         }
        return $this->validateValue($value);
     }

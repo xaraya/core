@@ -160,6 +160,8 @@ class DataObject extends DataObjectMaster implements iDataObject
                 $temp = $name1;
                 $name1 = $name2;
                 $name2 = $temp;
+                // Remove this because it should not be passed on
+                unset($args['priority']);
             }
             if(isset($args[$name])) {
                 // Name based check

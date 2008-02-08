@@ -84,7 +84,7 @@ class VariableTableDataStore extends SQLDataStore
 
         foreach ($propids as $propid) {
             // get the value from the corresponding property
-            $value = $this->fields[$propid]->getValue();
+            $value = $this->fields[$propid]->value;
 
             // invalid prop_id or undefined value (empty is OK, though !)
             if (empty($propid) || !is_numeric($propid) || !isset($value)) {
@@ -135,7 +135,7 @@ class VariableTableDataStore extends SQLDataStore
 
         foreach ($propids as $propid) {
             // get the value from the corresponding property
-            $value = $this->fields[$propid]->getValue();
+            $value = $this->fields[$propid]->value;
 
             // invalid prop_id or undefined value (empty is OK, though !)
             if (empty($propid) || !is_numeric($propid) || !isset($value)) {
