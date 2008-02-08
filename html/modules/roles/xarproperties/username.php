@@ -25,6 +25,7 @@ class UsernameProperty extends TextBoxProperty
     public $display_linkrule                = 0;
     public $validation_existrule            = 0;
     public $validation_existrule_invalid;
+    public $initialization_store_type     = 'name';
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -89,20 +90,14 @@ class UsernameProperty extends TextBoxProperty
             // Cater to a common case
             if ($data['user'] == 'myself') {
                 $this->value = xarUserGetVar('id');
-                $data['value'] = $this->getValue();
+                $role = xarRoles::get($this->value);
+                $data['value'] = $role->getUser();
             } else {
                 $data['value'] = $data['user'];
             }
         } else {
             // The value param is a user ID
             if (isset($data['value'])) $this->value = $data['value'];
-            if (empty($this->value))  {
-                $this->value = '';
-            } else {
-                if(!is_numeric($this->value)) {
-                    throw new BadParameterException($this->value, 'is not a user ID');
-                }
-            }
             $data['value'] = $this->getValue();
         }
         return parent::showInput($data);
@@ -115,24 +110,23 @@ class UsernameProperty extends TextBoxProperty
             // Cater to a common case
             if ($data['user'] == 'myself') {
                 $this->value = xarUserGetVar('id');
-                $data['value'] = $this->getValue();
+                $role = xarRoles::get($this->value);
+                $data['value'] = $role->getUser();
             } else {
                 $data['value'] = $data['user'];
             }
         } else {
             // The value param is a user ID
             if (isset($data['value'])) $this->value = $data['value'];
-            if (empty($this->value))  {
-                $this->value = '';
-            } else {
-                if(!is_numeric($this->value)) {
-                    throw new BadParameterException($this->value, 'is not a user ID');
-                }
-            }
             $data['value'] = $this->getValue();
 
-            if ($this->configuration) {
-                $data['linkurl'] = xarModURL('roles','user','display',array('id' => $value));
+            if ($this->display_linkrule) {
+                if ($this->initialization_store_type == 'id') {
+                    $textvalue = $this->value;
+                } else {
+                    $textvalue = $this->value;
+                }
+                $data['linkurl'] = xarModURL('roles','user','display',array('id' => $this->value));
             } else {
                 $data['linkurl'] = "";
             }
@@ -142,13 +136,25 @@ class UsernameProperty extends TextBoxProperty
     
     public function getValue()
     {
-        return xarUserGetVar('uname',$this->value);
+        if (empty($this->value)) return '';
+        if ($this->initialization_store_type == 'id') {
+            if(!is_numeric($this->value)) {
+                throw new BadParameterException($this->value, 'is not a user ID');
+            }
+            return xarUserGetVar('uname',$this->value);
+        } else {
+            return $this->value;
+        }
     }
 
     public function setValue($uname)
     {
-        $role = xarRoles::ufindRole($uname);
-        $this->value = $role->getID();
+        if ($this->initialization_store_type == 'id') {
+            $role = xarRoles::ufindRole($uname);
+            $this->value = $role->getID();
+        } else {
+            $this->value = $uname;
+        }
     }
 }
 ?>
