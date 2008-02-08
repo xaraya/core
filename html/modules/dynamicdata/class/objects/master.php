@@ -1028,6 +1028,7 @@ class DataObjectMaster extends Object
 
         for(;;) {
             $thisobject     = $objects[$parentitemtype];
+//        var_dump($objects[$parentitemtype]);exit;
 
 //            if ($parentitemtype >= 1000 || $this->moduleid == 182) {
                 // This is a DD descendent object. add it to the ancestor array
@@ -1035,32 +1036,9 @@ class DataObjectMaster extends Object
                 $objectid       = $thisobject['objectid'];
                 $itemtype       = $thisobject['itemtype'];
                 $name           = $thisobject['objectname'];
-//                $parentitemtype = $thisobject['parent'];
+                $parentitemtype = $thisobject['parent'];
                 $this->baseancestor = $objectid;
                 $ancestors[] = $thisobject;
-/*            } else {
-
-                // This is a native itemtype. get ready to quit
-                $done = true;
-                $itemtype = $parentitemtype;
-                if ($itemtype) {
-                    if ($info = self::getObjectInfo(array('objectid' => $thisobject['objectid']))) {
-
-                        // A DD wrapper object exists, add it to the ancestor array
-                        if ($base) $ancestors[] = array('objectid' => $info['objectid'], 'itemtype' => $itemtype, 'name' => $info['name'], 'moduleid' => $moduleid);
-                    } else {
-
-                        // No DD wrapper object
-                        // This must be a native itemtype of some module - add it to the ancestor array if requested
-                        $types = self::getModuleItemTypes(array('moduleid' => $moduleid));
-                        $name = strtolower($types[$itemtype]['label']);
-                        if ($base) {$ancestors[] = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => $name, 'moduleid' => $moduleid);}
-                    }
-                } else {
-                    // Itemtype = 0. We're already at the bottom - do nothing
-                }
-            }
-            */
             if (!$thisobject['parent']) break;
         }
         $ancestors = array_reverse($ancestors, true);
