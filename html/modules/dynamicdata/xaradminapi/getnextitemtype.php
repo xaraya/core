@@ -27,7 +27,9 @@ function dynamicdata_adminapi_getnextitemtype($args = array())
     $ids = array_keys($types);
     sort($ids);
     $lastid = array_pop($ids);
-    if ($modid == 182) return $lastid + 1;
+    // DD and DD-type modules go one way
+    if ($modid == 182 || $modid == 27) return $lastid + 1;
+    // other module go another
     else return max(1000,$lastid + 1);
 }
 ?>

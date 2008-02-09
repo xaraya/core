@@ -32,12 +32,10 @@ class VariableTableDataStore extends SQLDataStore
      */
     function getItem(array $args = array())
     {
+        if (count($this->fields) < 1) return;
         $itemid = $args['itemid'];
 
         $propids = array_keys($this->fields);
-        if (count($propids) < 1) {
-            return;
-        }
 
         $dynamicdata = $this->tables['dynamic_data'];
 
@@ -56,7 +54,7 @@ class VariableTableDataStore extends SQLDataStore
             list($propid, $value) = $result->getRow();
             if (isset($value)) {
                 // set the value for this property
-                $this->fields[$propid]->setValue($value);
+                $this->fields[$propid]->value = $value;
             }
         }
         $result->close();
@@ -68,6 +66,7 @@ class VariableTableDataStore extends SQLDataStore
      */
     function createItem(array $args = array())
     {
+        if (count($this->fields) < 1) return;
         extract($args);
 
         // we need to manage our own item ids here, and we can't use some sequential field
@@ -80,15 +79,12 @@ class VariableTableDataStore extends SQLDataStore
         }
 
         $propids = array_keys($this->fields);
-        if (count($propids) < 1) {
-            return $itemid;
-        }
 
         $dynamicdata = $this->tables['dynamic_data'];
 
         foreach ($propids as $propid) {
             // get the value from the corresponding property
-            $value = $this->fields[$propid]->getValue();
+            $value = $this->fields[$propid]->value;
 
             // invalid prop_id or undefined value (empty is OK, though !)
             if (empty($propid) || !is_numeric($propid) || !isset($value)) {
@@ -112,11 +108,9 @@ class VariableTableDataStore extends SQLDataStore
     function updateItem(array $args = array())
     {
         $itemid = $args['itemid'];
+        if (count($this->fields) < 1) return $itemid;
 
         $propids = array_keys($this->fields);
-        if (count($propids) < 1) {
-            return $itemid;
-        }
 
         $dynamicdata = $this->tables['dynamic_data'];
 
@@ -141,7 +135,7 @@ class VariableTableDataStore extends SQLDataStore
 
         foreach ($propids as $propid) {
             // get the value from the corresponding property
-            $value = $this->fields[$propid]->getValue();
+            $value = $this->fields[$propid]->value;
 
             // invalid prop_id or undefined value (empty is OK, though !)
             if (empty($propid) || !is_numeric($propid) || !isset($value)) {
@@ -420,20 +414,20 @@ class VariableTableDataStore extends SQLDataStore
 
             $query = "SELECT itemid ";
             foreach ($propids as $propid) {
-                $query .= ", MAX(CASE WHEN propid = $propid THEN $propval ELSE '' END) AS $propid \n";
+                $query .= ", MAX(CASE WHEN propid = $propid THEN $propval ELSE '' END) AS dd_$propid \n";
             }
             $query .= " FROM $dynamicdata
                        WHERE propid IN (" . join(', ',$propids) . ")
                     GROUP BY itemid ";
 
             if (count($this->where) > 0) {
-                $query .= " HAVING ";
+                  $query .= " HAVING ";
                 foreach ($this->where as $whereitem) {
                     // Postgres does not support column aliases in HAVING clauses, but you can use the same aggregate function
                     if (substr($dbtype,0,8) == 'postgres') {
-                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'MAX(CASE WHEN propid = ' . $whereitem['field'] . " THEN $propval ELSE '' END) " . $whereitem['clause'] . $whereitem['post'] . ' ';
+                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'MAX(CASE WHEN propid = ' . 'dd_' . $whereitem['field'] . " THEN $propval ELSE '' END) " . $whereitem['clause'] . $whereitem['post'] . ' ';
                     } else {
-                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
+                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
                     }
                 }
             }
@@ -442,7 +436,7 @@ class VariableTableDataStore extends SQLDataStore
                 $query .= " ORDER BY ";
                 $join = '';
                 foreach ($this->sort as $sortitem) {
-                    $query .= $join . $sortitem['field'] . ' ' . $sortitem['sortorder'];
+                    $query .= $join . 'dd_' . $sortitem['field'] . ' ' . $sortitem['sortorder'];
                     $join = ', ';
                 }
             }

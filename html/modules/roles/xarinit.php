@@ -134,8 +134,8 @@ function roles_activate()
     xarModVars::set('roles', 'locale', '');
     xarModVars::set('roles', 'duvsettings', serialize(array()));
     xarModVars::set('roles', 'userhome', 'undefined');
-    xarModVars::set('roles', 'userlastlogin', '');
-    xarModVars::set('roles', 'passwordupdate', '');
+    xarModVars::set('roles', 'userlastlogin', 0);
+    xarModVars::set('roles', 'passwordupdate', 0);
     xarModVars::set('roles', 'usertimezone', xarConfigVars::get(null, 'Site.Core.TimeZone'));
     xarModVars::set('roles', 'useremailformat', 'text');
     xarModVars::set('roles', 'displayrolelist', false);

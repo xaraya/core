@@ -1,22 +1,22 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
-</div>
-<div class="xar-mod-body">
-   <xar:template type="module" file="admin-menu" />
-    <h2>
-        <xar:mlstring>View Privileges</xar:mlstring>
-    </h2>
-    <xar:template file="tablist" />
-    <br />
-    <fieldset>
-        <legend><xar:mlstring>Privilege hierarchy</xar:mlstring></legend>
-        <style type="text/css">
-            ul.tree { margin-left: 4em;}
-            ul.tree div.preamble { position: absolute; left: 3em; }
-        </style>
-        <xar:data-input type="privilegestree" show="$show" />
-    </fieldset>
-</div>
+    <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
+    </div>
+    <div class="xar-mod-body">
+       <xar:template type="module" file="admin-menu" />
+        <h2>
+            <xar:mlstring>View Privileges</xar:mlstring>
+        </h2>
+        <xar:template file="tablist" />
+        <br />
+        <fieldset>
+            <legend><xar:mlstring>Privilege hierarchy</xar:mlstring></legend>
+            <style type="text/css">
+                ul.tree { margin-left: 4em;}
+                ul.tree div.preamble { position: absolute; left: 3em; }
+            </style>
+            <xar:data-input type="privilegestree" show="$show" />
+        </fieldset>
+    </div>
 </xar:template>
