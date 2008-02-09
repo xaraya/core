@@ -117,7 +117,7 @@ class DataObject extends DataObjectMaster implements iDataObject
     /**
      * Check the different input values for this item
      */
-    public function checkInput(Array $args = array(), $suppress=0)
+    public function checkInput(Array $args = array(), $suppress=0, $priority='dd')
     {
         if(!empty($args['itemid']) && $args['itemid'] != $this->itemid) {
             $this->itemid = $args['itemid'];
@@ -156,12 +156,10 @@ class DataObject extends DataObjectMaster implements iDataObject
                 $name1 = $name;
                 $name2 = $ddname;
             }
-            if (!empty($args['priority']) && ($args['priority'] == 'dd')) {
+            if ($priority == 'dd') {
                 $temp = $name1;
                 $name1 = $name2;
                 $name2 = $temp;
-                // Remove this because it should not be passed on
-                unset($args['priority']);
             }
             if(isset($args[$name])) {
                 // Name based check

@@ -48,7 +48,7 @@ function dynamicdata_admin_update($args)
         xarVarSetCached('dynamicdata','currentproptype', $myobject->properties['type']);
     }
 
-    $isvalid = $myobject->checkInput(array('priority' => 'dd'));
+    $isvalid = $myobject->checkInput(array(), 0, 'dd');
 
     // recover any session var information
     $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
