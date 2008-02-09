@@ -59,86 +59,11 @@ class ConfigurationProperty extends TextBoxProperty
         $this->value = $property->configuration;
 
         return true;
-//        return $this->validateValue($value);
     }
 
-/*    public function validateValue($value = null)
-    {
-        // get the property type we're currently dealing with
-        if (!xarVarIsCached('dynamicdata','currentproptype')) {
-            // tell the caller that we don't have a property type
-            $this->invalid = xarML('property type');
-            // save the value anyway and return true
-            if (isset($value)) {
-                $this->value = $value;
-            }
-            return true;
-        }
-        $proptype = xarVarGetCached('dynamicdata','currentproptype');
-
-        // check if the property type was changed via user input
-        $propid = 'dd_' . $proptype->id;
-        if (!xarVarFetch($propid,'id',$newtype,NULL,XARVAR_NOT_REQUIRED)) return;
-
-        $data = array();
-        // get a new property of the right type
-        if (!empty($newtype)) {
-            $data['type'] = $newtype;
-        } elseif (!empty($proptype->value)) {
-            $data['type'] = $proptype->value;
-        } else {
-            $data['type'] = 0;
-        }
-        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
-        // pass the actual id for the property here
-        $data['id']         = $this->id;
-        $property =& DataPropertyMaster::getProperty($data);
-
-        // pass the current value as configuration rule
-        $data['configuration'] = isset($value) ? $value : $this->value;
-
-        $isvalid = $property->updateConfiguration($data);
-
-        if ($isvalid) {
-            // store the updated configuration rule back in the value and return
-            $this->value = $property->configuration;
-            return true;
-        }
-
-        $this->value = null;
-        $this->invalid = $property->invalid;
-        return false;
-    }
-*/
     public function showInput(Array $data = array())
     {
-        /* CHECKME: do wew need this? Doesn't seem so.
-        // get the property type we're currently dealing with
-        if (!xarVarIsCached('dynamicdata','currentproptype')) {
-            // tell the caller that we don't have a property type
-            $this->invalid = xarML('property type');
-            // let the TextBox property type handle the rest
-            return parent::showInput($data);
-        }
-        $proptype = xarVarGetCached('dynamicdata','currentproptype');
-        */
-
-        // check if the property type was changed via user input
-//        $propid = 'dd_' . $proptype->id;
-//        if (!xarVarFetch($propid,'id',$newtype,NULL,XARVAR_NOT_REQUIRED)) return;
-
-        if (!isset($newtype)) {
-            $newtype = $this->objectref->properties['property_id']->value;
-        }
-
-        // get a new property of the right type
-        if (!empty($newtype)) {
-            $data['type'] = $newtype;
-        } elseif (!empty($proptype->value)) {
-            $data['type'] = $proptype->value;
-        } else {
-            $data['type'] = 1; // default DataProperty class
-        }
+        $data['type'] = $this->objectref->properties['property_id']->value;
 
         $property =& DataPropertyMaster::getProperty($data);
         $property->id = $this->id;
