@@ -116,20 +116,19 @@ class UsernameProperty extends TextBoxProperty
                 $data['value'] = $data['user'];
             }
         } else {
-            // The value param is a user ID
             if (isset($data['value'])) $this->value = $data['value'];
             $data['value'] = $this->getValue();
+        }
 
-            if ($this->display_linkrule) {
-                if ($this->initialization_store_type == 'id') {
-                    $textvalue = $this->value;
-                } else {
-                    $textvalue = $this->value;
-                }
-                $data['linkurl'] = xarModURL('roles','user','display',array('id' => $this->value));
+        if ($this->display_linkrule) {
+            if ($this->initialization_store_type == 'id') {
+                $textvalue = $this->value;
             } else {
-                $data['linkurl'] = "";
+                $textvalue = $this->value;
             }
+            $data['linkurl'] = xarModURL('roles','user','display',array('id' => $this->value));
+        } else {
+            $data['linkurl'] = "";
         }
         return parent::showOutput($data);
     }
