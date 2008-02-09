@@ -18,7 +18,7 @@ function privileges_admin_main()
 {
 
 // Security Check
-    if(!xarSecurityCheck('ViewPrivileges')) return;
+    if(!xarSecurityCheck('EditPrivilege')) return;
 
     xarResponseRedirect(xarModURL('privileges', 'admin', 'viewprivileges'));
 

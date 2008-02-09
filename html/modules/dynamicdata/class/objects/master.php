@@ -121,6 +121,7 @@ class DataObjectMaster extends Object
     public $fieldorder  = array();      // displayorder for the properties
     public $fieldprefix = '';           // prefix to use in field names etc.
     public $status      = 65;           // inital status is active and can add/modify
+    public $anonymous   = 0;            // if true forces display of names of properties instead of dd_xx designations
 
     public $layout = 'default';         // optional layout inside the templates
     public $template = '';              // optional sub-template, e.g. user-objectview-[template].xd (defaults to the object name)
@@ -154,7 +155,7 @@ class DataObjectMaster extends Object
         $properties = $this->getPublicProperties();
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
         //FIXME where do we need to define the modname best?
-        $args['modname'] = xarModGetNameFromID($args['moduleid']); //FIXME change to systemid
+        if (!empty($args['moduleid'])) $args['modname'] = xarModGetNameFromID($args['moduleid']); //FIXME change to systemid
         return $args;
     }
 
@@ -236,15 +237,9 @@ class DataObjectMaster extends Object
             }
         }
 
-        // filter on property status if necessary
-        if(!empty($this->status) && count($this->fieldlist) == 0)
-        {
-            $this->fieldlist = array(); // why?
-            foreach($this->properties as $name => $property)
-                if($property->status && $this->status)
-//                if($property->status & $this->status)
-                    $this->fieldlist[] = $name;
-        }
+        // create the list of fields, filtering where necessary
+        $this->fieldlist = $this->getFieldList($this->fieldlist,$this->status);
+
         // build the list of relevant data stores where we'll get/set our data
         if(count($this->datastores) == 0 && count($this->properties) > 0)
            $this->getDataStores();
@@ -253,6 +248,31 @@ class DataObjectMaster extends Object
         // the default is to add the fields
         $this->baseancestor = $this->objectid;
         if($this->extend) $this->addAncestors();
+    }
+
+    private function getFieldList($fieldlist=array(),$status=null)
+    {
+        $properties = $this->properties;
+        $fields = array();
+        if(count($fieldlist) != 0) {
+            foreach($fieldlist as $field)
+                // Ignore those disabled AND those that don't exist
+                if(isset($properties[$field]) && ($properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED))
+                    $fields[$properties[$field]->id] = $properties[$field]->name;
+        } else {
+            if ($status) {
+                // we have a status: filter on it
+                foreach($properties as $property)
+                    if($property->status && $this->status)
+                        $fields[$property->id] = $property->name;
+            } else {
+                // no status filter: return those that are not disabled
+                foreach($this->properties as $property)
+                    if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                        $fields[$property->id] = $property->name;
+            }
+        }
+        return $fields;
     }
 
     /**
@@ -449,8 +469,25 @@ class DataObjectMaster extends Object
 
 
         $properties = array();
-        foreach($fieldlist as $name) {
-            if (isset($this->properties[$name])) $properties[$name] = &$this->properties[$name];
+        if (!empty($args['fieldprefix'])) {
+            foreach($fieldlist as $name) {
+                if (isset($this->properties[$name])) {
+                    // Pass along a field prefix if there is one
+                    $this->properties[$name]->_fieldprefix = $args['fieldprefix'];
+                    $properties[$name] = &$this->properties[$name];
+                    // Pass along the directive of what property name to display
+                    if (isset($args['anonymous'])) $this->properties[$name]->anonymous = $args['anonymous'];
+                }
+            }
+        } else {
+            foreach($fieldlist as $name) {
+                if (isset($this->properties[$name])) {
+                    // Pass along a field prefix if there is one
+                    $properties[$name] = &$this->properties[$name];
+                    // Pass along the directive of what property name to display
+                    if (isset($args['anonymous'])) $this->properties[$name]->anonymous = $args['anonymous'];
+                }
+            }
         }
 
         return $properties;
@@ -562,6 +599,12 @@ class DataObjectMaster extends Object
             return $info;
         }
 
+        $cacheKey = 'DynamicData.ObjectInfo';
+        $infoid = (int)$args['objectid'];
+        if(xarCore::isCached($cacheKey,$infoid)) {
+            return xarCore::getCached($cacheKey,$infoid);
+        }
+
         $dbconn = xarDB::getConn();
         $xartable = xarDB::getTables();
 
@@ -600,6 +643,7 @@ class DataObjectMaster extends Object
         {
             $info['label'] .= ' + ' . $args['join'];
         }
+        xarCore::setCached($cacheKey,$infoid,$info);
         return $info;
     }
 
@@ -984,6 +1028,7 @@ class DataObjectMaster extends Object
 
         for(;;) {
             $thisobject     = $objects[$parentitemtype];
+//        var_dump($objects[$parentitemtype]);exit;
 
 //            if ($parentitemtype >= 1000 || $this->moduleid == 182) {
                 // This is a DD descendent object. add it to the ancestor array
@@ -991,32 +1036,9 @@ class DataObjectMaster extends Object
                 $objectid       = $thisobject['objectid'];
                 $itemtype       = $thisobject['itemtype'];
                 $name           = $thisobject['objectname'];
-//                $parentitemtype = $thisobject['parent'];
+                $parentitemtype = $thisobject['parent'];
                 $this->baseancestor = $objectid;
                 $ancestors[] = $thisobject;
-/*            } else {
-
-                // This is a native itemtype. get ready to quit
-                $done = true;
-                $itemtype = $parentitemtype;
-                if ($itemtype) {
-                    if ($info = self::getObjectInfo(array('objectid' => $thisobject['objectid']))) {
-
-                        // A DD wrapper object exists, add it to the ancestor array
-                        if ($base) $ancestors[] = array('objectid' => $info['objectid'], 'itemtype' => $itemtype, 'name' => $info['name'], 'moduleid' => $moduleid);
-                    } else {
-
-                        // No DD wrapper object
-                        // This must be a native itemtype of some module - add it to the ancestor array if requested
-                        $types = self::getModuleItemTypes(array('moduleid' => $moduleid));
-                        $name = strtolower($types[$itemtype]['label']);
-                        if ($base) {$ancestors[] = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => $name, 'moduleid' => $moduleid);}
-                    }
-                } else {
-                    // Itemtype = 0. We're already at the bottom - do nothing
-                }
-            }
-            */
             if (!$thisobject['parent']) break;
         }
         $ancestors = array_reverse($ancestors, true);

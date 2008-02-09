@@ -96,7 +96,7 @@ function &dynamicdata_userapi_getitem($args)
     if (!empty($itemid)) $object->getItem();
 
     // ..check it
-    if (!empty($preview)) $object->checkInput();
+    if (!empty($preview)) $object->checkInput(array(),1);
 
     if (!empty($getobject)) {
         return $object;

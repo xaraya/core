@@ -40,7 +40,18 @@ qa_location=qa_location or "/var/mt/xar/com.xaraya.qa.tests/tests/"
 -- qa_location=qa_location or "d:/var/mt/xar/com.xaraya.qa.tests/tests/"
 -- 
 -- Name of mtn executable
-mtn_exe='mtn'
+mtn_exe='mtn'      
+
+--
+-- Initialization routines
+--
+-- Read in the lua files in the 'command' directory
+command_loc = command_loc or get_confdir() .. '/command'
+if( includedirpattern(command_loc,"*.lua") == false) then
+    print("A user command contains an error, not all commands may have been loaded properly.")
+end
+
+
 --
 -- Line endings, a never ending story. Anyways, we want both the internal
 -- representation and the external to have LF only
