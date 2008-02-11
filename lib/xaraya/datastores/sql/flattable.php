@@ -166,7 +166,7 @@ class FlatTableDataStore extends SQLDataStore
         $bindvars = array();
         foreach ($fieldlist as $field) {
             // get the value from the corresponding property
-            $value = $this->fields[$field]->getValue();
+            $value = $this->fields[$field]->value;
             // skip fields where values aren't set
             if (!isset($value)) {
                 continue;
