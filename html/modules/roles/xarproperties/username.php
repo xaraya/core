@@ -48,11 +48,6 @@ class UsernameProperty extends TextBoxProperty
 
         $role = xarRoles::ufindRole($value);
         
-        if (empty($role)) {
-            $this->invalid = xarML('user #(1) does not exist', $value);
-            return false;
-        }
-
         switch ((int)$this->validation_existrule) {
             case 1:
             if (!empty($role)) {
@@ -79,7 +74,7 @@ class UsernameProperty extends TextBoxProperty
             case 0:
             default:
         }
-        $this->value = $role->getID();
+        $this->setValue($value);
         return true;
     }
 
@@ -96,7 +91,6 @@ class UsernameProperty extends TextBoxProperty
                 $data['value'] = $data['user'];
             }
         } else {
-            // The value param is a user ID
             if (isset($data['value'])) $this->value = $data['value'];
             $data['value'] = $this->getValue();
         }
