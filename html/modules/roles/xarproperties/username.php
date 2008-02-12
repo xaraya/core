@@ -140,13 +140,13 @@ class UsernameProperty extends TextBoxProperty
         }
     }
 
-    public function setValue($uname)
+    public function setValue($value=null)
     {
         if ($this->initialization_store_type == 'id') {
-            $role = xarRoles::ufindRole($uname);
+            $role = xarRoles::ufindRole($value);
             $this->value = $role->getID();
         } else {
-            $this->value = $uname;
+            $this->value = $value;
         }
     }
 }
