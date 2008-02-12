@@ -38,17 +38,17 @@ class NumberBoxProperty extends TextBoxProperty
 
         if (!isset($value) || $value === '') {
             if (isset($this->validation_min_value)) {
-                $this->value = $this->validation_min_value;
+                $this->setValue($this->validation_min_value);
             } elseif (isset($this->validation_max_value)) {
-                $this->value = $this->validation_max_value;
+                $this->setValue($this->validation_max_value);
             } else {
-                $this->value = null;
+                $this->setValue();
             }
         } elseif (is_numeric($value)) {
             $value = intval($value);
             if (isset($this->min) && isset($this->validation_max_value) && ($this->validation_min_value > $value || $this->validation_max_value < $value)) {
                 $this->invalid = xarML('integer : allowed range is between #(1) and #(2)',$this->validation_min_value,$this->validation_max_value);
-                $this->value = null;
+                $this->setValue();
                 return false;
             } elseif (isset($this->min) && $this->validation_min_value > $value) {
                 if (!empty($this->validation_min_value_invalid)) {
@@ -56,7 +56,7 @@ class NumberBoxProperty extends TextBoxProperty
                 } else {
                     $this->invalid = xarML('integer : must be #(1) or more',$this->validation_min_value);
                 }
-                $this->value = null;
+                $this->setValue();
                 return false;
             } elseif (isset($this->validation_max_value) && $this->validation_max_value < $value) {
                 if (!empty($this->validation_max_value_invalid)) {
@@ -64,16 +64,14 @@ class NumberBoxProperty extends TextBoxProperty
                 } else {
                     $this->invalid = xarML('integer : must be #(1) or less',$this->validation_max_value);
                 }
-                $this->value = null;
+                $this->setValue();
                 return false;
             }
         } else {
             $this->invalid = xarML('integer: #(1)', $this->name);
-            $this->value = null;
+            $this->setValue();
             return false;
         }
-        // Need this to ensure we have an integer type
-        $this->setValue($value);
         return true;
     }
 }
