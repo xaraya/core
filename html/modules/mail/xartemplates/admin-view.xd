@@ -13,7 +13,7 @@
     <!-- Master view -->
     <fieldset>
         <legend><xar:mlstring>Registered mail queues</xar:mlstring></legend>
-        <xar:data-view modid="$qdef['moduleid']" itemtype="$qdef['itemtype']" layout="table" linkfield="name" sort="id" />
+        <xar:data-view modid="$qdef['moduleid']" itemtype="$qdef['itemtype']" layout="list" linkfield="name" sort="id" tplmodule="mail" />
     </fieldset>
 
   <fieldset>
@@ -43,9 +43,9 @@
       <legend><xar:mlstring>Create new queue definition</xar:mlstring></legend>
 
       <xar:comment>Create form</xar:comment>
-      <form style="display: inline;" method="post" action="&xar-modurl-mail-admin-create;">
-        <xar:data-form module="$qdef['moduleid']" itemid="$itemid" itemtype="$qdef['itemtype']" linkfield="name" fieldlist="name,qtype,description,status"/>
-        <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
+      <form style="display: inline;" method="post" action="&xar-modurl-dynamicdata-admin-create;">
+        <xar:data-form module="$qdef['moduleid']" itemid="$itemid" itemtype="$qdef['itemtype']" linkfield="name" />
+        <input type="hidden" name="authid" value="#xarSecGenAuthKey('dynamicdata')#"/>
         <input type="hidden" name="objectid" value="#$qdef.objectid#"/>
         <input type="hidden" name="modid" value="#$qdef.moduleid#"/>
         <input type="hidden" name="return_url" value="&xar-modurl-mail-admin-view;"/>

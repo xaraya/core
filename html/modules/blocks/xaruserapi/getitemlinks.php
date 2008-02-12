@@ -57,7 +57,7 @@ function blocks_userapi_getitemlinks($args)
         case 2: // block groups
             $param = array();
             if (!empty($itemids) && count($itemids) == 1) {
-                $param['gid'] = $itemids[0];
+                $param['id'] = $itemids[0];
             }
             $groups = xarModAPIFunc('blocks','user','getallgroups',$param);
             if (empty($itemids)) {
@@ -69,7 +69,7 @@ function blocks_userapi_getitemlinks($args)
                 $itemlinks[$itemid] = array('label' => xarVarPrepForDisplay($label),
                                             'title' => xarML('View Block Group'),
                                             'url'   => $showurl ? xarModURL('blocks', 'admin', 'view_groups',
-                                                                            array('gid' => $itemid)) : '');
+                                                                            array('id' => $itemid)) : '');
             }
             break;
 

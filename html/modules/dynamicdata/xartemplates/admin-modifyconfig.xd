@@ -28,16 +28,16 @@
         <table class="xar-fullwidth">
             <tr>
                 <th>
-                    #$labels['id']#
+                    ID
                 </th>
                 <th>
-                    #$labels['name']#
+                    Name
                 </th>
                 <th>
-                    #$labels['label']#
+                    Display Name
                 </th>
                 <th>
-                    #$labels['informat']#
+                    Input Format
                 </th>
                 <th>
                     #$labels['configuration']#
@@ -63,8 +63,8 @@
                     <td>
                         <input type="text" name="label[#$field['id']#]" id="label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium" />
                     </td>
-                    <td>
-                        <xar:data-output property="$fieldtypeprop" value="$field['format']" />
+                    <td>#$fieldtypeprop:name#<!--
+                        <xar:data-output property="$fieldtypeprop" value="$field['format']" />-->
                     </td>
                     <td>
                         <input type="text" name="configuration[#$field['id']#]" id="configuration_#$field['id']#" value="#$field['configuration']#" class="xar-form-textmedium" />
@@ -79,16 +79,16 @@
         <table class="xar-fullwidth">
             <tr>
                 <th>
-                    #$labels['id']#
+                    ID
                 </th>
                 <th>
-                    #$labels['name']#
+                    Name
                 </th>
                 <th>
-                    #$labels['label']#
+                    Display Name
                 </th>
                 <th>
-                    #$labels['informat']#
+                    Input Format
                 </th>
                 <th>
                     #$labels['configuration']#
@@ -96,7 +96,7 @@
             </tr>
             <tr>
                 <td>
-                    #$labels['new']#
+                    New
                 </td>
                 <td>
                     <input type="text" name="name[0]" id="name_0" class="xar-form-textmedium" />

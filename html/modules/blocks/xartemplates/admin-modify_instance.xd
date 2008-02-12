@@ -164,7 +164,7 @@
                         </option>
                         <xar:loop name="$block_groups">
                             <xar:if condition="empty($loop:item['selected'])">
-                                <option value="#$loop:item['gid']#">
+                                <option value="#$loop:item['id']#">
                                     #xarVarPrepForDisplay($loop:item['name'])#
                                 </option>
                             </xar:if>
@@ -177,28 +177,28 @@
                 <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
 
                     <div class="xar-form-input-wrapper">
-                        <label for="group_templates_#$loop:item.gid#" class="xar-form-label" title="#xarML('Format is: [outer-template][semi-colon][inner-template].')#">
+                        <label for="group_templates_#$loop:item.id#" class="xar-form-label" title="#xarML('Format is: [outer-template][semi-colon][inner-template].')#">
                             #xarVarPrepForDisplay($loop:item['name'])# <xar:mlstring>Group:</xar:mlstring>
                         </label>
                         <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
-                            <input type="text" name="group_templates[#$loop:item.gid#]" id="group_templates_#$loop:item.gid#" value="#xarVarPrepForDisplay($loop:item.template)#" maxlength="100" class="xar-form-textlong" />
+                            <input type="text" name="group_templates[#$loop:item.id#]" id="group_templates_#$loop:item.id#" value="#xarVarPrepForDisplay($loop:item.template)#" maxlength="100" class="xar-form-textlong" />
                             <xar:if condition="$group_method eq 'min'">
                                 <xar:if condition="!empty($loop:item['selected'])">
-                                    <input type="checkbox" name="block_remove_groups[#$loop:item.gid#]" id="block_remove_groups_#$loop:item.gid#" value="on" />
-                                    <label for="block_remove_groups_#$loop:item.gid#">
+                                    <input type="checkbox" name="block_remove_groups[#$loop:item.id#]" id="block_remove_groups_#$loop:item.id#" value="on" />
+                                    <label for="block_remove_groups_#$loop:item.id#">
                                         <xar:mlstring>
                                             Remove
                                         </xar:mlstring>
                                     </label>
-                                    <input type="hidden" name="block_groups[#$loop:item.gid#]" id="block_groups_#$loop:item.gid#" value="on" />
+                                    <input type="hidden" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" />
                                 </xar:if>
                             <xar:else />
                                 <xar:if condition="!empty($loop:item['selected'])">
-                                    <input type="checkbox" name="block_groups[#$loop:item.gid#]" id="block_groups_#$loop:item.gid#" value="on" checked="checked" />
+                                    <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" checked="checked" />
                                 <xar:else />
-                                    <input type="checkbox" name="block_groups[#$loop:item.gid#]" id="block_groups_#$loop:item.gid#" value="on" />
+                                    <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" />
                                 </xar:if>
-                                <label for="block_groups_#$loop:item.gid#">
+                                <label for="block_groups_#$loop:item.id#">
                                     <xar:mlstring>
                                         Selected
                                     </xar:mlstring>

@@ -51,6 +51,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
                                   'short'     => htmlspecialchars($e->getMessage()),)
                                 );
             // If we have em, use em
+
             if(function_exists('xarTplGetThemeDir') && function_exists('xarTplFile')) {
                 $theme_dir = xarTplGetThemeDir(); $template="systemerror";
                 if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
@@ -63,8 +64,10 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
                 // Rethrow it, we cant handle it.
                 throw $e;
             }
-        } catch( Exception $e) {
-            // Oh well, pick up the bones
+        } catch( Exception $e_internal) {
+            // Oh well, pick up the bones, but pick them up from the original exception
+            // otherwise the message can be rather confusing
+            // @todo: do we care about what $e_internal is?
             ExceptionHandlers::bone($e);
         }
     }
