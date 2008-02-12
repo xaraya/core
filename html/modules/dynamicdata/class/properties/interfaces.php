@@ -14,7 +14,7 @@ interface iDataProperty
     public function parseConfiguration($configuration = '');
     public function showConfiguration(Array $data = array());
     public function updateConfiguration(Array $data = array());
-    public function setValue($value);
+    public function setValue($value=null);
     public function showHidden(Array $args = array());
     public function showInput(Array $args = array());
     public function showLabel(Array $args = array());

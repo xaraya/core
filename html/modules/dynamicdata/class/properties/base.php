@@ -174,7 +174,7 @@ class DataProperty extends Object implements iDataProperty
      *
      * @param mixed $value the new value for the property
      */
-    public function setValue($value)
+    public function setValue($value=null)
     {
         $this->value = $value;
     }
