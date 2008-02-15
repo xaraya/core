@@ -28,9 +28,8 @@ class URLTitleProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (!empty($value)) {
             if (is_array($value)) {
 
