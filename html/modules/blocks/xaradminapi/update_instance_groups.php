@@ -60,7 +60,7 @@ function blocks_adminapi_update_instance_groups($args)
 
         $current[$id] = array (
             'id'        => $result->getInt(1),
-            'id'       => $id,
+            'group_id'  => $id,
             'template'  => $result->getString(3)
         );
     }
