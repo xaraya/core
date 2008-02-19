@@ -70,8 +70,9 @@ function privileges_admin_modifyprivilege()
     else {$data['prealm'] = $priv->getRealm();}
 
     if(!isset($data['pmodule'])) {
-        $info = xarModAPIFunc('privileges','admin','get',array('itemid' => $id));
-        $data['pmodule'] = $info['moduleid'];
+//        $info = xarModAPIFunc('privileges','admin','get',array('itemid' => $id));
+//        $data['pmodule'] = $info['moduleid'];
+        $data['pmodule'] = 0;
     }
 
     if(isset($component)) {$data['pcomponent'] = $component;}

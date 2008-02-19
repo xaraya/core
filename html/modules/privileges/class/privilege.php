@@ -352,7 +352,7 @@ class xarPrivilege extends xarMask
         $parents = array();
 
         // perform a SELECT on the privmembers table
-        $query = "SELECT p.*, m.name
+        $query = "SELECT DISTINCT p.*, m.name
                   FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.parentid
                   LEFT JOIN $this->modulestable m ON p.module_id = m.id
                   AND pm.id = ?";
@@ -532,7 +532,7 @@ class xarPrivilege extends xarMask
     */
     function isEmpty()
     {
-        return $this->module == null;
+        return $this->module_id == null;
     }
 
     /**
