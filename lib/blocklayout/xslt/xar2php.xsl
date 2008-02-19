@@ -164,7 +164,7 @@
   <xsl:variable name="nrOfDelimiters"
       select="string-length($expr) - string-length(translate($expr, $beginDelimiter, ''))"/>
 
-<xsl:choose>
+  <xsl:choose>
     <!-- If we have zero or one hash, just output the text node -->
     <xsl:when test="$nrOfDelimiters &lt; 2">
       <xsl:processing-instruction name="php">
