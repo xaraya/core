@@ -35,7 +35,7 @@ class BlocklayoutXSLTProcessor extends Object
 
         // Set up the document to transform
         $this->xmlDoc = new DOMDocument();
-        // Setting this to false makes it 2 times faster, what do we loose?
+        // Setting this to false makes it 2 times faster, what do we lose?
         $this->xmlDoc->resolveExternals = false;
         // We're still a long way from validating
         // $this->xmlDoc->validateOnParse = true;
