@@ -74,7 +74,7 @@
 <xsl:template name="mlvar">
   <xsl:call-template name="resolvePHP">
     <xsl:with-param name="expr">
-      <xsl:value-of select="."/>
+      <xsl:value-of select="normalize-space(.)"/>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
