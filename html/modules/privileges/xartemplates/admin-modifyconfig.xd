@@ -370,9 +370,7 @@
                     <xar:mlstring>
                     The current tester is <strong>#(1)</strong>.
                     </xar:mlstring>
-                    <xar:mlvar>
-                       #xarUserGetVar('uname',$tester)#
-                    </xar:mlvar>
+                    <xar:mlvar>#xarUserGetVar('uname',$tester)#</xar:mlvar>
                    </xar:ml>
                 </span>
                 </div>
