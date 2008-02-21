@@ -69,23 +69,14 @@
 <xsl:template match="xar:mlvar" />
 
 <!--
-  we pick up its values to add to the PHP xarML function as params by explicitly calling this template
+  we pick up its value/expression to add to the PHP xarML function as a param by explicitly calling this template
 -->
 <xsl:template name="mlvar">
-  <xsl:param name="expr">
-    <xsl:value-of select="."/>
-  </xsl:param>
-  <xsl:param name="strippedexpr">
-    <xsl:value-of select="substring-before(substring-after($expr,'#'),'#')"/>
-  </xsl:param>
-  <xsl:choose>
-    <xsl:when test="$strippedexpr=''">
-      <xsl:value-of select="$expr"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="$strippedexpr"/>
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:call-template name="resolvePHP">
+    <xsl:with-param name="expr">
+      <xsl:value-of select="."/>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <!-- Not handled anymore, ignore closed mlvar, pass on content of mlstring -->
@@ -96,6 +87,7 @@
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
+
 <xsl:template match="xar:set/xar:ml/xar:mlstring">
   <xsl:call-template name="replace">
     <xsl:with-param name="source">
@@ -103,6 +95,11 @@
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
-<xsl:template match="xar:set/xar:mlstring"><xsl:text>'</xsl:text><xsl:apply-templates /><xsl:text>'</xsl:text></xsl:template>
+
+<xsl:template match="xar:set/xar:mlstring">
+  <xsl:text>'</xsl:text>
+  <xsl:apply-templates />
+  <xsl:text>'</xsl:text>
+</xsl:template>
 
 </xsl:stylesheet>
