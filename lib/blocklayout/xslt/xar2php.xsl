@@ -163,33 +163,74 @@
       select="string-length($expr) - string-length(translate($expr, '#', ''))"/>
 
   <xsl:choose>
-    <!-- If we have zero or one hash, just output the text node -->
-    <xsl:when test="$nrOfHashes &lt; 2">
-        <xsl:value-of select="$expr"/>
-    </xsl:when>
-    <!-- Resolve left to right -->
-    <xsl:otherwise>
-      <!-- more than two, so in general ....#....#....#....#.... etc. -->
-
-      <!-- [....]#....#.... : get the first part out of the way -->
-      <xsl:value-of select="substring-before($expr,'#')"/>
-
-      <!-- Resolve the part in between -->
-      <!-- Left at this point: ....#[....]#.... -->
-      <xsl:if test="substring-before(substring-after($expr,'#'),'#') !=''">
-        <xsl:processing-instruction name="php">
-          <xsl:text>echo </xsl:text>
-          <xsl:call-template name="resolvePHP">
-              <xsl:with-param name="expr" select="substring-before(substring-after($expr,'#'),'#')"/>
-          </xsl:call-template>
-          <xsl:text>;</xsl:text>
-        </xsl:processing-instruction>
-      </xsl:if>
-
-      <!-- ....#....#[....#....#....etc.] -->
-      <xsl:call-template name="resolveText">
-        <xsl:with-param name="expr" select="substring-after(substring-after($expr,'#'),'#')"/>
+    <!-- if we are inside a xar:ml tag the translation is already being handled -->
+    <xsl:when test="ancestor::xar:ml">
+<!--
+      <xsl:call-template name="replace">
+        <xsl:with-param name="source" select="$expr"/>
       </xsl:call-template>
+-->
+      <xsl:value-of select="$expr"/>
+    </xsl:when>
+
+    <!-- if we are inside a pre tag we want everything sent back literally -->
+    <xsl:when test="ancestor::pre">
+      <xsl:value-of select="$expr"/>
+    </xsl:when>
+
+    <xsl:otherwise>
+      <xsl:choose>
+        <!-- If we have zero or one hash, just output the text node -->
+        <xsl:when test="$nrOfHashes &lt; 2">
+          <!-- remove unnecessary whitespace from the string -->
+          <xsl:param name="strippedexpr" select="normalize-space($expr)" />
+          <xsl:choose>
+          <!-- no translation if we have an essentially empty string -->
+            <xsl:when test="$strippedexpr = ''">
+            </xsl:when>
+            <xsl:when test="$strippedexpr = '&#160;'">
+              <xsl:text> </xsl:text>
+            </xsl:when>
+          <!-- attempt to translate anything else -->
+            <xsl:otherwise>
+              <xsl:processing-instruction name="php">
+                <xsl:text>echo xarML('</xsl:text>
+                <xsl:call-template name="replace">
+                  <xsl:with-param name="source" select="$expr"/>
+                </xsl:call-template>
+                <xsl:text>');</xsl:text>
+              </xsl:processing-instruction>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+
+        <!-- Resolve left to right -->
+        <xsl:otherwise>
+          <!-- more than two, so in general ....#....#....#....#.... etc. -->
+
+          <!-- [....]#....#.... : get the first part out of the way -->
+        <xsl:call-template name="resolveText">
+            <xsl:with-param name="expr" select="substring-before($expr,'#')"/>
+        </xsl:call-template>
+
+          <!-- Resolve the part in between -->
+          <!-- Left at this point: ....#[....]#.... -->
+          <xsl:if test="substring-before(substring-after($expr,'#'),'#') !=''">
+            <xsl:processing-instruction name="php">
+              <xsl:text>echo </xsl:text>
+              <xsl:call-template name="resolvePHP">
+                  <xsl:with-param name="expr" select="substring-before(substring-after($expr,'#'),'#')"/>
+              </xsl:call-template>
+              <xsl:text>;</xsl:text>
+            </xsl:processing-instruction>
+          </xsl:if>
+
+          <!-- ....#....#[....#....#....etc.] -->
+          <xsl:call-template name="resolveText">
+            <xsl:with-param name="expr" select="substring-after(substring-after($expr,'#'),'#')"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
