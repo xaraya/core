@@ -156,7 +156,7 @@
 <xsl:template name="resolveText" >
   <xsl:param name="expr"/>
 
-  <!--
+  <!-- 
     <xsl:text>[EXPR]</xsl:text><xsl:value-of select="$expr"/><xsl:text>[END EXPR]</xsl:text>
   -->
   <xsl:variable name="nrOfHashes"
@@ -197,14 +197,13 @@
 <!--
   For all text nodes, resolve expressions within
 -->
-<!--
-  <xsl:template match="text()">
+<!-- -->
+<xsl:template match="text()">
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
 </xsl:template>
--->
-
+ <!-- -->
 
 <!-- Expression resolving in nodes-->
 <xsl:template name="resolvePHP">

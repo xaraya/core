@@ -30,7 +30,7 @@ function dynamicdata_admin_updateprop()
     if(!xarVarFetch('dd_source',         'isset', $dd_source,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('display_dd_status', 'isset', $display_dd_status, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('input_dd_status',   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_validation',     'isset', $dd_validation,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_configuration',     'isset', $dd_configuration,     NULL, XARVAR_DONT_SET)) {return;}
 
     if (!xarSecConfirmAuthKey()) return;
 
@@ -94,8 +94,8 @@ function dynamicdata_admin_updateprop()
                 $lf = chr(10);
                 $dd_defaultvalue[$id] = preg_replace('/\[LF\]/',$lf,$dd_defaultvalue[$id]);
             }
-            if (!isset($dd_validation[$id])) {
-                $dd_validation[$id] = null;
+            if (!isset($dd_configuration[$id])) {
+                $dd_configuration[$id] = null;
             }
             if (!isset($display_dd_status[$id])) {
                 $display_dd_status[$id] = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
@@ -113,7 +113,7 @@ function dynamicdata_admin_updateprop()
                                     'defaultvalue' => $dd_defaultvalue[$id],
                               //      'source' => $dd_source[$id],
                                     'status' => $dd_status[$id],
-                                    'validation' => $dd_validation[$id]))) {
+                                    'configuration' => $dd_configuration[$id]))) {
                 return;
             }
             if ($dd_type[$id] == 21) { // item id
@@ -146,7 +146,7 @@ function dynamicdata_admin_updateprop()
                                       'source' => $dd_source[0],
                                       'status' => $dd_status[0],
                                       'seq' => $i,
-                                      'validation' => $dd_validation[0]));
+                                      'configuration' => $dd_configuration[0]));
         if (empty($id)) {
             return;
         }

@@ -51,7 +51,7 @@ class DataPropertyMaster extends Object
         $bindvars = array();
         $query = "SELECT name, label, type,
                          id, defaultvalue, source,
-                         status, seq, validation,
+                         status, seq, configuration,
                          objectid FROM $dynamicprop ";
         if(empty($args['objectid']))
         {
@@ -63,6 +63,7 @@ class DataPropertyMaster extends Object
         $query .= " WHERE objectid = ?";
         $bindvars[] = (int) $args['objectid'];
 
+        $anonymous = empty($args['anonymous']) ? 0 : 1;
         if(empty($args['allprops']))
             $query .= " AND status > 0 ";
 
@@ -74,7 +75,7 @@ class DataPropertyMaster extends Object
         while ($result->next()) {
             list(
                 $name, $label, $type, $id, $defaultvalue, $source, $fieldstatus,
-                $seq, $validation, $_objectid
+                $seq, $configuration, $_objectid
                 ) = $result->fields;
 //            if (xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id")) {
                 $property = array(
@@ -85,10 +86,11 @@ class DataPropertyMaster extends Object
                     'defaultvalue'  => $defaultvalue,
                     'source'        => $source,
                     'status'        => $fieldstatus,
-                    'seq'         => $seq,
-                    'validation'    => $validation,
+                    'seq'           => $seq,
+                    'configuration' => $configuration,
                     // some internal variables
                     '_objectid'     => $_objectid,
+                    'anonymous'     => $anonymous,
                     'class'         => ''
                 );
                 if(isset($args['objectref'])) {
@@ -141,6 +143,12 @@ class DataPropertyMaster extends Object
         // add it to the list of properties
         $objectref->properties[$property->name] =& $property;
 
+        // if the property wants a reference, give it
+        if ($property->include_reference) {
+            $objectref->properties[$property->name]->objectref = $objectref;
+        }
+
+        // if the property involves upload, tell its object
         if(isset($property->upload))
             $objectref->upload = true;
     }
@@ -198,7 +206,11 @@ class DataPropertyMaster extends Object
             sys::import($dp);
 
             $clazz = $propertyClass;
+        } else {
+            throw new BadParameterException($args['type'], 'The dataproperty #(1) does not exist');
         }
+        // Add the alias information to the class
+        $args['args'] = $propertyInfo['args'];
         // DataProperty or the determined one
         $descriptor = new ObjectDescriptor($args);
         $property = new $clazz($descriptor);

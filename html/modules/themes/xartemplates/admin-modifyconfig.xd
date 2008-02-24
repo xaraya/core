@@ -61,7 +61,7 @@
             </div>
             <div class="xar-form-input-wrapper-after">
                 <xar:set name="checked">$adminpagemenu</xar:set>
-                <xar:data-input type="checkbox" name="adminpagemenu" id="adminpagemenu" checked="$checked" />
+                <xar:data-input type="checkbox" name="adminpagemenu" value="$checked" />
                 <label for="adminpagemenu" title="#xarML('Use submenus in the page for admin functions.')#">
                     <xar:mlstring>
                         Enable InPage Admin SubMenus
@@ -70,7 +70,7 @@
             </div>
             <div class="xar-form-input-wrapper-after">
                 <xar:set name="checked">xarModIsHooked('themes', 'roles')</xar:set>
-                <xar:data-input type="checkbox" name="usermenu" id="usermenu" checked="$checked" />
+                <xar:data-input type="checkbox" name="usermenu" checked="$checked" />
                 <label for="usermenu" title="#xarML('Allow users to select themes from their Account Details page.')#">
                     <xar:mlstring>
                         Allow users to set their theme in User Account page
@@ -91,7 +91,8 @@
                         Site Name
                     </xar:mlstring>
                 </label>
-                <input type="text" name="sitename" id="sitename" value="#xarModVars::get('themes', 'SiteName', 1)#" size="30" maxlength="100" />
+                <xar:set name="value"><xar:var scope="module" module="themes" name="SiteName"/></xar:set>
+                <input type="text" name="sitename" id="sitename" value="#$value#" size="30" maxlength="100" />
             </div>
             <div class="xar-form-input-wrapper">
                 <label for="slogan" class="xar-form-label">
@@ -99,7 +100,8 @@
                         Site Slogan
                     </xar:mlstring>
                 </label>
-                <input type="text" name="slogan" id="slogan" value="#xarModVars::get('themes', 'SiteSlogan', 1)#" size="30" maxlength="100" />
+                <xar:set name="value"><xar:var scope="module" module="themes" name="SiteSlogan"/></xar:set>
+                <input type="text" name="slogan" id="slogan" value="#$value#" size="30" maxlength="100" />
             </div>
             <div class="xar-form-input-wrapper">
                 <label for="copyright" class="xar-form-label">
@@ -107,7 +109,8 @@
                         Copyright
                     </xar:mlstring>
                 </label>
-                <input type="text" name="copyright" id="copyright" value="#xarModVars::get('themes', 'SiteCopyRight', 1)#" size="30" maxlength="100" />
+                <xar:set name="value"><xar:var scope="module" module="themes" name="SiteCopyRight"/></xar:set>
+                <input type="text" name="copyright" id="copyright" value="#$value#" size="30" maxlength="100" />
             </div>
             #xarVarDelCached('Mod.Variables.themes','SiteCopyRight')#
             <div class="xar-form-input-wrapper">
@@ -117,7 +120,8 @@
                     </xar:mlstring>
                 </label>
                 <div class="xar-form-container-after">
-                    <textarea name="footer" id="footer" cols="60" rows="5" class="xar-form-textareamedium">#xarModVars::get('themes', 'SiteFooter', 1)#</textarea>
+                    <xar:set name="value"><xar:var scope="module" module="themes" name="SiteFooter"/></xar:set>
+                    <textarea name="footer" id="footer" cols="60" rows="5" class="xar-form-textareamedium">#$value#</textarea>
                 </div>
             </div>
             #xarVarDelCached('Mod.Variables.themes','SiteFooter')#
@@ -128,7 +132,8 @@
                         Page Title Separator
                     </xar:mlstring>
                 </label>
-                <input type="text" name="separator" id="separator" value="#xarModVars::get('themes', 'SiteTitleSeparator', 1)#" size="10" maxlength="15" />
+                <xar:set name="value"><xar:var scope="module" module="themes" name="SiteTitleSeparator"/></xar:set>
+                <input type="text" name="separator" id="separator" value="#$value#" size="10" maxlength="15" />
             </div>
             <div class="xar-form-input-wrapper">
                 <xar:set name="options">
@@ -204,7 +209,8 @@
                             Atom Tag
                         </xar:mlstring>
                     </label>
-                    <input type="text" name="AtomTag" id="AtomTag" value="#xarModVars::get('themes', 'AtomTag', 1)#" size="30" maxlength="100" />
+                    <xar:set name="value"><xar:var scope="module" module="themes" name="AtomTag"/></xar:set>
+                    <input type="text" name="AtomTag" id="AtomTag" value="#$value#" size="30" maxlength="100" />
                 </div>
             </xar:if>
         </fieldset>

@@ -178,7 +178,7 @@ class xarPrivilege extends xarMask
                           module_id = ?,   component = ?,
                           instance = ?, level = ?, type = ?
                       WHERE id = ?';
-        $bindvars = array($this->name, $realmid, $this->module,
+        $bindvars = array($this->name, $realmid, $this->module_id,
                           $this->component, $this->instance, $this->level, self::PRIVILEGES_PRIVILEGETYPE,
                           $this->getID());
         //Execute the query, bail if an exception was thrown
