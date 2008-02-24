@@ -492,7 +492,7 @@ INSERT INTO `xar_module_vars` (module_id, name, value)
     WHERE  mods.name = 'themes' AND modvars.name = 'Site.BL.ThemesDirectory';
 
 ALTER TABLE `xar_privileges`
-  CHANGE COLUMN `realmid` `realm_id` INTEGER default NULL,
+  CHANGE COLUMN `realmid` `realm_id` INTEGER default NULL;
 
 /* TODO: fix  key */
   KEY `i_xar_privileges_realm_id` (`realm_id`),
