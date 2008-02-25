@@ -58,7 +58,7 @@
 <xsl:template match="xar:ml//xar:var">
   <xsl:text>#(</xsl:text>
   <xsl:number from="xar:ml" level="any"/>
-  <xsl:text>)#</xsl:text>
+  <xsl:text>)</xsl:text>
 </xsl:template>
 
 
@@ -81,11 +81,6 @@
 
 <!-- Not handled anymore, ignore closed mlvar, pass on content of mlstring -->
 <xsl:template match="xar:mlstring">
-<!--
-  <xsl:call-template name="replace">
-    <xsl:with-param name="source" select="."/>
-  </xsl:call-template>
--->
   <xsl:call-template name="replace">
     <xsl:with-param name="source" select="."/>
   </xsl:call-template>
