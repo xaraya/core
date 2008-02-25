@@ -11,7 +11,7 @@
         <xar:else />
             <a href="javascript:void(0);" title="#xarML('Click to toggle field visibility for this property')#" onclick="return toggleDisplay('fieldwrapper_#$field.id#');">
                 <xar:mlstring>[unnamed property]</xar:mlstring></a>
-        </xar:if>
+        </xar:if>&#160;
         [#$labels['id']#: #$field['id']#]
     </legend>
     
