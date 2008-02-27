@@ -1,3 +1,0 @@
-database "/var/mtn/xaraya.db"
-  branch "com.xaraya.themes.empty.2.x"
-  keydir "/Users/rolf/.monotone/keys"
