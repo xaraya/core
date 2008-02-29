@@ -584,7 +584,7 @@ function xarMLS__bindVariables($string, $args)
     // FIXME: <marco> Consider to use strtr to do the same, can we?
     $i = 1;
     foreach($args as $var) {
-        $search = "#($i)#";
+        $search = "#($i)";
         $string = str_replace($search, $var, $string);
         $i++;
     }
