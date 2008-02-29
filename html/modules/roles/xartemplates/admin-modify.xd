@@ -77,7 +77,7 @@
                                 <xar:mlstring>Type:</xar:mlstring>
                         </label>
                         <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
-                        <xar:data-input type="itemtype" name="itemtype" value="$itemtype" validation="roles" onchange="$onchange" />
+                        <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1" />
                     </div>
                 </xar:if>
                 <xar:data-form object="$object" />
@@ -88,7 +88,7 @@
                             <xar:mlstring>Primary Parent Group:</xar:mlstring>
                         </label>
                         <xar:set name="value">
-                            xarModUserVars::get('roles','primaryparent',$id)
+                            xarModAPIFunc('roles','user','getprimaryparent',array('itemid' => $id))
                         </xar:set>
                         <xar:set name="options">
                             xarModAPIFunc('roles','user','getancestors',array('id' => $id, 'parents' => 1))
@@ -180,9 +180,10 @@
                 </xar:if>
 
                 <div class="xar-align-center xar-clearboth">
-                    <input type="hidden" name="object_objectid" id="objectid" value="#$object:objectid#" />
-                    <input type="hidden" name="object_itemid" id="itemid" value="#$id#" />
-                    <input type="hidden" name="object_tplmodule" id="tplmodule" value="roles" />
+                    <input type="hidden" name="parents" id="parents" value="#$parents#" />
+                    <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#" />
+                    <input type="hidden" name="itemid" id="itemid" value="#$id#" />
+                    <input type="hidden" name="tplmodule" id="tplmodule" value="roles" />
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#" />
                     <input type="submit" value="#xarML('Update')#" />
                     <input type="hidden" name="return_url" value="#xarModURL('roles','admin','modify',array('name' => $object->name))#" />

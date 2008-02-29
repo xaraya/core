@@ -56,9 +56,9 @@ class FilePickerProperty extends SelectProperty
             $name = $dir->getFileName() . "." . $dir->getExtension();
             if (!$this->fullname) $name = substr($name, 0, strlen($name) - strlen($dir->getExtension()) - 1);
             if(!empty($this->matches) && (strpos($name,$this->matches) === false)) continue;
-            $this->options[] = array('id' => $name, 'name' => $name);
+            $options[] = array('id' => $name, 'name' => $name);
         }
-        return $this->options;
+        return $options;
     }
 }
 ?>

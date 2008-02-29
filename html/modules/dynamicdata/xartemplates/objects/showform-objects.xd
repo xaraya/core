@@ -6,10 +6,10 @@
         <xar:if condition="$name eq 'moduleid'">
             <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
             <!-- FIXME remove the validation attribute when we go from regids to systemids  -->
-            <xar:data-input property="$properties[$name]" onchange="$onchange" validation="regid" />
+            <xar:data-input property="$properties[$name]" onchange="$onchange" store_prop="regid" />
         <xar:elseif condition="$name eq 'parent'" />
             <xar:set name="modid">$properties['moduleid']->value</xar:set>
-            <xar:data-input property="$properties[$name]" modid="$modid" />
+            <xar:data-input property="$properties[$name]" modid="$modid" firstline="0,No parent" />
         <xar:else />
             <xar:data-input property="$properties[$name]" />
         </xar:if>
