@@ -31,9 +31,8 @@ class URLProperty extends TextBoxProperty
 
     function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         // Make sure $value['link'] is set, has a length > 0 and does not equal simply 'http://'
         $value = trim($value);
         if (!empty($value) && $value != 'http://')  {

@@ -253,13 +253,12 @@
   For all text nodes, resolve expressions within
 -->
 <!-- -->
-  <xsl:template match="text()">
+<xsl:template match="text()">
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
 </xsl:template>
  <!-- -->
-
 
 <!-- Expression resolving in nodes-->
 <xsl:template name="resolvePHP">

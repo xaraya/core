@@ -8,11 +8,13 @@
     You can use different user-displayhook-[objectname].xd templates for different objects
 -->
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
-<xar:foreach in="$properties" key="$name" value="$property">
-    <tr class="xar-align-left">
-        <td><xar:data-label property="$properties[$name]" /> </td>
-        <td><xar:data-output property="$properties[$name]" /> </td>
-    </tr>
-</xar:foreach>
+    <xar:foreach in="$properties" key="$name" value="$property">
+        <xar:if condition="$properties[$name]:getDisplayStatus() ne DataPropertyMaster::DD_DISPLAYSTATE_DISABLED" >
+            <tr class="xar-align-left">
+                <td><xar:data-label property="$properties[$name]" /> </td>
+                <td><xar:data-output property="$properties[$name]" /> </td>
+            </tr>
+        </xar:if>
+    </xar:foreach>
 </table>
 </xar:template>

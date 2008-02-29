@@ -19,9 +19,9 @@ interface ITranslationsBackend {
     function clear();
 
     // Bind the backend to the specified domain.
-    function bindDomain($dnType, $dnName);
+    function bindDomain($dnType, $dnName='xaraya');
 
-    // Check if this backend supports a scpecified translation context.
+    // Check if this backend supports a specified translation context.
     function hasContext($ctxType, $ctxName);
 
     // Load a set of translations into the backend.
@@ -98,7 +98,7 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
     //abstract function loadContext($ctxType, $ctxName);
     //abstract function getContextNames($ctxType);
 
-    function bindDomain($dnType, $dnName)
+    function bindDomain($dnType, $dnName='xaraya')
     {
         // only bind each domain once (?)
         //if (isset($this->domaincache["$dnType.$dnName"])) {

@@ -17,26 +17,6 @@
  */
 function roles_userapi_getitemtypes($args)
 {
-    $itemtypes = array();
-
-/* this is the default for roles at the moment - select ALL in hooks if you want this*/
-    $itemtypes[ROLES_ROLETYPE] = array('label' => xarML('Role'),
-                          'title' => xarML('View Role'),
-                          'url'   => xarModURL('roles','user','view')
-                         );
-    $itemtypes[ROLES_USERTYPE] = array('label' => xarML('User'),
-                          'title' => xarML('View User'),
-                          'url'   => xarModURL('roles','user','view')
-                         );
-    $itemtypes[ROLES_GROUPTYPE] = array('label' => xarML('Group'),
-                          'title' => xarML('View Group'),
-                          'url'   => xarModURL('roles','user','viewtree')
-                         );
-    // @todo let's use DataObjectMaster::getModuleItemType here, but not until roles brings in dd automatically
-    $extensionitemtypes = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27, 'native' =>false));
-
-    $keys = array_merge(array_keys($itemtypes),array_keys($extensionitemtypes));
-    $values = array_merge(array_values($itemtypes),array_values($extensionitemtypes));
-    return array_combine($keys,$values);
+    return xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27, 'native' =>false));
 }
 ?>

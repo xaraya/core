@@ -24,22 +24,24 @@ class DataSourceProperty extends SelectProperty
     public $name       = 'datasource';
     public $desc       = 'Data Source';
 
+    public $validation_override = true;
+
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $this->filepath   = 'modules/dynamicdata/xarproperties';
+        $this->filepath = 'modules/dynamicdata/xarproperties';
+    }
 
-        if (count($this->options) == 0) {
-            $sources = DataStoreFactory::getDataSources();
-            if (!isset($sources)) {
-                $sources = array();
-            }
-            foreach ($sources as $source) {
-                $this->options[] = array('id' => $source, 'name' => $source);
-            }
+    function getOptions()
+    {
+        $sources = DataStoreFactory::getDataSources();
+        if (!isset($sources)) {
+            $options = array();
         }
-        // allow values other than those in the options
-        $this->override = true;
+        foreach ($sources as $source) {
+            $options[] = array('id' => $source, 'name' => $source);
+        }
+        return $options;
     }
 }
 ?>
