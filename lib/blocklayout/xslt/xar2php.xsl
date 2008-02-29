@@ -225,7 +225,7 @@
             <xsl:with-param name="expr" select="substring($expr,$delimiter-position)"/>
         </xsl:call-template>
 -->
-        <xsl:value-of select="substring($expr,0,$delimiter-position -1)"/>
+        <xsl:value-of select="substring($expr,0,$delimiter-position)"/>
 
           <!-- Resolve the part in between -->
           <!-- Left at this point: ....#[....]#.... -->
