@@ -347,11 +347,11 @@
     </xsl:param>
     <xsl:choose>
       <xsl:when test="starts-with(substring-after($expr,$delimiter),$delimiter)">
-        <xsl:param name="add-on-position">
+        <xsl:variable name="add-on-position">
           <xsl:call-template name="return-delimiter-position">
               <xsl:with-param name="expr" select="substring($expr,$initial-position+2)"/>
           </xsl:call-template>
-        </xsl:param>
+        </xsl:variable>
         <xsl:value-of select="$initial-position+1+$add-on-position" />
       </xsl:when>
       <xsl:otherwise>
