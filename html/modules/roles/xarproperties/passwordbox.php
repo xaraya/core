@@ -26,7 +26,7 @@ class PassBoxProperty extends TextBoxProperty
 
     public $password = null;
 
-    public $config_min     = 4;
+    public $config_min     = 1;
     public $config_max     = 30;
     public $config_regex   = null;
     public $config_other   = null;
