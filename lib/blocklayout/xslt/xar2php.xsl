@@ -184,12 +184,11 @@
         <!-- If we have zero or one hash, just output the text node -->
         <xsl:when test="$nrOfHashes &lt; 2">
           <!-- remove unnecessary whitespace from the string -->
-          <xsl:param name="strippedexpr" select="normalize-space($expr)" />
           <xsl:choose>
           <!-- no translation if we have an essentially empty string -->
-            <xsl:when test="$strippedexpr = ''">
+            <xsl:when test="normalize-space($expr) = ''">
             </xsl:when>
-            <xsl:when test="$strippedexpr = '&#160;'">
+            <xsl:when test="normalize-space($expr) = '&#160;'">
               <xsl:text>&#160;</xsl:text>
             </xsl:when>
           <!-- attempt to translate anything else -->
@@ -213,11 +212,11 @@
           <!-- more than two, so in general ....#....#....#....#.... etc. -->
 
           <!-- find the text up to the first "real" delimiter -->
-          <xsl:param name="delimiter-position">
+          <xsl:variable name="delimiter-position">
             <xsl:call-template name="return-delimiter-position">
                 <xsl:with-param name="expr" select="$expr"/>
             </xsl:call-template>
-          </xsl:param>
+          </xsl:variable>
 
           <!-- [....]#....#.... : get the first part out of the way -->
 <!--
@@ -229,7 +228,7 @@
 
           <!-- Resolve the part in between -->
           <!-- Left at this point: ....#[....]#.... -->
-          <xsl:param name="expr-after" select="substring($expr,$delimiter-position+1)"/>
+          <xsl:variable name="expr-after" select="substring($expr,$delimiter-position+1)"/>
           <xsl:if test="substring-before($expr-after,'#') !=''">
             <xsl:processing-instruction name="php">
               <xsl:text>echo </xsl:text>
