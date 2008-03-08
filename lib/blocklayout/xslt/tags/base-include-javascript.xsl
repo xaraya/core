@@ -44,7 +44,7 @@
         <xsl:value-of select="@type"/>
         <xsl:text>',"</xsl:text>
         <xsl:value-of select="@code"/>
-        <xsl:text>);&nl;</xsl:text>
+        <xsl:text>");&nl;</xsl:text>
       </xsl:when>
       <xsl:when test="string-length(@filename) &gt; 0">
         <xsl:text>xarModApiFunc('base','javascript','modulefile',array('module'=&gt;</xsl:text>
