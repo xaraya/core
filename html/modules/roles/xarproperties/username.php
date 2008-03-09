@@ -46,33 +46,36 @@ class UsernameProperty extends TextBoxProperty
         // We set an empty value to the id of the current user
         if (empty($value) || ($value == 'myself')) $value = xarUserGetVar('uname');
 
-        $role = xarRoles::ufindRole($value);
+        // We allow the special value [All]
         
-        switch ((int)$this->validation_existrule) {
-            case 1:
-            if (!empty($role)) {
-                if (!empty($this->validation_existrule_invalid)) {
-                    $this->invalid = xarML($this->validation_existrule_invalid);
-                } else {
-                    $this->invalid = xarML('user #(1) already exists', $value);
+        if ($value != '[All]') {
+        $role = xarRoles::ufindRole($value);        
+            switch ((int)$this->validation_existrule) {
+                case 1:
+                if (!empty($role)) {
+                    if (!empty($this->validation_existrule_invalid)) {
+                        $this->invalid = xarML($this->validation_existrule_invalid);
+                    } else {
+                        $this->invalid = xarML('user #(1) already exists', $value);
+                    }
+                    return false;
                 }
-                return false;
-            }
-            break;
+                break;
 
-            case 2:
-            if (empty($role)) {
-                if (!empty($this->validation_existrule_invalid)) {
-                    $this->invalid = xarML($this->validation_existrule_invalid);
-                } else {
-                    $this->invalid = xarML('user #(1) does not exist', $value);
+                case 2:
+                if (empty($role)) {
+                    if (!empty($this->validation_existrule_invalid)) {
+                        $this->invalid = xarML($this->validation_existrule_invalid);
+                    } else {
+                        $this->invalid = xarML('user #(1) does not exist', $value);
+                    }
+                    return false;
                 }
-                return false;
-            }
-            break;
+                break;
 
-            case 0:
-            default:
+                case 0:
+                default:
+            }
         }
         $this->setValue($value);
         return true;
@@ -129,13 +132,14 @@ class UsernameProperty extends TextBoxProperty
     
     public function getValue()
     {
-        if (empty($this->value)) return '';
         if ($this->initialization_store_type == 'id') {
+            if ($this->value == 0) return '[All]';
             if(!is_numeric($this->value)) {
                 throw new BadParameterException($this->value, 'is not a user ID');
             }
             return xarUserGetVar('uname',$this->value);
         } else {
+            if (empty($this->value)) return '';
             return $this->value;
         }
     }
@@ -143,8 +147,16 @@ class UsernameProperty extends TextBoxProperty
     public function setValue($value=null)
     {
         if ($this->initialization_store_type == 'id') {
-            $role = xarRoles::ufindRole($value);
-            $this->value = $role->getID();
+            if (empty($value)) {
+                $this->value = null;
+            } else {
+                if ($value == '[All]') {
+                    $this->value = 0;
+                } else {
+                    $role = xarRoles::ufindRole($value);
+                    $this->value = $role->getID();
+                }
+            }
         } else {
             $this->value = $value;
         }
