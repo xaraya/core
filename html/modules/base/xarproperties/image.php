@@ -46,6 +46,8 @@ class ImageProperty extends TextBoxProperty
     {
         if (!parent::validateValue($value)) return false;
 
+        if (!xarVarFetch('image_source', 'str:1:100', $image_source, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!empty($image_source)) $this->initialization_image_source = $image_source;
         if ($this->initialization_image_source == 'url') {
             $prop = DataPropertyMaster::getProperty(array('type' => 'url'));
             $prop->validateValue($value);
@@ -63,9 +65,9 @@ class ImageProperty extends TextBoxProperty
 
     public function showInput(Array $data = array())
     {
-        $data['inputtype'] = isset($data['inputtype']) ? $data['inputtype'] : $this->initialization_image_source;
-        if ($data['inputtype'] == 'upload') $this->upload = true;
-        $data['basedir'] = isset($data['basedir']) ? $data['basedir'] : $this->initialization_basedirectory;
+        $data['image_source'] = isset($data['inputtype']) ? $data['inputtype'] : $this->initialization_image_source;
+        if ($data['image_source'] == 'upload') $this->upload = true;
+        $data['basedirectory'] = isset($data['basedir']) ? $data['basedir'] : $this->initialization_basedirectory;
         $data['extensions'] = isset($data['extensions']) ? $data['extensions'] : $this->validation_file_extensions;
         $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
 
@@ -74,6 +76,8 @@ class ImageProperty extends TextBoxProperty
 
     public function showOutput(Array $data = array())
     {
+        if(!empty($data['inputtype'])) $this->initialization_image_source = $data['inputtype'];
+        if(!empty($data['basedir'])) $this->initialization_basedirectory = $data['basedir'];
         if (empty($data['value'])) $data['value'] = $this->value;
         if (($this->initialization_image_source == 'local') || ($this->initialization_image_source == 'upload')) {
             $data['value'] = $this->initialization_basedirectory . "/" . $data['value'];

@@ -13,6 +13,7 @@
             [ <a href="#$basedirectory#/#$value#" target="preview">#$showlabel#</a> ]
         </xar:if>
     </xar:if>
+    <input type="hidden" name="image_source" value="#$image_source#" />
 
     <xar:template file="dataproperty_additions" module="base" />
 </xar:template>
