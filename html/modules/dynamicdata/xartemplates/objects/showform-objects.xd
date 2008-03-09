@@ -2,7 +2,7 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:foreach in="$properties" key="$name" value="$property">
       <div class="xar-form-input-wrapper">
-        <xar:data-label property="$properties[$name]" label="id" />
+        <xar:data-label property="$properties[$name]" label="id"/>
         <xar:if condition="$name eq 'moduleid'">
             <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
             <!-- FIXME remove the validation attribute when we go from regids to systemids  -->
