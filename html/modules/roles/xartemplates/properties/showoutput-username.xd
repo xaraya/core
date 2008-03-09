@@ -1,6 +1,8 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-
+    <xar:if condition="empty($value)">
+        <xar:set name="value">'[All Users]'</xar:set>
+    </xar:if>
     <xar:if condition="!empty($linkurl)">
         <a href="#$linkurl#">#$value#</a>
     <xar:else />
