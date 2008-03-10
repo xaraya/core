@@ -159,6 +159,13 @@ class URLTitleProperty extends TextBoxProperty
             $link = xarVarPrepForDisplay($link);
         }
 
+        $url_parts = parse_url($link);
+        if (!isset($url_parts['host'])) {
+            $truecurrenturl = xarServerGetCurrentURL(array(), false);
+            $urldata = xarModAPIFunc('roles','user','parseuserhome',array('url'=>$link,'truecurrenturl'=>$truecurrenturl));
+        $link = $urldata['redirecturl'];
+        }
+
         $data['value']   = $this->value;
         $data['link']    = (!empty($link) && $link != 'http://') ? $link : '';
         $data['title']   = (!empty($title)) ? $title : '';
