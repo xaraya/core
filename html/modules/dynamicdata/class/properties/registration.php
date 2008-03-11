@@ -258,6 +258,12 @@ class PropertyRegistration extends DataContainer
                 $property = new $propertyClass($descriptor);
                 if (empty($property->id)) continue;   // Don't register the base property
                 $baseInfo->getRegistrationInfo($property);
+                
+                // If we are adding properties from specific dirs, only look for those
+                // FIXME: the dirs should *always* be passed as an array (random)
+                if (!empty($dirs) && is_array($dirs) && !in_array($baseInfo->filepath,$dirs)) continue;
+                if (!empty($dirs) && !is_array($dirs) && ($baseInfo->filepath != $dirs)) continue;
+
                 // Fill in the info we dont have in the registration class yet
                 // TODO: see if we can have it in the registration class
                 $baseInfo->class = $propertyClass;
