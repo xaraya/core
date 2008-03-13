@@ -62,6 +62,8 @@ class PropertyRegistration extends DataContainer
         $this->desc = $class->desc;
         $this->reqmodules = $class->reqmodules;
         $this->args = $class->args;
+        $this->filepath = $class->filepath;
+        $this->template = $class->template;
         return $this;
     }
 
@@ -77,10 +79,11 @@ class PropertyRegistration extends DataContainer
             if(!file_exists($required))
                 return false;
 
+/*
         foreach($this->reqmodules as $required)
             if(!xarModIsAvailable($required))
                 return false;
-
+*/
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
         $propdefTable = $tables['dynamic_properties_def'];
