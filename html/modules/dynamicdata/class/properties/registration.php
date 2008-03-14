@@ -219,7 +219,6 @@ class PropertyRegistration extends DataContainer
                 // typical usecase: a module which has its own property, during install phase needs that property before
                 // the module is active.
                 $propDirs = $dirs;
-                echo "A";
             } else {
                 // Clear the cache
                 PropertyRegistration::ClearCache();
@@ -234,7 +233,6 @@ class PropertyRegistration extends DataContainer
                         $propDirs[] = $dir;
                     }
                 }
-                echo "B";
             }
 
             // Get list of properties in properties directories
