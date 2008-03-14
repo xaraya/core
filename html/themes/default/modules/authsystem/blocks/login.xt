@@ -14,16 +14,14 @@
             <label for="pass#$blockid#" title="#xarML('Enter your password')#"><xar:mlstring>Password:</xar:mlstring></label>
             <input type="password" name="pass" id="pass#$blockid#" maxlength="64" />
         </div>
-        
-<xar:comment>
-        <xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') ne 'High'">
+
+        <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') ne 'High'">
             <div class="checkInputContainer">
                 <input type="checkbox" name="rememberme" id="rememberme#$blockid#" value="1" />
                 <label for="rememberme#$blockid#"><xar:mlstring>Don't ask for password</xar:mlstring></label>
             </div>
         </xar:if>
-</xar:comment>
-        
+
         <div class="submitInputContainer">
             <input type="submit" value="#xarML('Log In')#" />
         </div>

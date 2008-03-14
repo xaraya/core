@@ -16,9 +16,6 @@
         <div id="main">
             <div id="logo">
                 <a href="/" title="home"><img src="/#xarTplGetThemeDir()#/images/xarLogo3.png" width="90" height="90" alt="Xaraya Logo" title="home" /></a>
-<xar:comment>
-                <p>#xarModGetVar('themes', 'SiteSlogan')#</p>
-</xar:comment>
                 <p>
                     <xar:var name="SiteSlogan" scope="module" module="themes" />
                 </p>
