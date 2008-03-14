@@ -235,7 +235,7 @@ class PropertyRegistration extends DataContainer
                     $file = $dir->getPathName();
                     if (!isset($loaded[$file])) {
                         // FIXME: later -> include
-                        $dp = str_replace('/','.',substr($PropertiesDir.basename($file),0,-4));
+                        $dp = str_replace('/','.',substr($PropertiesDir . "/" . basename($file),0,-4));
                         sys::import($dp);
                         $loaded[$file] = true;
                     }
