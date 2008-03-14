@@ -130,6 +130,7 @@ function modules_adminapi_installwithdependencies ($args)
             }
 
             PropertyRegistration::importPropertyTypes(true, array('modules/' . $modInfo['directory'] . '/xarproperties'));
+//            PropertyRegistration::importPropertyTypes(true);
             if (empty($modstack)) {
                 // Looks like we're done
                 xarSessionDelVar('modulestoinstall');

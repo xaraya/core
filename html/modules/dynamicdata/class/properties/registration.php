@@ -73,6 +73,7 @@ class PropertyRegistration extends DataContainer
     function Register()
     {
         static $stmt = null;
+        static $types = array();
 
         // Sanity checks (silent)
         foreach($this->reqfiles as $required)
@@ -95,6 +96,15 @@ class PropertyRegistration extends DataContainer
 
         if($this->format == 0) $this->format = $this->id;
 
+        if (empty($types)) {
+            $sql = "SELECT id FROM $tables[dynamic_properties_def]";
+            $res = $dbconn->executeQuery($sql);
+            while($res->next()) {
+                list($id) = $res->fields;
+                $types[] = $id;
+            }
+        }
+        
         $sql = "INSERT INTO $propdefTable
                 (id, name, label,
                  parent, filepath, class,
@@ -110,7 +120,14 @@ class PropertyRegistration extends DataContainer
             $this->format, $this->configuration, $this->source,
             serialize($this->reqfiles), $modId, is_array($this->args) ? serialize($this->args) : $this->args, serialize($this->aliases)
         );
-        $res = $stmt->executeUpdate($bindvars);
+
+        // Ignore if we already have this dataproperty
+        if (!in_array($this->id, $types)) {
+            $res = $stmt->executeUpdate($bindvars);
+            $types[] = $this->id;
+        } else {
+            $res = true;
+        }
 
         if(!empty($this->aliases))
         {
