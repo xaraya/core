@@ -69,9 +69,7 @@ function modules_admin_install()
     }
 
     // See if we have lost any modules since last generation
-    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
-        return;
-    }
+    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) return;
 
     xarSession::setVar('installing',true);
 

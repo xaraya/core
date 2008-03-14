@@ -211,7 +211,7 @@ class PropertyRegistration extends DataContainer
 
                 foreach($activeMods as $modInfo) {
                     // FIXME: the modinfo directory does NOT end with a /
-                    $dir = 'modules/' .$modInfo['osdirectory'] . '/xarproperties/';
+                    $dir = 'modules/' .$modInfo['osdirectory'] . '/xarproperties';
                     if(file_exists($dir)){
                         $propDirs[] = $dir;
                     }
