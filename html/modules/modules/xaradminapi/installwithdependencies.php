@@ -129,7 +129,7 @@ function modules_adminapi_installwithdependencies ($args)
                 throw new Exception($msg);
             }
 
-            if(!xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('dirs' => 'modules/' . $modInfo['directory'] . '/xarproperties', 'flush' => true))) return false;
+            PropertyRegistration::importPropertyTypes(true, array('modules/' . $modInfo['directory'] . '/xarproperties'));
             if (empty($modstack)) {
                 // Looks like we're done
                 xarSessionDelVar('modulestoinstall');
