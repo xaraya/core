@@ -97,6 +97,9 @@ function modules_adminapi_remove($args)
         if ($modinfo['name'] == $defaultmod) {
             xarModVars::set('modules', 'defaultmodule','base');
         }
+        
+        PropertyRegistration::importPropertyTypes(true);
+        
         $dbconn->commit();
     } catch (Exception $e) {
         $dbconn->rollback();
