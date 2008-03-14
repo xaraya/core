@@ -323,9 +323,9 @@
         <xsl:value-of select="string-length($expr) + 1" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:param name="initial-position">
+        <xsl:variable name="initial-position">
           <xsl:value-of select="string-length(substring-before($expr,$delimiter)) + 1" />
-        </xsl:param>
+        </xsl:variable>
         <xsl:choose>
           <xsl:when test="starts-with(substring-after($expr,$delimiter),$delimiter)">
             <xsl:variable name="add-on-position">
