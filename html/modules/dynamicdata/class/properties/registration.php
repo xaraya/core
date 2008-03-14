@@ -129,8 +129,8 @@ class PropertyRegistration extends DataContainer
 
     static function Retrieve()
     {
-        if(xarVarIsCached('DynamicData','PropertyTypes')) {
-            return xarVarGetCached('DynamicData','PropertyTypes');
+        if(xarCore::isCached('DynamicData','PropertyTypes')) {
+            return xarCore::getCached('DynamicData','PropertyTypes');
         }
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
@@ -173,7 +173,7 @@ class PropertyRegistration extends DataContainer
             }
         }
 
-        xarVarSetCached('DynamicData','PropertyTypes',$proptypes);
+        xarCore::setCached('DynamicData','PropertyTypes',$proptypes);
 
         return $proptypes;
     }
