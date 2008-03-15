@@ -191,8 +191,7 @@
                 </td>
                 <xar:if condition="$id gt 0">
                     <td  class="xar-align-center xar-valign-middle">
-                        <xar:set name="checked">$includesubgroups == 0</xar:set>
-                        <xar:data-input type="checkbox" name="includesubgroups" id="includesubgroups" checked="$checked" onchange="this.form.submit()" />
+                        <xar:data-input type="checkbox" name="includesubgroups" id="includesubgroups" checked="$includesubgroups" onchange="this.form.submit()" />
                     </td>
                 </xar:if>
                 <td class="xar-align-center">
