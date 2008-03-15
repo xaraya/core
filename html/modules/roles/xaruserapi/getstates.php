@@ -19,9 +19,11 @@
  */
 function roles_userapi_getstates()
 {
-    return array(ROLES_STATE_INACTIVE => xarML('Inactive'),
-                 ROLES_STATE_NOTVALIDATED => xarML('Not Validated'),
-                 ROLES_STATE_ACTIVE => xarML('Active'),
-                 ROLES_STATE_PENDING => xarML('Pending'));
+    return array(
+        array('id' => ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')),
+        array('id' => ROLES_STATE_NOTVALIDATED, 'name'  => xarML('Not Validated')),
+        array('id' => ROLES_STATE_ACTIVE, 'name'  => xarML('Active')),
+        array('id' => ROLES_STATE_PENDING, 'name'  => xarML('Pending'))
+        );
 }
 ?>
