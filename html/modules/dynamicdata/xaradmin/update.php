@@ -52,7 +52,6 @@ function dynamicdata_admin_update($args)
 
     // recover any session var information and remove it from the var
     $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
-    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
     extract($data);
 
     if (!empty($preview) || !$isvalid) {
@@ -82,9 +81,14 @@ function dynamicdata_admin_update($args)
 
         return xarTplModule($tplmodule,'admin','modify', $data);
     }
+
     // Valid and not previewing, update the object
+
     $itemid = $myobject->updateItem();
     if (!isset($itemid)) return; // throw back
+
+     // If we are here then the update is valid: reset the session var
+    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
 
     // special case for dynamic objects themselves
     if ($myobject->objectid == 1) {
