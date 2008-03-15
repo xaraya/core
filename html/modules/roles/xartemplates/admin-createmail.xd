@@ -4,7 +4,7 @@
 </xar:comment>
 <xar:set name="stateoptions">
     array(
-        array('id' => ROLES_STATE_CURRENT, 'name' => xarML('All')),
+        array('id' => ROLES_STATE_ALL, 'name' => xarML('All')),
         array('id' => ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')),
         array('id' => ROLES_STATE_NOTVALIDATED, 'name' => xarML('Not Validated')),
         array('id' => ROLES_STATE_ACTIVE, 'name' => xarML('Active')),
