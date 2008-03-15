@@ -315,7 +315,7 @@ class DataProperty extends Object implements iDataProperty
         if(isset($data['fieldprefix']))  $data['name'] = $data['fieldprefix'] . '_' . $data['name'];
         if(!isset($data['id']))          $data['id']   = $data['name'];
 
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
 
