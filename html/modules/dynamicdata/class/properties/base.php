@@ -61,7 +61,6 @@ class DataProperty extends Object implements iDataProperty
         $this->descriptor = $descriptor;
         $args = $descriptor->getArgs();
         $this->template = $this->getTemplate();
-        $this->args = serialize(array());
 
         $descriptor->refresh($this);
 
