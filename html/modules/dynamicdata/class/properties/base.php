@@ -42,10 +42,10 @@ class DataProperty extends Object implements iDataProperty
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
     public $args         = array(); //args that hold alias info
 
-    public $datastore = '';   // name of the data store where this property comes from
+    public $datastore = '';    // name of the data store where this property comes from
 
-    public $value = null;     // value of this property for a particular DataObject
-    public $invalid = '';     // result of the checkInput/validateValue methods
+    public $value = null;      // value of this property for a particular DataObject
+    public $invalid = '';      // result of the checkInput/validateValue methods
 
     // public $objectref = null; // object this property belongs to
     public $_objectid = null; // objectid this property belongs to
@@ -78,6 +78,12 @@ class DataProperty extends Object implements iDataProperty
                 }
             }
             $this->value = $this->defaultvalue;
+        }
+        // do the minimum for alias info, let the single property do the rest
+        if (!empty($this->args)) {
+            try {
+                $this->args = unserialize($this->args);
+            } catch (Exception $e) {}
         }
     }
 
@@ -155,7 +161,7 @@ class DataProperty extends Object implements iDataProperty
      *
      * @param mixed $value the new value for the property
      */
-    public function setValue($value)
+    public function setValue($value=null)
     {
         $this->value = $value;
     }
