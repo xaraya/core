@@ -30,7 +30,8 @@ function roles_admin_createmail()
         $type = 'selection';
     } else {
         $role  = xarRoles::get($id);
-        $type  = $role->getType() ? 'selection' : 'single';
+        $baseitemtype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $role->getType()));
+        $type  = ($baseitemtype == xarRoles::ROLES_GROUPTYPE) ? 'selection' : 'single';
     }
 
     $xartable = xarDB::getTables();
@@ -57,17 +58,16 @@ function roles_admin_createmail()
                             'r.state AS state',
                             'r.date_reg AS date_reg'));
         $q->eq('r.id',$id);
-        $q->sessionsetvar('rolesquery');
-    }
-    else {
+        xarSession::setVar('rolesquery',serialize($q));
+    } else {
         if ($selstyle == 0) $selstyle = 1;
 
         // Get the current query or create a new one if need be
         if ($id == -1) {
             $q = new xarQuery();
-            $q = $q->sessiongetvar('rolesquery');
+            $q = unserialize(xarSession::getVar('rolesquery'));
         }
-        if(empty($q)) {
+        if(empty($q->tables)) {
             $q = new xarQuery('SELECT');
             $q->addtable($xartable['roles'],'r');
             $q->addfields(array('r.id AS id',
@@ -100,12 +100,13 @@ function roles_admin_createmail()
                 $q->addtable($xartable['rolemembers'],'rm');
                 $q->join('r.id','rm.id');
                 $q->eq('rm.parentid',$id);
+            } else {
+                $q->eq('r.id',$id);
             }
         }
 
         // Save the query so we can reuse it somewhere
-        $q->sessionsetvar('rolesquery');
-
+        xarSession::setVar('rolesquery',serialize($q));
         // open a connection and run the query
         $q->run();
 
