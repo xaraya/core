@@ -18,7 +18,7 @@ function roles_admin_createmail()
 
     if (!xarVarFetch('id',       'int:0:', $id,        -1, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ids',      'isset',  $ids,     NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state',    'int:0:', $state,      -1, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state',    'int:0:', $state,      xarRoles::ROLES_STATE_ALL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('startnum', 'int:1:', $startnum,    1, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('order',    'str:0:', $data['order'], 'name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('includesubgroups', 'int:0:', $data['includesubgroups'],0, XARVAR_NOT_REQUIRED)) return;
@@ -76,7 +76,7 @@ function roles_admin_createmail()
                                 'r.email AS email',
                                 'r.state AS state',
                                 'r.date_reg AS date_reg'));
-            $q->eq('type',ROLES_USERTYPE);
+            $q->eq('type',xarRoles::ROLES_USERTYPE);
         }
         // Set the paging and order stuff for this particular page
         $numitems = xarModVars::get('roles', 'itemsperpage');
@@ -87,15 +87,15 @@ function roles_admin_createmail()
         // Add state
         if ($id != -1) {
             $q->removecondition('state');
-            if ($state == ROLES_STATE_CURRENT) $q->ne('state',ROLES_STATE_DELETED);
-            elseif ($state == ROLES_STATE_ALL) {}
+            if ($state == xarRoles::ROLES_STATE_CURRENT) $q->ne('state',xarRoles::ROLES_STATE_DELETED);
+            elseif ($state == xarRoles::ROLES_STATE_ALL) {}
             else $q->eq('state',$state);
         } else {
-            $state = -1;
+            $state = xarRoles::ROLES_STATE_ALL;
         }
 
         if ($id != -1) {
-            if ($id != 0) {
+            if ($baseitemtype == xarRoles::ROLES_GROUPTYPE) {
                 // If a group was chosen, get only the users of that group
                 $q->addtable($xartable['rolemembers'],'rm');
                 $q->join('r.id','rm.id');
@@ -129,14 +129,15 @@ function roles_admin_createmail()
 
             while (list($key, $user) = each($descendants)) {
                 if (xarSecurityCheck('EditRole',0,'Roles',$user->getName())) {
-                    $data['users'][$user->getID()] =
-                        array('id'      => $user->getID(),
-                              'name'     => $user->getName(),
-                              'uname'    => $user->getUser(),
-                              'email'    => $user->getEmail(),
-                              'status'   => $user->getState(),
-                              'date_reg' => $user->getDateReg()
-                             );
+                    if (in_array($state, array($user->getState(),xarRoles::ROLES_STATE_ALL))) {
+                        $data['users'][$user->getID()] =
+                            array('id'      => $user->getID(),
+                                  'name'     => $user->getName(),
+                                  'uname'    => $user->getUser(),
+                                  'email'    => $user->getEmail(),
+                                  'status'   => $user->getState(),
+                                  'date_reg' => $user->getDateReg()
+                                 );}
                 }
             }
         }
