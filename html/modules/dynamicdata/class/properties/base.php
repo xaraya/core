@@ -402,14 +402,22 @@ class DataProperty extends Object implements iDataProperty
     function showHidden(Array $data = array())
     {
         $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
+
+        $name = $data['name'];
+        // Add the object's field prefix if there is one
+        if(!empty($this->_fieldprefix))  $name = $this->_fieldprefix . '_' . $data['name'];
+        // A field prefix added here can override the previous one
+        if(isset($data['fieldprefix']))  $name = $data['fieldprefix'] . '_' . $data['name'];
+        $data['name'] = $name;
+
         $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
         $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->getValue());
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
 
-        return xarTplProperty($data['module'], $data['template'], 'showhidden', $data);
+        return xarTplProperty($data['tplmodule'], $data['template'], 'showhidden', $data);
     }
 
     /**
