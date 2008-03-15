@@ -37,9 +37,9 @@ class PrivilegesTreeProperty extends DataProperty
         if (!isset($data['show'])) $data['show'] = 'assigned';
         $trees = array();
         foreach ($this->privs->gettoplevelprivileges($data['show']) as $entry) {
-            $node = new TreeNode($entry['id']);
-            $tree = new PrivilegesTree($node);
-            $trees[] = $node->depthfirstenumeration();
+			$node = new TreeNode($entry['id']);
+			$tree = new PrivilegesTree($node);
+			$trees[] = $node->depthfirstenumeration();
         }
         $data['trees'] = $trees;
         return parent::showInput($data);

@@ -121,6 +121,7 @@ class DataObjectMaster extends Object
     public $fieldorder  = array();      // displayorder for the properties
     public $fieldprefix = '';           // prefix to use in field names etc.
     public $status      = 65;           // inital status is active and can add/modify
+    public $anonymous   = 0;            // if true forces display of names of properties instead of dd_xx designations
 
     public $layout = 'default';         // optional layout inside the templates
     public $template = '';              // optional sub-template, e.g. user-objectview-[template].xd (defaults to the object name)
@@ -154,7 +155,7 @@ class DataObjectMaster extends Object
         $properties = $this->getPublicProperties();
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
         //FIXME where do we need to define the modname best?
-        $args['modname'] = xarModGetNameFromID($args['moduleid']); //FIXME change to systemid
+        if (!empty($args['moduleid'])) $args['modname'] = xarModGetNameFromID($args['moduleid']); //FIXME change to systemid
         return $args;
     }
 
@@ -1027,6 +1028,7 @@ class DataObjectMaster extends Object
 
         for(;;) {
             $thisobject     = $objects[$parentitemtype];
+//        var_dump($objects[$parentitemtype]);exit;
 
 //            if ($parentitemtype >= 1000 || $this->moduleid == 182) {
                 // This is a DD descendent object. add it to the ancestor array

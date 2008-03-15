@@ -139,7 +139,7 @@ function roles_user_usermenu($args)
             // We succedded in updating. Delete the session var
             xarSession::delVar('user_object');
 
-            //set emailing options for the user
+			//set emailing options for the user
             xarModUserVars::set('roles','allowemail',$allowemail,$id);
 
 
@@ -244,6 +244,7 @@ function roles_user_usermenu($args)
 
             xarResponseRedirect(xarModURL('roles', 'user', 'account'));
     }
+//    var_dump($data);exit;
     return $data;
 }
 ?>

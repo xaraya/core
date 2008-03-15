@@ -147,6 +147,7 @@ function modules_adminapi_installwithdependencies ($args)
                 // Do the next module
                 if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid' => array_pop($modstack), 'phase' => 0))) return;
             }
+            // Flush the property cache
             return true;
 
         default:

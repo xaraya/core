@@ -144,6 +144,7 @@
 
   <!-- Others -->
   <xsl:include href="tags/element.xsl"/>
+
 <!--
     Utility template for resolving text nodes. It recursively resolves
     #-pairs from left to right. Pre- and Post- hash content are treated
@@ -156,40 +157,78 @@
 <xsl:template name="resolveText" >
   <xsl:param name="expr"/>
 
-  <!--
+  <!-- 
     <xsl:text>[EXPR]</xsl:text><xsl:value-of select="$expr"/><xsl:text>[END EXPR]</xsl:text>
   -->
-  <xsl:variable name="nrOfHashes"
-      select="string-length($expr) - string-length(translate($expr, '#', ''))"/>
-
   <xsl:choose>
-    <!-- If we have zero or one hash, just output the text node -->
-    <xsl:when test="$nrOfHashes &lt; 2">
-        <xsl:value-of select="$expr"/>
-    </xsl:when>
-    <!-- Resolve left to right -->
-    <xsl:otherwise>
-      <!-- more than two, so in general ....#....#....#....#.... etc. -->
-
-      <!-- [....]#....#.... : get the first part out of the way -->
-      <xsl:value-of select="substring-before($expr,'#')"/>
-
-      <!-- Resolve the part in between -->
-      <!-- Left at this point: ....#[....]#.... -->
-      <xsl:if test="substring-before(substring-after($expr,'#'),'#') !=''">
-        <xsl:processing-instruction name="php">
-          <xsl:text>echo </xsl:text>
-          <xsl:call-template name="resolvePHP">
-              <xsl:with-param name="expr" select="substring-before(substring-after($expr,'#'),'#')"/>
-          </xsl:call-template>
-          <xsl:text>;</xsl:text>
-        </xsl:processing-instruction>
-      </xsl:if>
-
-      <!-- ....#....#[....#....#....etc.] -->
-      <xsl:call-template name="resolveText">
-        <xsl:with-param name="expr" select="substring-after(substring-after($expr,'#'),'#')"/>
+    <!-- if we are inside a xar:ml tag the translation is already being handled -->
+    <xsl:when test="ancestor::xar:ml">
+<!--
+      <xsl:call-template name="replace">
+        <xsl:with-param name="source" select="$expr"/>
       </xsl:call-template>
+-->
+      <xsl:value-of select="$expr"/>
+    </xsl:when>
+
+    <!-- if we are inside a pre tag we want everything sent back literally -->
+    <xsl:when test="ancestor::pre">
+      <xsl:value-of select="$expr"/>
+    </xsl:when>
+
+    <xsl:otherwise>
+      <xsl:variable name="nrOfHashes"
+          select="string-length($expr) - string-length(translate($expr, '#', ''))"/>
+
+      <xsl:choose>
+        <!-- If we have zero or one hash, just output the text node -->
+        <xsl:when test="$nrOfHashes &lt; 2">
+<!-- Just echo the string for now
+              <xsl:processing-instruction name="php">
+                <xsl:text>echo xarML('</xsl:text>
+                <xsl:call-template name="replace">
+                  <xsl:with-param name="source" select="$expr"/>
+                </xsl:call-template>
+                <xsl:text>');</xsl:text>
+              </xsl:processing-instruction>
+-->
+              <xsl:value-of select="$expr"/>
+        </xsl:when>
+
+        <!-- Resolve left to right -->
+        <xsl:otherwise>
+          <!-- two or more, so in general ....#....#....#....#.... etc. -->
+
+          <!-- find the text up to the first "real" delimiter -->
+          <xsl:variable name="delimiter-position">
+            <xsl:call-template name="return-delimiter-position">
+                <xsl:with-param name="expr" select="$expr"/>
+            </xsl:call-template>
+          </xsl:variable>
+
+          <!-- [....]#....#.... : get the first part out of the way -->
+
+          <xsl:value-of select="substring($expr,0,$delimiter-position)"/>
+
+          <!-- Resolve the part in between -->
+          <!-- Left at this point: ....#[....]#.... -->
+          <xsl:variable name="expr-after" select="substring($expr,$delimiter-position + 1)"/>
+          <xsl:if test="substring-before($expr-after,'#') !=''">
+            <xsl:processing-instruction name="php" >
+              <xsl:text>echo </xsl:text>
+              <xsl:call-template name="resolvePHP">
+                  <xsl:with-param name="expr" select="substring-before($expr-after,'#')"/>
+              </xsl:call-template>
+              <xsl:text>;</xsl:text>
+            </xsl:processing-instruction>
+          </xsl:if>
+
+          <!-- ....#....#[....#....#....etc.] -->
+          <xsl:call-template name="resolveText">
+            <xsl:with-param name="expr" select="substring-after($expr-after,'#')"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -197,14 +236,13 @@
 <!--
   For all text nodes, resolve expressions within
 -->
-<!--
-  <xsl:template match="text()">
+<!-- -->
+<xsl:template match="text()">
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
 </xsl:template>
--->
-
+ <!-- -->
 
 <!-- Expression resolving in nodes-->
 <xsl:template name="resolvePHP">
@@ -277,4 +315,31 @@
   <xsl:text>)</xsl:text>
 </xsl:template>
 
+  <xsl:template name="return-delimiter-position">
+    <xsl:param name="expr"/>
+    <xsl:param name="delimiter" select="'#'"/>
+    <xsl:choose>
+      <xsl:when test="contains($expr,$delimiter) = 0">
+        <xsl:value-of select="string-length($expr) + 1" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="initial-position">
+          <xsl:value-of select="string-length(substring-before($expr,$delimiter)) + 1" />
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="starts-with(substring-after($expr,$delimiter),$delimiter)">
+            <xsl:variable name="add-on-position">
+              <xsl:call-template name="return-delimiter-position">
+                <xsl:with-param name="expr" select="substring($expr,$initial-position + 2)"/>
+              </xsl:call-template>
+            </xsl:variable>
+            <xsl:value-of select="$initial-position + 1 + $add-on-position" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$initial-position" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 </xsl:stylesheet>
