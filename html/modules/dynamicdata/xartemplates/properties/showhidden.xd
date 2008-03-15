@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
     <input type="hidden" name="#$name#" id="#$id#" value="#$value#"/>
 
