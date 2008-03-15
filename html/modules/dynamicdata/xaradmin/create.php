@@ -49,7 +49,6 @@ function dynamicdata_admin_create($args)
 
     // recover any session var information
     $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
-    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
     extract($data);
 
     if (!empty($preview) || !$isvalid) {
@@ -82,6 +81,9 @@ function dynamicdata_admin_create($args)
     }
 
     $itemid = $myobject->createItem();
+
+   // If we are here then the create is valid: reset the session var
+    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
 
     if (empty($itemid)) return; // throw back
 

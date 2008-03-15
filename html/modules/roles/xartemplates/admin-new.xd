@@ -46,7 +46,6 @@
                 </label>
                 <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
                 <xar:data-input type="itemtype" name="itemtype" value="$itemtype" validation="roles" onchange="$onchange" />
-                #$itemtype#xxx
             </div>
 
             <xar:data-form object="$object" />
