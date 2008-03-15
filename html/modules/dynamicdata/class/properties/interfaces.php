@@ -12,7 +12,7 @@ interface iDataProperty
     public static function getRegistrationInfo();
     public function getValue();
     public function parseValidation($validation = '');
-    public function setValue($value);
+    public function setValue($value=null);
     public function showHidden(Array $args = array());
     public function showInput(Array $args = array());
     public function showLabel(Array $args = array());
