@@ -40,7 +40,7 @@ class DataProperty extends Object implements iDataProperty
     public $tplmodule = 'dynamicdata';
     public $validation = '';
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
-    public $args         = array();
+    public $args         = array(); //args that hold alias info
 
     public $datastore = '';   // name of the data store where this property comes from
 
