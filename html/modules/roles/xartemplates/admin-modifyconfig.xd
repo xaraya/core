@@ -130,7 +130,8 @@
                             Users Per Page:
                         </xar:mlstring>
                     </label>
-                    <input type="text" name="itemsperpage" id="itemsperpage" value="#xarModVars::get('roles', 'itemsperpage')#" maxlength="3" class="xar-form-textshort" />
+                    <xar:set name="value"><xar:var scope="module" module="roles" name="itemsperpage"/></xar:set>
+                    <input type="text" name="itemsperpage" id="itemsperpage" value="#$value#" maxlength="3" class="xar-form-textshort" />
                 </div>
                 <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked"><xar:var scope="module" module="roles" name="SupportShortURLs"/></xar:set>

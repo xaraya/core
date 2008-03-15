@@ -40,12 +40,12 @@ class DataProperty extends Object implements iDataProperty
     public $tplmodule = 'dynamicdata';
     public $validation = '';
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
-    public $args         = array();
+    public $args         = array(); //args that hold alias info
 
-    public $datastore = '';   // name of the data store where this property comes from
+    public $datastore = '';    // name of the data store where this property comes from
 
-    public $value = null;     // value of this property for a particular DataObject
-    public $invalid = '';     // result of the checkInput/validateValue methods
+    public $value = null;      // value of this property for a particular DataObject
+    public $invalid = '';      // result of the checkInput/validateValue methods
 
     // public $objectref = null; // object this property belongs to
     public $_objectid = null; // objectid this property belongs to
@@ -61,7 +61,6 @@ class DataProperty extends Object implements iDataProperty
         $this->descriptor = $descriptor;
         $args = $descriptor->getArgs();
         $this->template = $this->getTemplate();
-        $this->args = serialize(array());
 
         $descriptor->refresh($this);
 
@@ -78,6 +77,12 @@ class DataProperty extends Object implements iDataProperty
                 }
             }
             $this->value = $this->defaultvalue;
+        }
+        // do the minimum for alias info, let the single property do the rest
+        if (!empty($this->args)) {
+            try {
+                $this->args = unserialize($this->args);
+            } catch (Exception $e) {}
         }
     }
 
@@ -155,7 +160,7 @@ class DataProperty extends Object implements iDataProperty
      *
      * @param mixed $value the new value for the property
      */
-    public function setValue($value)
+    public function setValue($value=null)
     {
         $this->value = $value;
     }
@@ -310,7 +315,7 @@ class DataProperty extends Object implements iDataProperty
         if(isset($data['fieldprefix']))  $data['name'] = $data['fieldprefix'] . '_' . $data['name'];
         if(!isset($data['id']))          $data['id']   = $data['name'];
 
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
 
@@ -348,11 +353,11 @@ class DataProperty extends Object implements iDataProperty
 
         if(!isset($data['value'])) $data['value'] = $this->getValue();
         // TODO: does this hurt when it is an array?
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
 
-        return xarTplProperty($data['module'], $data['template'], 'showoutput', $data);
+        return xarTplProperty($data['tplmodule'], $data['template'], 'showoutput', $data);
     }
 
     /**
@@ -380,10 +385,10 @@ class DataProperty extends Object implements iDataProperty
         $data['name']  = $this->name;
         $data['label'] = isset($label) ? xarVarPrepForDisplay($label) : xarVarPrepForDisplay($this->label);
         $data['for']   = isset($for) ? $for : null;
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
-        return xarTplProperty($data['module'], $data['template'], 'label', $data);
+        return xarTplProperty($data['tplmodule'], $data['template'], 'label', $data);
     }
 
     /**
@@ -397,14 +402,22 @@ class DataProperty extends Object implements iDataProperty
     function showHidden(Array $data = array())
     {
         $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
+
+        $name = $data['name'];
+        // Add the object's field prefix if there is one
+        if(!empty($this->_fieldprefix))  $name = $this->_fieldprefix . '_' . $data['name'];
+        // A field prefix added here can override the previous one
+        if(isset($data['fieldprefix']))  $name = $data['fieldprefix'] . '_' . $data['name'];
+        $data['name'] = $name;
+
         $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
         $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->getValue());
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
 
-        return xarTplProperty($data['module'], $data['template'], 'showhidden', $data);
+        return xarTplProperty($data['tplmodule'], $data['template'], 'showhidden', $data);
     }
 
     /**

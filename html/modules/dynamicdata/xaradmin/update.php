@@ -28,11 +28,11 @@ function dynamicdata_admin_update($args)
 {
     extract($args);
 
-    if(!xarVarFetch('object_objectid',   'isset', $objectid,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('object_itemid',     'isset', $itemid,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('object_join',       'isset', $join,        NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('object_table',      'isset', $table,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('object_tplmodule',  'isset', $tplmodule,   'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('objectid',   'isset', $objectid,    NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('itemid',     'isset', $itemid,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('join',       'isset', $join,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('table',      'isset', $table,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('tplmodule',  'isset', $tplmodule,   'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('preview',    'isset', $preview,     0, XARVAR_NOT_REQUIRED)) {return;}
 
@@ -50,9 +50,8 @@ function dynamicdata_admin_update($args)
 
     $isvalid = $myobject->checkInput();
 
-    // recover any session var information and remove it from the var
+    // recover any session var information
     $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
-    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
     extract($data);
 
     if (!empty($preview) || !$isvalid) {
@@ -82,9 +81,14 @@ function dynamicdata_admin_update($args)
 
         return xarTplModule($tplmodule,'admin','modify', $data);
     }
+
     // Valid and not previewing, update the object
+
     $itemid = $myobject->updateItem();
     if (!isset($itemid)) return; // throw back
+
+     // If we are here then the update is valid: reset the session var
+    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
 
     // special case for dynamic objects themselves
     if ($myobject->objectid == 1) {

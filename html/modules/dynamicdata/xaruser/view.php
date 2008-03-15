@@ -45,7 +45,7 @@ function dynamicdata_user_view($args)
         $itemtype = 0;
     }
 
-    $object = DataObjectMaster::getobjectlist(
+    $object = DataObjectMaster::getObjectList(
                             array('objectid'  => $objectid,
                                   'moduleid'  => $modid,
                                   'itemtype'  => $itemtype,
@@ -64,8 +64,8 @@ function dynamicdata_user_view($args)
     // TODO: another stray
     $data['catid'] = $catid;
 
-    if (file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-new.xd') ||
-        file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-new-' . $data['template'] . '.xd')) {
+    if (file_exists('modules/' . $data['tplmodule'] . '/xartemplates/user-view.xd') ||
+        file_exists('modules/' . $data['tplmodule'] . '/xartemplates/user-view-' . $data['template'] . '.xd')) {
         return xarTplModule($data['tplmodule'],'user','view',$data,$data['template']);
     } else {
         return xarTplModule('dynamicdata','user','view',$data,$args['template']);
