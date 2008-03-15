@@ -324,7 +324,7 @@ class DataProperty extends Object implements iDataProperty
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid: #(1)', $this->invalid) :'';
 
         // Render it
-        return xarTplProperty($data['module'], $data['template'], 'showinput', $data);
+        return xarTplProperty($data['tplmodule'], $data['template'], 'showinput', $data);
     }
 
     /**
