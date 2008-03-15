@@ -3,7 +3,7 @@
 <xar:set name="otherfields">xarML('Edit property "#(1)"',$field['name'])</xar:set>
 <fieldset>
     <legend>
-        <xar:mlstring>Property</xar:mlstring>
+        <xar:mlstring>Property</xar:mlstring>&#160;
         <xar:if condition="!empty($field['name'])">
             <a href="javascript:void(0);" title="#xarML('Click to toggle field visibility for this property')#" onclick="return toggleDisplay('fieldwrapper_#$field.id#');">
                 #$field['name']#
@@ -11,7 +11,7 @@
         <xar:else />
             <a href="javascript:void(0);" title="#xarML('Click to toggle field visibility for this property')#" onclick="return toggleDisplay('fieldwrapper_#$field.id#');">
                 <xar:mlstring>[unnamed property]</xar:mlstring></a>
-        </xar:if>
+        </xar:if>&#160;
         [#$labels['id']#: #$field['id']#]
     </legend>
     
@@ -22,7 +22,10 @@
         </div>
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">#$labels.name#</label>
-            #$field.name#
+            #$field.name#&#160;
+            <a href="&xar-modurl-dynamicdata-admin-modify;&amp;objectid=2&amp;itemid=#$field.id#">
+                <xar:var name="otherfields" prep="true"/>
+            </a>
         </div>
 
         <div class="xar-form-input-wrapper">
