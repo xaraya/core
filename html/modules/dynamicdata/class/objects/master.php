@@ -1028,7 +1028,6 @@ class DataObjectMaster extends Object
 
         for(;;) {
             $thisobject     = $objects[$parentitemtype];
-//        var_dump($objects[$parentitemtype]);exit;
 
 //            if ($parentitemtype >= 1000 || $this->moduleid == 182) {
                 // This is a DD descendent object. add it to the ancestor array

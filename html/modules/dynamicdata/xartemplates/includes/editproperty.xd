@@ -41,6 +41,12 @@
             </label>
             #$field['source']#
         </div>
+
+        <div class="xar-form-input-wrapper-after">
+            <a href="&xar-modurl-dynamicdata-admin-modify;&amp;objectid=2&amp;itemid=#$field.id#">
+                <xar:var name="otherfields" prep="true"/>
+            </a>
+        </div>
       
         <div class="xar-form-input-wrapper">
             <label for="dd_type_#$field.id#" class="xar-form-label">

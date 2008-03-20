@@ -139,6 +139,7 @@ class xarRoles extends Object
      * Wrapper functions to support Xaraya 1 API for roles
      */
     public static function getRole($id) {return get::get($id);}
+
     /**
      * findRole: finds a single role based on its name
      *
@@ -270,7 +271,7 @@ class xarRoles extends Object
         $q->addfield('rm.parentid AS parentid');
         $c = array();
         foreach ($basetypes as $type) {
-            $c[] = $q->eq('r.type',$type);
+            $c[] = $q->peq('r.type',$type);
         }
         $q->qor($c);
         $q->eq('r.state',ROLES_STATE_ACTIVE);

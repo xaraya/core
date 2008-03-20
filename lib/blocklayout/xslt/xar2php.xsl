@@ -214,7 +214,7 @@
           <!-- Left at this point: ....#[....]#.... -->
           <xsl:variable name="expr-after" select="substring($expr,$delimiter-position + 1)"/>
           <xsl:if test="substring-before($expr-after,'#') !=''">
-            <xsl:processing-instruction name="php" >
+            <xsl:processing-instruction name="php">
               <xsl:text>echo </xsl:text>
               <xsl:call-template name="resolvePHP">
                   <xsl:with-param name="expr" select="substring-before($expr-after,'#')"/>
