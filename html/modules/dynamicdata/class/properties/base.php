@@ -315,7 +315,7 @@ class DataProperty extends Object implements iDataProperty
 
         if(!isset($data['tabindex'])) $data['tabindex'] = 0;
         if(!isset($data['value']))    $data['value']    = '';
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid: #(1)', $this->invalid) :'';
+        $data['invalid']  = !empty($this->invalid) ? xarML($this->invalid) :'';
 
         // Add the configuration options if they have not been overridden
         if(isset($data['configuration'])) {
