@@ -57,6 +57,8 @@ function dynamicdata_userapi_showview($args)
 
     if (isset($table)) {
         $table = xarDB::getPrefix() . '_' . $table;
+    } else {
+        $table = '';
     }
 
     // don't try getting the where clause via input variables, obviously !

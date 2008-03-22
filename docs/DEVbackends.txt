@@ -17,6 +17,28 @@ VIEWS support
 - oracle  : yes, no idea version wise
 
 ==> SUPPPORTED BY ALL, WORTH CONSIDERING
+==> Usecase: Transposing Dynamic Data values.
+
+    Suppose you have roles extended in your install. (or in general, items based on a fixed table)
+    That means that the code has to go through quite a few hoops to get all the
+    data together. The backend, with the help of a structured view can do this a lot faster.
+    Suppose we have roles extended by adding 4 properties: address, postalcode, city, country 
+    corresponding to property id's 1,2,3 and 4
+    
+    CREATE VIEW dd_roles AS
+    SELECT xar_dd_itemid AS role_id,  
+        MAX(CASE xar_dd_propid WHEN 59 THEN d.xar_dd_value ELSE null END) AS address,
+        MAX(CASE xar_dd_propid WHEN 60 THEN d.xar_dd_value ELSE null END) AS postalcode,
+        MAX(CASE xar_dd_propid WHEN 61 THEN d.xar_dd_value ELSE null END) AS city,
+        MAX(CASE xar_dd_propid WHEN 70 THEN d.xar_dd_value ELSE null END) AS country,
+    FROM xar_dynamic_data d WHERE xar_dd_propid IN (1,2,3,4)
+    GROUP BY xar_dd_itemid;
+    
+    This results in the values being in columns rather than rows. It's trivial to
+    add the columns from xar_roles by joining on role_id (or, in general the itemid of the extended table)
+    
+    The above views could be generated automatically by the dd module. 
+    In general, the view will be read-only, i.e. a statement like UPDATE dd_roles SET.... wont work.
 
 TRANSACTION support
 -------------------
@@ -38,12 +60,13 @@ NESTED TRANSACTION support:
 
 ==> We have to make sure we have only one transaction active at any given time
 Having multiple transactions active is hidden by creole by just not committing
-until the transactioncount reached zero again. This will not work in cases where the
-sequence of code doing database operations has a functional dependency, unless these
-dependencies are all in the same transaction. This can lead to very confusing errors
-while running the code. Seemingly random/ad-hoc errors start to appear. The exact logic is
-hard to describe and can differ between backends. (mysql does an auto commit for an
-active transaction when a new one is started for example, while others do not)
+until the transactioncount reached zero again. This will not work in cases
+where the sequence of code doing database operations has a functional
+dependency, unless these dependencies are all in the same transaction. This
+can lead to very confusing errors while running the code. Seemingly
+random/ad-hoc errors start to appear. The exact logic is hard to describe and
+can differ between backends. (mysql does an auto commit for an active
+transaction when a new one is started for example, while others do not)
 
 We could consider:
 -> raising an exception during development phase when 2 transactions are active
@@ -282,16 +305,27 @@ The main problem:
     both in the same way.
 
 Current concept:
-    - call genID before an insert, that delivers something back (no matter what it is)
-    - call a SQL insert statement, putting whatever genID delivered back in the place of the column which should hold the ID
-    - when needed call PO_Insert_ID to retrieve the actual value (and pray it is the right one) of the ID used.
+    - call genID before an insert, that delivers something back (no matter
+      what it is)
+    - call a SQL insert statement, putting whatever genID delivered back in
+      the place of the column which should hold the ID
+    - when needed call PO_Insert_ID to retrieve the actual value (and pray it
+      is the right one) of the ID used.
 
     [UPDATE: with a current Creole patch, the behaviour is now safe]
 
 Problems with this concept:
-    - the genID call is useless, it generates nothing for auto increment type systems and advances the sequence for sequence based systems too early, thus creating a dependency  (i.e. you really cant call genID, wait for some user input for example and then go on, you  basically need to do the insert    right away and hope you do it fast enough)
-    - the insert touches an ID column, allowed of course, and needed in our concept but it doesnt serve any purpose, as you cant influence it anyways
-    - the PO_Insert_ID implementation is a hack and unreliable, especially in high concurrency environments. (it uses select max(id) which may have been advanced to 10 ids further on by the time you're calling it.)
+    - the genID call is useless, it generates nothing for auto increment type
+      systems and advances the sequence for sequence based systems too early,
+      thus creating a dependency (i.e. you really cant call genID, wait for
+      some user input for example and then go on, you basically need to do the
+      insert right away and hope you do it fast enough)
+    - the insert touches an ID column, allowed of course, and needed in our
+      concept but it doesnt serve any purpose, as you cant influence it
+      anyways
+    - the PO_Insert_ID implementation is a hack and unreliable, especially in
+      high concurrency environments. (it uses select max(id) which may have
+      been advanced to 10 ids further on by the time you're calling it.)
 
     [UPDATE: this has now been adapted in Creole to do a better thing, so
     this argument is basically void now]
@@ -464,7 +498,10 @@ Relevant postgres changelog entries:
     - alter table can change column type
 8.1
     - multi machine prepares (two phase commit)
-    - default values of columns as ::regclass not ::text, this means that if an expression in a default value uses a named object, the default value expression follows suite if that object gets renamed (we use this feature for sequences, hence the 8.1 min. required version) 8.1.4
+    - default values of columns as ::regclass not ::text, this means that if
+      an expression in a default value uses a named object, the default value
+      expression follows suite if that object gets renamed (we use this
+      feature for sequences, hence the 8.1 min. required version) 8.1.4
     - unsafe usage of \' in string literals is rejected now
 
 
@@ -473,21 +510,22 @@ Other backends
 There are some other backends which have an API in PHP.
 
 Firebird/Interbase:
-    The old borland product which went open source a while ago. The server exists
-    in 2 varieties if i recall correctly, something like a standard version and a
-    superserver. No idea what the differences are. The database (from what i remember)
-    is a bit weird to connect to, as the path on the server needs to be known, but other
-    than that its a pretty standard database. It runs on linux and windows in any
-    case. For this backend to be supported a driver section in Creole would have to be
-    developed. There will also be an PDO driver for this database.
-    (speaking of which, a PDO driver for Creole would be a good long term investment
-    if you're doing creole work. It consolidates the driver interface and the innovative
+    The old borland product which went open source a while ago. The server
+    exists in 2 varieties if i recall correctly, something like a standard
+    version and a superserver. No idea what the differences are. The database
+    (from what i remember) is a bit weird to connect to, as the path on the
+    server needs to be known, but other than that its a pretty standard
+    database. It runs on linux and windows in any case. For this backend to be
+    supported a driver section in Creole would have to be developed. There
+    will also be an PDO driver for this database. (speaking of which, a PDO
+    driver for Creole would be a good long term investment if you're doing
+    creole work. It consolidates the driver interface and the innovative
     frameworks are moving towards it.)
 
 IBM DB2 universal database
-    Free as in beer. Available for many platforms but mostly a \*nix bases product if
-    the types of platforms are a good criterium for it. I know next to nothing about this
-    database
+    Free as in beer. Available for many platforms but mostly a \*nix bases
+    product if the types of platforms are a good criterium for it. I know next
+    to nothing about this database
 
 Informix
     No known information

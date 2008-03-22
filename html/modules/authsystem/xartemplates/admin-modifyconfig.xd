@@ -39,35 +39,36 @@
                     Login Security Options
                 </xar:mlstring>
             </legend>
-                <div class="xar-form-input-wrapper-after">
+                <div class="xar-form-input-wrapper">
+                    <label for="uselockout" class="xar-form-label" title="Lock a user out after a number of failed logins">
+                        <xar:mlstring>
+                            Enable lockout option? 
+                        </xar:mlstring>
+                    </label>
                     <xar:if condition="xarModVars::get('authsystem', 'uselockout')">
                         <input type="checkbox" name="uselockout" id="uselockout" value="1" checked="checked" />
                         <xar:else />
                         <input type="checkbox" name="uselockout" id="uselockout" value="1" />
                     </xar:if>
-                    <label for="uselockout">
-                        <xar:mlstring>
-                            Use lockout time on incorrect login attempts? 
-                        </xar:mlstring>
-                    </label>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="lockouttries" class="xar-form-label">
+                    <label for="lockouttries" class="xar-form-label" title="The number of attempts allowed before lockout">
                         <xar:mlstring>
-                            Number of attempts before lockout 
+                            Allowed attempts 
+                        </xar:mlstring>                        : 
+                    </label>
+                    <xar:set name="value"><xar:var scope="module" module="authsystem" name="lockouttries"/></xar:set>
+                    <input type="text" name="lockouttries" id="lockouttries" value="#$value#" size="2" maxlength="2" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="lockouttime" class="xar-form-label" title="The time a lockout is in effect">
+                        <xar:mlstring>
+                            Lockout time (minutes) 
                         </xar:mlstring>
                         : 
                     </label>
-                    <input type="text" name="lockouttries" id="lockouttries" value="#xarModVars::get('authsystem', 'lockouttries')#" size="2" maxlength="2" />
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="lockouttime" class="xar-form-label">
-                        <xar:mlstring>
-                            Length of time for lockout (minutes) 
-                        </xar:mlstring>
-                        : 
-                    </label>
-                    <input type="text" name="lockouttime" id="lockouttime" value="#xarModVars::get('authsystem', 'lockouttime')#" size="2" maxlength="2" />
+                    <xar:set name="value"><xar:var scope="module" module="authsystem" name="lockouttime"/></xar:set>
+                    <input type="text" name="lockouttime" id="lockouttime" value="#$value#" size="2" maxlength="2" />
                 </div>
         </fieldset>
         <fieldset>

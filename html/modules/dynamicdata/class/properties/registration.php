@@ -62,6 +62,8 @@ class PropertyRegistration extends DataContainer
         $this->desc = $class->desc;
         $this->reqmodules = $class->reqmodules;
         $this->args = $class->args;
+        $this->filepath = $class->filepath;
+        $this->template = $class->template;
         return $this;
     }
 
@@ -71,16 +73,18 @@ class PropertyRegistration extends DataContainer
     function Register()
     {
         static $stmt = null;
+        static $types = array();
 
         // Sanity checks (silent)
         foreach($this->reqfiles as $required)
             if(!file_exists($required))
                 return false;
 
+/*
         foreach($this->reqmodules as $required)
             if(!xarModIsAvailable($required))
                 return false;
-
+*/
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
         $propdefTable = $tables['dynamic_properties_def'];
@@ -92,6 +96,15 @@ class PropertyRegistration extends DataContainer
 
         if($this->format == 0) $this->format = $this->id;
 
+        if (empty($types)) {
+            $sql = "SELECT id FROM $tables[dynamic_properties_def]";
+            $res = $dbconn->executeQuery($sql);
+            while($res->next()) {
+                list($id) = $res->fields;
+                $types[] = $id;
+            }
+        }
+        
         $sql = "INSERT INTO $propdefTable
                 (id, name, label,
                  parent, filepath, class,
@@ -107,16 +120,23 @@ class PropertyRegistration extends DataContainer
             $this->format, $this->configuration, $this->source,
             serialize($this->reqfiles), $modId, is_array($this->args) ? serialize($this->args) : $this->args, serialize($this->aliases)
         );
-        $res = $stmt->executeUpdate($bindvars);
+
+        // Ignore if we already have this dataproperty
+        if (!in_array($this->id, $types)) {
+            $res = $stmt->executeUpdate($bindvars);
+            $types[] = $this->id;
+        } else {
+            $res = true;
+        }
 
         if(!empty($this->aliases))
         {
             foreach($this->aliases as $aliasInfo)
             {
-                $aliasInfo->filepath = $this->filepath; // Make sure
-                $aliasInfo->class = $this->class;
-                $aliasInfo->format = $this->format;
-                $aliasInfo->reqmodules = $this->reqmodules;
+                if (!isset($aliasInfo['filepath'])) $aliasInfo['filepath'] = $this->filepath;
+                if (!isset($aliasInfo['class'])) $aliasInfo['class'] = $this->class;
+                if (!isset($aliasInfo['format'])) $aliasInfo['format'] = $this->format;
+                if (!isset($aliasInfo['reqmodules'])) $aliasInfo['reqmodules'] = $this->reqmodules;
                 // Recursive!!
                 $res = $aliasInfo->Register();
             }
@@ -126,8 +146,8 @@ class PropertyRegistration extends DataContainer
 
     static function Retrieve()
     {
-        if(xarVarIsCached('DynamicData','PropertyTypes')) {
-            return xarVarGetCached('DynamicData','PropertyTypes');
+        if(xarCore::isCached('DynamicData','PropertyTypes')) {
+            return xarCore::getCached('DynamicData','PropertyTypes');
         }
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
@@ -170,7 +190,7 @@ class PropertyRegistration extends DataContainer
             }
         }
 
-        xarVarSetCached('DynamicData','PropertyTypes',$proptypes);
+        xarCore::setCached('DynamicData','PropertyTypes',$proptypes);
 
         return $proptypes;
     }
@@ -208,7 +228,7 @@ class PropertyRegistration extends DataContainer
 
                 foreach($activeMods as $modInfo) {
                     // FIXME: the modinfo directory does NOT end with a /
-                    $dir = 'modules/' .$modInfo['osdirectory'] . '/xarproperties/';
+                    $dir = 'modules/' .$modInfo['osdirectory'] . '/xarproperties';
                     if(file_exists($dir)){
                         $propDirs[] = $dir;
                     }
@@ -232,7 +252,7 @@ class PropertyRegistration extends DataContainer
                     $file = $dir->getPathName();
                     if (!isset($loaded[$file])) {
                         // FIXME: later -> include
-                        $dp = str_replace('/','.',substr($PropertiesDir.basename($file),0,-4));
+                        $dp = str_replace('/','.',substr($PropertiesDir . "/" . basename($file),0,-4));
                         sys::import($dp);
                         $loaded[$file] = true;
                     }
@@ -258,6 +278,12 @@ class PropertyRegistration extends DataContainer
                 $property = new $propertyClass($descriptor);
                 if (empty($property->id)) continue;   // Don't register the base property
                 $baseInfo->getRegistrationInfo($property);
+                
+                // If we are adding properties from specific dirs, only look for those
+                // FIXME: the dirs should *always* be passed as an array (random)
+                if (!empty($dirs) && is_array($dirs) && !in_array($baseInfo->filepath,$dirs)) continue;
+                if (!empty($dirs) && !is_array($dirs) && ($baseInfo->filepath != $dirs)) continue;
+
                 // Fill in the info we dont have in the registration class yet
                 // TODO: see if we can have it in the registration class
                 $baseInfo->class = $propertyClass;

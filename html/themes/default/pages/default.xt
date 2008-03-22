@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xar type="page" ?>
+<!DOCTYPE blocklayout PUBLIC "-//XAR//DTD BL 2.0 Strict//EN" "http://xaraya.com/bl2/DTD/bl2-strict.dtd">
+<xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <xar:blockgroup name="header" id="header" />
+        <title><xar:var name="tpl:pageTitle" /></title>
+        <xar:style scope="common" />
+        <xar:style scope="theme" file="style" title="Basic"/>
+        <xar:additional-styles />
+        <xar:base-render-javascript position="head" />
+    </head>
+    <body>
+        <div id="wrapper">
+        <div id="main">
+            <div id="logo">
+                <a href="/" title="home"><img src="/#xarTplGetThemeDir()#/images/xarLogo3.png" width="90" height="90" alt="Xaraya Logo" title="home" /></a>
+                <p>
+                    <xar:var name="SiteSlogan" scope="module" module="themes" />
+                </p>
+            </div>
+            <xar:module id="modulespace"  main="true" />
+        </div>
+        <div id="sideInfo1" class="sideInfo">
+            <xar:blockgroup name="left" id="left" />
+        </div>
+        <div id="sideInfo2" class="sideInfo">
+            <xar:blockgroup name="right" id="right"  />
+            <xar:blockgroup name="admin" id="admin"  />
+        </div>
+        <xar:blockgroup name="topnav" id="topnav" />
+        <xar:blockgroup name="center" id="center" />
+
+        <xar:base-render-javascript position="body" />
+        </div>
+    </body>
+    </html>
+</xar:blocklayout>

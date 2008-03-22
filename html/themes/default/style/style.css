@@ -1,0 +1,231 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-color: #020;
+    background-color: #F6E7D2;
+    background: #F6F0E7 url(../images/background3.jpg) repeat-x left top;
+    color: #020;
+    font: .8em/1.5em Arial, Helvetica, sans-serif;
+}
+/* remove redundant default style */
+input, textarea {
+    margin: 0;
+}
+
+/* layout */
+#wrapper {
+    /* to prevent the content area to become too wide (with respect to line-length) */
+    margin: 1.5em auto;
+    width: 100%;
+    max-width: 84em;
+    position: relative;
+}
+#main {
+    padding: 1.5em;
+    margin: 0 16.5em;
+    border: 1px dotted #D77043;
+    border-width: 0 1px;
+    background: #F6F0E7;
+    color: #020;
+    min-height: 537px;
+}
+#logo {
+    padding: 1.5em;
+    /*	we have something to chose from */
+    /*	background: #8BADA4 url(../images/header4b2.jpg) repeat-x left bottom;*/
+    background: #D77043 url(../images/header2b.jpg) no-repeat left top;
+    height: 90px;
+    position: relative;
+}
+#logo img {
+    float: left;
+    width: 90px;
+    margin-right: 1.5em;
+}
+#logo p {
+    position: absolute;
+    right: 1.5em;
+    bottom: 1.1em;
+    margin: 0 0 0 90px;
+    padding-left: 3em;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 120%;
+    letter-spacing: .1em;
+    text-align: right;
+    color: #F6F0E7;
+}
+.sideInfo {
+    position: absolute;
+    top: 90px;
+    width: 13.5em;
+    margin: 0 1.5em;
+    padding: 4.5em 0 1.5em;
+}
+#sideInfo1 {
+    left: 0;
+}
+#sideInfo2 {
+    right: 0;
+}
+a img {
+    border: 0;
+}
+a:link {
+    color: #2380A8;
+    border-bottom: 1px dotted #2380A8;
+    text-decoration: none;
+}
+a:visited {
+    color: #8F5D59;
+    border-bottom: 1px dotted #8F5D59;
+    text-decoration: none;
+}
+a:visited {
+    color: #6B5273;
+    border-bottom: 1px dotted #6B5273;
+    text-decoration: none;
+}
+a:visited {
+    color: #845161;
+    border-bottom: 1px dotted #845161;
+    text-decoration: none;
+}
+a:hover, a:focus {
+    color: #2352A8;
+    border-bottom: 1px solid #2352A8;
+}
+a:active {
+    color: #D77043;
+    border-bottom: 1px solid #D77043;
+}
+#main h2 {
+    font: italic normal 1.5em Georgia, Times, "Times New Roman", serif;
+    text-align: center;
+}
+.xar-mod-title {
+    text-transform: uppercase;
+    font-size: .88em;
+    letter-spacing: .1em;
+    color: #D77043;
+}
+.sideInfo .xar-block-title {
+    text-transform: uppercase;
+    font-size: .88em;
+    letter-spacing: .1em;
+    color: #D77043;
+    border-top: 1px solid #D77043;
+    text-align: right;
+}
+.sideInfo .xar-block-body {
+    margin: 0 0 1.5em;
+}
+.sideInfo ul {
+    margin: 0 0 1.5em;
+    padding: 0;
+}
+.sideInfo ul ul {
+    margin: 0;
+}
+.sideInfo li {
+    margin: 0;
+    list-style-type: none;
+}
+.sideInfo li li li {
+    padding-left: 0;
+    margin-left: 1.25em;
+    list-style-type: disc;
+    list-style-image: url(../images/li-bullet2-5.png);
+}
+.sideInfo h4 {
+    margin: 0;
+    font: italic normal 1em Georgia, Times, "Times New Roman", serif;
+}
+
+/* standard forms */
+fieldset {
+    border: 1px solid #B9B6B3;
+    margin: 0 0 2.25em;
+    padding: 0 1.5em .75em;
+}
+legend {
+    text-transform: uppercase;
+    font-size: .88em;
+    letter-spacing: .1em;
+    color: #020;
+}
+fieldset fieldset {
+    margin: 1.5em 0 1.5em;
+    padding: 0;
+    border-color: #CECBC9;
+    border-right: 0;
+    border-left: 0;
+    padding-bottom: 0;
+    /*	background-color: rgba(255,255,255,.33);*/
+    clear: left;
+}
+fieldset fieldset legend {
+    color: #7D7875;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 1em;
+    display: none;
+}
+form p {
+    margin: 0;
+}
+.textInputContainer, .passInputContainer, .checkInputContainer, .radioInputContainer, .selectContainer, .textareaContainer {
+    margin: .375em 0 .75em;
+    clear: left;
+}
+#main .textInputContainer label, #main .passInputContainer label, #main .selectContainer label, #main .textareaContainer label {
+    float: left;
+    width: 25%;
+    text-align: right;
+}
+#main .textInputContainer input, #main .passInputContainer input {
+    width: 70%;
+    max-width: 18em;
+    margin: 0 .75em;
+}
+.selectContainer select {
+    margin: 0 0 0 .75em;
+}
+.textareaContainer textarea {
+    width: 70%;
+    margin: 0 0 0 .75em;
+}
+.checkInputContainer {
+    margin-left: 25%;
+    padding-left: 2.25em;
+    text-indent: -1.5em;
+}
+.infoAddedInput {
+    margin-left: 25%;
+    padding-left: .85em;
+    font-size: .88em;
+    color: #7D7875;
+}
+#main .textInputContainer .infoAddedInput input, #main .passInputContainer .infoAddedInput input {
+    margin: 0;
+}
+
+/* specific blocks */
+#authsystemBlocksLogin fieldset {
+    padding: 0 .75em .75em;
+}
+#authsystemBlocksLogin div, #authsystemBlocksLogin p {
+    margin: 0 0 .75em;
+}
+#authsystemBlocksLogin .checkInputContainer {
+    margin-left: 0;
+    padding-left: 1.5em;
+}
+#authsystemBlocksLogin .textInputContainer label, #authsystemBlocksLogin .passInputContainer label {
+    font: italic normal 1em Georgia, Times, "Times New Roman", serif;
+}
+#authsystemBlocksLogin .textInputContainer input, #authsystemBlocksLogin .passInputContainer input {
+    width: 96%; /* wanted to do this with display: block, but that does not work correctly, this seems to work best... */
+}

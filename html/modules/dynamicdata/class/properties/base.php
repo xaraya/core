@@ -268,19 +268,27 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
-     * Get the value of this property's display status
+     * Get and set the value of this property's display status
      */
     function getDisplayStatus()
     {
         return ($this->status & DataPropertyMaster::DD_DISPLAYMASK);
     }
+    function setDisplayStatus($status)
+    {
+        $this->status = $status & DataPropertyMaster::DD_DISPLAYMASK;
+    }
 
     /**
-     * Get the value of this property's input status
+     * Get and set the value of this property's input status
      */
     function getInputStatus()
     {
         return $this->status - $this->getDisplayStatus();
+    }
+    function setInputStatus($status)
+    {
+        $this->status = $status - $this->getDisplayStatus();
     }
 
     /**
@@ -300,7 +308,17 @@ class DataProperty extends Object implements iDataProperty
         if(!empty($data['preset']))
             return $this->_showPreset($data);
 
-        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN || !empty($data['hidden']))
+        if (!empty($data['hidden'])) {
+            if ($data['hidden'] == 'active') {
+                $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE);
+            } elseif ($data['hidden'] == 'display') {
+                $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY);
+            } elseif ($data['hidden'] == 'hidden') {
+                $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN);
+            }
+        }
+
+        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($data);
 
         if($this->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_NOINPUT) {
@@ -311,7 +329,6 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($data['name']))        $data['name'] = 'dd_'.$this->id;
         if(isset($data['fieldprefix']))  $data['name'] = $data['fieldprefix'] . '_' . $data['name'];
         if(!isset($data['id']))          $data['id']   = $data['name'];
-        // mod for the tpl and what tpl the prop wants.
 
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
@@ -344,13 +361,23 @@ class DataProperty extends Object implements iDataProperty
      */
     public function showOutput(Array $data = array())
     {
+        if (!empty($data['hidden'])) {
+            if ($data['hidden'] == 'active') {
+                $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE);
+            } elseif ($data['hidden'] == 'display') {
+                $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY);
+            } elseif ($data['hidden'] == 'hidden') {
+                $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN);
+            }
+        }
+
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($data);
 
         $data['id']   = $this->id;
         $data['name'] = $this->name;
 
-        if(!isset($data['value'])) $data['value'] = $this->value;
+        if(!isset($data['value'])) $data['value'] = $this->getValue();
         // TODO: does this hurt when it is an array?
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
@@ -401,8 +428,16 @@ class DataProperty extends Object implements iDataProperty
     function showHidden(Array $data = array())
     {
         $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
+
+        $name = $data['name'];
+        // Add the object's field prefix if there is one
+        if(!empty($this->_fieldprefix))  $name = $this->_fieldprefix . '_' . $data['name'];
+        // A field prefix added here can override the previous one
+        if(isset($data['fieldprefix']))  $name = $data['fieldprefix'] . '_' . $data['name'];
+        $data['name'] = $name;
+
         $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
-        $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
+        $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->getValue());
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;

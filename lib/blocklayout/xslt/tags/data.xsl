@@ -288,6 +288,19 @@
                   <xsl:value-of select="@for"/>
                   <xsl:text>'</xsl:text>
                 </xsl:if>
+                <xsl:if test="@title">
+                  <xsl:text>,'title'=&gt;</xsl:text>
+                  <xsl:choose>
+                    <xsl:when test="starts-with(@title,'$')">
+                      <xsl:value-of select="@title"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:text>'</xsl:text>
+                      <xsl:value-of select="@title"/>
+                      <xsl:text>'</xsl:text>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:if>
                 <xsl:text>),'label');</xsl:text>
               </xsl:otherwise>
             </xsl:choose>
@@ -314,6 +327,19 @@
                     <xsl:text>'</xsl:text>
                   </xsl:otherwise>
                 </xsl:choose>
+                <xsl:if test="@title">
+                  <xsl:text>,'title'=&gt;</xsl:text>
+                  <xsl:choose>
+                    <xsl:when test="starts-with(@title,'$')">
+                      <xsl:value-of select="@title"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:text>'</xsl:text>
+                      <xsl:value-of select="@title"/>
+                      <xsl:text>'</xsl:text>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:if>
                 <xsl:text>));</xsl:text>
               </xsl:otherwise>
             </xsl:choose>
