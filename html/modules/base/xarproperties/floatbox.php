@@ -29,9 +29,8 @@ class FloatBoxProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (!isset($value) || $value === '') {
             if (isset($this->min)) {
                 $this->value = $this->min;
@@ -61,15 +60,6 @@ class FloatBoxProperty extends TextBoxProperty
             return false;
         }
         return true;
-    }
-
-    public function showValidation(Array $args = array())
-    {
-        extract($args);
-        // allow template override by child classes
-        $template  = empty($template) ? $this->getTemplate() : $template;
-
-        return parent::showValidation($args);
     }
 }
 

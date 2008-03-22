@@ -51,7 +51,7 @@ class DataPropertyMaster extends Object
         $bindvars = array();
         $query = "SELECT name, label, type,
                          id, defaultvalue, source,
-                         status, seq, validation,
+                         status, seq, configuration,
                          objectid FROM $dynamicprop ";
         if(empty($args['objectid']))
         {
@@ -74,7 +74,7 @@ class DataPropertyMaster extends Object
         while ($result->next()) {
             list(
                 $name, $label, $type, $id, $defaultvalue, $source, $fieldstatus,
-                $seq, $validation, $_objectid
+                $seq, $configuration, $_objectid
                 ) = $result->fields;
 //            if (xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id")) {
                 $property = array(
@@ -85,8 +85,8 @@ class DataPropertyMaster extends Object
                     'defaultvalue'  => $defaultvalue,
                     'source'        => $source,
                     'status'        => $fieldstatus,
-                    'seq'         => $seq,
-                    'validation'    => $validation,
+                    'seq'           => $seq,
+                    'configuration' => $configuration,
                     // some internal variables
                     '_objectid'     => $_objectid,
                     'class'         => ''
@@ -141,6 +141,12 @@ class DataPropertyMaster extends Object
         // add it to the list of properties
         $objectref->properties[$property->name] =& $property;
 
+        // if the property wants a reference, give it
+        if ($property->include_reference) {
+            $objectref->properties[$property->name]->objectref = $objectref;
+        }
+
+        // if the property involves upload, tell its object
         if(isset($property->upload))
             $objectref->upload = true;
     }

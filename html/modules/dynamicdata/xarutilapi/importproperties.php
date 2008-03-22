@@ -84,7 +84,7 @@ function dynamicdata_utilapi_importproperties($args)
                                       'source'     => $field['source'],
                                       'status'     => $field['status'],
                                       'seq'      => $field['seq'],
-                                      'validation' => $field['validation']));
+                                      'configuration' => $field['configuration']));
         if (empty($id)) {
             return;
         }

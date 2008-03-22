@@ -37,10 +37,10 @@
   </div>
   
   <div class="xar-form-input-wrapper">
-    <label for="dd_validation_0" class="xar-form-label">
-      #$labels['validation']#:
+    <label for="dd_configuration_0" class="xar-form-label">
+      #$labels['configuration']#:
     </label>
-    <input type="text" name="dd_validation[0]" id="dd_validation_0" class="xar-form-textmedium" />
+    <input type="text" name="dd_configuration[0]" id="dd_validation_0" class="xar-form-textmedium" />
   </div>
   
   <div class="xar-form-input-wrapper">
