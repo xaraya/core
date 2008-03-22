@@ -504,6 +504,8 @@ ALTER TABLE `xar_privileges`
     during upgrade
 */
 
+/* DynamicData table changes */
+
 ALTER TABLE `xar_dynamic_properties`
   CHANGE COLUMN `prop_id` `id` INTEGER NOT NULL AUTO_INCREMENT,
   CHANGE COLUMN `prop_name` `name` varchar(30) NOT NULL default '',
@@ -550,6 +552,15 @@ ALTER TABLE `xar_dynamic_objects`
   CHANGE COLUMN `object_maxid` `maxid` INTEGER NOT NULL default '0',
   CHANGE COLUMN `object_config` `config` text,
   CHANGE COLUMN `object_isalias` `isalias` tinyint(4) NOT NULL default '1';
+
+UPDATE `xar_dynamic_properties` SET name = 'defaultvalue' WHERE name = 'default' AND objectid = 2;
+UPDATE `xar_dynamic_properties` SET name = 'seq' WHERE name = 'order' AND objectid = 2;
+
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_objects.object_", "xar_dynamic_objects.");
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.prop_", "xar_dynamic_properties.");
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.default", "xar_dynamic_properties.defaultvalue");
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.order", "xar_dynamic_properties.seq");
+UPDATE `xar_dynamic_properties` SET objectid = 24 WHERE name = 'parent' AND objectid = 1;
 
 ALTER TABLE `xar_dynamic_properties`
   CHANGE COLUMN `validation` `configuration` text;
