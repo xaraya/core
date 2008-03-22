@@ -238,10 +238,6 @@ class DataProperty extends Object implements iDataProperty
     {
         if(!isset($value)) $value = $this->getValue();
         else $this->setValue($value);
-
-//        $this->value = null;
-//        $this->invalid = xarML('unknown property');
-//        return false;
         return true;
     }
 
