@@ -28,9 +28,8 @@ class URLTitleProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (!empty($value)) {
             if (is_array($value)) {
 
@@ -158,6 +157,13 @@ class URLTitleProperty extends TextBoxProperty
         } else {
             $title = xarVarPrepForDisplay($title);
             $link = xarVarPrepForDisplay($link);
+        }
+
+        $url_parts = parse_url($link);
+        if (!isset($url_parts['host'])) {
+            $truecurrenturl = xarServerGetCurrentURL(array(), false);
+            $urldata = xarModAPIFunc('roles','user','parseuserhome',array('url'=>$link,'truecurrenturl'=>$truecurrenturl));
+        $link = $urldata['redirecturl'];
         }
 
         $data['value']   = $this->value;

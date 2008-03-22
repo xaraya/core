@@ -13,7 +13,5 @@
     </xar:if>
     <xar:if condition="!empty($link)">[ 
     <a href="#$link#" target="#$preview#">#$check#</a>]</xar:if>
-    <xar:if condition="!empty($invalid)">
-        &#160;<span class="xar-error">#$invalid#</span>
-    </xar:if>
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

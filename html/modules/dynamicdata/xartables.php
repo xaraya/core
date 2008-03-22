@@ -26,6 +26,7 @@ function dynamicdata_xartables()
     $tables['dynamic_data'] = $prefix . '_dynamic_data';
     $tables['dynamic_relations'] = $prefix . '_dynamic_relations';
     $tables['dynamic_properties_def'] = $prefix . '_dynamic_properties_def';
+    $tables['dynamic_configurations'] = $prefix . '_dynamic_configurations';
 
     return $tables;
 }
