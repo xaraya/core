@@ -79,25 +79,35 @@
   </xsl:call-template>
 </xsl:template>
 
-<!-- Not handled anymore, ignore closed mlvar, pass on content of mlstring -->
+<!-- mlstring forces translation for now -->
 <xsl:template match="xar:mlstring">
-  <xsl:call-template name="replace">
-    <xsl:with-param name="source" select="."/>
+  <xsl:call-template name="translateText">
+    <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
 </xsl:template>
 
+<!-- mlstring inside ml just needs to reolve the text node -->
+<xsl:template match="xar:ml/xar:mlstring">
+  <xsl:call-template name="resolveText">
+    <xsl:with-param name="expr" select="."/>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- this case is covered bythe previous one
 <xsl:template match="xar:set/xar:ml/xar:mlstring">
   <xsl:call-template name="replace">
     <xsl:with-param name="source" select="."/>
   </xsl:call-template>
 </xsl:template>
+-->
 
+<!-- mlstring inside set just needs to reolve the text node -->
 <xsl:template match="xar:set/xar:mlstring">
-  <xsl:text>'</xsl:text>
-  <xsl:call-template name="replace">
-    <xsl:with-param name="source" select="."/>
+  <xsl:text>xarML('</xsl:text>
+  <xsl:call-template name="resolveText">
+    <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
-  <xsl:text>'</xsl:text>
+  <xsl:text>')</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>
