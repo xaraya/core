@@ -45,7 +45,7 @@
       <id>26</id>
       <label>Property</label>
       <type>fieldtype</type>
-      <defaultvalue></defaultvalue>
+      <defaultvalue>1</defaultvalue>
       <source>xar_dynamic_configurations.property_id</source>
       <status>33</status>
       <seq>4</seq>
