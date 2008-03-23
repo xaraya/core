@@ -149,21 +149,13 @@ class URLTitleProperty extends TextBoxProperty
             }
         }
 
-        if (empty($link) && empty($title)) {
-        } elseif (empty($link)) {
-            $title = xarVarPrepForDisplay($title);
-        } elseif (empty($title)) {
-            $link = xarVarPrepForDisplay($link);
-        } else {
-            $title = xarVarPrepForDisplay($title);
-            $link = xarVarPrepForDisplay($link);
-        }
+        if (!empty($title)) $title = xarVarPrepForDisplay($title);
 
         $url_parts = parse_url($link);
         if (!isset($url_parts['host'])) {
             $truecurrenturl = xarServerGetCurrentURL(array(), false);
             $urldata = xarModAPIFunc('roles','user','parseuserhome',array('url'=>$link,'truecurrenturl'=>$truecurrenturl));
-        $link = $urldata['redirecturl'];
+            $link = $urldata['redirecturl'];
         }
 
         $data['value']   = $this->value;
