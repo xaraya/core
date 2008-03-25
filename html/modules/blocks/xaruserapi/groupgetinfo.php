@@ -79,6 +79,7 @@ function blocks_userapi_groupgetinfo($args)
                         mods.name as module,
                         inst.title as title,
                         inst.name as name,
+                        inst.state as state,
                         group_inst.position as position
               FROM      $blockGroupInstancesTable as group_inst
               LEFT JOIN $blockGroupsTable as bgroups ON group_inst.group_id = bgroups.id
