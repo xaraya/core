@@ -138,7 +138,7 @@ class xarRoles extends Object
     /**
      * Wrapper functions to support Xaraya 1 API for roles
      */
-    public static function getRole($id) {return get::get($id);}
+    public static function getRole($id) {return self::get($id);}
 
     /**
      * findRole: finds a single role based on its name
@@ -197,7 +197,7 @@ class xarRoles extends Object
         list($id, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
         sys::import('modules.dynamicdata.class.objects.master');
-        $parent = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
+        $parent = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $type));
         $parent->getItem(array('itemid' => $id));
 
         // retrieve the child's data from the repository
@@ -209,7 +209,7 @@ class xarRoles extends Object
         list($id, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
         sys::import('modules.dynamicdata.class.objects.master');
-        $child = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
+        $child = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $type));
         $child->getItem(array('itemid' => $id));
 
        // done
@@ -315,7 +315,7 @@ class xarRoles extends Object
         }
         // create and return the role object
         sys::import('modules.dynamicdata.class.objects.master');
-        $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $row['type']));
+        $role = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $row['type']));
         $role->getItem(array('itemid' => $row['id']));
         return $role;
     }
