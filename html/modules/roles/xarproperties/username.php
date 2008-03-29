@@ -53,6 +53,10 @@ class UsernameProperty extends TextBoxProperty
             switch ((int)$this->validation_existrule) {
                 case 1:
                 if (!empty($role)) {
+                    
+                    // If we're just keeping the name we already have, it's OK
+                    if ($this->value == $value) break;
+
                     if (!empty($this->validation_existrule_invalid)) {
                         $this->invalid = xarML($this->validation_existrule_invalid);
                     } else {
