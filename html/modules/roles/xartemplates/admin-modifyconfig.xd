@@ -190,7 +190,7 @@
                             Authentication:
                         </xar:mlstring>
                     </label>
-                    <xar:data-input type="module" name="defaultauthmodule" class="Authentication" value="$defaultauthmod" validation="name" firstline="Choose a module" />
+                    <xar:data-input type="module" name="defaultauthmodule" class="Authentication" value="$defaultauthmod" store_prop="name" firstline="Choose a module" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="defaultregmodule" title="#xarML('Select the module that manages registration of users')#" class="xar-form-label">
@@ -198,7 +198,7 @@
                             Registration:
                         </xar:mlstring>
                     </label>
-                    <xar:data-input type="module" name="defaultregmodule" class="Registration" value="$defaultregmod" validation="name" firstline="Choose a module" />
+                    <xar:data-input type="module" name="defaultregmodule" class="Registration" value="$defaultregmod" store_prop="name" firstline="Choose a module" />
                 </div>
             </fieldset>
             <fieldset>

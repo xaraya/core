@@ -63,7 +63,7 @@ class XarDateTime extends DateTime
             $tzobject = new DateTimezone($timezone);
             $localoffset = $tzobject->getOffset($this);
         }
-        return $localoffset - ($baseoffset - $machineoffset);
+                return $localoffset - ($baseoffset - $machineoffset);
     }
 
     function setnow($timezone=null)

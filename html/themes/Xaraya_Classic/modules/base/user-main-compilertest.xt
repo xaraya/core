@@ -11,7 +11,7 @@
 <div>
   <h2>Using the compiler test page</h2>
   <p>
-    This page collects test for the new xslt based Blocklayout Compiler. Its
+    This page collects tests for the new xslt based Blocklayout Compiler. Its
     aim is to have one reference place to visit in an install, to quickly check
     if the compiler is sane, as to eliminate needless hunting for a bug when
     the problem is really the compiler. For this page to work, you obviously
@@ -80,6 +80,9 @@
       cases at once. The old xar:ml/xar:mlstring construct should do nothing
       special now.
     </p>
+    <p>
+      Note: in the transitional scenario we continue to support the old version of xar:mlvar
+    </p>
     <h4>Source</h4>
     <pre>
       <xar:set name="next">4</xar:set>
@@ -138,7 +141,7 @@ E: Next page; <a href="blah"> Test 4 items</a>, yes really 4.
         </xar:set>
         <xar:var name="nextpagelabel"/>
         <xar:ml>
-          R: Next page; <a href="blah"> Test <xar:var name="next"/> items</a>, yes really <xar:var name="next"/>.
+          R: Next page; <a href="blah"> Test <xar:var name="next"/> items</a>, yes really <xar:var name="next"/>
         </xar:ml>
       </pre>
     </div>
