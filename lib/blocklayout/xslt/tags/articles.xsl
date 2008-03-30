@@ -17,6 +17,11 @@
             <xsl:text>);</xsl:text>
           </xsl:when>
           <xsl:otherwise>
+            <xsl:text>echo xarModAPIFunc('articles','user','showfield',</xsl:text>
+              <xsl:call-template name="atts2args">
+                <xsl:with-param name="nodeset" select="@*"/>
+              </xsl:call-template>
+            <xsl:text>);</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
     </xsl:processing-instruction>
