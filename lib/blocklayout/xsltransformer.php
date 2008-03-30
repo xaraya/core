@@ -35,7 +35,7 @@ class BlocklayoutXSLTProcessor extends Object
 
         // Set up the document to transform
         $this->xmlDoc = new DOMDocument();
-        // Setting this to false makes it 2 times faster, what do we loose?
+        // Setting this to false makes it 2 times faster, what do we lose?
         $this->xmlDoc->resolveExternals = false;
         // We're still a long way from validating
         // $this->xmlDoc->validateOnParse = true;
@@ -81,9 +81,10 @@ class BlocklayoutXSLTProcessor extends Object
 
         // Make sure ML placeholders look like expressions
         // #(1)... -> #(1)#...
-        $mlsPattern     = '/(#\([0-9]+\))([^#])/';
-        $callBack       = array('XsltCallbacks','mlsplaceholders');
-        $this->prepXml  = preg_replace_callback($mlsPattern, $callBack, $this->prepXml);
+        // Disable  this for now (random)
+        //$mlsPattern     = '/(#\([0-9]+\))([^#])/';
+        //$callBack       = array('XsltCallbacks','mlsplaceholders');
+        //$this->prepXml  = preg_replace_callback($mlsPattern, $callBack, $this->prepXml);
     }
 
     public function transform(&$xml)

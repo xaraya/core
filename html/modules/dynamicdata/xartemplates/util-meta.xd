@@ -125,7 +125,7 @@
                         <xar:mlstring>Source</xar:mlstring>
                     </th>
                     <th>
-                        <xar:mlstring>Validation</xar:mlstring>
+                        <xar:mlstring>Configuration</xar:mlstring>
                     </th>
                 </tr>
                 <xar:foreach in="$tables" key="$curtable" value="$fields">
@@ -148,7 +148,7 @@
                                     #$field['source']#
                                 </td>
                                 <td>
-                                    #$field['validation']#
+                                    #$field['configuration']#
                                 </td>
                             </tr>
                         </xar:foreach>
