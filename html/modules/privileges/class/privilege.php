@@ -108,18 +108,9 @@ class xarPrivilege extends xarMask
     function removeMember($member)
     {
         sys::import('modules.roles.class.xarQuery');
-        $q = new xarQuery('SELECT', $this->privmemberstable, 'COUNT(*) AS count');
+        $q = new xarQuery('DELETE',$this->privmemberstable);
         $q->eq('id', $member->getID());
-        if (!$q->run()) return;
-        $total = $q->row();
-        if($total['count'] == 0) return true;
-
-        if($total['count'] > 1) {
-            $q = new xarQuery('DELETE');
-            $q->eq('parentid', $this->getID());
-        }
-        $q->addtable($this->privmemberstable);
-        $q->eq('id', $member->getID());
+        $q->eq('parentid', $this->getID());
         if (!$q->run()) return;
 
         return true;
