@@ -779,7 +779,7 @@ class Role extends DataObject
      */
     function getID() { return $this->properties['id']->value; }
     function getName() { return $this->properties['name']->value; }
-    function getUname() { return $this->properties['name']->value; }
+    function getUname() { return $this->properties['uname']->value; }
     function getType() { return $this->properties['role_type']->value; }
     function getUser() { return $this->properties['uname']->value; }
     function getEmail() { return $this->properties['email']->value; }
@@ -794,7 +794,8 @@ class Role extends DataObject
     }
 
     function setName($var) { $this->properties['name']->setValue($var); }
-    function setUname($var) { $this->properties['name']->setValue($var); }
+    function setUname($var) { $this->properties['uname']->setValue($var); }
+    function setType($var) { $this->properties['type']->setValue($var); }
     function setParent($var) { $this->properties['parentid']->setValue($var); }
     function setUser($var) { $this->properties['uname']->setValue($var); }
     function setEmail($var) { $this->properties['email']->setValue($var); }
