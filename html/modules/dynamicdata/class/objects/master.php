@@ -664,6 +664,7 @@ class DataObjectMaster extends Object
         $info = self::getObjectInfo($args);
 
         if ($info != null) $args = array_merge($args,$info);
+        else return $info;
 
         if(!empty($args['filepath'])) include_once($args['filepath']);
         if (!empty($args['class'])) {
