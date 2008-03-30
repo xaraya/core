@@ -26,7 +26,7 @@ class xarPrivilege extends xarMask
     function __construct($pargs)
     {
         parent::__construct($pargs);
-        $this->parentid     = isset($parentid) ? (int) $parentid : 0;
+        $this->parentid     = isset($pargs['parentid']) ? (int) $pargs['parentid'] : 0;
     }
 
     /**
