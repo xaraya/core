@@ -939,12 +939,9 @@ function installer_admin_confirm_configuration()
         /*********************************************************************
         * Arrange the  privileges in a hierarchy
         * Format is
-        * makeEntry(Privilege)
-        * makeMember(Child,Parent)
+        * xarMakePrivilegeMember(Child,Parent)
         *********************************************************************/
 
-        xarMakePrivilegeRoot('Administration');
-        xarMakePrivilegeRoot('GeneralLock');
         xarMakePrivilegeMember('LockMyself','GeneralLock');
         xarMakePrivilegeMember('LockEverybody','GeneralLock');
         xarMakePrivilegeMember('LockAnonymous','GeneralLock');

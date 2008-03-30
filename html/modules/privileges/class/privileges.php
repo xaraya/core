@@ -807,26 +807,6 @@ class xarPrivileges extends xarMasks
         $child = self::findPrivilege($childname);
         return $parent->addMember($child);
     }
-
-    /**
-     * makeEntry: defines a top level entry of the privileges hierarchy
-     *
-     * Creates an entry in the privmembers table
-     * This is a convenience class for module developers
-     *
-     * @author  Marc Lutolf <marcinmilan@xaraya.com>
-     * @access  public
-     * @param   string
-     * @return  boolean
-     * @throws  none
-     * @todo    create exceptions for bad input
-    */
-    public static function makeEntry($rootname)
-    {
-        $priv = self::findPrivilege($rootname);
-        $priv->makeEntry();
-        return true;
-    }
 }
 
 ?>

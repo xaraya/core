@@ -175,17 +175,6 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
 }
 
 /**
- * xarMakePrivilegeRoot: defines an entry in the database as the root of a privilege tree
- *
- * This is a wrapper function
- *
- * @access  public
- * @param   string name
- * @return  bool
- */
-function xarMakePrivilegeRoot($name) { return xarPrivileges::makeEntry($name); }
-
-/**
  * xarMakePrivilegeMember: create a parent-child relationship in the database between two privileges
  *
  * This is a wrapper function
