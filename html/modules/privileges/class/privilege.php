@@ -355,7 +355,7 @@ class xarPrivilege extends xarMask
         $query = "SELECT DISTINCT p.*, m.name
                   FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.parentid
                   LEFT JOIN $this->modulestable m ON p.module_id = m.id
-                  AND pm.id = ?";
+                  WHERE pm.id = ?";
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
         // collect the table values and use them to create new role objects
