@@ -66,30 +66,11 @@ class xarPrivilege extends xarMask
         $this->id = $this->dbconn->getLastId($this->privilegestable);
 
         // make this privilege a child of its parent
-        if($this->parentid != 0) {
+        if(!empty($this->parentid)) {
             sys::import('modules.privileges.class.privileges');
             $parentperm = xarPrivileges::getprivilege($this->parentid);
             $parentperm->addMember($this);
         }
-        // create this privilege as an entry in the repository
-        return $this->makeEntry();
-    }
-
-    /**
-     * makeEntry: sets up a privilege without parents
-     *
-     * Sets up a privilege as a root entry (no parent)
-     *
-     * @author  Marc Lutolf <marcinmilan@xaraya.com>
-     * @access  public
-     * @return  boolean
-     * @todo    check to make sure the child is not a parent of the parent
-    */
-    function makeEntry()
-    {
-        if ($this->isRootPrivilege()) return true;
-        $query = "INSERT INTO $this->privmemberstable VALUES (?,?)";
-        $this->dbconn->Execute($query,array($this->getID(),0));
         return true;
     }
 
@@ -111,10 +92,6 @@ class xarPrivilege extends xarMask
         $bindvars = array($member->getID(), $this->getID());
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
-
-// empty the privset cache
-//        $privileges = new xarPrivileges();
-//        $privileges->forgetprivsets();
 
         return true;
     }
@@ -140,17 +117,10 @@ class xarPrivilege extends xarMask
         if($total['count'] > 1) {
             $q = new xarQuery('DELETE');
             $q->eq('parentid', $this->getID());
-        } else {
-            $q = new xarQuery('UPDATE');
-            $q->addfield('parentid', 0);
         }
         $q->addtable($this->privmemberstable);
         $q->eq('id', $member->getID());
         if (!$q->run()) return;
-
-// empty the privset cache
-//        $privileges = new xarPrivileges();
-//        $privileges->forgetprivsets();
 
         return true;
     }
@@ -220,11 +190,6 @@ class xarPrivilege extends xarMask
                 $parentperm->removeMember($this);
             }
         }
-
-        // remove this child from the root privilege too
-        $query = "DELETE FROM $this->privmemberstable WHERE id=? AND parentid=?";
-        $stmt = $this->dbconn->prepareStatement($query);
-        $stmt->executeUpdate(array($this->id,0));
 
         // get all the roles this privilege was assigned to
         $roles = $this->getRoles();
@@ -571,7 +536,6 @@ class xarPrivilege extends xarMask
         $q->addtable($this->privmemberstable,'pm');
         $q->join('p.id','pm.id');
         $q->eq('pm.id',$this->getID());
-        $q->eq('pm.parentid',0);
         if(!$q->run()) return;
         return ($q->output() != array());
     }
