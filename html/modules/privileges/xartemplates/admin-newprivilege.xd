@@ -82,19 +82,7 @@
                             Member Of:
                         </xar:mlstring>
                     </label>
-                    <select name="pparentid" id="pparentid">
-                        <xar:loop name="$privileges">
-                            <xar:if condition="$loop:item['id'] eq $pparentid">
-                                <option value="#$loop:item['id']#" selected="selected">
-                                    #$loop:item['name']#
-                                </option>
-                                <xar:else />
-                                <option value="#$loop:item['id']#">
-                                    #$loop:item['name']#
-                                </option>
-                            </xar:if>
-                        </xar:loop>
-                    </select>
+                    <xar:data-input type="dropdown" name="pparentid" options="$privileges" value="$pparentid" />
                 </div>
                 <xar:if condition="xarModVars::get('privileges','showrealms')">
                     <div class="xar-form-input-wrapper">
@@ -103,19 +91,7 @@
                                 Realm:
                             </xar:mlstring>
                         </label>
-                        <select name="prealm" id="prealm">
-                            <xar:loop name="$realms">
-                                <xar:if condition="$loop:item['name'] eq $prealm">
-                                    <option value="#$loop:item['name']#" selected="selected">
-                                        #$loop:item['name']#
-                                    </option>
-                                    <xar:else />
-                                    <option value="#$loop:item['name']#">
-                                        #$loop:item['name']#
-                                    </option>
-                                </xar:if>
-                            </xar:loop>
-                        </select>
+                        <xar:data-input type="dropdown" name="prealm" options="$realms" value="$prealm" />
                     </div>
                 </xar:if>
                 <div class="xar-form-input-wrapper">
@@ -125,7 +101,7 @@
                         </xar:mlstring>
                     </label>
                     <xar:set name="onchange">"javascript:this.form.action = '" . xarModURl('privileges','admin','newprivilege') . "';this.form.submit();"</xar:set>
-                    <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="All" onchange="$onchange" validation="regid" />
+                    <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="0,All" onchange="$onchange" validation="regid" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="pcomponent" title="#xarML('Component to which this privilege applies')#" class="xar-form-label">
