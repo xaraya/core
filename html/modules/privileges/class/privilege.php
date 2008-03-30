@@ -371,7 +371,7 @@ class xarPrivilege extends xarMask
                             'level'=>$level,
                             'description'=>$description,
                             'parentid' => $id);
-            array_push($parents, new xarPrivilege($pargs));
+            $parents[] = new xarPrivilege($pargs);
         }
         // done
         return $parents;
@@ -396,7 +396,7 @@ class xarPrivilege extends xarMask
         while (list($key, $parent) = each($parents)) {
             $ancestors = $parent->getParents();
             foreach ($ancestors as $ancestor) {
-                array_push($parents,$ancestor);
+                $parents[] = $ancestor;
             }
         }
 
