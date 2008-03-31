@@ -217,36 +217,6 @@ class xarRoles extends Object
     }
 
     /**
-     * isRoot: defines the root of the roles hierarchy
-     *
-     * This is a convenience class for module developers
-     *
-     * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @param string $rootname
-     * @return bool
-     * @todo create exceptions for bad input
-     */
-    public static function isRoot($rootname)
-    {
-        self::initialize();
-        // get the data for the root object
-        $query = "SELECT id
-                  FROM " . self::$rolestable .
-                  " WHERE name = ?";
-        // Execute the query, bail if an exception was thrown
-        $result = self::$dbconn->Execute($query,array($rootname));
-
-        // create the entry
-        list($id) = $result->fields;
-        $query = "INSERT INTO " . self::$rolememberstable .
-                " VALUES (?,?)";
-        // Execute the query, bail if an exception was thrown
-        self::$dbconn->Execute($query, array($id,null));
-        // done
-        return true;
-    }
-
-    /**
      * _getgroupsquery: query for getting groups
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
@@ -264,7 +234,7 @@ class xarRoles extends Object
         $q = new xarQuery('SELECT');
         $q->addtable(self::$rolestable,'r');
         $q->addtable(self::$rolememberstable,'rm');
-        $q->join('r.id','rm.id');
+        $q->leftjoin('r.id','rm.id');
         $q->addfield('r.id AS id');
         $q->addfield('r.name AS name');
         $q->addfield('r.users AS users');

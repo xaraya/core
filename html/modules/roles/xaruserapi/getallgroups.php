@@ -29,7 +29,7 @@ function roles_userapi_getallgroups($args)
     $q = new xarQuery('SELECT');
     $q->addtable($xartable['roles'],'r');
     $q->addtable($xartable['rolemembers'], 'rm');
-    $q->join('rm.id','r.id');
+    $q->leftjoin('r.id','rm.id');
     $q->addfields(array('r.id AS id','r.name AS name','r.users AS users','rm.parentid AS parentid'));
 
     $conditions = array();
