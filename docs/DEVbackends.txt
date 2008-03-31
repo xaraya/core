@@ -8,7 +8,7 @@ Documentation references:
 - mssql   : http://msdn2.microsoft.com/en-us/library/ms189826.aspx
 - oracle  : http://download-uk.oracle.com/docs/cd/B19306_01/server.102/b14200/toc.htm
 
-VIEWS support
+VIEWS support:
 -------------
 - mysql   : yes, since 5.0
 - sqlite  : yes, since forever, but read only (which is a good thing,  but a pain when you're migrating )
@@ -40,7 +40,7 @@ VIEWS support
     The above views could be generated automatically by the dd module. 
     In general, the view will be read-only, i.e. a statement like UPDATE dd_roles SET.... wont work.
 
-TRANSACTION support
+TRANSACTION support:
 -------------------
 - mysql   : yes, innodb engine only ( gracefull fallback provided by middleware?)
 - sqlite  : yes, since forever
@@ -68,12 +68,12 @@ random/ad-hoc errors start to appear. The exact logic is hard to describe and
 can differ between backends. (mysql does an auto commit for an active
 transaction when a new one is started for example, while others do not)
 
-We could consider:
+We could consider: 
 -> raising an exception during development phase when 2 transactions are active
 -> keep current creole behaviour and watch logs (there are clearly greppable log statements issued)
 
 
-FOREIGN KEY support
+FOREIGN KEY support:
 -------------------
 - mysql   : yes, innodb engine only
 - sqlite  : no, accepts syntax, but doesnt act (triggers is the proposed alternative)
@@ -94,7 +94,7 @@ if that meaning is not correct, the on update/delete etc. trigger either need to
 prevent it or take another appropriate action to make sure if the action is valid the
 constraints are met]
 
-HASH index support
+HASH index support:
 ------------------
 - mysql   : yes, memory tables only, only used for equality tests (obviously)
 - sqlite  : no
@@ -102,7 +102,7 @@ HASH index support
 - mssql   :
 - oracle  :
 
-IN MEMORY TABLE support
+IN MEMORY TABLE support:
 -----------------------
 - mysql   : yes
 - sqlite  : yes, in memory databases only
@@ -110,7 +110,7 @@ IN MEMORY TABLE support
 - mssql   :
 - oracle  :
 
-IN MEMORY DATABASE support
+IN MEMORY DATABASE support:
 --------------------------
 - mysql   :
 - sqlite  : yes
@@ -118,7 +118,7 @@ IN MEMORY DATABASE support
 - mssql   :
 - oracle  :
 
-TRIGGER support
+TRIGGER support:
 ---------------
 - mysql   : yes, since 5.0.2
 - sqlite  : yes, since forever
@@ -128,34 +128,17 @@ TRIGGER support
 
 ==> SUPPORTED BY ALL, WORTH CONSIDERING
 
-CHECK constraint support
-------------------------
-- mysql   : yes
-- sqlite  : yes
-- postgres: yes
-- mssql   : yes
-- oracle  : yes
+Syntax notes:
+    mysql: 
+        CREATE TRIGGER someTriggerName BEFORE INSERT ON sometable
+        FOR EACH ROW
+        BEGIN
+            SET NEW.guid = UUID();
+        END
+        --> no instead of trigger (no need)
+        --> only before insert, not after insert
 
-==> SUPPORTED BY ALL, WORTH CONSIDERING
-Note: the expression syntax is likely to differ wildly between the backends.
-Value check might work, but it's hell to compare and document the different
-syntaxes. Keep this in mind and look it up when a check is needed.
-
-TRIGGER SYNTAX
---------------
-
-mysql::
-
-    CREATE TRIGGER someTriggerName BEFORE INSERT ON sometable
-    FOR EACH ROW
-    BEGIN
-        SET NEW.guid = UUID();
-    END
-    --> no instead of trigger (no need)
-    --> only before insert, not after insert
-
-sqlite::
-
+    sqlite: 
         // This trigger runs instead of the supplied statement to
         // workaround the read-only limitation of a view
         CREATE TRIGGER someTriggerName INSTEAD OF INSERT ON SomeView
@@ -178,6 +161,32 @@ sqlite::
         -> on insert NEW is valid
         -> on delete OLD is valid
         -> only FOR EACH ROW triggers (the default also)
+        
+    postgres: 
+        TBD
+        
+CHECK constraint support:
+------------------------
+- mysql   : yes
+- sqlite  : yes
+- postgres: yes
+- mssql   : yes
+- oracle  : yes
+
+==> SUPPORTED BY ALL, WORTH CONSIDERING
+Note: the expression syntax is likely to differ wildly between the backends.
+Value check might work, but it's hell to compare and document the different
+syntaxes. Keep this in mind and look it up when a check is needed.
+
+STORED procedures support:
+------------------------
+- mysql   : yes
+- sqlite  : no
+- postgres: yes
+- mssql   : yes
+- oracle  : yes
+
+
 
 Native query preparation support
 --------------------------------

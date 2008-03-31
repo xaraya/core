@@ -54,7 +54,14 @@ DB-CHANGES:
 * hooks table colum xar_smodid now INTEGER DEFAULT NULL
 * hooks table column xar_tmodid now INTEGER NOT NULL
 * drop moduleid and and itemtype fields from dynamic_properties table
-
+* reworked all code and tables to not use a prefix on the column names, next to
+  the DDL for the tables, the *content* of masks is the tricky thing to watch out for here
+* roles.date_reg is now an INT (why?)
+* themes.mode and modules.mode have been deleted
+* fields dynamic_objects.filepath and dynamicobject.class added
+* privileges.realmid renamed to privileges.realm_id
+* modules.regid is now not null default '0'
+* 
 
 (see `browser:docs/DEVupgrades.sql`:trac: for details on all of the above)
 
@@ -62,28 +69,13 @@ PENDING DB-CHANGES
 ==================
 
 * `ticket:12`:trac: does blocks really need 5 tables?
-* `ticket:5`:trac: xar_module column in privileges table uses a string for modulename and 'All' and 'empty' which prevents it from being a foreign key to the modules table
 * is column auth_modid still needed?
     Answer: yes, but it's confusing:
     1. it doesnt need to be there really, but might be a moditemvar (it applies to the few)
     2. it is referred to as default authmodule in the code sometimes, which it  is not, it is the auth module which successfully logged this user on latest.
-* `ticket:6`:trac: the xar\_ prefix on columns is redundant, not a lightly task though, kinda  obvious why.
-   Note: this ticket was closed
-* `ticket:7`:trac: privmembers parent column stores 0 now for 'no parent', change to null, so a foreign key constraint can be added on the column
-   Note: this ticket was closed
-* `ticket:7`:trac: rolemembers parent column stores 0 now for 'no parent', change to null, so a  foreign key constraint can be added on the column
-   Note: this ticket was closed
+* `ticket:7`:trac: no primary key on privmembers table 
 
-NOTE: the above 2 are probably problematic since the parent column is part of
-the primary key and as such can probably not contain the non-value NULL.
-no idea what the solution is there, except revert back to a unique key only.
-Choices:
-
-    1. table without a primary key but consistent with the foreign keys
-    2. table with a primary key but no foreign key possible
-    3. use a derived constraint like a trigger to enforce consistency (this is the same as 2, but extended)
-
-    A question related to this::
+  A question related to this::
 
         Does the combination of say, privparent, privchild need extra attributes
         i.e. if the fact of a privilege 'membership' would lead to a need of
