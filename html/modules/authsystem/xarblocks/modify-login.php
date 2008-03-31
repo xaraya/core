@@ -25,10 +25,10 @@ function authsystem_loginblock_modify($blockinfo)
     }
 
     // Defaults
-    if (empty($vars['showlogout'])) {
-        $vars['showlogout'] = 0;
+    if (!$vars['showlogout']) {
+        $vars['showlogout'] = false;
     }
-    if (empty($vars['logouttitle'])) {
+    if (is_null($vars['logouttitle'])) {
         $vars['logouttitle'] = '';
     }
 
@@ -37,6 +37,7 @@ function authsystem_loginblock_modify($blockinfo)
 
     $args['blockid'] = $blockinfo['bid'];
     return $args;
+
 }
 
 /**
@@ -45,7 +46,7 @@ function authsystem_loginblock_modify($blockinfo)
  */
 function authsystem_loginblock_update($blockinfo)
 {
-    if (!xarVarFetch('showlogout', 'int:0:1', $vars['showlogout'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('showlogout', 'checkbox', $vars['showlogout'], false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('logouttitle', 'str', $vars['logouttitle'], '', XARVAR_NOT_REQUIRED)) return;
 
     $blockinfo['content'] = $vars;
