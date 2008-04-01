@@ -38,6 +38,7 @@
 
         function display(Array $data=array())
         {
+            if (!xarSecurityCheck('View' . $data['module'], 0, 'Block', $data['type'] . ":" . $data['name'] . ":" . "$data[bid]")) {return;}
             // Get variables from content block
             if (!is_array($data['content'])) $data['content'] = unserialize($data['content']);
             if (empty($data['content'])) $data['content'] = array();
