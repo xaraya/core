@@ -148,7 +148,7 @@
           <label for="pmodule" title="#xarML('Module which holds the target component')#" class="xar-form-label">
             <xar:mlstring>Module:</xar:mlstring>
           </label>
-            <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="All" onchange="$onclick" store_prop="regid" />
+            <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="All" onchange="$onclick" store_prop="name" />
         </div>
 
         <div class="xar-form-input-wrapper">
