@@ -1,35 +1,33 @@
 Functionality description
 -------------------------
 
-This directory contains files which aim to implement a schema based piece of
-functionality which does the following:
+This directory contains files which aim to implement a xml schema based piece
+of functionality which does the following:
 
-1. Define a DTD for describing database schema's (schema.xml) with sufficient
-information to describe a certain state to allow for creating the schema as
-well as updating an existing schema to reflect that state. [xarddl.dtd]
+    1. Define a DTD for describing database schema's (schema.xml) with
+    sufficient information to describe a certain state to allow for creating
+    the schema as well as updating an existing schema to reflect that state.
+    [xarddl.dtd] generated from [xarddl.rnc]
 
-2. A xml2ddl utility (or API) which takes a schema.xml and produces valid DDL
-statements for supported database to create the schema in that database
+    2. A xml2ddl utility (or API) which takes a schema.xml and produces valid
+    DDL statements for supported database to create the schema in that
+    database
+    -> xsltproc xml2ddl-dbvendor.xsl schema.xml > dbvendor.ddl
 
--> xsltproc xml2ddl-dbvendor.xsl schema.xml > dbvendor.ddl
+    3. A db2xml utility (or API) which takes a database schema and creates a
+    valid XML schema file which reflects the same information contained in
+    that database schema.
+    -> xar + bl db2xml.xd -> schema.xml
 
-3. A db2xml utility (or API) which takes a database schema and creates a valid
-XML schema file which reflects the same information contained in that database
-schema.
-
--> xar + bl db2xml.xd -> schema.xml
-
-4. A utility which takes an existing database schema plus a schema.xml and
-determines valid ddl to update the existing database schema to the one
-described in the schema.xml
-
--> db2xml [dbspec] > dbschema.xml
--> xmldiff2ddl schema.xml dbschema.xml > diffschema.ddl
+    4. A utility which takes an existing database schema plus a schema.xml and
+    determines valid ddl to update the existing database schema to the one
+    described in the schema.xml
+    -> db2xml [dbspec] > dbschema.xml
+    -> xmldiff2ddl schema.xml dbschema.xml > diffschema.ddl
 
 
 Analysis
 --------
-
 The critical part in code of the above is determining the differences between
 an existing (empty) schema in the db and generating the correct ddl statement
 to upgrade that existing schema to the reference schema.xml. The type of
