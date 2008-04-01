@@ -140,7 +140,7 @@ function xarBlock_render($blockinfo)
                 !empty($blockinfo['_bl_template_base']) ? $blockinfo['_bl_template_base'] : NULL
             );
         } else {
-        	return "";
+            return "";
         }
     }
 

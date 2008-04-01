@@ -604,6 +604,7 @@ ALTER TABLE `xar_publication_types`
   CHANGE COLUMN `xar_pubtypeconfig` `pubtypeconfig` text;
   
   /*
-      Remove all the privmember entries with parentid = 0
+      Remove all the privmember and rolemember entries with parentid = 0
   */
 DELETE FROM `xar_privmembers` WHERE `parentid` = 0;
+DELETE FROM `xar_rolemembers` WHERE `id` = 1;
