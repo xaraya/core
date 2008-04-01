@@ -504,6 +504,8 @@ ALTER TABLE `xar_privileges`
     during upgrade
 */
 
+/* DynamicData table changes */
+
 ALTER TABLE `xar_dynamic_properties`
   CHANGE COLUMN `prop_id` `id` INTEGER NOT NULL AUTO_INCREMENT,
   CHANGE COLUMN `prop_name` `name` varchar(30) NOT NULL default '',
@@ -549,19 +551,59 @@ ALTER TABLE `xar_dynamic_objects`
   CHANGE COLUMN `object_urlparam` `urlparam` varchar(30) NOT NULL default 'itemid',
   CHANGE COLUMN `object_maxid` `maxid` INTEGER NOT NULL default '0',
   CHANGE COLUMN `object_config` `config` text,
-  CHANGE COLUMN `object_isalias` `isalias` tinyint(4) NOT NULL default '1',
-  CHANGE COLUMN `object_class` 'class' varchar(255) NOT NULL default 'DataObject',
-  CHANGE COLUMN `object_filepath` 'filepath' varchar(255) NOT NULL default 'modules/dynamicdata/class/objects/base.php';
+  CHANGE COLUMN `object_isalias` `isalias` tinyint(4) NOT NULL default '1';
 
 UPDATE `xar_dynamic_properties` SET name = 'defaultvalue' WHERE name = 'default' AND objectid = 2;
 UPDATE `xar_dynamic_properties` SET name = 'seq' WHERE name = 'order' AND objectid = 2;
+
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_objects.object_", "xar_dynamic_objects.");
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.prop_", "xar_dynamic_properties.");
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.default", "xar_dynamic_properties.defaultvalue");
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.order", "xar_dynamic_properties.seq");
 UPDATE `xar_dynamic_properties` SET objectid = 24 WHERE name = 'parent' AND objectid = 1;
 
-/*
-    Remove all the privmember entries with parentid = 0
-*/
+ALTER TABLE `xar_dynamic_properties`
+  CHANGE COLUMN `validation` `configuration` text;
+
+ALTER TABLE `xar_dynamic_properties_def`
+  CHANGE COLUMN `validation` `configuration` varchar(254) default NULL;
+
+UPDATE `xar_dynamic_properties` SET name = 'configuration' WHERE name = 'validation' AND objectid = 2;
+UPDATE `xar_dynamic_properties` SET label = 'Configuration' WHERE label = 'Validation' AND objectid = 2;
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.validation", "xar_dynamic_properties.configuration");
+  
+CREATE TABLE `xar_dynamic_configurations` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(254) NOT NULL default '',
+  `description` varchar(254) NOT NULL default '',
+  `property_id` int(11) NOT NULL default '0',
+  `label` varchar(254) NOT NULL default '',
+  `configuration` mediumtext,
+  PRIMARY KEY  (`id`));
+
+
+/* Articles table changes */
+
+ALTER TABLE `xar_articles`
+  CHANGE COLUMN `xar_aid` `id` int(11) NOT NULL auto_increment,
+  CHANGE COLUMN `xar_title` `title` varchar(254) NOT NULL default '',
+  CHANGE COLUMN `xar_summary` `summary` text,
+  CHANGE COLUMN `xar_body` `body` text,
+  CHANGE COLUMN `xar_notes` `notes` text,
+  CHANGE COLUMN `xar_status` `status` tinyint(4) NOT NULL default '0',
+  CHANGE COLUMN `xar_authorid` `authorid` int(11) NOT NULL default '0',
+  CHANGE COLUMN `xar_pubdate` `pubdate` int(10) unsigned NOT NULL default '0',
+  CHANGE COLUMN `xar_pubtypeid` `pubtypeid` smallint(6) NOT NULL default '1',
+  CHANGE COLUMN `xar_pages` `pages` int(10) unsigned NOT NULL default '1',
+  CHANGE COLUMN `xar_language` `language` varchar(30) NOT NULL default '';
+
+ALTER TABLE `xar_publication_types`
+  CHANGE COLUMN `xar_pubtypeid` `pubtypeid` smallint(6) NOT NULL auto_increment,
+  CHANGE COLUMN `xar_pubtypename` `pubtypename` varchar(30) NOT NULL default '',
+  CHANGE COLUMN `xar_pubtypedescr` `pubtypedescr` varchar(254) NOT NULL default '',
+  CHANGE COLUMN `xar_pubtypeconfig` `pubtypeconfig` text;
+  
+  /*
+      Remove all the privmember entries with parentid = 0
+  */
 DELETE FROM `xar_privmembers` WHERE `parentid` = 0;
