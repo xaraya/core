@@ -48,7 +48,7 @@ function dynamicdata_admin_update($args)
         xarVarSetCached('dynamicdata','currentproptype', $myobject->properties['type']);
     }
 
-    $isvalid = $myobject->checkInput();
+    $isvalid = $myobject->checkInput(array(), 0, 'dd');
 
     // recover any session var information
     $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
@@ -67,7 +67,9 @@ function dynamicdata_admin_update($args)
             $data['return_url'] = $return_url;
         }
 
-        $modinfo = xarModGetInfo($myobject->moduleid);
+        // Makes this hooks call explictly from DD
+        // $modinfo = xarModGetInfo($myobject->moduleid);
+        $modinfo = xarModGetInfo(182);
         $item = array();
         foreach (array_keys($myobject->properties) as $name) {
             $item[$name] = $myobject->properties[$name]->value;

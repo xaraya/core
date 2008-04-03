@@ -30,7 +30,7 @@
  * place to put things in our root class. There are severe limitations to what
  * can and can not be placed into this class. For example, it can not have a
  * constructor because it would prevent descendents to have a private
- * constructor, which is rather common in the SingleTon pattern.
+ * constructor, which is rather common in the Singleton pattern.
  *
  * @package core
 **/

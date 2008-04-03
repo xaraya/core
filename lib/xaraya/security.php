@@ -70,17 +70,6 @@ function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state
 }
 
 /**
- * xarMakeRoleRoot: defines an entry in the database as the root of a role tree
- *
- * This is a wrapper function
- *
- * @access public
- * @param  string name
- * @return bool
- */
-function xarMakeRoleRoot($name) { return xarRoles::isRoot($name); }
-
-/**
  * xarMakeRoleMemberByName: create a parent-child relationship in the database between two roles
  *
  * This is a wrapper function
@@ -173,17 +162,6 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
     }
     return;
 }
-
-/**
- * xarMakePrivilegeRoot: defines an entry in the database as the root of a privilege tree
- *
- * This is a wrapper function
- *
- * @access  public
- * @param   string name
- * @return  bool
- */
-function xarMakePrivilegeRoot($name) { return xarPrivileges::makeEntry($name); }
 
 /**
  * xarMakePrivilegeMember: create a parent-child relationship in the database between two privileges

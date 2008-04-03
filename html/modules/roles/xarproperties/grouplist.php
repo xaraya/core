@@ -43,10 +43,6 @@ class GroupListProperty extends SelectProperty
 
     public function getOptions()
     {
-        //allow overriding
-        $options = parent::getOptions();
-        if (!empty($options)) return $options;
-
         $select_options = array();
         if (!empty($this->initialization_ancestorgroup_list)) {
             $select_options['ancestor'] = $this->initialization_ancestorgroup_list;

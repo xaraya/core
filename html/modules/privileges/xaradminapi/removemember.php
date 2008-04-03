@@ -30,10 +30,10 @@ function privileges_adminapi_removemember($args)
 // call the Privileges class and get the parent and child objects
     sys::import('modules.privileges.class.privileges');
     $priv = xarPrivileges::getPrivilege($parentid);
-    $member = $privs->getPrivilege($childid);
+    $member = xarPrivileges::getPrivilege($childid);
 
 // assign the child to the parent and bail if an error was thrown
-    if (!$priv->removeMember($member)) {return;}
+    if (!$priv->removeMember($member)) return;
 
 // set the session variable
     xarSession::setVar('privileges_statusmsg', xarML('Removed from Privilege',

@@ -314,23 +314,21 @@ class xarPrivileges extends xarMasks
         $query = "SELECT DISTINCT p.id, p.name,  r.name,
                          p.module_id,  p.component, p.instance,
                          p.level, p.description, pm.parentid
-                  FROM " . parent::$privmemberstable . " pm, " .
-                           parent::$privilegestable  . " p LEFT JOIN " . parent::$realmstable . " r ON p.realm_id = r.id";
+                  FROM " . parent::$privilegestable . " p LEFT JOIN " .
+                           parent::$privmemberstable  . " pm ON p.id = pm.id LEFT JOIN " . parent::$realmstable . " r ON p.realm_id = r.id";
 
         if($arg == "all") {
-             $query .= " WHERE p.id = pm.id AND
-                              pm.parentid = ? ";
+             $query .= " WHERE pm.parentid IS NULL ";
         } elseif ($arg == "assigned") {
             $query .= ", " . self::$acltable . " acl
-                        WHERE p.id = pm.id AND
-                              p.id = acl.permid AND
-                              pm.parentid = ? ";
+                        WHERE p.id = acl.permid AND
+                              pm.parentid IS NULL ";
         }
         $query .=" AND p.type = ?";
         $query .=" ORDER BY p.name";
 
         $stmt = parent::$dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array(0,self::PRIVILEGES_PRIVILEGETYPE));
+        $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE));
 
         $privileges = array();
         $pids = array();
@@ -808,26 +806,6 @@ class xarPrivileges extends xarMasks
         $parent = self::findPrivilege($parentname);
         $child = self::findPrivilege($childname);
         return $parent->addMember($child);
-    }
-
-    /**
-     * makeEntry: defines a top level entry of the privileges hierarchy
-     *
-     * Creates an entry in the privmembers table
-     * This is a convenience class for module developers
-     *
-     * @author  Marc Lutolf <marcinmilan@xaraya.com>
-     * @access  public
-     * @param   string
-     * @return  boolean
-     * @throws  none
-     * @todo    create exceptions for bad input
-    */
-    public static function makeEntry($rootname)
-    {
-        $priv = self::findPrivilege($rootname);
-        $priv->makeEntry();
-        return true;
     }
 }
 

@@ -76,10 +76,8 @@ class FlatTableDataStore extends SQLDataStore
             }
         }
 
+        if (count($this->fields) < 1) return;
         $fieldlist = array_keys($this->fields);
-        if (count($fieldlist) < 1) {
-            return;
-        }
 
         $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
                     FROM " . join(', ', $tables) . $more . "
@@ -110,7 +108,7 @@ class FlatTableDataStore extends SQLDataStore
 
         foreach ($fieldlist as $field) {
             // set the value for this property
-            $this->fields[$field]->setValue(array_shift($values));
+            $this->fields[$field]->value = array_shift($values);
         }
         return $itemid;
     }
@@ -123,6 +121,7 @@ class FlatTableDataStore extends SQLDataStore
      **/
     function createItem(Array $args = array())
     {
+        if (count($this->fields) < 1) return;
         $itemid = $args['itemid'];
         $table = $this->name;
         $itemidfield = $this->primary;
@@ -154,7 +153,7 @@ class FlatTableDataStore extends SQLDataStore
         $join = '';
         foreach ($fieldlist as $field) {
             // get the value from the corresponding property
-            $value = $this->fields[$field]->getValue();
+            $value = $this->fields[$field]->value;
             // skip fields where values aren't set
             if (!isset($value)) {
                 continue;
@@ -167,7 +166,7 @@ class FlatTableDataStore extends SQLDataStore
         $bindvars = array();
         foreach ($fieldlist as $field) {
             // get the value from the corresponding property
-            $value = $this->fields[$field]->getValue();
+            $value = $this->fields[$field]->value;
             // skip fields where values aren't set
             if (!isset($value)) {
                 continue;
@@ -197,6 +196,7 @@ class FlatTableDataStore extends SQLDataStore
     function updateItem(Array $args = array())
     {
         $itemid = $args['itemid'];
+        if (count($this->fields) < 1) return $itemid;
         $table = $this->name;
         $itemidfield = $this->primary;
 
@@ -218,7 +218,7 @@ class FlatTableDataStore extends SQLDataStore
         $bindvars = array();
         foreach ($fieldlist as $field) {
             // get the value from the corresponding property
-            $value = $this->fields[$field]->getValue();
+            $value = $this->fields[$field]->value;
 
             // skip fields where values aren't set, and don't update the item id either
             if (!isset($value) || $field == $itemidfield) {
@@ -635,10 +635,10 @@ class FlatTableDataStore extends SQLDataStore
             return;
         }
 
-        $this->fields[$itemidfield]->setValue($itemid);
+        $this->fields[$itemidfield]->value = $itemid;
         foreach ($fieldlist as $field) {
             // set the value for this property
-            $this->fields[$field]->setValue(array_shift($values));
+            $this->fields[$field]->value = array_shift($values);
         }
         return $itemid;
     }

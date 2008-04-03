@@ -313,6 +313,14 @@
   </configurations>
   <configurations itemid="40">
     <id>40</id>
+    <name>display_required</name>
+    <description>Whether this field is tagged as &quot;required&quot; or not</description>
+    <property_id>14</property_id>
+    <label>Required</label>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="40">
+    <id>40</id>
     <name>initialization_store_type</name>
     <description>Is this field stored as text or ID</description>
     <property_id>6</property_id>

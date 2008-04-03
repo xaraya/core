@@ -31,7 +31,7 @@
                     <div style="margin-top: 20px">
                         Your account has been terminated at your request or 
                         <br />
-                        at the adminstrator\'s discretion.
+                        at the adminstrator&#39;s discretion.
                     </div>
                 <xar:elseif condition="$layout eq 'account_inactive'" />
                     <div style="margin-top: 20px">

@@ -23,7 +23,7 @@ function privileges_admin_updateprivilege()
     if(!xarVarFetch('id',        'isset', $id,        NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pname',      'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('prealm',     'isset', $realm,     'All', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('pmodule',    'isset', $module,     0,    XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pmodule',    'isset', $pmodule,    'All',    XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('pcomponent', 'isset', $component,  'All', XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('ptype',      'isset', $type,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('plevel',     'isset', $level,      NULL, XARVAR_DONT_SET)) {return;}
@@ -50,19 +50,14 @@ function privileges_admin_updateprivilege()
 // this is just a container for other privileges
         $priv->setName($name);
         $priv->setRealm('All');
-        $priv->setModule(null);
+        $priv->setModuleID(null);
         $priv->setComponent('All');
         $priv->setInstance('All');
         $priv->setLevel(0);
     } else {
         $priv->setName($name);
         $priv->setRealm($realm);
-        if (!empty($module)) {
-            $info = xarMod_GetBaseInfo(xarMod::getName($module));
-            $priv->setModule($info['systemid']);
-        } else {
-            $priv->setModule(0);
-        }
+        $priv->setModuleID($pmodule);
         $priv->setComponent($component);
         $priv->setInstance($instance);
         $priv->setLevel($level);

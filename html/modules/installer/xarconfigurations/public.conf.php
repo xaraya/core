@@ -90,8 +90,6 @@ function installer_public_commentnoncore()
     xarRegisterPrivilege('CommentNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
     xarRegisterPrivilege('CommentAccess','All','All','All','All','ACCESS_COMMENT','Comment access to all modules');
 //    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
-    xarMakePrivilegeRoot('CommentNonCore');
-    xarMakePrivilegeRoot('CommentAccess');
     xarMakePrivilegeMember('CommentAccess','CommentNonCore');
 //    xarMakePrivilegeMember('CommentAccess','ViewRegistrationLogin');
     xarMakePrivilegeMember('DenyPrivileges','CommentNonCore');
@@ -113,14 +111,6 @@ function installer_public_moderatenoncore()
     xarRegisterPrivilege('DenyMail','All','mail','All','All','ACCESS_NONE','Deny access to the Mail module');
     xarRegisterPrivilege('DenyModules','All','modules','All','All','ACCESS_NONE','Deny access to the Modules module');
     xarRegisterPrivilege('DenyThemes','All','themes','All','All','ACCESS_NONE','Deny access to the Themes module');
-    xarMakePrivilegeRoot('ModerateNonCore');
-    xarMakePrivilegeRoot('ModerateAccess');
-    xarMakePrivilegeRoot('DenyPrivileges');
-    //xarMakePrivilegeRoot('DenyAdminPanels');
-    xarMakePrivilegeRoot('DenyBlocks');
-    xarMakePrivilegeRoot('DenyMail');
-    xarMakePrivilegeRoot('DenyModules');
-    xarMakePrivilegeRoot('DenyThemes');
     xarMakePrivilegeMember('ModerateAccess','ModerateNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ModerateNonCore');
     //xarMakePrivilegeMember('DenyAdminPanels','ModerateNonCore');
@@ -141,14 +131,6 @@ function installer_public_readnoncore()
     xarRegisterPrivilege('DenyMail','All','mail','All','All','ACCESS_NONE','Deny access to the Mail module');
     xarRegisterPrivilege('DenyModules','All','modules','All','All','ACCESS_NONE','Deny access to the Modules module');
     xarRegisterPrivilege('DenyThemes','All','themes','All','All','ACCESS_NONE','Deny access to the Themes module');
-    xarMakePrivilegeRoot('ReadNonCore');
-    xarMakePrivilegeRoot('ReadAccess');
-    xarMakePrivilegeRoot('DenyPrivileges');
-    //xarMakePrivilegeRoot('DenyAdminPanels');
-    xarMakePrivilegeRoot('DenyBlocks');
-    xarMakePrivilegeRoot('DenyMail');
-    xarMakePrivilegeRoot('DenyModules');
-    xarMakePrivilegeRoot('DenyThemes');
     xarMakePrivilegeMember('ReadAccess','ReadNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
     //xarMakePrivilegeMember('DenyAdminPanels','ReadNonCore');

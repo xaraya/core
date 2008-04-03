@@ -84,11 +84,8 @@ function dynamicdata_adminapi_updatehook($args)
                                          'itemid'   => $itemid,
                                          'extend' => false));
 
-    if (!isset($myobject)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('object', 'admin', $dd_function, 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
-    }
+    // If no object returned, bail and pass the extrainfo to the next hook
+    if (!isset($myobject)) return $extrainfo;
 
     $myobject->getItem();
 

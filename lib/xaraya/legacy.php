@@ -98,5 +98,9 @@ function xarModDelAllVars($modName)                  {   return xarModVars::dele
 function xarModGetUserVar($modName, $name, $id = NULL, $prep = NULL){   return xarModUserVars::get($modName, $name, $id, $prep);  }
 function xarModSetUserVar($modName, $name, $value, $id=NULL)        {   return xarModUserVars::set($modName, $name, $value, $id); }
 
+// These functions no longer do anything
+function xarMakePrivilegeRoot($privilege)        {   return true; }
+function xarMakeRoleRoot($name) { return true; }
+
 
 ?>
