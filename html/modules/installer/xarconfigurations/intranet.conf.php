@@ -79,7 +79,6 @@ function installer_intranet_configuration_load($args)
         xarAssignPrivilege('Oversight','Oversight');
         if(!in_array('p1',$args)) {
             xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All','ACCESS_NONE','Exclude access to the Privileges modules');
-            xarMakePrivilegeRoot('DenyPrivileges');
         }
         xarMakePrivilegeMember('DenyPrivileges','Oversight');
 //        xarMakePrivilegeMember('Administration','Oversight');
@@ -92,7 +91,6 @@ function installer_intranet_configuration_load($args)
 function installer_intranet_oversightprivilege()
 {
     xarRegisterPrivilege('Oversight','All',null,'All','All','ACCESS_NONE','The privilege container for the Oversight group');
-    xarMakePrivilegeRoot('Oversight');
 }
 
 function installer_intranet_oversightrole()
@@ -130,11 +128,6 @@ function installer_intranet_casualaccess()
     xarRegisterPrivilege('ViewBlocks','All','base','Block','All','ACCESS_OVERVIEW','View blocks of the Base module');
     xarRegisterPrivilege('ViewLoginItems','All','dynamicdata','Item','All','ACCESS_OVERVIEW','View some Dynamic Data items');
     xarRegisterPrivilege('ViewBlockItems','All','blocks','BlockItem','All','ACCESS_OVERVIEW','View block items in general');
-    xarMakePrivilegeRoot('CasualAccess');
-    xarMakePrivilegeRoot('ViewLogin');
-    xarMakePrivilegeRoot('ViewBlocks');
-    xarMakePrivilegeRoot('ViewLoginItems');
-    xarMakePrivilegeRoot('ViewBlockItems');
     xarMakePrivilegeMember('ViewAuthsystem','CasualAccess');
     xarMakePrivilegeMember('ViewLogin','CasualAccess');
     xarMakePrivilegeMember('ViewBlocks','CasualAccess');
@@ -152,13 +145,6 @@ function installer_intranet_readnoncore()
     xarRegisterPrivilege('DenyMail','All','mail','All','All','ACCESS_NONE','Deny access to the Mail module');
     xarRegisterPrivilege('DenyModules','All','modules','All','All','ACCESS_NONE','Deny access to the Modules module');
     xarRegisterPrivilege('DenyThemes','All','themes','All','All','ACCESS_NONE','Deny access to the Themes module');
-    xarMakePrivilegeRoot('ReadNonCore');
-    xarMakePrivilegeRoot('DenyPrivileges');
-    xarMakePrivilegeRoot('DenyBlocks');
-    xarMakePrivilegeRoot('DenyMail');
-    xarMakePrivilegeRoot('DenyModules');
-    xarMakePrivilegeRoot('DenyThemes');
-    //xarMakePrivilegeRoot('DenyDynamicData');
     xarMakePrivilegeMember('ReadAccess','ReadNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
     xarMakePrivilegeMember('DenyBlocks','ReadNonCore');
@@ -173,6 +159,5 @@ function installer_intranet_readnoncore()
 function installer_intranet_readaccess()
 {
         xarRegisterPrivilege('ReadAccess','All','All','All','All','ACCESS_READ','Read access to all modules');
-        xarMakePrivilegeRoot('ReadAccess');
 }
 ?>

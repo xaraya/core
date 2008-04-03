@@ -67,7 +67,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         $GLOBALS['xarML_PHPBackend_keyEntries'] = array();
     }
 
-    function bindDomain($dnType, $dnName)
+    function bindDomain($dnType, $dnName='xaraya')
     {
         $bindResult = parent::bindDomain($dnType, $dnName);
 

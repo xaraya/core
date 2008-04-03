@@ -138,7 +138,7 @@ class xarRoles extends Object
     /**
      * Wrapper functions to support Xaraya 1 API for roles
      */
-    public static function getRole($id) {return get::get($id);}
+    public static function getRole($id) {return self::get($id);}
 
     /**
      * findRole: finds a single role based on its name
@@ -197,7 +197,7 @@ class xarRoles extends Object
         list($id, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
         sys::import('modules.dynamicdata.class.objects.master');
-        $parent = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
+        $parent = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $type));
         $parent->getItem(array('itemid' => $id));
 
         // retrieve the child's data from the repository
@@ -208,42 +208,12 @@ class xarRoles extends Object
         // create the child object
         list($id, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
-        sys::import('modules.dynamicdata.class.objects.master');
-        $child = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
+        sys::import('modules.roles.class.role');
+        $child = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $type));
         $child->getItem(array('itemid' => $id));
 
        // done
         return $parent->addMember($child);
-    }
-
-    /**
-     * isRoot: defines the root of the roles hierarchy
-     *
-     * This is a convenience class for module developers
-     *
-     * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @param string $rootname
-     * @return bool
-     * @todo create exceptions for bad input
-     */
-    public static function isRoot($rootname)
-    {
-        self::initialize();
-        // get the data for the root object
-        $query = "SELECT id
-                  FROM " . self::$rolestable .
-                  " WHERE name = ?";
-        // Execute the query, bail if an exception was thrown
-        $result = self::$dbconn->Execute($query,array($rootname));
-
-        // create the entry
-        list($id) = $result->fields;
-        $query = "INSERT INTO " . self::$rolememberstable .
-                " VALUES (?,?)";
-        // Execute the query, bail if an exception was thrown
-        self::$dbconn->Execute($query, array($id,null));
-        // done
-        return true;
     }
 
     /**
@@ -264,7 +234,7 @@ class xarRoles extends Object
         $q = new xarQuery('SELECT');
         $q->addtable(self::$rolestable,'r');
         $q->addtable(self::$rolememberstable,'rm');
-        $q->join('r.id','rm.id');
+        $q->leftjoin('r.id','rm.id');
         $q->addfield('r.id AS id');
         $q->addfield('r.name AS name');
         $q->addfield('r.users AS users');
@@ -314,8 +284,8 @@ class xarRoles extends Object
             if (!empty($duv)) $duvs[$key] = $duv;
         }
         // create and return the role object
-        sys::import('modules.dynamicdata.class.objects.master');
-        $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $row['type']));
+        sys::import('modules.roles.class.role');
+        $role = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $row['type']));
         $role->getItem(array('itemid' => $row['id']));
         return $role;
     }

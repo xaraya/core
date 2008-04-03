@@ -138,7 +138,7 @@ function base_menublock_display($blockinfo)
                 {
                     case '[': // module link
                     {
-                        // Credit to Elek M�ton for further expansion
+                        // Credit to Elek M?ton for further expansion
                         $sections = explode(']',substr($url,1));
                         $url = explode(':', $sections[0]);
                         // if the current module is active, then we are here
@@ -458,7 +458,7 @@ function base_menublock_insert($blockinfo)
 
     // User links.
     $content = array();
-    $c = 0;
+    $c = 1;
     if (!xarVarFetch('linkname', 'array', $linkname, NULL, XARVAR_NOT_REQUIRED)) return;
     if (isset($linkname)) {
         if (!xarVarFetch('linkurl',  'list:str', $linkurl,  NULL, XARVAR_NOT_REQUIRED)) {return;}
@@ -499,5 +499,8 @@ function base_menublock_insert($blockinfo)
 
     return($blockinfo);
 }
-
+function base_menublock_update($blockinfo)
+{
+	return base_menublock_insert($blockinfo);
+}
 ?>

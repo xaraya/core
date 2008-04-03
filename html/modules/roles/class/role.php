@@ -646,36 +646,32 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param int state get users in this state
-     * @param int $groupflag
-     * @return array list of users with elements <objectid> => <object>
+     * @param int $grpflag
+     * @return array list of users
+     * @todo evaluate performance of this (3 loops, of which 2 nested)
      */
-    public function getDescendants($state = ROLES_STATE_CURRENT, $groupflag=0)
+    public function getDescendants($state = ROLES_STATE_CURRENT, $grpflag=0)
     {
-        $groups = xarRoles::getgroups();
+        $users = $this->getUsers($state);
 
-        $queue = array($this->getID());
-        while (true) {
-            if (empty($queue)) break;
-            $parent = array_shift($queue);
-            $parents[] = $parent;
-            foreach ($groups as $group) {
-                if ($group['id'] == $parent) {unset($group); continue;}
-                if ($group['parentid'] == $parent) {$queue[] = $group['id']; unset($group);}
-            }
+        $groups = xarRoles::getSubGroups($this->getID());
+        $ua = array();
+        foreach($users as $user){
+            //using the ID as the key so that if a person is in more than one sub group they only get one email (mrb: email?)
+            $ua[$user->getID()] = $user;
         }
-        $descendants = array();
-        foreach($parents as $id){
-            $role = xarRoles::get($id);
-            if ($groupflag) {
-                $descendants[$id] = $role;
+        //Get the sub groups and go for another round
+        foreach($groups as $group){
+            $role = xarRoles::get($group['id']);
+            if ($grpflag) {
+                $ua[$group['id']] = $role;
             }
-            $users = $role->getUsers($state);
+            $users = $role->getDescendants($state);
             foreach($users as $user){
-                $descendants[$user->getID()] = $user;
+                $ua[$user->getID()] = $user;
             }
         }
-
-        return($descendants);
+        return($ua);
     }
 
     /**
@@ -779,7 +775,7 @@ class Role extends DataObject
      */
     function getID() { return $this->properties['id']->value; }
     function getName() { return $this->properties['name']->value; }
-    function getUname() { return $this->properties['name']->value; }
+    function getUname() { return $this->properties['uname']->value; }
     function getType() { return $this->properties['role_type']->value; }
     function getUser() { return $this->properties['uname']->value; }
     function getEmail() { return $this->properties['email']->value; }
@@ -794,7 +790,8 @@ class Role extends DataObject
     }
 
     function setName($var) { $this->properties['name']->setValue($var); }
-    function setUname($var) { $this->properties['name']->setValue($var); }
+    function setUname($var) { $this->properties['uname']->setValue($var); }
+    function setType($var) { $this->properties['type']->setValue($var); }
     function setParent($var) { $this->properties['parentid']->setValue($var); }
     function setUser($var) { $this->properties['uname']->setValue($var); }
     function setEmail($var) { $this->properties['email']->setValue($var); }

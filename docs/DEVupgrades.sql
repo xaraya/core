@@ -587,3 +587,31 @@ CREATE TABLE `xar_dynamic_configurations` (
   `label` varchar(254) NOT NULL default '',
   `configuration` mediumtext,
   PRIMARY KEY  (`id`));
+
+
+/* Articles table changes */
+
+ALTER TABLE `xar_articles`
+  CHANGE COLUMN `xar_aid` `id` int(11) NOT NULL auto_increment,
+  CHANGE COLUMN `xar_title` `title` varchar(254) NOT NULL default '',
+  CHANGE COLUMN `xar_summary` `summary` text,
+  CHANGE COLUMN `xar_body` `body` text,
+  CHANGE COLUMN `xar_notes` `notes` text,
+  CHANGE COLUMN `xar_status` `status` tinyint(4) NOT NULL default '0',
+  CHANGE COLUMN `xar_authorid` `authorid` int(11) NOT NULL default '0',
+  CHANGE COLUMN `xar_pubdate` `pubdate` int(10) unsigned NOT NULL default '0',
+  CHANGE COLUMN `xar_pubtypeid` `pubtypeid` smallint(6) NOT NULL default '1',
+  CHANGE COLUMN `xar_pages` `pages` int(10) unsigned NOT NULL default '1',
+  CHANGE COLUMN `xar_language` `language` varchar(30) NOT NULL default '';
+
+ALTER TABLE `xar_publication_types`
+  CHANGE COLUMN `xar_pubtypeid` `pubtypeid` smallint(6) NOT NULL auto_increment,
+  CHANGE COLUMN `xar_pubtypename` `pubtypename` varchar(30) NOT NULL default '',
+  CHANGE COLUMN `xar_pubtypedescr` `pubtypedescr` varchar(254) NOT NULL default '',
+  CHANGE COLUMN `xar_pubtypeconfig` `pubtypeconfig` text;
+  
+  /*
+      Remove all the privmember and rolemember entries with parentid = 0
+  */
+DELETE FROM `xar_privmembers` WHERE `parentid` = 0;
+DELETE FROM `xar_rolemembers` WHERE `id` = 1;
