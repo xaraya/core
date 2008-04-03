@@ -1,0 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:var name="content" prep="false"/>
+
+</xar:template>

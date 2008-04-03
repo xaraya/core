@@ -190,9 +190,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             $properties = $this->getProperties($args);
             $args['properties'] = array();
             foreach ($properties as $property) {
-                if(($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) &&
-                   ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
-                )
+                if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
                     $args['properties'][$property->name] = $property;
             }
         } else {
@@ -215,7 +213,6 @@ class DataObject extends DataObjectMaster implements iDataObject
 
             foreach($this->properties as $property) {
                 if(
-                    ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) &&
                     ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) &&
                     ($property->type != 21) &&
                     isset($transformed[$property->name])
@@ -263,6 +260,18 @@ class DataObject extends DataObjectMaster implements iDataObject
             }
         }
         return $fields;
+    }
+
+    public function setFieldValues(Array $args = array(), $bypass = 0)
+    {
+        if ($bypass) {
+            foreach ($args as $key => $value)
+                if (isset($this->properties[$key])) $this->properties[$key]->value = $value;
+        } else {
+            foreach ($args as $key => $value)
+                if (isset($this->properties[$key]))  $this->properties[$key]->setValue($value);
+        }
+        return true;
     }
 
     /**

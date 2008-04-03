@@ -1,0 +1,12 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div class="xar-blockgroup-#$group_name#" >
+        <xar:if condition="!empty($title)">
+            <div class="xar-block-title">
+                <xar:var name="title" prep="false" />
+            </div>
+        </xar:if>
+        <div class="xar-block-body">
+            <xar:var name="content" prep="false"/>
+        </div>
+    </div>
+</xar:template>

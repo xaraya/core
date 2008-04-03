@@ -420,7 +420,7 @@ class VariableTableDataStore extends SQLDataStore
 
             $query = "SELECT itemid ";
             foreach ($propids as $propid) {
-                $query .= ", MAX(CASE WHEN propid = $propid THEN $propval ELSE '' END) AS $propid \n";
+                $query .= ", MAX(CASE WHEN propid = $propid THEN $propval ELSE '' END) AS dd_$propid \n";
             }
             $query .= " FROM $dynamicdata
                        WHERE propid IN (" . join(', ',$propids) . ")
@@ -442,7 +442,7 @@ class VariableTableDataStore extends SQLDataStore
                 $query .= " ORDER BY ";
                 $join = '';
                 foreach ($this->sort as $sortitem) {
-                    $query .= $join . $sortitem['field'] . ' ' . $sortitem['sortorder'];
+                    $query .= $join . 'dd_' . $sortitem['field'] . ' ' . $sortitem['sortorder'];
                     $join = ', ';
                 }
             }

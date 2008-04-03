@@ -31,7 +31,7 @@ function blocks_adminapi_update_instance_groups($args)
     // $groups parameter.
     // $groups is an array of _current_ group memberships.
     // Each group membership is an array:
-    // 'gid' - group ID
+    // 'id' - group ID
     // 'template' - the over-ride template for this block group instance
     // This function will add, update or delete group memberships for
     // the block instance to leave the group membership state as defined
@@ -56,11 +56,11 @@ function blocks_adminapi_update_instance_groups($args)
 
     $current = array();
     while ($result->next()) {
-        $gid = $result->getInt(2);
+        $id = $result->getInt(2);
 
-        $current[$gid] = array (
+        $current[$id] = array (
             'id'        => $result->getInt(1),
-            'gid'       => $gid,
+            'group_id'  => $id,
             'template'  => $result->getString(3)
         );
     }
@@ -68,7 +68,7 @@ function blocks_adminapi_update_instance_groups($args)
     // Get all groups for the main update loop.
     $allgroups = xarModAPIfunc('blocks', 'user', 'getallgroups');
 
-    // Key the new groups on the gid for convenience
+    // Key the new groups on the id for convenience
     $newgroups = array();
     foreach($groups as $group) {
         // Set default template. This comes into play when
@@ -78,7 +78,7 @@ function blocks_adminapi_update_instance_groups($args)
             $group['template'] = '';
         }
 
-        $newgroups[$group['gid']] = $group;
+        $newgroups[$group['id']] = $group;
     }
 
     $query_arr = array();
@@ -103,22 +103,22 @@ function blocks_adminapi_update_instance_groups($args)
 
     // Loop for each group.
     foreach ($allgroups as $group) {
-        $gid = $group['gid'];
+        $id = $group['id'];
         // If the group is not in the $groups array, and is in the
         // current instance groups, then it should be deleted.
-        if (!isset($newgroups[$gid]) && isset($current[$gid])) {
-            $delStmt->executeUpdate(array((int) $current[$gid]['id']));
+        if (!isset($newgroups[$id]) && isset($current[$id])) {
+            $delStmt->executeUpdate(array((int) $current[$id]['id']));
         }
         // If the new group does not exist, then create it.
-        elseif (isset($newgroups[$gid]) && !isset($current[$gid])) {
-            $insStmt->executeUpdate(array($gid, $bid, 0,$newgroups[$gid]['template']));
+        elseif (isset($newgroups[$id]) && !isset($current[$id])) {
+            $insStmt->executeUpdate(array($id, $bid, 0,$newgroups[$id]['template']));
         }
 
         // If the new group already exists, then update it.
-        elseif (isset($newgroups[$gid]) && isset($current[$gid])
-            && $newgroups[$gid]['template'] != $current[$gid]['template'])
+        elseif (isset($newgroups[$id]) && isset($current[$id])
+            && $newgroups[$id]['template'] != $current[$id]['template'])
         {
-            $updStmt->executeUpdate(array($newgroups[$gid]['template'],$current[$gid]['id']));
+            $updStmt->executeUpdate(array($newgroups[$id]['template'],$current[$id]['id']));
         }
     }
     // Resequence the position values, since we may have changed the existing values.

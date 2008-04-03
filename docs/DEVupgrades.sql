@@ -492,7 +492,7 @@ INSERT INTO `xar_module_vars` (module_id, name, value)
     WHERE  mods.name = 'themes' AND modvars.name = 'Site.BL.ThemesDirectory';
 
 ALTER TABLE `xar_privileges`
-  CHANGE COLUMN `realmid` `realm_id` INTEGER default NULL,
+  CHANGE COLUMN `realmid` `realm_id` INTEGER default NULL;
 
 /* TODO: fix  key */
   KEY `i_xar_privileges_realm_id` (`realm_id`),
@@ -546,14 +546,14 @@ ALTER TABLE `xar_dynamic_objects`
   CHANGE COLUMN `object_moduleid` `moduleid` INTEGER NOT NULL default '0',
   CHANGE COLUMN `object_itemtype` `itemtype` INTEGER NOT NULL default '0',
   CHANGE COLUMN `object_parent` `parent` INTEGER NOT NULL default '0',
-  CHANGE COLUMN `object_class` `class` VARCHAR(255) NOT NULL DEFAULT 'DataObject';
-  CHANGE COLUMN `object_filepath` `filepath` VARCHAR(255) NOT NULL DEFAULT 'modules/dynamicdata/class/objects/base.php';
+  CHANGE COLUMN `object_class` `class` VARCHAR(255) NOT NULL DEFAULT 'DataObject',
+  CHANGE COLUMN `object_filepath` `filepath` VARCHAR(255) NOT NULL DEFAULT 'modules/dynamicdata/class/objects/base.php',
   CHANGE COLUMN `object_urlparam` `urlparam` varchar(30) NOT NULL default 'itemid',
   CHANGE COLUMN `object_maxid` `maxid` INTEGER NOT NULL default '0',
   CHANGE COLUMN `object_config` `config` text,
-  CHANGE COLUMN `object_isalias` `isalias` tinyint(4) NOT NULL default '1';
-
-UPDATE `xar_dynamic_properties` SET name = 'defaultvalue' WHERE name = 'default' AND objectid = 2;
+  CHANGE COLUMN `object_isalias` `isalias` tinyint(4) NOT NULL default '1',
+  CHANGE COLUMN `object_class` 'class' varchar(255) NOT NULL default 'DataObject',
+  CHANGE COLUMN `object_filepath` 'filepath' varchar(255) NOT NULL default 'modules/dynamicdata/class/objects/base.php';
 UPDATE `xar_dynamic_properties` SET name = 'seq' WHERE name = 'order' AND objectid = 2;
 
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_objects.object_", "xar_dynamic_objects.");
@@ -569,6 +569,13 @@ ALTER TABLE `xar_dynamic_properties_def`
   CHANGE COLUMN `validation` `configuration` varchar(254) default NULL;
 
 UPDATE `xar_dynamic_properties` SET name = 'configuration' WHERE name = 'validation' AND objectid = 2;
+UPDATE `xar_dynamic_properties` SET name = 'defaultvalue' WHERE name = 'default' AND objectid = 2;
+UPDATE `xar_dynamic_properties` SET name = 'seq' WHERE name = 'order' AND objectid = 2;
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_objects.object_", "xar_dynamic_objects.");
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.prop_", "xar_dynamic_properties.");
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.default", "xar_dynamic_properties.defaultvalue");
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.order", "xar_dynamic_properties.seq");
+UPDATE `xar_dynamic_properties` SET objectid = 24 WHERE name = 'parent' AND objectid = 1;
 UPDATE `xar_dynamic_properties` SET label = 'Configuration' WHERE label = 'Validation' AND objectid = 2;
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.validation", "xar_dynamic_properties.configuration");
   

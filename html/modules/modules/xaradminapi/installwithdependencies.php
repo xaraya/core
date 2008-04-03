@@ -19,7 +19,6 @@
  */
 function modules_adminapi_installwithdependencies ($args)
 {
-    //    static $installed_ids = array();
     // Get module information
     $mainId = $args['regid'];
     $modInfo = xarModGetInfo($mainId);
@@ -44,14 +43,6 @@ function modules_adminapi_installwithdependencies ($args)
 
         case 0:
 
-
-            // FIXME: check if this is necessary, it shouldn't, we should have checked it earlier
-            //     if(in_array($mainId, $installed_ids)) {
-            //         xarLogMessage("Already installed $mainId in this request, skipping");
-            //         return true;
-            //     }
-            //     $installed_ids[] = $mainId;
-
             // Security Check
             // need to specify the module because this function is called by the installer module
             if (!xarSecurityCheck('AdminModules', 1, 'All', 'All', 'modules'))
@@ -61,9 +52,7 @@ function modules_adminapi_installwithdependencies ($args)
             if (!isset($mainId)) throw new EmptyParameterException('regid');
 
             // See if we have lost any modules since last generation
-            if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
-                return;
-            }
+            if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) return;
 
             // Make xarModGetInfo not cache anything...
             //We should make a funcion to handle this or maybe whenever we
@@ -103,9 +92,11 @@ function modules_adminapi_installwithdependencies ($args)
                     $modId = $conditions;
                 }
 
-                if (!xarModAPIFunc('modules', 'admin', 'installwithdependencies', array('regid'=>$modId, 'phase' => 0))) {
-                    $msg = xarML('Unable to initialize dependency module with ID (#(1)).', $modId);
-                    throw new Exception($msg);
+                if (!xarMod::isAvailable(xarMod::getName($modId))) {
+                    if (!xarModAPIFunc('modules', 'admin', 'installwithdependencies', array('regid'=>$modId, 'phase' => 0))) {
+                        $msg = xarML('Unable to initialize dependency module with ID (#(1)).', $modId);
+                        throw new Exception($msg);
+                    }
                 }
             }
 
@@ -126,11 +117,6 @@ function modules_adminapi_installwithdependencies ($args)
             //Checks if the module is already initialised
             if (!$initialised) {
                 // Finally, now that dependencies are dealt with, initialize the module
-                // Begin by flushing the property cache otherwise you will
-                // get errors on displaying the property.
-                if(!xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true))) {
-                    return false; //FIXME: Do we want an exception here if flushing fails?
-                }
                 if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $mainId))) {
                     $msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
                     throw new Exception($msg);
@@ -143,6 +129,7 @@ function modules_adminapi_installwithdependencies ($args)
                 throw new Exception($msg);
             }
 
+            PropertyRegistration::importPropertyTypes(true, array('modules/' . $modInfo['directory'] . '/xarproperties'));
             if (empty($modstack)) {
                 // Looks like we're done
                 xarSessionDelVar('modulestoinstall');

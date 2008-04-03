@@ -21,16 +21,16 @@ function blocks_userapi_groupgetinfo($args)
 {
     extract($args);
 
-    if (empty($gid) || !is_numeric($gid)) {$gid = 0;}
+    if (empty($id) || !is_numeric($id)) {$id = 0;}
 
     if (empty($name)) {$name = '';}
 
-    if (empty($name) && empty($gid)) {
-        throw new EmptyParameterException('name or gid');
+    if (empty($name) && empty($id)) {
+        throw new EmptyParameterException('name or id');
     }
 
-    if (xarVarIsCached('Block.Group.Infos', $gid)) {
-        return xarVarGetCached('Block.Group.Infos', $gid);
+    if (xarVarIsCached('Block.Group.Infos', $id)) {
+        return xarVarGetCached('Block.Group.Infos', $id);
     }
 
     $dbconn = xarDB::getConn();
@@ -48,9 +48,9 @@ function blocks_userapi_groupgetinfo($args)
               FROM      ' . $blockGroupsTable;
 
     $bindvars = array();
-    if (!empty($gid)) {
+    if (!empty($id)) {
         $query .= ' WHERE id = ?';
-        $bindvars=array($gid);
+        $bindvars=array($id);
     } elseif (!empty($name)) {
         $query .= ' WHERE name = ?';
         $bindvars=array($name);
@@ -68,8 +68,8 @@ function blocks_userapi_groupgetinfo($args)
     $result->close();
 
     // If the name was used to find the group, then get the GID from the fetched group.
-    if (empty($gid)) {
-        $gid = $group['id'];
+    if (empty($id)) {
+        $id = $group['id'];
     }
 
     // Query for instances in this group
@@ -88,7 +88,7 @@ function blocks_userapi_groupgetinfo($args)
               WHERE     bgroups.id = ?
               ORDER BY  group_inst.position ASC";
     $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuery(array($gid),ResultSet::FETCHMODE_ASSOC);
+    $result = $stmt->executeQuery(array($id),ResultSet::FETCHMODE_ASSOC);
 
     // Load up list of group's instances
     $instances = array();
@@ -99,7 +99,7 @@ function blocks_userapi_groupgetinfo($args)
 
     $group['instances'] = $instances;
 
-    xarVarSetCached('Block.Group.Infos', $gid, $group);
+    xarVarSetCached('Block.Group.Infos', $id, $group);
     return $group;
 }
 

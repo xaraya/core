@@ -15,7 +15,7 @@
  */
 function blocks_admin_modify_group()
 {
-    if (!xarVarFetch('gid', 'int:1:', $gid)) {return;}
+    if (!xarVarFetch('id', 'int:1:', $id)) {return;}
 
     // Security Check
     if(!xarSecurityCheck('EditBlock', 0, 'Group')) {return;}
@@ -23,7 +23,7 @@ function blocks_admin_modify_group()
     // Get details on current group
     $group = xarModAPIFunc(
         'blocks', 'user', 'groupgetinfo',
-        array('gid' => $gid)
+        array('id' => $id)
     );
 
     $up_arrow_src   = xarTplGetImage('up.gif');

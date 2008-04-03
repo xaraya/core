@@ -14,14 +14,7 @@
  * Format : <xar:data-input name="thisname" type="thattype" value="$val" ... />
  *       or <xar:data-input field="$field" /> with $field an array containing the type, name, value, ...
  *       or <xar:data-input property="$property" /> with $property a DataProperty object
- *
- * Special attributes :
- *     hidden="yes" to show a hidden field regardless of the original property type
- *     preset="yes" this can typically be used in admin-new.xd templates for individual
- *                  properties you'd like to automatically preset via GET or POST parameters
- * Note: don't use this if you already check the input for the whole object or in the code
- * See also preview="yes", which can be used on the object level to preview the whole object
- *
+ * *
  * @param $args array containing the input field definition or the type, name, value, ...
  * @return string the PHP code needed to invoke showinput() in the BL template
  */
