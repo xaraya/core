@@ -22,6 +22,7 @@ class SelectProperty extends DataProperty
     public $options;
     public $itemfunc;   // CHECKME: how is this best implemented?
 
+    public $initialization_firstline        = null;
     public $initialization_function         = null;
     public $initialization_file             = null;
     public $initialization_collection       = null;
@@ -76,6 +77,7 @@ class SelectProperty extends DataProperty
             if (isset($data['function']))   $this->initialization_function = $data['function'];
             if (isset($data['file']))       $this->initialization_file = $data['file'];
             if (isset($data['collection'])) $this->initialization_collection = $data['collection'];
+            if (isset($data['firstline']))  $this->initialization_firstline = $data['firstline'];
 
         // Finally generate the options
             $data['options'] = $this->getOptions();
@@ -118,10 +120,13 @@ class SelectProperty extends DataProperty
      */
     function getOptions()
     {
+        $firstline = $this->getFirstline();
         if (count($this->options) > 0) {
+            if (!empty($firstline)) $this->options = array_merge($firstline,$this->options);
             return $this->options;
         }
         $options = array();
+        if (!empty($firstline)) $options[] = $firstline;
         if (!empty($this->initialization_function)) {
             @eval('$items = ' . $this->initialization_function .';');
             if (!isset($items) || !is_array($items)) $items = array();
@@ -186,6 +191,29 @@ class SelectProperty extends DataProperty
         }
 
         return $options;
+    }
+
+    function getFirstline()
+    {
+        $line = array();
+        $firstline = $this->initialization_firstline;
+        if (!empty($firstline)) {
+            if (is_array($firstline)) {
+                if (isset($firstline['name'])) {
+                    $line = array('id' => $firstline['id'], 'name' => $firstline['name']);
+                } else {
+                    $line = array('id' => $firstline['id'], 'name' => $firstline['id']);
+                }
+            } else {
+                $firstline = explode(',',$firstline);
+                if (isset($firstline[1])) {
+                    $line = array('id' => $firstline[0], 'name' => $firstline[1]);
+                } else {
+                    $line = array('id' => $firstline[0], 'name' => $firstline[0]);
+                }
+            }
+        }
+        return $line;
     }
 
     /**

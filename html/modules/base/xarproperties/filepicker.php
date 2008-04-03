@@ -69,6 +69,8 @@ class FilePickerProperty extends SelectProperty
 
         $extensions = explode(',',$this->validation_file_extensions);
         $options = array();
+        $firstline = $this->getFirstline();
+        if (!empty($firstline)) $options[] = $firstline;
         for($dir->rewind();$dir->valid();$dir->next()) {
             if($dir->isDir()) continue; // no dirs
             if(!empty($this->validation_file_extensions) && !in_array($dir->getExtension(),$extensions)) continue;
