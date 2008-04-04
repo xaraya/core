@@ -92,7 +92,6 @@ class xarPrivilege extends xarMask
         $bindvars = array($member->getID(), $this->getID());
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
-
         return true;
     }
 

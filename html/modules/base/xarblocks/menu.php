@@ -499,5 +499,8 @@ function base_menublock_insert($blockinfo)
 
     return($blockinfo);
 }
-
+function base_menublock_update($blockinfo)
+{
+    return base_menublock_insert($blockinfo);
+}
 ?>
