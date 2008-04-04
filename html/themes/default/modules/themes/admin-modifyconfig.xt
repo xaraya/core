@@ -25,55 +25,44 @@
     </div>
 
     <div class="xar-mod-body">
-      <xar:template type="module" file="admin-menu" />
+      <xar:template type="module" file="admin-menu"/>
       <h2>Modify Configuration</h2>
       <form action="&xar-modurl-themes-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>
-        <legend>Configuration Options</legend>
+            <legend>Configuration Options</legend>
 
-        <xar:set name="value">xarModVars::get('themes', 'themesdirectory')</xar:set>
-
-        <div class="textInputContainer">
-          <xar:data-label label="Default Theme Directory" for="themedir" title="The default directory for site themes - no trailing slash." />
-          <xar:data-input id="themedir" name="themedir" type="textbox" size="15" maxlength="100" value="$value"/>
-        </div>
-        <!-- Alternative example of textbox input, apart from the fact the above should be a directory picker
-          <textbox id="themedir" size="15" maxlength="100">
-            <label>Default theme directory</label>
-            <help>The default directory for site themes - do not enter a trailing slash
-            <value>#$value#</value>
-          </textbox>
-        -->
-
-        <fieldset>
-          <legend>Admin Dashboard</legend>
-          <div class="checkInputContainer">
-            <xar:data-input type="checkbox" name="dashboard" checked="$dashboard" />
-            <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#">
-              Enable the Admin Dashboard.
-            </label>
-          </div>
-
-          <div class="textInputContainer">
-            <label for="dashtemplate" title="#xarML('Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'')#">
-              Dashboard Template name
-            </label>
-            <div class="infoAddedInput">
-              <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100" />
-              <span class="inputIndication">(without the .xt extension)</span>
-              <p>
-                The Admin Dashboard is automatically used with all admin
-                functions. The default page template name is
-                <strong>dashboard.xt</strong>.
-              </p>
-              <p>
-                A page template called <strong>admin.xt</strong> will be used
-                automatically without this switch and can be customised on a
-                module by module basis (eg admin-articles.xt).
-              </p>
+            <div class="textInputContainer">
+                <xar:set name="value">xarModVars::get('themes', 'themesdirectory')</xar:set>
+                <xar:data-label label="Default Theme Directory" for="themedir" title="The default directory for site themes - no trailing slash." />
+                <xar:data-input id="themedir" name="themedir" type="textbox" size="15" maxlength="100" value="$value"/>
             </div>
-          </div>
-        </fieldset>
+
+            <fieldset>
+                <legend>Admin Dashboard</legend>
+                <div class="checkInputContainer">
+                    <xar:data-input type="checkbox" name="dashboard" checked="$dashboard" />
+                    <xar:data-label label="Enable the Admin Dashboard" for="dashboard" title="Use the Admin Dashboard to manage all your Admin settings from a single page."/>
+                </div>
+
+                <div class="textInputContainer">
+                    <xar:data-label label="Dashboard Template name" for="dashtemplate" title="Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'"/>
+                    <div class="infoAddedInput">
+                        <xar:set name="valDashtamplate"><xar:var scope="module" module="themes" name="dashtemplate"/></xar:set>
+                        <xar:data-input id="dashtamplate" name="dashtamplate" type="textbox" value="$valDashtamplate" size="30" maxlength="100"/>
+                        <span class="inputIndication">(without the .xt extension)</span>
+                        <p>
+                            The Admin Dashboard is automatically used with all admin
+                            functions. The default page template name is
+                            <strong>dashboard.xt</strong>.
+                        </p>
+                        <p>
+                            A page template called <strong>admin.xt</strong> will be used
+                            automatically without this switch and can be customised on a
+                            module by module basis (eg admin-articles.xt).
+                        </p>
+                    </div>
+                </div>
+            </fieldset>
 
         <div class="checkInputContainer">
           <xar:set name="checked">$adminpagemenu</xar:set>
