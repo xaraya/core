@@ -75,7 +75,7 @@ function themes_admin_updateconfig()
         if ($usermenu) {
             $hooked_roles[0] = 1;
             // turning on, so remember previous hook config
-            if (xarModIsHooked('themes', 'roles', 1)) {
+            if (xarModIsHooked('themes', 'roles', xarRoles::ROLES_GROUPTYPE)) {
                 xarModVars::set('themes', 'group_hooked', true);
             }
         } else {

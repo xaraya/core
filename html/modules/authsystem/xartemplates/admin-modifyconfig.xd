@@ -26,12 +26,8 @@
                 <label for="shorturls" class="xar-form-label" title="#xarML('Enable short URLS?')#">
                     <xar:mlstring>Enable short URLs?</xar:mlstring>
                 </label>
-                <xar:if condition="$shorturlschecked">
-                    <input type="checkbox" name="shorturls" id="shorturls" value="1" checked="checked" />
-                <xar:else/>
-                    <input type="checkbox" name="shorturls" id="shorturls" value="1" />
-                 </xar:if>
-             </div>
+                <xar:data-input type="checkbox" name="shorturls" id="shorturls" value="$shorturlschecked" checked="$shorturlschecked" />
+            </div>
         </fieldset>
         <fieldset>
             <legend>
@@ -45,19 +41,16 @@
                             Enable lockout option? 
                         </xar:mlstring>
                     </label>
-                    <xar:if condition="xarModVars::get('authsystem', 'uselockout')">
-                        <input type="checkbox" name="uselockout" id="uselockout" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="uselockout" id="uselockout" value="1" />
-                    </xar:if>
+                    <xar:data-input type="checkbox" name="uselockout" id="uselockout" value="$uselockoutchecked" checked="$uselockoutchecked" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="lockouttries" class="xar-form-label" title="The number of attempts allowed before lockout">
                         <xar:mlstring>
                             Allowed attempts 
-                        </xar:mlstring>                        : 
+                        </xar:mlstring>
+                        : 
                     </label>
-                    <input type="text" name="lockouttries" id="lockouttries" value="#xarModVars::get('authsystem', 'lockouttries')#" size="2" maxlength="2" />
+                    <xar:data-input type="integerbox" name="lockouttries" id="lockouttries" value="$lockouttries" size="2" maxlength="2" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="lockouttime" class="xar-form-label" title="The time a lockout is in effect">
@@ -66,13 +59,13 @@
                         </xar:mlstring>
                         : 
                     </label>
-                    <input type="text" name="lockouttime" id="lockouttime" value="#xarModVars::get('authsystem', 'lockouttime')#" size="2" maxlength="2" />
+                    <xar:data-input type="textbox" name="lockouttime" id="lockouttime" value="$lockouttime" size="2" maxlength="2" />
                 </div>
         </fieldset>
         <fieldset>
              <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="phase" id="phase" value="update" />
+                    <xar:data-input type="hidden" name="authid" id="authid" value="$authid" />
+                    <xar:data-input type="hidden" name="phase" id="phase" value="update" />
                     <input type="submit" value="#xarML('Update Authentication Configuration')#" />
               </div>
           </fieldset>

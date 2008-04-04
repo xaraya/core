@@ -19,7 +19,7 @@ function authsystem_admin_modifyconfig()
     if (!xarSecurityCheck('AdminAuthsystem')) return;
     if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('shorturls',    'checkbox',  $shorturls,   false,    XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('uselockout',   'checkbox',  $uselockout,  true,     XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('uselockout',   'checkbox',  $uselockout,  false,     XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('lockouttime',  'int:1:',    $lockouttime, 15,       XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('lockouttries', 'int:1:',    $lockouttries, 3,       XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
@@ -28,11 +28,10 @@ function authsystem_admin_modifyconfig()
         default:
             $data['authid']           = xarSecGenAuthKey();
             $data['shorturlschecked'] = xarModVars::get('authsystem',  'SupportShortURLs') ? true : false;
-            $data['uselockout']       = xarModVars::get('authsystem,', 'uselockout') ? 'checked' : '';
-            $data['lockouttime']      = xarModVars::get('authsystem,', 'lockouttime')? xarModVars::get('authsystem,', 'lockouttime'): 15; //minutes
-            $data['lockouttries']     = xarModVars::get('authsystem,', 'lockouttries') ? xarModVars::get('authsystem,', 'lockouttries'): 3;
-
-            break;
+            $data['uselockoutchecked']= xarModVars::get('authsystem', 'uselockout') ? true : false;
+            $data['lockouttime']      = xarModVars::get('authsystem', 'lockouttime')? xarModVars::get('authsystem', 'lockouttime'): 15; //minutes
+            $data['lockouttries']     = xarModVars::get('authsystem', 'lockouttries') ? xarModVars::get('authsystem', 'lockouttries'): 3;
+						break;
 
         case 'update':
             // Confirm authorisation code

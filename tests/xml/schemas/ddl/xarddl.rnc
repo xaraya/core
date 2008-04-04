@@ -38,7 +38,6 @@ description =  element description
     text
 }
 
-
 # Definitions corresponding to the values for the datatypes
 textValue    = string
 binaryValue  = string            # string? then we need an encoding
@@ -177,7 +176,7 @@ time = element time
 }
 
 # Element:
-#   binary    - element describing a b binary value
+#   binary    - element describing a binary value
 # Attributes:
 #   size      - required positive integer indidcatin the maximum number of bytes in the binary
 #   default   - default value

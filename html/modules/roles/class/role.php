@@ -91,7 +91,7 @@ class Role extends DataObject
         if (!$q->run()) return;
 
         if ($q->getrows() > 0) {
-            throw new DuplicateException(array('role',($this->basetype == ROLES_GROUPTYPE)?$this->getName():$this->getUser()));
+            throw new DuplicateException(array('role',($this->basetype == ROLES_GROUPTYPE)?$this->getName():$this->getUname()));
         }
 
         $id = parent::createItem($data);
@@ -312,7 +312,7 @@ class Role extends DataObject
         $q->addfield('uname',$uname);
         $q->addfield('pass',$pass);
         $q->addfield('email',$email);
-        $q->addfield('date_reg',$date_reg);
+        $q->addfield('date_reg',time());
         $q->addfield('state',$state);
         $q->eq('id',$this->getID());
         if(!$q->run()) return;
@@ -463,18 +463,27 @@ class Role extends DataObject
         $query = "SELECT r.id, r.name, r.type, r.uname,
                          r.email, r.pass, r.date_reg,
                          r.valcode, r.state,r.auth_modid
-                  FROM $this->rolestable r, $this->rolememberstable rm
-                  WHERE r.id = rm.id AND
+                  FROM $this->rolestable r, $this->rolememberstable rm ";
+        // set up the query and get the data
+        if ($state == ROLES_STATE_CURRENT) {
+            $where = "WHERE r.id = rm.id AND
                         r.type = ? AND
                         r.state != ? AND
                         rm.parentid = ?";
-        // set up the query and get the data
-        if ($state == ROLES_STATE_CURRENT) {
              $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->getID());
-
+        } elseif ($state == ROLES_STATE_ALL) {
+            $where = "WHERE r.id = rm.id AND
+                        r.type = ? AND
+                        rm.parentid = ?";
+             $bindvars = array(ROLES_USERTYPE,$this->getID());
         } else {
              $bindvars = array(ROLES_USERTYPE, $state, $this->properties['id']->value);
+            $where = "WHERE r.id = rm.id AND
+                        r.type = ? AND
+                        r.state = ? AND
+                        rm.parentid = ?";
         }
+        $query .= $where;
         if (isset($selection)) $query .= $selection;
         $query .= " ORDER BY " . $order;
         // Prepare the query
@@ -770,7 +779,7 @@ class Role extends DataObject
      */
     function getID() { return $this->properties['id']->value; }
     function getName() { return $this->properties['name']->value; }
-    function getUname() { return $this->properties['name']->value; }
+    function getUname() { return $this->properties['uname']->value; }
     function getType() { return $this->properties['role_type']->value; }
     function getUser() { return $this->properties['uname']->value; }
     function getEmail() { return $this->properties['email']->value; }
@@ -785,7 +794,8 @@ class Role extends DataObject
     }
 
     function setName($var) { $this->properties['name']->setValue($var); }
-    function setUname($var) { $this->properties['name']->setValue($var); }
+    function setUname($var) { $this->properties['uname']->setValue($var); }
+    function setType($var) { $this->properties['type']->setValue($var); }
     function setParent($var) { $this->properties['parentid']->setValue($var); }
     function setUser($var) { $this->properties['uname']->setValue($var); }
     function setEmail($var) { $this->properties['email']->setValue($var); }

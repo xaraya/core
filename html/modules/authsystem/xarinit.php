@@ -31,8 +31,6 @@ function authsystem_activate()
 {
     xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
     xarRegisterPrivilege('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
-    xarMakePrivilegeRoot('AdminAuthsystem');
-    xarMakePrivilegeRoot('ViewAuthsystem');
 
     xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');

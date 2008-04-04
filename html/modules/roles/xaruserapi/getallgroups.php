@@ -29,7 +29,7 @@ function roles_userapi_getallgroups($args)
     $q = new xarQuery('SELECT');
     $q->addtable($xartable['roles'],'r');
     $q->addtable($xartable['rolemembers'], 'rm');
-    $q->join('rm.id','r.id');
+    $q->leftjoin('r.id','rm.id');
     $q->addfields(array('r.id AS id','r.name AS name','r.users AS users','rm.parentid AS parentid'));
 
     $conditions = array();
@@ -37,7 +37,7 @@ function roles_userapi_getallgroups($args)
     if (isset($group)) {
         $groups = explode(',', $group);
         foreach ($groups as $group) {
-            $conditions[] = $q->eq('r.name',$group);
+            $conditions[] = $q->peq('r.name',trim($group));
         }
     }
 // Restriction by parent group.
@@ -52,32 +52,28 @@ function roles_userapi_getallgroups($args)
                 )
             );
             if (isset($group['id']) && is_numeric($group['id'])) {
-                $conditions[] = $q->eq('rm.parentid',$group['id']);
+                $conditions[] = $q->peq('rm.parentid',$group['id']);
             }
         }
     }
 // Restriction by ancestor group.
-    if (isset($ancestor)) {
-        $groups = explode(',', $ancestor);
-        $q1 = new xarQuery('SELECT');
-        $q1->addtable($xartable['roles'],'r');
-        $q1->addtable($xartable['roles'],'r1');
-        $q1->addtable($xartable['rolemembers'], 'rm');
-        $q1->join('rm.id','r.id');
-        $q1->join('rm.parentid','r1.id');
-        $q1->addfields(array('r.name','rm.id','r1.name','rm.parentid'));
-        $q1->eq('r.type',ROLES_GROUPTYPE);
+    // FIXME: this is really broken
+    if (isset($ancestor) && 0 == 1) {
+        $q1 = new xarQuery('SELECT',$xartable['roles']);
+        $q1->addfields(array('id','name'));
+        $q1->eq('type',ROLES_GROUPTYPE);
         $q1->run();
         $allgroups = $q1->output();
         $descendants = array();
+        $groups = explode(',', $ancestor);
         foreach ($groups as $group) {
-            $descendants = array_merge($descendants,_getDescendants($group,$allgroups));
+            $descendants = array_merge($descendants,_getDescendants(trim($group),$allgroups));
         }
         $ids = array();
         foreach ($descendants as $descendant) {
             if (!in_array($descendant[1],$ids)) {
                 $ids[] = $descendant[1];
-                $conditions[] = $q->eq('rm.id',$descendant[1]);
+                $conditions[] = $q->peq('rm.id',$descendant[1]);
             }
         }
     }
@@ -93,13 +89,13 @@ function _getDescendants($ancestor,$groups)
 {
     $descendants = array();
     foreach($groups as $group){
-        if($group['r1.name'] == $ancestor)
-        $descendants[$group['rm.id']] = array($group['r.name'],$group['rm.id']);
+        if($group['name'] == $ancestor)
+            $descendants[$group['id']] = array($group['name'],$group['id']);
     }
     foreach($descendants as $descendant){
         $subgroups = _getDescendants($descendant[0],$groups);
         foreach($subgroups as $subgroup){
-            $descendants[$subgroup['rm.id']] = $subgroup['rm.id'];
+            $descendants[$subgroup['id']] = $subgroup['id'];
         }
     }
     return $descendants ;

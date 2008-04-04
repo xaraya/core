@@ -88,11 +88,13 @@ function roles_init()
 
         $query = xarDBCreateTable($tables['rolemembers'],
                             array('id' => array('type'        => 'integer',
-                                 'null'        => true,
-                                                           'default'     => null),
+                                                'null'        => true,
+                                                'default'     => null,
+                                                'primary_key' => true),
                                         'parentid' => array('type'        => 'integer',
-                                                                'null'        => true,
-                                                                'default'     => null)));
+                                                            'null'        => true,
+                                                            'default'     => null,
+                                                            'primary_key' => true)));
         $dbconn->Execute($query);
 
         $index = array('name' => 'i_' . $prefix . '_rolememb_id',
@@ -186,7 +188,6 @@ function roles_activate()
     $rolefields['uname'] = 'everybody';
     $rolefields['parentid'] = 0;
     $topid = $group->createItem($rolefields);
-    xarRoles::isRoot('Everybody');
     xarModVars::set('roles', 'everybody', $topid);
     xarModVars::set('roles', 'primaryparent', $topid);
     xarModUserVars::set('roles', 'userhome', '[base]',$topid);

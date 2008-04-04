@@ -561,3 +561,7 @@ UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_prop
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.order", "xar_dynamic_properties.seq");
 UPDATE `xar_dynamic_properties` SET objectid = 24 WHERE name = 'parent' AND objectid = 1;
 
+/*
+    Remove all the privmember entries with parentid = 0
+*/
+DELETE FROM `xar_privmembers` WHERE `parentid` = 0;

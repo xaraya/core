@@ -10,8 +10,6 @@
  * @author Marcel van der Boom
  */
 
-
-
 /**
  * Set configuration options if necessary
  *
@@ -23,19 +21,19 @@
  * @todo add option to specify a list of tables to get
  * @todo move most of this into xaraya proper and make it runnable via cli interface (currently html/ls.php)
  */
-$xaruser = '';
-$xarpass = '';
-$dbtype = 'sqlite';
-//$dbhost = '../tests/xml/schemas/ddl';
-$dbname= 'ddltest';
-$dbuser = '';
-$dbpass = '';
+$xaruser = 'admin';
+$xarpass = 'toedeliedokie';
+$dbtype  = 'mysql';
+$dbhost  = 'dbserver';
+$dbname  =  'dbcore2x';
+$dbuser  = 'user';
+$dbpass  = 'pass';
 /* We need a (fake) ip address to run xar */
 putenv("REMOTE_ADDR=127.0.0.1");
 /* End configurable stuff */
 
 /* Make sure we're in the docroot */
-chdir("../html");
+chdir("../../../../html");
 include '../lib/bootstrap.php';
 sys::import('xaraya.core');
 xarCoreInit(XARCORE_SYSTEM_ALL);

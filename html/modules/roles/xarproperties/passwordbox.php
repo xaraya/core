@@ -49,7 +49,7 @@ class PassBoxProperty extends TextBoxProperty
         return array($a1);
     }
 
-    function setValue($value)
+    function setValue($value=null)
     {
          $this->value = $this->encrypt($value);
     }
