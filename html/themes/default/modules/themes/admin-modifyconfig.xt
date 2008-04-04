@@ -64,72 +64,70 @@
                 </div>
             </fieldset>
 
-        <div class="checkInputContainer">
-          <xar:set name="checked">$adminpagemenu</xar:set>
-          <xar:data-input type="checkbox" name="adminpagemenu" id="adminpagemenu" checked="$checked" />
-          <label for="adminpagemenu" title="#xarML('Use submenus in the page for admin functions.')#">
-            Enable InPage Admin SubMenus
-          </label>
-        </div>
+            <div class="checkInputContainer">
+                <xar:set name="checked">$adminpagemenu</xar:set>
+                <xar:data-input type="checkbox" name="adminpagemenu" id="adminpagemenu" checked="$checked" />
+                <xar:data-label label="Enable InPage Admin SubMenus" for="adminpagemenu" title="Use submenus in the page for admin functions."/>
+            </div>
 
-        <div class="checkInputContainer">
-          <xar:set name="checked">xarModIsHooked('themes', 'roles')</xar:set>
-          <xar:data-input type="checkbox" name="usermenu" id="usermenu" checked="$checked" />
-          <label for="usermenu" title="#xarML('Allow users to select themes from their Account Details page.')#">
-            Allow users to set their theme in User Account page
-          </label>
-        </div>
+            <div class="checkInputContainer">
+                <xar:set name="checked">xarModIsHooked('themes', 'roles')</xar:set>
+                <xar:data-input type="checkbox" name="usermenu" id="usermenu" checked="$checked" />
+                <xar:data-label label="Allow users to set their theme in User Account page" for="usermenu" title="Allow users to select themes from their Account Details page."/>
+            </div>
         </fieldset>
 
         <fieldset>
-          <legend>Site Display Options</legend>
-          <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <legend>Site Display Options</legend>
+            <xar:set name="valAuthid"><xar:var scope="module" module="authsystem" name="authid"/></xar:set>
+            <xar:data-input id="authid" name="authid" type="hidden" value="$valAuthid"/>
 
-          <div class="textInputContainer">
-            <label for="sitename">Site Name</label>
-            <input type="text" name="sitename" id="sitename" value="#xarModVars::get('themes', 'SiteName', 1)#" size="30" maxlength="100" />
-          </div>
+            <div class="textInputContainer">
+                <xar:set name="valSitename">xarModVars::get('themes', 'SiteName', 1)</xar:set>
+                <xar:data-label label="Site Name" for="sitename"/>
+                <xar:data-input type="textbox" name="sitename" id="sitename" value="$valSitename"/>
+            </div>
 
-          <div class="textInputContainer">
-            <label for="slogan">Site Slogan</label>
-            <input type="text" name="slogan" id="slogan" value="#xarModVars::get('themes', 'SiteSlogan', 1)#" size="30" maxlength="100" />
-          </div>
+            <div class="textInputContainer">
+                <label for="slogan">Site Slogan</label>
+                <input type="text" name="slogan" id="slogan" value="#xarModVars::get('themes', 'SiteSlogan', 1)#" size="30" maxlength="100" />
+            </div>
 
-          <div class="textInputContainer">
-            <label for="copyright">Copyright</label>
-            <input type="text" name="copyright" id="copyright" value="#xarModVars::get('themes', 'SiteCopyRight', 1)#" size="30" maxlength="100" />
-          </div>
-          #xarVarDelCached('Mod.Variables.themes','SiteCopyRight')#
+            <div class="textInputContainer">
+                <label for="copyright">Copyright</label>
+                <input type="text" name="copyright" id="copyright" value="#xarModVars::get('themes', 'SiteCopyRight', 1)#" size="30" maxlength="100" />
+            </div>
+            #xarVarDelCached('Mod.Variables.themes','SiteCopyRight')#
 
-          <div class="textareaContainer">
-            <label for="footer">Footer Note</label>
-            <textarea name="footer" id="footer" cols="60" rows="5">#xarModVars::get('themes', 'SiteFooter', 1)#</textarea>
-          </div>
-          #xarVarDelCached('Mod.Variables.themes','SiteFooter')#
+            <div class="textareaContainer">
+                <label for="footer">Footer Note</label>
+                <textarea name="footer" id="footer" cols="60" rows="5">#xarModVars::get('themes', 'SiteFooter', 1)#</textarea>
+            </div>
+            #xarVarDelCached('Mod.Variables.themes','SiteFooter')#
 
-          <div class="textInputContainer">
-            <label for="separator">Page Title Separator</label>
-            <input type="text" name="separator" id="separator" value="#xarModVars::get('themes', 'SiteTitleSeparator', 1)#" size="10" maxlength="15" />
-          </div>
+            <div class="textInputContainer">
+                <label for="separator">Page Title Separator</label>
+                <input type="text" name="separator" id="separator" value="#xarModVars::get('themes', 'SiteTitleSeparator', 1)#" size="10" maxlength="15" />
+            </div>
 
-          <div class="selectContainer">
-            <xar:set name="options">
-              array(
-              array('id' => 'default', 'name' => xarML('Site Name - Module Name - Page Name')),
-              array('id' => 'sp', 'name' => xarML('Site Name - Page Name')),
-              array('id' => 'mps', 'name' => xarML('Module Name - Page Name - Site Name')),
-              array('id' => 'pms', 'name' => xarML('Page Name - Module Name - Site Name')),
-              array('id' => 'to', 'name' => xarML('Page Name')),
-              array('id' => 'theme', 'name' => xarML('Theme Driven')),
-              )
+            <div class="selectContainer">
+                <xar:set name="options">
+                array(
+                array('id' => 'default', 'name' => xarML('Site Name - Module Name - Page Name')),
+                array('id' => 'sp', 'name' => xarML('Site Name - Page Name')),
+                array('id' => 'mps', 'name' => xarML('Module Name - Page Name - Site Name')),
+                array('id' => 'pms', 'name' => xarML('Page Name - Module Name - Site Name')),
+                array('id' => 'to', 'name' => xarML('Page Name')),
+                array('id' => 'theme', 'name' => xarML('Theme Driven')),
+                )
             </xar:set>
             <xar:set name="value">
-              <xar:var scope="module" module="themes" name="SiteTitleOrder"/>
-            </xar:set>
-            <label for="pagetitle">Page Title Order</label>
-            <xar:data-input type="dropdown" name="pagetitle" options="$options" value="$value" />
-          </div>
-        </fieldset>
+            <xar:var scope="module" module="themes" name="SiteTitleOrder"/>
+        </xar:set>
+        <label for="pagetitle">Page Title Order</label>
+        <xar:data-input type="dropdown" name="pagetitle" options="$options" value="$value" />
+    </div>
+</fieldset>
 
         <fieldset>
           <legend>Template Debugging options</legend>
