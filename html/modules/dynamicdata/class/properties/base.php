@@ -321,15 +321,15 @@ class DataProperty extends Object implements iDataProperty
             if ($this->anonymous == true) $data['name'] = $this->name;
             else $data['name'] = 'dd_'.$this->id;
         }
-        $name = $data['name'];
+        if(!isset($data['id']))          $data['id']   = $data['name'];
 
         // Add the object's field prefix if there is one
-        if(!empty($this->_fieldprefix))  $name = $this->_fieldprefix . '_' . $data['name'];
+        $prefix = '';
+        if(!empty($this->_fieldprefix))  $prefix = $this->_fieldprefix . '_';
         // A field prefix added here can override the previous one
-        if(isset($data['fieldprefix']))  $name = $data['fieldprefix'] . '_' . $data['name'];
-        $data['name'] = $name;
-
-        if(!isset($data['id']))          $data['id']   = $data['name'];
+        if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
+        if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
+        if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
 
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
@@ -430,15 +430,16 @@ class DataProperty extends Object implements iDataProperty
     function showHidden(Array $data = array())
     {
         $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
-
-        $name = $data['name'];
-        // Add the object's field prefix if there is one
-        if(!empty($this->_fieldprefix))  $name = $this->_fieldprefix . '_' . $data['name'];
-        // A field prefix added here can override the previous one
-        if(isset($data['fieldprefix']))  $name = $data['fieldprefix'] . '_' . $data['name'];
-        $data['name'] = $name;
-
         $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
+
+        // Add the object's field prefix if there is one
+        $prefix = '';
+        if(!empty($this->_fieldprefix))  $prefix = $this->_fieldprefix . '_';
+        // A field prefix added here can override the previous one
+        if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
+        if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
+        if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
+
         $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->getValue());
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;

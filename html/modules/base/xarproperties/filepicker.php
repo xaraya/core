@@ -46,7 +46,7 @@ class FilePickerProperty extends SelectProperty
         if (!parent::validateValue($value)) return false;
 
         $basedir = $this->initialization_basedirectory;
-        $filetype = $this->filetype;
+        $filetype = $this->validation_file_extensions;
         if (!empty($value) &&
             //slight change to allow spaces
             preg_match('/^[a-zA-Z0-9_\/.\-\040]+$/',$value) &&
@@ -57,7 +57,7 @@ class FilePickerProperty extends SelectProperty
         } elseif (empty($value)) {
             return true;
         }
-        $this->invalid = xarML('selection: #(1)', $this->name);
+        $this->invalid = xarML('incorrect selection: #(1) for #(2)', $value, $this->name);
         $this->value = null;
         return false;
     }

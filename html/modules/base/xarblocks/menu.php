@@ -501,6 +501,6 @@ function base_menublock_insert($blockinfo)
 }
 function base_menublock_update($blockinfo)
 {
-	return base_menublock_insert($blockinfo);
+    return base_menublock_insert($blockinfo);
 }
 ?>
