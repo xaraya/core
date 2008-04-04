@@ -1,26 +1,30 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Login to an existing account</xar:mlstring></span></div>
+<div class="xar-mod-head">
+  <span class="xar-mod-title">
+    <xar:mlstring>Login to an existing account</xar:mlstring>
+  </span>
+</div>
 <div class="xar-mod-body">
   <form action="#$loginurl#" method="post" enctype="application/x-www-form-urlencoded">
     <fieldset>
       <legend><xar:mlstring>Login</xar:mlstring></legend>
 
-      <input type="hidden" name="redirecturl" id="returnurl" value="#$redirecturl#" />
+      <xar:data-input type="hidden" name="redirecturl" id="returnurl" value="$redirecturl" />
 
       <div class="xar-form-input-wrapper">
         <label for="username" class="xar-form-label"><xar:mlstring>Username</xar:mlstring></label>
-        <input type="text" name="uname" id="username" maxlength="255" size="20" tabindex="1" />
+        <xar:data-input type="textbox" name="uname" id="username" maxlength="255" size="20" tabindex="1" />
       </div>
       <div class="xar-form-input-wrapper">
         <label for="password" class="xar-form-label"><xar:mlstring>Password</xar:mlstring></label>
-        <input type="password" name="pass" id="password" maxlength="64" size="20" tabindex="2" />
+        <xar:data-input type="password" name="pass" id="password" maxlength="64" size="20" tabindex="2" />
       </div>
       <p class="xar-form-input-wrapper-after">
         <a href="&xar-modurl-roles-user-lostpassword;"><xar:mlstring>Request a new password</xar:mlstring></a>
       </p>
       <div class="xar-form-input-wrapper-after">
-        <input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3" />
+        <xar:data-input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3" />
         <label for="remembermeform"><xar:mlstring>Remember me</xar:mlstring></label>
       </div>
     </fieldset>
@@ -30,5 +34,8 @@
       </div>
     </fieldset>
   </form>
+    <script type="text/javascript">
+        document.getElementById('username').focus();
+    </script>
 </div>
 </xar:template>

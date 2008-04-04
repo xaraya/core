@@ -18,7 +18,7 @@ function privileges_admin_modifyprivilege()
     if(!xarVarFetch('id',            'isset', $id,           NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pname',         'isset', $name,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('prealm',        'isset', $realm,        NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pmodule',       'isset', $data['pmodule'],    NULL,          XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pmodule',       'isset', $pmodule,      NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('pcomponent',    'isset', $component,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('poldcomponent', 'isset', $oldcomponent, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('ptype',         'isset', $type,         NULL, XARVAR_DONT_SET)) {return;}
@@ -69,11 +69,9 @@ function privileges_admin_modifyprivilege()
     if(isset($realm)) {$data['prealm'] = $realm;}
     else {$data['prealm'] = $priv->getRealm();}
 
-    if(!isset($data['pmodule'])) {
-//        $info = xarModAPIFunc('privileges','admin','get',array('itemid' => $id));
-//        $data['pmodule'] = $info['moduleid'];
-        $data['pmodule'] = 0;
-    }
+    if(isset($pmodule)) {$data['pmodule'] = $pmodule;}
+    else {$data['pmodule'] = $priv->getModule();}
+    if (empty($data['pmodule'])) $data['pmodule'] ="empty";
 
     if(isset($component)) {$data['pcomponent'] = $component;}
     else {$data['pcomponent'] = $priv->getComponent();}
@@ -81,7 +79,7 @@ function privileges_admin_modifyprivilege()
     if(isset($level)) {$data['plevel'] = $level;}
     else {$data['plevel'] = $priv->getLevel();}
 
-    $instances = xarPrivileges::getinstances($data['pmodule'],$data['pcomponent']);
+    $instances = xarPrivileges::getinstances(xarMod::getRegID($data['pmodule']),$data['pcomponent']);
     $numInstances = count($instances); // count the instances to use in later loops
 
     if(count($instance) > 0) {$default = $instance;}
@@ -91,10 +89,9 @@ function privileges_admin_modifyprivilege()
         if ($inst == "All") for($i=0; $i < $numInstances; $i++) $default[] = "All";
         else $default = explode(':',$priv->getInstance());
     }
-
 // send to external wizard if necessary
     if (!empty($instances['external']) && $instances['external'] == "yes") {
-        $data['target'] = $instances['target'] . '&amp;extpid='.$data['ppid'].'&amp;extname='.$data['pname'].'&amp;extrealm='.$data['prealm'].'&amp;extmodule='.xarModGetNameFromID($data['pmodule']).'&amp;extcomponent='.$data['pcomponent'].'&amp;extlevel='.$data['plevel'];
+        $data['target'] = $instances['target'] . '&amp;extpid='.$data['ppid'].'&amp;extname='.$data['pname'].'&amp;extrealm='.$data['prealm'].'&amp;extmodule='.$data['pmodule'].'&amp;extcomponent='.$data['pcomponent'].'&amp;extlevel='.$data['plevel'];
         $data['target'] .= '&amp;extinstance=' . urlencode(join(':',$default));
         $data['curinstance'] = join(':',$default);
         $data['instances'] = array();
@@ -118,8 +115,8 @@ function privileges_admin_modifyprivilege()
     $data['authid'] = xarSecGenAuthKey();
     $data['parents'] = $parents;
     $data['privileges'] = $privileges;
-    $data['realms'] = xarPrivileges::getrealms();
-    $data['components'] = xarPrivileges::getcomponents($data['pmodule']);
+    $data['realms'] = xarPrivileges::getrealms();;
+    $data['components'] = xarPrivileges::getcomponents(xarMod::getRegID($data['pmodule']));
     $data['refreshlabel'] = xarML('Refresh');
     return $data;
 }

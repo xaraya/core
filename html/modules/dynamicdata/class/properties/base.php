@@ -41,6 +41,7 @@ class DataProperty extends Object implements iDataProperty
     public $configuration = '';
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
     public $args         = array(); //args that hold alias info
+    public $anonymous = 0;        // if true the name, rather than the dd_xx designation is used in displaying the property
 
     public $datastore = '';    // name of the data store where this property comes from
 
@@ -124,14 +125,14 @@ class DataProperty extends Object implements iDataProperty
                 // data available in user variables
                 // we'll keep a separate data store per module/itemtype here for now
                 // TODO: (don't) integrate user variable handling with DD
-                $storename = 'uservars_'.$this->moduleid.'_'.$this->itemtype; //FIXME change id
+                $storename = 'uservars_'.$this->_objectid.'_'.$this->type;
                 $storetype = 'uservars';
                 break;
             case 'module variables':
                 // data available in module variables
                 // we'll keep a separate data store per module/itemtype here for now
                 // TODO: (don't) integrate module variable handling with DD
-                $storename = 'modulevars_'.$this->moduleid.'_'.$this->itemtype; //FIXME change id
+                $storename = 'module variables_'.$this->name;
                 $storetype = 'modulevars';
                 break;
             case 'dummy':
@@ -186,25 +187,14 @@ class DataProperty extends Object implements iDataProperty
      */
     public function fetchValue($name = '')
     {
-        $isvalid = true;
+        $found = false;
         $value = null;
         xarVarFetch($name, 'isset', $namevalue, NULL, XARVAR_DONT_SET);
         if(isset($namevalue)) {
+            $found = true;
             $value = $namevalue;
-        } else {
-            xarVarFetch($this->name, 'isset', $fieldvalue,  NULL, XARVAR_DONT_SET);
-            if(isset($fieldvalue)) {
-                $value = $fieldvalue;
-            } else {
-                xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_DONT_SET);
-                if(isset($ddvalue)) {
-                    $value = $ddvalue;
-                } else {
-                    $isvalid = false;
-                }
-            }
         }
-        return array($isvalid,$value);
+        return array($found,$value);
     }
 
     /**
@@ -215,16 +205,17 @@ class DataProperty extends Object implements iDataProperty
      */
     public function checkInput($name = '', $value = null)
     {
-        if(!isset($value)) {
-            list($isvalid,$value) = $this->fetchValue($name);
-            if (!$isvalid) {
-                $this->invalid = xarML('no value found');
-                return false;
-            }
-
             // store the fieldname for configurations who need them (e.g. file uploads)
-            $name = empty($name) ? 'dd_'.$this->id : $name;
-            $this->fieldname = $name;
+        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $this->fieldname = $name;
+        $this->invalid = '';
+        if(!isset($value)) {
+            list($found,$value) = $this->fetchValue($name);
+            if (!$found) {
+            // store the fieldname for configurations who need them (e.g. file uploads)
+                $this->objectref->missingfields[] = $this->name;
+                return null;
+            }
         }
        return $this->validateValue($value);
     }
@@ -238,6 +229,10 @@ class DataProperty extends Object implements iDataProperty
     {
         if(!isset($value)) $value = $this->getValue();
         else $this->setValue($value);
+
+//        $this->value = null;
+//        $this->invalid = xarML('unknown property');
+//        return false;
         return true;
     }
 
@@ -321,10 +316,20 @@ class DataProperty extends Object implements iDataProperty
             return $this->showOutput($data) . $this->showHidden($data);
         }
 
-        // Our common items we need
-        if(!isset($data['name']))        $data['name'] = 'dd_'.$this->id;
-        if(isset($data['fieldprefix']))  $data['name'] = $data['fieldprefix'] . '_' . $data['name'];
+        // Display directive for the name
+        if(!isset($data['name'])) {
+            if ($this->anonymous == true) $data['name'] = $this->name;
+            else $data['name'] = 'dd_'.$this->id;
+        }
         if(!isset($data['id']))          $data['id']   = $data['name'];
+
+        // Add the object's field prefix if there is one
+        $prefix = '';
+        if(!empty($this->_fieldprefix))  $prefix = $this->_fieldprefix . '_';
+        // A field prefix added here can override the previous one
+        if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
+        if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
+        if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
 
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
@@ -407,6 +412,7 @@ class DataProperty extends Object implements iDataProperty
         $data['name']  = $this->name;
         $data['label'] = isset($label) ? xarVarPrepForDisplay($label) : xarVarPrepForDisplay($this->label);
         $data['for']   = isset($for) ? $for : null;
+        if(!empty($this->_fieldprefix))  $data['fieldprefix'] = $this->_fieldprefix;
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
@@ -424,15 +430,16 @@ class DataProperty extends Object implements iDataProperty
     function showHidden(Array $data = array())
     {
         $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
-
-        $name = $data['name'];
-        // Add the object's field prefix if there is one
-        if(!empty($this->_fieldprefix))  $name = $this->_fieldprefix . '_' . $data['name'];
-        // A field prefix added here can override the previous one
-        if(isset($data['fieldprefix']))  $name = $data['fieldprefix'] . '_' . $data['name'];
-        $data['name'] = $name;
-
         $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
+
+        // Add the object's field prefix if there is one
+        $prefix = '';
+        if(!empty($this->_fieldprefix))  $prefix = $this->_fieldprefix . '_';
+        // A field prefix added here can override the previous one
+        if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
+        if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
+        if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
+
         $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->getValue());
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
