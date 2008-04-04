@@ -4,181 +4,159 @@
 <!ENTITY ndash "&#8211;">
 <!ENTITY xar-modurl-themes-admin-updateconfig "index.php?module=themes&amp;type=admin&amp;func=updateconfig">
 ]>
-
-<xar:template
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:xar="http://xaraya.com/2004/blocklayout"
-    xmlns:xf="http://www.w3.org/2002/xforms"
-    xml:lang="en">
-    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <!-- In this template we try to translate the form into XForms. -->
-    <div id="themesAdminModifyconfig">
-        <div class="xar-mod-head">
-            <span class="xar-mod-title">Themes Administration</span>
-        </div>
-
-        <div class="xar-mod-body">
-            <xar:template type="module" file="admin-menu"/>
-            <h2>Modify Configuration</h2>
-
-
-
-            <form action="&xar-modurl-themes-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded">
-                <fieldset>
-                    <legend>Configuration Options</legend>
-
-                    <div class="textInputContainer">
-                        <xar:set name="value">xarModVars::get('themes', 'themesdirectory')</xar:set>
-                        <xar:data-label label="Default Theme Directory" for="themedir" title="The default directory for site themes - no trailing slash." />
-                        <xar:data-input id="themedir" name="themedir" type="textbox" size="15" maxlength="100" value="$value"/>
-                    </div>
-
-                    <!-- textfield containing the default themes directory -->
-                    <xf:input ref="modules/themes/themesdirectory" class="filepath">
-                        <xf:label>Default Theme Directory</xf:label>
-                        <xf:hint>The default directory for site themes &ndash; no trailing slash</xf:hint>
-                    </xf:input>
-
-                    <fieldset>
-                        <legend>Admin Dashboard</legend>
-                        <div class="checkInputContainer">
-                            <xar:data-input type="checkbox" name="dashboard" checked="$dashboard" />
-                            <xar:data-label label="Enable the Admin Dashboard" for="dashboard" title="Use the Admin Dashboard to manage all your Admin settings from a single page."/>
-                        </div>
-
-                        <div class="textInputContainer">
-                            <xar:data-label label="Dashboard Template name" for="dashtemplate" title="Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'"/>
-                            <div class="infoAddedInput">
-                                <xar:set name="valDashtamplate"><xar:var scope="module" module="themes" name="dashtemplate"/></xar:set>
-                                <xar:data-input id="dashtamplate" name="dashtamplate" type="textbox" value="$valDashtamplate" size="30" maxlength="100"/>
-                                <span class="inputIndication">(without the .xt extension)</span>
-                                <p>
-                                    The Admin Dashboard is automatically used with all admin
-                                    functions. The default page template name is
-                                    <strong>dashboard.xt</strong>.
-                                </p>
-                                <p>
-                                    A page template called <strong>admin.xt</strong> will be used
-                                    automatically without this switch and can be customised on a
-                                    module by module basis (eg admin-articles.xt).
-                                </p>
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <div class="checkInputContainer">
-                        <xar:set name="checked">$adminpagemenu</xar:set>
-                        <xar:data-input type="checkbox" name="adminpagemenu" id="adminpagemenu" checked="$checked" />
-                        <xar:data-label label="Enable InPage Admin SubMenus" for="adminpagemenu" title="Use submenus in the page for admin functions."/>
-                    </div>
-
-                    <div class="checkInputContainer">
-                        <xar:set name="checked">xarModIsHooked('themes', 'roles')</xar:set>
-                        <xar:data-input type="checkbox" name="usermenu" id="usermenu" checked="$checked" />
-                        <xar:data-label label="Allow users to set their theme in User Account page" for="usermenu" title="Allow users to select themes from their Account Details page."/>
-                    </div>
-                </fieldset>
-
-                <fieldset>
-                    <legend>Site Display Options</legend>
-                    <xar:set name="valAuthid"><xar:var scope="module" module="authsystem" name="authid"/></xar:set>
-                    <xar:data-input id="authid" name="authid" type="hidden" value="$valAuthid"/>
-
-                    <div class="textInputContainer">
-                        <xar:set name="valSitename">xarModVars::get('themes', 'SiteName', 1)</xar:set>
-                        <xar:data-label label="Site Name" for="sitename"/>
-                        <xar:data-input type="textbox" name="sitename" id="sitename" value="$valSitename"/>
-                    </div>
-
-                    <div class="textInputContainer">
-                        <label for="slogan">Site Slogan</label>
-                        <input type="text" name="slogan" id="slogan" value="#xarModVars::get('themes', 'SiteSlogan', 1)#" size="30" maxlength="100" />
-                    </div>
-
-                    <div class="textInputContainer">
-                        <label for="copyright">Copyright</label>
-                        <input type="text" name="copyright" id="copyright" value="#xarModVars::get('themes', 'SiteCopyRight', 1)#" size="30" maxlength="100" />
-                    </div>
-                    #xarVarDelCached('Mod.Variables.themes','SiteCopyRight')#
-
-                    <div class="textareaContainer">
-                        <label for="footer">Footer Note</label>
-                        <textarea name="footer" id="footer" cols="60" rows="5">#xarModVars::get('themes', 'SiteFooter', 1)#</textarea>
-                    </div>
-                    #xarVarDelCached('Mod.Variables.themes','SiteFooter')#
-
-                    <div class="textInputContainer">
-                        <label for="separator">Page Title Separator</label>
-                        <input type="text" name="separator" id="separator" value="#xarModVars::get('themes', 'SiteTitleSeparator', 1)#" size="10" maxlength="15" />
-                    </div>
-
-                    <div class="selectContainer">
-                        <xar:set name="options">
-                            array(
-                            array('id' => 'default', 'name' => xarML('Site Name - Module Name - Page Name')),
-                            array('id' => 'sp', 'name' => xarML('Site Name - Page Name')),
-                            array('id' => 'mps', 'name' => xarML('Module Name - Page Name - Site Name')),
-                            array('id' => 'pms', 'name' => xarML('Page Name - Module Name - Site Name')),
-                            array('id' => 'to', 'name' => xarML('Page Name')),
-                            array('id' => 'theme', 'name' => xarML('Theme Driven')),
-                            )
-                        </xar:set>
-                        <xar:set name="value">
-                            <xar:var scope="module" module="themes" name="SiteTitleOrder"/>
-                        </xar:set>
-                        <label for="pagetitle">Page Title Order</label>
-                        <xar:data-input type="dropdown" name="pagetitle" options="$options" value="$value" />
-                    </div>
-                </fieldset>
-
-                <fieldset>
-                    <legend>Template Debugging options</legend>
-
-                    <xar:if condition="xarConfigVars::get(null,'Site.BL.CacheTemplates')">
-                        <div class="checkInputContainer">
-                            <xar:set name="checked"><xar:var scope="module" module="themes" name="ShowPHPCommentBlockInTemplates"/></xar:set>
-                            <xar:data-input type="checkbox" name="showphpcbit" id="showphpcbit" checked="$checked" />
-                            <label for="showphpcbit">
-                                Show php comment block header in compiled templates
-                            </label>
-                        </div>
-                    </xar:if>
-
-                    <div class="checkInputContainer">
-                        <xar:set name="checked"><xar:var scope="module" module="themes" name="ShowTemplates"/></xar:set>
-                        <xar:data-input type="checkbox" name="showtemplates" id="showtemplates" checked="$checked" />
-                        <label for="showtemplates">
-                            Show template filenames in HTML comments
-                        </label>
-                    </div>
-
-                    <div class="checkInputContainer">
-                        <xar:set name="checked"><xar:var scope="config" name="Site.BL.CacheTemplates"/></xar:set>
-                        <xar:data-input type="checkbox" name="cachetemplates" id="cachetemplates" checked="$checked" />
-                        <label for="cachetemplates">Cache templates</label>
-                    </div>
-
-                    <div class="checkInputContainer">
-                        <xar:comment>
-                            <xar:set name="checked">xarModVars::get('themes', 'var_dump')</xar:set>
-                        </xar:comment>
-                        <xar:set name="checked"><xar:var scope="module" module="themes" name="var_dump"/></xar:set>
-                        <xar:data-input type="checkbox" name="var_dump" id="var_dump" checked="$checked" />
-                        <label for="var_dump">
-                            Debug Templates by Showing Variables Available
-                        </label>
-                    </div>
-
-                    <xar:if condition="xarThemeIsAvailable('atom')">
-                        <!-- This should be moved if we ever fully support the atom spec -->
-                        <div class="textInputContainer">
-                            <label for="AtomTag">Atom Tag</label>
-                            <input type="text" name="AtomTag" id="AtomTag" value="#xarModVars::get('themes', 'AtomTag', 1)#" size="30" maxlength="100" />
-                        </div>
-                    </xar:if>
-                </fieldset>
-                <input type="submit" value="#$submitbutton#" />
-            </form>
-        </div>
+<xar:template xmlns="http://www.w3.org/1999/xhtml" xmlns:xar="http://xaraya.com/2004/blocklayout" xmlns:xf="http://www.w3.org/2002/xforms" xml:lang="en">
+  <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+  <!-- In this template we try to translate the form into XForms. -->
+  <div id="themesAdminModifyconfig">
+    <div class="xar-mod-head">
+      <span class="xar-mod-title">Themes Administration</span>
     </div>
+    <div class="xar-mod-body">
+      <xar:template type="module" file="admin-menu"/>
+      <h2>Modify Configuration</h2>
+      <form action="index.php?module=themes&amp;type=admin&amp;func=updateconfig" method="post" enctype="application/x-www-form-urlencoded">
+        <xf:group ref="configoptions">
+          <xf:label>Configuration Options</xf:label>
+          <!-- textfield containing the default themes directory -->
+          <xf:input name="themedir" ref="modules/themes/themesdirectory" class="filepath">
+            <xf:label>Default Theme Directory</xf:label>
+            <!-- Example of an entity which xml does not know about, so doctype above has to declare it -->
+            <xf:hint>The default directory for site themes – no trailing slash</xf:hint>
+          </xf:input>
+          <xf:group ref="dashboard">
+            <xf:label>Admin Dashboard</xf:label>
+            <div class="checkInputContainer">
+              <xar:data-input type="checkbox" name="dashboard" checked="$dashboard"/>
+              <xar:data-label label="Enable the Admin Dashboard" for="dashboard" title="Use the Admin Dashboard to manage all your Admin settings from a single page."/>
+            </div>
+            <div class="textInputContainer">
+              <xar:data-label label="Dashboard Template name" for="dashtemplate" title="Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'"/>
+              <div class="infoAddedInput">
+                <xar:set name="valDashtamplate">
+                  <xar:var scope="module" module="themes" name="dashtemplate"/>
+                </xar:set>
+                <xar:data-input id="dashtamplate" name="dashtamplate" type="textbox" value="$valDashtamplate" size="30" maxlength="100"/>
+                <span class="inputIndication">(without the .xt extension)</span>
+                <p>
+                  The Admin Dashboard is automatically used with all admin
+                  functions. The default page template name is
+                  <strong>dashboard.xt</strong>.
+                </p>
+                <p>
+                  A page template called <strong>admin.xt</strong> will be used
+                  automatically without this switch and can be customised on a
+                  module by module basis (eg admin-articles.xt).
+                </p>
+              </div>
+            </div>
+          </xf:group>
+          <div class="checkInputContainer">
+            <xar:set name="checked">$adminpagemenu</xar:set>
+            <xar:data-input type="checkbox" name="adminpagemenu" id="adminpagemenu" checked="$checked"/>
+            <xar:data-label label="Enable InPage Admin SubMenus" for="adminpagemenu" title="Use submenus in the page for admin functions."/>
+          </div>
+          <div class="checkInputContainer">
+            <xar:set name="checked">xarModIsHooked('themes', 'roles')</xar:set>
+            <xar:data-input type="checkbox" name="usermenu" id="usermenu" checked="$checked"/>
+            <xar:data-label label="Allow users to set their theme in User Account page" for="usermenu" title="Allow users to select themes from their Account Details page."/>
+          </div>
+        </xf:group>
+        <xf:group>
+          <xf:label>Site Display Options</xf:label>
+          <xar:set name="valAuthid">
+            <xar:var scope="module" module="authsystem" name="authid"/>
+          </xar:set>
+          <xar:data-input id="authid" name="authid" type="hidden" value="$valAuthid"/>
+          <div class="textInputContainer">
+            <xar:set name="valSitename">xarModVars::get('themes', 'SiteName', 1)</xar:set>
+            <xar:data-label label="Site Name" for="sitename"/>
+            <xar:data-input type="textbox" name="sitename" id="sitename" value="$valSitename"/>
+          </div>
+          <div class="textInputContainer">
+            <label for="slogan">Site Slogan</label>
+            <input type="text" name="slogan" id="slogan" value="#xarModVars::get('themes', 'SiteSlogan', 1)#" size="30" maxlength="100"/>
+          </div>
+          <div class="textInputContainer">
+            <label for="copyright">Copyright</label>
+            <input type="text" name="copyright" id="copyright" value="#xarModVars::get('themes', 'SiteCopyRight', 1)#" size="30" maxlength="100"/>
+          </div>
+          <div class="textareaContainer">
+            <label for="footer">Footer Note</label>
+            <textarea name="footer" id="footer" cols="60" rows="5">#xarModVars::get('themes', 'SiteFooter', 1)#</textarea>
+          </div>
+          <div class="textInputContainer">
+            <label for="separator">Page Title Separator</label>
+            <input type="text" name="separator" id="separator" value="#xarModVars::get('themes', 'SiteTitleSeparator', 1)#" size="10" maxlength="15"/>
+          </div>
+          <div class="selectContainer">
+            <xar:set name="options">
+                  array(
+                  array('id' =&gt; 'default', 'name' =&gt; xarML('Site Name - Module Name - Page Name')),
+                  array('id' =&gt; 'sp', 'name' =&gt; xarML('Site Name - Page Name')),
+                  array('id' =&gt; 'mps', 'name' =&gt; xarML('Module Name - Page Name - Site Name')),
+                  array('id' =&gt; 'pms', 'name' =&gt; xarML('Page Name - Module Name - Site Name')),
+                  array('id' =&gt; 'to', 'name' =&gt; xarML('Page Name')),
+                  array('id' =&gt; 'theme', 'name' =&gt; xarML('Theme Driven')),
+                  )
+              </xar:set>
+            <xar:set name="value">
+              <xar:var scope="module" module="themes" name="SiteTitleOrder"/>
+            </xar:set>
+            <label for="pagetitle">Page Title Order</label>
+            <xar:data-input type="dropdown" name="pagetitle" options="$options" value="$value"/>
+          </div>
+        </xf:group>
+        <xf:group>
+          <xf:label>Template Debugging options</xf:label>
+          <xar:if condition="xarConfigVars::get(null,'Site.BL.CacheTemplates')">
+            <div class="checkInputContainer">
+              <xar:set name="checked">
+                <xar:var scope="module" module="themes" name="ShowPHPCommentBlockInTemplates"/>
+              </xar:set>
+              <xar:data-input type="checkbox" name="showphpcbit" id="showphpcbit" checked="$checked"/>
+              <label for="showphpcbit">
+                      Show php comment block header in compiled templates
+                  </label>
+            </div>
+          </xar:if>
+          <div class="checkInputContainer">
+            <xar:set name="checked">
+              <xar:var scope="module" module="themes" name="ShowTemplates"/>
+            </xar:set>
+            <xar:data-input type="checkbox" name="showtemplates" id="showtemplates" checked="$checked"/>
+            <label for="showtemplates">
+                  Show template filenames in HTML comments
+              </label>
+          </div>
+          <div class="checkInputContainer">
+            <xar:set name="checked">
+              <xar:var scope="config" name="Site.BL.CacheTemplates"/>
+            </xar:set>
+            <xar:data-input type="checkbox" name="cachetemplates" id="cachetemplates" checked="$checked"/>
+            <label for="cachetemplates">Cache templates</label>
+          </div>
+          <div class="checkInputContainer">
+            <xar:comment>
+              <xar:set name="checked">xarModVars::get('themes', 'var_dump')</xar:set>
+            </xar:comment>
+            <xar:set name="checked">
+              <xar:var scope="module" module="themes" name="var_dump"/>
+            </xar:set>
+            <xar:data-input type="checkbox" name="var_dump" id="var_dump" checked="$checked"/>
+            <label for="var_dump">
+                  Debug Templates by Showing Variables Available
+              </label>
+          </div>
+          <xar:if condition="xarThemeIsAvailable('atom')">
+            <!-- This should be moved if we ever fully support the atom spec -->
+            <div class="textInputContainer">
+              <label for="AtomTag">Atom Tag</label>
+              <input type="text" name="AtomTag" id="AtomTag" value="#xarModVars::get('themes', 'AtomTag', 1)#" size="30" maxlength="100"/>
+            </div>
+          </xar:if>
+        </xf:group>
+        <input type="submit" value="#$submitbutton#"/>
+      </form>
+    </div>
+  </div>
 </xar:template>
