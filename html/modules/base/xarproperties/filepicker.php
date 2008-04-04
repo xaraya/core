@@ -46,11 +46,13 @@ class FilePickerProperty extends SelectProperty
         if (!parent::validateValue($value)) return false;
 
         $basedir = $this->initialization_basedirectory;
-        $filetype = $this->validation_file_extensions;
+        $filetypes = $this->validation_file_extensions;
+        $pos = strrpos($value, '.');
+        $extension = substr($value,$pos+1);
         if (!empty($value) &&
             //slight change to allow spaces
             preg_match('/^[a-zA-Z0-9_\/.\-\040]+$/',$value) &&
-            preg_match("/$filetype$/",$value) &&
+            preg_match("/^$extension/",$filetypes) &&
             file_exists($basedir.'/'.$value) &&
             is_file($basedir.'/'.$value)) {
             return true;
@@ -67,7 +69,9 @@ class FilePickerProperty extends SelectProperty
         if (empty($this->initialization_basedirectory)) return array();
         $dir = new RelativeDirectoryIterator($this->initialization_basedirectory);
 
-        $extensions = explode(',',$this->validation_file_extensions);
+        if (!is_array($this->validation_file_extensions)) $extensions = explode(',',$this->validation_file_extensions);
+        else $extensions = $this->validation_file_extensions;
+        
         $options = array();
         $firstline = $this->getFirstline();
         if (!empty($firstline)) $options[] = $firstline;
