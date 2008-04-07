@@ -29,23 +29,30 @@ function blocks_userapi_read_type_info($args)
 
     // Function to execute, to get the block info.
     $infofunc = $module . '_' . $type . 'block_info';
-
     if (function_exists($infofunc)) {
         return $infofunc();
-    } else {
-        // Load and execute the info function of the block.
-        if (!xarModAPIFunc(
-            'blocks', 'admin', 'load',
-            array(
-                'modName' => $module,
-                'blockName' => $type,
-                'blockFunc' => 'info'
-            )
-        )) {return false;}
     }
 
+    // Load and execute the info function of the block.
+    if (!xarModAPIFunc(
+        'blocks', 'admin', 'load',
+        array(
+            'modName' => $module,
+            'blockName' => $type,
+            'blockFunc' => 'info'
+        )
+    )) {return;}
+
+    $classpath = 'modules/' . $module . '/xarblocks/' . $type . '.php';
     if (function_exists($infofunc)) {
         return $infofunc();
+    } elseif (file_exists($classpath)) {
+        sys::import('modules.' . $module . '.xarblocks.' . $type);
+        sys::import('xaraya.structures.descriptor');
+        $name = ucfirst($type) . "Block";
+        $descriptor = new ObjectDescriptor(array());
+        $block = new $name($descriptor);
+        return $block->getInfo();
     } else {
         // No block info function found.
         return false;

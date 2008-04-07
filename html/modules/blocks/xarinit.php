@@ -26,6 +26,7 @@ function blocks_init()
     try {
         $dbconn->begin();
 
+        /*
         // *_block_groups
         $query = xarDBCreateTable($prefix . '_block_groups',
                                   array('id'         => array('type'        => 'integer',
@@ -47,7 +48,7 @@ function blocks_init()
                                         'fields' => array('name'),
                                         'unique' => 'true'));
         $dbconn->Execute($query);
-
+*/
         // *_block_instances
         $query = xarDBCreateTable($prefix . '_block_instances',
                                   array('id'          => array('type'        => 'integer',
@@ -66,7 +67,7 @@ function blocks_init()
                                                                    'null'        => true,
                                                                    'default'     => NULL),
                                         'content'     => array('type'        => 'text',
-                                                                   'null'        => false),
+                                                                   'null'        => true),
                                         'template'    => array('type'        => 'varchar',
                                                                    'size'        => 255,
                                                                    'null'        => true,

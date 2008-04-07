@@ -9,94 +9,94 @@
             </tr>
         </table>
     </xar:if>
-    <table class="xar-fullwidth">
+<table class="xar-fullwidth">
+    <tr>
+        <th>
+            <xar:mlstring>Name</xar:mlstring>
+        </th>
+        <th>
+            <xar:mlstring>Groups</xar:mlstring>
+        </th>
+        <th>
+            <xar:mlstring>Module</xar:mlstring>
+        </th>
+        <th>
+            <xar:mlstring>Type</xar:mlstring>
+        </th>
+        <th>
+            <xar:mlstring>Template</xar:mlstring>
+        </th>
+        <th>
+            <xar:mlstring>Status</xar:mlstring>
+        </th>
+        <th>
+            <xar:mlstring>Actions</xar:mlstring>
+        </th>
+    </tr>
+    <xar:loop name="$blocks">
         <tr>
-            <th>
-                <xar:mlstring>Name</xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>Groups</xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>Module</xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>Type</xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>Template</xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>Status</xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>Actions</xar:mlstring>
-            </th>
-        </tr>
-        <xar:loop name="$blocks">
-            <tr>
-                <td>
-                    <xar:if condition="empty($loop:item['title'])">
-                        #$loop:item['name']# 
-                        <xar:else />
-                        <span title="#xarVarPrepfordisplay($loop:item['title'])#">
-                            #$loop:item['name']# 
-                        </span>
-                    </xar:if>
-                </td>
-                <td>
-                    <xar:if condition="!empty($loop:item.groups)">
-                        <xar:loop name="$loop:item.groups" id="groups">
-                            <a href="&xar-modurl-blocks-admin-modify_group;&amp;id=#$loop:groups:item.id#">
-                                #$loop:groups:item.name# 
-                            </a>
-                        </xar:loop>
+            <td>
+                <xar:if condition="empty($loop:item['title'])">
+                    #$loop:item['name']# 
                     <xar:else />
-                        [ <xar:mlstring>none</xar:mlstring> ]
-                    </xar:if>
-                </td>
-                <td>
-                    #$loop:item['module']# 
-                </td>
-                <td>
-                    <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
-                        #$loop:item['type']# 
-                    </a>
-                </td>
-                <td>
-                    <xar:if condition="$loop:item['template'] ne NULL">
-                        #$loop:item['template']# &#160; 
-                        <xar:else />
-                        <xar:if condition="empty($loop:item['group_template'])">
-                            [ 
-                            <xar:mlstring>
-                                default 
-                            </xar:mlstring>
-                            ] 
-                        <xar:else />
-                            #$loop:item['group_template']# &#160; 
-                        </xar:if>
-                    </xar:if>
-                </td>
-                <td class="xar-align-center">
-                    #$state_desc[$loop:item['state']]# 
-                </td>
-                <td class="xar-align-center">
-                    <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item.bid#">
+                    <span title="#xarVarPrepfordisplay($loop:item['title'])#">
+                        #$loop:item['name']# 
+                    </span>
+                </xar:if>
+            </td>
+            <td>
+                <xar:if condition="!empty($loop:item.groups)">
+                    <xar:loop name="$loop:item.groups" id="groups">
+                        <a href="&xar-modurl-blocks-admin-modify_group;&amp;id=#$loop:groups:item.id#">
+                            #$loop:groups:item.name# 
+                        </a>
+                    </xar:loop>
+                <xar:else />
+                    [ <xar:mlstring>none</xar:mlstring> ]
+                </xar:if>
+            </td>
+            <td>
+                #$loop:item['module']# 
+            </td>
+            <td>
+                <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
+                    #$loop:item['type']# 
+                </a>
+            </td>
+            <td>
+                <xar:if condition="$loop:item['template'] ne NULL">
+                    #$loop:item['template']# &#160; 
+                    <xar:else />
+                    <xar:if condition="empty($loop:item['group_template'])">
+                        [ 
                         <xar:mlstring>
-                            Edit 
+                            default 
                         </xar:mlstring>
-                    </a>
-                    | 
-                    <a href="#$loop:item['deleteurl']#" onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
-                        <xar:mlstring>
-                            Delete 
-                        </xar:mlstring>
-                    </a>
-                </td>
-            </tr>
-        </xar:loop>
-    </table>
+                        ] 
+                    <xar:else />
+                        #$loop:item['group_template']# &#160; 
+                    </xar:if>
+                </xar:if>
+            </td>
+            <td class="xar-align-center">
+                #$state_desc[$loop:item['state']]# 
+            </td>
+            <td class="xar-align-center">
+                <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item.bid#">
+                    <xar:mlstring>
+                        Edit 
+                    </xar:mlstring>
+                </a>
+                | 
+                <a href="#$loop:item['deleteurl']#" onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
+                    <xar:mlstring>
+                        Delete 
+                    </xar:mlstring>
+                </a>
+            </td>
+        </tr>
+    </xar:loop>
+</table>
     <xar:if condition="$pager ne ''">
         <table class="xar-fullwidth" border="0" cellspacing="2" cellpadding="2">
             <tr>        
@@ -106,4 +106,5 @@
             </tr>
         </table>
     </xar:if>
+
 </xar:template>

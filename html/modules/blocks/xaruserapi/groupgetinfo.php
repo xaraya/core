@@ -38,7 +38,7 @@ function blocks_userapi_groupgetinfo($args)
 
     $blockInstancesTable      = $tables['block_instances'];
     $blockTypesTable          = $tables['block_types'];
-    $blockGroupsTable         = $tables['block_groups'];
+    $blockGroupsTable         = $tables['block_instances'];
     $blockGroupInstancesTable = $tables['block_group_instances'];
     $modulesTable             = $tables['modules'];
 

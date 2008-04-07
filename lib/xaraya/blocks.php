@@ -25,7 +25,6 @@ function xarBlock_init(&$args)
 
     $tables = array(
         'block_instances'       => $prefix . '_block_instances',
-        'block_groups'          => $prefix . '_block_groups',
         'block_group_instances' => $prefix . '_block_group_instances',
         'block_types'           => $prefix . '_block_types'
     );
@@ -141,7 +140,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
 
     $blockGroupInstancesTable = $tables['block_group_instances'];
     $blockInstancesTable      = $tables['block_instances'];
-    $blockGroupsTable         = $tables['block_groups'];
+    $blockGroupsTable         = $tables['block_instances'];
     $blockTypesTable          = $tables['block_types'];
     $modulesTable             = $tables['modules'];
 

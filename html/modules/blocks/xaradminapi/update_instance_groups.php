@@ -43,7 +43,7 @@ function blocks_adminapi_update_instance_groups($args)
 
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
-    $block_groups_table = $xartable['block_groups'];
+    $block_groups_table = $xartable['block_instances'];
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];
 
@@ -60,7 +60,7 @@ function blocks_adminapi_update_instance_groups($args)
 
         $current[$id] = array (
             'id'        => $result->getInt(1),
-            'group_id'  => $id,
+            'id'       => $id,
             'template'  => $result->getString(3)
         );
     }
