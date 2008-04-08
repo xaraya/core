@@ -34,10 +34,15 @@ class FieldTypeProperty extends ObjectRefProperty
     }
     function getOptions()
     {
+        $options = $this->getFirstline();
+        if (count($this->options) > 0) {
+            if (!empty($firstline)) $this->options = array_merge($options,$this->options);
+            return $this->options;
+        }
+        
         $proptypes = DataPropertyMaster::getPropertyTypes();
         if (!isset($proptypes)) $proptypes = array();
 
-        $options = array();
         foreach ($proptypes as $propid => $proptype) {
             // TODO: label isnt guaranteed to be unique, if not, leads to some surprises.
             $options[$proptype[$this->initialization_display_prop]] = array('id' => $proptype[$this->initialization_store_prop], 'name' => $proptype[$this->initialization_display_prop]);

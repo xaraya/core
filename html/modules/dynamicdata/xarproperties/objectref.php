@@ -47,6 +47,12 @@ class ObjectRefProperty extends SelectProperty
     // Return a list of array(id => value) for the possible options
     function getOptions()
     {
+        $options = $this->getFirstline();
+        if (count($this->options) > 0) {
+            if (!empty($firstline)) $this->options = array_merge($options,$this->options);
+            return $this->options;
+        }
+        
         // The object we need to query is in $this->initialization_refobject, we display the value of
         // the property in $this->display_prop and the id comes from $this->store_prop
 
@@ -92,7 +98,6 @@ class ObjectRefProperty extends SelectProperty
         if (!in_array($this->initialization_store_prop,$fields))
             throw new EmptyParameterException($object->name . '.' .$this->initialization_store_prop);
             
-        $options = array();
         foreach($items as $item) {
             $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
         }

@@ -43,8 +43,13 @@ class ModuleProperty extends ObjectRefProperty
 
     function getOptions()
     {
+        $options = $this->getFirstline();
+        if (count($this->options) > 0) {
+            if (!empty($firstline)) $this->options = array_merge($options,$this->options);
+            return $this->options;
+        }
+        
         $items = xarModAPIFunc('modules', 'admin', 'getlist',array('filter' => $this->filter));
-        $options = array();
         foreach($items as $item) {
             $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
         }

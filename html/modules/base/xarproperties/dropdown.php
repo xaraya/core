@@ -120,13 +120,12 @@ class SelectProperty extends DataProperty
      */
     function getOptions()
     {
-        $firstline = $this->getFirstline();
+        $options = $this->getFirstline();
         if (count($this->options) > 0) {
-            if (!empty($firstline)) $this->options = array_merge($firstline,$this->options);
+            if (!empty($firstline)) $this->options = array_merge($options,$this->options);
             return $this->options;
         }
-        $options = array();
-        if (!empty($firstline)) $options[] = $firstline;
+        
         if (!empty($this->initialization_function)) {
             @eval('$items = ' . $this->initialization_function .';');
             if (!isset($items) || !is_array($items)) $items = array();
@@ -195,7 +194,6 @@ class SelectProperty extends DataProperty
 
     function getFirstline()
     {
-        $line = array();
         $firstline = $this->initialization_firstline;
         if (!empty($firstline)) {
             if (is_array($firstline)) {
@@ -212,8 +210,9 @@ class SelectProperty extends DataProperty
                     $line = array('id' => $firstline[0], 'name' => $firstline[0]);
                 }
             }
+            return array($line);
         }
-        return $line;
+        return array();
     }
 
     /**

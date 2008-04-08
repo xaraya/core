@@ -34,12 +34,17 @@ class DataSourceProperty extends SelectProperty
 
     function getOptions()
     {
-        $sources = DataStoreFactory::getDataSources();
-        if (!isset($sources)) {
-            $options = array();
+        $options = $this->getFirstline();
+        if (count($this->options) > 0) {
+            if (!empty($firstline)) $this->options = array_merge($options,$this->options);
+            return $this->options;
         }
-        foreach ($sources as $source) {
-            $options[] = array('id' => $source, 'name' => $source);
+        
+        $sources = DataStoreFactory::getDataSources();
+        if (isset($sources) && is_array($sources)) {
+            foreach ($sources as $source) {
+                $options[] = array('id' => $source, 'name' => $source);
+            }
         }
         return $options;
     }
