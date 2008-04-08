@@ -108,6 +108,7 @@
   <!-- TODO: organize this -->
   <!-- xar:data-view/output/label etc. -->
   <xsl:include href="tags/data.xsl"/>
+  <xsl:include href="tags/articles.xsl"/>
 
   <!-- xar:else -->
   <xsl:include href="tags/else.xsl"/>
@@ -160,20 +161,42 @@
   <!-- 
     <xsl:text>[EXPR]</xsl:text><xsl:value-of select="$expr"/><xsl:text>[END EXPR]</xsl:text>
   -->
-  <xsl:variable name="nrOfHashes"
-      select="string-length($expr) - string-length(translate($expr, '#', ''))"/>
-
   <xsl:choose>
-    <!-- If we have zero or one hash, just output the text node -->
-    <xsl:when test="$nrOfHashes &lt; 2">
-      <!-- Escape any quote marks in the text and output -->
+    <!-- if we are inside a xar:ml tag the translation is already being handled -->
+    <xsl:when test="ancestor::xar:ml">
+<!--
       <xsl:call-template name="replace">
         <xsl:with-param name="source" select="$expr"/>
       </xsl:call-template>
+-->
+      <xsl:value-of select="$expr"/>
     </xsl:when>
 
-    <!-- Resolve left to right -->
+    <!-- if we are inside a pre tag we want everything sent back literally -->
+    <xsl:when test="ancestor::pre">
+      <xsl:value-of select="$expr"/>
+    </xsl:when>
+
     <xsl:otherwise>
+      <xsl:variable name="nrOfHashes"
+          select="string-length($expr) - string-length(translate($expr, '#', ''))"/>
+
+      <xsl:choose>
+        <!-- If we have zero or one hash, just output the text node -->
+        <xsl:when test="$nrOfHashes &lt; 2">
+      <!-- Escape any quote marks in the text and output -->
+              <xsl:processing-instruction name="php">
+                <xsl:text>echo xarML('</xsl:text>
+                <xsl:call-template name="replace">
+                  <xsl:with-param name="source" select="$expr"/>
+                </xsl:call-template>
+                <xsl:text>');</xsl:text>
+              </xsl:processing-instruction>
+-->
+        </xsl:when>
+
+        <!-- Resolve left to right -->
+        <xsl:otherwise>
       <!-- two or more, so in general ....#....#....#....#.... etc. -->
 
       <!-- find the text up to the first "real" delimiter -->
@@ -183,25 +206,27 @@
         </xsl:call-template>
       </xsl:variable>
 
-      <!-- [....]#....#.... : get the first part out of the way -->
+          <!-- [....]#....#.... : get the first part out of the way -->
 
-      <xsl:value-of select="substring($expr,0,$delimiter-position)"/>
+          <xsl:value-of select="substring($expr,0,$delimiter-position)"/>
 
-      <!-- Resolve the part in between -->
-      <!-- Left at this point: ....#[....]#.... -->
-      <xsl:variable name="expr-after" select="substring($expr,$delimiter-position + 1)"/>
-      <xsl:if test="substring-before($expr-after,'#') !=''">
+          <!-- Resolve the part in between -->
+          <!-- Left at this point: ....#[....]#.... -->
+          <xsl:variable name="expr-after" select="substring($expr,$delimiter-position + 1)"/>
+          <xsl:if test="substring-before($expr-after,'#') !=''">
           <xsl:text>'.</xsl:text>
-          <xsl:call-template name="resolvePHP">
-              <xsl:with-param name="expr" select="substring-before($expr-after,'#')"/>
-          </xsl:call-template>
+              <xsl:call-template name="resolvePHP">
+                  <xsl:with-param name="expr" select="substring-before($expr-after,'#')"/>
+              </xsl:call-template>
           <xsl:text>.'</xsl:text>
-      </xsl:if>
+          </xsl:if>
 
-      <!-- ....#....#[....#....#....etc.] -->
-      <xsl:call-template name="resolveText">
-        <xsl:with-param name="expr" select="substring-after($expr-after,'#')"/>
-      </xsl:call-template>
+          <!-- ....#....#[....#....#....etc.] -->
+          <xsl:call-template name="resolveText">
+            <xsl:with-param name="expr" select="substring-after($expr-after,'#')"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -254,7 +279,6 @@
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
 </xsl:template>
-
 <!-- Expression resolving in nodes-->
 <xsl:template name="resolvePHP">
   <xsl:param name="expr"/>
