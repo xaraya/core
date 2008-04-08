@@ -90,7 +90,7 @@ class Tree extends Object implements ITree
     public $root;
     public $asksallowschildren;
 
-    public $treedata;
+    public $treedata = array();
 
     function __construct(TreeNode $root=null)
     {

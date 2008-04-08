@@ -31,7 +31,12 @@ class CountryListProperty extends SelectProperty
     */
    function getOptions()
    {
-        $options = array();
+        $options = $this->getFirstline();
+        if (count($this->options) > 0) {
+            if (!empty($firstline)) $this->options = array_merge($options,$this->options);
+            return $this->options;
+        }
+
         $options[] = array('id' =>'af', 'name'=>xarML('Afghanistan'));
         $options[] = array('id' =>'ax', 'name'=>xarML('&#197;land Islands'));
         $options[] = array('id' =>'al', 'name'=>xarML('Albania'));

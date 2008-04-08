@@ -24,7 +24,12 @@ class StateListProperty extends SelectProperty
 
    function getOptions()
    {
-        $options = array();
+        $options = $this->getFirstline();
+        if (count($this->options) > 0) {
+            if (!empty($firstline)) $this->options = array_merge($options,$this->options);
+            return $this->options;
+        }
+        
         $options[] = array('id' =>'Alabama', 'name' =>'Alabama');
         $options[] = array('id' =>'Alaska', 'name' =>'Alaska');
         $options[] = array('id' =>'Arizona', 'name' =>'Arizona');
