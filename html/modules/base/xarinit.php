@@ -187,7 +187,7 @@ function base_init()
     xarConfigVars::set(null, 'Site.MLS.MLSMode', 'SINGLE');
 
     // The installer should now set the default locale based on the
-    // chose language, let's make sure that is true
+    // chosen language, let's make sure that is true
     if(!xarConfigVars::get(null, 'Site.MLS.DefaultLocale')) {
         xarConfigVars::set(null, 'Site.MLS.DefaultLocale', 'en_US.utf-8');
         $allowedLocales = array('en_US.utf-8');

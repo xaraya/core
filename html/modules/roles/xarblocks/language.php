@@ -64,7 +64,7 @@ function roles_languageblock_display($blockinfo)
         return;
     }
 
-    $current_locale = xarConfigVars::get(null, 'Site.MLS.DefaultLocale');
+    $current_locale = xarUserGetNavigationLocale();
 
     $site_locales = xarMLSListSiteLocales();
 
