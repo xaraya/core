@@ -62,7 +62,7 @@ class ArraySequence extends Object implements iSequence, iSequenceAdapter
         $this->items = array();
         return true;
     }
-    
+
     /**
      * Getter mapper
      *
