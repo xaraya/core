@@ -186,7 +186,10 @@
 
       <!-- [....]#....#.... : get the first part out of the way -->
 
-      <xsl:value-of select="substring($expr,0,$delimiter-position)"/>
+      <!-- Just escape the quotes and display the first part -->
+      <xsl:call-template name="replace">
+        <xsl:with-param name="source" select="substring($expr,0,$delimiter-position)"/>
+      </xsl:call-template>
 
       <!-- Resolve the part in between -->
       <!-- Left at this point: ....#[....]#.... -->
