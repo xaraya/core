@@ -274,41 +274,19 @@ function xarUserGetNavigationLocale()
         $id = xarUserGetVar('id');
           //last resort user is falling over on this uservar by setting multiple times
          //return true for last resort user - use default locale
-         if ($id==XARUSER_LAST_RESORT) return true;
+         if ($id == XARUSER_LAST_RESORT) return true;
 
         $locale = xarModUserVars::get('roles', 'locale');
-        if (!isset($locale)) {
-            // CHECKME: why is this here? The logic of falling back is already in the modgetuservar
-            $siteLocale = xarModVars::get('roles', 'locale');
-            if (!isset($siteLocale)) {
-                xarModVars::set('roles', 'locale', '');
-            }
-        }
         if (empty($locale)) {
             $locale = xarSessionGetVar('navigationLocale');
-            if (!isset($locale)) {
-                $locale = xarMLSGetSiteLocale();
-            }
-            xarModUserVars::set('roles', 'locale', $locale);
-        } else {
-            $siteLocales = xarMLSListSiteLocales();
-            if (!in_array($locale, $siteLocales)) {
-                // Locale not available, use the default
-                $locale = xarMLSGetSiteLocale();
-                xarModUserVars::set('roles', 'locale', $locale);
-                xarLogMessage("WARNING: falling back to default locale: $locale in xarUserGetNavigationLocale function");
-            }
         }
-        xarSessionSetVar('navigationLocale', $locale);
     } else {
         $locale = xarSessionGetVar('navigationLocale');
-        if (!isset($locale)) {
-            // CHECKME: use dynamicdata for roles, module user variable and/or
-            // session variable (see also 'timezone' in xarMLS_userOffset())
-            $locale = xarMLSGetSiteLocale();
-            xarSessionSetVar('navigationLocale', $locale);
-        }
     }
+    if (empty($locale)) {
+        $locale = xarConfigVars::get(null, 'Site.MLS.DefaultLocale');
+    }
+    xarSessionSetVar('navigationLocale', $locale);
     return $locale;
 }
 
