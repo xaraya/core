@@ -410,6 +410,7 @@ class DataProperty extends Object implements iDataProperty
     function showHidden(Array $data = array())
     {
         $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
+        $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
 
         // Add the object's field prefix if there is one
         $prefix = '';
