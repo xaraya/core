@@ -1268,7 +1268,9 @@ function installer_admin_upgrade2()
         $content .= "<p>CSS tags registered successfully, css subsystem is ready to be deployed.</p>";
     }
 
-    // Bug 3164, store locale in ModUSerVar
+    // Set the fallback locale for logged in users to be empty
+    // If there is not modvar/moduservar the locale falls back to the session, 
+    // and then to the default site locale
     xarModVars::set('roles', 'locale', '');
 
   $content .= "<p><strong>Checking <strong>include/properties</strong> directory for moved DD properties</strong></p>";
