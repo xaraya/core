@@ -389,7 +389,6 @@ abstract class PreparedStatementCommon {
                  // it does, then this method just shouldn't be used).
                  $this->setTimestamp($paramIndex, $value);
             } else {
-            die($value);
                 throw new SQLException("Unsupported object type passed to set(): " . get_class($value));
             }
         } else {
