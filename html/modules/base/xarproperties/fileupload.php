@@ -82,8 +82,7 @@ class FileUploadProperty extends DataProperty
 
         // Note : {user} will be replaced by the current user uploading the file - e.g. var/uploads/{user} -&gt; var/uploads/myusername_123
         if (!empty($this->initialization_basedirectory) && preg_match('/\{user\}/',$this->initialization_basedirectory)) {
-            $uname = xarUserGetVar('uname');
-            $uname = xarVarPrepForOS($uname);
+            $uname = 'user';
             $id = xarUserGetVar('id');
             // Note: we add the userid just to make sure it's unique e.g. when filtering
             // out unwanted characters through xarVarPrepForOS, or if the database makes
@@ -92,8 +91,7 @@ class FileUploadProperty extends DataProperty
             $this->initialization_basedirectory = preg_replace('/\{user\}/',$udir,$this->initialization_basedirectory);
         }
         if (!empty($this->initialization_importdirectory) && preg_match('/\{user\}/',$this->initialization_importdirectory)) {
-            $uname = xarUserGetVar('uname');
-            $uname = xarVarPrepForOS($uname);
+            $uname = 'user';
             $id = xarUserGetVar('id');
             // Note: we add the userid just to make sure it's unique e.g. when filtering
             // out unwanted characters through xarVarPrepForOS, or if the database makes
@@ -112,7 +110,6 @@ class FileUploadProperty extends DataProperty
         if (!isset($value)) {
             xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET);
         }
-
         return $this->validateValue($value);
     }
 
