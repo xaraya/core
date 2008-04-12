@@ -16,7 +16,18 @@
   <xsl:processing-instruction name="php">
     <xsl:text>echo xarML('</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>');</xsl:text>
+    <xsl:text>'</xsl:text>
+    <xsl:for-each select=".//xar:var">
+      <xsl:text>,</xsl:text>
+      <xsl:call-template name="xarvar_getcode"/>
+    </xsl:for-each>
+    <xsl:for-each select="xar:mlvar">
+      <xsl:if test="count(xar:var)=0">
+        <xsl:text>,</xsl:text>
+        <xsl:call-template name="mlvar"/>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:text>);</xsl:text>
   </xsl:processing-instruction>
 </xsl:template>
 
@@ -27,37 +38,81 @@
 <xsl:template match="xar:set/xar:ml">
   <xsl:text>xarML('</xsl:text>
   <xsl:apply-templates/>
-  <xsl:text>');</xsl:text>
+  <xsl:text>'</xsl:text>
+  <xsl:for-each select=".//xar:var">
+    <xsl:text>,</xsl:text>
+    <xsl:call-template name="xarvar_getcode"/>
+  </xsl:for-each>
+  <xsl:for-each select="xar:mlvar">
+    <xsl:if test="count(xar:var)=0">
+      <xsl:text>,</xsl:text>
+      <xsl:call-template name="mlvar"/>
+    </xsl:if>
+  </xsl:for-each>
+  <xsl:text>);</xsl:text>
 </xsl:template>
 
 <!--
   xar:var tags as children of xar:ml need to get placeholders
-
 -->
 <xsl:template match="xar:ml//xar:var">
   <xsl:text>#(</xsl:text>
   <xsl:number from="xar:ml" level="any"/>
-  <xsl:text>)#</xsl:text>
+  <xsl:text>)</xsl:text>
 </xsl:template>
 
 
 
-<!-- Not handled anymore, ignore closed mlvar, pass on content of mlstring -->
-<xsl:template match="xar:mlvar"/>
-<xsl:template match="xar:mlstring">
-  <xsl:call-template name="replace">
-    <xsl:with-param name="source">
-      <xsl:value-of select="."/>
+<!--
+  Matching the old xar:mlvar tag does nothing, but
+-->
+<xsl:template match="xar:mlvar" />
+
+<!--
+  we pick up its value/expression to add to the PHP xarML function as a param by explicitly calling this template
+-->
+<xsl:template name="mlvar">
+  <xsl:call-template name="resolvePHP">
+    <xsl:with-param name="expr">
+      <xsl:value-of select="normalize-space(.)"/>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
+
+<!-- mlstring forces translation for now -->
+<xsl:template match="xar:mlstring">
+<!--  <xsl:call-template name="translateText">
+    <xsl:with-param name="expr" select="."/>
+  </xsl:call-template>
+-->
+  <xsl:call-template name="replace">
+    <xsl:with-param name="source" select="."/>
+  </xsl:call-template>
+
+</xsl:template>
+
+<!-- mlstring inside ml just needs to reolve the text node -->
+<xsl:template match="xar:ml/xar:mlstring">
+  <xsl:call-template name="replace">
+    <xsl:with-param name="source" select="."/>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- this case is covered bythe previous one
 <xsl:template match="xar:set/xar:ml/xar:mlstring">
   <xsl:call-template name="replace">
-    <xsl:with-param name="source">
-      <xsl:value-of select="."/>
-    </xsl:with-param>
+    <xsl:with-param name="source" select="."/>
   </xsl:call-template>
 </xsl:template>
-<xsl:template match="xar:set/xar:mlstring"><xsl:text>'</xsl:text><xsl:apply-templates /><xsl:text>'</xsl:text></xsl:template>
+-->
+
+<!-- mlstring inside set just needs to reolve the text node -->
+<xsl:template match="xar:set/xar:mlstring">
+  <xsl:text>xarML('</xsl:text>
+  <xsl:call-template name="resolveText">
+    <xsl:with-param name="expr" select="."/>
+  </xsl:call-template>
+  <xsl:text>')</xsl:text>
+</xsl:template>
 
 </xsl:stylesheet>

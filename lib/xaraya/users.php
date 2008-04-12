@@ -303,13 +303,6 @@ function xarUserSetNavigationLocale($locale)
         xarSessionSetVar('navigationLocale', $locale);
         if (xarUserIsLoggedIn()) {
             $userLocale = xarModUserVars::get('roles', 'locale');
-            if (!isset($userLocale)) {
-                // CHECKME: Why is this here? the fallback logic is already in modgetuservar
-                $siteLocale = xarModVars::get('roles', 'locale');
-                if (!isset($siteLocale)) {
-                    xarModVars::set('roles', 'locale', '');
-                }
-            }
             xarModUserVars::set('roles', 'locale', $locale);
         }
         return true;

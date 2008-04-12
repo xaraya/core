@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-  <style type="text/css">
+<style type="text/css">
     .testcase { padding: 3pt; margin: 5pt; border: thin solid black;
     }
   </style>
@@ -11,7 +11,7 @@
 <div>
   <h2>Using the compiler test page</h2>
   <p>
-    This page collects test for the new xslt based Blocklayout Compiler. Its
+    This page collects tests for the new xslt based Blocklayout Compiler. Its
     aim is to have one reference place to visit in an install, to quickly check
     if the compiler is sane, as to eliminate needless hunting for a bug when
     the problem is really the compiler. For this page to work, you obviously
@@ -65,20 +65,28 @@
     </p>
     <h4>Source</h4>
     <pre>
-      <![CDATA[ <xar:comment iecondition="lt IE 7">This would apply to IE with version less than 7</xar:comment> ]]>
+      <![CDATA[
+      <xar:set name="seven">7</xar:set>
+      <xar:comment iecondition="lt IE 7">This would apply to IE with version less than ##$seven#</xar:comment> 
+        ]]>
       <xar:comment iecondition="lt IE 7">This would apply to IE with version less than 7</xar:comment>
     </pre>
     <h4>Expected</h4>
     <pre>
       <![CDATA[ <!--[lt IE 7]>This would apply to IE with version less than 7<![endif]--> ]]>
     </pre>
+      <xar:set name="seven">7</xar:set>
+    R: <xar:comment iecondition="lt IE 7">This would apply to IE with version less than #$seven#</xar:comment>
+    Does not work: see trac ticket #123
   </div>
   <div class="testcase">
-    <h3>Old xar:ml construct does nothing special</h3>
+    <h3>Old xar:ml construct translates</h3>
     <p>
       Adding the xar:ml tag and its constructs inside a xar:set, so we test 2
-      cases at once. The old xar:ml/xar:mlstring construct should do nothing
-      special now.
+      cases at once.
+    </p>
+    <p>
+      Note: in the transitional scenario we continue to support the old version of xar:mlvar
     </p>
     <h4>Source</h4>
     <pre>
@@ -87,8 +95,8 @@
       <xar:set name="next">4</xar:set>
       <xar:set name="nextpagelabel">
         <xar:ml>
-          <xar:mlstring>Next page; #(1) items</xar:mlstring>
-          <xar:mlvar>##$next#</xar:mlvar>
+          <xar:mlstring>Next page; ##(1)## items</xar:mlstring>
+          <xar:mlvar>$next</xar:mlvar>
         </xar:ml>
       </xar:set>
       <xar:var name="nextpagelabel"/>
@@ -96,7 +104,7 @@
     </pre>
     <h4>Results</h4>
     <pre>
-      E: Next page; #(1)# items
+      E: Next page; 4 items
 <xar:set name="nextpagelabel">
       <xar:ml>
         <xar:mlstring>Next page; #(1) items</xar:mlstring>
@@ -115,6 +123,7 @@
         <xar:set name="next">4</xar:set>
         <![CDATA[
         <xar:set name="next">4</xar:set>
+        <xar:set name="link">'&lt;a href="blah"&gt;' . xarML('Test #(1) items',$next).'&lt;/a&gt;'</xar:set>
         <xar:set name="nextpagelabel">
           <xar:ml>
             Next page; <xar:var name="next"/> items, yes really <xar:var name="next"/>.
@@ -122,12 +131,13 @@
         </xar:set>
         <xar:var name="nextpagelabel"/>
         <xar:ml>
-          Next page; <a href="blah"> Test <xar:var name="next"/> items</a>, yes really <xar:var name="next"/>.
+          Next page; <xar:var name="link"/>, yes really <xar:var name="next"/>.
         </xar:ml>
       ]]>
       </pre>
       <h4>Results</h4>
       <xar:set name="next">4</xar:set>
+      <xar:set name="link">'&lt;a href="blah"&gt;' . xarML('Test #(1) items',$next).'&lt;/a&gt;'</xar:set>
       <pre>
 E: Next page; 4 items, yes really 4.
 E: Next page; <a href="blah"> Test 4 items</a>, yes really 4.
@@ -138,7 +148,7 @@ E: Next page; <a href="blah"> Test 4 items</a>, yes really 4.
         </xar:set>
         <xar:var name="nextpagelabel"/>
         <xar:ml>
-          R: Next page; <a href="blah"> Test <xar:var name="next"/> items</a>, yes really <xar:var name="next"/>.
+          R: Next page; <xar:var name="link"/>, yes really <xar:var name="next"/>
         </xar:ml>
       </pre>
     </div>
