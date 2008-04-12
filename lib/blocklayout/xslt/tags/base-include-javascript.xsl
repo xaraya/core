@@ -13,7 +13,7 @@
   <xsl:variable name="module">
     <xsl:choose>
       <xsl:when test="not(@module)">
-        <xsl:text>$_bl_module_name</xsl:text>
+        <xsl:text>xarMod::getName()</xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>'</xsl:text>
