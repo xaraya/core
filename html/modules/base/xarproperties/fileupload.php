@@ -9,7 +9,7 @@
  * @link http://xaraya.com/index.php/release/68.html
  */
 /* Include parent class */
-sys::import('modules.dynamicdata.class.properties');
+sys::import('modules.dynamicdata.class.properties.master');
 /**
  * Class to handle file upload properties
  */
@@ -179,7 +179,6 @@ class FileUploadProperty extends DataProperty
         }
 
 //        $upname = $name .'_upload';
-        $filetype = $this->validation_file_extensions;
 
         if (isset($_FILES[$name])) {
             $file =& $_FILES[$name];
@@ -190,8 +189,7 @@ class FileUploadProperty extends DataProperty
         if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->validation_max_file_size) {
             // if the uploads module is hooked (to be verified and set by the calling module)
             if (!empty($_FILES[$name]['name'])) {
-                $fileName = xarVarPrepForOS(basename(strval($file['name'])));
-                if (!empty($filetype) && !preg_match("/\.$filetype$/",$fileName)) {
+                if (!$this->validateExtension($file['name'])) {
                     $this->invalid = xarML('The file type is not allowed');
                     $this->value = null;
                     return false;
@@ -213,7 +211,7 @@ class FileUploadProperty extends DataProperty
         } elseif (xarVarIsCached('DynamicData.FileUpload',$name)) {
             $this->value = xarVarGetCached('DynamicData.FileUpload',$name);
         } elseif (!empty($value) &&  !(is_numeric($value) || stristr($value, ';'))) {
-            if (!empty($filetype) && !preg_match("/\.$filetype$/",$value)) {
+            if (!$this->validateExtension($value)) {
                 $this->invalid = xarML('The file type is not allowed');
                 $this->value = null;
                 return false;
@@ -224,7 +222,9 @@ class FileUploadProperty extends DataProperty
             }
             $this->value = $value;
         } else {
-            $this->value = '';
+            $this->invalid = xarML('The file for upload was not found');
+            $this->value = null;
+            return false;
         }
         return true;
     }
@@ -316,6 +316,13 @@ class FileUploadProperty extends DataProperty
         }
     }
 
+    public function validateExtension($filename='')
+    {
+        $filetype = $this->validation_file_extensions;
+        $filename = xarVarPrepForOS(basename(strval($filename)));
+        return (!empty($filetype) && preg_match("/\.$filetype$/",$filename));
+    }
+    
 /*    public function parseConfiguration($validation = '')
     {
         if ($this->UploadsModule_isHooked == TRUE) {
