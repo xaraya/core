@@ -1,12 +1,11 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<h4>Component - #$component#</h4> 
-<p>
-    <xar:mlstring>
-        The Theme CSS tools deal with the styles defined and included by the user themes.
-    </xar:mlstring>
-</p>
-<xar:if condition="$configurable">
-
-<xar:else />
-    <h4>#$unmanagednote#</h4>
-</xar:if></xar:template>
+    <h4>Component - #$component#</h4> 
+    <p>
+        <xar:mlstring>
+            The Theme CSS tools deal with the styles defined and included by the user themes.
+        </xar:mlstring>
+    </p>
+    <xar:if condition="!$configurable">
+        <h4>#$unmanagednote#</h4>
+    </xar:if>
+</xar:template>
