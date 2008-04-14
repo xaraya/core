@@ -44,6 +44,15 @@ class ObjectRefProperty extends SelectProperty
         $this->filepath   = 'modules/dynamicdata/xarproperties';
     }
 
+    public function showInput(Array $data = array())
+    {
+        // Allow overriding by specific parameters
+            if (isset($data['refobject']))    $this->initialization_refobject = $data['refobject'];
+            if (isset($data['store_prop']))   $this->initialization_store_prop = $data['store_prop'];
+            if (isset($data['display_prop'])) $this->initialization_display_prop = $data['display_prop'];
+        return parent::showInput($data);
+    }
+
     // Return a list of array(id => value) for the possible options
     function getOptions()
     {
