@@ -141,6 +141,10 @@ function themes_adminapi_getthemelist($args)
                 $themeInfo['version'] = "&#160;";
                 // end patch
             }
+
+            // Ignore cases where the theme is in the db but not present in the filesystem
+            if (empty($themeFileInfo)) continue;
+                
             $themeInfo = array_merge($themeInfo, $themeFileInfo);
 
             xarVarSetCached('Theme.Infos', $themeInfo['regid'], $themeInfo);
