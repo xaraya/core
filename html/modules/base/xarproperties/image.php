@@ -20,6 +20,7 @@ class ImageProperty extends TextBoxProperty
     public $desc       = 'Image';
 
     public $imagetext  = 'no image';
+    public $imagealt   = 'Image';
 
     public $initialization_image_source  = 'url';
     public $initialization_basedirectory  = 'var/uploads';
@@ -83,6 +84,7 @@ class ImageProperty extends TextBoxProperty
             $data['value'] = $this->initialization_basedirectory . "/" . $data['value'];
         }
         if (empty($data['imagetext'])) $data['imagetext'] = $this->imagetext;
+        if (empty($data['alt'])) $data['alt'] = $this->imagealt;
 
         return parent::showOutput($data);
     }
