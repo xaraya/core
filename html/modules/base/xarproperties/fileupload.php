@@ -224,7 +224,7 @@ class FileUploadProperty extends DataProperty
             $this->value = $value;
         } else {
             // No file name entered, ignore
-            $this->value = null;
+            $this->value = '';
             return true;
         }
         return true;
