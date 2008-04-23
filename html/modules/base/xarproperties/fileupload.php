@@ -186,6 +186,7 @@ class FileUploadProperty extends DataProperty
             $file = array();
         }
 
+//            var_dump($file);exit;
         if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->validation_max_file_size) {
             // if the uploads module is hooked (to be verified and set by the calling module)
             if (!empty($_FILES[$name]['name'])) {
@@ -222,9 +223,9 @@ class FileUploadProperty extends DataProperty
             }
             $this->value = $value;
         } else {
-            $this->invalid = xarML('The file for upload was not found');
+            // No file name entered, ignore
             $this->value = null;
-            return false;
+            return true;
         }
         return true;
     }
