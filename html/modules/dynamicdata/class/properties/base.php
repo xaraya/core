@@ -296,8 +296,8 @@ class DataProperty extends Object implements iDataProperty
      */
     public function showInput(Array $data = array())
     {
-        if(!empty($data['preset']))
-            return $this->_showPreset($data);
+//        var_dump($data);
+//        if(!empty($data['preset']) && $data['preset']) return $this->_showPreset($data);
 
         if (!empty($data['hidden'])) {
             if ($data['hidden'] == 'active') {
@@ -463,28 +463,15 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    private final function _showPreset(Array $args = array())
+    public final function _showPreset(Array $data = array())
     {
         // Check for empty here instead of isset, e.g. for <xar:data-input ... value="" />
-        if(empty($args['value']))
-        {
-            if(empty($args['name']))
-                $isvalid = $this->checkInput();
-            else
-                $isvalid = $this->checkInput($args['name']);
+        if(empty($data['name'])) $isvalid = $this->checkInput();
+        else $isvalid = $this->checkInput($data['name']);
+        if(!$isvalid) $isvalid = $this->checkInput($this->name);
 
-            if($isvalid)
-                // remove the original input value from the arguments
-                unset($args['value']);
-            else
-                // clear the invalid message for preset
-                $this->invalid = '';
-        }
-
-        if(!empty($args['hidden']))
-            return $this->showHidden($args);
-        else
-            return $this->showInput($args);
+        if(!empty($data['hidden'])) return $this->showHidden($data);
+        else return $this->showInput($data);
     }
 
     /**
