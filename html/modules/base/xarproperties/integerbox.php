@@ -36,6 +36,10 @@ class NumberBoxProperty extends TextBoxProperty
     {
         if (!parent::validateValue($value)) return false;
 
+        // We might have picked up empty string values in the configuration
+        if ($this->validation_min_value == "") $this->validation_min_value = null;
+        if ($this->validation_max_value == "") $this->validation_max_value = null;
+
         if (!isset($value) || $value === '') {
             if (isset($this->validation_min_value)) {
                 $this->setValue($this->validation_min_value);
@@ -46,11 +50,11 @@ class NumberBoxProperty extends TextBoxProperty
             }
         } elseif (is_numeric($value)) {
             $value = intval($value);
-            if (isset($this->min) && isset($this->validation_max_value) && ($this->validation_min_value > $value || $this->validation_max_value < $value)) {
+            if (isset($this->validation_min_value) && isset($this->validation_max_value) && ($this->validation_min_value > $value || $this->validation_max_value < $value)) {
                 $this->invalid = xarML('integer : allowed range is between #(1) and #(2)',$this->validation_min_value,$this->validation_max_value);
                 $this->setValue();
                 return false;
-            } elseif (isset($this->min) && $this->validation_min_value > $value) {
+            } elseif (isset($this->validation_min_value) && $this->validation_min_value > $value) {
                 if (!empty($this->validation_min_value_invalid)) {
                     $this->invalid = xarML($this->validation_min_value_invalid);
                 } else {
@@ -59,6 +63,7 @@ class NumberBoxProperty extends TextBoxProperty
                 $this->setValue();
                 return false;
             } elseif (isset($this->validation_max_value) && $this->validation_max_value < $value) {
+
                 if (!empty($this->validation_max_value_invalid)) {
                     $this->invalid = xarML($this->validation_max_value_invalid);
                 } else {

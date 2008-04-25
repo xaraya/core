@@ -296,9 +296,6 @@ class DataProperty extends Object implements iDataProperty
      */
     public function showInput(Array $data = array())
     {
-//        var_dump($data);
-//        if(!empty($data['preset']) && $data['preset']) return $this->_showPreset($data);
-
         if (!empty($data['hidden'])) {
             if ($data['hidden'] == 'active') {
                 $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE);
@@ -465,7 +462,6 @@ class DataProperty extends Object implements iDataProperty
      */
     public final function _showPreset(Array $data = array())
     {
-        // Check for empty here instead of isset, e.g. for <xar:data-input ... value="" />
         if(empty($data['name'])) $isvalid = $this->checkInput();
         else $isvalid = $this->checkInput($data['name']);
         if(!$isvalid) $isvalid = $this->checkInput($this->name);
