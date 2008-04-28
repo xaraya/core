@@ -67,10 +67,12 @@ class ObjectRefProperty extends SelectProperty
 
         if ($this->initialization_refobject == 'objects') {
             // In this case need to go directly (rather than get a DD object) to avoid recursion
+            if ($this->initialization_display_prop == 'id') $sortprop = "objectid";
+            else $sortprop = $this->initialization_display_prop;
             $dbconn = xarDB::getConn();
             $xartable = xarDB::getTables();
             $q = "SELECT id, name, label, parent, moduleid, itemtype, class, filepath,
-                urlparam, maxid, config, isalias FROM " . $xartable['dynamic_objects'];
+                urlparam, maxid, config, isalias FROM " . $xartable['dynamic_objects'] . " ORDER BY " . $sortprop;
             $result = $dbconn->executeQuery($q);
             $items = array();
             while ($result->next()) {
