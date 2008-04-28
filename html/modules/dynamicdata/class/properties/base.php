@@ -544,6 +544,7 @@ class DataProperty extends Object implements iDataProperty
         else $data['required'] = false;
         if(!isset($data['module']))   $data['module']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
+        if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
 
         if (!isset($data['display'])) $data['display'] = $this->getConfigProperties('display',1);
         if (!isset($data['validation'])) $data['validation'] = $this->getConfigProperties('validation',1);
