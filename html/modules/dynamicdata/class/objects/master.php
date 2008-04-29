@@ -397,7 +397,8 @@ class DataObjectMaster extends Object
             if(
                 !empty($this->fieldlist) and          // if there is a fieldlist
                 !in_array($name,$this->fieldlist) and // but the field is not in it,
-                $property->type != 21                 // and we're not on an Item ID property
+                $property->type != 21 or                // and we're not on an Item ID property
+                ($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)  // or the property is disabled
             )
             {
                 // Skip it.
