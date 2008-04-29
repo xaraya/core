@@ -137,10 +137,8 @@ class UsernameProperty extends TextBoxProperty
     public function getValue()
     {
         if ($this->initialization_store_type == 'id') {
-            if ($this->value == 0) return '[All]';
-            if(!is_numeric($this->value)) {
-                throw new BadParameterException($this->value, 'is not a user ID');
-            }
+            if(!is_numeric($this->value)) return $this->value;
+            if ($this->value === 0) return '[All]';
             return xarUserGetVar('uname',$this->value);
         } else {
             if (empty($this->value)) return '';
