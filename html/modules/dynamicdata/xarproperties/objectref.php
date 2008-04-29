@@ -100,6 +100,7 @@ class ObjectRefProperty extends SelectProperty
                                         'sort'     => $this->initialization_display_prop,
                                         'fieldlist'=> array($this->initialization_display_prop,$this->initialization_store_prop))
                                  );
+            $object = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
         }
         
         // Make sure the display and store fields are valid properties of this object
