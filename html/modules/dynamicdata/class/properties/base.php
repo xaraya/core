@@ -62,6 +62,8 @@ class DataProperty extends Object implements iDataProperty
     public $display_required                = false;           // the field is not tagged as "required" for input
     public $display_tooltip                 = "";              // there is no tooltip text, and so no tooltip
     public $initialization_other_rule       = null;
+    public $validation_equals               = null;
+    public $validation_notequals            = null;
 
     /**
      * Default constructor setting the variables
@@ -205,14 +207,13 @@ class DataProperty extends Object implements iDataProperty
      */
     public function checkInput($name = '', $value = null)
     {
-            // store the fieldname for configurations who need them (e.g. file uploads)
+        // store the fieldname for configurations who need them (e.g. file uploads)
         $name = empty($name) ? 'dd_'.$this->id : $name;
         $this->fieldname = $name;
         $this->invalid = '';
         if(!isset($value)) {
             list($found,$value) = $this->fetchValue($name);
             if (!$found) {
-            // store the fieldname for configurations who need them (e.g. file uploads)
                 $this->objectref->missingfields[] = $this->name;
                 return null;
             }
@@ -229,6 +230,12 @@ class DataProperty extends Object implements iDataProperty
     {
         if(!isset($value)) $value = $this->getValue();
         else $this->setValue($value);
+        if (isset($this->validation_equals)) {
+            if ($this->value != $this->validation_equals) return false;
+        }
+        if (isset($this->validation_notequals)) {
+            if ($this->value === $this->validation_notequals) return false;
+        }
 
 //        $this->value = null;
 //        $this->invalid = xarML('unknown property');
@@ -581,6 +588,7 @@ class DataProperty extends Object implements iDataProperty
                 $properties = $this->getConfigProperties($configtype,1);
                 foreach ($properties as $name => $configarg) {
                     if (isset($configuration[$name])) {
+                        if ($configarg['ignore_empty'] && ($configuration[$name] == '')) continue;
                         $storableconfiguration[$name] = $configuration[$name];
                     }
                     // Invalid messages only get stored if they are non-empty. For all others we check whether they exist (for now)
