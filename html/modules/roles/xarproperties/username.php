@@ -138,7 +138,7 @@ class UsernameProperty extends TextBoxProperty
     {
         if ($this->initialization_store_type == 'id') {
             if(!is_numeric($this->value)) return $this->value;
-            if ($this->value === 0) return '[All]';
+            if ($this->value == 0) return '[All]';
             return xarUserGetVar('uname',$this->value);
         } else {
             if (empty($this->value)) return '';
@@ -154,9 +154,10 @@ class UsernameProperty extends TextBoxProperty
             } else {
                 if ($value == '[All]') {
                     $this->value = 0;
-                } else {
+                } else {echo $value;
                     $role = xarRoles::ufindRole($value);
-                    $this->value = $role->getID();
+                    if (empty($role)) $this->value = null;
+                    else $this->value = $role->getID();
                 }
             }
         } else {

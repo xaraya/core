@@ -399,6 +399,11 @@ function dynamicdata_init()
                 'null'        => false,
                 'default'     => ''
             ),
+            'ignore_empty'     => array(
+                'type'        => 'integer',
+                'null'        => false,
+                'default'     => '1'
+            ),
             'configuration'   => array(
                 'type'        => 'text',
                 'size'        => 'medium',
