@@ -154,7 +154,7 @@ class UsernameProperty extends TextBoxProperty
             } else {
                 if ($value == '[All]') {
                     $this->value = 0;
-                } else {echo $value;
+                } else {
                     $role = xarRoles::ufindRole($value);
                     if (empty($role)) $this->value = null;
                     else $this->value = $role->getID();
