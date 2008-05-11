@@ -458,7 +458,7 @@ function base_menublock_insert($blockinfo)
 
     // User links.
     $content = array();
-    $c = 0;
+    $c = 1;
     if (!xarVarFetch('linkname', 'array', $linkname, NULL, XARVAR_NOT_REQUIRED)) return;
     if (isset($linkname)) {
         if (!xarVarFetch('linkurl',  'list:str', $linkurl,  NULL, XARVAR_NOT_REQUIRED)) {return;}
