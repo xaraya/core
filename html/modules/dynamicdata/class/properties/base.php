@@ -581,6 +581,7 @@ class DataProperty extends Object implements iDataProperty
                 $properties = $this->getConfigProperties($configtype,1);
                 foreach ($properties as $name => $configarg) {
                     if (isset($configuration[$name])) {
+                        if ($configarg['ignore_empty'] && ($configuration[$name] == '')) continue;
                         $storableconfiguration[$name] = $configuration[$name];
                     }
                     // Invalid messages only get stored if they are non-empty. For all others we check whether they exist (for now)

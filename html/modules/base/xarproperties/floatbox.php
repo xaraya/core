@@ -23,9 +23,12 @@ class FloatBoxProperty extends TextBoxProperty
     public $display_size                    = 10;
     public $display_maxlength               = 30;
 
+    public $defaultvalue   = 0;
+    
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
+        if ($this->value == '') $this->value = $this->defaultvalue;
     }
 
     public function validateValue($value = null)
