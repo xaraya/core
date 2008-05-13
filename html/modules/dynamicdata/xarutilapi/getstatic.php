@@ -60,19 +60,6 @@ function dynamicdata_utilapi_getstatic($args)
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
 
-    $metaTable = xarDB::getPrefix() . '_tables';
-
-    if ($modinfo['name'] == 'dynamicdata') {
-        // let's cheat a little for DD, because otherwise it won't find any tables :)
-        if ($itemtype == 0) {
-            $modinfo['name'] = 'dynamic_objects';
-        } elseif ($itemtype == 1) {
-            $modinfo['name'] = 'dynamic_properties';
-        } elseif ($itemtype == 2) {
-            $modinfo['name'] = 'dynamic_data';
-        }
-    }
-
     $dbInfo = $dbconn->getDatabaseInfo();
     $dbTables = array();
 
