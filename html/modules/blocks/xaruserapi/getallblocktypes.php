@@ -41,7 +41,7 @@ function blocks_userapi_getallblocktypes($args)
     // Fetch instance details.
     $query = "SELECT btypes.id, mods.name, btypes.type, btypes.info
               FROM  $block_types_table btypes, $modules_table mods
-              WHERE btypes.modid = mods.id ";
+              WHERE btypes.module_id = mods.id ";
 
     $bind = array();
     if (!empty($module)) {

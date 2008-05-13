@@ -165,7 +165,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
               LEFT JOIN $blockGroupsTable bgroups ON group_inst.group_id = bgroups.id
               LEFT JOIN $blockInstancesTable inst ON inst.id = group_inst.instance_id
               LEFT JOIN $blockTypesTable btypes   ON btypes.id = inst.type_id
-              LEFT JOIN $modulesTable mods        ON btypes.modid = mods.id
+              LEFT JOIN $modulesTable mods        ON btypes.module_id = mods.id
               WHERE     bgroups.name = ? AND
                         inst.state > ?
               ORDER BY  group_inst.position ASC";

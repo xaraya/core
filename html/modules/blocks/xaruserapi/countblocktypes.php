@@ -34,7 +34,7 @@ function blocks_userapi_countblocktypes($args)
 
     $query = "SELECT count(btypes.id)
               FROM $block_types_table btypes, $modules_table mods
-              WHERE btypes.modid = mods.id ";
+              WHERE btypes.module_id = mods.id ";
     if(!empty($module)) {
         $query .= "AND mods.name = ? ";
         $bind[] = $module;

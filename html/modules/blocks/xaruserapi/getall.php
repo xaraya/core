@@ -45,7 +45,7 @@ function blocks_userapi_getall($args)
                      btypes.id, mods.name, btypes.type
               FROM   $modules_table mods, $block_instances_table binst
               LEFT JOIN $block_types_table btypes  ON btypes.id = binst.type_id
-              WHERE  mods.id = btypes.modid ";
+              WHERE  mods.id = btypes.module_id ";
 
     $bindvars = array();
     if (!empty($bid)) {
