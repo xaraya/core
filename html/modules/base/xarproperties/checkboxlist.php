@@ -68,7 +68,7 @@ class CheckboxListProperty extends SelectProperty
             $data['value'] = explode(',', $data['value']);
         }
 
-/*        if (!isset($data['options']) || count($data['options']) == 0) {
+        if (!isset($data['options']) || count($data['options']) == 0) {
             $options = $this->getOptions();
         } else {
             $options = $data['options'];
@@ -77,7 +77,7 @@ class CheckboxListProperty extends SelectProperty
             $option['checked'] = in_array($option['id'],$data['value']);
             $data['options'][$key] = $option;
         }
-*/        return parent::showInput($data);
+        return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
