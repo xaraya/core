@@ -103,6 +103,7 @@ function themes_admin_updateconfig()
     }
 
     // lets update status and display updated configuration
+	$redirecturl = xarModURL('themes', 'admin', 'modifyconfig');
     xarResponseRedirect($redirecturl);
     // Return
     return true;
