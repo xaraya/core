@@ -302,8 +302,11 @@ class DataProperty extends Object implements iDataProperty
             return $this->showOutput($data) . $this->showHidden($data);
         }
 
-        // Our common items we need
-        if(!isset($data['name']))        $data['name'] = 'dd_'.$this->id;
+        // Display directive for the name
+        if(!isset($data['name'])) {
+            if ($this->anonymous == true) $data['name'] = $this->name;
+            else $data['name'] = 'dd_'.$this->id;
+        }
         if(!isset($data['id']))          $data['id']   = $data['name'];
 
         // Add the object's field prefix if there is one
