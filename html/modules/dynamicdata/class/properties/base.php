@@ -178,25 +178,14 @@ class DataProperty extends Object implements iDataProperty
      */
     public function fetchValue($name = '')
     {
-        $isvalid = true;
+        $found = false;
         $value = null;
-        xarVarFetch($name, 'isset', $namevalue,  NULL, XARVAR_DONT_SET);
+        xarVarFetch($name, 'isset', $namevalue, NULL, XARVAR_DONT_SET);
         if(isset($namevalue)) {
+            $found = true;
             $value = $namevalue;
-        } else {
-            xarVarFetch($this->name, 'isset', $fieldvalue,  NULL, XARVAR_DONT_SET);
-            if(isset($fieldvalue)) {
-                $value = $fieldvalue;
-            } else {
-                xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_DONT_SET);
-                if(isset($ddvalue)) {
-                    $value = $ddvalue;
-                } else {
-                    $isvalid = false;
-                }
-            }
         }
-        return array($isvalid,$value);
+        return array($found,$value);
     }
 
     /**
@@ -207,16 +196,17 @@ class DataProperty extends Object implements iDataProperty
      */
     public function checkInput($name = '', $value = null)
     {
+            // store the fieldname for configurations who need them (e.g. file uploads)
+        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $this->fieldname = $name;
+        $this->invalid = '';
         if(!isset($value)) {
-            list($isvalid,$value) = $this->fetchValue($name);
-            if (!$isvalid) {
-                $this->invalid = xarML('no value found');
-                return false;
+            list($found,$value) = $this->fetchValue($name);
+            if (!$found) {
+            // store the fieldname for configurations who need them (e.g. file uploads)
+                $this->objectref->missingfields[] = $this->name;
+                return null;
             }
-
-            // store the fieldname for validations who need them (e.g. file uploads)
-            $name = empty($name) ? 'dd_'.$this->id : $name;
-            $this->fieldname = $name;
         }
        return $this->validateValue($value);
     }
