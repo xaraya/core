@@ -9,7 +9,7 @@
             <xar:data-input property="$properties[$name]" onchange="$onchange" validation="regid" />
         <xar:elseif condition="$name eq 'parent'" />
             <xar:set name="modid">$properties['moduleid']->value</xar:set>
-            <xar:data-input property="$properties[$name]" modid="$modid" firstline="0,No parent" />
+            <xar:data-input property="$properties[$name]" modid="$modid" />
         <xar:else />
             <xar:data-input property="$properties[$name]" />
         </xar:if>
