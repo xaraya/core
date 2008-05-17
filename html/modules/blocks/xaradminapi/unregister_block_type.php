@@ -39,7 +39,7 @@ function blocks_adminapi_unregister_block_type($args)
     // and block_group_instances tables
     $query = "SELECT    inst.id as id
               FROM      $block_instances_table inst, $block_types_table btypes, $modules_table mods
-              WHERE     mods.id = btypes.modid AND
+              WHERE     mods.id = btypes.module_id AND
                         btypes.id = inst.type_id AND
                         mods.name = ? AND
                         btypes.type = ?";
@@ -56,7 +56,7 @@ function blocks_adminapi_unregister_block_type($args)
             xarModAPIFunc('blocks','admin','delete_instance', array('bid' => $result->getInt(1)));
         }
         // Delete the block type itself
-        $query = "DELETE FROM $block_types_table WHERE modid = ? AND type = ?";
+        $query = "DELETE FROM $block_types_table WHERE module_id = ? AND type = ?";
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate(array($modId,$blockType));
 

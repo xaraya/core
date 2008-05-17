@@ -85,7 +85,7 @@ function blocks_userapi_groupgetinfo($args)
               LEFT JOIN $blockGroupsTable as bgroups ON group_inst.group_id = bgroups.id
               LEFT JOIN $blockInstancesTable as inst ON inst.id = group_inst.instance_id
               LEFT JOIN $blockTypesTable as btypes   ON btypes.id = inst.type_id
-              LEFT JOIN $modulesTable as mods        ON btypes.modid = mods.id
+              LEFT JOIN $modulesTable as mods        ON btypes.module_id = mods.id
               WHERE     bgroups.id = ?
               ORDER BY  group_inst.position ASC";
     $stmt = $dbconn->prepareStatement($query);

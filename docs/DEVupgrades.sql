@@ -615,3 +615,4 @@ ALTER TABLE `xar_publication_types`
   */
 DELETE FROM `xar_privmembers` WHERE `parentid` = 0;
 DELETE FROM `xar_rolemembers` WHERE `id` = 1;
+ALTER TABLE `xar_block_types` CHANGE `modid` `module_id` INT( 10 ) UNSIGNED NOT NULL DEFAULT '0'
