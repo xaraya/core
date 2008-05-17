@@ -176,6 +176,9 @@
         <xsl:choose>
           <xsl:when test="@preset and not(@value)">
             <xsl:text>_showPreset(</xsl:text>
+            <xsl:call-template name="atts2args">
+              <xsl:with-param name="nodeset" select="@*[name() != 'hidden' and name() != 'preset']"/>
+            </xsl:call-template>
           </xsl:when>
           <xsl:when test="@hidden">
             <xsl:text>showHidden(</xsl:text>
@@ -199,6 +202,9 @@
         <xsl:choose>
           <xsl:when test="@preset and not(@value)">
             <xsl:text>_showPreset(</xsl:text>
+            <xsl:call-template name="atts2args">
+              <xsl:with-param name="nodeset" select="@*[name() != 'hidden' and name() != 'preset']"/>
+            </xsl:call-template>
           </xsl:when>
           <xsl:when test="@hidden">
             <xsl:text>showHidden(</xsl:text>
