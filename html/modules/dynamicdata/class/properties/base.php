@@ -41,14 +41,17 @@ class DataProperty extends Object implements iDataProperty
     public $validation = '';
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
     public $args         = array(); //args that hold alias info
+    public $anonymous = 0;        // if true the name, rather than the dd_xx designation is used in displaying the property
 
     public $datastore = '';    // name of the data store where this property comes from
 
     public $value = null;      // value of this property for a particular DataObject
     public $invalid = '';      // result of the checkInput/validateValue methods
 
+    public $include_reference = 0; // tells the object this property belongs whether to add a reference of itself to me
     // public $objectref = null; // object this property belongs to
     public $_objectid = null; // objectid this property belongs to
+    public $_fieldprefix = ''; // the object's fieldprefix
 
     public $_itemid;          // reference to $itemid in DataObject, where the current itemid is kept
     public $_items;           // reference to $items in DataObjectList, where the different item values are kept
