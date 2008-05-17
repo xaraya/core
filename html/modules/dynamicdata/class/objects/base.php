@@ -22,7 +22,8 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     protected $descriptor  = null;      // descriptor object of this class
 
-    public $itemid = 0;
+    public $itemid         = 0;
+    public $missingfields  = array();      // reference to fields not found by checkInput
 
     /**
      * Inherits from DataObjectMaster and sets the requested item id
@@ -83,6 +84,34 @@ class DataObject extends DataObjectMaster implements iDataObject
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview'])) $this->checkInput();
         return $this->itemid;
+    }
+
+    public function getInvalids(Array $args = array())
+    {
+        if (!empty($args['fields'])) {
+            $fields = $args['fields'];
+        } else {
+            $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+        }
+        $invalids = array();
+        foreach($fields as $name) {
+            if (!empty($this->properties[$name]->invalid))
+                $invalids[$name] = $this->properties[$name]->invalid;
+        }
+        return $invalids;
+    }
+
+    public function clearInvalids()
+    {
+        if (!empty($args['fields'])) {
+            $fields = $args['fields'];
+        } else {
+            $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+        }
+        foreach($fields as $name) {
+            $this->properties[$name]->invalid = '';
+        }
+        return true;
     }
 
     /**
