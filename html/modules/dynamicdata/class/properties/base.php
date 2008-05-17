@@ -285,8 +285,6 @@ class DataProperty extends Object implements iDataProperty
      */
     public function showInput(Array $data = array())
     {
-        if(!empty($data['preset']) && $data['preset']) return $this->_showPreset($data);
-
         if (!empty($data['hidden'])) {
             if ($data['hidden'] == 'active') {
                 $this->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE);
