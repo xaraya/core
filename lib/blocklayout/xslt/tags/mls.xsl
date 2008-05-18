@@ -81,15 +81,16 @@
 
 <!-- mlstring forces translation for now -->
 <xsl:template match="xar:mlstring">
-  <xsl:call-template name="translateText">
-    <xsl:with-param name="expr" select="."/>
+  <xsl:call-template name="replace">
+    <xsl:with-param name="source" select="."/>
   </xsl:call-template>
+
 </xsl:template>
 
 <!-- mlstring inside ml just needs to reolve the text node -->
 <xsl:template match="xar:ml/xar:mlstring">
-  <xsl:call-template name="resolveText">
-    <xsl:with-param name="expr" select="."/>
+  <xsl:call-template name="replace">
+    <xsl:with-param name="source" select="."/>
   </xsl:call-template>
 </xsl:template>
 
