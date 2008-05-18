@@ -431,10 +431,10 @@ function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elem
     // Property fall-back to default template in the module the property belongs to
     if ((empty($sourceFileName) || !file_exists($sourceFileName)) &&
         $elements == 'properties') {
-		$fallbackmodule = DataPropertyMaster::getProperty(array('type' => $ddName))->tplmodule;
-		if ($fallbackmodule != $modName) {
-			$sourceFileName = xarTpl__GetSourceFileName($fallbackmodule, $templateBase, $ddName, $elements);
-		}
+        $fallbackmodule = DataPropertyMaster::getProperty(array('type' => $ddName))->tplmodule;
+        if ($fallbackmodule != $modName) {
+            $sourceFileName = xarTpl__GetSourceFileName($fallbackmodule, $templateBase, $ddName, $elements);
+        }
     }
 
     // Final fall-back to default template in dynamicdata for both objects and properties
@@ -907,9 +907,14 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
 {
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
-    $sourceFileName = xarTplGetThemeDir() . "/modules/$modName/includes/$templateName.xt";
-    if (!file_exists($sourceFileName)) {
-        $sourceFileName = "modules/$modName/xartemplates/includes/$templateName.xd";
+    $modules = explode(',',$modName);
+    foreach ($modules as $module) {
+        $thismodule = trim($module);
+        $sourceFileName = xarTplGetThemeDir() . "/modules/$thismodule/includes/$templateName.xt";
+        if (!file_exists($sourceFileName)) {
+            $sourceFileName = "modules/$thismodule/xartemplates/includes/$templateName.xd";
+        }
+        if (file_exists($sourceFileName)) break;
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }

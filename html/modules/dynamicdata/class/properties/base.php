@@ -91,6 +91,8 @@ class DataProperty extends Object implements iDataProperty
                 }
             }
             $this->setValue($this->defaultvalue);
+        } else {
+            $this->setValue($args['value']);
         }
         // do the minimum for alias info, let the single property do the rest
         if (!empty($this->args)) {

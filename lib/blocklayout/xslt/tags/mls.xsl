@@ -81,10 +81,6 @@
 
 <!-- mlstring forces translation for now -->
 <xsl:template match="xar:mlstring">
-<!--  <xsl:call-template name="translateText">
-    <xsl:with-param name="expr" select="."/>
-  </xsl:call-template>
--->
   <xsl:call-template name="replace">
     <xsl:with-param name="source" select="."/>
   </xsl:call-template>
