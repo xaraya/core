@@ -27,6 +27,7 @@ function dynamicdata_adminapi_getnextitemtype($args = array())
     $ids = array_keys($types);
     sort($ids);
     $lastid = array_pop($ids);
+    return $lastid + 1;
     if ($modid == 182) return $lastid + 1;
     else return max(1000,$lastid + 1);
 }
