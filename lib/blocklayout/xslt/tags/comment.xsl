@@ -13,7 +13,7 @@
     <xsl:if test="string-length(@iecondition)">
       <xsl:text>[</xsl:text><xsl:value-of select="@iecondition"/><xsl:text>]&gt;</xsl:text>
     </xsl:if>
-    <xsl:call-template name="resolveText">
+    <xsl:call-template name="translateText">
       <xsl:with-param name="expr" select="."/>
     </xsl:call-template>
     <xsl:if test="string-length(@iecondition)">
