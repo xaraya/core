@@ -81,9 +81,10 @@ class BlocklayoutXSLTProcessor extends Object
 
         // Make sure ML placeholders look like expressions
         // #(1)... -> #(1)#...
-        $mlsPattern     = '/(#\([0-9]+\))([^#])/';
-        $callBack       = array('XsltCallbacks','mlsplaceholders');
-        $this->prepXml  = preg_replace_callback($mlsPattern, $callBack, $this->prepXml);
+        // Disable  this for now (random)
+        //$mlsPattern     = '/(#\([0-9]+\))([^#])/';
+        //$callBack       = array('XsltCallbacks','mlsplaceholders');
+        //$this->prepXml  = preg_replace_callback($mlsPattern, $callBack, $this->prepXml);
     }
 
     public function transform(&$xml)
