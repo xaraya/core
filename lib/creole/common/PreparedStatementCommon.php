@@ -379,11 +379,11 @@ abstract class PreparedStatementCommon {
     {
         $type = gettype($value);
         if ($type == "object") {
-            if (is_a($value, 'Blob')) {
+            if (class_exists('Blob') && ($value instanceof Blob)) {
                 $this->setBlob($paramIndex, $value);
-            } elseif (is_a($value, 'Clob')) {
+            } elseif (class_exists('Clob') && ($value instanceof Clob)) {
                 $this->setClob($paramIndex, $value);
-            } elseif (is_a($value, 'Date')) {
+            } elseif (class_exists('Date') && ($value instanceof Date)) {
                  // can't be sure if the column type is a DATE, TIME, or TIMESTAMP column
                  // we'll just use TIMESTAMP by default; hopefully DB won't complain (if
                  // it does, then this method just shouldn't be used).

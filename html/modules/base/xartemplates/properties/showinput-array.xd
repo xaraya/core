@@ -1,24 +1,22 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:if condition="is_array($value)">
-    <xar:foreach in="$value" key="$key" value="$val">
-        <xar:if condition="!empty($key) and !is_numeric($key)">
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label">#$key#</label>
-                <input class="xar-form-textlong" type="text" name="#$name#[#$key#]" id="#$id#_#$key#" value="#$val#" size="#$size#" />
-            </div>
-            <xar:else />
-            <div class="xar-form-input-wrapper-after">
-                <input type="text" name="#$name#[#$key#]" id="#$id#_#$key#" value="#$val#" size="#$size#" />
-            </div>
-        </xar:if>
-    </xar:foreach>
-<xar:else />
-    <div class="xar-form-input-wrapper-after">
-        <textarea name="#$name#" rows="8" cols="50" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
-    </div>
-</xar:if>
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="is_array($value)">
+        <xar:foreach in="$value" key="$key" value="$val">
+            <xar:if condition="!empty($key) and !is_numeric($key)">
+                <div class="xar-form-input-wrapper">
+                    <label class="xar-form-label">#$key#</label>
+                    <input class="xar-form-textlong" type="text" name="#$name#[#$key#]" id="#$id#_#$key#" value="#$val#" size="#$size#" />
+                </div>
+                <xar:else />
+                <div class="xar-form-input-wrapper-after">
+                    <input type="text" name="#$name#[#$key#]" id="#$id#_#$key#" value="#$val#" size="#$size#" />
+                </div>
+            </xar:if>
+        </xar:foreach>
+    <xar:else />
+        <div class="xar-form-input-wrapper-after">
+            <textarea name="#$name#" rows="8" cols="50" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
+        </div>
+    </xar:if>
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

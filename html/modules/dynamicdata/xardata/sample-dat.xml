@@ -1,0 +1,20 @@
+<items>
+  <sample itemid="1">
+    <id>1</id>
+    <name>Johnny</name>
+    <age>32</age>
+    <location>http://mikespub.net/xaraya/images/cuernos1.jpg</location>
+  </sample>
+  <sample itemid="2">
+    <id>2</id>
+    <name>Nancy</name>
+    <age>29</age>
+    <location>http://mikespub.net/xaraya/images/agra1.jpg</location>
+  </sample>
+  <sample itemid="3">
+    <id>3</id>
+    <name>Baby</name>
+    <age>1</age>
+    <location>http://mikespub.net/xaraya/images/sydney1.jpg</location>
+  </sample>
+</items>
