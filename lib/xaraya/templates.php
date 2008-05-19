@@ -431,10 +431,10 @@ function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elem
     // Property fall-back to default template in the module the property belongs to
     if ((empty($sourceFileName) || !file_exists($sourceFileName)) &&
         $elements == 'properties') {
-		$fallbackmodule = DataPropertyMaster::getProperty(array('type' => $ddName))->tplmodule;
-		if ($fallbackmodule != $modName) {
-			$sourceFileName = xarTpl__GetSourceFileName($fallbackmodule, $templateBase, $ddName, $elements);
-		}
+        $fallbackmodule = DataPropertyMaster::getProperty(array('type' => $ddName))->tplmodule;
+        if ($fallbackmodule != $modName) {
+            $sourceFileName = xarTpl__GetSourceFileName($fallbackmodule, $templateBase, $ddName, $elements);
+        }
     }
 
     // Final fall-back to default template in dynamicdata for both objects and properties
@@ -1193,8 +1193,5 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
     }
     return $foundHeaderContent;
 }
-
-// Make sure we expose the same api as yesterday
-sys::import('blocklayout.template.tags');
 
 ?>
