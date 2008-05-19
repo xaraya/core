@@ -63,7 +63,7 @@ function dynamicdata_init()
                 'default'     => ''
             ),
             /* the module this object relates to */
-            'moduleid' => array(
+            'module_id' => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
@@ -129,7 +129,7 @@ function dynamicdata_init()
             $dynamic_objects,
             array(
                 'name'   => 'i_' . $prefix . '_dynobjects_combo',
-                'fields' => array('moduleid','itemtype'),
+                'fields' => array('module_id','itemtype'),
                 'unique' => 'true'
             )
         );
@@ -156,7 +156,7 @@ function dynamicdata_init()
         // create default objects for dynamic data
         $sql = "INSERT INTO $dynamic_objects (
                 name, label,
-                moduleid, itemtype, class, filepath, urlparam,
+                module_id, itemtype, class, filepath, urlparam,
                 maxid, config, isalias)
                 VALUES (?,?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
@@ -279,7 +279,7 @@ function dynamicdata_init()
             array('name'      ,'Name'               ,$objectid[1],2 ,''            ,$dynamic_objects.'.name'       ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
             array('label'     ,'Label'              ,$objectid[1],2 ,''            ,$dynamic_objects.'.label'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
             array('parent'    ,'Parent',             $objectid[1],24,'0'           ,$dynamic_objects.'.parent'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'a:2:{s:10:"validation";s:7:"integer";s:8:"override";s:1:"1";}'),
-            array('moduleid'  ,'Module'             ,$objectid[1],19,'182'         ,$dynamic_objects.'.moduleid'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,5 ,'regid'), // FIXME: change this validation when we move from regid to systemid
+            array('module_id'  ,'Module'             ,$objectid[1],19,'182'         ,$dynamic_objects.'.module_id'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,5 ,'regid'), // FIXME: change this validation when we move from regid to systemid
             array('itemtype'  ,'Item Type'          ,$objectid[1],20,'0'           ,$dynamic_objects.'.itemtype'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,6 ,'integer'),
             array('class'     ,'Class'              ,$objectid[1],2 ,'DataObject'  ,$dynamic_objects.'.class'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'varchar (255)'),
             array('filepath'  ,'Location'           ,$objectid[1],2 ,''            ,$dynamic_objects.'.filepath'   ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (255)'),

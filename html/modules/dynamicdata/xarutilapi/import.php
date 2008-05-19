@@ -26,6 +26,7 @@ function dynamicdata_utilapi_import($args)
 {
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
+
     extract($args);
 
     if (!isset($prefix)) {
@@ -80,6 +81,9 @@ function dynamicdata_utilapi_import($args)
             if (isset($xmlobject->{$property}[0]))
                 $args[$property] = (string)$xmlobject->{$property}[0];
         }
+        // Backwards Compatibility with old defintions
+        $args['moduleid'] = (string)$xmlobject->moduleid[0];
+        $args['module_id'] = (string)$xmlobject->moduleid[0];
 
         // Treat parents where the module is DD differently. Put in numeric itemtype
 //        if ($args['moduleid'] == 182) {
@@ -87,6 +91,7 @@ function dynamicdata_utilapi_import($args)
             $infobaseobject = DataObjectMaster::getObjectInfo(array('name' => $args['parent']));
             $args['parent'] = $infobaseobject['itemtype'];
 //        }
+
         if (empty($args['name']) || empty($args['moduleid'])) {
             throw new BadParameterException(null,'Missing keys in object definition');
         }
