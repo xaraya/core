@@ -375,7 +375,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         // special case when we try to create a new object handled by dynamicdata
         if(
             $this->objectid == 1 &&
-            $this->properties['moduleid']->value == xarModGetIDFromName('dynamicdata')
+            $this->properties['module_id']->value == xarModGetIDFromName('dynamicdata')
             //&& $this->properties['itemtype']->value < 2
         )
         {
@@ -568,7 +568,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         $dynamicobjects = $xartable['dynamic_objects'];
 
-        $query = "SELECT MAX(itemtype) FROM $dynamicobjects  WHERE moduleid = ?";
+        $query = "SELECT MAX(itemtype) FROM $dynamicobjects  WHERE module_id = ?";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array((int)$args['moduleid']));
         if(!$result->first()) return; // shouldnt we raise?

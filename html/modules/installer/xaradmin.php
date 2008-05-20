@@ -454,13 +454,6 @@ function installer_admin_phase5()
 
     if (!xarInstallAPIFunc('initialise', array('directory'=>'authsystem', 'initfunc'=>'activate'))) return;;
 
-    // TODO: move this to some common place in Xaraya ?
-    // Register BL user tags
-    // Include a JavaScript file in a page
-    xarTplRegisterTag('base', 'base-include-javascript', array(),'base_javascriptapi_handlemodulejavascript');
-    // Render JavaScript in a page
-    xarTplRegisterTag('base', 'base-render-javascript', array(),'base_javascriptapi_handlerenderjavascript');
-
     // TODO: is this is correct place for a default value for a modvar?
     xarModVars::set('base', 'AlternatePageTemplate', 'homepage');
 

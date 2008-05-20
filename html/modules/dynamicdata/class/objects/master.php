@@ -69,7 +69,7 @@ class DataObjectDescriptor extends ObjectDescriptor
             $q->eq('id',(int)$args['objectid']);
         } else {
             $args = self::getModID($args);
-            $q->eq('moduleid', $args['moduleid']);
+            $q->eq('module_id', $args['moduleid']);
             $q->eq('itemtype', $args['itemtype']);
         }
         if (!$q->run()) return;
@@ -80,7 +80,7 @@ class DataObjectDescriptor extends ObjectDescriptor
             $args['objectid'] = isset($args['objectid']) ? $args['objectid'] : null;
             $args['name'] = isset($args['name']) ? $args['name'] : null;
         } else {
-            $args['moduleid'] = $row['moduleid'];
+            $args['moduleid'] = $row['module_id'];
             $args['itemtype'] = $row['itemtype'];
             $args['objectid'] = $row['id'];
             $args['name'] = $row['name'];
@@ -533,7 +533,7 @@ class DataObjectMaster extends Object
         $query = "SELECT id,
                          name,
                          label,
-                         moduleid,
+                         module_id,
                          itemtype,
                          parent,
                          urlparam,
@@ -543,7 +543,7 @@ class DataObjectMaster extends Object
                   FROM $dynamicobjects ";
         if(isset($moduleid))
         {
-            $query .= "WHERE moduleid = ?";
+            $query .= "WHERE module_id = ?";
             $bindvars[] = $moduleid;
         }
         $stmt = $dbconn->prepareStatement($query);
@@ -616,7 +616,7 @@ class DataObjectMaster extends Object
         $query = "SELECT id,
                          name,
                          label,
-                         moduleid,
+                         module_id,
                          itemtype,
                          parent,
                          class,
@@ -1016,8 +1016,8 @@ class DataObjectMaster extends Object
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
 //        $q->open();
-        $q->addfields(array('id AS objectid','name AS objectname','moduleid AS moduleid','itemtype AS itemtype','parent AS parent'));
-        $q->eq('moduleid',$this->moduleid);
+        $q->addfields(array('id AS objectid','name AS objectname','module_id AS moduleid','itemtype AS itemtype','parent AS parent'));
+        $q->eq('module_id',$this->moduleid);
         if (!$q->run()) return;
 
         // Put in itemtype as key for easier manipulation
@@ -1092,8 +1092,8 @@ class DataObjectMaster extends Object
         $xartable = xarDB::getTables();
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-        $q->addfields(array('id AS objectid','label AS objectlabel','moduleid AS moduleid','itemtype AS itemtype','parent AS parent'));
-        $q->eq('moduleid',$moduleid);
+        $q->addfields(array('id AS objectid','label AS objectlabel','module_id AS moduleid','itemtype AS itemtype','parent AS parent'));
+        $q->eq('module_id',$moduleid);
         if (!$q->run()) return;
 
         // put in itemtype as key for easier manipulation

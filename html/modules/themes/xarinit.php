@@ -138,15 +138,6 @@ function themes_upgrade($oldversion)
 
         case '1.2':
         case '1.3.0':
-            // Register additional styles tag.
-            // This is for bug 3868 only - available to those that want to use it, but
-            // not a permanent replacement for the additional styles global or corecss.
-
-            // register complete set of css tags is now encapsulated in the module's api function
-            if(!xarModAPIFunc('themes', 'css', 'registercsstags', array())) {
-                return false;
-            }
-
             // Ensure the meta blocktype is registered
             if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))) {
                 if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
