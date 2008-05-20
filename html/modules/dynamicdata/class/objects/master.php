@@ -1087,21 +1087,36 @@ class DataObjectMaster extends Object
             $module = $info['name'];
         }
 
-        $types = array();
-        // Get all the objects at once
-        $xartable = xarDB::getTables();
-        sys::import('modules.roles.class.xarQuery');
-        $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-        $q->addfields(array('id AS objectid','label AS objectlabel','moduleid AS moduleid','itemtype AS itemtype','parent AS parent'));
-        $q->eq('moduleid',$moduleid);
-        if (!$q->run()) return;
+        $native = isset($native) ? $native : true;
+        $extensions = isset($extensions) ? $extensions : true;
 
-        // put in itemtype as key for easier manipulation
-        foreach($q->output() as $row)
-            $types [$row['itemtype']] = array(
-                                        'label' => $row['objectlabel'],
-                                        'title' => xarML('View #(1)',$row['objectlabel']),
-                                        'url' => xarModURL('dynamicdata','user','view',array('itemtype' => $row['itemtype'])));
+        $types = array();
+        if ($native) {
+            // Try to get the itemtypes
+            try {
+                // @todo create an adaptor class for procedural getitemtypes in modules
+                $types = xarModAPIFunc($module,'user','getitemtypes',array());
+            } catch ( FunctionNotFoundException $e) {
+                // No worries
+            }
+        }
+        if ($extensions) {
+            // Get all the objects at once
+            $xartable = xarDB::getTables();
+            sys::import('modules.roles.class.xarQuery');
+            $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
+            $q->addfields(array('id AS objectid','label AS objectlabel','moduleid AS moduleid','itemtype AS itemtype','parent AS parent'));
+            $q->eq('moduleid',$moduleid);
+            if (!$q->run()) return;
+
+            // put in itemtype as key for easier manipulation
+            foreach($q->output() as $row)
+                $types [$row['itemtype']] = array(
+                                            'label' => $row['objectlabel'],
+                                            'title' => xarML('View #(1)',$row['objectlabel']),
+                                            'url' => xarModURL('dynamicdata','user','view',array('itemtype' => $row['itemtype'])));
+        }
+
         return $types;
     }
 

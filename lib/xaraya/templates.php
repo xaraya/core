@@ -1199,4 +1199,7 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
     return $foundHeaderContent;
 }
 
+// Make sure we expose the same api as yesterday
+sys::import('blocklayout.template.tags');
+
 ?>
