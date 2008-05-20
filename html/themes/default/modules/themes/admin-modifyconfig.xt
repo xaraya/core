@@ -133,14 +133,6 @@
 
         <fieldset>
             <legend>Template Debugging options</legend>
-            <xar:if condition="xarConfigVars::get(null,'Site.BL.CacheTemplates')">
-                <div class="checkInputContainer">
-                    <xar:set name="checkShowphpcbit"><xar:var scope="module" module="themes" name="ShowPHPCommentBlockInTemplates"/></xar:set>
-                    <xar:data-input type="checkbox" name="showphpcbit" id="showphpcbit" checked="$checkShowphpcbit"/>
-                    <xar:data-label label="Show php comment block header in compiled templates" for="showphpcbit"/>
-                </div>
-            </xar:if>
-
             <div class="checkInputContainer">
                 <xar:set name="checkShowtemplates"><xar:var scope="module" module="themes" name="ShowTemplates"/></xar:set>
                 <xar:data-input type="checkbox" name="showtemplates" id="showtemplates" checked="$checkShowtemplates"/>

@@ -102,7 +102,6 @@ function themes_init()
     xarModVars::set('themes', 'SiteTitleSeparator', ' :: ');
     xarModVars::set('themes', 'SiteTitleOrder', 'default');
     xarModVars::set('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder" /></a>');
-    xarModVars::set('themes', 'ShowPHPCommentBlockInTemplates', 0);
     xarModVars::set('themes', 'ShowTemplates', 0);
     xarModVars::set('themes', 'var_dump', 0);
     //Moved here in 1.1.x series

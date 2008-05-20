@@ -17,15 +17,13 @@
  */
 function themes_admin_updateconfig()
 {
-    // Confirm authorisation code
     if (!xarSecConfirmAuthKey()) return;
-    // Security Check
+
     if (!xarSecurityCheck('AdminTheme')) return;
-    // Get parameters
+
     if (!xarVarFetch('sitename', 'str:1:', $sitename, 'Your Site Name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('separator', 'str:1:', $separator, ' :: ', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pagetitle', 'str:1:', $pagetitle, 'default', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('showphpcbit', 'checkbox', $showphpcbit, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('showtemplates', 'checkbox', $showtemplates, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('cachetemplates', 'checkbox', $cachetemplates, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('var_dump', 'checkbox', $var_dump, false, XARVAR_NOT_REQUIRED)) return;
@@ -33,7 +31,7 @@ function themes_admin_updateconfig()
     if (!xarVarFetch('footer', 'str:1:', $footer, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('copyright', 'str:1:', $copyright, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('AtomTag', 'str:1:', $atomtag, '', XARVAR_NOT_REQUIRED)) return;
-    // enable or disable dashboard
+
     if (!xarVarFetch('dashboard', 'checkbox', $dashboard, false, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('adminpagemenu', 'checkbox', $adminpagemenu, false, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('dashtemplate', 'str:1:', $dashtemplate, 'dashboard', XARVAR_DONT_SET)) {return;}
@@ -47,7 +45,6 @@ function themes_admin_updateconfig()
     xarModVars::set('themes', 'SiteSlogan', $slogan);
     xarModVars::set('themes', 'SiteCopyRight', $copyright);
     xarModVars::set('themes', 'SiteFooter', $footer);
-    xarModVars::set('themes', 'ShowPHPCommentBlockInTemplates', $showphpcbit);
     xarModVars::set('themes', 'ShowTemplates', $showtemplates);
     xarModVars::set('themes', 'AtomTag', $atomtag);
     xarModVars::set('themes', 'var_dump', $var_dump);
@@ -103,9 +100,9 @@ function themes_admin_updateconfig()
     }
 
     // lets update status and display updated configuration
-	$redirecturl = xarModURL('themes', 'admin', 'modifyconfig');
+    $redirecturl = xarModURL('themes', 'admin', 'modifyconfig');
     xarResponseRedirect($redirecturl);
-    // Return
+
     return true;
 }
 

@@ -163,17 +163,6 @@
                     Template Debugging options
                 </xar:mlstring>
             </legend>
-            <xar:if condition="xarConfigVars::get(null,'Site.BL.CacheTemplates')">
-                <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked"><xar:var scope="module" module="themes" name="ShowPHPCommentBlockInTemplates"/></xar:set>
-                    <xar:data-input type="checkbox" name="showphpcbit" id="showphpcbit" checked="$checked" />
-                    <label for="showphpcbit">
-                        <xar:mlstring>
-                            Show php comment block header in compiled templates
-                        </xar:mlstring>
-                    </label>
-                </div>
-            </xar:if>
             <div class="xar-form-input-wrapper-after">
                 <xar:set name="checked"><xar:var scope="module" module="themes" name="ShowTemplates"/></xar:set>
                 <xar:data-input type="checkbox" name="showtemplates" id="showtemplates" checked="$checked" />
