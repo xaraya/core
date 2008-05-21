@@ -30,7 +30,7 @@ class CheckboxListProperty extends SelectProperty
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // store the fieldname for validations who need them (e.g. file uploads)
+        // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
             xarVarFetch($name, 'isset', $value,  NULL, XARVAR_NOT_REQUIRED);
@@ -60,6 +60,7 @@ class CheckboxListProperty extends SelectProperty
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
+        else $this->value = $data['value'];
 
         if (empty($data['value'])) {
             $data['value'] = array();
@@ -84,6 +85,16 @@ class CheckboxListProperty extends SelectProperty
         if (!isset($data['value'])) $data['value'] = $this->value;
         if (is_array($data['value']) ) $data['value'] = implode(',',$data['value']);
         return parent::showOutput($data);
+    }
+
+    public function getOptions()
+    {
+        $options = parent::getOptions();
+        foreach ($options as $key => $option) {
+            $option['checked'] = in_array($option['id'],$this->value);
+            $options[$key] = $option;
+        }
+        return $options;
     }
 }
 

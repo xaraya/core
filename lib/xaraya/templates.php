@@ -903,9 +903,14 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
 {
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
-    $sourceFileName = xarTplGetThemeDir() . "/modules/$modName/includes/$templateName.xt";
-    if (!file_exists($sourceFileName)) {
-        $sourceFileName = "modules/$modName/xartemplates/includes/$templateName.xd";
+    $modules = explode(',',$modName);
+    foreach ($modules as $module) {
+        $thismodule = trim($module);
+        $sourceFileName = xarTplGetThemeDir() . "/modules/$thismodule/includes/$templateName.xt";
+        if (!file_exists($sourceFileName)) {
+            $sourceFileName = "modules/$thismodule/xartemplates/includes/$templateName.xd";
+        }
+        if (file_exists($sourceFileName)) break;
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
@@ -1189,5 +1194,8 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
     }
     return $foundHeaderContent;
 }
+
+// Make sure we expose the same api as yesterday
+sys::import('blocklayout.template.tags');
 
 ?>

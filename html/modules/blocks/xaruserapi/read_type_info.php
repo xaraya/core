@@ -44,8 +44,18 @@ function blocks_userapi_read_type_info($args)
         )) {return false;}
     }
 
+    $classpath = 'modules/' . $module . '/xarblocks/' . $type . '.php';
     if (function_exists($infofunc)) {
+    	// we are using an old time block
         return $infofunc();
+    } elseif (file_exists($classpath)) {
+    	// we are using a block class
+        sys::import('modules.' . $module . '.xarblocks.' . $type);
+        sys::import('xaraya.structures.descriptor');
+        $name = ucfirst($type) . "Block";
+        $descriptor = new ObjectDescriptor(array());
+        $block = new $name($descriptor);
+        return $block->getInfo();
     } else {
         // No block info function found.
         return false;

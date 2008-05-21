@@ -3,7 +3,5 @@
 
     <input type="hidden" name="#$name#" id="#$id#" value="#$value#"/>
 
-    <xar:if condition="!empty($invalid)">
-        &#160;<span class="xar-error">#$invalid#</span>
-    </xar:if>
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

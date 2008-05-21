@@ -228,14 +228,31 @@ class xarBLCompiler extends Object implements IxarBLCompiler
      */
     private function compile(&$templateSource)
     {
-        sys::import('blocklayout.xsltransformer');
-        $xslFile = sys::root() . '/lib/blocklayout/xslt/xar2php.xsl';
-        $xslProc = new BlockLayoutXSLTProcessor($xslFile);
-        // This is confusing, dont do this here.
-        $xslProc->xmlFile = $this->parser->getFileName();
-        // This generates php code, the documentree is not visible here anymore
-        $outDoc = $xslProc->transform($templateSource);
-        return $outDoc;
+        // use the new compiler or not?
+        try {
+          // @todo dont want this here! db dependency
+          sys::import('xaraya.variables.config');
+          $what = xarConfigVars::get(null,'Site.BL.CompilerVersion');
+          $use_xsl = ($what == 'XAR_BL_USE_XSLT');
+        } catch(Exception $e) {
+            $use_xsl = true;
+        }
+
+        if($use_xsl) {
+            sys::import('blocklayout.xsltransformer');
+            $xslFile = sys::root() . '/lib/blocklayout/xslt/xar2php.xsl';
+            $xslProc = new BlockLayoutXSLTProcessor($xslFile);
+            // This is confusing, dont do this here.
+            $xslProc->xmlFile = $this->parser->getFileName();
+            // This generates php code, the documentree is not visible here anymore
+            $outDoc = $xslProc->transform($templateSource);
+            return $outDoc;
+        }
+
+        $documentTree = $this->parser->parse($templateSource);
+        if (!isset($documentTree)) return; // throw back
+        $res = $this->codeGenerator->generate($documentTree);
+        return $res;
     }
 }
 
