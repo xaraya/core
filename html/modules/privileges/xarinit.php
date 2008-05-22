@@ -148,7 +148,7 @@ function privileges_init()
                                                                     'null'        => false,
                                                                     'default'     => '0',
                                                                     'primary_key'         => true),
-                                        'permid'      => array('type'   => 'integer',
+                                        'privilege_id'      => array('type'   => 'integer',
                                                                    'null'        => false,
                                                                    'default'     => '0',
                                                                    'primary_key'         => true)));
@@ -160,8 +160,8 @@ function privileges_init()
         $query = xarDBCreateIndex($tables['security_acl'],$index);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$prefix.'_security_acl_permid',
-                       'fields'    => array('permid'),
+        $index = array('name'      => 'i_'.$prefix.'_security_acl_privilege_id',
+                       'fields'    => array('privilege_id'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['security_acl'],$index);
         $dbconn->Execute($query);

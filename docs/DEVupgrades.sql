@@ -587,3 +587,4 @@ UPDATE `xar_security_instances` SET instanceparentid='role_id' WHERE instancetab
 
 # security_acl ddl adjustments
 ALTER TABLE `xar_security_acl` CHANGE COLUMN `partid` `role_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE `xar_security_acl` CHANGE COLUMN `permid` `privilege_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;

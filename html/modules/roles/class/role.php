@@ -349,7 +349,7 @@ class Role extends DataObject
                           $this->privilegestable p
                           LEFT JOIN $this->realmstable r ON p.realm_id = r.id
                           LEFT JOIN $this->modulestable m ON p.module_id = m.id
-                  WHERE   p.id = acl.permid AND
+                  WHERE   p.id = acl.privilege_id AND
                           acl.role_id = ?";
 //                          echo $query;exit;
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
@@ -441,7 +441,7 @@ class Role extends DataObject
     {
         // remove an entry from the privmembers table
         $query = "DELETE FROM $this->acltable
-                  WHERE role_id= ? AND permid= ?";
+                  WHERE role_id= ? AND privilege_id= ?";
         $bindvars = array($this->properties['id']->value, $privilege->getID());
         $this->dbconn->Execute($query,$bindvars);
         return true;

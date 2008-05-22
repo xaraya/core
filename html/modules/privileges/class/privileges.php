@@ -213,7 +213,7 @@ class xarPrivileges extends xarMasks
         $query = "SELECT p.id, p.name, r.id,r.type,r.name,
                          p.module_id, p.component, p.instance,
                          p.level,  p.description
-                  FROM " . parent::$privilegestable . " p INNER JOIN ". parent::$acltable . " a ON p.id = a.permid
+                  FROM " . parent::$privilegestable . " p INNER JOIN ". parent::$acltable . " a ON p.id = a.privilege_id
                   INNER JOIN ". parent::$rolestable . " r ON a.role_id = r.id " .
                   $where .
                   " ORDER BY p.name";
@@ -321,7 +321,7 @@ class xarPrivileges extends xarMasks
              $query .= " WHERE pm.parent_id IS NULL ";
         } elseif ($arg == "assigned") {
             $query .= ", " . self::$acltable . " acl
-                        WHERE p.id = acl.permid AND
+                        WHERE p.id = acl.privilege_id AND
                               pm.parent_id IS NULL ";
         }
         $query .=" AND p.type = ?";
