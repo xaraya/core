@@ -215,8 +215,8 @@ class xarPrivilege extends xarMask
     {
         static $stmt = null;
 
-        $query = "SELECT partid FROM $this->acltable WHERE
-                partid = ? AND permid = ?";
+        $query = "SELECT role_id FROM $this->acltable WHERE
+                role_id = ? AND permid = ?";
         $bindvars = array($role->getID(), $this->getID());
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
@@ -241,7 +241,7 @@ class xarPrivilege extends xarMask
                          r.uname, r.email, r.pass,
                          r.auth_modid
                   FROM $this->rolestable r, $this->acltable acl
-                  WHERE r.id = acl.partid AND
+                  WHERE r.id = acl.role_id AND
                         acl.permid = ?";
         $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->id));

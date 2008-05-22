@@ -144,7 +144,7 @@ function privileges_init()
          *********************************************************************/
 
         $query = xarDBCreateTable($tables['security_acl'],
-                                  array('partid'       => array('type'  => 'integer',
+                                  array('role_id'       => array('type'  => 'integer',
                                                                     'null'        => false,
                                                                     'default'     => '0',
                                                                     'primary_key'         => true),
@@ -154,8 +154,8 @@ function privileges_init()
                                                                    'primary_key'         => true)));
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$prefix.'_security_acl_partid',
-                       'fields'    => array('partid'),
+        $index = array('name'      => 'i_'.$prefix.'_security_acl_role_id',
+                       'fields'    => array('role_id'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['security_acl'],$index);
         $dbconn->Execute($query);

@@ -584,3 +584,6 @@ ALTER TABLE `xar_rolemembers` CHANGE COLUMN `parentid` `parent_id` INTEGER UNSIG
 UPDATE `xar_security_instances` SET instanceparentid='parent_id' WHERE instancetable2='xar_rolemembers';
 ALTER TABLE `core2x`.`xar_rolemembers` CHANGE COLUMN `id` `role_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
 UPDATE `xar_security_instances` SET instanceparentid='role_id' WHERE instancetable2='xar_rolemembers';
+
+# security_acl ddl adjustments
+ALTER TABLE `xar_security_acl` CHANGE COLUMN `partid` `role_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;

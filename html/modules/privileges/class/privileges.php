@@ -214,7 +214,7 @@ class xarPrivileges extends xarMasks
                          p.module_id, p.component, p.instance,
                          p.level,  p.description
                   FROM " . parent::$privilegestable . " p INNER JOIN ". parent::$acltable . " a ON p.id = a.permid
-                  INNER JOIN ". parent::$rolestable . " r ON a.partid = r.id " .
+                  INNER JOIN ". parent::$rolestable . " r ON a.role_id = r.id " .
                   $where .
                   " ORDER BY p.name";
         $stmt = parent::$dbconn->prepareStatement($query);
