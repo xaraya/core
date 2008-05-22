@@ -106,7 +106,7 @@ function roles_userapi_getallroles($args)
 
     if ($includedgroups != array() || $excludedgroups != array()) {
         $q->addtable($xartable['rolemembers'],'rm');
-        $q->join('r.id','rm.id');
+        $q->join('r.id','rm.role_id');
         foreach ($includedgroups as $include) {
             $q->eq('rm.parent_id',$include);
         }

@@ -98,7 +98,7 @@ function roles_admin_showusers()
         // If a group was chosen, get only the users of that group
         if ($id != 0) {
             $q->addtable($xartable['rolemembers'],'rm');
-            $q->join('r.id','rm.id');
+            $q->join('r.id','rm.role_id');
             $q->eq('rm.parent_id',$id);
         }
 

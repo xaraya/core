@@ -87,7 +87,7 @@ function roles_init()
         $dbconn->Execute($query);
 
         $query = xarDBCreateTable($tables['rolemembers'],
-                            array('id' => array('type'        => 'integer',
+                            array('role_id' => array('type'        => 'integer',
                                                 'null'        => true,
                                                 'default'     => null,
                                                 'primary_key' => true),
@@ -98,7 +98,7 @@ function roles_init()
         $dbconn->Execute($query);
 
         $index = array('name' => 'i_' . $prefix . '_rolememb_id',
-                       'fields' => array('id'),
+                       'fields' => array('role_id'),
                        'unique' => false);
         $query = xarDBCreateIndex($tables['rolemembers'], $index);
         $dbconn->Execute($query);

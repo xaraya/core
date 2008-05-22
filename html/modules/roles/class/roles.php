@@ -234,7 +234,7 @@ class xarRoles extends Object
         $q = new xarQuery('SELECT');
         $q->addtable(self::$rolestable,'r');
         $q->addtable(self::$rolememberstable,'rm');
-        $q->leftjoin('r.id','rm.id');
+        $q->leftjoin('r.id','rm.role_id');
         $q->addfield('r.id AS id');
         $q->addfield('r.name AS name');
         $q->addfield('r.users AS users');
