@@ -566,9 +566,11 @@ UPDATE `xar_dynamic_properties` SET objectid = 24 WHERE name = 'parent' AND obje
 */
 DELETE FROM `xar_privmembers` WHERE `parentid` = 0;
 
-ALTER TABLE `xar_block_types` CHANGE `modid` `module_id` INT( 10 ) UNSIGNED NOT NULL DEFAULT '0'
+ALTER TABLE `xar_block_types` CHANGE `modid` `module_id` INTEGER UNSIGNED NOT NULL DEFAULT '0'
 UPDATE `xar_security_instances` SET `query` = REPLACE(query, "modid", "module_id");
 
-ALTER TABLE `xar_dynamic_objects` CHANGE `moduleid` `module_id` INT( 11 ) NOT NULL DEFAULT '0'
+ALTER TABLE `xar_dynamic_objects` CHANGE `moduleid` `module_id` INTEGER  UNSIGNED NOT NULL DEFAULT '0'
 UPDATE `xar_dynamic_properties` SET `name` = 'module_id',
 `source` = 'xar_dynamic_objects.module_id' WHERE `xar_dynamic_properties`.`source` = 'xar_dynamic_objects.moduleid';
+
+ALTER TABLE `xar_privmembers` CHANGE COLUMN `parentid` `parent_id` INTEGER  UNSIGNED NOT NULL DEFAULT 0;

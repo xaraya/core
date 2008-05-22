@@ -127,10 +127,10 @@ function privileges_init()
 
         $query = "CREATE TABLE " . $tables['privmembers'] . "(
           `id` int(11) NOT NULL default '0',
-          `parentid` int(11) NOT NULL default '0',
-          PRIMARY KEY  (`id`,`parentid`),
+          `parent_id` int(11) NOT NULL default '0',
+          PRIMARY KEY  (`id`,`parent_id`),
           KEY `i_xar_privmembers_pid` (`id`),
-          KEY `i_xar_privmembers_parentid` (`parentid`)
+          KEY `i_xar_privmembers_parentid` (`parent_id`)
         )";
 
         $dbconn->Execute($query);

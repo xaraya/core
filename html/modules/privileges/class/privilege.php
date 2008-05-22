@@ -166,7 +166,7 @@ class xarPrivilege extends xarMask
         $this->dbconn->Execute($query,array($this->id));
 
         // set up a query to get all the parents of this child
-        $query = "SELECT parentid FROM $this->privmemberstable
+        $query = "SELECT parent_id FROM $this->privmemberstable
               WHERE id=?";
         //Execute the query, bail if an exception was thrown
         $stmt = $this->dbconn->prepareStatement($query);
@@ -308,7 +308,7 @@ class xarPrivilege extends xarMask
 
         // perform a SELECT on the privmembers table
         $query = "SELECT DISTINCT p.*, m.name
-                  FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.parentid
+                  FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.parent_id
                   LEFT JOIN $this->modulestable m ON p.module_id = m.id
                   WHERE pm.id = ?";
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
@@ -385,7 +385,7 @@ class xarPrivilege extends xarMask
         // create an array to hold the objects to be returned
         $children = array();
 
-        $query = "SELECT p.*, pm.parentid, m.name
+        $query = "SELECT p.*, pm.parent_id, m.name
                     FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.id
                     LEFT JOIN $this->modulestable m ON p.module_id = m.id
                     WHERE p.id = pm.id";
