@@ -91,7 +91,7 @@ function roles_init()
                                                 'null'        => true,
                                                 'default'     => null,
                                                 'primary_key' => true),
-                                        'parentid' => array('type'        => 'integer',
+                                        'parent_id' => array('type'        => 'integer',
                                                             'null'        => true,
                                                             'default'     => null,
                                                             'primary_key' => true)));
@@ -104,7 +104,7 @@ function roles_init()
         $dbconn->Execute($query);
 
         $index = array('name' => 'i_' . $prefix . '_rolememb_parentid',
-                       'fields' => array('parentid'),
+                       'fields' => array('parent_id'),
                        'unique' => false);
         $query = xarDBCreateIndex($tables['rolemembers'], $index);
         $dbconn->Execute($query);

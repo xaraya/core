@@ -99,7 +99,7 @@ function roles_admin_showusers()
         if ($id != 0) {
             $q->addtable($xartable['rolemembers'],'rm');
             $q->join('r.id','rm.id');
-            $q->eq('rm.parentid',$id);
+            $q->eq('rm.parent_id',$id);
         }
 
         // Save the query so we can reuse it somewhere

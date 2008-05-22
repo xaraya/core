@@ -108,10 +108,10 @@ function roles_userapi_getall($args)
         $where_clause[] = 'roletab.id = rolememb.id';
         if (count($group_list) > 1) {
             $bindmarkers = '?' . str_repeat(',?',count($group_list)-1);
-            $where_clause[] = 'rolememb.parentid in (' . $bindmarkers. ')';
+            $where_clause[] = 'rolememb.parent_id in (' . $bindmarkers. ')';
             $bindvars = array_merge($bindvars, $group_list);
         } else {
-            $where_clause[] = 'rolememb.parentid = ?';
+            $where_clause[] = 'rolememb.parent_id = ?';
             $bindvars[] = $group_list[0];
         }
     }

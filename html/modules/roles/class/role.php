@@ -154,7 +154,7 @@ class Role extends DataObject
 
         $q = new xarQuery('SELECT',$this->rolememberstable);
         $q->eq('id',$member->getID());
-        $q->eq('parentid',$this->getID());
+        $q->eq('parent_id',$this->getID());
         if (!$q->run()) return;
         // This relationship already exists. Move on
         if ($q->row() != array()) return true;
@@ -162,7 +162,7 @@ class Role extends DataObject
         // add the necessary entry to the rolemembers table
         $q = new xarQuery('INSERT',$this->rolememberstable);
         $q->addfield('id',$member->getID());
-        $q->addfield('parentid',$this->getID());
+        $q->addfield('parent_id',$this->getID());
         if (!$q->run()) return;
 
         // for children that are users
@@ -200,7 +200,7 @@ class Role extends DataObject
     public function removeMember($member)
     {
         // delete the relevant entry from the rolemembers table
-        $query = "DELETE FROM $this->rolememberstable WHERE id= ? AND parentid= ?";
+        $query = "DELETE FROM $this->rolememberstable WHERE id= ? AND parent_id= ?";
         $bindvars = array($member->getID(), $this->getID());
         $this->dbconn->Execute($query,$bindvars);
         // for children that are users
@@ -242,7 +242,7 @@ class Role extends DataObject
 
         // get a list of all relevant entries in the rolemembers table
         // where this role is the child
-        $query = "SELECT parentid FROM $this->rolememberstable WHERE id= ?";
+        $query = "SELECT parent_id FROM $this->rolememberstable WHERE id= ?";
         // Execute the query, bail if an exception was thrown
         $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
@@ -469,19 +469,19 @@ class Role extends DataObject
             $where = "WHERE r.id = rm.id AND
                         r.type = ? AND
                         r.state != ? AND
-                        rm.parentid = ?";
+                        rm.parent_id = ?";
              $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->getID());
         } elseif ($state == ROLES_STATE_ALL) {
             $where = "WHERE r.id = rm.id AND
                         r.type = ? AND
-                        rm.parentid = ?";
+                        rm.parent_id = ?";
              $bindvars = array(ROLES_USERTYPE,$this->getID());
         } else {
              $bindvars = array(ROLES_USERTYPE, $state, $this->properties['id']->value);
             $where = "WHERE r.id = rm.id AND
                         r.type = ? AND
                         r.state = ? AND
-                        rm.parentid = ?";
+                        rm.parent_id = ?";
         }
         $query .= $where;
         if (isset($selection)) $query .= $selection;
@@ -526,7 +526,7 @@ class Role extends DataObject
         $q->addtable($this->rolestable,'r');
         $q->addtable($this->rolememberstable,'rm');
         $q->join('r.id', 'rm.id');
-        $q->eq('rm.parentid', $this->properties['id']->value);
+        $q->eq('rm.parent_id', $this->properties['id']->value);
         if ($state == ROLES_STATE_CURRENT) {
             $q->ne('r.state', ROLES_STATE_DELETED);
         } else {
@@ -581,7 +581,7 @@ class Role extends DataObject
         // if this is a user just perform a SELECT on the rolemembers table
         $query = "SELECT r.*
                   FROM $this->rolestable r, $this->rolememberstable rm
-                  WHERE r.id = rm.parentid AND rm.id = ?";
+                  WHERE r.id = rm.parent_id AND rm.id = ?";
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->properties['id']->value));
 

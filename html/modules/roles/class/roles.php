@@ -238,7 +238,7 @@ class xarRoles extends Object
         $q->addfield('r.id AS id');
         $q->addfield('r.name AS name');
         $q->addfield('r.users AS users');
-        $q->addfield('rm.parentid AS parentid');
+        $q->addfield('rm.parent_id AS parentid');
         $c = array();
         foreach ($basetypes as $type) {
             $c[] = $q->peq('r.type',$type);

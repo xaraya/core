@@ -30,7 +30,7 @@ function roles_userapi_getallgroups($args)
     $q->addtable($xartable['roles'],'r');
     $q->addtable($xartable['rolemembers'], 'rm');
     $q->leftjoin('r.id','rm.id');
-    $q->addfields(array('r.id AS id','r.name AS name','r.users AS users','rm.parentid AS parentid'));
+    $q->addfields(array('r.id AS id','r.name AS name','r.users AS users','rm.parent_id AS parentid'));
 
     $conditions = array();
     // Restriction by group.
@@ -52,7 +52,7 @@ function roles_userapi_getallgroups($args)
                 )
             );
             if (isset($group['id']) && is_numeric($group['id'])) {
-                $conditions[] = $q->peq('rm.parentid',$group['id']);
+                $conditions[] = $q->peq('rm.parent_id',$group['id']);
             }
         }
     }

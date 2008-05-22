@@ -99,7 +99,7 @@ function roles_admin_createmail()
                 // If a group was chosen, get only the users of that group
                 $q->addtable($xartable['rolemembers'],'rm');
                 $q->join('r.id','rm.id');
-                $q->eq('rm.parentid',$id);
+                $q->eq('rm.parent_id',$id);
             } else {
                 $q->eq('r.id',$id);
             }
