@@ -1094,30 +1094,6 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
 }
 
 /**
- * Output php comment block in templates
- *
- * @access private
- * @global int xarTpl_showPHPCommentBlockInTemplates int
- * @return int value of xarTpl_showPHPCommentBlockInTemplates (0 or 1)
- */
-function xarTpl_outputPHPCommentBlockInTemplates()
-{
-    if (!isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates'])) {
-        // Default to not show the comments
-        $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
-        // CHECKME: not sure if this is needed, e.g. during installation
-        // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
-        if (method_exists('xarModVars','Get')){
-            $showphpcbit = xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates');
-            if (!empty($showphpcbit)) {
-                $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
-            }
-        }
-    }
-    return $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'];
-}
-
-/**
  * Output template filenames
  *
  * @access private
