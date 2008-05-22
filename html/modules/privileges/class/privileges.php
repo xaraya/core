@@ -315,7 +315,7 @@ class xarPrivileges extends xarMasks
                          p.module_id,  p.component, p.instance,
                          p.level, p.description, pm.parent_id
                   FROM " . parent::$privilegestable . " p LEFT JOIN " .
-                           parent::$privmemberstable  . " pm ON p.id = pm.id LEFT JOIN " . parent::$realmstable . " r ON p.realm_id = r.id";
+                           parent::$privmemberstable  . " pm ON p.id = pm.privilege_id LEFT JOIN " . parent::$realmstable . " r ON p.realm_id = r.id";
 
         if($arg == "all") {
              $query .= " WHERE pm.parent_id IS NULL ";

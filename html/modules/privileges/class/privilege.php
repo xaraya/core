@@ -109,7 +109,7 @@ class xarPrivilege extends xarMask
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('DELETE',$this->privmemberstable);
         $q->eq('id', $member->getID());
-        $q->eq('parentid', $this->getID());
+        $q->eq('parent_id', $this->getID());
         if (!$q->run()) return;
 
         return true;
@@ -310,7 +310,7 @@ class xarPrivilege extends xarMask
         $query = "SELECT DISTINCT p.*, m.name
                   FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.parent_id
                   LEFT JOIN $this->modulestable m ON p.module_id = m.id
-                  WHERE pm.id = ?";
+                  WHERE pm.privilege_id = ?";
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
         // collect the table values and use them to create new role objects
@@ -386,11 +386,11 @@ class xarPrivilege extends xarMask
         $children = array();
 
         $query = "SELECT p.*, pm.parent_id, m.name
-                    FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.id
+                    FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.privilege_id
                     LEFT JOIN $this->modulestable m ON p.module_id = m.id
-                    WHERE p.id = pm.id";
+                    WHERE p.id = pm.privilege_id";
         // retrieve all children of everyone at once
-        //              AND pm.parentid = " . $cacheId;
+        //              AND pm.parent_id = " . $cacheId;
         // Can't use caching here. The privs have changed
         $result = $this->dbconn->executeQuery($query);
 
@@ -524,8 +524,8 @@ class xarPrivilege extends xarMask
         $q = new xarQuery('SELECT');
         $q->addtable($this->privilegestable,'p');
         $q->addtable($this->privmemberstable,'pm');
-        $q->join('p.id','pm.id');
-        $q->eq('pm.id',$this->getID());
+        $q->join('p.id','pm.privilege_id');
+        $q->eq('pm.privilege_id',$this->getID());
         if(!$q->run()) return;
         return ($q->output() != array());
     }

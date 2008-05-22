@@ -119,18 +119,18 @@ function privileges_init()
 
         /*********************************************************************
          * CREATE TABLE xar_privmembers (
-         *   id int(11) NOT NULL default '0',
-         *   parentid int(11) NOT NULL default '0',
-         *   PRIMARY KEY id (id,parentid)
+         *   privilege_id integer unsigned NOT NULL default '0',
+         *   parent_id integer unsigned NOT NULL default '0',
+         *   PRIMARY KEY (privilege_id,parent_id)
          * )
          *********************************************************************/
 
         $query = "CREATE TABLE " . $tables['privmembers'] . "(
-          `id` int(11) NOT NULL default '0',
-          `parent_id` int(11) NOT NULL default '0',
-          PRIMARY KEY  (`id`,`parent_id`),
-          KEY `i_xar_privmembers_pid` (`id`),
-          KEY `i_xar_privmembers_parentid` (`parent_id`)
+          `privilege_id` INTEGER UNSIGNED NOT NULL default '0',
+          `parent_id`    INTEGER UNSIGNED NOT NULL default '0',
+          PRIMARY KEY  (`privilege_id`,`parent_id`),
+          KEY `i_xar_privmembers_pid` (`privilege_id`),
+          KEY `i_xar_privmembers_parent_id` (`parent_id`)
         )";
 
         $dbconn->Execute($query);

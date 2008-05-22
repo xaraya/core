@@ -574,3 +574,6 @@ UPDATE `xar_dynamic_properties` SET `name` = 'module_id',
 `source` = 'xar_dynamic_objects.module_id' WHERE `xar_dynamic_properties`.`source` = 'xar_dynamic_objects.moduleid';
 
 ALTER TABLE `xar_privmembers` CHANGE COLUMN `parentid` `parent_id` INTEGER  UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE `xar_privmembers` CHANGE COLUMN `id` `privilege_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
+UPDATE `xar_security_instances` SET instancechildid='privilege_id' WHERE instancetable2='xar_privmembers';
+UPDATE `xar_security_instances` SET instanceparentid='parent_id' WHERE instancetable2='xar_privmembers';
