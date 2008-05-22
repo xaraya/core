@@ -194,14 +194,14 @@ class FileUploadProperty extends DataProperty
                     $this->invalid = xarML('The file type is not allowed');
                     $this->value = null;
                     return false;
-                } elseif (!move_uploaded_file($file['tmp_name'], $this->initialization_basepath . '/' . $this->initialization_basedirectory . '/'. $fileName)) {
+                } elseif (!move_uploaded_file($file['tmp_name'], $this->initialization_basepath . '/' . $this->initialization_basedirectory . '/'. $file['name'])) {
                     $this->invalid = xarML('The file upload failed');
                     $this->value = null;
                     return false;
                 }
-                $this->value = $fileName;
+                $this->value = $file['name'];
                 // save new value for preview + new/modify combinations
-                xarVarSetCached('DynamicData.FileUpload',$name,$fileName);
+                xarVarSetCached('DynamicData.FileUpload',$name,$file['name']);
             } else {
             // TODO: assign random name + figure out mime type to add the right extension ?
                 $this->invalid = xarML('The file name for upload is empty');
