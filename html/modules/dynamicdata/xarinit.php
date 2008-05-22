@@ -202,7 +202,7 @@ function dynamicdata_init()
                 'default'     => ''
             ),
             /* the object this property belong to */
-            'objectid'   => array(
+            'object_id'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
@@ -252,7 +252,7 @@ function dynamicdata_init()
             $dynamic_properties,
             array(
                 'name'   => 'i_' . $prefix . '_dynprops_combo',
-                'fields' => array('objectid', 'name'),
+                'fields' => array('object_id', 'name'),
                 'unique' => 'true'
             )
         );
@@ -265,7 +265,7 @@ function dynamicdata_init()
 
         // create default properties for dynamic data objects
         $sql = "INSERT INTO $dynamic_properties (
-                name, label, objectid,
+                name, label, object_id,
                 type, defaultvalue, source,
                 status, seq, validation)
             VALUES (?,?,?,?,?,?,?,?,?)";
@@ -292,7 +292,7 @@ function dynamicdata_init()
             array('id'        ,'Id'                 ,$objectid[2],21,''            ,$dynamic_properties.'.id'        ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,1 ,'integer'),
             array('name'      ,'Name'               ,$objectid[2],2 ,''            ,$dynamic_properties.'.name'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
             array('label'     ,'Label'              ,$objectid[2],2 ,''            ,$dynamic_properties.'.label'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
-            array('objectid'  ,'Object'             ,$objectid[2],24,''            ,$dynamic_properties.'.objectid'  ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
+            array('objectid'  ,'Object'             ,$objectid[2],24,''            ,$dynamic_properties.'.object_id'  ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
             array('type'      ,'Property Type'      ,$objectid[2],22,''            ,$dynamic_properties.'.type'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'integer'),
             array('defaultvalue' ,'Default'         ,$objectid[2],3 ,''            ,$dynamic_properties.'.defaultvalue'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (254)'),
             array('source'    ,'Source'             ,$objectid[2],23,'dynamic_data',$dynamic_properties.'.source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,'varchar (254)'),

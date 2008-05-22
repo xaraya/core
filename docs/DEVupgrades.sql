@@ -589,6 +589,8 @@ UPDATE `xar_security_instances` SET instanceparentid='role_id' WHERE instancetab
 ALTER TABLE `xar_security_acl` CHANGE COLUMN `partid` `role_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE `xar_security_acl` CHANGE COLUMN `permid` `privilege_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
 
-# dynamic_data propid 
-ALTER TABLE `xar_dynamic_data` CHANGE `propid` `property_id` INT NOT NULL DEFAULT 0; 
+# dynamic_data.property_id 
+ALTER TABLE `xar_dynamic_data` CHANGE `propid` `property_id` INT NOT NULL DEFAULT 0;
+# dynamic_data object_id
+ ALTER TABLE `xar_dynamic_properties` CHANGE `objectid` `object_id` INT NOT NULL DEFAULT '0'
 
