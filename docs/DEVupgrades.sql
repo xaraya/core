@@ -594,5 +594,7 @@ ALTER TABLE `xar_dynamic_data` CHANGE `propid` `property_id` INT NOT NULL DEFAUL
 # dynamic_data object_id
 ALTER TABLE `xar_dynamic_properties` CHANGE `objectid` `object_id` INT NOT NULL DEFAULT '0';
 
-ALTER TABLE `xar_security_instances` DROP `instancetable2`;
-
+ALTER TABLE `xar_security_instances`
+  DROP `instancetable2`,
+  DROP `instancechildid`,
+  DROP `instanceparentid`;

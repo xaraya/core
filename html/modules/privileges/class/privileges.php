@@ -58,8 +58,7 @@ class xarPrivileges extends xarMasks
                     list($id) = $result->fields;
                     $query = "UPDATE $iTable
                           SET query = ?, ddlimit = ?,
-                              propagate = ?, instancechildid = ?,
-                              instanceparentid = ?, description = ?
+                              propagate = ?, description = ?
                           WHERE id = ?";
                     $bindvars = array(
                                       $instance['query'], $instance['limit'],
@@ -70,9 +69,8 @@ class xarPrivileges extends xarMasks
                     $query = "INSERT INTO $iTable
                           ( module_id, component, header,
                             query, ddlimit, propagate,
-                            instancechildid,
-                            instanceparentid, description)
-                          VALUES (?,?,?,?,?,?,?,?,?)";
+                            description)
+                          VALUES (?,?,?,?,?,?,?)";
                     $modInfo = xarMod_GetBaseInfo($module);
                     $module_id = $modInfo['systemid'];
                     $bindvars = array(
