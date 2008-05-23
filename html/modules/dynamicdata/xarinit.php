@@ -203,7 +203,7 @@ function dynamicdata_init()
                 'default'     => ''
             ),
             /* the object this property belong to */
-            'objectid'   => array(
+            'object_id'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
@@ -253,7 +253,7 @@ function dynamicdata_init()
             $dynamic_properties,
             array(
                 'name'   => 'i_' . $prefix . '_dynprops_combo',
-                'fields' => array('objectid', 'name'),
+                'fields' => array('object_id', 'name'),
                 'unique' => 'true'
             )
         );
@@ -266,7 +266,7 @@ function dynamicdata_init()
 
         // create default properties for dynamic data objects
         $sql = "INSERT INTO $dynamic_properties (
-                name, label, objectid,
+                name, label, object_id,
                 type, defaultvalue, source,
                 status, seq, configuration)
             VALUES (?,?,?,?,?,?,?,?,?)";
@@ -322,7 +322,7 @@ function dynamicdata_init()
                 'primary_key' => true
             ),
             /* the property this dynamic data belongs to */
-            'propid'   => array(
+            'property_id'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
@@ -349,8 +349,8 @@ function dynamicdata_init()
         $query = xarDBCreateIndex(
             $dynamic_data,
             array(
-                'name'   => 'i_' . $prefix . '_dyndata_propid',
-                'fields' => array('propid')
+                'name'   => 'i_' . $prefix . '_dyndata_property_id',
+                'fields' => array('property_id')
             )
         );
         $dbconn->Execute($query);

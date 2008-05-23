@@ -109,7 +109,7 @@ class xarPrivilege extends xarMask
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('DELETE',$this->privmemberstable);
         $q->eq('id', $member->getID());
-        $q->eq('parentid', $this->getID());
+        $q->eq('parent_id', $this->getID());
         if (!$q->run()) return;
 
         return true;
@@ -166,7 +166,7 @@ class xarPrivilege extends xarMask
         $this->dbconn->Execute($query,array($this->id));
 
         // set up a query to get all the parents of this child
-        $query = "SELECT parentid FROM $this->privmemberstable
+        $query = "SELECT parent_id FROM $this->privmemberstable
               WHERE id=?";
         //Execute the query, bail if an exception was thrown
         $stmt = $this->dbconn->prepareStatement($query);
@@ -215,8 +215,8 @@ class xarPrivilege extends xarMask
     {
         static $stmt = null;
 
-        $query = "SELECT partid FROM $this->acltable WHERE
-                partid = ? AND permid = ?";
+        $query = "SELECT role_id FROM $this->acltable WHERE
+                role_id = ? AND privilege_id = ?";
         $bindvars = array($role->getID(), $this->getID());
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
@@ -241,8 +241,8 @@ class xarPrivilege extends xarMask
                          r.uname, r.email, r.pass,
                          r.auth_modid
                   FROM $this->rolestable r, $this->acltable acl
-                  WHERE r.id = acl.partid AND
-                        acl.permid = ?";
+                  WHERE r.id = acl.role_id AND
+                        acl.privilege_id = ?";
         $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->id));
 
@@ -308,9 +308,9 @@ class xarPrivilege extends xarMask
 
         // perform a SELECT on the privmembers table
         $query = "SELECT DISTINCT p.*, m.name
-                  FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.parentid
+                  FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.parent_id
                   LEFT JOIN $this->modulestable m ON p.module_id = m.id
-                  WHERE pm.id = ?";
+                  WHERE pm.privilege_id = ?";
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
         // collect the table values and use them to create new role objects
@@ -385,12 +385,12 @@ class xarPrivilege extends xarMask
         // create an array to hold the objects to be returned
         $children = array();
 
-        $query = "SELECT p.*, pm.parentid, m.name
-                    FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.id
+        $query = "SELECT p.*, pm.parent_id, m.name
+                    FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.privilege_id
                     LEFT JOIN $this->modulestable m ON p.module_id = m.id
-                    WHERE p.id = pm.id";
+                    WHERE p.id = pm.privilege_id";
         // retrieve all children of everyone at once
-        //              AND pm.parentid = " . $cacheId;
+        //              AND pm.parent_id = " . $cacheId;
         // Can't use caching here. The privs have changed
         $result = $this->dbconn->executeQuery($query);
 
@@ -524,8 +524,8 @@ class xarPrivilege extends xarMask
         $q = new xarQuery('SELECT');
         $q->addtable($this->privilegestable,'p');
         $q->addtable($this->privmemberstable,'pm');
-        $q->join('p.id','pm.id');
-        $q->eq('pm.id',$this->getID());
+        $q->join('p.id','pm.privilege_id');
+        $q->eq('pm.privilege_id',$this->getID());
         if(!$q->run()) return;
         return ($q->output() != array());
     }

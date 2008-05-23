@@ -68,7 +68,7 @@ function initializeSetup()
     $instances = array(array('header' => 'Privileges',
                              'query' => $query,
                              'limit' => 20));
-    xarDefineInstance('privileges','Privileges',$instances,0,$privMembersTable,'id','parentid','Instances of the privileges module, including multilevel nesting');
+    xarDefineInstance('privileges','Privileges',$instances,0,$privMembersTable,'privilege_id','parent_id','Instances of the privileges module, including multilevel nesting');
 
     // ----------------------------- Base Module
     $info = xarMod::getBaseInfo('base');

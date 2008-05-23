@@ -39,8 +39,8 @@ function roles_admin_modifyconfig()
             $dbconn   = xarDB::getConn();
             $xartable = xarDB::getTables();
             $acltable = xarDB::getPrefix() . '_security_acl';
-            $query    = "SELECT partid FROM $acltable
-                         WHERE permid   = ?";
+            $query    = "SELECT role_id FROM $acltable
+                         WHERE privilege_id  = ?";
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery(array((int) $adminpriv));
 

@@ -213,8 +213,8 @@ class xarPrivileges extends xarMasks
         $query = "SELECT p.id, p.name, r.id,r.type,r.name,
                          p.module_id, p.component, p.instance,
                          p.level,  p.description
-                  FROM " . parent::$privilegestable . " p INNER JOIN ". parent::$acltable . " a ON p.id = a.permid
-                  INNER JOIN ". parent::$rolestable . " r ON a.partid = r.id " .
+                  FROM " . parent::$privilegestable . " p INNER JOIN ". parent::$acltable . " a ON p.id = a.privilege_id
+                  INNER JOIN ". parent::$rolestable . " r ON a.role_id = r.id " .
                   $where .
                   " ORDER BY p.name";
         $stmt = parent::$dbconn->prepareStatement($query);
@@ -313,16 +313,16 @@ class xarPrivileges extends xarMasks
         // Base query
         $query = "SELECT DISTINCT p.id, p.name,  r.name,
                          p.module_id,  p.component, p.instance,
-                         p.level, p.description, pm.parentid
+                         p.level, p.description, pm.parent_id
                   FROM " . parent::$privilegestable . " p LEFT JOIN " .
-                           parent::$privmemberstable  . " pm ON p.id = pm.id LEFT JOIN " . parent::$realmstable . " r ON p.realm_id = r.id";
+                           parent::$privmemberstable  . " pm ON p.id = pm.privilege_id LEFT JOIN " . parent::$realmstable . " r ON p.realm_id = r.id";
 
         if($arg == "all") {
-             $query .= " WHERE pm.parentid IS NULL ";
+             $query .= " WHERE pm.parent_id IS NULL ";
         } elseif ($arg == "assigned") {
             $query .= ", " . self::$acltable . " acl
-                        WHERE p.id = acl.permid AND
-                              pm.parentid IS NULL ";
+                        WHERE p.id = acl.privilege_id AND
+                              pm.parent_id IS NULL ";
         }
         $query .=" AND p.type = ?";
         $query .=" ORDER BY p.name";

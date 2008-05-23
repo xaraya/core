@@ -56,10 +56,10 @@ class PrivilegesTree extends Tree
         $xartable = xarDB::getTables();
         $query = "SELECT p.id, p.name, r.name,
                          m.name, p.component, p.instance,
-                         p.level,  p.description, pm.parentid
+                         p.level,  p.description, pm.parent_id
                   FROM " . $xartable['privileges'] . " p LEFT JOIN ". $xartable['realms'] . " r ON p.realm_id = r.id
                   LEFT JOIN ". $xartable['modules'] . " m ON p.module_id = m.id
-                  LEFT JOIN ". $xartable['privmembers'] . " pm ON p.id = pm.id
+                  LEFT JOIN ". $xartable['privmembers'] . " pm ON p.id = pm.privilege_id
                   WHERE type = " . xarPrivileges::PRIVILEGES_PRIVILEGETYPE .
                   " ORDER BY p.name";
         $stmt = $dbconn->prepareStatement($query);

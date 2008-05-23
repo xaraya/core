@@ -52,7 +52,7 @@ class DataPropertyMaster extends Object
         $query = "SELECT name, label, type,
                          id, defaultvalue, source,
                          status, seq, configuration,
-                         objectid FROM $dynamicprop ";
+                         object_id FROM $dynamicprop ";
         if(empty($args['objectid']))
         {
             $doargs['moduleid'] = $args['moduleid'];
@@ -60,7 +60,7 @@ class DataPropertyMaster extends Object
             $info = DataObjectDescriptor::getObjectID($doargs);
         }
 
-        $query .= " WHERE objectid = ?";
+        $query .= " WHERE object_id = ?";
         $bindvars[] = (int) $args['objectid'];
 
         $anonymous = empty($args['anonymous']) ? 0 : 1;
