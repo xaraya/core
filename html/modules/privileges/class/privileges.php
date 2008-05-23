@@ -58,24 +58,23 @@ class xarPrivileges extends xarMasks
                     list($id) = $result->fields;
                     $query = "UPDATE $iTable
                           SET query = ?, ddlimit = ?,
-                              propagate = ?, description = ?
+                              description = ?
                           WHERE id = ?";
                     $bindvars = array(
                                       $instance['query'], $instance['limit'],
-                                      $propagate, $description, $id
+                                      $description, $id
                                       );
                 } else {
                     $query = "INSERT INTO $iTable
                           ( module_id, component, header,
-                            query, ddlimit, propagate,
-                            description)
-                          VALUES (?,?,?,?,?,?,?)";
+                            query, ddlimit, description)
+                          VALUES (?,?,?,?,?,?)";
                     $modInfo = xarMod_GetBaseInfo($module);
                     $module_id = $modInfo['systemid'];
                     $bindvars = array(
                                       $module_id, $type, $instance['header'],
                                       $instance['query'], $instance['limit'],
-                                      $propagate,$description
+                                      $description
                                       );
                 }
                 $stmt = parent::$dbconn->prepareStatement($query);

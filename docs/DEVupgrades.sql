@@ -597,4 +597,5 @@ ALTER TABLE `xar_dynamic_properties` CHANGE `objectid` `object_id` INT NOT NULL 
 ALTER TABLE `xar_security_instances`
   DROP `instancetable2`,
   DROP `instancechildid`,
-  DROP `instanceparentid`;
+  DROP `instanceparentid`,
+  DROP `propagate`;
