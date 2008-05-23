@@ -790,9 +790,7 @@ class DataObjectMaster extends Object
 
     static function updateObject(Array $args)
     {
-        $descriptor = new DataObjectDescriptor($args);
-        $object = self::getObject($descriptor->getArgs());
-        $args = $descriptor->getArgs();
+        $object = self::getObject(array('name' => 'objects'));
 
         // Update specific part
         $itemid = $object->getItem(array('itemid' => $args['objectid']));
