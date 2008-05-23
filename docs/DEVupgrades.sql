@@ -579,24 +579,6 @@ UPDATE `xar_dynamic_properties` SET objectid = 24 WHERE name = 'parent' AND obje
 UPDATE `xar_dynamic_properties` SET label = 'Configuration' WHERE label = 'Validation' AND objectid = 2;
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.validation", "xar_dynamic_properties.configuration");
 
-/*
-    Remove all the privmember entries with parentid = 0
-*/
-DELETE FROM `xar_privmembers` WHERE `parentid` = 0;
-
-ALTER TABLE `xar_block_types` CHANGE `modid` `module_id` INTEGER UNSIGNED NOT NULL DEFAULT '0'
-UPDATE `xar_security_instances` SET `query` = REPLACE(query, "modid", "module_id");
-
-ALTER TABLE `xar_dynamic_objects` CHANGE `moduleid` `module_id` INTEGER  UNSIGNED NOT NULL DEFAULT '0'
-UPDATE `xar_dynamic_properties` SET `name` = 'module_id',
-`source` = 'xar_dynamic_objects.module_id' WHERE `xar_dynamic_properties`.`source` = 'xar_dynamic_objects.moduleid';
-
-# privmembers ddl adjustments
-ALTER TABLE `xar_privmembers` CHANGE COLUMN `parentid` `parent_id` INTEGER  UNSIGNED NOT NULL DEFAULT 0;
-ALTER TABLE `xar_privmembers` CHANGE COLUMN `id` `privilege_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
-UPDATE `xar_security_instances` SET instancechildid='privilege_id' WHERE instancetable2='xar_privmembers';
-UPDATE `xar_security_instances` SET instanceparentid='parent_id' WHERE instancetable2='xar_privmembers';
-  
 CREATE TABLE `xar_dynamic_configurations` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(254) NOT NULL default '',
@@ -606,21 +588,7 @@ CREATE TABLE `xar_dynamic_configurations` (
   `configuration` mediumtext,
   PRIMARY KEY  (`id`));
 
-# rolemembers ddl adjustments
-ALTER TABLE `xar_rolemembers` CHANGE COLUMN `parentid` `parent_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
-UPDATE `xar_security_instances` SET instanceparentid='parent_id' WHERE instancetable2='xar_rolemembers';
-ALTER TABLE `core2x`.`xar_rolemembers` CHANGE COLUMN `id` `role_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
-UPDATE `xar_security_instances` SET instanceparentid='role_id' WHERE instancetable2='xar_rolemembers';
-
-# security_acl ddl adjustments
 /* Articles table changes */
-ALTER TABLE `xar_security_acl` CHANGE COLUMN `partid` `role_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
-ALTER TABLE `xar_security_acl` CHANGE COLUMN `permid` `privilege_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
-
-# dynamic_data.property_id 
-ALTER TABLE `xar_dynamic_data` CHANGE `propid` `property_id` INT NOT NULL DEFAULT 0;
-# dynamic_data object_id
- ALTER TABLE `xar_dynamic_properties` CHANGE `objectid` `object_id` INT NOT NULL DEFAULT '0'
 ALTER TABLE `xar_articles`
   CHANGE COLUMN `xar_aid` `id` int(11) NOT NULL auto_increment,
   CHANGE COLUMN `xar_title` `title` varchar(254) NOT NULL default '',
@@ -640,9 +608,35 @@ ALTER TABLE `xar_publication_types`
   CHANGE COLUMN `xar_pubtypedescr` `pubtypedescr` varchar(254) NOT NULL default '',
   CHANGE COLUMN `xar_pubtypeconfig` `pubtypeconfig` text;
   
-  /*
-      Remove all the privmember and rolemember entries with parentid = 0
-  */
+/*
+  Remove all the privmember and rolemember entries with parentid = 0
+*/
+DELETE FROM `xar_privmembers` WHERE `parentid` = 0;
 DELETE FROM `xar_rolemembers` WHERE `id` = 1;
-ALTER TABLE `xar_dynamic_objects` CHANGE `moduleid` `module_id` INT( 11 ) NOT NULL DEFAULT '0';
+
+ALTER TABLE `xar_block_types` CHANGE `modid` `module_id` INTEGER UNSIGNED NOT NULL DEFAULT '0'
+UPDATE `xar_security_instances` SET `query` = REPLACE(query, "modid", "module_id");
+
+ALTER TABLE `xar_dynamic_objects` CHANGE `moduleid` `module_id` INTEGER  UNSIGNED NOT NULL DEFAULT '0';
 UPDATE `xar_dynamic_properties` SET `name` = 'module_id', `source` = 'xar_dynamic_objects.module_id' WHERE `xar_dynamic_properties`.`source` = 'xar_dynamic_objects.moduleid';
+
+# privmembers ddl adjustments
+ALTER TABLE `xar_privmembers` CHANGE COLUMN `parentid` `parent_id` INTEGER  UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE `xar_privmembers` CHANGE COLUMN `id` `privilege_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
+UPDATE `xar_security_instances` SET instancechildid='privilege_id' WHERE instancetable2='xar_privmembers';
+UPDATE `xar_security_instances` SET instanceparentid='parent_id' WHERE instancetable2='xar_privmembers';
+  
+# rolemembers ddl adjustments
+ALTER TABLE `xar_rolemembers` CHANGE COLUMN `parentid` `parent_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
+UPDATE `xar_security_instances` SET instanceparentid='parent_id' WHERE instancetable2='xar_rolemembers';
+ALTER TABLE `xar_rolemembers` CHANGE COLUMN `id` `role_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
+UPDATE `xar_security_instances` SET instanceparentid='role_id' WHERE instancetable2='xar_rolemembers';
+
+# security_acl ddl adjustments
+ALTER TABLE `xar_security_acl` CHANGE COLUMN `partid` `role_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE `xar_security_acl` CHANGE COLUMN `permid` `privilege_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
+
+# dynamic_data.property_id 
+ALTER TABLE `xar_dynamic_data` CHANGE `propid` `property_id` INT NOT NULL DEFAULT 0;
+# dynamic_data object_id
+ ALTER TABLE `xar_dynamic_properties` CHANGE `objectid` `object_id` INT NOT NULL DEFAULT '0';
