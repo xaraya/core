@@ -62,8 +62,7 @@ class xarPrivileges extends xarMasks
                           WHERE id = ?";
                     $bindvars = array(
                                       $instance['query'], $instance['limit'],
-                                      $propagate, $childID, $parentID,
-                                      $description, $id
+                                      $propagate, $description, $id
                                       );
                 } else {
                     $query = "INSERT INTO $iTable
@@ -76,8 +75,7 @@ class xarPrivileges extends xarMasks
                     $bindvars = array(
                                       $module_id, $type, $instance['header'],
                                       $instance['query'], $instance['limit'],
-                                      $propagate, $childID, $parentID,
-                                      $description
+                                      $propagate,$description
                                       );
                 }
                 $stmt = parent::$dbconn->prepareStatement($query);
