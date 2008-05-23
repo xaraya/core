@@ -174,11 +174,9 @@ function privileges_init()
          *   name varchar(100) NOT NULL default '',
          *   module varchar(100) NOT NULL default '',
          *   type varchar(100) NOT NULL default '',
-         *   instancetable1 varchar(100) NOT NULL default '',
          *   instancevaluefield1 varchar(100) NOT NULL default '',
          *   instancedisplayfield1 varchar(100) NOT NULL default '',
          *   instanceapplication int(11) NOT NULL default '0',
-         *   instancetable2 varchar(100) NOT NULL default '',
          *   instancevaluefield2 varchar(100) NOT NULL default '',
          *   instancedisplayfield2 varchar(100) NOT NULL default '',
          *   description varchar(255) NOT NULL default '',
@@ -213,10 +211,6 @@ function privileges_init()
                                         'propagate' => array('type'  => 'integer',
                                                                  'null'        => false,
                                                                  'default'     => '0'),
-                                        'instancetable2' => array('type'   => 'varchar',
-                                                                      'size'        => 100,
-                                                                      'null'        => false,
-                                                                      'default'     => ''),
                                         'instancechildid' => array('type'   => 'varchar',
                                                                        'size'        => 100,
                                                                        'null'        => false,
@@ -321,5 +315,4 @@ function privileges_delete()
 
     return true;
 }
-
 ?>
