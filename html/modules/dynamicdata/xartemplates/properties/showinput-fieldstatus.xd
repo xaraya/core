@@ -1,0 +1,35 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="isset($onchange)">
+      <xar:set name="evt_change">$onchange</xar:set>
+    <xar:else/>
+      <xar:set name="evt_change">'return true;'</xar:set>
+    </xar:if>
+
+    <!-- Arguably a style attribute here is wrong -->
+    <xar:if condition="!isset($style)">
+        <xar:set name="style">''</xar:set>
+    </xar:if>
+    <select name="display_#$name#" id="display_#$id#_" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#" >
+        <xar:foreach in="$options['display']" value="$row">
+            <xar:if condition="$row['id'] eq $value['display']" >
+                <option value="#$row['id']#" selected="selected">#$row['name']#</option>
+            <xar:else />
+                <option value="#$row['id']#">#$row['name']#</option>
+            </xar:if>
+        </xar:foreach>
+    </select>
+
+    <xar:set name="tabindex">$tabindex + 1</xar:set>
+    <select name="input_#$name#" id="input_#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#" >
+        <xar:foreach in="$options['input']" value="$row">
+            <xar:if condition="$row['id'] eq $value['input']" >
+                <option value="#$row['id']#" selected="selected">#$row['name']#</option>
+            <xar:else />
+                <option value="#$row['id']#">#$row['name']#</option>
+            </xar:if>
+        </xar:foreach>
+    </select>
+
+    <xar:template file="dataproperty_additions" module="base" />
+
+</xar:template>

@@ -43,7 +43,7 @@ function dynamicdata_admin_update($args)
                                          'itemid'   => $itemid));
     $itemid = $myobject->getItem();
     // if we're editing a dynamic property, save its property type to cache
-    // for correct processing of the validation rule (ValidationProperty)
+    // for correct processing of the configuration rule (ValidationProperty)
     if ($myobject->objectid == 2) {
         xarVarSetCached('dynamicdata','currentproptype', $myobject->properties['type']);
     }
@@ -67,7 +67,9 @@ function dynamicdata_admin_update($args)
             $data['return_url'] = $return_url;
         }
 
-        $modinfo = xarModGetInfo($myobject->moduleid);
+        // Makes this hooks call explictly from DD
+        // $modinfo = xarModGetInfo($myobject->moduleid);
+        $modinfo = xarModGetInfo(182);
         $item = array();
         foreach (array_keys($myobject->properties) as $name) {
             $item[$name] = $myobject->properties[$name]->value;

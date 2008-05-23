@@ -1,5 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!-- Commenting out this stuff for themoment. Seems to lead to confusion more than anything else
 <xar:if condition="!empty($class)">
 <xar:elseif condition="empty($rows)"/>
     <xar:set name="class">'xar-form-textareamedium'</xar:set>
@@ -9,6 +10,10 @@
     <xar:set name="class">'xar-form-textareasmall'</xar:set>
 <xar:else/>
     <xar:set name="class">'xar-form-textareamedium'</xar:set>
+</xar:if>
+-->
+<xar:if condition="empty($class)">
+    <xar:set name="class">''</xar:set>
 </xar:if>
 
 <!--
@@ -42,7 +47,5 @@ textarea#'.$id.' {
 '</xar:set>
 <xar:style method="embed" source="'.$textareasource.'" media="all" />
     <textarea name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#" class="#$class#">#$value#</textarea>
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>
