@@ -23,10 +23,10 @@ class xarPrivileges extends xarMasks
      * This function should be invoked at module initialisation time
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
-     * @access  public
      * @param   array of values to register instance
      * @return  boolean
-    */
+     * @todo remove table2 argument
+     */
     public static function defineInstance($module,$type,$instances,$propagate=0,$table2='',$childID='',$parentID='',$description='')
     {
         foreach($instances as $instance) {
@@ -58,27 +58,22 @@ class xarPrivileges extends xarMasks
                     list($id) = $result->fields;
                     $query = "UPDATE $iTable
                           SET query = ?, ddlimit = ?,
-                              propagate = ?, instancetable2 = ?, instancechildid = ?,
-                              instanceparentid = ?, description = ?
+                              description = ?
                           WHERE id = ?";
                     $bindvars = array(
                                       $instance['query'], $instance['limit'],
-                                      $propagate, $table2, $childID, $parentID,
                                       $description, $id
                                       );
                 } else {
                     $query = "INSERT INTO $iTable
                           ( module_id, component, header,
-                            query, ddlimit, propagate,
-                            instancetable2, instancechildid,
-                            instanceparentid, description)
-                          VALUES (?,?,?,?,?,?,?,?,?,?)";
+                            query, ddlimit, description)
+                          VALUES (?,?,?,?,?,?)";
                     $modInfo = xarMod_GetBaseInfo($module);
                     $module_id = $modInfo['systemid'];
                     $bindvars = array(
                                       $module_id, $type, $instance['header'],
                                       $instance['query'], $instance['limit'],
-                                      $propagate, $table2, $childID, $parentID,
                                       $description
                                       );
                 }

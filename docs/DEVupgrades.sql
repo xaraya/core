@@ -614,7 +614,7 @@ ALTER TABLE `xar_publication_types`
 DELETE FROM `xar_privmembers` WHERE `parentid` = 0;
 DELETE FROM `xar_rolemembers` WHERE `id` = 1;
 
-ALTER TABLE `xar_block_types` CHANGE `modid` `module_id` INTEGER UNSIGNED NOT NULL DEFAULT '0'
+ALTER TABLE `xar_block_types` CHANGE `modid` `module_id` INTEGER UNSIGNED NOT NULL DEFAULT '0';
 UPDATE `xar_security_instances` SET `query` = REPLACE(query, "modid", "module_id");
 
 ALTER TABLE `xar_dynamic_objects` CHANGE `moduleid` `module_id` INTEGER  UNSIGNED NOT NULL DEFAULT '0';
@@ -640,3 +640,8 @@ ALTER TABLE `xar_security_acl` CHANGE COLUMN `permid` `privilege_id` INTEGER UNS
 ALTER TABLE `xar_dynamic_data` CHANGE `propid` `property_id` INT NOT NULL DEFAULT 0;
 # dynamic_data object_id
 ALTER TABLE `xar_dynamic_properties` CHANGE `objectid` `object_id` INT NOT NULL DEFAULT '0';
+ALTER TABLE `xar_security_instances`
+  DROP `instancetable2`,
+  DROP `instancechildid`,
+  DROP `instanceparentid`,
+  DROP `propagate`;
