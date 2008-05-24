@@ -47,11 +47,6 @@ function dynamicdata_admin_new($args)
                                          ));
 
     $args = $myobject->toArray();
-    if (isset($myobject->properties['module_id'])) {
-        if ($notfresh) $isvalid = $myobject->checkInput();
-        $itemtype = xarModAPIFunc('dynamicdata','admin', 'getnextitemtype', array('modid' => $myobject->properties['module_id']->value));
-        $myobject->properties['itemtype']->value = $itemtype;
-    }
     $data['object'] =& $myobject;
     $data['tplmodule'] = $args['tplmodule'];  //TODO: is this needed?
 
