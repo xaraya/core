@@ -22,12 +22,12 @@
                 <xar:set name="firstline">array('id' => 0,'name' => 'Choose or enter an item')</xar:set>
                 <xar:data-input type="dropdown" name="$name" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
             </xar:if>
+            <xar:if condition="$layout eq 'horizontal' OR $layout eq 'default'">
+                &#160;
+            <xar:else />
+                <br />
+            </xar:if>
         </xar:if>
-    </xar:if>
-    <xar:if condition="$layout eq 'horizontal' OR $layout eq 'default'">
-        &#160;
-    <xar:else />
-        <br />
     </xar:if>
     <xar:if condition="($mode eq 2) OR ($mode eq 3)">
         <xar:set name="name">$name . '_tb'</xar:set>
