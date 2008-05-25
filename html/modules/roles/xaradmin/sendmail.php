@@ -75,6 +75,7 @@ function roles_admin_sendmail()
         'sitename'   => xarModVars::get('themes', 'SiteName'),
         'siteslogan' => xarModVars::get('themes', 'SiteSlogan'),
         'siteadmin'  => xarModVars::get('mail', 'adminname'),
+        'adminmail'  => xarModVars::get('mail', 'adminmail'),
         'siteurl'    => xarServerGetBaseURL(),
         'myname'     => xarUserGetVar('name'),
         'myuname'    => xarUserGetVar('uname'),
