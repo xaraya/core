@@ -60,7 +60,7 @@ function dynamicdata_utilapi_export($args)
 
     $xml = '';
 
-    $xml .= '<object name="'.$myobject->name.'">'."\n";
+    $xml .= '<object name="'.$myobject->properties['name']->value.'">'."\n";
     foreach (array_keys($object_properties) as $name) {
         if ($name != 'name' && isset($myobject->properties[$name]->value)) {
             if (is_array($myobject->properties[$name]->value)) {
@@ -82,20 +82,7 @@ function dynamicdata_utilapi_export($args)
         }
     }
     $xml .= "  <properties>\n";
-    if (!empty($myobject->objectid)) {
-        // get the property info directly from the database again to avoid default eval()
-        $properties = DataPropertyMaster::getProperties(array('objectid' => $myobject->objectid));
-    } else {
-        $properties = array();
-        foreach (array_keys($myobject->properties) as $name) {
-            $properties[$name] = array();
-            foreach (array_keys($property_properties) as $key) {
-                if (isset($myobject->properties[$name]->$key)) {
-                    $properties[$name][$key] = $myobject->properties[$name]->$key;
-                }
-            }
-        }
-    }
+    $properties = DataPropertyMaster::getProperties(array('objectid' => $myobject->properties['objectid']->value));
     foreach (array_keys($properties) as $name) {
         $xml .= '    <property name="'.$name.'">' . "\n";
         foreach (array_keys($property_properties) as $key) {
