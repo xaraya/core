@@ -1,7 +1,7 @@
 <object name="qa_testing">
   <objectid>5</objectid>
   <label>QA Testing</label>
-  <moduleid>182</moduleid>
+  <module_id>182</module_id>
   <itemtype>3</itemtype>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>

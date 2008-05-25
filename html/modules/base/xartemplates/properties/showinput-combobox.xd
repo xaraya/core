@@ -16,20 +16,25 @@
     <xar:if condition="($mode eq 1) OR ($mode eq 3)">
         <xar:if condition="count($options) gt 0">
             <xar:if condition="($optionSelected eq false) AND !empty($value) AND ($mode eq 3)">
-                <xar:set name="firstline">'Text Specified ==&gt;'</xar:set>
+                <xar:set name="firstline">array('id' => 0,'name' => 'Text Specified ==&gt;')</xar:set>
                 <xar:data-input type="dropdown" name="$name" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
             <xar:else />
-                <xar:data-input type="dropdown" name="$name" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" />
+                <xar:set name="firstline">array('id' => 0,'name' => 'Choose or enter an item')</xar:set>
+                <xar:data-input type="dropdown" name="$name" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
             </xar:if>
         </xar:if>
     </xar:if>
-
+    <xar:if condition="$layout eq 'horizontal' OR $layout eq 'default'">
+        &#160;
+    <xar:else />
+        <br />
+    </xar:if>
     <xar:if condition="($mode eq 2) OR ($mode eq 3)">
         <xar:set name="name">$name . '_tb'</xar:set>
         <xar:if condition="$optionSelected eq false">
-            <xar:data-input type="textbox" name="$name" value="$value" />
+            <xar:data-input type="textbox" name="$name" value="$value" style="$style" />
         <xar:else />
-            <xar:data-input type="textbox" name="$name" />
+            <xar:data-input type="textbox" name="$name" style="$style" />
         </xar:if>
 
         <xar:if condition="!empty($invalid)">

@@ -2,7 +2,7 @@
 <objectid>103</objectid>
 <label>Dynamic Configurations</label>
 <parent>objects</parent>
-<moduleid>182</moduleid>
+<module_id>182</module_id>
 <itemtype>39</itemtype>
 <class>DataObject</class>
 <filepath></filepath>

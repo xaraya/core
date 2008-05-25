@@ -2,7 +2,7 @@
   <objectid>51</objectid>
   <label>mail-queues</label>
   <parent>0</parent>
-  <moduleid>771</moduleid>
+  <module_id>771</module_id>
   <itemtype>1000</itemtype>
   <class>DataObject</class>
   <filepath></filepath>

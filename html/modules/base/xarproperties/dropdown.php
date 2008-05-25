@@ -81,6 +81,9 @@ class SelectProperty extends DataProperty
 
         // Finally generate the options
             $data['options'] = $this->getOptions();
+        } elseif (isset($data['firstline'])) {
+            $this->initialization_firstline = $data['firstline'];
+            $data['options'] = array_merge($this->getFirstline(),$data['options']);
         }
 
         // check if we need to add the current value to the options

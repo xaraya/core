@@ -2,7 +2,7 @@
   <objectid>19</objectid>
   <label>Hooks</label>
   <parent>objects</parent>
-  <moduleid>182</moduleid>
+  <module_id>182</module_id>
   <itemtype>12</itemtype>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>

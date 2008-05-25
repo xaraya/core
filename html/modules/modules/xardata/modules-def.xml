@@ -2,7 +2,7 @@
   <objectid>9</objectid>
   <label>Modules</label>
   <parent>objects</parent>
-  <moduleid>182</moduleid>
+  <module_id>182</module_id>
   <itemtype>4</itemtype>
   <class>DataObject</class>
   <filepath></filepath>

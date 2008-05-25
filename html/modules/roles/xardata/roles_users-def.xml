@@ -2,7 +2,7 @@
   <objectid>7</objectid>
   <label>User</label>
   <parent>0</parent>
-  <moduleid>27</moduleid>
+  <module_id>27</module_id>
   <itemtype>2</itemtype>
   <class>Role</class>
   <filepath>modules/roles/class/role.php</filepath>
