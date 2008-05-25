@@ -1,7 +1,7 @@
 <object name="qa_testing">
   <objectid>5</objectid>
   <label>QA Testing</label>
-  <moduleid>182</moduleid>
+  <module_id>182</module_id>
   <itemtype>3</itemtype>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
@@ -16,7 +16,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>1</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="text_box">
       <id>31</id>
@@ -26,7 +26,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>2</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="small_text_area">
       <id>32</id>
@@ -36,7 +36,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>3</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="medium_text_area">
       <id>33</id>
@@ -46,7 +46,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>4</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="large_text_area">
       <id>34</id>
@@ -56,7 +56,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>5</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="dropdown_list">
       <id>35</id>
@@ -66,7 +66,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>6</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="username">
       <id>36</id>
@@ -76,7 +76,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>7</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="calendar">
       <id>37</id>
@@ -86,7 +86,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>8</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="file_upload">
       <id>38</id>
@@ -96,7 +96,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>9</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="status">
       <id>39</id>
@@ -106,7 +106,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>10</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="url">
       <id>40</id>
@@ -116,7 +116,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>11</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="image">
       <id>41</id>
@@ -126,7 +126,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>12</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="html_page">
       <id>42</id>
@@ -136,7 +136,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>13</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="checkbox">
       <id>43</id>
@@ -146,7 +146,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>14</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="number_box">
       <id>44</id>
@@ -156,7 +156,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>15</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="number_list">
       <id>45</id>
@@ -166,7 +166,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>16</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="number_box_float">
       <id>46</id>
@@ -176,7 +176,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>17</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="hidden">
       <id>47</id>
@@ -186,7 +186,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>18</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="module">
       <id>48</id>
@@ -196,7 +196,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>19</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="item_type">
       <id>49</id>
@@ -206,7 +206,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>20</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="item_id">
       <id>50</id>
@@ -216,7 +216,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>21</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="field_type">
       <id>51</id>
@@ -226,7 +226,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>22</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="data_source">
       <id>52</id>
@@ -236,7 +236,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>23</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="object">
       <id>53</id>
@@ -246,7 +246,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>24</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="field_status">
       <id>54</id>
@@ -256,7 +256,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>25</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="e_mail">
       <id>55</id>
@@ -266,7 +266,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>26</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="url_icon">
       <id>56</id>
@@ -276,7 +276,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>27</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="icq_number">
       <id>57</id>
@@ -286,7 +286,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>28</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="aim_address">
       <id>58</id>
@@ -296,7 +296,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>29</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="msn_messenger">
       <id>59</id>
@@ -306,7 +306,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>30</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="yahoo_messenger">
       <id>60</id>
@@ -316,7 +316,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>31</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="time_zone">
       <id>61</id>
@@ -326,7 +326,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>32</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="date_format">
       <id>62</id>
@@ -336,7 +336,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>33</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="radio_buttons">
       <id>63</id>
@@ -346,7 +346,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>34</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="image_list">
       <id>64</id>
@@ -356,7 +356,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>35</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="language_list">
       <id>65</id>
@@ -366,7 +366,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>36</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="user_list">
       <id>66</id>
@@ -376,7 +376,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>37</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="text_upload">
       <id>67</id>
@@ -386,7 +386,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>38</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="multi_select">
       <id>68</id>
@@ -396,7 +396,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>39</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="affero_username">
       <id>69</id>
@@ -406,7 +406,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>40</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="url_title">
       <id>70</id>
@@ -416,7 +416,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>41</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="country_dropdown">
       <id>71</id>
@@ -426,7 +426,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>42</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="state_dropdown">
       <id>72</id>
@@ -436,7 +436,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>43</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="tigra_color_picker">
       <id>73</id>
@@ -446,7 +446,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>44</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="group_list">
       <id>74</id>
@@ -456,7 +456,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>45</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="categories">
       <id>75</id>
@@ -466,7 +466,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>46</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="hit_count">
       <id>76</id>
@@ -476,7 +476,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>47</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="rating">
       <id>77</id>
@@ -486,7 +486,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>48</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="comments">
       <id>78</id>
@@ -496,7 +496,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>49</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="_of_comments">
       <id>79</id>
@@ -506,7 +506,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>50</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="password_text_box">
       <id>88</id>
@@ -516,7 +516,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>51</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="extended_date">
       <id>89</id>
@@ -526,7 +526,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>52</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="logging_level">
       <id>90</id>
@@ -536,7 +536,7 @@
       <source>dynamic_data</source>
       <status>1</status>
       <seq>53</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
   </properties>
 </object>

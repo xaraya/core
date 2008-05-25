@@ -2,7 +2,7 @@
   <objectid>7</objectid>
   <label>Base Privileges</label>
   <parent>0</parent>
-  <moduleid>1098</moduleid>
+  <module_id>1098</module_id>
   <itemtype>1</itemtype>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
@@ -17,7 +17,7 @@
       <source>xar_privileges.id</source>
       <status>65</status>
       <seq>1</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
   </properties>
 </object>

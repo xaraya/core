@@ -1,8 +1,8 @@
 <object name="roles_users">
-  <objectid>5</objectid>
+  <objectid>7</objectid>
   <label>User</label>
   <parent>0</parent>
-  <moduleid>27</moduleid>
+  <module_id>27</module_id>
   <itemtype>2</itemtype>
   <class>Role</class>
   <filepath>modules/roles/class/role.php</filepath>
@@ -12,104 +12,104 @@
   <isalias>1</isalias>
   <properties>
     <property name="id">
-      <id>29</id>
+      <id>35</id>
       <label>ID</label>
       <type>itemid</type>
       <defaultvalue></defaultvalue>
       <source>xar_roles.id</source>
       <status>65</status>
       <seq>1</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="name">
-      <id>30</id>
+      <id>36</id>
       <label>Name</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source>xar_roles.name</source>
       <status>33</status>
       <seq>2</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="role_type">
-      <id>31</id>
+      <id>37</id>
       <label>Type</label>
       <type>itemtype</type>
       <defaultvalue>2</defaultvalue>
       <source>xar_roles.type</source>
       <status>67</status>
       <seq>3</seq>
-      <validation>roles</validation>
+      <configuration>a:9:{s:18:"display_combo_mode";s:1:"1";s:14:"display_layout";s:7:"default";s:21:"initialization_module";s:1:"4";s:23:"initialization_itemtype";s:1:"0";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
     <property name="uname">
-      <id>32</id>
+      <id>38</id>
       <label>User Name</label>
-      <type>textbox</type>
+      <type>username</type>
       <defaultvalue></defaultvalue>
       <source>xar_roles.uname</source>
       <status>33</status>
-      <seq>4</seq>
-      <validation>::/[[:^space:]]/</validation>
+      <seq>3</seq>
+      <configuration></configuration>
     </property>
     <property name="email">
-      <id>33</id>
+      <id>39</id>
       <label>Email</label>
       <type>email</type>
       <defaultvalue></defaultvalue>
       <source>xar_roles.email</source>
       <status>33</status>
       <seq>5</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="password">
-      <id>34</id>
+      <id>40</id>
       <label>Password</label>
       <type>passwordbox</type>
       <defaultvalue></defaultvalue>
       <source>xar_roles.pass</source>
       <status>33</status>
       <seq>6</seq>
-      <validation></validation>
+      <configuration>a:8:{s:12:"display_size";s:2:"25";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:1:"4";s:21:"validation_max_length";s:2:"30";s:27:"validation_password_confirm";s:1:"1";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
     <property name="regdate">
-      <id>35</id>
+      <id>41</id>
       <label>Reg. Date</label>
       <type>calendar</type>
       <defaultvalue>xarMLS_userTime()</defaultvalue>
       <source>xar_roles.date_reg</source>
-      <status>67</status>
+      <status>66</status>
       <seq>7</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="valcode">
-      <id>36</id>
+      <id>42</id>
       <label>Val. Code</label>
       <type>textbox</type>
       <defaultvalue>createdbyadmin</defaultvalue>
       <source>xar_roles.valcode</source>
       <status>67</status>
       <seq>8</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="state">
-      <id>37</id>
+      <id>43</id>
       <label>State</label>
       <type>dropdown</type>
       <defaultvalue>1</defaultvalue>
       <source>xar_roles.state</source>
       <status>33</status>
       <seq>9</seq>
-      <validation>xarModAPIFunc('roles','user','getstates')</validation>
+      <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:41:"xarModAPIFunc('roles','user','getstates')";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
     <property name="authmodule">
-      <id>38</id>
+      <id>44</id>
       <label>Auth. Module</label>
       <type>integerbox</type>
-      <defaultvalue>xarModVars::get('roles', 'defaultauthmodule')</defaultvalue>
+      <defaultvalue>xarMod::getID(xarModVars::get('roles', 'defaultauthmodule'))</defaultvalue>
       <source>xar_roles.auth_modid</source>
       <status>67</status>
       <seq>10</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
   </properties>
 </object>

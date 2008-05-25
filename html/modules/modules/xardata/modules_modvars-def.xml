@@ -2,7 +2,7 @@
   <objectid>11</objectid>
   <label>Module Vars</label>
   <parent>objects</parent>
-  <moduleid>182</moduleid>
+  <module_id>182</module_id>
   <itemtype>4</itemtype>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
@@ -17,7 +17,7 @@
       <source>xar_module_vars.id</source>
       <status>65</status>
       <seq>1</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="module_id">
       <id>75</id>
@@ -27,7 +27,7 @@
       <source>xar_module_vars.modid</source>
       <status>33</status>
       <seq>2</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="name">
       <id>76</id>
@@ -37,7 +37,7 @@
       <source>xar_module_vars.name</source>
       <status>33</status>
       <seq>3</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="value">
       <id>77</id>
@@ -47,7 +47,7 @@
       <source>xar_module_vars.value</source>
       <status>33</status>
       <seq>4</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
   </properties>
 </object>

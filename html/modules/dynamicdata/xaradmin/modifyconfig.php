@@ -41,7 +41,7 @@ function dynamicdata_admin_modifyconfig()
                             'label' => xarML('Description'),
                             'informat' => xarML('Input Format'),
                             'outformat' => xarML('Display Format'),
-                            'validation' => xarML('Validation'),
+                            'configuration' => xarML('Configuration'),
                         // etc.
                             'new' => xarML('New'),
                       );

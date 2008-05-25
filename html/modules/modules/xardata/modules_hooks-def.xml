@@ -2,7 +2,7 @@
   <objectid>19</objectid>
   <label>Hooks</label>
   <parent>objects</parent>
-  <moduleid>182</moduleid>
+  <module_id>182</module_id>
   <itemtype>12</itemtype>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
@@ -17,7 +17,7 @@
       <source>xar_hooks.id</source>
       <status>67</status>
       <seq>1</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="object">
       <id>143</id>
@@ -27,7 +27,7 @@
       <source>xar_hooks.object</source>
       <status>65</status>
       <seq>2</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="action">
       <id>144</id>
@@ -37,7 +37,7 @@
       <source>xar_hooks.action</source>
       <status>65</status>
       <seq>3</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="subject_module">
       <id>145</id>
@@ -47,7 +47,7 @@
       <source>xar_hooks.s_module_id</source>
       <status>65</status>
       <seq>4</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="subject_type">
       <id>146</id>
@@ -57,7 +57,7 @@
       <source>xar_hooks.s_type</source>
       <status>65</status>
       <seq>5</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="area">
       <id>147</id>
@@ -67,7 +67,7 @@
       <source>xar_hooks.t_area</source>
       <status>65</status>
       <seq>6</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="observer_module">
       <id>148</id>
@@ -77,7 +77,7 @@
       <source>xar_hooks.t_module_id</source>
       <status>65</status>
       <seq>7</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="observer_type">
       <id>149</id>
@@ -87,7 +87,7 @@
       <source>xar_hooks.t_type</source>
       <status>65</status>
       <seq>8</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="observer_function">
       <id>150</id>
@@ -97,7 +97,7 @@
       <source>xar_hooks.t_func</source>
       <status>65</status>
       <seq>9</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
   </properties>
 </object>

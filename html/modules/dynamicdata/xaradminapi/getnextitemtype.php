@@ -22,13 +22,15 @@
 function dynamicdata_adminapi_getnextitemtype($args = array())
 {
     extract($args);
-    if (empty($modid)) throw new EmptyParameterException('modid');
+    if (empty($modid)) $modid = 182;
     $types = DataObjectMaster::getModuleItemTypes(array('moduleid' => $modid));
     $ids = array_keys($types);
     sort($ids);
     $lastid = array_pop($ids);
-    return $lastid + 1;
-    if ($modid == 182) return $lastid + 1;
+    return $lastid;
+    // DD and DD-type modules go one way
+    if ($modid == 182 || $modid == 27) return $lastid + 1;
+    // other module go another
     else return max(1000,$lastid + 1);
 }
 ?>
