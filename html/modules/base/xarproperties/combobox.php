@@ -37,19 +37,22 @@ sys::import('modules.base.xarproperties.dropdown');
             $tbname  = $name.'_tb';
             if (!xarVarFetch($tbname, 'isset', $tbvalue,  NULL, XARVAR_DONT_SET)) {return;}
 
+            // store the fieldname for configurations who need them (e.g. file uploads)
+            $this->fieldname = $tbname;
+
             if( isset($tbvalue) && ($tbvalue != '') )
             {
-                // store the fieldname for configurations who need them (e.g. file uploads)
-                $this->fieldname = $tbname;
-
                 // check as a textbox
                 $value = $tbvalue;
                 $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
-                return $textbox->checkInput($tbname, $tbvalue);
+                $isvalid = $textbox->checkInput($tbname, $tbvalue);
+                if ($isvalid) {
+                    $this->value = $textbox->value;
+                } else {
+                    $this->invalid = $textbox->invalid;
+                }
+                return $isvalid;
             } else {
-                // store the fieldname for configurations who need them (e.g. file uploads)
-                $this->fieldname = $name;
-
                 // check as a dropdown
                 return parent::checkInput($name, $value);
             }
