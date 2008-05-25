@@ -66,6 +66,10 @@ function roles_admin_sendmail()
     $themecomments = xarModVars::get('themes','ShowTemplates');
     xarModVars::set('themes','ShowTemplates',0);
 
+    // Add root tage and compile the subject and message
+    $subject  = xarTplCompileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$subject.'</xar:template>');
+    $message  = xarTplCompileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$message.'</xar:template>');
+
     // Define the variables automatically available to all templates
     $data = array(
         'sitename'   => xarModVars::get('themes', 'SiteName'),
