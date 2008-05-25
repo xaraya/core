@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 #$recipientname#,
 
 Here is your new password for #$sitename#. You may now login to #$siteurl#
@@ -9,3 +10,4 @@ username: #$username#
 password: #$mypassword#
 
 -- #$siteadmin#
+</xar:template>

@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 #$recipientname#,
 
 Your account was deactivated by the administrator.
@@ -5,3 +6,4 @@ If you want to know the reason, contact #$adminmail#
 You will receive an email as soon as your account is activated again.
 
 #$siteadmin#
+</xar:template>

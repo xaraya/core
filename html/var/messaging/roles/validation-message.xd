@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 Your account must be validated again because your e-mail address has changed or
 an administrator has unvalidated it. You can either do this now, or on the next
 time that you log in. If you prefer to do it now, then you will need to follow
@@ -8,3 +9,4 @@ Validation Code to activate your account:  #$valcode#
 You will receive an email has soon as your account is activated again.
 
 #$siteadmin#
+</xar:template>

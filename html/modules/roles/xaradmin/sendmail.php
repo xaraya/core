@@ -61,23 +61,21 @@ function roles_admin_sendmail()
         }
     }
 
-    // Get the template that defines the substitution vars
-    $messaginghome = sys::varpath() . "/messaging/roles";
-    $msgvarstemplate = $messaginghome . "/includes/message-vars.xd";
-    if (!file_exists($msgvarstemplate)) throw new FileNotFoundException($msgvarstemplate);
-    $string = '';
-    $fd = fopen($msgvarstemplate, 'r');
-    while(!feof($fd)) {
-        $line = fgets($fd, 1024);
-        $string .= $line;
-    }
-
     // To prevent the template comments from being sent with the mail
     // messages, we turn it off temporarily
     $themecomments = xarModVars::get('themes','ShowTemplates');
     xarModVars::set('themes','ShowTemplates',0);
-    $subject  = xarTplCompileString($string . $subject);
-    $message  = xarTplCompileString($string . $message);
+
+    // Define the variables automatically available to all templates
+    $data = array(
+        'sitename'   => xarModVars::get('themes', 'SiteName'),
+        'siteslogan' => xarModVars::get('themes', 'SiteSlogan'),
+        'siteadmin'  => xarModVars::get('mail', 'adminname'),
+        'siteurl'    => xarServerGetBaseURL(),
+        'myname'     => xarUserGetVar('name'),
+        'myuname'    => xarUserGetVar('uname'),
+        'myuid'      => xarUserGetVar('id'),
+    );
 
     // now send the mails
     foreach ($users as $user) {
