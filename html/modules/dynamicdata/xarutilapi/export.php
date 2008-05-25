@@ -20,8 +20,9 @@ function dynamicdata_utilapi_export($args)
     // restricted to DD Admins
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
+        $myobject = & DataObjectMaster::getObject(array('name' => 'objects'));
     if (isset($args['objectref'])) {
-        $myobject =& $args['objectref'];
+        $myobject->getItem(array('itemid' => $args['objectref']->objectid));
 
     } else {
         extract($args);
@@ -39,11 +40,7 @@ function dynamicdata_utilapi_export($args)
             $itemid = null;
         }
 
-        $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
-                                             'moduleid' => $modid,
-                                             'itemtype' => $itemtype,
-                                             'itemid'   => $itemid,
-                                             'allprops' => true));
+        $myobject->getItem(array('itemid' => $itemid));
     }
 
     if (!isset($myobject) || empty($myobject->label)) {
@@ -65,8 +62,8 @@ function dynamicdata_utilapi_export($args)
 
     $xml .= '<object name="'.$myobject->name.'">'."\n";
     foreach (array_keys($object_properties) as $name) {
-        if ($name != 'name' && isset($myobject->$name)) {
-            if (is_array($myobject->$name)) {
+        if ($name != 'name' && isset($myobject->properties[$name]->value)) {
+            if (is_array($myobject->properties[$name]->value)) {
                 $xml .= "  <$name>\n";
                 foreach ($myobject->$name as $field => $value) {
                     $xml .= "    <$field>" . xarVarPrepForDisplay($value) . "</$field>\n";
@@ -75,10 +72,10 @@ function dynamicdata_utilapi_export($args)
             } else {
                 // Treat parent fields where module is DD differently
                 if (($name == 'parent') && ($myobject->moduleid == 182)) {
-                    $info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('modid' => 182, 'itemtype' => $myobject->$name));
+                    $info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('modid' => 182, 'itemtype' => $myobject->properties[$name]->value));
                     $value = $info['name'];
                 } else {
-                    $value = $myobject->$name;
+                    $value = $myobject->properties[$name]->value;
                 }
                 $xml .= "  <$name>" . xarVarPrepForDisplay($value) . "</$name>\n";
             }

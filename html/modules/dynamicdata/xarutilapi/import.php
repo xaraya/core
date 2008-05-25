@@ -82,8 +82,8 @@ function dynamicdata_utilapi_import($args)
                 $args[$property] = (string)$xmlobject->{$property}[0];
         }
         // Backwards Compatibility with old defintions
-        $args['moduleid'] = (string)$xmlobject->moduleid[0];
-        $args['module_id'] = (string)$xmlobject->moduleid[0];
+        $args['moduleid'] = (string)$xmlobject->module_id[0];
+        $args['module_id'] = (string)$xmlobject->module_id[0];
 
         // Treat parents where the module is DD differently. Put in numeric itemtype
 //        if ($args['moduleid'] == 182) {
