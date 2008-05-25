@@ -1,4 +1,3 @@
-<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 #$recipientname#,
 
 Your account is pending.
@@ -8,4 +7,3 @@ If you want to know the reason, contact #$adminmail#.
 You will receive an email has soon as your account is activated again.
 
 --#$siteadmin#
-</xar:template>
