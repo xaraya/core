@@ -61,7 +61,7 @@ function authsystem_loginblock_display($blockinfo)
     // e.g. when the login/logout block also contains a search box
     if (xarUserIsLoggedIn()) {
         if (!empty($vars['showlogout'])) {
-            $args['name'] = xarUserGetVar('name');
+            $args['name'] = xarUser::getVar('name');
 
             // Since we are logged in, set the template base to 'logout'.
             // FIXME: not allowed to set BL variables directly
