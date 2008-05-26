@@ -73,17 +73,24 @@ function mail_adminapi_hookmailcreate($args)
     $subject = $strings['subject'];
     $message = $strings['message'];
 
-// Get the template that defines the substitution vars
-    $vars  = xarModAPIFunc('mail','admin','getmessageincludestring',
-                           array('module' => 'mail',
-                                 'template' => 'message-vars'));
+    // Add root tage and compile the subject and message
+    $subject  = xarTplCompileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$subject.'</xar:template>');
+    $message  = xarTplCompileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$message.'</xar:template>');
 
-// Substitute the static vars in the template
-    $subject  = xarTplCompileString($vars . $subject);
-    $message  = xarTplCompileString($vars . $message);
+    // Define the variables automatically available to all templates
+    $data = array(
+        'sitename'   => xarModVars::get('themes', 'SiteName'),
+        'siteslogan' => xarModVars::get('themes', 'SiteSlogan'),
+        'siteadmin'  => xarModVars::get('mail', 'adminname'),
+        'adminmail'  => xarModVars::get('mail', 'adminmail'),
+        'siteurl'    => xarServerGetBaseURL(),
+        'myname'     => xarUserGetVar('name'),
+        'myuname'    => xarUserGetVar('uname'),
+        'myuid'      => xarUserGetVar('id'),
+    );
 
 // Substitute the dynamic vars in the template
-    $data = $extrainfo;
+    $data = array_merge($data,$extrainfo);
     $data['modulename'] = $modname;
     $data['objectid'] = $objectid;
     $subject = xarTplString($subject, $data);
