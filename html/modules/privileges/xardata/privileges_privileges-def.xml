@@ -2,7 +2,7 @@
   <objectid>8</objectid>
   <label>Privileges</label>
   <parent>0</parent>
-  <moduleid>1098</moduleid>
+  <module_id>1098</module_id>
   <itemtype>2</itemtype>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>

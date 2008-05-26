@@ -1,6 +1,6 @@
 <object name="mailqueues">
   <label>mail-queues</label>
-  <moduleid>771</moduleid>
+  <module_id>771</module_id>
   <itemtype>-1</itemtype>
   <urlparam>itemid</urlparam>
   <config></config>
