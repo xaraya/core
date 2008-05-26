@@ -619,6 +619,7 @@ UPDATE `xar_security_instances` SET `query` = REPLACE(query, "modid", "module_id
 
 ALTER TABLE `xar_dynamic_objects` CHANGE `moduleid` `module_id` INTEGER  UNSIGNED NOT NULL DEFAULT '0';
 UPDATE `xar_dynamic_properties` SET `name` = 'module_id', `source` = 'xar_dynamic_objects.module_id' WHERE `xar_dynamic_properties`.`source` = 'xar_dynamic_objects.moduleid';
+UPDATE `xar_dynamic_properties` SET `name` = 'object_id', `source` = 'xar_dynamic_properties.object_id' WHERE `xar_dynamic_properties`.`source` = 'xar_dynamic_properties.objectid';
 
 # privmembers ddl adjustments
 ALTER TABLE `xar_privmembers` CHANGE COLUMN `parentid` `parent_id` INTEGER  UNSIGNED NOT NULL DEFAULT 0;
