@@ -2,7 +2,7 @@
   <objectid>7</objectid>
   <label>Base Privileges</label>
   <parent>0</parent>
-  <moduleid>1098</moduleid>
+  <module_id>1098</module_id>
   <itemtype>1</itemtype>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
