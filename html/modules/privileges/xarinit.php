@@ -57,7 +57,7 @@ function privileges_init()
          * )
          *********************************************************************/
         $fields = array('id'  => array('type'        => 'integer','null'        => false,
-                                            'default'     => '0',      'increment'   => true,
+                                            'unsigned'     => true,      'increment'   => true,
                                             'primary_key' => true),
                         'name' => array('type'        => 'varchar','size'        => 255,
                                             'null'        => false,    'default'     => ''));
@@ -69,8 +69,8 @@ function privileges_init()
          * CREATE TABLE xar_privileges (
          *   id int(11) NOT NULL auto_increment,
          *   name varchar(100) NOT NULL default '',
-         *   realm varchar(100) NOT NULL default '',
-         *   module_id int(11) NOT NULL default '0',
+         *   realm_id integer unsigned default NULL,
+         *   module_id integer unsigned NOT NULL,
          *   component varchar(100) NOT NULL default '',
          *   instance varchar(100) NOT NULL default '',
          *   level int(11) NOT NULL default '0',
@@ -79,15 +79,16 @@ function privileges_init()
          * )
          *********************************************************************/
 
-        $fields = array('id'   => array('type' => 'integer', 'null' => false, 'default' => '0','increment' => true, 'primary_key' => true),
+        $fields = array(
+                        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                         'name'  => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
-                        'realm_id'=>array('type' => 'integer', 'null' => true, 'default' => null),
-                        'module_id'=>array('type' => 'integer', 'null' => true, 'default' => null),
+                        'realm_id'=>array('type' => 'integer', 'unsigned' => true, 'null' => true),
+                        'module_id'=>array('type' => 'integer', 'unsigned' => true, 'null' => true),
                         'component' => array('type'  => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
                         'instance' => array('type'   => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
                         'level' => array('type'      => 'integer', 'null' => false,'default' => '0'),
                         'description' => array('type'=> 'varchar', 'size' => 255, 'null' => false, 'default'     => ''),
-                        'type' => array('type'=> 'integer', 'null' => false, 'default'     => '0'));
+                        'type' => array('type'=> 'integer', 'unsigned' => true, 'null' => false));
         $query = xarDBCreateTable($tables['privileges'],$fields);
         $dbconn->Execute($query);
 
@@ -126,8 +127,8 @@ function privileges_init()
          *********************************************************************/
 
         $query = "CREATE TABLE " . $tables['privmembers'] . "(
-          `privilege_id` INTEGER UNSIGNED NOT NULL default '0',
-          `parent_id`    INTEGER UNSIGNED NOT NULL default '0',
+          `privilege_id` INTEGER UNSIGNED NOT NULL,
+          `parent_id`    INTEGER UNSIGNED NOT NULL,
           PRIMARY KEY  (`privilege_id`,`parent_id`),
           KEY `i_xar_privmembers_pid` (`privilege_id`),
           KEY `i_xar_privmembers_parent_id` (`parent_id`)
@@ -137,20 +138,20 @@ function privileges_init()
 
         /*********************************************************************
          * CREATE TABLE xar_security_acl (
-         *   partmember int(11) NOT NULL default '0',
-         *   permmember int(11) NOT NULL default '0',
-         *   KEY id (id,parentid)
+         *   role_id integer NOT NULL,
+         *   privilege_id integer NOT NULL,
+         *   PRIMARY KEY (role_id,privilege_id)
          * )
          *********************************************************************/
 
         $query = xarDBCreateTable($tables['security_acl'],
                                   array('role_id'       => array('type'  => 'integer',
+                                                                    'unsigned'    => true,
                                                                     'null'        => false,
-                                                                    'default'     => '0',
                                                                     'primary_key'         => true),
                                         'privilege_id'      => array('type'   => 'integer',
+                                                                   'unsigned'    => true,
                                                                    'null'        => false,
-                                                                   'default'     => '0',
                                                                    'primary_key'         => true)));
         $dbconn->Execute($query);
 
@@ -186,13 +187,13 @@ function privileges_init()
 
         $query = xarDBCreateTable($tables['security_instances'],
                                   array('id'  => array('type'       => 'integer',
+                                                            'unsigned'     => true,
                                                             'null'        => false,
-                                                            'default'     => '0',
                                                             'increment'   => true,
                                                             'primary_key' => true),
                                         'module_id' => array('type'     => 'integer',
-                                                             'null'        => false,
-                                                             'default'     => '0'),
+                                                             'unsigned'    => true,
+                                                             'null'        => true),
                                         'component' => array('type'   => 'varchar',
                                                                  'size'        => 100,
                                                                  'null'        => false,

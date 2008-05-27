@@ -26,21 +26,19 @@ function themes_init()
 
     $prefix = xarDB::getPrefix();
     $tables['themes']     = $prefix . '_themes';
-    $tables['theme_vars'] = $prefix . '_theme_vars';
 
     // Create tables
     /**
      * Here we create all the tables for the theme system
      *
      * prefix_themes       - basic theme info
-     * prefix_theme_vars   - theme variables table
      */
     // prefix_themes
     /**
      * CREATE TABLE xar_themes (
-     *   id int(11) NOT NULL auto_increment,
+     *   id integer unsigned NOT NULL auto_increment,
      *   name varchar(64) NOT NULL default '',
-     *   regid int(10) INTEGER NOT NULL default '0',
+     *   regid int(10) INTEGER unsigned NOT NULL,
      *   directory varchar(64) NOT NULL default '',
      *   author varchar(64) NOT NULL default '',
      *   homepage varchar(64) NOT NULL default '',
@@ -58,9 +56,9 @@ function themes_init()
      * )
      */
     $fields = array(
-        'id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
         'name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'regid' => array('type' => 'integer', 'default' => null),
+        'regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
         'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
         'author' => array('type' => 'varchar', 'size' => 64, 'null' => false),
         'homepage' => array('type' => 'varchar', 'size' => 64, 'null' => false),
