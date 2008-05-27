@@ -134,11 +134,11 @@ function modules_init()
                         'id'          => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
                         'object'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'action'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        's_module_id' => array('type' => 'integer', 'null' => true, 'default' => null),
+                        's_module_id' => array('type' => 'integer', 'unsigned' => true, 'null' => true, 'default' => null),
                         // TODO: switch to integer for itemtype (see also xarMod.php)
                         's_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => ''),
                         't_area'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        't_module_id'  => array('type' => 'integer', 'null' => false),
+                        't_module_id'  => array('type' => 'integer','unsigned' => true, 'null' => false),
                         't_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         't_func'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'priority'       => array('type' => 'integer', 'null' => false, 'default' => '0')
