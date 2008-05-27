@@ -58,7 +58,7 @@ function modules_init()
          * )
          */
         $fields = array(
-                        'id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+                        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                         'name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'regid' => array('type' => 'integer', 'unsigned'=>true, 'null' => false),
                         'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
@@ -131,7 +131,7 @@ function modules_init()
          * )
          */
         $fields = array(
-                        'id'          => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+                        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                         'object'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'action'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         's_module_id' => array('type' => 'integer', 'unsigned' => true, 'null' => true, 'default' => null),

@@ -36,7 +36,7 @@ function themes_init()
     // prefix_themes
     /**
      * CREATE TABLE xar_themes (
-     *   id int(11) NOT NULL auto_increment,
+     *   id integer unsigned NOT NULL auto_increment,
      *   name varchar(64) NOT NULL default '',
      *   regid int(10) INTEGER unsigned NOT NULL,
      *   directory varchar(64) NOT NULL default '',
@@ -56,7 +56,7 @@ function themes_init()
      * )
      */
     $fields = array(
-        'id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
         'name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
         'regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
         'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),

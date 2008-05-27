@@ -43,8 +43,8 @@ function dynamicdata_init()
         $objectfields = array(
             'id' => array(
                 'type'        => 'integer',
+                'unsigned'     => true,
                 'null'        => false,
-                'default'     => '0',
                 'increment'   => true,
                 'primary_key' => true
             ),
@@ -182,8 +182,8 @@ function dynamicdata_init()
         $propfields = array(
             'id'     => array(
                 'type'        => 'integer',
+                'unsigned'     => true,
                 'null'        => false,
-                'default'     => '0',
                 'increment'   => true,
                 'primary_key' => true
             ),
@@ -323,8 +323,8 @@ function dynamicdata_init()
         $datafields = array(
             'id'   => array(
                 'type'        => 'integer',
+                'unsigned'     => true,
                 'null'        => false,
-                'default'     => '0',
                 'increment'   => true,
                 'primary_key' => true
             ),
@@ -739,8 +739,8 @@ function dynamicdata_createPropDefTable()
     $propdefs = array(
         'id'     => array(
             'type'        => 'integer',
+            'unsigned'     => true,
             'null'        => false,
-            'default'     => '0',
             'increment'   => true,
             'primary_key' => true
         ),

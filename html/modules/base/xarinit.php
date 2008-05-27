@@ -85,7 +85,7 @@ function base_init()
         $modVarsTable  = $prefix . '_module_vars';
         /*********************************************************************
          * CREATE TABLE xar_module_vars (
-         *  id        integer NOT NULL auto_increment,
+         *  id        integer unsigned NOT NULL auto_increment,
          *  module_id integer unsigned default NULL,
          *  name      varchar(64) NOT NULL default '',
          *  value     longtext,
@@ -94,7 +94,8 @@ function base_init()
          * )
          *********************************************************************/
 
-        $fields = array('id'        => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+        $fields = array(
+                        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                         'module_id' => array('type'=>'integer','unsigned'=>true,'null'=>true),
                         'name'      => array('type'=>'varchar','size'=>64,'null'=>false),
                         'value'     => array('type'=>'text','size'=>'long')

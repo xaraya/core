@@ -57,7 +57,7 @@ function privileges_init()
          * )
          *********************************************************************/
         $fields = array('id'  => array('type'        => 'integer','null'        => false,
-                                            'default'     => '0',      'increment'   => true,
+                                            'unsigned'     => true,      'increment'   => true,
                                             'primary_key' => true),
                         'name' => array('type'        => 'varchar','size'        => 255,
                                             'null'        => false,    'default'     => ''));
@@ -79,7 +79,8 @@ function privileges_init()
          * )
          *********************************************************************/
 
-        $fields = array('id'   => array('type' => 'integer', 'null' => false, 'default' => '0','increment' => true, 'primary_key' => true),
+        $fields = array(
+                        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                         'name'  => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
                         'realm_id'=>array('type' => 'integer', 'unsigned' => true, 'null' => true),
                         'module_id'=>array('type' => 'integer', 'unsigned' => true, 'null' => true),
@@ -137,9 +138,9 @@ function privileges_init()
 
         /*********************************************************************
          * CREATE TABLE xar_security_acl (
-         *   partmember int(11) NOT NULL,
-         *   permmember int(11) NOT NULL,
-         *   KEY id (id,parentid)
+         *   role_id integer NOT NULL,
+         *   privilege_id integer NOT NULL,
+         *   PRIMARY KEY (role_id,privilege_id)
          * )
          *********************************************************************/
 
@@ -186,8 +187,8 @@ function privileges_init()
 
         $query = xarDBCreateTable($tables['security_instances'],
                                   array('id'  => array('type'       => 'integer',
+                                                            'unsigned'     => true,
                                                             'null'        => false,
-                                                            'default'     => '0',
                                                             'increment'   => true,
                                                             'primary_key' => true),
                                         'module_id' => array('type'     => 'integer',

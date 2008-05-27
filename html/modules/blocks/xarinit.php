@@ -29,6 +29,7 @@ function blocks_init()
         // *_block_groups
         $query = xarDBCreateTable($prefix . '_block_groups',
                                   array('id'         => array('type'        => 'integer',
+                                                                  'unsigned'    => true,
                                                                   'null'        => false,
                                                                   'increment'   => true,
                                                                   'primary_key' => true),
@@ -51,6 +52,7 @@ function blocks_init()
         // *_block_instances
         $query = xarDBCreateTable($prefix . '_block_instances',
                                   array('id'          => array('type'        => 'integer',
+                                                                   'unsigned'    => true,
                                                                    'null'        => false,
                                                                    'increment'   => true,
                                                                    'primary_key' => true),
@@ -101,6 +103,7 @@ function blocks_init()
                                   array(
                                         'id' => array(
                                                           'type'          => 'integer',
+                                                          'unsigned'    => true,
                                                           'null'          => false,
                                                           'increment'     => true,
                                                           'primary_key'   => true
@@ -141,6 +144,7 @@ function blocks_init()
         // *_block_group_instances
         $query = xarDBCreateTable($prefix . '_block_group_instances',
                                   array('id'          => array('type'        => 'integer',
+                                                                   'unsigned'    => true,
                                                                    'null'        => false,
                                                                    'increment'   => true,
                                                                    'primary_key' => true),
@@ -177,8 +181,8 @@ function blocks_init()
 
         $query = xarDBCreateTable($prefix . '_cache_blocks',
                                   array('id'          => array('type'        => 'integer',
+                                                                    'unsigned'    => true,
                                                                     'null'        => false,
-                                                                    'default'     => '0',
                                                                     'primary_key' => true),
                                         'nocache'    => array('type'        => 'integer',
                                                                   'null'        => false,
