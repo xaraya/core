@@ -82,7 +82,7 @@ function privileges_init()
         $fields = array('id'   => array('type' => 'integer', 'null' => false, 'default' => '0','increment' => true, 'primary_key' => true),
                         'name'  => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
                         'realm_id'=>array('type' => 'integer', 'unsigned' => true, 'null' => true),
-                        'module_id'=>array('type' => 'integer', 'unsigned' => true, 'null' => false),
+                        'module_id'=>array('type' => 'integer', 'unsigned' => true, 'null' => true),
                         'component' => array('type'  => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
                         'instance' => array('type'   => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
                         'level' => array('type'      => 'integer', 'null' => false,'default' => '0'),
