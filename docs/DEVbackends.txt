@@ -87,7 +87,7 @@ Foreign key constrained columns can be NULL?
 - sqlite  : yes (n/a, needs to be handled by trigger)
 - postgres: yes
 - mssql   : ?
-- oracle  : ?
+- oracle  : yes (handled by a trigger or a check-constraint)
 
 [Note: this is important to know because we encode 'none' and 'empty' with null, so
 if that meaning is not correct, the on update/delete etc. trigger either need to
