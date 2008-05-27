@@ -35,7 +35,7 @@ function roles_init()
         $fields = array(
                         'id' => array('type' => 'integer','null' => false,'default' => '0','increment' => true, 'primary_key' => true),
                         'name' => array('type' => 'varchar','size' => 255,'null' => false,'default' => ''),
-                        'type' => array('type' => 'integer', 'null' => false, 'default' => '0'),
+                        'type' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
                         'users' => array('type' => 'integer', 'null' => false, 'default' => '0'),
                         'uname' => array('type' => 'varchar', 'size' => 255, 'null' => false, 'default' => ''),
                         'email' => array('type' => 'varchar', 'size' => 255,'null' => false,'default' => ''),
@@ -43,7 +43,7 @@ function roles_init()
                         'date_reg' => array('type' => 'integer', 'null' => false, 'default' => '0'),
                         'valcode' => array('type' => 'varchar', 'size' => 35, 'null' => false, 'default' => ''),
                         'state' => array('type' => 'integer', 'null' => false,'default' => '3'),
-                        'auth_modid' => array('type' => 'integer', 'unsigneded' => true,'null' => false, 'default' => '0'));
+                        'auth_modid' => array('type' => 'integer', 'unsigned' => true,'null' => false));
         $query = xarDBCreateTable($tables['roles'],$fields);
         $dbconn->Execute($query);
 
@@ -88,12 +88,12 @@ function roles_init()
 
         $query = xarDBCreateTable($tables['rolemembers'],
                             array('role_id' => array('type'        => 'integer',
+                                                'unsigned'     => true,
                                                 'null'        => true,
-                                                'default'     => null,
                                                 'primary_key' => true),
                                         'parent_id' => array('type'        => 'integer',
+                                                            'unsigned'     => true,
                                                             'null'        => true,
-                                                            'default'     => null,
                                                             'primary_key' => true)));
         $dbconn->Execute($query);
 
