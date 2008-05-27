@@ -207,6 +207,7 @@ function privileges_init()
                                                              'null'        => false,
                                                              'default'     => ''),
                                         'ddlimit' => array('type'  => 'integer',
+                                                             'unsigned'    => true,
                                                              'null'        => false,
                                                              'default'     => '0'),
                                         'description' => array('type'=> 'varchar',
