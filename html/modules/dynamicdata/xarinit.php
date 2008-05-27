@@ -116,6 +116,7 @@ function dynamicdata_init()
             'isalias'  => array(
                 'type'        => 'integer',
                 'size'        => 'tiny',
+                'unsigned'    => true,
                 'null'        => false,
                 'default'     => '1'
             ),
@@ -230,6 +231,8 @@ function dynamicdata_init()
             /* is this property active ? (unused at the moment) */
             'status'     => array(
                 'type'        => 'integer',
+                'size'        => 'tiny',
+                'unsigned'     => true,
                 'null'        => false,
                 'default'     => '33'
             ),
