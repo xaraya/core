@@ -103,6 +103,7 @@ function dynamicdata_init()
             ),
             /* the highest item id for this object (used if the object has a dynamic item id field) */
             'maxid'    => array(
+                'unsigned'    => true,
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
