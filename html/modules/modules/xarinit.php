@@ -141,7 +141,7 @@ function modules_init()
                         't_module_id'  => array('type' => 'integer','unsigned' => true, 'null' => false),
                         't_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         't_func'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'priority'       => array('type' => 'integer', 'null' => false, 'default' => '0')
+                        'priority'       => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0')
                     );
         // TODO: no indexes?
 

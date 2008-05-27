@@ -236,8 +236,8 @@ function dynamicdata_init()
             'seq'      => array(
                 'type'        => 'integer',
                 'size'        => 'tiny',
-                'null'        => false,
-                'default'     => '0'
+                'unsigned'     => true,
+                'null'        => false
             ),
             /* specific validation rules for this property (e.g. basedir, size, ...) */
             'validation' => array(

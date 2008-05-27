@@ -160,8 +160,8 @@ function blocks_init()
                                                                    'null'        => true,
                                                                    'default'     => NULL),
                                         'position'    => array('type'        => 'integer',
-                                                                   'null'        => false,
-                                                                   'default'     => '0')));
+                                                                   'unsigned'    => true,
+                                                                   'null'        => false)));
 
         $dbconn->Execute($query);
 
