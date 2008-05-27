@@ -42,7 +42,7 @@ function roles_init()
                         'pass' => array('type' => 'varchar',  'size' => 100, 'null' => false, 'default' => ''),
                         'date_reg' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
                         'valcode' => array('type' => 'varchar', 'size' => 35, 'null' => false, 'default' => ''),
-                        'state' => array('type' => 'integer', 'size' => 'tiny', 'null' => false,'default' => '3'),
+                        'state' => array('type' => 'integer', 'unsigned' => true, 'size' => 'tiny', 'null' => false,'default' => '3'),
                         'auth_modid' => array('type' => 'integer', 'unsigned' => true, 'unsigned' => true, 'null' => false));
         $query = xarDBCreateTable($tables['roles'],$fields);
         $dbconn->Execute($query);
