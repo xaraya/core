@@ -86,7 +86,7 @@ function base_init()
         $modVarsTable  = $prefix . '_module_vars';
         /*********************************************************************
          * CREATE TABLE xar_module_vars (
-         *  id        integer NOT NULL auto_increment,
+         *  id        integer unsigned NOT NULL auto_increment,
          *  module_id integer NOT NULL default '0',
          *  name      varchar(64) NOT NULL default '',
          *  value     longtext,
