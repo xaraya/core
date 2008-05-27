@@ -81,6 +81,7 @@ function blocks_init()
                                                                    'null'        => false,
                                                                    'default'     => '0'),
                                         'last_update' => array('type'        => 'integer',
+                                                                   'unsigned'    => true,
                                                                    'null'        => false,
                                                                    'default'     => '0')));
 

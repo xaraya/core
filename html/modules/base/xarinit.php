@@ -54,8 +54,8 @@ function base_init()
          *********************************************************************/
         $fields = array('id'        => array('type'=>'varchar','size'=>32   ,'null'=>false,'primary_key'=>true),
                         'ip_addr'   => array('type'=>'varchar','size'=>20   ,'null'=>false),
-                        'first_use' => array('type'=>'integer','null'=>false,'default'=>'0'),
-                        'last_use'  => array('type'=>'integer','null'=>false,'default'=>'0'),
+                        'first_use' => array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
+                        'last_use'  => array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
                         'role_id'   => array('type'=>'integer','unsigned'=>true, 'null'=>false),
                         'vars'      => array('type'=>'blob'   ,'null'=>true),
                         'remember'  => array('type'=>'integer','size'=>1    ,'default'=>'0')

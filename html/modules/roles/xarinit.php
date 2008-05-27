@@ -40,7 +40,7 @@ function roles_init()
                         'uname' => array('type' => 'varchar', 'size' => 255, 'null' => false, 'default' => ''),
                         'email' => array('type' => 'varchar', 'size' => 255,'null' => false,'default' => ''),
                         'pass' => array('type' => 'varchar',  'size' => 100, 'null' => false, 'default' => ''),
-                        'date_reg' => array('type' => 'integer', 'null' => false, 'default' => '0'),
+                        'date_reg' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
                         'valcode' => array('type' => 'varchar', 'size' => 35, 'null' => false, 'default' => ''),
                         'state' => array('type' => 'integer', 'null' => false,'default' => '3'),
                         'auth_modid' => array('type' => 'integer', 'unsigned' => true,'null' => false));
