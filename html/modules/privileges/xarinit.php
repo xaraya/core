@@ -88,7 +88,7 @@ function privileges_init()
                         'instance' => array('type'   => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
                         'level' => array('type'      => 'integer', 'null' => false,'default' => '0'),
                         'description' => array('type'=> 'varchar', 'size' => 255, 'null' => false, 'default'     => ''),
-                        'type' => array('type'=> 'integer', 'null' => false, 'default'     => '0'));
+                        'type' => array('type'=> 'integer', 'unsigned' => true, 'null' => false));
         $query = xarDBCreateTable($tables['privileges'],$fields);
         $dbconn->Execute($query);
 
