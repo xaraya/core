@@ -633,3 +633,46 @@ ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`         integer NOT NU
 ALTER TABLE `xar_cache_blocks` CHANGE `page` `page`               integer NOT NULL default '0';
 ALTER TABLE `xar_cache_blocks` CHANGE `user` `user`               integer unsigned NOT NULL;
 ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`           integer default NULL;
+
+ALTER TABLE `xar_dynamic_data` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_dynamic_data` CHANGE `property_id` `property_id` integer unsigned NOT NULL;
+ALTER TABLE `xar_dynamic_data` CHANGE `itemid` `itemid`           integer unsigned NOT NULL;
+ALTER TABLE `xar_dynamic_data` CHANGE `value` `value`             mediumtext;
+
+ALTER TABLE `xar_dynamic_objects` CHANGE `id` `id`                integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_dynamic_objects` CHANGE `name` `name`            varchar(30) NOT NULL default '';
+ALTER TABLE `xar_dynamic_objects` CHANGE `label` `label`          varchar(254) NOT NULL default '';
+ALTER TABLE `xar_dynamic_objects` CHANGE `module_id` `module_id`  integer unsigned NOT NULL;
+ALTER TABLE `xar_dynamic_objects` CHANGE `itemtype` `itemtype`    integer NOT NULL default '0';
+ALTER TABLE `xar_dynamic_objects` CHANGE `parent` `parent`        integer NOT NULL default '0';
+ALTER TABLE `xar_dynamic_objects` CHANGE `class` `class`          varchar(255) NOT NULL default 'DataObject';
+ALTER TABLE `xar_dynamic_objects` CHANGE `filepath` `filepath`    varchar(255) NOT NULL default 'modules/dynamicdata/class/objects/base.php';
+ALTER TABLE `xar_dynamic_objects` CHANGE `urlparam` `urlparam`    varchar(30) NOT NULL default 'itemid';
+ALTER TABLE `xar_dynamic_objects` CHANGE `maxid` `maxid`          integer unsigned NOT NULL default '0';
+ALTER TABLE `xar_dynamic_objects` CHANGE `config` `config`        text;
+ALTER TABLE `xar_dynamic_objects` CHANGE `isalias` `isalias`      tinyint(3) unsigned NOT NULL default '1';
+
+ALTER TABLE `xar_dynamic_properties` CHANGE `id` `id`                      integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_dynamic_properties` CHANGE `name` `name`                  varchar(30) NOT NULL default '';
+ALTER TABLE `xar_dynamic_properties` CHANGE `label` `label`                varchar(254) NOT NULL default '';
+ALTER TABLE `xar_dynamic_properties` CHANGE `object_id` `object_id`        integer unsigned NOT NULL;
+ALTER TABLE `xar_dynamic_properties` CHANGE `type` `type`                  integer NOT NULL;
+ALTER TABLE `xar_dynamic_properties` CHANGE `defaultvalue` `defaultvalue`  varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties` CHANGE `source` `source`              varchar(254) NOT NULL default 'dynamic_data';
+ALTER TABLE `xar_dynamic_properties` CHANGE `status` `status`              tinyint(3) unsigned NOT NULL default '33';
+ALTER TABLE `xar_dynamic_properties` CHANGE `seq` `seq`                    tinyint(3) unsigned NOT NULL;
+ALTER TABLE `xar_dynamic_properties` CHANGE `validation` `validation`      text;
+
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `id` `id`                  integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `name` `name`              varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `label` `label`            varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `parent` `parent`          varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `filepath` `filepath`      varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `class` `class`            varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `validation` `validation`  varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `source` `source`          varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `reqfiles` `reqfiles`      varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `modid` `modid`            integer unsigned NOT NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `args` `args`              mediumtext NOT NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `aliases` `aliases`        varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `format` `format`          integer default '0';
