@@ -676,3 +676,34 @@ ALTER TABLE `xar_dynamic_properties_def` CHANGE `modid` `modid`            integ
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `args` `args`              mediumtext NOT NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `aliases` `aliases`        varchar(254) default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `format` `format`          integer default '0';
+
+ALTER TABLE `xar_hooks` CHANGE `id` `id`                     integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_hooks` CHANGE `object` `object`             varchar(64) NOT NULL;
+ALTER TABLE `xar_hooks` CHANGE `action` `action`             varchar(64) NOT NULL;
+ALTER TABLE `xar_hooks` CHANGE `s_module_id` `s_module_id`   int(10) unsigned default NULL;
+ALTER TABLE `xar_hooks` CHANGE `s_type` `s_type`             varchar(64) NOT NULL;
+ALTER TABLE `xar_hooks` CHANGE `t_area` `t_area`             varchar(64) NOT NULL;
+ALTER TABLE `xar_hooks` CHANGE `t_module_id` `t_module_id`   int(10) unsigned NOT NULL;
+ALTER TABLE `xar_hooks` CHANGE `t_type` `t_type`             varchar(64) NOT NULL;
+ALTER TABLE `xar_hooks` CHANGE `t_func` `t_func`             varchar(64) NOT NULL;
+ALTER TABLE `xar_hooks` CHANGE `priority` `priority`         int(10) unsigned NOT NULL default '0';
+
+ALTER TABLE `xar_module_itemvars` CHANGE `module_var_id` `module_var_id`     int(10) unsigned NOT NULL;
+ALTER TABLE `xar_module_itemvars` CHANGE `item_id` `item_id`                 int(10) unsigned NOT NULL;
+ALTER TABLE `xar_module_itemvars` CHANGE `value` `value`                     longtext;
+
+ALTER TABLE `xar_module_vars` CHANGE `id` `id`                     integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_module_vars` CHANGE `module_id` `module_id`       int(10) unsigned default NULL;
+ALTER TABLE `xar_module_vars` CHANGE `name` `name`                 varchar(64) NOT NULL;
+ALTER TABLE `xar_module_vars` CHANGE `value` `value`               longtext;
+
+ALTER TABLE `xar_modules` CHANGE `id` `id`                       integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_modules` CHANGE `name` `name`                   varchar(64) NOT NULL;
+ALTER TABLE `xar_modules` CHANGE `regid` `regid`                 int(10) unsigned NOT NULL;
+ALTER TABLE `xar_modules` CHANGE `directory` `directory`         varchar(64) NOT NULL;
+ALTER TABLE `xar_modules` CHANGE `version` `version`             varchar(10) NOT NULL;
+ALTER TABLE `xar_modules` CHANGE `class` `class`                 varchar(64) NOT NULL;
+ALTER TABLE `xar_modules` CHANGE `category` `category`           varchar(64) NOT NULL;
+ALTER TABLE `xar_modules` CHANGE `admin_capable` `admin_capable` tinyint(3) unsigned NOT NULL default '0';
+ALTER TABLE `xar_modules` CHANGE `user_capable` `user_capable`   tinyint(3) unsigned NOT NULL default '0';
+ALTER TABLE `xar_modules` CHANGE `state` `state`                 tinyint(3) unsigned NOT NULL default '1';
