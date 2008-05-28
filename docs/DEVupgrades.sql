@@ -720,3 +720,18 @@ ALTER TABLE `xar_privileges` CHANGE `type` `type`                   integer unsi
 
 ALTER TABLE `xar_privmembers` CHANGE `privilege_id` `privilege_id`  integer unsigned NOT NULL;
 ALTER TABLE `xar_privmembers` CHANGE `parent_id` `parent_id`        integer unsigned NOT NULL;
+
+ALTER TABLE `xar_rolemembers` CHANGE `role_id` `role_id`  integer unsigned NOT NULL default '0';
+ALTER TABLE `xar_rolemembers` CHANGE `parent_id` `parent_id`        integer unsigned NOT NULL default '0';
+
+ALTER TABLE `xar_roles` CHANGE `id` `id`                       integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_roles` CHANGE `name` `name`                   varchar(255) NOT NULL default '';
+ALTER TABLE `xar_roles` CHANGE `type` `type`                   integer unsigned NOT NULL;
+ALTER TABLE `xar_roles` CHANGE `users` `users`                 integer NOT NULL default '0';
+ALTER TABLE `xar_roles` CHANGE `uname` `uname`                 varchar(255) NOT NULL default '';
+ALTER TABLE `xar_roles` CHANGE `email` `email`                 varchar(255) NOT NULL default '';
+ALTER TABLE `xar_roles` CHANGE `pass` `pass`                   varchar(100) NOT NULL default '';
+ALTER TABLE `xar_roles` CHANGE `date_reg` `date_reg`           integer unsigned NOT NULL default '0';
+ALTER TABLE `xar_roles` CHANGE `valcode` `valcode`             varchar(35) NOT NULL default '';
+ALTER TABLE `xar_roles` CHANGE `state` `state`                 tinyint(4) NOT NULL default '3';
+ALTER TABLE `xar_roles` CHANGE `auth_modid` `auth_modid`       integer unsigned NOT NULL;
