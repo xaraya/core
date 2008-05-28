@@ -750,3 +750,27 @@ ALTER TABLE `xar_security_instances` CHANGE `description` `description`     varc
 ALTER TABLE `xar_security_realms` CHANGE `id` `id`                       integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_security_realms` CHANGE `name` `name`                   varchar(254) NOT NULL default '';
 
+ALTER TABLE `xar_session_info` CHANGE `id` `id`                       varchar(32) NOT NULL;
+ALTER TABLE `xar_session_info` CHANGE `ip_addr` `ip_addr`             varchar(20) NOT NULL;
+ALTER TABLE `xar_session_info` CHANGE `first_use` `first_use`         integer unsigned NOT NULL default '0';
+ALTER TABLE `xar_session_info` CHANGE `last_use` `last_use`           integer unsigned NOT NULL default '0';
+ALTER TABLE `xar_session_info` CHANGE `role_id` `role_id`             integer unsigned NOT NULL;
+ALTER TABLE `xar_session_info` CHANGE `vars` `vars`                   blob;
+ALTER TABLE `xar_session_info` CHANGE `remember` `remember`           tinyint(3) unsigned NOT NULL default '0';
+
+ALTER TABLE `xar_themes` CHANGE `id` `id`                          integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_themes` CHANGE `name` `name`                      varchar(64) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `regid` `regid`                    integer unsigned NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `directory` `directory`            varchar(64) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `author` `author`                  varchar(64) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `homepage` `homepage`              varchar(64) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `email` `email`                    varchar(64) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `description` `description`        varchar(254) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `contactinfo` `contactinfo`        varchar(254) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `publishdate` `publishdate`        varchar(32) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `license` `license`                varchar(254) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `version` `version`                varchar(10) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `xaraya_version` `xaraya_version`  varchar(10) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `bl_version` `bl_version`          varchar(10) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `class` `class`                    integer NOT NULL default '0';
+ALTER TABLE `xar_themes` CHANGE `state` `state`                    tinyint(3) unsigned NOT NULL default '1';
