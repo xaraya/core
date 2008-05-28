@@ -599,3 +599,37 @@ ALTER TABLE `xar_security_instances`
   DROP `instancechildid`,
   DROP `instanceparentid`,
   DROP `propagate`;
+
+/*
+    Suggestion: do all further renames above this and change the appropriate line(s) here
+*/
+ALTER TABLE `xar_block_group_instances` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_block_group_instances` CHANGE `group_id` `group_id`       integer unsigned NOT NULL;
+ALTER TABLE `xar_block_group_instances` CHANGE `instance_id` `instance_id` integer unsigned NOT NULL;
+ALTER TABLE `xar_block_group_instances` CHANGE `template` `template`       varchar(100) default NULL;
+ALTER TABLE `xar_block_group_instances` CHANGE `position` `position`       integer unsigned NOT NULL;
+
+ALTER TABLE `xar_block_groups` CHANGE `id` `id`             integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_block_groups` CHANGE `name` `name`         varchar(255) NOT NULL default '';
+ALTER TABLE `xar_block_groups` CHANGE `template` `template` varchar(255) NOT NULL default '';
+
+ALTER TABLE `xar_block_instances` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_block_instances` CHANGE `type_id` `type_id`         integer unsigned NOT NULL;
+ALTER TABLE `xar_block_instances` CHANGE `name` `name`               varchar(100) NOT NULL;
+ALTER TABLE `xar_block_instances` CHANGE `title` `title`             varchar(255) default NULL;
+ALTER TABLE `xar_block_instances` CHANGE `content` `content`         text NOT NULL;
+ALTER TABLE `xar_block_instances` CHANGE `template` `template`       varchar(255) default NULL;
+ALTER TABLE `xar_block_instances` CHANGE `state` `state`             tinyint(3) unsigned NOT NULL default '2';
+ALTER TABLE `xar_block_instances` CHANGE `refresh` `refresh`         tinyint(3) unsigned NOT NULL default '0';
+ALTER TABLE `xar_block_instances` CHANGE `last_update` `last_update` integer unsigned NOT NULL default '0';
+
+ALTER TABLE `xar_block_types` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_block_types` CHANGE `type` `type`               varchar(64) NOT NULL default '';
+ALTER TABLE `xar_block_types` CHANGE `module_id` `module_id`     integer unsigned NOT NULL;
+ALTER TABLE `xar_block_types` CHANGE `info` `info`               text;
+
+ALTER TABLE `xar_cache_blocks` CHANGE `id` `id`                   integer unsigned NOT NULL;
+ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`         integer NOT NULL default '0';
+ALTER TABLE `xar_cache_blocks` CHANGE `page` `page`               integer NOT NULL default '0';
+ALTER TABLE `xar_cache_blocks` CHANGE `user` `user`               integer unsigned NOT NULL;
+ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`           integer default NULL;
