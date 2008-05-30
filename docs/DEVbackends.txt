@@ -14,7 +14,7 @@ VIEWS support:
 - sqlite  : yes, since forever, but read only (which is a good thing,  but a pain when you're migrating )
 - postgres: yes, since 7.3 (at least)
 - mssql   : yes, no idea version wise
-- oracle  : yes, no idea version wise
+- oracle  : yes, all versions since the mid-1990s
 
 ==> SUPPPORTED BY ALL, WORTH CONSIDERING
 ==> Usecase: Transposing Dynamic Data values.
@@ -115,8 +115,8 @@ IN MEMORY DATABASE support:
 - mysql   :
 - sqlite  : yes
 - postgres:
-- mssql   :
-- oracle  :
+- mssql   : yes
+- oracle  : yes, both shared structure (private data) and per-session temporary tables
 
 TRIGGER support:
 ---------------
@@ -124,7 +124,7 @@ TRIGGER support:
 - sqlite  : yes, since forever
 - postgres: yes, at least since 7.3
 - mssql   : yes, at least since mssql server 2000
-- oracle  : yes, no idea version wise
+- oracle  : yes, since mid-1990s
 
 ==> SUPPORTED BY ALL, WORTH CONSIDERING
 
@@ -224,7 +224,17 @@ Native query preparation support
                     $result = pg_execute($dbconn, "my_query", array("Joe's Widgets"));
                     $result = pg_execute($dbconn, "my_query", array("Clothes Clothes Clothes"));
 - mssql     :    Unknown, it's possible in embedded SQL, no idea if transact SQL does support it.
-- oracle    :    most likely
+- oracle    :    using PL/SQL or Java
+              Can be done in stages (prepare, parse, execute) or in a single step.
+
+              DECLARE
+	          /* These variables could also come from trigger columns (e.g. :NEW.name) or be stored procedure parameters. */
+	          l_id NUMBER;
+	          l_name VARCHAR(60);
+	      BEGIN
+	          ...
+                  EXECUTE IMMEDIATE 'UPDATE foobar SET name = :1 WHERE id = :2' USING l_name, l_id;
+	      END;
 
 
 Comments Syntax support for SQL:
@@ -417,7 +427,9 @@ Does this work for all databases? Here's an overview
             or define the sequence explicitly and the column too
 - oracle:   define the sequence and either use a before insert trigger or
             the definition of the default value on the sequence (not sure if that is supported
-            [UPDATE: it is NOT, damn])
+            [UPDATE: it is NOT, damn] - the closest is to use trigger_name.nextval in the insert statement,
+	    which is not portable or transparent, though should in theory be all that genID needs to return,
+	    so long as it does not get quoted when put into the query, e.g. INSERT INTO foobar (f_id) VALUES(foobar_seq.NEXTVAL)
 - mssql   : mssql uses the IDENTITY column, which does exactly what it says, i.e.
             provide an identifier. The catch is that that column can NOT be used explicitly
             unless the backend is explicitly told so with ``SET IDENTIY INSERT tablename ON;``
@@ -468,10 +480,11 @@ Sqlite:
 
 Oracle:
 -------
-
-::
-
-    CREATE SEQUENCE tablename_colname_seq START WITH 1;
+    /* Use the NOCACHE option to ensure contiguous sequences, otherwise
+       they are fetched in batches of N (defaut 10) with any not used in
+       the session being discarded. Alternatively use 'CACHE 1' to ensure
+       only one is fetched each time and none are wasted. */
+    CREATE SEQUENCE tablename_colname_seq START WITH 1 NOCACHE;
     CREATE TABLE tablename (
         colname NUMBER
     )
