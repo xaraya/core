@@ -600,6 +600,7 @@ ALTER TABLE `xar_security_instances`
   DROP `instanceparentid`,
   DROP `propagate`;
 
+ALTER TABLE `xar_dynamic_data` CHANGE `itemid` `item_id` INTEGER UNSIGNED NOT NULL;
 /*
     Suggestion: do all further renames above this and change the appropriate line(s) here
 */
@@ -636,7 +637,7 @@ ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`           integer defaul
 
 ALTER TABLE `xar_dynamic_data` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_dynamic_data` CHANGE `property_id` `property_id` integer unsigned NOT NULL;
-ALTER TABLE `xar_dynamic_data` CHANGE `itemid` `itemid`           integer unsigned NOT NULL;
+ALTER TABLE `xar_dynamic_data` CHANGE `item_id` `item_id`           integer unsigned NOT NULL;
 ALTER TABLE `xar_dynamic_data` CHANGE `value` `value`             mediumtext;
 
 ALTER TABLE `xar_dynamic_objects` CHANGE `id` `id`                integer unsigned NOT NULL auto_increment;
@@ -774,3 +775,4 @@ ALTER TABLE `xar_themes` CHANGE `xaraya_version` `xaraya_version`  varchar(10) N
 ALTER TABLE `xar_themes` CHANGE `bl_version` `bl_version`          varchar(10) NOT NULL;
 ALTER TABLE `xar_themes` CHANGE `class` `class`                    integer NOT NULL default '0';
 ALTER TABLE `xar_themes` CHANGE `state` `state`                    tinyint(3) unsigned NOT NULL default '1';
+

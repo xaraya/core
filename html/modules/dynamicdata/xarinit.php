@@ -339,7 +339,7 @@ function dynamicdata_init()
                 'null'        => false
             ),
             /* the item id this dynamic data belongs to */
-            'itemid'   => array(
+            'item_id'   => array(
                 'type'        => 'integer',
                 'unsigned'    => true,
                 'null'        => false
@@ -369,8 +369,8 @@ function dynamicdata_init()
         $query = xarDBCreateIndex(
             $dynamic_data,
             array(
-                'name'   => 'i_' . $prefix . '_dyndata_itemid',
-                'fields' => array('itemid')
+                'name'   => 'i_' . $prefix . '_dyndata_item_id',
+                'fields' => array('item_id')
             )
         );
         $dbconn->Execute($query);
@@ -383,7 +383,7 @@ function dynamicdata_init()
         // we don't really need to create an object and properties for the dynamic data table
 
         // create some sample data for the sample object
-        $sql = "INSERT INTO $dynamic_data (property_id, itemid, value)
+        $sql = "INSERT INTO $dynamic_data (property_id, item_id, value)
             VALUES (?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
