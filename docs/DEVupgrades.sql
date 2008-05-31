@@ -601,6 +601,7 @@ ALTER TABLE `xar_security_instances`
   DROP `propagate`;
 
 ALTER TABLE `xar_dynamic_data` CHANGE `itemid` `item_id` INTEGER UNSIGNED NOT NULL;
+ALTER TABLE `xar_dynamic_objects` CHANGE `parent` `parent_id` INTEGER UNSIGNED NOT NULL;
 /*
     Suggestion: do all further renames above this and change the appropriate line(s) here
 */
@@ -645,7 +646,7 @@ ALTER TABLE `xar_dynamic_objects` CHANGE `name` `name`            varchar(30) NO
 ALTER TABLE `xar_dynamic_objects` CHANGE `label` `label`          varchar(254) NOT NULL default '';
 ALTER TABLE `xar_dynamic_objects` CHANGE `module_id` `module_id`  integer unsigned NOT NULL;
 ALTER TABLE `xar_dynamic_objects` CHANGE `itemtype` `itemtype`    integer NOT NULL default '0';
-ALTER TABLE `xar_dynamic_objects` CHANGE `parent` `parent`        integer NOT NULL default '0';
+ALTER TABLE `xar_dynamic_objects` CHANGE `parent` `parent_id`        integer NOT NULL default '0';
 ALTER TABLE `xar_dynamic_objects` CHANGE `class` `class`          varchar(254) NOT NULL default 'DataObject';
 ALTER TABLE `xar_dynamic_objects` CHANGE `filepath` `filepath`    varchar(254) NOT NULL default 'modules/dynamicdata/class/objects/base.php';
 ALTER TABLE `xar_dynamic_objects` CHANGE `urlparam` `urlparam`    varchar(30) NOT NULL default 'itemid';
