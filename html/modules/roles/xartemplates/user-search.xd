@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <h2><xar:mlstring>Search Users</xar:mlstring></h2>
 <xar:if condition="!empty($users) and count($users) gt 0">
     <h3><xar:mlstring>Users Found</xar:mlstring>:</h3>
