@@ -761,7 +761,7 @@ function dynamicdata_createPropDefTable()
             'default'     => null
         ),
         /* this property's parent */
-        'parent' => array(
+        'parent_id' => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null

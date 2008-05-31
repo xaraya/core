@@ -602,6 +602,7 @@ ALTER TABLE `xar_security_instances`
 
 ALTER TABLE `xar_dynamic_data` CHANGE `itemid` `item_id` INTEGER UNSIGNED NOT NULL;
 ALTER TABLE `xar_dynamic_objects` CHANGE `parent` `parent_id` INTEGER UNSIGNED NOT NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `parent` `parent_id` INTEGER UNSIGNED NOT NULL;
 /*
     Suggestion: do all further renames above this and change the appropriate line(s) here
 */
@@ -668,7 +669,7 @@ ALTER TABLE `xar_dynamic_properties` CHANGE `validation` `validation`      text;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `id` `id`                  integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `name` `name`              varchar(254) default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `label` `label`            varchar(254) default NULL;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `parent` `parent`          varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `parent` `parent_id`       integer unsigned default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `filepath` `filepath`      varchar(254) default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `class` `class`            varchar(254) default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `validation` `validation`  varchar(254) default NULL;
