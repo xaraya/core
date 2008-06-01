@@ -125,16 +125,25 @@ function privileges_init()
          *   PRIMARY KEY (privilege_id,parent_id)
          * )
          *********************************************************************/
+         $fields = array(
+                'privilege_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'primary_key' => true),
+                'parent_id'    => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'primary_key' => true)
+                );
+         $query = xarDBCreateTable($tables['privmembers'],$fields);
+         $dbconn->Execute($query);
+         
+         $index = array('name'      => 'i_'.$prefix.'_privmembers_pid',
+                        'fields'    => array('privilege_id'),
+                        'unique'    => false);
+         $query = xarDBCreateIndex($tables['privmembers'],$index);
+         $dbconn->Execute($query);
+                
+         $index = array('name'      => 'i_'.$prefix.'_privmembers_parent_id',
+                        'fields'    => array('parent_id'),
+                        'unique'    => false);
+         $query = xarDBCreateIndex($tables['privmembers'],$index);
+         $dbconn->Execute($query);
 
-        $query = "CREATE TABLE " . $tables['privmembers'] . "(
-          `privilege_id` INTEGER UNSIGNED NOT NULL,
-          `parent_id`    INTEGER UNSIGNED NOT NULL,
-          PRIMARY KEY  (`privilege_id`,`parent_id`),
-          KEY `i_xar_privmembers_pid` (`privilege_id`),
-          KEY `i_xar_privmembers_parent_id` (`parent_id`)
-        )";
-
-        $dbconn->Execute($query);
 
         /*********************************************************************
          * CREATE TABLE xar_security_acl (
