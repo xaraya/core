@@ -40,16 +40,7 @@ function themes_init()
      *   name varchar(64) NOT NULL default '',
      *   regid int(10) INTEGER unsigned NOT NULL,
      *   directory varchar(64) NOT NULL default '',
-     *   author varchar(64) NOT NULL default '',
-     *   homepage varchar(64) NOT NULL default '',
-     *   email varchar(64) NOT NULL default '',
-     *   description varchar(255) NOT NULL default '',
-     *   contactinfo varchar(255) NOT NULL default '',
-     *   publishdate varchar(32) NOT NULL default '',
-     *   license varchar(255) NOT NULL default '',
      *   version varchar(10) NOT NULL default '',
-     *   xaraya_version varchar(10) NOT NULL default '',
-     *   bl_version varchar(10) NOT NULL default '',
      *   class int(10) INTEGER NOT NULL default '0',
      *   state tinyint(3) not null default '1'
      *   PRIMARY KEY  (id)
@@ -60,17 +51,7 @@ function themes_init()
         'name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
         'regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
         'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'author' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'homepage' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'email' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'description' => array('type' => 'varchar', 'size' => 255, 'null' => false),
-        'contactinfo' => array('type' => 'varchar', 'size' => 255, 'null' => false),
-        'publishdate' => array('type' => 'varchar', 'size' => 32, 'null' => false),
-        'license' => array('type' => 'varchar', 'size' => 255, 'null' => false),
         'version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
-        'xaraya_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
-        'bl_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
-        'class' => array('type' => 'integer', 'null' => false, 'default' => '0'),
         'state' => array('type' => 'integer', 'size' => 'tiny', 'unsigned'=> true, 'null' => false, 'default' => '1')
         );
 

@@ -603,6 +603,19 @@ ALTER TABLE `xar_security_instances`
 ALTER TABLE `xar_dynamic_data` CHANGE `itemid` `item_id` INTEGER UNSIGNED NOT NULL;
 ALTER TABLE `xar_dynamic_objects` CHANGE `parent` `parent_id` INTEGER UNSIGNED NOT NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `parent` `parent_id` INTEGER UNSIGNED NOT NULL;
+
+ALTER TABLE `xar_themes`
+  DROP `directory`,
+  DROP `author`,
+  DROP `homepage`,
+  DROP `email`,
+  DROP `description`,
+  DROP `contactinfo`,
+  DROP `publishdate`,
+  DROP `license`,
+  DROP `xaraya_version`,
+  DROP `bl_version`,
+  DROP `class`;
 /*
     Suggestion: do all further renames above this and change the appropriate line(s) here
 */
@@ -765,16 +778,6 @@ ALTER TABLE `xar_themes` CHANGE `id` `id`                          integer unsig
 ALTER TABLE `xar_themes` CHANGE `name` `name`                      varchar(64) NOT NULL;
 ALTER TABLE `xar_themes` CHANGE `regid` `regid`                    integer unsigned NOT NULL;
 ALTER TABLE `xar_themes` CHANGE `directory` `directory`            varchar(64) NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `author` `author`                  varchar(64) NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `homepage` `homepage`              varchar(64) NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `email` `email`                    varchar(64) NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `description` `description`        varchar(254) NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `contactinfo` `contactinfo`        varchar(254) NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `publishdate` `publishdate`        varchar(32) NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `license` `license`                varchar(254) NOT NULL;
 ALTER TABLE `xar_themes` CHANGE `version` `version`                varchar(10) NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `xaraya_version` `xaraya_version`  varchar(10) NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `bl_version` `bl_version`          varchar(10) NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `class` `class`                    integer NOT NULL default '0';
 ALTER TABLE `xar_themes` CHANGE `state` `state`                    tinyint(3) unsigned NOT NULL default '1';
 

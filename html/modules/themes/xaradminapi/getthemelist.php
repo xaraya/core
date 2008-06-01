@@ -24,7 +24,7 @@ function themes_adminapi_getthemelist($args)
 {
     extract($args);
 
-    static $validOrderFields = array('name' => 'themes', 'regid' => 'themes', 'class' => 'infos');
+    static $validOrderFields = array('name' => 'themes', 'regid' => 'themes');
 
     if (!isset($filter)) $filter = array();
     if (!is_array($filter)) {
@@ -59,11 +59,6 @@ function themes_adminapi_getthemelist($args)
     // Construct arrays for the where conditions and their bind variables
     $whereClauses = array(); $bindvars = array();
 
-    if (isset($filter['Class'])) {
-        $whereClauses[] = 'themes.class = ?';
-        $bindvars[] = $filter['Class'];
-    }
-
     if (isset($filter['State'])) {
         if ($filter['State'] != XARTHEME_STATE_ANY) {
             if ($filter['State'] != XARTHEME_STATE_INSTALLED) {
@@ -90,7 +85,6 @@ function themes_adminapi_getthemelist($args)
     $query = "SELECT themes.regid,
                      themes.name,
                      themes.directory,
-                     themes.class,
                      themes.state
               FROM $themestable AS themes $whereClause ORDER BY $orderByClause";
 
@@ -103,7 +97,6 @@ function themes_adminapi_getthemelist($args)
         list($themeInfo['regid'],
              $themeInfo['name'],
              $themeInfo['directory'],
-             $themeInfo['class'],
              $themeState) = $result->fields;
 
         if (xarVarIsCached('Theme.Infos', $themeInfo['regid'])) {
@@ -154,7 +147,7 @@ function themes_adminapi_getthemelist($args)
         $themeInfo = array();
     }
     $result->close();
+
     return $themeList;
 }
-
 ?>
