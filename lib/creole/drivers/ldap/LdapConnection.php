@@ -84,9 +84,10 @@ class LdapConnection extends ConnectionCommon implements Connection {
         if (empty($conn)) {
             if (($err = @ldap_error()) != '') {
                 throw new SQLException("connect failed", $err);
+            } elseif (empty($php_errormsg)) {
+                throw new SQLException("connect failed");
             } else {
-                $err = error_get_last(); $err = $err['message'];
-                throw new SQLException("connect failed", $err['message']);
+                throw new SQLException("connect failed", $php_errormsg);
             }
         }
 

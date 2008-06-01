@@ -31,11 +31,13 @@ include_once 'creole/drivers/mssql/MSSQLResultSet.php';
  * If you have trouble with BLOB / CLOB support
  * --------------------------------------------
  * 
- * You may need to change some PHP ini settings.  In particular, the following settings
- * set the text size to maximum which should get around issues with truncated data:
+ * You may need to change some PHP ini settings.  In particular, the first two settings
+ * set the text size to maximum which should get around issues with truncated data.
+ * The third rectifies an issue with losing the seconds part of a DATETIME column
  * <code>
  *  ini_set('mssql.textsize', 2147483647);
  *  ini_set('mssql.textlimit', 2147483647);
+ *  ini_set('mssql.datetimeconvert', 0);
  * </code>
  * We do not set these by default (anymore) because they do not apply to cases where MSSQL
  * is being used w/ FreeTDS.
@@ -142,11 +144,141 @@ class MSSQLConnection extends ConnectionCommon implements Connection {
     }
     
     /**
-     * Returns false since MSSQL doesn't support this method.
+     * Since MSSQL doesn't support this method natively, the SQL is modified to use
+     * nested queries to attain the same result.
+     *
+     * @param string &$sql The query that will be modified.
+     * @param int $offset
+     * @param int $limit
+     * @return void
+     * @throws SQLException - if unable to modify query for any reason.
      */
     public function applyLimit(&$sql, $offset, $limit)
     {
-        return false;
+        /*
+        Offsets and limits can be done with nested sql using TOP
+
+        SELECT * FROM (
+            SELECT TOP x * FROM (
+                SELECT TOP y fields
+                FROM table
+                WHERE conditions
+                ORDER BY table.field  ASC) as foo
+            ORDER by field DESC) as bar
+        ORDER by field ASC
+
+        x is limit and y is x+offset
+        Note: see special case where limit is 0.
+        */
+
+        // obtain the original select statement
+        preg_match('/\A(.*)select(.*)from/si',$sql,$select_segment);
+        if(count($select_segment>0)) {
+            $original_select = $select_segment[0];
+        } else {
+            // not a select query, nothing further to do
+            return;
+    }
+        $modified_select = substr_replace($original_select, null, stristr($original_select,'SELECT') , 6 );
+    
+        // remove the original select statement
+        $sql = str_replace($original_select , null, $sql);
+
+        // obtain the original order by clause, or create one if there isn't one
+        preg_match('/order by(.*)\Z/si',$sql,$order_segment);
+        if(count($order_segment)>0) {
+            $order_by = $order_segment[0];
+        } else {
+            // no order by clause, if there are columns we can attempt to sort by the columns in the select statement
+            $select_items = split(',',trim(substr($modified_select,0,strlen($modified_select)-4)));
+            if(count($select_items)>0) {
+                $item_number = 0;
+                $order_by = null;
+                while($order_by === null && $item_number<count($select_items)) {
+                    if(!strstr($select_items[$item_number],'*')) {
+                        if (strstr($select_items[$item_number],'(')) {
+                            // aggregate function used in field, if the field is named with AS, use it
+                            //  if a name is not given, assign one for use as ORDER BY field
+                            $aggregateFieldName = array();
+                            //preg_match('/ as (.*)\Z/si',$select_items[$item_number],$aggregateFieldName);
+                            if (count($aggregateFieldName) == 0) {
+                                $select_items[$item_number].=' AS _creole_order_field';
+                                $aggregateFieldName = array('_creole_order_field');
+                            }
+                            $order_by = 'ORDER BY ' . $aggregateFieldName[0] . ' ASC';
+                        } else {
+                            $order_by = 'ORDER BY ' . $select_items[$item_number] . ' ASC';
+                        }
+                    }
+                    $item_number++;
+                }
+            }
+            // since the select has possibly had a name added to a field, regenerate the select
+            $modified_select = ' '.join(', ', $select_items).' FROM';
+            if($order_by === null) {
+                // no valid columns were found in the select statement (SELECT *), get a list of fields from the db
+                $fieldSql = 'SELECT TOP 1 '.$modified_select.$sql;
+                $fieldStmt = $this->prepareStatement($fieldSql);
+                $fieldRs = $fieldStmt->executeQuery();
+                $fieldRs->next();
+                $fields = array_keys($fieldRs->getRow());
+                // in this case, there is always at least one field
+                $order_by = 'ORDER BY ' . $fields[0] . ' ASC';
+            }
+            $sql.= ' '.$order_by;
+        }
+
+        // modify the sort order for paging
+        $inverted_order = '';
+        $order_columns = split(',',str_ireplace('order by ','',$order_by));
+        $original_order_by = $order_by;
+        $order_by = '';
+        foreach($order_columns as $column) {
+            // strip "table." from order by columns
+            $column = array_reverse(split("\.",$column));
+            $column = $column[0];
+
+            // commas if we have multiple sort columns
+            if(strlen($inverted_order)>0){
+                $order_by.= ', ';
+                $inverted_order.=', ';
+            }
+
+            // put together order for paging wrapper
+            if(stristr($column,' desc')) {
+                $order_by .= $column;
+                $inverted_order .= str_ireplace(' desc',' ASC',$column);
+            } elseif(stristr($column,' asc')) {
+                $order_by .= $column;
+                $inverted_order .= str_ireplace(' asc',' DESC',$column);
+            } else {
+                $order_by .= $column;
+                $inverted_order .= $column .' DESC';
+            }
+        }
+        $order_by = 'ORDER BY ' . $order_by;
+        $inverted_order = 'ORDER BY ' . $inverted_order;
+
+        // build the query
+        $modified_sql = "";
+        if ( $limit > 0 ) {
+            $modified_sql = 'SELECT * FROM (';
+            $modified_sql.= 'SELECT TOP '.$limit.' * FROM (';
+            $modified_sql.= 'SELECT TOP '.($limit+$offset).' '.$modified_select.$sql;
+            $modified_sql.= ') OffsetSet '.$inverted_order.') LimitSet '.$order_by;
+        } else {
+            // For the case when the limit is 0, the idea is to return the entire recordset minus the offset
+            $countSql = count($order_segment)>0 ? str_replace($order_segment[0] , null, $sql) : $sql;
+            $countStmt = $this->prepareStatement("SELECT COUNT(*) FROM $countSql");
+            $countRs = $countStmt->executeQuery(ResultSet::FETCHMODE_NUM);
+            $countRs->next();
+            $rowCount = $countRs->getInt(1);
+            $modified_sql = 'SELECT * FROM (';
+            $modified_sql.= 'SELECT TOP '.($rowCount-$offset).' * FROM (';
+            $modified_sql.= 'SELECT TOP 100 PERCENT '.$modified_select.$sql;
+            $modified_sql.= ') OffsetSet '.$inverted_order.') LimitSet '.$order_by;
+        }
+        $sql = $modified_sql;
     }
     
     /**

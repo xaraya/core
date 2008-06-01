@@ -85,7 +85,6 @@ abstract class ResultSetCommon {
     public $fields;
     // END XARAYA MODIFICATION
 
-
     /**
      * A an assoc_array of all fields in the result set so we can easily test for their existence with isset(), which is much faster than array_key_exists()
      * @var assoc_array
@@ -315,10 +314,9 @@ abstract class ResultSetCommon {
      */
     public function get($column)
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
-        return $this->fields[$column];
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        return $this->fields[$idx];
     }
     
     /**
@@ -326,10 +324,10 @@ abstract class ResultSetCommon {
      */
     public function getArray($column) 
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
-        return (array) unserialize($this->fields[$column]);
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$idx] === null) { return null; }
+        return (array) unserialize($this->fields[$idx]);
     } 
 
     /**
@@ -337,10 +335,10 @@ abstract class ResultSetCommon {
      */
     public function getBoolean($column) 
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
-        return (boolean) $this->fields[$column];
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$idx] === null) { return null; }
+        return (boolean) $this->fields[$idx];
     }
             
     /**
@@ -348,12 +346,12 @@ abstract class ResultSetCommon {
      */
     public function getBlob($column) 
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$idx] === null) { return null; }
         require_once 'creole/util/Blob.php';
         $b = new Blob();
-        $b->setContents($this->fields[$column]);
+        $b->setContents($this->fields[$idx]);
         return $b;
     }    
 
@@ -362,12 +360,12 @@ abstract class ResultSetCommon {
      */
     public function getClob($column) 
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$idx] === null) { return null; }
         require_once 'creole/util/Clob.php';
         $c = new Clob();
-        $c->setContents($this->fields[$column]);
+        $c->setContents($this->fields[$idx]);
         return $c;
     } 
 
@@ -376,12 +374,12 @@ abstract class ResultSetCommon {
      */
     public function getDate($column, $format = '%x') 
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
-        $ts = strtotime($this->fields[$column]);        
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$idx] === null) { return null; }
+        $ts = strtotime($this->fields[$idx]);        
         if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
-            throw new SQLException("Unable to convert value at column " . $column . " to timestamp: " . $this->fields[$column]);
+            throw new SQLException("Unable to convert value at column " . $column . " to timestamp: " . $this->fields[$idx]);
         }
         if ($format === null) {
             return $ts;
@@ -398,10 +396,10 @@ abstract class ResultSetCommon {
      */
     public function getFloat($column) 
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
-        return (float) $this->fields[$column];
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$idx] === null) { return null; }
+        return (float) $this->fields[$idx];
     }
 
     /**
@@ -409,10 +407,10 @@ abstract class ResultSetCommon {
      */
     public function getInt($column) 
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
-        return (int) $this->fields[$column];
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$idx] === null) { return null; }
+        return (int) $this->fields[$idx];
     }
        
     /**
@@ -420,10 +418,10 @@ abstract class ResultSetCommon {
      */
     public function getString($column) 
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
-		return ($this->rtrimString ? rtrim($this->fields[$column]) : (string) $this->fields[$column]);
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$idx] === null) { return null; }
+		return ($this->rtrimString ? rtrim($this->fields[$idx]) : (string) $this->fields[$idx]);
     }
     
     /**
@@ -431,14 +429,14 @@ abstract class ResultSetCommon {
      */
     public function getTime($column, $format = '%X') 
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$idx] === null) { return null; }
         
-        $ts = strtotime($this->fields[$column]);
+        $ts = strtotime($this->fields[$idx]);
         
         if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
-            throw new SQLException("Unable to convert value at column " . (is_int($column) ? $column + 1 : $column) . " to timestamp: " . $this->fields[$column]);
+            throw new SQLException("Unable to convert value at column " . (is_int($column) ? $column + 1 : $column) . " to timestamp: " . $this->fields[$idx]);
         }
         if ($format === null) {
             return $ts;
@@ -455,13 +453,13 @@ abstract class ResultSetCommon {
      */
     public function getTimestamp($column, $format = 'Y-m-d H:i:s') 
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$idx] === null) { return null; }
         
-        $ts = strtotime($this->fields[$column]);
+        $ts = strtotime($this->fields[$idx]);
         if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
-            throw new SQLException("Unable to convert value at column " . $column . " to timestamp: " . $this->fields[$column]);
+            throw new SQLException("Unable to convert value at column " . $column . " to timestamp: " . $this->fields[$idx]);
         }
         if ($format === null) {
             return $ts;

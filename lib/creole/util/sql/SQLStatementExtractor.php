@@ -30,6 +30,14 @@ class SQLStatementExtractor {
     
     protected static $delimiter = ';';
     
+    protected static $in_quote = false;
+    
+    // the level of block comments we are in
+    protected static $bc_nest = 0;
+    
+    // the level of BEGIN/END blocks we are in
+    protected static $iBegEndNest = 0;
+    
     /**
      * Get SQL statements from file.
      * 
@@ -79,18 +87,73 @@ class SQLStatementExtractor {
                     continue;
                 }
 
-                $sql .= " " . $line;
-                $sql = trim($sql);
+                // looking for the number of block comment patterns in this line
+                // minus one b/c of the nature of explode
+                $bc_start_num = count(explode('/*', $line)) - 1;
+                $bc_end_num = count(explode('*/', $line)) - 1;
+                self::$bc_nest = self::$bc_nest + ($bc_start_num - $bc_end_num);
+
+                // now looking for the first bc open and the last bc close
+                $bc_first = strpos($line, '/*');
+                $bc_last = strrpos($line, '*/');
+                
+                // looking for the number of BEGIN/END blocks
+                if( preg_match('/BEGIN$/', strtoupper($line)) ) {
+                    self::$iBegEndNest++;
+                }
+                
+                if( preg_match('/^END;/', strtoupper($line)) ) {
+                    self::$iBegEndNest--;
+                }
 
                 // SQL defines "--" as a comment to EOL
                 // and in Oracle it may contain a hint
-                // so we cannot just remove it, instead we must end it
-                if (strpos($line, "--") !== false) {
-                    $sql .= "\n";
+                // so we cannot just remove it, instead we just remove it
+                // for the purpose of testing the line
+                $comment_position = strpos($line, "--");
+                
+                // make sure the above comment isn't in block comment
+                if( self::$bc_nest > 0 || ($bc_first < $comment_position && $bc_last > $comment_position ) ) {
+                    // it is in a block comment, so we will pretend it doesn't exist
+                    $comment_position = false;
                 }
     
-                if (self::endsWith(self::$delimiter, $sql)) {
+                if ( $comment_position !== false) {
+                    $comment = self::substring($line, $comment_position);
+                    $line = self::substring($line, 0, $comment_position - 1);
+                } else {
+                    $comment = '';
+                }
+                
+                $sql .= " " . $line;
+                $sql = trim($sql);
+                
+                // count the number of times we found a non-escaped single quote
+                $quote_count = preg_match_all("#^'|[^\\\\]'#", $line, $matches);
+                
+                // two single quotes (i.e. empty string), minus one b/c of the nature
+                // of explode.  We have to look at the this b/c the above regex
+                // matches two single quotes only once, we negate that below
+                $es_count = count(explode("''", $line)) - 1;
+                $quote_count = $quote_count - $es_count;
+                
+                $odd_quotes = $quote_count % 2 == 0 ? false : true;
+
+                // if we are inside a quote, it doesn't matter what is in the line
+                // we need to continue
+                if ( self::$in_quote == true && $odd_quotes == false ) {
+                    continue;
+                } elseif ( self::$in_quote == true && $odd_quotes == true ) {
+                    self::$in_quote = false;
+                } elseif ( self::$in_quote == false && $odd_quotes == true ) {
+                    self::$in_quote = true;
+                }
+    
+                if (self::$iBegEndNest == 0 && self::endsWith(self::$delimiter, $sql)) {
                     $statements[] = self::substring($sql, 0, strlen($sql)-1 - strlen(self::$delimiter));
+                    if( $comment != '' ) {
+                       $statements[] = $comment;
+                    }
                     $sql = "";
                 }
             }

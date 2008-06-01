@@ -67,8 +67,6 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet {
             }
         }
         
-        $this->parseFields();
-        
         if ($this->fetchmode === ResultSet::FETCHMODE_ASSOC && $this->lowerAssocCase) {
             $this->fields = array_change_key_case($this->fields, CASE_LOWER);
         }
@@ -107,10 +105,10 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet {
      */
     public function getString($column) 
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
-        return (string) $this->fields[$column];
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$idx] === null) { return null; }
+        return (string) $this->fields[$idx];
     }
     
     /**
@@ -121,9 +119,9 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet {
      */
     function getTimestamp($column, $format='Y-m-d H:i:s') 
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
+        if (is_int($column)) { $column--; } // because Java convention is to start at 1 
+        if (!array_key_exists($column, $this->fields)) { throw new SQLException("Invalid resultset column: " . (is_int($column) ? $column + 1 : $column)); }
+        if ($this->fields[$column] === null || $this->fields[$column] == '0000-00-00 00:00:00') { return null; }
         
         $ts = strtotime($this->fields[$column]);
         if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
@@ -147,5 +145,23 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet {
             return date($format, $ts);
         }
     }
+
+    /**
+     * @see ResultSetCommon::getDate()
+     */
+    public function getDate($column, $format = '%X')
+    {
+        /* As of PHP 5.2.4, strftime() returns false for '0000-00-00' which
+           is impossible to tell apart from illegal dates. (Pre-PHP 5.2.4
+           even interpreted such dates incorrectly, see 
+           http://bugs.php.net/bug.php?id=41523).
+           We catch this special case and return null as the date here.
+           However, we need to know the exact format the DBMS returns this
+           date, which is why we make this decision here in the specific
+           driver before dispatching to the common implementation. */
+        $idx = (is_int($column) ? $column - 1 : $column);        
+        if (array_key_exists($idx, $this->fields) && $this->fields[$idx] == '0000-00-00') return null;
+        return parent::getDate($column, $format);
+}
 
 }

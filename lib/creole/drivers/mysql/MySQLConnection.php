@@ -57,6 +57,10 @@ class MySQLConnection extends ConnectionCommon implements Connection {
         $this->flags = $flags;
 
         $persistent = ($flags & Creole::PERSISTENT) === Creole::PERSISTENT;
+		$multi_statement = ($flags & Creole::MYSQL_CLIENT_MULTI_STATEMENTS) === Creole::MYSQL_CLIENT_MULTI_STATEMENTS;
+		$multi_result = ($flags & Creole::MYSQL_CLIENT_MULTI_RESULTS) === Creole::MYSQL_CLIENT_MULTI_RESULTS;
+		$connect_flags = ($multi_statement ? Creole::MYSQL_CLIENT_MULTI_STATEMENTS : 0) |
+							($multi_result ? Creole::MYSQL_CLIENT_MULTI_RESULTS : 0);
 
         if (isset($dsninfo['protocol']) && $dsninfo['protocol'] == 'unix') {
             $dbhost = ':' . $dsninfo['socket'];
@@ -69,15 +73,15 @@ class MySQLConnection extends ConnectionCommon implements Connection {
         $user = $dsninfo['username'];
         $pw = $dsninfo['password'];
 
-        $connect_function = $persistent ? 'mysql_pconnect' : 'mysql_connect';
+		$encoding = !empty($dsninfo['encoding']) ? $dsninfo['encoding'] : null;
 
         @ini_set('track_errors', true);
         if ($dbhost && $user && $pw) {
-            $conn = @$connect_function($dbhost, $user, $pw);
+            $conn = $persistent ? mysql_pconnect($dbhost, $user, $pw, $connect_flags) : mysql_connect($dbhost, $user, $pw, null, $connect_flags);
         } elseif ($dbhost && $user) {
-            $conn = @$connect_function($dbhost, $user);
+            $conn = $persistent ? mysql_pconnect($dbhost, $user, null, $connect_flags) : mysql_connect($dbhost, $user, null, null, $connect_flags);
         } elseif ($dbhost) {
-            $conn = @$connect_function($dbhost);
+            $conn = $persistent ? mysql_pconnect($dbhost, null, null, $connect_flags) : mysql_connect($dbhost, null, null, null, $connect_flags);
         } else {
             $conn = false;
         }
@@ -85,9 +89,10 @@ class MySQLConnection extends ConnectionCommon implements Connection {
         if (empty($conn)) {
             if (($err = @mysql_error()) != '') {
                 throw new SQLException("connect failed", $err);
+            } elseif (empty($php_errormsg)) {
+                throw new SQLException("connect failed");
             } else {
-                $err = error_get_last(); $err = $err['message'];
-                throw new SQLException("connect failed", $err['message']);
+                throw new SQLException("connect failed", $php_errormsg);
             }
         }
 
@@ -113,7 +118,10 @@ class MySQLConnection extends ConnectionCommon implements Connection {
 
         $this->dblink = $conn;
 
+        if ($encoding) {
+			$this->executeUpdate("SET NAMES " . $encoding);
     }
+    }    
 
     /**
      * @see Connection::getDatabaseInfo()
@@ -244,10 +252,15 @@ class MySQLConnection extends ConnectionCommon implements Connection {
                  throw new SQLException('No database selected', mysql_error($this->dblink));
             }
         }
+        
         $result = @mysql_query('COMMIT', $this->dblink);
+        if (!$result) {
+            throw new SQLException('Could not commit transaction', mysql_error($this->dblink));                
+        }
+        
         $result = @mysql_query('SET AUTOCOMMIT=1', $this->dblink);
         if (!$result) {
-            throw new SQLException('Can not commit transaction', mysql_error($this->dblink));
+            throw new SQLException('Could not set AUTOCOMMIT', mysql_error($this->dblink));                
         }
     }
 
@@ -263,11 +276,16 @@ class MySQLConnection extends ConnectionCommon implements Connection {
                 throw new SQLException('No database selected', mysql_error($this->dblink));
             }
         }
+        
         $result = @mysql_query('ROLLBACK', $this->dblink);
-        $result = @mysql_query('SET AUTOCOMMIT=1', $this->dblink);
         if (!$result) {
             throw new SQLException('Could not rollback transaction', mysql_error($this->dblink));
         }
+        
+        $result = @mysql_query('SET AUTOCOMMIT=1', $this->dblink);
+        if (!$result) {
+            throw new SQLException('Could not set AUTOCOMMIT', mysql_error($this->dblink));
+    }
     }
 
     /**
@@ -281,4 +299,55 @@ class MySQLConnection extends ConnectionCommon implements Connection {
         return (int) @mysql_affected_rows($this->dblink);
     }
 
+    /**
+     * Checks if the current connection supports savepoints
+     * 
+     * @return bool Does the connection support savepoints
+     * @todo This should check the version of the server to see if it supports savepoints
+     */
+    protected function supportsSavepoints()
+    {
+    	return true;
+}    
+    /**
+     * Creates a new savepoint
+     *
+     * @param string $identifier Name of the savepoint to create
+     * @see ConnectionCommon::setSavepoint()
+     */
+    protected function setSavepoint( $identifier )
+    {
+        $result = @mysql_query("savepoint ".$identifier, $this->dblink);
+        if (!$result) {
+            throw new SQLException('Could not begin transaction', mysql_error($this->dblink));
+        }
+    }
+    
+    /**
+     * Releases a savepoint
+     *
+     * @param string $identifier Name of the savepoint to release
+     * @see ConnectionCommon::releaseSavepoint()
+     */
+    protected function releaseSavepoint( $identifier )
+    {
+        $result = @mysql_query("release savepoint ".$identifier, $this->dblink);
+        if (!$result) {
+            throw new SQLException('Could not begin transaction', mysql_error($this->dblink));
+        }
+    }
+    
+    /**
+     * Rollback changes to a savepoint
+     *
+     * @param string $identifier Name of the savepoint to rollback to
+     * @see ConnectionCommon::rollbackToSavepoint()
+     */
+    protected function rollbackToSavepoint( $identifier )
+    {
+        $result = @mysql_query("rollback to savepoint ".$identifier, $this->dblink);
+        if (!$result) {
+            throw new SQLException('Could not begin transaction', mysql_error($this->dblink));
+        }
+    }
 }

@@ -39,7 +39,8 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
         include_once 'creole/drivers/pgsql/metadata/PgSQLTableInfo.php';
         
         // Get Database Version
-        $result = pg_exec ($this->conn->getResource(), "SELECT version() as ver");
+	// TODO: www.php.net/pg_version
+        $result = pg_query ($this->conn->getResource(), "SELECT version() as ver");
         
         if (!$result)
         {
@@ -54,14 +55,13 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
         pg_free_result ($result);
         $result = null;
 
-        $result = pg_exec($this->conn->getResource(), "SELECT oid, relname FROM pg_class
-										WHERE relkind = 'r' AND relnamespace = (SELECT oid
-										FROM pg_namespace
-										WHERE
-										     nspname NOT IN ('information_schema','pg_catalog')
-										     AND nspname NOT LIKE 'pg_temp%'
-										     AND nspname NOT LIKE 'pg_toast%'
-										LIMIT 1)
+        $result = pg_query($this->conn->getResource(), "SELECT c.oid, 
+														case when n.nspname='public' then c.relname else n.nspname||'.'||c.relname end as relname 
+														FROM pg_class c join pg_namespace n on (c.relnamespace=n.oid)
+														WHERE c.relkind = 'r'
+														  AND n.nspname NOT IN ('information_schema','pg_catalog')
+														  AND n.nspname NOT LIKE 'pg_temp%'
+														  AND n.nspname NOT LIKE 'pg_toast%'
 										ORDER BY relname");
 
         if (!$result) {
@@ -86,14 +86,13 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
      
 	 	$this->sequences = array();
 		   
-        $result = pg_exec($this->conn->getResource(), "SELECT oid, relname FROM pg_class
-										WHERE relkind = 'S' AND relnamespace = (SELECT oid
-										FROM pg_namespace
-										WHERE
-										     nspname NOT IN ('information_schema','pg_catalog')
-										     AND nspname NOT LIKE 'pg_temp%'
-										     AND nspname NOT LIKE 'pg_toast%'
-										LIMIT 1)
+        $result = pg_query($this->conn->getResource(), "SELECT c.oid, 
+														case when n.nspname='public' then c.relname else n.nspname||'.'||c.relname end as relname 
+														FROM pg_class c join pg_namespace n on (c.relnamespace=n.oid)
+														WHERE c.relkind = 'S'
+														  AND n.nspname NOT IN ('information_schema','pg_catalog')
+														  AND n.nspname NOT LIKE 'pg_temp%'
+														  AND n.nspname NOT LIKE 'pg_toast%'
 										ORDER BY relname");
 
         if (!$result) {

@@ -93,8 +93,8 @@ class ODBCPreparedStatement extends PreparedStatementCommon implements PreparedS
             @odbc_free_result($stmt);
             throw new SQLException('Could not execute query', $this->conn->nativeError(), $sql);
         }
-
-        return $this->conn->createResultSet(new ODBCResultResource($stmt), $fetchmode);
+        $this->odbcresult = new ODBCResultResource($stmt);
+        return $this->conn->createResultSet($this->odbcresult, $fetchmode);
     }
 
     /**
@@ -124,6 +124,8 @@ class ODBCPreparedStatement extends PreparedStatementCommon implements PreparedS
             for($i=0,$cnt=count($params); $i < $cnt; $i++) {
                 $this->set($i+1, $params[$i]);
             }
+        } else {
+            $params = null;
         }
         
         $sql = $this->replaceParams();

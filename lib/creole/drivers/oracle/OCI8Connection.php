@@ -76,6 +76,8 @@ class OCI8Connection extends ConnectionCommon implements Connection
 									? 'oci_pconnect'
 									: 'oci_connect';
 
+		$encoding = !empty($dsninfo['encoding']) ? $dsninfo['encoding'] : null;
+		
 		@ini_set( 'track_errors', true );
 		
 		if ( $hostspec && $port )
@@ -85,16 +87,16 @@ class OCI8Connection extends ConnectionCommon implements Connection
 
         if ( $db && $hostspec && $user && $pw )
 	{
-			$conn				= @$connect_function( $user, $pw, "//$hostspec/$db" );
+			$conn				= @$connect_function( $user, $pw, "//$hostspec/$db", $encoding);
 	}
         elseif ( $hostspec && $user && $pw )
 		{
-			$conn				= @$connect_function( $user, $pw, $hostspec );
+			$conn				= @$connect_function( $user, $pw, $hostspec, $encoding );
         }
 		
 		elseif ( $user || $pw )
 		{
-			$conn				= @$connect_function( $user, $pw );
+			$conn				= @$connect_function( $user, $pw, null, $encoding );
         }
 		
 		else
@@ -120,6 +122,8 @@ class OCI8Connection extends ConnectionCommon implements Connection
         //please note, if this is changed, the function setTimestamp and setDate in OCI8PreparedStatement.php
         //must be changed to match
         $sql = "ALTER SESSION SET NLS_DATE_FORMAT='YYYY-MM-DD HH24:MI:SS'";
+        $this->executeQuery($sql);
+        $sql = "ALTER SESSION SET NLS_TIMESTAMP_FORMAT='YYYY-MM-DD HH24:MI:SS'";
         $this->executeQuery($sql);
     }
 
@@ -184,7 +188,7 @@ class OCI8Connection extends ConnectionCommon implements Connection
 			);
         }
                 
-        $success				= oci_execute( $statement, $this->execMode );
+        $success = @oci_execute( $statement, $this->execMode );
 
         if ( ! $success )
 		{

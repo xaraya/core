@@ -64,8 +64,8 @@ abstract class CreoleTypes {
                 self::BIGINT => 'String',
                 self::CHAR => 'String',
                 self::DATE => 'Date',
-                self::DOUBLE => 'Float',
-                self::FLOAT => 'Float',
+                self::DOUBLE => 'String',
+                self::FLOAT => 'String',
                 self::INTEGER => 'Int',
                 self::SMALLINT => 'Int',
                 self::TINYINT => 'Int',
@@ -73,12 +73,12 @@ abstract class CreoleTypes {
                 self::TIMESTAMP => 'Timestamp',
                 self::VARCHAR => 'String',                
                 self::VARBINARY => 'Blob',
-                self::NUMERIC => 'Float',
+                self::NUMERIC => 'String',
                 self::BLOB => 'Blob',
                 self::CLOB => 'Clob',
                 self::LONGVARCHAR => 'String',
-                self::DECIMAL => 'Float',
-                self::REAL => 'Float',
+                self::DECIMAL => 'String',
+                self::REAL => 'String',
                 self::BINARY => 'Blob',
                 self::LONGVARBINARY => 'Blob',
                 self::YEAR => 'Int',
@@ -121,8 +121,8 @@ abstract class CreoleTypes {
          * @param string $nativeType DB native type (e.g. 'TEXT', 'byetea', etc.).
          * @return int Creole native type (e.g. Types::LONGVARCHAR, Types::BINARY, etc.).
          */
-        public static function getType($nativeType) {
-        	throw new Exception('This method must be overridden in subclasses!'); // abstract static not allowed since PHP 5.2
+        static function getType($nativeType) {
+            throw new SQLException('CreoleTypes::getType() should not be called directly');
         }
         
         /**
@@ -132,8 +132,8 @@ abstract class CreoleTypes {
          * native type will be returned.
          * @return string Native type string.
          */
-        public static function getNativeType($creoleType) {
-        	 throw new Exception('This method must be overridden in subclasses!'); // abstract static not allowed since PHP 5.2
+        static function getNativeType($creoleType) {
+            throw new SQLException('CreoleTypes::getNativeType() should not be called directly');
         }
         
         /**

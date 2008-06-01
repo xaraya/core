@@ -80,8 +80,12 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
 
         if ($file != ':memory:') {
             if (!file_exists($file)) {
-                touch($file);
+                if( !@touch($file) ) {
+                    throw new SQLException("Unable to create SQLite database.  Check parent folder permissions.");
+                }
+                
                 chmod($file, $mode);
+                
                 if (!file_exists($file)) {
                     throw new SQLException("Unable to create SQLite database.");
                 }

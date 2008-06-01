@@ -25,69 +25,23 @@ require_once 'creole/common/ResultSetCommon.php';
 /**
  * MSSQL implementation of ResultSet.
  *
- * MS SQL does not support LIMIT or OFFSET natively so the methods
- * in here need to perform some adjustments and extra checking to make sure
- * that this behaves the same as RDBMS drivers using native OFFSET/LIMIT.
+ * MS SQL does not support LIMIT or OFFSET natively, but
+ * the connection overrides applyLimit to handle this with SQL
+ * manipulation.
  * 
  * @author    Hans Lellelid <hans@xmpl.org>
  * @version   $Revision: 1.21 $
  * @package   creole.drivers.mssql
  */
 class MSSQLResultSet extends ResultSetCommon implements ResultSet {    
-    
-    /**
-     * Offset at which to start reading rows.
-     * @var int
-     */
-    private $offset = 0;
-    
-    /**
-     * Maximum rows to retrieve, or 0 if all.
-     * @var int
-     */
-    private $limit = 0;   
-    
-    /**
-     * This MSSQL-only function exists to set offset after ResultSet is instantiated.
-     * This function should be "protected" in Java sense: only available to classes in package.
-     * THIS METHOD SHOULD NOT BE CALLED BY ANYTHING EXCEPTION DRIVER CLASSES.
-     * @param int $offset New offset.  If great than 0, then seek(0) will be called to move cursor.
-     * @access protected
-     */
-    public function _setOffset($offset)
-    {
-        $this->offset = $offset;
-        if ($offset > 0) {
-            $this->seek(0);  // 0 becomes $offset by seek() method
-        }
-    }
-    
-    /**
-     * This MSSQL-only function exists to set limit after ResultSet is instantiated.
-     * This function should be "protected" in Java sense: only available to classes in package.
-     * THIS METHOD SHOULD NOT BE CALLED BY ANYTHING EXCEPTION DRIVER CLASSES.
-     * @param int $limit New limit.
-     * @access protected
-     */
-    public function _setLimit($limit)
-    {
-        $this->limit = $limit;
-    }
-    
     /**
      * @see ResultSet::seek()
      */ 
     function seek($rownum)
     {
         // support emulated OFFSET
-        $actual = $rownum + $this->offset;
+        $actual = $rownum; // + $this->offset;
         
-        if (($this->limit > 0 && $rownum >= $this->limit) || $rownum < 0) {
-                    // have to check for rownum < 0, because mssql_seek() won't
-                    // complain if the $actual is valid.
-            return false;
-        }
-                
         // MSSQL rows start w/ 0, but this works, because we are
         // looking to move the position _before_ the next desired position
          if (!@mssql_data_seek($this->result, $actual)) {
@@ -103,17 +57,15 @@ class MSSQLResultSet extends ResultSetCommon implements ResultSet {
      */
     function next()
     {
-        // support emulated LIMIT
-        if ( $this->limit > 0 && ($this->cursorPos >= $this->limit) ) {
-            $this->afterLast();
-            return false;
+        if ($this->fetchmode === ResultSet::FETCHMODE_ASSOC) {
+            $this->fields = mssql_fetch_assoc($this->result);
+        } else {
+            $this->fields = mssql_fetch_row($this->result);
         }
         
-        $this->fields = mssql_fetch_array($this->result, $this->fetchmode);        
-                
         if (!$this->fields) {
             if ($errmsg = mssql_get_last_message()) {
-                throw new SQLWarning("Error fetching result", $errmsg);
+                throw new SQLException("Error fetching result", $errmsg);
              } else {
                 // We've advanced beyond end of recordset.
                 $this->afterLast();
@@ -139,11 +91,41 @@ class MSSQLResultSet extends ResultSetCommon implements ResultSet {
         if ($rows === null) {
             throw new SQLException('Error getting record count', mssql_get_last_message());
         }
-        // adjust count based on emulated LIMIT/OFFSET
-        $rows -= $this->offset;
-        return ($this->limit > 0 && $rows > $this->limit ? $this->limit : $rows);
+        return $rows;
     }
 
+    
+    
+    /**
+     * @see ResultSet::getTime()
+     */
+    public function getTime($column, $format = '%X') 
+    {
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$idx] === null) { return null; }
+        
+        $fvalue = $this->fields[$idx];
+        
+        // msssql uses the below date to pad its date values since it doesn't
+        // have a time-only field type
+        $fvalue = str_replace('1900-01-01 ', '', $fvalue);
+        
+        $ts = strtotime($fvalue);
+        
+        if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
+            throw new SQLException("Unable to convert value at column " . (is_int($column) ? $column + 1 : $column) . " to timestamp: " . $this->fields[$idx]);
+        }
+        if ($format === null) {
+            return $ts;
+        }        
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $ts);
+        } else {
+            return date($format, $ts);
+        }        
+    }
+    
     /**
      * @see ResultSet::close()
      */ 

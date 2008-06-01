@@ -19,7 +19,7 @@
  * <http://creole.phpdb.org>.
  */
 
-require_once 'creole/metadata/DatabaseInfo.php';
+require_once 'creole/drivers/mysql/metadata/MySQLDatabaseInfoBase.php';
 
 /**
  * MySQL implementation of DatabaseInfo.
@@ -28,39 +28,25 @@ require_once 'creole/metadata/DatabaseInfo.php';
  * @version   $Revision: 1.13 $
  * @package   creole.drivers.mysql.metadata
  */
-class MySQLDatabaseInfo extends DatabaseInfo {
+class MySQLDatabaseInfo extends MySQLDatabaseInfoBase {
 
-    /**
-     * @throws SQLException
-     * @return void
-     */
-    protected function initTables()
-    {
-        include_once 'creole/drivers/mysql/metadata/MySQLTableInfo.php';		
-																		// using $this->dblink was causing tests to break
-																		// perhaps dblink is changed by another test ... ?
-        $result = @mysql_query("SHOW TABLES FROM `" . $this->dbname . "`", $this->conn->getResource());
+    protected $driverName = 'mysql';
 
-        if (!$result) {
-            throw new SQLException("Could not list tables", mysql_error($this->conn->getResource()));
+    protected $tableClassName = 'MySQLTableInfo';
+    
+    function sqlQuery( $sql ) {
+        return @mysql_query( $sql, $this->conn->getResource());   
         }
 
-        while ($row = mysql_fetch_row($result)) {
-            $this->tables[strtoupper($row[0])] = new MySQLTableInfo($this, $row[0]);
+    function fetchRow($result) {
+        return mysql_fetch_row($result);
         }
 		
-		$this->tablesLoaded = true;
-		
+    function fetchAssoc($result) {
+        return mysql_fetch_assoc($result);
     }
 
-    /**
-     * MySQL does not support sequences.
-     *
-     * @return void
-     * @throws SQLException
-     */
-    protected function initSequences()
-    {
-        // throw new SQLException("MySQL does not support sequences natively.");
+    function selectDb($dbName) {
+        return @mysql_select_db($dbName, $this->conn->getResource());
     }
 }

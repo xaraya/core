@@ -76,7 +76,16 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet {
             }
         }
         
-        $this->parseFields();
+        // strip out the table part of the field names so we get
+        // just the column part
+        $keys = array_keys($this->fields);
+        foreach( $keys as $key ) {
+            if( ($pos = strpos($key, '.')) !== false ) {
+                $newkey = substr($key, $pos + 1 );
+                $this->fields[$newkey] = $this->fields[$key];
+                unset($this->fields[$key]);
+            }
+        }
         
         // Advance cursor position
         $this->cursorPos++;
@@ -101,9 +110,9 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet {
      */
     public function getBlob($column) 
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
-        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$column] === null) { return null; }
+        $idx = (is_int($column) ? $column - 1 : $column);
+        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$idx] === null) { return null; }
         require_once 'creole/util/Blob.php';
         $b = new Blob();
         $b->setContents(sqlite_udf_decode_binary($this->fields[$idx]));

@@ -75,6 +75,12 @@ class Creole {
     const COMPAT_ALL = 96;
 
     /**
+	 * MySQL connection flags to explicitly set multiple statement/result support
+	 */
+	const MYSQL_CLIENT_MULTI_STATEMENTS = 65536;
+	const MYSQL_CLIENT_MULTI_RESULTS = 131072;
+
+    /**
      * Map of built-in drivers.
      * Change or add your own using registerDriver()
      * @see registerDriver()
@@ -86,7 +92,10 @@ class Creole {
                                         'sqlite' => 'creole.drivers.sqlite.SQLiteConnection',
                                         'oracle' => 'creole.drivers.oracle.OCI8Connection',
                                         'mssql' => 'creole.drivers.mssql.MSSQLConnection',
-                                        'odbc' => 'creole.drivers.odbc.ODBCConnection'
+                                        'odbc' => 'creole.drivers.odbc.ODBCConnection',
+                                        'pdosqlite' => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
+                                        'pdosqlite2' => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
+                                        'sqlite3' => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
                                        );
 
     /**
@@ -177,10 +186,14 @@ class Creole {
         }
 
         // gather any flags from the DSN
-        if (!empty($dsninfo['persistent'])) $flags |= Creole::PERSISTENT;
-        if (!empty($dsninfo['compat_assoc_lower'])) $flags |= Creole::COMPAT_ASSOC_LOWER;
-        if (!empty($dsninfo['compat_rtrim_string'])) $flags |= Creole::COMPAT_RTRIM_STRING;
-        if (!empty($dsninfo['compat_all'])) $flags |= Creole::COMPAT_ALL;
+		if ( isset ( $dsninfo['persistent'] ) && ! empty ( $dsninfo['persistent'] ) )
+			$flags |= Creole::PERSISTENT;
+		if ( isset ( $dsninfo['compat_assoc_lower'] ) && ! empty ( $dsninfo['compat_assoc_lower'] ) )
+			$flags |= Creole::COMPAT_ASSOC_LOWER;
+		if ( isset ( $dsninfo['compat_rtrim_string'] ) && ! empty ( $dsninfo['compat_rtrim_string'] ) )
+			$flags |= Creole::COMPAT_RTRIM_STRING;
+		if ( isset ( $dsninfo['compat_all'] ) && ! empty ( $dsninfo['compat_all'] ) )
+			$flags |= Creole::COMPAT_ALL;
 
         if ($flags & Creole::NO_ASSOC_LOWER) {
             trigger_error("The Creole::NO_ASSOC_LOWER flag has been deprecated, and is now the default behavior. Use Creole::COMPAT_ASSOC_LOWER to lowercase resulset keys.", E_USER_WARNING);
@@ -264,11 +277,11 @@ class Creole {
      *
      * The format of the supplied DSN is in its fullest form:
      *
-     *  phptype://username:password@protocol+hostspec/database
+     *  phptype://username:password@hostspec/database
      *
      * Most variations are allowed:
      *
-     *  phptype://username:password@protocol+hostspec:110//usr/db_file.db
+     *  phptype://username:password@protocol(hostspec:110)//usr/db_file.db
      *  phptype://username:password@hostspec/database_name
      *  phptype://username:password@hostspec
      *  phptype://username@hostspec
@@ -296,37 +309,51 @@ class Creole {
             'database' => null
         );
 
-        $info = parse_url($dsn);
+		$preg_query = "!^(([a-z0-9]+)(\(([^()]+)\))?)(://((((([^@/:]+)(:([^@/]+))?)@)?((([a-z]+)\((([^?():]+)(:([^()?]+))?)\))|((([^/?:]+)(:([^/?]+))?))))/?)?([^?]+)?(\?(.+))?)?$!i";
 
-        if (count($info) === 1) { // if there's only one element in result, then it must be the phptype
-            $parsed['phptype'] = array_pop($info);
-            return $parsed;
+		$info = array();
+
+		if (preg_match($preg_query,$dsn,$info)) { // only if it is matching
+
+			$parsed['phptype'] = @$info[2]; // Group 2 should always exist.
+
+			// Don't know what to do with Group 4: phptype(xx) should => check first if available
+
+			if (isset($info[5])) { // There is more than just the phptype
+
+				if (strlen($info[10]) > 0) { // There is a username specified
+					$parsed['username'] = @$info[10];
         }
 
-        // some values can be copied directly
-        $parsed['phptype'] = @$info['scheme'];
-        $parsed['username'] = @$info['user'];
-        $parsed['password'] = @$info['pass'];
-        $parsed['port'] = @$info['port'];
+				if (strlen($info[12]) > 0) { // There is a password specified
+					$parsed['password'] = @$info[12];
+				}
 
-        $host = @$info['host'];
-        if (false !== ($pluspos = strpos($host, '+'))) {
-            $parsed['protocol'] = substr($host,0,$pluspos);
-            if ($parsed['protocol'] === 'unix') {
-                $parsed['socket'] = substr($host,$pluspos+1);
+				if (strlen($info[15]) > 0) { // There is a protocol specified: protocol(hostspec)
+					$parsed['protocol'] = @$info[15];
+
+					if ($parsed["protocol"] === "unix") {
+						$parsed['socket'] = @$info[16];
             } else {
-                $parsed['hostspec'] = substr($host,$pluspos+1);
+						$parsed["hostspec"] = @$info[17];
+						if (strlen($info[19]) > 0) {
+							$parsed["port"] = @$info[19];
             }
-        } else {
-            $parsed['hostspec'] = $host;
         }
+				} elseif (strlen($info[20]) > 0) {
+					$parsed["hostspec"] = @$info[22];
 
-        if (isset($info['path'])) {
-            $parsed['database'] = substr($info['path'], 1); // remove first char, which is '/'
+					if ((isset($info[24]) && (strlen($info[24]) > 0))) { // There is a port set (not always available)
+						$parsed["port"] = @$info[24];
         }
+				}
 
-        if (isset($info['query'])) {
-                $opts = explode('&', $info['query']);
+				if ((isset($info[25])) && (strlen($info[25]) > 0)) { // There is a database
+					$parsed["database"] = @$info[25];
+				}
+
+				if ((isset($info[27])) && (strlen($info[27]) >0)) { // There is a query
+					$opts = explode('&', $info[27]);
                 foreach ($opts as $opt) {
                     list($key, $value) = explode('=', $opt);
                     if (!isset($parsed[$key])) { // don't allow params overwrite
@@ -334,6 +361,9 @@ class Creole {
                     }
                 }
         }
+
+			}
+		}
 
         return $parsed;
     }
@@ -348,22 +378,25 @@ class Creole {
      *                      - if after loading file class still does not exist
      */
     public static function import($class) {
-        if (!class_exists($class, false)) {
+        $pos = strrpos($class, '.');
+        // get just classname ('path.to.ClassName' -> 'ClassName')
+        if ($pos !== false) {
+            $classname = substr($class, $pos + 1);
+        } else {
+          $classname = $class;
+        }
+        
+        if (!class_exists($classname, false)) {
             $path = strtr($class, '.', DIRECTORY_SEPARATOR) . '.php';
-            $ret = include_once($path);
+            $ret = @include_once($path);
             if ($ret === false) {
                 throw new SQLException("Unable to load driver class: " . $class);
             }
-            // get just classname ('path.to.ClassName' -> 'ClassName')
-            $pos = strrpos($class, '.');
-            if ($pos !== false) {
-                $class = substr($class, $pos + 1);
+            if (!class_exists($classname)) {
+                throw new SQLException("Unable to find loaded class: $classname (Hint: make sure classname matches filename)");
             }
-            if (!class_exists($class)) {
-                throw new SQLException("Unable to find loaded class: $class (Hint: make sure classname matches filename)");
             }
+        return $classname;
         }
-        return $class;
-    }
 
 }

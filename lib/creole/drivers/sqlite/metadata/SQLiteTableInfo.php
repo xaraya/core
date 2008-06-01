@@ -30,6 +30,34 @@ require_once 'creole/metadata/TableInfo.php';
  */
 class SQLiteTableInfo extends TableInfo {
     
+    protected $resource;
+    
+    protected $i2resource;
+    
+    protected function prepTable() {
+        $sql = "PRAGMA table_info('".$this->name."')";
+                
+        $this->resource = sqlite_query($this->conn->getResource(), $sql);
+    }
+    
+    protected function getRow() {
+        return sqlite_fetch_array($this->resource, SQLITE_ASSOC);
+    }
+    
+    protected function prepIndex1() {
+        $sql = "PRAGMA index_list('".$this->name."')";
+                
+        $this->resource = sqlite_query($this->conn->getResource(), $sql);
+    }
+    
+    protected function prepIndex2($name) {
+        $this->i2resource = sqlite_query($this->conn->getResource(), "PRAGMA index_info('$name')");
+    }
+    
+    protected function getI2Row() {
+        return sqlite_fetch_array($this->i2resource, SQLITE_ASSOC);
+    }
+    
     /** Loads the columns for this table. */
     protected function initColumns() 
     {
@@ -42,21 +70,20 @@ class SQLiteTableInfo extends TableInfo {
         // two separate queries.  The first gets names and default values
         // the second will fill in some more details.
         
-        $sql = "PRAGMA table_info('".$this->name."')";
+        $this->prepTable();
                 
-        $res = sqlite_query($this->conn->getResource(), $sql);
-        
-        
-        while($row = sqlite_fetch_array($res, SQLITE_ASSOC)) {
+        while($row = $this->getRow()) {
         
             $name = $row['name'];
             
             $fulltype = $row['type'];            
             $size = null;
+            $precision = null;
             $scale = null;
+            
             if (preg_match('/^([^\(]+)\(\s*(\d+)\s*,\s*(\d+)\s*\)$/', $fulltype, $matches)) {
                 $type = $matches[1];
-                $size = $matches[2];
+                $precision = $matches[2];
                 $scale = $matches[3]; // aka precision    
             } elseif (preg_match('/^([^\(]+)\(\s*(\d+)\s*\)$/', $fulltype, $matches)) {
                 $type = $matches[1];
@@ -72,9 +99,13 @@ class SQLiteTableInfo extends TableInfo {
             
             $default_val = $row['dflt_value'];
             
-            $this->columns[$name] = new ColumnInfo($this, $name, SQLiteTypes::getType($type), $type, $size, $scale, $is_nullable, $default_val, $is_auto_increment);
-            
+            $this->columns[$name] = new ColumnInfo($this, $name, SQLiteTypes::getType($type), $type, $size, $precision, $scale, $is_nullable, $default_val, $is_auto_increment);
+            if( $this->name == 'products' && $name == 'ProductID' ) {
+                //sa( $row );
+                //sa( $type)
+            }
             if (($row['pk'] == 1) || (strtolower($type) == 'integer primary key')) {
+                //dsa( 'here' );
                 if ($this->primaryKey === null) {
                     $this->primaryKey = new PrimaryKeyInfo($name);
                 }
@@ -103,16 +134,15 @@ class SQLiteTableInfo extends TableInfo {
         // columns have to be loaded first
         if (!$this->colsLoaded) $this->initColumns();        
 
-        $sql = "PRAGMA index_list('".$this->name."')";
-        $res = sqlite_query($this->conn->getResource(), $sql);
+        $this->prepIndex1();
         
-        while($row = sqlite_fetch_array($res, SQLITE_ASSOC)) {        
+        while($row = $this->getRow()) {
             $name = $row['name'];
             $this->indexes[$name] = new IndexInfo($name);
             
             // get columns for that index
-            $res2 = sqlite_query($this->conn->getResource(), "PRAGMA index_info('$name')");
-            while($row2 = sqlite_fetch_array($res2, SQLITE_ASSOC)) {
+            $this->prepIndex2($name);
+            while($row2 = $this->getI2Row()) {
                 $colname = $row2['name'];
                 $this->indexes[$name]->addColumn($this->columns[ $colname ]);
             }

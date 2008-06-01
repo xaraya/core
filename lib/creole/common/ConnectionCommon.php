@@ -47,6 +47,12 @@ abstract class ConnectionCommon {
     protected $transactionOpcount = 0;
 
     /**
+     * Stack of savepoint names used for nested transaction emulation.
+     * @var array
+     */
+    protected $nestedTransactionSavepoints = array();
+    
+    /**
      * DB connection resource id.
      * @var resource
      */
@@ -163,6 +169,10 @@ abstract class ConnectionCommon {
     {
         if ($this->transactionOpcount === 0 || $this->supportsNestedTrans()) {
             $this->beginTrans();
+        } elseif ($this->supportsSavepoints()) {
+        	$savepointIdentifier = "creole_savepoint_".count($this->nestedTransactionSavepoints);
+        	$this->nestedTransactionSavepoints[] = $savepointIdentifier;
+        	$this->setSavepoint( $savepointIdentifier );
         }
         $this->transactionOpcount++;
         xarLogMessage("DB: starting transaction [".$this->transactionOpcount."]");
@@ -176,9 +186,11 @@ abstract class ConnectionCommon {
         if ($this->transactionOpcount > 0) {
             if ($this->transactionOpcount == 1 || $this->supportsNestedTrans()) {
                 $this->commitTrans();
-                xarLogMessage("DB: committed transaction [".$this->transactionOpcount."]");
-            } else {
-                xarLogMessage("DB: postponing commit of transaction [".$this->transactionOpcount."]");
+				xarLogMessage("DB: committed transaction [".$this->transactionOpcount."]");
+            } elseif ($this->supportsSavepoints()) {
+            	$savepointIdentifier = array_pop( $this->nestedTransactionSavepoints );
+            	$this->releaseSavepoint( $savepointIdentifier );
+			    xarLogMessage("DB: releasing savepoint of transaction [".$this->transactionOpcount."]");
             }
             $this->transactionOpcount--;
         }
@@ -192,12 +204,57 @@ abstract class ConnectionCommon {
         if ($this->transactionOpcount > 0) {
             if ($this->transactionOpcount == 1 || $this->supportsNestedTrans()) {
                 $this->rollbackTrans();
-                xarLogMessage("DB: Rolled back transaction [".$this->transactionOpcount."]");
+            } elseif ($this->supportsSavepoints()) {
+            	$savepointIdentifier = array_pop( $this->nestedTransactionSavepoints );
+            	$this->rollbackToSavepoint( $savepointIdentifier );
+				xarLogMessage("DB: Rolled back transaction [".$this->transactionOpcount."]");
             }
             $this->transactionOpcount--;
         }
     }
 
+    /**
+     * Checks if the current connection supports savepoints
+     * 
+     * Driver classes should override this if they support savepoints.
+     * 
+     * @return bool Does the connection support savepoints
+     */
+    protected function supportsSavepoints()
+    {
+    	return false;
+    }    
+
+    /**
+     * Creates a new savepoint
+     *
+     * @param string $identifier Name of the savepoint to create
+     */
+    protected function setSavepoint( $identifier )
+    {
+    	throw new SQLException('This database driver doesn\'t support savepoints');
+    }
+    
+    /**
+     * Releases a savepoint
+     *
+     * @param string $identifier Name of the savepoint to release
+     */
+    protected function releaseSavepoint( $identifier )
+    {
+    	throw new SQLException('This database driver doesn\'t support savepoints');
+    }
+    
+    /**
+     * Rollback changes to a savepoint
+     *
+     * @param string $identifier Name of the savepoint to rollback to
+     */
+    protected function rollbackToSavepoint( $identifier )
+    {
+    	throw new SQLException('This database driver doesn\'t support savepoints');
+    }
+    
     /**
      * Enable/disable automatic commits.
      *

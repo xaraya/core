@@ -44,7 +44,7 @@ class MSSQLTableInfo extends TableInfo {
             throw new SQLException('No database selected');
         }
          
-        $res = mssql_query("sp_columns ".$this->name, $this->conn->getResource());
+        $res = mssql_query("sp_columns '".$this->name."'", $this->conn->getResource());
         if (!$res) {
             throw new SQLException('Could not get column names', mssql_get_last_message());
         }
@@ -56,11 +56,12 @@ class MSSQLTableInfo extends TableInfo {
             $is_nullable = $row['NULLABLE'];
             $default = $row['COLUMN_DEF'];
             $precision = $row['PRECISION'];
+            $scale = $row['SCALE'];
 			$identity = false;
 			if (strtolower($type) == "int identity") {
 			    $identity = true;
 			}
-            $this->columns[$name] = new ColumnInfo($this, $name, MSSQLTypes::getType($type), $type, $length, $precision, $is_nullable, $default, $identity);
+            $this->columns[$name] = new ColumnInfo($this, $name, MSSQLTypes::getType($type), $type, $length, $precision, $scale, $is_nullable, $default, $identity);
         }
                 
         $this->colsLoaded = true;
@@ -127,7 +128,7 @@ class MSSQLTableInfo extends TableInfo {
                 if ($this->database->hasTable($ftbl)) {
                     $foreignTable = $this->database->getTable($ftbl);
                 } else {                
-                    $foreignTable = new TableInfo($ltbl);
+                    $foreignTable = new TableInfo($ftbl);
                     $this->database->addTable($foreignTable);
                 }
 

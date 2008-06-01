@@ -56,6 +56,8 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
      */
     function connect($dsninfo, $flags = 0)
     {
+        global $php_errormsg;
+                
         if (!extension_loaded('pgsql')) {
             throw new SQLException('pgsql extension not loaded');
         }
@@ -93,6 +95,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
             $connstr .= ' tty=' . $dsninfo['tty'];
         }
 
+        @ini_set('track_errors', true);
         if ($persistent) {
             $conn = @pg_pconnect($connstr);
         } else {
@@ -102,11 +105,16 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
         if (!$conn) {
 			// hide the password from connstr
 			$cleanconnstr = preg_replace('/password=\'.*?\'($|\s)/', 'password=\'*********\'', $connstr);
-			$err = error_get_last()
-            throw new SQLException('Could not connect', $err['message'], $cleanconnstr);
+            throw new SQLException('Could not connect', $php_errormsg, $cleanconnstr);
         }
+        @ini_restore('track_errors');
 
         $this->dblink = $conn;
+        
+        // set the schema search order
+        if( !empty( $dsninfo['schema'] ) ) {
+            $this->setSchemaSearchPath( $dsninfo['schema'] );   
+    }
     }
 
     /**
@@ -142,7 +150,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
         if (!$result) {
             throw new SQLException('Could not execute query', pg_last_error($this->dblink), $sql);
         }
-	$this->result_affected_rows = @pg_affected_rows($result);
+        $this->result_affected_rows = (int) @pg_affected_rows($result);
 
         return new PgSQLResultSet($this, $result, $fetchmode);
     }
@@ -168,7 +176,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
      */
     protected function beginTrans()
     {
-        $result = @pg_query($this->dblink, "begin");
+        $result = @pg_query($this->dblink, "BEGIN");
         if (!$result) {
             throw new SQLException('Could not begin transaction', pg_last_error($this->dblink));
         }
@@ -181,7 +189,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
      */
     protected function commitTrans()
     {
-        $result = @pg_query($this->dblink, "end");
+        $result = @pg_query($this->dblink, "COMMIT");
         if (!$result) {
             throw new SQLException('Could not commit transaction', pg_last_error($this->dblink));
         }
@@ -194,7 +202,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
      */
     protected function rollbackTrans()
     {
-        $result = @pg_query($this->dblink, "abort");
+        $result = @pg_query($this->dblink, "ROLLBACK");
         if (!$result) {
             throw new SQLException('Could not rollback transaction', pg_last_error($this->dblink));
         }
@@ -256,4 +264,62 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
         return new PgSQLStatement($this);
     }
 
+    /**
+     * Checks if the current connection supports savepoints
+     * 
+     * @return bool Does the connection support savepoints
+     * @todo This should check the version of the server to see if it supports savepoints
+     */
+    protected function supportsSavepoints()
+    {
+    	return true;
+}
+    
+    /**
+     * Creates a new savepoint
+     *
+     * @param string $identifier Name of the savepoint to create
+     * @see ConnectionCommon::setSavepoint()
+     */
+    protected function setSavepoint( $identifier )
+    {
+        $result = @pg_query($this->dblink, "savepoint ".$identifier);
+        if (!$result) {
+            throw new SQLException('Could not begin transaction', pg_last_error($this->dblink));
+        }
+    }
+    
+    /**
+     * Releases a savepoint
+     *
+     * @param string $identifier Name of the savepoint to release
+     * @see ConnectionCommon::releaseSavepoint()
+     */
+    protected function releaseSavepoint( $identifier )
+    {
+        $result = @pg_query($this->dblink, "release savepoint ".$identifier);
+        if (!$result) {
+            throw new SQLException('Could not begin transaction', pg_last_error($this->dblink));
+        }
+    }
+    
+    /**
+     * Rollback changes to a savepoint
+     *
+     * @param string $identifier Name of the savepoint to rollback to
+     * @see ConnectionCommon::rollbackToSavepoint()
+     */
+    protected function rollbackToSavepoint( $identifier )
+    {
+        $result = @pg_query($this->dblink, "rollback to savepoint ".$identifier);
+        if (!$result) {
+            throw new SQLException('Could not begin transaction', pg_last_error($this->dblink));
+        }
+    }
+    
+    public function setSchemaSearchPath( $searchPath ) {
+        $sql = "SET search_path TO $searchPath";
+        
+        return $this->executeUpdate( $sql );
+    }
 }

@@ -279,9 +279,22 @@ abstract class PreparedStatementCommon {
             if (!isset($this->boundInVars[$position + 1])) {
                 throw new SQLException('Replace params: undefined query param: ' . ($position + 1));
             }
+            
+            // The following section prevents float values getting sent with
+            // a ',' for the decimal separator when PHP locale settings would 
+            // indicate that is required
+            $param_value = $this->boundInVars[$position + 1];
+            $str_param_value = '';
+            if( is_float( $param_value ) ) {
+                $str_param_value .= $param_value;
+                $str_param_value = str_replace(',', '.', $str_param_value);
+            } else {
+                $str_param_value .= $param_value;
+            }
+            
             $current_position = $this->positions[$position];
             $sql .= substr($this->sql, $last_position, $current_position - $last_position);
-            $sql .= $this->boundInVars[$position + 1];
+            $sql .= $str_param_value;                    
             $last_position = $current_position + 1;
         }
         // append the rest of the query
@@ -317,11 +330,11 @@ abstract class PreparedStatementCommon {
             else $fetchmode = $p1;
         }
 
-        if ($params) {
-            for($i=0,$cnt=count($params); $i < $cnt; $i++) {
-                $this->set($i+1, $params[$i]);
+	    	foreach ( (array) $params as $i=>$param ) {
+			$this->set ( $i + 1, $param );
+			unset ( $i, $param );
             }
-        }
+		unset ( $params );
 
         $this->updateCount = null; // reset
         $sql = $this->replaceParams();
@@ -343,11 +356,11 @@ abstract class PreparedStatementCommon {
      */
     public function executeUpdate($params = null)
     {
-        if ($params) {
-            for($i=0,$cnt=count($params); $i < $cnt; $i++) {
-                $this->set($i+1, $params[$i]);
+		foreach ( (array) $params as $i=>$param ) {
+			$this->set ( $i + 1, $param );
+			unset ( $i, $param );
             }
-        }
+		unset ( $params );
 
         if($this->resultSet) $this->resultSet->close();
         $this->resultSet = null; // reset
@@ -399,13 +412,14 @@ abstract class PreparedStatementCommon {
         case 'double':
             $type = 'float';
             break;
-        // nice at a later date for large int handling?
-        //case 'gmp':
         }
-            $setter = 'set' . ucfirst($type); // PHP types are case-insensitive, but we'll do this in case that changes
-        $this->sql_cache_valid = false;
+		$setter = 'set' . ucfirst($type); // PHP types are case-insensitive, but we'll do this in case that change
+		if ( method_exists ( $this, $setter ) ) {
             $this->$setter($paramIndex, $value);
+		} else {
+			throw new SQLException ( "Unsupported datatype passed to set(): " . $type );
         }
+    }
     }
 
     /**
@@ -422,7 +436,8 @@ abstract class PreparedStatementCommon {
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
-            $this->boundInVars[$paramIndex] = "'" . $this->escape(serialize($value)) . "'";
+            $value = serialize( $value );
+            $this->setString( $paramIndex, $value );
         }
     }
 
@@ -493,7 +508,7 @@ abstract class PreparedStatementCommon {
         } else {
             if (is_numeric($value)) $value = date("Y-m-d", $value);
             elseif (is_object($value)) $value = date("Y-m-d", $value->getTime());
-            $this->boundInVars[$paramIndex] = "'" . $this->escape($value) . "'";
+            $this->setString( $paramIndex, $value );
         }
     }
 
@@ -615,7 +630,7 @@ abstract class PreparedStatementCommon {
             } elseif ( is_object ( $value ) ) {
                 $value = date ('H:i:s', $value->getTime ( ) );
             }
-            $this->boundInVars [ $paramIndex ] = "'" . $this->escape ( $value ) . "'";
+            $this->setString( $paramIndex, $value );
         }
     }
 
@@ -632,7 +647,7 @@ abstract class PreparedStatementCommon {
         } else {
             if (is_numeric($value)) $value = date('Y-m-d H:i:s', $value);
             elseif (is_object($value)) $value = date('Y-m-d H:i:s', $value->getTime());
-            $this->boundInVars[$paramIndex] = "'".$this->escape($value)."'";
+            $this->setString( $paramIndex, $value );
         }
     }
 
