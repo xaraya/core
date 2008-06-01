@@ -7,8 +7,9 @@
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @author Marcel van der Boom <marcel@hsdev.com>
- * @todo This design promotoes method growth instead of inheritance, change it (there should be a chain of classes, not a chain of methods)
- **/
+ * @todo This design promotes method growth instead of inheritance, change it 
+ *         (there should be a chain of classes, not a chain of methods)
+**/
 
 interface IExceptionHandlers
 {
