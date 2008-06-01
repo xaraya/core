@@ -44,8 +44,8 @@ function dynamicdata_init()
         $objectfields = array(
             'id' => array(
                 'type'        => 'integer',
+                'unsigned'     => true,
                 'null'        => false,
-                'default'     => '0',
                 'increment'   => true,
                 'primary_key' => true
             ),
@@ -66,8 +66,8 @@ function dynamicdata_init()
             /* the module this object relates to */
             'module_id' => array(
                 'type'        => 'integer',
-                'null'        => false,
-                'default'     => '0'
+                'unsigned'    => true,
+                'null'        => false
             ),
             /* the optional item type within this module */
             'itemtype' => array(
@@ -76,7 +76,7 @@ function dynamicdata_init()
                 'default'     => '0'
             ),
             /* the item type of the parent of this object */
-            'parent' => array(
+            'parent_id' => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
@@ -104,6 +104,7 @@ function dynamicdata_init()
             ),
             /* the highest item id for this object (used if the object has a dynamic item id field) */
             'maxid'    => array(
+                'unsigned'    => true,
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
@@ -116,6 +117,7 @@ function dynamicdata_init()
             'isalias'  => array(
                 'type'        => 'integer',
                 'size'        => 'tiny',
+                'unsigned'    => true,
                 'null'        => false,
                 'default'     => '1'
             ),
@@ -183,8 +185,8 @@ function dynamicdata_init()
         $propfields = array(
             'id'     => array(
                 'type'        => 'integer',
+                'unsigned'     => true,
                 'null'        => false,
-                'default'     => '0',
                 'increment'   => true,
                 'primary_key' => true
             ),
@@ -205,8 +207,8 @@ function dynamicdata_init()
             /* the object this property belong to */
             'object_id'   => array(
                 'type'        => 'integer',
-                'null'        => false,
-                'default'     => '0'
+                'unsigned'    => true,
+                'null'        => false
             ),
             /* the property type of this property */
             'type'       => array(
@@ -230,6 +232,8 @@ function dynamicdata_init()
             /* is this property active ? (unused at the moment) */
             'status'     => array(
                 'type'        => 'integer',
+                'size'        => 'tiny',
+                'unsigned'     => true,
                 'null'        => false,
                 'default'     => '33'
             ),
@@ -237,8 +241,8 @@ function dynamicdata_init()
             'seq'      => array(
                 'type'        => 'integer',
                 'size'        => 'tiny',
-                'null'        => false,
-                'default'     => '0'
+                'unsigned'     => true,
+                'null'        => false
             ),
             /* specific configuration rules for this property (e.g. basedir, size, ...) */
             'configuration' => array(
@@ -316,22 +320,22 @@ function dynamicdata_init()
         $datafields = array(
             'id'   => array(
                 'type'        => 'integer',
+                'unsigned'     => true,
                 'null'        => false,
-                'default'     => '0',
                 'increment'   => true,
                 'primary_key' => true
             ),
             /* the property this dynamic data belongs to */
             'property_id'   => array(
                 'type'        => 'integer',
-                'null'        => false,
-                'default'     => '0'
+                'unsigned'    => true,
+                'null'        => false
             ),
             /* the item id this dynamic data belongs to */
-            'itemid'   => array(
+            'item_id'   => array(
                 'type'        => 'integer',
-                'null'        => false,
-                'default'     => '0'
+                'unsigned'    => true,
+                'null'        => false
             ),
             /* the value of this dynamic data */
             'value'    => array(
@@ -358,8 +362,8 @@ function dynamicdata_init()
         $query = xarDBCreateIndex(
             $dynamic_data,
             array(
-                'name'   => 'i_' . $prefix . '_dyndata_itemid',
-                'fields' => array('itemid')
+                'name'   => 'i_' . $prefix . '_dyndata_item_id',
+                'fields' => array('item_id')
             )
         );
         $dbconn->Execute($query);
@@ -780,8 +784,8 @@ function dynamicdata_createPropDefTable()
     $propdefs = array(
         'id'     => array(
             'type'        => 'integer',
+            'unsigned'     => true,
             'null'        => false,
-            'default'     => '0',
             'increment'   => true,
             'primary_key' => true
         ),
@@ -798,7 +802,7 @@ function dynamicdata_createPropDefTable()
             'default'     => null
         ),
         /* this property's parent */
-        'parent' => array(
+        'parent_id' => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
@@ -836,8 +840,8 @@ function dynamicdata_createPropDefTable()
         /* the ID of the module owning this property */
         'modid'  => array(
             'type'        => 'integer',
-            'null'        => true,
-            'default'     => null
+            'unsigned'    => true,
+            'null'        => false
         ),
         /* the default args for this property -- serialized array */
         'args'    => array(

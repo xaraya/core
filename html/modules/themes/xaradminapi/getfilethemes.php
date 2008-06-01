@@ -74,11 +74,11 @@ function themes_adminapi_getfilethemes()
                     }
 
                     if (!isset($xar_version)) {
-                        $xar_version = 1.0;
+                        $xar_version = 2.0;
                     }
 
                     if (!isset($bl_version)) {
-                        $bl_version = 1.0;
+                        $bl_version = 2.0;
                     }
 
                     //FIXME: <johnny> add class and category checking

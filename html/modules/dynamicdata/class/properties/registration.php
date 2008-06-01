@@ -107,7 +107,7 @@ class PropertyRegistration extends DataContainer
         
         $sql = "INSERT INTO $propdefTable
                 (id, name, label,
-                 parent, filepath, class,
+                 parent_id, filepath, class,
                  format, configuration, source,
                  reqfiles, modid, args, aliases)
                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -153,7 +153,7 @@ class PropertyRegistration extends DataContainer
         $tables = xarDB::getTables();
         // Sort by required module(s) and then by name
         $query = "SELECT  p.id, p.name, p.label,
-                          p.parent, p.filepath, p.class,
+                          p.parent_id, p.filepath, p.class,
                           p.format, p.configuration, p.source,
                           p.reqfiles, m.name, p.args,
                           p.aliases

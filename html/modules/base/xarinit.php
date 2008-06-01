@@ -38,7 +38,6 @@ function base_init()
          *
          * prefix_session_info  - Session table
          * prefix_module_vars   - system configuration variables
-         * prefix_template_tags - module template tag registry
          *********************************************************************/
         $sessionInfoTable = $prefix . '_session_info';
         /*********************************************************************
@@ -47,7 +46,7 @@ function base_init()
          *  ipaddr    varchar(20) NOT NULL default '',
          *  first_use integer NOT NULL default '0',
          *  last_use  integer NOT NULL default '0',
-         *  role_id   integer NOT NULL default '0',
+         *  role_id   integer unsigned NOT NULL,
          *  vars      blob,
          *  remember  int(1) default '0',
          *  PRIMARY KEY  (id)
@@ -55,11 +54,11 @@ function base_init()
          *********************************************************************/
         $fields = array('id'        => array('type'=>'varchar','size'=>32   ,'null'=>false,'primary_key'=>true),
                         'ip_addr'   => array('type'=>'varchar','size'=>20   ,'null'=>false),
-                        'first_use' => array('type'=>'integer','null'=>false,'default'=>'0'),
-                        'last_use'  => array('type'=>'integer','null'=>false,'default'=>'0'),
-                        'role_id'   => array('type'=>'integer','null'=>false,'default'=>'0'),
+                        'first_use' => array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
+                        'last_use'  => array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
+                        'role_id'   => array('type'=>'integer','unsigned'=>true, 'null'=>false),
                         'vars'      => array('type'=>'blob'   ,'null'=>true),
-                        'remember'  => array('type'=>'integer','size'=>1    ,'default'=>'0')
+                        'remember'  => array('type'=>'integer', 'unsigned' => true, 'size'=> 'tiny', 'null'=>false, 'default'=>'0')
                         );
 
         $query = xarDBCreateTable($sessionInfoTable,$fields);
@@ -87,7 +86,7 @@ function base_init()
         /*********************************************************************
          * CREATE TABLE xar_module_vars (
          *  id        integer unsigned NOT NULL auto_increment,
-         *  module_id integer NOT NULL default '0',
+         *  module_id integer unsigned default NULL,
          *  name      varchar(64) NOT NULL default '',
          *  value     longtext,
          *  PRIMARY KEY  (id),
@@ -95,8 +94,9 @@ function base_init()
          * )
          *********************************************************************/
 
-        $fields = array('id'        => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
-                        'module_id' => array('type'=>'integer','null'=>true,'increment'=>false),
+        $fields = array(
+                        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
+                        'module_id' => array('type'=>'integer','unsigned'=>true,'null'=>true),
                         'name'      => array('type'=>'varchar','size'=>64,'null'=>false),
                         'value'     => array('type'=>'text','size'=>'long')
                         );

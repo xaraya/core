@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:comment>Roles module confirmation for existing users revalidating their email</xar:comment>
 <xar:set name="adminemail"><xar:var scope="module" module="mail" name="adminmail"/></xar:set>
 <div class="xar-mod-head">

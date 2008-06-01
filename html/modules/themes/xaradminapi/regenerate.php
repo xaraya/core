@@ -79,26 +79,12 @@ function themes_adminapi_regenerate()
         if (empty($dbThemes[$name])) {
             // New theme
 
-            if (empty($themeInfo['xar_version'])){
-                $themeInfo['xar_version'] = '1.0.0';
-            }
-
             $sql = "INSERT INTO $xartable[themes]
-                      (name, regid, directory,
-                       author, homepage, email, description,
-                       contactinfo, publishdate, license,
-                       version, xaraya_version, bl_version,
-                       class)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                      (name, regid, directory, version)
+                    VALUES (?,?,?,?)";
             $bindvars = array($themeInfo['name'],$themeInfo['regid'],
-                              $themeInfo['directory'],$themeInfo['author'],
-                              $themeInfo['homepage'],$themeInfo['email'],
-                              $themeInfo['description'],$themeInfo['contact_info'],
-                              $themeInfo['publish_date'],$themeInfo['license'],
-                              $themeInfo['version'],$themeInfo['xar_version'],
-                              $themeInfo['bl_version'],$themeInfo['class']);
+                              $themeInfo['directory'], $themeInfo['version']);
             $result = $dbconn->Execute($sql,$bindvars);
-
 
             $set = xarModAPIFunc('themes',
                                 'admin',

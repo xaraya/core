@@ -535,7 +535,7 @@ class DataObjectMaster extends Object
                          label,
                          module_id,
                          itemtype,
-                         parent,
+                         parent_id,
                          urlparam,
                          maxid,
                          config,
@@ -618,7 +618,7 @@ class DataObjectMaster extends Object
                          label,
                          module_id,
                          itemtype,
-                         parent,
+                         parent_id,
                          class,
                          filepath,
                          urlparam,
@@ -1013,7 +1013,7 @@ class DataObjectMaster extends Object
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
 //        $q->open();
-        $q->addfields(array('id AS objectid','name AS objectname','module_id AS moduleid','itemtype AS itemtype','parent AS parent'));
+        $q->addfields(array('id AS objectid','name AS objectname','module_id AS moduleid','itemtype AS itemtype','parent_id AS parent'));
         $q->eq('module_id',$this->moduleid);
         if (!$q->run()) return;
 
@@ -1102,7 +1102,7 @@ class DataObjectMaster extends Object
             $xartable = xarDB::getTables();
             sys::import('modules.roles.class.xarQuery');
             $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-        $q->addfields(array('id AS objectid','label AS objectlabel','module_id AS moduleid','itemtype AS itemtype','parent AS parent'));
+        $q->addfields(array('id AS objectid','label AS objectlabel','module_id AS moduleid','itemtype AS itemtype','parent_id AS parent'));
         $q->eq('module_id',$moduleid);
             if (!$q->run()) return;
 

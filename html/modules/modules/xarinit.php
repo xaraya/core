@@ -46,7 +46,7 @@ function modules_init()
          * CREATE TABLE xar_modules (
          *   id int(11) NOT NULL auto_increment,
          *   name varchar(64) NOT NULL default '',
-         *   regid int(10) INTEGER NOT NULL default '0',
+         *   regid int(10) integer unsigned NOT NULL,
          *   directory varchar(64) NOT NULL default '',
          *   version varchar(10) NOT NULL default '0',
          *   class varchar(64) NOT NULL default '',
@@ -58,16 +58,16 @@ function modules_init()
          * )
          */
         $fields = array(
-                        'id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+                        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                         'name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'regid' => array('type' => 'integer', 'default' => null),
+                        'regid' => array('type' => 'integer', 'unsigned'=>true, 'null' => false),
                         'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
                         'class' => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'category' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'admin_capable' => array('type' => 'integer', 'null' => false, 'default' => '0'),
-                        'user_capable' => array('type' => 'integer', 'null' => false, 'default' => '0'),
-                        'state' => array('type' => 'integer', 'null' => false, 'default' => '1')
+                        'admin_capable' => array('type' => 'integer', 'size' => 'tiny', 'unsigned'=>true, 'null' => false, 'default' => '0'),
+                        'user_capable' => array('type' => 'integer', 'size' => 'tiny', 'unsigned'=>true, 'null' => false, 'default' => '0'),
+                        'state' => array('type' => 'integer', 'size' => 'tiny','unsigned'=>true, 'null' => false, 'default' => '1')
                         );
 
         // Create the modules table
@@ -99,15 +99,15 @@ function modules_init()
 
         /**
          * CREATE TABLE module_itemvars (
-         *   module_var_id    integer NOT NULL auto_increment,
-         *   item_id          integer NOT NULL default 0,
+         *   module_var_id    integer unsigned NOT NULL,
+         *   item_id          integer unsigned NOT NULL,
          *   value            longtext,
          *   PRIMARY KEY      (module_var_id, item_id)
          * )
          */
         $fields = array(
-                        'module_var_id' => array('type' => 'integer', 'null' => false, 'primary_key' => true),
-                        'item_id' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => true),
+                        'module_var_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'primary_key' => true),
+                        'item_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'unsigned' => true, 'primary_key' => true),
                         'value' => array('type' => 'text', 'size' => 'long')
                         );
 
@@ -120,10 +120,10 @@ function modules_init()
          *   id         integer NOT NULL auto_increment,
          *   object     varchar(64) NOT NULL default '',
          *   action     varchar(64) NOT NULL default '',
-         *   s_module_id integer default null,
+         *   s_module_id integer unsigned default null,
          *   s_type      varchar(64) NOT NULL default '',
          *   t_area      varchar(64) NOT NULL default '',
-         *   t_module_id integer not null,
+         *   t_module_id integer unsigned not null,
          *   t_type      varchar(64) NOT NULL default '',
          *   t_func      varchar(64) NOT NULL default '',
          *   priority    integer default 0
@@ -131,17 +131,17 @@ function modules_init()
          * )
          */
         $fields = array(
-                        'id'          => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+                        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                         'object'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'action'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        's_module_id' => array('type' => 'integer', 'null' => true, 'default' => null),
+                        's_module_id' => array('type' => 'integer', 'unsigned' => true, 'null' => true, 'default' => null),
                         // TODO: switch to integer for itemtype (see also xarMod.php)
                         's_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => ''),
                         't_area'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        't_module_id'  => array('type' => 'integer', 'null' => false),
+                        't_module_id'  => array('type' => 'integer','unsigned' => true, 'null' => false),
                         't_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         't_func'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'priority'       => array('type' => 'integer', 'null' => false, 'default' => '0')
+                        'priority'       => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0')
                     );
         // TODO: no indexes?
 
