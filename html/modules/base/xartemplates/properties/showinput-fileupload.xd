@@ -1,17 +1,15 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:if condition="!empty($value)">
-    <!-- we're using a hidden field to keep track of any previously uploaded file here -->
-    <span id="#$id#_text"><xar:ml><xar:mlstring>Uploaded file: #(1)</xar:mlstring><xar:mlvar>#$value#</xar:mlvar></xar:ml> <input type="button" onClick="document.getElementById('#$id#_hidden').value='';document.getElementById('#$id#_text').innerHTML='';" value="#xarML('Clear')#" />
-    <br /></span> <input type="hidden" name="#$name#" id="#$id#_hidden" value="#$value#" />
-</xar:if>
-<input type="hidden" name="MAX_FILE_SIZE" value="#$maxsize#" />
-<input type="file" name="#$upname#" size="#$size#" id="#$id#" tabindex="#$tabindex#" />
-<xar:if condition="!empty($extensions)">
-    <br /><xar:ml><xar:mlstring>Allowed file types : #(1)</xar:mlstring><xar:mlvar>#$extensions#</xar:mlvar></xar:ml>
-</xar:if>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="!empty($value)">
+        <!-- we're using a hidden field to keep track of any previously uploaded file here -->
+        <span id="#$id#_text"><xar:ml><xar:mlstring>Uploaded file: #(1)</xar:mlstring><xar:mlvar>#$value#</xar:mlvar></xar:ml> <input type="button" onClick="document.getElementById('#$id#_hidden').value='';document.getElementById('#$id#_text').innerHTML='';" value="#xarML('Clear')#" />
+        <br /></span> <input type="hidden" name="#$name#" id="#$id#_hidden" value="#$value#" />
+    </xar:if>
+    <input type="hidden" name="MAX_FILE_SIZE" value="#$max_file_size#" />
+    <input type="file" name="#$name#" size="#$size#" id="#$id#" tabindex="#$tabindex#" />
+    <xar:if condition="!empty($file_extensions)">
+        <br /><xar:ml><xar:mlstring>Allowed file types : #(1)</xar:mlstring><xar:mlvar>#$file_extensions#</xar:mlvar></xar:ml>
+    </xar:if>
 
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

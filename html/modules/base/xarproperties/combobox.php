@@ -14,53 +14,55 @@ sys::import('modules.base.xarproperties.dropdown');
 /**
  * Handle the combo property
  */
-class ComboProperty extends SelectProperty
-{
-    public $id         = 506;
-    public $name       = 'combobox';
-    public $desc       = 'Combo Dropdown Box';
-
-    function __construct(ObjectDescriptor $descriptor)
+    class ComboProperty extends SelectProperty
     {
-        parent::__construct($descriptor);
-        $this->tplmodule = 'base';
-        $this->template  = 'combobox';
-    }
+        public $id         = 506;
+        public $name       = 'combobox';
+        public $desc       = 'Combo Dropdown Box';
 
-    public function checkInput($name = '', $value = null)
-    {
-        $name = empty($name) ? 'dd_'.$this->id : $name;
+        public $display_combo_mode       = 3;
+        public $validation_override      = true;
 
-        // First check for text in the text box
-        $tbname  = $name.'_tb';
-        if (!xarVarFetch($tbname, 'isset', $tbvalue,  NULL, XARVAR_DONT_SET)) {return;}
-
-        if( isset($tbvalue) && ($tbvalue != '') )
+        function __construct(ObjectDescriptor $descriptor)
         {
-            $this->fieldname = $tbname;
-            $value = $tbvalue;
-        } else {
-            // Default to checking the selection box.
+            parent::__construct($descriptor);
+            $this->template  = 'combobox';
+        }
 
-            // store the fieldname for validations who need them (e.g. file uploads)
-            $this->fieldname = $name;
-            if (!isset($value))
+        public function checkInput($name = '', $value = null)
+        {
+            $name = empty($name) ? 'dd_'.$this->id : $name;
+
+            // First check for text in the text box
+            $tbname  = $name.'_tb';
+            if (!xarVarFetch($tbname, 'isset', $tbvalue,  NULL, XARVAR_DONT_SET)) {return;}
+
+            // store the fieldname for configurations who need them (e.g. file uploads)
+            $this->fieldname = $tbname;
+
+            if( isset($tbvalue) && ($tbvalue != '') )
             {
-                if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
+                // check as a textbox
+                $value = $tbvalue;
+                $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
+                $isvalid = $textbox->checkInput($tbname, $tbvalue);
+                if ($isvalid) {
+                    $this->value = $textbox->value;
+                } else {
+                    $this->invalid = $textbox->invalid;
+                }
+                return $isvalid;
+            } else {
+                // check as a dropdown
+                return parent::checkInput($name, $value);
             }
         }
-        return $this->validateValue($value);
-    }
 
-    public function validateValue($value = null)
-    {
-        if (!isset($value))
+        public function showInput(Array $data = array())
         {
-            $value = $this->value;
+            if (empty($data['mode'])) $data['mode'] = $this->display_combo_mode;
+            return parent::showInput($data);
         }
-        $this->value = $value;
 
-        return true;
     }
-}
 ?>

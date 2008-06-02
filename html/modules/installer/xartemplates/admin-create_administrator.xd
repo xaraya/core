@@ -22,6 +22,39 @@
                 <xar:mlstring>Administrator Information</xar:mlstring>
             </h3>
 
+<!-- Replacement when we move to using dataproperties here
+            <div class="simpleform">
+                <p>
+                    <label for="install_admin_name">
+                        <xar:mlstring>Display Name</xar:mlstring>
+                    </label>
+                    <xar:data-input type="textbox" name="install_admin_name"  value="#$install_admin_name#" />
+                    <br class="clear" />
+                </p>
+                <p>
+                    <label for="install_admin_username">
+                        <xar:mlstring>Username</xar:mlstring>
+                    </label>
+                    <xar:data-input type="username" name="install_admin_username"  value="#$install_admin_username#" store_type="id" />
+                    <br class="clear" />
+                </p>
+                <p>
+                    <label for="install_admin_password">
+                        <xar:mlstring>Password</xar:mlstring>
+                    </label>
+                    <xar:data-input type="password" name="install_admin_password"  value="#$install_admin_password#" confirm_password="1" />
+                    <br class="clear" />
+                </p>
+                <p>
+                    <label for="install_admin_email">
+                        <xar:mlstring>Email</xar:mlstring>
+                    </label>
+                    <xar:data-input type="email" name="install_admin_email"  value="#$install_admin_email#" />
+                    <br class="clear" />
+                </p>
+            </div>
+
+-->
             <div class="simpleform">
                 <p>
                     <label for="install_admin_name">

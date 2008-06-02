@@ -1,0 +1,55 @@
+<object name="sample">
+  <objectid>5</objectid>
+  <label>Sample Object</label>
+  <parent>objects</parent>
+  <module_id>182</module_id>
+  <itemtype>3</itemtype>
+  <class>DataObject</class>
+  <filepath></filepath>
+  <urlparam>itemid</urlparam>
+  <maxid>7</maxid>
+  <config>nothing much...</config>
+  <isalias>0</isalias>
+  <properties>
+    <property name="id">
+      <id>29</id>
+      <label>Id</label>
+      <type>itemid</type>
+      <defaultvalue></defaultvalue>
+      <source>dynamic_data</source>
+      <status>34</status>
+      <seq>1</seq>
+      <configuration></configuration>
+    </property>
+    <property name="name">
+      <id>30</id>
+      <label>Name</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>dynamic_data</source>
+      <status>33</status>
+      <seq>2</seq>
+      <configuration>a:7:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:1:"1";s:21:"validation_max_length";s:2:"30";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+    </property>
+    <property name="age">
+      <id>31</id>
+      <label>Age</label>
+      <type>integerbox</type>
+      <defaultvalue></defaultvalue>
+      <source>dynamic_data</source>
+      <status>33</status>
+      <seq>3</seq>
+      <configuration>a:9:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:20:"validation_min_value";s:1:"0";s:20:"validation_max_value";s:3:"125";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+    </property>
+    <property name="location">
+      <id>32</id>
+      <label>Location</label>
+      <type>image</type>
+      <defaultvalue></defaultvalue>
+      <source>dynamic_data</source>
+      <status>34</status>
+      <seq>4</seq>
+      <configuration></configuration>
+    </property>
+  </properties>
+</object>
