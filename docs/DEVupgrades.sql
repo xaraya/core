@@ -602,7 +602,9 @@ ALTER TABLE `xar_security_instances`
 
 ALTER TABLE `xar_dynamic_data` CHANGE `itemid` `item_id` INTEGER UNSIGNED NOT NULL;
 ALTER TABLE `xar_dynamic_objects` CHANGE `parent` `parent_id` INTEGER UNSIGNED NOT NULL;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `parent` `parent_id` INTEGER UNSIGNED NOT NULL;
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_objects.parent", "xar_dynamic_objects.parent_id");
+ALTER TABLE `xar_dynamic_properties_def`
+  DROP `parent`;
 
 ALTER TABLE `xar_themes`
   DROP `directory`,
@@ -616,12 +618,6 @@ ALTER TABLE `xar_themes`
   DROP `xaraya_version`,
   DROP `bl_version`,
   DROP `class`;
-
-ALTER TABLE `xar_dynamic_data` CHANGE `itemid` `item_id`                   integer unsigned NOT NULL;
-ALTER TABLE `xar_dynamic_objects` CHANGE `parent` `parent_id`              integer NOT NULL default '0';
-UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_objects.parent", "xar_dynamic_objects.parent_id");
-#ALTER TABLE `xar_dynamic_properties_def` CHANGE `parent` `parent_id`       integer unsigned NOT NULL default NULL;
-
 
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
@@ -689,7 +685,6 @@ ALTER TABLE `xar_dynamic_properties` CHANGE `validation` `validation`      text;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `id` `id`                  integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `name` `name`              varchar(254) default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `label` `label`            varchar(254) default NULL;
-#ALTER TABLE `xar_dynamic_properties_def` CHANGE `parent_id` `parent_id`    integer unsigned default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `filepath` `filepath`      varchar(254) default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `class` `class`            varchar(254) default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `validation` `validation`  varchar(254) default NULL;

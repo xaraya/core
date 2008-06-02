@@ -760,12 +760,6 @@ function dynamicdata_createPropDefTable()
             'size'        => 254,
             'default'     => null
         ),
-        /* this property's parent */
-        'parent_id' => array(
-            'type'        => 'varchar',
-            'size'        => 254,
-            'default'     => null
-        ),
         /* path to the file defining this property */
         'filepath' => array(
             'type'          => 'varchar',
