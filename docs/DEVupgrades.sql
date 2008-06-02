@@ -607,7 +607,6 @@ ALTER TABLE `xar_dynamic_properties_def`
   DROP `parent`;
 
 ALTER TABLE `xar_themes`
-  DROP `directory`,
   DROP `author`,
   DROP `homepage`,
   DROP `email`,
@@ -779,6 +778,6 @@ ALTER TABLE `xar_session_info` CHANGE `remember` `remember`           tinyint(3)
 ALTER TABLE `xar_themes` CHANGE `id` `id`                          integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_themes` CHANGE `name` `name`                      varchar(64) NOT NULL;
 ALTER TABLE `xar_themes` CHANGE `regid` `regid`                    integer unsigned NOT NULL;
-#ALTER TABLE `xar_themes` CHANGE `directory` `directory`            varchar(64) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `directory` `directory`            varchar(64) NOT NULL;
 ALTER TABLE `xar_themes` CHANGE `version` `version`                varchar(10) NOT NULL;
 ALTER TABLE `xar_themes` CHANGE `state` `state`                    tinyint(3) unsigned NOT NULL default '1';
