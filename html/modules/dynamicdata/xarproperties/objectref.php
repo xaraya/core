@@ -71,19 +71,19 @@ class ObjectRefProperty extends SelectProperty
             else $sortprop = $this->initialization_display_prop;
             $dbconn = xarDB::getConn();
             $xartable = xarDB::getTables();
-            $q = "SELECT id, name, label, parent, module_id, itemtype, class, filepath,
+            $q = "SELECT id, name, label, parent_id, module_id, itemtype, class, filepath,
                 urlparam, maxid, config, isalias FROM " . $xartable['dynamic_objects'] . " ORDER BY " . $sortprop;
             $result = $dbconn->executeQuery($q);
             $items = array();
             while ($result->next()) {
-            list($objectid, $name, $label, $parent, $moduleid, $itemtype, $class,
+            list($objectid, $name, $label, $parent_id, $module_id, $itemtype, $class,
                 $filepath, $urlparam, $maxid, $config, $isalias) = $result->fields;
 
             $items[] = array('objectid' => $objectid,
                              'name'    => $name,
                              'label'   => $label,
-                             'parent' => $parent,
-                             'moduleid' => $moduleid,
+                             'parent' => $parent_id,
+                             'moduleid' => $module_id,
                              'itemtype' => $itemtype,
                              'class'   => $class,
                              'filepath'   => $filepath,
