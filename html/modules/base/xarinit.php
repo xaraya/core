@@ -199,6 +199,26 @@ function base_init()
     $authModules = array('authsystem');
     xarConfigVars::set(null, 'Site.User.AuthenticationModules',$authModules);
 
+    $templateTagsTable = $prefix . '_template_tags';
+    /*********************************************************************
+     * CREATE TABLE xar_template_tags (
+     *  id        integer NOT NULL auto_increment,
+     *  name      varchar(255) NOT NULL default '',
+     *  module_id integer default 0,
+     *  handler   varchar(255) NOT NULL default '',
+     *  data      text,
+     *  PRIMARY KEY (id)
+     * )
+     *********************************************************************/
+    $fields = array('id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+                    'name'    => array('type'=>'varchar','size'=>255,'null'=>false),
+                    'module_id'   => array('type'=>'integer','null'=>false,'default'=>'0'),
+                    'handler' => array('type'=>'varchar','size'=>255,'null'=>false),
+                    'data'    => array('type'=>'text')
+                    );
+    $query = xarDBCreateTable($templateTagsTable,$fields);
+    $dbconn->Execute($query);
+
     // Start Modules Support
     $systemArgs = array('enableShortURLsSupport' => false,
                         'generateXMLURLs' => false);

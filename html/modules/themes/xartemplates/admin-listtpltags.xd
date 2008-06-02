@@ -1,0 +1,54 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
+   <xar:template type="module" file="admin-menu" />
+    <h2>
+        <xar:mlstring>Template Tags</xar:mlstring>
+    </h2>
+    <p class="xar-error">
+        <xar:mlstring>Warning - Core System Settings</xar:mlstring>
+    </p>
+    <p>
+        <xar:mlstring>
+            This list contains core system template tags and is supplied for developer convenience. 
+            You should not have to visit this page or modify any tags here unless you are a developer
+            creating your own template tags. In this latter case, the tags would usually
+            be registered during the initialization of the module that supplies the tag.
+        </xar:mlstring>
+    </p>
+
+    <p>[<a href="#$addurl#"><xar:mlstring>Add a new Tag</xar:mlstring></a>]</p>
+    
+    <table class="xar-fullwidth">
+        <tr>
+            <th>
+                <xar:mlstring>Name</xar:mlstring>
+            </th>
+            <th>
+                <xar:mlstring>Module</xar:mlstring>
+            </th>
+            <th>
+                <xar:mlstring>Actions</xar:mlstring>
+            </th>
+        </tr>
+        <xar:foreach in="$tags" value="$item">
+            <tr>
+                <td>
+                    &lt;xar:#$item['name']#&gt;
+                </td>
+                <td>
+                    #$item['module']#
+                </td>
+                <td class="xar-align-center">
+                    <a href="#$item['editurl']#"><xar:mlstring>Edit</xar:mlstring></a> | 
+                    <a href="#$item['deleteurl']#" onclick="return confirm('#xarML('Are you sure you want to delete the tag: ')##$item['name']# ?');"><xar:mlstring>Delete</xar:mlstring></a>
+                </td>
+            </tr>
+        </xar:foreach> 
+    </table>    
+
+</div>
+</xar:template>

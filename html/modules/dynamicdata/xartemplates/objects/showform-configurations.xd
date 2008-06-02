@@ -1,0 +1,21 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- This is a generic form template for any DD object. You can use a specific template for one particular object in this directory as showform-[objectname].xd, and/or use templates in your own [module]/xartemplates/objects directory by specifying the tplmodule="..." argument in the xar:data-form BL tag or showForm() method call. -->
+    <xar:if condition="empty($layout)">
+        <xar:set name="layout">'default'</xar:set>
+    </xar:if>
+
+    <xar:if condition="$layout eq 'default'">
+        <xar:foreach in="$properties" key="$name" value="$property">
+            <div class="xar-form-input-wrapper">
+                <xar:if condition="$name ne 'configuration'">
+                    <xar:data-label property="$properties[$name]" label="id" />
+                </xar:if>
+                <xar:data-input property="$properties[$name]" />
+            </div>
+        </xar:foreach>
+    <xar:else />
+          <!-- You can also specify your own layout here or in a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->
+         <xar:template module="$tplmodule" file="form-$layout" />
+    </xar:if>
+</xar:template>

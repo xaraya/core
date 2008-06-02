@@ -44,9 +44,6 @@ class TextUploadProperty extends DataProperty
         $this->template  = 'textupload';
         $this->filepath   = 'modules/base/xarproperties';
 
-        // always parse validation to preset methods here
-        $this->parseValidation($this->validation);
-
         // Note : {user} will be replaced by the current user uploading the file - e.g. var/uploads/{user} -&gt; var/uploads/myusername_123
         if (!empty($this->basedir) && preg_match('/\{user\}/',$this->basedir)) {
             $uname = xarUserGetVar('uname');
@@ -74,9 +71,8 @@ class TextUploadProperty extends DataProperty
     {
         // the variable corresponding to the file upload field is no longer set in PHP 4.2.1+
         // but we're using a textarea field to keep track of any previously uploaded file here
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (isset($this->fieldname)) {
             $name = $this->fieldname;
         } else {
@@ -246,7 +242,7 @@ class TextUploadProperty extends DataProperty
         parent::showInput($data);
     }
 
-    public function parseValidation($validation = '')
+    public function parseConfiguration($validation = '')
     {
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality
@@ -264,7 +260,7 @@ class TextUploadProperty extends DataProperty
         }
     }
 
-    public function showValidation(Array $args = array())
+    public function showConfiguration(Array $args = array())
     {
         extract($args);
 
@@ -278,8 +274,8 @@ class TextUploadProperty extends DataProperty
         $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
 
         if (isset($validation)) {
-            $this->validation = $validation;
-            $this->parseValidation($validation);
+            $this->configuration = $validation;
+            $this->parseConfiguration($validation);
         }
 
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
@@ -300,23 +296,23 @@ class TextUploadProperty extends DataProperty
         if (empty($template)) {
             $template = 'textupload';
         }
-        return xarTplProperty('base', $template, 'validation', $data);
+        return xarTplProperty('base', $template, 'configuration', $data);
     }
 
-    public function updateValidation(Array $args = array())
+    public function updateConfiguration(Array $args = array())
     {
         extract($args);
 
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // do something with the validation and save it in $this->validation
+        // do something with the validation and save it in $this->configuration
         if (isset($validation)) {
             if (is_array($validation)) {
                 if (!empty($validation['other'])) {
-                    $this->validation = $validation['other'];
+                    $this->configuration = $validation['other'];
 
                 } elseif (xarVarGetCached('Hooks.uploads','ishooked')) {
-                    $this->validation = '';
+                    $this->configuration = '';
 // CHECKME: verify format of methods(...) part
                     if (!empty($validation['methods'])) {
                         $todo = array();
@@ -328,23 +324,23 @@ class TextUploadProperty extends DataProperty
                             }
                         }
                         if (count($todo) > 0) {
-                            $this->validation .= ';methods(';
-                            $this->validation .= join(',',$todo);
-                            $this->validation .= ')';
+                            $this->configuration .= ';methods(';
+                            $this->configuration .= join(',',$todo);
+                            $this->configuration .= ')';
                         }
                     }
                     if (!empty($validation['basedir'])) {
-                        $this->validation .= ';basedir(' . $validation['basedir'] . ')';
+                        $this->configuration .= ';basedir(' . $validation['basedir'] . ')';
                     }
                     if (!empty($validation['importdir'])) {
-                        $this->validation .= ';importdir(' . $validation['importdir'] . ')';
+                        $this->configuration .= ';importdir(' . $validation['importdir'] . ')';
                     }
                 } else {
-                    $this->validation = '';
+                    $this->configuration = '';
                     // nothing interesting here
                 }
             } else {
-                $this->validation = $validation;
+                $this->configuration = $validation;
             }
         }
 

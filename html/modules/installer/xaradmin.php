@@ -454,6 +454,13 @@ function installer_admin_phase5()
 
     if (!xarInstallAPIFunc('initialise', array('directory'=>'authsystem', 'initfunc'=>'activate'))) return;;
 
+    // TODO: move this to some common place in Xaraya ?
+    // Register BL user tags
+    // Include a JavaScript file in a page
+    xarTplRegisterTag('base', 'base-include-javascript', array(),'base_javascriptapi_handlemodulejavascript');
+    // Render JavaScript in a page
+    xarTplRegisterTag('base', 'base-render-javascript', array(),'base_javascriptapi_handlerenderjavascript');
+
     // TODO: is this is correct place for a default value for a modvar?
     xarModVars::set('base', 'AlternatePageTemplate', 'homepage');
 
@@ -508,8 +515,26 @@ function installer_admin_bootstrap()
     }
 
 # --------------------------------------------------------
-# Create wrapper DD overlay objects for the roles module
+# Create DD configuration and sample objects
 #
+    $objects = array(
+                   'configurations',
+                   'sample',
+                     );
+
+    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'dynamicdata', 'objects' => $objects))) return;
+
+# --------------------------------------------------------
+# Create wrapper DD overlay objects for the modules and roles modules
+#
+    $objects = array(
+                   'modules',
+//                   'modules_hooks',
+//                   'modules_modvars',
+                     );
+
+    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'modules', 'objects' => $objects))) return;
+
     $objects = array(
                    'roles_roles',
                    'roles_users',
@@ -1144,7 +1169,7 @@ function installer_admin_finish()
     xarVarFetch('returnurl', 'str', $returnurl, 'site', XARVAR_NOT_REQUIRED);
 
 # --------------------------------------------------------
-# Create wrapper DD overlay objects for the modules and privileges modules
+# Create wrapper DD overlay objects for the privileges modules
 #
     $objects = array(
                    'privileges_baseprivileges',
@@ -1152,13 +1177,6 @@ function installer_admin_finish()
                      );
 
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'privileges', 'objects' => $objects))) return;
-
-    $objects = array(
-//                   'modules_hooks',
-//                   'modules_modvars',
-                     );
-
-    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'modules', 'objects' => $objects))) return;
 
     $machinetz = date_default_timezone_get();
     xarConfigVars::set(null, 'System.Core.TimeZone', $machinetz);

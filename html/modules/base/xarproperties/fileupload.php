@@ -9,7 +9,7 @@
  * @link http://xaraya.com/index.php/release/68.html
  */
 /* Include parent class */
-sys::import('modules.dynamicdata.class.properties');
+sys::import('modules.dynamicdata.class.properties.master');
 /**
  * Class to handle file upload properties
  */
@@ -20,21 +20,21 @@ class FileUploadProperty extends DataProperty
     public $desc       = 'File Upload';
     public $reqmodules = array('base');
 
-    public $size = 40;
-    public $maxsize = 1000000;
-    public $basedir = '';
-    public $filetype;
-    public $UploadsModule_isHooked = FALSE;
-    public $basePath;
-    public $multiple = TRUE;
+    public $display_size                    = 40;
+    public $validation_max_file_size          = 1000000;
+    public $initialization_basedirectory    = 'var/uploads';
+    public $initialization_importdirectory  = null;
+    public $validation_file_extensions      = 'gif|jpg|jpeg|png|bmp|pdf|doc|txt';
+    public $initialization_basepath         = null;
+    public $initialization_multiple         = TRUE;
     public $methods = array('trusted'  => false,
-                         'external' => false,
-                         'upload'   => false,
-                         'stored'   => false);
-    public $importdir = null;
+                            'external' => false,
+                            'upload'   => false,
+                            'stored'   => false);
 
     // this is used by DataPropertyMaster::addProperty() to set the $object->upload flag
     public $upload = true;
+    public $UploadsModule_isHooked          = FALSE;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -58,9 +58,6 @@ class FileUploadProperty extends DataProperty
             }
         }
 
-        // always parse validation to preset methods here
-        $this->parseValidation($this->validation);
-
         if(xarServerGetVar('PATH_TRANSLATED')) {
             $base_directory = dirname(realpath(xarServerGetVar('PATH_TRANSLATED')));
         } elseif(xarServerGetVar('SCRIPT_FILENAME')) {
@@ -69,51 +66,49 @@ class FileUploadProperty extends DataProperty
             $base_directory = './';
         }
 
-        $this->basePath = $base_directory;
+        $this->initialization_basepath = $base_directory;
 
-        if (empty($this->basedir) && $this->UploadsModule_isHooked != TRUE) {
-            $this->basedir = 'var/uploads';
+        if (empty($this->initialization_basedirectory) && $this->UploadsModule_isHooked != TRUE) {
+            $this->initialization_basedirectory = 'var/uploads';
         }
 
-        if (empty($this->filetype)) {
-            $this->filetype = '';
-        }
+        if (empty($this->validation_file_extensions)) $this->validation_file_extensions = '';
+
         // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/Xaraya_Classic/images
-        if (!empty($this->basedir) && preg_match('/\{theme\}/',$this->basedir)) {
+        if (!empty($this->initialization_basedirectory) && preg_match('/\{theme\}/',$this->initialization_basedirectory)) {
             $curtheme = xarTplGetThemeDir();
-            $this->basedir = preg_replace('/\{theme\}/',$curtheme,$this->basedir);
+            $this->initialization_basedirectory = preg_replace('/\{theme\}/',$curtheme,$this->initialization_basedirectory);
         }
 
         // Note : {user} will be replaced by the current user uploading the file - e.g. var/uploads/{user} -&gt; var/uploads/myusername_123
-        if (!empty($this->basedir) && preg_match('/\{user\}/',$this->basedir)) {
-            $uname = xarUserGetVar('uname');
-            $uname = xarVarPrepForOS($uname);
+        if (!empty($this->initialization_basedirectory) && preg_match('/\{user\}/',$this->initialization_basedirectory)) {
+            $uname = 'user';
             $id = xarUserGetVar('id');
             // Note: we add the userid just to make sure it's unique e.g. when filtering
             // out unwanted characters through xarVarPrepForOS, or if the database makes
             // a difference between upper-case and lower-case and the OS doesn't...
             $udir = $uname . '_' . $id;
-            $this->basedir = preg_replace('/\{user\}/',$udir,$this->basedir);
+            $this->initialization_basedirectory = preg_replace('/\{user\}/',$udir,$this->initialization_basedirectory);
         }
-        if (!empty($this->importdir) && preg_match('/\{user\}/',$this->importdir)) {
-            $uname = xarUserGetVar('uname');
-            $uname = xarVarPrepForOS($uname);
+        if (!empty($this->initialization_importdirectory) && preg_match('/\{user\}/',$this->initialization_importdirectory)) {
+            $uname = 'user';
             $id = xarUserGetVar('id');
             // Note: we add the userid just to make sure it's unique e.g. when filtering
             // out unwanted characters through xarVarPrepForOS, or if the database makes
             // a difference between upper-case and lower-case and the OS doesn't...
             $udir = $uname . '_' . $id;
-            $this->importdir = preg_replace('/\{user\}/',$udir,$this->importdir);
+            $this->initialization_importdirectory = preg_replace('/\{user\}/',$udir,$this->initialization_importdirectory);
         }
     }
 
-    public function checkInput($name = '', $value = null)
+    function checkInput($name='', $value = null)
     {
-        $name = empty($name) ? 'dd_'.$this->id : $name;
-        // store the fieldname for validations who need them (e.g. file uploads)
+        if (empty($name)) $name = 'dd_' . $this->id;
+
+        // Store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
+            xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET);
         }
         return $this->validateValue($value);
     }
@@ -122,14 +117,10 @@ class FileUploadProperty extends DataProperty
     {
         // the variable corresponding to the file upload field is no longer set in PHP 4.2.1+
         // but we're using a hidden field to keep track of any previously uploaded file here
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (isset($this->fieldname)) {
-            $name = $this->fieldname;
-        } else {
-            $name = 'dd_'.$this->id;
-        }
+        if (!parent::validateValue($value)) return false;
+
+        if (isset($this->fieldname)) $name = $this->fieldname;
+        else $name = 'dd_'.$this->id;
 
         // retrieve new value for preview + new/modify combinations
         if (xarVarIsCached('DynamicData.FileUpload',$name)) {
@@ -140,13 +131,13 @@ class FileUploadProperty extends DataProperty
         // if the uploads module is hooked in, use it's functionality instead
         if ($this->UploadsModule_isHooked == TRUE) {
             // set override for the upload/import paths if necessary
-            if (!empty($this->basedir) || !empty($this->importdir)) {
+            if (!empty($this->initialization_basedirectory) || !empty($this->initialization_importdirectory)) {
                 $override = array();
-                if (!empty($this->basedir)) {
-                    $override['upload'] = array('path' => $this->basedir);
+                if (!empty($this->initialization_basedirectory)) {
+                    $override['upload'] = array('path' => $this->initialization_basedirectory);
                 }
-                if (!empty($this->importdir)) {
-                    $override['import'] = array('path' => $this->importdir);
+                if (!empty($this->initialization_importdirectory)) {
+                    $override['import'] = array('path' => $this->initialization_importdirectory);
                 }
             } else {
                 $override = null;
@@ -159,11 +150,11 @@ class FileUploadProperty extends DataProperty
                                           'moduleid' => $this->_moduleid,
                                           'itemtype' => $this->_itemtype,
                                           'itemid'   => !empty($this->_itemid) ? $this->_itemid : null,
-                                          'multiple' => $this->multiple,
+                                          'multiple' => $this->initialization_multiple,
                                           'format' => 'fileupload',
                                           'methods' => $this->methods,
                                           'override' => $override,
-                                          'maxsize' => $this->maxsize));
+                                          'maxsize' => $this->validation_max_file_size));
             // TODO: this raises exceptions now, we want to catch some of them
             // TODO: Insert try/catch clause once we know what uploads raises
             // TODO:
@@ -187,34 +178,32 @@ class FileUploadProperty extends DataProperty
             }
         }
 
-        $upname = $name .'_upload';
-        $filetype = $this->filetype;
+//        $upname = $name .'_upload';
 
-        if (isset($_FILES[$upname])) {
-            $file =& $_FILES[$upname];
+        if (isset($_FILES[$name])) {
+            $file =& $_FILES[$name];
         } else {
             $file = array();
         }
 
-        if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->maxsize) {
+        if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->validation_max_file_size) {
             // if the uploads module is hooked (to be verified and set by the calling module)
-            if (!empty($_FILES[$upname]['name'])) {
-                $fileName = xarVarPrepForOS(basename(strval($file['name'])));
-                if (!empty($filetype) && !preg_match("/\.$filetype$/",$fileName)) {
-                    $this->invalid = xarML('file type');
+            if (!empty($_FILES[$name]['name'])) {
+                if (!$this->validateExtension($file['name'])) {
+                    $this->invalid = xarML('The file type is not allowed');
                     $this->value = null;
                     return false;
-                } elseif (!move_uploaded_file($file['tmp_name'], $this->basePath . '/' . $this->basedir . '/'. $fileName)) {
-                    $this->invalid = xarML('file upload failed');
+                } elseif (!move_uploaded_file($file['tmp_name'], $this->initialization_basepath . '/' . $this->initialization_basedirectory . '/'. $file['name'])) {
+                    $this->invalid = xarML('The file upload failed');
                     $this->value = null;
                     return false;
                 }
-                $this->value = $fileName;
+                $this->value = $file['name'];
                 // save new value for preview + new/modify combinations
-                xarVarSetCached('DynamicData.FileUpload',$name,$fileName);
+                xarVarSetCached('DynamicData.FileUpload',$name,$file['name']);
             } else {
             // TODO: assign random name + figure out mime type to add the right extension ?
-                $this->invalid = xarML('file name for upload');
+                $this->invalid = xarML('The file name for upload is empty');
                 $this->value = null;
                 return false;
             }
@@ -222,32 +211,37 @@ class FileUploadProperty extends DataProperty
         } elseif (xarVarIsCached('DynamicData.FileUpload',$name)) {
             $this->value = xarVarGetCached('DynamicData.FileUpload',$name);
         } elseif (!empty($value) &&  !(is_numeric($value) || stristr($value, ';'))) {
-            if (!empty($filetype) && !preg_match("/\.$filetype$/",$value)) {
-                $this->invalid = xarML('file type');
+            if (!$this->validateExtension($value)) {
+                $this->invalid = xarML('The file type is not allowed');
                 $this->value = null;
                 return false;
-            } elseif (!file_exists($this->basedir . '/'. $value) || !is_file($this->basedir . '/'. $value)) {
-                $this->invalid = xarML('file');
+            } elseif (!file_exists($this->initialization_basedirectory . '/'. $value) || !is_file($this->initialization_basedirectory . '/'. $value)) {
+                $this->invalid = xarML('The file cannot be found');
                 $this->value = null;
                 return false;
             }
             $this->value = $value;
         } else {
+            // No file name entered, ignore
             $this->value = '';
+            return true;
         }
         return true;
     }
 
-//    function showInput($name = '', $value = null, $size = 0, $maxsize = 0, $id = '', $tabindex = '')
     public function showInput(Array $data = array())
     {
-        extract($data);
-        $name = empty($name) ? 'dd_'.$this->id : $name;
-        $id = empty($id) ? $name : $id;
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        $upname = $name .'_upload';
+        $data['name'] = empty($data['name']) ? 'dd_'.$this->id : $data['name'];
+        $data['upname'] = $data['name'] .'_upload';
+//        $id = empty($id) ? $name : $id;
+//        if (!isset($value)) {
+//            $value = $this->value;
+//        }
+        
+        // Allow overriding by specific parameters
+            if (isset($data['size']))   $this->display_size = $data['size'];
+            if (isset($data['maxsize']))   $this->validation_max_file_size = $data['maxsize'];
+            if (isset($data['extensions']))   $this->validation_file_extensions = $data['extensions'];
 
         // inform anyone that we're showing a file upload field, and that they need to use
         // <form ... enctype="multipart/form-data" ... > in their input form
@@ -260,13 +254,13 @@ class FileUploadProperty extends DataProperty
                 $value = '';
             }
             // set override for the upload/import paths if necessary
-            if (!empty($this->basedir) || !empty($this->importdir)) {
+            if (!empty($this->initialization_basedirectory) || !empty($this->initialization_importdirectory)) {
                 $override = array();
-                if (!empty($this->basedir)) {
-                    $override['upload'] = array('path' => $this->basedir);
+                if (!empty($this->initialization_basedirectory)) {
+                    $override['upload'] = array('path' => $this->initialization_basedirectory);
                 }
-                if (!empty($this->importdir)) {
-                    $override['import'] = array('path' => $this->importdir);
+                if (!empty($this->initialization_importdirectory)) {
+                    $override['import'] = array('path' => $this->initialization_importdirectory);
                 }
             } else {
                 $override = null;
@@ -275,7 +269,7 @@ class FileUploadProperty extends DataProperty
             return xarModAPIFunc('uploads','admin','showinput',
                                  array('id' => $name, // not $this->id
                                        'value' => $value,
-                                       'multiple' => $this->multiple,
+                                       'multiple' => $this->initialization_multiple,
                                        'format' => 'fileupload',
                                        'methods' => $this->methods,
                                        'override' => $override,
@@ -284,27 +278,7 @@ class FileUploadProperty extends DataProperty
 
         // user must have unhooked the uploads module
         // remove any left over values
-        if (!empty($value) && (is_numeric($value) || stristr($value, ';'))) {
-            $value = '';
-        }
-
-        if (!empty($this->filetype)) {
-            $extensions = $this->filetype;
-            // TODO: get rid of the break
-            $allowed = '<br />' . xarML('Allowed file types : #(1)',$extensions);
-        } else {
-            $extensions = '';
-            $allowed = '';
-        }
-
-        $data['name']       = $name;
-        $data['value']      = xarVarPrepForDisplay($value);
-        $data['id']         = $id;
-        $data['upname']     = $upname;
-        $data['size']       = !empty($size) ? $size : $this->size;
-        $data['maxsize']    = !empty($maxsize) ? $maxsize : $this->maxsize;
-        $data['allowed']    = $allowed;
-        $data['extensions'] = $extensions;
+        if (!empty($data['value']) && (is_numeric($data['value']) || stristr($data['value'], ';'))) $data['value'] = '';
 
         return parent::showInput($data);
     }
@@ -320,7 +294,7 @@ class FileUploadProperty extends DataProperty
             return xarModAPIFunc('uploads','user','showoutput',
                                  array('value' => $value,
                                        'format' => 'fileupload',
-                                       'multiple' => $this->multiple));
+                                       'multiple' => $this->initialization_multiple));
         }
 
         // Note: you can't access files directly in the document root here
@@ -331,8 +305,8 @@ class FileUploadProperty extends DataProperty
                 return '';
             }
             // if the uploads module is hooked (to be verified and set by the calling module)
-            if (!empty($this->basedir) && file_exists($this->basedir . '/'. $value) && is_file($this->basedir . '/'. $value)) {
-                $data['basedir'] = $this->basedir;
+            if (!empty($this->initialization_basedirectory) && file_exists($this->initialization_basedirectory . '/'. $value) && is_file($this->initialization_basedirectory . '/'. $value)) {
+                $data['basedir'] = $this->initialization_basedirectory;
             } else {
                 $data['basedir'] = null; // something went wrong here
             }
@@ -342,36 +316,43 @@ class FileUploadProperty extends DataProperty
         }
     }
 
-    public function parseValidation($validation = '')
+    public function validateExtension($filename='')
+    {
+        $filetype = $this->validation_file_extensions;
+        $filename = xarVarPrepForOS(basename(strval($filename)));
+        return (!empty($filetype) && preg_match("/\.$filetype$/",$filename));
+    }
+    
+/*    public function parseConfiguration($validation = '')
     {
         if ($this->UploadsModule_isHooked == TRUE) {
             list($multiple, $methods, $basedir, $importdir) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $validation);
 
-            $this->multiple = $multiple;
+            $this->initialization_multiple = $multiple;
             $this->methods = $methods;
-            $this->basedir = $basedir;
-            $this->importdir = $importdir;
-            $this->maxsize = xarModVars::get('uploads', 'file.maxsize');
+            $this->initialization_basedirectory = $basedir;
+            $this->initialization_importdirectory = $importdir;
+            $this->validation_max_file_size = xarModVars::get('uploads', 'file.maxsize');
 
         } elseif (!empty($validation)) {
             // specify base directory and optional file types in validation
             // field - e.g. this/dir or this/dir;(gif|jpg|png|bmp) or this/dir;(gif|jpg|png|bmp);1500000
             $fields = explode(';',$validation);
-            $this->basedir = trim($fields[0]);
+            $this->initialization_basedirectory = trim($fields[0]);
             if (count($fields) > 1) {
-                $this->filetype = trim($fields[1]);
+                $this->validation_file_extensions = trim($fields[1]);
                 if (count($fields) > 2) {
-                    $this->maxsize = trim($fields[2]);
+                    $this->validation_max_file_size = trim($fields[2]);
                 }
             } else {
-                $this->filetype = '';
+                $this->validation_file_extensions = '';
             }
         } else {
             // use the default values
         }
     }
 
-    public function showValidation(Array $args = array())
+    public function showConfiguration(Array $args = array())
     {
         extract($args);
 
@@ -385,8 +366,8 @@ class FileUploadProperty extends DataProperty
         $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
 
         if (isset($validation)) {
-            $this->validation = $validation;
-            $this->parseValidation($validation);
+            $this->configuration = $validation;
+            $this->parseConfiguration($validation);
         }
 
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
@@ -395,15 +376,15 @@ class FileUploadProperty extends DataProperty
             $data['ishooked'] = false;
         }
         if ($data['ishooked']) {
-            $data['multiple'] = $this->multiple;
+            $data['multiple'] = $this->initialization_multiple;
             $data['methods'] = $this->methods;
-            $data['basedir'] = $this->basedir;
-            $data['importdir'] = $this->importdir;
+            $data['basedir'] = $this->initialization_basedirectory;
+            $data['importdir'] = $this->initialization_importdirectory;
         } else {
-            $data['basedir'] = $this->basedir;
-            if (!empty($this->filetype)) {
-                $this->filetype = strtr($this->filetype, array('(' => '', ')' => ''));
-                $data['filetype'] = explode('|',$this->filetype);
+            $data['basedir'] = $this->initialization_basedirectory;
+            if (!empty($this->validation_file_extensions)) {
+                $this->validation_file_extensions = strtr($this->validation_file_extensions, array('(' => '', ')' => ''));
+                $data['filetype'] = explode('|',$this->validation_file_extensions);
             } else {
                 $data['filetype'] = array();
             }
@@ -413,35 +394,31 @@ class FileUploadProperty extends DataProperty
                     $data['filetype'][] = '';
                 }
             }
-            $data['maxsize'] = $this->maxsize;
+            $data['maxsize'] = $this->validation_max_file_size;
         }
         $data['other'] = '';
 
-        // allow template override by child classes
-        if (empty($template)) {
-            $template = 'fileupload';
-        }
-        return xarTplProperty('base', $template, 'validation', $data);
+        return xarTplProperty('base', $template, 'configuration', $data);
     }
 
-    public function updateValidation(Array $args = array())
+    public function updateConfiguration(Array $args = array())
     {
         extract($args);
 
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // do something with the validation and save it in $this->validation
+        // do something with the validation and save it in $this->configuration
         if (isset($validation)) {
             if (is_array($validation)) {
                 if (!empty($validation['other'])) {
-                    $this->validation = $validation['other'];
+                    $this->configuration = $validation['other'];
 
                 } elseif ($this->UploadsModule_isHooked) {
-                    $this->validation = '';
+                    $this->configuration = '';
                     if (!empty($validation['multiple'])) {
-                        $this->validation = 'multiple';
+                        $this->configuration = 'multiple';
                     } else {
-                        $this->validation = 'single';
+                        $this->configuration = 'single';
                     }
 // CHECKME: verify format of methods(...) part
                     if (!empty($validation['methods'])) {
@@ -454,21 +431,21 @@ class FileUploadProperty extends DataProperty
                             }
                         }
                         if (count($todo) > 0) {
-                            $this->validation .= ';methods(';
-                            $this->validation .= join(',',$todo);
-                            $this->validation .= ')';
+                            $this->configuration .= ';methods(';
+                            $this->configuration .= join(',',$todo);
+                            $this->configuration .= ')';
                         }
                     }
                     if (!empty($validation['basedir'])) {
-                        $this->validation .= ';basedir(' . $validation['basedir'] . ')';
+                        $this->configuration .= ';basedir(' . $validation['basedir'] . ')';
                     }
                     if (!empty($validation['importdir'])) {
-                        $this->validation .= ';importdir(' . $validation['importdir'] . ')';
+                        $this->configuration .= ';importdir(' . $validation['importdir'] . ')';
                     }
                 } else {
-                    $this->validation = '';
+                    $this->configuration = '';
                     if (!empty($validation['basedir'])) {
-                        $this->validation = $validation['basedir'];
+                        $this->configuration = $validation['basedir'];
                     }
                     if (!empty($validation['filetype'])) {
                         $todo = array();
@@ -477,27 +454,26 @@ class FileUploadProperty extends DataProperty
                             $todo[] = $ext;
                         }
                         if (count($todo) > 0) {
-                            $this->validation .= ';(';
-                            $this->validation .= join('|',$todo);
-                            $this->validation .= ')';
+                            $this->configuration .= ';(';
+                            $this->configuration .= join('|',$todo);
+                            $this->configuration .= ')';
                         }
                     }
                     if (!empty($validation['maxsize'])) {
                         if (empty($todo)) {
-                            $this->validation .= ';';
+                            $this->configuration .= ';';
                         }
-                        $this->validation .= ';' . $validation['maxsize'];
+                        $this->configuration .= ';' . $validation['maxsize'];
                     }
                 }
             } else {
-                $this->validation = $validation;
+                $this->configuration = $validation;
             }
         }
 
-        // tell the calling function that everything is OK
         return true;
     }
-
+*/
 }
 
 ?>

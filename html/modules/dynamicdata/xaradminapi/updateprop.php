@@ -20,7 +20,7 @@
  * @param $args['defaultvalue'] default of the field to update (optional)
  * @param $args['source'] data source of the field to update (optional)
  * @param $args['status'] status of the field to update (optional)
- * @param $args['validation'] validation of the field to update (optional)
+ * @param $args['configuration'] configuration of the field to update (optional)
  * @return bool
  * @throws BAD_PARAM, NO_PERMISSION
  */
@@ -77,9 +77,9 @@ function dynamicdata_adminapi_updateprop($args)
         $sql .= ", source = ?";
         $bindvars[] = $source;
     }
-    if (isset($validation) && is_string($validation)) {
-        $sql .= ", validation = ?";
-        $bindvars[] = $validation;
+    if (isset($configuration) && is_string($configuration)) {
+        $sql .= ", configuration = ?";
+        $bindvars[] = $configuration;
     }
     if (isset($name) && is_string($name)) {
         $sql .= ", name = ?";

@@ -34,7 +34,7 @@
                         Module Name:
                     </xar:mlstring>
                 </label>
-                <xar:data-input type="module" name="moduleid" id="moduleid" value="$moduleid" />
+                <xar:data-input type="module" name="moduleid" id="moduleid" value="$moduleid" store_prop="regid" />
             </div>
             <div class="xar-form-input-wrapper">
                 <label for="blockname" title="#xarML('This is the exact name of the block.  It must be case specific, otherwise the block will not function correctly.')#" class="xar-form-label">
