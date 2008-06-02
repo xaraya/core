@@ -1157,10 +1157,10 @@ class xarMod extends Object implements IxarMod
         // theme+s or module+s
         $table = $tables[$type.'s'];
 
-        $query = "SELECT items.regid, items.directory,
+        $query = "SELECT items.regid
                      items.id, items.state, items.name
               FROM   $table items
-              WHERE  items.name = ? OR items.directory = ?";
+              WHERE  items.name = ?";
         $bindvars = array($modName, $modName);
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
