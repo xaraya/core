@@ -650,6 +650,7 @@ ALTER TABLE `xar_security_instances`
 ALTER TABLE `xar_dynamic_data` CHANGE `itemid` `item_id` INTEGER UNSIGNED NOT NULL;
 ALTER TABLE `xar_dynamic_objects` CHANGE `parent` `parent_id` INTEGER UNSIGNED NOT NULL;
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_objects.parent", "xar_dynamic_objects.parent_id");
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.objectid", "xar_dynamic_properties.object_id");
 ALTER TABLE `xar_dynamic_properties_def`
   DROP `parent`;
 
