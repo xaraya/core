@@ -1157,7 +1157,7 @@ class xarMod extends Object implements IxarMod
         // theme+s or module+s
         $table = $tables[$type.'s'];
 
-        $query = "SELECT items.regid
+        $query = "SELECT items.regid,
                      items.id, items.state, items.name
               FROM   $table items
               WHERE  items.name = ?";
