@@ -13,6 +13,10 @@
   </h3>
 </xar:if>
 
+<xar:set name="propertyfields">xarModAPIFunc('dynamicdata','user','getprop',
+                                   array('objectid' => 2,
+                                         'allprops' => true))
+</xar:set>                                         
 <xar:foreach in="$fields" value="$item">
     <!-- Include the edit-part for a property -->
     <xar:set name="field">$item</xar:set>
