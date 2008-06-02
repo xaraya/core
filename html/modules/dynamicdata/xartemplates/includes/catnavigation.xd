@@ -7,14 +7,14 @@
 
 <xar:if condition="!empty($tmpreq) and $tmpreq[1] eq 'admin' and $tmpreq[2] eq 'view'">
 <!-- from admin-objectlist.xd -->
-<xar:categories-navigation layout="trails" showchildren="1" module="$modname" type="admin" func="$viewfunc" itemtype="$itemtype" itemid="0" catid="$catid" showcatcount="1" />
+<xar:data-output type="categorynavigation" layout="trails" showchildren="1" module="$modname" urltype="admin" urlfunc="$viewfunc" itemtype="$itemtype" itemid="0" catid="$catid" showcatcount="1" />
 
 <xar:elseif condition="isset($itemid)"/>
 <!-- from user-objectdisplay.xd -->
-<xar:categories-navigation layout="trails" showchildren="1" module="$modname" func="$viewfunc" itemtype="$itemtype" itemid="$itemid" catid="$catid" showcatcount="1" />
+<xar:data-output type="categorynavigation" layout="trails" showchildren="1" module="$modname" urlfunc="$viewfunc" itemtype="$itemtype" itemid="$itemid" catid="$catid" showcatcount="1" />
 
 <xar:else/>
 <!-- from user-objectview.xd -->
-<xar:categories-navigation layout="trails" showchildren="1" module="$modname" func="$viewfunc" itemtype="$itemtype" catid="$catid" showcatcount="1" />
+<xar:data-output type="categorynavigation" layout="trails" showchildren="1" module="$modname" urlfunc="$viewfunc" itemtype="$itemtype" catid="$catid" showcatcount="1" />
 </xar:if>
 </xar:template>

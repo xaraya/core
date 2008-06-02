@@ -61,7 +61,7 @@ function dynamicdata_admin_modifyconfighook($args)
                     'type' => xarML('Field Format'),
                     'defaultvalue' => xarML('Default'),
                     'source' => xarML('Data Source'),
-                    'validation' => xarML('Validation'),
+                    'configuration' => xarML('Configuration'),
                    );
 
     $labels['dynamicdata'] = xarML('Dynamic Data Fields');
