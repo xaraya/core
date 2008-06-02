@@ -12,16 +12,16 @@
             <a href="javascript:void(0);" title="#xarML('Click to toggle field visibility for this property')#" onclick="return toggleDisplay('fieldwrapper_#$field.id#');">
                 <xar:mlstring>[unnamed property]</xar:mlstring></a>
         </xar:if>&#160;
-        [#$labels['id']#: #$field['id']#]
+        [#$fields['id']['label']#: #$field['id']#]
     </legend>
     
     <div id="fieldwrapper_#$field.id#" style="display:none;" class="xar-displaynone">
         <div class="xar-form-input-wrapper">
-            <label class="xar-form-label">#$labels.id#</label>
+            <label class="xar-form-label">#$fields.id.label#</label>
             #$field.id#
         </div>
         <div class="xar-form-input-wrapper">
-            <label class="xar-form-label">#$labels.name#</label>
+            <label class="xar-form-label">#$fields.name.label#</label>
             #$field.name#&#160;
             <a href="&xar-modurl-dynamicdata-admin-modify;&amp;objectid=2&amp;itemid=#$field.id#">
                 <xar:var name="otherfields" prep="true"/>
@@ -30,14 +30,14 @@
 
         <div class="xar-form-input-wrapper">
             <label for="dd_label_#$field['id']#" class="xar-form-label">
-                #$labels['label']#:
+                #$fields['label']['label']#:
             </label>
             <input type="text" name="dd_label[#$field['id']#]" id="dd_label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium" />
         </div>
 
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">
-                #$labels['source']#:
+                #$fields['source']['label']#:
             </label>
             #$field['source']#
         </div>
@@ -50,21 +50,21 @@
       
         <div class="xar-form-input-wrapper">
             <label for="dd_type_#$field.id#" class="xar-form-label">
-                #$labels['type']#:
+                #$fields['type']['label']#:
             </label>
             <xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="old_dd_type_'.$field['id'].'" value="$field['type']" />
         </div>
         
         <div class="xar-form-input-wrapper">
             <label for="dd_default_#$field.id#" class="xar-form-label">
-                #$labels['defaultvalue']#:
+                #$fields['defaultvalue']['label']#:
             </label>
             <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVarPrepForDisplay($field['defaultvalue'])#" class="xar-form-textmedium" />
         </div>
         
         <div class="xar-form-input-wrapper">
             <label for="dd_validation_#$field.id#" class="xar-form-label">
-                #$labels['validation']#:
+                #$fields['validation']['label']#:
             </label>
             <input type="text" name="dd_validation[#$field['id']#]" id="dd_validation_#$field['id']#" value="#xarVarPrepForDisplay($field['validation'])#" class="xar-form-textmedium" />
             <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$field.id#" title="#xarVarPrepForDisplay($editvalidation)#">
@@ -74,7 +74,7 @@
         
         <div class="xar-form-input-wrapper">
             <label for="dd_status_#$field.id#" class="xar-form-label">
-                #$labels['status']#:
+                #$fields['status']['label']#:
             </label>
             <xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" id="dd_status_'.$field['id'].'" size="15" value="$field['status']" />
         </div>

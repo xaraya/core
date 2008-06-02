@@ -13,11 +13,10 @@
   </h3>
 </xar:if>
 
-<xar:foreach in="$fields" value="$field">
+<xar:foreach in="$fields" value="$item">
     <!-- Include the edit-part for a property -->
-    <xar:template file="editproperty"
-                  module="dynamicdata"
-                  subdata="array('field' =&gt; $field, 'labels' =&gt; $labels,'fieldtypeprop' =&gt; $fieldtypeprop, 'fieldstatusprop' =&gt; $fieldstatusprop)"/>
+    <xar:set name="field">$item</xar:set>
+    <xar:template file="editproperty" module="dynamicdata"/>
 </xar:foreach>
 
 <!-- Include the part for creating a new property -->

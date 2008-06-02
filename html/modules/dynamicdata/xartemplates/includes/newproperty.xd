@@ -6,7 +6,7 @@
   
   <div class="xar-form-input-wrapper">
     <label for="dd_source_0" class="xar-form-label">
-      #$labels['source']#:
+      #$fields['source']['label']#:
     </label>
     <select class="dd-norm" name="dd_source[0]" id="dd_source_0">
       <xar:foreach in="$sources" value="$mysource">
@@ -17,35 +17,35 @@
   
   <div class="xar-form-input-wrapper">
     <label for="dd_label_0" class="xar-form-label">
-      #$labels['label']#:
+      #$fields['label']['label']#:
     </label>
     <input type="text" name="dd_label[0]" id="dd_label_0" class="xar-form-text-medium" />
   </div>
   
   <div class="xar-form-input-wrapper">
     <label for="dd_type_0" class="xar-form-label">
-      #$labels['type']#:
+      #$fields['type']['label']#:
     </label>
     <xar:data-input property="$fieldtypeprop" name="dd_type[0]" id="dd_type_0" value="" />
   </div>
   
   <div class="xar-form-input-wrapper">
     <label for="dd_default_0" class="xar-form-label">
-      #$labels['defaultvalue']#:
+      #$fields['defaultvalue']['label']#:
     </label>
     <input type="text" name="dd_default[0]" id="dd_default_0" class="xar-form-textmedium" />
   </div>
   
   <div class="xar-form-input-wrapper">
     <label for="dd_validation_0" class="xar-form-label">
-      #$labels['validation']#:
+      #$fields['validation']['label']#:
     </label>
     <input type="text" name="dd_validation[0]" id="dd_validation_0" class="xar-form-textmedium" />
   </div>
   
   <div class="xar-form-input-wrapper">
     <label for="dd_status_0" class="xar-form-label">
-      #$labels['status']#:
+      #$fields['status']['label']#:
     </label>
     <xar:data-input property="$fieldstatusprop" name="dd_status[0]" id="dd_status_0" value="1" />
   </div>
