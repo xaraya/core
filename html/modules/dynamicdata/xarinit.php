@@ -301,7 +301,7 @@ function dynamicdata_init()
             array('defaultvalue' ,'Default'         ,$objectid[2],3 ,''            ,$dynamic_properties.'.defaultvalue'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (254)'),
             array('source'    ,'Source'             ,$objectid[2],23,'dynamic_data',$dynamic_properties.'.source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,'varchar (254)'),
             array('status'    ,'Status'             ,$objectid[2],25,'1'           ,$dynamic_properties.'.status'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,'integer (tiny)'),
-            array('seq  '     ,'Order'              ,$objectid[2],15,'0'           ,$dynamic_properties.'.seq'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11,'integer (tiny)'),
+            array('seq'       ,'Order'              ,$objectid[2],15,'0'           ,$dynamic_properties.'.seq'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11,'integer (tiny)'),
             array('validation','Validation'         ,$objectid[2],3 ,''            ,$dynamic_properties.'.validation',DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12,'text'),
 
             // Properties for the Sample DD object
@@ -756,12 +756,6 @@ function dynamicdata_createPropDefTable()
         ),
         /* the label of this property */
         'label'  => array(
-            'type'        => 'varchar',
-            'size'        => 254,
-            'default'     => null
-        ),
-        /* this property's parent */
-        'parent_id' => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null

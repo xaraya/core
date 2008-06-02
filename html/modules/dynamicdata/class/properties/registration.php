@@ -107,16 +107,16 @@ class PropertyRegistration extends DataContainer
         
         $sql = "INSERT INTO $propdefTable
                 (id, name, label,
-                 parent_id, filepath, class,
+                 filepath, class,
                  format, validation, source,
                  reqfiles, modid, args, aliases)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         if(!isset($stmt))
             $stmt = $dbconn->prepareStatement($sql);
 
         $bindvars = array(
             (int) $this->id, $this->name, $this->desc,
-            $this->parent, $this->filepath, $this->class,
+            $this->filepath, $this->class,
             $this->format, $this->validation, $this->source,
             serialize($this->reqfiles), $modId, is_array($this->args) ? serialize($this->args) : $this->args, serialize($this->aliases)
         );
@@ -153,7 +153,7 @@ class PropertyRegistration extends DataContainer
         $tables = xarDB::getTables();
         // Sort by required module(s) and then by name
         $query = "SELECT  p.id, p.name, p.label,
-                          p.parent_id, p.filepath, p.class,
+                          p.filepath, p.class,
                           p.format, p.validation, p.source,
                           p.reqfiles, m.name, p.args,
                           p.aliases
@@ -168,7 +168,7 @@ class PropertyRegistration extends DataContainer
             while($result->next())
             {
                 list(
-                    $id,$name,$label,$parent,$filepath,$class,$format,
+                    $id,$name,$label,$filepath,$class,$format,
                     $validation,$source,$reqfiles,$modname,$args,$aliases
                 ) = $result->fields;
 
