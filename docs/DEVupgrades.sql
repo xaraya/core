@@ -616,8 +616,15 @@ ALTER TABLE `xar_themes`
   DROP `xaraya_version`,
   DROP `bl_version`,
   DROP `class`;
+
+ALTER TABLE `xar_dynamic_data` CHANGE `itemid` `item_id`                   integer unsigned NOT NULL;
+ALTER TABLE `xar_dynamic_objects` CHANGE `parent` `parent_id`              integer NOT NULL default '0';
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_objects.parent", "xar_dynamic_objects.parent_id");
+#ALTER TABLE `xar_dynamic_properties_def` CHANGE `parent` `parent_id`       integer unsigned NOT NULL default NULL;
+
+
 /*
-    Suggestion: do all further renames above this and change the appropriate line(s) here
+    Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
 */
 ALTER TABLE `xar_block_group_instances` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_block_group_instances` CHANGE `group_id` `group_id`       integer unsigned NOT NULL;
@@ -652,7 +659,7 @@ ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`           integer defaul
 
 ALTER TABLE `xar_dynamic_data` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_dynamic_data` CHANGE `property_id` `property_id` integer unsigned NOT NULL;
-ALTER TABLE `xar_dynamic_data` CHANGE `item_id` `item_id`           integer unsigned NOT NULL;
+ALTER TABLE `xar_dynamic_data` CHANGE `item_id` `item_id`         integer unsigned NOT NULL;
 ALTER TABLE `xar_dynamic_data` CHANGE `value` `value`             mediumtext;
 
 ALTER TABLE `xar_dynamic_objects` CHANGE `id` `id`                integer unsigned NOT NULL auto_increment;
@@ -660,7 +667,7 @@ ALTER TABLE `xar_dynamic_objects` CHANGE `name` `name`            varchar(30) NO
 ALTER TABLE `xar_dynamic_objects` CHANGE `label` `label`          varchar(254) NOT NULL default '';
 ALTER TABLE `xar_dynamic_objects` CHANGE `module_id` `module_id`  integer unsigned NOT NULL;
 ALTER TABLE `xar_dynamic_objects` CHANGE `itemtype` `itemtype`    integer NOT NULL default '0';
-ALTER TABLE `xar_dynamic_objects` CHANGE `parent` `parent_id`        integer NOT NULL default '0';
+ALTER TABLE `xar_dynamic_objects` CHANGE `parent_id` `parent_id`  integer NOT NULL default '0';
 ALTER TABLE `xar_dynamic_objects` CHANGE `class` `class`          varchar(254) NOT NULL default 'DataObject';
 ALTER TABLE `xar_dynamic_objects` CHANGE `filepath` `filepath`    varchar(254) NOT NULL default 'modules/dynamicdata/class/objects/base.php';
 ALTER TABLE `xar_dynamic_objects` CHANGE `urlparam` `urlparam`    varchar(30) NOT NULL default 'itemid';
@@ -682,7 +689,7 @@ ALTER TABLE `xar_dynamic_properties` CHANGE `validation` `validation`      text;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `id` `id`                  integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `name` `name`              varchar(254) default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `label` `label`            varchar(254) default NULL;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `parent` `parent_id`       integer unsigned default NULL;
+#ALTER TABLE `xar_dynamic_properties_def` CHANGE `parent_id` `parent_id`    integer unsigned default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `filepath` `filepath`      varchar(254) default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `class` `class`            varchar(254) default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `validation` `validation`  varchar(254) default NULL;
@@ -780,4 +787,3 @@ ALTER TABLE `xar_themes` CHANGE `regid` `regid`                    integer unsig
 ALTER TABLE `xar_themes` CHANGE `directory` `directory`            varchar(64) NOT NULL;
 ALTER TABLE `xar_themes` CHANGE `version` `version`                varchar(10) NOT NULL;
 ALTER TABLE `xar_themes` CHANGE `state` `state`                    tinyint(3) unsigned NOT NULL default '1';
-
