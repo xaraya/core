@@ -40,7 +40,7 @@ function blocks_userapi_countblocktypes($args)
         $bind[] = $module;
     }
     if (!empty($type)) {
-        $query .= 'AND btypes.type = ?';
+        $query .= 'AND btypes.name = ?';
         $bind[] = $type;
     }
     $result =& $dbconn->Execute($query, $bind);

@@ -55,7 +55,7 @@ function blocks_adminapi_create_type($args)
     try {
         $dbconn->begin();
         $query = "INSERT INTO $block_types_table
-                  (module_id, type, info) VALUES (?, ?, ?)";
+                  (module_id, name, info) VALUES (?, ?, ?)";
         $bindvars = array($modId, $type, $info);
         $dbconn->Execute($query, $bindvars);
         // We need the id which was generated

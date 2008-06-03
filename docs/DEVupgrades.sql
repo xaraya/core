@@ -619,6 +619,7 @@ ALTER TABLE `xar_themes`
   DROP `bl_version`,
   DROP `class`;
 
+ALTER TABLE `xar_block_types` CHANGE `name` `name` varchar(64) NOT NULL default '';
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
 */
@@ -643,7 +644,7 @@ ALTER TABLE `xar_block_instances` CHANGE `refresh` `refresh`         tinyint(3) 
 ALTER TABLE `xar_block_instances` CHANGE `last_update` `last_update` integer unsigned NOT NULL default '0';
 
 ALTER TABLE `xar_block_types` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_block_types` CHANGE `type` `type`               varchar(64) NOT NULL default '';
+ALTER TABLE `xar_block_types` CHANGE `name` `name`               varchar(64) NOT NULL default '';
 ALTER TABLE `xar_block_types` CHANGE `module_id` `module_id`     integer unsigned NOT NULL;
 ALTER TABLE `xar_block_types` CHANGE `info` `info`               text;
 

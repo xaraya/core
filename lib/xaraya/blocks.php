@@ -148,7 +148,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
     // Fetch details of all blocks in the group.
     // CHECKME: Does this really have to be a quadruple left join, i cant imagine
     $query = "SELECT    inst.id as bid,
-                        btypes.type as type,
+                        btypes.name as type,
                         mods.name as module,
                         inst.name as name,
                         inst.title as title,

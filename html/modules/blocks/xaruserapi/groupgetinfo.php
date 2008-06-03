@@ -75,7 +75,7 @@ function blocks_userapi_groupgetinfo($args)
     // Query for instances in this group
     // NOTE: same query as in includes/xarBlocks.php
     $query = "SELECT    inst.id as id,
-                        btypes.type as type,
+                        btypes.name as type,
                         mods.name as module,
                         inst.title as title,
                         inst.name as name,

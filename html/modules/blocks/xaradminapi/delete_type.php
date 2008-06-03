@@ -54,7 +54,7 @@ function blocks_adminapi_delete_type($args)
                         $block_types_table as btypes
               WHERE     btypes.id = inst.type_id
               AND       btypes.module_id = ?
-              AND       btypes.type = ?";
+              AND       btypes.name = ?";
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array($module, $type));
 
@@ -65,7 +65,7 @@ function blocks_adminapi_delete_type($args)
     $result->close();
 
     // Delete the block type
-    $query = "DELETE FROM $block_types_table WHERE module_id = ? AND type = ?";
+    $query = "DELETE FROM $block_types_table WHERE module_id = ? AND name = ?";
     $dbconn->Execute($query, array($module, $type));
     return true;
 }

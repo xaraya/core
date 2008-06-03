@@ -39,7 +39,7 @@ function blocks_userapi_getallblocktypes($args)
     $modules_table     = $xartable['modules'];
 
     // Fetch instance details.
-    $query = "SELECT btypes.id, mods.name, btypes.type, btypes.info
+    $query = "SELECT btypes.id, mods.name, btypes.name, btypes.info
               FROM  $block_types_table btypes, $modules_table mods
               WHERE btypes.module_id = mods.id ";
 
@@ -50,7 +50,7 @@ function blocks_userapi_getallblocktypes($args)
     }
 
     if (!empty($type)) {
-        $query .= ' AND btypes.type = ?';
+        $query .= ' AND btypes.name = ?';
         $bind [] = $type;
     }
 

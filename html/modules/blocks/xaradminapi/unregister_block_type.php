@@ -42,7 +42,7 @@ function blocks_adminapi_unregister_block_type($args)
               WHERE     mods.id = btypes.module_id AND
                         btypes.id = inst.type_id AND
                         mods.name = ? AND
-                        btypes.type = ?";
+                        btypes.name = ?";
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array($modName,$blockType));
 
