@@ -144,7 +144,6 @@
 
   <!-- Others -->
   <xsl:include href="tags/element.xsl"/>
-  <xsl:include href="tags/label.xsl"/>
 <!--
     Utility template for resolving text nodes. It recursively resolves
     #-pairs from left to right. Pre- and Post- hash content are treated
