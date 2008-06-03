@@ -15,6 +15,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param none
  * @return groups listing of available groups
+ * @todo this code is unreadable
  */
 
 function roles_userapi_getallgroups($args)
