@@ -141,7 +141,6 @@ class xarLogger extends Object
         // NOTE: when using E_STRICT, and PHP has no 'own' timezone setting
         // strftime() will issue notices on that. But that's what you get with
         // E_STRICT ;-) so we will leave this.  
-        date_default_timezone_set('Europe/Amsterdam');  
         return strftime($this->_timeFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->_elapsed, 3),3);
     }
 }
