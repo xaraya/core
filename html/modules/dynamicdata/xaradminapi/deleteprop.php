@@ -62,7 +62,7 @@ function dynamicdata_adminapi_deleteprop($args)
         // TODO: don't delete if the data source is not in dynamic_data
         // delete all data too !
         $dynamicdata = $xartable['dynamic_data'];
-        $sql = "DELETE FROM $dynamicdata WHERE propid = ?";
+        $sql = "DELETE FROM $dynamicdata WHERE property_id = ?";
         $dbconn->Execute($sql,array($id));
         $dbconn->commit();
     } catch (SQLException $e) {

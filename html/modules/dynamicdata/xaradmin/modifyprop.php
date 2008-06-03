@@ -119,18 +119,6 @@ function dynamicdata_admin_modifyprop()
     }
     $data['hooks'] = $hooks;
 
-    $data['labels'] = array(
-                            'id' => xarML('ID'),
-                            'name' => xarML('Name'),
-                            'label' => xarML('Label'),
-                            'type' => xarML('Property Type'),
-                            'defaultvalue' => xarML('Default'),
-                            'source' => xarML('Data Source'),
-                            'status' => xarML('Status'),
-                            'validation' => xarML('Validation'),
-                            'new' => xarML('New'),
-                      );
-
     $data['fieldtypeprop'] =& DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
     $data['fieldstatusprop'] =& DataPropertyMaster::getProperty(array('type' => 'fieldstatus'));
 

@@ -85,7 +85,7 @@ function dynamicdata_adminapi_removehook($args)
 
         // Delete the item fields
         $bindmarkers = '?' . str_repeat(',?',count($ids)-1);
-        $sql = "DELETE FROM $dynamicdata WHERE propid IN ($bindmarkers)";
+        $sql = "DELETE FROM $dynamicdata WHERE property_id IN ($bindmarkers)";
         $stmt = $dbconn->prepareStatement($sql);
         $stmt->executeUpdate($ids);
 
