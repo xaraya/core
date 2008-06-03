@@ -664,9 +664,9 @@ function xarModRegisterHook($hookObject, $hookAction, $hookArea, $hookModName, $
         $tmodInfo = xarMod::getBaseInfo($hookModName);
         $tmodId = $tmodInfo['systemid'];
         $query = "INSERT INTO $hookstable
-                  (object, action, t_area, t_module_id, t_type, t_func)
-                  VALUES (?,?,?,?,?,?)";
-        $bindvars = array($hookObject,$hookAction,$hookArea,$tmodId,$hookModType,$hookFuncName);
+                  (object, action, s_type, t_area, t_module_id, t_type, t_func)
+                  VALUES (?,?,?,?,?,?,?)";
+        $bindvars = array($hookObject,$hookAction,'',$hookArea,$tmodId,$hookModType,$hookFuncName);
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeUpdate($bindvars);
         $dbconn->commit();
