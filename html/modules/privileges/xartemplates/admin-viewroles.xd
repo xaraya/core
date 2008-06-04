@@ -105,7 +105,7 @@
             <xar:foreach in="$roles" value="$role">
                 <tr>
                     <td>
-                        <xar:if condition="$role['type'] eq 0">
+                        <xar:if condition="$role['itemtype'] eq 2">
                             <xar:mlstring>User</xar:mlstring>
                         <xar:else />
                             <xar:mlstring>Group</xar:mlstring>

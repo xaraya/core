@@ -31,7 +31,7 @@
             <xar:loop name="$roles">
                 <tr>
                     <td width="150">
-                        <xar:if condition="$loop:item['type'] eq 0">User
+                        <xar:if condition="$loop:item['itemtype'] eq 2">User
                         <xar:else />Group</xar:if>
                     </td>
                     <td width="150">#$loop:item['name']#</td>

@@ -36,7 +36,7 @@
       <label>Type</label>
       <type>itemtype</type>
       <defaultvalue>2</defaultvalue>
-      <source>xar_roles.type</source>
+      <source>xar_roles.itemtype</source>
       <status>67</status>
       <seq>3</seq>
       <validation>roles</validation>

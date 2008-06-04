@@ -33,9 +33,9 @@ function roles_userapi_getdeleteduser($args)
         throw new VariableValidationException(array('id',$id,'numeric'));
     }
 
-    // Set type to user
-    if (empty($type)){
-        $type = ROLES_USERTYPE;
+    // Set itemtype to user
+    if (empty($itemtype)){
+        $itemtype = ROLES_USERTYPE;
     }
 
     if(!xarSecurityCheck('ReadRole')) return;
@@ -56,9 +56,9 @@ function roles_userapi_getdeleteduser($args)
                    valcode,
                    state
             FROM $rolestable
-            WHERE state = ? AND type = ?";
+            WHERE state = ? AND itemtype = ?";
     $bindvars[] = 0;
-    $bindvars[] = $type;
+    $bindvars[] = $itemtype;
 
     if (!empty($id) && is_numeric($id)) {
         $query .= " AND id = ?";

@@ -65,7 +65,7 @@ function roles_admin_showusers()
     if (empty($q) || isset($reload)) {
         $types = xarModAPIFunc('roles','user','getitemtypes');
         $basetypes = array();
-        // Show only roles based on the user type
+        // Show only roles based on the user itemtype
         foreach ($types as $key => $value) {
             $basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('itemtype' => $key, 'moduleid' => 27));
             if ($basetype == ROLES_USERTYPE) $basetypes[] = $basetype;
@@ -85,8 +85,8 @@ function roles_admin_showusers()
         }
 
           $c = array();
-          foreach ($basetypes as $type) {
-              $c[] = $q->eq('r.type',$type);
+          foreach ($basetypes as $itemtype) {
+              $c[] = $q->eq('r.itemtype',$itemtype);
           }
           $q->qor($c);
 

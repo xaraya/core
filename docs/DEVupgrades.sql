@@ -622,6 +622,8 @@ ALTER TABLE `xar_themes`
 ALTER TABLE `xar_block_types` CHANGE `type` `name` varchar(64) NOT NULL default '';
 ALTER TABLE `xar_roles` CHANGE `auth_modid` `auth_module_id` integer unsigned NOT NULL;
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_roles.auth_modid", "xar_roles.auth_module_id");
+ALTER TABLE `xar_roles` CHANGE `type` `itemtype`                   integer unsigned NOT NULL;
+
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
 */
@@ -747,7 +749,7 @@ ALTER TABLE `xar_rolemembers` CHANGE `parent_id` `parent_id`        integer unsi
 
 ALTER TABLE `xar_roles` CHANGE `id` `id`                       integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_roles` CHANGE `name` `name`                   varchar(254) NOT NULL default '';
-ALTER TABLE `xar_roles` CHANGE `type` `type`                   integer unsigned NOT NULL;
+ALTER TABLE `xar_roles` CHANGE `itemtype` `itemtype`           integer unsigned NOT NULL;
 ALTER TABLE `xar_roles` CHANGE `users` `users`                 integer NOT NULL default '0';
 ALTER TABLE `xar_roles` CHANGE `uname` `uname`                 varchar(254) NOT NULL default '';
 ALTER TABLE `xar_roles` CHANGE `email` `email`                 varchar(254) NOT NULL default '';

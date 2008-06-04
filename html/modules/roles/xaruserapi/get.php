@@ -45,7 +45,7 @@ function roles_userapi_get($args)
                   'id',
                   'uname',
                   'name',
-                  'type', // TYPE is a key word in several databases (avoid for the future)
+                  'itemtype', 
                   'email',
                   'pass',
                   'date_reg',
@@ -70,17 +70,17 @@ function roles_userapi_get($args)
     elseif (!empty($state) && $state != ROLES_STATE_ALL) {
         $q->eq('state',(int)$state);
     }
-    if (!empty($type)) {
-        $q->eq('type',$type);
+    if (!empty($itemtype)) {
+        $q->eq('itemtype',$itemtype);
     }
     if (!$q->run()) return;
 
     // Check for no rows found, and if so return
     $user = $q->row();
     if ($user == array()) return false;
-    // id and type are reserved/key words in Oracle et al.
+    // id is a reserved/key words in Oracle et al.
     $user['id'] = $user['id'];
-    $user['type'] = $user['type'];
+    $user['itemtype'] = $user['itemtype'];
     return $user;
 }
 

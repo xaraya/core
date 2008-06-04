@@ -148,7 +148,7 @@
                                     #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#
                                 </td>
                                 <td>
-                                    #$loop:item['type']#
+                                    #$loop:item['itemtype']#
                                 </td>
                                 <td class="xar-align-center">
                                     <xar:if condition="$loop:item['unique'] eq 1">

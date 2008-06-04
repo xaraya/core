@@ -77,7 +77,7 @@ class GroupListProperty extends SelectProperty
             // check if this is a valid group id
             $group = xarModAPIFunc('roles','user','get',
                                    array('id' => $value,
-                                         'type' => 1)); // we're looking for a group here
+                                         'itemtype' => 1)); // we're looking for a group here
             if (!empty($group)) {
                 $this->value = $value;
                 return true;
@@ -132,7 +132,7 @@ class GroupListProperty extends SelectProperty
         } else {
             $group = xarModAPIFunc('roles','user','get',
                                    array('id' => $value,
-                                         'type' => ROLES_GROUPTYPE)); // we're looking for a group here
+                                         'itemtype' => ROLES_GROUPTYPE)); // we're looking for a group here
             if (empty($group) || empty($group['name'])) {
                 $groupname = '';
             } else {

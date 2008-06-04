@@ -76,7 +76,7 @@ function roles_admin_createmail()
                                 'r.email AS email',
                                 'r.state AS state',
                                 'r.date_reg AS date_reg'));
-            $q->eq('type',xarRoles::ROLES_USERTYPE);
+            $q->eq('itemtype',xarRoles::ROLES_USERTYPE);
         }
         // Set the paging and order stuff for this particular page
         $numitems = xarModVars::get('roles', 'itemsperpage');

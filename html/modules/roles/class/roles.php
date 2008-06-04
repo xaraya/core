@@ -194,10 +194,10 @@ class xarRoles extends Object
         $result->first();
 
         // create the parent object
-        list($id, $name, $type, $parentid, $uname, $email, $pass,
+        list($id, $name, $itemtype, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
         sys::import('modules.dynamicdata.class.objects.master');
-        $parent = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $type));
+        $parent = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $itemtype));
         $parent->getItem(array('itemid' => $id));
 
         // retrieve the child's data from the repository
@@ -206,10 +206,10 @@ class xarRoles extends Object
         $result->first();
 
         // create the child object
-        list($id, $name, $type, $parentid, $uname, $email, $pass,
+        list($id, $name, $itemtype, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
         sys::import('modules.roles.class.role');
-        $child = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $type));
+        $child = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $itemtype));
         $child->getItem(array('itemid' => $id));
 
        // done
@@ -240,8 +240,8 @@ class xarRoles extends Object
         $q->addfield('r.users AS users');
         $q->addfield('rm.parent_id AS parentid');
         $c = array();
-        foreach ($basetypes as $type) {
-            $c[] = $q->peq('r.type',$type);
+        foreach ($basetypes as $itemtype) {
+            $c[] = $q->peq('r.itemtype',$itemtype);
         }
         $q->qor($c);
         $q->eq('r.state',ROLES_STATE_ACTIVE);
@@ -257,7 +257,7 @@ class xarRoles extends Object
      * @param int    $state
      * @return object a role
      */
-    private static function _lookuprole($field,$value,$type=ROLES_USERTYPE,$state=ROLES_STATE_ALL)
+    private static function _lookuprole($field,$value,$itemtype=ROLES_USERTYPE,$state=ROLES_STATE_ALL)
     {
         // retrieve the object's data from the repository
         // set up and execute the query
@@ -285,7 +285,7 @@ class xarRoles extends Object
         }
         // create and return the role object
         sys::import('modules.roles.class.role');
-        $role = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $row['type']));
+        $role = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $row['itemtype']));
         $role->getItem(array('itemid' => $row['id']));
         return $role;
     }

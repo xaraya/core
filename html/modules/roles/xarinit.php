@@ -35,7 +35,7 @@ function roles_init()
         $fields = array(
                         'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                         'name' => array('type' => 'varchar','size' => 255,'null' => false,'default' => ''),
-                        'type' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
+                        'itemtype' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
                         'users' => array('type' => 'integer', 'null' => false, 'default' => '0'),
                         'uname' => array('type' => 'varchar', 'size' => 255, 'null' => false, 'default' => ''),
                         'email' => array('type' => 'varchar', 'size' => 255,'null' => false,'default' => ''),
@@ -48,8 +48,8 @@ function roles_init()
         $dbconn->Execute($query);
 
         // role type is used in all group look-ups (e.g. security checks)
-        $index = array('name' => 'i_' . $prefix . '_roles_type',
-                       'fields' => array('type')
+        $index = array('name' => 'i_' . $prefix . '_roles_itemtypetype',
+                       'fields' => array('itemtype')
                        );
         $query = xarDBCreateIndex($tables['roles'], $index);
         $dbconn->Execute($query);

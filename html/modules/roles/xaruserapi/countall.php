@@ -61,7 +61,7 @@ function roles_userapi_countall($args)
         $bindvars[] = (int) $thisrole['id'];
     }
 
-    $query .= " AND type = ?";
+    $query .= " AND itemtype = ?";
     $bindvars[] = ROLES_USERTYPE;
     $bindvars[] = 0;
 // cfr. xarcachemanager - this approach might change later

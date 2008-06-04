@@ -237,7 +237,7 @@ class xarPrivilege extends xarMask
     {
         // set up a query to select the roles this privilege
         // is linked to in the acl table
-        $query = "SELECT r.id, r.name, r.type,
+        $query = "SELECT r.id, r.name, r.itemtype,
                          r.uname, r.email, r.pass,
                          r.auth_module_id
                   FROM $this->rolestable r, $this->acltable acl
@@ -252,7 +252,7 @@ class xarPrivilege extends xarMask
         //      $ind = 0;
     sys::import('modules.dynamicdata.class.objects.master');
         while($result->next()) {
-            list($id,$name,$type,$uname,$email,$pass,$auth_modid) = $result->fields;
+            list($id,$name,$itemtype,$uname,$email,$pass,$auth_modid) = $result->fields;
             //          $ind = $ind + 1;
 
             $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
@@ -260,7 +260,7 @@ class xarPrivilege extends xarMask
             /*
             $role = new xarRole(array('id' => $id,
                                       'name' => $name,
-                                      'type' => $type,
+                                      'itemtype' => $itemtype,
                                       'uname' => $uname,
                                       'email' => $email,
                                       'pass' => $pass,

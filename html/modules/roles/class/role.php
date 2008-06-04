@@ -454,32 +454,32 @@ class Role extends DataObject
      * @param integer state get users in this state
      * @param integer startnum get users beyond this number
      * @param integer numitems get a defined number of users
-     * @param string order order the result (name, uname, type, email, date_reg, state...)
+     * @param string order order the result (name, uname, itemtype, email, date_reg, state...)
      * @param string selection get users within this selection criteria
      * @return array
      */
     public function getUsers($state = ROLES_STATE_CURRENT, $startnum = 0, $numitems = 0, $order = 'name', $selection = NULL)
     {
-        $query = "SELECT r.id, r.name, r.type, r.uname,
+        $query = "SELECT r.id, r.name, r.itemtype, r.uname,
                          r.email, r.pass, r.date_reg,
                          r.valcode, r.state,r.auth_module_id
                   FROM $this->rolestable r, $this->rolememberstable rm ";
         // set up the query and get the data
         if ($state == ROLES_STATE_CURRENT) {
             $where = "WHERE r.id = rm.role_id AND
-                        r.type = ? AND
+                        r.itemtype = ? AND
                         r.state != ? AND
                         rm.parent_id = ?";
              $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->getID());
         } elseif ($state == ROLES_STATE_ALL) {
             $where = "WHERE r.id = rm.role_id AND
-                        r.type = ? AND
+                        r.itemtype = ? AND
                         rm.parent_id = ?";
              $bindvars = array(ROLES_USERTYPE,$this->getID());
         } else {
              $bindvars = array(ROLES_USERTYPE, $state, $this->properties['id']->value);
             $where = "WHERE r.id = rm.role_id AND
-                        r.type = ? AND
+                        r.itemtype = ? AND
                         r.state = ? AND
                         rm.parent_id = ?";
         }
@@ -516,10 +516,10 @@ class Role extends DataObject
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param integer state count user in this state
      * @param string selection count user within this selection criteria
-     * @param integer type group or user
+     * @param integer itemtype group or user
      * @return int
      */
-    public function countChildren($state = ROLES_STATE_CURRENT, $selection = NULL, $type = NULL)
+    public function countChildren($state = ROLES_STATE_CURRENT, $selection = NULL, $itemtype = NULL)
     {
         $q = new xarQuery('SELECT');
         $q->addfield('COUNT(r.id) AS children');
@@ -532,7 +532,7 @@ class Role extends DataObject
         } else {
             $q->eq('r.state', $state);
         }
-        if (isset($type)) $q->eq('r.type', $type);
+        if (isset($itemtype)) $q->eq('r.itemtype', $itemtype);
 
         if (isset($selection)) {
             $query = $q->tostring() . $selection;
@@ -696,8 +696,8 @@ class Role extends DataObject
     /**
      * isUser: checks whether this role is a user
      *
-     * Users have type = 2.
-     * Groups have type = 3.
+     * Users have itemtype = 2.
+     * Groups have itemtype = 3.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @return bool
@@ -795,7 +795,7 @@ class Role extends DataObject
 
     function setName($var) { $this->properties['name']->setValue($var); }
     function setUname($var) { $this->properties['uname']->setValue($var); }
-    function setType($var) { $this->properties['type']->setValue($var); }
+    function setType($var) { $this->properties['itemtype']->setValue($var); }
     function setParent($var) { $this->properties['parentid']->setValue($var); }
     function setUser($var) { $this->properties['uname']->setValue($var); }
     function setEmail($var) { $this->properties['email']->setValue($var); }

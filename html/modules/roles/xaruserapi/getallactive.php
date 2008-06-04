@@ -67,7 +67,7 @@ function roles_userapi_getallactive($args)
         $bindvars[] = (int) $thisrole['id'];
     }
 
-    $query .= " AND type = ? ORDER BY " . $order;
+    $query .= " AND itemtype = ? ORDER BY " . $order;
     $bindvars[] = 0;
     $stmt = $dbconn->prepareStatement($query);
 

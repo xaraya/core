@@ -63,7 +63,7 @@ function roles_userapi_getall($args)
                 'roles', 'user', 'get',
                 array(
                     (is_numeric($group) ? 'id' : 'name') => $group,
-                    'type' => ROLES_GROUPTYPE
+                    'itemtype' => ROLES_GROUPTYPE
                 )
             );
             if (isset($group['id']) && is_numeric($group['id'])) {
@@ -139,7 +139,7 @@ function roles_userapi_getall($args)
     }
 
     // Return only users (not groups).
-    $where_clause[] = 'roletab.type = ' . ROLES_USERTYPE;
+    $where_clause[] = 'roletab.itemtype = ' . ROLES_USERTYPE;
 
     // Add the where-clause to the query.
     $query .= ' WHERE ' . implode(' AND ', $where_clause);

@@ -68,7 +68,7 @@ function roles_admin_purge($args)
                     'uname',
                     'name',
                     'email',
-                    'type',
+                    'itemtype',
                     'date_reg'));
         $q->setorder('name');
         if (!empty($data['recallsearch'])) {
@@ -126,7 +126,7 @@ function roles_admin_purge($args)
                }
                 if (!$skip) {
                     $types = xarModAPIFunc('roles','user','getitemtypes');
-                    $role['type'] = $types[$role['type']]['label'];
+                    $role['itemtype'] = $types[$role['itemtype']]['label'];
                     $role['unique'] = $unique;
                     $recallroles[] = $role;
                 }
@@ -172,7 +172,7 @@ function roles_admin_purge($args)
                 $name = '';
                 $pass = '';
                 $email = '';
-                $date_reg = '';
+                $date_reg = 0;
                 $q = new xarQuery('UPDATE',$rolestable);
                 $q->addfield('name',$name);
                 $q->addfield('uname',$uname);
