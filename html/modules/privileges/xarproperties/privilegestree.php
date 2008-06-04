@@ -60,7 +60,7 @@ class PrivilegesTree extends Tree
                   FROM " . $xartable['privileges'] . " p LEFT JOIN ". $xartable['realms'] . " r ON p.realm_id = r.id
                   LEFT JOIN ". $xartable['modules'] . " m ON p.module_id = m.id
                   LEFT JOIN ". $xartable['privmembers'] . " pm ON p.id = pm.privilege_id
-                  WHERE type = " . xarPrivileges::PRIVILEGES_PRIVILEGETYPE .
+                  WHERE itemtype = " . xarPrivileges::PRIVILEGES_PRIVILEGETYPE .
                   " ORDER BY p.name";
         $stmt = $dbconn->prepareStatement($query);
         // The fetchmode *needed* to be here, dunno why. Exception otherwise

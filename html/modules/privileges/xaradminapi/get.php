@@ -18,7 +18,7 @@ function privileges_adminapi_get($args)
                      p.level,  p.description
               FROM " . $xartable['privileges'] . " p
               LEFT JOIN ". $xartable['modules'] . " m ON p.module_id = m.id
-              WHERE p.type = " . xarMasks::PRIVILEGES_PRIVILEGETYPE;
+              WHERE p.itemtype = " . xarMasks::PRIVILEGES_PRIVILEGETYPE;
     if (isset($itemid)) {
         $query .= " AND p.id = " . $itemid;
     }

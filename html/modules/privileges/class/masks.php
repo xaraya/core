@@ -121,7 +121,7 @@ class xarMasks extends Object
                 $bindvars = array($module_id,$component,'All','None');
             }
         }
-        $query .= " AND type = ? ";
+        $query .= " AND itemtype = ? ";
         $bindvars[] = self::PRIVILEGES_MASKTYPE;
         $query .= "ORDER BY masks.module_id, masks.component, masks.name";
 
@@ -178,7 +178,7 @@ class xarMasks extends Object
             if($result->next()) $realmid = $result->getInt('id');
         }
 
-        $query = "SELECT id FROM " . self::$privilegestable  . " WHERE type = ? AND module_id = ? AND name = ?";
+        $query = "SELECT id FROM " . self::$privilegestable  . " WHERE itemtype = ? AND module_id = ? AND name = ?";
         $stmt = self::$dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(self::PRIVILEGES_MASKTYPE, $module_id, $name));
 
@@ -189,13 +189,13 @@ class xarMasks extends Object
                 $query = "UPDATE " . self::$privilegestable .
                           " SET realm_id = ?, component = ?,
                               instance = ?, level = ?,
-                              description = ?, type= ?
+                              description = ?, itemtype= ?
                           WHERE id = ?";
                 $bindvars = array($realmid, $component, $instance, $level,
                                   $description, self::PRIVILEGES_MASKTYPE, $id);
             } else {
                 $query = "INSERT INTO " . self::$privilegestable .
-                          " (name, realm_id, module_id, component, instance, level, description, type)
+                          " (name, realm_id, module_id, component, instance, level, description, itemtype)
                           VALUES (?,?,?,?,?,?,?,?)";
                 $bindvars = array(
                                   $name, $realmid, $module_id, $component, $instance, $level,
@@ -225,7 +225,7 @@ class xarMasks extends Object
     public static function unregister($name)
     {
         self::initialize();
-        $query = "DELETE FROM " . self::$privilegestable . " WHERE type = ? AND name = ?";
+        $query = "DELETE FROM " . self::$privilegestable . " WHERE itemtype = ? AND name = ?";
         self::$dbconn->Execute($query,array(self::PRIVILEGES_MASKTYPE, $name));
         return true;
     }
@@ -241,7 +241,7 @@ class xarMasks extends Object
     public static function removemasks($module_id)
     {
         self::initialize();
-        $query = "DELETE FROM " . self::$privilegestable . " WHERE type = ? AND module_id = ?";
+        $query = "DELETE FROM " . self::$privilegestable . " WHERE itemtype = ? AND module_id = ?";
         //Execute the query, bail if an exception was thrown
         self::$dbconn->Execute($query,array(self::PRIVILEGES_MASKTYPE, $module_id));
         return true;
@@ -710,7 +710,7 @@ class xarMasks extends Object
                 $query .= " AND masks.component = ? ";
                 $bindvars[] = strtolower($component);
             }
-            $query .= " AND type = ? ";
+            $query .= " AND itemtype = ? ";
             $bindvars[] = self::PRIVILEGES_MASKTYPE;
             $stmt = self::$dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);

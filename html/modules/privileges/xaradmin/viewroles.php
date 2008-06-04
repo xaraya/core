@@ -34,9 +34,9 @@ function privileges_admin_viewroles()
     foreach ($priv->getRoles() as $role) {
         array_push($curroles, array('roleid'=>$role->getID(),
                                     'name'=>$role->getName(),
-                                    'type'=>$role->getType(),
+                                    'itemtype'=>$role->getType(),
                                     'uname'=>$role->getUser(),
-                                    'auth_module'=>$role->getAuthModule()));
+                                    'auth_module_id'=>$role->getAuthModule()));
     }
 
 //Get the array of parents of this privilege

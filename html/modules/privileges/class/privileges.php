@@ -148,7 +148,7 @@ class xarPrivileges extends xarMasks
         }
         $query = "INSERT INTO " . parent::$privilegestable . " (
                     name, realm_id, module_id, component,
-                    instance, level, description, type)
+                    instance, level, description, itemtype)
                   VALUES (?,?,?,?,?,?,?,?)";
         $bindvars = array($name, $realmid, $module_id, $component,
                           $instance, $level, $description, parent::PRIVILEGES_PRIVILEGETYPE);
@@ -198,14 +198,14 @@ class xarPrivileges extends xarMasks
     {
         parent::initialize();
 
-        $where = "WHERE p.type = " . self::PRIVILEGES_PRIVILEGETYPE;
+        $where = "WHERE p.itemtype = " . self::PRIVILEGES_PRIVILEGETYPE;
         if (!empty($args['privilege_id']))      $where .= ' AND p.id = ' . $args['privilege_id'];
         if (!empty($args['role_id']))      $where .= ' AND r.id = ' . $args['role_id'];
         if (!empty($args['module'])) {
             if ($args['module'] == strtolower('All')) $where .= " AND p.module_id = " . 0;
             else $where .= " AND p.module_id = " . xarMod::getID($args['module']);
         }
-        $query = "SELECT p.id, p.name, r.id,r.type,r.name,
+        $query = "SELECT p.id, p.name, r.id,r.itemtype,r.name,
                          p.module_id, p.component, p.instance,
                          p.level,  p.description
                   FROM " . parent::$privilegestable . " p INNER JOIN ". parent::$acltable . " a ON p.id = a.privilege_id
@@ -252,7 +252,7 @@ class xarPrivileges extends xarMasks
         parent::initialize();
 
         xarLogMessage('PRIV: getting all privs, once!');
-        $where = "WHERE type = " . self::PRIVILEGES_PRIVILEGETYPE;
+        $where = "WHERE itemtype = " . self::PRIVILEGES_PRIVILEGETYPE;
         if (!empty($args['name']))      $where .= ' AND p.name = ' . $args['name'];
         if (!empty($args['module'])) {
             if ($args['module'] == strtolower('All')) $where .= " AND p.module_id = " . 0;
@@ -319,7 +319,7 @@ class xarPrivileges extends xarMasks
                         WHERE p.id = acl.privilege_id AND
                               pm.parent_id IS NULL ";
         }
-        $query .=" AND p.type = ?";
+        $query .=" AND p.itemtype = ?";
         $query .=" ORDER BY p.name";
 
         $stmt = parent::$dbconn->prepareStatement($query);
@@ -663,7 +663,7 @@ class xarPrivileges extends xarMasks
         $query = "SELECT p.id, p.name, r.name, p.module_id, m.name, p.component, p.instance, p.level, p.description
                   FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable ." r ON p.realm_id = r.id
                   LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id
-                  WHERE type = ?";
+                  WHERE itemtype = ?";
         if(is_numeric($id)) $query .= " AND p.id = ?";
         else  $query .= " AND p.name = ?";
 
@@ -712,7 +712,7 @@ class xarPrivileges extends xarMasks
 
         parent::initialize();
         $query = "SELECT p.*, m.name FROM " . parent::$privilegestable . " p
-        LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.type = ? AND p.name = ?";
+        LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.itemtype = ? AND p.name = ?";
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
 
         //Execute the query, bail if an exception was thrown
@@ -756,7 +756,7 @@ class xarPrivileges extends xarMasks
         parent::initialize();
         $privileges = array();
         $query = "SELECT p.*, m.name FROM " . parent::$privilegestable . " p
-        LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.type = ? AND p.module_id = ?";
+        LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.itemtype = ? AND p.module_id = ?";
         //Execute the query, bail if an exception was thrown
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, $module));

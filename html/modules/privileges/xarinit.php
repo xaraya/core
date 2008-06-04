@@ -75,6 +75,7 @@ function privileges_init()
          *   instance varchar(100) NOT NULL default '',
          *   level int(11) NOT NULL default '0',
          *   description varchar(255) NOT NULL default '',
+         *   itemtype integer unsigned NOT NULL,
          *   PRIMARY KEY  (id)
          * )
          *********************************************************************/
@@ -88,12 +89,12 @@ function privileges_init()
                         'instance' => array('type'   => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
                         'level' => array('type'      => 'integer', 'null' => false,'default' => '0'),
                         'description' => array('type'=> 'varchar', 'size' => 255, 'null' => false, 'default'     => ''),
-                        'type' => array('type'=> 'integer', 'unsigned' => true, 'null' => false));
+                        'itemtype' => array('type'=> 'integer', 'unsigned' => true, 'null' => false));
         $query = xarDBCreateTable($tables['privileges'],$fields);
         $dbconn->Execute($query);
 
         $index = array('name'      => 'i_'.$prefix.'_privileges_name',
-                       'fields'    => array('name', 'module_id', 'type'),
+                       'fields'    => array('name', 'module_id', 'itemtype'),
                        'unique'    => true);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);

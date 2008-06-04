@@ -623,6 +623,7 @@ ALTER TABLE `xar_block_types` CHANGE `type` `name` varchar(64) NOT NULL default 
 ALTER TABLE `xar_roles` CHANGE `auth_modid` `auth_module_id` integer unsigned NOT NULL;
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_roles.auth_modid", "xar_roles.auth_module_id");
 ALTER TABLE `xar_roles` CHANGE `type` `itemtype`                   integer unsigned NOT NULL;
+ALTER TABLE `xar_privileges` CHANGE `type` `itemtype`                   integer unsigned NOT NULL;
 
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
@@ -739,7 +740,7 @@ ALTER TABLE `xar_privileges` CHANGE `component` `component`         varchar(100)
 ALTER TABLE `xar_privileges` CHANGE `instance` `instance`           varchar(100) NOT NULL default '';
 ALTER TABLE `xar_privileges` CHANGE `level` `level`                 integer NOT NULL default '0';
 ALTER TABLE `xar_privileges` CHANGE `description` `description`     varchar(254) NOT NULL default '';
-ALTER TABLE `xar_privileges` CHANGE `type` `type`                   integer unsigned NOT NULL;
+ALTER TABLE `xar_privileges` CHANGE `itemtype` `itemtype`           integer unsigned NOT NULL;
 
 ALTER TABLE `xar_privmembers` CHANGE `privilege_id` `privilege_id`  integer unsigned NOT NULL;
 ALTER TABLE `xar_privmembers` CHANGE `parent_id` `parent_id`        integer unsigned NOT NULL;

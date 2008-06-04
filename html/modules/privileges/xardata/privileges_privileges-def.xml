@@ -94,7 +94,7 @@
       <label>Type</label>
       <type>dropdown</type>
       <defaultvalue>2</defaultvalue>
-      <source>xar_privileges.type</source>
+      <source>xar_privileges.itemtype</source>
       <status>65</status>
       <seq>8</seq>
       <validation>0,Base;1,Privilege;3,Mask</validation>
