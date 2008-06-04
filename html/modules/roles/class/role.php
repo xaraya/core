@@ -462,7 +462,7 @@ class Role extends DataObject
     {
         $query = "SELECT r.id, r.name, r.type, r.uname,
                          r.email, r.pass, r.date_reg,
-                         r.valcode, r.state,r.auth_modid
+                         r.valcode, r.state,r.auth_module_id
                   FROM $this->rolestable r, $this->rolememberstable rm ";
         // set up the query and get the data
         if ($state == ROLES_STATE_CURRENT) {

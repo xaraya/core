@@ -163,7 +163,7 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
     // TODO: this should be inside roles module
     try {
         $dbconn->begin();
-        $query = "UPDATE $rolestable SET auth_modid = ? WHERE id = ?";
+        $query = "UPDATE $rolestable SET auth_module_id = ? WHERE id = ?";
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate(array($modId,$userId));
         $dbconn->commit();
@@ -549,7 +549,7 @@ function xarUser__getAuthModule($userId)
 
     $query = "SELECT mods.name
               FROM $modstable mods, $rolestable roles
-              WHERE mods.id = roles.auth_modid AND
+              WHERE mods.id = roles.auth_module_id AND
                     roles.id = ?";
     $stmt =& $dbconn->prepareStatement($query);
     $result =& $stmt->executeQuery(array($userId),ResultSet::FETCHMODE_NUM);

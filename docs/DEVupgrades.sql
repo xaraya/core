@@ -620,6 +620,8 @@ ALTER TABLE `xar_themes`
   DROP `class`;
 
 ALTER TABLE `xar_block_types` CHANGE `type` `name` varchar(64) NOT NULL default '';
+ALTER TABLE `xar_roles` CHANGE `auth_modid` `auth_module_id` integer unsigned NOT NULL;
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_roles.auth_modid", "xar_roles.auth_module_id");
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
 */
@@ -753,7 +755,7 @@ ALTER TABLE `xar_roles` CHANGE `pass` `pass`                   varchar(100) NOT 
 ALTER TABLE `xar_roles` CHANGE `date_reg` `date_reg`           integer unsigned NOT NULL default '0';
 ALTER TABLE `xar_roles` CHANGE `valcode` `valcode`             varchar(35) NOT NULL default '';
 ALTER TABLE `xar_roles` CHANGE `state` `state`                 tinyint(4) NOT NULL default '3';
-ALTER TABLE `xar_roles` CHANGE `auth_modid` `auth_modid`       integer unsigned NOT NULL;
+ALTER TABLE `xar_roles` CHANGE `auth_module_id` `auth_module_id`       integer unsigned NOT NULL;
 
 ALTER TABLE `xar_security_acl` CHANGE `role_id` `role_id`  integer unsigned NOT NULL;
 ALTER TABLE `xar_security_acl` CHANGE `privilege_id` `privilege_id`  integer unsigned NOT NULL;

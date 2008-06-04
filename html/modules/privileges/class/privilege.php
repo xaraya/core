@@ -239,7 +239,7 @@ class xarPrivilege extends xarMask
         // is linked to in the acl table
         $query = "SELECT r.id, r.name, r.type,
                          r.uname, r.email, r.pass,
-                         r.auth_modid
+                         r.auth_module_id
                   FROM $this->rolestable r, $this->acltable acl
                   WHERE r.id = acl.role_id AND
                         acl.privilege_id = ?";
