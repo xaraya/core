@@ -1,5 +1,5 @@
 <object name="roles_groups">
-  <objectid>6</objectid>
+  <objectid>8</objectid>
   <label>Group</label>
   <parent>0</parent>
   <module_id>27</module_id>
@@ -12,94 +12,94 @@
   <isalias>1</isalias>
   <properties>
     <property name="id">
-      <id>39</id>
+      <id>45</id>
       <label>ID</label>
       <type>itemid</type>
       <defaultvalue></defaultvalue>
       <source>xar_roles.id</source>
       <status>65</status>
       <seq>1</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="name">
-      <id>40</id>
+      <id>46</id>
       <label>Name</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source>xar_roles.name</source>
       <status>33</status>
       <seq>2</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="role_type">
-      <id>41</id>
+      <id>47</id>
       <label>Type</label>
       <type>itemtype</type>
       <defaultvalue>3</defaultvalue>
       <source>xar_roles.type</source>
       <status>67</status>
       <seq>3</seq>
-      <validation>roles</validation>
+      <configuration>a:9:{s:18:"display_combo_mode";s:1:"1";s:14:"display_layout";s:7:"default";s:21:"initialization_module";s:1:"4";s:23:"initialization_itemtype";s:1:"0";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
     <property name="users">
-      <id>42</id>
+      <id>48</id>
       <label>Users</label>
       <type>integerbox</type>
       <defaultvalue>0</defaultvalue>
       <source>xar_roles.users</source>
       <status>67</status>
       <seq>4</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="uname">
-      <id>43</id>
+      <id>49</id>
       <label>User Name</label>
       <type>textbox</type>
       <defaultvalue>time()</defaultvalue>
       <source>xar_roles.uname</source>
       <status>67</status>
       <seq>5</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="regdate">
-      <id>44</id>
+      <id>50</id>
       <label>Reg. Date</label>
       <type>calendar</type>
       <defaultvalue>xarMLS_userTime()</defaultvalue>
       <source>xar_roles.date_reg</source>
       <status>67</status>
       <seq>6</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="valcode">
-      <id>45</id>
+      <id>51</id>
       <label>Val. Code</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source>xar_roles.valcode</source>
       <status>67</status>
       <seq>7</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="state">
-      <id>46</id>
+      <id>52</id>
       <label>State</label>
       <type>dropdown</type>
       <defaultvalue>3</defaultvalue>
       <source>xar_roles.state</source>
       <status>67</status>
       <seq>8</seq>
-      <validation>xarModAPIFunc('roles','user','getstates')</validation>
+      <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:41:"xarModAPIFunc('roles','user','getstates')";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
     <property name="authmodule">
-      <id>47</id>
+      <id>53</id>
       <label>Auth. Module</label>
       <type>integerbox</type>
-      <defaultvalue>xarModVars::get('roles', 'defaultauthmodule')</defaultvalue>
+      <defaultvalue>xarMod::getID(xarModVars::get('roles', 'defaultauthmodule'))</defaultvalue>
       <source>xar_roles.auth_module_id</source>
       <status>67</status>
       <seq>9</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
   </properties>
 </object>

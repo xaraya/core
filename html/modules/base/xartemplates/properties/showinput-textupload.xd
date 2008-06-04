@@ -1,13 +1,14 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-form-container-after">
-    <textarea class="xar-form-textarealarge" name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
-    <xar:if condition="!empty($uploads_hooked)">#$uploads_hooked# 
-    <xar:else />
-    <input type="hidden" name="MAX_FILE_SIZE" value="#$maxsize#" />
-    <input class="xar-fullwidth" type="file" name="#$upname#" size="#$size#" id="#$upid#" tabindex="#$tabindex#" />#$allowed#</xar:if>
-    <xar:if condition="!empty($invalid)">
-        <span class="xar-error">#$invalid#</span>
-    </xar:if>
-</div>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-form-container-after">
+        <textarea class="xar-form-textarealarge" name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
+        <xar:if condition="!empty($uploads_hooked)">#$uploads_hooked# 
+        <xar:else />
+        <input type="hidden" name="MAX_FILE_SIZE" value="#$maxsize#" />
+        <input class="xar-fullwidth" type="file" name="#$upname#" size="#$size#" id="#$upid#" tabindex="#$tabindex#" />#$allowed#</xar:if>
+        <xar:if condition="!empty($invalid)">
+            <span class="xar-error">#$invalid#</span>
+        </xar:if>
+    </div>
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

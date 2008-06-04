@@ -9,13 +9,13 @@
  * @link http://xaraya.com/index.php/release/1.html
  */
 
-/* include the base class */
-sys::import('modules.base.xarproperties.dropdown');
+sys::import('modules.dynamicdata.xarproperties.objectref');
+
 /**
  * Handle module property
  * @author mikespub
  */
-class ModuleProperty extends SelectProperty
+class ModuleProperty extends ObjectRefProperty
 {
     public $id         = 19;
     public $name       = 'module';
@@ -23,6 +23,10 @@ class ModuleProperty extends SelectProperty
     public $reqmodules = array('modules');
 
     public $filter = array();
+
+    public $initialization_refobject    = 'modules';            // ID of the object we want to reference
+    public $initialization_store_prop   = 'systemid';           // Name of the property we want to use for storage
+    public $initialization_display_prop = 'displayname';        // Name of the property we want to use for storage
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -33,40 +37,23 @@ class ModuleProperty extends SelectProperty
     function showInput(Array $data=array())
     {
         if (!empty($data['filter'])) $this->filter = $data['filter'];
-        if (!empty($data['validation'])) $this->parseValidation($data['validation']);
+        if (!empty($data['store_prop'])) $this->initialization_store_prop = $data['store_prop'];
         return parent::showInput($data);
     }
 
     function getOptions()
     {
-        if (count($this->options) == 0) {
-            if ($this->validation == 'name') {
-                $key = 'name';
-            } elseif ($this->validation == 'regid') {
-                $key = 'regid';
-            } else {
-                $key = 'systemid';
-            }
-            // TODO: wasnt here an $args earlier? where did this go?
-            $modlist = xarModAPIFunc('modules', 'admin', 'getlist',array('filter' => $this->filter));
-            foreach ($modlist as $modinfo) {
-                $this->options[] = array('id' => $modinfo[$key], 'name' => $modinfo['displayname']);
-            }
+        $options = $this->getFirstline();
+        if (count($this->options) > 0) {
+            if (!empty($firstline)) $this->options = array_merge($options,$this->options);
+            return $this->options;
         }
-        return $this->options;
+        
+        $items = xarModAPIFunc('modules', 'admin', 'getlist',array('filter' => $this->filter));
+        foreach($items as $item) {
+            $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
+        }
+        return $options;
     }
-
-    /**
-     * Get Option
-     * @todo finish this once we're able to get modinfo by systemid
-     */
-    /*function getOption($check = false)
-    {
-        debug($this);
-        if (!isset($this->value)) {
-             if ($check) return true;
-             return null;
-        }
-    }*/
 }
 ?>
