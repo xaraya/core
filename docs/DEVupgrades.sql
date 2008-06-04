@@ -619,7 +619,7 @@ ALTER TABLE `xar_themes`
   DROP `bl_version`,
   DROP `class`;
 
-ALTER TABLE `xar_block_types` CHANGE `name` `name` varchar(64) NOT NULL default '';
+ALTER TABLE `xar_block_types` CHANGE `type` `name` varchar(64) NOT NULL default '';
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
 */
