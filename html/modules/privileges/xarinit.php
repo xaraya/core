@@ -93,25 +93,25 @@ function privileges_init()
         $query = xarDBCreateTable($tables['privileges'],$fields);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$prefix.'_privileges_name',
+        $index = array('name'      => $prefix.'_privileges_name',
                        'fields'    => array('name', 'module_id', 'itemtype'),
                        'unique'    => true);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$prefix.'_privileges_realm_id',
+        $index = array('name'      => $prefix.'_privileges_realm_id',
                        'fields'    => array('realm_id'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$prefix.'_privileges_module',
+        $index = array('name'      => $prefix.'_privileges_module',
                        'fields'    => array('module_id'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$prefix.'_privileges_level',
+        $index = array('name'      => $prefix.'_privileges_level',
                        'fields'    => array('level'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['privileges'],$index);
@@ -133,13 +133,13 @@ function privileges_init()
          $query = xarDBCreateTable($tables['privmembers'],$fields);
          $dbconn->Execute($query);
          
-         $index = array('name'      => 'i_'.$prefix.'_privmembers_pid',
+         $index = array('name'      => $prefix.'_privmembers_pid',
                         'fields'    => array('privilege_id'),
                         'unique'    => false);
          $query = xarDBCreateIndex($tables['privmembers'],$index);
          $dbconn->Execute($query);
                 
-         $index = array('name'      => 'i_'.$prefix.'_privmembers_parent_id',
+         $index = array('name'      => $prefix.'_privmembers_parent_id',
                         'fields'    => array('parent_id'),
                         'unique'    => false);
          $query = xarDBCreateIndex($tables['privmembers'],$index);
@@ -165,13 +165,13 @@ function privileges_init()
                                                                    'primary_key'         => true)));
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$prefix.'_security_acl_role_id',
+        $index = array('name'      => $prefix.'_security_acl_role_id',
                        'fields'    => array('role_id'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['security_acl'],$index);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$prefix.'_security_acl_privilege_id',
+        $index = array('name'      => $prefix.'_security_acl_privilege_id',
                        'fields'    => array('privilege_id'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['security_acl'],$index);

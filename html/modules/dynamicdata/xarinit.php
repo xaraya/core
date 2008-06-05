@@ -130,7 +130,7 @@ function dynamicdata_init()
         $query = xarDBCreateIndex(
             $dynamic_objects,
             array(
-                'name'   => 'i_' . $prefix . '_dynobjects_combo',
+                'name'   => $prefix . '_dynobjects_combo',
                 'fields' => array('module_id','itemtype'),
                 'unique' => 'true'
             )
@@ -141,7 +141,7 @@ function dynamicdata_init()
         $query = xarDBCreateIndex(
             $dynamic_objects,
             array(
-                'name'   => 'i_' . $prefix . '_dynobjects_name',
+                'name'   => $prefix . '_dynobjects_name',
                 'fields' => array('name'),
                 'unique' => 'true'
             )
@@ -255,7 +255,7 @@ function dynamicdata_init()
         $query = xarDBCreateIndex(
             $dynamic_properties,
             array(
-                'name'   => 'i_' . $prefix . '_dynprops_combo',
+                'name'   => $prefix . '_dynprops_combo',
                 'fields' => array('object_id', 'name'),
                 'unique' => 'true'
             )
@@ -360,7 +360,7 @@ function dynamicdata_init()
         $query = xarDBCreateIndex(
             $dynamic_data,
             array(
-                'name'   => 'i_' . $prefix . '_dyndata_property_id',
+                'name'   => $prefix . '_dyndata_property_id',
                 'fields' => array('property_id')
             )
         );
@@ -369,7 +369,7 @@ function dynamicdata_init()
         $query = xarDBCreateIndex(
             $dynamic_data,
             array(
-                'name'   => 'i_' . $prefix . '_dyndata_item_id',
+                'name'   => $prefix . '_dyndata_item_id',
                 'fields' => array('item_id')
             )
         );
@@ -821,7 +821,7 @@ function dynamicdata_createPropDefTable()
     $query = xarDBCreateIndex(
         $dynamic_properties_def,
         array(
-            'name'   => 'i_' . $prefix . '_dynpropdef_modid',
+            'name'   => $prefix . '_dynpropdef_modid',
             'fields' => array('modid')
         )
     );

@@ -48,14 +48,14 @@ function roles_init()
         $dbconn->Execute($query);
 
         // role type is used in all group look-ups (e.g. security checks)
-        $index = array('name' => 'i_' . $prefix . '_roles_itemtype',
+        $index = array('name' => $prefix . '_roles_itemtype',
                        'fields' => array('itemtype')
                        );
         $query = xarDBCreateIndex($tables['roles'], $index);
         $dbconn->Execute($query);
 
         // username must be unique (for login) + don't allow groupname to be the same either
-        $index = array('name' => 'i_' . $prefix . '_roles_uname',
+        $index = array('name' => $prefix . '_roles_uname',
                        'fields' => array('uname'),
                        'unique' => true
                        );
@@ -63,7 +63,7 @@ function roles_init()
         $dbconn->Execute($query);
 
         // allow identical "real names" here
-        $index = array('name' => 'i_' . $prefix . '_roles_name',
+        $index = array('name' => $prefix . '_roles_name',
                        'fields' => array('name'),
                        'unique' => false
                        );
@@ -71,7 +71,7 @@ function roles_init()
         $dbconn->Execute($query);
 
         // allow identical e-mail here (???) + is empty for groups !
-        $index = array('name' => 'i_' . $prefix . '_roles_email',
+        $index = array('name' => $prefix . '_roles_email',
                        'fields' => array('email'),
                        'unique' => false
                        );
@@ -79,7 +79,7 @@ function roles_init()
         $dbconn->Execute($query);
 
         // role state is used in many user lookups
-        $index = array('name' => 'i_' . $prefix . '_roles_state',
+        $index = array('name' => $prefix . '_roles_state',
                        'fields' => array('state'),
                        'unique' => false
                        );
@@ -97,13 +97,13 @@ function roles_init()
                                                             'primary_key' => true)));
         $dbconn->Execute($query);
 
-        $index = array('name' => 'i_' . $prefix . '_rolememb_id',
+        $index = array('name' => $prefix . '_rolememb_id',
                        'fields' => array('role_id'),
                        'unique' => false);
         $query = xarDBCreateIndex($tables['rolemembers'], $index);
         $dbconn->Execute($query);
 
-        $index = array('name' => 'i_' . $prefix . '_rolememb_parentid',
+        $index = array('name' => $prefix . '_rolememb_parentid',
                        'fields' => array('parent_id'),
                        'unique' => false);
         $query = xarDBCreateIndex($tables['rolemembers'], $index);
