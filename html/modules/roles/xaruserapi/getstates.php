@@ -14,8 +14,8 @@
  *
  * @author Marc Lutolf
  * @todo this either needs to move somewhere else, or become smarter (ie: use workflow)
- *       there's no current way this can be included in the property validation
- *       since property validation can't be MLed
+ *       there's no current way this can be included in the property configuration
+ *       since property configuration can't be MLed
  */
 function roles_userapi_getstates()
 {

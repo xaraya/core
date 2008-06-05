@@ -128,6 +128,23 @@
                         <xar:mlvar>#$XARCORE_VERSION_SUB#</xar:mlvar>
                      </xar:ml>
                 </div>
+                <div class="xar-form-input-wrapper">
+                    <label title="#xarML('Current Version.')#" class="xar-form-label">
+                        <xar:mlstring>
+                            BlockLayout compiler version:
+                        </xar:mlstring>
+                    </label>
+                    <xar:set name="options">
+                        array(
+                            array('id' => 'FOO', 'name' => 'BL1'),
+                            array('id' => 'XAR_BL_USE_XSLT', 'name' => 'BL2'),
+                        )
+                    </xar:set>
+                    <xar:set name="value">
+                        <xar:var scope="config" name="Site.BL.CompilerVersion"/>
+                    </xar:set>
+                    <xar:data-input type="radio" name="compilerversion" value="$value" options="$options" />
+                </div>
             </fieldset>
             <fieldset>
                 <legend>
@@ -154,7 +171,7 @@
                         <xar:set name="filter">array('UserCapable' => 1)</xar:set>
                     </xar:if>
                     <xar:set name="value"><xar:var scope="module" module="modules" name="defaultmodule"/></xar:set>
-                    <xar:data-input type="module" name="defaultmodule" id="defaultmodule" filter="$filter" value="$value" validation="name" />
+                    <xar:data-input type="module" name="defaultmodule" id="defaultmodule" filter="$filter" value="$value" store_prop="name" />
                 </div>
 
                 <xar:if condition="xarModVars::get('modules', 'defaultmodule') eq xarMod::getID('base')">
