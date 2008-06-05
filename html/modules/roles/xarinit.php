@@ -48,7 +48,7 @@ function roles_init()
         $dbconn->Execute($query);
 
         // role type is used in all group look-ups (e.g. security checks)
-        $index = array('name' => 'i_' . $prefix . '_roles_itemtypetype',
+        $index = array('name' => 'i_' . $prefix . '_roles_itemtype',
                        'fields' => array('itemtype')
                        );
         $query = xarDBCreateIndex($tables['roles'], $index);
