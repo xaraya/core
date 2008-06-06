@@ -51,7 +51,7 @@ function dynamicdata_init()
             /* the name used to reference an object */
             'name'     => array(
                 'type'        => 'varchar',
-                'size'        => 30,
+                'size'        => 64,
                 'null'        => false,
                 'default'     => ''
             ),
@@ -83,14 +83,14 @@ function dynamicdata_init()
             /* the class this object belongs to*/
             'class'     => array(
                 'type'        => 'varchar',
-                'size'        => 255,
+                'size'        => 254,
                 'null'        => false,
                 'default'     => 'DataObject'
             ),
             /* the location where the class file lives*/
             'filepath'     => array(
                 'type'        => 'varchar',
-                'size'        => 255,
+                'size'        => 254,
                 'null'        => false,
                 'default'     => 'modules/dynamicdata/class/objects/base.php'
             ),
@@ -192,7 +192,7 @@ function dynamicdata_init()
             /* the name used to reference a particular property, e.g. in function calls and templates */
             'name'       => array(
                 'type'        => 'varchar',
-                'size'        => 30,
+                'size'        => 64,
                 'null'        => false,
                 'default'     => ''
             ),
@@ -751,7 +751,7 @@ function dynamicdata_createPropDefTable()
         /* the name of this property */
         'name'   => array(
             'type'        => 'varchar',
-            'size'        => 254,
+            'size'        => 64,
             'default'     => null
         ),
         /* the label of this property */

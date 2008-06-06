@@ -185,7 +185,7 @@ function blocks_init()
         $cacheblockstable =  $prefix . '_cache_blocks';
 
         $query = xarDBCreateTable($prefix . '_cache_blocks',
-                                  array('id'          => array('type'        => 'integer',
+                                  array('blockinstance_id'          => array('type'        => 'integer',
                                                                     'unsigned'    => true,
                                                                     'null'        => false,
                                                                     'primary_key' => true),

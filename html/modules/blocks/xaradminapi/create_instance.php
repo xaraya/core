@@ -121,7 +121,7 @@ function blocks_adminapi_create_instance($args)
         }
         //now create the new block
         $cacheblocks = $xartable['cache_blocks'];
-        $query = "INSERT INTO $cacheblocks (id,
+        $query = "INSERT INTO $cacheblocks (blockinstance_id,
                                             nocache,
                                             page,
                                             user,

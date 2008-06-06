@@ -624,6 +624,7 @@ ALTER TABLE `xar_roles` CHANGE `auth_modid` `auth_module_id` integer unsigned NO
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_roles.auth_modid", "xar_roles.auth_module_id");
 ALTER TABLE `xar_roles` CHANGE `type` `itemtype`                   integer unsigned NOT NULL;
 ALTER TABLE `xar_privileges` CHANGE `type` `itemtype`                   integer unsigned NOT NULL;
+ALTER TABLE `xar_cache_blocks` CHANGE `id` `blockinstance_id`           integer unsigned NOT NULL;
 
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
@@ -653,11 +654,11 @@ ALTER TABLE `xar_block_types` CHANGE `name` `name`               varchar(64) NOT
 ALTER TABLE `xar_block_types` CHANGE `module_id` `module_id`     integer unsigned NOT NULL;
 ALTER TABLE `xar_block_types` CHANGE `info` `info`               text;
 
-ALTER TABLE `xar_cache_blocks` CHANGE `id` `id`                   integer unsigned NOT NULL;
-ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`         tinyint NOT NULL default '0';
-ALTER TABLE `xar_cache_blocks` CHANGE `page` `page`               integer NOT NULL default '0';
-ALTER TABLE `xar_cache_blocks` CHANGE `user` `user`               integer unsigned NOT NULL;
-ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`           tinyint default NULL;
+ALTER TABLE `xar_cache_blocks` CHANGE `blockinstance_id` `blockinstance_id`  integer unsigned NOT NULL;
+ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`                    tinyint NOT NULL default '0';
+ALTER TABLE `xar_cache_blocks` CHANGE `page` `page`                          integer NOT NULL default '0';
+ALTER TABLE `xar_cache_blocks` CHANGE `user` `user`                          integer unsigned NOT NULL;
+ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`                      tinyint default NULL;
 
 ALTER TABLE `xar_dynamic_data` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_dynamic_data` CHANGE `property_id` `property_id` integer unsigned NOT NULL;
