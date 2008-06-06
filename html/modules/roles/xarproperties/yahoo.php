@@ -31,9 +31,8 @@ class YahooProperty extends URLIconProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (!empty($value)) {
             if (preg_match('/^[a-z0-9_-]+$/i',$value)) { // TODO: refine this !?
                 $this->value = $value;

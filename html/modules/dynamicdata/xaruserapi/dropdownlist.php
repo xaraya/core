@@ -14,7 +14,7 @@
  * Get an array of DD items (itemid => fieldvalue) for use in dropdown lists
  *
  * E.g. to specify the parent of an item for parent-child relationships,
- * add a dynamic data field of type Dropdown List with the validation rule
+ * add a dynamic data field of type Dropdown List with the configuration rule
  * xarModAPIFunc('dynamicdata','user','dropdownlist',array('field' => 'name','module' => 'dynamicdata','itemtype' => 2))
  *
  * Note : for additional optional parameters, see the getitems() function

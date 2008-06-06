@@ -91,9 +91,17 @@ function blocks_admin_update_instance()
     // Do block-specific update
     $usname = preg_replace('/ /', '_', $blockinfo['module']);
     $updatefunc = $usname . '_' . $blockinfo['type'] . 'block_update';
+    $classpath = 'modules/' . $blockinfo['module'] . '/xarblocks/' . $blockinfo['type'] . '.php';
 
     if (function_exists($updatefunc)) {
         $blockinfo = $updatefunc($blockinfo);
+    } elseif (file_exists($classpath)) {
+        sys::import('modules.' . $blockinfo['module'] . '.xarblocks.' . $blockinfo['type']);
+        sys::import('xaraya.structures.descriptor');
+        $name = ucfirst($blockinfo['type']) . "Block";
+        $descriptor = new ObjectDescriptor(array());
+        $block = new $name($descriptor);
+        $blockinfo = $block->update($blockinfo);
     } else {
         $blockinfofunc = $usname . '_' . $blockinfo['type'] . 'block_info';
         $blockdesc = $blockinfofunc();
