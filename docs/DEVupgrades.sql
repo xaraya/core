@@ -635,12 +635,12 @@ ALTER TABLE `xar_block_group_instances` CHANGE `template` `template`       varch
 ALTER TABLE `xar_block_group_instances` CHANGE `position` `position`       tinyint unsigned NOT NULL;
 
 ALTER TABLE `xar_block_groups` CHANGE `id` `id`             integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_block_groups` CHANGE `name` `name`         varchar(254) NOT NULL default '';
+ALTER TABLE `xar_block_groups` CHANGE `name` `name`         varchar(64) NOT NULL default '';
 ALTER TABLE `xar_block_groups` CHANGE `template` `template` varchar(254) NOT NULL default '';
 
 ALTER TABLE `xar_block_instances` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_block_instances` CHANGE `type_id` `type_id`         integer unsigned NOT NULL;
-ALTER TABLE `xar_block_instances` CHANGE `name` `name`               varchar(100) NOT NULL;
+ALTER TABLE `xar_block_instances` CHANGE `name` `name`               varchar(64) NOT NULL;
 ALTER TABLE `xar_block_instances` CHANGE `title` `title`             varchar(254) default NULL;
 ALTER TABLE `xar_block_instances` CHANGE `content` `content`         text NOT NULL;
 ALTER TABLE `xar_block_instances` CHANGE `template` `template`       varchar(254) default NULL;
@@ -665,7 +665,7 @@ ALTER TABLE `xar_dynamic_data` CHANGE `item_id` `item_id`         integer unsign
 ALTER TABLE `xar_dynamic_data` CHANGE `value` `value`             mediumtext;
 
 ALTER TABLE `xar_dynamic_objects` CHANGE `id` `id`                integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_dynamic_objects` CHANGE `name` `name`            varchar(30) NOT NULL default '';
+ALTER TABLE `xar_dynamic_objects` CHANGE `name` `name`            varchar(64) NOT NULL default '';
 ALTER TABLE `xar_dynamic_objects` CHANGE `label` `label`          varchar(254) NOT NULL default '';
 ALTER TABLE `xar_dynamic_objects` CHANGE `module_id` `module_id`  integer unsigned NOT NULL;
 ALTER TABLE `xar_dynamic_objects` CHANGE `itemtype` `itemtype`    integer NOT NULL default '0';
@@ -678,7 +678,7 @@ ALTER TABLE `xar_dynamic_objects` CHANGE `config` `config`        text;
 ALTER TABLE `xar_dynamic_objects` CHANGE `isalias` `isalias`      tinyint unsigned NOT NULL default '1';
 
 ALTER TABLE `xar_dynamic_properties` CHANGE `id` `id`                      integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_dynamic_properties` CHANGE `name` `name`                  varchar(30) NOT NULL default '';
+ALTER TABLE `xar_dynamic_properties` CHANGE `name` `name`                  varchar(64) NOT NULL default '';
 ALTER TABLE `xar_dynamic_properties` CHANGE `label` `label`                varchar(254) NOT NULL default '';
 ALTER TABLE `xar_dynamic_properties` CHANGE `object_id` `object_id`        integer unsigned NOT NULL;
 ALTER TABLE `xar_dynamic_properties` CHANGE `type` `type`                  integer NOT NULL;
@@ -689,7 +689,7 @@ ALTER TABLE `xar_dynamic_properties` CHANGE `seq` `seq`                    tinyi
 ALTER TABLE `xar_dynamic_properties` CHANGE `validation` `validation`      text;
 
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `id` `id`                  integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `name` `name`              varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `name` `name`              varchar(64) default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `label` `label`            varchar(254) default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `filepath` `filepath`      varchar(254) default NULL;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `class` `class`            varchar(254) default NULL;
