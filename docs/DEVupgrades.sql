@@ -624,6 +624,8 @@ ALTER TABLE `xar_roles` CHANGE `auth_modid` `auth_module_id` integer unsigned NO
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_roles.auth_modid", "xar_roles.auth_module_id");
 ALTER TABLE `xar_roles` CHANGE `type` `itemtype`                   integer unsigned NOT NULL;
 ALTER TABLE `xar_privileges` CHANGE `type` `itemtype`                   integer unsigned NOT NULL;
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_roles.type", "xar_roles.itemtype");
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_privileges.type", "xar_privileges.itemtype");
 ALTER TABLE `xar_cache_blocks` CHANGE `id` `blockinstance_id`           integer unsigned NOT NULL;
 
 /*
