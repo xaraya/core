@@ -162,7 +162,8 @@ function blocks_init()
                                                                    'size'        => 100,
                                                                    'null'        => true,
                                                                    'default'     => NULL),
-                                        'position'    => array('type'        => 'integer',
+                                        'position'    => array('type'            => 'integer',
+                                                                   'size'        => 'tiny',
                                                                    'unsigned'    => true,
                                                                    'null'        => false)));
 
@@ -189,7 +190,8 @@ function blocks_init()
                                                                     'null'        => false,
                                                                     'primary_key' => true),
                                         'nocache'    => array('type'        => 'integer',
-                                                                  'null'        => false,
+                                                                    'size'        => 'tiny',
+                                                                    'null'        => false,
                                                                   'default'     => '0'),
                                         'page' => array('type'        => 'integer',
                                                             'null'        => false,
@@ -198,6 +200,7 @@ function blocks_init()
                                                                'unsigned'    => true,
                                                                'null'        => false),
                                         'expire'    => array('type'        => 'integer',
+                                                                 'size'        => 'tiny',
                                                                  'null'        => true)));
         $dbconn->Execute($query);
 
