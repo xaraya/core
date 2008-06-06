@@ -1,0 +1,42 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!-- Default layout for a list of objects -->
+<div class="xar-fullwidth">
+    <!-- we don't use xar:data-form or xar:data-input here, because this is typically not an input form -->
+    <xar:foreach in="$items" key="$itemid" value="$fields">
+        <table class="xar-norm xar-norm-outline xar-fullwidth">
+            <tr>
+                <th>
+                    <xar:mlstring>
+                        Sort by
+                    </xar:mlstring>
+                </th>
+                <th colspan="2">
+                    <xar:foreach in="$links[$itemid]"  key="$otype" value="$option">
+                        <xar:if condition="!empty($option['olink'])">
+                            #$option['ojoin']#
+                            <a href="#$option['olink']#">
+                                #$option['otitle']#
+                            </a>
+                            <xar:else />
+                            #$option['ojoin']# #$option['otitle']#
+                        </xar:if>
+                    </xar:foreach>
+                </th>
+            </tr>
+            <xar:foreach in="$properties" key="$name">
+                <tr>
+                    <th class="xar-align-right xar-form-textlong">
+                        <a href="#$sorturl#=#$name#">
+                            <xar:data-label property="$properties[$name]" />
+                        </a>
+                    </th>
+                    <td>
+                        <xar:data-output property="$properties[$name]" value="$fields[$name]" />
+                    </td>
+                </tr>
+            </xar:foreach>
+        </table>
+    </xar:foreach>
+</div>
+</xar:template>

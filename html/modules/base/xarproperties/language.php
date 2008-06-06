@@ -21,18 +21,23 @@ class LanguageListProperty extends SelectProperty
 
     function getOptions()
     {
+        $options = $this->getFirstline();
+        if (count($this->options) > 0) {
+            if (!empty($firstline)) $this->options = array_merge($options,$this->options);
+            return $this->options;
+        }
+        
         $list = xarMLSListSiteLocales();
-
         asort($list);
 
         foreach ($list as $locale) {
             $locale_data =& xarMLSLoadLocaleData($locale);
             $name = $locale_data['/language/display'] . " (" . $locale_data['/country/display'] . ")";
-            $this->options[] = array('id'   => $locale,
+            $options[] = array('id'   => $locale,
                                      'name' => $name,
                                     );
         }
-        return $this->options;
+        return $options;
     }
 }
 ?>
