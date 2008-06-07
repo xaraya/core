@@ -83,7 +83,7 @@ function dynamicdata_admin_showpropval($args)
                 if (empty($return_url)) {
                     // return to modifyprop
                     $return_url = xarModURL('dynamicdata', 'admin', 'modifyprop',
-                                            array('itemid' => $myobject->objectid));
+                                            array('itemid' => $myobject->properties['objectid']->value));
                 }
                 xarResponseRedirect($return_url);
                 return true;
