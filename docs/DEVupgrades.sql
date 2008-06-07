@@ -793,20 +793,20 @@ ALTER TABLE `xar_privileges` CHANGE `itemtype` `itemtype`           integer unsi
 ALTER TABLE `xar_privmembers` CHANGE `privilege_id` `privilege_id`  integer unsigned NOT NULL;
 ALTER TABLE `xar_privmembers` CHANGE `parent_id` `parent_id`        integer unsigned NOT NULL;
 
-ALTER TABLE `xar_rolemembers` CHANGE `role_id` `role_id`  integer unsigned NOT NULL default '0';
+ALTER TABLE `xar_rolemembers` CHANGE `role_id` `role_id`            integer unsigned NOT NULL default '0';
 ALTER TABLE `xar_rolemembers` CHANGE `parent_id` `parent_id`        integer unsigned NOT NULL default '0';
 
-ALTER TABLE `xar_roles` CHANGE `id` `id`                       integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_roles` CHANGE `name` `name`                   varchar(254) NOT NULL default '';
-ALTER TABLE `xar_roles` CHANGE `itemtype` `itemtype`           integer unsigned NOT NULL;
-ALTER TABLE `xar_roles` CHANGE `users` `users`                 integer NOT NULL default '0';
-ALTER TABLE `xar_roles` CHANGE `uname` `uname`                 varchar(254) NOT NULL default '';
-ALTER TABLE `xar_roles` CHANGE `email` `email`                 varchar(254) NOT NULL default '';
-ALTER TABLE `xar_roles` CHANGE `pass` `pass`                   varchar(100) NOT NULL default '';
-ALTER TABLE `xar_roles` CHANGE `date_reg` `date_reg`           integer unsigned NOT NULL default '0';
-ALTER TABLE `xar_roles` CHANGE `valcode` `valcode`             varchar(35) NOT NULL default '';
-ALTER TABLE `xar_roles` CHANGE `state` `state`                 tinyint NOT NULL default '3';
-ALTER TABLE `xar_roles` CHANGE `auth_module_id` `auth_module_id`       integer unsigned NOT NULL;
+ALTER TABLE `xar_roles` CHANGE `id` `id`                            integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_roles` CHANGE `name` `name`                        varchar(254) NOT NULL default '';
+ALTER TABLE `xar_roles` CHANGE `itemtype` `itemtype`                integer unsigned NOT NULL;
+ALTER TABLE `xar_roles` CHANGE `users` `users`                      integer NOT NULL default '0';
+ALTER TABLE `xar_roles` CHANGE `uname` `uname`                      varchar(254) NOT NULL default '';
+ALTER TABLE `xar_roles` CHANGE `email` `email`                      varchar(254) NOT NULL default '';
+ALTER TABLE `xar_roles` CHANGE `pass` `pass`                        varchar(100) NOT NULL default '';
+ALTER TABLE `xar_roles` CHANGE `date_reg` `date_reg`                integer unsigned NOT NULL default '0';
+ALTER TABLE `xar_roles` CHANGE `valcode` `valcode`                  varchar(35) NOT NULL default '';
+ALTER TABLE `xar_roles` CHANGE `state` `state`                      tinyint NOT NULL default '3';
+ALTER TABLE `xar_roles` CHANGE `auth_module_id` `auth_module_id`    integer unsigned NOT NULL;
 
 ALTER TABLE `xar_security_acl` CHANGE `role_id` `role_id`  integer unsigned NOT NULL;
 ALTER TABLE `xar_security_acl` CHANGE `privilege_id` `privilege_id`  integer unsigned NOT NULL;
