@@ -810,8 +810,8 @@ ALTER TABLE `xar_roles` CHANGE `valcode` `valcode`                  varchar(35) 
 ALTER TABLE `xar_roles` CHANGE `state` `state`                      tinyint NOT NULL default '3';
 ALTER TABLE `xar_roles` CHANGE `auth_module_id` `auth_module_id`    integer unsigned NOT NULL;
 
-ALTER TABLE `xar_security_acl` CHANGE `role_id` `role_id`  integer unsigned NOT NULL;
-ALTER TABLE `xar_security_acl` CHANGE `privilege_id` `privilege_id`  integer unsigned NOT NULL;
+ALTER TABLE `xar_security_acl` CHANGE `role_id` `role_id`           integer unsigned NOT NULL;
+ALTER TABLE `xar_security_acl` CHANGE `privilege_id` `privilege_id` integer unsigned NOT NULL;
 
 ALTER TABLE `xar_security_instances` CHANGE `id` `id`                       integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_security_instances` CHANGE `module_id` `module_id`         integer unsigned default NULL;
