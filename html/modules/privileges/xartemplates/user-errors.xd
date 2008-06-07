@@ -1,0 +1,29 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>User Error</xar:mlstring></span></div>
+    <div class="xar-mod-body">
+        <fieldset>
+            <legend><xar:mlstring>Privileges Problem</xar:mlstring></legend>
+            <img src="#xarTplGetImage('sysmessage.jpg','base')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon" />
+            <xar:if condition="!isset($layout)">
+                <div style="margin-top: 20px; margin-left: 20px">
+                    No error message is available.
+                    <br />
+                    Please contact the system administrator.
+                </div>                    
+            <xar:elseif condition="$layout eq 'no_privileges'" />
+                <div style="margin-top: 20px; margin-left: 20px">
+                    You don't have the correct privileges for this operation
+                    <br />
+                    Contact the system administrator if you think this is an error.
+                </div>
+            <xar:else />
+                <div style="margin-top: 20px; margin-left: 20px">
+                    No error message is available.
+                    <br />
+                    Please contact the system administrator.
+                </div>                    
+            </xar:if>                
+        </fieldset>
+    </div>
+</xar:template>

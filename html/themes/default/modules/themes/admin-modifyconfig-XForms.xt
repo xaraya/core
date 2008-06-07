@@ -108,6 +108,17 @@
         </xf:group>
         <xf:group>
           <xf:label>Template Debugging options</xf:label>
+          <xar:if condition="xarConfigVars::get(null,'Site.BL.CacheTemplates')">
+            <div class="checkInputContainer">
+              <xar:set name="checked">
+                <xar:var scope="module" module="themes" name="ShowPHPCommentBlockInTemplates"/>
+              </xar:set>
+              <xar:data-input type="checkbox" name="showphpcbit" id="showphpcbit" checked="$checked"/>
+              <label for="showphpcbit">
+                      Show php comment block header in compiled templates
+                  </label>
+            </div>
+          </xar:if>
           <div class="checkInputContainer">
             <xar:set name="checked">
               <xar:var scope="module" module="themes" name="ShowTemplates"/>

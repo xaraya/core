@@ -22,15 +22,15 @@
             <xar:comment>
                 Module List Sort and Filter Controls
             </xar:comment>
-            <select name="selstyle" id="selstyle">
-                <xar:foreach in="$style" key="$key" value="$value">
-                    <xar:if condition="$key eq $selstyle">
-                        <option value="#$key#" selected="selected">#$value#</option>
-                    <xar:else />
-                        <option value="#$key#">#$value#</option>
-                    </xar:if>
-                </xar:foreach>
-            </select>
+            <xar:set name="options">
+                array(
+                    array('id' => 'plain',   'name' => xarML('Plain')),
+                    array('id' => 'compact', 'name' => xarML('Compact')),
+                    array('id' => 'bygroup', 'name' => xarML('By Group')),
+                    array('id' => 'bytype',  'name' => xarML('By Type')),
+                )
+            </xar:set>
+            <xar:data-input type="dropdown" name="selstyle" options="$options" value="$selstyle" />
             <input type="submit" value="#xarML('Refresh')#" />
         </div>
         <div class="xar-form-input-wrapper">
@@ -43,8 +43,12 @@
 
         <xar:if condition="$selstyle eq 'compact'">
             <xar:template file="compact" type="module" />
-            <xar:else />
+        <xar:elseif condition="$selstyle eq 'plain'" />
             <xar:template file="plain" type="module" />
+        <xar:elseif condition="$selstyle eq 'bytype'" />
+            <xar:template file="bytype" type="module" />
+        <xar:elseif condition="$selstyle eq 'bygroup'" />
+            <xar:template file="bygroup" type="module" />
         </xar:if>
     </form>
 </div>
