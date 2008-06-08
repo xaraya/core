@@ -674,6 +674,7 @@ ALTER TABLE `xar_privileges` CHANGE `type` `itemtype`                   integer 
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_roles.type", "xar_roles.itemtype");
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_privileges.type", "xar_privileges.itemtype");
 ALTER TABLE `xar_cache_blocks` CHANGE `id` `blockinstance_id`           integer unsigned NOT NULL;
+UPDATE `xar_dynamic_properties` SET `defaultvalue` = REPLACE(defaultvalue, "xarMod::getID(xarModVars::get('roles', 'defaultauthmodule'))", "xarModVars::get('roles', 'defaultauthmodule')")WHERE source = 'xar_roles.auth_module_id';
 
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
