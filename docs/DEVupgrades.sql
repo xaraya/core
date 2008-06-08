@@ -695,7 +695,7 @@ ALTER TABLE `xar_block_instances` CHANGE `title` `title`             varchar(254
 ALTER TABLE `xar_block_instances` CHANGE `content` `content`         text NOT NULL;
 ALTER TABLE `xar_block_instances` CHANGE `template` `template`       varchar(254) default NULL;
 ALTER TABLE `xar_block_instances` CHANGE `state` `state`             tinyint unsigned NOT NULL default '2';
-ALTER TABLE `xar_block_instances` CHANGE `refresh` `refresh`         tinyint unsigned NOT NULL default '0';
+ALTER TABLE `xar_block_instances` CHANGE `refresh` `refresh`         bool default '0';
 ALTER TABLE `xar_block_instances` CHANGE `last_update` `last_update` integer unsigned NOT NULL default '0';
 
 ALTER TABLE `xar_block_types` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
@@ -704,7 +704,7 @@ ALTER TABLE `xar_block_types` CHANGE `module_id` `module_id`     integer unsigne
 ALTER TABLE `xar_block_types` CHANGE `info` `info`               text;
 
 ALTER TABLE `xar_cache_blocks` CHANGE `blockinstance_id` `blockinstance_id`  integer unsigned NOT NULL;
-ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`                    tinyint NOT NULL default '0';
+ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`                    bool default '0';
 ALTER TABLE `xar_cache_blocks` CHANGE `page` `page`                          integer NOT NULL default '0';
 ALTER TABLE `xar_cache_blocks` CHANGE `user` `user`                          integer unsigned NOT NULL;
 ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`                      tinyint default NULL;
@@ -725,7 +725,7 @@ ALTER TABLE `xar_dynamic_objects` CHANGE `filepath` `filepath`    varchar(254) N
 ALTER TABLE `xar_dynamic_objects` CHANGE `urlparam` `urlparam`    varchar(30) NOT NULL default 'itemid';
 ALTER TABLE `xar_dynamic_objects` CHANGE `maxid` `maxid`          integer unsigned NOT NULL default '0';
 ALTER TABLE `xar_dynamic_objects` CHANGE `config` `config`        text;
-ALTER TABLE `xar_dynamic_objects` CHANGE `isalias` `isalias`      tinyint unsigned NOT NULL default '1';
+ALTER TABLE `xar_dynamic_objects` CHANGE `isalias` `isalias`      bool default '1';
 
 ALTER TABLE `xar_dynamic_properties` CHANGE `id` `id`                            integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_dynamic_properties` CHANGE `name` `name`                  varchar(64) NOT NULL default '';
@@ -778,8 +778,8 @@ ALTER TABLE `xar_modules` CHANGE `directory` `directory`         varchar(64) NOT
 ALTER TABLE `xar_modules` CHANGE `version` `version`             varchar(10) NOT NULL;
 ALTER TABLE `xar_modules` CHANGE `class` `class`                 varchar(64) NOT NULL;
 ALTER TABLE `xar_modules` CHANGE `category` `category`           varchar(64) NOT NULL;
-ALTER TABLE `xar_modules` CHANGE `admin_capable` `admin_capable` tinyint unsigned NOT NULL default '0';
-ALTER TABLE `xar_modules` CHANGE `user_capable` `user_capable`   tinyint unsigned NOT NULL default '0';
+ALTER TABLE `xar_modules` CHANGE `admin_capable` `admin_capable` bool default '0';
+ALTER TABLE `xar_modules` CHANGE `user_capable` `user_capable`   bool default '0';
 ALTER TABLE `xar_modules` CHANGE `state` `state`                 tinyint unsigned NOT NULL default '1';
 
 ALTER TABLE `xar_privileges` CHANGE `id` `id`                       integer unsigned NOT NULL auto_increment;
@@ -830,7 +830,7 @@ ALTER TABLE `xar_session_info` CHANGE `first_use` `first_use`         integer un
 ALTER TABLE `xar_session_info` CHANGE `last_use` `last_use`           integer unsigned NOT NULL default '0';
 ALTER TABLE `xar_session_info` CHANGE `role_id` `role_id`             integer unsigned NOT NULL;
 ALTER TABLE `xar_session_info` CHANGE `vars` `vars`                   blob;
-ALTER TABLE `xar_session_info` CHANGE `remember` `remember`           tinyint unsigned NOT NULL default '0';
+ALTER TABLE `xar_session_info` CHANGE `remember` `remember`           bool default '0';
 
 ALTER TABLE `xar_themes` CHANGE `id` `id`                          integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_themes` CHANGE `name` `name`                      varchar(64) NOT NULL;
