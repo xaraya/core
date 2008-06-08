@@ -65,8 +65,8 @@ function modules_init()
                         'version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
                         'class' => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'category' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'admin_capable' => array('type' => 'integer', 'size' => 'tiny', 'unsigned'=>true, 'null' => false, 'default' => '0'),
-                        'user_capable' => array('type' => 'integer', 'size' => 'tiny', 'unsigned'=>true, 'null' => false, 'default' => '0'),
+                        'admin_capable' => array('type' => 'boolean', 'default' => '0'),
+                        'user_capable' => array('type' => 'boolean', 'default' => '0'),
                         'state' => array('type' => 'integer', 'size' => 'tiny','unsigned'=>true, 'null' => false, 'default' => '1')
                         );
 
