@@ -20,7 +20,9 @@
       <xsl:text>require_once($file);</xsl:text>
       <xsl:text>}$</xsl:text>
       <xsl:value-of select="@name"/>
-      <xsl:text>=new $class($object);</xsl:text>
+      <xsl:text>=new $class(</xsl:text>
+      <xsl:value-of select="@object"/>
+      <xsl:text>);</xsl:text>
     </xsl:processing-instruction>
   </xsl:template>
 
