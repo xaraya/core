@@ -109,6 +109,7 @@
   <!-- xar:data-view/output/label etc. -->
   <xsl:include href="tags/data.xsl"/>
   <xsl:include href="tags/articles.xsl"/>
+  <xsl:include href="tags/calendar.xsl"/>
 
   <!-- xar:else -->
   <xsl:include href="tags/else.xsl"/>
