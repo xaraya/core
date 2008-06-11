@@ -235,11 +235,7 @@ class SelectProperty extends DataProperty
              if ($check) return true;
              return null;
         }
-        // most API functions throw exceptions for empty ids, so we skip those here
-        if (empty($this->value)) {
-             if ($check) return true;
-             return $this->value;
-        }
+
         // we're interested in one of the known options (= default behaviour)
         $options = $this->getOptions();
         foreach ($options as $option) {
