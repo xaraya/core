@@ -45,12 +45,12 @@ function modules_init()
         /**
          * CREATE TABLE xar_modules (
          *   id int(11) NOT NULL auto_increment,
-         *   name varchar(64) NOT NULL default '',
+         *   name varchar(64) NOT NULL,
          *   regid int(10) integer unsigned NOT NULL,
-         *   directory varchar(64) NOT NULL default '',
+         *   directory varchar(64) NOT NULL,
          *   version varchar(10) NOT NULL default '0',
-         *   class varchar(64) NOT NULL default '',
-         *   category varchar(64) NOT NULL default '',
+         *   class varchar(64) NOT NULL,
+         *   category varchar(64) NOT NULL,
          *   admin_capable INTEGER NOT NULL default '0',
          *   user_capable INTEGER NOT NULL default '0',
          *   state INTEGER NOT NULL default '0'
@@ -118,14 +118,14 @@ function modules_init()
         /**
          * CREATE TABLE xar_hooks (
          *   id         integer NOT NULL auto_increment,
-         *   object     varchar(64) NOT NULL default '',
-         *   action     varchar(64) NOT NULL default '',
+         *   object     varchar(64) NOT NULL,
+         *   action     varchar(64) NOT NULL,
          *   s_module_id integer unsigned default null,
-         *   s_type      varchar(64) NOT NULL default '',
-         *   t_area      varchar(64) NOT NULL default '',
+         *   s_type      varchar(64) NOT NULL,
+         *   t_area      varchar(64) NOT NULL,
          *   t_module_id integer unsigned not null,
-         *   t_type      varchar(64) NOT NULL default '',
-         *   t_func      varchar(64) NOT NULL default '',
+         *   t_type      varchar(64) NOT NULL,
+         *   t_func      varchar(64) NOT NULL,
          *   priority    integer default 0
          *   PRIMARY KEY (id)
          * )
@@ -136,7 +136,7 @@ function modules_init()
                         'action'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         's_module_id' => array('type' => 'integer', 'unsigned' => true, 'null' => true, 'default' => null),
                         // TODO: switch to integer for itemtype (see also xarMod.php)
-                        's_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => ''),
+                        's_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         't_area'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         't_module_id'  => array('type' => 'integer','unsigned' => true, 'null' => false),
                         't_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false),

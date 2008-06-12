@@ -35,12 +35,10 @@ function blocks_init()
                                                                   'primary_key' => true),
                                         'name'        => array('type'        => 'varchar',
                                                                    'size'        => 64,
-                                                                   'null'        => false,
-                                                                   'default'     => ''),
+                                                                   'null'        => false),
                                         'template'    => array('type'        => 'varchar',
                                                                    'size'        => 254,
-                                                                   'null'        => false,
-                                                                   'default'     => '')));
+                                                                   'null'        => false)));
         $dbconn->Execute($query);
 
         $query = xarDBCreateIndex($prefix . '_block_groups',
@@ -113,7 +111,6 @@ function blocks_init()
                                                             'type'          => 'varchar',
                                                             'size'          => 64,
                                                             'null'          => false,
-                                                            'default'       => ''
                                                             ),
                                         'module_id' => array(
                                                               'type'          => 'integer',

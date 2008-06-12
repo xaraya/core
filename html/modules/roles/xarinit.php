@@ -34,14 +34,14 @@ function roles_init()
 
         $fields = array(
                         'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-                        'name' => array('type' => 'varchar','size' => 255,'null' => false,'default' => ''),
+                        'name' => array('type' => 'varchar','size' => 254,'null' => false),
                         'itemtype' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
                         'users' => array('type' => 'integer', 'null' => false, 'default' => '0'),
-                        'uname' => array('type' => 'varchar', 'size' => 255, 'null' => false, 'default' => ''),
-                        'email' => array('type' => 'varchar', 'size' => 255,'null' => false,'default' => ''),
-                        'pass' => array('type' => 'varchar',  'size' => 100, 'null' => false, 'default' => ''),
+                        'uname' => array('type' => 'varchar', 'size' => 254, 'null' => false),
+                        'email' => array('type' => 'varchar', 'size' => 254,'null' => true),
+                        'pass' => array('type' => 'varchar',  'size' => 100, 'null' => true),
                         'date_reg' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
-                        'valcode' => array('type' => 'varchar', 'size' => 35, 'null' => false, 'default' => ''),
+                        'valcode' => array('type' => 'varchar', 'size' => 35, 'null' => false),
                         'state' => array('type' => 'integer', 'unsigned' => true, 'size' => 'tiny', 'null' => false,'default' => '3'),
                         'auth_module_id' => array('type' => 'integer', 'unsigned' => true, 'unsigned' => true, 'null' => false));
         $query = xarDBCreateTable($tables['roles'],$fields);

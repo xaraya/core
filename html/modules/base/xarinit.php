@@ -43,7 +43,7 @@ function base_init()
         /*********************************************************************
          * CREATE TABLE xar_session_info (
          *  id        varchar(32) NOT NULL,
-         *  ipaddr    varchar(20) NOT NULL default '',
+         *  ipaddr    varchar(20) NOT NULL,
          *  first_use integer NOT NULL default '0',
          *  last_use  integer NOT NULL default '0',
          *  role_id   integer unsigned NOT NULL,
@@ -87,7 +87,7 @@ function base_init()
          * CREATE TABLE xar_module_vars (
          *  id        integer unsigned NOT NULL auto_increment,
          *  module_id integer unsigned default NULL,
-         *  name      varchar(64) NOT NULL default '',
+         *  name      varchar(64) NOT NULL,
          *  value     longtext,
          *  PRIMARY KEY  (id),
          *  KEY (name)

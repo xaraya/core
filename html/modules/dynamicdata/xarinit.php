@@ -53,14 +53,12 @@ function dynamicdata_init()
                 'type'        => 'varchar',
                 'size'        => 64,
                 'null'        => false,
-                'default'     => ''
             ),
             /* the label used for display */
             'label'    => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
-                'default'     => ''
             ),
             /* the module this object relates to */
             'module_id' => array(
@@ -198,7 +196,6 @@ function dynamicdata_init()
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
-                'default'     => ''
             ),
             /* the object this property belong to */
             'object_id'   => array(
