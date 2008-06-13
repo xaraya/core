@@ -17,12 +17,12 @@
  * @param $args['title'] the title of the block
  * @param $args['type'] the block's type
  * @param $args['template'] the block's template
- * @returns int
- * @return block instance id on success, false on failure
+ * @return integer block instance id on success, false on failure
  */
 function blocks_adminapi_create_instance($args)
 {
     // Get arguments from argument array
+    $template = null;
     extract($args);
 
     // Argument check
@@ -61,7 +61,6 @@ function blocks_adminapi_create_instance($args)
         $content = serialize($content);
     }
 
-    if (!isset($template)) $template = '';
     if (!isset($title)) $title = '';
 
     // Load up database details.
@@ -75,7 +74,6 @@ function blocks_adminapi_create_instance($args)
               title, content, template,
               state, refresh, last_update
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-
     $dbconn->Execute($query, array($type, $name, $title, $content, $template, $state,0,0));
 
     // Get ID of row inserted.

@@ -25,20 +25,19 @@ function blocks_init()
     // Create tables inside a transaction
     try {
         $dbconn->begin();
-
+        
+        // prototypes
+        $id_type       = array('type'=>'integer', 'unsigned'=>true, 'null'=>false, 'increment'=>true, 'primary_key'=>true);
+        $idref_type    = array('type'=>'integer', 'unsigned'=>true, 'null'=>false);
+        $template_type = array('type'=>'varchar', 'size'=>254, 'null'=>true, 'default'=>null);
+        
         // *_block_groups
         $query = xarDBCreateTable($prefix . '_block_groups',
-                                  array('id'         => array('type'        => 'integer',
-                                                                  'unsigned'    => true,
-                                                                  'null'        => false,
-                                                                  'increment'   => true,
-                                                                  'primary_key' => true),
+                                  array('id'          => $id_type,
                                         'name'        => array('type'        => 'varchar',
                                                                    'size'        => 64,
                                                                    'null'        => false),
-                                        'template'    => array('type'        => 'varchar',
-                                                                   'size'        => 254,
-                                                                   'null'        => false)));
+                                        'template'    => $template_type));
         $dbconn->Execute($query);
 
         $query = xarDBCreateIndex($prefix . '_block_groups',
@@ -49,14 +48,8 @@ function blocks_init()
 
         // *_block_instances
         $query = xarDBCreateTable($prefix . '_block_instances',
-                                  array('id'          => array('type'        => 'integer',
-                                                                   'unsigned'    => true,
-                                                                   'null'        => false,
-                                                                   'increment'   => true,
-                                                                   'primary_key' => true),
-                                        'type_id'     => array('type'        => 'integer',
-                                                                   'unsigned'    => true,
-                                                                   'null'        => false),
+                                  array('id'          => $id_type,
+                                        'type_id'     => $idref_type,
                                         'name'       => array('type'        => 'varchar',
                                                                   'size'        => 64,
                                                                   'null'        => false,
@@ -67,10 +60,7 @@ function blocks_init()
                                                                    'default'     => NULL),
                                         'content'     => array('type'        => 'text',
                                                                    'null'        => false),
-                                        'template'    => array('type'        => 'varchar',
-                                                                   'size'        => 254,
-                                                                   'null'        => true,
-                                                                   'default'     => NULL),
+                                        'template'    => $template_type,
                                         'state'       => array('type'        => 'integer',
                                                                    'size'        => 'tiny',
                                                                    'unsigned'    => true,
@@ -100,23 +90,13 @@ function blocks_init()
         // *_block_types
         $query = xarDBCreateTable($prefix . '_block_types',
                                   array(
-                                        'id' => array(
-                                                          'type'          => 'integer',
-                                                          'unsigned'    => true,
-                                                          'null'          => false,
-                                                          'increment'     => true,
-                                                          'primary_key'   => true
-                                                          ),
+                                        'id' => $id_type,
                                         'name' => array(
                                                             'type'          => 'varchar',
                                                             'size'          => 64,
                                                             'null'          => false,
                                                             ),
-                                        'module_id' => array(
-                                                              'type'          => 'integer',
-                                                              'unsigned'      => true,
-                                                              'null'          => false
-                                                              ),
+                                        'module_id' => $idref_type,
                                         'info' => array(
                                                             'type'          => 'text',
                                                             'null'          => true
@@ -141,21 +121,10 @@ function blocks_init()
         */
         // *_block_group_instances
         $query = xarDBCreateTable($prefix . '_block_group_instances',
-                                  array('id'          => array('type'        => 'integer',
-                                                                   'unsigned'    => true,
-                                                                   'null'        => false,
-                                                                   'increment'   => true,
-                                                                   'primary_key' => true),
-                                        'group_id'    => array('type'        => 'integer',
-                                                                   'unsigned'    => true,
-                                                                   'null'        => false),
-                                        'instance_id' => array('type'        => 'integer',
-                                                                   'unsigned'    => true,
-                                                                   'null'        => false),
-                                        'template'    => array('type'        => 'varchar',
-                                                                   'size'        => 100,
-                                                                   'null'        => true,
-                                                                   'default'     => NULL),
+                                  array('id'          => $id_type,
+                                        'group_id'    => $idref_type,
+                                        'instance_id' => $idref_type,
+                                        'template'    => $template_type,
                                         'position'    => array('type'            => 'integer',
                                                                    'size'        => 'tiny',
                                                                    'unsigned'    => true,

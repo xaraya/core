@@ -634,12 +634,12 @@ ALTER TABLE `xar_cache_blocks` CHANGE `id` `blockinstance_id`           integer 
 ALTER TABLE `xar_block_group_instances` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_block_group_instances` CHANGE `group_id` `group_id`       integer unsigned NOT NULL;
 ALTER TABLE `xar_block_group_instances` CHANGE `instance_id` `instance_id` integer unsigned NOT NULL;
-ALTER TABLE `xar_block_group_instances` CHANGE `template` `template`       varchar(100) default NULL;
+ALTER TABLE `xar_block_group_instances` CHANGE `template` `template`       varchar(254) default NULL;
 ALTER TABLE `xar_block_group_instances` CHANGE `position` `position`       tinyint unsigned NOT NULL;
 
 ALTER TABLE `xar_block_groups` CHANGE `id` `id`             integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_block_groups` CHANGE `name` `name`         varchar(64) NOT NULL;
-ALTER TABLE `xar_block_groups` CHANGE `template` `template` varchar(254) NOT NULL;
+ALTER TABLE `xar_block_groups` CHANGE `template` `template` varchar(254) default NULL;
 
 ALTER TABLE `xar_block_instances` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_block_instances` CHANGE `type_id` `type_id`         integer unsigned NOT NULL;

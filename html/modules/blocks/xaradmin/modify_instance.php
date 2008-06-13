@@ -89,7 +89,7 @@ function blocks_admin_modify_instance()
             $block_groups[$key]['template'] = $instance['groups'][$id]['group_inst_template'];
         } else {
             $block_groups[$key]['selected'] = false;
-            $block_groups[$key]['template'] = '';
+            $block_groups[$key]['template'] = null;
         }
     }
 
