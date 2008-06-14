@@ -271,6 +271,7 @@ class Role extends DataObject
             'email' => "[" . $deleted . "]" . time(),
             'state' => ROLES_STATE_DELETED,
         );
+        if (isset($data['authmodule'])) $args['authmodule'] = $data['authmodule'];
         $this->updateItem($args);
 
         // get all the privileges that were assigned to this role
