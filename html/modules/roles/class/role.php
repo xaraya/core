@@ -263,10 +263,10 @@ class Role extends DataObject
             }
         }
 
-        //Let's not remove the role yet.  Instead, we want to deactivate it
-        // <mrb> i'm not a fan of the name munging
+        //Let's not remove the role yet. Instead, we want to deactivate it
         $deleted = xarML('deleted');
         $args = array(
+            'itemid' => $this->getID(),
             'user' => "[" . $deleted . "]" . time(),
             'email' => "[" . $deleted . "]" . time(),
             'state' => ROLES_STATE_DELETED,
@@ -789,6 +789,7 @@ class Role extends DataObject
         return $this->parentlevel;
     }
 
+    function setID($var) { $this->properties['id']->setValue($var); }
     function setName($var) { $this->properties['name']->setValue($var); }
     function setUname($var) { $this->properties['uname']->setValue($var); }
     function setType($var) { $this->properties['itemtype']->setValue($var); }
