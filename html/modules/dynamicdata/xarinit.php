@@ -30,7 +30,6 @@ function dynamicdata_init()
     $dynamic_objects = $xartable['dynamic_objects'];
     $dynamic_properties = $xartable['dynamic_properties'];
     $dynamic_data = $xartable['dynamic_data'];
-    $dynamic_relations = $xartable['dynamic_relations'];
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
     $modulestable = $xartable['modules'];
 
@@ -188,8 +187,7 @@ function dynamicdata_init()
             'name'       => array(
                 'type'        => 'varchar',
                 'size'        => 64,
-                'null'        => false,
-                'default'     => ''
+                'null'        => false
             ),
             /* the label used for display */
             'label'      => array(
