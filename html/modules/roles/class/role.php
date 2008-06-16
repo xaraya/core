@@ -87,11 +87,11 @@ class Role extends DataObject
             if (empty($data['uname'])) $data['uname'] = $this->getUser();
             $q->eq('uname',$data['uname']);
         }
-
         if (!$q->run()) return;
 
         if ($q->getrows() > 0) {
-            throw new DuplicateException(array('role',($this->basetype == ROLES_GROUPTYPE)?$this->getName():$this->getUname()));
+            $result = $q->row();
+            throw new DuplicateException(array('role',($this->basetype == ROLES_GROUPTYPE) ? $result['name'] :$result['uname'] ));
         }
 
         $id = parent::createItem($data);
