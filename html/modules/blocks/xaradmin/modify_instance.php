@@ -49,19 +49,23 @@ function blocks_admin_modify_instance()
         }
     } elseif (file_exists($classpath)) {
         sys::import('modules.' . $instance['module'] . '.xarblocks.' . $instance['type']);
-        sys::import('xaraya.structures.descriptor');
         $name = ucfirst($instance['type']) . "Block";
-        $descriptor = new ObjectDescriptor(array());
-        $block = new $name($descriptor);
+        if (class_exists($name)) {
+            sys::import('xaraya.structures.descriptor');
+            $descriptor = new ObjectDescriptor(array());
+            $block = new $name($descriptor);
 
-        $extra = $block->modify($instance);
-        if (is_array($extra)) {
-            // Render the extra settings if necessary.
-            try {
-                $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
-            } catch (Exception $e) {
-                $extra = '';
+            $extra = $block->modify($instance);
+            if (is_array($extra)) {
+                // Render the extra settings if necessary.
+                try {
+                    $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
+                } catch (Exception $e) {
+                    $extra = '';
+                }
             }
+        } else {
+            $extra = '';
         }
     } else {
         $extra = '';
