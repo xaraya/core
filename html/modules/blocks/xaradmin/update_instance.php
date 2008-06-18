@@ -97,11 +97,13 @@ function blocks_admin_update_instance()
         $blockinfo = $updatefunc($blockinfo);
     } elseif (file_exists($classpath)) {
         sys::import('modules.' . $blockinfo['module'] . '.xarblocks.' . $blockinfo['type']);
-        sys::import('xaraya.structures.descriptor');
         $name = ucfirst($blockinfo['type']) . "Block";
-        $descriptor = new ObjectDescriptor(array());
-        $block = new $name($descriptor);
-        $blockinfo = $block->update($blockinfo);
+        if (class_exists($name)) {
+            sys::import('xaraya.structures.descriptor');
+            $descriptor = new ObjectDescriptor(array());
+            $block = new $name($descriptor);
+            $blockinfo = $block->update($blockinfo);
+        }
     } else {
         $blockinfofunc = $usname . '_' . $blockinfo['type'] . 'block_info';
         $blockdesc = $blockinfofunc();
