@@ -257,7 +257,7 @@
   <xsl:value-of select="."/>
 </xsl:template>
 
-<!-- Stuff in ml tags is laready in PHP mode -->
+<!-- Stuff in ml tags is already in PHP mode -->
 <xsl:template match="xar:ml/text()">
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
