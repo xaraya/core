@@ -73,7 +73,7 @@ function base_adminmenublock_display($blockinfo)
 
     // are there any admin modules, then get the whole list sorted by names
     // checking this as early as possible
-    $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => 1)));
+    $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => true)));
 
 
     // which module is loaded atm?

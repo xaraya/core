@@ -436,8 +436,8 @@ function installer_admin_phase5()
                               $modversion['version'],
                               $modversion['class'],
                               $modversion['category'],
-                              isset($modversion['admin'])?$modversion['admin']:0,
-                              isset($modversion['user'])?$modversion['user']:0,
+                              isset($modversion['admin']) ? $modversion['admin']:false,
+                              isset($modversion['user'])  ? $modversion['user']:false,
                               3);
             $result = $newStmt->executeUpdate($bindvars);
             $newModId = $dbconn->getLastId($tables['modules']);

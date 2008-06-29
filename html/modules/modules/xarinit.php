@@ -65,8 +65,8 @@ function modules_init()
                         'version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
                         'class' => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'category' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'admin_capable' => array('type' => 'boolean', 'default' => '0'),
-                        'user_capable' => array('type' => 'boolean', 'default' => '0'),
+                        'admin_capable' => array('type' => 'boolean', 'default' => false),
+                        'user_capable' => array('type' => 'boolean', 'default' => false),
                         'state' => array('type' => 'integer', 'size' => 'tiny','unsigned'=>true, 'null' => false, 'default' => '1')
                         );
 
@@ -84,7 +84,7 @@ function modules_init()
         if (!isset($modInfo)) return; // throw back
         // Use version, since that's the only info likely to change
         $modVersion = $modInfo['version'];
-        $bindvars = array('modules',1,'modules',(string) $modVersion,'Core Admin','Global',1,0,3);
+        $bindvars = array('modules',1,'modules',(string) $modVersion,'Core Admin','Global',true,false,3);
         $dbconn->Execute($query,$bindvars);
 
         $modInfo = xarMod_getFileInfo('base');
@@ -92,7 +92,7 @@ function modules_init()
         // Use version, since that's the only info likely to change
         $modVersion = $modInfo['version'];
 
-        $bindvars = array('base',68,'base',(string) $modVersion,'Core Admin','Global',1,1,3);
+        $bindvars = array('base',68,'base',(string) $modVersion,'Core Admin','Global',true,true,3);
         $dbconn->Execute($query,$bindvars);
 
         /** Module vars table is created earlier now (base mod, where config_vars table was created */

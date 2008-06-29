@@ -87,7 +87,7 @@ function base_menublock_display($blockinfo)
     $mods = xarModAPIFunc('modules',
                           'admin',
                           'getlist',
-                          array('filter'     => array('UserCapable' => 1)));
+                          array('filter'     => array('UserCapable' => true)));
     if(empty($mods)) {
     // there aren't any user capable modules, dont display user menu
         return;

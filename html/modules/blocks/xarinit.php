@@ -41,7 +41,7 @@ function blocks_init()
         $dbconn->Execute($query);
 
         $query = xarDBCreateIndex($prefix . '_block_groups',
-                                  array('name'   => $prefix . '_block_groups',
+                                  array('name'   => $prefix . '_block_groups_name',
                                         'fields' => array('name'),
                                         'unique' => 'true'));
         $dbconn->Execute($query);
@@ -67,7 +67,7 @@ function blocks_init()
                                                                    'null'        => false,
                                                                    'default'     => '2'),
                                         'refresh'     => array('type'        => 'boolean',
-                                                                   'default'     => '0'),
+                                                                   'default'     => false),
                                         'last_update' => array('type'        => 'integer',
                                                                    'unsigned'    => true,
                                                                    'null'        => false,
@@ -76,7 +76,7 @@ function blocks_init()
         $dbconn->Execute($query);
 
         $query = xarDBCreateIndex($prefix . '_block_instances',
-                                  array('name'   => $prefix . '_block_instances',
+                                  array('name'   => $prefix . '_block_instances_type_id',
                                         'fields' => array('type_id'),
                                         'unique' => false));
         $dbconn->Execute($query);
@@ -133,13 +133,13 @@ function blocks_init()
         $dbconn->Execute($query);
 
         $query = xarDBCreateIndex($prefix . '_block_group_instances',
-                                  array('name' => $prefix . '_block_group_instances',
+                                  array('name' => $prefix . '_block_group_instances_group_id',
                                         'fields' => array('group_id'),
                                         'unique' => false));
         $dbconn->Execute($query);
 
         $query = xarDBCreateIndex($prefix . '_block_group_instances',
-                                  array('name' => $prefix . '_block_group_instances_2',
+                                  array('name' => $prefix . '_block_group_instances_instance_id',
                                         'fields' => array('instance_id'),
                                         'unique' => false));
         $dbconn->Execute($query);
@@ -159,7 +159,7 @@ function blocks_init()
                                         'page' => array('type'        => 'integer',
                                                             'null'        => false,
                                                             'default'     => '0'),
-                                        'user'    => array('type'        => 'integer',
+                                        'theuser'    => array('type'        => 'integer',
                                                                'unsigned'    => true,
                                                                'null'        => false),
                                         'expire'    => array('type'        => 'integer',

@@ -74,7 +74,7 @@ function blocks_adminapi_create_instance($args)
               title, content, template,
               state, refresh, last_update
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    $dbconn->Execute($query, array($type, $name, $title, $content, $template, $state,0,0));
+    $dbconn->Execute($query, array($type, $name, $title, $content, $template, $state,false,0));
 
     // Get ID of row inserted.
     $bid = $dbconn->getLastId($block_instances_table);
@@ -122,7 +122,7 @@ function blocks_adminapi_create_instance($args)
         $query = "INSERT INTO $cacheblocks (blockinstance_id,
                                             nocache,
                                             page,
-                                            user,
+                                            theuser,
                                             expire)
                   VALUES (?,?,?,?,?)";
         $bindvars = array($bid, $nocache, $pageshared, $usershared, $cacheexpire);

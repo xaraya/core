@@ -48,7 +48,7 @@ function base_init()
          *  last_use  integer NOT NULL default '0',
          *  role_id   integer unsigned NOT NULL,
          *  vars      blob,
-         *  remember  boolean default '0',
+         *  remember  boolean default false,
          *  PRIMARY KEY  (id)
          * )
          *********************************************************************/
@@ -58,7 +58,7 @@ function base_init()
                         'last_use'  => array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
                         'role_id'   => array('type'=>'integer','unsigned'=>true, 'null'=>false),
                         'vars'      => array('type'=>'blob'   ,'null'=>true),
-                        'remember'  => array('type'=>'boolean', 'default'=>'0')
+                        'remember'  => array('type'=>'boolean', 'default'=>  false)
                         );
 
         $query = xarDBCreateTable($sessionInfoTable,$fields);
