@@ -1344,14 +1344,14 @@ class xarQuery
     function lastid($table="", $id="")
     {
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
-        $result = $this->dbconn->Execute("SELECT MAX($id) FROM $table");
-        list($id) = $result->fields;
-        return $id;
+        $gen = $this->dbconn->getIdGenerator();
+        return  $gen->getLastId($table);
     }
     function nextid($table="", $id="")
     {
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
-        return $this->dbconn->PO_Insert_ID($table,$id);
+        $gen = $this->dbconn->getIdGenerator();
+        return  $gen->getNextId($table);
     }
     function openconnection($x = '')
     {
