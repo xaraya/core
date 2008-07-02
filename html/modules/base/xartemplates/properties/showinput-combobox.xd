@@ -20,7 +20,7 @@
                 <xar:set name="firstline">array('id' => 0,'name' => 'Text Specified ==&gt;')</xar:set>
                 <xar:data-input type="dropdown" name="$name" id="dd" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
             <xar:else />
-                <xar:set name="firstline">array('id' => 0,'name' => 'Choose or enter an item')</xar:set>
+                <xar:set name="firstline">array('id' => 0,'name' => 'Choose or enter an item ==&gt;')</xar:set>
                 <xar:data-input type="dropdown" name="$name" id="dd" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
             </xar:if>
             <xar:if condition="$layout eq 'horizontal' OR $layout eq 'default'">

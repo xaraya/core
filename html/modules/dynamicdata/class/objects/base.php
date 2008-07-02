@@ -240,14 +240,17 @@ class DataObject extends DataObjectMaster implements iDataObject
             $properties = $this->getProperties($args);
             $args['properties'] = array();
             foreach ($properties as $property) {
-                if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
-                    $args['properties'][$property->name] = $property;
+                if(($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                || ($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)) continue;
+                $args['properties'][$property->name] = $property;
             }
         } else {
             $args['properties'] =& $this->properties;
             // TODO: this is exactly the same as in the display function, consolidate it.
             $totransform = array(); $totransform['transform'] = array();
             foreach($this->properties as $pname => $pobj) {
+                if(($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                || ($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)) continue;
                 // *never* transform an ID
                 // TODO: there is probably lots more to skip here.
                 if($pobj->type == '21') continue;
@@ -264,6 +267,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             foreach($this->properties as $property) {
                 if(
                     ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) &&
+                    ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) &&
                     ($property->type != 21) &&
                     isset($transformed[$property->name])
                 )

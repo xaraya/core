@@ -1,28 +1,28 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<!-- This is a generic display template for any DD object. You can use a specific template for one particular object in this directory as showdisplay-[objectname].xd, and/or use templates in your own [module]/xartemplates/objects directory by specifying the tplmodule="..." argument in the xar:data-display BL tag or showDisplay() method call. -->
-<xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
-    <xar:template file="catnavigation" />
-</xar:if>
-<!-- The layout could be set directly or through inheritance (for example in the modify prop screen) -->
-<xar:if condition="empty($layout)">
-    <xar:set name="layout">'default'</xar:set>
-</xar:if>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- This is a generic display template for any DD object. You can use a specific template for one particular object in this directory as showdisplay-[objectname].xd, and/or use templates in your own [module]/xartemplates/objects directory by specifying the tplmodule="..." argument in the xar:data-display BL tag or showDisplay() method call. -->
+    <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
+        <xar:template file="catnavigation" />
+    </xar:if>
+    <!-- The layout could be set directly or through inheritance (for example in the modify prop screen) -->
+    <xar:if condition="empty($layout)">
+        <xar:set name="layout">'default'</xar:set>
+    </xar:if>
 
-<xar:if condition="$layout eq 'default'">
-  <xar:foreach in="$properties" key="$name" value="$property">
-    <div class="xar-form-input-wrapper">
-          <xar:data-label property="$properties[$name]" label="id" />
-            <xar:if condition="$name eq 'parent'" >
-                <xar:set name="modid">$properties['module_id']->value</xar:set>
-                <xar:data-output property="$properties[$name]" modid="$modid" />
-            <xar:else />
-                <xar:data-output property="$properties[$name]" />
-            </xar:if>
-    </div>
-  </xar:foreach>
-<xar:else />
-    <!-- You can include your own layout here or specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->
-    <xar:template module="$tplmodule" file="display-$layout" />
-</xar:if>
+    <xar:if condition="$layout eq 'default'">
+      <xar:foreach in="$properties" key="$name" value="$property">
+        <div class="xar-form-input-wrapper">
+              <xar:data-label property="$properties[$name]" label="id" />
+                <xar:if condition="$name eq 'parent'" >
+                    <xar:set name="modid">$properties['module_id']->value</xar:set>
+                    <xar:data-output property="$properties[$name]" modid="$modid" />
+                <xar:else />
+                    <xar:data-output property="$properties[$name]" />
+                </xar:if>
+        </div>
+      </xar:foreach>
+    <xar:else />
+        <!-- You can include your own layout here or specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->
+        <xar:template module="$tplmodule" file="display-$layout" />
+    </xar:if>
 </xar:template>
