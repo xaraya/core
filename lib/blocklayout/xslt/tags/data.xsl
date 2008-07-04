@@ -313,15 +313,13 @@
           </xsl:when>
           <xsl:otherwise>
             <!-- We have a property -->
-            <xsl:choose>
-              <xsl:text>echo </xsl:text><xsl:value-of select="@property"/>
-              <xsl:text>-&gt;showLabel(</xsl:text>
-              <xsl:call-template name="atts2args">
-                <xsl:with-param name="nodeset" select="@*"/>
-              </xsl:call-template>
-              <xsl:text>);</xsl:text>
-            </xsl:otherwise>
-          </xsl:choose>
+            <xsl:text>echo </xsl:text><xsl:value-of select="@property"/>
+            <xsl:text>-&gt;showLabel(</xsl:text>
+            <xsl:call-template name="atts2args">
+              <xsl:with-param name="nodeset" select="@*"/>
+            </xsl:call-template>
+            <xsl:text>);</xsl:text>
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
