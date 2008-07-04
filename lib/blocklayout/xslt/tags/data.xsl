@@ -314,55 +314,14 @@
           <xsl:otherwise>
             <!-- We have a property -->
             <xsl:choose>
-              <xsl:when test="not(@label)">
-                <!-- Property, but no label attribute -->
-                <xsl:text>echo xarVarPrepForDisplay(</xsl:text>
-                <xsl:value-of select="@property"/><xsl:text>-&gt;label);</xsl:text>
-              </xsl:when>
-              <xsl:otherwise>
-                <!-- Property object, but also label attribute -->
-                <xsl:text>echo </xsl:text><xsl:value-of select="@property"/>
-                <xsl:text>-&gt;showLabel(array('label'=&gt;</xsl:text>
-                <xsl:choose>
-                  <xsl:when test="starts-with(@label,'$')">
-                    <xsl:value-of select="@label"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:text>'</xsl:text>
-                    <xsl:value-of select="@label"/>
-                    <xsl:text>'</xsl:text>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:if test="@for">
-                  <xsl:text>,'for'=&gt;</xsl:text>
-                  <xsl:choose>
-                    <xsl:when test="starts-with(@for,'$')">
-                      <xsl:value-of select="@for"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:text>'</xsl:text>
-                      <xsl:value-of select="@for"/>
-                      <xsl:text>'</xsl:text>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:if>
-                <xsl:if test="@title">
-                  <xsl:text>,'title'=&gt;</xsl:text>
-                  <xsl:choose>
-                    <xsl:when test="starts-with(@title,'$')">
-                      <xsl:value-of select="@title"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:text>'</xsl:text>
-                      <xsl:value-of select="@title"/>
-                      <xsl:text>'</xsl:text>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:if>
-                <xsl:text>));</xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:otherwise>
+              <xsl:text>echo </xsl:text><xsl:value-of select="@property"/>
+              <xsl:text>-&gt;showLabel(</xsl:text>
+              <xsl:call-template name="atts2args">
+                <xsl:with-param name="nodeset" select="@*"/>
+              </xsl:call-template>
+              <xsl:text>);</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
