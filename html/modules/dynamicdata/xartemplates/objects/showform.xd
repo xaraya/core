@@ -8,7 +8,7 @@
 <xar:if condition="$layout eq 'default'">
     <xar:foreach in="$properties" key="$name" value="$property">
         <div class="xar-form-input-wrapper">
-            <xar:data-label property="$properties[$name]" label="id" />
+            <xar:data-label property="$properties[$name]" for="id" />
             <xar:data-input property="$properties[$name]" />
         </div>
     </xar:foreach>

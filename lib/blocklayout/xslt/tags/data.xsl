@@ -322,7 +322,7 @@
               <xsl:otherwise>
                 <!-- Property object, but also label attribute -->
                 <xsl:text>echo </xsl:text><xsl:value-of select="@property"/>
-                <xsl:text>-&gt;showLabel(array('for'=&gt;</xsl:text>
+                <xsl:text>-&gt;showLabel(array('label'=&gt;</xsl:text>
                 <xsl:choose>
                   <xsl:when test="starts-with(@label,'$')">
                     <xsl:value-of select="@label"/>
@@ -333,6 +333,19 @@
                     <xsl:text>'</xsl:text>
                   </xsl:otherwise>
                 </xsl:choose>
+                <xsl:if test="@for">
+                  <xsl:text>,'for'=&gt;</xsl:text>
+                  <xsl:choose>
+                    <xsl:when test="starts-with(@for,'$')">
+                      <xsl:value-of select="@for"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:text>'</xsl:text>
+                      <xsl:value-of select="@for"/>
+                      <xsl:text>'</xsl:text>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:if>
                 <xsl:if test="@title">
                   <xsl:text>,'title'=&gt;</xsl:text>
                   <xsl:choose>

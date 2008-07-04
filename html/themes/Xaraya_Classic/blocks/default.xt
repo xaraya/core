@@ -1,13 +1,14 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:if id="title_condition" condition="!empty($title)">
-    <div class="xar-block-head">
-        <div class="xar-block-title">
-            <xar:var name="title"/>
+    <xar:if id="title_condition" condition="!empty($title)">
+        <div class="xar-block-head">
+            <div class="xar-block-title">
+                <xar:var name="title"/>
+            </div>
         </div>
+    </xar:if>
+    <div class="xar-block-body">
+        <xar:var name="content"/>
     </div>
-</xar:if>
-<div class="xar-block-body">
-    <xar:var name="content"/>
-</div>
-<div class="xar-block-foot">
-</div></xar:template>
+    <div class="xar-block-foot">
+    </div>
+</xar:template>
