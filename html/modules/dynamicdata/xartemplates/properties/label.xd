@@ -11,7 +11,9 @@
     </xar:if>
 
     <xar:if condition="empty($for)">
-        #$label#
+        <label class="#$class#" title="#$title#" style="#$style#">
+            #$label#
+        </label>
     <xar:elseif condition="$for ne 'id' and $for ne 'name'"/>
         <xar:if condition="!empty($fieldprefix)">
             <xar:set name="for">$fieldprefix . "_" . $for</xar:set>
