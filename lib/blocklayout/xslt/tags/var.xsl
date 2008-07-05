@@ -86,11 +86,11 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- No start with #, just copy it -->
-        <xsl:text>'</xsl:text>
+        <xsl:text>xarML('</xsl:text>
         <xsl:call-template name="replace">
           <xsl:with-param name="source" select="normalize-space(.)"/>
         </xsl:call-template>
-        <xsl:text>'</xsl:text>
+        <xsl:text>')</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
