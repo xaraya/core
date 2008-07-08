@@ -34,11 +34,11 @@ function blocks_init()
                                                                   'increment'   => true,
                                                                   'primary_key' => true),
                                         'name'        => array('type'        => 'varchar',
-                                                                   'size'        => 255,
+                                                                   'size'        => 64,
                                                                    'null'        => false,
                                                                    'default'     => ''),
                                         'template'    => array('type'        => 'varchar',
-                                                                   'size'        => 255,
+                                                                   'size'        => 254,
                                                                    'null'        => false,
                                                                    'default'     => '')));
         $dbconn->Execute($query);
@@ -60,17 +60,17 @@ function blocks_init()
                                                                    'unsigned'    => true,
                                                                    'null'        => false),
                                         'name'       => array('type'        => 'varchar',
-                                                                  'size'        => 100,
+                                                                  'size'        => 64,
                                                                   'null'        => false,
                                                                   'default'     => NULL),
                                         'title'       => array('type'        => 'varchar',
-                                                                   'size'        => 255,
+                                                                   'size'        => 254,
                                                                    'null'        => true,
                                                                    'default'     => NULL),
                                         'content'     => array('type'        => 'text',
                                                                    'null'        => false),
                                         'template'    => array('type'        => 'varchar',
-                                                                   'size'        => 255,
+                                                                   'size'        => 254,
                                                                    'null'        => true,
                                                                    'default'     => NULL),
                                         'state'       => array('type'        => 'integer',
@@ -162,7 +162,8 @@ function blocks_init()
                                                                    'size'        => 100,
                                                                    'null'        => true,
                                                                    'default'     => NULL),
-                                        'position'    => array('type'        => 'integer',
+                                        'position'    => array('type'            => 'integer',
+                                                                   'size'        => 'tiny',
                                                                    'unsigned'    => true,
                                                                    'null'        => false)));
 
@@ -189,7 +190,8 @@ function blocks_init()
                                                                     'null'        => false,
                                                                     'primary_key' => true),
                                         'nocache'    => array('type'        => 'integer',
-                                                                  'null'        => false,
+                                                                    'size'        => 'tiny',
+                                                                    'null'        => false,
                                                                   'default'     => '0'),
                                         'page' => array('type'        => 'integer',
                                                             'null'        => false,
@@ -198,6 +200,7 @@ function blocks_init()
                                                                'unsigned'    => true,
                                                                'null'        => false),
                                         'expire'    => array('type'        => 'integer',
+                                                                 'size'        => 'tiny',
                                                                  'null'        => true)));
         $dbconn->Execute($query);
 
