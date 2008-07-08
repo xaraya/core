@@ -211,11 +211,12 @@ form p {
 
 /* standard tables */
 table {
-    border-collapse: collapse;
     width: 100%;
     margin: 1.5em 0;
+    border-collapse: collapse;
     border: 1px dotted #D77043;
     border-width: 1px 0;
+    background-color: #F6F0E7;
 }
 table + table {
     margin-top: 3em;
