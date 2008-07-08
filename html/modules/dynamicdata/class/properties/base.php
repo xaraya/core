@@ -63,6 +63,9 @@ class DataProperty extends Object implements iDataProperty
     public $display_tooltip                 = "";              // there is no tooltip text, and so no tooltip
     public $initialization_transform        = false;           // generic trigger that can be checked in getValue and setValue
     public $initialization_other_rule       = null;
+    public $validation_notequals            = null;           // 
+    public $validation_equals               = null;           // 
+    public $validation_allowempty           = null;           // 
 
     /**
      * Default constructor setting the variables
@@ -232,6 +235,20 @@ class DataProperty extends Object implements iDataProperty
     {
         if(!isset($value)) $value = $this->getValue();
         else $this->setValue($value);
+
+        if (isset($this->validation_notequals)  && $value == $this->validation_notequals) {
+            $this->invalid = xarML('#(1) cannot have the value #(2)', $this->name,$this->validation_notequals );
+            $this->value = null;
+            return false;
+        } elseif (isset($this->validation_equals)  && $value != $this->validation_equals) {
+            $this->invalid = xarML('#(1) must have the value #(2)', $this->name,$this->validation_notequals );
+            $this->value = null;
+            return false;
+        } elseif (isset($this->validation_allowempty) && !$this->validation_allowempty && empty($value)) {
+            $this->invalid = xarML('#(1) cannot be empty', $this->name);
+            $this->value = null;
+            return false;
+        }
 
 //        $this->value = null;
 //        $this->invalid = xarML('unknown property');
