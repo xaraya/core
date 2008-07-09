@@ -53,31 +53,36 @@
                 throw new Exception($msg);
             }
 
-            // We cant prepare this outside the loop as we have no idea what it is.
-            $stmt1 = $dbconn->prepareStatement($selection);
-            $result1 = $stmt1->executeQuery();
-
-            $dropdown = array();
-            if (empty($modid)){
-                $dropdown[] = array('id' => -2,'name' => '');
-            }  elseif($result->EOF) { // FIXME: this never gets executed it think? it's outside the while condition.
-                $dropdown[] = array('id' => -1,'name' => 'All');
-    //          $dropdown[] = array('id' => 0, 'name' => 'None');
-            }  else {
-                $dropdown[] = array('id' => -1,'name' => 'All');
-    //          $dropdown[] = array('id' => 0, 'name' => 'None');
-            }
-            while($result1->next()) {
-                list($dropdownline) = $result1->fields;
-                if (($dropdownline != 'All') && ($dropdownline != 'None')){
-                    $dropdown[] = array('id' => $dropdownline, 'name' => $dropdownline);
-                }
-            }
-
-            if (count($dropdown) > $ddlimit) {
-                $type = "manual";
+            if (preg_match('/^xarModAPIFunc/i',$selection)) {
+                eval('$dropdown = ' . $this->func .';');
+                if (!isset($dropdown)) $dropdown = array();
             } else {
-                $type = "dropdown";
+                // We cant prepare this outside the loop as we have no idea what it is.
+                $stmt1 = $dbconn->prepareStatement($selection);
+                $result1 = $stmt1->executeQuery();
+
+                $dropdown = array();
+                if (empty($modid)){
+                    $dropdown[] = array('id' => -2,'name' => '');
+                }  elseif($result->EOF) { // FIXME: this never gets executed it think? it's outside the while condition.
+                    $dropdown[] = array('id' => -1,'name' => 'All');
+        //          $dropdown[] = array('id' => 0, 'name' => 'None');
+                }  else {
+                    $dropdown[] = array('id' => -1,'name' => 'All');
+        //          $dropdown[] = array('id' => 0, 'name' => 'None');
+                }
+                while($result1->next()) {
+                    list($dropdownline) = $result1->fields;
+                    if (($dropdownline != 'All') && ($dropdownline != 'None')){
+                        $dropdown[] = array('id' => $dropdownline, 'name' => $dropdownline);
+                    }
+                }
+
+                if (count($dropdown) > $ddlimit) {
+                    $type = "manual";
+                } else {
+                    $type = "dropdown";
+                }
             }
             $instances[] = array('header' => $header,'dropdown' => $dropdown, 'type' => $type);
         }

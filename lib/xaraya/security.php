@@ -324,7 +324,14 @@ function xarTree()
  */
 function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$level)
 {
-    return xarPrivileges::returnPrivilege($pid,$name,$realm,$module,$component,$instance,$level);
+    return xarModAPIFunc('privileges','admin','returnprivilege',array(
+        'pid' => $pid,
+        'name' => $name,
+        'realm' => $realm,
+        'module' => $module,
+        'component' => $component,
+        'instance' => $instance,
+        'level' => $level));
 }
 
 /**
