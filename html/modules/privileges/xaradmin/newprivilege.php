@@ -18,11 +18,11 @@ function privileges_admin_newprivilege()
 {
     $data = array();
 
-    if (!xarVarFetch('id',        'isset', $data['id'],        '',         XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('id',         'isset', $data['id'],        '',          XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pname',      'isset', $data['pname'],      '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pparentid',  'isset', $data['pparentid'],  '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('prealm',     'isset', $data['prealm'],     'All',      XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('pmodule',    'isset', $data['pmodule'],    0,          XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('pmodule',    'isset', $data['pmodule'],    'All',      XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pcomponent', 'isset', $data['pcomponent'], 'All',      XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pinstance',  'isset', $data['pinstance'],  '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('plevel',     'isset', $data['plevel'],     '',         XARVAR_NOT_REQUIRED)) {return;}
@@ -49,7 +49,9 @@ function privileges_admin_newprivilege()
         }
     }
     //Load Template
-    $instances = xarModAPIFunc('privileges','admin','getinstances',array('modid' => $data['pmodule'],'component' => $data['pcomponent']));
+    if ($data['pmodule'] == 'All') $modid = 0;
+    else $modid = xarMod::getRegid($data['pmodule']);
+    $instances = xarModAPIFunc('privileges','admin','getinstances',array('modid' => $modid,'component' => $data['pcomponent']));
 // send to external wizard if necessary
     if (!empty($instances['external']) && $instances['external'] == "yes") {
         $data['target'] = $instances['target'] . '&amp;extpid=0&amp;extname='.$data['pname'].'&amp;extrealm='.$data['prealm'].'&amp;extmodule='.xarModGetNameFromID($data['pmodule']).'&amp;extcomponent='.$data['pcomponent'].'&amp;extlevel='.$data['plevel'];
@@ -66,7 +68,7 @@ function privileges_admin_newprivilege()
     $data['authid'] = xarSecGenAuthKey();
     $data['realms'] = xarPrivileges::getrealms();
     $data['privileges'] = $privileges;
-    $data['components'] = xarModAPIFunc('privileges','admin','getcomponents',array('modid' => $data['pmodule']));
+    $data['components'] = xarModAPIFunc('privileges','admin','getcomponents',array('modid' => $modid));
     return $data;
 }
 

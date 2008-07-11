@@ -675,7 +675,7 @@ UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_roles.type",
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_privileges.type", "xar_privileges.itemtype");
 ALTER TABLE `xar_cache_blocks` CHANGE `id` `blockinstance_id`           integer unsigned NOT NULL;
 UPDATE `xar_dynamic_properties` SET `defaultvalue` = REPLACE(defaultvalue, "xarMod::getID(xarModVars::get('roles', 'defaultauthmodule'))", "xarModVars::get('roles', 'defaultauthmodule')")WHERE source = 'xar_roles.auth_module_id';
-UPDATE `xar_security_instances` SET `query` = REPLACE(query, "SELECT DISTINCT type FROM xar_block_types", "SELECT DISTINCT name FROM xar_block_types");
+UPDATE `xar_security_instances` SET `query` = REPLACE(query, "type FROM xar_block_types", "name FROM xar_block_types");
 
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
