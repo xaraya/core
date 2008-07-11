@@ -155,15 +155,7 @@
           <label for="pcomponent" title="#xarML('Component to which this privilege applies')#" class="xar-form-label">
             <xar:mlstring>Component:</xar:mlstring>
           </label>
-          <select name="pcomponent" id="pcomponent" onchange="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();">
-            <xar:loop name="$components">
-              <xar:if condition="strtolower($loop:item['name']) eq strtolower($pcomponent)">
-                <option value="#$loop:item['name']#" selected="selected">#$loop:item['name']#</option>
-                <xar:else />
-                <option value="#$loop:item['name']#">#$loop:item['name']#</option>
-              </xar:if>
-            </xar:loop>
-          </select>
+          <xar:data-input type="dropdown" name="pcomponent" options="$components" onchange="$onclick" />
         </div>
 
         <div class="xar-form-input-wrapper">
