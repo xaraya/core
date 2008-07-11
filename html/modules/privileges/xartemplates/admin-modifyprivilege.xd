@@ -155,7 +155,7 @@
           <label for="pcomponent" title="#xarML('Component to which this privilege applies')#" class="xar-form-label">
             <xar:mlstring>Component:</xar:mlstring>
           </label>
-          <xar:data-input type="dropdown" name="pcomponent" options="$components" onchange="$onclick" />
+          <xar:data-input type="dropdown" name="pcomponent" value="$pcomponent" options="$components" onchange="$onclick" />
         </div>
 
         <div class="xar-form-input-wrapper">
