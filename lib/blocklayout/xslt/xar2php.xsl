@@ -236,6 +236,8 @@
 
     <!-- We have a non-empty node -->
     <xsl:otherwise>
+      <!-- A kludge return char to avoid extra chars appearing in the output -->
+      <xsl:text>&#13;</xsl:text>
       <xsl:processing-instruction name="php">
         <xsl:text>echo xarML('</xsl:text>
         <xsl:call-template name="resolveText">
