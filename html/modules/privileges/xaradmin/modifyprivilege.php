@@ -116,7 +116,7 @@ function privileges_admin_modifyprivilege()
     $data['parents'] = $parents;
     $data['privileges'] = $privileges;
     $data['realms'] = xarPrivileges::getrealms();;
-    $data['components'] = xarPrivileges::getcomponents(xarMod::getRegID($data['pmodule']));
+    $data['components'] = xarModAPIFunc('privileges','admin','getcomponents',array('modid' => xarMod::getRegID($data['pmodule'])));
     $data['refreshlabel'] = xarML('Refresh');
     return $data;
 }
