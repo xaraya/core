@@ -48,7 +48,6 @@ function privileges_admin_newprivilege()
             $privileges[] = $temp;
         }
     }
-
     //Load Template
     $instances = xarModAPIFunc('privileges','admin','getinstances',array('modid' => $data['pmodule'],'component' => $data['pcomponent']));
 // send to external wizard if necessary
@@ -59,6 +58,11 @@ function privileges_admin_newprivilege()
         $data['instances'] = $instances;
     }
 
+    $accesslevels = SecurityLevel::$displayMap;
+    unset($accesslevels[-1]);
+    $data['levels'] = array();
+    foreach ($accesslevels as $key => $value) $data['levels'][] = array('id' => $key, 'name' => $value);
+    
     $data['authid'] = xarSecGenAuthKey();
     $data['realms'] = xarPrivileges::getrealms();
     $data['privileges'] = $privileges;

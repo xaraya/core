@@ -111,6 +111,11 @@ function privileges_admin_modifyprivilege()
     if(isset($show)) {$data['show'] = $show;}
     else {$data['show'] = 'assigned';}
 
+    $accesslevels = SecurityLevel::$displayMap;
+    unset($accesslevels[-1]);
+    $data['levels'] = array();
+    foreach ($accesslevels as $key => $value) $data['levels'][] = array('id' => $key, 'name' => $value);
+    
     $data['oldcomponent'] = $component;
     $data['authid'] = xarSecGenAuthKey();
     $data['parents'] = $parents;

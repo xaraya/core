@@ -129,21 +129,7 @@
                             Level:
                         </xar:mlstring>
                     </label>
-                    <xar:set name="levels">
-                        SecurityLevel::$displayMap
-                    </xar:set>
-                    <xar:set name="foo">
-                        1; array_shift($levels)
-                    </xar:set>
-                    <xar:set name="options">
-                        array();
-                    </xar:set>
-                    <xar:foreach in="$levels" key="$key" value="$value" >
-                        <xar:set name="foo">1;
-                            $options[] = array('id' => $key * 100, 'name' => $value)
-                        </xar:set>
-                    </xar:foreach>
-                    <xar:data-input type="dropdown" name="plevel" value="$plevel" options="$options" />
+                    <xar:data-input type="dropdown" name="plevel" value="$plevel" options="$levels" />
                 </div>
             </xar:if>
             <xar:if condition="$ptype ne null">
