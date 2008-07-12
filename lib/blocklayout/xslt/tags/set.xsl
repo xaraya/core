@@ -28,12 +28,21 @@
 </xsl:template>
 
 <!--
-  xar:set contains a PHP expression, nothing else
+  If xar:set has a text node, do a poor mans resolving for now
 -->
 <xsl:template match="xar:set/text()">
-  <xsl:call-template name="resolvePHP">
-    <xsl:with-param name="expr" select="normalize-space(.)"/>
-  </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="substring(normalize-space(.),1,1) = '#'">
+        <!-- The string starts with # so, let's resolve it -->
+        <xsl:call-template name="resolvePHP">
+          <xsl:with-param name="expr" select="normalize-space(.)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- No start with #, just copy it -->
+        <xsl:copy/>
+      </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>
