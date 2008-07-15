@@ -6,42 +6,47 @@
     <xar:if condition="empty($style)">
         <xar:set name="style">""</xar:set>
     </xar:if>
-    <xar:if condition="empty($class)">
-        <xar:set name="class">"xar-form-label"</xar:set>
-    </xar:if>
 
     <xar:if condition="empty($for)">
+        <xar:if condition="empty($class)">
+            <xar:set name="class">""</xar:set>
+        </xar:if>
         <label class="#$class#" title="#$title#" style="#$style#">
             #$label#
         </label>
-    <xar:elseif condition="$for ne 'id' and $for ne 'name'"/>
-        <xar:if condition="!empty($fieldprefix)">
-            <xar:set name="for">$fieldprefix . "_" . $for</xar:set>
+    <xar:else />
+        <xar:if condition="empty($class)">
+            <xar:set name="class">"xar-form-label"</xar:set>
         </xar:if>
-        <label class="#$class#" for="#$for#" title="#$title#" style="#$style#">
-            #$label#
-        </label>
-    <xar:elseif condition="$for eq 'id' and !empty($id)"/>
-        <xar:if condition="!empty($fieldprefix)">
-            <xar:set name="for">$fieldprefix . "_dd_" . $id</xar:set>
+        <xar:if condition="$for ne 'id' and $for ne 'name'">
+            <xar:if condition="!empty($fieldprefix)">
+                <xar:set name="for">$fieldprefix . "_" . $for</xar:set>
+            </xar:if>
+            <label class="#$class#" for="#$for#" title="#$title#" style="#$style#">
+                #$label#
+            </label>
+        <xar:elseif condition="$for eq 'id' and !empty($id)"/>
+            <xar:if condition="!empty($fieldprefix)">
+                <xar:set name="for">$fieldprefix . "_dd_" . $id</xar:set>
+            <xar:else/>
+                <xar:set name="for">"dd_" . $id</xar:set>
+            </xar:if>
+            <label class="#$class#" for="#$for#" title="#$title#" style="#$style#">
+                #$label#
+            </label>
+        <xar:elseif condition="$for eq 'name' and !empty($name)"/>
+            <xar:if condition="!empty($fieldprefix)">
+                <xar:set name="for">$fieldprefix . "_" . $name</xar:set>
+            <xar:else/>
+                <xar:set name="for">$name</xar:set>
+            </xar:if>
+            <label class="#$class#" for="#$for#" title="#$title#" style="#$style#">
+                #$label#
+            </label>
         <xar:else/>
-            <xar:set name="for">"dd_" . $id</xar:set>
+             <label class="#$class#" title="#$title#" style="#$style#">
+                #$label#
+            </label>
         </xar:if>
-        <label class="#$class#" for="#$for#" title="#$title#" style="#$style#">
-            #$label#
-        </label>
-    <xar:elseif condition="$for eq 'name' and !empty($name)"/>
-        <xar:if condition="!empty($fieldprefix)">
-            <xar:set name="for">$fieldprefix . "_" . $name</xar:set>
-        <xar:else/>
-            <xar:set name="for">$name</xar:set>
-        </xar:if>
-        <label class="#$class#" for="#$for#" title="#$title#" style="#$style#">
-            #$label#
-        </label>
-    <xar:else/>
-         <label class="#$class#" title="#$title#" style="#$style#">
-            #$label#
-        </label>
     </xar:if>
 </xar:template>
