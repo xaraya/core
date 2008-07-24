@@ -127,7 +127,7 @@ Issues
     This turned out to be a `<script />` empty tag issue, as above with the div.
 
 - [DONE] we now add a root tag to module templates artificially. This leads to a
-  number of things we can not do now:
+  number of things we can not do now: 
   - as we 'pre-read' the templatefile to add this tag, the filename of the
     template gets lost when an exception is raised. We really should add the root
     tag to the templates themselves. (this can be automated)
@@ -213,7 +213,7 @@ attributes to be handled by your engine. BL doesnt use this technique yet
 either. The key addition this brings to the table is that you can hook your
 namespace into others. Say you combine html and blocklayout in a template a
 div tag, belonging to the html (default) namespace can be (legally) extended
-by::
+by: 
 
     <div style="border:thin" xar:extra="somevalue">
         <img src="myPicture.png" />
@@ -235,7 +235,7 @@ Technique 3: define dynamic behaviour through an expression language
 
 Here's where the problem starts. XML, as such, unless implemented explicitly
 in one of the two previous techniques doesnt define dynamic behaviour in
-itself. There is however a staggering amount of ways to give it one:
+itself. There is however a staggering amount of ways to give it one: 
 
     1. XPath expression language to point to XML things and execute some 
        functions on them
