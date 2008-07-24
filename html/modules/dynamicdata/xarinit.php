@@ -30,7 +30,6 @@ function dynamicdata_init()
     $dynamic_objects = $xartable['dynamic_objects'];
     $dynamic_properties = $xartable['dynamic_properties'];
     $dynamic_data = $xartable['dynamic_data'];
-    $dynamic_relations = $xartable['dynamic_relations'];
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
     $modulestable = $xartable['modules'];
 
@@ -51,16 +50,14 @@ function dynamicdata_init()
             /* the name used to reference an object */
             'name'     => array(
                 'type'        => 'varchar',
-                'size'        => 30,
+                'size'        => 64,
                 'null'        => false,
-                'default'     => ''
             ),
             /* the label used for display */
             'label'    => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
-                'default'     => ''
             ),
             /* the module this object relates to */
             'module_id' => array(
@@ -83,14 +80,14 @@ function dynamicdata_init()
             /* the class this object belongs to*/
             'class'     => array(
                 'type'        => 'varchar',
-                'size'        => 255,
+                'size'        => 254,
                 'null'        => false,
                 'default'     => 'DataObject'
             ),
             /* the location where the class file lives*/
             'filepath'     => array(
                 'type'        => 'varchar',
-                'size'        => 255,
+                'size'        => 254,
                 'null'        => false,
                 'default'     => 'modules/dynamicdata/class/objects/base.php'
             ),
@@ -114,11 +111,8 @@ function dynamicdata_init()
             ),
             /* use the name of this object as alias for short URLs */
             'isalias'  => array(
-                'type'        => 'integer',
-                'size'        => 'tiny',
-                'unsigned'    => true,
-                'null'        => false,
-                'default'     => '1'
+                'type'        => 'boolean',
+                'default'     => true
             ),
         );
 
@@ -164,9 +158,9 @@ function dynamicdata_init()
         $stmt = $dbconn->prepareStatement($sql);
 
         $objects = array(
-            array('objects'   ,'Dynamic Objects'   ,$modid,0,'','',                                               'itemid',0,''               ,0),
-            array('properties','Dynamic Properties',$modid,1,'DProperty','modules/dynamicdata/class/property.php','itemid',0,''               ,0),
-            array('sample'    ,'Sample Object'     ,$modid,2,'','',                                               'itemid',3,'nothing much...',0)
+            array('objects'   ,'Dynamic Objects'   ,$modid,0,'','',                                               'itemid',0,''               ,false),
+            array('properties','Dynamic Properties',$modid,1,'DProperty','modules/dynamicdata/class/property.php','itemid',0,''               ,false),
+            array('sample'    ,'Sample Object'     ,$modid,2,'','',                                               'itemid',3,'nothing much...',false)
         );
 
         $objectid = array();
@@ -192,16 +186,14 @@ function dynamicdata_init()
             /* the name used to reference a particular property, e.g. in function calls and templates */
             'name'       => array(
                 'type'        => 'varchar',
-                'size'        => 30,
-                'null'        => false,
-                'default'     => ''
+                'size'        => 64,
+                'null'        => false
             ),
             /* the label used for display */
             'label'      => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
-                'default'     => ''
             ),
             /* the object this property belong to */
             'object_id'   => array(
@@ -751,7 +743,7 @@ function dynamicdata_createPropDefTable()
         /* the name of this property */
         'name'   => array(
             'type'        => 'varchar',
-            'size'        => 254,
+            'size'        => 64,
             'default'     => null
         ),
         /* the label of this property */

@@ -116,7 +116,8 @@ Issues
 - [DONE] how to cross the border? i.e. how do parameters from the module
   get passed into the xslt processor (see parameter section below and
   xsltransformer.php )
-- [DONE]the construct <div style="clear: left|right|both"><div> appears to render improperly.
+- [DONE]the construct <div style="clear: left|right|both"><div> appears to 
+    render improperly.
     See:
         - http://www.stylusstudio.com/xsllist/200209/post10350.html
         - mtn rev: 6143d31238f3aaa6309a390f16fca034b9d1cda2
@@ -127,8 +128,11 @@ Issues
 
 - [DONE] we now add a root tag to module templates artificially. This leads to a
   number of things we can not do now:
-  - as we 'pre-read' the templatefile to add this tag, the filename of the template gets lost when an exception is raised. We really should add the root tag to the templates themselves. (this can be automated)
-  - individual templates are not well-formed (interoperability) (all core templates have had their root tags added in)
+  - as we 'pre-read' the templatefile to add this tag, the filename of the
+    template gets lost when an exception is raised. We really should add the root
+    tag to the templates themselves. (this can be automated)
+  - individual templates are not well-formed (interoperability) (all core 
+    templates have had their root tags added in)
 - [DONE] an empty template with just <xar:template xmlns...> </xar:template> gets an
   Error: 0: FileNotFoundException The file "modules/base/xartemplates/includes/.xd
   could not be found. Workaround, add a comment inside the tags.
@@ -204,20 +208,21 @@ Technique 2: namespaced attribute lib to extend sibling taglibs. : <div xar:extr
 ------------------------------------------------------------------------------------------
 
 What only a handful template engines use is the namespaced attribute
-technique. Similarly to the namespaced tags, you can employ namespaced attributes
-to be handled by your engine. BL doesnt  use this technique yet either. The
-key addition this brings to the table is that you can hook your namespace into
-others. Say you combine html and blocklayout in a template a div tag, belonging
-to the html (default) namespace can be (legally) extended by::
+technique. Similarly to the namespaced tags, you can employ namespaced
+attributes to be handled by your engine. BL doesnt use this technique yet
+either. The key addition this brings to the table is that you can hook your
+namespace into others. Say you combine html and blocklayout in a template a
+div tag, belonging to the html (default) namespace can be (legally) extended
+by::
 
     <div style="border:thin" xar:extra="somevalue">
         <img src="myPicture.png" />
     </div>
 
-Assuming the namespaces are properly tagged onto the document, this is perfectly
-valid XML. This allows a template engine to extend another namespace with
-extended behaviour. Still, the same XML rules apply and all information is
-still static.
+Assuming the namespaces are properly tagged onto the document, this is
+perfectly valid XML. This allows a template engine to extend another namespace
+with extended behaviour. Still, the same XML rules apply and all information
+is still static.
 
 The above is really what XML has to offer. Through clever combinations of both
 techniques it may seem there is more, but there really isn't :-)
@@ -229,13 +234,19 @@ Technique 3: define dynamic behaviour through an expression language
 --------------------------------------------------------------------
 
 Here's where the problem starts. XML, as such, unless implemented explicitly
-in one of the two previous techniques doesnt define dynamic behaviour in itself. There is however a staggering amount of ways to give it one:
+in one of the two previous techniques doesnt define dynamic behaviour in
+itself. There is however a staggering amount of ways to give it one:
 
-    1. XPath expression language to point to XML things and execute some functions on them
+    1. XPath expression language to point to XML things and execute some 
+       functions on them
     2. Extensions of XPath like XPointer and XLink for example
     3. XQuery to search into XML
-    4. An event model layered into what is known as a DOM (into 3 levels) which introduces an indirect way to manipulate XML documents by modelling them as an hierarchical object. It's not entirely clear where the OnEvent like    attributes come into play. (that is, to which doctype they actually belong)
-    5. Choose a specific doctype like XHTML and you get another set of dynamics, specific to what the dialect was designed for (xul+javascript for example)
+    4. An event model layered into what is known as a DOM (into 3 levels) which
+introduces an indirect way to manipulate XML documents by modelling them as an
+hierarchical object. It's not entirely clear where the OnEvent like attributes
+come into play. (that is, to which doctype they actually belong)
+    5. Choose a specific doctype like XHTML and you get another set of dynamics,
+       specific to what the dialect was designed for (xul+javascript for example)
     6. Databinding specifications like XForms and RDF
 
 and last but not least the custom expression languages which every template

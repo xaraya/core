@@ -424,8 +424,8 @@ ALTER TABLE `xar_roles`
   CHANGE COLUMN `xar_type` `type` INTEGER NOT NULL default '0',
   CHANGE COLUMN `xar_users` `users` INTEGER NOT NULL default '0',
   CHANGE COLUMN `xar_uname` `uname` varchar(255) NOT NULL default '',
-  CHANGE COLUMN `xar_email` `email` varchar(255) NOT NULL default '',
-  CHANGE COLUMN `xar_pass` `pass` varchar(100) NOT NULL default '',
+  CHANGE COLUMN `xar_email` `email` varchar(255) default NULL;
+  CHANGE COLUMN `xar_pass` `pass` varchar(100) default NULL;
   CHANGE COLUMN `xar_date_reg` `date_reg` varchar(100) NOT NULL default '0000-00-00 00:00:00',
   CHANGE COLUMN `xar_valcode` `valcode` varchar(35) NOT NULL default '',
   CHANGE COLUMN `xar_state` `state` INTEGER NOT NULL default '3',
@@ -624,6 +624,9 @@ ALTER TABLE `xar_roles` CHANGE `auth_modid` `auth_module_id` integer unsigned NO
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_roles.auth_modid", "xar_roles.auth_module_id");
 ALTER TABLE `xar_roles` CHANGE `type` `itemtype`                   integer unsigned NOT NULL;
 ALTER TABLE `xar_privileges` CHANGE `type` `itemtype`                   integer unsigned NOT NULL;
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_roles.type", "xar_roles.itemtype");
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_privileges.type", "xar_privileges.itemtype");
+ALTER TABLE `xar_cache_blocks` CHANGE `id` `blockinstance_id`           integer unsigned NOT NULL;
 
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
@@ -631,12 +634,12 @@ ALTER TABLE `xar_privileges` CHANGE `type` `itemtype`                   integer 
 ALTER TABLE `xar_block_group_instances` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_block_group_instances` CHANGE `group_id` `group_id`       integer unsigned NOT NULL;
 ALTER TABLE `xar_block_group_instances` CHANGE `instance_id` `instance_id` integer unsigned NOT NULL;
-ALTER TABLE `xar_block_group_instances` CHANGE `template` `template`       varchar(100) default NULL;
+ALTER TABLE `xar_block_group_instances` CHANGE `template` `template`       varchar(254) default NULL;
 ALTER TABLE `xar_block_group_instances` CHANGE `position` `position`       tinyint unsigned NOT NULL;
 
 ALTER TABLE `xar_block_groups` CHANGE `id` `id`             integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_block_groups` CHANGE `name` `name`         varchar(64) NOT NULL default '';
-ALTER TABLE `xar_block_groups` CHANGE `template` `template` varchar(254) NOT NULL default '';
+ALTER TABLE `xar_block_groups` CHANGE `name` `name`         varchar(64) NOT NULL;
+ALTER TABLE `xar_block_groups` CHANGE `template` `template` varchar(254) default NULL;
 
 ALTER TABLE `xar_block_instances` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_block_instances` CHANGE `type_id` `type_id`         integer unsigned NOT NULL;
@@ -645,19 +648,19 @@ ALTER TABLE `xar_block_instances` CHANGE `title` `title`             varchar(254
 ALTER TABLE `xar_block_instances` CHANGE `content` `content`         text NOT NULL;
 ALTER TABLE `xar_block_instances` CHANGE `template` `template`       varchar(254) default NULL;
 ALTER TABLE `xar_block_instances` CHANGE `state` `state`             tinyint unsigned NOT NULL default '2';
-ALTER TABLE `xar_block_instances` CHANGE `refresh` `refresh`         tinyint unsigned NOT NULL default '0';
+ALTER TABLE `xar_block_instances` CHANGE `refresh` `refresh`         bool default '0';
 ALTER TABLE `xar_block_instances` CHANGE `last_update` `last_update` integer unsigned NOT NULL default '0';
 
 ALTER TABLE `xar_block_types` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_block_types` CHANGE `name` `name`               varchar(64) NOT NULL default '';
+ALTER TABLE `xar_block_types` CHANGE `name` `name`               varchar(64) NOT NULL;
 ALTER TABLE `xar_block_types` CHANGE `module_id` `module_id`     integer unsigned NOT NULL;
 ALTER TABLE `xar_block_types` CHANGE `info` `info`               text;
 
-ALTER TABLE `xar_cache_blocks` CHANGE `id` `id`                   integer unsigned NOT NULL;
-ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`         tinyint NOT NULL default '0';
-ALTER TABLE `xar_cache_blocks` CHANGE `page` `page`               integer NOT NULL default '0';
-ALTER TABLE `xar_cache_blocks` CHANGE `user` `user`               integer unsigned NOT NULL;
-ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`           tinyint default NULL;
+ALTER TABLE `xar_cache_blocks` CHANGE `blockinstance_id` `blockinstance_id`  integer unsigned NOT NULL;
+ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`                    bool default '0';
+ALTER TABLE `xar_cache_blocks` CHANGE `page` `page`                          integer NOT NULL default '0';
+ALTER TABLE `xar_cache_blocks` CHANGE `user` `user`                          integer unsigned NOT NULL;
+ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`                      tinyint default NULL;
 
 ALTER TABLE `xar_dynamic_data` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_dynamic_data` CHANGE `property_id` `property_id` integer unsigned NOT NULL;
@@ -665,8 +668,8 @@ ALTER TABLE `xar_dynamic_data` CHANGE `item_id` `item_id`         integer unsign
 ALTER TABLE `xar_dynamic_data` CHANGE `value` `value`             mediumtext;
 
 ALTER TABLE `xar_dynamic_objects` CHANGE `id` `id`                integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_dynamic_objects` CHANGE `name` `name`            varchar(64) NOT NULL default '';
-ALTER TABLE `xar_dynamic_objects` CHANGE `label` `label`          varchar(254) NOT NULL default '';
+ALTER TABLE `xar_dynamic_objects` CHANGE `name` `name`            varchar(64) NOT NULL;
+ALTER TABLE `xar_dynamic_objects` CHANGE `label` `label`          varchar(254) NOT NULL;
 ALTER TABLE `xar_dynamic_objects` CHANGE `module_id` `module_id`  integer unsigned NOT NULL;
 ALTER TABLE `xar_dynamic_objects` CHANGE `itemtype` `itemtype`    integer NOT NULL default '0';
 ALTER TABLE `xar_dynamic_objects` CHANGE `parent_id` `parent_id`  integer NOT NULL default '0';
@@ -675,11 +678,11 @@ ALTER TABLE `xar_dynamic_objects` CHANGE `filepath` `filepath`    varchar(254) N
 ALTER TABLE `xar_dynamic_objects` CHANGE `urlparam` `urlparam`    varchar(30) NOT NULL default 'itemid';
 ALTER TABLE `xar_dynamic_objects` CHANGE `maxid` `maxid`          integer unsigned NOT NULL default '0';
 ALTER TABLE `xar_dynamic_objects` CHANGE `config` `config`        text;
-ALTER TABLE `xar_dynamic_objects` CHANGE `isalias` `isalias`      tinyint unsigned NOT NULL default '1';
+ALTER TABLE `xar_dynamic_objects` CHANGE `isalias` `isalias`      bool default '1';
 
 ALTER TABLE `xar_dynamic_properties` CHANGE `id` `id`                      integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_dynamic_properties` CHANGE `name` `name`                  varchar(64) NOT NULL default '';
-ALTER TABLE `xar_dynamic_properties` CHANGE `label` `label`                varchar(254) NOT NULL default '';
+ALTER TABLE `xar_dynamic_properties` CHANGE `name` `name`                  varchar(64) NOT NULL;
+ALTER TABLE `xar_dynamic_properties` CHANGE `label` `label`                varchar(254) NOT NULL;
 ALTER TABLE `xar_dynamic_properties` CHANGE `object_id` `object_id`        integer unsigned NOT NULL;
 ALTER TABLE `xar_dynamic_properties` CHANGE `type` `type`                  integer NOT NULL;
 ALTER TABLE `xar_dynamic_properties` CHANGE `defaultvalue` `defaultvalue`  varchar(254) default NULL;
@@ -728,63 +731,74 @@ ALTER TABLE `xar_modules` CHANGE `directory` `directory`         varchar(64) NOT
 ALTER TABLE `xar_modules` CHANGE `version` `version`             varchar(10) NOT NULL;
 ALTER TABLE `xar_modules` CHANGE `class` `class`                 varchar(64) NOT NULL;
 ALTER TABLE `xar_modules` CHANGE `category` `category`           varchar(64) NOT NULL;
-ALTER TABLE `xar_modules` CHANGE `admin_capable` `admin_capable` tinyint unsigned NOT NULL default '0';
-ALTER TABLE `xar_modules` CHANGE `user_capable` `user_capable`   tinyint unsigned NOT NULL default '0';
+ALTER TABLE `xar_modules` CHANGE `admin_capable` `admin_capable` bool default '0';
+ALTER TABLE `xar_modules` CHANGE `user_capable` `user_capable`   bool default '0';
 ALTER TABLE `xar_modules` CHANGE `state` `state`                 tinyint unsigned NOT NULL default '1';
 
 ALTER TABLE `xar_privileges` CHANGE `id` `id`                       integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_privileges` CHANGE `name` `name`                   varchar(100) NOT NULL default '';
+ALTER TABLE `xar_privileges` CHANGE `name` `name`                   varchar(100) NOT NULL;
 ALTER TABLE `xar_privileges` CHANGE `realm_id` `realm_id`           integer unsigned default NULL;
 ALTER TABLE `xar_privileges` CHANGE `module_id` `module_id`         integer unsigned default NULL;
-ALTER TABLE `xar_privileges` CHANGE `component` `component`         varchar(100) NOT NULL default '';
-ALTER TABLE `xar_privileges` CHANGE `instance` `instance`           varchar(100) NOT NULL default '';
+ALTER TABLE `xar_privileges` CHANGE `component` `component`         varchar(100) NOT NULL;
+ALTER TABLE `xar_privileges` CHANGE `instance` `instance`           varchar(100) NOT NULL;
 ALTER TABLE `xar_privileges` CHANGE `level` `level`                 integer NOT NULL default '0';
-ALTER TABLE `xar_privileges` CHANGE `description` `description`     varchar(254) NOT NULL default '';
+ALTER TABLE `xar_privileges` CHANGE `description` `description`     varchar(254) NOT NULL;
 ALTER TABLE `xar_privileges` CHANGE `itemtype` `itemtype`           integer unsigned NOT NULL;
 
 ALTER TABLE `xar_privmembers` CHANGE `privilege_id` `privilege_id`  integer unsigned NOT NULL;
 ALTER TABLE `xar_privmembers` CHANGE `parent_id` `parent_id`        integer unsigned NOT NULL;
 
-ALTER TABLE `xar_rolemembers` CHANGE `role_id` `role_id`  integer unsigned NOT NULL default '0';
+ALTER TABLE `xar_rolemembers` CHANGE `role_id` `role_id`            integer unsigned NOT NULL default '0';
 ALTER TABLE `xar_rolemembers` CHANGE `parent_id` `parent_id`        integer unsigned NOT NULL default '0';
 
-ALTER TABLE `xar_roles` CHANGE `id` `id`                       integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_roles` CHANGE `name` `name`                   varchar(254) NOT NULL default '';
-ALTER TABLE `xar_roles` CHANGE `itemtype` `itemtype`           integer unsigned NOT NULL;
-ALTER TABLE `xar_roles` CHANGE `users` `users`                 integer NOT NULL default '0';
-ALTER TABLE `xar_roles` CHANGE `uname` `uname`                 varchar(254) NOT NULL default '';
-ALTER TABLE `xar_roles` CHANGE `email` `email`                 varchar(254) NOT NULL default '';
-ALTER TABLE `xar_roles` CHANGE `pass` `pass`                   varchar(100) NOT NULL default '';
-ALTER TABLE `xar_roles` CHANGE `date_reg` `date_reg`           integer unsigned NOT NULL default '0';
-ALTER TABLE `xar_roles` CHANGE `valcode` `valcode`             varchar(35) NOT NULL default '';
-ALTER TABLE `xar_roles` CHANGE `state` `state`                 tinyint NOT NULL default '3';
-ALTER TABLE `xar_roles` CHANGE `auth_module_id` `auth_module_id`       integer unsigned NOT NULL;
+ALTER TABLE `xar_roles` CHANGE `id` `id`                            integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_roles` CHANGE `name` `name`                        varchar(254) NOT NULL;
+ALTER TABLE `xar_roles` CHANGE `itemtype` `itemtype`                integer unsigned NOT NULL;
+ALTER TABLE `xar_roles` CHANGE `users` `users`                      integer NOT NULL default '0';
+ALTER TABLE `xar_roles` CHANGE `uname` `uname`                      varchar(254) NOT NULL;
+ALTER TABLE `xar_roles` CHANGE `email` `email`                      varchar(254) NOT NULL;
+ALTER TABLE `xar_roles` CHANGE `pass` `pass`                        varchar(100) NOT NULL;
+ALTER TABLE `xar_roles` CHANGE `date_reg` `date_reg`                integer unsigned NOT NULL default '0';
+ALTER TABLE `xar_roles` CHANGE `valcode` `valcode`                  varchar(35) NOT NULL;
+ALTER TABLE `xar_roles` CHANGE `state` `state`                      tinyint NOT NULL default '3';
+ALTER TABLE `xar_roles` CHANGE `auth_module_id` `auth_module_id`    integer unsigned NOT NULL;
 
-ALTER TABLE `xar_security_acl` CHANGE `role_id` `role_id`  integer unsigned NOT NULL;
-ALTER TABLE `xar_security_acl` CHANGE `privilege_id` `privilege_id`  integer unsigned NOT NULL;
+ALTER TABLE `xar_security_acl` CHANGE `role_id` `role_id`           integer unsigned NOT NULL;
+ALTER TABLE `xar_security_acl` CHANGE `privilege_id` `privilege_id` integer unsigned NOT NULL;
 
-ALTER TABLE `xar_security_instances` CHANGE `id` `id`                       integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_security_instances` CHANGE `module_id` `module_id`         integer unsigned default NULL;
-ALTER TABLE `xar_security_instances` CHANGE `component` `component`         varchar(100) NOT NULL default '';
-ALTER TABLE `xar_security_instances` CHANGE `header` `header`               varchar(254) NOT NULL default '';
-ALTER TABLE `xar_security_instances` CHANGE `query` `query`                 varchar(254) NOT NULL default '';
-ALTER TABLE `xar_security_instances` CHANGE `ddlimit` `ddlimit`             integer NOT NULL default '0';
-ALTER TABLE `xar_security_instances` CHANGE `description` `description`     varchar(254) NOT NULL default '';
+ALTER TABLE `xar_security_instances` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_security_instances` CHANGE `module_id` `module_id`     integer unsigned default NULL;
+ALTER TABLE `xar_security_instances` CHANGE `component` `component`     varchar(100) NOT NULL;
+ALTER TABLE `xar_security_instances` CHANGE `header` `header`           varchar(254) NOT NULL;
+ALTER TABLE `xar_security_instances` CHANGE `query` `query`             varchar(254) NOT NULL;
+ALTER TABLE `xar_security_instances` CHANGE `ddlimit` `ddlimit`         integer NOT NULL default '0';
+ALTER TABLE `xar_security_instances` CHANGE `description` `description` varchar(254) NOT NULL;
 
-ALTER TABLE `xar_security_realms` CHANGE `id` `id`                       integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_security_realms` CHANGE `name` `name`                   varchar(254) NOT NULL default '';
+ALTER TABLE `xar_security_realms` CHANGE `id` `id`                      integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_security_realms` CHANGE `name` `name`                  varchar(254) NOT NULL;
 
-ALTER TABLE `xar_session_info` CHANGE `id` `id`                       varchar(32) NOT NULL;
-ALTER TABLE `xar_session_info` CHANGE `ip_addr` `ip_addr`             varchar(20) NOT NULL;
-ALTER TABLE `xar_session_info` CHANGE `first_use` `first_use`         integer unsigned NOT NULL default '0';
-ALTER TABLE `xar_session_info` CHANGE `last_use` `last_use`           integer unsigned NOT NULL default '0';
-ALTER TABLE `xar_session_info` CHANGE `role_id` `role_id`             integer unsigned NOT NULL;
-ALTER TABLE `xar_session_info` CHANGE `vars` `vars`                   blob;
-ALTER TABLE `xar_session_info` CHANGE `remember` `remember`           tinyint unsigned NOT NULL default '0';
+ALTER TABLE `xar_session_info` CHANGE `id` `id`                     varchar(32) NOT NULL;
+ALTER TABLE `xar_session_info` CHANGE `ip_addr` `ip_addr`           varchar(20) NOT NULL;
+ALTER TABLE `xar_session_info` CHANGE `first_use` `first_use`       integer unsigned NOT NULL default '0';
+ALTER TABLE `xar_session_info` CHANGE `last_use` `last_use`         integer unsigned NOT NULL default '0';
+ALTER TABLE `xar_session_info` CHANGE `role_id` `role_id`           integer unsigned NOT NULL;
+ALTER TABLE `xar_session_info` CHANGE `vars` `vars`                 blob;
+ALTER TABLE `xar_session_info` CHANGE `remember` `remember`         bool default '0';
 
-ALTER TABLE `xar_themes` CHANGE `id` `id`                          integer unsigned NOT NULL auto_increment;
-ALTER TABLE `xar_themes` CHANGE `name` `name`                      varchar(64) NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `regid` `regid`                    integer unsigned NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `directory` `directory`            varchar(64) NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `version` `version`                varchar(10) NOT NULL;
-ALTER TABLE `xar_themes` CHANGE `state` `state`                    tinyint unsigned NOT NULL default '1';
+ALTER TABLE `xar_themes` CHANGE `id` `id`                           integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_themes` CHANGE `name` `name`                       varchar(64) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `regid` `regid`                     integer unsigned NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `directory` `directory`             varchar(64) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `version` `version`                 varchar(10) NOT NULL;
+ALTER TABLE `xar_themes` CHANGE `state` `state`                     tinyint unsigned NOT NULL default '1';
+
+/* boolean fields in mysql are an alias for tinyint(1), bit(1) is better, rangewise. 
+   In the API this mapping is done automatically and the fieldtype is indeed called boolean there
+*/
+ALTER TABLE `xar_session_info` CHANGE `remember` `remember`         bit(1) default 0;
+ALTER TABLE `xar_block_instances` CHANGE `refresh` `refresh`        bit(1) default 0;
+ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`           bit(1) default 0;
+ALTER TABLE `xar_dynamic_objects` CHANGE `isalias` `isalias`        bit(1) default 1;
+
+/* User is a reserved word in postgres and we are likely to refactor cache_blocks anyways */
+ALTER TABLE `xar_cache_blocks` CHANGE `user` `theuser`              integer unsigned NOT NULL;

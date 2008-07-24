@@ -52,15 +52,15 @@ function privileges_init()
         /*********************************************************************
          * CREATE TABLE xar_security_realms (
          *  id int(11) NOT NULL auto_increment,
-         *  name varchar(255) NOT NULL default '',
+         *  name varchar(254) NOT NULL,
          *  PRIMARY KEY  (id)
          * )
          *********************************************************************/
         $fields = array('id'  => array('type'        => 'integer','null'        => false,
                                             'unsigned'     => true,      'increment'   => true,
                                             'primary_key' => true),
-                        'name' => array('type'        => 'varchar','size'        => 255,
-                                            'null'        => false,    'default'     => ''));
+                        'name' => array('type'        => 'varchar','size'        => 254,
+                                            'null'        => false,));
         $query = xarDBCreateTable($tables['security_realms'],$fields);
         $dbconn->Execute($query);
 
@@ -68,13 +68,13 @@ function privileges_init()
         /*********************************************************************
          * CREATE TABLE xar_privileges (
          *   id int(11) NOT NULL auto_increment,
-         *   name varchar(100) NOT NULL default '',
+         *   name varchar(100) NOT NULL,
          *   realm_id integer unsigned default NULL,
          *   module_id integer unsigned NOT NULL,
-         *   component varchar(100) NOT NULL default '',
-         *   instance varchar(100) NOT NULL default '',
+         *   component varchar(100) NOT NULL,
+         *   instance varchar(100) NOT NULL,
          *   level int(11) NOT NULL default '0',
-         *   description varchar(255) NOT NULL default '',
+         *   description varchar(254) NOT NULL,
          *   itemtype integer unsigned NOT NULL,
          *   PRIMARY KEY  (id)
          * )
@@ -82,13 +82,13 @@ function privileges_init()
 
         $fields = array(
                         'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-                        'name'  => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
+                        'name'  => array('type' => 'varchar', 'size' => 100, 'null' => false),
                         'realm_id'=>array('type' => 'integer', 'unsigned' => true, 'null' => true),
                         'module_id'=>array('type' => 'integer', 'unsigned' => true, 'null' => true),
-                        'component' => array('type'  => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
-                        'instance' => array('type'   => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
+                        'component' => array('type'  => 'varchar', 'size' => 100, 'null' => false),
+                        'instance' => array('type'   => 'varchar', 'size' => 100, 'null' => false),
                         'level' => array('type'      => 'integer', 'null' => false,'default' => '0'),
-                        'description' => array('type'=> 'varchar', 'size' => 255, 'null' => false, 'default'     => ''),
+                        'description' => array('type'=> 'varchar', 'size' => 254, 'null' => false),
                         'itemtype' => array('type'=> 'integer', 'unsigned' => true, 'null' => false));
         $query = xarDBCreateTable($tables['privileges'],$fields);
         $dbconn->Execute($query);
@@ -182,15 +182,15 @@ function privileges_init()
         /*********************************************************************
          * CREATE TABLE xar_security_instances (
          *   id int(11) NOT NULL default '0',
-         *   name varchar(100) NOT NULL default '',
-         *   module varchar(100) NOT NULL default '',
-         *   type varchar(100) NOT NULL default '',
-         *   instancevaluefield1 varchar(100) NOT NULL default '',
-         *   instancedisplayfield1 varchar(100) NOT NULL default '',
+         *   name varchar(100) NOT NULL,
+         *   module varchar(100) NOT NULL,
+         *   type varchar(100) NOT NULL,
+         *   instancevaluefield1 varchar(100) NOT NULL,
+         *   instancedisplayfield1 varchar(100) NOT NULL,
          *   instanceapplication int(11) NOT NULL default '0',
-         *   instancevaluefield2 varchar(100) NOT NULL default '',
-         *   instancedisplayfield2 varchar(100) NOT NULL default '',
-         *   description varchar(255) NOT NULL default '',
+         *   instancevaluefield2 varchar(100) NOT NULL,
+         *   instancedisplayfield2 varchar(100) NOT NULL,
+         *   description varchar(254) NOT NULL,
          *   PRIMARY KEY  (sid)
          * )
          *********************************************************************/
@@ -206,24 +206,20 @@ function privileges_init()
                                                              'null'        => true),
                                         'component' => array('type'   => 'varchar',
                                                                  'size'        => 100,
-                                                                 'null'        => false,
-                                                                 'default'     => ''),
+                                                                 'null'        => false),
                                         'header' => array('type'   => 'varchar',
-                                                              'size'        => 255,
-                                                              'null'        => false,
-                                                              'default'     => ''),
+                                                              'size'        => 254,
+                                                              'null'        => false),
                                         'query' => array('type'   => 'varchar',
-                                                             'size'        => 255,
-                                                             'null'        => false,
-                                                             'default'     => ''),
+                                                             'size'        => 254,
+                                                             'null'        => false),
                                         'ddlimit' => array('type'  => 'integer',
                                                              'unsigned'    => true,
                                                              'null'        => false,
                                                              'default'     => '0'),
                                         'description' => array('type'=> 'varchar',
-                                                                   'size'        => 255,
-                                                                   'null'        => false,
-                                                                   'default'     => '')));
+                                                                   'size'        => 254,
+                                                                   'null'        => false)));
 
         $dbconn->Execute($query);
 

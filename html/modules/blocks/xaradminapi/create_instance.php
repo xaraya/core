@@ -17,12 +17,12 @@
  * @param $args['title'] the title of the block
  * @param $args['type'] the block's type
  * @param $args['template'] the block's template
- * @returns int
- * @return block instance id on success, false on failure
+ * @return integer block instance id on success, false on failure
  */
 function blocks_adminapi_create_instance($args)
 {
     // Get arguments from argument array
+    $template = null;
     extract($args);
 
     // Argument check
@@ -61,7 +61,6 @@ function blocks_adminapi_create_instance($args)
         $content = serialize($content);
     }
 
-    if (!isset($template)) $template = '';
     if (!isset($title)) $title = '';
 
     // Load up database details.
@@ -75,8 +74,7 @@ function blocks_adminapi_create_instance($args)
               title, content, template,
               state, refresh, last_update
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-
-    $dbconn->Execute($query, array($type, $name, $title, $content, $template, $state,0,0));
+    $dbconn->Execute($query, array($type, $name, $title, $content, $template, $state,false,0));
 
     // Get ID of row inserted.
     $bid = $dbconn->getLastId($block_instances_table);
@@ -121,10 +119,10 @@ function blocks_adminapi_create_instance($args)
         }
         //now create the new block
         $cacheblocks = $xartable['cache_blocks'];
-        $query = "INSERT INTO $cacheblocks (id,
+        $query = "INSERT INTO $cacheblocks (blockinstance_id,
                                             nocache,
                                             page,
-                                            user,
+                                            theuser,
                                             expire)
                   VALUES (?,?,?,?,?)";
         $bindvars = array($bid, $nocache, $pageshared, $usershared, $cacheexpire);

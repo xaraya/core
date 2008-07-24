@@ -932,7 +932,7 @@ class xarQuery
         $tablesdone = array();
         $t = '';
         $count = count($this->tablelinks );
-        for ($i=0;$i<$count;$i++) $t .= '(';
+        for ($i=0;$i<$count;$i++) $t .= '';
         foreach ($this->tablelinks as $link) {
             $fullfield1 = $this->_deconstructfield($link['field1']);
             $fullfield2 = $this->_deconstructfield($link['field2']);
@@ -957,7 +957,7 @@ class xarQuery
             $t .= $this->_gettablenamefromalias($fullfield2['table']);
             $t .= " " . $fullfield2['table'] . " ";
             $t .= "ON " . $link['field1'] . " = " . $link['field2'];
-            $t .= ")";
+            $t .= "";
         }
 
         return $t ;
@@ -1344,14 +1344,14 @@ class xarQuery
     function lastid($table="", $id="")
     {
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
-        $result = $this->dbconn->Execute("SELECT MAX($id) FROM $table");
-        list($id) = $result->fields;
-        return $id;
+        $gen = $this->dbconn->getIdGenerator();
+        return  $gen->getLastId($table);
     }
     function nextid($table="", $id="")
     {
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
-        return $this->dbconn->PO_Insert_ID($table,$id);
+        $gen = $this->dbconn->getIdGenerator();
+        return  $gen->getNextId($table);
     }
     function openconnection($x = '')
     {

@@ -43,12 +43,12 @@ function base_init()
         /*********************************************************************
          * CREATE TABLE xar_session_info (
          *  id        varchar(32) NOT NULL,
-         *  ipaddr    varchar(20) NOT NULL default '',
+         *  ipaddr    varchar(20) NOT NULL,
          *  first_use integer NOT NULL default '0',
          *  last_use  integer NOT NULL default '0',
          *  role_id   integer unsigned NOT NULL,
          *  vars      blob,
-         *  remember  int(1) default '0',
+         *  remember  boolean default false,
          *  PRIMARY KEY  (id)
          * )
          *********************************************************************/
@@ -58,7 +58,7 @@ function base_init()
                         'last_use'  => array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
                         'role_id'   => array('type'=>'integer','unsigned'=>true, 'null'=>false),
                         'vars'      => array('type'=>'blob'   ,'null'=>true),
-                        'remember'  => array('type'=>'integer', 'unsigned' => true, 'size'=> 'tiny', 'null'=>false, 'default'=>'0')
+                        'remember'  => array('type'=>'boolean', 'default'=>  false)
                         );
 
         $query = xarDBCreateTable($sessionInfoTable,$fields);
@@ -87,7 +87,7 @@ function base_init()
          * CREATE TABLE xar_module_vars (
          *  id        integer unsigned NOT NULL auto_increment,
          *  module_id integer unsigned default NULL,
-         *  name      varchar(64) NOT NULL default '',
+         *  name      varchar(64) NOT NULL,
          *  value     longtext,
          *  PRIMARY KEY  (id),
          *  KEY (name)
