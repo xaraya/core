@@ -56,7 +56,7 @@ function blocks_adminapi_delete_type($args)
               AND       btypes.module_id = ?
               AND       btypes.name = ?";
     $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuery(array($module, $type));
+    $result = $stmt->executeQuery(array(xarMod::getId($module), $type));
 
     while ($result->next()) {
         // Pass ids to API
@@ -66,7 +66,7 @@ function blocks_adminapi_delete_type($args)
 
     // Delete the block type
     $query = "DELETE FROM $block_types_table WHERE module_id = ? AND name = ?";
-    $dbconn->Execute($query, array($module, $type));
+    $dbconn->Execute($query, array(xarMod::getId($module), $type));
     return true;
 }
 
