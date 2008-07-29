@@ -51,7 +51,9 @@ class ModuleProperty extends ObjectRefProperty
         
         $items = xarModAPIFunc('modules', 'admin', 'getlist',array('filter' => $this->filter));
         foreach($items as $item) {
-            $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
+            try {
+                $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
+            } catch(Exception $e) {}
         }
         return $options;
     }
