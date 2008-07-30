@@ -103,11 +103,11 @@
 
 <!-- mlstring inside set just needs to resolve the text node -->
 <xsl:template match="xar:set/xar:mlstring">
-  <xsl:text>xarML('</xsl:text>
+  <xsl:text>xarML(</xsl:text>
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
-  <xsl:text>')</xsl:text>
+  <xsl:text>)</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>
