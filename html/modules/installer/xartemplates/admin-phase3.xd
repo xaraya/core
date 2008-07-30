@@ -414,6 +414,15 @@
                        <xar:mlstring>WARNING: SQLITE as database will not be available</xar:mlstring>
                    </li>
                 </xar:if>
+                <xar:if condition="$pdosqliteextension">
+                    <li class="success">
+                        <xar:mlstring>SUCCESS: The PDO SQLite Extension is loaded.</xar:mlstring>
+                    </li>
+                <xar:else />
+                   <li class="warning">
+                       <xar:mlstring>WARNING: PDO SQLITE as database will not be available</xar:mlstring>
+                   </li>
+                </xar:if>
             </ul>
             <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $rssTemplatesIsWritable AND $metMinMemRequirement">
                 <input type="hidden" name="install_phase" id="install_phase" value="4" />
