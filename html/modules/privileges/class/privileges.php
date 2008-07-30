@@ -183,9 +183,16 @@ class xarPrivileges extends xarMasks
         $role = xarRoles::findRole($rolename);
         $roleid = $role->getID();
 
+        $bindvars = array($roleid,$privid);
+        
+        // Check if the privilege already exists
+        $query = "SELECT * FROM " . parent::$acltable . " WHERE role_id = ? and privilege_id = ?";
+        $stmt = parent::$dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
+        if ($result->first()) return true;
+        
         // Add the assignation as an entry to the acl table
         $query = "INSERT INTO " . parent::$acltable . " VALUES (?,?)";
-        $bindvars = array($roleid,$privid);
         parent::$dbconn->Execute($query,$bindvars);
 
         // empty the privset cache
