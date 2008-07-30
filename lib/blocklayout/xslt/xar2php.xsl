@@ -170,7 +170,7 @@
       <xsl:text>'</xsl:text>
       <!-- Escape any quote marks in the text and output -->
       <xsl:call-template name="replace">
-        <xsl:with-param name="source" select="$expr"/>
+        <xsl:with-param name="source" select="normalize-space($expr)"/>
       </xsl:call-template>
       <xsl:text>'</xsl:text>
     </xsl:when>
@@ -229,13 +229,20 @@
 
 <xsl:template name="translateText">
   <xsl:param name="expr" />
-  <xsl:processing-instruction name="php">
-    <xsl:text>echo xarML(</xsl:text>
-    <xsl:call-template name="resolveText">
-      <xsl:with-param name="expr" select="normalize-space($expr)"/>
-    </xsl:call-template>
-    <xsl:text>);</xsl:text>
-  </xsl:processing-instruction>
+  <xsl:choose>
+    <xsl:when test="string(number($expr))!='NaN'">
+      <xsl:value-of select="$expr"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:processing-instruction name="php">
+        <xsl:text>echo xarML(</xsl:text>
+        <xsl:call-template name="resolveText">
+          <xsl:with-param name="expr" select="$expr"/>
+        </xsl:call-template>
+        <xsl:text>);</xsl:text>
+      </xsl:processing-instruction>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- Stuff in pre tags should not be translated -->
