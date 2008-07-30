@@ -167,10 +167,12 @@
   <xsl:choose>
     <!-- If we have zero or one hash, just output the text node -->
     <xsl:when test="$nrOfHashes &lt; 2">
+      <xsl:text>'</xsl:text>
       <!-- Escape any quote marks in the text and output -->
       <xsl:call-template name="replace">
         <xsl:with-param name="source" select="$expr"/>
       </xsl:call-template>
+      <xsl:text>'</xsl:text>
     </xsl:when>
 
     <!-- Resolve left to right -->
@@ -187,25 +189,31 @@
       <!-- [....]#....#.... : get the first part out of the way -->
 
       <!-- Just escape the quotes and display the first part -->
-      <xsl:call-template name="replace">
-        <xsl:with-param name="source" select="substring($expr,0,$delimiter-position)"/>
-      </xsl:call-template>
+      <xsl:if test="$delimiter-position &gt; 1">
+        <xsl:text>'</xsl:text>
+        <xsl:call-template name="replace">
+          <xsl:with-param name="source" select="substring($expr,0,$delimiter-position)"/>
+        </xsl:call-template>
+        <xsl:text>'</xsl:text>
+        <xsl:if test="substring($expr,0,$delimiter-position) != $expr">
+          <xsl:text>.</xsl:text>
+        </xsl:if>
+      </xsl:if>
 
       <!-- Resolve the part in between -->
       <!-- Left at this point: ....#[....]#.... -->
       <xsl:variable name="expr-after" select="substring($expr,$delimiter-position + 1)"/>
-      <xsl:if test="substring-before($expr-after,'#') !=''">
-          <xsl:text>'.</xsl:text>
-          <xsl:call-template name="resolvePHP">
-              <xsl:with-param name="expr" select="substring-before($expr-after,'#')"/>
-          </xsl:call-template>
-          <xsl:text>.'</xsl:text>
-      </xsl:if>
-
-      <!-- ....#....#[....#....#....etc.] -->
-      <xsl:call-template name="resolveText">
-        <xsl:with-param name="expr" select="substring-after($expr-after,'#')"/>
+      <xsl:call-template name="resolvePHP">
+          <xsl:with-param name="expr" select="substring-before($expr-after,'#')"/>
       </xsl:call-template>
+
+      <xsl:if test="string-length(substring-after($expr-after,'#')) &gt; 0">
+        <xsl:text>.</xsl:text>
+        <!-- ....#....#[....#....#....etc.] -->
+        <xsl:call-template name="resolveText">
+          <xsl:with-param name="expr" select="substring-after($expr-after,'#')"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -221,30 +229,13 @@
 
 <xsl:template name="translateText">
   <xsl:param name="expr" />
-  <xsl:choose>
-    <!-- We have an empty node -->
-    <!-- Not real elegant. how to do better? (random) -->
-    <xsl:when test="normalize-space($expr) = '&#160;'">
-      <xsl:copy />
-    </xsl:when>
-    <xsl:when test="normalize-space($expr) = ' '">
-      <xsl:copy />
-    </xsl:when>
-    <xsl:when test="normalize-space($expr) = ''">
-      <xsl:copy />
-    </xsl:when>
-
-    <!-- We have a non-empty node -->
-    <xsl:otherwise>
-      <xsl:processing-instruction name="php">
-        <xsl:text>echo xarML('</xsl:text>
-        <xsl:call-template name="resolveText">
-          <xsl:with-param name="expr" select="$expr"/>
-        </xsl:call-template>
-        <xsl:text>');</xsl:text>
-      </xsl:processing-instruction>
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:processing-instruction name="php">
+    <xsl:text>echo xarML(</xsl:text>
+    <xsl:call-template name="resolveText">
+      <xsl:with-param name="expr" select="normalize-space($expr)"/>
+    </xsl:call-template>
+    <xsl:text>);</xsl:text>
+  </xsl:processing-instruction>
 </xsl:template>
 
 <!-- Stuff in pre tags should not be translated -->
