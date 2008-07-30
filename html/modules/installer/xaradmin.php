@@ -175,6 +175,7 @@ function installer_admin_phase3()
     $data['mysqlextension']           = extension_loaded('mysql');
     $data['pgsqlextension']           = extension_loaded('pgsql');
     $data['sqliteextension']          = extension_loaded('sqlite');
+    $data['pdosqliteextension']       = extension_loaded('pdo_sqlite');
 
     $data['metRequiredPHPVersion']    = $metRequiredPHPVersion;
     $data['phpVersion']               = PHP_VERSION;
@@ -221,12 +222,13 @@ function installer_admin_phase4()
     $data['database_prefix']     = xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
     $data['database_type']       = xarSystemVars::get(sys::CONFIG, 'DB.Type');
     // Supported  Databases:
-    $data['database_types']      = array('mysql'    => array('name' => 'MySQL'   , 'available' => extension_loaded('mysql')),
-                                         'postgres' => array('name' => 'Postgres', 'available' => extension_loaded('pgsql')),
-                                         'sqlite'   => array('name' => 'SQLite'  , 'available' => extension_loaded('sqlite')),
+    $data['database_types']      = array('mysql'       => array('name' => 'MySQL'   , 'available' => extension_loaded('mysql')),
+                                         'postgres'    => array('name' => 'Postgres', 'available' => extension_loaded('pgsql')),
+                                         'sqlite'      => array('name' => 'SQLite'  , 'available' => extension_loaded('sqlite')),
+                                         //'pdosqlite'   => array('name' => 'PDO SQLite'  , 'available' => extension_loaded('pdo_sqlite')),
                                          // use portable version of OCI8 driver to support ? bind variables
-                                         'oci8po'   => array('name' => 'Oracle 9+ (not supported)'  , 'available' => extension_loaded('oci8')),
-                                         'mssql'    => array('name' => 'MS SQL Server (not supported)' , 'available' => extension_loaded('mssql')),
+                                         'oci8po'      => array('name' => 'Oracle 9+ (not supported)'  , 'available' => extension_loaded('oci8')),
+                                         'mssql'       => array('name' => 'MS SQL Server (not supported)' , 'available' => extension_loaded('mssql')),
                                         );
 
     $data['language'] = $install_language;
@@ -287,13 +289,13 @@ function installer_admin_phase5()
         return;
     }
 
-    $init_args =  array('userName' => $dbUname,
-                        'password' => $dbPass,
+    $init_args =  array('userName'     => $dbUname,
+                        'password'     => $dbPass,
                         'databaseHost' => $dbHost,
                         'databaseType' => $dbType,
                         'databaseName' => $dbName,
-                        'prefix' => $dbPrefix,
-                        'doConnect' => false);
+                        'prefix'       => $dbPrefix,
+                        'doConnect'    => false);
 
     sys::import('xaraya.database');
     xarDB_Init($init_args);
