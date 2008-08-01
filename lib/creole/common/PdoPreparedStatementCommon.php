@@ -115,27 +115,27 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
      * @return ResultSet
      * @throws SQLException if a database access error occurs.
      */
-	public function executeQuery($p1 = null, $fetchmode = null, $rs_class = null)
-	{    
+    public function executeQuery($p1 = null, $fetchmode = null, $rs_class = null)
+    {    
         // $rs_class can not be null, but inheritance requires our class definition
         // to be compatible with PreparedStatementCommon::executeQuery()
         if( empty( $rs_class ) ) {
             throw new SQLException('PdoPreparedStatementCommon::executeQuery: $rs_class can not be empty');
         }
         
-	    $params = null;
-		if ($fetchmode !== null) {
-			$params = $p1;
-		} elseif ($p1 !== null) {
-			if (is_array($p1)) $params = $p1;
-			else $fetchmode = $p1;
-		}
-	    
-    	foreach ( (array) $params as $i=>$param ) {
-    		$this->set ( $i + 1, $param );
-    		unset ( $i, $param );
-		}
-		unset ( $params );
+        $params = null;
+        if ($fetchmode !== null) {
+            $params = $p1;
+        } elseif ($p1 !== null) {
+            if (is_array($p1)) $params = $p1;
+            else $fetchmode = $p1;
+        }
+        
+        foreach ( (array) $params as $i=>$param ) {
+            $this->set ( $i + 1, $param );
+            unset ( $i, $param );
+        }
+        unset ( $params );
         
         $this->updateCount = null; // reset   
         
@@ -228,7 +228,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
      */
     function setBoolean($paramIndex, $value) 
     {                
-	    if ($value === null) {
+        if ($value === null) {
             $this->setNull($paramIndex);
         } else {
             $this->saveBindValue( $paramIndex, $value, PDO::PARAM_BOOL );
@@ -260,7 +260,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
      */
     function setDecimal($paramIndex, $value) 
     {
-	    if ($value === null) {
+        if ($value === null) {
             $this->setNull($paramIndex);
         } else {
             // PDO doesn't seem to have an excplict PDO::PARAM 
@@ -276,7 +276,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
      */
     function setDouble($paramIndex, $value) 
     {
-	    if ($value === null) {
+        if ($value === null) {
             $this->setNull($paramIndex);
         } else {
             // PDO doesn't seem to have an excplict PDO::PARAM 
@@ -287,7 +287,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
     
     function setFloat($paramIndex, $value) 
     {
-	    if ($value === null) {
+        if ($value === null) {
             $this->setNull($paramIndex);
         } else {
             // PDO doesn't seem to have an excplict PDO::PARAM 
@@ -303,7 +303,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
      */
     function setInt($paramIndex, $value) 
     {
-	    if ($value === null) {
+        if ($value === null) {
             $this->setNull($paramIndex);
         } else {
             $this->saveBindValue( $paramIndex, $value, PDO::PARAM_INT );
@@ -316,7 +316,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
      */
     function setNull($paramIndex) 
     {
-    	$this->saveBindValue( $paramIndex, null, PDO::PARAM_NULL );
+        $this->saveBindValue( $paramIndex, null, PDO::PARAM_NULL );
         
     }
     
@@ -327,10 +327,10 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
         } else {
             // it's ok to have a fatal error here, IMO, if object doesn't have
             // __toString() and is being passed to this method.
-    	    if ( is_object ( $value ) ) {
-                	$value = $value->__toString();
-    	    }
-    	    $this->saveBindValue( $paramIndex, $value, PDO::PARAM_STR );
+            if ( is_object ( $value ) ) {
+                    $value = $value->__toString();
+            }
+            $this->saveBindValue( $paramIndex, $value, PDO::PARAM_STR );
         }
     } 
     

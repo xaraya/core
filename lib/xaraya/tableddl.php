@@ -58,7 +58,8 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
         case 'postgres':
             $sql = 'CREATE DATABASE "'.$databaseName .'"';
             break;
-         case 'sqlite':
+        case 'sqlite':
+        case 'pdosqlite':
             // No such thing, its created automatically when it doesnt exist
             $sql ='';
             break;
@@ -119,6 +120,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
             $sql = xarDB__oracleCreateTable($tableName, $fields);
             break;
         case 'sqlite':
+        case 'pdosqlite':
             sys::import('xaraya.tableddl.sqlite');
             $sql = xarDB__sqliteCreateTable($tableName, $fields);
             break;
@@ -181,6 +183,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
             $sql = xarDB__oracleAlterTable($tableName, $args);
             break;
         case 'sqlite':
+        case 'pdosqlite':
             sys::import('xaraya.tableddl.sqlite');
             $sql = xarDB__sqliteAlterTable($tableName, $args);
             break;
@@ -219,6 +222,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
         case 'oci8':
         case 'oci8po':
         case 'sqlite':
+        case 'pdosqlite':
             $sql = 'DROP TABLE '.$tableName;
             break;
         case 'mssql':
@@ -275,6 +279,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
         case 'oci8':
         case 'oci8po':
         case 'sqlite':
+        case 'pdosqlite':
             if ($index['unique'] == true) {
                 $sql = 'CREATE UNIQUE INDEX '.$index['name'].' ON '.$tableName;
             } else {
@@ -326,6 +331,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
         case 'oci8':
         case 'oci8po':
         case 'sqlite':
+        case 'pdosqlite':
             $sql = 'DROP INDEX '.$index['name'];
             break;
         case 'mssql':

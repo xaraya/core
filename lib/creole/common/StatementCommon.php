@@ -157,7 +157,7 @@ abstract class StatementCommon {
     public function execute($sql, $fetchmode = null)
     {
         xarLogMessage("DB: $sql");
-        if (!$this->isSelect($sql)) {                    
+        if (!$this->isSelect($sql)) {                 
             $this->updateCount = $this->executeUpdate($sql);
             return false;
         } else {
