@@ -431,7 +431,6 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo = NULL, $
     $isGUI = false;
 
     // TODO: #3
-
     // Call each hook
     foreach ($hooklist as $hook) {
         //THIS IS BROKEN
@@ -1209,7 +1208,7 @@ class xarMod extends Object implements IxarMod
         if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
 
         if (empty($GLOBALS['xarMod_noCacheState']) && xarCore::isCached('Mod.getFileInfos', $modOsDir)) {
-            return xarCore::getCached('Mod.getFileInfos', $modOsDir);
+            return xarCore::getCached('Mod.getFileInfos', $modOsDir ." / " . $type);
         }
         // Log it when it didnt came from cache
         xarLogMessage("xarMod::getFileInfo ". $modOsDir ." / " . $type);
@@ -1218,7 +1217,6 @@ class xarMod extends Object implements IxarMod
         // TODO redo legacy support via type.
         switch($type) {
         case 'module':
-        default:
             // Spliffster, additional mod info from modules/$modDir/xarversion.php
             $fileName = 'modules/' . $modOsDir . '/xarversion.php';
             $part = 'xarversion';
@@ -1230,6 +1228,8 @@ class xarMod extends Object implements IxarMod
             $fileName = xarModVars::get('themes', 'themesdirectory'). '/' . $modOsDir . '/xartheme.php';
             $part = 'xartheme';
             break;
+        default:
+            throw new BadParameterException('module/theme type');
         }
 
         if (!file_exists($fileName)) {
@@ -1282,7 +1282,7 @@ class xarMod extends Object implements IxarMod
         }
         $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
 
-        xarCore::setCached('Mod.getFileInfos', $modOsDir, $FileInfo);
+        xarCore::setCached('Mod.getFileInfos', $modOsDir ." / " . $type, $FileInfo);
         return $FileInfo;
     }
 
