@@ -984,7 +984,6 @@ class xarMod extends Object implements IxarMod
 
         switch($type) {
         case 'module':
-        default:
             if (xarCore::isCached('Mod.Infos', $modRegId)) {
                 return xarCore::getCached('Mod.Infos', $modRegId);
             }
@@ -994,6 +993,8 @@ class xarMod extends Object implements IxarMod
                 return xarCore::getCached('Theme.Infos', $modRegId);
             }
             break;
+        default:
+            throw new BadParameterException('module/theme type');
         }
         // Log it when it doesnt come from the cache
         xarLogMessage("xarMod::getInfo ". $modRegId ." / " . $type);
