@@ -925,8 +925,8 @@ class xarMod extends Object implements IxarMod
      */
     static function getState($modRegId, $type = 'module')
     {
-        $tmp = self::getInfo($modRegid, $type);
-        return $tmp['state'];
+        $tmp = self::getInfo($modRegId, $type);
+        return (int)$tmp['state'];
     }
 
     /**
