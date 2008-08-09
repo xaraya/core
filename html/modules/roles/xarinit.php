@@ -129,7 +129,7 @@ function roles_activate()
     // Create some modvars
     //
     //TODO: improve on this hardwiring
-    xarModVars::set('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem')); //Setting a default
+    xarModVars::set('roles', 'defaultauthmodule', 'authsystem'); 
     xarModVars::set('roles', 'defaultregmodule', '');
     if (xarModVars::get('roles','itemsperpage')) return true;
     xarModVars::set('roles', 'rolesdisplay', 'tabbed');
