@@ -124,8 +124,8 @@ interface IsessionHandler
 
 class xarSession extends Object implements IsessionHandler
 {
-    const  PREFIX='XARSV';    // Reserved by us for our session vars
-    const  COOKIE='XARAYASID';// Our cookiename
+    const  PREFIX='XARSV';     // Reserved by us for our session vars
+    const  COOKIE='XARAYASID'; // Our cookiename
     private $db;               // We store sessioninfo in the database
     private $tbl;              // Container for the session info
     private $isNew = true;     // Flag signalling if we're dealing with a new session
