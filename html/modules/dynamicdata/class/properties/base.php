@@ -394,6 +394,7 @@ class DataProperty extends Object implements iDataProperty
 
         $data['id']   = $this->id;
         $data['name'] = $this->name;
+        if (empty($data['_itemid'])) $data['_itemid'] = 0;
 
         if(!isset($data['value'])) $data['value'] = $this->getValue();
         // TODO: does this hurt when it is an array?
