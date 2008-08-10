@@ -32,7 +32,7 @@
                         </a>
                     </th>
                     <td>
-                        <xar:data-output property="$properties[$name]" value="$fields[$name]" />
+                        <xar:data-output property="$properties[$name]" _itemid="$itemid" value="$fields[$name]" />
                     </td>
                 </tr>
             </xar:foreach>
