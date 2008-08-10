@@ -10,10 +10,10 @@
                        &#160;
                     <xar:elseif condition="!empty($linkfield) and $linkfield eq $name" />
                         <a href="#xarModURL($urlmodule,$linktype,$linkfunc,array('itemtype' =&gt; $itemtype,$urlparam =&gt; $itemid))#">
-                            <xar:data-output property="$properties[$name]" value="$fields[$name]" />
+                            <xar:data-output property="$properties[$name]" _itemid="$itemid" value="$fields[$name]" />
                         </a>
                     <xar:else />
-                            <xar:data-output property="$properties[$name]" value="$fields[$name]" />
+                            <xar:data-output property="$properties[$name]" _itemid="$itemid" value="$fields[$name]" />
                     </xar:if>
                      &#160;*** &#160;
             </xar:foreach>
