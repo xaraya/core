@@ -252,7 +252,7 @@ function mail_adminapi__sendmail($args)
         // This automatically sets the email to multipart/alternative.
         // This body can be read by mail clients that do not have HTML email
         // capability such as mutt. Clients that can read HTML will view the normal Body.
-        if (!empty($message)) {
+        /*if (!empty($message)) {
             if ($usetemplates) {
                 $mail->AltBody = xarTplModule('mail',
                                               'admin',
@@ -262,7 +262,7 @@ function mail_adminapi__sendmail($args)
             } else {
                 $mail->AltBody = $message;
             }
-        }
+        }*/
         // HTML message body
         if ($usetemplates) {
             $mail->Body = xarTplModule('mail',

@@ -94,7 +94,11 @@ class DataProperty extends Object implements iDataProperty
                     $this->defaultvalue = null;
                 }
             }
-            $this->setValue($this->defaultvalue);
+            // The try clause is to gracefully exit in those cases where we are just importing properties
+            // but don't yet have the full configuration
+            try {
+                $this->setValue($this->defaultvalue);
+            } catch (Exception $e) {}
         } else {
             $this->setValue($args['value']);
         }
