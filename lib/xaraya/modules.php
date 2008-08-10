@@ -953,7 +953,7 @@ class xarMod extends Object implements IxarMod
         // The module details will be cached anyway.
         $modBaseInfo = self::getBaseInfo($modName, $type);
 
-        // Return null if the result wasn't set
+        // Return false if the result wasn't set
         if (!isset($modBaseInfo)) return false; // throw back
 
         if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modAvailableCache[$modBaseInfo['name']])) {
