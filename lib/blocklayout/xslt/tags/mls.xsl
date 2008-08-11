@@ -19,7 +19,7 @@
     <xsl:for-each select=".//xar:var">
       <xsl:text>,</xsl:text>
       <xsl:call-template name="xarvar_getcode"/>
-    </xsl:for-each>
+    </xsl:for-each>    
     <xsl:for-each select="xar:mlvar">
       <xsl:if test="count(xar:var)=0">
         <xsl:text>,</xsl:text>
@@ -54,9 +54,12 @@
   xar:var tags as children of xar:ml need to get placeholders
 -->
 <xsl:template match="xar:ml//xar:var">
-  <xsl:text>.'#(</xsl:text>
+  <xsl:text>.' #(</xsl:text>
   <xsl:number from="xar:ml" level="any"/>
-  <xsl:text>)'.</xsl:text>
+  <xsl:text>) '</xsl:text>
+  <xsl:if test="position()!=last()">
+    <xsl:text>.</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 
