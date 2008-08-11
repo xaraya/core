@@ -14,9 +14,8 @@
 -->
 <xsl:template match="xar:ml">
   <xsl:processing-instruction name="php">
-    <xsl:text>echo xarML('</xsl:text>
+    <xsl:text>echo xarML(</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>'</xsl:text>
     <xsl:for-each select=".//xar:var">
       <xsl:text>,</xsl:text>
       <xsl:call-template name="xarvar_getcode"/>
@@ -36,9 +35,8 @@
   do it again (TEMP, ugly)
 -->
 <xsl:template match="xar:set/xar:ml">
-  <xsl:text>xarML('</xsl:text>
+  <xsl:text>xarML(</xsl:text>
   <xsl:apply-templates/>
-  <xsl:text>'</xsl:text>
   <xsl:for-each select=".//xar:var">
     <xsl:text>,</xsl:text>
     <xsl:call-template name="xarvar_getcode"/>
@@ -56,9 +54,9 @@
   xar:var tags as children of xar:ml need to get placeholders
 -->
 <xsl:template match="xar:ml//xar:var">
-  <xsl:text>#(</xsl:text>
+  <xsl:text>.'#(</xsl:text>
   <xsl:number from="xar:ml" level="any"/>
-  <xsl:text>)</xsl:text>
+  <xsl:text>)'.</xsl:text>
 </xsl:template>
 
 
@@ -88,8 +86,8 @@
 
 <!-- mlstring inside ml just needs to resolve the text node -->
 <xsl:template match="xar:ml/xar:mlstring">
-  <xsl:call-template name="replace">
-    <xsl:with-param name="source" select="."/>
+  <xsl:call-template name="resolveText">
+    <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
 </xsl:template>
 
