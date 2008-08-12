@@ -187,7 +187,7 @@
       </xsl:variable>
 
       <!-- [....]#....#.... : get the first part out of the way -->
-
+ 
       <!-- Just escape the quotes and display the first part -->
       <xsl:if test="$delimiter-position &gt; 1">
         <xsl:text>'</xsl:text>
@@ -353,6 +353,21 @@
             </xsl:variable>
             <xsl:value-of select="$initial-position + 1 + $add-on-position" />
           </xsl:when>
+          
+          <!-- Honor the #(n) construct here. Replace this with the matches function at some point -->
+          <!-- matches function requires regex support in libxsl -->
+          <xsl:when test="starts-with(substring-after($expr,$delimiter),'(')
+                          and number(substring-before(substring-after($expr,concat($delimiter,'(')),')')) > 0
+          ">
+            <xsl:variable name="add-on-position">
+              <xsl:call-template name="return-delimiter-position">
+                <xsl:with-param name="expr" select="substring($expr,$initial-position + 1)"/>
+              </xsl:call-template>
+            </xsl:variable>
+            <xsl:value-of select="$initial-position + 1 + $add-on-position" />
+          </xsl:when>
+          <!-- End of #(n) clause -->
+
           <xsl:otherwise>
             <xsl:value-of select="$initial-position" />
           </xsl:otherwise>
