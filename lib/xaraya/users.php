@@ -91,12 +91,10 @@ function xarUser_init(Array &$args)
  */
 function xarUserLogIn($userName, $password, $rememberMe = 0)
 {
-    if (xarUserIsLoggedIn()) {
-        return true;
-    }
+    if (xarUserIsLoggedIn()) return true;
+
     if (empty($userName)) throw new EmptyParameterException('userName');
     if (empty($password)) throw new EmptyParameterException('password');
-
 
     $userId = XARUSER_AUTH_FAILED;
     $args = array('uname' => $userName, 'pass' => $password);
@@ -339,12 +337,9 @@ function xarUserGetVar($name, $userId = NULL)
 {
     if (empty($name)) throw new EmptyParameterException('name');
 
-    if (empty($userId)) {
-        $userId = xarSessionGetVar('role_id');
-    }
-    if ($name == 'id') {
-        return $userId;
-    }
+    if (empty($userId)) $userId = xarSessionGetVar('role_id');
+    if ($name == 'id') return $userId;
+
     if ($userId == _XAR_ID_UNREGISTERED) {
         // Anonymous user => only id, name and uname allowed, for other variable names
         // an exception of type NOT_LOGGED_IN is raised
