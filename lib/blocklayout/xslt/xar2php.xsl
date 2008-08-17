@@ -250,8 +250,11 @@
   <xsl:value-of select="."/>
 </xsl:template>
 
-<!-- Stuff in script tags should not be translated -->
+<!-- Stuff in script and style tags should not be translated -->
 <xsl:template match="script/text()">
+  <xsl:value-of select="."/>
+</xsl:template>
+<xsl:template match="style/text()">
   <xsl:value-of select="."/>
 </xsl:template>
 
