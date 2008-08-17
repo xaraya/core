@@ -73,7 +73,7 @@ div#xc-center-wrapper {
     float: left;
     position: relative;
     width: 100%;
-    z-index: 12;
+/*    z-index: 12; */
     margin:0;
 }
 
@@ -84,7 +84,7 @@ div#xc-center {
 
 div#xc-header {
     position: relative;
-    z-index: 13;
+/*    z-index: 13; */
     height: 100px;
     margin: 0 25px 4px 25px;
     background-color: transparent;
