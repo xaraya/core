@@ -78,15 +78,11 @@ function __getFaviconURL($url)
 
     $url_parts = @parse_url($url);
 
-    if (empty($url_parts)) {
-        return false;
-    }
+    if (empty($url_parts)) return false;
+    if (!isset($url_parts['host'])) return false;
 
     $full_url = "http://$url_parts[host]";
-
-    if(isset($url_parts['port'])){
-        $full_url .= ":$url_parts[port]";
-    }
+    if(isset($url_parts['port'])) $full_url .= ":$url_parts[port]";
 
     $favicon_url = $full_url . "/favicon.ico" ;
     return $favicon_url;
