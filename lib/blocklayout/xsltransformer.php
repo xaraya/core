@@ -101,7 +101,7 @@ class BlocklayoutXSLTProcessor extends Object
         // Transform it
         set_exception_handler(array('ExceptionHandlers','defaulthandler'));
         // What should we initialize $result to?
-        $this->postXML = trim($this->xslProc->transformToXML($this->xmlDoc));
+        $this->postXML = $this->xslProc->transformToXML($this->xmlDoc);
 
         // Postprocess it
         $this->postProcess();
