@@ -3,9 +3,26 @@
     Defaults for html type stuff
   -->
 
-  <!-- For now, dont resolve inline CSS -->
+  <!-- For now, dont resolve inline CSS 
   <xsl:template match="style/text()">
     <xsl:apply-imports />
+  </xsl:template>
+-->
+
+  <!-- Stuff in pre tags should not be translated -->
+  <xsl:template match="pre/text()">
+    <xsl:value-of select="."/>
+  </xsl:template>
+  <xsl:template match="textarea/text()">
+    <xsl:value-of select="."/>
+  </xsl:template>
+
+  <!-- Stuff in script and style tags should not be translated -->
+  <xsl:template match="script/text()">
+    <xsl:value-of select="."/>
+  </xsl:template>
+  <xsl:template match="style/text()">
+    <xsl:value-of select="."/>
   </xsl:template>
 
   <!--
