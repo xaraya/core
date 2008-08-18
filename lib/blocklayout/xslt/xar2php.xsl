@@ -30,7 +30,7 @@
   <!--
     The defaults for html type stuff
   -->
-  <xsl:import href="defaults/html.xsl" />
+  <xsl:include href="defaults/html.xsl" />
 
   <!--
     Debugging templates, this (tries to) be more verbose.
@@ -243,19 +243,6 @@
       </xsl:processing-instruction>
     </xsl:otherwise>
   </xsl:choose>
-</xsl:template>
-
-<!-- Stuff in pre tags should not be translated -->
-<xsl:template match="pre/text()">
-  <xsl:value-of select="."/>
-</xsl:template>
-
-<!-- Stuff in script and style tags should not be translated -->
-<xsl:template match="script/text()">
-  <xsl:value-of select="."/>
-</xsl:template>
-<xsl:template match="style/text()">
-  <xsl:value-of select="."/>
 </xsl:template>
 
 <!-- Stuff in ml tags is already in PHP mode -->
