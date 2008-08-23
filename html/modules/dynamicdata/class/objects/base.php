@@ -413,6 +413,14 @@ class DataObject extends DataObjectMaster implements iDataObject
                     // add the primary to the data store fields if necessary
                     if(!empty($this->fieldlist) && !in_array($primaryobject->primary,$this->fieldlist))
                         $this->datastores[$primarystore]->addField($this->properties[$this->primary]); // use reference to original property
+
+                    // Execute any property-specific code first
+                    foreach ($this->datastores[$primarystore]->fields as $property) {
+                        if (method_exists($property,'createvalue')) {
+                            $property->createValue($this->itemid);
+                        }
+                    }
+
                     $this->itemid = $this->datastores[$primarystore]->createItem($this->toArray());
                 } else {
                     $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
@@ -430,6 +438,16 @@ class DataObject extends DataObjectMaster implements iDataObject
             if(isset($primarystore) && $store == $primarystore)
                 continue;
 
+            // Execute any property-specific code first
+            if ($store != '_dummy_') {
+                foreach ($this->datastores[$store]->fields as $property) {
+                    if (method_exists($property,'createvalue')) {
+                        $property->createValue($this->itemid);
+                    }
+                }
+            }
+            
+            // Now run the create routine of the this datastore
             $itemid = $this->datastores[$store]->createItem($args);
             if(empty($itemid))
                 return;
@@ -478,6 +496,16 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['itemid'] = $this->itemid;
         foreach(array_keys($this->datastores) as $store)
         {
+            // Execute any property-specific code first
+            if ($store != '_dummy_') {
+                foreach ($this->datastores[$store]->fields as $property) {
+                    if (method_exists($property,'createvalue')) {
+                        $property->createValue($this->itemid);
+                    }
+                }
+            }
+
+            // Now run the update routine of the this datastore
             $itemid = $this->datastores[$store]->updateItem($args);
             if(empty($itemid))
                 return;
