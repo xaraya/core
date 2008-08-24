@@ -184,7 +184,11 @@ class PropertyRegistration extends DataContainer
                 $property['args']           = $args;
                 $property['class']          = $class;
                 // TODO: this return a serialized array of objects, does that hurt?
-                $property['aliases']        = unserialize($aliases);
+                try{
+                    $property['aliases']        = unserialize($aliases);
+                } catch(Exception $e) {
+                    $property['aliases']        = array();
+                }
 
                 $proptypes[$id] = $property;
             }
