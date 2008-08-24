@@ -183,7 +183,7 @@ class PropertyRegistration extends DataContainer
                 $property['requiresmodule'] = $modname;
                 $property['args']           = $args;
                 $property['class']          = $class;
-                // TODO: this return a serialized array of objects, does that hurt?
+                // TODO: this returns a serialized array of objects, does that hurt?
                 try{
                     $property['aliases']        = unserialize($aliases);
                 } catch(Exception $e) {

@@ -1,4 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <div class="xar-block-body">
     <xar:var name="content"/>
-</div></xar:template>
+</div>
+</xar:template>
