@@ -28,7 +28,8 @@ function blocks_userapi_getallblocktypes($args)
 
     if (!empty($order) && xarVarValidate('strlist:,|:pre:trim:passthru:enum:module:type:id', $order, true)) {
         $orderby = ' ORDER BY ' . $order;
-        $orderby = str_ireplace("module", "name", $orderby);
+        $orderby = str_ireplace("module", "mods.name", $orderby);
+        $orderby = str_ireplace("type", "btypes.name", $orderby);
     } else {
         $orderby = '';
     }
