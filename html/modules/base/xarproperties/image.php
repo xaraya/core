@@ -84,7 +84,7 @@ class ImageProperty extends TextBoxProperty
             $data['value'] = $this->initialization_basedirectory . "/" . $data['value'];
         }
         if (empty($data['imagetext'])) $data['imagetext'] = $this->imagetext;
-        if (empty($data['alt'])) $data['alt'] = $this->imagealt;
+        if (empty($data['imagealt'])) $data['imagealt'] = $this->imagealt;
 
         return parent::showOutput($data);
     }
