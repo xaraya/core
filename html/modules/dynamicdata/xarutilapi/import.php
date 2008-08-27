@@ -82,8 +82,8 @@ function dynamicdata_utilapi_import($args)
                 $args[$property] = (string)$xmlobject->{$property}[0];
         }
         // Backwards Compatibility with old defintions
-        $args['moduleid'] = (string)$xmlobject->moduleid;
-        $args['module_id'] = (string)$xmlobject->moduleid;
+        $args['moduleid'] = (string)$xmlobject->module_id;
+        $args['module_id'] = (string)$xmlobject->module_id;
 
         // Treat parents where the module is DD differently. Put in numeric itemtype
 //        if ($args['moduleid'] == 182) {
@@ -93,7 +93,8 @@ function dynamicdata_utilapi_import($args)
 //        }
 
         if (empty($args['name']) || empty($args['moduleid'])) {
-             throw new BadParameterException(null,'Missing keys in object definition');
+            debug($args);
+            throw new BadParameterException(null,'Missing keys in object definition');
         }
         // Make sure we drop the object id, because it might already exist here
         //TODO: don't define it in the first place?
