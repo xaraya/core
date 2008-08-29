@@ -109,8 +109,14 @@ class xarMask extends Object
             $normalform[] = $this->module_id;
             $normalform[] = strtolower($this->getComponent());
             $thisinstance = strtolower($this->getInstance());
-            $thisinstance = str_replace('myself',xarSession::getVar('role_id'),$thisinstance);
-            $normalform   = array_merge($normalform, explode(':', $thisinstance));
+            $instancearray = $this->getInstanceArray($thisinstance);
+            
+            // Cater to the myself role
+            $normalinstance = array();
+            foreach ($instancearray as $key => $value) 
+                $normalinstance[$key] = $value == 'myself' ? xarSession::getVar('role_id') : $value;
+                
+            $normalform   = array_merge($normalform, $normalinstance);
             $this->normalform = $normalform;
         }
 
@@ -119,6 +125,20 @@ class xarMask extends Object
         }
 
         return $normalform;
+    }
+    
+    /**
+     * create an array representing a mask instance
+    */
+    private function getInstanceArray($instancestring=array()) {
+        if (empty($instancestring)) return $instancestring;
+        try {
+            // the new way
+            return unserialize($instancestring);
+        } catch(Exception $e) {
+            // the old way
+            return explode(':', $instancestring);
+        }
     }
 
     /**
