@@ -153,6 +153,9 @@ function xarMain()
 }
 
 // The world is not enough...
+$start = microtime(1);
 xarMain();
+$end = microtime(1);
+echo $end - $start;
 // All done, the shutdown handlers take care of the rest
 ?>

@@ -393,7 +393,7 @@ class xarMasks extends Object
             $role = xarRoles::findRole($rolename);
         }
         // check if we already have the irreducible set of privileges for the current user
-        if (!xarVarIsCached('Security.Variables','privilegeset.'.$mask->module) || !empty($rolename)) {
+        if (!xarVarIsCached('Security.Variables','privilegeset') || !empty($rolename)) {
             // get the privileges and test against them
             $privileges = self::irreducibleset(array('roles' => array($role)),$mask->module);
 
@@ -402,11 +402,17 @@ class xarMasks extends Object
             if ($rolename == '') {
                 // normalize all privileges before saving, to avoid re-doing that every time
                 self::normalizeprivset($privileges);
-                xarVarSetCached('Security.Variables','privilegeset.'.$mask->module,$privileges);
+                xarVarSetCached('Security.Variables','privilegeset',$privileges);
+/*        $dick = @unserialize(xarSessionGetVar('irreducibleset'));
+        if (!empty($dick)) echo "XXX";
+        else {xarSessionSetVar('irreducibleset',serialize(copy($privileges)));echo "YYY";}
+        $dick = @unserialize(xarSessionGetVar('irreducibleset'));
+        echo $dick;*/
+                
             }
         } else {
             // get the irreducible set of privileges for the current user from cache
-            $privileges = xarVarGetCached('Security.Variables','privilegeset.'.$mask->module);
+            $privileges = xarVarGetCached('Security.Variables','privilegeset');
         }
         $pass = self::testprivileges($mask,$privileges,false,$role);
 
@@ -496,13 +502,13 @@ class xarMasks extends Object
      * @param   array representing the initial node to start from
      * @return  nested array containing the role's ancestors and privileges
     */
-    public static function irreducibleset($coreset,$modid=null)
+    public static function irreducibleset($coreset,$module_id=null)
     {
         $roles = $coreset['roles'];
         $coreset['privileges'] = array();
         $coreset['children'] = array();
         if (count($roles) == 0) return $coreset;
-        if ($modid == null) return $coreset;
+        if ($module_id == null) return $coreset;
 
         $parents = array();
         foreach ($roles as $role) {
@@ -517,17 +523,13 @@ class xarMasks extends Object
                 $privileges = array_merge($priv->getDescendants(),$privileges);
             }
             $privs = array();
-            foreach ($privileges as $priv) {
-                $privModule = $priv->getModule();
-                if ($privModule == self::PRIVILEGES_ALL || $privModule == $modid) {
-                    $privs[] = $priv;
-                }
-            }
+            foreach ($privileges as $priv) $privs[] = $priv;
+            
             $coreset['privileges'] = array_merge($coreset['privileges'],$privs);
             $parents = array_merge($parents,$role->getParents());
         }
         // CHECKME: Tail recursion, could be removed
-        $coreset['children'] = self::irreducibleset(array('roles' => $parents),$modid);
+        $coreset['children'] = self::irreducibleset(array('roles' => $parents),$module_id);
         return $coreset;
     }
 
