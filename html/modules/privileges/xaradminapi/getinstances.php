@@ -19,11 +19,12 @@
     {
         extract($args);
         
-        if (is_null($modid)) return array();
-        if (!empty($modid)) $modid = xarMod::getID(xarModGetNameFromID($modid));
-
-//        if ($component =="All") $componentstring = "";
-//        else $componentstring = "AND ";
+        if (is_null($module)) return array();
+        try {
+            $modid = xarMod::getID($module);
+        } catch(Exception $e) {
+            $modid = 0;
+        }
 
         $dbconn = xarDB::getConn();
         $xartable = xarDB::getTables();
