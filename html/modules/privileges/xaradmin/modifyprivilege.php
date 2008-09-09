@@ -64,7 +64,9 @@ function privileges_admin_modifyprivilege()
     $data['pname'] = $name;
 
     // Security Check
-    $data['frozen'] = !xarSecurityCheck('EditPrivilege',0,'Privileges',$name);
+    echo "X";
+    $data['frozen'] = !xarSecurityCheck('EditPrivilege',0,'Privileges',$name);echo $data['frozen']."X";
+    
 
     if(isset($realm)) {$data['prealm'] = $realm;}
     else {$data['prealm'] = $priv->getRealm();}
@@ -79,7 +81,7 @@ function privileges_admin_modifyprivilege()
     if(isset($level)) {$data['plevel'] = $level;}
     else {$data['plevel'] = $priv->getLevel();}
 
-    $instances = xarModAPIFunc('privileges','admin','getinstances',array('modid' => xarMod::getRegID($data['pmodule']),'component' => $data['pcomponent']));
+    $instances = xarModAPIFunc('privileges','admin','getinstances',array('module' => $data['pmodule'],'component' => $data['pcomponent']));
     $numInstances = count($instances); // count the instances to use in later loops
 
     if(count($instance) > 0) {$default = $instance;}
