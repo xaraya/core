@@ -215,14 +215,13 @@ class DataProperty extends Object implements iDataProperty
      */
     public function checkInput($name = '', $value = null)
     {
-            // store the fieldname for configurations who need them (e.g. file uploads)
         $name = empty($name) ? 'dd_'.$this->id : $name;
+        // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         $this->invalid = '';
         if(!isset($value)) {
             list($found,$value) = $this->fetchValue($name);
             if (!$found) {
-            // store the fieldname for configurations who need them (e.g. file uploads)
                 $this->objectref->missingfields[] = $this->name;
                 return null;
             }
