@@ -49,9 +49,7 @@ function privileges_admin_newprivilege()
         }
     }
     //Load Template
-    if ($data['pmodule'] == 'All') $modid = 0;
-    else $modid = xarMod::getRegid($data['pmodule']);
-    $instances = xarModAPIFunc('privileges','admin','getinstances',array('modid' => $modid,'component' => $data['pcomponent']));
+    $instances = xarModAPIFunc('privileges','admin','getinstances',array('module' => $data['pmodule'],'component' => $data['pcomponent']));
 // send to external wizard if necessary
     if (!empty($instances['external']) && $instances['external'] == "yes") {
         $data['target'] = $instances['target'] . '&amp;extpid=0&amp;extname='.$data['pname'].'&amp;extrealm='.$data['prealm'].'&amp;extmodule='.xarModGetNameFromID($data['pmodule']).'&amp;extcomponent='.$data['pcomponent'].'&amp;extlevel='.$data['plevel'];
