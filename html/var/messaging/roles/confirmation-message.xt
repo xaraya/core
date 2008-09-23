@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 Your account has been created for #$sitename# and needs to be activated.
 You can either do this now, or on the first time that you log in.
 If you prefer to do it now, then you will need to follow this link :
@@ -18,3 +19,5 @@ inactive after a period of time and deleted from our records.  You will receive
 no further emails from us.Thank you,
 
 <xar:var name="siteadmin"/>
+</xar:template>
+
