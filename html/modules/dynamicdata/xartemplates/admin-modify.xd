@@ -67,6 +67,16 @@
 
         <!-- this does most of the hard work :) -->
         <xar:data-form object="$object" />
+        <!--
+        <xar:template file="showinvalids" module="dynamicdata" /> -->
+        <xar:set name="$invalids">$object->getInvalids()</xar:set>
+        <xar:if condition="!empty($invalids)" >
+            <div style="clear:both">
+                <xar:foreach in="$invalids" key="$key"value="$value">
+                    #$key#:&#160;#value#
+                </xar:foreach>
+            </div>
+        </xar:if>
 
         <xar:if condition="!empty($hooks)">
             <xar:foreach in="$hooks" key="$module" value="$output">
