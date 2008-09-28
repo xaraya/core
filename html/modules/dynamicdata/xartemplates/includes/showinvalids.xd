@@ -2,10 +2,10 @@
     <xar:set name="invalids">$object->getInvalids()</xar:set>
     <xar:if condition="!empty($invalids)" >
       <fieldset>
-        <legend><xar:mlstring>Invalid Vlues</xar:mlstring></legend>
+        <legend><xar:mlstring>Invalid Values</xar:mlstring></legend>
         <xar:foreach in="$invalids" key="$key" value="$value">
             <div>
-                #$key#:&#160;#value#
+                #$key#:&#160;#$value#
             </div>
         </xar:foreach>
       </fieldset>
