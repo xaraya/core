@@ -1,0 +1,13 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:set name="invalids">$object->getInvalids()</xar:set>
+    <xar:if condition="!empty($invalids)" >
+      <fieldset>
+        <legend><xar:mlstring>Invalid Vlues</xar:mlstring></legend>
+        <xar:foreach in="$invalids" key="$key" value="$value">
+            <div>
+                #$key#:&#160;#value#
+            </div>
+        </xar:foreach>
+      </fieldset>
+    </xar:if>
+</xar:template>
