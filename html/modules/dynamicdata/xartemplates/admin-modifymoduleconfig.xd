@@ -1,0 +1,87 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<xar:comment>
+    License: GPL http://www.gnu.org/copyleft/gpl.html
+</xar:comment>
+<div class="xar-mod-head">
+    <span class="xar-mod-title">
+        <xar:if condition="xarModVars::get('dynamicdata','useModuleAlias')">
+            <xar:var scope="module" module="dynamicdata" name="aliasname" />
+        <xar:else />
+            <xar:mlstring>DynamicData Administration</xar:mlstring>
+        </xar:if>
+    </span>
+</div>
+<div class="xar-mod-body">
+    <h2>
+        <xar:mlstring>
+            Modify Configuration
+        </xar:mlstring>
+    </h2>
+
+    <form method="post" action="&xar-modurl-dynamicdata-admin-modifymoduleconfig;" enctype="application/x-www-form-urlencoded">
+        <h3>
+            <xar:mlstring>
+                General Options
+            </xar:mlstring>
+        </h3>
+        <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Page Layout
+                </xar:mlstring>
+            </legend>
+            <div class="xar-form-input-wrapper">
+                <label for="itemsperpage" title="#xarML('Number of items to show on each page.')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Items Per Page:
+                    </xar:mlstring>
+                </label>
+                <xar:set name="value"><xar:var scope="module" module="dynamicdata" name="itemsperpage" /></xar:set>
+                <input type="text" name="itemsperpage" id="itemsperpage" value="#$value#" maxlength="3" class="xar-form-textshort" />
+            </div>
+            <div class="xar-form-input-wrapper-after">
+                <xar:set name="checked">xarModVars::get('dynamicdata','SupportShortURLs')</xar:set>
+                <xar:data-input type="checkbox" name="shorturls" id="shorturls" checked="$checked" />
+                <label for="shorturls" title="#xarML('Enable short URLs for Query module')#">
+                    <xar:mlstring>
+                        Enable Short URLs
+                    </xar:mlstring>
+                </label>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label for = "modulealias" class="xar-form-label" title="#xarML('Use an alias instead of the module name')#">
+                    <xar:mlstring>
+                        Use a module alias
+                    </xar:mlstring>
+                </label>
+                <xar:set name="checked">xarModVars::get('dynamicdata','useModuleAlias')</xar:set>
+                <xar:data-input type="checkbox" name="modulealias" id="modulealias" checked="$checked" />
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label for="aliasname" class="xar-form-label" title="#xarML('The name of module alias to be used.')#">
+                        <xar:mlstring>
+                            Module Alias Name
+                        </xar:mlstring>
+                </label>
+                <xar:set name="value"><xar:var scope="module" module="dynamicdata" name="aliasname" /></xar:set>
+                <input type="text" name="aliasname" id="aliasname" value="#$value#" size="32" maxlength="100" />
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Defaults
+                </xar:mlstring>
+            </legend>
+            <xar:template file="defaults" />
+        </fieldset>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="phase" id="phase" value="update" />
+                <input type="submit" value="#xarML('Update Configuration')#" />
+            </div>
+        </fieldset>
+    </form>
+</div>
+</xar:template>
