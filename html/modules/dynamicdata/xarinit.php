@@ -424,10 +424,16 @@ function dynamicdata_init()
         throw $e;
     }
 
-    /**
-     * Set module variables
-     */
-    xarModVars::set('dynamicdata', 'SupportShortURLs', 1);
+# --------------------------------------------------------
+#
+# Set up modvars
+#
+    xarModVars::set('dynamicdata', 'itemsperpage', 20);
+    xarModVars::set('dynamicdata', 'shorturla', 0);
+    xarModVars::set('dynamicdata', 'useModuleAlias',0);
+    xarModVars::set('dynamicdata', 'aliasname','Query');
+    xarModVars::set('dynamicdata', 'debugmode', 0);
+    xarModVars::set('dynamicdata', 'debugusers', serialize(array()));
 
     /**
      * Register blocks
@@ -669,7 +675,7 @@ function dynamicdata_delete()
     /**
      * Delete module variables
      */
-    xarModVars::delete('dynamicdata', 'SupportShortURLs');
+    xarModVars::delete_all('dynamicdata');
 
     /**
      * Unregister blocks
