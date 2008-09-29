@@ -1,13 +1,16 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:set name="invalids">$object->getInvalids()</xar:set>
-    <xar:if condition="!empty($invalids)" >
-      <fieldset>
-        <legend><xar:mlstring>Invalid Values</xar:mlstring></legend>
-        <xar:foreach in="$invalids" key="$key" value="$value">
-            <div>
-                #$key#:&#160;#$value#
-            </div>
-        </xar:foreach>
-      </fieldset>
+    <xar:set name="debugusers">array_keys(unserialize(xarModVars::get('dynamicdata', 'debugusers')))</xar:set>
+    <xar:if condition="xarModVars::get('dynamicdata','debugmode') AND in_array(xarUserGetVar('uname'),$debugusers)">
+        <xar:set name="invalids">$object->getInvalids()</xar:set>
+        <xar:if condition="!empty($invalids)" >
+          <fieldset>
+            <legend><xar:mlstring>Invalid Values</xar:mlstring></legend>
+            <xar:foreach in="$invalids" key="$key" value="$value">
+                <div>
+                    #$key#:&#160;#$value#
+                </div>
+            </xar:foreach>
+          </fieldset>
+        </xar:if>
     </xar:if>
 </xar:template>
