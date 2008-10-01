@@ -680,7 +680,13 @@ class DataObjectMaster extends Object
         // here we can use our own classes to retrieve this
         $descriptor = new DataObjectDescriptor($args);
 
-        $object = new $args['class']($descriptor);
+        // Try to get tghe object from the cache
+        if (xarCore::isCached('DDObject', serialize($args))) {
+            $object = xarCore::getCached('DDObject', serialize($args));
+        } else {
+            $object = new $args['class']($descriptor);
+            xarCore::setCached('DDObject', serialize($args), clone $object);
+        }
         return $object;
     }
 
