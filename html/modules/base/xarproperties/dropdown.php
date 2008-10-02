@@ -201,15 +201,19 @@ class SelectProperty extends DataProperty
         if (!empty($firstline)) {
             if (is_array($firstline)) {
                 if (isset($firstline['name'])) {
+                    if (strpos($firstline['name'],'xar') === 0) @eval('$firstline["name"] = ' . $firstline['name'] .';');
                     $line = array('id' => $firstline['id'], 'name' => $firstline['name']);
                 } else {
+                    if (strpos($firstline['id'],'xar') === 0) @eval('$firstline["id"] = ' . $firstline['id'] .';');
                     $line = array('id' => $firstline['id'], 'name' => $firstline['id']);
                 }
             } else {
                 $firstline = explode(',',$firstline);
                 if (isset($firstline[1])) {
+                    if (strpos($firstline[1],'xar') === 0) @eval('$firstline[1] = ' . $firstline[1] .';');
                     $line = array('id' => $firstline[0], 'name' => $firstline[1]);
                 } else {
+                    if (strpos($firstline[0],'xar') === 0) @eval('$firstline[0] = ' . $firstline[0] .';');
                     $line = array('id' => $firstline[0], 'name' => $firstline[0]);
                 }
             }
