@@ -168,7 +168,7 @@ function xarML($string/*, ...*/)
     // if an empty string is passed in, just return an empty string. it's
     // the most sensible thing to do
     $string = trim($string);
-    if(empty($string)) return '';
+    if($string == '') return '';
 
     // Make sure string is sane
     // - hex 0D -> ''
