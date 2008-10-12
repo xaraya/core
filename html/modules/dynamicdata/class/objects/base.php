@@ -204,19 +204,34 @@ class DataObject extends DataObjectMaster implements iDataObject
         // Set all properties based on what is passed in.
         $properties = $this->getProperties($args);
 
-        $args['properties'] = array();
-        foreach ($properties as $property) {
-            if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
-                $args['properties'][$property->name] = $property;
+        if (!empty($args['fieldlist']) && !is_array($args['fieldlist'])) {
+            $args['fieldlist'] = explode(',',$args['fieldlist']);
+            if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
         }
+        
+        if(count($args['fieldlist']) > 0 || !empty($this->status)) {
+            $args['properties'] = array();
+            foreach($args['fieldlist'] as $name) {
+                if(isset($this->properties[$name])) {
+                    if($this->properties[$name]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                        $args['properties'][$name] = $this->properties[$name];
+                }
+            }
+        } else {
+            $args['properties'] = array();
+            foreach ($properties as $property) {
+                if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                    $args['properties'][$property->name] = $property;
+            }
 
-        // Order the fields if this is an extended object
-        if (!empty($this->fieldorder)) {
-            $tempprops = array();
-            foreach ($this->fieldorder as $field)
-                if (isset($args['properties'][$field]))
-                    $tempprops[$field] = $args['properties'][$field];
-            $args['properties'] = $tempprops;
+            // Order the fields if this is an extended object
+            if (!empty($this->fieldorder)) {
+                $tempprops = array();
+                foreach ($this->fieldorder as $field)
+                    if (isset($args['properties'][$field]))
+                        $tempprops[$field] = $args['properties'][$field];
+                $args['properties'] = $tempprops;
+            }
         }
 
         // pass some extra template variables for use in BL tags, API calls etc.
