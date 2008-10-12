@@ -456,6 +456,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $state = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
         }
         $args['properties'] = array();
+        if (!empty($args['fieldlist']) && !is_array($args['fieldlist'])) {
+            $args['fieldlist'] = explode(',',$args['fieldlist']);
+            if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
+        }
         if(count($args['fieldlist']) > 0) {
             foreach($args['fieldlist'] as $name) {
                 if(isset($this->properties[$name])) {
@@ -464,23 +468,21 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     }
                 }
             }
-        }
-        else
-        {
+        } else {
             foreach($this->properties as $property)
                 if($property->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                     $args['properties'][$property->name] =& $property;
 
+            // Order the fields if this is an extended object
+            if (!empty($this->fieldorder)) {
+                $tempprops = array();
+                foreach ($this->fieldorder as $field)
+                    if (isset($args['properties'][$field]))
+                        $tempprops[$field] = $args['properties'][$field];
+                $args['properties'] = $tempprops;
+            }
         }
-
-        // Order the fields if this is an extended object
-        if (!empty($this->fieldorder)) {
-            $tempprops = array();
-            foreach ($this->fieldorder as $field)
-                if (isset($args['properties'][$field]))
-                    $tempprops[$field] = $args['properties'][$field];
-            $args['properties'] = $tempprops;
-        }
+        
         $args['items'] =& $this->items;
 
         // add link to display the item
