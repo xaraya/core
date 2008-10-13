@@ -98,9 +98,11 @@ class FieldStatusProperty extends SelectProperty
     {
         $options['display'] = array(
                              array('id' => DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE, 'name' => xarML('Active')),
-                             array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISABLED, 'name' => xarML('Disabled')),
+                             array('id' => DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY, 'name' => xarML('View only')),
                              array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY, 'name' => xarML('Display only')),
                              array('id' => DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN, 'name' => xarML('Hidden')),
+                             array('id' => DataPropertyMaster::DD_DISPLAYSTATE_IGNORED, 'name' => xarML('Ignored')),
+                             array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISABLED, 'name' => xarML('Disabled')),
                          );
         $options['input'] = array(
                              array('id' => DataPropertyMaster::DD_INPUTSTATE_NOINPUT, 'name' => xarML('No input allowed')),
