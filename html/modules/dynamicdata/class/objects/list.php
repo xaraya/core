@@ -463,15 +463,24 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if(count($args['fieldlist']) > 0) {
             foreach($args['fieldlist'] as $name) {
                 if(isset($this->properties[$name])) {
-                    if($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK)) {
+                    if(($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
+                    || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE)
+                    || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
+                    || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
+                    ) {
                         $args['properties'][$name] =& $this->properties[$name];
                     }
                 }
             }
         } else {
             foreach($this->properties as $property)
-                if($property->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
+                if(($property->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
+                ) {
                     $args['properties'][$property->name] =& $property;
+                }
 
             // Order the fields if this is an extended object
             if (!empty($this->fieldorder)) {
