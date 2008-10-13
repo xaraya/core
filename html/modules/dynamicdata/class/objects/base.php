@@ -213,14 +213,16 @@ class DataObject extends DataObjectMaster implements iDataObject
             $args['properties'] = array();
             foreach($args['fieldlist'] as $name) {
                 if(isset($this->properties[$name])) {
-                    if($this->properties[$name]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                    if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                    || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)) continue;
                         $args['properties'][$name] = $this->properties[$name];
                 }
             }
         } else {
             $args['properties'] = array();
             foreach ($properties as $property) {
-                if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                if(($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)) continue;
                     $args['properties'][$property->name] = $property;
             }
 
@@ -260,6 +262,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             foreach($args['fieldlist'] as $name) {
                 if(isset($this->properties[$name])) {
                     if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                    || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)) continue;
                     $args['properties'][$name] = $this->properties[$name];
                 }
@@ -270,6 +273,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             $totransform = array(); $totransform['transform'] = array();
             foreach($this->properties as $pname => $pobj) {
                 if(($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
                 || ($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)) continue;
                 // *never* transform an ID
                 // TODO: there is probably lots more to skip here.
@@ -287,6 +291,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             foreach($this->properties as $property) {
                 if(
                     ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) &&
+                    ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY) &&
                     ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) &&
                     ($property->type != 21) &&
                     isset($transformed[$property->name])
