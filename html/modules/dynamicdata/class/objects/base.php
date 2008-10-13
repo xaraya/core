@@ -139,8 +139,9 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         $this->missingfields = array();
         foreach($fields as $name) {
-            // Ignore disabled properties
-            if($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+            // Ignore disabled or ignored properties
+            if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+            || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED))
                 continue;
 
             // Give the property this object's reference so it can send back info on missing fields
@@ -214,6 +215,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             foreach($args['fieldlist'] as $name) {
                 if(isset($this->properties[$name])) {
                     if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                    || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)) continue;
                         $args['properties'][$name] = $this->properties[$name];
                 }
@@ -222,6 +224,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             $args['properties'] = array();
             foreach ($properties as $property) {
                 if(($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)) continue;
                     $args['properties'][$property->name] = $property;
             }
