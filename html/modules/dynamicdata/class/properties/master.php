@@ -19,9 +19,11 @@ sys::import('modules.dynamicdata.class.properties.registration');
 class DataPropertyMaster extends Object
 {
     const DD_DISPLAYSTATE_DISABLED = 0;
-    const DD_DISPLAYSTATE_HIDDEN = 3;
-    const DD_DISPLAYSTATE_DISPLAYONLY = 2;
     const DD_DISPLAYSTATE_ACTIVE = 1;
+    const DD_DISPLAYSTATE_DISPLAYONLY = 2;
+    const DD_DISPLAYSTATE_HIDDEN = 3;
+    const DD_DISPLAYSTATE_VIEWONLY = 4;
+    const DD_DISPLAYSTATE_IGNORED = 5;
 
     const DD_INPUTSTATE_ADDMODIFY = 32;
     const DD_INPUTSTATE_NOINPUT = 64;
