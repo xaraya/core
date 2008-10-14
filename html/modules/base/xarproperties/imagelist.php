@@ -38,6 +38,7 @@ class ImageListProperty extends FilePickerProperty
     public function showOutput(Array $data = array())
     {
         extract($data);
+        $this->template = 'imagelist';
 
         if (!isset($value)) $value = $this->value;
 
