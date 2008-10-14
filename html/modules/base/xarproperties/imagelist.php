@@ -42,21 +42,15 @@ class ImageListProperty extends FilePickerProperty
         if (!isset($value)) $value = $this->value;
 
         $basedir = $this->initialization_basedirectory;
-        $filetype = $this->filetype;
 
-        if (!empty($value) &&
-            preg_match('/^[a-zA-Z0-9_\/.\-\040]+$/',$value) &&
-            preg_match("/$filetype$/",$value) &&
-            file_exists($basedir.'/'.$value) &&
-            is_file($basedir.'/'.$value)) {
-            $srcpath=$basedir.'/'.$value;
+        if (!empty($value)) {
+            $srcpath = $basedir.'/'.$value;
         } else {
-            $srcpath='';
+            $srcpath = '';
         }
 
         $data['value']    = $value;
         $data['basedir']  = $basedir;
-        $data['filetype'] = $filetype;
         $data['srcpath']  = $srcpath;
         return parent::showOutput($data);
     }
