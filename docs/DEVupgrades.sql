@@ -821,3 +821,8 @@ ALTER TABLE `xar_themes` CHANGE `regid` `regid`                    integer unsig
 ALTER TABLE `xar_themes` CHANGE `directory` `directory`            varchar(64) NOT NULL;
 ALTER TABLE `xar_themes` CHANGE `version` `version`                varchar(10) NOT NULL;
 ALTER TABLE `xar_themes` CHANGE `state` `state`                    tinyint unsigned NOT NULL default '1';
+
+# ----- 13.10.2008
+INSERT INTO `xar_module_vars` (module_id, name, value)
+    SELECT mods.id, 'debugusers', 'a:0:{}' FROM xar_modules mods
+    WHERE mods.name = 'dynamicdata';
