@@ -110,7 +110,7 @@
   <xsl:include href="tags/data.xsl"/>
   <xsl:include href="tags/articles.xsl"/>
   <xsl:include href="tags/calendar.xsl"/>
-  <xsl:include href="tags/recommend.xsl"/>
+  <!-- <xsl:include href="tags/recommend.xsl"/> -->
 
   <!-- xar:else -->
   <xsl:include href="tags/else.xsl"/>
