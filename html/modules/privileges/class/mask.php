@@ -104,10 +104,11 @@ class xarMask extends Object
             $normalform = $this->normalform;
         } else {
             $normalform = array();
-            $normalform[] = strtolower($this->getLevel());
-            $normalform[] = strtolower($this->getRealm());
-            $normalform[] = $this->module_id;
-            $normalform[] = strtolower($this->getComponent());
+            $normalform['name'] = $this->getName();
+            $normalform['level'] = strtolower($this->getLevel());
+            $normalform['realm'] = strtolower($this->getRealm());
+            $normalform['module'] = $this->module_id;
+            $normalform['component'] = strtolower($this->getComponent());
             $thisinstance = strtolower($this->getInstance());
             $instancearray = $this->getInstanceArray($thisinstance);
             
@@ -116,14 +117,14 @@ class xarMask extends Object
             foreach ($instancearray as $key => $value) 
                 $normalinstance[$key] = $value == 'myself' ? xarSession::getVar('role_id') : $value;
                 
-            $normalform   = array_merge($normalform, $normalinstance);
+            $normalform['instance']   = $normalinstance;
             $this->normalform = $normalform;
         }
 
-        for ($i=0;$i<$adds;$i++) {
+/*        for ($i=0;$i<$adds;$i++) {
             $normalform[] = 'all';
         }
-
+*/
         return $normalform;
     }
     
@@ -283,7 +284,7 @@ class xarMask extends Object
     */
     function implies($mask)
     {
-        $match = $this->includes($mask);
+        $match = xarMasks::includes($this->normalform,$mask->normalform);
         return $match && ($this->getLevel() >= $mask->getLevel()) && ($mask->getLevel() > 0);
     }
 

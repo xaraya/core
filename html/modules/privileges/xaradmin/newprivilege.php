@@ -66,7 +66,7 @@ function privileges_admin_newprivilege()
     $data['authid'] = xarSecGenAuthKey();
     $data['realms'] = xarPrivileges::getrealms();
     $data['privileges'] = $privileges;
-    $data['components'] = xarModAPIFunc('privileges','admin','getcomponents',array('modid' => $modid));
+    $data['components'] = xarModAPIFunc('privileges','admin','getcomponents',array('modid' => xarMod::getRegID($data['pmodule'])));
     return $data;
 }
 
