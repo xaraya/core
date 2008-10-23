@@ -398,7 +398,8 @@ class xarMasks extends Object
             // No go from cache. Try and get it from the session
             sys::import('modules.privileges.class.privilege');
             $privileges = unserialize(xarSession::getVar('privilegeset'));
-            if (empty($privileges)) {
+            // force recalculating the privs for now
+            if (empty($privileges) || 0) {
             
                 // Still no go. Assemble the privleges
                 $privileges = self::irreducibleset(array('roles' => array($role)),$mask->module);
