@@ -399,7 +399,7 @@ class xarMasks extends Object
             sys::import('modules.privileges.class.privilege');
             $privileges = unserialize(xarSession::getVar('privilegeset'));
             // force recalculating the privs for now
-            if (empty($privileges) || 0) {
+            if (empty($privileges) || 1) {
             
                 // Still no go. Assemble the privleges
                 $privileges = self::irreducibleset(array('roles' => array($role)),$mask->module);
