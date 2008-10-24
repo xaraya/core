@@ -126,8 +126,10 @@ function base_userapi_getfile($args)
                 if (!$superrors) throw new BadParameterException(array($file,$url),'Error opening cache file #(1) for URL #(2)');
             }
             $content = '';
-            while (!feof($fp)) {
-                $content .= fread($fp, filesize($file));
+            if (filesize($file)) {
+                while (!feof($fp)) {
+                    $content .= fread($fp, filesize($file));
+                }
             }
             fclose($fp);
             return $content;
@@ -201,7 +203,8 @@ function base_userapi_getfile($args)
         if (empty($lines)) {
             if (!$superrors) throw new BadParameterException($url);
         }
-        $content = implode('',$lines);
+        if (is_array($lines)) $content = implode('',$lines);
+        else $content = $lines;
     }
 
     if ($cached && is_dir($vardir . '/' . $cachedir)) {
