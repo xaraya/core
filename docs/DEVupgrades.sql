@@ -690,7 +690,7 @@ ALTER TABLE `xar_cache_blocks` CHANGE `blockinstance_id` `blockinstance_id`  int
 ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`                    bool default '0';
 ALTER TABLE `xar_cache_blocks` CHANGE `page` `page`                          integer NOT NULL default '0';
 ALTER TABLE `xar_cache_blocks` CHANGE `user` `user`                          integer unsigned NOT NULL;
-ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`                      tinyint default NULL;
+ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`                      integer unsigned NOT NULL;
 
 ALTER TABLE `xar_dynamic_data` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_dynamic_data` CHANGE `property_id` `property_id` integer unsigned NOT NULL;
