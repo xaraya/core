@@ -46,8 +46,6 @@ class Role extends DataObject
     public function __construct(DataObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $args = $descriptor->getArgs();
-        extract($args);
 
         $this->dbconn = xarDB::getConn();
 
