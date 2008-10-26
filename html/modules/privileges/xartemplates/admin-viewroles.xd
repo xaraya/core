@@ -151,7 +151,7 @@
       <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-viewroles;" method="post" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="id" id="id" value="#$id#" />
         <p>
-            <a href="&xar-modurl-privileges-admin-newprivilege;">
+            <a href="&xar-modurl-privileges-admin-new;">
                 <xar:mlstring>Add Privilege</xar:mlstring>
             </a>
         </p>
