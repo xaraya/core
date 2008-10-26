@@ -166,7 +166,7 @@
                 </div>
             </xar:if>
 
-            <xar:if condition="$pcomponent ne 'All' and count($instances) and empty($target)">
+            <xar:if condition="$pcomponent ne 'All' AND count($instances) AND empty($target)">
               <p>
                 <xar:ml>
                   <xar:mlstring>Allow instances of component #(1) that have:</xar:mlstring>
