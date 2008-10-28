@@ -27,6 +27,7 @@ class NumberBoxProperty extends TextBoxProperty
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
+        if (!is_numeric($this->value) && !empty($this->value)) throw new Exception(xarML('The value of a #(1) must be numeric',$this->name));
 
         $this->display_size      = 10;
         $this->display_maxlength = 30;
