@@ -124,7 +124,7 @@
             <xsl:call-template name="atts2args">
               <xsl:with-param name="nodeset" select="@*[name() != 'name']"/>
             </xsl:call-template>
-            <xsl:text>);</xsl:text>
+            <xsl:text>);$</xsl:text>
             <xsl:value-of select="@name"/><xsl:text>=</xsl:text>
             <xsl:value-of select="@object"/><xsl:text>->getProperties();</xsl:text>
           </xsl:when>
@@ -174,12 +174,13 @@
             <xsl:choose>
               <xsl:when test="substring(@object,1,1) = '$'">
                 <!-- This a variable. we assume it's an object -->
+                <xsl:text>$</xsl:text>
                 <xsl:value-of select="@value"/><xsl:text>=</xsl:text>
                 <xsl:value-of select="@object"/><xsl:text>-&gt;getItems(</xsl:text>
                 <xsl:call-template name="atts2args">
                   <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='value']"/>
                 </xsl:call-template>
-                <xsl:text>);</xsl:text>
+                <xsl:text>);$</xsl:text>
                 <xsl:value-of select="@name"/><xsl:text>=</xsl:text>
                 <xsl:value-of select="@object"/><xsl:text>->getProperties();</xsl:text>
               </xsl:when>
