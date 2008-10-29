@@ -117,14 +117,39 @@
         <xsl:value-of select="@name"/><xsl:text>= $object-&gt;getProperties();</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <!-- We do have one, invoke the getItem method on it -->
-        <xsl:value-of select="@object"/><xsl:text>-&gt;getItem(</xsl:text>
-        <xsl:call-template name="atts2args">
-          <xsl:with-param name="nodeset" select="@*[name() != 'name']"/>
-        </xsl:call-template>
-        <xsl:text>);</xsl:text>
-        <xsl:value-of select="@name"/><xsl:text>=</xsl:text>
-        <xsl:value-of select="@object"/><xsl:text>->getProperties();</xsl:text>
+        <xsl:choose>
+          <xsl:when test="substring(@object,1,1) = '$'">
+            <!-- This a variable. we assume it's an object -->
+            <xsl:value-of select="@object"/><xsl:text>-&gt;getItem(</xsl:text>
+            <xsl:call-template name="atts2args">
+              <xsl:with-param name="nodeset" select="@*[name() != 'name']"/>
+            </xsl:call-template>
+            <xsl:text>);</xsl:text>
+            <xsl:value-of select="@name"/><xsl:text>=</xsl:text>
+            <xsl:value-of select="@object"/><xsl:text>->getProperties();</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- This a string. we assume it's an object name -->
+            <xsl:text>sys::import('modules.dynamicdata.class.objects.master');</xsl:text>
+            <xsl:text>$__</xsl:text>
+            <xsl:value-of select="@object"/>
+            <xsl:text> = DataObjectMaster::getObject(array('name' => '</xsl:text>
+            <xsl:value-of select="@object"/>
+            <xsl:text>'));</xsl:text>
+            <xsl:text>$__</xsl:text>
+            <xsl:value-of select="@object"/>
+            <xsl:text>->getItem(</xsl:text>
+            <xsl:call-template name="atts2args">
+              <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='object']"/>
+            </xsl:call-template>
+            <xsl:text>);$</xsl:text>
+            <xsl:value-of select="@name"/>
+            <xsl:text> = </xsl:text>
+            <xsl:text>$__</xsl:text>
+            <xsl:value-of select="@object"/>
+            <xsl:text>->getProperties();</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:processing-instruction>
@@ -146,15 +171,40 @@
             <xsl:text>);</xsl:text>
           </xsl:when>
           <xsl:otherwise>
-            <!-- We do have an object, invoke the getItems method on it -->
-            <xsl:value-of select="@value"/><xsl:text>=</xsl:text>
-            <xsl:value-of select="@object"/><xsl:text>-&gt;getItems(</xsl:text>
-            <xsl:call-template name="atts2args">
-              <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='value']"/>
-            </xsl:call-template>
-            <xsl:text>);</xsl:text>
-            <xsl:value-of select="@name"/><xsl:text>=</xsl:text>
-            <xsl:value-of select="@object"/><xsl:text>->getProperties();</xsl:text>
+            <xsl:choose>
+              <xsl:when test="substring(@object,1,1) = '$'">
+                <!-- This a variable. we assume it's an object -->
+                <xsl:value-of select="@value"/><xsl:text>=</xsl:text>
+                <xsl:value-of select="@object"/><xsl:text>-&gt;getItems(</xsl:text>
+                <xsl:call-template name="atts2args">
+                  <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='value']"/>
+                </xsl:call-template>
+                <xsl:text>);</xsl:text>
+                <xsl:value-of select="@name"/><xsl:text>=</xsl:text>
+                <xsl:value-of select="@object"/><xsl:text>->getProperties();</xsl:text>
+              </xsl:when>
+              <xsl:otherwise>
+                <!-- This a string. we assume it's an object name -->
+                <xsl:text>sys::import('modules.dynamicdata.class.objects.master');</xsl:text>
+                <xsl:text>$__</xsl:text>
+                <xsl:value-of select="@object"/>
+                <xsl:text> = DataObjectMaster::getObjectList(array('name' => '</xsl:text>
+                <xsl:value-of select="@object"/>
+                <xsl:text>'));</xsl:text>
+                <xsl:value-of select="@value"/><xsl:text>=</xsl:text>
+                <xsl:text>$__</xsl:text>
+                <xsl:value-of select="@object"/>
+                <xsl:text>-&gt;getItems(</xsl:text>
+                <xsl:call-template name="atts2args">
+                  <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='value' and name()!='object']"/>
+                </xsl:call-template>
+                <xsl:text>);</xsl:text>
+                <xsl:value-of select="@name"/><xsl:text>=</xsl:text>
+                <xsl:text>$__</xsl:text>
+                <xsl:value-of select="@object"/>
+                <xsl:text>->getProperties();</xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:otherwise>
       </xsl:choose>
     </xsl:processing-instruction>
