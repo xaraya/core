@@ -29,7 +29,7 @@ class FloatBoxProperty extends TextBoxProperty
     {
         parent::__construct($descriptor);
         if ($this->value == '') $this->value = $this->defaultvalue;
-        if (!is_numeric($this->value)) throw new Exception(xarML('The default value of a #(1) must be numeric',$this->name));
+        if (!is_numeric($this->value) && !empty($this->value)) throw new Exception(xarML('The default value of a #(1) must be numeric',$this->name));
     }
 
     public function validateValue($value = null)
