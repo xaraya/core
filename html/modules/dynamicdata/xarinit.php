@@ -164,7 +164,6 @@ function dynamicdata_init()
         $objects = array(
             array('objects'   ,'Dynamic Objects'   ,$modid,0,'','',                                               'itemid',0,''               ,0),
             array('properties','Dynamic Properties',$modid,1,'DProperty','modules/dynamicdata/class/property.php','itemid',0,''               ,0),
-            array('sample'    ,'Sample Object'     ,$modid,2,'','',                                               'itemid',3,'nothing much...',0)
         );
 
         $objectid = array();
