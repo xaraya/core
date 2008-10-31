@@ -198,7 +198,7 @@ function blocks_init()
                                                                'null'        => false),
                                         'expire'    => array('type'        => 'integer',
                                                                'unsigned'    => true,
-                                                                 'null'        => false)));
+                                                               'default'     => '0')));
         $dbconn->Execute($query);
 
         // *_userblocks
