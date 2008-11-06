@@ -2,17 +2,20 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="is_array($value)">
         <xar:foreach in="$value" key="$key" value="$val">
-            <xar:if condition="!empty($key) and !is_numeric($key)">
-                <div class="xar-form-input-wrapper">
-                    <label class="xar-form-label">#$key#</label>
-                    <input class="xar-form-textlong" type="text" name="#$name#[#$key#]" id="#$id#_#$key#" value="#$val#" size="#$size#" />
-                </div>
-                <xar:else />
-                <div class="xar-form-input-wrapper-after">
-                    <input type="text" name="#$name#[#$key#]" id="#$id#_#$key#" value="#$val#" size="#$size#" />
-                </div>
-            </xar:if>
+            <div class="xar-form-input-wrapper" >
+                <input class="xar-form-textmedium" type="text" name="#$name#_key[#$key#]" id="#$id#_key_#$key#" value="#$key#" size="#$size#" />
+                &#160;=&#62;&#160;
+                <input class="xar-form-textlong" type="text" name="#$name#_value[#$key#]" id="#$id#_value_#$key#" value="#$val#" size="#$size#" />
+            </div>
         </xar:foreach>
+        <xar:set name="start">count($value) + 1</xar:set>
+        <xar:for start="$i = $start" test="$i le $rows" iter="$i++">
+            <div class="xar-form-input-wrapper">
+                <input class="xar-form-textmedium" type="text" name="#$name#_key[#$i#]" id="#$id#_key_#$i#" value="#$i#" size="#$size#" />
+                &#160;=&#62;&#160;
+                <input class="xar-form-textlong" type="text" name="#$name#_value[#$i#]" id="#$id#_value_#$i#" value="" size="#$size#" />
+            </div>
+        </xar:for>
     <xar:else />
         <div class="xar-form-input-wrapper-after">
             <textarea name="#$name#" rows="8" cols="50" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>

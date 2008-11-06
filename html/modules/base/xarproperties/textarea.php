@@ -9,9 +9,11 @@
  * @link http://xaraya.com/index.php/release/68.html
  * @author mikespub <mikespub@xaraya.com>
  */
+sys::import('modules.dynamicdata.class.properties');
 /**
  * Handle text area property
  */
+
 class TextAreaProperty extends DataProperty
 {
     public $id         = 3;
