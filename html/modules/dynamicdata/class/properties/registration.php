@@ -257,7 +257,11 @@ class PropertyRegistration extends DataContainer
                     if (!isset($loaded[$file])) {
                         // FIXME: later -> include
                         $dp = str_replace('/','.',substr($PropertiesDir . "/" . basename($file),0,-4));
-                        sys::import($dp);
+                        try {
+                            sys::import($dp);
+                        } catch (Exception $e) {
+                            throw new Exception(xarML('The file #(1) could not be loaded', $dp));
+                        }
                         $loaded[$file] = true;
                     }
                 } // loop over the files in a directory
@@ -268,9 +272,9 @@ class PropertyRegistration extends DataContainer
             $newClasses = get_declared_classes();
 
             // See what class(es) we have here
+            $i=0;
             foreach($newClasses as $index => $propertyClass) {
                 // If it doesnt exist something weird is goin on
-
                 if (!is_subclass_of($propertyClass, 'DataProperty')) {;continue;}
                 $processedClasses[] = $propertyClass;
 
@@ -279,7 +283,11 @@ class PropertyRegistration extends DataContainer
                 if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
                 $descriptor = new ObjectDescriptor(array());
                 $baseInfo = new PropertyRegistration($descriptor);
-                $property = new $propertyClass($descriptor);
+                try {
+                    $property = new $propertyClass($descriptor);
+                } catch (Exception $e) {
+                    throw new Exception(xarML('The property #(1) could not be instantiated', $propertyClass));
+                }
                 if (empty($property->id)) continue;   // Don't register the base property
                 $baseInfo->getRegistrationInfo($property);
                 
