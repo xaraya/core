@@ -61,8 +61,9 @@ class UserListProperty extends SelectProperty
             if (($this->initialization_user_state <> ROLES_STATE_ALL)) $select_options['state'] = $this->initialization_user_state;
             if (!empty($this->initialization_orderlist)) $select_options['order'] = implode(',', $this->initialization_orderlist);
             if (!empty($this->initialization_group_list)) $select_options['group'] = implode(',', $this->initialization_group_list);
-            $users = xarModAPIFunc('roles', 'user', 'getall', $select_options);
-
+//            $users = xarModAPIFunc('roles', 'user', 'getall', $select_options);
+            // FIXME: this function needs to be reviewed
+            $users = array();
             // Loop for each user retrived and populate the options array.
             if (empty($this->display_showfields)) {
                 // Simple case (default) -
