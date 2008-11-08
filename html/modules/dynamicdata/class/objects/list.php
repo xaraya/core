@@ -16,8 +16,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 {
     public $itemids  = array();           // the list of item ids used in data stores
     public $where    = '';
-    public $sort;
-    public $groupby;
+    public $sort     = '';
+    public $groupby  = array();
     public $numitems = null;
     public $startnum = null;
 
@@ -47,8 +47,17 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // see if we can access these objects, at least in overview
 //        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':All')) return;
 
-        // set the different arguments (item ids, sort, where, numitems, startnum, ...)
-        $this->setArguments($descriptor->getArgs());
+        // Load the configuration settings
+        $args = $descriptor->getArgs();
+
+        // Set the configuration parameters
+        try {
+            $configargs = unserialize($args['config']);
+            foreach ($configargs as $key => $value) $this->{$key} = $value;
+        } catch (Exception $e) {}
+
+        // Set the arguments passed via the constructor. These override the configurations settings
+        $this->setArguments($args);
     }
 
     /**
@@ -60,62 +69,28 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     {
         if (empty($args)) return true;
 
-        // set the number of items to retrieve
-        if(!empty($args['numitems'])) {
-            $this->numitems = $args['numitems'];
-        }
-        // set the start number to retrieve
-        if(!empty($args['startnum'])) {
-            $this->startnum = $args['startnum'];
-        }
-        // set the list of requested item ids
-        if(!empty($args['itemids'])) {
-            if(is_numeric($args['itemids'])) {
-                $this->itemids = array($args['itemids']);
-            } elseif(is_string($args['itemids'])) {
-                $this->itemids = explode(',',$args['itemids']);
-            } elseif(is_array($args['itemids'])) {
-                $this->itemids = $args['itemids'];
+        foreach ($args as $key => $value) $this->{$key} = $value;
+        
+        // Make sure we have an array for itemids and groupings
+        if (!is_array($this->itemids)) {
+            if(is_numeric($this->itemids)) {
+                $this->itemids = array($this->itemids);
+            } elseif(is_string($this->itemids)) {
+                $this->itemids = explode(',',$this->itemids);
             }
         }
-        if (!isset($this->itemids)) {
-            $this->itemids = array();
-        }
+        if (!is_array($this->groupby)) $this->groupby = explode(',',$this->groupby);
 
-        // reset fieldlist and datastores if necessary
-        if(
-            isset($args['fieldlist']) &&
-            (!isset($this->fieldlist) || $args['fieldlist'] != $this->fieldlist)
-        )
-        {
-
-            $this->fieldlist = $args['fieldlist'];
-            $this->getDataStores(true);
-        } else {
-            if(
-                isset($args['status']) &&
-                (!isset($this->status) || $args['status'] != $this->status)
-            )
-            {
-                $this->status = $args['status'];
-                $this->fieldlist = array();
-                foreach($this->properties as $name => $property)
-                    if($property->status == $this->status)
-                        $this->fieldlist[] = $name;
-
-                $this->getDataStores(true);
-            }
-        }
-
+        $this->getDataStores(true);
+        
         // add where clause if itemtype is one of the properties (e.g. articles)
         if(isset($this->secondary) && !empty($this->itemtype) && $this->objectid > 2) {
-            if(empty($args['where'])) {
-                $args['where'] = $this->secondary . ' eq ' . $this->itemtype;
+            if(empty($this->where)) {
+                $this->where = $this->secondary . ' eq ' . $this->itemtype;
             } else {
-                $args['where'] .= ' and ' . $this->secondary . ' eq ' . $this->itemtype;
+                $this->where .= ' and ' . $this->secondary . ' eq ' . $this->itemtype;
             }
         }
-
         // Note: they can be empty here, which means overriding any previous criteria
         if(isset($args['sort']) || isset($args['where']) || isset($args['groupby']) || isset($args['cache'])) {
             foreach(array_keys($this->datastores) as $name) {
@@ -134,21 +109,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
         }
 
-        // set the sort criteria
-        if(!empty($args['sort']))
-            $this->setSort($args['sort']);
+        $this->setSort($this->sort);
+        $this->setWhere($this->where);
+        $this->setGroupBy($this->groupby);
+//        $this->setCategories($this->catid);
 
-        // set the where clauses
-        if(!empty($args['where']))
-            $this->setWhere($args['where']);
-
-        // set the group by fields
-        if(!empty($args['groupby']))
-            $this->setGroupBy($args['groupby']);
-
-        // set the categories
-        if(!empty($args['catid']))
-            $this->setCategories($args['catid']);
     }
 
     /**
@@ -309,13 +274,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function setGroupBy($groupby)
     {
-        if(is_array($groupby)) {
-            $this->groupby = $groupby;
-        } else {
-            $this->groupby = explode(',',$groupby);
-        }
-        $this->isgrouped = 1;
-
         foreach($this->groupby as $name) {
             if(isset($this->properties[$name])) {
                 // pass the sort criteria to the right data store
@@ -521,6 +479,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if(empty($itemtype)) $itemtype = 0; // don't add to URL
         $args['table'] = !empty($this->table) ? $this->table : null;
         $args['objectname'] = !empty($this->name) ? $this->name : null;
+        $args['objectlabel'] = !empty($this->label) ? $this->label : null;
         $args['modname'] = $modname;
         $args['itemtype'] = $itemtype;
         $args['objectid'] = $this->objectid;
@@ -539,7 +498,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         foreach(array_keys($this->items) as $itemid) {
             // TODO: improve this + SECURITY !!!
             $options = array();
-            if(!empty($this->isgrouped)) {
+            if(!empty($this->groupby)) {
                 $args['links'][$itemid] = $options;
                 continue;
             }
@@ -547,7 +506,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // @todo let's be a lil more explicit in handling these options
             $args['links'][$itemid] = $this->getViewOptions($args);
         }
-        if(!empty($this->isgrouped)) {
+        if(!empty($this->groupby)) {
             foreach(array_keys($args['properties']) as $name) {
                 if(!empty($this->properties[$name]->operation))
                     $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';

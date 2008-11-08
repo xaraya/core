@@ -107,7 +107,7 @@ class DataObjectMaster extends Object
 
     public $urlparam    = 'itemid';
     public $maxid       = 0;
-    public $config      = '';
+    public $config      = 'a:0:{}';       // the configuraion parameters for this DD object
     public $isalias     = 0;
     public $join        = '';
     public $table       = '';

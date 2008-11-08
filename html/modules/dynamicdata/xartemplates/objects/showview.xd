@@ -1,44 +1,44 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<!--
-    This is a generic view template for any DD object. You can use a specific template
-    for one particular object in this directory as showview-[objectname].xd, and/or
-    use templates in your own [module]/xartemplates/objects directory by specifying
-    the tplmodule="..." argument in the xar:data-view BL tag or showView() method call.
--->
-<xar:style scope="module" module="dynamicdata" file="dd" />
-<xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
-    <xar:template file="catnavigation" />
-</xar:if>
-
-<xar:sec mask="AddDynamicDataItem" catch="false" component="Item" instance="$moduleid .':' . $itemtype.':All'">
-    <xar:if condition="!isset($newlink)">
-        <xar:set name="newlink">#xarModURL($urlmodule,'admin','new',array('itemtype' =&gt; $itemtype,'tplmodule' =&gt; $tplmodule))#</xar:set>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!--
+        This is a generic view template for any DD object. You can use a specific template
+        for one particular object in this directory as showview-[objectname].xd, and/or
+        use templates in your own [module]/xartemplates/objects directory by specifying
+        the tplmodule="..." argument in the xar:data-view BL tag or showView() method call.
+    -->
+    <xar:style scope="module" module="dynamicdata" file="dd" />
+    <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
+        <xar:template file="catnavigation" />
     </xar:if>
-    <a href="#$newlink#">
-            <strong>
-                <xar:mlstring>
-                    Create New
-                </xar:mlstring>
-            </strong>
-     </a>
-</xar:sec>
-<xar:if condition="empty($layout)">
-    <xar:set name="layout">'default'</xar:set>
-</xar:if>
 
-<xar:template module="$tplmodule" file="view-$layout" />
+    <xar:sec mask="AddDynamicDataItem" catch="false" component="Item" instance="$moduleid .':' . $itemtype.':All'">
+        <xar:if condition="!isset($newlink)">
+            <xar:set name="newlink">#xarModURL($urlmodule,'admin','new',array('itemtype' =&gt; $itemtype,'tplmodule' =&gt; $tplmodule))#</xar:set>
+        </xar:if>
+        <a href="#$newlink#">
+                <strong>
+                    <xar:mlstring>
+                        Create New Item in&#160;#$objectlabel#
+                    </xar:mlstring>
+                </strong>
+         </a>
+    </xar:sec>
+    <xar:if condition="empty($layout)">
+        <xar:set name="layout">'default'</xar:set>
+    </xar:if>
 
-<xar:if condition="!empty($prevurl) or !empty($nexturl)">
-    <div class="xar-align-center">
-        <xar:if condition="!empty($prevurl)">
-            <a href="#$prevurl#">&lt;&lt;<xar:mlstring> Prev</xar:mlstring></a>
-        <xar:else />
-            &lt;&lt;
-        </xar:if>&#160;&#160;&#160;
-        <xar:if condition="!empty($nexturl)">
-            <a href="#$nexturl#"><xar:mlstring>Next</xar:mlstring>&gt;&gt; </a>
-        <xar:else />&gt;&gt;</xar:if>
-    </div>
-</xar:if>
+    <xar:template module="$tplmodule" file="view-$layout" />
+
+    <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+        <div class="xar-align-center">
+            <xar:if condition="!empty($prevurl)">
+                <a href="#$prevurl#">&lt;&lt;<xar:mlstring> Prev</xar:mlstring></a>
+            <xar:else />
+                &lt;&lt;
+            </xar:if>&#160;&#160;&#160;
+            <xar:if condition="!empty($nexturl)">
+                <a href="#$nexturl#"><xar:mlstring>Next</xar:mlstring>&gt;&gt; </a>
+            <xar:else />&gt;&gt;</xar:if>
+        </div>
+    </xar:if>
 </xar:template>

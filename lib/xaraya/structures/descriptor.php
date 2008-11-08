@@ -5,10 +5,6 @@
  * @todo this does not belong here
 **/
 
-/**
- * Define DocBlock
- **/
-
 class ObjectDescriptor extends DataContainer
 {
     protected $args;
