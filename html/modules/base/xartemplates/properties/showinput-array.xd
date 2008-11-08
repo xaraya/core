@@ -1,19 +1,20 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="is_array($value)">
+        <xar:set name="index">0</xar:set>
         <xar:foreach in="$value" key="$key" value="$val">
             <div class="xar-form-input-wrapper" >
-                <input class="xar-form-textmedium" type="text" name="#$name#_key[#$key#]" id="#$id#_key_#$key#" value="#$key#" size="#$size#" />
-                &#160;=&#62;&#160;
-                <input class="xar-form-textlong" type="text" name="#$name#_value[#$key#]" id="#$id#_value_#$key#" value="#$val#" size="#$size#" />
+                Key:&#160;<input class="xar-form-textmedium" type="text" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$key#" size="#$size#" />
+                &#160;
+                Value:&#160;<input class="xar-form-textlong" type="text" name="#$name#_value[#$index#]" id="#$id#_value_#$index#" value="#$val#" size="#$size#" />
             </div>
+            <xar:set name="index">$index+1</xar:set>
         </xar:foreach>
-        <xar:set name="start">count($value) + 1</xar:set>
-        <xar:for start="$i = $start" test="$i le $rows" iter="$i++">
+        <xar:for start="$i = $index" test="$i lt $rows" iter="$i++">
             <div class="xar-form-input-wrapper">
-                <input class="xar-form-textmedium" type="text" name="#$name#_key[#$i#]" id="#$id#_key_#$i#" value="#$i#" size="#$size#" />
-                &#160;=&#62;&#160;
-                <input class="xar-form-textlong" type="text" name="#$name#_value[#$i#]" id="#$id#_value_#$i#" value="" size="#$size#" />
+                Key:&#160;<input class="xar-form-textmedium" type="text" name="#$name#_key[#$i#]" id="#$id#_key_#$i#" value="" size="#$size#" />
+                &#160;
+                Value:&#160;<input class="xar-form-textlong" type="text" name="#$name#_value[#$i#]" id="#$id#_value_#$i#" value="" size="#$size#" />
             </div>
         </xar:for>
     <xar:else />
