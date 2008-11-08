@@ -35,10 +35,15 @@ class DataObject extends DataObjectMaster implements iDataObject
       // get the object type information from our parent class
         $this->loader($descriptor);
 
-        // set the specific item id (or 0)
+        // Set the configuration parameters
         $args = $descriptor->getArgs();
-        if(isset($args['itemid']))
-            $this->itemid = $args['itemid'];
+        try {
+            $configargs = unserialize($args['config']);
+            foreach ($configargs as $key => $value) $this->{$key} = $value;
+        } catch (Exception $e) {}
+
+        // set the specific item id (or 0)
+        if(isset($args['itemid'])) $this->itemid = $args['itemid'];
 
         // see if we can access this object, at least in overview
 /*        if(!xarSecurityCheck(

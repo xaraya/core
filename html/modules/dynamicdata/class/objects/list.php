@@ -21,9 +21,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     public $numitems = null;
     public $startnum = null;
 
-    public $startstore = null; // the data store we should start with (for sort)
+    public $startstore = null;      // the data store we should start with (for sort)
 
-    public $items = array();             // the result array of itemid => (property name => value)
+    public $items = array();       // the result array of itemid => (property name => value)
 
     // optional URL style for use in xarModURL() (defaults to itemtype=...&...)
     public $urlstyle = 'itemtype'; // TODO: table or object, or wrapper for all, or all in template, or...
@@ -47,10 +47,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // see if we can access these objects, at least in overview
 //        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':All')) return;
 
-        // Load the configuration settings
-        $args = $descriptor->getArgs();
-
         // Set the configuration parameters
+        $args = $descriptor->getArgs();
         try {
             $configargs = unserialize($args['config']);
             foreach ($configargs as $key => $value) $this->{$key} = $value;
