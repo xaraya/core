@@ -167,6 +167,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function setWhere($where)
     {
+        if (empty($where)) return true;
+        
         // find all single-quoted pieces of text with and/or and replace them first, to
         // allow where clauses like : title eq 'this and that' and body eq 'here or there'
         $idx = 0;
