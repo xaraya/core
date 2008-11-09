@@ -27,8 +27,14 @@
                 <th class="xar-form-textlong">&#160;</th>
             </xar:if>
         </tr>
+        <xar:set name="issuperadmin">               
+            in_array(xarUserGetVar('uname'),array_merge(unserialize(xarModVars::get('dynamicdata','administrators')),array('admin')))
+        </xar:set>
         <xar:set name="item_no">0</xar:set>
         <xar:foreach in="$items" key="$itemid" value="$fields">
+            <xar:if condition="!$issuperadmin AND ($itemid lt 3)">
+                <xar:continue />
+            </xar:if>
             <xar:set name="item_no">$item_no+1</xar:set>
             <xar:set name="rowclass">'xar-norm'</xar:set>
             <xar:if condition="$item_no % 2 eq 0">

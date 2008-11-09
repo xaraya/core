@@ -24,6 +24,7 @@ function dynamicdata_admin_modifymoduleconfig()
             $admins = explode(',',$administrators);
             $validadmins = array();
             foreach ($admins as $admin) {
+                if (empty($admin)) continue;
                 $user = xarModAPIFunc('roles','user','get',array('uname' => trim($admin)));
                 if(!empty($user)) $validadmins[$user['uname']] = $user['uname'];
             }
