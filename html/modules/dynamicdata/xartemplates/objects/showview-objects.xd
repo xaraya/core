@@ -28,7 +28,7 @@
             </xar:if>
         </tr>
         <xar:set name="issuperadmin">               
-            in_array(xarUserGetVar('uname'),array_merge(unserialize(xarModVars::get('dynamicdata','administrators')),array('admin')))
+            in_array(xarUserGetVar('uname'),array_merge(unserialize(xarModVars::get('dynamicdata','administrators')),array(xarUserGetVar('uname',xarModVars::get('roles','admin')))))
         </xar:set>
         <xar:set name="item_no">0</xar:set>
         <xar:foreach in="$items" key="$itemid" value="$fields">
