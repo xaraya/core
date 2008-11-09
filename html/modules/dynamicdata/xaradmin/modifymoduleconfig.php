@@ -19,7 +19,15 @@ function dynamicdata_admin_modifymoduleconfig()
             if (!xarVarFetch('modulealias',  'checkbox', $useModuleAlias,  xarModVars::get('dynamicdata', 'useModuleAlias'), XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('aliasname',    'str',      $aliasname,  xarModVars::get('dynamicdata', 'aliasname'), XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('debugmode',    'checkbox', $debugmode, xarModVars::get('dynamicdata', 'debugmode'), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('administrators', 'str', $administrators, '', XARVAR_NOT_REQUIRED)) return;
 
+            $admins = explode(',',$administrators);
+            $validadmins = array();
+            foreach ($admins as $admin) {
+                $user = xarModAPIFunc('roles','user','get',array('uname' => trim($admin)));
+                if(!empty($user)) $validadmins[$user['uname']] = $user['uname'];
+            }
+            xarModVars::set('dynamicdata', 'administrators', serialize($validadmins));
             xarModVars::set('dynamicdata', 'itemsperpage', $itemsperpage);
             xarModVars::set('dynamicdata', 'supportshorturls', $shorturls);
             xarModVars::set('dynamicdata', 'useModuleAlias', $useModuleAlias);

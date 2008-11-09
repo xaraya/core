@@ -76,6 +76,14 @@
             <xar:template file="defaults" />
         </fieldset>
         <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Display
+                </xar:mlstring>
+            </legend>
+            <xar:template file="display" />
+        </fieldset>
+        <fieldset>
             <div class="xar-form-input-wrapper-after">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="phase" id="phase" value="update" />
