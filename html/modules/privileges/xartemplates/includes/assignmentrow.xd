@@ -1,6 +1,9 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <tr class="#$displayclass#">
         <td>
+            #$row['name']#
+        </td>
+        <td>
             <a href="#xarModURL('roles','admin','showprivileges',array('id' => $row['role_id']))#" >
                 #$row['role_name']#
             </a>
@@ -13,9 +16,6 @@
                 SecurityLevel::$displayMap[$row['level']]
             </xar:set>
             #$level#
-        </td>
-        <td>
-            #$row['name']#
         </td>
         <!--
         <td style="text-align: center;">
