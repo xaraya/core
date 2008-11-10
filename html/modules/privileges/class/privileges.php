@@ -570,8 +570,7 @@ class xarPrivileges extends xarMasks
         LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.itemtype = ? AND p.module_id = ?";
         //Execute the query, bail if an exception was thrown
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, $module));
-
+        $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, xarMod::getID($module)));
         while ($result->next()) {
             list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$module) = $result->fields;
             $pargs = array(
