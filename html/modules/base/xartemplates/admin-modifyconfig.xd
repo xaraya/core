@@ -103,7 +103,7 @@
     <!-- Begin Site Display Options -->
     <xar:if condition="$tab eq 'display'">
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
-               <fieldset>
+            <fieldset>
                 <legend>
                     <xar:mlstring>
                         Version Information
@@ -144,6 +144,37 @@
                         <xar:var scope="config" name="Site.BL.CompilerVersion"/>
                     </xar:set>
                     <xar:data-input type="radio" name="compilerversion" value="$value" options="$options" />
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Database Information
+                    </xar:mlstring>
+                </legend>
+                <div class="xar-form-input-wrapper">
+                    <label title="#xarML('Host')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Host:
+                        </xar:mlstring>
+                    </label>
+                    #xarSystemVars::get(sys::CONFIG, 'DB.Host')#
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label title="#xarML('Database Type')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Database Type:
+                        </xar:mlstring>
+                    </label>
+                    #xarSystemVars::get(sys::CONFIG, 'DB.Type')#
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label title="#xarML('Current Database')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Current Database:
+                        </xar:mlstring>
+                    </label>
+                    #xarSystemVars::get(sys::CONFIG, 'DB.Name')#
                 </div>
             </fieldset>
             <fieldset>
