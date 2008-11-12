@@ -433,7 +433,7 @@ function dynamicdata_init()
     xarModVars::set('dynamicdata', 'aliasname','Query');
     xarModVars::set('dynamicdata', 'debugmode', 0);
     xarModVars::set('dynamicdata', 'debugusers', serialize(array()));
-    xarModVars::set('simpleadmin', 'administrators', serialize(array()));
+    xarModVars::set('dynamicdata', 'administrators', serialize(array()));
 
     /**
      * Register blocks
