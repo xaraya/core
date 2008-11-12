@@ -309,13 +309,13 @@ function xarLocaleGetList($filter=array())
  *  @access protected
  *  @return int unix timestamp.
  */
-function xarMLS_userTime($time=null)
+function xarMLS_userTime($time=null,$flag=1)
 {
     // get the current UTC time
     if (!isset($time)) {
         $time = time();
     }
-    $time += xarMLS_userOffset($time) * 3600;
+    if ($flag) $time += xarMLS_userOffset($time) * 3600;
     // return the corrected timestamp
     return $time;
 }
