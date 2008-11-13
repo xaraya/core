@@ -66,9 +66,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     public function setArguments(Array $args = array())
     {
         if (empty($args)) return true;
-
         foreach ($args as $key => $value) $this->{$key} = $value;
-        
         // Make sure we have an array for itemids and groupings
         if (!is_array($this->itemids)) {
             if(is_numeric($this->itemids)) {
@@ -106,7 +104,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     $this->datastores[$name]->cache = $args['cache'];
             }
         }
-
         $this->setSort($this->sort);
         $this->setWhere($this->where);
         $this->setGroupBy($this->groupby);
@@ -167,8 +164,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function setWhere($where)
     {
-        if (empty($where)) return true;
-        
         // find all single-quoted pieces of text with and/or and replace them first, to
         // allow where clauses like : title eq 'this and that' and body eq 'here or there'
         $idx = 0;
@@ -196,8 +191,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $where = str_replace($findLogic, $replaceLogic, $where);
 
         // TODO: reject multi-source WHERE clauses :-)
-        $parts = preg_split('/\s+(and|or)\s+/',$where,-1,PREG_SPLIT_DELIM_CAPTURE);
-        $join = '';
+        if (empty($where)) {
+            $parts = array();
+        } else {
+            $parts = preg_split('/\s+(and|or)\s+/',$where,-1,PREG_SPLIT_DELIM_CAPTURE);
+            $join = '';
+        }
         foreach($parts as $part) {
             if($part == 'and' || $part == 'or') {
                 $join = $part;

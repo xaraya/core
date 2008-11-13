@@ -159,7 +159,6 @@ function roles_admin_showusers()
                            );
 
     $object = xarModAPIFunc('dynamicdata','user','getobjectlist',array('name' => 'roles_users'));
-
     $object->getItems(array('itemids' => array_keys($users)));
 
     // Load Template
