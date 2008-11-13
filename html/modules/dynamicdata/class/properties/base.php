@@ -48,7 +48,7 @@ class DataProperty extends Object implements iDataProperty
     public $value = null;      // value of this property for a particular DataObject
     public $invalid = '';      // result of the checkInput/validateValue methods
 
-    public $include_reference = 0; // tells the object this property belongs whether to add a reference of itself to me
+    public $include_reference = 0; // tells the object this property belongs to whether to add a reference of itself to me
     public $objectref = null;  // object this property belongs to
     public $_objectid = null;  // objectid this property belongs to
     public $_fieldprefix = ''; // the object's fieldprefix

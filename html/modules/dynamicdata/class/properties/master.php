@@ -149,6 +149,9 @@ class DataPropertyMaster extends Object
         if ($property->include_reference) {
             $objectref->properties[$property->name]->objectref = $objectref;
         }
+        
+        // Expose the object configuration to the property
+        $objectref->properties[$property->name]->objectconfiguration =& $objectref->configuration;
 
         // if the property involves upload, tell its object
         if(isset($property->upload))
