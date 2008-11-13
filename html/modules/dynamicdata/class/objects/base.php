@@ -40,6 +40,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         try {
             $configargs = unserialize($args['config']);
             foreach ($configargs as $key => $value) $this->{$key} = $value;
+            $this->configuration = $configargs;
         } catch (Exception $e) {}
 
         // set the specific item id (or 0)
@@ -51,6 +52,15 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->moduleid.':'.$this->itemtype.':'.$this->itemid)
         ) return;
         */
+        
+        // Get a reference to each property's value
+        foreach ($this->properties as $property) {
+            $this->configuration['property_' . $property->id] = array('type' => &$property->type, 'value' => &$property->value);
+        }
+        // Run the post initialization method for each property
+        foreach ($this->properties as $property) {
+            $property->postinitialize();
+        }
     }
 
     /**

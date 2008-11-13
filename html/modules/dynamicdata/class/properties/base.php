@@ -721,5 +721,10 @@ class DataProperty extends Object implements iDataProperty
     {
         return array();
     }
+    
+    function postinitialize()
+    {
+        return true;
+    }
 }
 ?>
