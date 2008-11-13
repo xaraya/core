@@ -42,14 +42,18 @@ class ArrayProperty extends DataProperty
         if (!isset($value)) {
             if (!xarVarFetch($name . '_key', 'array', $keys, array(), XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch($name . '_value',   'array', $values, array(), XARVAR_NOT_REQUIRED)) return;
+            $hasvalues = false;
             while (count($keys)) {
                 try {
                     $thiskey = array_shift($keys);
                     $thisvalue = array_shift($values);
-                    if (!empty($thiskey) && !empty($thisvalue)) 
+                    if (!empty($thiskey) && !empty($thisvalue)) {
                         $value[$thiskey] = $thisvalue;
+                        $hasvalues = true;
+                    }
                 } catch (Exception $e) {}
             }
+            if (!$hasvalues) $value = array();
         }
         return $this->validateValue($value);;
     }
