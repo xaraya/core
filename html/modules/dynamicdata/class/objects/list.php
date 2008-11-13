@@ -79,8 +79,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         $this->getDataStores(true);
         
+        // REMOVEME: secondary is now always false
         // add where clause if itemtype is one of the properties (e.g. articles)
-        if(isset($this->secondary) && !empty($this->itemtype) && $this->objectid > 2) {
+        if(isset($this->secondary) && !empty($this->itemtype) && $this->objectid > 2 && $this->filter) {
             if(empty($this->where)) {
                 $this->where = $this->secondary . ' eq ' . $this->itemtype;
             } else {

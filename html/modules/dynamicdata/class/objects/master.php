@@ -131,7 +131,7 @@ class DataObjectMaster extends Object
 
     public $primary = null;             // primary key is item id
     public $secondary = null;           // secondary key could be item type (e.g. for articles)
-    public $filter = true;              // set this true to automatically filter by current itemtype on secondary key
+    public $filter = false;             // set this true to automatically filter by current itemtype on secondary key
     public $upload = false;             // flag indicating if this object has some property that provides file upload
 
     /**
