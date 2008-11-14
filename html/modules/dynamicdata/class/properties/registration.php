@@ -260,7 +260,7 @@ class PropertyRegistration extends DataContainer
                         try {
                             sys::import($dp);
                         } catch (Exception $e) {
-                            throw new Exception(xarML('The file #(1) could not be loaded', $dp));
+                            throw new Exception(xarML('The file #(1) could not be loaded', $dp . '.php'));
                         }
                         $loaded[$file] = true;
                     }
