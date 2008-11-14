@@ -46,7 +46,7 @@ function roles_userapi_getallactive($args)
                      a.name,
                      a.email,
                      a.date_reg,
-                     b.ipaddr
+                     b.ip_addr
               FROM $rolestable a, $sessioninfoTable b
               WHERE a.id = b.role_id AND b.last_use > ? AND a.id > ?";
     $bindvars[] = $filter;
