@@ -114,6 +114,7 @@
         </xsl:call-template>
         <xsl:text>);</xsl:text>
         <!-- the name attribute holds a variable name, not good, but it is like that -->
+        <xsl:text>$</xsl:text>
         <xsl:value-of select="@name"/><xsl:text>= $object-&gt;getProperties();</xsl:text>
       </xsl:when>
       <xsl:otherwise>
@@ -161,8 +162,9 @@
           <xsl:when test="not(@object)">
             <!-- No object gotta make one -->
             <xsl:text>list(</xsl:text>
+            <xsl:text>$</xsl:text>
             <xsl:value-of select="@name"/>
-            <xsl:text>,</xsl:text>
+            <xsl:text>,$</xsl:text>
             <xsl:value-of select="@value"/>
             <xsl:text>) = xarModApiFunc('dynamicdata','user','getitemsforview',</xsl:text>
             <xsl:call-template name="atts2args">
