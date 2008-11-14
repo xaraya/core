@@ -128,10 +128,10 @@ function roles_onlineblock_display($blockinfo)
 
     if($dbconn->databaseType == 'sqlite') {
         $query2 = "SELECT COUNT(*)
-                   FROM (SELECT DISTINCT ipaddr FROM $sessioninfotable
+                   FROM (SELECT DISTINCT ip_addr FROM $sessioninfotable
                          WHERE last_use > ? AND role_id = ?)";
     } else {
-        $query2 = "SELECT COUNT(DISTINCT ipaddr)
+        $query2 = "SELECT COUNT(DISTINCT ip_addr)
                FROM $sessioninfotable
                WHERE last_use > ? AND role_id = ?";
     }
