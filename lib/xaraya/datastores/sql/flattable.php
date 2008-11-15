@@ -275,7 +275,6 @@ class FlatTableDataStore extends SQLDataStore
             $itemids = $this->_itemids;
         } else {
             $itemids = array();
-            return true;
         }
         // check if it's set here - could be 0 (= empty) too
         if (isset($args['cache'])) {

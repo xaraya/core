@@ -431,13 +431,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 }
             }
         } else {
-            foreach($this->properties as $property)
-                if(($property->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
+            foreach($this->properties as $name => $property)
+                if(($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
                 ) {
-                    $args['properties'][$property->name] =& $property;
+                        $args['properties'][$name] =& $this->properties[$name];
                 }
 
             // Order the fields if this is an extended object
