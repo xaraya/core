@@ -85,7 +85,6 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
     $whereClauses = array(); $bindvars = array();
 
     if (isset($filter['Class'])) {
-        $whereClauses[] = 'themes.class = ?';
         $bindvars[] = $filter['Class'];
     }
     if (isset($filter['State'])) {
@@ -93,9 +92,6 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
             $whereClauses[] = 'themes.state = ?';
             $bindvars[] = $filter['State'];
         }
-    } else {
-        $whereClauses[] = 'themes.state = ?';
-        $bindvars[] = XARTHEME_STATE_ACTIVE;
     }
 
     $themeList = array();

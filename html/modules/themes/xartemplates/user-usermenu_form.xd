@@ -23,7 +23,7 @@
             </select>
         </div>
 
-        <div class="xar-align-center">
+        <div class="xar-form-input-wrapper-after">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="id" id="id" value="#$id#" />
             <input type="hidden" name="phase" id="phase" value="update" />
