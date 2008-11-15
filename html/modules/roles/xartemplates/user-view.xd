@@ -18,11 +18,22 @@
         <xar:else />
             <table width="100%" border="1" cellspacing="0" cellpadding="2">
                 <tr>
+                <!-- 
                     <xar:foreach in="$itemlabels" value="$label">
                         <th class="xar-fullwidth">
                                 #$label#
                         </th>
                     </xar:foreach>
+                    -->
+                        <th class="xar-fullwidth">
+                            Name
+                        </th>
+                        <th class="xar-fullwidth">
+                            User Name
+                        </th>
+                        <th class="xar-fullwidth">
+                            Email
+                        </th>
                 </tr>
                 <xar:if condition="count($items) eq 0">
                     <xar:set name="columns">count($itemlabels)</xar:set>
@@ -43,16 +54,13 @@
                         </xar:if>
 
                         <tr class="#$item_class#">
-                            <xar:foreach in="$loop:item" value="$field">
-                                <td>#$field#
-                                </td>
-                            </xar:foreach>
                             <xar:set name="id">#$loop:item['id']#</xar:set>
                             <xar:foreach in="$objectlists" value="$list">
                                 <xar:set name="items">$list->items</xar:set>
                                 <xar:set name="properties">$list->getProperties()</xar:set>
                                 <xar:foreach in="$properties" key="$key" value="$value">
-                                    <xar:if condition="isset($items[$id][$key])">
+                                    <xar:set name="name">$value->name</xar:set>
+                                    <xar:if condition="isset($items[$id][$key]) AND in_array($name,array('name','uname','email'))">
                                         <td>
                                             <xar:data-output property="$properties[$key]" value="$items[$id][$key]" />
                                         </td>
