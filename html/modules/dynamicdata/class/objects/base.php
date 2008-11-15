@@ -55,11 +55,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         
         // Get a reference to each property's value
         foreach ($this->properties as $property) {
-            $this->configuration['property_' . $property->id] = array('type' => &$property->type, 'value' => &$property->value);
-        }
-        // Run the post initialization method for each property
-        foreach ($this->properties as $property) {
-            $property->postinitialize();
+            $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);
         }
     }
 
@@ -71,9 +67,11 @@ class DataObject extends DataObjectMaster implements iDataObject
         if(!empty($args['itemid']))
         {
             if($args['itemid'] != $this->itemid)
-                // initialise the properties again
-                foreach(array_keys($this->properties) as $name)
-                    $this->properties[$name]->value = $this->properties[$name]->defaultvalue;
+                // initialise the properties again and refresh the contents of the object configuration
+                foreach($this->properties as $property) {
+                    $property->value = $property->defaultvalue;
+                    $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);
+                }
 
             $this->itemid = $args['itemid'];
         }

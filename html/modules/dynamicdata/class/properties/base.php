@@ -356,7 +356,7 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
 
         if(!isset($data['tabindex'])) $data['tabindex'] = 0;
-        if(!isset($data['value']))    $data['value']    = '';
+        if(!isset($data['value']))    $data['value']    = $this->value;
         $data['invalid']  = !empty($this->invalid) ? xarML($this->invalid) :'';
 
         // Add the configuration options if they have not been overridden
@@ -720,11 +720,6 @@ class DataProperty extends Object implements iDataProperty
     function aliases()
     {
         return array();
-    }
-    
-    function postinitialize()
-    {
-        return true;
-    }
+    }    
 }
 ?>
