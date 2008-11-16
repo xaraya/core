@@ -363,7 +363,7 @@ class xarCurl extends Object
             }
         }
 
-        // Decode transfer-encoding
+        /* Decode transfer-encoding
         if (isset($this->header['Transfer-Encoding']) && $this->header['Transfer-Encoding'] == 'chunked'){
             if (!$result = $this->_decode_chunked($result)){
                 $this->errno = -1;
@@ -371,7 +371,7 @@ class xarCurl extends Object
                 return false;
             }
         }
-
+        */
         // Decode content-encoding.
         if (isset($this->header['Content-Encoding']) && $this->header['Content-Encoding'] != ''){
             if ($this->header['Content-Encoding'] == 'deflate' || $this->header['Content-Encoding'] == 'gzip') {

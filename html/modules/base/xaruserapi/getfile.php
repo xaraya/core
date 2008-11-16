@@ -193,13 +193,34 @@ function base_userapi_getfile($args)
         $content = preg_replace('/^.*?\r\n\r\n/s','',$content);
 
     } else {
-    // TODO: we probably want some fancier error checking here too :-)
-        if (!ini_get('allow_url_fopen')) {
-            if (!$superrors)
+        // TODO: we probably want some fancier error checking here too :-)
+        // use curl instead of fopen method if we can (not supported by all hosts these days)
+        sys::import('modules.base.xarclass.xarCurl');
+        $curl = new xarCurl(array('url' => $url));
+        // check that curl initialised ok
+        if ($curl->errno <> 0) {
+          // check for allow fopen if curl returned an error
+          if (!xarFuncIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
+          if (!ini_get('allow_url_fopen')) {
+             if (!$superrors)
                 throw new ConfigurationException('allow_url_fopen','PHP is not currently configured to allow URL retrieval
                              of remote files.  Please turn on #(1) to use the base module getfile userapi.');
+          }
+          $lines = @file($url);
+        // use cURL instead
+        } else {
+          $curl->seturl($url);
+          $lines = $curl->exec();
+          // make sure we got a valid file
+          if ($curl->errno <> 0) {
+            // CHECKME: do we want to raise an exception here? or leave for BadParameter to catch later?
+            /*
+             if (!$superrors)
+                throw new BadParameterException(array($curl->error, $url),'cURL could not retrieve the file at #(2). Failed with error #(1)');
+            */
+            $lines = '';
+          }
         }
-        $lines = @file($url);
         if (empty($lines)) {
             if (!$superrors) throw new BadParameterException($url);
         }

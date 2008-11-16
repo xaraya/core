@@ -31,11 +31,12 @@ function base_admin_release()
          $releasenumber=10;
     }
 
-    // allow fopen
+    /* allow fopen - let getfile handle this 
     if (!xarFuncIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
     if (!ini_get('allow_url_fopen')) {
         throw new ForbiddenOperationException('fopen to get RSS feeds','The current PHP configuration does not allow to use #(1) with an url');
     }
+    */
     // Require the xmlParser class
     sys::import('modules.base.xarclass.xmlParser');
     // Require the feedParser class
