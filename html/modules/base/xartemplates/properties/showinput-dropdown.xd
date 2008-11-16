@@ -25,6 +25,8 @@
             </xar:if>
         </xar:foreach>
     </select>
+    
+    <input type="hidden" name="#$name#_previous_value" value="#$value#" />
 
     <xar:template file="dataproperty_additions" module="base" />
 </xar:template>
