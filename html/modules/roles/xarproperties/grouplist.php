@@ -24,12 +24,12 @@ class GroupListProperty extends SelectProperty
     public $previous_groupid = 0;
     public $current_groupid  = 0;
 
-    public $initialization_behavior            = 'replace';
-    public $initialization_basegroup           = 'Everybody';
+    public $initialization_behavior        = 'replace';
+    public $initialization_basegroup       = 'Everybody';
     public $validation_ancestorgroup_list  = null;
     public $validation_parentgroup_list    = null;
     public $validation_group_list          = null;
-    public $validation_override                = true;
+    public $validation_override            = true;
 
     /*
     * Options available to group selection
@@ -141,6 +141,9 @@ class GroupListProperty extends SelectProperty
 
     public function showInput(Array $data = array())
     {
+        if (isset($data['behavior'])) $this->initialization_behavior = $data['behavior'];
+        if (isset($data['basegroup'])) $this->initialization_basegroup = $data['basegroup'];
+
         // If we are not standalone get the group value first 
         if ($this->_itemid) {
             $data['value'] = $this->retrieveValue($this->_itemid);
@@ -150,6 +153,9 @@ class GroupListProperty extends SelectProperty
 
     public function showOutput(Array $data = array())
     {
+        if (isset($data['behavior'])) $this->initialization_behavior = $data['behavior'];
+        if (isset($data['basegroup'])) $this->initialization_basegroup = $data['basegroup'];
+
         // If we are not standalone get the group value first 
         if ($this->_itemid) {
             // It's a standalone property
