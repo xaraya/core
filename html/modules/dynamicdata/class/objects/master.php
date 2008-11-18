@@ -115,7 +115,7 @@ class DataObjectMaster extends Object
     public $extend      = true;
 
     public $class       = 'DataObject'; // the class name of this DD object
-    public $filepath    = '';           // the path to the class of this DD object (can be empty for DataObject)
+    public $filepath    = 'auto';       // the path to the class of this DD object (can be empty or 'auto' for DataObject)
     public $properties  = array();      // list of properties for the DD object
     public $datastores  = array();      // similarly the list of datastores (arguably in the wrong place here)
     public $fieldlist   = array();      // array of properties to be displayed
@@ -564,7 +564,7 @@ class DataObjectMaster extends Object
             $info['moduleid'] = 182;
             $info['itemtype'] = 0;
             $info['parent'] = 1;
-            $info['filepath'] = '';
+            $info['filepath'] = 'auto';
             $info['urlparam'] = 'itemid';
             $info['maxid'] = 0;
             $info['config'] = '';
@@ -640,7 +640,7 @@ class DataObjectMaster extends Object
         if ($info != null) $args = array_merge($args,$info);
         else return $info;
 
-        if(!empty($args['filepath'])) include_once($args['filepath']);
+        if(!empty($args['filepath']) && ($args['filepath'] != 'auto')) include_once($args['filepath']);
         if (!empty($args['class'])) {
             if(!class_exists($args['class'])) {
                 throw new ClassNotFoundException($args['class']);
