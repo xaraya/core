@@ -826,3 +826,10 @@ ALTER TABLE `xar_themes` CHANGE `state` `state`                    tinyint unsig
 INSERT INTO `xar_module_vars` (module_id, name, value)
     SELECT mods.id, 'debugusers', 'a:0:{}' FROM xar_modules mods
     WHERE mods.name = 'dynamicdata';
+    
+# ----- 17.11.2008
+ALTER TABLE xar_categories 
+    ADD COLUMN `child_object` varchar(255) default NULL;
+ALTER TABLE xar_categories_linkage
+    ADD COLUMN `child_category_id` int(11) NOT NULL;
+
