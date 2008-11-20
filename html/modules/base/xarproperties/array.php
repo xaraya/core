@@ -72,8 +72,12 @@ class ArrayProperty extends DataProperty
 
     function setValue($value=null)
     {
-        if (empty($value)) $value = array();
-        $this->value = serialize($value);
+        if (!empty($value) && !is_array($value)) {
+            $this->value = $value;
+        } else {
+            if (empty($value)) $value = array();
+            $this->value = serialize($value);
+        }
     }
 
     public function getValue()
