@@ -109,7 +109,7 @@ function dynamicdata_init()
                 'null'        => false,
                 'default'     => '0'
             ),
-            /* any configuration settings for this object (future) */
+            /* any configuration settings for this object */
             'config'   => array(
                 'type'=>'text'
             ),
