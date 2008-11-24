@@ -321,8 +321,9 @@ function installer_admin_phase5()
     }
 
     if (!$createDB && !$dbExists) {
-        $msg = xarML('Database #(1) doesn\'t exist and it wasnt selected to be created.', $dbName);
-        throw new Exception($msg);
+        $msg = xarML('Database #(1) doesn\'t exist and it wasn\'t selected to be created. <br />
+        Please go back and either check the checkbox to create the database or choose a database that already exists.', $dbName);
+        die($msg);
     }
 
     $data['confirmDB']  = $confirmDB;
