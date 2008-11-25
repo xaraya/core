@@ -89,21 +89,16 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
         }
         // Note: they can be empty here, which means overriding any previous criteria
-        if(isset($args['sort']) || isset($args['where']) || isset($args['groupby']) || isset($args['cache'])) {
-            foreach(array_keys($this->datastores) as $name) {
-                if(isset($args['sort']))
-                    // make sure we don't have some left-over sort criteria
-                    $this->datastores[$name]->cleanSort();
-                if(isset($args['where']))
-                    // make sure we don't have some left-over where clauses
-                    $this->datastores[$name]->cleanWhere();
-                if(isset($args['groupby']))
-                    // make sure we don't have some left-over group by fields
-                    $this->datastores[$name]->cleanGroupBy();
-                if(isset($args['cache']))
-                    // pass the cache value to the datastores
-                    $this->datastores[$name]->cache = $args['cache'];
-            }
+        foreach(array_keys($this->datastores) as $name) {
+            // make sure we don't have some left-over sort criteria
+            $this->datastores[$name]->cleanSort();
+            // make sure we don't have some left-over where clauses
+            $this->datastores[$name]->cleanWhere();
+            // make sure we don't have some left-over group by fields
+            $this->datastores[$name]->cleanGroupBy();
+            if(isset($args['cache']))
+                // pass the cache value to the datastores
+                $this->datastores[$name]->cache = $args['cache'];
         }
         $this->setSort($this->sort);
         $this->setWhere($this->where);
@@ -238,8 +233,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     $this->properties[$name]->datastore = $storename;
                     $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
                     $datastore = $storename;
-                }
-                elseif($this->properties[$name]->type == 21)
+                } elseif($this->properties[$name]->type == 21)
                     $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
 
                 if(empty($idx)) {
