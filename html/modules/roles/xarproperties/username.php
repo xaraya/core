@@ -40,6 +40,9 @@ class UsernameProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
+        // Save the current value of this property for comparison below
+        $previousvalue = $this->value;
+        
         // Validate as a text box
         if (!parent::validateValue($value)) return false;
 
@@ -55,7 +58,7 @@ class UsernameProperty extends TextBoxProperty
                 if (!empty($role)) {
                     
                     // If we're just keeping the name we already have, it's OK
-                    if ($this->value == $value) break;
+                    if ($previousvalue == $value) break;
 
                     if (!empty($this->validation_existrule_invalid)) {
                         $this->invalid = xarML($this->validation_existrule_invalid);
