@@ -62,10 +62,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);
         }
 
-        // Get a reference to each property's value
-        foreach ($this->properties as $property) {
-            $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);
-        }
+        // Store the items values where the properties can get them
+        $this->configuration['items]' =& $this->items;
     }
 
     /**
