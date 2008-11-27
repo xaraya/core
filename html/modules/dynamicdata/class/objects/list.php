@@ -63,7 +63,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 
         // Store the items values where the properties can get them
-        $this->configuration['items]' =& $this->items;
+        $this->configuration['items'] =& $this->items;
     }
 
     /**
