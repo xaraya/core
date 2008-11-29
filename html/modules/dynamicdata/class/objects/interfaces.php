@@ -10,7 +10,7 @@ interface iDataObject
     public function checkInput(Array $data = array());
     public function showForm(Array $data = array());
     public function showDisplay(Array $data = array());
-    public function getFieldValues(Array $data = array());
+    public function getFieldValues(Array $data = array(), $bypass = 0);
     public function getDisplayValues(Array $data = array());
     public function createItem(Array $data = array());
     public function updateItem(Array $data = array());
