@@ -15,10 +15,10 @@ function mail_adminapi_getsourcefilename($args)
     extract($args);  
     
     // Template search order:
-    // 1. var/messaging/{module}/{type}-{template Name}-{mail type}-{message part}.xd
-    // 2. var/messaging/{module}/{type}-{template Name}-text-{message part}.xd
-    // 3. var/messaging/{template Name}-{mail type}-{message part}.xd
-    // 4. var/messaging/{template Name}-text-{message part}.xd
+    // 1. var/messaging/{module}/{type}-{template Name}-{message part}-{mail type}.xd
+    // 2. var/messaging/{module}/{type}-{template Name}-{message part}.xd
+    // 3. var/messaging/{template Name}-{message part}-{mail type}.xd
+    // 4. var/messaging/{template Name}-{message part}.xd
     // 5. complain (later on)
    
     $tplMessagingDir = sys::varpath() . "/messaging/$modName";    
@@ -27,20 +27,20 @@ function mail_adminapi_getsourcefilename($args)
     
     unset($sourceFileName);
 
-    xarLogMessage("TPL: 1. $tplMessagingDir/$modType-$templateName-$mailType-$messagepart.xd");
-    xarLogMessage("TPL: 2. $tplMessagingDir/$modType-$templateName-text-$messagepart.xd");
+    xarLogMessage("TPL: 1. $tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xd");
+    xarLogMessage("TPL: 2. $tplMessagingDir/$modType-$templateName-$messagepart.xd");
        
     if(!empty($templateName) &&
-        file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$mailType-$messagepart.xd")) {
+        file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xd")) {
         
     } elseif(!empty($templateName) &&
-        file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-text-$messagepart.xd")) { 
+        file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$messagepart.xd")) { 
 
     } elseif(!empty($templateName) &&
-        file_exists($sourceFileName = "$tplMessagingDir/$templateName-$mailType-$messagepart.xd")) { 
+        file_exists($sourceFileName = "$tplMessagingDir/$templateName-$messagepart-$mailType.xd")) { 
             
     } elseif(!empty($templateName) &&
-        file_exists($sourceFileName = "$tplMessagingDir/$templateName-text-$messagepart.xd")) {
+        file_exists($sourceFileName = "$tplMessagingDir/$templateName-$messagepart.xd")) {
             
     } else{
         throw new FileNotFoundException(xarML('No template was found corresponding to #(1) #(2)',$templateName,$messagepart));
@@ -51,6 +51,3 @@ function mail_adminapi_getsourcefilename($args)
 }
 
 ?>
-
-
-

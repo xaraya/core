@@ -24,6 +24,3 @@ function mail_adminapi_mailmessagemodule($args)
 }
 
 ?>
-
-
-

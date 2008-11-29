@@ -2,9 +2,8 @@
 /**
  * Psspl : Added API function to read the contents of template files (.xd) as plain text
  */
-function mail_adminapi_getmessagestring($args)
+function mail_adminapi_getsourcestring($args)
 {   
-    $args['messagepart'] = 'message';
     $sourceFileName = xarModAPIFunc('mail', 'admin', 'getsourcefilename', $args);      
     if (!file_exists($sourceFileName)) throw new FileNotFoundException($sourceFileName);
     $string = '';
@@ -24,6 +23,3 @@ function mail_adminapi_getmessagestring($args)
     return $message;
 }
 ?>
-
-
-
