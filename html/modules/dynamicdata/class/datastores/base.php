@@ -48,6 +48,14 @@ class BasicDataStore extends DDObject implements IBasicDataStore
     }
 
     /**
+     * Remove all sorts for this data store (for getItems)
+     */
+    function cleanSort()
+    {
+        $this->sort = array();
+    }
+
+    /**
      * Get the field name used to identify this property (by default, the property name itself)
      */
     function getFieldName(DataProperty &$property)

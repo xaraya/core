@@ -56,6 +56,14 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // Set the arguments passed via the constructor. These override the configurations settings
         $this->setArguments($args);
+
+        // Get a reference to each property's value
+        foreach ($this->properties as $property) {
+            $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);
+        }
+
+        // Get a reference to each property's value
+        $this->configuration['items'] =& $this->items;
     }
 
     /**
