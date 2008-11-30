@@ -24,12 +24,12 @@ class GroupListProperty extends SelectProperty
     public $previous_groupid = 0;
     public $current_groupid  = 0;
 
-    public $initialization_behavior        = 'replace';
-    public $initialization_basegroup       = 'Everybody';
-    public $validation_ancestorgroup_list  = null;
-    public $validation_parentgroup_list    = null;
-    public $validation_group_list          = null;
-    public $validation_override            = true;
+    public $initialization_update_behavior  = 'replace';
+    public $initialization_basegroup        = 'Everybody';
+    public $validation_ancestorgroup_list   = null;
+    public $validation_parentgroup_list     = null;
+    public $validation_group_list           = null;
+    public $validation_override             = true;
 
     /*
     * Options available to group selection
@@ -85,7 +85,7 @@ class GroupListProperty extends SelectProperty
     {
         $xartable = xarDB::getTables();
         
-        if ($this->initialization_behavior == 'replace' && $this->previous_groupid) {
+        if ($this->initialization_update_behavior == 'replace' && $this->previous_groupid) {
             if (!$itemid) {
                 $q = new xarQuery('DELETE',$xartable['rolemembers']);
                 $q->eq('parent_id',$this->previous_groupid);
@@ -141,7 +141,7 @@ class GroupListProperty extends SelectProperty
 
     public function showInput(Array $data = array())
     {
-        if (isset($data['behavior'])) $this->initialization_behavior = $data['behavior'];
+        if (isset($data['behavior'])) $this->initialization_update_behavior = $data['behavior'];
         if (isset($data['basegroup'])) $this->initialization_basegroup = $data['basegroup'];
 
         // If we are not standalone get the group value first 
@@ -153,7 +153,7 @@ class GroupListProperty extends SelectProperty
 
     public function showOutput(Array $data = array())
     {
-        if (isset($data['behavior'])) $this->initialization_behavior = $data['behavior'];
+        if (isset($data['behavior'])) $this->initialization_update_behavior = $data['behavior'];
         if (isset($data['basegroup'])) $this->initialization_basegroup = $data['basegroup'];
 
         // If we are not standalone get the group value first 
