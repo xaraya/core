@@ -197,10 +197,7 @@ class GroupListProperty extends SelectProperty
                 $options[] = array('id' => $group['id'], 'name' => $group['name']);
             }
         } else {
-            // This is a standalone property
-            foreach ($groups as $group) {
-                $options[] = array('id' => $group['id'], 'name' => $group['name']);
-            }
+            $options = $groups;
         }
         return $options;
     }
