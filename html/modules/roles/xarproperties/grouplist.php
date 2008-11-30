@@ -25,7 +25,7 @@ class GroupListProperty extends SelectProperty
     public $current_groupid  = 0;
 
     public $initialization_update_behavior  = 'replace';
-    public $initialization_basegroup        = 'Everybody';
+    public $initialization_basegroup        = 1;
     public $validation_ancestorgroup_list   = null;
     public $validation_parentgroup_list     = null;
     public $validation_group_list           = null;
@@ -121,7 +121,7 @@ class GroupListProperty extends SelectProperty
     {
         $this->value = $itemid;
         $value = 0;
-        $basegroup = xarRoles::findRole($this->initialization_basegroup);
+        $basegroup = xarRoles::get($this->initialization_basegroup);
         if (!empty($basegroup)) {
             $xartable = xarDB::getTables();
             $q = new xarQuery('SELECT',$xartable['rolemembers']);
