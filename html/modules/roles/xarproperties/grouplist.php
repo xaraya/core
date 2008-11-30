@@ -187,19 +187,7 @@ class GroupListProperty extends SelectProperty
         }
         // TODO: handle large # of groups too (optional - less urgent than for users)
         $groups = xarModAPIFunc('roles', 'user', 'getallgroups', $select_options);
-        $options = array();
-        $child = xarRoles::get($this->_itemid);
-        if ($this->_itemid && !empty($child)) {
-            // This is part of an object. Weed out unallowed parents
-            foreach ($groups as $group) {
-                $parent = xarRoles::get($group['id']);
-                if (($this->_itemid == $group['id']) || $child->isAncestor($parent)) continue;
-                $options[] = array('id' => $group['id'], 'name' => $group['name']);
-            }
-        } else {
-            $options = $groups;
-        }
-        return $options;
+        return $groups;
     }
 
 }
