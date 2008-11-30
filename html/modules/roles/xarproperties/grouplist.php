@@ -130,7 +130,7 @@ class GroupListProperty extends SelectProperty
             if (!$q->run()) return;
             foreach ($q->output() as $row) {
                 $candidate = xarRoles::get($row['parent_id']);
-                if ($candidate->isAncestor($basegroup)) {
+                if ($candidate->isAncestor($basegroup) || ($candidate->getId() == $basegroup->getId())) {
                     $value = $row['parent_id'];
                     break;
                 }
