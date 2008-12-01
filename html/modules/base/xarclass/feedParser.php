@@ -135,6 +135,7 @@ class feedParser extends Object
     function buildStruct($xmldata) 
     {
         // Create a parser object
+        sys::import('modules.base.xarclass.xmlParser');
         $p = new XMLParser;
     
         // Define our known namespaces

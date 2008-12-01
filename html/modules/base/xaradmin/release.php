@@ -37,8 +37,6 @@ function base_admin_release()
         throw new ForbiddenOperationException('fopen to get RSS feeds','The current PHP configuration does not allow to use #(1) with an url');
     }
     */
-    // Require the xmlParser class
-    sys::import('modules.base.xarclass.xmlParser');
     // Require the feedParser class
     sys::import('modules.base.xarclass.feedParser');
     // Check and see if a feed has been supplied to us.
