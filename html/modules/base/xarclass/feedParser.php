@@ -140,25 +140,28 @@ class feedParser extends Object
     
         // Define our known namespaces
         foreach ($this->namespaces as $space => $uri) {
-            $p->definens($space,$uri);
+            $this->definens($space,$uri);
         }
     
         // Define base namespace
-        $p->definens("UNDEF");
+        $this->definens("UNDEF");
 
         $this->parseEntities($xmldata);
-    
+
         // Tell the parser to get the file.
-        $p->setXmlData($xmldata);
+        $this->setXmlData($xmldata);
     
         // Tell the parser to build the tree.
-        $p->buildXmlTree();
+        $this->buildXmlTree();
     
         // Spit the tree out so we can see it
-        return $p->getXmlTree();
+        return $this->getXmlTree();
     
     }
 
+    function getXmlTree() { return $this->data;}
+    function setXmlData($data) { $this->xmldata = $data; }
+    
     function parseEntities(&$data) 
     {
 
@@ -531,6 +534,132 @@ class feedParser extends Object
         }
 
     }
+
+    function defineNs($ident, $uri = "") 
+    {
+        if ($uri == "") {
+            $uri = "::UNDEFINED::";
+        }
+        $this->ns2uri[strtoupper($ident)] = $uri;
+        $this->uri2ns[$uri] = strtoupper($ident);
+    }
+
+    function buildXmlTree() 
+    {
+        $p = xml_parser_create();
+        xml_parser_set_option($p, XML_OPTION_SKIP_WHITE, 1);
+        xml_parse_into_struct($p, $this->xmldata, $vals, $index);
+        xml_parser_free($p);
+
+        $this->data = array();
+        $i = 0;
+        if (!isset($vals[$i])) return;
+        $ns = $this->getnamespaces(isset($vals[$i]['attributes']));
+        array_push($this->data, array(
+            'tag' => $this->_convertTagNs($vals[$i]['tag'],$ns), 
+            'attributes' => isset($vals[$i]['attributes']),
+            'children' => $this->_getXmlChildren($vals, $ns, $i)
+        ));
+    }     
+
+    function getnamespaces($attribs,$ns = array()) 
+    {
+        if (is_array($attribs)) {
+            foreach($attribs as $key => $value) {
+                $key = strtoupper($key);
+                if (substr($key,0,5) == 'XMLNS') {
+                    if($pos = strpos($key,':')) {
+                        $ns[substr($key,$pos+1)] = $value;
+                    } else {
+                        $ns['::ROOT']= $value;
+                    }
+                }
+            }
+        }
+
+
+        return $ns;
+    }
+                    
+    function _convertTagNs($tag,$ns) 
+    {
+        if($pos = strpos($tag,':')) {
+            $docns = substr($tag,0,$pos);
+            $doctag = substr($tag,$pos+1);
+        } else {
+            $docns = "::ROOT";
+            $doctag = "$tag";
+        }
+
+        if (isset($ns[$docns])) {
+            $uri = $ns[$docns];
+        } else {
+            $uri = "::UNDEFINED::";
+        }
+
+        if(isset($this->uri2ns[$uri])) {
+            $parns = $this->uri2ns[$uri];
+        } else {
+            $this->definens("::UNK" . $this->unkcnt, $uri);
+            $parns = "::UNK" . $this->unkcnt;
+            $this->unkcnt++;
+        }
+
+        return $parns . ":" . $doctag;
+        
+    }
+
+    function _getXmlChildren(&$vals, $ns, &$i) 
+    {
+        $children = array();
+
+        if (isset($vals[$i]['value'])) {
+            array_push($children, $vals[$i]['value']);
+        }
+    
+        while (++$i < count($vals)) {
+            switch ($vals[$i]['type']) {
+                case 'cdata':
+                    array_push($children, $vals[$i]['value']);
+                    break;
+    
+                case 'complete':
+                    $tmpns = $this->getnamespaces(isset($vals[$i]['attributes']),$ns);
+                    $tag = $this->_convertTagNs($vals[$i]['tag'],$tmpns);
+                    if(isset($vals[$i]['value'])) {
+                        array_push($children, array(
+                            'tag' => $tag, 
+                            'attributes' => isset($vals[$i]['attributes']), 
+                            'children' => array($vals[$i]['value'])
+                        ));
+                    } else {
+                        array_push($children, array(
+                            'tag' => $tag, 
+                            'attributes' => isset($vals[$i]['attributes']) 
+                        ));
+                    }
+
+                    break;
+    
+                case 'open':
+                    $tmpns = $this->getnamespaces(isset($vals[$i]['attributes']),$ns);
+                    $tag = $this->_convertTagNs($vals[$i]['tag'],$tmpns);
+                    array_push($children, array(
+                        'tag' => $tag, 
+                        'attributes' => isset($vals[$i]['attributes']), 
+                        'children' => $this->_getXmlChildren($vals,$tmpns,$i)
+                    ));
+                    break;
+    
+                case 'close':
+                    if (isset($vals[$i]['value'])) {
+                        array_push($children, $vals[$i]['value']);
+                    }
+                    return $children;
+            }
+        }
+    }
+
 }
         
 ?>
