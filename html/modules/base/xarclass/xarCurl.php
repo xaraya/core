@@ -132,7 +132,7 @@ class xarCurl extends Object
      * A session will be opened immediately the object is created.
      * @return array
      */
-    function xarCurl($args)
+    function __construct($args)
     {
         extract($args);
 
@@ -152,7 +152,7 @@ class xarCurl extends Object
         }
 
         // Later versions of curl have extra info types. Add these on now.
-        if (defined('CURLINFO_CONTENT_TYPE')) {
+        if (isset(constant('CURLINFO_CONTENT_TYPE'))) {
             $this->info_types = array_merge(
                 $this->info_types,
                 array(
