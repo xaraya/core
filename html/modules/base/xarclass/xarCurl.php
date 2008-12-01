@@ -152,7 +152,7 @@ class xarCurl extends Object
         }
 
         // Later versions of curl have extra info types. Add these on now.
-        if (isset(constant('CURLINFO_CONTENT_TYPE'))) {
+        if (constant('CURLINFO_CONTENT_TYPE') != null) {
             $this->info_types = array_merge(
                 $this->info_types,
                 array(
