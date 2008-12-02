@@ -29,7 +29,7 @@
         <fieldset>
           <div class="xar-align-center">
             <input type="submit" value="#xarML('Log In')#" tabindex="4" />
-            <input type="hidden" name="redirecturl" id="returnurl" value="$redirecturl" />
+            <input type="hidden" name="redirecturl" id="returnurl" value="#$redirecturl#" />
           </div>
         </fieldset>
       </form>

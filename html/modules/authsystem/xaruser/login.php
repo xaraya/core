@@ -224,7 +224,7 @@ function authsystem_user_login()
                 $attempts = (int) xarSession::getVar('authsystem.login.attempts');
 
                 if (($attempts >= $lockouttries) && (xarModVars::get('authsystem','uselockout')==true)){
-                    // set the time for fifteen minutes from now
+                    // Set the time for fifteen minutes from now
                     xarSession::setVar('authsystem.login.lockedout', time() + (60 * $lockouttime));
                     xarSession::setVar('authsystem.login.attempts', 0);
                     return xarTplModule('authsystem','user','login_errors',array('layout' => 'bad_tries_exceeded', 'lockouttime' => $lockouttime));
