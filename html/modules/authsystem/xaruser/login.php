@@ -212,11 +212,8 @@ function authsystem_user_login()
                 }
             }
 
-
             // Get the default authentication data - we need to check again as authsystem is always installed and users could get here direct
-            $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
-            $defaultloginmodname=$defaultauthdata['defaultloginmodname'];
-            $res = xarModAPIFunc($defaultloginmodname,'user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
+            $res = xarModAPIFunc('authsystem','user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
 
             if ($res === NULL) return;
             elseif ($res == false) {
