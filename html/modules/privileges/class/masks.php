@@ -428,10 +428,10 @@ class xarMasks extends Object
 
         if ($catch && !$pass) {
             if (xarModVars::get('privileges','exceptionredirect') && !xarUserIsLoggedIn()) {
-                //authsystem will handle the authentication
+                // The current authentication module will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login
                 $requrl = xarServerGetCurrentUrl(array(),false);
-                xarResponseRedirect(xarModURL('authsystem','user','showloginform',array('redirecturl'=> $requrl),false));
+                xarResponseRedirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
             } else {
 //                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
                 xarResponseRedirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
