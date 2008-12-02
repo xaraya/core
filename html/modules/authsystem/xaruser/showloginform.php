@@ -19,26 +19,13 @@
 function authsystem_user_showloginform($args = array())
 {
     extract($args);
-    if (!isset($redirecturl)) $redirecturl = xarServerGetBaseURL();
-    xarVarFetch('redirecturl', 'str:1:254', $data['redirecturl'], $redirecturl, XARVAR_NOT_REQUIRED);
-
-    $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
-    $defaultloginmodname=$defaultauthdata['defaultloginmodname'];
+    xarVarFetch('redirecturl', 'str:1:254', $data['redirecturl'], xarServerGetBaseURL(), XARVAR_NOT_REQUIRED);
 
     if (!xarUserIsLoggedIn()) {
-      // Security check
-      // TODO: if exception redirects are set to ON we end up here, if further
-      // more anon has no priv for ViewAuthSystem, we end up here again => infinite loop
-      // 1. augment (i.e. hack it in) to force the check to go?
-      // 2. why is this security check here in the first place (a usecase would be nice)
-
-      //if (!xarSecurityCheck('ViewAuthsystem')) return; //jojodee - review this
-      $data['loginlabel'] = xarML('Log In');
-      $data['loginurl']=xarModURL($defaultloginmodname,'user','login');
-
-      return $data;
+        return $data;
     } else {
-      xarResponseRedirect($data['redirecturl']);
-    }// if
+        xarResponseRedirect($data['redirecturl']);
+        return true;
+    }
 }
 ?>
