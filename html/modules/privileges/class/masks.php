@@ -817,6 +817,38 @@ class xarMasks extends Object
         sys::import('modules.privileges.class.mask');
         return new xarMask($pargs);
     }
-}
 
+    /**
+     * Clear the cached privileges from all sessions
+     * @access public
+     * TODO: This should likely be integrated into the sessions handler, but that leads to other issues
+     */
+    public static function clearCache()
+    {
+        self::$dbconn = xarDB::getConn();
+        $xartable = xarDB::getTables();
+        $sessions = $xartable['session_info'];
+        $query = "SELECT id, last_use, vars FROM $sessions";
+        $stmt = self::$dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array(),ResultSet::FETCHMODE_NUM);
+        
+        $query = "UPDATE " . $sessions . " SET vars = ? WHERE id = ?";
+        $stmt = self::$dbconn->prepareStatement($query);
+        $sessions = array();
+        while($result->next()) {
+            list($id, $lastused, $vars) = $result->getRow();
+            // in case garbage collection didn't have the opportunity to do its job
+            if (!empty($GLOBALS['xarSession_systemArgs']['securityLevel']) &&
+                $GLOBALS['xarSession_systemArgs']['securityLevel'] == 'High') {
+                $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
+                if ($lastused < $timeoutSetting) {
+                    $vars = '';
+                }
+            } else {      
+                $vars = preg_replace('/' . xarSession::PREFIX . 'privilegeset\|(.*?);(?=' . xarSession::PREFIX . '|$)/', '', $vars);
+            }
+            $stmt->executeQuery(array($vars,$id));
+        }
+    }
+}
 ?>
