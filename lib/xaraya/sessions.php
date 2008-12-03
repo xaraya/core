@@ -361,7 +361,7 @@ class xarSession extends Object implements IsessionHandler
 
     /**
      * PHP function to open the session
-     * @access private
+     * @access public
      */
     function open($path, $name)
     {   // Nothing to do - database opened elsewhere
@@ -370,7 +370,7 @@ class xarSession extends Object implements IsessionHandler
 
     /**
      * PHP function to close the session
-     * @access private
+     * @access public
      */
     function close()
     {   // Nothing to do - database closed elsewhere
@@ -379,7 +379,7 @@ class xarSession extends Object implements IsessionHandler
 
     /**
      * PHP function to read a set of session variables
-     * @access private
+     * @access public
      */
     function read($sessionId)
     {
@@ -417,7 +417,7 @@ class xarSession extends Object implements IsessionHandler
     /**
      * PHP function to write a set of session variables
      *
-     * @access private
+     * @access public
      * @throws Exception
      */
     function write($sessionId, $vars)
@@ -445,7 +445,7 @@ class xarSession extends Object implements IsessionHandler
     /**
      * PHP function to destroy a session
      *
-     * @access private
+     * @access public
      * @throws SQLException
      */
     function destroy($sessionId)
@@ -465,7 +465,7 @@ class xarSession extends Object implements IsessionHandler
     /**
      * PHP function to garbage collect session information
      *
-     * @access private
+     * @access public
      * @throws SQLException
      */
     function gc($maxlifetime)
