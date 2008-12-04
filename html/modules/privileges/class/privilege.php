@@ -92,6 +92,8 @@ class xarPrivilege extends xarMask
         $bindvars = array($member->getID(), $this->getID());
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
@@ -112,6 +114,8 @@ class xarPrivilege extends xarMask
         $q->eq('parent_id', $this->getID());
         if (!$q->run()) return;
 
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
@@ -143,6 +147,9 @@ class xarPrivilege extends xarMask
                           $this->getID());
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
+
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 

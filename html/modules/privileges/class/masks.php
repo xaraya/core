@@ -399,7 +399,7 @@ class xarMasks extends Object
             sys::import('modules.privileges.class.privilege');
             $privileges = unserialize(xarSession::getVar('privilegeset'));
             // force recalculating the privs for now
-            if (empty($privileges) || 1) {
+            if (empty($privileges)) {
             
                 // Still no go. Assemble the privleges
                 $privileges = self::irreducibleset(array('roles' => array($role)),$mask->module);
@@ -407,13 +407,13 @@ class xarMasks extends Object
                 xarSession::setVar('privilegeset',serialize($privileges));
             }
 
-                // leave this as same-page caching, even if the db cache is finished
-                // if this is the current user, save the irreducible set of privileges to cache
-                if ($rolename == '') {
-                    // normalize all privileges before saving, to avoid re-doing that every time
+            // leave this as same-page caching, even if the db cache is finished
+            // if this is the current user, save the irreducible set of privileges to cache
+            if ($rolename == '') {
+                // normalize all privileges before saving, to avoid re-doing that every time
 //                    self::normalizeprivset($privileges);
-                    xarVarSetCached('Security.Variables','privilegeset',$privileges);
-                }
+                xarVarSetCached('Security.Variables','privilegeset',$privileges);
+            }
                 
         } else {
             // get the irreducible set of privileges for the current user from cache

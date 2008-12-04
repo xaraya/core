@@ -198,6 +198,8 @@ class xarPrivileges extends xarMasks
         // empty the privset cache
         //        parent::$forgetprivsets();
 
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 

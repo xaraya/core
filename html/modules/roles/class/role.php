@@ -182,6 +182,9 @@ class Role extends DataObject
         $item['itemtype'] = $this->getType();
         $item['itemid']   = $this->getID();
         xarModCallHooks('item', 'link', $this->getID(), $item);
+
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
@@ -220,6 +223,9 @@ class Role extends DataObject
         $item['itemtype'] = $this->getType();
         $item['itemid']   = $this->getID();
         xarModCallHooks('item', 'unlink', $this->getID(), $item);
+
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
@@ -426,6 +432,9 @@ class Role extends DataObject
         $query = "INSERT INTO $this->acltable VALUES (?,?)";
         $bindvars = array($this->getID(),$privilege->getID());
         $this->dbconn->Execute($query,$bindvars);
+
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
@@ -443,6 +452,9 @@ class Role extends DataObject
                   WHERE role_id= ? AND privilege_id= ?";
         $bindvars = array($this->properties['id']->value, $privilege->getID());
         $this->dbconn->Execute($query,$bindvars);
+
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
