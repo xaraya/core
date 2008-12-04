@@ -43,19 +43,14 @@ class CheckboxMaskProperty extends SelectProperty
         if (!isset($data['value'])) $data['value'] = $this->value;
         else $this->value = $data['value'];
 
-/*        if (!is_array($data['value']) && is_string($data['value'])) {
-            $data['value'] = maskExplode($data['value']);
-        }
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        else $this->value = $data['value'];
 
-        if (!isset($data['options']) || count($data['options']) == 0) {
-            $this->getOptions();
-            $options = array();
-            foreach($this->options as $key => $option) {
-                $option['checked'] = in_array($option['id'], $data['value']);
-                $data['options'][$key] = $option;
-            }
+        if (empty($data['value'])) {
+            $data['value'] = array();
+        } elseif (!is_array($data['value']) && is_string($data['value'])) {
+            $data['value'] = maskExplode(',', $data['value']);
         }
-*/
         return parent::showInput($data);
     }
 
@@ -83,17 +78,6 @@ class CheckboxMaskProperty extends SelectProperty
 
         return parent::showOutput($data);
     }
-
-    public function getOptions()
-    {
-        $options = parent::getOptions();
-        foreach ($options as $key => $option) {
-            $option['checked'] = in_array($option['id'],$this->value);
-            $options[$key] = $option;
-        }
-        return $options;
-    }
-
 }
 
 function maskImplode($anArray)

@@ -9,7 +9,7 @@
                 <xar:set name="theID">$id.'_'.$key</xar:set>
             </xar:if>
 
-            <xar:if condition="isset($option['checked'])">
+            <xar:if condition="in_array($option['id'],$value)">
                 <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="true" />
             <xar:else />
                 <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />

@@ -67,7 +67,6 @@ class CheckboxListProperty extends SelectProperty
         } elseif (!is_array($data['value']) && is_string($data['value'])) {
             $data['value'] = explode(',', $data['value']);
         }
-
         return parent::showInput($data);
     }
 
