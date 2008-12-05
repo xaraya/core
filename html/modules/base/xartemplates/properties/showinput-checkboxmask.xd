@@ -1,6 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<div class="xar-form-container-after">
     <xar:if condition="count($options) gt 0">
         <xar:foreach in="$options" value="$option" key="$key" >
             <xar:if condition="$key == 0">
@@ -21,4 +21,5 @@
     </xar:if>
 
     <xar:template file="dataproperty_additions" module="base" />
+</div>
 </xar:template>

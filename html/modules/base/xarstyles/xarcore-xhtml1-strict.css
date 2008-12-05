@@ -73,6 +73,11 @@
 /* this class may be deprecated in future in favour of more specific rules */
 .xar-clearnone { clear: none; }
 
+/* this class will magically fix floated elements that "bleed" out of their parents
+most common usage is on a <br /> as the last child of the parent.  Only exists 
+because ie6 and below doesn't support :last-child and :after pseudo-classes */
+.xar-clearall { clear:both; content: '.'; font-size: 0; display: block; height: 0; visibility: hidden; }
+
 /* common form elements */
 .xar-form-textshort { width: 5em; }
 .xar-form-textmedium { width: 10em; }

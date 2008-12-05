@@ -1,81 +1,79 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
-
+<div class="xar-form-container-after">
 <xar:if condition="empty($layout) or $layout eq 'default' or $layout eq 'horizontal'">
     <xar:if condition="count($options) gt 0">
         <xar:foreach in="$options" value="$option" key="$key">
-            <xar:if condition="$key == 0">
-                <xar:set name="theID">$id</xar:set>
-            <xar:else />
-                <xar:set name="theID">$id.'_'.$key</xar:set>
-            </xar:if>
+            <div style="float: left;margin-right: 2em;">
+                <xar:if condition="$key == 0">
+                    <xar:set name="theID">$id</xar:set>
+                <xar:else />
+                    <xar:set name="theID">$id.'_'.$key</xar:set>
+                </xar:if>
 
-            <xar:if condition="in_array($option['id'],$value)">
-                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked" />
-            <xar:else />
-                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
-            </xar:if>
+                <xar:if condition="in_array($option['id'],$value)">
+                    <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked" />
+                <xar:else />
+                    <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
+                </xar:if>
 
-            <label for="#$theID#">#$option['name']# </label>        
+                <label for="#$theID#">#$option['name']#</label>
+            </div>
         </xar:foreach>
     </xar:if>
 <xar:elseif condition="$layout eq 'vertical'" />
     <xar:if condition="count($options) gt 0">
         <xar:foreach in="$options" value="$option" key="$key">
-            <xar:if condition="$key == 0">
-                <xar:set name="theID">$id</xar:set>
-            <xar:else />
-                <xar:set name="theID">$id.'_'.$key</xar:set>
-            </xar:if>
+            <div>
+                <xar:if condition="$key == 0">
+                    <xar:set name="theID">$id</xar:set>
+                <xar:else />
+                    <xar:set name="theID">$id.'_'.$key</xar:set>
+                </xar:if>
 
-        <xar:if condition="in_array($option['id'],$value)">
-            <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked" />
-        <xar:else />
-            <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
-        </xar:if>
+                <xar:if condition="in_array($option['id'],$value)">
+                    <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked" />
+                <xar:else />
+                    <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
+                </xar:if>
 
-        <label for="#$theID#">#$option['name']# </label>  
-            <br />
+                <label for="#$theID#">#$option['name']#</label>
+            </div>
         </xar:foreach>
     </xar:if>
 <xar:elseif condition="$layout eq 'columns'" />
-    <xar:if condition="count($options) gt 0">
-        <table>
-            <xar:while condition="1">
-                <tr>
-                    <xar:set name="i">1</xar:set>
-                    <xar:while condition="1">
-                        <td>
-                            <xar:if condition="!empty($options)">
-                                <xar:set name="key">key($options)</xar:set>
-                                <xar:set name="option">array_shift($options)</xar:set>
-                                <xar:if condition="$key == 0">
-                                    <xar:set name="theID">$id</xar:set>
-                                <xar:else />
-                                    <xar:set name="theID">$id.'_'.$key</xar:set>
-                                </xar:if>
-                                <xar:if condition="in_array($option['id'],$value)">
-                                    <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked" />
-                                <xar:else />
-                                    <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
-                                </xar:if>
-                                &#160;
-                                <label for="#$theID#">#$option['name']# </label>  
-                            <xar:else />
-                                &#160;
-                            </xar:if>
-                        </td>
-                        <xar:if condition="$i ge $cols">
-                            <xar:break />
+    <xar:set name="opt_count">count($options)</xar:set>
+    <xar:if condition="$opt_count gt 0">
+        <xar:set name="col_count">(int)floor($opt_count / $rows_cols)</xar:set>
+        <xar:set name="long_cols">$opt_count % $rows_cols</xar:set>
+        <xar:if condition="$long_cols gt 0">
+            <xar:set name="col_count">$col_count + 1</xar:set>
+        </xar:if>
+        <xar:set name="col_opts">array()</xar:set>
+        <xar:for start="$i = 1" test="$i le $rows_cols" iter="$i++">
+            <xar:if condition="array_push($col_opts, array_slice($options, (($i - 1 ) * $col_count), $col_count, true))"></xar:if>
+        </xar:for>
+        <xar:set name="col_width">(100 / $rows_cols) - 1</xar:set>
+        <xar:foreach in="$col_opts" key="$c" value="$col_opts">
+            <div style="width: #$col_width#%;float: left;">
+                <xar:foreach in="$col_opts" key="$o" value="$option">
+                    <div>
+                        <xar:if condition="$o == 0">
+                            <xar:set name="theID">$id</xar:set>
+                        <xar:else />
+                            <xar:set name="theID">$id.'_'.$o</xar:set>
                         </xar:if>
-                        <xar:set name="i">$i+1</xar:set>
-                    </xar:while>
-                </tr>
-                <xar:if condition="empty($options)">
-                    <xar:break />
-                </xar:if>
-            </xar:while>
-        </table>
+                        <xar:if condition="in_array($option['id'],$value)">
+                            <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked" />
+                        <xar:else />
+                            <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
+                        </xar:if>
+                        &#160;
+                        <label for="#$theID#">#$option['name']#</label>
+                    </div>
+                </xar:foreach>
+            </div>
+        </xar:foreach>
     </xar:if>
 <xar:else />
 <p>
@@ -87,4 +85,6 @@
 </xar:if>
 
     <xar:template file="dataproperty_additions" module="base" />
+    <br class="xar-clearall" />
+</div>
 </xar:template>
