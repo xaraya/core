@@ -50,7 +50,7 @@
                     <!-- #$key# -->
                     <div class="xar-form-input-wrapper">
                         <label for="#$invalidname#" title="An optional error message for #$init['label']#" class="xar-form-label">
-                            #$init['label']# Message
+                            #$init['label']#&#160;Message
                         </label>
                         <xar:data-input type="textarea" name="$invalidname" id="$invalidid" value="$invalidvalue" />
                     </div>

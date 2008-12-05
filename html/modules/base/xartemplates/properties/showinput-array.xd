@@ -1,33 +1,33 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-form-container-after">
-    <xar:if condition="is_array($value)">
-        <xar:set name="index">0</xar:set>
-        <xar:foreach in="$value" key="$key" value="$val">
-            <div class="xar-form-input-wrapper" >
-                <label for="#$id#_key_#$index#">Key:</label>&#160;
-                <input class="xar-form-textmedium" type="text" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$key#" size="#$size#" />
-                &#160;
-                <label for="#$id#_value_#$index#">Value:</label>&#160;
-                <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#]" id="#$id#_value_#$index#" value="#$val#" size="#$size#" />
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-form-container-after">
+        <xar:if condition="is_array($value)">
+            <xar:set name="index">0</xar:set>
+            <xar:foreach in="$value" key="$key" value="$val">
+                <div class="xar-form-input-wrapper" >
+                    <label for="#$id#_key_#$index#">Key:</label>&#160;
+                    <input class="xar-form-textmedium" type="text" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$key#" size="#$size#" />
+                    &#160;
+                    <label for="#$id#_value_#$index#">Value:</label>&#160;
+                    <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#]" id="#$id#_value_#$index#" value="#$val#" size="#$size#" />
+                </div>
+                <xar:set name="index">$index+1</xar:set>
+            </xar:foreach>
+            <xar:for start="$i = $index" test="$i lt $rows" iter="$i++">
+                <div class="xar-form-input-wrapper">
+                    <label for="#$id#_key_#$i#">Key:</label>&#160;
+                    <input class="xar-form-textmedium" type="text" name="#$name#_key[#$i#]" id="#$id#_key_#$i#" value="" size="#$size#" />
+                    &#160;
+                    <label for="#$id#_value_#$i#">Value:</label>&#160;
+                    <input class="xar-form-textlong" type="text" name="#$name#_value[#$i#]" id="#$id#_value_#$i#" value="" size="#$size#" />
+                </div>
+            </xar:for>
+        <xar:else />
+            <div class="xar-form-input-wrapper-after">
+                <textarea name="#$name#" rows="8" cols="50" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
             </div>
-            <xar:set name="index">$index+1</xar:set>
-        </xar:foreach>
-        <xar:for start="$i = $index" test="$i lt $rows" iter="$i++">
-            <div class="xar-form-input-wrapper">
-                <label for="#$id#_key_#$i#">Key:</label>&#160;
-                <input class="xar-form-textmedium" type="text" name="#$name#_key[#$i#]" id="#$id#_key_#$i#" value="" size="#$size#" />
-                &#160;
-                <label for="#$id#_value_#$i#">Value:</label>&#160;
-                <input class="xar-form-textlong" type="text" name="#$name#_value[#$i#]" id="#$id#_value_#$i#" value="" size="#$size#" />
-            </div>
-        </xar:for>
-    <xar:else />
-        <div class="xar-form-input-wrapper-after">
-            <textarea name="#$name#" rows="8" cols="50" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
-        </div>
-    </xar:if>
-    <br class="xar-clearall" />
-    <xar:template file="dataproperty_additions" module="base" />
-</div>
+        </xar:if>
+        <br class="xar-clearall" />
+        <xar:template file="dataproperty_additions" module="base" />
+    </div>
 </xar:template>
