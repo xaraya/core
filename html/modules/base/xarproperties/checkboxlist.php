@@ -20,7 +20,7 @@ class CheckboxListProperty extends SelectProperty
     public $name       = 'checkboxlist';
     public $desc       = 'Checkbox List';
 
-    public $display_rows_columns = 3;
+    public $display_columns = 3;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -64,7 +64,7 @@ class CheckboxListProperty extends SelectProperty
         if (!isset($data['value'])) $data['value'] = $this->value;
         else $this->value = $data['value'];
 
-        if (!isset($data['rows_cols'])) $data['rows_cols'] = $this->display_rows_columns;
+        if (!isset($data['rows_cols'])) $data['rows_cols'] = $this->display_columns;
         if (empty($data['value'])) {
             $data['value'] = array();
         } elseif (!is_array($data['value']) && is_string($data['value'])) {

@@ -280,10 +280,10 @@
   </configurations>
   <configurations itemid="32">
     <id>32</id>
-    <name>display_rows_columns</name>
-    <description>The number of rows or columns this field displays with</description>
+    <name>display_columns</name>
+    <description>The number of columns this field displays with</description>
     <property_id>15</property_id>
-    <label>Rows / Columns</label>
+    <label>Columns</label>
     <ignore_empty>1</ignore_empty>
     <configuration>a:9:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:20:"validation_min_value";s:0:"";s:20:"validation_max_value";s:0:"";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
