@@ -10,11 +10,11 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /* include the base class */
-sys::import('modules.base.xarproperties.dropdown');
+sys::import('modules.base.xarproperties.checkboxlist');
 /**
  * Handle checkbox mask property
  */
-class CheckboxMaskProperty extends SelectProperty
+class CheckboxMaskProperty extends CheckboxListProperty
 {
     public $id         = 1114;
     public $name       = 'checkboxmask';
@@ -29,7 +29,7 @@ class CheckboxMaskProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!SelectProperty::validateValue($value)) return false;
 
         if(is_array($value)) {
             $this->value = maskImplode($value);
