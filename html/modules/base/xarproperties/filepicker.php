@@ -38,6 +38,7 @@ class FilePickerProperty extends SelectProperty
         if (isset($data['basedir'])) $this->initialization_basedirectory = $data['basedir'];
         if (isset($data['matches'])) $this->validation_matches = $data['matches'];
         if (isset($data['extensions'])) $this->validation_file_extensions = $data['extensions'];
+        if (isset($data['display_fullname'])) $this->display_fullname = $data['display_fullname'];
         return parent::showInput($data);
     }
 
