@@ -63,12 +63,14 @@ function roles_admin_testprivileges()
         // test returned an object
         else {
             $resultdisplay = "";
-            $data['rname'] = $testresult->getName();
-            $data['rrealm'] = $testresult->getRealm();
-            $data['rmodule'] = $testresult->getModule();
-            $data['rcomponent'] = $testresult->getComponent();
-            $data['rinstance'] = $testresult->getInstance();
-            $data['rlevel'] = xarMasks::$levels[$testresult->getLevel()];
+            $data['rname'] = $testresult['name'];
+            $data['rrealm'] = $testresult['realm'];
+            if ($testresult['module'] == 0) $data['rmodule'] = 'all';
+            elseif ($testresult['module'] == null) $data['rmodule'] = 'none';
+            else $data['rmodule'] = xarModGetNameFromID($testresult['module']);
+            $data['rcomponent'] = $testresult['component'];
+            $data['rinstance'] = implode(':',$testresult['instance']);
+            $data['rlevel'] = xarMasks::$levels[$testresult['level']];
         }
         // rest of the data for template display
         $data['testresult'] = $testresult;
