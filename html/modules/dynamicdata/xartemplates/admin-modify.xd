@@ -14,28 +14,8 @@
     </h2>
 
     <xar:if condition="!empty($objectid) and $objectid eq 1">
-        <xar:style scope="module" module="base" file="navtabs" />
-        <div>
-            <dl class="xar-tabs">
-                <dt class="help">
-                    <xar:mlstring>Options:</xar:mlstring>
-                </dt>
-                <dd class="active">
-                  <a href="#xarServerGetCurrentUrl()#">
-                    <xar:mlstring>Modify Object definition</xar:mlstring>
-                  </a>
-                </dd>
-                <dd>
-                    <a href="&xar-modurl-dynamicdata-admin-modifyprop;&amp;itemid=#$itemid#"><xar:mlstring>Modify DataProperties</xar:mlstring></a>
-                </dd>
-                <dd>
-                    <a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a>
-                </dd>
-                <dd>
-                    <a href="&xar-modurl-dynamicdata-admin-view;&amp;itemid=#$itemid#"><xar:mlstring>View Items</xar:mlstring></a>
-                </dd>
-            </dl>
-        </div>
+        <xar:set name="action">'modify'</xar:set>
+        <xar:template file="object-actions" />
     </xar:if>
 
     <xar:if condition="isset($preview)">
