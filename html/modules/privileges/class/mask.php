@@ -104,6 +104,7 @@ class xarMask extends Object
             $normalform = $this->normalform;
         } else {
             $normalform = array();
+            $normalform['id'] = $this->getID();
             $normalform['name'] = $this->getName();
             $normalform['level'] = strtolower($this->getLevel());
             $normalform['realm'] = strtolower($this->getRealm());
@@ -291,7 +292,7 @@ class xarMask extends Object
     function getID()                 { return $this->id; }
     function getName()                 { return $this->name; }
     function getRealm()             { return ($this->realm == null) ? "All" : $this->realm; }
-    function getModule()             { return $this->module; }
+    function getModule()             { return ($this->module_id == 0) ? "All" : $this->module; }
     function getModuleID()            { return $this->module_id; }
     function getComponent()         { return $this->component; }
     function getInstance()             { return $this->instance; }
