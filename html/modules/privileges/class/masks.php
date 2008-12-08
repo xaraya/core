@@ -667,8 +667,7 @@ class xarMasks extends Object
                     }
                 }
                 $matched = true;
-            }
-            elseif (self::includes($mask,$privilege)) {
+            } elseif (self::includes($mask,$privilege)) {
                 if ($privilege['level'] >= $mask['level']) {
                     if($test && ($testmask == $mask['name'] || $testmask == "All")) {
                         echo "<font color='blue'>[" . $privilege['name'] . "] wins</font>. Mask includes privilege. Privilege level greater or equal. Continuing with other checks.. <br />";
@@ -689,8 +688,7 @@ class xarMasks extends Object
                         xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
                     }
                 }
-            }
-            else {
+            } else {
                 if($test && ($testmask == $mask['name'] || $testmask == "All")) {
                     echo "<font color='red'>no match</font>. Continuing with other checks..<br />";
                     $msg = "NO MATCH.\n";
