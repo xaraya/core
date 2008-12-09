@@ -145,8 +145,7 @@ function dynamicdata_admin_updateprop()
                                       'defaultvalue' => $dd_defaultvalue[0],
                                       'source' => $dd_source[0],
                                       'status' => $dd_status[0],
-                                      'seq' => $i,
-                                      'configuration' => $dd_configuration[0]));
+                                      'seq' => $i));
         if (empty($id)) {
             return;
         }
