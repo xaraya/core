@@ -29,11 +29,12 @@ function base_admin_updateconfig()
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
     switch ($data['tab']) {
         case 'display':
-            if (!xarVarFetch('defaultmodule','str:1:',$defaultModuleName)) return;
             if (!xarVarFetch('alternatepagetemplate','checkbox',$alternatePageTemplate,false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('alternatepagetemplatename','str',$alternatePageTemplateName,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('defaulttype','str:1:',$defaultModuleType)) return;
-            if (!xarVarFetch('defaultfunction','str:1:',$defaultModuleFunction,'main',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('defaultmodule',  'str:1:', $defaultModuleName, xarModVars::set('modules', 'defaultmodule'), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('defaulttype',    'str:1:', $defaultModuleType, xarModVars::set('modules', 'defaultmoduletype'), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('defaultfunction','str:1:', $defaultModuleFunction,xarModVars::set('modules', 'defaultmodulefunction'),XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('defaultdatapath','str:1:', $defaultDataPath, xarModVars::set('modules', 'defaultdatapath'),XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('shorturl','checkbox',$enableShortURLs,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('baseshorturl','checkbox',$enableBaseShortURLs,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('htmlenitites','checkbox',$FixHTMLEntities,false,XARVAR_NOT_REQUIRED)) return;
@@ -43,6 +44,7 @@ function base_admin_updateconfig()
             xarModVars::set('modules', 'defaultmodule', $defaultModuleName);
             xarModVars::set('modules', 'defaultmoduletype',$defaultModuleType);
             xarModVars::set('modules', 'defaultmodulefunction',$defaultModuleFunction);
+            xarModVars::set('modules', 'defaultdatapath',$defaultDataPath);
             xarModVars::set('base','UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
             xarModVars::set('base','AlternatePageTemplateName', $alternatePageTemplateName);
 
