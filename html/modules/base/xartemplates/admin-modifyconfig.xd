@@ -250,6 +250,22 @@
                     <input type="text" id="defaultfunction" name="defaultfunction" value="#$value#" maxlength="100" class="xar-form-textlong" />
                 </div>
            </fieldset>
+            <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Module Data Path
+                    </xar:mlstring>
+                </legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="defaultdatapath" title="#xarML('The path to the library where the module's data is held.')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Path to Module Data:
+                        </xar:mlstring>
+                    </label>
+                    <xar:set name="value"><xar:var scope="module" module="modules" name="defaultdatapath"/></xar:set>
+                    <input type="text" id="defaultdatapath" name="defaultdatapath" value="#$value#" maxlength="100" class="xar-form-textlong" />
+                </div>
+           </fieldset>
            <fieldset>
                 <legend>
                     <xar:mlstring>
