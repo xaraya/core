@@ -257,7 +257,7 @@
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="defaultdatapath" title="#xarML('The path to the library where the module's data is held.')#" class="xar-form-label">
+                    <label for="defaultdatapath" title="#xarML('The path to the library where the module\'s data is held.')#" class="xar-form-label">
                         <xar:mlstring>
                             Path to Module Data:
                         </xar:mlstring>
