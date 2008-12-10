@@ -31,10 +31,10 @@ function base_admin_updateconfig()
         case 'display':
             if (!xarVarFetch('alternatepagetemplate','checkbox',$alternatePageTemplate,false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('alternatepagetemplatename','str',$alternatePageTemplateName,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('defaultmodule',  'str:1:', $defaultModuleName, xarModVars::set('modules', 'defaultmodule'), XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('defaulttype',    'str:1:', $defaultModuleType, xarModVars::set('modules', 'defaultmoduletype'), XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('defaultfunction','str:1:', $defaultModuleFunction,xarModVars::set('modules', 'defaultmodulefunction'),XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('defaultdatapath','str:1:', $defaultDataPath, xarModVars::set('modules', 'defaultdatapath'),XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('defaultmodule',  'str:1:', $defaultModuleName, xarModVars::get('modules', 'defaultmodule'), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('defaulttype',    'str:1:', $defaultModuleType, xarModVars::get('modules', 'defaultmoduletype'), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('defaultfunction','str:1:', $defaultModuleFunction,xarModVars::get('modules', 'defaultmodulefunction'),XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('defaultdatapath','str:1:', $defaultDataPath, xarModVars::get('modules', 'defaultdatapath'),XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('shorturl','checkbox',$enableShortURLs,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('baseshorturl','checkbox',$enableBaseShortURLs,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('htmlenitites','checkbox',$FixHTMLEntities,false,XARVAR_NOT_REQUIRED)) return;
