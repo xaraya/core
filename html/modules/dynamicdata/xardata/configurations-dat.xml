@@ -235,30 +235,30 @@
   </configurations>
   <configurations itemid="27">
     <id>27</id>
-    <name>validation_group_list</name>
+    <name>initialization_group_list</name>
     <description>A list of groups to chow in this field</description>
     <property_id>2</property_id>
     <label>Group List</label>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:3:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";}</configuration>
+    <configuration>a:0:{}</configuration>
   </configurations>
   <configurations itemid="28">
     <id>28</id>
-    <name>validation_parentgroup_list</name>
+    <name>initialization_parentgroup_list</name>
     <description>A list of parent groups whose children are shown in this field</description>
     <property_id>2</property_id>
     <label>Parent Groups</label>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:3:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";}</configuration>
+    <configuration>a:0:{}</configuration>
   </configurations>
   <configurations itemid="29">
     <id>29</id>
-    <name>validation_ancestorgroup_list</name>
+    <name>initialization_ancestorgroup_list</name>
     <description>A list of ancestor groups whose children are shown in this field</description>
     <property_id>2</property_id>
     <label>Ancestor Groups</label>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:3:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";}</configuration>
+    <configuration>a:0:{}</configuration>
   </configurations>
   <configurations itemid="30">
     <id>30</id>
@@ -532,19 +532,10 @@
   </configurations>
   <configurations itemid="60">
     <id>60</id>
-    <name>initialization_update_behavior</name>
-    <description>The result of an update action</description>
-    <property_id>6</property_id>
-    <label>Update Behavior</label>
-    <ignore_empty>1</ignore_empty>
-    <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:23:"replace,Replace;add,Add";}</configuration>
-  </configurations>
-  <configurations itemid="61">
-    <id>61</id>
-    <name>initialization_basegroup</name>
-    <description>The ancestor group for this field</description>
-    <property_id>45</property_id>
-    <label>Base Group</label>
+    <name>display_show_route</name>
+    <description>Show the Route or not?</description>
+    <property_id>14</property_id>
+    <label>Show Route?</label>
     <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
