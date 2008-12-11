@@ -9,8 +9,9 @@
     exclude-result-prefixes="php xar">
 
 <xsl:template match="xar:br">
-<xsl:text>
-</xsl:text>
+  <xsl:processing-instruction name="php">
+    <xsl:text>echo "\r\n";</xsl:text>
+  </xsl:processing-instruction>
 </xsl:template>
 
 </xsl:stylesheet>
