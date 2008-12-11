@@ -145,11 +145,9 @@ function dynamicdata_admin_updateprop()
                                       'defaultvalue' => $dd_defaultvalue[0],
                                       'source' => $dd_source[0],
                                       'status' => $dd_status[0],
-                                      'seq' => $i,
-                                      'configuration' => $dd_configuration[0]));
-        if (empty($id)) {
-            return;
-        }
+                                      'seq' => $i));
+        if (empty($id)) return;
+
         if ($dd_type[0] == 21) { // item id
             $isprimary = 1;
         }

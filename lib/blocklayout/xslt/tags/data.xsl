@@ -115,7 +115,11 @@
         <xsl:text>);</xsl:text>
         <!-- the name attribute holds a variable name, not good, but it is like that -->
         <xsl:text>$</xsl:text>
-        <xsl:value-of select="@name"/><xsl:text>= $object-&gt;getProperties();</xsl:text>
+        <xsl:value-of select="@name"/><xsl:text>= $object-&gt;getProperties(</xsl:text>
+          <xsl:call-template name="atts2args">
+            <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='object']"/>
+          </xsl:call-template>
+        <xsl:text>);</xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <xsl:choose>
@@ -127,7 +131,11 @@
             </xsl:call-template>
             <xsl:text>);$</xsl:text>
             <xsl:value-of select="@name"/><xsl:text>=</xsl:text>
-            <xsl:value-of select="@object"/><xsl:text>->getProperties();</xsl:text>
+            <xsl:value-of select="@object"/><xsl:text>->getProperties(</xsl:text>
+              <xsl:call-template name="atts2args">
+                <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='object']"/>
+              </xsl:call-template>
+            <xsl:text>);</xsl:text>
           </xsl:when>
           <xsl:otherwise>
             <!-- This a string. we assume it's an object name -->
@@ -148,7 +156,11 @@
             <xsl:text> = </xsl:text>
             <xsl:text>$__</xsl:text>
             <xsl:value-of select="@object"/>
-            <xsl:text>->getProperties();</xsl:text>
+            <xsl:text>->getProperties(</xsl:text>
+              <xsl:call-template name="atts2args">
+                <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='object']"/>
+              </xsl:call-template>
+            <xsl:text>);</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>

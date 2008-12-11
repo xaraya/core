@@ -46,15 +46,11 @@
 
         $components = array();
         if(count($result->fields) == 0) {
-            $components[] = array('id' => -1,
-                               'name' => 'All');
-//          $components[] = array('id' => 0,
-//                             'name' => 'None');
+            $components[] = array('id' => 'All', 'name' => 'All');
+//          $components[] = array('id' => 0, 'name' => 'None');
         } else {
-            $components[] = array('id' => -1,
-                               'name' => 'All');
-//          $components[] = array('id' => 0,
-//                             'name' => 'None');
+            $components[] = array('id' => 'All', 'name' => 'All');
+//          $components[] = array('id' => 0,'name' => 'None');
             $ind = 2;
             while($iter) {
                 $name = $result->getString(1);

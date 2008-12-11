@@ -38,6 +38,7 @@ class FilePickerProperty extends SelectProperty
         if (isset($data['basedir'])) $this->initialization_basedirectory = $data['basedir'];
         if (isset($data['matches'])) $this->validation_matches = $data['matches'];
         if (isset($data['extensions'])) $this->validation_file_extensions = $data['extensions'];
+        if (isset($data['display_fullname'])) $this->display_fullname = $data['display_fullname'];
         return parent::showInput($data);
     }
 
@@ -82,9 +83,9 @@ class FilePickerProperty extends SelectProperty
             if($dir->isDir()) continue; // no dirs
             if(!empty($this->validation_file_extensions) && !in_array($dir->getExtension(),$extensions)) continue;
             if($dir->isDot()) continue; // temp for emacs insanity and skip hidden files while we're at it
-            $name = $dir->getFileName() . "." . $dir->getExtension();
+            $name = $dir->getFileName();
             if (!$this->display_fullname) $name = substr($name, 0, strlen($name) - strlen($dir->getExtension()) - 1);
-            if(!empty($this->validation_matches) && (strpos($name,$this->validation_matches) === false)) continue;
+            if(!empty($this->validation_matches) && (strpos($this->validation_matches,$name) === false)) continue;
             $options[] = array('id' => $name, 'name' => $name);
         }
         return $options;

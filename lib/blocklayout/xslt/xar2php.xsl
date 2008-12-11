@@ -98,6 +98,8 @@
   <xsl:include href="tags/blockgroup.xsl"/>
   <!-- xar:blocklayout -->
   <xsl:include href="tags/blocklayout.xsl"/>
+  <!-- xar:br -->
+  <xsl:include href="tags/br.xsl"/>
   <!-- xar:break -->
   <xsl:include href="tags/break.xsl"/>
   <!-- xar:comment -->

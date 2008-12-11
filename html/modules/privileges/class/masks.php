@@ -392,33 +392,36 @@ class xarMasks extends Object
         } else {
             $role = xarRoles::findRole($rolename);
         }
-        // check if we already have the irreducible set of privileges for the current user
-        if (!xarVarIsCached('Security.Variables','privilegeset') || !empty($rolename)) {
         
-            // No go from cache. Try and get it from the session
-            sys::import('modules.privileges.class.privilege');
-            $privileges = unserialize(xarSession::getVar('privilegeset'));
-            // force recalculating the privs for now
-            if (empty($privileges)) {
-            
-                // Still no go. Assemble the privleges
-                $privileges = self::irreducibleset(array('roles' => array($role)),$mask->module);
-                // Save them to the sesssion too
-                xarSession::setVar('privilegeset',serialize($privileges));
-            }
+        // check if we already have the irreducible set of privileges for the current user
+        if ($rolename == '') {
+            // We are checking the privileges of the current user
+            // See if we have something cached
+            if (!xarVarIsCached('Security.Variables','privilegeset')) {
 
-            // leave this as same-page caching, even if the db cache is finished
-            // if this is the current user, save the irreducible set of privileges to cache
-            if ($rolename == '') {
-                // normalize all privileges before saving, to avoid re-doing that every time
-//                    self::normalizeprivset($privileges);
+                // No go from cache. Try and get it from the session
+                sys::import('modules.privileges.class.privilege');
+                $privileges = unserialize(xarSession::getVar('privilegeset'));
+                if (empty($privileges)) {
+
+                    // Still no go. Assemble the privleges
+                    $privileges = self::irreducibleset(array('roles' => array($role)),$mask->module);
+                    // Save them to the sesssion too
+                    xarSession::setVar('privilegeset',serialize($privileges));
+                }
+
+                // Save them to the cache
                 xarVarSetCached('Security.Variables','privilegeset',$privileges);
+
+            } else {
+                // get the irreducible set of privileges for the current user from cache
+                $privileges = xarVarGetCached('Security.Variables','privilegeset');
             }
-                
         } else {
-            // get the irreducible set of privileges for the current user from cache
-            $privileges = xarVarGetCached('Security.Variables','privilegeset');
+            // This is a different user, force recalculation
+            $privileges = self::irreducibleset(array('roles' => array($role)),$mask->module);
         }
+
         $pass = self::testprivileges($mask->normalform,$privileges,false,$role);
 //if ($mask->getName() == 'EditPrivilege' && $mask->getComponent() == 'Privileges') {echo "<pre>";var_dump($privileges);}
 
@@ -664,8 +667,7 @@ class xarMasks extends Object
                     }
                 }
                 $matched = true;
-            }
-            elseif (self::includes($mask,$privilege)) {
+            } elseif (self::includes($mask,$privilege)) {
                 if ($privilege['level'] >= $mask['level']) {
                     if($test && ($testmask == $mask['name'] || $testmask == "All")) {
                         echo "<font color='blue'>[" . $privilege['name'] . "] wins</font>. Mask includes privilege. Privilege level greater or equal. Continuing with other checks.. <br />";
@@ -686,8 +688,7 @@ class xarMasks extends Object
                         xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
                     }
                 }
-            }
-            else {
+            } else {
                 if($test && ($testmask == $mask['name'] || $testmask == "All")) {
                     echo "<font color='red'>no match</font>. Continuing with other checks..<br />";
                     $msg = "NO MATCH.\n";

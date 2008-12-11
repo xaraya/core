@@ -43,19 +43,9 @@ class CheckboxListProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        // this won't do for check boxes !
-        //if (!isset($value)) {
-        //    $value = $this->value;
-        //}
-
-        if (!isset($value)) {
-            $this->value = '';
-        } elseif ( is_array($value) ) {
-            $this->value = implode ( ',', $value);
-        } else {
-            $this->value = $value;
-        }
-
+        if (!isset($value)) $this->value = '';
+        elseif ( is_array($value) ) $this->value = implode ( ',', $value);
+        else $this->value = $value;
         return true;
     }
 

@@ -20,7 +20,7 @@
     <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;" enctype="#$enc_type#">
       <fieldset>
         <legend><xar:mlstring>Property summary</xar:mlstring></legend>
-        <xar:set name="fieldlist">array('name','label','objectid','type','configuration')</xar:set>
+        <xar:set name="fieldlist">array('name','label','objectid','type')</xar:set>
         <xar:data-display object="$object" fieldlist="$fieldlist" />
       </fieldset>
         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
