@@ -94,10 +94,8 @@ class SelectProperty extends DataProperty
         }
             
         // If a firstline was defined add it in
-        if (isset($data['firstline'])) {
-            $this->initialization_firstline = $data['firstline'];
-            $data['options'] = array_merge($this->getFirstline(),$data['options']);
-        }
+        if (isset($data['firstline'])) $this->initialization_firstline = $data['firstline'];
+        $data['options'] = array_merge($this->getFirstline(),$data['options']);
 
         // check if we need to add the current value to the options
         if (!empty($data['value']) && $this->validation_override) {
@@ -141,7 +139,6 @@ class SelectProperty extends DataProperty
             if (!empty($firstline)) $this->options = array_merge($options,$this->options);
             return $this->options;
         }
-        
         if (!empty($this->initialization_function)) {
             @eval('$items = ' . $this->initialization_function .';');
             if (!isset($items) || !is_array($items)) $items = array();
@@ -211,28 +208,27 @@ class SelectProperty extends DataProperty
     function getFirstline()
     {
         $firstline = $this->initialization_firstline;
-        if (!empty($firstline)) {
-            if (is_array($firstline)) {
-                if (isset($firstline['name'])) {
-                    if (strpos($firstline['name'],'xar') === 0) @eval('$firstline["name"] = ' . $firstline['name'] .';');
-                    $line = array('id' => $firstline['id'], 'name' => $firstline['name']);
-                } else {
-                    if (strpos($firstline['id'],'xar') === 0) @eval('$firstline["id"] = ' . $firstline['id'] .';');
-                    $line = array('id' => $firstline['id'], 'name' => $firstline['id']);
-                }
+        if (empty($firstline)) return array();
+        
+        if (is_array($firstline)) {
+            if (isset($firstline['name'])) {
+                if (strpos($firstline['name'],'xar') === 0) @eval('$firstline["name"] = ' . $firstline['name'] .';');
+                $line = array('id' => $firstline['id'], 'name' => $firstline['name']);
             } else {
-                $firstline = explode(',',$firstline);
-                if (isset($firstline[1])) {
-                    if (strpos($firstline[1],'xar') === 0) @eval('$firstline[1] = ' . $firstline[1] .';');
-                    $line = array('id' => $firstline[0], 'name' => $firstline[1]);
-                } else {
-                    if (strpos($firstline[0],'xar') === 0) @eval('$firstline[0] = ' . $firstline[0] .';');
-                    $line = array('id' => $firstline[0], 'name' => $firstline[0]);
-                }
+                if (strpos($firstline['id'],'xar') === 0) @eval('$firstline["id"] = ' . $firstline['id'] .';');
+                $line = array('id' => $firstline['id'], 'name' => $firstline['id']);
             }
-            return array($line);
+        } else {
+            $firstline = explode(',',$firstline);
+            if (isset($firstline[1])) {
+                if (strpos($firstline[1],'xar') === 0) @eval('$firstline[1] = ' . $firstline[1] .';');
+                $line = array('id' => $firstline[0], 'name' => $firstline[1]);
+            } else {
+                if (strpos($firstline[0],'xar') === 0) @eval('$firstline[0] = ' . $firstline[0] .';');
+                $line = array('id' => $firstline[0], 'name' => $firstline[0]);
+            }
         }
-        return array();
+        return array($line);        
     }
 
     /**
