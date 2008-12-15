@@ -134,10 +134,6 @@ class feedParser extends Object
 
     function buildStruct($xmldata) 
     {
-        // Create a parser object
-        sys::import('modules.base.xarclass.xmlParser');
-        $p = new XMLParser;
-    
         // Define our known namespaces
         foreach ($this->namespaces as $space => $uri) {
             $this->definens($space,$uri);
