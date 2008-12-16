@@ -539,4 +539,40 @@
     <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
+  <configurations itemid="61">
+    <id>61</id>
+    <name>initialization_rows</name>
+    <description>Allow adding of rows</description>
+    <property_id>6</property_id>
+    <label>Add/Delete Rows</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:70:"0,No Addition/Deletion,display only;1,Only Add Rows;2,Add/Delete Rows;";}</configuration>
+  </configurations>
+  <configurations itemid="62">
+    <id>62</id>
+    <name>display_key_label</name>
+    <description>Changing key label of Row</description>
+    <property_id>2</property_id>
+    <label>Key Label</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="63">
+    <id>63</id>
+    <name>display_value_label</name>
+    <description>Changing Value label of Row</description>
+    <property_id>2</property_id>
+    <label>Value Label</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="64">
+    <id>64</id>
+    <name>initialization_associative_array</name>
+    <description>Allow Saving As Associative Array</description>
+    <property_id>14</property_id>
+    <label>Associative Array Storage</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
 </items>

@@ -24,6 +24,15 @@ class ArrayProperty extends DataProperty
 
     public $display_columns = 30;
     public $display_rows = 4;
+    public $initialization_rows = 0;
+    //default value of Key label
+    public $display_key_label = "Key";
+    //default value of value label
+    public $display_value_label = "Label";
+    //to store the value as associative array
+    public $initialization_associative_array = 0;
+    //suffix for the Add/Remove Button
+    public $default_suffixlabel = "Row";       
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -76,14 +85,33 @@ class ArrayProperty extends DataProperty
             $this->value = $value;
         } else {
             if (empty($value)) $value = array();
-            $this->value = serialize($value);
+            //this code is added to store the values as value1,value2 in the DB for non-associative storage
+        	if(!$this->initialization_associative_array) {
+            	$items = $value;
+            	$elements = "";
+            	foreach ($items as $value) {
+            		$element = $value;            		
+            		if($elements == "") {
+            			$elements = $element;
+            		} else {
+ 				   	 	$elements = $elements . ";" . $element;
+            		}            		
+				}				
+            	$this->value = $elements .";";
+            } else {
+            	$this->value = serialize($value);
+            }
         }
     }
 
     public function getValue()
     {
         try {
-            $value = unserialize($this->value);
+        	if(!$this->initialization_associative_array) {
+        		$value = $this->value;
+        	} else {
+        		$value = unserialize($this->value);
+        	}            
         } catch(Exception $e) {
             $value = null;
         }
@@ -94,6 +122,8 @@ class ArrayProperty extends DataProperty
     {
         if (!isset($data['value'])) $value = $this->value;
         else $value = $data['value'];
+        
+        if (!isset($data['suffixlabel'])) $data['suffixlabel'] = $this->default_suffixlabel;                
         if (!is_array($value)) {
             try {
                 $value = unserialize($value);
@@ -141,16 +171,35 @@ class ArrayProperty extends DataProperty
 
         $data['rows'] = !empty($rows) ? $rows : $this->display_rows;
         $data['size'] = !empty($size) ? $size : $this->display_columns;
-
+        
+        //Psspl: Added code for getting the text of 'Key' and 'Value' label
+        $data['keylabel'] = !empty($keylabel) ? $keylabel : $this->display_key_label;
+        $data['valuelabel'] = !empty($valuelabel) ? $valuelabel : $this->display_value_label;
+        $data['allowinput'] = !empty($allowinput) ? $allowinput : $this->initialization_rows;
+        $data['associative_array'] = !empty($associative_array) ? $associative_array : $this->initialization_associative_array;
+		$data['numberofrows'] = count($data['value']);
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
         $value = isset($data['value']) ? $data['value'] : $this->getValue();
-
+		$data['associative_array'] = !empty($associative_array) ? $associative_array : $this->initialization_associative_array;		
         if (!is_array($value)) {
-            $data['value'] = $value;
+        	//this is added to show the value with new line when storage is non-associative        	        	
+        	if(!$this->initialization_associative_array) {        		
+	        	$elements = array();
+	            $data['value'] = $value;
+	            $lines = explode(';',$value);
+	            // remove the last (empty) element
+	             array_pop($lines);
+	             foreach ($lines as $element) {
+	            	 array_push($elements, $element);
+	             }
+	             $data['value'] = $elements;
+        	} else {
+        		 $data['value'] = $value;
+        	}        	
         } else {
             if (empty($value)) $value = array();
 

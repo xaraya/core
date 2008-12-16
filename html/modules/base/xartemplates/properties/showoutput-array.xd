@@ -2,10 +2,17 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="!empty($value)">
         <xar:if condition="is_array($value)">
-            <xar:foreach in="$value" key="$key" value="$val">
-                #$key#,&#160;#$val#
-                <br/>
-            </xar:foreach>
+        	<xar:if condition = "$associative_array eq 1">
+            	<xar:foreach in="$value" key="$key" value="$val">
+                	#$key#,&#160;#$val#
+                	<br/>
+            	</xar:foreach>
+        	<xar:else/>
+        		<xar:foreach in="$value" key="$key" value="$val">
+                	#$val#
+                	<br/>
+            	</xar:foreach>
+        	</xar:if>
         <xar:else/>
             <xar:var name="value" prep="true"/>
         </xar:if>
