@@ -2,7 +2,7 @@
 <xar:template file="mod-head"/>
 
   <fieldset>
-      <legend><xar:mlstring>Change queue definition</xar:mlstring></legend>
+      <legend>Change queue definition</legend>
       
       <xar:comment>Normal edit form</xar:comment>
       <form style="display: inline;" method="post" action="&xar-modurl-dynamicdata-admin-update;">

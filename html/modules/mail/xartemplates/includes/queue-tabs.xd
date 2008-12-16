@@ -10,21 +10,21 @@
 <xar:set name="activeclass">''</xar:set>
 <dl class="xar-tabs">
     <dt class="help" title="#xarML('Queue management areas')#">
-        <xar:mlstring>Queue</xar:mlstring>
+        Queue
     </dt>
     <xar:if condition="$active_tab eq 'registration'"><xar:set name="activeclass">'active'</xar:set></xar:if>
     <dd class="#$activeclass#">
-        <a href="&xar-modurl-mail-admin-view;"><xar:mlstring>Registration</xar:mlstring></a>
+        <a href="&xar-modurl-mail-admin-view;">Registration</a>
     </dd>
     <xar:set name="activeclass">''</xar:set>
     <xar:if condition="$active_tab eq 'status'"><xar:set name="activeclass">'active'</xar:set></xar:if>
     <dd class="#$activeclass#">
-        <a href="&xar-modurl-mail-admin-qstatus;"><xar:mlstring>Status</xar:mlstring></a>
+        <a href="&xar-modurl-mail-admin-qstatus;">Status</a>
     </dd>
     <xar:set name="activeclass">''</xar:set>
     <xar:if condition="$active_tab eq 'mapping'"><xar:set name="activeclass">'active'</xar:set></xar:if>
     <dd class="#$activeclass#">
-        <a href="&xar-modurl-mail-admin-mapping;"><xar:mlstring>Mapping</xar:mlstring></a>
+        <a href="&xar-modurl-mail-admin-mapping;">Mapping</a>
     </dd>
 
 </dl>
