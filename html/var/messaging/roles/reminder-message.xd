@@ -1,9 +1,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 #$recipientname#,<xar:br />
 
-Here is your new password for&#160;<xar:var scope="module" module="themes" name="SiteName"/>. You may now login to #xarServerGetBaseURL()#
-
-using the following username and password:<xar:br />
+Here is your new password for&#160;<xar:var scope="module" module="themes" name="SiteName"/>. You may now login to&#160;#xarServerGetBaseURL()#&#160;using the following username and password:<xar:br />
 
 username: #$username#<xar:br />
 
