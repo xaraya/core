@@ -1,1 +1,3 @@
-#$recipientname# deactivated at #$sitename#
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+#$recipientname# deactivated at <xar:var scope="module" module="themes" name="SiteName"/>
+</xar:template>

@@ -1,1 +1,3 @@
-Replacement login information for #$recipientname# at #$sitename#
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+Replacement login information for #$recipientname# at&#160;<xar:var scope="module" module="themes" name="SiteName"/>
+</xar:template>
