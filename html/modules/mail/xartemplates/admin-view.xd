@@ -12,13 +12,13 @@
     <xar:template file="queue-tabs"/>
     <!-- Master view -->
     <fieldset>
-        <legend><xar:mlstring>Registered mail queues</xar:mlstring></legend>
+        <legend>Registered mail queues</legend>
         <xar:data-view modid="$qdef['moduleid']" itemtype="$qdef['itemtype']" layout="list" linkfield="name" sort="id" tplmodule="mail" />
     </fieldset>
 
   <fieldset>
     <xar:if condition="$itemid gt 0">
-      <legend><xar:mlstring>Change queue definition</xar:mlstring></legend>
+      <legend>Change queue definition</legend>
 
       <xar:comment>Normal edit form</xar:comment>
       <form style="display: inline;" method="post" action="&xar-modurl-mail-admin-update;">
@@ -40,7 +40,7 @@
         <input type="submit" value="#xarML('Delete')#"/>
       </form>
     <xar:else/>
-      <legend><xar:mlstring>Create new queue definition</xar:mlstring></legend>
+      <legend>Create new queue definition</legend>
 
       <xar:comment>Create form</xar:comment>
       <form style="display: inline;" method="post" action="&xar-modurl-dynamicdata-admin-create;">
@@ -55,7 +55,7 @@
     </xar:if>
   </fieldset>
   <xar:if condition="$itemid ne 0">
-    <a href="&xar-modurl-mail-admin-view;"><xar:mlstring>Create new queue definition</xar:mlstring></a>
+    <a href="&xar-modurl-mail-admin-view;">Create new queue definition</a>
   </xar:if>
 </div>
 </xar:template>

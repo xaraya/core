@@ -1,12 +1,12 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Mail Administration</span>
 </div>
 <div class="xar-mod-body">
     <xar:template type="module" file="admin-menu" />
     <h2>
-        <xar:mlstring>Mail Queue</xar:mlstring>
+        Mail Queue
     </h2>
 
    <xar:comment>
@@ -23,7 +23,7 @@
         <table>
             <tr>
                 <td>
-                    <xar:mlstring>Mail ID</xar:mlstring>
+                    Mail ID
                 </td>
                 <td>
                     #xarVarPrepForDisplay($id)#
@@ -31,7 +31,7 @@
             </tr>
             <tr>
                 <td>
-                    <xar:mlstring>From</xar:mlstring>
+                    From
                 </td>
                 <td>
                     #xarVarPrepForDisplay($mail['fromname'])# &lt;#xarVarPrepForDisplay($mail['from'])#&gt;
@@ -39,7 +39,7 @@
             </tr>
             <tr>
                 <td>
-                    <xar:mlstring>To</xar:mlstring>
+                    To
                 </td>
                 <td>
                     <xar:if condition="!empty($mail['recipients'])">
@@ -62,7 +62,7 @@
             </tr>
             <tr>
                 <td>
-                    <xar:mlstring>Subject</xar:mlstring>
+                    Subject
                 </td>
                 <td>
                     #xarVarPrepForDisplay($mail['subject'])#
@@ -70,7 +70,7 @@
             </tr>
             <tr>
                 <td>
-                    <xar:mlstring>Queued</xar:mlstring>
+                    Queued
                 </td>
                 <td>
                     #xarLocaleGetFormattedDate('medium',$mail['queued'])# #xarLocaleGetFormattedTime('medium',$mail['queued'])#
@@ -78,7 +78,7 @@
             </tr>
             <tr>
                 <td>
-                    <xar:mlstring>Send After</xar:mlstring>
+                    Send After
                 </td>
                 <td>
                     #xarLocaleGetFormattedDate('medium',$mail['when'])# #xarLocaleGetFormattedTime('medium',$mail['when'])#
@@ -96,13 +96,13 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="2">
     <tr>
         <th>
-            <xar:mlstring>Mail ID</xar:mlstring>
+            Mail ID
         </th>
         <th>
-            <xar:mlstring>Send After</xar:mlstring>
+            Send After
         </th>
         <th>
-            <xar:mlstring>Action</xar:mlstring>
+            Action
         </th>
     </tr>
     <xar:if condition="count($items) gt 0">
@@ -115,9 +115,9 @@
             #xarLocaleGetFormattedDate('medium',$when)# #xarLocaleGetFormattedTime('medium',$when)#
         </td>
         <td>
-            <a href="#xarModURL('mail','admin','viewq',array('id'=>$id,'action' => 'view','authid' => $authid))#"><xar:mlstring>View</xar:mlstring></a>
+            <a href="#xarModURL('mail','admin','viewq',array('id'=>$id,'action' => 'view','authid' => $authid))#">View</a>
             |
-            <a href="#xarModURL('mail','admin','viewq',array('id'=>$id,'action' => 'delete','authid' => $authid))#"><xar:mlstring>Delete</xar:mlstring></a>
+            <a href="#xarModURL('mail','admin','viewq',array('id'=>$id,'action' => 'delete','authid' => $authid))#">Delete</a>
         </td>
      </tr>
      </xar:foreach>
@@ -125,21 +125,21 @@
     <tr>
       <td colspan="3" class="xar-align-left">
       <br />
-      <strong><xar:mlstring>No mails scheduled to be sent later</xar:mlstring></strong>
+      <strong>No mails scheduled to be sent later</strong>
       </td>
     </tr>
     </xar:if>
     </table>
     <xar:else />
         <p> <xar:set name="hookmailurl">xarModURL('modules','admin','hooks', array('hook' => 'mail'))</xar:set>
-            <xar:set name="hookmailtitle"><xar:mlstring>Hook mail to scheduler to activate queue processing</xar:mlstring></xar:set>
-            <xar:set name="hookmaillinktext"><xar:mlstring>hook mail to scheduler</xar:mlstring></xar:set>
+            <xar:set name="hookmailtitle">Hook mail to scheduler to activate queue processing</xar:set>
+            <xar:set name="hookmaillinktext">hook mail to scheduler</xar:set>
             <xar:ml>
-                <xar:mlstring>
+                
                 You can schedule mail for sending later by installing and using the Scheduler module.
                 Install Scheduler first. Mail supplies the hooks so you must also
                 <a href="#(1)" title="#(2)">#(3)</a> to use this option.
-                </xar:mlstring>
+                
                 <xar:mlvar>#$hookmailurl#</xar:mlvar>
                 <xar:mlvar>#$hookmailtitle#</xar:mlvar>
                 <xar:mlvar>#$hookmaillinktext#</xar:mlvar>
