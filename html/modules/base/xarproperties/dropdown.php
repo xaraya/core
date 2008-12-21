@@ -81,6 +81,10 @@ class SelectProperty extends DataProperty
 
         // Finally generate the options
             $data['options'] = $this->getOptions();
+        } else {
+            // If a firstline was defined add it in
+            if (isset($data['firstline'])) $this->initialization_firstline = $data['firstline'];
+            $data['options'] = array_merge($this->getFirstline(),$data['options']);
         }
         
         // Make sure the optins have the correct form
@@ -93,10 +97,6 @@ class SelectProperty extends DataProperty
             $data['options'] = $normalizedoptions;
         }
             
-        // If a firstline was defined add it in
-        if (isset($data['firstline'])) $this->initialization_firstline = $data['firstline'];
-        $data['options'] = array_merge($this->getFirstline(),$data['options']);
-
         // check if we need to add the current value to the options
         if (!empty($data['value']) && $this->validation_override) {
             $found = false;
