@@ -551,7 +551,7 @@
   <configurations itemid="62">
     <id>62</id>
     <name>display_key_label</name>
-    <description>Changing key label of Row</description>
+    <description>Changing key label of row</description>
     <property_id>2</property_id>
     <label>Key Label</label>
     <ignore_empty>1</ignore_empty>
@@ -560,7 +560,7 @@
   <configurations itemid="63">
     <id>63</id>
     <name>display_value_label</name>
-    <description>Changing Value label of Row</description>
+    <description>Changing value label of row</description>
     <property_id>2</property_id>
     <label>Value Label</label>
     <ignore_empty>1</ignore_empty>
@@ -569,10 +569,28 @@
   <configurations itemid="64">
     <id>64</id>
     <name>initialization_associative_array</name>
-    <description>Allow Saving As Associative Array</description>
+    <description>Allow saving as associative array</description>
     <property_id>14</property_id>
     <label>Associative Array Storage</label>
     <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="65">
+    <id>65</id>
+    <name>initialization_start_year</name>
+    <description>Minimum year to start with</description>
+    <property_id>15</property_id>
+    <label>Start Year</label>
+    <ignore_empty>0</ignore_empty>
+    <configuration>a:5:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:27:"Minimum value for the year.";s:21:"validation_min_length";s:1:"4";}</configuration>
+  </configurations>
+  <configurations itemid="66">
+    <id>66</id>
+    <name>initialization_end_year</name>
+    <description>Maximum year to end with</description>
+    <property_id>15</property_id>
+    <label>End Year</label>
+    <ignore_empty>0</ignore_empty>
+    <configuration>a:5:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:25:"Maximum value of the year";s:21:"validation_min_length";s:1:"4";}</configuration>
   </configurations>
 </items>
