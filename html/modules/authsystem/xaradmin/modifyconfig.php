@@ -3,7 +3,7 @@
  * Modify configuration
  *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) copyright-placeholder
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -31,7 +31,7 @@ function authsystem_admin_modifyconfig()
             $data['uselockoutchecked']= xarModVars::get('authsystem', 'uselockout') ? true : false;
             $data['lockouttime']      = xarModVars::get('authsystem', 'lockouttime')? xarModVars::get('authsystem', 'lockouttime'): 15; //minutes
             $data['lockouttries']     = xarModVars::get('authsystem', 'lockouttries') ? xarModVars::get('authsystem', 'lockouttries'): 3;
-						break;
+                        break;
 
         case 'update':
             // Confirm authorisation code
