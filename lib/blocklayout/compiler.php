@@ -5,7 +5,7 @@
  * The compiler is responsible for compiling xar + xml -> php + xml
  *
  * @package blocklayout
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) copyright-placeholder
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
