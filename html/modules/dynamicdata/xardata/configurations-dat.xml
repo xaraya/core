@@ -593,4 +593,13 @@
     <ignore_empty>0</ignore_empty>
     <configuration>a:5:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:25:"Maximum value of the year";s:21:"validation_min_length";s:1:"4";}</configuration>
   </configurations>
+  <configurations itemid="67">
+    <id>62</id>
+    <name>validation_file_type</name>
+    <description>Whether this field displays files or directories</description>
+    <property_id>6</property_id>
+    <label>Show type file or directory</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:30:"file,file;directory,directory;";}</configuration>
+  </configurations>
 </items>
