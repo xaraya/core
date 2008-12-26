@@ -8,7 +8,7 @@
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>26</maxid>
-  <config></config>
+  <config>a:0:{}</config>
   <isalias>0</isalias>
   <properties>
     <property name="id">

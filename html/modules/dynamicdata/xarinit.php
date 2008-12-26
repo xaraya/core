@@ -162,8 +162,8 @@ function dynamicdata_init()
         $stmt = $dbconn->prepareStatement($sql);
 
         $objects = array(
-            array('objects'   ,'Dynamic Objects'   ,$modid,0,'DataObject','auto',                                 'itemid',0,''               ,0),
-            array('properties','Dynamic Properties',$modid,1,'DProperty','modules/dynamicdata/class/property.php','itemid',0,''               ,0),
+            array('objects'   ,'Dynamic Objects'   ,$modid,0,'DataObject','auto',                                 'itemid',0,'a:0:{}'               ,0),
+            array('properties','Dynamic Properties',$modid,1,'DProperty','modules/dynamicdata/class/property.php','itemid',0,'a:0:{}'               ,0),
         );
 
         $objectid = array();
