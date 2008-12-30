@@ -56,6 +56,7 @@
         <xar:data-input type="hidden" name="tab" id="tab" value="$tab"/>
         <!-- General tab -->
         <xar:if condition="$tab eq 'general'">
+            <xar:template file="display" module="base" subdata="array('modulename' => 'mail')" />
             <fieldset>
                 <legend>Mail Configuration</legend>
                 <div class="xar-form-input-wrapper">

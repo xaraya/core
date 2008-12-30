@@ -116,31 +116,7 @@
     </xar:comment>
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-            <fieldset>
-                <legend>
-                    <xar:mlstring>
-                        Page Layout
-                    </xar:mlstring>
-                </legend>
-                <div class="xar-form-input-wrapper">
-                    <label for="itemsperpage" title="#xarML('Number of users to show on each page.')#" class="xar-form-label">
-                        <xar:mlstring>
-                            Users Per Page:
-                        </xar:mlstring>
-                    </label>
-                    <xar:set name="value"><xar:var scope="module" module="roles" name="itemsperpage"/></xar:set>
-                    <input type="text" name="itemsperpage" id="itemsperpage" value="#$value#" maxlength="3" class="xar-form-textshort" />
-                </div>
-                <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked"><xar:var scope="module" module="roles" name="SupportShortURLs"/></xar:set>
-                    <xar:data-input type="checkbox" name="shorturls" id="shorturls" checked="$checked" />
-                    <label for="shorturls" title="#xarML('Enable short URLs for Roles module')#">
-                        <xar:mlstring>
-                            Enable Short URLs
-                        </xar:mlstring>
-                    </label>
-                </div>
-            </fieldset>
+            <xar:template file="display" module="base" subdata="array('modulename' => 'roles')" />
             <fieldset>
                 <legend>
                     <xar:mlstring>
