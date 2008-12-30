@@ -107,9 +107,11 @@
     <xsl:choose>
       <!-- Modvars -->
       <xsl:when test="@scope = 'module'">
-        <xsl:text>xarModVars::get('</xsl:text>
-        <xsl:value-of select="@module"/>
-        <xsl:text>', '</xsl:text>
+        <xsl:text>xarModVars::get("</xsl:text>
+          <xsl:call-template name="resolvePHP">
+            <xsl:with-param name="expr" select="@module"/>
+          </xsl:call-template>
+        <xsl:text>", '</xsl:text>
         <xsl:value-of select="@name"/>
         <xsl:text>')</xsl:text>
       </xsl:when>
