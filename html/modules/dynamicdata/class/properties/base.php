@@ -357,7 +357,7 @@ class DataProperty extends Object implements iDataProperty
 
         if(!isset($data['tabindex'])) $data['tabindex'] = 0;
         if(!isset($data['value']))    $data['value']    = $this->value;
-        if (!empty($this->invalid))) {
+        if (!empty($this->invalid)) {
             $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : xarML($this->invalid);
         } else {
             $data['invalid']  = '';
