@@ -119,6 +119,8 @@ class SelectProperty extends DataProperty
     {
         if (isset($data['value'])) $this->value = $data['value'];
 
+        // If we have options passed, take them.
+        if (isset($data['options'])) $this->options = $data['options'];
         // get the option corresponding to this value
         $result = $this->getOption();
         // only apply xarVarPrepForDisplay on strings, not arrays et al.
