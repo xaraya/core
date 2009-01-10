@@ -15,7 +15,7 @@ class UserSettingsDataStore extends BasicDataStore // Consider inheriting from M
 {
     public $modname;
 
-    function __construct($name)
+    function __construct($name=null)
     {
         // invoke the default constructor from our parent class
         parent::__construct($name);
