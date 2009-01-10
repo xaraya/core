@@ -6,11 +6,19 @@
     {
         function createItem(Array $args = array())
         {
+            // If this is a modvar storage, create the modvar first
             if ($args['source'] == 'module variables') {
                 $namepart = explode('_',$args['name']);
-                if (empty($namepart[1])) $namepart[1] = 'dynamicdata';
-                xarModVars::set($namepart[1],$namepart[0],true);
+                if (empty($namepart[1])) {
+                    $modulename = 'dynamicdata';
+                    $varname = $namepart[0];
+                } else {
+                    $modulename = array_pop($namepart);
+                    $varname = implode('_',$namepart);
+                }
+                xarModVars::set($modulename,$varname,true);
             }
+            
             $id = parent::createItem($args);
             return $id;
         }
