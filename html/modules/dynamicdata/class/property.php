@@ -16,7 +16,8 @@
                     $modulename = array_pop($namepart);
                     $varname = implode('_',$namepart);
                 }
-                xarModVars::set($modulename,$varname,true);
+                $value = (isset($args['defaultvalue'])) ? $args['defaultvalue'] : true;
+                xarModVars::set($modulename,$varname,$value);
             }
             
             $id = parent::createItem($args);
