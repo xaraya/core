@@ -21,10 +21,10 @@ class ModuleVariablesDataStore extends FlatTableDataStore
     function __construct($name=null)
     {
         parent::__construct($name);
-        $this->setModvarName(name);
+        $this->setModvarName($name);
     }
 
-    private function setModvarName(name="")
+    private function setModvarName($name="")
     {
         if (empty($name)) throw new Exception('Bad modvar name');
         $namepart = explode('_',$name);
