@@ -517,8 +517,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function updateItem(Array $args = array())
     {
-        if(count($args) > 0)
-        {
+        if(count($args) > 0) {
             if(!empty($args['itemid']))
                 $this->itemid = $args['itemid'];
 
@@ -526,8 +525,12 @@ class DataObject extends DataObjectMaster implements iDataObject
                 if(isset($this->properties[$name]))
                     $this->properties[$name]->setValue($value);
         }
-        if(empty($this->itemid))
-        {
+        if(empty($this->itemid)) {
+            // Try getting the id value from the item ID property if it exists
+            foreach($this->properties as $property)
+                if ($property->type == 21) $this->itemid = $property->value;
+        }
+        if(empty($this->itemid)) {
             $msg = 'Invalid item id in method #(1)() for dynamic object [#(2)] #(3)';
             $vars = array('updateItem',$this->objectid,$this->name);
             throw new BadParameterException($vars,$msg);
