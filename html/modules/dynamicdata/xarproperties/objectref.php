@@ -56,6 +56,7 @@ class ObjectRefProperty extends SelectProperty
     // Return a list of array(id => value) for the possible options
     function getOptions()
     {
+        $options = $this->getFirstline();
         // The object we need to query is in $this->initialization_refobject, we display the value of
         // the property in $this->display_prop and the id comes from $this->store_prop
 
