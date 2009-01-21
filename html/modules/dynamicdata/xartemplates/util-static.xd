@@ -11,9 +11,12 @@
    <xar:template type="module" file="admin-menu" />
    <h2><xar:mlstring>Utilities -  Static Table Definitions </xar:mlstring></h2>
    <xar:template type="module" file="utility-menu" />
-
+    <xar:var name="firstline">Choose a table</xar:var>
+    <form action="#xarServerGetCurrentURL()#" method="post">
+        <xar:data-input type="dropdown" name="table" options="$tables" value="$table" firstline="$firstline" onchange="submit()"/>
+    </form>
     <xar:if condition="empty($export)">
-        <xar:foreach in="$tables" key="$table" value="$fields">
+        <xar:foreach in="$tabledata" key="$table" value="$fields">
             <h3>
                 #$table#
             </h3>
@@ -86,12 +89,15 @@
                         <input type="hidden" name="authid" value="#$authid#" />
                         <input type="hidden" name="modid" value="#$modid#" />
                         <input type="hidden" name="itemtype" value="#$itemtype#" />
+                        <!--
                         <input type="hidden" name="table" value="#$table#" />
+                        -->
                         <input type="submit" value=" #xarML('Import Table')# #$table# " />
                     </div>
                 </fieldset>
             </form>
         </xar:foreach>
+        <!--
         <div class="xar-align-center">
             <a href="&xar-modurl-dynamicdata-util-static;&amp;export=1&amp;modid=#$modid#">
                 <xar:mlstring>
@@ -99,6 +105,7 @@
                 </xar:mlstring>
             </a>
         </div>
+        -->
         <xar:else />
         <form>
             <fieldset>

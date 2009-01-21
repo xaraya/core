@@ -67,7 +67,8 @@ function dynamicdata_utilapi_getstatic($args)
         // it's easy if the table name is known
         $dbTables[] = $dbInfo->getTable($table);
     } else {
-        $dbTables = $dbInfo->getTables();
+///        $dbTables = $dbInfo->getTables();
+        $dbTables = array();
     }
 
     // TODO: we lost the linkage with modules here
