@@ -7,7 +7,7 @@
                 </xar:mlstring>
             </legend>
             <div class="xar-form-input-wrapper">
-                <label for="itemsperpage" title="#xarML('Number of items to show on each page.')#" class="xar-form-label">
+                <label for="itemsperpage" title="#xarML('The number of items to show on each page.')#" class="xar-form-label">
                     <xar:mlstring>
                         Items Per Page:
                     </xar:mlstring>
@@ -18,7 +18,7 @@
             <div class="xar-form-input-wrapper-after">
                 <xar:set name="checked"><xar:var scope="module" module="$modulename" name="SupportShortURLs" /></xar:set>
                 <xar:data-input type="checkbox" name="shorturls" id="shorturls" checked="$checked" />
-                <label for="shorturls" title="#xarML('Enable short URLs for Query module')#">
+                <label for="shorturls" title="#xarML('Enable short URLs for this module')#">
                     <xar:mlstring>
                         Enable Short URLs
                     </xar:mlstring>
@@ -34,7 +34,7 @@
                 <xar:data-input type="checkbox" name="modulealias" id="modulealias" checked="$checked" />
             </div>
             <div class="xar-form-input-wrapper">
-                <label for="aliasname" class="xar-form-label" title="#xarML('The name of module alias to be used.')#">
+                <label for="aliasname" class="xar-form-label" title="#xarML('The name of the module alias to be used.')#">
                         <xar:mlstring>
                             Module Alias Name
                         </xar:mlstring>
