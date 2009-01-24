@@ -40,7 +40,6 @@ function dynamicdata_util_static($args)
     $data['table'] = $table;
 
     //debug($static);
-
     if (!isset($static) || $static == false) {
         $data['tabledata'] = array();
     } else {
