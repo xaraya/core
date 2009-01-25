@@ -79,7 +79,7 @@
             </xar:if>
             <xar:if condition="$option eq 'static'">
                 <dd class="active">
-                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=static">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=view_static">
                         <xar:mlstring>
                             Table Definition 
                         </xar:mlstring>
@@ -87,7 +87,7 @@
                 </dd>
                 <xar:else />
                 <dd>
-                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=static">
+                    <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=view_static">
                         <xar:mlstring>
                             Table Definition 
                         </xar:mlstring>

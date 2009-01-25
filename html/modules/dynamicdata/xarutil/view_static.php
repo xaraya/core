@@ -11,9 +11,9 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * Return static table information (test only)
+ * Return static table information
  */
-function dynamicdata_util_static($args)
+function dynamicdata_util_view_static($args)
 {
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
