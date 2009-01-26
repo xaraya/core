@@ -38,9 +38,16 @@
                     $query .= $options['attributes'][$data['object']->properties['attributes']->value] . " ";
                 }
                 $query .= $options['nulls'][$data['object']->properties['null']->value] . " ";
-                $query .= 'COLLATE ' . $options['collations'][$data['object']->properties['collation']->value] . " ";
-                if (!empty($data['object']->properties['default']->value)) 
-                    $query .= 'default "' . $data['object']->properties['default']->value . '"';
+//                $query .= 'COLLATE ' . $options['collations'][$data['object']->properties['collation']->value] . " ";
+
+                if ($data['object']->properties['type']->value != 6) {
+                    if (in_array($data['object']->properties['type']->value,array(3,4,5))) {
+                        if (is_numeric($data['object']->properties['default']->value)) 
+                            $query .= 'default ' . $data['object']->properties['default']->value;
+                    } else {
+                        $query .= 'default "' . $data['object']->properties['default']->value . '"';
+                    }
+                }
                 $dbconn = xarDB::getConn();
                 $dbconn->Execute($query);
                 
