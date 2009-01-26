@@ -19,9 +19,11 @@
                     #$table#
                 </h3>
                 <p>
+                <!--
                     <a href="&xar-modurl-dynamicdata-util-relations;&amp;modid=#$modid#" style="float:left">                    
                         Add Relation                     
                     </a>
+                -->
                     <a href="&xar-modurl-dynamicdata-util-new_static;&amp;table=#$table#" style="float:right">                    
                         Add table field                     
                     </a>
@@ -80,19 +82,19 @@
                         </tr>
                     </xar:foreach>
                 </table>
+                            <!--
                 <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
                     <fieldset>
                         <div class="xar-form-input-wrapper-after">
                             <input type="hidden" name="authid" value="#$authid#" />
                             <input type="hidden" name="modid" value="#$modid#" />
                             <input type="hidden" name="itemtype" value="#$itemtype#" />
-                            <!--
                             <input type="hidden" name="table" value="#$table#" />
-                            -->
                             <input type="submit" value=" #xarML('Import Table')# #$table# " />
                         </div>
                     </fieldset>
                 </form>
+                            -->
             </xar:foreach>
             <!--
             <div class="xar-align-center">
