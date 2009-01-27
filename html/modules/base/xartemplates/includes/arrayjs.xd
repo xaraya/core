@@ -2,8 +2,6 @@
     <script type="text/javascript" >
         function #$id#_addRow(removeflag)
         {			
-        	//to check whether the remove button is to be added for saved rows
-        	var removebuttonflag = removeflag;
         	//get the div in which the rows are displayed            
             var itemdiv = document.getElementById('#$id#_rows');
             // Get value for the next row and increment the last row ID
@@ -28,7 +26,7 @@
             var rowtemplate = document.getElementById('#$id#_rowtemplate');            
             var rowhtml = rowtemplate.innerHTML;
             //check for the remove button to be added or not                                                        	
- 			if(removebuttonflag) {
+ 			if(removeflag) {
  				var removetemplate = document.getElementById('#$id#_removetemplate');
  				var removehtml = removetemplate.innerHTML; 			           
             	newdiv.innerHTML = rowhtml + removehtml;
