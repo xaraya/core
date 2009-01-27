@@ -37,7 +37,7 @@
       <type>dropdown</type>
       <defaultvalue>1</defaultvalue>
       <source>dummy</source>
-      <status>33</status>
+      <status>32</status>
       <seq>3</seq>
       <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:21:"1,utf-8;2,iso-8859-1;";}</configuration>
     </property>
