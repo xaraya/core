@@ -312,7 +312,7 @@
   <xsl:text>array(</xsl:text>
   <xsl:if test="$nodeset">
     <xsl:for-each select="$nodeset">
-      <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>' =&gt;</xsl:text>
+      <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>'=&gt;</xsl:text>
       <xsl:choose>
         <xsl:when test="starts-with(normalize-space(.),'$') or not(string(number(.))='NaN')">
           <xsl:value-of select="."/><xsl:text>,</xsl:text>
