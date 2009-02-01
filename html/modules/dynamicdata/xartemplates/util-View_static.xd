@@ -7,12 +7,23 @@
     </div>
     <div class="xar-mod-body">
        <xar:template type="module" file="admin-menu" />
-       <h2>Utilities -  Static Table Definitions </h2>
+       <h2>Static Table Definitions </h2>
        <xar:template type="module" file="utility-menu" />
         <xar:var name="firstline">Choose a table</xar:var>
         <form action="#xarServerGetCurrentURL()#" method="post">
-            <xar:data-input type="dropdown" name="table" options="$tables" value="$table" firstline="$firstline" onchange="submit()"/>
+            <div style="float:left">
+                Current Table:&#160;
+                <xar:data-input type="dropdown" name="table" options="$tables" value="$table" firstline="$firstline" onchange="submit()"/>
+            </div>
+            <div style="float:right">
+                New Table:
+                &#160;
+                <xar:data-input type="textbox" name="newtable" />
+                &#160;
+                <input type="submit" value="Add a new table" />                    
+            </div>
         </form>
+        <div style="clear: both">&#160;</div>
         <xar:if condition="empty($export)">
             <xar:foreach in="$tabledata" key="$table" value="$fields">
                 <h3>
@@ -24,8 +35,14 @@
                         Add Relation                     
                     </a>
                 -->
-                    <a href="&xar-modurl-dynamicdata-util-new_static;&amp;table=#$table#" style="float:right">                    
-                        Add table field                     
+                    <a href="&xar-modurl-dynamicdata-util-new_static;&amp;table=#$table#" style="float:left">                    
+                        Add a  field to this table                   
+                    </a>
+                    <a href="&xar-modurl-dynamicdata-util-delete_static_table;&amp;table=#$table#" style="float:right">                    
+                        Delete this table:                    
+                    </a>
+                    <a href="&xar-modurl-dynamicdata-util-rename_static_table;&amp;table=#$table#" style="float:right">                    
+                        Rename this table:&#160;|&#160;             
                     </a>
                 </p>
                 <table class="xar-fullwidth">

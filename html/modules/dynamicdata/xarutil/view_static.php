@@ -21,10 +21,20 @@ function dynamicdata_util_view_static($args)
     if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     '', XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('newtable',    'isset', $newtable,     '', XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('export',  'isset', $export,       0, XARVAR_DONT_SET)) {return;}
 
     extract($args);
 
+    if (!empty($newtable)) {
+        $query = "CREATE TABLE " . $newtable . " (
+          id integer unsigned NOT NULL auto_increment,
+          PRIMARY KEY  (id))";
+        $dbconn = xarDB::getConn();
+        $dbconn->Execute($query);
+        $table = $newtable;
+    }
+    
     $data = array();
     $data['menutitle'] = xarML('Dynamic Data Utilities');
 

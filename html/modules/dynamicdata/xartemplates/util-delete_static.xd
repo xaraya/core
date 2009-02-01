@@ -24,7 +24,7 @@
             </legend>
             The field '#$field#' in table '#$table#'
             <br />
-            Any data the table contains in this field will deleted.
+            Any data the table contains in this field will be deleted.
         </fieldset>
 
         <form method="post" action="#xarServerGetCurrentURL()#">
