@@ -106,6 +106,8 @@
   <xsl:include href="tags/comment.xsl"/>
   <!-- xar:continue -->
   <xsl:include href="tags/continue.xsl"/>
+  <!-- xar:button -->
+  <xsl:include href="tags/button.xsl"/>
 
   <!-- TODO: organize this -->
   <!-- xar:data-view/output/label etc. -->
