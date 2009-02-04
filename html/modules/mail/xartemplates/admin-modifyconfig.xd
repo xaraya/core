@@ -64,7 +64,7 @@
                         Mail Admin:
                     </label>
                     <xar:set name="curadmin"><xar:var scope="module" module="mail" name="admin_outgoing" prep="true"/></xar:set>
-                    <xar:data-input id="admin_outgoing" value="$curadmin" name="admin_outgoing" type="userlist" validation="group:Administrators" onchange="this.form.submit()"/>
+                    <xar:data-input id="admin_outgoing" value="$curadmin" name="admin_outgoing" type="userlist" group_list="Administrators" onchange="this.form.submit()"/>
                 </div>
 
                 <div class="xar-form-input-wrapper">
