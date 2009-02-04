@@ -15,14 +15,14 @@
                 <xar:set name="value"><xar:var scope="module" module="$modulename" name="itemsperpage" /></xar:set>
                 <input type="text" name="itemsperpage" id="itemsperpage" value="#$value#" maxlength="3" class="xar-form-textshort" />
             </div>
-            <div class="xar-form-input-wrapper-after">
+            <div class="xar-form-input-wrapper">
                 <xar:set name="checked"><xar:var scope="module" module="$modulename" name="SupportShortURLs" /></xar:set>
-                <xar:data-input type="checkbox" name="shorturls" id="shorturls" checked="$checked" />
-                <label for="shorturls" title="#xarML('Enable short URLs for this module')#">
+                <label for="shorturls" class="xar-form-label"  title="#xarML('Enable short URLs for this module')#">
                     <xar:mlstring>
                         Enable Short URLs
                     </xar:mlstring>
                 </label>
+                <xar:data-input type="checkbox" name="shorturls" id="shorturls" checked="$checked" />
             </div>
             <div class="xar-form-input-wrapper">
                 <label for = "modulealias" class="xar-form-label" title="#xarML('Use an alias instead of the module name')#">
