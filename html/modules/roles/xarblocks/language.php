@@ -16,94 +16,68 @@
  * @author Marco Canini
  * initialise block
  */
-//sys::import('xaraya.structures.descriptor');
-//sys::import('modules.roles.class.language');
+sys::import('xaraya.structures.containers.blocks.basicblock');
 
-function roles_languageblock_init()
+class LanguageBlock extends BasicBlock
 {
-    return array(
-        'nocache' => 1, // don't cache by default
-        'pageshared' => 1, // share across pages
-        'usershared' => 0, // don't share across users
-        'cacheexpire' => null);
-/*        $descriptor = new ObjectDescriptor(array(
-                                        'nocache' => 1,
-                                        'usershared' => 0,
-                                        'text_type' => 'Language',
-                                        'text_type_long' => 'Language selection',
-                                        'module' => 'roles',
-                                        ));
-        $block = new LanguageBlock($descriptor);
-        return $block->getArgs();
-*/
-}
+    public $name                = 'LanguageBlock';
+    public $module              = 'roles';
+    public $text_type           = 'Language';
+    public $text_type_long      = 'Language selection';
+    public $allow_multiple      = true;
+    public $show_preview        = true;
 
-/**
- * get information on block
- */
-function roles_languageblock_info()
-{
-    return array(
-        'text_type' => 'Language',
-        'module' => 'roles',
-        'text_type_long' => 'Language selection'
-    );
-}
+    public $no_cache            = 1;
 
-/**
- * Display func.
- * @param $blockinfo array containing title,content
- */
-function roles_languageblock_display($blockinfo)
-{
-    // Security check
-    if (!xarSecurityCheck('ReadRole', 0, 'Block', "All:" . $blockinfo['title'] . ":" . $blockinfo['bid'])) {return;}
+    function display(Array $data=array())
+    {
+        // Security check
+        if (!xarSecurityCheck('ReadRole', 0, 'Block', "All:" . $data['title'] . ":" . $data['bid'])) {return;}
 
-    // if (xarMLSGetMode() != XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
-    if (xarMLSGetMode() == XARMLS_SINGLE_LANGUAGE_MODE) {
-        return;
+        // if (xarMLSGetMode() != XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
+        if (xarMLSGetMode() == XARMLS_SINGLE_LANGUAGE_MODE) return;
+
+        $current_locale = xarUserGetNavigationLocale();
+
+        $site_locales = xarMLSListSiteLocales();
+
+        asort($site_locales);
+
+        if (count($site_locales) <= 1) {
+            return;
+        }
+
+        foreach ($site_locales as $locale) {
+            $locale_data =& xarMLSLoadLocaleData($locale);
+
+            $selected = ($current_locale == $locale);
+
+            $locales[] = array(
+                'locale'   => $locale,
+                'country'  => $locale_data['/country/display'],
+                'name'     => $locale_data['/language/display'],
+                'selected' => $selected
+            );
+        }
+
+
+        $args['form_action'] = xarModURL('roles', 'user', 'changelanguage');
+        $args['form_picker_name'] = 'locale';
+        $args['locales'] = $locales;
+        $args['blockid'] = $data['bid'];
+
+        if (xarServerGetVar('REQUEST_METHOD') == 'GET') {
+            // URL of this page
+            $args['return_url'] = xarServerGetCurrentURL();
+        } else {
+            // Base URL of the site
+            $args['return_url'] = xarServerGetBaseURL();
+        }
+
+        $data['content'] = $args;
+
+        return $data;
     }
-
-    $current_locale = xarUserGetNavigationLocale();
-
-    $site_locales = xarMLSListSiteLocales();
-
-    asort($site_locales);
-
-    if (count($site_locales) <= 1) {
-        return;
-    }
-
-    foreach ($site_locales as $locale) {
-        $locale_data =& xarMLSLoadLocaleData($locale);
-
-        $selected = ($current_locale == $locale);
-
-        $locales[] = array(
-            'locale'   => $locale,
-            'country'  => $locale_data['/country/display'],
-            'name'     => $locale_data['/language/display'],
-            'selected' => $selected
-        );
-    }
-
-
-    $tplData['form_action'] = xarModURL('roles', 'user', 'changelanguage');
-    $tplData['form_picker_name'] = 'locale';
-    $tplData['locales'] = $locales;
-    $tplData['blockid'] = $blockinfo['bid'];
-
-    if (xarServerGetVar('REQUEST_METHOD') == 'GET') {
-        // URL of this page
-        $tplData['return_url'] = xarServerGetCurrentURL();
-    } else {
-        // Base URL of the site
-        $tplData['return_url'] = xarServerGetBaseURL();
-    }
-
-    $blockinfo['content'] = $tplData;
-
-    return $blockinfo;
 }
 
 ?>
