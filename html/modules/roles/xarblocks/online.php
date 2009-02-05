@@ -81,7 +81,7 @@ function roles_onlineblock_display($blockinfo)
     }
 
     // FIXME: there could be many active users, but we only want a handful of them.
-    $zz = xarModAPIFunc(
+    $activeusers = xarModAPIFunc(
         'roles', 'user', 'getallactive',
         array(
             'order' => 'name',
@@ -90,38 +90,35 @@ function roles_onlineblock_display($blockinfo)
             'include_myself' => false
         )
     );
-    var_dump($zz);
 
-    if (!empty($zz)) {
-        foreach ($zz as $key => $aa) {
-            $args['test1'][$key] = array(
-                'name' => $aa['name'],
-                'userurl' => xarModURL(
-                    'roles', 'user', 'display',
-                    array('id' => $aa['id'])
-                ),
-                'total' => '',
-                'unread' => '',
-                'messagesurl' => ''
-            );
+    foreach ($activeusers as $key => $thisuser) {
+        $args['activeusers'][$key] = array(
+            'name' => $thisuser['name'],
+            'userurl' => xarModURL(
+                'roles', 'user', 'display',
+                array('id' => $thisuser['id'])
+            ),
+            'total' => '',
+            'unread' => '',
+            'messagesurl' => ''
+        );
 
-            if ($aa['name'] == xarUserGetVar('name')) {
-                if (xarModIsAvailable('messages')) {
-                    $args['test1'][$key]['total'] = xarModAPIFunc(
-                        'messages', 'user', 'count_total',
-                        array('id'=>$aa['id'])
-                    );
+        if ($thisuser['name'] == xarUserGetVar('name')) {
+            if (xarModIsAvailable('messages')) {
+                $args['activeusers'][$key]['total'] = xarModAPIFunc(
+                    'messages', 'user', 'count_total',
+                    array('id'=>$thisuser['id'])
+                );
 
-                    $args['test1'][$key]['unread'] = xarModAPIFunc(
-                        'messages', 'user', 'count_unread',
-                        array('id'=>$aa['id'])
-                    );
+                $args['activeusers'][$key]['unread'] = xarModAPIFunc(
+                    'messages', 'user', 'count_unread',
+                    array('id'=>$thisuser['id'])
+                );
 
-                    $args['test1'][$key]['messagesurl'] =xarModURL(
-                        'messages', 'user', 'display',
-                        array('id'=>$aa['id'])
-                    );
-                }
+                $args['activeusers'][$key]['messagesurl'] =xarModURL(
+                    'messages', 'user', 'display',
+                    array('id'=>$thisuser['id'])
+                );
             }
         }
     }

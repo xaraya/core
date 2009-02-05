@@ -7,7 +7,7 @@
         but since it's used it could be put right via css
         (comment by andyv)
     -->
-     <xar:if condition="!empty($test1)">
+     <xar:if condition="!empty($activeusers)">
         <table class="xar-fullwidth xar-roles-nicetable">
              <tr>
                  <td class="xar-threequarterswidth">
@@ -40,7 +40,7 @@
                      </td>
                  </tr>
              </xar:if>
-             <xar:foreach in="$test1" value="$dd">
+             <xar:foreach in="$activeusers" value="$dd">
                  <tr>
                      <td>
                          <xar:if condition="!empty($dd['userurl'])">
