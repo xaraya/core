@@ -24,10 +24,9 @@ class LanguageBlock extends BasicBlock
     public $module              = 'roles';
     public $text_type           = 'Language';
     public $text_type_long      = 'Language selection';
-    public $allow_multiple      = true;
-    public $show_preview        = true;
 
     public $no_cache            = 1;
+    public $usershared          = 0;
 
     function display(Array $data=array())
     {
