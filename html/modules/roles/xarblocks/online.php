@@ -13,172 +13,156 @@
 
 /**
  * Online Block
- * @author Jim McDonald, Greg Allan, John Cox, Michael Makushev
+ * @author Jim McDonald, Greg Allan, John Cox, Michael Makushev, Marc Lutolf
  */
-/*
- * initialise block
- */
-function roles_onlineblock_init()
-{
-    // No parameters accepted by this block.
-    return array(
-        'nocache' => 0, // cache by default
-        'pageshared' => 1, // share across pages
-        'usershared' => 1, // share for group members
-        'cacheexpire' => null);
-}
+    sys::import('xaraya.structures.containers.blocks.basicblock');
 
-/**
- * get information on block
- */
-function roles_onlineblock_info()
-{
-    return array(
-        'text_type' => 'Online',
-        'module' => 'roles',
-        'text_type_long' => 'Display who is online'
-    );
-}
+    class OnlineBlock extends BasicBlock
+    {
+        public $name                = 'OnlineBlock';
+        public $module              = 'roles';
+        public $text_type           = 'Online';
+        public $text_type_long      = 'Display who is online';
+        public $allow_multiple      = true;
+        public $show_preview        = true;
 
-/**
- * Display func.
- * @param $blockinfo array containing title,content
- */
-function roles_onlineblock_display($blockinfo)
-{
-    // Security check
-    if (!xarSecurityCheck('ViewRoles',0,'Block',"online:$blockinfo[title]:$blockinfo[bid]")) {return;}
 
-    // Get variables from content block
-    if (!is_array($blockinfo['content'])) {
-        $vars = unserialize($blockinfo['content']);
-    } else {
-        $vars = $blockinfo['content'];
-    }
+        function display(Array $data=array())
+        {
+            // Security check
+            if (!xarSecurityCheck('ViewRoles',0,'Block',"online:$data[title]:$data[bid]")) {return;}
 
-    // Database setup
-    // TODO: do we need this query? I'd have thought userapi/getallactive gives
-    // us everything we need.
-    $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
-    $sessioninfotable = $xartable['session_info'];
-    $activetime = time() - (xarConfigVars::get(null, 'Site.Session.Duration') * 60);
-    if($dbconn->databaseType == 'sqlite') {
-        $sql = "SELECT COUNT(*)
-                FROM (SELECT DISTINCT toles_id FROM $sessioninfotable
-                      WHERE last_use > ? AND role_id > ?)";
-    } else {
-        $sql = "SELECT COUNT(DISTINCT role_id)
-            FROM $sessioninfotable
-            WHERE last_use > ? AND role_id > ?";
-    }
-    $result = $dbconn->Execute($sql, array($activetime,2));
-    // CHECKME: do we catch the exception here?
-    list($args['numusers']) = $result->fields;
-    $result->Close();
-    if (empty($args['numusers'])) {
-        $args['numusers'] = 0;
-    }
-
-    // FIXME: there could be many active users, but we only want a handful of them.
-    $activeusers = xarModAPIFunc(
-        'roles', 'user', 'getallactive',
-        array(
-            'order' => 'name',
-            'startnum' => 0,
-            'include_anonymous' => false,
-            'include_myself' => false
-        )
-    );
-
-    foreach ($activeusers as $key => $thisuser) {
-        $args['activeusers'][$key] = array(
-            'name' => $thisuser['name'],
-            'userurl' => xarModURL(
-                'roles', 'user', 'display',
-                array('id' => $thisuser['id'])
-            ),
-            'total' => '',
-            'unread' => '',
-            'messagesurl' => ''
-        );
-
-        if ($thisuser['name'] == xarUserGetVar('name')) {
-            if (xarModIsAvailable('messages')) {
-                $args['activeusers'][$key]['total'] = xarModAPIFunc(
-                    'messages', 'user', 'count_total',
-                    array('id'=>$thisuser['id'])
-                );
-
-                $args['activeusers'][$key]['unread'] = xarModAPIFunc(
-                    'messages', 'user', 'count_unread',
-                    array('id'=>$thisuser['id'])
-                );
-
-                $args['activeusers'][$key]['messagesurl'] =xarModURL(
-                    'messages', 'user', 'display',
-                    array('id'=>$thisuser['id'])
-                );
+            // Get variables from content block
+            if (!is_array($data['content'])) {
+                $vars = unserialize($data['content']);
+            } else {
+                $vars = $data['content'];
             }
-        }
-    }
 
+            // Database setup
+            // TODO: do we need this query? I'd have thought userapi/getallactive gives
+            // us everything we need.
+            $dbconn = xarDB::getConn();
+            $xartable = xarDB::getTables();
+            $sessioninfotable = $xartable['session_info'];
+            $activetime = time() - (xarConfigVars::get(null, 'Site.Session.Duration') * 60);
+            if($dbconn->databaseType == 'sqlite') {
+                $sql = "SELECT COUNT(*)
+                        FROM (SELECT DISTINCT toles_id FROM $sessioninfotable
+                              WHERE last_use > ? AND role_id > ?)";
+            } else {
+                $sql = "SELECT COUNT(DISTINCT role_id)
+                    FROM $sessioninfotable
+                    WHERE last_use > ? AND role_id > ?";
+            }
+            $result = $dbconn->Execute($sql, array($activetime,2));
+            // CHECKME: do we catch the exception here?
+            list($args['numusers']) = $result->fields;
+            $result->Close();
+            if (empty($args['numusers'])) {
+                $args['numusers'] = 0;
+            }
 
-    if($dbconn->databaseType == 'sqlite') {
-        $query2 = "SELECT COUNT(*)
-                   FROM (SELECT DISTINCT ip_addr FROM $sessioninfotable
-                         WHERE last_use > ? AND role_id = ?)";
-    } else {
-        $query2 = "SELECT COUNT(DISTINCT ip_addr)
-               FROM $sessioninfotable
-               WHERE last_use > ? AND role_id = ?";
-    }
-    $result2 = $dbconn->Execute($query2, array($activetime,2));
-    // CHECKME: do we catch the exception here?
-    list($args['numguests']) = $result2->fields;
-    $result2->Close();
-    if (empty($args['numguests'])) {
-        $args['numguests'] = 0;
-    }
-
-    // Pluralise
-    if ($args['numguests'] == 1) {
-         $args['guests'] = xarML('guest');
-    } else {
-         $args['guests'] = xarML('guests');
-    }
-
-    if ($args['numusers'] == 1) {
-         $args['users'] = xarML('user');
-    } else {
-         $args['users'] = xarML('users');
-    }
-
-    $id = xarModVars::get('roles', 'lastuser');
-
-    // Make sure we have a lastuser
-    if (!empty($id)) {
-        if(!is_numeric($id)) {
-        //Remove this further down the line
-            $status = xarModAPIFunc(
-            'roles', 'user', 'get',
-            array('uname' => $id)
+            // FIXME: there could be many active users, but we only want a handful of them.
+            $activeusers = xarModAPIFunc(
+                'roles', 'user', 'getallactive',
+                array(
+                    'order' => 'name',
+                    'startnum' => 0,
+                    'include_anonymous' => false,
+                    'include_myself' => false
+                )
             );
 
-        } else {
-            $status = xarModAPIFunc(
-            'roles', 'user', 'get',
-            array('id' => $id)
-            );
+            foreach ($activeusers as $key => $thisuser) {
+                $args['activeusers'][$key] = array(
+                    'name' => $thisuser['name'],
+                    'userurl' => xarModURL(
+                        'roles', 'user', 'display',
+                        array('id' => $thisuser['id'])
+                    ),
+                    'total' => '',
+                    'unread' => '',
+                    'messagesurl' => ''
+                );
 
+                if ($thisuser['name'] == xarUserGetVar('name')) {
+                    if (xarModIsAvailable('messages')) {
+                        $args['activeusers'][$key]['total'] = xarModAPIFunc(
+                            'messages', 'user', 'count_total',
+                            array('id'=>$thisuser['id'])
+                        );
+
+                        $args['activeusers'][$key]['unread'] = xarModAPIFunc(
+                            'messages', 'user', 'count_unread',
+                            array('id'=>$thisuser['id'])
+                        );
+
+                        $args['activeusers'][$key]['messagesurl'] =xarModURL(
+                            'messages', 'user', 'display',
+                            array('id'=>$thisuser['id'])
+                        );
+                    }
+                }
+            }
+
+
+            if($dbconn->databaseType == 'sqlite') {
+                $query2 = "SELECT COUNT(*)
+                           FROM (SELECT DISTINCT ip_addr FROM $sessioninfotable
+                                 WHERE last_use > ? AND role_id = ?)";
+            } else {
+                $query2 = "SELECT COUNT(DISTINCT ip_addr)
+                       FROM $sessioninfotable
+                       WHERE last_use > ? AND role_id = ?";
+            }
+            $result2 = $dbconn->Execute($query2, array($activetime,2));
+            // CHECKME: do we catch the exception here?
+            list($args['numguests']) = $result2->fields;
+            $result2->Close();
+            if (empty($args['numguests'])) {
+                $args['numguests'] = 0;
+            }
+
+            // Pluralise
+            if ($args['numguests'] == 1) {
+                 $args['guests'] = xarML('guest');
+            } else {
+                 $args['guests'] = xarML('guests');
+            }
+
+            if ($args['numusers'] == 1) {
+                 $args['users'] = xarML('user');
+            } else {
+                 $args['users'] = xarML('users');
+            }
+
+            $id = xarModVars::get('roles', 'lastuser');
+
+            // Make sure we have a lastuser
+            if (!empty($id)) {
+                if(!is_numeric($id)) {
+                //Remove this further down the line
+                    $status = xarModAPIFunc(
+                    'roles', 'user', 'get',
+                    array('uname' => $id)
+                    );
+
+                } else {
+                    $status = xarModAPIFunc(
+                    'roles', 'user', 'get',
+                    array('id' => $id)
+                    );
+
+                }
+                 // Check return
+                 if ($status) {$args['lastuser'] = $status;}
+            }
+
+            $args['blockid'] = $data['bid'];
+            $data['content'] = $args;
+            return $data;
         }
-         // Check return
-         if ($status) {$args['lastuser'] = $status;}
     }
-
-    $args['blockid'] = $blockinfo['bid'];
-    $blockinfo['content'] = $args;
-    return $blockinfo;
-}
 
 ?>
