@@ -48,9 +48,8 @@ function roles_userapi_getallactive($args)
                      a.date_reg,
                      b.ip_addr
               FROM $rolestable a, $sessioninfoTable b
-              WHERE a.id = b.role_id AND b.last_use > ? AND a.id > ?";
+              WHERE a.id = b.role_id AND b.last_use > ?";
     $bindvars[] = $filter;
-    $bindvars[] = 1;
     if (isset($selection)) $query .= $selection;
 
     // if we aren't including anonymous in the query,
@@ -68,7 +67,7 @@ function roles_userapi_getallactive($args)
     }
 
     $query .= " AND itemtype = ? ORDER BY " . $order;
-    $bindvars[] = 0;
+    $bindvars[] = 2;
     $stmt = $dbconn->prepareStatement($query);
 
     // cfr. xarcachemanager - this approach might change later

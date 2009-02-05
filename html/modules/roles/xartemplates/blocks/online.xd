@@ -1,106 +1,105 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:style scope="block" file="onlineblock" />
-<xar:comment>
-    the above stylesheet has been included more like example
-    how to include a stylesheet in a block rather than a pure necessity here.
-    Tables really shouldn't be used for layout, only for tablular data,
-    but since it's used it could be put right via css
-    (comment by andyv)
-</xar:comment>
-<table class="xar-fullwidth xar-roles-nicetable">
+    <xar:style scope="block" file="onlineblock" />
+    <!--
+        the above stylesheet has been included more like example
+        how to include a stylesheet in a block rather than a pure necessity here.
+        Tables really shouldn't be used for layout, only for tablular data,
+        but since it's used it could be put right via css
+        (comment by andyv)
+    -->
      <xar:if condition="!empty($test1)">
-         <tr>
-             <td class="xar-threequarterswidth">
-                 <xar:mlstring>Users</xar:mlstring>
-             </td>
-             <td>
-                 &#160;
-             </td>
-             <td colspan="2">
-                 <xar:if condition="xarModIsAvailable('messages')">
-                     <xar:mlstring>Messages</xar:mlstring>
-                     <xar:else />
+        <table class="xar-fullwidth xar-roles-nicetable">
+             <tr>
+                 <td class="xar-threequarterswidth">
+                     Users
+                 </td>
+                 <td>
                      &#160;
-                 </xar:if>
+                 </td>
+                 <td colspan="2">
+                     <xar:if condition="xarModIsAvailable('messages')">
+                         Messages
+                     <xar:else />
+                         &#160;
+                     </xar:if>
+                 </td>
+             </tr>
+             <xar:if condition="xarModIsAvailable('messages')">
+                 <tr>
+                     <td>
+                         &#160;
+                     </td>
+                     <td>
+                         &#160;
+                     </td>
+                     <td class="xar-align-center">
+                         <img src="#xarTplGetImage('ob_mail_unreaded.gif','roles')#" alt="#xarML('Unread messages')#" />
+                     </td>
+                     <td class="xar-align-center">
+                         <img src="#xarTplGetImage('ob_mail_total.gif','roles')#" alt="#xarML('Total messages')#" />
+                     </td>
+                 </tr>
+             </xar:if>
+             <xar:foreach in="$test1" value="$dd">
+                 <tr>
+                     <td>
+                         <xar:if condition="!empty($dd['userurl'])">
+                             <img src="#xarTplGetImage('ob_user.gif','roles')#" alt="" class="xar-valign-middle" />
+                         <xar:else />
+                             <img src="#xarTplGetImage('ob_user_other.gif','roles')#" alt="" class="xar-valign-middle" />
+                         </xar:if>
+                         <a href="#$dd['userurl']#">
+                             #xarVarPrepForDisplay($dd['name'])#
+                         </a>
+                     </td>
+                     <td>
+                         &#160;
+                     </td>
+                     <td class="xar-align-center">
+                         <a href="#$dd['messagesurl']#">
+                             #$dd['unread']#
+                         </a>
+                     </td>
+                     <td class="xar-align-center">
+                         <a href="#$dd['messagesurl']#">
+                             #$dd['total']#
+                         </a>
+                     </td>
+                 </tr>
+             </xar:foreach>
+             <tr>
+                 <td colspan="4">
+                     &#160;
+                 </td>
+             </tr>
+        </table>
+    </xar:if>
+    <table class="xar-fullwidth xar-roles-nicetable">
+         <tr>
+             <td>
+                 <img src="#xarTplGetImage('ob_users.gif','roles')#" alt="" class="xar-valign-middle" />
+                 Total users
+             </td>
+             <td class="xar-align-right">
+                 #$numusers#
              </td>
          </tr>
-         <xar:if condition="xarModIsAvailable('messages')">
-             <tr>
-                 <td>
-                     &#160;
-                 </td>
-                 <td>
-                     &#160;
-                 </td>
-                 <td class="xar-align-center">
-                     <img src="#xarTplGetImage('ob_mail_unreaded.gif','roles')#" alt="#xarML('Unread messages')#" />
-                 </td>
-                 <td class="xar-align-center">
-                     <img src="#xarTplGetImage('ob_mail_total.gif','roles')#" alt="#xarML('Total messages')#" />
-                 </td>
-             </tr>
-         </xar:if>
-         <xar:foreach in="$test1" value="$dd">
-             <tr>
-                 <td>
-                     <xar:if condition="!empty($dd['userurl'])">
-                         <img src="#xarTplGetImage('ob_user.gif','roles')#" alt="" class="xar-valign-middle" />
-                         <xar:else />
-                         <img src="#xarTplGetImage('ob_user_other.gif','roles')#" alt="" class="xar-valign-middle" />
-                     </xar:if>
-                     <a href="#$dd['userurl']#">
-                         #xarVarPrepForDisplay($dd['name'])#
-                     </a>
-                 </td>
-                 <td>
-                     &#160;
-                 </td>
-                 <td class="xar-align-center">
-                     <a href="#$dd['messagesurl']#">
-                         #$dd['unread']#
-                     </a>
-                 </td>
-                 <td class="xar-align-center">
-                     <a href="#$dd['messagesurl']#">
-                         #$dd['total']#
-                     </a>
-                 </td>
-             </tr>
-         </xar:foreach>
-     </xar:if>
-     <tr>
-         <td colspan="4">
-             &#160;
-         </td>
-     </tr>
-     <tr>
-         <td>
-             <img src="#xarTplGetImage('ob_users.gif','roles')#" alt="" class="xar-valign-middle" />
-             <xar:mlstring>Total users</xar:mlstring>
-         </td>
-         <td>
-         </td>
-         <td class="xar-align-center" colspan="2">
-             #$numusers#
-         </td>
-     </tr>
-     <tr>
-         <td>
-             <img src="#xarTplGetImage('ob_users_an.gif','roles')#" alt="" class="xar-valign-middle" />
-             <xar:mlstring>Total guests</xar:mlstring>
-         </td>
-         <td>
-         </td>
-         <td class="xar-align-center" colspan="2">
-             #$numguests#
-         </td>
-     </tr>
-</table>
-<xar:if condition="isset($lastuser)">
-     <p>
-         <xar:mlstring>Welcome to our latest member,</xar:mlstring>
-         <a href="&xar-modurl-roles-user-display;&amp;id=#$lastuser['id']#">
-             #xarVarPrepForDisplay($lastuser['name'])#
-         </a>
-     </p>
-</xar:if></xar:template>
+         <tr>
+             <td>
+                 <img src="#xarTplGetImage('ob_users_an.gif','roles')#" alt="" class="xar-valign-middle" />
+                 Total guests
+             </td>
+             <td class="xar-align-right">
+                 #$numguests#
+             </td>
+         </tr>
+    </table>
+    <xar:if condition="isset($lastuser)">
+         <p>
+             Welcome to our latest member,
+             <a href="&xar-modurl-roles-user-display;&amp;id=#$lastuser['id']#">
+                 #xarVarPrepForDisplay($lastuser['name'])#
+             </a>
+         </p>
+    </xar:if>
+</xar:template>

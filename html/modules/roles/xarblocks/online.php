@@ -87,9 +87,10 @@ function roles_onlineblock_display($blockinfo)
             'order' => 'name',
             'startnum' => 0,
             'include_anonymous' => false,
-            'include_myself' => true
+            'include_myself' => false
         )
     );
+    var_dump($zz);
 
     if (!empty($zz)) {
         foreach ($zz as $key => $aa) {
