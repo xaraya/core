@@ -50,8 +50,7 @@
             // Get current content
             if (!is_array($data['content'])) {
                 $exploded = @unserialize($data['content']);
-                if (is_array($exploded))
-                    $data = array_merge($data,$exploded);
+                if (is_array($exploded)) $data['content'] = $exploded;
             } else {
                 $data = array_merge($data,$data['content']);
             }

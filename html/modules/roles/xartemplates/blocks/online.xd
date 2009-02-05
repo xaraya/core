@@ -7,7 +7,7 @@
         but since it's used it could be put right via css
         (comment by andyv)
     -->
-     <xar:if condition="!empty($activeusers)">
+     <xar:if condition="!empty($activeusers) AND $showusers">
         <table class="xar-fullwidth xar-roles-nicetable">
              <tr>
                  <td class="xar-threequarterswidth">
@@ -67,34 +67,35 @@
                      </td>
                  </tr>
              </xar:foreach>
-             <tr>
-                 <td colspan="4">
-                     &#160;
-                 </td>
-             </tr>
         </table>
     </xar:if>
-    <table class="xar-fullwidth xar-roles-nicetable">
-         <tr>
-             <td>
-                 <img src="#xarTplGetImage('ob_users.gif','roles')#" alt="" class="xar-valign-middle" />
-                 Total users
-             </td>
-             <td class="xar-align-right">
-                 #$numusers#
-             </td>
-         </tr>
-         <tr>
-             <td>
-                 <img src="#xarTplGetImage('ob_users_an.gif','roles')#" alt="" class="xar-valign-middle" />
-                 Total guests
-             </td>
-             <td class="xar-align-right">
-                 #$numguests#
-             </td>
-         </tr>
-    </table>
-    <xar:if condition="isset($lastuser)">
+    <xar:if condition="$showanontotal AND $showanontotal">
+        <table class="xar-fullwidth xar-roles-nicetable">
+            <xar:if condition="$showusertotal">
+                 <tr>
+                     <td>
+                         <img src="#xarTplGetImage('ob_users.gif','roles')#" alt="" class="xar-valign-middle" />
+                         Total users
+                     </td>
+                     <td class="xar-align-right">
+                         #$numusers#
+                     </td>
+                 </tr>
+            </xar:if>
+            <xar:if condition="$showanontotal">
+                 <tr>
+                     <td>
+                         <img src="#xarTplGetImage('ob_users_an.gif','roles')#" alt="" class="xar-valign-middle" />
+                         Total guests
+                     </td>
+                     <td class="xar-align-right">
+                         #$numguests#
+                     </td>
+                 </tr>
+            </xar:if>
+        </table>
+    </xar:if>
+    <xar:if condition="isset($lastuser) AND $showlastuser">
          <p>
              Welcome to our latest member,
              <a href="&xar-modurl-roles-user-display;&amp;id=#$lastuser['id']#">

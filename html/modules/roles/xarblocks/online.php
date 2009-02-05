@@ -29,14 +29,14 @@
 
         function display(Array $data=array())
         {
-            // Security check
+            $data = parent::display($data);
             if (!xarSecurityCheck('ViewRoles',0,'Block',"online:$data[title]:$data[bid]")) {return;}
 
             // Get variables from content block
             if (!is_array($data['content'])) {
-                $vars = unserialize($data['content']);
+                $args = unserialize($data['content']);
             } else {
-                $vars = $data['content'];
+                $args = $data['content'];
             }
 
             // Database setup
@@ -161,6 +161,29 @@
 
             $args['blockid'] = $data['bid'];
             $data['content'] = $args;
+            return $data;
+        }
+
+        function modify(Array $data=array())
+        {
+            $data = parent::modify($data);
+            $args = $data['content'];
+            if (!isset($args['showusers']))     $args['showusers'] = 0;
+            if (!isset($args['showusertotal'])) $args['showusertotal'] = 0;
+            if (!isset($args['showanontotal'])) $args['showanontotal'] = 0;
+            if (!isset($args['showlastuser']))  $args['showlastuser'] = 0;
+            $data = array_merge($data,$args);
+            return $data;
+        }
+
+        public function update(Array $data=array())
+        {
+            $data = parent::update($data);
+            if (!xarVarFetch('showusers',     'checkbox', $args['showusers'], false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('showusertotal', 'checkbox', $args['showusertotal'], false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('showanontotal', 'checkbox', $args['showanontotal'], false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('showlastuser',  'checkbox', $args['showlastuser'], false, XARVAR_NOT_REQUIRED)) return;
+            $data['content'] = $args;            
             return $data;
         }
     }
