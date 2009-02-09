@@ -41,10 +41,7 @@ class LanguageBlock extends BasicBlock
         $site_locales = xarMLSListSiteLocales();
 
         asort($site_locales);
-
-        if (count($site_locales) <= 1) {
-            return;
-        }
+        if (count($site_locales) <= 1) return;
 
         foreach ($site_locales as $locale) {
             $locale_data =& xarMLSLoadLocaleData($locale);
