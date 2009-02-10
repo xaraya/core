@@ -256,7 +256,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         //FIXME: check these
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
-
+        $args['object'] = $this;
         return xarTplObject($args['tplmodule'],$args['template'],'showform',$args);
     }
 
@@ -335,6 +335,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         //FIXME: check these
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
+        $args['object'] = $this;
         return xarTplObject($args['tplmodule'],$args['template'],'showdisplay',$args);
     }
 
