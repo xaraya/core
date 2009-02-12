@@ -28,8 +28,8 @@
         #$showval#
       <fieldset>
         <div class="xar-align-center">
-          <input type="submit" name="preview" value="#xarML('Preview')#" /> 
           <input type="submit" name="confirm" value="#xarML('Update')#" />
+          <input type="submit" name="exit" value="#xarML('Update and Exit')#" /> 
         </div>
       </fieldset>
     </form>
