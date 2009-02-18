@@ -34,7 +34,7 @@
         <xar:if condition="$mode eq 3">
             <xar:set name="dd_id">'dd_' . $id</xar:set>
             <xar:if condition="count($options) gt 0">
-                <xar:if condition="($optionSelected eq false) AND !empty($value))">
+                <xar:if condition="($optionSelected eq false) AND !empty($value)">
                     <xar:if condition="empty($firstline)">
                         <xar:var name="linetext">Text Specified ==&gt;</xar:var>
                         <xar:set name="firstline">array('id' => '','name' => $linetext)</xar:set>
