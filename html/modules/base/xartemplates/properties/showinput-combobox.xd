@@ -34,11 +34,17 @@
         <xar:if condition="$mode eq 3">
             <xar:set name="dd_id">'dd_' . $id</xar:set>
             <xar:if condition="count($options) gt 0">
-                <xar:if condition="($optionSelected eq false) AND !empty($value) AND ($mode eq 3)">
-                    <xar:set name="firstline">array('id' => 0,'name' => 'Text Specified ==&gt;')</xar:set>
+                <xar:if condition="($optionSelected eq false) AND !empty($value))">
+                    <xar:if condition="empty($firstline)">
+                        <xar:var name="linetext">Text Specified ==&gt;</xar:var>
+                        <xar:set name="firstline">array('id' => '','name' => $linetext)</xar:set>
+                    <xar:if>
                     <xar:data-input type="dropdown" name="$name" id="$dd_id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
                 <xar:else />
-                    <xar:set name="firstline">array('id' => 0,'name' => 'Choose or enter an item ==&gt;')</xar:set>
+                    <xar:if condition="empty($firstline)">
+                        <xar:var name="linetext">Choose or enter an item ==&gt;</xar:var>
+                        <xar:set name="firstline">array('id' => '','name' => $linetext)</xar:set>
+                    <xar:if>
                     <xar:data-input type="dropdown" name="$name" id="$dd_id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
                 </xar:if>
             </xar:if>
