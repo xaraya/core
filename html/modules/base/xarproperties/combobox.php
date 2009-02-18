@@ -40,7 +40,7 @@ sys::import('modules.base.xarproperties.dropdown');
             // store the fieldname for configurations who need them (e.g. file uploads)
             $this->fieldname = $tbname;
 
-            if( isset($tbvalue) && ($tbvalue != '') )
+            if( isset($tbvalue) && ($tbvalue != ''))
             {
                 // check as a textbox
                 $value = $tbvalue;
@@ -54,6 +54,10 @@ sys::import('modules.base.xarproperties.dropdown');
                 return $isvalid;
             } else {
                 // check as a dropdown
+                if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
+                // DId we find a dropdown?
+                if( isset($value)) return false
+                
                 return parent::checkInput($name, $value);
             }
         }
