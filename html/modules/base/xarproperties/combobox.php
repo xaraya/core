@@ -56,7 +56,7 @@ sys::import('modules.base.xarproperties.dropdown');
                 // check as a dropdown
                 if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
                 // DId we find a dropdown?
-                if( isset($value)) return false
+                if( isset($value)) return false;
                 
                 return parent::checkInput($name, $value);
             }
