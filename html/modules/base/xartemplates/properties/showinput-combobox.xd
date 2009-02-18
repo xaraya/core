@@ -38,13 +38,13 @@
                     <xar:if condition="empty($firstline)">
                         <xar:var name="linetext">Text Specified ==&gt;</xar:var>
                         <xar:set name="firstline">array('id' => '','name' => $linetext)</xar:set>
-                    <xar:if>
+                    </xar:if>
                     <xar:data-input type="dropdown" name="$name" id="$dd_id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
                 <xar:else />
                     <xar:if condition="empty($firstline)">
                         <xar:var name="linetext">Choose or enter an item ==&gt;</xar:var>
                         <xar:set name="firstline">array('id' => '','name' => $linetext)</xar:set>
-                    <xar:if>
+                    </xar:if>
                     <xar:data-input type="dropdown" name="$name" id="$dd_id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
                 </xar:if>
             </xar:if>
