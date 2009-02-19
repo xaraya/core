@@ -544,8 +544,8 @@ class DataObject extends DataObjectMaster implements iDataObject
             // Execute any property-specific code first
             if ($store != '_dummy_') {
                 foreach ($this->datastores[$store]->fields as $property) {
-                    if (method_exists($property,'createvalue')) {
-                        $property->createValue($this->itemid);
+                    if (method_exists($property,'updatevalue')) {
+                        $property->updateValue($this->itemid);
                     }
                 }
             }
