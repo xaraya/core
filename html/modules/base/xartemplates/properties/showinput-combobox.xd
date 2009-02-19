@@ -29,7 +29,11 @@
             </xar:if>
         </xar:if>
         <xar:if condition="$mode eq 3">
-            <br />
+            <xar:if condition="$layout eq 'horizontal'">
+                &#160;
+            <xar:elseif condition="($layout eq 'vertical') OR ($layout eq 'default')" />
+                <br />
+            </xar:if>
         </xar:if>
         <xar:if condition="$mode eq 3">
             <xar:set name="dd_id">'dd_' . $id</xar:set>
