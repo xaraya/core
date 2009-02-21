@@ -438,7 +438,7 @@ class DataProperty extends Object implements iDataProperty
         $data['name']  = $this->name;
         $data['label'] = isset($data['label']) ? xarVarPrepForDisplay($data['label']) : xarVarPrepForDisplay($this->label);
         // Allow 0 as a fieldprefix
-        if(!empty($this->_fieldprefix || $this->_fieldprefix == 0))  $data['fieldprefix'] = $this->_fieldprefix;
+        if(!empty($this->_fieldprefix) || $this->_fieldprefix == 0)  $data['fieldprefix'] = $this->_fieldprefix;
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
