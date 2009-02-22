@@ -434,8 +434,11 @@ class DataProperty extends Object implements iDataProperty
         elseif(is_array($data))
             extract($data);
 
-        $data['id']    = $this->id;
         $data['name']  = $this->name;
+        $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
+        $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
+        if(!isset($data['id'])) $data['id']   = $data['name'];
+        
         $data['label'] = isset($data['label']) ? xarVarPrepForDisplay($data['label']) : xarVarPrepForDisplay($this->label);
         // Allow 0 as a fieldprefix
         if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0)  $data['fieldprefix'] = $this->_fieldprefix;
