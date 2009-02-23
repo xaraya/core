@@ -55,9 +55,11 @@ sys::import('modules.base.xarproperties.dropdown');
             } else {
                 // check as a dropdown
                 if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
-                // DId we find a dropdown?
-                if( isset($value)) return false;
-                
+                // Did we find a dropdown?
+                if(!isset($value)) {
+                    $this->invalid = xarML('No dropdown available for the combobox #(1)',$name);
+                    return false;
+                }                
                 return parent::checkInput($name, $value);
             }
         }

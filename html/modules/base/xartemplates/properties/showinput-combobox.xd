@@ -16,7 +16,7 @@
     
     <xar:set name="optionSelected">false</xar:set>
     <xar:if condition="$mode eq 1">
-        <xar:data-input type="dropdown" name="$name" id="dd_$id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
+        <xar:data-input type="dropdown" name="$name" id="$id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
     <xar:else />
         <xar:if condition="($mode eq 2) OR ($mode eq 3)">
             <xar:set name="tbname">$name . '_tb'</xar:set>
@@ -54,7 +54,5 @@
         </xar:if>
 
     </xar:if>
-    <xar:if condition="!empty($invalid)">
-        <span class="xar-error">#$invalid#</span>
-    </xar:if>
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>
