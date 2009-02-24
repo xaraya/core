@@ -29,13 +29,10 @@ function dynamicdata_utilapi_import($args)
 
     extract($args);
 
-    if (!isset($prefix)) {
-        $prefix = xarDB::getPrefix() . '_';
-    } else {
-        $prefix .= '_';
-    }
-
+    if (!isset($prefix)) $prefix = xarDB::getPrefix();
+    $prefix .= '_';
     if (!isset($overwrite)) $overwrite = false;
+
     if (empty($xml) && empty($file)) {
         throw new EmptyParameterException('xml or file');
     } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/',$file)) ) {
@@ -53,6 +50,8 @@ function dynamicdata_utilapi_import($args)
 
     if (!empty($file)) {
         $xmlobject = simplexml_load_file($file);
+        xarLogMessage('DD: import file ' . $file);
+        
     } elseif (!empty($xml)) {
         $xmlobject = new SimpleXMLElement($xml);
     }
@@ -61,10 +60,12 @@ function dynamicdata_utilapi_import($args)
     $roottag = $dom->tagName;
 
     if ($roottag == 'object') {
-
+        
+        //FIXME: this unconditionally CLEARS the incoming parameter!!
         $args = array();
         // Get the object's name
         $args['name'] = (string)($xmlobject->attributes()->name);
+        xarLogMessage('DD: importing ' . $args['name']);
 
         // check if the object exists
         $info = DataObjectMaster::getObjectInfo(array('name' => $args['name']));
@@ -88,12 +89,11 @@ function dynamicdata_utilapi_import($args)
         // Treat parents where the module is DD differently. Put in numeric itemtype
 //        if ($args['moduleid'] == 182) {
             $args['parent'] = empty($args['parent']) ? 0 : $args['parent'];
-            $infobaseobject = DataObjectMaster::getObjectInfo(array('name' => $args['parent']));
+            $infobaseobject = DataObjectMaster::getObjectInfo(array('id' => $args['parent']));
             $args['parent'] = $infobaseobject['itemtype'];
 //        }
 
         if (empty($args['name']) || empty($args['moduleid'])) {
-            debug($args);
             throw new BadParameterException(null,'Missing keys in object definition');
         }
         // Make sure we drop the object id, because it might already exist here
