@@ -1,21 +1,24 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:set name="siteslogan"><xar:var scope="module" module="themes" name="SiteSlogan" /></xar:set>
-<div id="xc-header">
-    <div id="xc-header-rightbevel">
-        <!-- Right bevel is purely decorational - needs extra div-box -->
+    <xar:set name="siteslogan">
+        <xar:var scope="module" module="themes" name="SiteSlogan" />
+    </xar:set>
+    <div id="xc-header">
+        <div id="xc-header-rightbevel">
+            <!-- Right bevel is purely decorational - needs extra div-box -->
+        </div>
+        <!-- See if we need the styleswitcher controls here -->
+        <xar:if condition="$styleswitchertype ne 'none'">
+            <xar:template file="styleswitchercontrols" type="theme" />
+        </xar:if>
+        <!-- Logo and bevel are combined and positioned with css -->
+        <h1>
+            <a href="&xar-baseurl;" title="#$sitename#">
+                <span>#$sitename#</span>
+            </a>
+        </h1>
+        <p id="xc-slogan">
+            <xar:var name="siteslogan" />
+        </p>
     </div>
-    <!-- See if we need the styleswitcher controls here -->
-    <xar:if condition="$styleswitchertype ne 'none'">
-        <xar:template file="styleswitchercontrols" type="theme" />
-    </xar:if>
-    <!-- Logo and bevel are combined and positioned with css -->
-    <h1>
-        <a href="&xar-baseurl;" title="#$sitename#">
-            <span>#$sitename#</span>
-        </a>
-    </h1>
-    <p id="xc-slogan">
-        <xar:var name="siteslogan" />
-    </p>
-</div>
 </xar:template>

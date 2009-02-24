@@ -1,1 +1,2 @@
-<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout" file="view-table"/>
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout" file="view-table" />

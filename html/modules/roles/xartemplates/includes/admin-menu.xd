@@ -1,2 +1,3 @@
-<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout" type="module" module="base" file="admin-menu-skel" />
-
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout" type="module" module="base"
+file="admin-menu-skel" />

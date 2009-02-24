@@ -1,7 +1,7 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-
-<!--
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!--
 FIXME:  The target="" needs to be replaced by something that works in xhtml.
     <xar:if condition="!empty($linkurl)">
         #$user# [ <a href="#$linkurl#" target="#$preview#">#$profile#</a> ]
@@ -10,8 +10,6 @@ FIXME:  The target="" needs to be replaced by something that works in xhtml.
     </xar:if>
 -->
     <input type="text" name="#$name#" id="#$id#" value="#$user#" />
-
-    <xar:if condition="!empty($invalid)">
-        &#160;<span class="xar-error">#$invalid#</span>
-    </xar:if>
+    <xar:if condition="!empty($invalid)">&#160; 
+    <span class="xar-error">#$invalid#</span></xar:if>
 </xar:template>

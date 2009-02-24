@@ -1,40 +1,34 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<form action="&xar-modurl-authsystem-user-login;" method="post" class="xar-margin-none">   
-        
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <form action="&xar-modurl-authsystem-user-login;" method="post" class="xar-margin-none">
         <xar:set name="id">'returnurl'.$blockid</xar:set>
         <xar:set name="unameid">'uname'.$blockid</xar:set>
         <xar:set name="passid">'pass'.$blockid</xar:set>
         <xar:set name="remembermeid">'rememberme'.$blockid</xar:set>
-        
-    <p>
-        <xar:data-input type="hidden" name="redirecturl" id="$id" value="$return_url" />
-        <label for="#$unameid#" title="#xarML('Enter your user name')#">
-            Username:
-        </label>
-        <xar:data-input type="textbox" class="xar-fullwidth" name="uname" id="$unameid" maxlength="64" />
-    </p>
-    <p>
-        <label for="#$passid#" title="#xarML('Enter your password')#">
-            Password:
-        </label>
-        <xar:data-input type="password" class="xar-fullwidth" name="pass" id="$passid" maxlength="64" />
-    </p>
-    <p>
-        <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') ne 'High'">
-            <label class="xar-displayblock" for="#$remembermeid#">
-                <xar:data-input type="checkbox" name="rememberme" id="$remembermeid" value="1" />
-                Don't ask for password
-            </label>
-        </xar:if>
-    </p>
-    <p>
-        <input type="submit" value="#xarML('Log In')#" />
-    </p>
-    <p>
-        <a href="&xar-modurl-roles-user-lostpassword;">
-            Request new password
-        </a>
-    </p>
-</form>
+        <p>
+            <xar:data-input type="hidden" name="redirecturl" id="$id" value="$return_url" />
+            <label for="#$unameid#" title="#xarML('Enter your user name')#">Username:</label>
+            <xar:data-input type="textbox" class="xar-fullwidth" name="uname" id="$unameid"
+            maxlength="64" />
+        </p>
+        <p>
+            <label for="#$passid#" title="#xarML('Enter your password')#">Password:</label>
+            <xar:data-input type="password" class="xar-fullwidth" name="pass" id="$passid"
+            maxlength="64" />
+        </p>
+        <p>
+            <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') ne 'High'">
+                <label class="xar-displayblock" for="#$remembermeid#">
+                <xar:data-input type="checkbox" name="rememberme" id="$remembermeid"
+                value="1" />Don't ask for password</label>
+            </xar:if>
+        </p>
+        <p>
+            <input type="submit" value="#xarML('Log In')#" />
+        </p>
+        <p>
+            <a href="&xar-modurl-roles-user-lostpassword;">Request new password</a>
+        </p>
+    </form>
 </xar:template>

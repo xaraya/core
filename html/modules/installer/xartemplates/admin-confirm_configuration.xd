@@ -1,40 +1,36 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:set name="active_step">8</xar:set>
-<div id="install">
-    <xar:template file="status" />
-    <h1 class="xar-pagetitle">
-        Choose Privileges Setup
-    </h1>
-
-    <h3>
-        Privileges
-    </h3>
-    <form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
-        <div>
-            <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-            <input type="hidden" name="configuration" id="configuration" value="#$configuration#" />
-            <input type="hidden" name="confirmed" id="confirmed" value="true" />
-            <xar:loop name="$options1">
-                <p>
-                    <xar:if condition="$loop:item['option'] eq ''">
-                        #$loop:item['comment']#
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="active_step">8</xar:set>
+    <div id="install">
+        <xar:template file="status" />
+        <h1 class="xar-pagetitle">Choose Privileges Setup</h1>
+        <h3>Privileges</h3>
+        <form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
+            <div>
+                <input type="hidden" name="install_language" id="install_language"
+                value="#$language#" />
+                <input type="hidden" name="configuration" id="configuration"
+                value="#$configuration#" />
+                <input type="hidden" name="confirmed" id="confirmed" value="true" />
+                <xar:loop name="$options1">
+                    <p>
+                        <xar:if condition="$loop:item['option'] eq ''">#$loop:item['comment']# 
                         <xar:else />
                         <xar:if condition="$loop:item['option'] == 'true'">
-                            <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
+                            <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#"
+                            value="#$loop:item['item']#" checked="checked" />
                             <xar:else />
-                            <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
+                            <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#"
+                            value="#$loop:item['item']#" checked="checked" />
                         </xar:if>
-                        <label for="chosen1_#$loop:index#">
-                            #$loop:item['comment']#
-                        </label>
-                    </xar:if>
-                </p>
-            </xar:loop>
-            <p>
-                Disabling the options above will leave your registered and unregistered users with minimal access. The administrator you created in Step 6 will always have full access to the site.
-            </p>
-<!--
+                        <label for="chosen1_#$loop:index#">#$loop:item['comment']#</label></xar:if>
+                    </p>
+                </xar:loop>
+                <p>Disabling the options above will leave your registered and unregistered users
+                with minimal access. The administrator you created in Step 6 will always have full
+                access to the site.</p>
+                <!--
             <div class="configuration">
 
                 <h4>
@@ -84,8 +80,8 @@
                 All of the above modules can be installed or removed at any later time in the Modules module.
             </p>
         -->
-            <input type="submit" name="create" id="create" value="Continue" />
-        </div>
-    </form>
-</div>
+                <input type="submit" name="create" id="create" value="Continue" />
+            </div>
+        </form>
+    </div>
 </xar:template>

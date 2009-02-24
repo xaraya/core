@@ -1,12 +1,12 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<h4>Which template do I edit?</h4>
-<p>
-    
-        When working on a theme you should edit <em>override</em> theme templates not internal system templates. Turn on <em>Show template filenames in HTML comments</em> in
-        the Themes Modify Config page. This allows you to see which template is providing output by simply looking at the page source. Once you
-        have identified a template, create an <strong>override</strong> template in your theme.
-        Learn how you can <a href="http://xaraya.com/index.php/documentation/25">override templates</a>
-         with an Articles module example.
-</p>
-
+    <h4>Which template do I edit?</h4>
+    <p>When working on a theme you should edit 
+    <em>override</em>theme templates not internal system templates. Turn on 
+    <em>Show template filenames in HTML comments</em>in the Themes Modify Config page. This allows
+    you to see which template is providing output by simply looking at the page source. Once you
+    have identified a template, create an 
+    <strong>override</strong>template in your theme. Learn how you can 
+    <a href="http://xaraya.com/index.php/documentation/25">override templates</a>with an Articles
+    module example.</p>
 </xar:template>

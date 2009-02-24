@@ -1,34 +1,30 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:set name="active_step">1</xar:set>
-<div id="install">
-    <xar:template file="status" />
-    <h1>
-        Select your Language
-    </h1>
-
-    <p>
-        
-            This script will install the Xaraya database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the <a href="http://www.xaraya.com/index.php/xarbb">support forums</a> or live IRC support for help.
-        
-    </p>
-
-    <form action="install.php" method="post">
-        <p class="center">
-            <label for="install_language">
-                Language:
-            </label>
-            <select id="install_language" name="install_language" class="xar-text">
-                <xar:foreach in="$languages" key="$key" value="$value">
-                    <xar:if condition="$install_language == $key">
-                        <option value="#$key#" selected="selected">#$value# (#$key#)</option>
-                    <xar:else />
-                        <option value="#$key#">#$value# (#$key#)</option>
-                    </xar:if>
-                </xar:foreach>
-            </select>
-            <input type="hidden" name="install_phase" id="install_phase" value="2" />
-            <input type="submit" value="Continue" />
-        </p>
-    </form>
-</div></xar:template>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="active_step">1</xar:set>
+    <div id="install">
+        <xar:template file="status" />
+        <h1>Select your Language</h1>
+        <p>This script will install the Xaraya database and configure the settings you need to get
+        started. This process will take approximately ten (10) minutes. If you need assistance at
+        any point, visit the 
+        <a href="http://www.xaraya.com/index.php/xarbb">support forums</a>or live IRC support for
+        help.</p>
+        <form action="install.php" method="post">
+            <p class="center">
+                <label for="install_language">Language:</label>
+                <select id="install_language" name="install_language" class="xar-text">
+                    <xar:foreach in="$languages" key="$key" value="$value">
+                        <xar:if condition="$install_language == $key">
+                            <option value="#$key#" selected="selected">#$value# (#$key#)</option>
+                            <xar:else />
+                            <option value="#$key#">#$value# (#$key#)</option>
+                        </xar:if>
+                    </xar:foreach>
+                </select>
+                <input type="hidden" name="install_phase" id="install_phase" value="2" />
+                <input type="submit" value="Continue" />
+            </p>
+        </form>
+    </div>
+</xar:template>

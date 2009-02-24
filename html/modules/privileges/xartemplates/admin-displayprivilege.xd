@@ -1,10 +1,11 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:style scope="module" module="base" file="navtabs" />
-<xar:style scope="module" file="privtree" />
-<xar:base-include-javascript module="privileges" filename="xarTree.js" />
-<script type="javascript">
-<!--
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="module" module="base" file="navtabs" />
+    <xar:style scope="module" file="privtree" />
+    <xar:base-include-javascript module="privileges" filename="xarTree.js" />
+    <script type="javascript">
+        <!--
     var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
     function doOnLoad() {
     oldOnLoadFunction();
@@ -23,118 +24,99 @@
     document.forms['privilegeform'].action = target;
     document.forms['privilegeform'].submit();}
 // -->
-</script>
-<div class="xar-mod-head">
-    <span class="xar-mod-title">Privileges Administration</span>
-</div>
-<div class="xar-mod-body">
- <xar:template type="module" file="admin-menu" />
-    <h2>
-        Display Privilege:
-        #$pname#
-    </h2>
-
-    <xar:if condition="count($parents) ne 0">
+    </script>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Privileges Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu" />
+        <h2>Display Privilege: #$pname#</h2>
+        <xar:if condition="count($parents) ne 0">
+            <div>
+                <dl class="xar-tabs">
+                    <dt class="help"
+                    title="These are the privileges that contain #$pname# as a component">Used in
+                    :</dt>
+                    <xar:set name="prevgroup">""</xar:set>
+                    <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+                        <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+                            <dd>
+                                <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$parents.$i.parentid#"
+                                title="#xarML('Show this privilege')#">
+                                #$parents[$i]['parentname']#</a>
+                            </dd>
+                        </xar:if>
+                        <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
+                    </xar:for>
+                </dl>
+            </div>
+        </xar:if>
         <div>
             <dl class="xar-tabs">
-                <dt class="help" title="These are the privileges that contain #$pname# as a component">Used in :
-                </dt>
-                <xar:set name="prevgroup">""</xar:set>
-                <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
-                    <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                        <dd>
-                            <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
-                        </dd>
-                    </xar:if>
-                    <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
-                </xar:for>
+                <dt class="help" title="#xarML('Choose an action to perform on this privilege')#">
+                Manage privilege :</dt>
+                <dd class="active">
+                    <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$ppid#"
+                    class="active">Display</a>
+                </dd>
+                <dd>
+                    <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$ppid#">
+                    Modify</a>
+                </dd>
+                <dd>
+                    <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$ppid#">
+                    Delete</a>
+                </dd>
+                <dd>
+                    <a href="&xar-modurl-privileges-admin-viewroles;&amp;id=#$ppid#">
+                    Groups/Users</a>
+                </dd>
             </dl>
         </div>
-    </xar:if>
-
-    <div>
-        <dl class="xar-tabs">
-            <dt class="help" title="#xarML('Choose an action to perform on this privilege')#">
-                Manage privilege :
-            </dt>
-            <dd class="active">
-                <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$ppid#" class="active">Display</a>
-            </dd>
-            <dd>
-                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$ppid#">Modify</a>
-            </dd>
-            <dd>
-                <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$ppid#">Delete</a>
-            </dd>
-            <dd>
-                <a href="&xar-modurl-privileges-admin-viewroles;&amp;id=#$ppid#">Groups/Users</a>
-            </dd>
-        </dl>
+        <fieldset>
+            <legend>Privilege properties</legend>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label">Name:</label>
+                <span>#$pname#</span>
+            </div>
+            <xar:if condition="$ptype eq null">
+                <p>This is an empty container for other privileges.</p>
+            </xar:if>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label">Realm:</label>
+                <span>#$prealm#</span>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label">Module:</label>
+                <span>#$pmodule#</span>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label">Component:</label>
+                <span>#$pcomponent#</span>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label">Level:</label>
+                <span>
+                    <xar:if condition="$plevel eq 0">None 
+                    <xar:elseif condition="$plevel eq 100" />Overview 
+                    <xar:elseif condition="$plevel eq 200" />Read 
+                    <xar:elseif condition="$plevel eq 300" />Comment 
+                    <xar:elseif condition="$plevel eq 400" />Moderate 
+                    <xar:elseif condition="$plevel eq 500" />Edit 
+                    <xar:elseif condition="$plevel eq 600" />Add 
+                    <xar:elseif condition="$plevel eq 700" />Delete 
+                    <xar:elseif condition="$plevel eq 800" />Admin</xar:if>
+                </span>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label">Instances:</label>
+                <span>#$instance#</span>
+            </div>
+        </fieldset>
+        <br class="xar-clearboth" />
+        <fieldset>
+            <legend>The Components of '#$pname#':</legend>
+            <!--      <xar:data-input type="privilegestree" show="All" /> -->
+        </fieldset>
     </div>
-
-    <fieldset>
-      <legend>Privilege properties</legend>
-      <div class="xar-form-input-wrapper">
-        <label class="xar-form-label">Name:</label>
-        <span>#$pname#</span>
-      </div>
-
-      <xar:if condition="$ptype eq null">
-        <p>
-          This is an empty container for other privileges.
-        </p>
-      </xar:if>
-
-      <div class="xar-form-input-wrapper">
-        <label class="xar-form-label">Realm:</label>
-        <span>#$prealm#</span>
-      </div>
-
-      <div class="xar-form-input-wrapper">
-        <label class="xar-form-label">Module:</label>
-        <span>#$pmodule#</span>
-      </div>
-
-      <div class="xar-form-input-wrapper">
-        <label class="xar-form-label">Component:</label>
-        <span>#$pcomponent#</span>
-      </div>
-
-      <div class="xar-form-input-wrapper">
-        <label class="xar-form-label">Level:</label>
-        <span>
-          <xar:if condition="$plevel eq 0">
-            None
-            <xar:elseif condition="$plevel eq 100" />
-            Overview
-            <xar:elseif condition="$plevel eq 200" />
-            Read
-            <xar:elseif condition="$plevel eq 300" />
-            Comment
-            <xar:elseif condition="$plevel eq 400" />
-            Moderate
-            <xar:elseif condition="$plevel eq 500" />
-            Edit
-            <xar:elseif condition="$plevel eq 600" />
-            Add
-            <xar:elseif condition="$plevel eq 700" />
-            Delete
-            <xar:elseif condition="$plevel eq 800" />
-            Admin
-          </xar:if>
-        </span>
-      </div>
-
-      <div class="xar-form-input-wrapper">
-        <label class="xar-form-label">Instances:</label>
-        <span>#$instance#</span>
-      </div>
-    </fieldset>
-    <br class="xar-clearboth" />
-
-    <fieldset>
-      <legend>The Components of '#$pname#':</legend>
-<!--      <xar:data-input type="privilegestree" show="All" /> -->
-    </fieldset>
-</div>
 </xar:template>

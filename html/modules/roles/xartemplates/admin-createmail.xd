@@ -1,394 +1,257 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:set name="stateoptions">
-    array(
-        array('id' => ROLES_STATE_ALL, 'name' => xarML('All')),
-        array('id' => ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')),
-        array('id' => ROLES_STATE_NOTVALIDATED, 'name' => xarML('Not Validated')),
-        array('id' => ROLES_STATE_ACTIVE, 'name' => xarML('Active')),
-        array('id' => ROLES_STATE_PENDING, 'name' => xarML('Pending')),
-    )
-</xar:set>
-<xar:set name="modstatus">
-    xarSession::getVar('statusmsg')
-</xar:set>
-<xar:set name="messagetitle">
-    #xarML('Write this string in the message body or subject to display the corresponding information')#
-</xar:set>
-<xar:style scope="module" module="base" file="navtabs" />
-<div class="xar-mod-head">
-    <span class="xar-mod-title">
-        
-            Roles Administration
-        
-    </span>
-</div>
-<div class="xar-mod-body">
-  <xar:template type="module" file="admin-menu" />
-    <h2>
-        <a href="&xar-modurl-roles-admin-createmail;">
-            
-                Messaging System:
-            
-        </a>
-        
-            Send Mail To Users/Groups
-        
-    </h2>
-    <div>
-        <dl class="xar-tabs">
-            <dt class="help">
-                
-                    Option
-                
-                :
-            </dt>
-            <dd class="active">
-                <a href="&xar-modurl-roles-admin-createmail;">
-                    
-                        Send mail
-                    
-                </a>
-            </dd>
-            <dd>
-                <a href="&xar-modurl-roles-admin-modifyemail;">
-                    
-                        Templates
-                    
-                </a>
-            </dd>
-            <dd>
-                <a href="&xar-modurl-roles-admin-modifynotice;">
-                    
-                        Configure
-                    
-                </a>
-            </dd>
-        </dl>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="stateoptions">array( array('id' =&gt; ROLES_STATE_ALL, 'name' =&gt;
+    xarML('All')), array('id' =&gt; ROLES_STATE_INACTIVE, 'name' =&gt; xarML('Inactive')),
+    array('id' =&gt; ROLES_STATE_NOTVALIDATED, 'name' =&gt; xarML('Not Validated')), array('id'
+    =&gt; ROLES_STATE_ACTIVE, 'name' =&gt; xarML('Active')), array('id' =&gt; ROLES_STATE_PENDING,
+    'name' =&gt; xarML('Pending')), )</xar:set>
+    <xar:set name="modstatus">xarSession::getVar('statusmsg')</xar:set>
+    <xar:set name="messagetitle">#xarML('Write this string in the message body or subject to
+    display the corresponding information')#</xar:set>
+    <xar:style scope="module" module="base" file="navtabs" />
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Roles Administration</span>
     </div>
-    <form method="post" action="&xar-modurl-roles-admin-createmail;">
-        <xar:comment>
-            Module List Sort and Filter Controls table
-        </xar:comment>
-        <table class="xar-fullwidth">
-            <tr>
-                <th class="xar-nowrap">
-                    <label for="filter" title="#xarML('Select display type')#">
-                        
-                            Show Users
-                        
-                    </label>
-                </th>
-                <th class="xar-nowrap">
-                    <label for="filter" title="#xarML('Select a group')#">
-                        
-                            Groups
-                        
-                    </label>
-                </th>
-                <th class="xar-nowrap">
-                    <label for="filter" title="#xarML('Select the state of users')#">
-                        
-                            State
-                        
-                    </label>
-                </th>
-                <xar:if condition="$id gt 0">
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu" />
+        <h2>
+        <a href="&xar-modurl-roles-admin-createmail;">Messaging System:</a>Send Mail To
+        Users/Groups</h2>
+        <div>
+            <dl class="xar-tabs">
+                <dt class="help">Option :</dt>
+                <dd class="active">
+                    <a href="&xar-modurl-roles-admin-createmail;">Send mail</a>
+                </dd>
+                <dd>
+                    <a href="&xar-modurl-roles-admin-modifyemail;">Templates</a>
+                </dd>
+                <dd>
+                    <a href="&xar-modurl-roles-admin-modifynotice;">Configure</a>
+                </dd>
+            </dl>
+        </div>
+        <form method="post" action="&xar-modurl-roles-admin-createmail;">
+            <xar:comment>Module List Sort and Filter Controls table</xar:comment>
+            <table class="xar-fullwidth">
+                <tr>
                     <th class="xar-nowrap">
-                        <label for="filter" title="#xarML('Includes subgroups')#">
-                            
-                                Include Subgroups
-                            
-                        </label>
+                        <label for="filter" title="#xarML('Select display type')#">Show
+                        Users</label>
                     </th>
-                </xar:if>
-                <th class="xar-nowrap">
-                    <label for="filter" title="#xarML('Select template for the message')#">
-                        
-                            Templates
-                        
-                    </label>
-                </th>
-                <th class="xar-nowrap">
-                    <label for="reload">
-                        
-                            Action
-                        
-                    </label>
-                </th>
-            </tr>
-            <tr>
-                <td class="xar-align-center">
-                    <select name="selstyle" id="selstyle" onchange="this.form.submit()">
-                        <xar:foreach in="$style" key="$key" value="$value">
-                            <xar:if condition="$key eq $selstyle">
-                                <option value="#$key#" selected="selected">
-                                    #$value#
-                                </option>
-                                <xar:else />
-                                <option value="#$key#">
-                                    #$value#
-                                </option>
-                            </xar:if>
-                        </xar:foreach>
-                    </select>
-                </td>
-                <td class="xar-align-center">
-                    <select name="id" id="id" onchange="this.form.submit()">
-                        <xar:if condition="$type eq 'single'">
-                            <option value="#$id#" selected="selected">
-                                
-                                    Single user
-                                
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$id eq -1">
-                            <option value="#$id#" selected="selected">
-                                
-                                    -- choose --
-                                
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$id eq 0">
-                            <option value="0" selected="selected">
-                                
-                                    All Users
-                                
-                            </option>
-                            <xar:else />
-                            <option value="0">
-                                
-                                    All Users
-                                
-                            </option>
-                        </xar:if>
-                        <xar:set name="prevgroup">
-                            ""
-                        </xar:set>
-                        <xar:loop name="$groups">
-                            <xar:if condition="$prevgroup ne $loop:item['name']">
-                                <xar:if condition="$id eq $loop:item['id']">
-                                    <option value="#$loop:item['id']#" selected="selected">
-                                        #$loop:item['name']#
-                                    </option>
+                    <th class="xar-nowrap">
+                        <label for="filter" title="#xarML('Select a group')#">Groups</label>
+                    </th>
+                    <th class="xar-nowrap">
+                        <label for="filter" title="#xarML('Select the state of users')#">
+                        State</label>
+                    </th>
+                    <xar:if condition="$id gt 0">
+                        <th class="xar-nowrap">
+                            <label for="filter" title="#xarML('Includes subgroups')#">Include
+                            Subgroups</label>
+                        </th>
+                    </xar:if>
+                    <th class="xar-nowrap">
+                        <label for="filter" title="#xarML('Select template for the message')#">
+                        Templates</label>
+                    </th>
+                    <th class="xar-nowrap">
+                        <label for="reload">Action</label>
+                    </th>
+                </tr>
+                <tr>
+                    <td class="xar-align-center">
+                        <select name="selstyle" id="selstyle" onchange="this.form.submit()">
+                            <xar:foreach in="$style" key="$key" value="$value">
+                                <xar:if condition="$key eq $selstyle">
+                                    <option value="#$key#" selected="selected">#$value#</option>
                                     <xar:else />
-                                    <option value="#$loop:item['id']#">
-                                        #$loop:item['name']#
-                                    </option>
+                                    <option value="#$key#">#$value#</option>
                                 </xar:if>
-                            </xar:if>
-                            <xar:set name="prevgroup">
-                                #$loop:item['name']#
-                            </xar:set>
-                        </xar:loop>
-                    </select>
-                </td>
-                <td class="xar-align-center">
-                    <xar:set name="firstline">xarML('-- choose --')</xar:set>
-                    <xar:data-input type="dropdown" name="state" tabindex="5" onchange="this.form.submit()" firstline="$firstline" options="$stateoptions" value="$state" />
-                </td>
-                <xar:if condition="$id gt 0">
-                    <td  class="xar-align-center xar-valign-middle">
-                        <xar:data-input type="checkbox" name="includesubgroups" id="includesubgroups" checked="$includesubgroups" onchange="this.form.submit()" />
+                            </xar:foreach>
+                        </select>
                     </td>
-                </xar:if>
-                <td class="xar-align-center">
-                    <select name="mailtype" id="mailtype" size="1" tabindex="5" onchange="this.form.submit()">
-                        <xar:loop name="$templates">
-                            <xar:if condition="$mailtype eq $loop:item['key']">
-                                <option value="#$loop:item['key']#" selected="selected">
-                                    #$loop:item['value']#
-                                </option>
-                                <xar:else />
-                                <option value="#$loop:item['key']#">
-                                    #$loop:item['value']#
-                                </option>
+                    <td class="xar-align-center">
+                        <select name="id" id="id" onchange="this.form.submit()">
+                            <xar:if condition="$type eq 'single'">
+                                <option value="#$id#" selected="selected">Single user</option>
                             </xar:if>
-                        </xar:loop>
-                    </select>
-                </td>
-                <td class="xar-align-center">
-                    <input type="hidden" name="q" id="q" value="new" />
-                    <input type="submit" name="reload" id="reload" value="#xarML('Reload')#" />
-                </td>
-            </tr>
-        </table>
-    </form>
-    <xar:if condition="$modstatus">
-        <xar:comment>
-            lets display latest status ?? this contains very strange values, so let's not :-)
-        <p>
-            #$modstatus#
-        </p>
-        </xar:comment>
-
-    </xar:if>
-    <fieldset>
-      <legend>Users</legend>
-      <xar:if condition="!isset($users)">
-        <p>
-            
-                No users selected
-            
-            .
-        </p>
-      <xar:else />
-        <xar:comment>
-            the Roles Lists table-based styles (borrow from the Modules list)
-        </xar:comment>
-        <xar:if condition="$selstyle eq '1'">
-            <p>#$totalselected# user(s) selected.</p>
-        <xar:elseif condition="$selstyle eq '2'" />
-          <xar:if condition="count($users) eq 0">
-            <p>
-              
-                No users match
-              
-            </p>
-          <xar:else />
-          <table class="xar-fullwidth">
-            <tr>
-              <th>
-                <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=name">
-                  
-                    Real name
-                  
-                </a>
-              </th>
-              <th>
-                <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=uname">
-                  
-                    Login
-                  
-                </a>
-              </th>
-              <th>
-                <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=email">
-                  
-                    Email
-                  
-                </a>
-              </th>
-              <th>
-                <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=date_reg">
-                  
-                    Date Registered
-                  
-                </a>
-              </th>
-              <th>
-                <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=state">
-                  
-                    State
-                  
-                </a>
-              </th>
-            </tr>
-            <xar:loop name="$users">
-              <tr>
-                <td>
-                  #$loop:item['name']#
-                </td>
-                <td>
-                  #$loop:item['uname']#
-                </td>
-                <td>
-                  <a href="&xar-modurl-roles-admin-createmail;&amp;id=#$loop:item.id#" title="#xarML('Email this user')#">
-                    #$loop:item['email']#
-                  </a>
-                </td>
-                <td class="xar-align-center">
-                  #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#
-                </td>
-                <td>
-                  <xar:if condition="$loop:item['status'] eq 1">
-                    
-                      Inactive
-                    
-                    <xar:elseif condition="$loop:item['status'] eq 2" />
-                    
-                      Not Validated
-                    
-                    <xar:elseif condition="$loop:item['status'] eq 3" />
-                    
-                      Active
-                    
-                    <xar:elseif condition="$loop:item['status'] eq 4" />
-                    
-                      Pending
-                    
-                  </xar:if>
-                </td>
-              </tr>
-            </xar:loop>
-            <!-- end loop over users -->
-            <!-- if there is a pager show it in the last row -->
-          </table>
-          <xar:if condition="!empty($pager)">
-            <div class="xar-align-center">
-              #$pager#
-            </div>
-          </xar:if>
-          </xar:if>
+                            <xar:if condition="$id eq -1">
+                                <option value="#$id#" selected="selected">-- choose --</option>
+                            </xar:if>
+                            <xar:if condition="$id eq 0">
+                                <option value="0" selected="selected">All Users</option>
+                                <xar:else />
+                                <option value="0">All Users</option>
+                            </xar:if>
+                            <xar:set name="prevgroup">""</xar:set>
+                            <xar:loop name="$groups">
+                                <xar:if condition="$prevgroup ne $loop:item['name']">
+                                    <xar:if condition="$id eq $loop:item['id']">
+                                        <option value="#$loop:item['id']#" selected="selected">
+                                        #$loop:item['name']#</option>
+                                        <xar:else />
+                                        <option value="#$loop:item['id']#">
+                                        #$loop:item['name']#</option>
+                                    </xar:if>
+                                </xar:if>
+                                <xar:set name="prevgroup">#$loop:item['name']#</xar:set>
+                            </xar:loop>
+                        </select>
+                    </td>
+                    <td class="xar-align-center">
+                        <xar:set name="firstline">xarML('-- choose --')</xar:set>
+                        <xar:data-input type="dropdown" name="state" tabindex="5"
+                        onchange="this.form.submit()" firstline="$firstline"
+                        options="$stateoptions" value="$state" />
+                    </td>
+                    <xar:if condition="$id gt 0">
+                        <td class="xar-align-center xar-valign-middle">
+                            <xar:data-input type="checkbox" name="includesubgroups"
+                            id="includesubgroups" checked="$includesubgroups"
+                            onchange="this.form.submit()" />
+                        </td>
+                    </xar:if>
+                    <td class="xar-align-center">
+                        <select name="mailtype" id="mailtype" size="1" tabindex="5"
+                        onchange="this.form.submit()">
+                            <xar:loop name="$templates">
+                                <xar:if condition="$mailtype eq $loop:item['key']">
+                                    <option value="#$loop:item['key']#" selected="selected">
+                                    #$loop:item['value']#</option>
+                                    <xar:else />
+                                    <option value="#$loop:item['key']#">
+                                    #$loop:item['value']#</option>
+                                </xar:if>
+                            </xar:loop>
+                        </select>
+                    </td>
+                    <td class="xar-align-center">
+                        <input type="hidden" name="q" id="q" value="new" />
+                        <input type="submit" name="reload" id="reload" value="#xarML('Reload')#" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <xar:if condition="$modstatus">
+            <xar:comment>lets display latest status ?? this contains very strange values, so let's
+            not :-) 
+            <p>#$modstatus#</p></xar:comment>
         </xar:if>
-      </xar:if>
-      </fieldset>
-      <form action="&xar-modurl-roles-admin-sendmail;" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>
-            <legend>
-                
-                    Message
-                
-            </legend>
-        <p>
-            
-                Choose a message template from the Templates dropdown above, or type in your message directly :
-            
-        </p>
-            <div class="xar-form-input-wrapper">
-                <label for="subject" title="#xarML('Subject line of the email')#" class="xar-form-label">
-                    
-                        Subject:
-                    
-                </label>
-                <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong" />
-            </div>
-            <div class="xar-form-input-wrapper">
-                <label for="message" title="#xarML('Body of the email')#" class="xar-form-label">
-                    
-                        Message:
-                    
-                </label>
-                <div class="xar-form-container-after">
-                    <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
-                </div>
-            </div>
-        </fieldset>
-        <fieldset>
-            <div class="xar-form-input-wrapper-after">
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="id" id="id" value="#$id#" />
-                <input type="hidden" name="state" id="state" value="#$state#" />
-                <input type="hidden" name="includesubgroups" id="includesubgroups" value="#$includesubgroups#" />
-                <!--<input type="hidden" name="ids" id="ids" value="#$ids#" />-->
-                <xar:if condition="!isset($users) or $users eq 0">
-                    <input type="submit" value="#xarML('Send')#" disabled="disabled" class="xar-margin-thickright" />
-                    <xar:else />
-                    <input type="submit" value="#xarML('Send')#" class="xar-margin-thickright" />
+            <legend>Users</legend>
+            <xar:if condition="!isset($users)">
+                <p>No users selected .</p>
+                <xar:else />
+                <xar:comment>the Roles Lists table-based styles (borrow from the Modules
+                list)</xar:comment>
+                <xar:if condition="$selstyle eq '1'">
+                    <p>#$totalselected# user(s) selected.</p>
+                    <xar:elseif condition="$selstyle eq '2'" />
+                    <xar:if condition="count($users) eq 0">
+                        <p>No users match</p>
+                        <xar:else />
+                        <table class="xar-fullwidth">
+                            <tr>
+                                <th>
+                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=name">
+                                    Real name</a>
+                                </th>
+                                <th>
+                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=uname">
+                                    Login</a>
+                                </th>
+                                <th>
+                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=email">
+                                    Email</a>
+                                </th>
+                                <th>
+                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=date_reg">
+                                    Date Registered</a>
+                                </th>
+                                <th>
+                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=state">
+                                    State</a>
+                                </th>
+                            </tr>
+                            <xar:loop name="$users">
+                                <tr>
+                                    <td>#$loop:item['name']#</td>
+                                    <td>#$loop:item['uname']#</td>
+                                    <td>
+                                        <a href="&xar-modurl-roles-admin-createmail;&amp;id=#$loop:item.id#"
+                                        title="#xarML('Email this user')#">
+                                        #$loop:item['email']#</a>
+                                    </td>
+                                    <td class="xar-align-center">
+                                    #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#</td>
+                                    <td>
+                                        <xar:if condition="$loop:item['status'] eq 1">Inactive 
+                                        <xar:elseif condition="$loop:item['status'] eq 2" />Not
+                                        Validated 
+                                        <xar:elseif condition="$loop:item['status'] eq 3" />Active 
+                                        <xar:elseif condition="$loop:item['status'] eq 4" />Pending</xar:if>
+                                    </td>
+                                </tr>
+                            </xar:loop>
+                            <!-- end loop over users -->
+                            <!-- if there is a pager show it in the last row -->
+                        </table>
+                        <xar:if condition="!empty($pager)">
+                            <div class="xar-align-center">#$pager#</div>
+                        </xar:if>
+                    </xar:if>
                 </xar:if>
-                <input type="button" value="#xarML('Cancel')#" onclick="history.back(-1);" class="xar-margin-thickright" />
-            </div>
+            </xar:if>
         </fieldset>
-    </form>
-    <p>
-        
-            Look in the file var/messaging/roles/includes/message-vars.xd to see how the different variables used in the templates are defined.
-        
-    </p>
-    <p>
-        
-            Note that some variables (e.g. $myusername in the confirmation template) are defined dynamically during Xaraya processes, such as registration. You cannot use those variables, nor can you send messages that contain them from here.
-        
-    </p>
-</div>
+        <form action="&xar-modurl-roles-admin-sendmail;" method="post"
+        enctype="application/x-www-form-urlencoded">
+            <fieldset>
+                <legend>Message</legend>
+                <p>Choose a message template from the Templates dropdown above, or type in your
+                message directly :</p>
+                <div class="xar-form-input-wrapper">
+                    <label for="subject" title="#xarML('Subject line of the email')#"
+                    class="xar-form-label">Subject:</label>
+                    <input type="text" name="subject" id="subject"
+                    value="#xarVarPrepForDisplay($subject)#" maxlength="150"
+                    class="xar-form-textxlong" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="message" title="#xarML('Body of the email')#"
+                    class="xar-form-label">Message:</label>
+                    <div class="xar-form-container-after">
+                        <textarea name="message" id="message" class="xar-form-textareaxlarge">
+                        #xarVarPrepForDisplay($message)#</textarea>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="id" id="id" value="#$id#" />
+                    <input type="hidden" name="state" id="state" value="#$state#" />
+                    <input type="hidden" name="includesubgroups" id="includesubgroups"
+                    value="#$includesubgroups#" />
+                    <!--<input type="hidden" name="ids" id="ids" value="#$ids#" />-->
+                    <xar:if condition="!isset($users) or $users eq 0">
+                        <input type="submit" value="#xarML('Send')#" disabled="disabled"
+                        class="xar-margin-thickright" />
+                        <xar:else />
+                        <input type="submit" value="#xarML('Send')#"
+                        class="xar-margin-thickright" />
+                    </xar:if>
+                    <input type="button" value="#xarML('Cancel')#" onclick="history.back(-1);"
+                    class="xar-margin-thickright" />
+                </div>
+            </fieldset>
+        </form>
+        <p>Look in the file var/messaging/roles/includes/message-vars.xd to see how the different
+        variables used in the templates are defined.</p>
+        <p>Note that some variables (e.g. $myusername in the confirmation template) are defined
+        dynamically during Xaraya processes, such as registration. You cannot use those variables,
+        nor can you send messages that contain them from here.</p>
+    </div>
 </xar:template>

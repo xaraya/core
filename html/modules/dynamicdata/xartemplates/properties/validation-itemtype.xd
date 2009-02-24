@@ -1,55 +1,42 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<table class="xar-norm">
-  <tr>
-    <td>
-      Module
-    </td>
-    <td>
-      <xar:set name="field">$name.'[modid]'</xar:set>
-      <xar:data-input type="module" name="$field" value="$modid" tabindex="$tabindex" />
-    </td>
-    <td>
-      Select the module you want to show item types for
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Item Type
-    </td>
-    <td>
-      <xar:set name="field">$name.'[itemtype]'</xar:set>
-      <xar:data-input type="itemtype" name="$field" value="$itemtype" validation="$modname" tabindex="$tabindex" />
-    </td>
-    <td>
-      Select an item type you want to show items for (optional)
-    </td>
-  </tr>
-  <tr>
-    <td>
-      List Function
-    </td>
-    <td>
-      <input type="text" name="#$name#[func]" id="#$id#_func" value="#xarVarPrepForDisplay($func)#" size="40" tabindex="#$tabindex#" />
-    </td>
-    <td>
-      Get the list of items via API function call (optional)
-      <br/>
-      Syntax : xarModAPIFunc(...)
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Other rule
-    </td>
-    <td colspan="2">
-      <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="#$size#" tabindex="#$tabindex#" />
-    </td>
-  </tr>
-</table>
-
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
-
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <table class="xar-norm">
+        <tr>
+            <td>Module</td>
+            <td>
+                <xar:set name="field">$name.'[modid]'</xar:set>
+                <xar:data-input type="module" name="$field" value="$modid" tabindex="$tabindex" />
+            </td>
+            <td>Select the module you want to show item types for</td>
+        </tr>
+        <tr>
+            <td>Item Type</td>
+            <td>
+                <xar:set name="field">$name.'[itemtype]'</xar:set>
+                <xar:data-input type="itemtype" name="$field" value="$itemtype"
+                validation="$modname" tabindex="$tabindex" />
+            </td>
+            <td>Select an item type you want to show items for (optional)</td>
+        </tr>
+        <tr>
+            <td>List Function</td>
+            <td>
+                <input type="text" name="#$name#[func]" id="#$id#_func"
+                value="#xarVarPrepForDisplay($func)#" size="40" tabindex="#$tabindex#" />
+            </td>
+            <td>Get the list of items via API function call (optional) 
+            <br />Syntax : xarModAPIFunc(...)</td>
+        </tr>
+        <tr>
+            <td>Other rule</td>
+            <td colspan="2">
+                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#"
+                size="#$size#" tabindex="#$tabindex#" />
+            </td>
+        </tr>
+    </table>
+    <xar:if condition="!empty($invalid)">
+        <span class="xar-error">#$invalid#</span>
+    </xar:if>
 </xar:template>

@@ -1,37 +1,28 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-
-<div class="xar-form-input-wrapper">
-    <label for="expire#$blockid#" title="#xarML('Select when the block will expire, if at all.')#" class="xar-form-label">
-        Block Expiration:
-    </label>
-    <xar:set name="expireseconds">$expirein * 3600</xar:set>
-    <xar:set name="options">
-        array(
-            array('id' => 86400, 'name' => '1 Day'),
-            array('id' => 172800, 'name' => '2 Days'),
-            array('id' => 432000, 'name' => '5 Days'),
-            array('id' => 1296000, 'name' => '15 Days'),
-            array('id' => 2592000, 'name' => '30 Days'),
-            array('id' => 0, 'name' => 'Unlimited'),
-        )
-    </xar:set>    
-    <xar:data-input type="dropdown" name="expire" id="expire#$blockid#" options="$options" value="$expireseconds" />
-</div>
-
-<xar:if condition="$expirein ne 0">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-form-input-wrapper">
-        <label class="xar-form-label">
-            This Block Will Expire:
-        </label>
-        <xar:var name="expirein"/> hours from now.
+        <label for="expire#$blockid#"
+        title="#xarML('Select when the block will expire, if at all.')#" class="xar-form-label">
+        Block Expiration:</label>
+        <xar:set name="expireseconds">$expirein * 3600</xar:set>
+        <xar:set name="options">array( array('id' =&gt; 86400, 'name' =&gt; '1 Day'), array('id'
+        =&gt; 172800, 'name' =&gt; '2 Days'), array('id' =&gt; 432000, 'name' =&gt; '5 Days'),
+        array('id' =&gt; 1296000, 'name' =&gt; '15 Days'), array('id' =&gt; 2592000, 'name' =&gt;
+        '30 Days'), array('id' =&gt; 0, 'name' =&gt; 'Unlimited'), )</xar:set>
+        <xar:data-input type="dropdown" name="expire" id="expire#$blockid#" options="$options"
+        value="$expireseconds" />
     </div>
-</xar:if>
-
-<div class="xar-form-input-wrapper">
-    <label for="html_content#$blockid#" title="#xarML('Enter the HTML to display in the block.')#" class="xar-form-label">
-        HTML:
-    </label>
-     <textarea name="html_content" id="html_content#$blockid#" class="xar-form-textarealarge">#xarVarPrepForDisplay($html_content)#</textarea>
-</div>
+    <xar:if condition="$expirein ne 0">
+        <div class="xar-form-input-wrapper">
+        <label class="xar-form-label">This Block Will Expire:</label>
+        <xar:var name="expirein" />hours from now.</div>
+    </xar:if>
+    <div class="xar-form-input-wrapper">
+        <label for="html_content#$blockid#"
+        title="#xarML('Enter the HTML to display in the block.')#" class="xar-form-label">
+        HTML:</label>
+        <textarea name="html_content" id="html_content#$blockid#" class="xar-form-textarealarge">
+        #xarVarPrepForDisplay($html_content)#</textarea>
+    </div>
 </xar:template>

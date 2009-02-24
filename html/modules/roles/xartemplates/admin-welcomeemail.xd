@@ -1,82 +1,66 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head"><span class="xar-mod-title">Roles Administration</span></div>
-<div class="xar-mod-body"><h2>Welcome Email</h2>
-    <p>This email will be sent to users to welcome them.</p>
-    <p>The welcome email is plain text</p>
-    <form action="&xar-modurl-roles-admin-welcomeemail;" method="post" enctype="application/x-www-form-urlencoded">
-             <div>
-        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-        <input type="hidden" name="phase" id="phase" value="update" />
-        <table>
-        <tr>
-            <td>
-                <label for="welcometitle">Welcome Email Title</label>:
-            </td>
-            <td>
-                <input type="text" name="welcometitle" id="welcometitle" value="#$welcometitle#" size="35" maxlength="100" />
-            </td>
-        </tr>
-        </table>
-        <textarea name="welcomeemail" id="welcomeemail" rows="20" cols="80" tabindex="1">#$welcomeemail#</textarea>
-        <br /><br />
-        <input type="submit" value="#$submitlabel#" tabindex="2" />
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Roles Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>Welcome Email</h2>
+        <p>This email will be sent to users to welcome them.</p>
+        <p>The welcome email is plain text</p>
+        <form action="&xar-modurl-roles-admin-welcomeemail;" method="post"
+        enctype="application/x-www-form-urlencoded">
+            <div>
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="phase" id="phase" value="update" />
+                <table>
+                    <tr>
+                        <td>
+                        <label for="welcometitle">Welcome Email Title</label>:</td>
+                        <td>
+                            <input type="text" name="welcometitle" id="welcometitle"
+                            value="#$welcometitle#" size="35" maxlength="100" />
+                        </td>
+                    </tr>
+                </table>
+                <textarea name="welcomeemail" id="welcomeemail" rows="20" cols="80" tabindex="1">
+                #$welcomeemail#</textarea>
+                <br />
+                <br />
+                <input type="submit" value="#$submitlabel#" tabindex="2" />
             </div>
-    </form>
-    <p>The following variables will be replaced in the text with specific information:</p>
-    <table border="0" width="100%">
-        <tr class="xar-align-left">
-            <td>
-                %%validationlink%%
-            </td>
-            <td>
-                The link for the user to click on to complete their registration
-            </td>
-        </tr>
-        <tr class="xar-align-left">
-            <td>
-                %%myname%%
-            </td>
-            <td>
-                Name given during registration
-            </td>
-        </tr>
-        <tr class="xar-align-left">
-            <td>
-                %%username%%
-            </td>
-            <td>
-                Username given during registration
-            </td>
-        </tr>
-        <tr class="xar-align-left">
-            <td>
-                %%sitename%%
-            </td>
-            <td>
-                Your Site Name
-            </td>
-        </tr>
-        <tr class="xar-align-left">
-            <td>
-                %%siteadmin%%
-            </td>
-            <td>
-                Your name
-            </td>
-        </tr>
-       <xar:if condition="isset($properties)">
-           <xar:foreach in="$properties" key="$name">
+        </form>
+        <p>The following variables will be replaced in the text with specific information:</p>
+        <table border="0" width="100%">
             <tr class="xar-align-left">
-                <td>
-                    %%#$name#%%
-                </td>
-                <td>
-                    (dynamic property)
-                    <xar:data-label property="$properties[$name]" />
-                </td>
+                <td>%%validationlink%%</td>
+                <td>The link for the user to click on to complete their registration</td>
             </tr>
-           </xar:foreach>
-       </xar:if>
-    </table>
-</div></xar:template>
+            <tr class="xar-align-left">
+                <td>%%myname%%</td>
+                <td>Name given during registration</td>
+            </tr>
+            <tr class="xar-align-left">
+                <td>%%username%%</td>
+                <td>Username given during registration</td>
+            </tr>
+            <tr class="xar-align-left">
+                <td>%%sitename%%</td>
+                <td>Your Site Name</td>
+            </tr>
+            <tr class="xar-align-left">
+                <td>%%siteadmin%%</td>
+                <td>Your name</td>
+            </tr>
+            <xar:if condition="isset($properties)">
+                <xar:foreach in="$properties" key="$name">
+                    <tr class="xar-align-left">
+                        <td>%%#$name#%%</td>
+                        <td>(dynamic property) 
+                        <xar:data-label property="$properties[$name]" /></td>
+                    </tr>
+                </xar:foreach>
+            </xar:if>
+        </table>
+    </div>
+</xar:template>

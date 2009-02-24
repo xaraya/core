@@ -1,34 +1,36 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<p class="xar-error">
-    This is an over-ridden template. See #xarTplGetThemeDir()#/modules/example/user-main.xt for the example
-</p>
-<!--  common user menu for this module - remove link to the current function -->
-<table border="0" width="100%">
-  <!-- the variables used in this menu come from example_user_menu() -->
-  <tr>
-    <th class="xar-align-center">
-      <xar:var name="menutitle"/>
-    </th>
-  </tr>
-  <tr>
-    <td>
-      <table border="0" width="100%">
-        <tr class="xar-align-center">
-          <!-- a link to a particular menu item -->
-          <td>
-            <a href="#$menulink_view#">#$menulabel_view#</a>
-          </td>
-          <!-- more menu items come here... -->
-          <!-- Note : you can also specify simple links directly with blocklayout
-          template tags : e.g. &xar-modurl-example-user-view; -->
+    <p class="xar-error">This is an over-ridden template. See
+    #xarTplGetThemeDir()#/modules/example/user-main.xt for the example</p>
+    <!--  common user menu for this module - remove link to the current function -->
+    <table border="0" width="100%">
+        <!-- the variables used in this menu come from example_user_menu() -->
+        <tr>
+            <th class="xar-align-center">
+                <xar:var name="menutitle" />
+            </th>
         </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<!-- the specific template for the current function comes here -->
-<!-- some variable filled in by the function using this template -->
-<div class="xar-align-center">
-  <strong><xar:var name="welcome"/></strong>
-</div>
+        <tr>
+            <td>
+                <table border="0" width="100%">
+                    <tr class="xar-align-center">
+                        <!-- a link to a particular menu item -->
+                        <td>
+                            <a href="#$menulink_view#">#$menulabel_view#</a>
+                        </td>
+                        <!-- more menu items come here... -->
+                        <!-- Note : you can also specify simple links directly with blocklayout
+          template tags : e.g. &xar-modurl-example-user-view; -->
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <!-- the specific template for the current function comes here -->
+    <!-- some variable filled in by the function using this template -->
+    <div class="xar-align-center">
+        <strong>
+            <xar:var name="welcome" />
+        </strong>
+    </div>
 </xar:template>

@@ -1,35 +1,39 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<div class="xar-fullwidth">
-    <table class="xar-fullwidth">
-         <tr>
-             <xar:foreach in="$properties" key="$name">
-                 <th class="xar-form-textlong">
-                     <xar:data-label property="$properties[$name]" />
-                 </th>
-             </xar:foreach>
-         </tr>
-         <xar:foreach in="$items" key="$itemid" value="$fields">
-             <tr class="xar-norm">
-                 <xar:foreach in="$properties" key="$name">
-                     <td>
-                         <xar:if condition="!empty($fields[$name])">
-                             <!-- @todo do we have a better way of doing this name attribute?  perhaps fieldprefix ? -->
-                             <xar:data-input property="$properties[$name]" name="dd_'.$name.'['.$itemid.']" size="10" value="$fields[$name]" />
-                         <xar:else />
-                             <xar:data-input property="$properties[$name]" name="dd_'.$name.'['.$itemid.']" size="10" />
-                         </xar:if>
-                     </td>
-                 </xar:foreach> 
-             </tr>
-         </xar:foreach>
-        <tr>
-            <xar:foreach in="$properties" key="$name">
-                <td>
-                    <xar:data-input property="$properties[$name]" size="10" name="dd_'.$name.'[0]" />
-                </td>
+    <div class="xar-fullwidth">
+        <table class="xar-fullwidth">
+            <tr>
+                <xar:foreach in="$properties" key="$name">
+                    <th class="xar-form-textlong">
+                        <xar:data-label property="$properties[$name]" />
+                    </th>
+                </xar:foreach>
+            </tr>
+            <xar:foreach in="$items" key="$itemid" value="$fields">
+                <tr class="xar-norm">
+                    <xar:foreach in="$properties" key="$name">
+                        <td>
+                            <xar:if condition="!empty($fields[$name])">
+                                <!-- @todo do we have a better way of doing this name attribute?  perhaps fieldprefix ? -->
+                                <xar:data-input property="$properties[$name]"
+                                name="dd_'.$name.'['.$itemid.']" size="10"
+                                value="$fields[$name]" />
+                                <xar:else />
+                                <xar:data-input property="$properties[$name]"
+                                name="dd_'.$name.'['.$itemid.']" size="10" />
+                            </xar:if>
+                        </td>
+                    </xar:foreach>
+                </tr>
             </xar:foreach>
-        
-        </tr>
-    </table>
-</div>
+            <tr>
+                <xar:foreach in="$properties" key="$name">
+                    <td>
+                        <xar:data-input property="$properties[$name]" size="10"
+                        name="dd_'.$name.'[0]" />
+                    </td>
+                </xar:foreach>
+            </tr>
+        </table>
+    </div>
 </xar:template>

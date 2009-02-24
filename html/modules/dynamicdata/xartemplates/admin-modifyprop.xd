@@ -1,251 +1,152 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:base-include-javascript module="base" filename="toggle.js" />
-<div class="xar-mod-head">
-    <span class="xar-mod-title">
-        Dynamic Data Administration
-    </span>
-</div>
-<div class="xar-mod-body">
-   <xar:template type="module" file="admin-menu" />
-    <h2>Modify DataProperties #$label#</h2>
-
-    <xar:if condition="!empty($objectid)">
-        <xar:style scope="module" module="base" file="navtabs" />
-        <div>
-            <dl class="xar-tabs">
-                <dt class="help">
-                    Options:
-                </dt>
-                <dd>
-                    <a href="&xar-modurl-dynamicdata-admin-modify;&amp;itemid=#$objectid#">
-                        
-                            Modify Object Definition
-                        
-                    </a>
-                </dd>
-                <dd class="active">
-                  <a href="#xarServerGetCurrentUrl()#">Modify DataProperties</a>
-                </dd>
-                <dd>
-                    <a href="&xar-modurl-dynamicdata-util-export;&amp;modid=#$modid#&amp;itemtype=#$itemtype#">
-                        Export Object Definition to XML
-                    </a>
-                </dd>
-                <xar:if condition="!empty($fields)">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:base-include-javascript module="base" filename="toggle.js" />
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu" />
+        <h2>Modify DataProperties #$label#</h2>
+        <xar:if condition="!empty($objectid)">
+            <xar:style scope="module" module="base" file="navtabs" />
+            <div>
+                <dl class="xar-tabs">
+                    <dt class="help">Options:</dt>
                     <dd>
-                        <script type="text/javascript">
-                        function xar_dynamicdata_formpreview()
-                        {
-                            var my_window = window.open('#$urlform#',
-                                                        'FormPreview',
-                                                        'width=780,height=580,status=no,scrollbars=1,resizable=yes,top=0,left=0,dependent=yes,alwaysRaised=yes');
-                            my_window.opener = window;
-                            my_window.focus();
-                        }
-                        </script>
-                        <a href="javascript:xar_dynamicdata_formpreview();">
-                            Preview Input Form
-                        </a>
+                        <a href="&xar-modurl-dynamicdata-admin-modify;&amp;itemid=#$objectid#">
+                        Modify Object Definition</a>
                     </dd>
-                </xar:if>
-            </dl>
-        </div>
-
-        <fieldset>
-          <legend>Object summary</legend>
-          <xar:data-display layout="$layout" module="dynamicdata" itemtype="0" itemid="$objectid" fieldlist="name,label,moduleid,itemtype" />
-        </fieldset>
-    </xar:if>
-
-    <!-- This is where the list of properties shown starts -->
-    <xar:if condition="!isset($layout)">
-      <xar:set name="layout">'default'</xar:set>
-    </xar:if>
-
-    <form method="post" action="&xar-modurl-dynamicdata-admin-updateprop;">
-        <xar:template file="proplist-$layout" />
-    </form>
-
-    <p>
-        When DD is used to extend some item (e.g. roles), then you should definitely avoid re-using property names that are already in the original item - just like you can't have 2 fields called 'state' in "static" items either. You should also avoid 'module', 'itemtype', 'itemid', 'transform' and 'returnurl' when using DD via hooks, because those are pre-defined parameters in hook calls.
-    </p>
-
-    <p>
-        Hint: after you create a property, the label and name are independent from each other. You can adapt the property name by clicking on the ID link above.
-    </p>
-
-    <!-- <xar:data-view object="$myobject" layout="$layout"  /> -->
-    <p>
-        [
-        <xar:if condition="empty($details)">
-            <a href="#$detailslink#">
-                Show Static Properties and Relations
-            </a>
-        <xar:else />
-            <a href="#$detailslink#">
-                Hide Static Properties and Relations
-            </a>
+                    <dd class="active">
+                        <a href="#xarServerGetCurrentUrl()#">Modify DataProperties</a>
+                    </dd>
+                    <dd>
+                        <a href="&xar-modurl-dynamicdata-util-export;&amp;modid=#$modid#&amp;itemtype=#$itemtype#">
+                        Export Object Definition to XML</a>
+                    </dd>
+                    <xar:if condition="!empty($fields)">
+                        <dd>
+                            <script type="text/javascript">function xar_dynamicdata_formpreview() {
+                            var my_window = window.open('#$urlform#', 'FormPreview',
+                            'width=780,height=580,status=no,scrollbars=1,resizable=yes,top=0,left=0,dependent=yes,alwaysRaised=yes');
+                            my_window.opener = window; my_window.focus(); }</script>
+                            <a href="javascript:xar_dynamicdata_formpreview();">Preview Input
+                            Form</a>
+                        </dd>
+                    </xar:if>
+                </dl>
+            </div>
+            <fieldset>
+                <legend>Object summary</legend>
+                <xar:data-display layout="$layout" module="dynamicdata" itemtype="0"
+                itemid="$objectid" fieldlist="name,label,moduleid,itemtype" />
+            </fieldset>
         </xar:if>
-        ]
-    </p>
-
-    <xar:if condition="count($static) gt 0">
-      <fieldset>
-        <legend>#$statictitle#</legend>
-
-        <!--
-        TODO: very much under construction, obviously :-)
-        -->
-
-        <!-- don't accept updates for this (for now) -->
-        <table class="xar-fullwidth">
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Label
-                </th>
-                <th>
-                    Property Type
-                </th>
-                <th>
-                    Default
-                </th>
-                <th>
-                    Data Source
-                </th>
-                <th>
-                    Validation
-                </th>
-            </tr>
-            <xar:foreach in="$static" value="$field">
-                <tr>
-                    <td>
-                        #$field['name']#
-                    </td>
-                    <td>
-                        #$field['label']#
-                    </td>
-                    <td>
-                        <xar:data-output property="$fieldtypeprop" name="static_type['.$field['id'].']" value="$field['type']" />
-                    </td>
-                    <td>
-                        #$field['defaultvalue']#
-                    </td>
-                    <td>
-                        #$field['source']#
-                    </td>
-                    <td>
-                        #$field['validation']#
-                    </td>
-                </tr>
-            </xar:foreach>
-        </table>
-      </fieldset>
-      <fieldset>
-        <!-- xar:data-view module="dynamicdata" itemtype="1" where="$where" param="itemid" layout="cells" / -->
-        <xar:if condition="count($tables) gt 0">
-            <xar:foreach in="$tables" value="$table">
-                <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
-                    <div class="xar-align-center">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                        <input type="hidden" name="modid" id="modid" value="#$modid#" />
-                        <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
-                        <input type="hidden" name="table" id="table" value="#$table#" />
-                        <input type="submit" value="#xarML('Import table')# #$table#" />
-                    </div>
-                </form>
-            </xar:foreach>
+        <!-- This is where the list of properties shown starts -->
+        <xar:if condition="!isset($layout)">
+            <xar:set name="layout">'default'</xar:set>
         </xar:if>
-      </fieldset>
-    </xar:if>
-    <xar:if condition="count($relations) gt 0">
-
-        <h2>
-            #$relationstitle#
-        </h2>
-
-        <!--
-        TODO: very much under construction, obviously :-)
-        -->
-        <form method="post" action="&xar-modurl-dynamicdata-admin-modifyprop;">
-            <!-- don't accept updates for this (for now) -->
-            <xar:foreach in="$relations" value="$relation">
-                <xar:if condition="count($relation['links']) gt 0">
-                    <xar:foreach in="$relation['links']" value="$link">
-                        <p>
-
-                            <label>
-                                <strong>
-                                    #$labels['module']#
-                                </strong>
-                                #$relation['module']#
-                            </label>
-
-                            <label>
-                                <strong>
-                                    #$labels['linktype']#
-                                </strong>
-                                #$link['type']#
-                            </label>
-
-                            <label>
-                                <strong>
-                                    #$labels['linkfrom']#
-                                </strong>
-                                #$link['from']#
-                            </label>
-
-                            <label>
-                                <strong>
-                                    #$labels['linkto']#
-                                </strong>
-                                #$link['to']#
-                            </label>
-
-                        </p>
-                    </xar:foreach>
-                <xar:else />
-                    <p>
-
-                        <label>
-                            <strong>
-                                #$labels['module']#
-                            </strong>
-                            #$relation['module']#
-                        </label>
-
-                        <label>
-                            <strong>
-                                #$labels['linktype']#
-                            </strong>
-                            (
-                            not found
-                            )
-                        </label>
-
-                        <label>
-                            <strong>
-                                #$labels['linkfrom']#
-                            </strong>
-                            -
-                        </label>
-
-                        <label>
-                            <strong>
-                                #$labels['linkto']#
-                            </strong>
-                            (
-                            not found
-                            )
-                        </label>
-
-                    </p>
-                </xar:if>
-            </xar:foreach>
+        <form method="post" action="&xar-modurl-dynamicdata-admin-updateprop;">
+            <xar:template file="proplist-$layout" />
         </form>
-    </xar:if>
-</div>
+        <p>When DD is used to extend some item (e.g. roles), then you should definitely avoid
+        re-using property names that are already in the original item - just like you can't have 2
+        fields called 'state' in "static" items either. You should also avoid 'module', 'itemtype',
+        'itemid', 'transform' and 'returnurl' when using DD via hooks, because those are
+        pre-defined parameters in hook calls.</p>
+        <p>Hint: after you create a property, the label and name are independent from each other.
+        You can adapt the property name by clicking on the ID link above.</p>
+        <!-- <xar:data-view object="$myobject" layout="$layout"  /> -->
+        <p>[ 
+        <xar:if condition="empty($details)">
+            <a href="#$detailslink#">Show Static Properties and Relations</a>
+            <xar:else />
+            <a href="#$detailslink#">Hide Static Properties and Relations</a>
+        </xar:if>]</p>
+        <xar:if condition="count($static) gt 0">
+            <fieldset>
+                <legend>#$statictitle#</legend>
+                <!--
+        TODO: very much under construction, obviously :-)
+        -->
+                <!-- don't accept updates for this (for now) -->
+                <table class="xar-fullwidth">
+                    <tr>
+                        <th>Name</th>
+                        <th>Label</th>
+                        <th>Property Type</th>
+                        <th>Default</th>
+                        <th>Data Source</th>
+                        <th>Validation</th>
+                    </tr>
+                    <xar:foreach in="$static" value="$field">
+                        <tr>
+                            <td>#$field['name']#</td>
+                            <td>#$field['label']#</td>
+                            <td>
+                                <xar:data-output property="$fieldtypeprop"
+                                name="static_type['.$field['id'].']" value="$field['type']" />
+                            </td>
+                            <td>#$field['defaultvalue']#</td>
+                            <td>#$field['source']#</td>
+                            <td>#$field['validation']#</td>
+                        </tr>
+                    </xar:foreach>
+                </table>
+            </fieldset>
+            <fieldset>
+                <!-- xar:data-view module="dynamicdata" itemtype="1" where="$where" param="itemid" layout="cells" / -->
+                <xar:if condition="count($tables) gt 0">
+                    <xar:foreach in="$tables" value="$table">
+                        <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
+                            <div class="xar-align-center">
+                                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                                <input type="hidden" name="modid" id="modid" value="#$modid#" />
+                                <input type="hidden" name="itemtype" id="itemtype"
+                                value="#$itemtype#" />
+                                <input type="hidden" name="table" id="table" value="#$table#" />
+                                <input type="submit" value="#xarML('Import table')# #$table#" />
+                            </div>
+                        </form>
+                    </xar:foreach>
+                </xar:if>
+            </fieldset>
+        </xar:if>
+        <xar:if condition="count($relations) gt 0">
+            <h2>#$relationstitle#</h2>
+            <!--
+        TODO: very much under construction, obviously :-)
+        -->
+            <form method="post" action="&xar-modurl-dynamicdata-admin-modifyprop;">
+                <!-- don't accept updates for this (for now) -->
+                <xar:foreach in="$relations" value="$relation">
+                    <xar:if condition="count($relation['links']) gt 0">
+                        <xar:foreach in="$relation['links']" value="$link">
+                            <p>
+                                <label>
+                                <strong>#$labels['module']#</strong>#$relation['module']#</label>
+                                <label>
+                                <strong>#$labels['linktype']#</strong>#$link['type']#</label>
+                                <label>
+                                <strong>#$labels['linkfrom']#</strong>#$link['from']#</label>
+                                <label>
+                                <strong>#$labels['linkto']#</strong>#$link['to']#</label>
+                            </p>
+                        </xar:foreach>
+                        <xar:else />
+                        <p>
+                            <label>
+                            <strong>#$labels['module']#</strong>#$relation['module']#</label>
+                            <label>
+                            <strong>#$labels['linktype']#</strong>( not found )</label>
+                            <label>
+                            <strong>#$labels['linkfrom']#</strong>-</label>
+                            <label>
+                            <strong>#$labels['linkto']#</strong>( not found )</label>
+                        </p>
+                    </xar:if>
+                </xar:foreach>
+            </form>
+        </xar:if>
+    </div>
 </xar:template>

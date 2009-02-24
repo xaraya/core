@@ -1,35 +1,39 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<!-- You can use different admin-modifyconfighook-[objectname].xd templates for different objects -->
-<table class="xar-fullwidth">
-    <tr>
-      <th class="xar-align-center" colspan="6">
-        #$labels.dynamicdata# [ <a href="#$link#">#$labels.config#</a>]
-      </th>
-    </tr>
-    <xar:if condition="!empty($fields)">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- You can use different admin-modifyconfighook-[objectname].xd templates for different objects -->
+    <table class="xar-fullwidth">
         <tr>
-            <th>#$labels.id#</th>
-            <th>#$labels.name#</th>
-            <th>#$labels.label#</th>
-            <th>#$labels.type#</th>
-            <th>#$labels.defaultvalue#</th>
-            <th>#$labels.source#</th>
-            <th>#$labels.validation#</th>
+            <th class="xar-align-center" colspan="6">#$labels.dynamicdata# [ 
+            <a href="#$link#">#$labels.config#</a>]</th>
         </tr>
-        <xar:foreach in="$fields" value="$field">
-            <tr class="xar-align-left xar-valign-middle">
-                <td>#$field.id#</td>
-                <td>#$field.name#</td>
-                <td>#$field.label#</td>
-                <td>
-                    <xar:data-output property="$fieldtypeprop" value="$field['type']" />
-                </td>
-                <td><xar:var name="field.defaultvalue" prep="true"/></td>
-                <td>#$field.source#</td>
-                <td><xar:var name="field.validation" prep="true"/></td>
+        <xar:if condition="!empty($fields)">
+            <tr>
+                <th>#$labels.id#</th>
+                <th>#$labels.name#</th>
+                <th>#$labels.label#</th>
+                <th>#$labels.type#</th>
+                <th>#$labels.defaultvalue#</th>
+                <th>#$labels.source#</th>
+                <th>#$labels.validation#</th>
             </tr>
-        </xar:foreach>
-    </xar:if>
-</table>
+            <xar:foreach in="$fields" value="$field">
+                <tr class="xar-align-left xar-valign-middle">
+                    <td>#$field.id#</td>
+                    <td>#$field.name#</td>
+                    <td>#$field.label#</td>
+                    <td>
+                        <xar:data-output property="$fieldtypeprop" value="$field['type']" />
+                    </td>
+                    <td>
+                        <xar:var name="field.defaultvalue" prep="true" />
+                    </td>
+                    <td>#$field.source#</td>
+                    <td>
+                        <xar:var name="field.validation" prep="true" />
+                    </td>
+                </tr>
+            </xar:foreach>
+        </xar:if>
+    </table>
 </xar:template>

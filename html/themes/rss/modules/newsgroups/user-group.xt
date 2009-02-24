@@ -1,14 +1,17 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:if condition="isset($error_message)">
-<xar:else />
-    <xar:loop name="$items">
-    <item>
-        <title>#xarVarPrepForDisplay($loop:item['Subject'])#</title>
-        <link>#xarModUrl('newsgroups', 'user', 'article', array('group' => $group, 'article' => $loop:item['number']))#</link>
-        <description></description>
-        <author>#xarVarPrepEmailDisplay(xarVarPrepForDisplay($loop:item['From']))#</author>
-        <pubDate>#xarLocaleFormatUTCDate("%a, %d %b %Y %H:%M:%S GMT",strtotime($loop:item['Date']))#</pubDate>
-    </item>
-    </xar:loop>
-</xar:if>
+    <xar:if condition="isset($error_message)">
+        <xar:else />
+        <xar:loop name="$items">
+            <item>
+                <title>#xarVarPrepForDisplay($loop:item['Subject'])#</title>
+                <link>#xarModUrl('newsgroups', 'user', 'article', array('group' =&gt; $group,
+                'article' =&gt; $loop:item['number']))#</link>
+                <description></description>
+                <author>#xarVarPrepEmailDisplay(xarVarPrepForDisplay($loop:item['From']))#</author>
+                <pubDate>#xarLocaleFormatUTCDate("%a, %d %b %Y %H:%M:%S
+                GMT",strtotime($loop:item['Date']))#</pubDate>
+            </item>
+        </xar:loop>
+    </xar:if>
 </xar:template>

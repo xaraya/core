@@ -1,13 +1,14 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<title>#$tpl:pageTitle#</title>
-<xar:blockgroup name="header" id="header" />
-<base href="&xar-baseurl;index.php" />
-<!-- Main CSS rules (note: all default parameters in the tag can be omitted) -->
-<xar:style />
-<!-- Styleswitcher CSS files to link to -->
-<xar:template file="styleswitchercsslinks" type="theme" />
-<xar:style scope="common" />
-<!--
+    <title>#$tpl:pageTitle#</title>
+    <xar:blockgroup name="header" id="header" />
+    <base href="&xar-baseurl;index.php" />
+    <!-- Main CSS rules (note: all default parameters in the tag can be omitted) -->
+    <xar:style />
+    <!-- Styleswitcher CSS files to link to -->
+    <xar:template file="styleswitchercsslinks" type="theme" />
+    <xar:style scope="common" />
+    <!--
     The CSS for ie-win type browsers is included via the conditional comment - other browsers ignore it completely
     This method is recommended by MS - look up the details at http://msdn.microsoft.com/workshop/author/dhtml/overview/ccomment_ovw.asp
     In our case the stylesheet is to be served to any MSIE version which is less than IE7 (we assume IE7 will fix present bugs and deficiency)
@@ -29,18 +30,19 @@
 
     <xar:style scope="theme" file="no_old_browsers" method="import" />
 -->
-<xar:style scope="theme" file="ie_win" condition="lt IE 7" />
-<!--
+    <xar:style scope="theme" file="ie_win" condition="lt IE 7" />
+    <!--
     Additional CSS rules from Xaraya components (and from this theme via xar:style tag)
     Now required for all css-aware themes.
     OLD WAY: #$tpl:additionalStyles#
     NEW WAY: (starting from core RC3+) with the following attribute-less tag
 -->
-<xar:additional-styles />
-<xar:if condition="$styleswitchertype eq 'javascript'">
-    <!-- Styleswitcher JavaScript -->
-    <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js">&#160;</script>
-</xar:if>
-<!-- Head JavaScript - required for all themes -->
-<xar:base-render-javascript position="head" />
+    <xar:additional-styles />
+    <xar:if condition="$styleswitchertype eq 'javascript'">
+        <!-- Styleswitcher JavaScript -->
+        <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js">
+        &#160;</script>
+    </xar:if>
+    <!-- Head JavaScript - required for all themes -->
+    <xar:base-render-javascript position="head" />
 </xar:template>

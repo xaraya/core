@@ -1,44 +1,30 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<style type="text/css">
-    .testcase { padding: 3pt; margin: 5pt; border: thin solid black;
-    }
-  </style>
-<h1 class="xar-mod-head">
+    <style type="text/css">.testcase { padding: 3pt; margin: 5pt; border: thin solid black;
+    }</style>
+    <h1 class="xar-mod-head">XSLT Blocklayout compiler testpage</h1>
+    <div>
+        <h2>Using the compiler test page</h2>
+        <p>This page collects tests for the new xslt based Blocklayout Compiler. Its aim is to have
+        one reference place to visit in an install, to quickly check if the compiler is sane, as to
+        eliminate needless hunting for a bug when the problem is really the compiler. For this page
+        to work, you obviously have to make sure the compiler is actually compiling this page;
+        either disable the template cache (temporarily) or clear it before loading this page.</p>
+        <p>The tests rely for a big part on 
+        <strong>viewing the output source</strong>of the page you're generating because not every
+        test produces a visible result. The global functionality of the XSLT BL compiler is not
+        checked here, as it obviously works, since you're reading this! The tests should only cover
+        border cases and non-standard constructs to validate the more exotic corner of the compile
+        process.</p>
+        <xar:comment>Beginning of the tests</xar:comment>
+        <div class="testcase">
+            <h3>Empty tags, in particular divs</h3>
+            <p>Generating empty div for (X)HTML is problematic. As we are still not going to be
+            friendly for a while, the construct which can handle this is disabled in the compiler,
+            so these types will currently break:</p>
+            <pre>
     
-        XSLT Blocklayout compiler testpage
-    
-</h1>
-<div>
-  <h2>Using the compiler test page</h2>
-  <p>
-    This page collects tests for the new xslt based Blocklayout Compiler. Its
-    aim is to have one reference place to visit in an install, to quickly check
-    if the compiler is sane, as to eliminate needless hunting for a bug when
-    the problem is really the compiler. For this page to work, you obviously
-    have to make sure the compiler is actually compiling this page; either
-    disable the template cache (temporarily) or clear it before loading this
-    page.
-  </p>
-  <p>
-    The tests rely for a big part on <strong>viewing the output source</strong>
-    of the page you're generating because not every test produces a visible
-    result. The global functionality of the XSLT BL compiler is not checked here,
-    as it obviously works, since you're reading this! The tests should only cover
-    border cases and non-standard constructs to validate the more exotic corner
-    of the compile process.
-  </p>
-
-  <xar:comment>Beginning of the tests</xar:comment>
-
-  <div class="testcase">
-    <h3>Empty tags, in particular divs</h3>
-    <p>
-      Generating empty div for (X)HTML is problematic. As we are still not going
-      to be friendly for a while, the construct which can handle this is disabled
-      in the compiler, so these types will currently break:
-    </p>
-    <pre>
-    <![CDATA[
+<![CDATA[
     <!--Open, but nothing-->
     <div attribute="value"></div>
     <!--Closed-->
@@ -52,46 +38,54 @@
 
     All of the above also applies for <script/>
     ]]>
-    </pre>
-    <!-- Empty div test cases -->
-    <!--Just whitespace --><div attribute="value"> </div>
-    <!--Just an Entity --><div attribute="value">&#160;</div>
-  </div>
-  <div class="testcase">
-    <h3>xar:comment with IE conditional</h3>
-    <p>
-      Using the <code>iecondition</code> attribute, the xar:comment tag should produce
-      the special IE conditional comment construct.
-    </p>
-    <h4>Source</h4>
-    <pre>
-      <![CDATA[
+
+    
+</pre>
+            <!-- Empty div test cases -->
+            <!--Just whitespace -->
+            <div attribute="value"></div>
+            <!--Just an Entity -->
+            <div attribute="value">&#160;</div>
+        </div>
+        <div class="testcase">
+        <h3>xar:comment with IE conditional</h3>
+        <p>Using the 
+        <code>iecondition</code>attribute, the xar:comment tag should produce the special IE
+        conditional comment construct.</p>
+        <h4>Source</h4>
+        <pre>
+      
+<![CDATA[
       <xar:set name="seven">7</xar:set>
       <xar:comment iecondition="lt IE 7">This would apply to IE with version less than ##$seven#</xar:comment> 
         ]]>
-      <xar:comment iecondition="lt IE 7">This would apply to IE with version less than 7</xar:comment>
-    </pre>
-    <h4>Expected</h4>
-    <pre>
-      <![CDATA[ <!--[lt IE 7]>This would apply to IE with version less than 7<![endif]--> ]]>
-    </pre>
-      <xar:set name="seven">7</xar:set>
-    R: <xar:comment iecondition="lt IE 7">This would apply to IE with version less than #$seven#</xar:comment>
-    Does not work: see trac ticket #123
-  </div>
-  <div class="testcase">
-    <h3>Old xar:ml construct translates</h3>
-    <p>
-      Adding the xar:ml tag and its constructs inside a xar:set, so we test 2
-      cases at once.
-    </p>
-    <p>
-      Note: in the transitional scenario we continue to support the old version of xar:mlvar
-    </p>
-    <h4>Source</h4>
-    <pre>
-      <xar:set name="next">4</xar:set>
-      <![CDATA[
+
+      
+<xar:comment iecondition="lt IE 7">This would apply to IE with version less than 7</xar:comment>
+    
+</pre>
+        <h4>Expected</h4>
+        <pre>
+      
+<![CDATA[ <!--[lt IE 7]>This would apply to IE with version less than 7<![endif]--> ]]>
+
+    
+</pre>
+        <xar:set name="seven">7</xar:set>R: 
+        <xar:comment iecondition="lt IE 7">This would apply to IE with version less than
+        #$seven#</xar:comment>Does not work: see trac ticket #123</div>
+        <div class="testcase">
+            <h3>Old xar:ml construct translates</h3>
+            <p>Adding the xar:ml tag and its constructs inside a xar:set, so we test 2 cases at
+            once.</p>
+            <p>Note: in the transitional scenario we continue to support the old version of
+            xar:mlvar</p>
+            <h4>Source</h4>
+            <pre>
+      
+<xar:set name="next">4</xar:set>
+      
+<![CDATA[
       <xar:set name="next">4</xar:set>
       <xar:set name="nextpagelabel">
         <xar:ml>
@@ -101,27 +95,34 @@
       </xar:set>
       <xar:var name="nextpagelabel"/>
     ]]>
-    </pre>
-    <h4>Results</h4>
-    <pre>
+
+    
+</pre>
+            <h4>Results</h4>
+            <pre>
       E: Next page; 4 items
 <xar:set name="nextpagelabel">
-      <xar:ml>
+      
+<xar:ml>
         Next page; #(1) items
-        <xar:mlvar>$next</xar:mlvar>
+        
+<xar:mlvar>$next</xar:mlvar>
       </xar:ml>
     </xar:set>
-      R: <xar:var name="nextpagelabel"/>
-    </pre>
-  </div>
-    <div class="testcase">
-      <h3>New xar:ml construct translates</h3>
-      <p>
-        Same testcase as above, but now with the new xar:ml construct</p>
-      <h4>Source</h4>
-      <pre>
-        <xar:set name="next">4</xar:set>
-        <![CDATA[
+      R: 
+<xar:var name="nextpagelabel" />
+    
+</pre>
+        </div>
+        <div class="testcase">
+            <h3>New xar:ml construct translates</h3>
+            <p>Same testcase as above, but now with the new xar:ml construct</p>
+            <h4>Source</h4>
+            <pre>
+        
+<xar:set name="next">4</xar:set>
+        
+<![CDATA[
         <xar:set name="next">4</xar:set>
         <xar:set name="link">'&lt;a href="blah"&gt;' . xarML('Test #(1) items',$next).'&lt;/a&gt;'</xar:set>
         <xar:set name="nextpagelabel">
@@ -134,34 +135,49 @@
           Next page; <xar:var name="link"/>, yes really <xar:var name="next"/>.
         </xar:ml>
       ]]>
-      </pre>
-      <h4>Results</h4>
-      <xar:set name="next">4</xar:set>
-      <xar:set name="link">'&lt;a href="blah"&gt;' . xarML('Test #(1) items',$next).'&lt;/a&gt;'</xar:set>
-      <pre>
+
+      
+</pre>
+            <h4>Results</h4>
+            <xar:set name="next">4</xar:set>
+            <xar:set name="link">'&lt;a href="blah"&gt;' . xarML('Test #(1)
+            items',$next).'&lt;/a&gt;'</xar:set>
+            <pre>
 E: Next page; 4 items, yes really 4.
-E: Next page; <a href="blah"> Test 4 items</a>, yes really 4.
-        <xar:set name="nextpagelabel">
-          <xar:ml>
-            R: Next page; <xar:var name="next"/> items, yes really <xar:var name="next"/>.
+E: Next page; 
+<a href="blah"> Test 4 items</a>, yes really 4.
+        
+<xar:set name="nextpagelabel">
+          
+<xar:ml>
+            R: Next page; 
+<xar:var name="next" /> items, yes really 
+<xar:var name="next" />.
           </xar:ml>
         </xar:set>
-        <xar:var name="nextpagelabel"/>
-        <xar:ml>
-          R: Next page; <xar:var name="link"/>, yes really <xar:var name="next"/>
+        
+<xar:var name="nextpagelabel" />
+        
+<xar:ml>
+          R: Next page; 
+<xar:var name="link" />, yes really 
+<xar:var name="next" />
         </xar:ml>
-      </pre>
-    </div>
-  <div class="testcase">
-    <h3>xar:else tag in xar:sec</h3>
-    <p>
-      Inserting a xar:else clause inside a xar:sec tag should work the same as inside xar:if
-    </p>
-    <h4>Source</h4>
-    <pre>
-      <xar:set name="location">'test'</xar:set>
-      <xar:set name="instance">'test'</xar:set>
-      <![CDATA[
+      
+</pre>
+        </div>
+        <div class="testcase">
+            <h3>xar:else tag in xar:sec</h3>
+            <p>Inserting a xar:else clause inside a xar:sec tag should work the same as inside
+            xar:if</p>
+            <h4>Source</h4>
+            <pre>
+      
+<xar:set name="location">'test'</xar:set>
+      
+<xar:set name="instance">'test'</xar:set>
+      
+<![CDATA[
       <xar:set name="location">'test'</xar:set>
       <xar:set name="instance">'test'</xar:set>
       <xar:sec mask="ViewBase" component="Entry" instance="$instance" catch="false">
@@ -170,55 +186,67 @@ E: Next page; <a href="blah"> Test 4 items</a>, yes really 4.
         <pre>xar:sec returned false</pre>
       </xar:sec>
       ]]>
-    </pre>
-    <h4>Results</h4>
-    <pre>
+
+    
+</pre>
+            <h4>Results</h4>
+            <pre>
       E: xar:sec returned true
 <xar:sec mask="ViewBase" component="Entry" instance="$instance" catch="false">
       R: xar:sec returned true
-<xar:else/>
+<xar:else />
       R: xar:sec returned false
 </xar:sec>
-  </pre>
-  </div>
-
-  <div class="testcase">
-    <h3>xar:var instances not explicitly used in core</h3>
-    <h4>Source</h4>
-    <pre>
-    <![CDATA[
+  
+</pre>
+        </div>
+        <div class="testcase">
+            <h3>xar:var instances not explicitly used in core</h3>
+            <h4>Source</h4>
+            <pre>
+    
+<![CDATA[
       <xar:var scope="config" name="System.Core.VersionNumber"/>
       <xar:var scope="request" name="page" />
       <xar:var scope="session" name="navigationLocale"/>
       <xar:var scope="invalid" name="nonexistent"/>
     ]]>
-    </pre>
-    <h4>Results</h4>
-    <pre>
-      E: [ongoing development version]compilertesten_US.utf-8&#x2707;
-      R: <xar:var scope="config" name="System.Core.VersionNumber"/>
-      <xar:var scope="request" name="page" />
-      <xar:var scope="session" name="navigationLocale"/>
-      <xar:var scope="invalid" name="nonexistent"/>
-    </pre>
-  </div>
 
-  <div class="testcase">
-    <h3>xar:mlvar deprecation</h3>
-    <p>
-      xar:mlvar is a redundant tag, and implemented the wrong way, we are
-      replacing it with the behaviour of xar:var, without paying attention
-      to actual ML constructs yet. This means xar:var has to get the 'anonymous'
-      set syntax so we can 'set' a var if the name attribute is not present.
-      We do this, so we can mass replace xar:mlvar with xar:var.
-    </p>
-    <h4>Source</h4>
-    <pre>
-      <xar:set name="first">'first'</xar:set>
-      <xar:set name="second">'second'</xar:set>
-      <xar:set name="third">'##$third#'</xar:set>
-      <xar:set name="extra">#$first#</xar:set>
-    <![CDATA[
+    
+</pre>
+            <h4>Results</h4>
+            <pre>
+      E: [ongoing development version]compilertesten_US.utf-8&#x2707;
+      R: 
+<xar:var scope="config" name="System.Core.VersionNumber" />
+      
+<xar:var scope="request" name="page" />
+      
+<xar:var scope="session" name="navigationLocale" />
+      
+<xar:var scope="invalid" name="nonexistent" />
+    
+</pre>
+        </div>
+        <div class="testcase">
+            <h3>xar:mlvar deprecation</h3>
+            <p>xar:mlvar is a redundant tag, and implemented the wrong way, we are replacing it
+            with the behaviour of xar:var, without paying attention to actual ML constructs yet.
+            This means xar:var has to get the 'anonymous' set syntax so we can 'set' a var if the
+            name attribute is not present. We do this, so we can mass replace xar:mlvar with
+            xar:var.</p>
+            <h4>Source</h4>
+            <pre>
+      
+<xar:set name="first">'first'</xar:set>
+      
+<xar:set name="second">'second'</xar:set>
+      
+<xar:set name="third">'##$third#'</xar:set>
+      
+<xar:set name="extra">#$first#</xar:set>
+    
+<![CDATA[
         <xar:var>first</xar:var>         <!-- anon var gets value 'first' -->
         <xar:mlvar>first</xar:var>
         <xar:var>'first'</xar:var>       <!-- anon var gets value '\'first\'' -->
@@ -228,21 +256,25 @@ E: Next page; <a href="blah"> Test 4 items</a>, yes really 4.
         <xar:var>#$third#</xar:var>      <!-- anon var gets value of variable $third -->
         <xar:mlvar>#$third#</xar:mlvar>
     ]]>
-    </pre>
-      <xar:var>first</xar:var>         <!-- anon var gets value 'first' -->
-      <xar:mlvar>first</xar:mlvar>
-      <xar:var>'first'</xar:var>       <!-- anon var gets value '\'first\'' -->
-      <xar:mlvar>'first'</xar:mlvar>
-      <xar:var>$second</xar:var>       <!-- anon var gets value '$second' -->
-      <xar:mlvar>$second</xar:mlvar>
-      <xar:var>#$third#</xar:var>      <!-- anon var gets value of variable $third -->
-      <xar:mlvar>#$third#</xar:mlvar>
-      <xar:var>#xarServerGetVar('HTTP_HOST')#</xar:var>
 
-  </div>
-  <xar:comment>End of the tests</xar:comment>
-
-  <!-- Some tests which dont need to do anything, but also should not error out -->
-  <xar:template> </xar:template>
-
-</div></xar:template>
+    
+</pre>
+            <xar:var>first</xar:var>
+            <!-- anon var gets value 'first' -->
+            <xar:mlvar>first</xar:mlvar>
+            <xar:var>'first'</xar:var>
+            <!-- anon var gets value '\'first\'' -->
+            <xar:mlvar>'first'</xar:mlvar>
+            <xar:var>$second</xar:var>
+            <!-- anon var gets value '$second' -->
+            <xar:mlvar>$second</xar:mlvar>
+            <xar:var>#$third#</xar:var>
+            <!-- anon var gets value of variable $third -->
+            <xar:mlvar>#$third#</xar:mlvar>
+            <xar:var>#xarServerGetVar('HTTP_HOST')#</xar:var>
+        </div>
+        <xar:comment>End of the tests</xar:comment>
+        <!-- Some tests which dont need to do anything, but also should not error out -->
+        <xar:template></xar:template>
+    </div>
+</xar:template>

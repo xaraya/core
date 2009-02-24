@@ -1,71 +1,67 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head"><span class="xar-mod-title">Account Validation</span></div>
-<div class="xar-mod-body">
-    <h2>Start Validation</h2>
-
-<xar:if condition="isset($sent) and $sent eq '1'">
-    <p><strong>Your validation code has been sent again to the email address you have registered.</strong></p>
-<xar:else />
-    <p>Your account has not yet been activated. You need to finish these final steps in order to complete your account activation. </p>
-</xar:if>
-
-<xar:if condition="!empty($valcode)">
-    <xar:set name="validationlink">xarModURL('roles','user','getvalidation', array('phase'=>'getvalidate','uname'=>xarVarPrepForDisplay($uname), 'valcode'=>$valcode))</xar:set>
-    <p>
-        To continue, please follow <a href="#$validationlink#">this link</a>.
-    </p>
-
-<xar:else />
-    <form action="&xar-modurl-roles-user-getvalidation;" method="post" enctype="application/x-www-form-urlencoded">
-        <fieldset>
-            <legend>
-                
-                    Start Validation
-                
-            </legend>
-            <div class="xar-form-input-wrapper">
-                  <p>Please enter your username and validation code below:</p>
-            </div>
-            <div class="xar-form-input-wrapper">
-                <label for="uname" class="xar-form-label" title="#xarML('Please enter your user name')#">
-                    Username
-                </label>
-               <input type="text" name="uname" id="uname" value="#xarVarPrepForDisplay($uname)#" />
-            </div>
-            <div class="xar-form-input-wrapper">
-                <label for="valcode" class="xar-form-label" title="#xarML('Please enter your validation code')#">
-                    Validation Code:
-                </label>
-                <input type="text" name="valcode" id="valcode" value="" />
-             </div>
-
-            <div class="xar-form-input-wrapper-after">
-                <input type="hidden" name="phase" id="phase" value="getvalidate" />
-                <input type="submit" value="#xarVarPrepForDisplay($validatelabel)#" />
-            </div>
-        </fieldset>
-    </form>
-
-    <p>If you did not receive your validation code, we will try to resend it now.</p>
-    <form action="&xar-modurl-roles-user-getvalidation;" method="post" enctype="application/x-www-form-urlencoded">
-        <fieldset>
-            <legend>
-                
-                    Resend Validation
-                
-            </legend>
-            <div class="xar-form-input-wrapper">
-                <label for="unameresend" class="xar-form-label" title="#xarML('Please enter your username')#">
-                    Username:
-                </label>&#160;
-                <input type="text" name="uname" id="unameresend" value="#$uname#" />
-            </div>
-            <div class="xar-form-input-wrapper-after">
-                <input type="hidden" name="phase" id="phase" value="resend" />
-                <input type="submit" value="#$resendlabel#" />
-            </div>
-        </fieldset>
-    </form>
-</xar:if>
-</div></xar:template>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Account Validation</span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>Start Validation</h2>
+        <xar:if condition="isset($sent) and $sent eq '1'">
+            <p>
+                <strong>Your validation code has been sent again to the email address you have
+                registered.</strong>
+            </p>
+            <xar:else />
+            <p>Your account has not yet been activated. You need to finish these final steps in
+            order to complete your account activation.</p>
+        </xar:if>
+        <xar:if condition="!empty($valcode)">
+            <xar:set name="validationlink">xarModURL('roles','user','getvalidation',
+            array('phase'=&gt;'getvalidate','uname'=&gt;xarVarPrepForDisplay($uname),
+            'valcode'=&gt;$valcode))</xar:set>
+            <p>To continue, please follow 
+            <a href="#$validationlink#">this link</a>.</p>
+            <xar:else />
+            <form action="&xar-modurl-roles-user-getvalidation;" method="post"
+            enctype="application/x-www-form-urlencoded">
+                <fieldset>
+                    <legend>Start Validation</legend>
+                    <div class="xar-form-input-wrapper">
+                        <p>Please enter your username and validation code below:</p>
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="uname" class="xar-form-label"
+                        title="#xarML('Please enter your user name')#">Username</label>
+                        <input type="text" name="uname" id="uname"
+                        value="#xarVarPrepForDisplay($uname)#" />
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="valcode" class="xar-form-label"
+                        title="#xarML('Please enter your validation code')#">Validation
+                        Code:</label>
+                        <input type="text" name="valcode" id="valcode" value="" />
+                    </div>
+                    <div class="xar-form-input-wrapper-after">
+                        <input type="hidden" name="phase" id="phase" value="getvalidate" />
+                        <input type="submit" value="#xarVarPrepForDisplay($validatelabel)#" />
+                    </div>
+                </fieldset>
+            </form>
+            <p>If you did not receive your validation code, we will try to resend it now.</p>
+            <form action="&xar-modurl-roles-user-getvalidation;" method="post"
+            enctype="application/x-www-form-urlencoded">
+                <fieldset>
+                    <legend>Resend Validation</legend>
+                    <div class="xar-form-input-wrapper">
+                    <label for="unameresend" class="xar-form-label"
+                    title="#xarML('Please enter your username')#">Username:</label>&#160; 
+                    <input type="text" name="uname" id="unameresend" value="#$uname#" /></div>
+                    <div class="xar-form-input-wrapper-after">
+                        <input type="hidden" name="phase" id="phase" value="resend" />
+                        <input type="submit" value="#$resendlabel#" />
+                    </div>
+                </fieldset>
+            </form>
+        </xar:if>
+    </div>
+</xar:template>

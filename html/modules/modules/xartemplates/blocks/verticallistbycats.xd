@@ -1,64 +1,65 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<!--
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!--
     we dont really want to display a category if there are no modules that belong to it,
     even though we're passing all category names to this template from API [andyv]
--->    
-<xar:foreach in="$catmods" key="$catname" value="$cats">
-  <xar:if condition="count($cats) ne 0">
-    <ul class="xar-menu-section">
-      <li class="xar-menu-section">
-        <h4>#$catname#</h4>
-        <ul class="xar-menu-item">
-          <xar:foreach in="$cats" value="$mod" key="$modname">
-            <!--
+-->
+    <xar:foreach in="$catmods" key="$catname" value="$cats">
+        <xar:if condition="count($cats) ne 0">
+            <ul class="xar-menu-section">
+                <li class="xar-menu-section">
+                    <h4>#$catname#</h4>
+                    <ul class="xar-menu-item">
+                        <xar:foreach in="$cats" value="$mod" key="$modname">
+                            <!--
                 here we are dealing with 3 main conditions:
                 - if module is active and main/overview function is loaded, we display item as having *-current state
                 - if module is active and main/overview function is not loaded, we allow user to click the item to load main/overview
                 - if module is not active, user can activate item by clicking its link, upon which s/he loads main/overview function 
                 (some redundancy in template allows to easily port it for drop-down lists implementations in the future)
             -->
-            <xar:set name="menuitemclass">'xar-menu-item'</xar:set>
-            <xar:if condition="$mod['features']['modactive']">
-              <xar:set name="menuitemclass">'xar-menu-item-current'</xar:set>
-            </xar:if>
-            <li class="#$menuitemclass#">
-              <xar:if condition="$mod['features']['modactive'] and !$mod['features']['overview']">
-                <a name="activeitem" title="#$mod['features']['label']#">#$mod['features']['label']#</a>
-              <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
-                <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">#$mod['features']['label']#</a>
-              <xar:else />
-                <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">#$mod['features']['label']#</a>
-              </xar:if>
-              <!-- Render the menu part -->
-              <xar:template file="menu-part"  subdata="array('mod' =&gt; $mod)"/>
-            </li>
-          </xar:foreach>
-        </ul>
-      </li>
-    </ul>
-  </xar:if>
-</xar:foreach>
-<xar:if condition="$showlogout">
-  <ul class="xar-menu-section">
-    <li class="xar-menu-section">
-      <h4>
-        
-          Controls
-        
-      </h4>
-      <ul class="xar-menu-item">
-        <li class="xar-menu-item">
-          <a title="#xarML('Logout as administrator')#" href="&xar-modurl-modules-admin-confirmlogout;">
-            Admin logout
-          </a> 
-        </li>
-      </ul>
-    </li>
-  </ul>
-</xar:if>
+                            <xar:set name="menuitemclass">'xar-menu-item'</xar:set>
+                            <xar:if condition="$mod['features']['modactive']">
+                                <xar:set name="menuitemclass">'xar-menu-item-current'</xar:set>
+                            </xar:if>
+                            <li class="#$menuitemclass#">
+                                <xar:if condition="$mod['features']['modactive'] and !$mod['features']['overview']">
 
-<!-- DO NOT UNCOMMENT - EXAMPLE!
+                                    <a name="activeitem" title="#$mod['features']['label']#">
+                                    #$mod['features']['label']#</a>
+                                    <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
+                                    <a href="#$mod['features']['link']#"
+                                    title="#$mod['features']['maintitle']#">
+                                    #$mod['features']['label']#</a>
+                                    <xar:else />
+                                    <a href="#$mod['features']['link']#"
+                                    title="#$mod['features']['maintitle']#">
+                                    #$mod['features']['label']#</a>
+                                </xar:if>
+                                <!-- Render the menu part -->
+                                <xar:template file="menu-part" subdata="array('mod' =&gt; $mod)" />
+                            </li>
+                        </xar:foreach>
+                    </ul>
+                </li>
+            </ul>
+        </xar:if>
+    </xar:foreach>
+    <xar:if condition="$showlogout">
+        <ul class="xar-menu-section">
+            <li class="xar-menu-section">
+                <h4>Controls</h4>
+                <ul class="xar-menu-item">
+                    <li class="xar-menu-item">
+                        <a title="#xarML('Logout as administrator')#"
+                        href="&xar-modurl-modules-admin-confirmlogout;">Admin logout</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </xar:if>
+    <!-- DO NOT UNCOMMENT - EXAMPLE!
      
      Below is a typical (simplified) example of nested unordered list that we process in this template:
      

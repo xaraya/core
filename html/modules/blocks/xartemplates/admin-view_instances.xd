@@ -1,51 +1,45 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:style scope="common" />
-<xar:base-include-javascript module="base" filename="confirmlink.js" />
-<div class="xar-mod-head">
-    <span class="xar-mod-title">Blocks Administration</span>
-</div>
-<div class="xar-mod-body">
-    <xar:template type="module" file="admin-menu" />
-    <h2>
-        View Blocks
-    </h2>
-    <form method="post" action="#xarModUrl('blocks', 'admin', 'settings')#">
-
-    <fieldset>
-        <legend>View Options</legend>
-
-        <div class="xar-form-input-wrapper">
-            <label for="selstyle" title="#xarML('Choose how Block instances are displayed.')#" class="xar-form-label">
-                Preferred Layout:
-            </label>
-            <xar:comment>
-                Module List Sort and Filter Controls
-            </xar:comment>
-            <select name="selstyle" id="selstyle">
-                <xar:foreach in="$style" key="$key" value="$value">
-                    <xar:if condition="$key eq $selstyle">
-                        <option value="#$key#" selected="selected">#$value#</option>
-                    <xar:else />
-                        <option value="#$key#">#$value#</option>
-                    </xar:if>
-                </xar:foreach>
-            </select>
-            <input type="submit" value="#xarML('Refresh')#" />
-        </div>
-        <div class="xar-form-input-wrapper">
-            <label for="filter" title="#xarML('Filter the instances to be shown.')#" class="xar-form-label">
-                Filter:
-            </label>
-            <input type="text" id="filter" name="filter" value="#$filter#" class="xar-form-textmedium" />
-        </div>
-    </fieldset>
-
-        <xar:if condition="$selstyle eq 'compact'">
-            <xar:template file="compact" type="module" />
-            <xar:else />
-            <xar:template file="plain" type="module" />
-        </xar:if>
-    </form>
-</div>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="common" />
+    <xar:base-include-javascript module="base" filename="confirmlink.js" />
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Blocks Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu" />
+        <h2>View Blocks</h2>
+        <form method="post" action="#xarModUrl('blocks', 'admin', 'settings')#">
+            <fieldset>
+                <legend>View Options</legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="selstyle"
+                    title="#xarML('Choose how Block instances are displayed.')#"
+                    class="xar-form-label">Preferred Layout:</label>
+                    <xar:comment>Module List Sort and Filter Controls</xar:comment>
+                    <select name="selstyle" id="selstyle">
+                        <xar:foreach in="$style" key="$key" value="$value">
+                            <xar:if condition="$key eq $selstyle">
+                                <option value="#$key#" selected="selected">#$value#</option>
+                                <xar:else />
+                                <option value="#$key#">#$value#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                    <input type="submit" value="#xarML('Refresh')#" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="filter" title="#xarML('Filter the instances to be shown.')#"
+                    class="xar-form-label">Filter:</label>
+                    <input type="text" id="filter" name="filter" value="#$filter#"
+                    class="xar-form-textmedium" />
+                </div>
+            </fieldset>
+            <xar:if condition="$selstyle eq 'compact'">
+                <xar:template file="compact" type="module" />
+                <xar:else />
+                <xar:template file="plain" type="module" />
+            </xar:if>
+        </form>
+    </div>
 </xar:template>

@@ -1,23 +1,15 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head">
-    <span class="xar-mod-title">Modules Administration</span>
-</div>
-<div class="xar-mod-body">
-    <h2>
-        Function
-    </h2>
-
-    <h3>
-        Header
-    </h3>
-
-    <p>Maintext</p>
-
-</div>
-<div class="xar-mod-foot xar-align-center xar-padding-thick">
-    <p>
-        Footer
-    </p>
-</div>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Modules Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>Function</h2>
+        <h3>Header</h3>
+        <p>Maintext</p>
+    </div>
+    <div class="xar-mod-foot xar-align-center xar-padding-thick">
+        <p>Footer</p>
+    </div>
 </xar:template>

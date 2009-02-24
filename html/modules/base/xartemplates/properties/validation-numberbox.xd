@@ -1,33 +1,30 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<table class="xar-norm">
-  <tr>
-    <td>
-      Minimum value
-    </td>
-    <td>
-      <input type="text" name="#$name#[min]" id="#$id#_min" value="#$min#" size="4" tabindex="#$tabindex#" />
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Maximum value
-    </td>
-    <td>
-      <input type="text" name="#$name#[max]" id="#$id#_max" value="#$max#" size="4" tabindex="#$tabindex#" />
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Other rule
-    </td>
-    <td>
-      <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="50" tabindex="#$tabindex#" />
-    </td>
-  </tr>
-</table>
-
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <table class="xar-norm">
+        <tr>
+            <td>Minimum value</td>
+            <td>
+                <input type="text" name="#$name#[min]" id="#$id#_min" value="#$min#" size="4"
+                tabindex="#$tabindex#" />
+            </td>
+        </tr>
+        <tr>
+            <td>Maximum value</td>
+            <td>
+                <input type="text" name="#$name#[max]" id="#$id#_max" value="#$max#" size="4"
+                tabindex="#$tabindex#" />
+            </td>
+        </tr>
+        <tr>
+            <td>Other rule</td>
+            <td>
+                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#"
+                size="50" tabindex="#$tabindex#" />
+            </td>
+        </tr>
+    </table>
+    <xar:if condition="!empty($invalid)">
+        <span class="xar-error">#$invalid#</span>
+    </xar:if>
 </xar:template>

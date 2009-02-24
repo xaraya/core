@@ -1,35 +1,28 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<table class="xar-norm">
-  <tr>
-    <td>
-      Rows
-    </td>
-    <td>
-      <input type="text" name="#$name#[rows]" id="#$id#_rows" value="#$rows#" size="4" tabindex="#$tabindex#" />
-      (default: #$defaultrows#)
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Columns
-    </td>
-    <td>
-      <input type="text" name="#$name#[cols]" id="#$id#_cols" value="#$cols#" size="4" tabindex="#$tabindex#" />
-      (default: #$defaultcols#)
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Other rule
-    </td>
-    <td>
-      <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="50" tabindex="#$tabindex#" />
-    </td>
-  </tr>
-</table>
-
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <table class="xar-norm">
+        <tr>
+            <td>Rows</td>
+            <td>
+            <input type="text" name="#$name#[rows]" id="#$id#_rows" value="#$rows#" size="4"
+            tabindex="#$tabindex#" />(default: #$defaultrows#)</td>
+        </tr>
+        <tr>
+            <td>Columns</td>
+            <td>
+            <input type="text" name="#$name#[cols]" id="#$id#_cols" value="#$cols#" size="4"
+            tabindex="#$tabindex#" />(default: #$defaultcols#)</td>
+        </tr>
+        <tr>
+            <td>Other rule</td>
+            <td>
+                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#"
+                size="50" tabindex="#$tabindex#" />
+            </td>
+        </tr>
+    </table>
+    <xar:if condition="!empty($invalid)">
+        <span class="xar-error">#$invalid#</span>
+    </xar:if>
 </xar:template>

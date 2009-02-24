@@ -1,201 +1,181 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head">
-    <span class="xar-mod-title">Roles</span>
-</div>
-<div class="xar-mod-body">
-    <h2>Member List</h2>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Roles</span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>Member List</h2>
         <xar:style scope="module" module="base" file="navtabs" />
         <dl class="xar-tabs">
-            <dt class="help">
-                
-                    Sort
-                
-                :
-            </dt>
-                <xar:if condition="$letter eq ''">
-                    <dd class="active">
-                        <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#">
-                            All
-                        </a>
-                    </dd>
+            <dt class="help">Sort :</dt>
+            <xar:if condition="$letter eq ''">
+                <dd class="active">
+                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#">
+                    All</a>
+                </dd>
                 <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#">
-                            All
-                        </a>
-                    </dd>
-                </xar:if>
+                <dd>
+                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#">
+                    All</a>
+                </dd>
+            </xar:if>
             <xar:foreach in="$alphabet" value="$ltr">
                 <xar:if condition="$letter eq $ltr">
                     <dd class="active">
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#">
-                            #$ltr#
-                        </a>
+                        #$ltr#</a>
                     </dd>
-                <xar:else />
+                    <xar:else />
                     <dd>
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#">
-                            #$ltr#
-                        </a>
+                        #$ltr#</a>
                     </dd>
                 </xar:if>
             </xar:foreach>
-                <xar:if condition="$letter eq 'Other'">
-                    <dd class="active">
-                        <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#">
-                            Other
-                        </a>
-                    </dd>
+            <xar:if condition="$letter eq 'Other'">
+                <dd class="active">
+                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#">
+                    Other</a>
+                </dd>
                 <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#">
-                            Other
-                        </a>
-                    </dd>
-                </xar:if>
+                <dd>
+                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#">
+                    Other</a>
+                </dd>
+            </xar:if>
         </dl>
         <div>
             <dl class="xar-tabs">
-                <dt class="help">
-                    
-                        Show
-                    
-                    :
-                </dt>
+                <dt class="help">Show :</dt>
                 <xar:if condition="$phase ne 'active'">
                     <dd class="active">
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
-                        All
-                        </a>
+                        All</a>
                     </dd>
-                <xar:else />
+                    <xar:else />
                     <dd>
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
-                        All
-                        </a>
+                        All</a>
                     </dd>
                 </xar:if>
                 <xar:if condition="$phase eq 'active'">
                     <dd class="active">
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
-                        Online
-                        </a>
+                        Online</a>
                     </dd>
-                <xar:else />
+                    <xar:else />
                     <dd>
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
-                        Online
-                        </a>
+                        Online</a>
                     </dd>
                 </xar:if>
             </dl>
         </div>
         <div class="xar-clearboth">&#160;</div>
-    <xar:if condition="!empty($message)">
-        <p>#xarVarPrepForDisplay($message)#</p>
-    <xar:else />
-        <xar:if condition="xarModIsAvailable('dynamicdata')">
-            <xar:data-getitems name="$properties" value="$values" module="roles" itemids="$idlist" />
-        </xar:if>
-        <table width="100%" border="0" cellspacing="0" cellpadding="2">
-            <tr>
-                <xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
-                    <th class="xar-thirdwidth">
-                        <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
-                            Display Name
-                        </a>
-                    </th>
-                    <th class="xar-thirdwidth">
-                        <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=uname">
-                            IP Address
-                        </a>
-                    </th>
-                <xar:else />
-                    <th class="xar-twothirdwidth">
-                        <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
-                            Display Name
-                        </a>
-                    </th>
-                </xar:if>
-                <xar:if condition="xarModVars::get('roles', 'allowemail')">
-                    <th>
-                        Email
-                    </th>
-                </xar:if>
-                <xar:if condition="isset($properties) and count($properties) gt 0">
-                    <!-- TODO: adapt % of column widths -->
-                    <xar:foreach in="$properties" key="$key">
-                    <th>
-                        <xar:data-label property="$properties[$key]" />
-                    </th>
-                    </xar:foreach>
-                </xar:if>
-            </tr>
-            <xar:loop name="$items">
-                <xar:if condition="(($loop:index + 1) % 2)">
-                    <xar:set name="item_class">'xar-norm'</xar:set>
-                <xar:else/>
-                    <xar:set name="item_class">'xar-accent'</xar:set>
-                </xar:if>
-
-                <tr class="#$item_class#">
-                <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
-                    <td>
-                        <a href="&xar-modurl-roles-user-display;&amp;id=#$loop:item.id#">#xarVarPrepForDisplay($loop:item['name'])#</a>
-                    </td>
-                    <td class="xar-align-center">
-                        <!-- TODO: add link to working whois service -->
-                        #xarVarPrepForDisplay($loop:item['ipaddr'])#
-                    </td>
-                    <xar:else />
-                    <td>
-                        <xar:if condition="xarUserIsLoggedIn()">
-                            <a href="&xar-modurl-roles-user-display;&amp;id=#$loop:item.id#">#xarVarPrepForDisplay($loop:item['name'])#</a>
+        <xar:if condition="!empty($message)">
+            <p>#xarVarPrepForDisplay($message)#</p>
+            <xar:else />
+            <xar:if condition="xarModIsAvailable('dynamicdata')">
+                <xar:data-getitems name="$properties" value="$values" module="roles"
+                itemids="$idlist" />
+            </xar:if>
+            <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                <tr>
+                    <xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
+                        <th class="xar-thirdwidth">
+                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
+                            Display Name</a>
+                        </th>
+                        <th class="xar-thirdwidth">
+                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=uname">
+                            IP Address</a>
+                        </th>
                         <xar:else />
-                            #xarVarPrepForDisplay($loop:item['name'])#
-                        </xar:if>
-                    </td>
-                </xar:if>
-                <xar:if condition="xarModVars::get('roles', 'allowemail')">
-                    <td class="xar-align-center">
-                        <xar:if condition="empty($loop:item['emailurl']) || !xarUserIsLoggedIn()">
-                            <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/>
-                        <xar:else />
-                            <a href="#$loop:item['emailurl']#"><img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/></a>
-                        </xar:if>
-                    </td>
-                </xar:if>
-                <xar:if condition="isset($properties) and count($properties) gt 0">
-                    <xar:set name="id">#$loop:item['id']#</xar:set>
-                    <xar:foreach in="$properties" key="$key">
-                        <td>
-                            <xar:if condition="isset($values[$id][$key])">
-                                <xar:data-output property="$properties[$key]" value="$values[$id][$key]" />
-                            <xar:else />
-                                &#160;&#160;
-                            </xar:if>
-                        </td>
-                    </xar:foreach>
-                </xar:if>
+                        <th class="xar-twothirdwidth">
+                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
+                            Display Name</a>
+                        </th>
+                    </xar:if>
+                    <xar:if condition="xarModVars::get('roles', 'allowemail')">
+                        <th>Email</th>
+                    </xar:if>
+                    <xar:if condition="isset($properties) and count($properties) gt 0">
+                        <!-- TODO: adapt % of column widths -->
+                        <xar:foreach in="$properties" key="$key">
+                            <th>
+                                <xar:data-label property="$properties[$key]" />
+                            </th>
+                        </xar:foreach>
+                    </xar:if>
                 </tr>
-            </xar:loop>
-        </table>
+                <xar:loop name="$items">
+                    <xar:if condition="(($loop:index + 1) % 2)">
+                        <xar:set name="item_class">'xar-norm'</xar:set>
+                        <xar:else />
+                        <xar:set name="item_class">'xar-accent'</xar:set>
+                    </xar:if>
+                    <tr class="#$item_class#">
+                        <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
 
+                            <td>
+                                <a href="&xar-modurl-roles-user-display;&amp;id=#$loop:item.id#">
+                                #xarVarPrepForDisplay($loop:item['name'])#</a>
+                            </td>
+                            <td class="xar-align-center">
+                            <!-- TODO: add link to working whois service -->
+                            #xarVarPrepForDisplay($loop:item['ipaddr'])#</td>
+                            <xar:else />
+                            <td>
+                                <xar:if condition="xarUserIsLoggedIn()">
+                                <a href="&xar-modurl-roles-user-display;&amp;id=#$loop:item.id#">
+                                #xarVarPrepForDisplay($loop:item['name'])#</a>
+                                <xar:else />#xarVarPrepForDisplay($loop:item['name'])#</xar:if>
+                            </td>
+                        </xar:if>
+                        <xar:if condition="xarModVars::get('roles', 'allowemail')">
+                            <td class="xar-align-center">
+                                <xar:if condition="empty($loop:item['emailurl']) || !xarUserIsLoggedIn()">
 
-        <!-- add the pager here -->
-        <div class="xar-align-center">#$pager#</div>
-        <form method="post" action="&xar-modurl-roles-user-viewlist;">
-            <label for="search">Search:</label>
-            <input type="hidden" name="phase" id="phase" value="#xarVarPrepForDisplay($phase)#" />
-            <input type="hidden" name="order" id="order" value="#xarVarPrepForDisplay($order)#" />
-            <input type="hidden" name="letter" id="letter" value="" />
-            <input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1" />
-            <input type="submit" value="#xarVarPrepForDisplay($searchlabel)#" />
-        </form>
-        <p>
-            Search condition: <strong>#xarVarPrepForDisplay($msg)#</strong>
-        </p>
-    </xar:if>
-</div>
+                                    <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#"
+                                    title="#xarML('Email')#" />
+                                    <xar:else />
+                                    <a href="#$loop:item['emailurl']#">
+                                        <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#"
+                                        title="#xarML('Email')#" />
+                                    </a>
+                                </xar:if>
+                            </td>
+                        </xar:if>
+                        <xar:if condition="isset($properties) and count($properties) gt 0">
+                            <xar:set name="id">#$loop:item['id']#</xar:set>
+                            <xar:foreach in="$properties" key="$key">
+                                <td>
+                                    <xar:if condition="isset($values[$id][$key])">
+                                    <xar:data-output property="$properties[$key]"
+                                    value="$values[$id][$key]" />
+                                    <xar:else />&#160;&#160;</xar:if>
+                                </td>
+                            </xar:foreach>
+                        </xar:if>
+                    </tr>
+                </xar:loop>
+            </table>
+            <!-- add the pager here -->
+            <div class="xar-align-center">#$pager#</div>
+            <form method="post" action="&xar-modurl-roles-user-viewlist;">
+                <label for="search">Search:</label>
+                <input type="hidden" name="phase" id="phase"
+                value="#xarVarPrepForDisplay($phase)#" />
+                <input type="hidden" name="order" id="order"
+                value="#xarVarPrepForDisplay($order)#" />
+                <input type="hidden" name="letter" id="letter" value="" />
+                <input type="text" name="search" id="search" value="" size="40" maxlength="255"
+                tabindex="1" />
+                <input type="submit" value="#xarVarPrepForDisplay($searchlabel)#" />
+            </form>
+            <p>Search condition: 
+            <strong>#xarVarPrepForDisplay($msg)#</strong></p>
+        </xar:if>
+    </div>
 </xar:template>

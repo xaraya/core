@@ -1,31 +1,25 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head">
-    <span class="xar-mod-title">Themes Administration</span>
-</div>
-<div class="xar-mod-body">
-    <h2>
-        Recent Theme Extensions
-    </h2>
-    <xar:if condition="empty($warning)">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Themes Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>Recent Theme Extensions</h2>
+        <xar:if condition="empty($warning)">
         <xar:if condition="!empty($feedcontent)">
             <ul>
                 <xar:loop name="$feedcontent">
                     <li>
                         <xar:if condition="!empty($loop:item['link'])">
-                            <a href = "#$loop:item['link']#" target = "_BLANK"> #$loop:item['title']# </a>:
-                        <xar:else />
-                            #$loop:item['title']#:
-                        </xar:if>
+                        <a href="#$loop:item['link']#" target="_BLANK">#$loop:item['title']#</a>: 
+                        <xar:else />#$loop:item['title']#:</xar:if>
                         <xar:if condition="!empty($loop:item['description'])">
-                            #$loop:item['description']#
-                        </xar:if>
+                        #$loop:item['description']#</xar:if>
                     </li>
                 </xar:loop>
-               </ul>
+            </ul>
         </xar:if>
-    <xar:else />
-        #$warning#
-    </xar:if>
-</div>
+        <xar:else />#$warning#</xar:if>
+    </div>
 </xar:template>

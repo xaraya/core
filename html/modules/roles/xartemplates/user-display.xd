@@ -1,85 +1,51 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head">
-    <span class="xar-mod-title">
-        #$itemtypename# Information
-    </span>
-</div>
-<div class="xar-mod-body">
-    <xar:if condition="strtolower($uname) ne 'anonymous' and strtolower($uname) ne 'myself'">
-        <xar:if condition="xarModVars::get('roles', 'allowemail') and xarModUserVars::get('roles','allowemail',$id)">
-            <p>
-                <strong>Email</strong>
-                :
-                <a href="&xar-modurl-roles-user-email;&amp;id=#$id#">
-                    Send an Email to #xarVarPrepForDisplay($name)#
-                </a>
-            </p>
-            <xar:else />
-            <p>
-                <strong>
-                    
-                        Name
-                    
-                </strong>
-                :
-                #xarVarPrepForDisplay($name)#
-            </p>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">#$itemtypename# Information</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:if condition="strtolower($uname) ne 'anonymous' and strtolower($uname) ne 'myself'">
+            <xar:if condition="xarModVars::get('roles', 'allowemail') and xarModUserVars::get('roles','allowemail',$id)">
 
+                <p>
+                <strong>Email</strong>: 
+                <a href="&xar-modurl-roles-user-email;&amp;id=#$id#">Send an Email to
+                #xarVarPrepForDisplay($name)#</a></p>
+                <xar:else />
+                <p>
+                <strong>Name</strong>: #xarVarPrepForDisplay($name)#</p>
             </xar:if>
-
-           <xar:if condition="!empty($userlastlogin)">
-            <p>
-                <strong>
-                    
-                        Time of Last Login
-                    
-                </strong>
-                :
-                #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#
-            </p>
+            <xar:if condition="!empty($userlastlogin)">
+                <p>
+                <strong>Time of Last Login</strong>: #xarLocaleGetFormattedDate('medium',
+                $userlastlogin)# #xarLocaleGetFormattedTime('medium', $userlastlogin)#</p>
             </xar:if>
             <xar:if condition="!empty($homelink)">
-            <p>
-                <strong>
-                    
-                        Home Page
-                    
-                </strong>
-                :
-                <a href="#$homelink#" title="#xarML('Home Page')#">#$homelink#</a>
-            </p>
-        </xar:if>
-        <xar:if condition="!empty($utimezone)">
-            <p>
-                <strong>
-                    
-                        Timezone
-                    
-                </strong>
-                :
-                #$utimezone# (GMT #$offset#)
-            </p>
-        </xar:if>
-        <xar:data-getitem name="$properties" module="roles" itemtype="$itemtype" itemid="$id" />
-        <xar:if condition="isset($properties) and count($properties) gt 0">
-            <xar:foreach in="$properties" key="$name">
                 <p>
+                <strong>Home Page</strong>: 
+                <a href="#$homelink#" title="#xarML('Home Page')#">#$homelink#</a></p>
+            </xar:if>
+            <xar:if condition="!empty($utimezone)">
+                <p>
+                <strong>Timezone</strong>: #$utimezone# (GMT #$offset#)</p>
+            </xar:if>
+            <xar:data-getitem name="$properties" module="roles" itemtype="$itemtype"
+            itemid="$id" />
+            <xar:if condition="isset($properties) and count($properties) gt 0">
+                <xar:foreach in="$properties" key="$name">
+                    <p>
                     <strong>
                         <xar:data-label property="$properties[$name]" />
-                    </strong>
-                    :
-                    <xar:data-output property="$properties[$name]" />
-                </p>
-            </xar:foreach>
+                    </strong>: 
+                    <xar:data-output property="$properties[$name]" /></p>
+                </xar:foreach>
+            </xar:if>
         </xar:if>
-    </xar:if>
-    <p>
-    <xar:if condition="!empty($hooks)">
-        <xar:foreach in="$hooks" key="$module" value="$output">
-            #$output#
-        </xar:foreach>
-    </xar:if>
-    </p>
-</div>
+        <p>
+            <xar:if condition="!empty($hooks)">
+                <xar:foreach in="$hooks" key="$module" value="$output">#$output#</xar:foreach>
+            </xar:if>
+        </p>
+    </div>
 </xar:template>

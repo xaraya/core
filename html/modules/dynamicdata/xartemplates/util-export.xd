@@ -1,59 +1,38 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:style scope="module" file="dd" />
-<div class="xar-mod-head">
-    <span class="xar-mod-title">
-        
-            Dynamic Data Administration
-        
-    </span>
-</div>
-<div class="xar-mod-body">
-   <xar:template type="module" file="admin-menu" />
-   <h2>Utilities - Export DataObject Definition </h2>
-   <xar:template type="module" file="utility-menu" />
-    <form>
-        <fieldset>
-            <legend>
-                #$label# 
-            </legend>
-            <div class="xar-form-input-wrapper">
-                <label for="xml" class="xar-form-label">
-                    
-                        Definition
-                    
-                    :
-                </label>
-                <div class="xar-form-container-after">
-                    <textarea name="xml" id="xml" class="xar-form-textarealarge">#$xml#</textarea>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="module" file="dd" />
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu" />
+        <h2>Utilities - Export DataObject Definition</h2>
+        <xar:template type="module" file="utility-menu" />
+        <form>
+            <fieldset>
+                <legend>#$label#</legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="xml" class="xar-form-label">Definition :</label>
+                    <div class="xar-form-container-after">
+                        <textarea name="xml" id="xml" class="xar-form-textarealarge">
+                        #$xml#</textarea>
+                    </div>
                 </div>
-            </div>
-        </fieldset>
-    </form>
-    <xar:if condition="!empty($convertlink)">
-        <a href="#$convertlink#">
-            
-                Create dedicated table for this object 
-            
-        </a>
-    </xar:if>
-    <xar:if condition="!empty($formlink)">
-        <p class="xar-align-center">
-            <a href="#$formlink#">
-                
-                    Export Data for all Items to Browser 
-                
-            </a>
-        </p>
-    </xar:if>
-    <xar:if condition="!empty($filelink)">
-        <p class="xar-align-center">
-            <a href="#$filelink#">
-                
-                    Export Data for all Items to File 
-                
-            </a>
-        </p>
-    </xar:if>
-</div>
+            </fieldset>
+        </form>
+        <xar:if condition="!empty($convertlink)">
+            <a href="#$convertlink#">Create dedicated table for this object</a>
+        </xar:if>
+        <xar:if condition="!empty($formlink)">
+            <p class="xar-align-center">
+                <a href="#$formlink#">Export Data for all Items to Browser</a>
+            </p>
+        </xar:if>
+        <xar:if condition="!empty($filelink)">
+            <p class="xar-align-center">
+                <a href="#$filelink#">Export Data for all Items to File</a>
+            </p>
+        </xar:if>
+    </div>
 </xar:template>

@@ -1,29 +1,19 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<!-- modules module template: file admin-tools.xd -->
-<div class="xar-mod-head">
-    <span class="xar-mod-title">Modules Administration</span>
-</div>
-<div class="xar-mod-body">
-    <h2>
-        Toolbox
-    </h2>
-
-    <form method="post" action="&xar-modurl-modules-admin-tools;">
-        <p>
-            Module Information Generator/Validator
-        </p>
-
-        <p>
-               Although the Xaraya modules system still recognises the 'old style' modinfo 
-            from xarversion.php, we strongly encourage all module developers to re-generate 
-            their module's information to comply with the 'new' XML format.
-        </p>
-
-        <p>
-            Please select the module for which you wish to generate/validate the information:
-        </p>
-        
-    </form>
-</div>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- modules module template: file admin-tools.xd -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Modules Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>Toolbox</h2>
+        <form method="post" action="&xar-modurl-modules-admin-tools;">
+            <p>Module Information Generator/Validator</p>
+            <p>Although the Xaraya modules system still recognises the 'old style' modinfo from
+            xarversion.php, we strongly encourage all module developers to re-generate their
+            module's information to comply with the 'new' XML format.</p>
+            <p>Please select the module for which you wish to generate/validate the
+            information:</p>
+        </form>
+    </div>
 </xar:template>

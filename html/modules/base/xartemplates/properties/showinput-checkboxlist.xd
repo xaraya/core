@@ -1,53 +1,51 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="empty($layout) or $layout eq 'default' or $layout eq 'horizontal'">
+        <xar:if condition="count($options) gt 0">
+            <xar:foreach in="$options" value="$option" key="$key">
+                <xar:if condition="$key == 0">
+                    <xar:set name="theID">$id</xar:set>
+                    <xar:else />
+                    <xar:set name="theID">$id.'_'.$key</xar:set>
+                </xar:if>
+                <xar:if condition="isset($option['checked']) and !empty($option['checked']) and ($option['checked']==true)">
 
-<xar:if condition="empty($layout) or $layout eq 'default' or $layout eq 'horizontal'">
-    <xar:if condition="count($options) gt 0">
-        <xar:foreach in="$options" value="$option" key="$key">
-            <xar:if condition="$key == 0">
-                <xar:set name="theID">$id</xar:set>
-            <xar:else />
-                <xar:set name="theID">$id.'_'.$key</xar:set>
-            </xar:if>
+                    <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#"
+                    checked="checked" />
+                    <xar:else />
+                    <input type="checkbox" name="#$name#[]" id="#$theID#"
+                    value="#$option['id']#" />
+                </xar:if>
+                <label for="#$theID#">#$option['name']#</label>
+            </xar:foreach>
+        </xar:if>
+        <xar:elseif condition="$layout eq 'vertical'" />
+        <xar:if condition="count($options) gt 0">
+            <xar:foreach in="$options" value="$option" key="$key">
+                <xar:if condition="$key == 0">
+                    <xar:set name="theID">$id</xar:set>
+                    <xar:else />
+                    <xar:set name="theID">$id.'_'.$key</xar:set>
+                </xar:if>
+                <xar:if condition="isset($option['checked']) and !empty($option['checked']) and ($option['checked']==true)">
 
-            <xar:if condition="isset($option['checked']) and !empty($option['checked']) and ($option['checked']==true)">
-                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked" />
-            <xar:else />
-                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
-            </xar:if>
-
-            <label for="#$theID#">#$option['name']# </label>        
-        </xar:foreach>
+                    <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#"
+                    checked="checked" />
+                    <xar:else />
+                    <input type="checkbox" name="#$name#[]" id="#$theID#"
+                    value="#$option['id']#" />
+                </xar:if>
+                <label for="#$theID#">#$option['name']#</label>
+                <br />
+            </xar:foreach>
+        </xar:if>
+        <xar:else />
+        <p>Specify your own layout here...</p>
+        <p>You can also specify a separate template, e.g. if you want to handle individual fields
+        differently for a particular module / itemtype</p>
     </xar:if>
-<xar:elseif condition="$layout eq 'vertical'" />
-    <xar:if condition="count($options) gt 0">
-        <xar:foreach in="$options" value="$option" key="$key">
-            <xar:if condition="$key == 0">
-                <xar:set name="theID">$id</xar:set>
-            <xar:else />
-                <xar:set name="theID">$id.'_'.$key</xar:set>
-            </xar:if>
-
-            <xar:if condition="isset($option['checked']) and !empty($option['checked']) and ($option['checked']==true)">
-                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked" />
-            <xar:else />
-                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
-            </xar:if>
-
-            <label for="#$theID#">#$option['name']# </label>  
-            <br />
-        </xar:foreach>
+    <xar:if condition="!empty($invalid)">
+        <span class="xar-error">#$invalid#</span>
     </xar:if>
-<xar:else />
-<p>
-  Specify your own layout here...
-</p>
-<p>
-  You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype
-</p>
-</xar:if>
-
-<xar:if condition="!empty($invalid)">
-    <span class="xar-error">#$invalid#</span>
-</xar:if>
 </xar:template>

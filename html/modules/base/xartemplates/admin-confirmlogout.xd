@@ -1,20 +1,15 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-body">
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Administration</span>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-body">
+        <div class="xar-mod-head">
+            <span class="xar-mod-title">Administration</span>
+        </div>
+        <h2>Confirm Logout</h2>
+        <p>Are you sure? Click "Cancel" to return to the previous admin panel</p>
+        <div class="xar-align-center">
+        <xar:set name="authdata">xarModAPIFunc('roles','user','getdefaultauthdata')</xar:set>[ 
+        <a href="#xarModURL($authdata['defaultlogoutmodname'],'user','logout')#">Logout</a>] [ 
+        <a href="javascript:top.history.go(-1)">Cancel</a>]</div>
     </div>
-    <h2>
-        Confirm Logout
-    </h2>
-    <p>
-        Are you sure? Click "Cancel" to return to the previous admin panel
-    </p>
-
-    <div class="xar-align-center">
-        <xar:set name="authdata">xarModAPIFunc('roles','user','getdefaultauthdata')</xar:set>
-            [<a href="#xarModURL($authdata['defaultlogoutmodname'],'user','logout')#">Logout</a>]
-        [<a href="javascript:top.history.go(-1)">Cancel</a>]
-    </div>
-</div>
 </xar:template>

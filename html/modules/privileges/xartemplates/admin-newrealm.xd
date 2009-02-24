@@ -1,35 +1,30 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head">
-    <span class="xar-mod-title">Privileges Administration</span>
-</div>
-<div class="xar-mod-body">
-  <xar:template type="module" file="admin-menu" />
-
-   <xar:template type="module" file="admin-realms" />
-
-    <form id="privilegeform" action="&xar-modurl-privileges-admin-newrealm;" method="post" enctype="application/x-www-form-urlencoded">
-        <fieldset>
-            <legend>
-            
-                Add Realm 
-            
-            </legend>
-            <div class="xar-form-input-wrapper">
-            <label for="pname" title="#xarML('Name of the realm')#" class="xar-form-label">
-                
-                Name:
-                
-            </label>
-            <input type="text" name="name" id="name" value="" size="20" maxlength="20" tabindex="1" class="xar-form-textmedium" />
-            </div>
-        </fieldset>
-        <fieldset>
-            <div class="xar-form-input-wrapper-after">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="confirmed" id="confirmed" value="true" />
-            <input type="submit" value="Add" tabindex="2" />
-            </div>
-        </fieldset>
-    </form>
-</div></xar:template>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Privileges Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-realms" />
+        <form id="privilegeform" action="&xar-modurl-privileges-admin-newrealm;" method="post"
+        enctype="application/x-www-form-urlencoded">
+            <fieldset>
+                <legend>Add Realm</legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="pname" title="#xarML('Name of the realm')#" class="xar-form-label">
+                    Name:</label>
+                    <input type="text" name="name" id="name" value="" size="20" maxlength="20"
+                    tabindex="1" class="xar-form-textmedium" />
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="confirmed" id="confirmed" value="true" />
+                    <input type="submit" value="Add" tabindex="2" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</xar:template>
