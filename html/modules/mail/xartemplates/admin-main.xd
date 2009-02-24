@@ -2,132 +2,132 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
+        
             Mail Administration
-        </xar:mlstring>
+        
     </span>
 </div>
 <div class="xar-mod-body">
  <xar:template type="module" file="admin-menu" />
     <img src="#xarTplGetImage('admin.gif', 'mail')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
-    <h2><xar:mlstring>Overview</xar:mlstring></h2>
-    <h3><xar:mlstring>What is it?</xar:mlstring></h3>
+    <h2>Overview</h2>
+    <h3>What is it?</h3>
     <p>
-        <xar:mlstring>The mail module controls the ways that your site sends mail to users or groups of users.
+        The mail module controls the ways that your site sends mail to users or groups of users.
         This is a utility module that takes information from other modules installed on your site and formats
-        the mail for them. At its heart, this module is using the </xar:mlstring>
+        the mail for them. At its heart, this module is using the 
         <a href="http://phpmailer.sourceforge.net" onclick="window.open(this.getAttribute('href'));return false;">
-        <xar:mlstring>phpmailer</xar:mlstring></a> <xar:mlstring>classes for processing. These classes extend Xaraya to 
-        allow you to use SMTP, SendMail or the normal PHP Mail functions.</xar:mlstring>
+        phpmailer</a> classes for processing. These classes extend Xaraya to 
+        allow you to use SMTP, SendMail or the normal PHP Mail functions.
     </p>
-    <h3><xar:mlstring>How to use it?</xar:mlstring></h3>
+    <h3>How to use it?</h3>
     <p>
-        <xar:mlstring>
+        
              A number of choices are available in the menu:
-        </xar:mlstring>
+        
     </p>
     <ul>
         <li>
-            <xar:mlstring><strong>Test Configuration</strong>: Test your current mail system configuration
-             settings by sending an email</xar:mlstring>
+            <strong>Test Configuration</strong>: Test your current mail system configuration
+             settings by sending an email
         </li>
         <li>
-            <xar:mlstring><strong>View Mail Queue</strong>: This option is only available when you have the
-            Scheduler module installed</xar:mlstring>
+            <strong>View Mail Queue</strong>: This option is only available when you have the
+            Scheduler module installed
         </li>
         <li>
-            <xar:mlstring><strong>Notification Template</strong>: Allows you to customize the notification
-            templates that are available.</xar:mlstring>
+            <strong>Notification Template</strong>: Allows you to customize the notification
+            templates that are available.
         </li>
         <li>
-            <xar:mlstring><strong>Modify Configuration</strong>: From this menu option, you can update the
-            necessary configuration options</xar:mlstring>
+            <strong>Modify Configuration</strong>: From this menu option, you can update the
+            necessary configuration options
         </li>
     </ul>
-    <h4><xar:mlstring>View Mail Queue - Scheduling mail</xar:mlstring></h4>
+    <h4>View Mail Queue - Scheduling mail</h4>
         <p>
-            <xar:mlstring>This option allows you to view mail scheduled for sending. Other modules can request 
+            This option allows you to view mail scheduled for sending. Other modules can request 
             that a certain mail be sent no earlier than a specific time. In order to support that, you must 
             install Scheduler. You then need to configure the Mail module to use the 'scheduler' and check 
             if any mails need to be sent e.g. every x hours. Otherwise, those mails will be sent immediately. 
             Please note that if you stop the scheduler or if it isn't triggered, previously scheduled mails 
-            will not be sent.</xar:mlstring>
+            will not be sent.
         </p>
-    <h4><xar:mlstring>Notification Template</xar:mlstring></h4>
+    <h4>Notification Template</h4>
 
         <p>
-            <xar:mlstring>The Mail module can be hooked to other modules (See Included Hooks) to provide notification 
+            The Mail module can be hooked to other modules (See Included Hooks) to provide notification 
             of changes, updates or deletion of content on your site. The Notification Template provides you with the 
             means to change those templates to suit. There is a separate template for the 'changehook', 'createhook' 
-            and 'deletehook' notification.</xar:mlstring>
+            and 'deletehook' notification.
         </p>
 
         <p>
-            <xar:mlstring>There is also a list of variables provided that you can easily add to your templates for 
-            further customization.</xar:mlstring>
+            There is also a list of variables provided that you can easily add to your templates for 
+            further customization.
         </p>
-    <h4><xar:mlstring>Modify Config</xar:mlstring></h4>
+    <h4>Modify Config</h4>
         <p>
-            <xar:mlstring>There are four sections in the Modify Configuration option.</xar:mlstring>
+            There are four sections in the Modify Configuration option.
         </p>
         <ul>
         <li>
-            <xar:mlstring><strong>Mail Configuration</strong> : default options for email address, email format, 
-            reply to and template debug option</xar:mlstring>
+            <strong>Mail Configuration</strong> : default options for email address, email format, 
+            reply to and template debug option
         </li>
 
         <li>
-            <xar:mlstring><strong>HTML Options</strong> : option to use and set html headers and footers for your
-            emails</xar:mlstring>
+            <strong>HTML Options</strong> : option to use and set html headers and footers for your
+            emails
         </li>
 
         <li>
-            <xar:mlstring><strong>Text Options</strong> : various options to specify encoding and mail sending method.
+            <strong>Text Options</strong> : various options to specify encoding and mail sending method.
             Depending on your choice of SMTP, Sendmail, Mail or QMail you may get further options to specify. 
             You must ensure your SMTP or Sendmail is configured for use if you choose these options SMTP also 
-            has an option for scheduled email.</xar:mlstring>
+            has an option for scheduled email.
         </li>
 
         <li>
-            <xar:mlstring><strong>Filtering</strong> : allows you to specify strings for search and replacement</xar:mlstring>
+            <strong>Filtering</strong> : allows you to specify strings for search and replacement
         </li>
        </ul>
     <h3>
-        <xar:mlstring>
+        
             Included Blocks
-        </xar:mlstring>
+        
     </h3>
     <p>
-        <xar:mlstring>
+        
             The Mail Module has no blocks included at this time.
-        </xar:mlstring>
+        
     </p>
     <h3>
-        <xar:mlstring>
+        
             Included Hooks
-        </xar:mlstring>
+        
     </h3>
     <p>
-        <xar:mlstring>
+        
             The mail hook allows you to send an email to the site admin when something (content, users, etc) 
             is created, changed or deleted. This can be configured by going to <code>Modules -> Configure Hooks</code> and
             clicking on Mail module. Check the modules where you want the hook activated for mail notification.
-        </xar:mlstring>
+        
     </p>
 
-   <h3><xar:mlstring>Further Information</xar:mlstring></h3>
+   <h3>Further Information</h3>
    <p>
-      <xar:mlstring>Further information on the Mail module can be found at</xar:mlstring>
+      Further information on the Mail module can be found at
    </p>
    <ul>
-      <li><xar:mlstring>Mail Module Extension page at</xar:mlstring> <a title="#xarML('Mail Module - Xaraya Extension 771')#" href="http://www.xaraya.com/index.php/release/771.html">Xaraya Extension and Releases</a>.
-      <xar:mlstring> Click on Version History tab at the bottom to get the latest release information.</xar:mlstring>
+      <li>Mail Module Extension page at <a title="#xarML('Mail Module - Xaraya Extension 771')#" href="http://www.xaraya.com/index.php/release/771.html">Xaraya Extension and Releases</a>.
+       Click on Version History tab at the bottom to get the latest release information.
       </li>
-      <li><xar:mlstring>Related tutorials and documentation on Mail module found at</xar:mlstring> <a href="http://www.xaraya.com/index.php/keywords/mail/" title="#xarML('Related documentation on Mail')#"><xar:mlstring>Xaraya Documentation.</xar:mlstring></a>
+      <li>Related tutorials and documentation on Mail module found at <a href="http://www.xaraya.com/index.php/keywords/mail/" title="#xarML('Related documentation on Mail')#">Xaraya Documentation.</a>
       </li>
   </ul>
   <p class="xar-sub">
-    <strong>&#160;<xar:mlstring>Mail Module - Overview</xar:mlstring></strong><br />&#160;<xar:mlstring>Version</xar:mlstring> 0.1.1&#160; 2005-11-02
+    <strong>&#160;Mail Module - Overview</strong><br />&#160;Version 0.1.1&#160; 2005-11-02
   </p>
 </div>
 

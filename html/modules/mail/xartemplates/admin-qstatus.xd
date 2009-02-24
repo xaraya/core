@@ -17,13 +17,9 @@
 
     <fieldset>
         <div class="qstatus">
-            <xar:ml>
-                <xar:mlstring>Status as of: #(1) / #(2)</xar:mlstring>
-                <xar:mlvar>#xarLocaleGetFormattedDate('medium')#</xar:mlvar>
-                <xar:mlvar>#xarLocaleGetFormattedTime('medium')#</xar:mlvar>
-            </xar:ml>
+            Status as of: #xarLocaleGetFormattedDate('medium')# / #xarLocaleGetFormattedTime('medium')#
         </div>
-        <legend><xar:mlstring>Queue status overview</xar:mlstring></legend>
+        <legend>Queue status overview</legend>
         <xar:foreach in="$queues" key="$index" value="$qinfo">
             <xar:set name="rowclass">$index % 2?'xar-alt':''</xar:set>
             <ul class="qstatus #$rowclass#" style="background-image: url(#xarTplGetImage($qinfo.status .'.gif')#);">
@@ -36,16 +32,16 @@
         <div class="qstatus">
              <a href="&xar-modurl-mail-admin-qstatus;">
                  <img src="#xarTplGetImage('refresh.gif')#"/>
-                 <xar:mlstring>Refresh current status</xar:mlstring>
+                 Refresh current status
              </a>
              <a href="&xar-modurl-mail-admin-qstatus;">
                  <img src="#xarTplGetImage('reprocess.gif')#"/>
-                 <xar:mlstring>Reprocess queues</xar:mlstring>
+                 Reprocess queues
              </a>
         </div>
     </fieldset>
     <fieldset class="qslip">
-        <legend><xar:mlstring>Corrective measures</xar:mlstring></legend>
+        <legend>Corrective measures</legend>
         <xar:foreach in="$measures" key="$qname" value="$measure">
             <ul>
                 <li>#$qname#
@@ -64,7 +60,7 @@
     </fieldset>
 
     <fieldset class="qslip" style="margin-left: 5pt;">
-        <legend><xar:mlstring>Legend</xar:mlstring></legend>
+        <legend>Legend</legend>
         <ul class="qslip" >
             <li style="background-image: url(#xarTplGetImage('active.gif')#);">Queue is active and in good condition</li>
             <li style="background-image: url(#xarTplGetImage('inactive.gif')#);">Queue is inactive</li>

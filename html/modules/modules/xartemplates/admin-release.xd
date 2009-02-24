@@ -1,11 +1,11 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Modules Administration</span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>Recent Extension Releases</xar:mlstring>
+        Recent Extension Releases
     </h2>
 
     <xar:if condition="empty($warning)">

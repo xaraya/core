@@ -1,9 +1,9 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Login Error</xar:mlstring></span></div>
+    <div class="xar-mod-head"><span class="xar-mod-title">Login Error</span></div>
     <div class="xar-mod-body">
         <fieldset>
-            <legend><xar:mlstring>Problem Logging In</xar:mlstring></legend>
+            <legend>Problem Logging In</legend>
                 <img src="#xarTplGetImage('sysmessage.jpg','base')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon" />
                 <xar:if condition="!isset($layout)">
                     <div style="margin-top: 20px">

@@ -2,28 +2,28 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
+        
             Modules Administration
-        </xar:mlstring>
+        
     </span>
 </div>
 <div class="xar-mod-body">
  <xar:template type="module" file="admin-menu" />
     <h2>
-        <xar:mlstring>Modify Properties for Module</xar:mlstring>: #$displayname#
+        Modify Properties for Module: #$displayname#
     </h2>
     <form action="&xar-modurl-modules-admin-updateproperties;" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>
-                <xar:mlstring>
+                
                     Properties
-                </xar:mlstring>
+                
             </legend>
             <div class="xar-form-input-wrapper">
                 <label for="displayname" title="#xarML('The name which will be shown to identify this module.')#" class="xar-form-label">
-                    <xar:mlstring>
+                    
                         Display Name:
-                    </xar:mlstring>
+                    
                 </label>
                 #$displayname#
                 <input type="hidden" name="displayname" id="displayname" value="#$displayname#" />
@@ -33,9 +33,9 @@
                     <xar:set name="checked">$admincapable</xar:set>
                     <xar:data-input type="checkbox" name="admincapable" id="admincapable" checked="$checked" />
                     <label for="admincapable" title="#xarML('Set whether to display admin menu entries provided by this module.')#">
-                        <xar:mlstring>
+                        
                             Enable Admin Menu
-                        </xar:mlstring>
+                        
                     </label>
                 </div>
             </xar:if>
@@ -44,9 +44,9 @@
                     <xar:set name="checked">$usercapable</xar:set>
                     <xar:data-input type="checkbox" name="usercapable" id="usercapable" checked="$checked" />
                     <label for="usercapable" title="#xarML('Set whether to display user menu entries provided by this module.')#">
-                        <xar:mlstring>
+                        
                             Enable User Menu
-                        </xar:mlstring>
+                        
                     </label>
                 </div>
             </xar:if>

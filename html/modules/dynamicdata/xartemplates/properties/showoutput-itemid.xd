@@ -4,6 +4,6 @@
 <xar:if condition="!empty($value)">
     #$value#
 <xar:else />
-    <xar:mlstring>Auto allocated</xar:mlstring>
+    Auto allocated
 </xar:if>
 </xar:template>

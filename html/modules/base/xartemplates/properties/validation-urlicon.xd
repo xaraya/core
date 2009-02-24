@@ -3,7 +3,7 @@
 <table class="xar-norm">
   <tr>
     <td>
-      <xar:mlstring>Icon</xar:mlstring>
+      Icon
     </td>
     <td>
       <input type="text" name="#$name#[icon]" id="#$id#_icon" value="#$icon#" size="50" tabindex="#$tabindex#" />
@@ -14,7 +14,7 @@
   </tr>
   <tr>
     <td>
-      <xar:mlstring>Other rule</xar:mlstring>
+      Other rule
     </td>
     <td>
       <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="50" tabindex="#$tabindex#" />

@@ -1,32 +1,32 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Blocks Administration</span>
 </div>
 <div class="xar-mod-body">
  <xar:template type="module" file="admin-menu" />
     <xar:if condition="!empty($tid)">
         <h2>
-            <xar:mlstring>View Block Type</xar:mlstring>
+            View Block Type
         </h2>
         <h4>
-            <a href="&xar-modurl-blocks-admin-new_type;"><xar:mlstring>New Block Type</xar:mlstring></a>
+            <a href="&xar-modurl-blocks-admin-new_type;">New Block Type</a>
         </h4>
         <fieldset>
             <legend>
-                <xar:mlstring>Selected Block Type Properties</xar:mlstring>
+                Selected Block Type Properties
             </legend>
 
             <div class="xar-form-input-wrapper">
                 <label class="xar-form-label">
-                    <xar:mlstring>Block Type:</xar:mlstring>
+                    Block Type:
                 </label>
                 #xarVarPrepForDisplay($detail['type'])#
             </div>
 
             <div class="xar-form-input-wrapper">
                 <label class="xar-form-label">
-                    <xar:mlstring>Module:</xar:mlstring>
+                    Module:
                 </label>
                 #xarVarPrepForDisplay($detail['module'])#
             </div>
@@ -34,7 +34,7 @@
             <xar:if condition="!empty($info['text_type'])">
                 <div class="xar-form-input-wrapper">
                     <label class="xar-form-label">
-                        <xar:mlstring>Short Title:</xar:mlstring>
+                        Short Title:
                     </label>
                     #xarVarPrepForDisplay($info['text_type'])#
                 </div>
@@ -43,7 +43,7 @@
             <xar:if condition="!empty($info['text_type_long'])">
                 <div class="xar-form-input-wrapper">
                     <label class="xar-form-label">
-                        <xar:mlstring>Long Title:</xar:mlstring>
+                        Long Title:
                     </label>
                     #xarVarPrepForDisplay($info['text_type_long'])#
                 </div>
@@ -52,12 +52,12 @@
             <xar:if condition="isset($info['allow_multiple'])">
                 <div class="xar-form-input-wrapper">
                     <label class="xar-form-label">
-                        <xar:mlstring>Allow Multiple:</xar:mlstring>
+                        Allow Multiple:
                     </label>
                     <xar:if condition="!empty($info['allow_multiple'])">
-                        <xar:mlstring>True</xar:mlstring>
+                        True
                     <xar:else/>
-                        <xar:mlstring>False</xar:mlstring>
+                        False
                     </xar:if>
                 </div>
             </xar:if>
@@ -65,7 +65,7 @@
             <xar:if condition="!empty($info['notes'])">
                 <div class="xar-form-input-wrapper">
                     <label class="xar-form-label">
-                        <xar:mlstring>Notes:</xar:mlstring>
+                        Notes:
                     </label>
                     #xarVarPrepForDisplay($info['notes'])#
                 </div>
@@ -78,14 +78,14 @@
 
             <fieldset>
                 <legend>
-                    <xar:mlstring>Block Properties Customisable Through &lt;xar:block&gt; Tag</xar:mlstring>
+                    Block Properties Customisable Through &lt;xar:block&gt; Tag
                 </legend>
                 <table>
                     <tr>
-                        <th><xar:mlstring>Name</xar:mlstring></th>
-                        <th><xar:mlstring>Default</xar:mlstring></th>
-                        <th><xar:mlstring>Datatype</xar:mlstring></th>
-                        <th><xar:mlstring>Properties</xar:mlstring></th>
+                        <th>Name</th>
+                        <th>Default</th>
+                        <th>Datatype</th>
+                        <th>Properties</th>
                     </tr>
                     <xar:loop name="$params">
                         <tr>
@@ -94,15 +94,15 @@
                                 <xar:if condition="$loop:item.overrideable">
                                     #xarVarPrepForDisplay($loop:item.value)#
                                 <xar:else/>
-                                    <xar:mlstring>n/a</xar:mlstring>
+                                    n/a
                                 </xar:if>
                             </td>
                             <td>#xarVarPrepForDisplay($loop:item.type)#</td>
                             <td>
                                 <xar:if condition="$loop:item.overrideable">
-                                    <xar:mlstring>customisable</xar:mlstring>
+                                    customisable
                                 <xar:else/>
-                                    <xar:mlstring>not_customisable</xar:mlstring>
+                                    not_customisable
                                 </xar:if>
                             </td>
                         </tr>
@@ -112,17 +112,17 @@
         </xar:if>
     <xar:else />
         <h2>
-            <xar:mlstring>View Block Types</xar:mlstring>
+            View Block Types
         </h2>
         <h4>
-            <a href="&xar-modurl-blocks-admin-new_type;"><xar:mlstring>New Block Type</xar:mlstring></a>
+            <a href="&xar-modurl-blocks-admin-new_type;">New Block Type</a>
         </h4>
         <table class="xar-fullwidth">
             <tr>
-                <th title="#xarML('The module listed is the module from which this block originates')#"><xar:mlstring>Module</xar:mlstring></th>
-                <th title="#xarML('The block type indicates the type of block that can be selected.')#"><xar:mlstring>Type</xar:mlstring></th>
-                <th title="#xarML('A short description of what the block does.')#"><xar:mlstring>Description</xar:mlstring></th>
-                <th><xar:mlstring>Actions</xar:mlstring></th>
+                <th title="#xarML('The module listed is the module from which this block originates')#">Module</th>
+                <th title="#xarML('The block type indicates the type of block that can be selected.')#">Type</th>
+                <th title="#xarML('A short description of what the block does.')#">Description</th>
+                <th>Actions</th>
             </tr>
             <xar:loop name="$block_types" id="foo2">
                 <tr>
@@ -134,7 +134,7 @@
                         </xar:if>
                     </td>
                     <td class="xar-align-center">
-                        <a href="#$loop:item['refreshurl']#" title="#xarML('Refresh block details')#"><xar:mlstring>Refresh</xar:mlstring></a>
+                        <a href="#$loop:item['refreshurl']#" title="#xarML('Refresh block details')#">Refresh</a>
                     </td>
                 </tr>
             </xar:loop>

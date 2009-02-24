@@ -2,35 +2,35 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Roles Administration</span>
 </div>
 <div class="xar-mod-body">
   <xar:template type="module" file="admin-menu" />
     <h2>
             <a href="&xar-modurl-roles-admin-createmail;">
-                <xar:mlstring>Messaging System:</xar:mlstring>
+                Messaging System:
             </a>
-            <xar:mlstring>Modify Notification Options</xar:mlstring>
+            Modify Notification Options
     </h2>
 
     <div>
         <dl class="xar-tabs">
             <dt class="help">
-                <xar:mlstring>Options:</xar:mlstring>
+                Options:
             </dt>
             <dd>
                 <a href="&xar-modurl-roles-admin-createmail;">
-                    <xar:mlstring>Send mail</xar:mlstring>
+                    Send mail
                 </a>
             </dd>
             <dd>
                 <a href="&xar-modurl-roles-admin-modifyemail;">
-                    <xar:mlstring>Templates</xar:mlstring>
+                    Templates
                 </a>
             </dd>
             <dd class="active">
                 <a href="&xar-modurl-roles-admin-modifynotice;">
-                    <xar:mlstring>Configure</xar:mlstring>
+                    Configure
                 </a>
             </dd>
         </dl>
@@ -39,20 +39,20 @@
     <form method="post" action="&xar-modurl-roles-admin-modifynotice;" enctype="application/x-www-form-urlencoded" >
         <fieldset>
             <legend>
-                <xar:mlstring>
+                
                     Notification Email
-                </xar:mlstring>
+                
                 :
             </legend>
             <p class="xar-form-input-wrapper-before xar-padding-thick">
-                <xar:mlstring>Admin will be prompted to send an email to an existing user if the user status is changed to any of the following checked options.
-                    Admin will also be notified when status is changed automatically by the system (eg when an account is set to pending and requires approval):</xar:mlstring>
+                Admin will be prompted to send an email to an existing user if the user status is changed to any of the following checked options.
+                    Admin will also be notified when status is changed automatically by the system (eg when an account is set to pending and requires approval):
             </p>
             <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked"><xar:var scope="module" module="roles" name="askpendingemail"/></xar:set>
                     <xar:data-input type="checkbox" name="askpendingemail" id="askpendingemail" checked="$checked" />
                     <label for="askpendingemail" title="#xarML('When user state is changed to \'pending\'')#">
-                        <xar:mlstring>Pending</xar:mlstring>
+                        Pending
                     </label>
                 </div>
 
@@ -60,7 +60,7 @@
                     <xar:set name="checked"><xar:var scope="module" module="roles" name="askwelcomeemail"/></xar:set>
                     <xar:data-input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" checked="$checked" />
                     <label for="askwelcomeemail" title="#xarML('When user state is changed to \'active\'')#">
-                        <xar:mlstring>Active</xar:mlstring>
+                        Active
                     </label>
                 </div>
 
@@ -68,7 +68,7 @@
                     <xar:set name="checked"><xar:var scope="module" module="roles" name="askdeactivationemail"/></xar:set>
                     <xar:data-input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" checked="$checked" />
                     <label for="askdeactivationemail" title="#xarML('When user state is changed to \'inactive\'')#">
-                        <xar:mlstring>Inactive</xar:mlstring>
+                        Inactive
                     </label>
                 </div>
 
@@ -76,19 +76,19 @@
                     <xar:set name="checked"><xar:var scope="module" module="roles" name="askvalidationemail"/></xar:set>
                     <xar:data-input type="checkbox" name="askvalidationemail" id="askvalidationemail" checked="$checked" />
                     <label for="askvalidationemail" title="#xarML('When user state is changed to \'not validated\'')#">
-                        <xar:mlstring>Not Validated</xar:mlstring>
+                        Not Validated
                     </label>
                 </div>
 
                 <p class="xar-form-input-wrapper-before xar-padding-thick">
-                    <xar:mlstring>Ask about sending a notification when an administrator:</xar:mlstring>
+                    Ask about sending a notification when an administrator:
                 </p>
 
                 <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked"><xar:var scope="module" module="roles" name="askpasswordemail"/></xar:set>
                     <xar:data-input type="checkbox" name="askpasswordemail" id="askpasswordemail" checked="$checked" />
                     <label for="askpasswordemail" title="#xarML('When administrator changes a user\'s password')#">
-                        <xar:mlstring>Changes A User's Password</xar:mlstring>
+                        Changes A User's Password
                     </label>
                 </div>
             <!-- jojodee - we already have user hooks in the modifyconfig user hooks sections,

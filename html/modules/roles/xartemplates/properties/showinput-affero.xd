@@ -1,11 +1,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:set name="check">
-        <xar:mlstring>check</xar:mlstring>
-    </xar:set>
-    <xar:set name="preview">
-        <xar:mlstring>preview</xar:mlstring>
-    </xar:set>
+    <xar:set name="check">'check'</xar:set>
+    <xar:set name="preview">'preview'</xar:set>
     <xar:if condition="empty($tabindex)">
         <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#"  class="xar-form-textlong" />
         <xar:else />

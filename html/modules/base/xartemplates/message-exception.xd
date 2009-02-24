@@ -9,13 +9,13 @@
 ***********
 -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>System Message</xar:mlstring></span>
+    <span class="xar-mod-title">System Message</span>
 </div>
 <div class="xar-mod-body">
     <img src="#xarTplGetImage('sysmessage.jpg', 'base')#" alt="#xarML('Message Icon')#" class="xar-module-icon" />
 
     <h2>
-        <xar:mlstring>System Exception</xar:mlstring>
+        System Exception
     </h2>
 
     <h3>#$title#</h3>
@@ -24,21 +24,21 @@
 
     <xar:if condition = "isset($long) and $long ne ''">
         <h3>
-            <xar:mlstring>Explanation:</xar:mlstring>
+            Explanation:
         </h3>
 
         <p>#$long#</p>
     </xar:if>
     <xar:if condition = "isset($hint) and $hint ne ''">
         <h3>
-            <xar:mlstring>Further Information:</xar:mlstring>
+            Further Information:
         </h3>
 
         <p>#$hint#</p>
     </xar:if>
     <xar:if condition = "isset($stack) and $stack ne ''">
         <h3>
-            <xar:mlstring>Stack:</xar:mlstring>
+            Stack:
         </h3>
 
         <p>#$stack#</p>

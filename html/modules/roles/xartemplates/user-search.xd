@@ -1,8 +1,8 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<h2><xar:mlstring>Search Users</xar:mlstring></h2>
+<h2>Search Users</h2>
 <xar:if condition="!empty($users) and count($users) gt 0">
-    <h3><xar:mlstring>Users Found</xar:mlstring>:</h3>
+    <h3>Users Found:</h3>
     <ul>
         <xar:foreach in="$users" key="$id" value="$user">
             <li><a href="&xar-modurl-roles-user-display;&amp;id=#$user.id#">#xarVarPrepForDisplay($user['name'])#</a></li>
@@ -23,7 +23,7 @@
     </xar:foreach>
     <table border="0" cellpadding="2" cellspacing="0">
         <tr>
-            <td class="xar-align-top"><xar:mlstring>Search on</xar:mlstring>:</td>
+            <td class="xar-align-top">Search on:</td>
             <xar:comment>
                 you can also specify individual fields here, if you don't want to allow searching
                 through all dynamic properties (e.g. ... name="icq" ... property="$properties['icq']" ...)

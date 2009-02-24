@@ -1,18 +1,18 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Themes Administration</span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>Detailed Theme Information</xar:mlstring>
+        Detailed Theme Information
     </h2>
 
     <!-- Theme Name -->
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Registered Name:</xar:mlstring>
+                Registered Name:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -26,7 +26,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Description:</xar:mlstring>
+                Description:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -40,7 +40,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Directory:</xar:mlstring>
+                Directory:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -54,7 +54,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Registered ID:</xar:mlstring>
+                Registered ID:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -68,20 +68,20 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Class:</xar:mlstring>
+                Class:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
             <p class="xar-mod-title">
                 #$themeclass#
                 <xar:if condition="$themeclass eq 0">
-                    <xar:mlstring>(system theme)</xar:mlstring>
+                    (system theme)
                 <xar:elseif condition="$themeclass eq 1" />
-                    <xar:mlstring>(utility theme)</xar:mlstring>
+                    (utility theme)
                 <xar:elseif condition="$themeclass eq 2" />
-                    <xar:mlstring>(user selectable)</xar:mlstring>
+                    (user selectable)
                 <xar:else />
-                    <xar:mlstring>(unknown class)</xar:mlstring>
+                    (unknown class)
                 </xar:if>
             </p>
         </div>
@@ -91,7 +91,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Version:</xar:mlstring>
+                Version:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -105,7 +105,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Author(s):</xar:mlstring>
+                Author(s):
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -119,7 +119,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Dependency:</xar:mlstring>
+                Dependency:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -133,7 +133,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Quick Preview:</xar:mlstring>
+                Quick Preview:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -142,22 +142,22 @@
                     <select onchange="window.open(this.options[this.selectedIndex].value,'_blank')" >
                         <option value="#">Choose a page to preview..</option>
                         <!-- Next line cant be handled by entities yet -->
-                        <option value="#xarModURL()#?theme=#$themedir#"><xar:mlstring>Default Front Page</xar:mlstring></option>
-                         <option value="&xar-modurl-base-admin-main;&amp;theme=#$themedir#"><xar:mlstring>Base (admin)</xar:mlstring></option>
-                        <option value="&xar-modurl-base-user-main;&amp;theme=#$themedir#"><xar:mlstring>Base (user)</xar:mlstring></option>
-                        <option value="&xar-modurl-blocks-admin-main;&amp;theme=#$themedir#"><xar:mlstring>Blocks (admin)</xar:mlstring></option>
-                        <option value="&xar-modurl-module-admin-main;&amp;theme=#$themedir#"><xar:mlstring>Modules (admin)</xar:mlstring></option>
-                        <option value="&xar-modurl-themes-admin-main;&amp;theme=#$themedir#"><xar:mlstring>Themes (admin)</xar:mlstring></option>
-                        <option value="&xar-modurl-dynamicdata-admin-main;&amp;theme=#$themedir#"><xar:mlstring>Dynamicdata (admin)</xar:mlstring></option>
-                        <option value="&xar-modurl-privileges-admin-main;&amp;theme=#$themedir#"><xar:mlstring>Privileges (admin)</xar:mlstring></option>
-                        <option value="&xar-modurl-roles-admin-main;&amp;theme=#$themedir#"><xar:mlstring>Roles (admin)</xar:mlstring></option>
-                        <option value="&xar-modurl-themes-admin-themesinfo;&amp;theme=#$themedir#&amp;id=#$themeid#"><xar:mlstring>This Page</xar:mlstring></option>                    
+                        <option value="#xarModURL()#?theme=#$themedir#">Default Front Page</option>
+                         <option value="&xar-modurl-base-admin-main;&amp;theme=#$themedir#">Base (admin)</option>
+                        <option value="&xar-modurl-base-user-main;&amp;theme=#$themedir#">Base (user)</option>
+                        <option value="&xar-modurl-blocks-admin-main;&amp;theme=#$themedir#">Blocks (admin)</option>
+                        <option value="&xar-modurl-module-admin-main;&amp;theme=#$themedir#">Modules (admin)</option>
+                        <option value="&xar-modurl-themes-admin-main;&amp;theme=#$themedir#">Themes (admin)</option>
+                        <option value="&xar-modurl-dynamicdata-admin-main;&amp;theme=#$themedir#">Dynamicdata (admin)</option>
+                        <option value="&xar-modurl-privileges-admin-main;&amp;theme=#$themedir#">Privileges (admin)</option>
+                        <option value="&xar-modurl-roles-admin-main;&amp;theme=#$themedir#">Roles (admin)</option>
+                        <option value="&xar-modurl-themes-admin-themesinfo;&amp;theme=#$themedir#&amp;id=#$themeid#">This Page</option>                    
                     </select>
                     <noscript>
                         <input type="submit" value="Go" />
                     </noscript>
                 <xar:else/>
-                    <xar:mlstring>Theme not active, activate it first.</xar:mlstring>
+                    Theme not active, activate it first.
                 </xar:if>
             </p>
         </div>

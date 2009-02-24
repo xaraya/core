@@ -12,13 +12,13 @@
 <xar:style scope="common" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>Blocks Administration</xar:mlstring>
+        Blocks Administration
     </span>
 </div>
 <div class="xar-mod-body">
  <xar:template type="module" file="admin-menu" />
     <h2>
-        <xar:mlstring>New Block</xar:mlstring>
+        New Block
     </h2>
 
     <form action="#xarModURL('blocks', 'admin', 'create_instance')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
@@ -27,7 +27,7 @@
 
             <div class="xar-form-input-wrapper">
                 <label for="block_type" title="#xarML('The type of block that you wish to add.')#" class="xar-form-label">
-                    <xar:mlstring>Parent Module / Type:</xar:mlstring>
+                    Parent Module / Type:
                 </label>
                 <select name="block_type" id="block_type">
                     <xar:loop name="$block_types">
@@ -40,21 +40,21 @@
 
             <div class="xar-form-input-wrapper">
                 <label for="block_name" title="#xarML('Every block instance requires a unique name')#" class="xar-form-label">
-                    <xar:mlstring>Name:</xar:mlstring>
+                    Name:
                 </label>
                 <input type="text" name="block_name" id="block_name" value="" maxlength="100" class="xar-form-textmedium" />
             </div>
 
             <div class="xar-form-input-wrapper">
                 <label for="block_title" title="#xarML('The title of the block as you want it to appear on your website')#" class="xar-form-label">
-                    <xar:mlstring>Title:</xar:mlstring>
+                    Title:
                 </label>
                 <input type="text" name="block_title" id="block_title" value="" maxlength="255" class="xar-form-textmedium" />
             </div>
 
             <div class="xar-form-input-wrapper">
                 <label for="block_template" title="#xarML('Instance templates that you want to use for this block instance.')#" class="xar-form-label">
-                    <xar:mlstring>Instance Template (optional):</xar:mlstring>
+                    Instance Template (optional):
                 </label>
                 <input type="text" name="block_template" id="block_template" value="" maxlength="255" class="xar-form-textlong" />
                 (Specified as <code>outer<strong>;</strong>inner</code>)
@@ -62,12 +62,12 @@
 
             <div class="xar-form-input-wrapper">
                 <label for="block_groups" title="#xarML('Initial block group to place this block into (optional)')#" class="xar-form-label">
-                    <xar:mlstring>Block Group (optional):</xar:mlstring>
+                    Block Group (optional):
                 </label>
                 <select name="block_groups[][id]" id="block_groups">
                     <option value="">
                         --
-                        <xar:mlstring>no group</xar:mlstring>
+                        no group
                         --
                     </option>
                     <xar:loop name="$block_groups">
@@ -80,17 +80,17 @@
 
             <div class="xar-form-input-wrapper">
                 <label for="block_state" title="#xarML('This field is used to determine whether the block is shown (maximized) or hidden.')#" class="xar-form-label">
-                    <xar:mlstring>Default State:</xar:mlstring>
+                    Default State:
                 </label>
                 <select name="block_state" id="block_state">
                     <option value="0">
-                        <xar:mlstring>Hidden</xar:mlstring>
+                        Hidden
                     </option>
                     <option value="1">
-                        <xar:mlstring>Minimized</xar:mlstring>
+                        Minimized
                     </option>
                     <option value="2" selected="selected">
-                        <xar:mlstring>Maximized</xar:mlstring>
+                        Maximized
                     </option>
                 </select>
             </div>

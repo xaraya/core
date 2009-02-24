@@ -25,12 +25,12 @@
     // -->
 </script>
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Privileges Administration</span>
 </div>
 <div class="xar-mod-body">
  <xar:template type="module" file="admin-menu" />
     <h2>
-        <xar:mlstring>Manage Privilege:</xar:mlstring>
+        Manage Privilege:
         #$pname#
     </h2>
 
@@ -38,7 +38,7 @@
         <div>
             <dl class="xar-tabs">
                 <dt class="help" title="These are the privileges that contain #$pname# as a component">
-                    <xar:mlstring>Used in</xar:mlstring> :
+                    Used in :
                 </dt>
                 <xar:set name="prevgroup">""</xar:set>
                 <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
@@ -58,57 +58,57 @@
     <div>
         <dl class="xar-tabs">
             <dt class="help" title="#xarML('Choose an action to perform on this privilege')#">
-                <xar:mlstring>Manage privilege</xar:mlstring> :
+                Manage privilege :
             </dt>
             <dd>
                 <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$id#">
-                    <xar:mlstring>Display</xar:mlstring>
+                    Display
                 </a>
             </dd>
             <dd>
                 <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$id#">
-                    <xar:mlstring>Modify</xar:mlstring>
+                    Modify
                 </a>
             </dd>
             <dd>
                 <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$id#">
-                    <xar:mlstring>Delete</xar:mlstring>
+                    Delete
                 </a>
             </dd>
             <dd class="active">
                 <a href="&xar-modurl-privileges-admin-viewroles;&amp;id=#$id#" >
-                    <xar:mlstring>Groups/Users</xar:mlstring>
+                    Groups/Users
                 </a>
             </dd>
         </dl>
     </div>
 
     <fieldset>
-      <legend><xar:mlstring>Assignments</xar:mlstring></legend>
+      <legend>Assignments</legend>
       <xar:if condition="count($roles) eq 0">
         <p>
-          <xar:mlstring>This privilege is not assigned to any user or group.</xar:mlstring>
+          This privilege is not assigned to any user or group.
         </p>
       <xar:else />
         <table class="xar-fullwidth">
           <tr>
                 <th>
-                    <xar:mlstring>Type</xar:mlstring>
+                    Type
                 </th>
                 <th>
-                    <xar:mlstring>Name</xar:mlstring>
+                    Name
                 </th>
                 <th>
-                    <xar:mlstring>Actions</xar:mlstring>
+                    Actions
                 </th>
             </tr>
             <xar:foreach in="$roles" value="$role">
                 <tr>
                     <td>
                         <xar:if condition="$role['itemtype'] eq 2">
-                            <xar:mlstring>User</xar:mlstring>
+                            User
                         <xar:else />
-                            <xar:mlstring>Group</xar:mlstring>
+                            Group
                         </xar:if>
                     </td>
                     <td>
@@ -129,7 +129,7 @@
       <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
         <div class="xar-form-input-wrapper">
             <label for="roleid" title="#xarML('Choose a new Group to assign this Privilege.')#" class="xar-form-label">
-                <xar:mlstring>Assign to Group:</xar:mlstring>
+                Assign to Group:
             </label>
             <select name="roleid" id="roleid" class="xar-margin-thickright">
                 <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
@@ -147,16 +147,16 @@
     </fieldset>
 
     <fieldset>
-      <legend><xar:mlstring>Current Privileges</xar:mlstring></legend>
+      <legend>Current Privileges</legend>
       <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-viewroles;" method="post" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="id" id="id" value="#$id#" />
         <p>
             <a href="&xar-modurl-privileges-admin-newprivilege;">
-                <xar:mlstring>Add Privilege</xar:mlstring>
+                Add Privilege
             </a>
         </p>
         <p>
-            <xar:mlstring>Show Privileges that are:</xar:mlstring>
+            Show Privileges that are:
 
             <xar:if condition="$show eq 'assigned'">
                 <input type="radio" name="show" id="show_assigned" value="assigned" checked="checked" onclick="this.form.submit();"/>
@@ -164,7 +164,7 @@
                 <input type="radio" name="show" id="show_assigned" value="assigned" onclick="this.form.submit();" />
             </xar:if>
             <label for="show_assigned">
-                <xar:mlstring>Assigned</xar:mlstring>
+                Assigned
             </label>
 
             <xar:if condition="$show eq 'all'">
@@ -173,7 +173,7 @@
                 <input type="radio" name="show" id="show_all" value="all" onclick="this.form.submit();" />
             </xar:if>
             <label for="show_all">
-                <xar:mlstring>All</xar:mlstring>
+                All
             </label>
         </p>
       </form>

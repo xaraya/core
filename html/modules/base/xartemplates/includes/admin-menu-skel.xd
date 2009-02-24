@@ -12,7 +12,7 @@
         <div>
             <dl class="xar-tabs">
                 <dt class="help" title="#xarML('Choose an action to perform')#">
-                    <xar:mlstring>Actions:</xar:mlstring>
+                    Actions:
                 </dt>
                 <xar:foreach in="$tabs" value="$tab">
                     <xar:set name="functions">isset($tab['includes']) ? $tab['includes'] : array()</xar:set>

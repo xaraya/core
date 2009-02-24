@@ -1,15 +1,15 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <p>
-  <xar:mlstring>Hint: empty the Label to delete a property for all items</xar:mlstring>
+  Hint: empty the Label to delete a property for all items
 </p>
 
 <p>
-  <xar:mlstring>Click on a Property Name to edit it.</xar:mlstring>
+  Click on a Property Name to edit it.
 </p>
 
 <xar:if condition="!empty($objectid) and $objectid lt 3">
   <h3>
-    <xar:mlstring>Warning! This is a system object used internally by the Dynamic Data module. Trying to modify the properties of this object may break the Dynamic Data module. Proceed with caution.</xar:mlstring>
+    Warning! This is a system object used internally by the Dynamic Data module. Trying to modify the properties of this object may break the Dynamic Data module. Proceed with caution.
   </h3>
 </xar:if>
 
@@ -29,7 +29,7 @@
 
 <xar:if condition="$modid eq 182">
   <p>
-    <xar:mlstring>Note: for completely dynamic Objects like this one, you need to define one property that is of type "Item ID"</xar:mlstring>
+    Note: for completely dynamic Objects like this one, you need to define one property that is of type "Item ID"
   </p>
 </xar:if>
 

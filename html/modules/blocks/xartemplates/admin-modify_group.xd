@@ -6,12 +6,12 @@
 </script>
 
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Blocks Administration</span>
 </div>
 
 <div class="xar-mod-body">
  <xar:template type="module" file="admin-menu" />
-    <h2><xar:mlstring>Modify Block Group</xar:mlstring></h2>
+    <h2>Modify Block Group</h2>
 
     <form action="#xarModURL('blocks', 'admin', 'update_group')#" method="post" enctype="application/x-www-form-urlencoded" >
 
@@ -23,21 +23,21 @@
             <legend>Group Configuration</legend>
             <div class="xar-form-input-wrapper">
                 <label for="group_name" title="#xarML('Enter the name of the group.  This value is used in your theme template to call the block group.')#" class="xar-form-label">
-                    <xar:mlstring>Name:</xar:mlstring>
+                    Name:
                 </label>
                 <input type="text" name="group_name" id="group_name" value="#$group['name']#" maxlength="255" class="xar-form-textlong" />
             </div>
 
             <div class="xar-form-input-wrapper">
                 <label for="group_template" title="#xarML('If you wish to override the default template you may do so by entering a template name.  Otherwise the default.xt template will be used.')#" class="xar-form-label">
-                    <xar:mlstring>Default Template (optional):</xar:mlstring>
+                    Default Template (optional):
                 </label>
                 <input type="text" name="group_template" id="group_template" value="#$group['template']#" maxlength="255" class="xar-form-textlong" />
             </div>
 
             <div class="xar-form-input-wrapper xar-clearboth">
                 <label for="group_instances" title="#xarML('You may reorder the members in this block group by selecting the block to reorder and then using the up and down arrows to chose the position.')#" class="xar-form-label">
-                    <xar:mlstring>Members:</xar:mlstring>
+                    Members:
                 </label>
                 <xar:if condition="$instance_count gt 0">
                     <div class="xar-floatleft">
@@ -67,7 +67,7 @@
                         </div>
                     </div>
                 <xar:else />
-                    [ <xar:mlstring>none</xar:mlstring> ]
+                    [ none ]
                 </xar:if>
             </div>
         </fieldset>

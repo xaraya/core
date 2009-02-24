@@ -3,79 +3,79 @@
 <xar:style scope="common" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>Blocks Administration</xar:mlstring>
+        Blocks Administration
     </span>
 </div>
 <div class="xar-mod-body">
  <xar:template type="module" file="admin-menu" />
     <h2>
-        <xar:mlstring>Modify Block</xar:mlstring>
+        Modify Block
     </h2>
 
     <form action="#xarModURL('blocks', 'admin', 'update_instance')#" method="post" enctype="application/x-www-form-urlencoded">
 
         <fieldset>
             <legend>
-                <xar:mlstring>Block Properties</xar:mlstring>
+                Block Properties
             </legend>
 
             <div class="xar-form-input-wrapper">
                 <label title="#xarML('The name of module which owns the block.')#" class="xar-form-label">
-                    <xar:mlstring>Parent Module:</xar:mlstring>
+                    Parent Module:
                 </label>
                 #xarVarPrepForDisplay($instance['module'])#
             </div>
 
             <div class="xar-form-input-wrapper">
                 <label title="#xarML('This is the type of block that is being modified.')#" class="xar-form-label">
-                    <xar:mlstring>Block Type:</xar:mlstring>
+                    Block Type:
                 </label>
                 #xarVarPrepForDisplay($instance['type'])#
             </div>
 
             <div class="xar-form-input-wrapper">
                 <label for="block_name" title="#xarML('Each instance requires a unique name.')#" class="xar-form-label">
-                    <xar:mlstring>Name:</xar:mlstring>
+                    Name:
                 </label>
                 <input type="text" name="block_name" id="block_name" value="#xarVarPrepForDisplay($instance['name'])#" maxlength="255" class="xar-form-textmedium" />
             </div>
 
             <div class="xar-form-input-wrapper">
                 <label for="block_title" title="#xarML('Enter the new title for the block instance. The title is optional.')#" class="xar-form-label">
-                    <xar:mlstring>Title:</xar:mlstring>
+                    Title:
                 </label>
                 <input type="text" name="block_title" id="block_title" value="#xarVarPrepForDisplay($instance['title'])#" maxlength="255" class="xar-form-textmedium" />
             </div>
 
             <div class="xar-form-input-wrapper">
                 <label for="block_state" title="#xarML('This is the default state of the block.  Maximized is visible, hidden is not.')#" class="xar-form-label">
-                    <xar:mlstring>Default State:</xar:mlstring>
+                    Default State:
                 </label>
                 <select name="block_state" id="block_state">
                     <xar:if condition="$instance['state'] eq 0">
                         <option value="0" selected="selected">
-                            <xar:mlstring>
+                            
                                 Hidden
-                            </xar:mlstring>
+                            
                         </option>
                         <xar:else />
                         <option value="0">
-                            <xar:mlstring>
+                            
                                 Hidden
-                            </xar:mlstring>
+                            
                         </option>
                     </xar:if>
                     <xar:if condition="$instance['state'] eq 2">
                         <option value="2" selected="selected">
-                            <xar:mlstring>
+                            
                                 Maximized
-                            </xar:mlstring>
+                            
                         </option>
                         <xar:else />
                         <option value="2">
-                            <xar:mlstring>
+                            
                                 Maximized
-                            </xar:mlstring>
+                            
                         </option>
                     </xar:if>
                 </select>
@@ -88,7 +88,7 @@
 
                 <div class="xar-form-input-wrapper">
                     <label for="block_refresh" title="#xarML('If your block uses a refresh time, this field needs to be filled in.')#" class="xar-form-label">
-                        <xar:mlstring>Refresh:</xar:mlstring>
+                        Refresh:
                     </label>
                     <input type="text" name="block_name" id="block_name" value="#xarVarPrepForDisplay($instance['name'])#" maxlength="255" class="xar-form-textmedium" />
                     <select name="block_refresh" id="block_refresh">
@@ -111,7 +111,7 @@
 
        <fieldset>
             <legend>
-                <xar:mlstring>Block Type Properties</xar:mlstring>
+                Block Type Properties
             </legend>
 
             <xar:comment>
@@ -121,7 +121,7 @@
             <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
                 <div class="xar-form-input-wrapper">
                     <label for="block_content" title="#xarML('Enter the content that is shown in the block instance.')#" class="xar-form-label">
-                        <xar:mlstring>Content:</xar:mlstring>
+                        Content:
                     </label>
                     <textarea name="block_content" id="block_content" class="xar-form-textareaxlarge">#$instance['content']#</textarea>
                 </div>
@@ -136,7 +136,7 @@
                 </xar:if>
             <xar:else />
                 <p>
-                    <xar:mlstring>No extra settings for this block type.</xar:mlstring>
+                    No extra settings for this block type.
                 </p>
             </xar:if>
 
@@ -144,7 +144,7 @@
 
         <fieldset>
             <legend>
-                <xar:mlstring>Block Groups and Group Templates</xar:mlstring>
+                Block Groups and Group Templates
             </legend>
 
             <xar:if condition="$group_method eq 'min'">
@@ -154,13 +154,13 @@
 
                 <div class="xar-form-input-wrapper">
                     <label for="block_new_group" title="#xarML('Add this block instance to the selected block group.')#" class="xar-form-label">
-                        <xar:mlstring>Add To Group:</xar:mlstring>
+                        Add To Group:
                     </label>
                     <select name="block_new_group" id="block_new_group">
                         <option value="" selected="selected">
-                            <xar:mlstring>
+                            
                                 -- no new group --
-                            </xar:mlstring>
+                            
                         </option>
                         <xar:loop name="$block_groups">
                             <xar:if condition="empty($loop:item['selected'])">
@@ -178,7 +178,7 @@
 
                     <div class="xar-form-input-wrapper">
                         <label for="group_templates_#$loop:item.id#" class="xar-form-label" title="#xarML('Format is: [outer-template][semi-colon][inner-template].')#">
-                            #xarVarPrepForDisplay($loop:item['name'])# <xar:mlstring>Group:</xar:mlstring>
+                            #xarVarPrepForDisplay($loop:item['name'])# Group:
                         </label>
                         <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
                             <input type="text" name="group_templates[#$loop:item.id#]" id="group_templates_#$loop:item.id#" value="#xarVarPrepForDisplay($loop:item.template)#" maxlength="100" class="xar-form-textlong" />
@@ -186,9 +186,9 @@
                                 <xar:if condition="!empty($loop:item['selected'])">
                                     <input type="checkbox" name="block_remove_groups[#$loop:item.id#]" id="block_remove_groups_#$loop:item.id#" value="on" />
                                     <label for="block_remove_groups_#$loop:item.id#">
-                                        <xar:mlstring>
+                                        
                                             Remove
-                                        </xar:mlstring>
+                                        
                                     </label>
                                     <input type="hidden" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" />
                                 </xar:if>
@@ -199,9 +199,9 @@
                                     <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" />
                                 </xar:if>
                                 <label for="block_groups_#$loop:item.id#">
-                                    <xar:mlstring>
+                                    
                                         Selected
-                                    </xar:mlstring>
+                                    
                                 </label>
                             </xar:if>
                         </xar:if>
@@ -211,7 +211,7 @@
 
             <div class="xar-form-input-wrapper">
                 <label for="block_template" title="#xarML('Format is: [outer-template][semi-colon][inner-template].')#" class="xar-form-label">
-                    <xar:mlstring>Instance Template (optional):</xar:mlstring>
+                    Instance Template (optional):
                 </label>
                 <input type="text" name="block_template" id="block_template" value="#xarVarPrepForDisplay($instance['template'])#" maxlength="255" class="xar-form-textlong" />
                 (Specified as <code>outer<strong>;</strong>inner</code>)

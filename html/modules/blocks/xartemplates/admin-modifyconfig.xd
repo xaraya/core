@@ -3,38 +3,38 @@
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
+        
             Blocks Administration 
-        </xar:mlstring>
+        
     </span>
 </div>
 <div class="xar-mod-body">
  <xar:template type="module" file="admin-menu" />
     <h2>
-        <xar:mlstring>
+        
             Modify Blocks Configuration 
-        </xar:mlstring>
+        
     </h2>
     <dl class="xar-tabs">
         <dt class="help" title="#xarML('Choose a set of configuration options')#">
-            <xar:mlstring>
+            
                 Configure:
-            </xar:mlstring>
+            
         </dt>
         <xar:if condition="$tab eq 'general'">
             <dd class="active">
                 <a href="#xarServerGetCurrentURL()#">
-                    <xar:mlstring>
+                    
                         General 
-                    </xar:mlstring>
+                    
                 </a>
             </dd>
             <xar:else />
             <dd>
                 <a href="#xarModURL('blocks', 'admin', 'modifyconfig', array('tab' => 'general'))#">
-                    <xar:mlstring>
+                    
                         General 
-                    </xar:mlstring>
+                    
                 </a>
             </dd>
         </xar:if>
@@ -46,15 +46,15 @@
         <form action="#xarModUrl('blocks', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>
-                    <xar:mlstring>
+                    
                         Page Layout 
-                    </xar:mlstring>
+                    
                 </legend>
                 <div class="xar-form-input-wrapper">
                     <label for="itemsperpage" title="#xarML('The number of items to display on a page.')#" class="xar-form-label">
-                        <xar:mlstring>
+                        
                             Items Listed per Page View: 
-                        </xar:mlstring>
+                        
                     </label>
                     <xar:set name="value"><xar:var scope="module" module="blocks" name="itemsperpage"/></xar:set>
                     <input type="text" id="itemsperpage" name="itemsperpage" value="#$value#" class="xar-form-textshort" />

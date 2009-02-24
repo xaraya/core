@@ -1,23 +1,23 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Modules Administration</span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>Function</xar:mlstring>
+        Function
     </h2>
 
     <h3>
-        <xar:mlstring>Header</xar:mlstring>
+        Header
     </h3>
 
-    <p><xar:mlstring>Maintext</xar:mlstring></p>
+    <p>Maintext</p>
 
 </div>
 <div class="xar-mod-foot xar-align-center xar-padding-thick">
     <p>
-        <xar:mlstring>Footer</xar:mlstring>
+        Footer
     </p>
 </div>
 </xar:template>

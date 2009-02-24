@@ -15,7 +15,7 @@
     <div>
         <div class="tabnav">
             <div class="navhelp help" title="#xarML('Click on a tab to display that itemtype' )#">
-                <xar:mlstring>Itemtype</xar:mlstring>:
+                Itemtype:
             </div>
             <div class="tabnav-hairline"><!-- &nbsp; --></div>
             <ul class="navlist">

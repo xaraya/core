@@ -12,35 +12,35 @@
 <xar:style scope="common" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>Blocks Administration</xar:mlstring>
+        Blocks Administration
     </span>
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
-  <h2><xar:mlstring>New Block Type</xar:mlstring></h2>
+  <h2>New Block Type</h2>
 
     <form action="#xarModURL('blocks', 'admin', 'new_type')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>
-                <xar:mlstring>
+                
                     Block Type Properties
-                </xar:mlstring>
+                
             </legend>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="confirm" id="confirm" value="true" />
             <div class="xar-form-input-wrapper">
                 <label for="modulename" title="#xarML('This is the name of the module that this block is to be associated with.  Blocks must be associated with modules.  When in doubt use the base module.')#" class="xar-form-label">
-                    <xar:mlstring>
+                    
                         Module Name:
-                    </xar:mlstring>
+                    
                 </label>
                 <xar:data-input type="module" name="moduleid" id="moduleid" value="$moduleid" />
             </div>
             <div class="xar-form-input-wrapper">
                 <label for="blockname" title="#xarML('This is the exact name of the block.  It must be case specific, otherwise the block will not function correctly.')#" class="xar-form-label">
-                    <xar:mlstring>
+                    
                         Block Name:
-                    </xar:mlstring>
+                    
                 </label>
                 <xar:if condition="!empty($type_list)">
                     <select name="blockname" id="blockname">

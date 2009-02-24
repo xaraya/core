@@ -26,7 +26,7 @@
                     <span class="treeattributes">
                         <xar:if condition="$drawchildren eq false">
                             <span style="padding-left: 1em">
-                                <b>#$node['name']#</b> <xar:mlstring>see the entry above</xar:mlstring>
+                                <b>#$node['name']#</b> see the entry above
                             </span>
                         <xar:else />
                             <xar:set name="numofsubgroups">count(xarRoles::getsubgroups($node['id']))</xar:set>

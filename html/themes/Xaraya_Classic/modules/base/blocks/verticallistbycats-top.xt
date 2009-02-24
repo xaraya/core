@@ -2,9 +2,9 @@
 <div id="hmenu">
     <ul id="hmenuroot">
         <li id="hmenulabel">
-            <xar:mlstring>
+            
                 Administration
-            </xar:mlstring>
+            
         </li>
         <li class="cat">
             <a href="#" onclick="return false;" title="#xarML('This menu contains links to modules')#" class="empty">

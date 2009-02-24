@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <span style="padding-left: 1em">
-    <b>#$leafitemtext#</b> <xar:mlstring>see the entry above</xar:mlstring>
+    <b>#$leafitemtext#</b> see the entry above
 </span>
 </xar:template>

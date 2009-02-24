@@ -1,6 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:set name="alttext"><xar:mlstring>Click Here to select a color</xar:mlstring></xar:set>
+<xar:set name="alttext">Click Here to select a color</xar:set>
 <xar:set name="pickerimage">xarTplGetImage('tcolorpicker.gif', 'base')</xar:set>
 
 <input type="text" name="#$name#" id="#$id#" value="#$value#" size="#$size#" maxlength="#$maxlength#" />

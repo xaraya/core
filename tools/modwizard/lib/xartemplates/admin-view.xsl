@@ -14,10 +14,10 @@
 <div class="xar-mod-body">
     <div style="padding: 1px;" class="xar-norm-outline">
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>Add the default view of your module here</xar:mlstring></p>
+            <p>Add the default view of your module here</p>
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>Add the startpage of your module here. This is the default view. You can find this text in "xartemplates/admin-view.xd". </xar:mlstring></p>
+            <p>Add the startpage of your module here. This is the default view. You can find this text in "xartemplates/admin-view.xd". </p>
         </div>
     </div>
 </div>

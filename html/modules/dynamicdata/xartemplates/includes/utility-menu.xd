@@ -8,16 +8,16 @@
 <div>
     <dl class="xar-tabs">
         <dt class="help" title="#xarML('Select a utility function')#">
-            <xar:mlstring>
+            
                 Utility
-            </xar:mlstring>
+            
                 :
         </dt>
         <xar:sec mask="EditDynamicData" catch="false">
             <xar:set name="tabclass">$activetab=='query'?'active':''</xar:set>
             <dd class="#$tabclass#">
                 <a href="&xar-modurl-dynamicdata-admin-query;">
-                   <xar:mlstring>Query</xar:mlstring>
+                   Query
                 </a>
             </dd>
         </xar:sec>
@@ -25,7 +25,7 @@
             <xar:set name="tabclass">$activetab=='import'?'active':''</xar:set>
             <dd class="#$tabclass#">
                <a href="&xar-modurl-dynamicdata-util-import;">
-                    <xar:mlstring>Import</xar:mlstring>
+                    Import
               </a>
             </dd>
         </xar:sec>
@@ -33,7 +33,7 @@
             <xar:set name="tabclass">$activetab=='export'?'active':''</xar:set>
             <dd class="#$tabclass#">
                <a href="&xar-modurl-dynamicdata-util-export;">
-                    <xar:mlstring>Export</xar:mlstring>
+                    Export
               </a>
             </dd>
         </xar:sec>
@@ -41,7 +41,7 @@
             <xar:set name="tabclass">$activetab=='static'?'active':''</xar:set>
             <dd class="#$tabclass#">
                <a href="&xar-modurl-dynamicdata-util-static;">
-                    <xar:mlstring>Table Definition</xar:mlstring>
+                    Table Definition
               </a>
             </dd>
         </xar:sec>
@@ -50,7 +50,7 @@
             <xar:set name="tabclass">$activetab=='relations'?'active':''</xar:set>
             <dd class="#$tabclass#">
                <a href="&xar-modurl-dynamicdata-util-relations;">
-                    <xar:mlstring>Relationships</xar:mlstring>
+                    Relationships
               </a>
             </dd>
         </xar:sec>
@@ -59,7 +59,7 @@
             <xar:set name="tabclass">$activetab=='meta'?'active':''</xar:set>
             <dd class="#$tabclass#">
                <a href="&xar-modurl-dynamicdata-util-meta;">
-                    <xar:mlstring>Meta Definitions</xar:mlstring>
+                    Meta Definitions
               </a>
             </dd>
         </xar:sec>
@@ -67,7 +67,7 @@
             <xar:set name="tabclass">$activetab=='migrate'?'active':''</xar:set>
             <dd class="#$tabclass#">
                <a href="&xar-modurl-dynamicdata-util-migrate;">
-                    <xar:mlstring>Migrate Items</xar:mlstring>
+                    Migrate Items
               </a>
             </dd>
         </xar:sec>

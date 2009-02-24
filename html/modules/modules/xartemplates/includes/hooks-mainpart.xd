@@ -8,15 +8,15 @@
     </xar:if>
     <xar:if condition="$hookmod['modname'] eq $curhook">
         <p>
-            <xar:mlstring>Use this functionality in the following modules:</xar:mlstring>
+            Use this functionality in the following modules:
             [ <a href="javascript:void(0);" title="#xarML('Click to toggle details display.')#" onclick="return toggleDisplay('hookdetails');">
-            <xar:mlstring>Details</xar:mlstring></a> ]
+            Details</a> ]
         </p>
         <!-- inline style is needed here because IE's DOM support is flaky -->
         <div id="hookdetails" class="xar-displaynone">
         <xar:if condition="count($hooktypes) gt 0">
             <p>
-                <xar:mlstring>This module offers the following hooks:</xar:mlstring>
+                This module offers the following hooks:
             </p>
             <ul>
                 <xar:foreach in="$hooktypes" value="$hooktype">
@@ -25,7 +25,7 @@
             </ul>
         <xar:else />
             <p>
-                    <xar:mlstring>This module offers no hooks.</xar:mlstring>
+                    This module offers no hooks.
                 </p>
             </xar:if>
         </div>
@@ -80,11 +80,7 @@
                             </xar:if>
                         </xar:if>
                         <label for="NOT_hooked_#$hookedmod['name']#_0">
-                            <xar:ml>
-                                <xar:mlstring>Do NOT enable #(1) functionality in #(2)</xar:mlstring>
-                                <xar:mlvar>#$hookmod['modname']#</xar:mlvar>
-                                <xar:mlvar>#$hookedmod['name']#</xar:mlvar>
-                            </xar:ml>
+                            Do NOT enable #$hookmod['modname']# functionality in #$hookedmod['name']#
                         </label>
                         <br />
 
@@ -103,11 +99,7 @@
                             </xar:if>
                         </xar:if>
                         <label for="ALL_hooked_#$hookedmod['name']#_0">
-                            <xar:ml>
-                                <xar:mlstring>Enable the #(1) hooks for ALL items in #(2)</xar:mlstring>
-                                <xar:mlvar>#$hookmod['modname']#</xar:mlvar>
-                                <xar:mlvar>#$hookedmod['name']#</xar:mlvar>
-                            </xar:ml>
+                            Enable the #$hookmod['modname']# hooks for ALL items in #$hookedmod['name']#
                         </label>
                         <br/>
 
@@ -127,11 +119,7 @@
                                 </xar:if>
                             </xar:if>
                             <label for="SOME_hooked_#$hookedmod['name']#_0">
-                                <xar:ml>
-                                    <xar:mlstring>Enable #(1) functionality for SOME itemtypes in #(2)</xar:mlstring>
-                                    <xar:mlvar>#$hookmod['modname']#</xar:mlvar>
-                                    <xar:mlvar>#$hookedmod['name']#</xar:mlvar>
-                                </xar:ml>
+                                Enable #$hookmod['modname']# functionality for SOME itemtypes in #$hookedmod['name']#
                             </label>
                             <br />
 

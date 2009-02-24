@@ -8,9 +8,9 @@
 
 <dd class="#$tabclass#">
     <a href="#$current#">
-        <xar:mlstring>
+        
             Edit Profile
-        </xar:mlstring>
+        
     </a>
 </dd>
 </xar:template>

@@ -2,48 +2,48 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>Dynamic Data Utilities</xar:mlstring>
+        Dynamic Data Utilities
     </span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>Query Dynamic Objects or Database Tables</xar:mlstring>
+        Query Dynamic Objects or Database Tables
     </h2>
 
     <ul>
         <li>
             <a href="&xar-modurl-dynamicdata-admin-query;">
-                <xar:mlstring>Query DataObjects or Database Tables</xar:mlstring>
+                Query DataObjects or Database Tables
             </a>
         </li>
         <li>
             <a href="&xar-modurl-dynamicdata-util-import;">
-                <xar:mlstring>Import Object Definitions and Data</xar:mlstring>
+                Import Object Definitions and Data
             </a>
         </li>
         <li>
             <a href="&xar-modurl-dynamicdata-util-export;">
-                <xar:mlstring>Export Object Definitions and Data</xar:mlstring>
+                Export Object Definitions and Data
             </a>: 
-            <xar:mlstring>for a particular object, go via View Objects - Edit</xar:mlstring>
+            for a particular object, go via View Objects - Edit
         </li>
         <li>
             <a href="&xar-modurl-dynamicdata-util-static;">
-                <xar:mlstring>Static Table Definition</xar:mlstring>
+                Static Table Definition
             </a>: 
-            <xar:mlstring>for a particular object, go via View Objects - Edit</xar:mlstring>
+            for a particular object, go via View Objects - Edit
         </li>
         <li>
             <a href="&xar-modurl-dynamicdata-util-relations;">
-                <xar:mlstring>Relations between Objects</xar:mlstring>
+                Relations between Objects
             </a>
             ( 
-            <xar:mlstring>TODO</xar:mlstring>
+            TODO
             ) 
         </li>
         <li>
             <a href="&xar-modurl-dynamicdata-util-meta;">
-                <xar:mlstring>Meta Table Definitions</xar:mlstring>
+                Meta Table Definitions
             </a>
         </li>
     </ul>

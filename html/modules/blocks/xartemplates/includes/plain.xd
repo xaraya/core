@@ -12,25 +12,25 @@
     <table class="xar-fullwidth">
         <tr>
             <th>
-                <xar:mlstring>Name</xar:mlstring>
+                Name
             </th>
             <th>
-                <xar:mlstring>Groups</xar:mlstring>
+                Groups
             </th>
             <th>
-                <xar:mlstring>Module</xar:mlstring>
+                Module
             </th>
             <th>
-                <xar:mlstring>Type</xar:mlstring>
+                Type
             </th>
             <th>
-                <xar:mlstring>Template</xar:mlstring>
+                Template
             </th>
             <th>
-                <xar:mlstring>Status</xar:mlstring>
+                Status
             </th>
             <th>
-                <xar:mlstring>Actions</xar:mlstring>
+                Actions
             </th>
         </tr>
         <xar:loop name="$blocks">
@@ -52,7 +52,7 @@
                             </a>
                         </xar:loop>
                     <xar:else />
-                        [ <xar:mlstring>none</xar:mlstring> ]
+                        [ none ]
                     </xar:if>
                 </td>
                 <td>
@@ -69,9 +69,9 @@
                         <xar:else />
                         <xar:if condition="empty($loop:item['group_template'])">
                             [ 
-                            <xar:mlstring>
+                            
                                 default 
-                            </xar:mlstring>
+                            
                             ] 
                         <xar:else />
                             #$loop:item['group_template']# &#160; 
@@ -83,15 +83,15 @@
                 </td>
                 <td class="xar-align-center">
                     <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item.bid#">
-                        <xar:mlstring>
+                        
                             Edit 
-                        </xar:mlstring>
+                        
                     </a>
                     | 
                     <a href="#$loop:item['deleteurl']#" onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
-                        <xar:mlstring>
+                        
                             Delete 
-                        </xar:mlstring>
+                        
                     </a>
                 </td>
             </tr>

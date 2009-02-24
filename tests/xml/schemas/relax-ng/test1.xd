@@ -10,7 +10,7 @@
         <xar:foreach in="$properties" key="$name" value="$property">
             <th align="center"><!-- <xar:data-label property="$properties[$name]" /> --></th>
         </xar:foreach>
-        <th align="center"><xar:mlstring>Options</xar:mlstring></th>
+        <th align="center">Options</th>
     </tr>
     <xar:foreach in="$items" key="$itemid" value="$fields">
     <tr>
@@ -31,7 +31,7 @@
         <xar:foreach in="$properties" key="$name" value="$property">
             <td>&nbsp;</td>
         </xar:foreach>
-        <td><a href="#$newlink#"><xar:mlstring>New</xar:mlstring></a></td>
+        <td><a href="#$newlink#">New</a></td>
     </tr>
     </xar:if>
     </table>
@@ -72,7 +72,7 @@
         <xar:loop name="$labels">
             <td>&nbsp;</td>
         </xar:loop>
-        <td><a href="#$newlink#"><xar:mlstring>New</xar:mlstring></a></td>
+        <td><a href="#$newlink#">New</a></td>
     </tr>
     </xar:if>
     </table>
@@ -95,9 +95,9 @@
 
 <!-- TODO: multi-column output -->
 <xar:else />
-    <xar:mlstring>Specify your own layout here...</xar:mlstring>
+    Specify your own layout here...
     <br /><br />
-    <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+    You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype
 </xar:if>
 
 </xar:blocklayout>

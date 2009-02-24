@@ -1,16 +1,8 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:set name="steptext[1]">
-    <xar:mlstring>Prepare for Upgrade</xar:mlstring>
-</xar:set>
-<xar:set name="steptext[2]">
-    <xar:mlstring>Upgrade Database</xar:mlstring>
-</xar:set>
-<xar:set name="steptext[3]">
-    <xar:mlstring>Upgrade Miscellaneous</xar:mlstring>
-</xar:set>
-<xar:set name="steptext[4]">
-    <xar:mlstring>Finalize Upgrade</xar:mlstring>
-</xar:set>
+<xar:set name="steptext[1]">'Prepare for Upgrade'</xar:set>
+<xar:set name="steptext[2]">'Upgrade Database'</xar:set>
+<xar:set name="steptext[3]">'Upgrade Miscellaneous'</xar:set>
+<xar:set name="steptext[4]">'Finalize Upgrade'</xar:set>
 <div id="status">
     <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">
         <p class="complete">

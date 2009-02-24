@@ -11,14 +11,14 @@
      <xar:if condition="!empty($test1)">
          <tr>
              <td class="xar-threequarterswidth">
-                 <xar:mlstring>Users</xar:mlstring>
+                 Users
              </td>
              <td>
                  &#160;
              </td>
              <td colspan="2">
                  <xar:if condition="xarModIsAvailable('messages')">
-                     <xar:mlstring>Messages</xar:mlstring>
+                     Messages
                      <xar:else />
                      &#160;
                  </xar:if>
@@ -76,7 +76,7 @@
      <tr>
          <td>
              <img src="#xarTplGetImage('ob_users.gif','roles')#" alt="" class="xar-valign-middle" />
-             <xar:mlstring>Total users</xar:mlstring>
+             Total users
          </td>
          <td>
          </td>
@@ -87,7 +87,7 @@
      <tr>
          <td>
              <img src="#xarTplGetImage('ob_users_an.gif','roles')#" alt="" class="xar-valign-middle" />
-             <xar:mlstring>Total guests</xar:mlstring>
+             Total guests
          </td>
          <td>
          </td>
@@ -98,7 +98,7 @@
 </table>
 <xar:if condition="isset($lastuser)">
      <p>
-         <xar:mlstring>Welcome to our latest member,</xar:mlstring>
+         Welcome to our latest member,
          <a href="&xar-modurl-roles-user-display;&amp;id=#$lastuser['id']#">
              #xarVarPrepForDisplay($lastuser['name'])#
          </a>

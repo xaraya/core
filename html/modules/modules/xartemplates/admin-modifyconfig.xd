@@ -2,17 +2,17 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">
-            <xar:mlstring>Modules Administration</xar:mlstring>
+            Modules Administration
         </span>
     </div>
     <div class="xar-mod-body">
         <form method="post" action="&xar-modurl-modules-admin-updateconfig;">
             <fieldset>
-                <legend><xar:mlstring>Configuration settings</xar:mlstring></legend>
+                <legend>Configuration settings</legend>
                 <div class="xar-form-input-wrapper-after">
                     <xar:data-input type="checkbox" name="disableoverview" id="disableoverview" checked="$disableoverview" />
                     <label for="disableoverview" title="#xarML('Disable the display by default of all module overview pages.')#">
-                        <xar:mlstring>Disable the display by default of all module overview pages.</xar:mlstring>
+                        Disable the display by default of all module overview pages.
                     </label>
                 </div>
             </fieldset>

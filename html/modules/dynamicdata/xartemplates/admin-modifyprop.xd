@@ -3,38 +3,33 @@
 <xar:base-include-javascript module="base" filename="toggle.js" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>Dynamic Data Administration</xar:mlstring>
+        Dynamic Data Administration
     </span>
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
-    <h2>
-        <xar:ml>
-            <xar:mlstring>Modify DataProperties #(1)</xar:mlstring>
-            <xar:mlvar>#$label#</xar:mlvar>
-        </xar:ml>
-    </h2>
+    <h2>Modify DataProperties #$label#</h2>
 
     <xar:if condition="!empty($objectid)">
         <xar:style scope="module" module="base" file="navtabs" />
         <div>
             <dl class="xar-tabs">
                 <dt class="help">
-                    <xar:mlstring>Options:</xar:mlstring>
+                    Options:
                 </dt>
                 <dd>
                     <a href="&xar-modurl-dynamicdata-admin-modify;&amp;itemid=#$objectid#">
-                        <xar:mlstring>
+                        
                             Modify Object Definition
-                        </xar:mlstring>
+                        
                     </a>
                 </dd>
                 <dd class="active">
-                  <a href="#xarServerGetCurrentUrl()#"><xar:mlstring>Modify DataProperties</xar:mlstring></a>
+                  <a href="#xarServerGetCurrentUrl()#">Modify DataProperties</a>
                 </dd>
                 <dd>
                     <a href="&xar-modurl-dynamicdata-util-export;&amp;modid=#$modid#&amp;itemtype=#$itemtype#">
-                        <xar:mlstring>Export Object Definition to XML</xar:mlstring>
+                        Export Object Definition to XML
                     </a>
                 </dd>
                 <xar:if condition="!empty($fields)">
@@ -50,7 +45,7 @@
                         }
                         </script>
                         <a href="javascript:xar_dynamicdata_formpreview();">
-                            <xar:mlstring>Preview Input Form</xar:mlstring>
+                            Preview Input Form
                         </a>
                     </dd>
                 </xar:if>
@@ -58,7 +53,7 @@
         </div>
 
         <fieldset>
-          <legend><xar:mlstring>Object summary</xar:mlstring></legend>
+          <legend>Object summary</legend>
           <xar:data-display layout="$layout" module="dynamicdata" itemtype="0" itemid="$objectid" fieldlist="name,label,moduleid,itemtype" />
         </fieldset>
     </xar:if>
@@ -73,11 +68,11 @@
     </form>
 
     <p>
-        <xar:mlstring>When DD is used to extend some item (e.g. roles), then you should definitely avoid re-using property names that are already in the original item - just like you can't have 2 fields called 'state' in "static" items either. You should also avoid 'module', 'itemtype', 'itemid', 'transform' and 'returnurl' when using DD via hooks, because those are pre-defined parameters in hook calls.</xar:mlstring>
+        When DD is used to extend some item (e.g. roles), then you should definitely avoid re-using property names that are already in the original item - just like you can't have 2 fields called 'state' in "static" items either. You should also avoid 'module', 'itemtype', 'itemid', 'transform' and 'returnurl' when using DD via hooks, because those are pre-defined parameters in hook calls.
     </p>
 
     <p>
-        <xar:mlstring>Hint: after you create a property, the label and name are independent from each other. You can adapt the property name by clicking on the ID link above.</xar:mlstring>
+        Hint: after you create a property, the label and name are independent from each other. You can adapt the property name by clicking on the ID link above.
     </p>
 
     <!-- <xar:data-view object="$myobject" layout="$layout"  /> -->
@@ -85,11 +80,11 @@
         [
         <xar:if condition="empty($details)">
             <a href="#$detailslink#">
-                <xar:mlstring>Show Static Properties and Relations</xar:mlstring>
+                Show Static Properties and Relations
             </a>
         <xar:else />
             <a href="#$detailslink#">
-                <xar:mlstring>Hide Static Properties and Relations</xar:mlstring>
+                Hide Static Properties and Relations
             </a>
         </xar:if>
         ]
@@ -107,22 +102,22 @@
         <table class="xar-fullwidth">
             <tr>
                 <th>
-                    <xar:mlstring>Name</xar:mlstring>
+                    Name
                 </th>
                 <th>
-                    <xar:mlstring>Label</xar:mlstring>
+                    Label
                 </th>
                 <th>
-                    <xar:mlstring>Property Type</xar:mlstring>
+                    Property Type
                 </th>
                 <th>
-                    <xar:mlstring>Default</xar:mlstring>
+                    Default
                 </th>
                 <th>
-                    <xar:mlstring>Data Source</xar:mlstring>
+                    Data Source
                 </th>
                 <th>
-                    <xar:mlstring>Validation</xar:mlstring>
+                    Validation
                 </th>
             </tr>
             <xar:foreach in="$static" value="$field">
@@ -227,7 +222,7 @@
                                 #$labels['linktype']#
                             </strong>
                             (
-                            <xar:mlstring>not found</xar:mlstring>
+                            not found
                             )
                         </label>
 
@@ -243,7 +238,7 @@
                                 #$labels['linkto']#
                             </strong>
                             (
-                            <xar:mlstring>not found</xar:mlstring>
+                            not found
                             )
                         </label>
 

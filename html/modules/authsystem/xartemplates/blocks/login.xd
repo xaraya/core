@@ -10,13 +10,13 @@
     <p>
         <xar:data-input type="hidden" name="redirecturl" id="$id" value="$return_url" />
         <label for="#$unameid#" title="#xarML('Enter your user name')#">
-            <xar:mlstring>Username:</xar:mlstring>
+            Username:
         </label>
         <xar:data-input type="textbox" class="xar-fullwidth" name="uname" id="$unameid" maxlength="64" />
     </p>
     <p>
         <label for="#$passid#" title="#xarML('Enter your password')#">
-            <xar:mlstring>Password:</xar:mlstring>
+            Password:
         </label>
         <xar:data-input type="password" class="xar-fullwidth" name="pass" id="$passid" maxlength="64" />
     </p>
@@ -24,7 +24,7 @@
         <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') ne 'High'">
             <label class="xar-displayblock" for="#$remembermeid#">
                 <xar:data-input type="checkbox" name="rememberme" id="$remembermeid" value="1" />
-                <xar:mlstring>Don't ask for password</xar:mlstring>
+                Don't ask for password
             </label>
         </xar:if>
     </p>
@@ -33,7 +33,7 @@
     </p>
     <p>
         <a href="&xar-modurl-roles-user-lostpassword;">
-            <xar:mlstring>Request new password</xar:mlstring>
+            Request new password
         </a>
     </p>
 </form>

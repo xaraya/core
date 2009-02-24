@@ -1,23 +1,23 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="$menustyle eq byname">
-        <p><xar:mlstring>By Name</xar:mlstring>
+        <p>By Name
         <br />
         #$data#</p>
     <xar:elseif condition="$menustyle eq bycat" />
-        <p><xar:mlstring>By Category</xar:mlstring>
+        <p>By Category
         <br />
         #$data#</p>
     <xar:elseif condition="$menustyle eq byweight" />
-        <p><xar:mlstring>By Weight</xar:mlstring>
+        <p>By Weight
         <br />
         #$data#</p>
     <xar:elseif condition="$menustyle eq bygroup" />
-        <p><xar:mlstring>By Group</xar:mlstring>
+        <p>By Group
         <br />
         #$data#</p>
     <xar:else />
-        <p><xar:mlstring>By Category</xar:mlstring>
+        <p>By Category
         <br />
         #$data#</p>
     </xar:if>

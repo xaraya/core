@@ -3,60 +3,60 @@
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
+        
             Authsystem Authentication Administration
-        </xar:mlstring>
+        
     </span>
 </div>
 <div class="xar-mod-body">
 <xar:template type="module" file="admin-menu" />
     <h2>
-        <xar:mlstring>
+        
             Modify Configuration
-        </xar:mlstring>
+        
     </h2>
     <form method="post" action="&xar-modurl-authsystem-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>
-                <xar:mlstring>
+                
                     General Options
-                </xar:mlstring>
+                
             </legend>
             <div class="xar-form-input-wrapper">
                 <label for="shorturls" class="xar-form-label" title="#xarML('Enable short URLS?')#">
-                    <xar:mlstring>Enable short URLs?</xar:mlstring>
+                    Enable short URLs?
                 </label>
                 <xar:data-input type="checkbox" name="shorturls" id="shorturls" value="$shorturlschecked" checked="$shorturlschecked" />
             </div>
         </fieldset>
         <fieldset>
             <legend>
-                <xar:mlstring>
+                
                     Login Security Options
-                </xar:mlstring>
+                
             </legend>
                 <div class="xar-form-input-wrapper">
                     <label for="uselockout" class="xar-form-label" title="Lock a user out after a number of failed logins">
-                        <xar:mlstring>
+                        
                             Enable lockout option? 
-                        </xar:mlstring>
+                        
                     </label>
                     <xar:data-input type="checkbox" name="uselockout" id="uselockout" value="$uselockoutchecked" checked="$uselockoutchecked" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="lockouttries" class="xar-form-label" title="The number of attempts allowed before lockout">
-                        <xar:mlstring>
+                        
                             Allowed attempts 
-                        </xar:mlstring>
+                        
                         : 
                     </label>
                     <xar:data-input type="integerbox" name="lockouttries" id="lockouttries" value="$lockouttries" size="2" maxlength="2" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="lockouttime" class="xar-form-label" title="The time a lockout is in effect">
-                        <xar:mlstring>
+                        
                             Lockout time (minutes) 
-                        </xar:mlstring>
+                        
                         : 
                     </label>
                     <xar:data-input type="textbox" name="lockouttime" id="lockouttime" value="$lockouttime" size="2" maxlength="2" />

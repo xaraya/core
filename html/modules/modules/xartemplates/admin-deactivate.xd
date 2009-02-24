@@ -1,15 +1,15 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Modules Administration</span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>Module Deactivation with dependents still active</xar:mlstring>
+        Module Deactivation with dependents still active
     </h2>
 
     <h3>
-        <xar:mlstring>Dependents still Active</xar:mlstring>
+        Dependents still Active
     </h3>
 
     <xar:if condition="count($dependencies['active']) ne 0">

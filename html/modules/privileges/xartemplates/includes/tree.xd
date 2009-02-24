@@ -24,7 +24,7 @@
                     <a href="#$modlink#" title="#$node.parent.description#">#$node.parent.name#</a>
                     <xar:if condition="!empty($node.children)">
                         <xar:set name="comps">count($node['children'])</xar:set>
-                        <xar:ml><xar:mlstring>: #(1) components</xar:mlstring><xar:mlvar>#$comps#</xar:mlvar></xar:ml>
+                        #$comps# components
                         <xar:template file="tree" subdata="array('trees'=&gt;$node['children'])"/>
                     </xar:if>
                 </li>

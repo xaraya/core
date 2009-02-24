@@ -2,28 +2,28 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
+        
             Dynamic Data Administration
-        </xar:mlstring>
+        
     </span>
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
-   <h2><xar:mlstring>Utilities - Relationships</xar:mlstring></h2>
+   <h2>Utilities - Relationships</h2>
    <xar:template type="module" file="utility-menu" />
 
     <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
         <fieldset>
             <legend>
-                <xar:mlstring>
+                
                     Relations With Other Modules/Properties 
-                </xar:mlstring>
+                
             </legend>
             <div class="xar-form-input-wrapper">
                 <label for="modid" class="xar-form-label">
-                    <xar:mlstring>
+                    
                         Module: 
-                    </xar:mlstring>
+                    
                 </label>
                 <xar:data-input type="module" name="modid" value="$modid" />
             </div>
@@ -37,24 +37,24 @@
             <table class="xar-clearboth">
                 <tr>
                     <th>
-                        <xar:mlstring>
+                        
                             Module 
-                        </xar:mlstring>
+                        
                     </th>
                     <th>
-                        <xar:mlstring>
+                        
                             Link Type 
-                        </xar:mlstring>
+                        
                     </th>
                     <th>
-                        <xar:mlstring>
+                        
                             From 
-                        </xar:mlstring>
+                        
                     </th>
                     <th>
-                        <xar:mlstring>
+                        
                             To 
-                        </xar:mlstring>
+                        
                     </th>
                 </tr>
                 <xar:foreach in="$relations" value="$relation">
@@ -82,9 +82,9 @@
                             </td>
                             <td>
                                 ( 
-                                <xar:mlstring>
+                                
                                     not found 
-                                </xar:mlstring>
+                                
                                 ) 
                             </td>
                             <td>
@@ -92,9 +92,9 @@
                             </td>
                             <td>
                                 ( 
-                                <xar:mlstring>
+                                
                                     not found 
-                                </xar:mlstring>
+                                
                                 ) 
                             </td>
                         </tr>
@@ -103,24 +103,24 @@
             </table>
             <xar:else />
             <p>
-                <xar:mlstring>
+                
                     No relationships for this module. 
-                </xar:mlstring>
+                
             </p>
         </xar:if>
     </xar:if>
     <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
         <fieldset>
             <legend>
-                <xar:mlstring>
+                
                     Relations With Other Objects/Tables 
-                </xar:mlstring>
+                
             </legend>
             <div class="xar-form-input-wrapper">
                 <label for="objectid" class="xar-form-label">
-                    <xar:mlstring>
+                    
                         Object: 
-                    </xar:mlstring>
+                    
                 </label>
                 <select name="objectid" id="objectid">
                     <option value="">
@@ -140,9 +140,9 @@
             </div>
             <div class="xar-form-input-wrapper">
                 <label for="table" class="xar-form-label">
-                    <xar:mlstring>
+                    
                         Table: 
-                    </xar:mlstring>
+                    
                 </label>
 
                 <select name="table" id="table">
@@ -171,41 +171,41 @@
             #$table# 
         </h3>
         <a href="&xar-modurl-dynamicdata-admin-view;&amp;table=#$table#">
-            <xar:mlstring>
+            
                 View Table 
-            </xar:mlstring>
+            
         </a>
         <table>
             <tr>
                 <th>
-                    <xar:mlstring>
+                    
                         Name 
-                    </xar:mlstring>
+                    
                 </th>
                 <th>
-                    <xar:mlstring>
+                    
                         Label 
-                    </xar:mlstring>
+                    
                 </th>
                 <th>
-                    <xar:mlstring>
+                    
                         Property Type 
-                    </xar:mlstring>
+                    
                 </th>
                 <th>
-                    <xar:mlstring>
+                    
                         Default 
-                    </xar:mlstring>
+                    
                 </th>
                 <th>
-                    <xar:mlstring>
+                    
                         Source 
-                    </xar:mlstring>
+                    
                 </th>
                 <th>
-                    <xar:mlstring>
+                    
                         Validation 
-                    </xar:mlstring>
+                    
                 </th>
             </tr>
             <xar:foreach in="$fields" key="$name" value="$property">
@@ -240,9 +240,9 @@
         <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
             <div class="xar-form-input-wrapper">
                 <label class="xar-form-label">
-                    <xar:mlstring>
+                    
                         Relation Type: 
-                    </xar:mlstring>
+                    
                 </label>
                 <input type="hidden" name="modid" value="#$modid#" />
                 <input type="hidden" name="itemtype" value="#$itemtype#" />
@@ -251,39 +251,39 @@
                 <input type="hidden" name="authid" value="#$authid#" />
                 <select name="relation" id="relation">
                     <option value="parent">
-                        <xar:mlstring>
+                        
                             is parent of (one-to-many) 
-                        </xar:mlstring>
+                        
                     </option>
                     <option value="child">
-                        <xar:mlstring>
+                        
                             is child of (many-to-one) 
-                        </xar:mlstring>
+                        
                     </option>
                     <option value="direct">
-                        <xar:mlstring>
+                        
                             is linked to (one-to-one) 
-                        </xar:mlstring>
+                        
                     </option>
                     <option value="directfrom">
-                        <xar:mlstring>
+                        
                             is linked from (one-to-one) 
-                        </xar:mlstring>
+                        
                     </option>
                     <option value="recursive">
-                        <xar:mlstring>
+                        
                             is recursive with 
-                        </xar:mlstring>
+                        
                     </option>
                     <option value="extension">
-                        <xar:mlstring>
+                        
                             extends 
-                        </xar:mlstring>
+                        
                     </option>
                     <option value="extended">
-                        <xar:mlstring>
+                        
                             is extended by 
-                        </xar:mlstring>
+                        
                     </option>
                 </select>
                 <select name="withtable" id="withtable">
@@ -306,16 +306,16 @@
             <xar:if condition="!empty($withtable)">
                 <div class="xar-floatleft xar-thirdwidth">
                     <h4>
-                        <xar:mlstring>
+                        
                             From 
-                        </xar:mlstring>
+                        
                         #$table# 
                     </h4>
                     <div class="xar-form-input-wrapper">
                         <label for="field" class="xar-form-labelshort">
-                            <xar:mlstring>
+                            
                                 Field: 
-                            </xar:mlstring>
+                            
                         </label>
                         <select name="field" id="field">
                             <option value="">
@@ -335,25 +335,25 @@
                     </div>
                     <div class="xar-form-input-wrapper">
                         <label for="value" class="xar-form-labelshort">
-                            <xar:mlstring>
+                            
                                 Value: 
-                            </xar:mlstring>
+                            
                         </label>
                         <input type="textbox" name="value" id="value" value="#$value#" class="xar-form-textmedium" />
                     </div>
                 </div>
                 <div class="xar-floatleft xar-thirdwidth">
                     <h4>
-                        <xar:mlstring>
+                        
                             To 
-                        </xar:mlstring>
+                        
                         #$table# 
                     </h4>
                     <div class="xar-form-input-wrapper">
                         <label for="withfield" class="xar-form-labelshort">
-                            <xar:mlstring>
+                            
                                 Field: 
-                            </xar:mlstring>
+                            
                         </label>
                         <select name="withfield" id="withfield">
                             <option value="">
@@ -373,9 +373,9 @@
                     </div>
                     <div class="xar-form-input-wrapper">
                         <label for="withvalue" class="xar-form-labelshort">
-                            <xar:mlstring>
+                            
                                 Value: 
-                            </xar:mlstring>
+                            
                         </label>
                         <input type="textbox" name="withvalue" id="withvalue" value="#$withvalue#" class="xar-form-textmedium" />
                     </div>
@@ -395,32 +395,32 @@
                 <table>
                     <tr>
                         <th>
-                            <xar:mlstring>
+                            
                                 Delete 
-                            </xar:mlstring>
+                            
                         </th>
                         <th>
-                            <xar:mlstring>
+                            
                                 Parents 
-                            </xar:mlstring>
+                            
                         </th>
                         <th>
-                            <xar:mlstring>
+                            
                                 Direct From 
-                            </xar:mlstring>
+                            
                         </th>
                         <th>
                             - 
                         </th>
                         <th>
-                            <xar:mlstring>
+                            
                                 Direct To 
-                            </xar:mlstring>
+                            
                         </th>
                         <th>
-                            <xar:mlstring>
+                            
                                 Children 
-                            </xar:mlstring>
+                            
                         </th>
                     </tr>
                     <xar:foreach in="$relations[$table]" key="$where" value="$links">
@@ -438,10 +438,12 @@
                         </xar:if>
                         <xar:foreach in="$links" key="$idx" value="$link">
                             <xar:if condition="is_numeric($link['to'])">
+                                <!-- TODO: this needs to go -->
                                 <xar:set name="dummy">
                                     1; $link['from'] = $link['from'] . ' = ' . $link['to']; $link['to'] = '&#160;' 
                                 </xar:set>
                                 <xar:elseif condition="is_numeric($link['from'])" />
+                                <!-- TODO: this needs to go -->
                                 <xar:set name="dummy">
                                     1; $link['to'] = $link['to'] . ' = ' . $link['from']; $link['from'] = '&#160;' 
                                 </xar:set>

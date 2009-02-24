@@ -2,39 +2,25 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:ml>
-            <xar:mlstring>#(1) Information</xar:mlstring>
-            <xar:mlvar>#$itemtypename#</xar:mlvar>
-        </xar:ml>
+        #$itemtypename# Information
     </span>
 </div>
 <div class="xar-mod-body">
     <xar:if condition="strtolower($uname) ne 'anonymous' and strtolower($uname) ne 'myself'">
         <xar:if condition="xarModVars::get('roles', 'allowemail') and xarModUserVars::get('roles','allowemail',$id)">
             <p>
-                <strong>
-                    <xar:mlstring>
-                        Email
-                    </xar:mlstring>
-                </strong>
+                <strong>Email</strong>
                 :
                 <a href="&xar-modurl-roles-user-email;&amp;id=#$id#">
-                    <xar:ml>
-                        <xar:mlstring>
-                            Send an Email to #(1)
-                        </xar:mlstring>
-                        <xar:mlvar>
-                            #xarVarPrepForDisplay($name)#
-                        </xar:mlvar>
-                    </xar:ml>
+                    Send an Email to #xarVarPrepForDisplay($name)#
                 </a>
             </p>
             <xar:else />
             <p>
                 <strong>
-                    <xar:mlstring>
+                    
                         Name
-                    </xar:mlstring>
+                    
                 </strong>
                 :
                 #xarVarPrepForDisplay($name)#
@@ -45,9 +31,9 @@
            <xar:if condition="!empty($userlastlogin)">
             <p>
                 <strong>
-                    <xar:mlstring>
+                    
                         Time of Last Login
-                    </xar:mlstring>
+                    
                 </strong>
                 :
                 #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#
@@ -56,9 +42,9 @@
             <xar:if condition="!empty($homelink)">
             <p>
                 <strong>
-                    <xar:mlstring>
+                    
                         Home Page
-                    </xar:mlstring>
+                    
                 </strong>
                 :
                 <a href="#$homelink#" title="#xarML('Home Page')#">#$homelink#</a>
@@ -67,9 +53,9 @@
         <xar:if condition="!empty($utimezone)">
             <p>
                 <strong>
-                    <xar:mlstring>
+                    
                         Timezone
-                    </xar:mlstring>
+                    
                 </strong>
                 :
                 #$utimezone# (GMT #$offset#)

@@ -3,7 +3,7 @@
 <table class="xar-norm">
   <tr>
     <td>
-      <xar:mlstring>Groups</xar:mlstring>
+      Groups
     </td>
     <td> <!-- TODO: replace with dropdown / multi-select list of groups + adapt code ? -->
       <input type="text" name="#$name#[grouplist]" id="#$id#_grouplist" value="#$grouplist#" size="#$size#" tabindex="#$tabindex#" />
@@ -11,7 +11,7 @@
   </tr>
   <tr>
     <td>
-      <xar:mlstring>State</xar:mlstring>
+      State
     </td>
     <td> <!-- TODO: replace with dropdown / multi-select list of states + adapt code ? -->
       <input type="text" name="#$name#[userstate]" id="#$id#_userstate" value="#$userstate#" size="5" tabindex="#$tabindex#" />
@@ -19,7 +19,7 @@
   </tr>
   <tr>
     <td>
-      <xar:mlstring>Fields</xar:mlstring>
+      Fields
     </td>
     <td> <!-- TODO: replace with dropdown / multi-select list of fields + adapt code ? -->
       <input type="text" name="#$name#[showlist]" id="#$id#_showlist" value="#$showlist#" size="#$size#" tabindex="#$tabindex#" />
@@ -27,7 +27,7 @@
   </tr>
   <tr>
     <td>
-      <xar:mlstring>Order</xar:mlstring>
+      Order
     </td>
     <td> <!-- TODO: replace with dropdown / multi-select list of fields + adapt code ? -->
       <input type="text" name="#$name#[orderlist]" id="#$id#_orderlist" value="#$orderlist#" size="#$size#" tabindex="#$tabindex#" />
@@ -35,7 +35,7 @@
   </tr>
   <tr>
     <td>
-      <xar:mlstring>Glue</xar:mlstring>
+      Glue
     </td>
     <td>
       <input type="text" name="#$name#[showglue]" id="#$id#_showglue" value="#$showglue#" size="5" tabindex="#$tabindex#" />
@@ -43,7 +43,7 @@
   </tr>
   <tr>
     <td>
-      <xar:mlstring>Other rule</xar:mlstring>
+      Other rule
     </td>
     <td>
       <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="#$size#" tabindex="#$tabindex#" />

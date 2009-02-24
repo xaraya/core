@@ -20,7 +20,7 @@
         <xar:foreach in="$objects_props" key="$name">
             <th align="center"><xar:data-label property="$objects_props[$name]" /></th>
         </xar:foreach>
-        <th align="center"><xar:mlstring>Options</xar:mlstring></th>
+        <th align="center">Options</th>
     </tr>
     <xar:foreach in="$objects_values" key="$itemid" value="$fields">
     <tr>
@@ -35,15 +35,15 @@
         <td>
             <xsl:element name="a" xml:space="default">
                 <xsl:attribute disable-output-escaping="yes" name="href">#xarModURL('<xsl:value-of select="../../registry/name" />','user','display', $test )#</xsl:attribute>
-                <xar:mlstring>View</xar:mlstring>
+                View
             </xsl:element> |
             <xsl:element name="a" xml:space="default">
                 <xsl:attribute name="href">#xarModURL('<xsl:value-of select="../../registry/name" />','admin','modify',$test)#</xsl:attribute>
-                <xar:mlstring>Modify</xar:mlstring>
+                Modify
             </xsl:element> |
             <xsl:element name="a" xml:space="default">
                 <xsl:attribute name="href">#xarModURL('<xsl:value-of select="../../registry/name" />','admin','delete',$test)#</xsl:attribute>
-                <xar:mlstring>Delete</xar:mlstring>
+                Delete
             </xsl:element>
         </td>
     </tr>
@@ -56,7 +56,7 @@
                 <xar:set name="$test">array( <xsl:text disable-output-escaping="yes">'itemtype' => </xsl:text><xsl:value-of select="@itemtype" /> )</xar:set>
             <xsl:element name="a" xml:space="default">
                 <xsl:attribute name="href">#xarModURL('<xsl:value-of select="../../registry/name" />','admin','new',$test )#</xsl:attribute>
-                <xar:mlstring>New</xar:mlstring>
+                New
             </xsl:element>
         </td>
     </tr>

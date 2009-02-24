@@ -4,30 +4,22 @@
 <xar:style scope="module" file="privtree" />
 <xar:base-include-javascript module="privileges" filename="xarTree.js" />
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Privileges Administration</span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>Remove Privilege From Role</xar:mlstring>
+        Remove Privilege From Role
     </h2>
 
     <form method="post" action="&xar-modurl-privileges-admin-removerole;" enctype="application/x-www-form-urlencoded" >
 
         <xar:if condition="$ptype eq 1">
             <h3 class="xar-align-center">
-                <xar:ml>
-                    <xar:mlstring>Confirm the removal of Privilege '#(1)' from Group '#(2)'</xar:mlstring>
-                    <xar:mlvar>#$privname#</xar:mlvar>
-                    <xar:mlvar>#$rolename#</xar:mlvar>
-                </xar:ml>
+                Confirm the removal of Privilege '#$privname#' from Group '#$rolename#'
             </h3>
         <xar:else />
             <h3 class="xar-align-center">
-                <xar:ml>
-                    <xar:mlstring>Confirm the removal of Privilege '#(1)' from User '#(2)'</xar:mlstring>
-                    <xar:mlvar>#$privname#</xar:mlvar>
-                    <xar:mlvar>#$rolename#</xar:mlvar>
-                </xar:ml>
+                Confirm the removal of Privilege '#$privname#' from User '#$rolename#'
             </h3>
         </xar:if>
 

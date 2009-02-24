@@ -49,10 +49,10 @@
     </xar:foreach>
 <xar:else />
 <p>
-  <xar:mlstring>Specify your own layout here...</xar:mlstring>
+  Specify your own layout here...
 </p>
 <p>
-  <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+  You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype
 </p>
 </xar:if>
 

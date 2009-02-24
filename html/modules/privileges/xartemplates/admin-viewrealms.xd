@@ -1,7 +1,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Privileges Administration</span>
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
@@ -12,10 +12,10 @@
         <table class="xar-fullwidth xar-clearboth">
             <tr>
                 <th style="text-align: left; padding-left: .5em;">
-                    <xar:mlstring>Name</xar:mlstring>
+                    Name
                 </th>
                 <th style="text-align: center; padding-left: .5em;">
-                    <xar:mlstring>Actions</xar:mlstring>
+                    Actions
                 </th>
             </tr>
             <xar:loop name="$realms">
@@ -32,12 +32,12 @@
         </table>
     <xar:else />
     <h2>
-            <xar:mlstring>Manage Realms</xar:mlstring>
+            Manage Realms
     </h2>
       <p>
-            <xar:mlstring>
+            
             You can use Realms to 'slice' or divide your site into different areas. You can 'slice' in various ways, such as by theme or domain name.
-            You must </xar:mlstring><a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=realms" title="#xarML('Enable the Realms options')#"><xar:mlstring>enable Realms on your site</xar:mlstring></a>
-            <xar:mlstring> in the Privileges config options. The realms create and modify options will then display here.</xar:mlstring></p>
+            You must <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=realms" title="#xarML('Enable the Realms options')#">enable Realms on your site</a>
+             in the Privileges config options. The realms create and modify options will then display here.</p>
     </xar:if>
 </div> <!-- mod body --></xar:template>

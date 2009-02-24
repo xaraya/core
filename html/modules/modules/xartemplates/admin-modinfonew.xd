@@ -1,18 +1,18 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Modules Administration</span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>Detailed Module Information</xar:mlstring>
+        Detailed Module Information
     </h2>
 
     <!-- Icon -->
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Icon:</xar:mlstring>
+                Icon:
             </p>
             <div class="xar-error">
                 <p>#$modiconmsg#</p>
@@ -27,7 +27,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Name:</xar:mlstring>
+                Name:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -41,7 +41,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Display Name:</xar:mlstring>
+                Display Name:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -55,7 +55,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Description:</xar:mlstring>
+                Description:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -69,7 +69,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Directory:</xar:mlstring>
+                Directory:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -83,7 +83,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Module ID:</xar:mlstring>
+                Module ID:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -97,7 +97,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Class:</xar:mlstring>
+                Class:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -111,7 +111,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Category:</xar:mlstring>
+                Category:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -125,7 +125,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Version:</xar:mlstring>
+                Version:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -139,7 +139,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Author(s):</xar:mlstring>
+                Author(s):
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -153,7 +153,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Contact(s):</xar:mlstring>
+                Contact(s):
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -167,7 +167,7 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Dependency:</xar:mlstring>
+                Dependency:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
@@ -182,12 +182,12 @@
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
-                <xar:mlstring>Modules List:</xar:mlstring>
+                Modules List:
             </p>
         </div>
         <div class="xar-floatright xar-halfwidth xar-align-right">
             <p class="xar-mod-title">
-                <a href="#$modlisturl#"><xar:mlstring>View</xar:mlstring></a>
+                <a href="#$modlisturl#">View</a>
             </p>
         </div>
     </div>

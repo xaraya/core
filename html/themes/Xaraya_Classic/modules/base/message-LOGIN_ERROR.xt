@@ -19,35 +19,31 @@ for examples and instructions on overriding error message templates
     <!--<h2>#$type#</h2>-->
 
     <h3>
-        <xar:mlstring>A login error has occurred</xar:mlstring>
+        A login error has occurred
     </h3>
 
     <p>#$short#</p>
 
     <xar:if condition = "$long ne '' and $long ne 'No further information is available.'">
         <h3>
-            <xar:mlstring>Problem:</xar:mlstring>
+            Problem:
         </h3>
 
         <p>#$long#</p>
     </xar:if>
     <xar:if condition = "$hint ne ''">
         <h3>
-            <xar:mlstring>Further Information:</xar:mlstring>
+            Further Information:
         </h3>
 
         <p>#$hint#</p>
     </xar:if>
 </div>
     <p>
-        <xar:set name="contactus">'mailto:'.xarModVars::get('mail', 'adminmail',1)</xar:set>
-        <xar:ml>
-        <xar:mlstring>Please review the information above and try logging in again.
+        <xar:set name="contactus"><xar:var scope="module" module="mail" name="adminmail"/></xar:set>
+        Please review the information above and try logging in again.
         If you continue to have difficulty with logging in and you believe your account
-        and password should be active, then please <a href="#(1)">contact us</a>.
-        </xar:mlstring>
-        <xar:mlvar>#$contactus#</xar:mlvar>
-        </xar:ml>
+        and password should be active, then please <a href="mailto:#$contactus#">contact us</a>.
     </p>
     <div class="xar-thirdwidth">
        <xar:block module="authsystem" type="login" />

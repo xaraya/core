@@ -9,7 +9,7 @@
 <xar:style scope="module" file="roletree" />
 <xar:additional-styles />
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Roles Administration</span>
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
@@ -17,7 +17,7 @@
         #xarVarPrepForDisplay($title)#:
         <a href="&xar-modurl-roles-admin-modify;&amp;id=#$groupid#" title="#xarML('Modify role')#">#xarVarPrepForDisplay($groupname)#</a>
         <xar:if condition="$search ne ''">
-            <xar:mlstring>matching</xar:mlstring>
+            matching
             '#xarVarPrepForDisplay($search)#'
         </xar:if>
         (#$totalselect#)
@@ -31,7 +31,7 @@
     <xar:if condition="$selstyle eq '0'">
     <xar:elseif condition="$selstyle eq '1'"/>
         <fieldset>
-          <legend><xar:mlstring>Role hierarchy</xar:mlstring></legend>
+          <legend>Role hierarchy</legend>
             <div name="tree" id="tree" class="tree">
                 <xar:data-input type="rolestree" />
           </div>
@@ -40,20 +40,20 @@
         <div>
             <dl class="xar-tabs">
                 <dt class="help" title="#xarML('Click on a group tab to display users from that group')#">
-                    <xar:mlstring>
+                    
                         Groups
-                    </xar:mlstring>
+                    
                     :
                 </dt>
                 <xar:if condition="$groupid eq 0">
                     <dd class="active">
                         <a href="&xar-modurl-roles-admin-showusers;&amp;id=0&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload">
-                            <xar:mlstring>All Users</xar:mlstring> (#$totalusers#)</a>
+                            All Users (#$totalusers#)</a>
                     </dd>
                 <xar:else/>
                     <dd>
                         <a href="&xar-modurl-roles-admin-showusers;&amp;id=0&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload">
-                            <xar:mlstring>All Users </xar:mlstring> (#$totalusers#)</a>
+                            All Users  (#$totalusers#)</a>
                     </dd>
                 </xar:if>
                 <xar:set name="prevgroup">""</xar:set>
@@ -85,26 +85,26 @@
             <tr>
                 <th>
                     <label for="selstyle" title="#xarML('Select display type')#">
-                        <xar:mlstring>Style</xar:mlstring>
+                        Style
                     </label>
                 </th>
                 <th>
                     <label for="groupid" title="#xarML('Select a group to display its users')#">
-                        <xar:mlstring>Groups</xar:mlstring>
+                        Groups
                     </label>
                 </th>
                 <th>
                     <label for="state" title="#xarML('Select the state of users')#">
-                        <xar:mlstring>State</xar:mlstring>
+                        State
                     </label>
                 </th>
                 <th>
                     <label for="search" title="#xarML('Search for users with either their real name, login name or email matching the string')#">
-                        <xar:mlstring>Search</xar:mlstring>
+                        Search
                     </label>
                 </th>
                 <th>
-                    <xar:mlstring>Action</xar:mlstring>
+                    Action
                 </th>
             </tr>
             <tr>
@@ -124,11 +124,11 @@
                     <select name="id" id="groupid" onchange="this.form.submit()">
                         <xar:if condition="$groupid eq 0">
                             <option value="0" selected="selected">
-                                <xar:mlstring>All Users</xar:mlstring> - #$totalusers#
+                                All Users - #$totalusers#
                             </option>
                         <xar:else/>
                             <option value="0">
-                                <xar:mlstring>All Users</xar:mlstring> - #$totalusers#
+                                All Users - #$totalusers#
                             </option>
                         </xar:if>
                         <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
@@ -165,14 +165,14 @@
         <p>
             #$message#
             <xar:if condition="$search ne ''">
-                &#160;<xar:mlstring>matching</xar:mlstring> '#$search#'
+                &#160;matching '#$search#'
             </xar:if>
         </p>
     <xar:else />
         <form method="post" action="&xar-modurl-roles-admin-updatestate;" name="state">
             <div class="xar-form-input-wrapper">
                 <label for="status" title="#xarML('Change the state of the users who have been selected below')#" class="xar-form-label" style="width: 200px">
-                    <xar:mlstring>Change state of selected users:</xar:mlstring>
+                    Change state of selected users:
                 </label>
                 <xar:data-input type="dropdown" name="status" id="status" options="$statelist" class="xar-margin-thickright" />
 
@@ -199,7 +199,7 @@
                         </th>
                     </xar:foreach>
                     <th colspan="2" style="text-align: center">
-                        <xar:mlstring>Action</xar:mlstring>
+                        Action
                     </th>
                 </tr>
                 
@@ -244,10 +244,10 @@
 
             <div class="xar-align-right">
                 <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['state'],true);return false;">
-                    <xar:mlstring>Check All</xar:mlstring>
+                    Check All
                 </a> |
                 <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['state'],false);return false;">
-                    <xar:mlstring>Uncheck All</xar:mlstring>
+                    Uncheck All
                 </a>
             </div>
 
@@ -260,11 +260,11 @@
     </xar:if>
     <p>
       <a href="&xar-modurl-roles-admin-new;&amp;ptype=0&amp;pparentid=#$groupid#" title="#xarML('Add a new user')#">
-        <xar:mlstring>Add a new user to this group</xar:mlstring>
+        Add a new user to this group
       </a>
       |
       <a href="&xar-modurl-roles-admin-createmail;">
-        <xar:mlstring>Email users in this group</xar:mlstring>
+        Email users in this group
       </a>
     </p>
 </div>

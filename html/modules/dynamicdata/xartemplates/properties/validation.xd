@@ -3,7 +3,7 @@
 <table class="xar-norm">
   <tr>
     <td>
-      <xar:mlstring>Rule</xar:mlstring>
+      Rule
     </td>
     <td>
       <xar:if condition="!isset($value)">

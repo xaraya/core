@@ -8,7 +8,7 @@
     <xar:data-input type="url" name="$name" value="$value" />
 <xar:else />
     <xar:data-input type="filepicker" name="$name" value="$value" basedir="$basedir" extensions="gif,jpg,jpeg,png,bmp" />
-    <xar:set name="showlabel"><xar:mlstring>check</xar:mlstring></xar:set>
+    <xar:set name="showlabel">check</xar:set>
     <xar:if condition="!empty($value)">
         [ <a href="#$basedir#/#$value#" target="preview">#$showlabel#</a> ]
     </xar:if>

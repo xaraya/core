@@ -7,9 +7,9 @@
         <table class="xar-norm xar-norm-outline xar-fullwidth">
             <tr>
                 <th>
-                    <xar:mlstring>
+                    
                         Sort by
-                    </xar:mlstring>
+                    
                 </th>
                 <th colspan="2">
                     <xar:foreach in="$links[$itemid]"  key="$otype" value="$option">

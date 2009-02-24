@@ -4,14 +4,14 @@
 <div id="install">
     <xar:template file="status" />
     <h1>
-        <xar:mlstring>Choose a Configuration</xar:mlstring>
+        Choose a Configuration
     </h1>
 
     <form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
         <div>
             <input type="hidden" name="install_language" id="install_language" value="#$language#" />
             <h3>
-                <xar:mlstring>Available Configurations</xar:mlstring>
+                Available Configurations
             </h3>
             <xar:if condition="isset($warning)">
                 #$warning# 
@@ -32,12 +32,9 @@
                 </select>
             </xar:if>
             <p>
-                <xar:mlstring>Each configuration will load a predefined set of modules, menus, hooks etc. as well as create an initial configuration of the security system. On the next page you can change some of the options of your chosen configuration.</xar:mlstring>
+                Each configuration will load a predefined set of modules, menus, hooks etc. as well as create an initial configuration of the security system. On the next page you can change some of the options of your chosen configuration.
             </p>
-            <xar:set name="buttonnext">
-                <xar:mlstring>Continue</xar:mlstring>
-            </xar:set>
-            <input type="submit" name="create" id="create" value="#$buttonnext#" />
+            <input type="submit" name="create" id="create" value="Continue" />
         </div>
     </form>
 </div></xar:template>

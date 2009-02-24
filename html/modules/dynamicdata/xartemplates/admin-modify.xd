@@ -1,38 +1,32 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Dynamic Data Administration</span>
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
-    <h2>
-        <xar:ml>
-            <xar:mlstring>Modify Item #(1) in #(2)</xar:mlstring>
-            <xar:mlvar>#$object:itemid#</xar:mlvar>
-            <xar:mlvar>#$object:label#</xar:mlvar>
-        </xar:ml>
-    </h2>
+    <h2>Modify Item #$object:itemid# in #$object:label#</h2>
 
     <xar:if condition="!empty($objectid) and $objectid eq 1">
         <xar:style scope="module" module="base" file="navtabs" />
         <div>
             <dl class="xar-tabs">
                 <dt class="help">
-                    <xar:mlstring>Options:</xar:mlstring>
+                    Options:
                 </dt>
                 <dd class="active">
                   <a href="#xarServerGetCurrentUrl()#">
-                    <xar:mlstring>Modify Object definition</xar:mlstring>
+                    Modify Object definition
                   </a>
                 </dd>
                 <dd>
-                    <a href="&xar-modurl-dynamicdata-admin-modifyprop;&amp;itemid=#$itemid#"><xar:mlstring>Modify DataProperties</xar:mlstring></a>
+                    <a href="&xar-modurl-dynamicdata-admin-modifyprop;&amp;itemid=#$itemid#">Modify DataProperties</a>
                 </dd>
                 <dd>
-                    <a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a>
+                    <a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#">Export Object Definition to XML</a>
                 </dd>
                 <dd>
-                    <a href="&xar-modurl-dynamicdata-admin-view;&amp;itemid=#$itemid#"><xar:mlstring>View Items</xar:mlstring></a>
+                    <a href="&xar-modurl-dynamicdata-admin-view;&amp;itemid=#$itemid#">View Items</a>
                 </dd>
             </dl>
         </div>
@@ -40,7 +34,7 @@
 
     <xar:if condition="isset($preview)">
         <fieldset>
-            <legend><xar:mlstring>Preview</xar:mlstring></legend>
+            <legend>Preview</legend>
             <xar:data-display object="$object" />
         </fieldset>
     </xar:if>
@@ -54,14 +48,14 @@
 
     <form method="post" action="&xar-modurl-dynamicdata-admin-update;" enctype="#$enc_type#">
       <fieldset>
-        <legend><xar:mlstring>Modify Object Definition</xar:mlstring></legend>
+        <legend>Modify Object Definition</legend>
         <xar:if condition="!empty($objectid) and $objectid eq 1 and $itemid lt 3">
             <h3 class="xar-align-center">
-                <xar:mlstring>Warning! This is a system object used internally by the Dynamic Data module.</xar:mlstring>
+                Warning! This is a system object used internally by the Dynamic Data module.
             </h3>
 
             <p>
-                <xar:mlstring>Trying to modify this object may break the Dynamic Data module. Proceed with caution.</xar:mlstring>
+                Trying to modify this object may break the Dynamic Data module. Proceed with caution.
             </p>
         </xar:if>
 
@@ -94,7 +88,7 @@
         <xar:if condition="!empty($objectid) and $objectid eq 2">
             <p>
                 <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#">
-                    <xar:mlstring>Edit validation</xar:mlstring>
+                    Edit validation
                 </a>
             </p>
         </xar:if>

@@ -3,14 +3,14 @@
     <xar:set name="otherpropertyfields">xarML('Edit property "#(1)"',$field['name'])</xar:set>
     <fieldset>
         <legend>
-            <xar:mlstring>Property</xar:mlstring>&#160;
+            Property&#160;
             <xar:if condition="!empty($field['name'])">
                 <a href="javascript:void(0);" title="#xarML('Click to toggle field visibility for this property')#" onclick="return toggleDisplay('fieldwrapper_#$field.id#');">
                     #$field['name']#
                 </a>
             <xar:else />
                 <a href="javascript:void(0);" title="#xarML('Click to toggle field visibility for this property')#" onclick="return toggleDisplay('fieldwrapper_#$field.id#');">
-                    <xar:mlstring>[unnamed property]</xar:mlstring></a>
+                    [unnamed property]</a>
             </xar:if>&#160;
             [#$propertyfields['id']['label']#: #$field['id']#]
         </legend>
@@ -68,7 +68,7 @@
                 </label>
                 <input type="text" name="dd_validation[#$field['id']#]" id="dd_validation_#$field['id']#" value="#xarVarPrepForDisplay($field['validation'])#" class="xar-form-textmedium" />
                 <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$field.id#" title="#xarVarPrepForDisplay($editvalidation)#">
-                    <xar:mlstring>Edit Validation</xar:mlstring>
+                    Edit Validation
                 </a>
             </div>
 

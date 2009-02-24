@@ -7,7 +7,7 @@
 </xar:if>
 <h3>
     <a href="#xarModURL('dynamicdata','admin','new')#">
-        <xar:mlstring>Create New Data Object</xar:mlstring>
+        Create New Data Object
     </a>
 </h3>
 <xar:if condition="empty($layout)">
@@ -74,12 +74,12 @@
 <xar:if condition="!empty($prevurl) or !empty($nexturl)">
     <div class="xar-align-center">
         <xar:if condition="!empty($prevurl)">
-            <a href="#$prevurl#">&lt;&lt;<xar:mlstring> Prev</xar:mlstring></a>
+            <a href="#$prevurl#">&lt;&lt; Prev</a>
         <xar:else />
             &lt;&lt;
         </xar:if>&#160;&#160;&#160;
         <xar:if condition="!empty($nexturl)">
-            <a href="#$nexturl#"><xar:mlstring>Next</xar:mlstring>&gt;&gt; </a>
+            <a href="#$nexturl#">Next&gt;&gt; </a>
         <xar:else />&gt;&gt;</xar:if>
     </div>
 </xar:if>

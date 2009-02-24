@@ -9,7 +9,7 @@
 ***********
 -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Error Message</xar:mlstring></span>
+    <span class="xar-mod-title">Error Message</span>
 </div>
 <div class="xar-mod-body">
     <img src="#xarTplGetImage('exception.jpg', 'base')#" alt="#xarML('Exception Icon')#" class="xar-module-icon" />
@@ -24,14 +24,14 @@
 
     <xar:if condition = "$long ne ''">
         <h3>
-            <xar:mlstring>Problem:</xar:mlstring>
+            Problem:
         </h3>
 
         <p>#$long#</p>
     </xar:if>
     <xar:if condition = "$hint ne ''">
         <h3>
-            <xar:mlstring>Further Information:</xar:mlstring>
+            Further Information:
         </h3>
 
         <p>#$hint#</p>

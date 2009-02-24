@@ -17,7 +17,7 @@
         <label for="#$theID#">#$option['name']# </label>
     </xar:foreach>
 <xar:else />
-    <xar:mlstring>No options specified for CheckBox Mask in validation field.</xar:mlstring>
+    No options specified for CheckBox Mask in validation field.
 </xar:if>
 
 <xar:if condition="!empty($invalid)">

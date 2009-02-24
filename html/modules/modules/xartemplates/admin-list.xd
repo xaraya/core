@@ -6,16 +6,16 @@
     xarSession::getVar('statusmsg')
 </xar:set>
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Modules Administration</span>
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
     <h2>
-        <xar:mlstring>View Modules</xar:mlstring>
+        View Modules
     </h2>
 
     <p>
-        <xar:mlstring>Total listed: </xar:mlstring>
+        Total listed: 
         <xar:set name="modscount">count($listrowsitems)</xar:set>
         #$modscount#
     </p>
@@ -25,19 +25,19 @@
         <table class="xar-fullwidth">
             <tr>
                 <th>
-                    <label class="xar-mod-title" for="filter"><xar:mlstring>Style</xar:mlstring></label>
+                    <label class="xar-mod-title" for="filter">Style</label>
                 </th>
                 <th>
-                    <label class="xar-mod-title" for="filter"><xar:mlstring>View</xar:mlstring></label>
+                    <label class="xar-mod-title" for="filter">View</label>
                 </th>
                 <th>
-                    <label class="xar-mod-title" for="sort"><xar:mlstring>Sort by</xar:mlstring></label>
+                    <label class="xar-mod-title" for="sort">Sort by</label>
                 </th>
                 <th>
-                    <label class="xar-mod-title" for="hide"><xar:mlstring>Hide</xar:mlstring></label>
+                    <label class="xar-mod-title" for="hide">Hide</label>
                 </th>
                 <th>
-                    <label class="xar-mod-title" for="reload"><xar:mlstring>Action</xar:mlstring></label>
+                    <label class="xar-mod-title" for="reload">Action</label>
                 </th>
             </tr>
             <tr>
@@ -78,7 +78,7 @@
                     <xar:set name="checked">$hidecore</xar:set>
                     <xar:data-input type="checkbox" name="hidecore" id="hidecore" checked="$checked" />
                     <label for="hidecore">
-                        <xar:mlstring>Core Modules</xar:mlstring>
+                        Core Modules
                     </label>
                 </td>
                 <td class="xar-align-center">
@@ -89,9 +89,9 @@
         <xar:if condition="$modstatus">
             <!-- lets display latest status on core modules upgrades if any -->
             <p>
-                <xar:mlstring>
+                
                     Latest status - the following core modules have been successfully upgraded:
-                </xar:mlstring>
+                
             </p>
             <p>
                 #$modstatus#
@@ -105,25 +105,25 @@
                 <table class="xar-fullwidth">
                     <tr>
                         <th>
-                            <xar:mlstring>Name</xar:mlstring>
+                            Name
                         </th>
                         <th>
-                            <xar:mlstring>Version</xar:mlstring>
+                            Version
                         </th>
                         <th>
-                            <xar:mlstring>Info</xar:mlstring>
+                            Info
                         </th>
                         <th>
-                            <xar:mlstring>Status</xar:mlstring>
+                            Status
                         </th>
                         <th>
-                            <xar:mlstring>Actions</xar:mlstring>
+                            Actions
                         </th>
                         <th>
-                            <xar:mlstring>Properties</xar:mlstring>
+                            Properties
                         </th>
                         <th>
-                            <xar:mlstring>Hooks</xar:mlstring>
+                            Hooks
                         </th>
                     </tr>
                     <xar:foreach in="$listrowsitems" value="$modinfo">
@@ -153,9 +153,9 @@
                                         <a href="#$modinfo['infourl']#"><img src="#$infoimg#" alt="#$infolabel#" /></a>
                                     </noscript>
                                 <xar:else />
-                                    <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new"><xar:mlstring>Info</xar:mlstring></a>
+                                    <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new">Info</a>
                                     <noscript>
-                                        <a href="#$modinfo['infourl']#"><xar:mlstring>Info</xar:mlstring></a>
+                                        <a href="#$modinfo['infourl']#">Info</a>
                                     </noscript>
                                 </xar:if>
                             </td>
@@ -244,17 +244,17 @@
 </div>
 <div class="xar-mod-foot xar-align-center">
     <p>
-        <xar:mlstring>Note to module developers: removal of all core modules is currently disabled from GUI; you may need to re-classify your modules in accordance with </xar:mlstring>
+        Note to module developers: removal of all core modules is currently disabled from GUI; you may need to re-classify your modules in accordance with 
         <a href="http://www.xaraya.com/documentation/rfcs/rfc0013.html">RFC-13</a>
     </p>
     <xar:if condition="$selstyle eq 'icons'">
         <div class="xar-accent-outline xar-margin-thick xar-padding-thick">
-            <img src="#xarTplGetImage('set1/disabled.png')#"    alt="disabled" hspace="5" /><xar:mlstring>Disabled</xar:mlstring>
-            <img src="#xarTplGetImage('set1/activate.png')#"    alt="activate" hspace="5" /><xar:mlstring>Activate</xar:mlstring>
-            <img src="#xarTplGetImage('set1/deactivate.png')#"  alt="deactivate" hspace="5" /><xar:mlstring>Deactivate</xar:mlstring>
-            <img src="#xarTplGetImage('set1/upgrade.png')#"     alt="upgrade" hspace="5" /><xar:mlstring>Upgrade</xar:mlstring>
-            <img src="#xarTplGetImage('set1/initialise.png')#"  alt="initialise" hspace="5" /><xar:mlstring>Install</xar:mlstring>
-            <img src="#xarTplGetImage('set1/remove.png')#"      alt="remove" hspace="5" /><xar:mlstring>Remove</xar:mlstring>
+            <img src="#xarTplGetImage('set1/disabled.png')#"    alt="disabled" hspace="5" />Disabled
+            <img src="#xarTplGetImage('set1/activate.png')#"    alt="activate" hspace="5" />Activate
+            <img src="#xarTplGetImage('set1/deactivate.png')#"  alt="deactivate" hspace="5" />Deactivate
+            <img src="#xarTplGetImage('set1/upgrade.png')#"     alt="upgrade" hspace="5" />Upgrade
+            <img src="#xarTplGetImage('set1/initialise.png')#"  alt="initialise" hspace="5" />Install
+            <img src="#xarTplGetImage('set1/remove.png')#"      alt="remove" hspace="5" />Remove
         </div>
     </xar:if>
 </div>

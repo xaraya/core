@@ -3,7 +3,7 @@
 <table class="xar-norm">
   <tr>
     <td>
-      <xar:mlstring>Minimum value</xar:mlstring>
+      Minimum value
     </td>
     <td>
       <input type="text" name="#$name#[min]" id="#$id#_min" value="#$min#" size="4" tabindex="#$tabindex#" />
@@ -11,7 +11,7 @@
   </tr>
   <tr>
     <td>
-      <xar:mlstring>Maximum value</xar:mlstring>
+      Maximum value
     </td>
     <td>
       <input type="text" name="#$name#[max]" id="#$id#_max" value="#$max#" size="4" tabindex="#$tabindex#" />
@@ -19,7 +19,7 @@
   </tr>
   <tr>
     <td>
-      <xar:mlstring>Other rule</xar:mlstring>
+      Other rule
     </td>
     <td>
       <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="50" tabindex="#$tabindex#" />

@@ -1,10 +1,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:ml>
-            <xar:mlstring>#(1) Module Configuration</xar:mlstring>
-            <xar:mlvar>#$displayname#</xar:mlvar>
-        </xar:ml>
+        #$displayname# Module Configuration
     </span>
 </div>
 <div class="xar-mod-body">

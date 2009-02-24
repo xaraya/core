@@ -4,40 +4,40 @@
 <xar:style scope="module" module="base" file="navtabs" />
 <xar:style scope="module" file="privileges" />
 <div class="xar-mod-head">
-     <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring>
+     <span class="xar-mod-title">Roles Administration
      </span>
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
     <h2>
-        <xar:mlstring>Recall / Purge</xar:mlstring>
+        Recall / Purge
     </h2>
 
     <div>
         <dl class="xar-tabs">
             <dt class="help">
-                <xar:mlstring>Choose:</xar:mlstring>
+                Choose:
             </dt>
             <xar:if condition="$operation eq 'recall'">
                 <dd class="active">
                     <a href="&xar-modurl-roles-admin-purge;&amp;operation=recall">
-                        <xar:mlstring>Recall Groups and Users</xar:mlstring>
+                        Recall Groups and Users
                     </a>
                 </dd>
                 <dd>
                     <a href="&xar-modurl-roles-admin-purge;&amp;operation=purge" >
-                        <xar:mlstring>Purge Users</xar:mlstring>
+                        Purge Users
                     </a>
                 </dd>
             <xar:else />
                 <dd>
                     <a href="&xar-modurl-roles-admin-purge;&amp;operation=recall">
-                        <xar:mlstring>Recall Groups and Users</xar:mlstring>
+                        Recall Groups and Users
                     </a>
                 </dd>
                 <dd class="active">
                     <a href="&xar-modurl-roles-admin-purge;&amp;operation=purge">
-                        <xar:mlstring>Purge Users</xar:mlstring>
+                        Purge Users
                     </a>
                 </dd>
             </xar:if>
@@ -46,7 +46,7 @@
 
     <xar:if condition="$operation eq 'recall'">
         <h3>
-            <xar:mlstring>Recall Deleted Groups and Users</xar:mlstring>
+            Recall Deleted Groups and Users
         </h3>
 
         <form method="post" action="&xar-modurl-roles-admin-purge;" enctype="application/x-www-form-urlencoded" >
@@ -55,17 +55,17 @@
                 <tr>
                        <th>
                            <label for="recallsearch" title="#xarML('Search for users with either their real name, login name or email matching the string')#">
-                               <xar:mlstring>Search</xar:mlstring>
+                               Search
                            </label>
                        </th>
                        <th class="xar-nowrap">
                            <label for="groupid" title="#xarML('Assign recalled users to this group')#">
-                                <xar:mlstring>Attach Recalled Groups/Users To</xar:mlstring>
+                                Attach Recalled Groups/Users To
                            </label>
                        </th>
                        <th class="xar-nowrap">
                            <label for="groupid" title="#xarML('Assign recalled users to this status')#">
-                                  <xar:mlstring>Set Recalled Users To</xar:mlstring>
+                                  Set Recalled Users To
                            </label>
                        </th>
                    </tr>
@@ -103,7 +103,7 @@
                     <p>
                         #$recallmessage#
                         <xar:if condition="$recallsearch ne ''">
-                            <xar:mlstring>matching</xar:mlstring> '#$recallsearch#'
+                            matching '#$recallsearch#'
                         </xar:if>
                     </p>
                 <xar:else />
@@ -111,22 +111,22 @@
                     <table class="xar-fullwidth">
                         <tr>
                             <th>
-                                <xar:mlstring>Real name</xar:mlstring>
+                                Real name
                             </th>
                             <th>
-                                <xar:mlstring>User Name</xar:mlstring>
+                                User Name
                             </th>
                             <th>
-                                <xar:mlstring>Email</xar:mlstring>
+                                Email
                             </th>
                             <th>
-                                <xar:mlstring>Date Registered</xar:mlstring>
+                                Date Registered
                             </th>
                             <th>
-                                <xar:mlstring>Type</xar:mlstring>
+                                Type
                             </th>
                             <th>
-                                <xar:mlstring>Recall</xar:mlstring>
+                                Recall
                             </th>
                         </tr>
                         <xar:loop name="$recallroles">
@@ -176,18 +176,18 @@
         </form>
 
         <p>
-              <xar:mlstring>Note: Groups/users without checkboxes cannot be recalled because another group/user
-              of the same name already exists (or same email, if the admin restricted emails to be unique).</xar:mlstring>
+              Note: Groups/users without checkboxes cannot be recalled because another group/user
+              of the same name already exists (or same email, if the admin restricted emails to be unique).
         </p>
 
     <xar:else />
 
         <h3>
-            <xar:mlstring>Purge Users</xar:mlstring>
+            Purge Users
         </h3>
 
         <p>
-            <xar:mlstring>Note: Purged users cannot be recalled. Groups and some special users cannot be purged.</xar:mlstring>
+            Note: Purged users cannot be recalled. Groups and some special users cannot be purged.
         </p>
 
         <form method="post" action="&xar-modurl-roles-admin-purge;" enctype="application/x-www-form-urlencoded" name="purge">
@@ -200,12 +200,12 @@
                 <tr>
                     <th>
                         <label for="purgesearch" title="#xarML('Search for users with either their real name, login name or email matching the string')#">
-                            <xar:mlstring>Search Users</xar:mlstring>
+                            Search Users
                         </label>
                     </th>
                     <th>
                         <label for="purgestate" title="#xarML('Search for all users of a given status')#">
-                            <xar:mlstring>Select users based on their status</xar:mlstring>
+                            Select users based on their status
                         </label>
                     </th>
                 </tr>
@@ -235,7 +235,7 @@
                 <p>
                     #$purgemessage#
                     <xar:if condition="$purgesearch ne ''">
-                        <xar:mlstring>matching</xar:mlstring>
+                        matching
                         <xar:if condition="$purgestatetext ne ''">
                             '#$purgesearch# / #$purgestatetext#'
                         <xar:else />
@@ -247,22 +247,22 @@
                 <table class="xar-fullwidth">
                     <tr>
                         <th>
-                            <xar:mlstring>Real name</xar:mlstring>
+                            Real name
                         </th>
                         <th>
-                            <xar:mlstring>User Name</xar:mlstring>
+                            User Name
                         </th>
                         <th>
-                            <xar:mlstring>Email</xar:mlstring>
+                            Email
                         </th>
                         <th>
-                            <xar:mlstring>Date Registered</xar:mlstring>
+                            Date Registered
                         </th>
                         <th>
-                            <xar:mlstring>Status</xar:mlstring>
+                            Status
                         </th>
                         <th>
-                            <xar:mlstring>Purge?</xar:mlstring>
+                            Purge?
                         </th>
                     </tr>
                     <xar:loop name="$purgeusers">
@@ -292,10 +292,10 @@
 
                 <div class="xar-align-right">
                     <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['purge'],true);return false;">
-                        <xar:mlstring>Check All</xar:mlstring>
+                        Check All
                     </a> |
                     <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['purge'],false);return false;">
-                        <xar:mlstring>Uncheck All</xar:mlstring>
+                        Uncheck All
                     </a>
                 </div>
 

@@ -32,10 +32,10 @@
             <td>
             <xar:if condition="empty($itemid)">
                 <xar:set name="shownew">0</xar:set>
-                <input type="checkbox" name="#$fieldprefix#dd_create[#$objectid#]" id="#$fieldprefix#dd_create_#$objectid#" value="1" checked="checked" /><label for="#$fieldprefix#dd_create_#$objectid#"><xar:mlstring>Add</xar:mlstring></label>
+                <input type="checkbox" name="#$fieldprefix#dd_create[#$objectid#]" id="#$fieldprefix#dd_create_#$objectid#" value="1" checked="checked" /><label for="#$fieldprefix#dd_create_#$objectid#">Add</label>
             <xar:else/>
             <!--
-                <input type="checkbox" name="#$fieldprefix#dd_delete[#$objectid#]" id="#$fieldprefix#dd_delete_#$objectid#_#$itemid#" value="#$itemid#" /><label for="#$fieldprefix#dd_delete_#$objectid#_#$itemid#"><xar:mlstring>Delete</xar:mlstring></label>
+                <input type="checkbox" name="#$fieldprefix#dd_delete[#$objectid#]" id="#$fieldprefix#dd_delete_#$objectid#_#$itemid#" value="#$itemid#" /><label for="#$fieldprefix#dd_delete_#$objectid#_#$itemid#">Delete</label>
             -->
             </xar:if>
             </td>
@@ -51,7 +51,7 @@
             </td>
         </xar:foreach>
         <td>
-            <input type="checkbox" name="#$fieldprefix#dd_create[#$objectid#]" id="#$fieldprefix#dd_create_#$objectid#" value="1" /><label for="#$fieldprefix#dd_create_#$objectid#"><xar:mlstring>Add</xar:mlstring></label>
+            <input type="checkbox" name="#$fieldprefix#dd_create[#$objectid#]" id="#$fieldprefix#dd_create_#$objectid#" value="1" /><label for="#$fieldprefix#dd_create_#$objectid#">Add</label>
         </td>
     </tr>
     </xar:if>

@@ -5,7 +5,7 @@
         #$value#
         <input type="hidden" name="#$name#" id="#$id#" value="#$value#"/>
     <xar:else />
-        <xar:mlstring>Auto allocated</xar:mlstring>
+        Auto allocated
         <input type="hidden" name="#$name#" id="#$id#" value="0"/>
     </xar:if>
 </xar:template>

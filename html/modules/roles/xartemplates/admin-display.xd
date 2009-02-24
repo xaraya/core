@@ -3,21 +3,12 @@
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:ml>
-            <xar:mlstring>#(1) Information</xar:mlstring>
-            <xar:mlvar>#$object:label#</xar:mlvar>
-        </xar:ml>
+        #$object:label# Information
     </span>
 </div>
 <div class="xar-mod-body">
   <xar:template type="module" file="admin-menu" />
-    <h2>
-        <xar:ml>
-            <xar:mlstring>Manage #(1) '#(2)':</xar:mlstring>
-            <xar:mlvar>#$object:label#</xar:mlvar>
-            <xar:mlvar>#$name#</xar:mlvar>
-        </xar:ml>
-    </h2>
+    <h2>Manage #$object:label# '#$name#':</h2>
 
     <xar:if condition="count($parents) ne 0">
         <div>
@@ -26,7 +17,7 @@
                     xarML('These are the groups that #(1) is a member of', xarVarPrepForDisplay($name))
                 </xar:set>
                 <dt class="help" title="#$pgtitle#">
-                    <xar:mlstring>Parent Groups:</xar:mlstring>
+                    Parent Groups:
                 </dt>
                 <xar:set name="prevgroup">""</xar:set>
                 <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
@@ -47,7 +38,7 @@
     <!-- Show the general tab list for roles -->
     <xar:template file="tablist" />
     <fieldset>
-      <legend><xar:mlstring>Role properties</xar:mlstring></legend>
+      <legend>Role properties</legend>
       <xar:set name="fields">array('id','name','uname','email','state','regdate')</xar:set>
       <xar:data-display object="$object" fieldlist="$fields" />
 
@@ -56,7 +47,7 @@
     <xar:if condition="in_array('userhome',$settings)">
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">
-                <xar:mlstring>Home:</xar:mlstring>
+                Home:
             </label>
             #xarModUserVars::get('roles','userhome',$id)#&#160;
         </div>
@@ -65,7 +56,7 @@
         <xar:if condition="empty($phome) and !empty($parenthome)">
           <div class="xar-form-input-wrapper">
             <label class="xar-form-label">
-                <xar:mlstring>Primary Parent Home:</xar:mlstring>
+                Primary Parent Home:
             </label>
             <xar:set name="value">
                 xarModUserVars::get('roles','primaryparent',$id)
@@ -75,7 +66,7 @@
         </xar:if>
         <div class="xar-form-input-wrapper">
             <label for="duvs_primaryparent" title="#xarML('Primary parent group')#" class="xar-form-label">
-                <xar:mlstring>Primary Parent Group:</xar:mlstring>
+                Primary Parent Group:
             </label>
             <xar:set name="value">
                 xarModAPIFunc('roles','user','getprimaryparent',array('itemid' => $id))
@@ -90,7 +81,7 @@
       <xar:if condition="in_array('userlastlogin',$settings)">
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">
-                <xar:mlstring>Last Login:</xar:mlstring>
+                Last Login:
             </label>
             #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#  #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
         </div>
@@ -98,7 +89,7 @@
       <xar:if condition="in_array('passwordupdate',$settings)">
           <div class="xar-form-input-wrapper">
               <label class="xar-form-label">
-                  <xar:mlstring>Password last updated:</xar:mlstring>
+                  Password last updated:
               </label>
             #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))# #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
           </div>
@@ -106,7 +97,7 @@
       <xar:if condition="in_array('usertimezone',$settings)">
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">
-                <xar:mlstring>User Timezone:</xar:mlstring>
+                User Timezone:
             </label>
             <xar:set name="value">
                 xarModUserVars::get('roles','usertimezone',$id)

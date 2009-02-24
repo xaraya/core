@@ -4,9 +4,9 @@
     }
   </style>
 <h1 class="xar-mod-head">
-    <xar:mlstring>
+    
         XSLT Blocklayout compiler testpage
-    </xar:mlstring>
+    
 </h1>
 <div>
   <h2>Using the compiler test page</h2>
@@ -95,7 +95,7 @@
       <xar:set name="next">4</xar:set>
       <xar:set name="nextpagelabel">
         <xar:ml>
-          <xar:mlstring>Next page; ##(1)## items</xar:mlstring>
+          Next page; ##(1)## items
           <xar:mlvar>$next</xar:mlvar>
         </xar:ml>
       </xar:set>
@@ -107,7 +107,7 @@
       E: Next page; 4 items
 <xar:set name="nextpagelabel">
       <xar:ml>
-        <xar:mlstring>Next page; #(1) items</xar:mlstring>
+        Next page; #(1) items
         <xar:mlvar>$next</xar:mlvar>
       </xar:ml>
     </xar:set>

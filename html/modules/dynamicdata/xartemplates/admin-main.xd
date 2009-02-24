@@ -1,84 +1,84 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Dynamic Data Administration</span>
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
     <img src="#xarTplGetImage('admin.gif', 'base')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
 
     <h2>
-        <xar:mlstring>Overview</xar:mlstring>
+        Overview
     </h2>
 
         <p>
-            <xar:mlstring>Many modules are basically dealing with the equivalent of real-life objects, like news articles, projects, surveys, race tracks or whatever.</xar:mlstring>
+            Many modules are basically dealing with the equivalent of real-life objects, like news articles, projects, surveys, race tracks or whatever.
         </p>
         <p>
-            <xar:mlstring>Those "objects" each have a number of "properties", like an item id, a title, an author, a deadline or a number of VIP places, and their data is generally stored in some dedicated module table.</xar:mlstring>
+            Those "objects" each have a number of "properties", like an item id, a title, an author, a deadline or a number of VIP places, and their data is generally stored in some dedicated module table.
         </p>
         <p>
-            <xar:mlstring>The whole management of the object instances (creation, modification, display, deletion, ...) is typically hard-coded in the module, and tightly wired to the underlying data structure, which makes it difficult to e.g. add another property to your objects without rewriting half the module code (and templates).</xar:mlstring>
+            The whole management of the object instances (creation, modification, display, deletion, ...) is typically hard-coded in the module, and tightly wired to the underlying data structure, which makes it difficult to e.g. add another property to your objects without rewriting half the module code (and templates).
         </p>
 
-        <h3><xar:mlstring>What is it?</xar:mlstring></h3>
+        <h3>What is it?</h3>
         <p>
-            <xar:mlstring>The Dynamic Data module allows you to dynamically add properties to your module objects, and to integrate them with the rest of the site without much effort - regardless of whether you're the module developer, a third-party solution designer or the website admin.</xar:mlstring>
+            The Dynamic Data module allows you to dynamically add properties to your module objects, and to integrate them with the rest of the site without much effort - regardless of whether you're the module developer, a third-party solution designer or the website admin.
         </p>
         <p>
-            <xar:mlstring>And no-one says you're limited to existing modules - you could just as easily create whole new objects by defining their properties and telling the Dynamic Data module where their data should be coming from : dedicated module tables, dynamic data fields (auto-generated), some utility module from Xaraya or a user function you'll specify.</xar:mlstring>
+            And no-one says you're limited to existing modules - you could just as easily create whole new objects by defining their properties and telling the Dynamic Data module where their data should be coming from : dedicated module tables, dynamic data fields (auto-generated), some utility module from Xaraya or a user function you'll specify.
         </p>
         <p>
-            <xar:mlstring>The starting point for all this is of course the admin interface.</xar:mlstring>
+            The starting point for all this is of course the admin interface.
         </p>
 
         <h3>
-            <xar:mlstring>Admin interface of the Dynamic Data module</xar:mlstring>
+            Admin interface of the Dynamic Data module
         </h3>
 
         <p>
-            <xar:mlstring>Explain property types, data sources, validation, input &amp; output representation.</xar:mlstring>
+            Explain property types, data sources, validation, input &amp; output representation.
         </p>
 
         <h3>
-            <xar:mlstring>Using the &lt;xar:data-* ...&gt; tags in your templates</xar:mlstring>
+            Using the &lt;xar:data-* ...&gt; tags in your templates
         </h3>
 
         <h4>
-            <xar:mlstring>User view and admin list (for several items)</xar:mlstring>
+            User view and admin list (for several items)
         </h4>
 
         <p>
-            <xar:mlstring>If you want to get the dynamic properties and values for your items, and include them somewhere in your own view/list.</xar:mlstring>
+            If you want to get the dynamic properties and values for your items, and include them somewhere in your own view/list.
         </p>
         <p>
-            <xar:mlstring>Available tags: (replace 'users', '&#36;idlist' and '&#36;id' with your own)</xar:mlstring>
+            Available tags: (replace 'users', '&#36;idlist' and '&#36;id' with your own)
         </p>
 
         <pre>
-<code>&lt;!-- <xar:mlstring>this retrieves the dynamic properties defined for the 'users' module,
+<code>&lt;!-- this retrieves the dynamic properties defined for the 'users' module,
      and their value for all items listed in &#36;idlist. You'll need to build
-     that id list in your module function and pass it along to the template</xar:mlstring> --&gt;
+     that id list in your module function and pass it along to the template --&gt;
 &lt;xar:data-getitems name="&#36;properties" value="&#36;values" module="users"
  itemids="&#36;idlist" /&gt;
 
-&lt;!-- <xar:mlstring>this shows the label for dynamic property</xar:mlstring> '&#36;name' --&gt;
+&lt;!-- this shows the label for dynamic property '&#36;name' --&gt;
 &lt;xar:data-label property="&#36;properties[&#36;name]" /&gt;
 
-&lt;!-- <xar:mlstring>this shows the value of dynamic property '&#36;name' for item &#36;id,
- formatted for output</xar:mlstring> --&gt;
+&lt;!-- this shows the value of dynamic property '&#36;name' for item &#36;id,
+ formatted for output --&gt;
 &lt;xar:data-output property="&#36;properties[&#36;name]" value="&#36;values[&#36;id][&#36;name]" /&gt;
 
-&lt;!-- <xar:mlstring>this shows the value of dynamic property '&#36;name' for item &#36;id,
- formatted for input</xar:mlstring> --&gt;
+&lt;!-- this shows the value of dynamic property '&#36;name' for item &#36;id,
+ formatted for input --&gt;
 &lt;xar:data-input property="&#36;properties[&#36;name]" value="&#36;values[&#36;id][&#36;name]" /&gt;</code>
         </pre>
         <p>
-            <xar:mlstring>Sample use:</xar:mlstring>
+            Sample use:
         </p>
 
         <p>
-            <xar:mlstring>(somewhere near the beginning of your template)</xar:mlstring>
+            (somewhere near the beginning of your template)
         </p>
 
         <pre>
@@ -89,7 +89,7 @@
 </pre>
 
         <p>
-            <xar:mlstring>(when you're building some table headers, and you want to add labels for the dynamic properties)</xar:mlstring>
+            (when you're building some table headers, and you want to add labels for the dynamic properties)
         </p>
 
 <pre>
@@ -103,15 +103,15 @@
 </pre>
 
         <p>
-            <xar:mlstring>(when you're looping over the individual items, and you want to add the dynamic values for item &#36;id)</xar:mlstring>
+            (when you're looping over the individual items, and you want to add the dynamic values for item &#36;id)
         </p>
 
         <pre>
 <code>
     &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
         &lt;td class="xar-norm"&gt;
-        &lt;!-- <xar:mlstring>avoid errors if the value isn't defined for this
- item (yet)</xar:mlstring> --&gt;
+        &lt;!-- avoid errors if the value isn't defined for this
+ item (yet) --&gt;
         &lt;xar:if condition="isset(&#36;values[&#36;id][&#36;name])"&gt;
             &lt;xar:data-output property="&#36;properties[&#36;name]"
  value="&#36;values[&#36;id][&#36;name]" /&gt;
@@ -124,7 +124,7 @@
 </pre>
 
         <p>
-            <xar:mlstring>If you want to show a standard list of items, with all the dynamic properties that are defined for that object.</xar:mlstring>
+            If you want to show a standard list of items, with all the dynamic properties that are defined for that object.
         </p>
 
         <pre>
@@ -151,32 +151,32 @@
 </pre>
 
     <p>
-        <xar:mlstring>Idem for</xar:mlstring>
+        Idem for
     </p>
 
 <pre>&lt;xar:data-view ... /&gt;
 </pre>
         <p>
-            <xar:mlstring>(Todo : group, join ?)</xar:mlstring>
+            (Todo : group, join ?)
         </p>
 
         <h4>
-            <xar:mlstring>User display and admin form (for one item)</xar:mlstring>
+            User display and admin form (for one item)
         </h4>
 
         <p>
-            <xar:mlstring>If you want to get the dynamic properties for this item, and include them manually in your own display.</xar:mlstring>
+            If you want to get the dynamic properties for this item, and include them manually in your own display.
         </p>
 
 <pre>
-<code>&lt;!-- <xar:mlstring>this retrieves the dynamic properties defined for the 'users' module
+<code>&lt;!-- this retrieves the dynamic properties defined for the 'users' module
      and item &#36;id. Note that we don't use value="..." here, since we only
-     have one item</xar:mlstring> --&gt;
+     have one item --&gt;
 &lt;xar:data-getitem name="&#36;properties" module="users" itemid="&#36;id" /&gt;</code>
 </pre>
 
         <p>
-            <xar:mlstring>(where you want to add the dynamic labels and values for this item)</xar:mlstring>
+            (where you want to add the dynamic labels and values for this item)
         </p>
 
 <pre>
@@ -191,29 +191,29 @@
     &lt;/tr&gt;
 &lt;/xar:foreach&gt;
 
-<xar:mlstring>Idem for input forms, where you'd use &lt;xar:data-input ... /&gt; to show input fields</xar:mlstring></code>
+Idem for input forms, where you'd use &lt;xar:data-input ... /&gt; to show input fields</code>
 </pre>
         <p>
-            <xar:mlstring>If you simply want to display the dynamic properties for this item (= easier in most cases).</xar:mlstring>
+            If you simply want to display the dynamic properties for this item (= easier in most cases).
         </p>
 
 <pre><code>
-&lt;!-- <xar:mlstring>this will use the default layout of user-objectdisplay.xd</xar:mlstring> --&gt;
+&lt;!-- this will use the default layout of user-objectdisplay.xd --&gt;
 &lt;xar:data-display module="example" itemid="&#36;exid" /&gt;
 
-&lt;!-- <xar:mlstring>this will use layout 'mylayout' of user-objectdisplay.xd</xar:mlstring> --&gt;
+&lt;!-- this will use layout 'mylayout' of user-objectdisplay.xd --&gt;
 &lt;xar:data-display module="users" itemid="&#36;id" layout="mylayout" /&gt;
 
-&lt;!-- <xar:mlstring>this will use the template user-objectdisplay-myusers.xd</xar:mlstring> --&gt;
+&lt;!-- this will use the template user-objectdisplay-myusers.xd --&gt;
 &lt;xar:data-display module="users" itemid="&#36;id" template="myusers" /&gt;
 
 &lt;xar:data-display object="&#36;object" /&gt;
 
-<xar:mlstring>Idem for</xar:mlstring> &lt;xar:data-form ... /&gt;</code>
+Idem for &lt;xar:data-form ... /&gt;</code>
 </pre>
 
         <h4>
-            <xar:mlstring>User output and admin input (for one field of an item)</xar:mlstring>
+            User output and admin input (for one field of an item)
         </h4>
 
 <pre>
@@ -221,101 +221,101 @@
 
 &lt;xar:data-input property="&#36;property" /&gt;
 
-<xar:mlstring>Idem for</xar:mlstring> &lt;xar:data-output ... /&gt;</code>
+Idem for &lt;xar:data-output ... /&gt;</code>
 </pre>
         <h3>
-            <xar:mlstring>Included hooks</xar:mlstring>
+            Included hooks
         </h3>
 
         <ul>
             <li>
-                <xar:mlstring><strong>Admin Hook</strong> : new/create/modify/update/delete plus
-                modifyconf/updateconfig.</xar:mlstring><br />
-                <xar:mlstring>You can hook Dynamic Data to other modules by going to Modules -> Configure Hooks
+                <strong>Admin Hook</strong> : new/create/modify/update/delete plus
+                modifyconf/updateconfig.<br />
+                You can hook Dynamic Data to other modules by going to Modules -> Configure Hooks
                 and clicking on Dynamic Data. Activate the hook by checking the checkbox next to the module where
-                you would like to use Dynamic Data.</xar:mlstring>
+                you would like to use Dynamic Data.
             </li>
             <li>
                 user : display (
-                <xar:mlstring>deprecated</xar:mlstring>
+                deprecated
                 )
             </li>
         </ul>
 
         <h3>
-            <xar:mlstring>Using API calls</xar:mlstring>
+            Using API calls
         </h3>
 
         <ul>
             <li>
-                <xar:mlstring>Property Types</xar:mlstring>
+                Property Types
             </li>
             <li>
-                <xar:mlstring>Dynamic Objects And Object Lists</xar:mlstring>
+                Dynamic Objects And Object Lists
             </li>
             <li>
-                <xar:mlstring>Dynamic Properties</xar:mlstring>
+                Dynamic Properties
             </li>
             <li>
-                <xar:mlstring>items : getitems(), getitem(), getfield()</xar:mlstring>
+                items : getitems(), getitem(), getfield()
             </li>
         </ul>
 
         <h3>
-            <xar:mlstring>Using Object Oriented Programming</xar:mlstring>
+            Using Object Oriented Programming
         </h3>
         <ul>
             <li>
-                <xar:mlstring>Property Types</xar:mlstring>
+                Property Types
             </li>
             <li>
-                <xar:mlstring>Dynamic Objects And Object Lists</xar:mlstring>
+                Dynamic Objects And Object Lists
             </li>
             <li>
-                <xar:mlstring>Dynamic Properties</xar:mlstring>
+                Dynamic Properties
             </li>
             <li>
-                <xar:mlstring>items : getitems(), getitem(), getfield()</xar:mlstring>
+                items : getitems(), getitem(), getfield()
             </li>
         </ul>
 
         <h3>
-            <xar:mlstring>Customising Dynamic Data</xar:mlstring>
+            Customising Dynamic Data
         </h3>
 
         <p>
-            <xar:mlstring>templates, data sources, functions, validation, ...</xar:mlstring>
+            templates, data sources, functions, validation, ...
         </p>
 
         <h3>
-            <xar:mlstring>Integrate utility modules via hooks or dynamic data (or both) ?</xar:mlstring>
+            Integrate utility modules via hooks or dynamic data (or both) ?
         </h3>
 
         <h3>
-            <xar:mlstring>Import/Export Utilities</xar:mlstring>
+            Import/Export Utilities
         </h3>
 
         <p>
-            <xar:mlstring>Usage : Export object definitions and/or data - and import them elsewhere...</xar:mlstring>
+            Usage : Export object definitions and/or data - and import them elsewhere...
         </p>
 
         <p>
-            <xar:mlstring>[+ Easter Egg : util meta -&gt; export to XML -&gt; save to file -&gt; util import -&gt; access your whole database via DD]</xar:mlstring>
+            [+ Easter Egg : util meta -&gt; export to XML -&gt; save to file -&gt; util import -&gt; access your whole database via DD]
         </p>
         <h3>
-            <xar:mlstring>Further Information</xar:mlstring>
+            Further Information
         </h3>
         <p>
-           <xar:mlstring>Further information on the DynamicData module can be found at:</xar:mlstring>
+           Further information on the DynamicData module can be found at:
         </p>
         <ul>
-           <li><xar:mlstring>DynamicData Module Extension page at</xar:mlstring> <a title="#xarML('DynamicData  Module - Xaraya Extension 182')#" href="http://www.xaraya.com/index.php/release/182.html">Xaraya Extension and Releases</a>.
+           <li>DynamicData Module Extension page at <a title="#xarML('DynamicData  Module - Xaraya Extension 182')#" href="http://www.xaraya.com/index.php/release/182.html">Xaraya Extension and Releases</a>.
            </li>
-           <li><xar:mlstring>Related tutorials and documentation on DynamicData module at</xar:mlstring> <a href="http://www.xaraya.com/index.php/keywords/dynamicdata/" title="#xarML('Related documentation on DynamicData')#"><xar:mlstring>Xaraya Documentation.</xar:mlstring></a>
+           <li>Related tutorials and documentation on DynamicData module at <a href="http://www.xaraya.com/index.php/keywords/dynamicdata/" title="#xarML('Related documentation on DynamicData')#">Xaraya Documentation.</a>
            </li>
        </ul>
        <p class="xar-sub">
-         <strong>&#160;<xar:mlstring>DynamicData Module - Overview</xar:mlstring></strong><br />&#160;<xar:mlstring>Version</xar:mlstring> 1.2.1&#160; 2005-11-03
+         <strong>&#160;DynamicData Module - Overview</strong><br />&#160;Version 1.2.1&#160; 2005-11-03
        </p>
 </div>
 </xar:template>

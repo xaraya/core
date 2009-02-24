@@ -1,28 +1,28 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span>
+    <span class="xar-mod-title">Roles</span>
 </div>
 <div class="xar-mod-body">
-    <h2><xar:mlstring>Member List</xar:mlstring></h2>
+    <h2>Member List</h2>
         <xar:style scope="module" module="base" file="navtabs" />
         <dl class="xar-tabs">
             <dt class="help">
-                <xar:mlstring>
+                
                     Sort
-                </xar:mlstring>
+                
                 :
             </dt>
                 <xar:if condition="$letter eq ''">
                     <dd class="active">
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#">
-                            <xar:mlstring>All</xar:mlstring>
+                            All
                         </a>
                     </dd>
                 <xar:else />
                     <dd>
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#">
-                            <xar:mlstring>All</xar:mlstring>
+                            All
                         </a>
                     </dd>
                 </xar:if>
@@ -44,13 +44,13 @@
                 <xar:if condition="$letter eq 'Other'">
                     <dd class="active">
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#">
-                            <xar:mlstring>Other</xar:mlstring>
+                            Other
                         </a>
                     </dd>
                 <xar:else />
                     <dd>
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#">
-                            <xar:mlstring>Other</xar:mlstring>
+                            Other
                         </a>
                     </dd>
                 </xar:if>
@@ -58,34 +58,34 @@
         <div>
             <dl class="xar-tabs">
                 <dt class="help">
-                    <xar:mlstring>
+                    
                         Show
-                    </xar:mlstring>
+                    
                     :
                 </dt>
                 <xar:if condition="$phase ne 'active'">
                     <dd class="active">
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
-                        <xar:mlstring>All</xar:mlstring>
+                        All
                         </a>
                     </dd>
                 <xar:else />
                     <dd>
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
-                        <xar:mlstring>All</xar:mlstring>
+                        All
                         </a>
                     </dd>
                 </xar:if>
                 <xar:if condition="$phase eq 'active'">
                     <dd class="active">
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
-                        <xar:mlstring>Online</xar:mlstring>
+                        Online
                         </a>
                     </dd>
                 <xar:else />
                     <dd>
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
-                        <xar:mlstring>Online</xar:mlstring>
+                        Online
                         </a>
                     </dd>
                 </xar:if>
@@ -103,24 +103,24 @@
                 <xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
                     <th class="xar-thirdwidth">
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
-                            <xar:mlstring>Display Name</xar:mlstring>
+                            Display Name
                         </a>
                     </th>
                     <th class="xar-thirdwidth">
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=uname">
-                            <xar:mlstring>IP Address</xar:mlstring>
+                            IP Address
                         </a>
                     </th>
                 <xar:else />
                     <th class="xar-twothirdwidth">
                         <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
-                            <xar:mlstring>Display Name</xar:mlstring>
+                            Display Name
                         </a>
                     </th>
                 </xar:if>
                 <xar:if condition="xarModVars::get('roles', 'allowemail')">
                     <th>
-                        <xar:mlstring>Email</xar:mlstring>
+                        Email
                     </th>
                 </xar:if>
                 <xar:if condition="isset($properties) and count($properties) gt 0">
@@ -186,7 +186,7 @@
         <!-- add the pager here -->
         <div class="xar-align-center">#$pager#</div>
         <form method="post" action="&xar-modurl-roles-user-viewlist;">
-            <label for="search"><xar:mlstring>Search:</xar:mlstring></label>
+            <label for="search">Search:</label>
             <input type="hidden" name="phase" id="phase" value="#xarVarPrepForDisplay($phase)#" />
             <input type="hidden" name="order" id="order" value="#xarVarPrepForDisplay($order)#" />
             <input type="hidden" name="letter" id="letter" value="" />
@@ -194,7 +194,7 @@
             <input type="submit" value="#xarVarPrepForDisplay($searchlabel)#" />
         </form>
         <p>
-            <xar:mlstring>Search condition</xar:mlstring>: <strong>#xarVarPrepForDisplay($msg)#</strong>
+            Search condition: <strong>#xarVarPrepForDisplay($msg)#</strong>
         </p>
     </xar:if>
 </div>

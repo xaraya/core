@@ -13,7 +13,7 @@ function IntegrateIt() {
 }
 </script>
 <xar:if condition="!isset($title)">
-    <xar:set name="title"><xar:mlstring>External Page</xar:mlstring></xar:set>
+    <xar:set name="title">External Page</xar:set>
 </xar:if>
 <xar:if condition="xarUserIsLoggedIn() and xarSecurityCheck('ReadBase')">
     <div class="xar-mod-head">
@@ -31,5 +31,5 @@ function IntegrateIt() {
     </xar:foreach>
   </xar:if>
 <xar:else />
-   <xar:mlstring>You do not have permission to access this page.</xar:mlstring>
+   You do not have permission to access this page.
 </xar:if></xar:template>

@@ -2,16 +2,7 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-body">
     <fieldset>
-        <legend>
-            <xar:ml>
-                <xar:mlstring>
-                    #(1) List
-                </xar:mlstring>
-                <xar:mlvar>
-                    #$itemtypename#
-                </xar:mlvar>
-            </xar:ml>
-        </legend>
+        <legend>#$itemtypename# List</legend>
 
         <xar:if condition="!empty($message)">
             <p>#xarVarPrepForDisplay($message)#</p>
@@ -27,12 +18,7 @@
                 <xar:if condition="count($items) eq 0">
                     <xar:set name="columns">count($itemlabels)</xar:set>
                     <tr>
-                        <td colspan="#$columns#">
-                            <xar:ml>
-                                <xar:mlstring>No #(1) to display</xar:mlstring>
-                                <xar:mlvar>#$itemtypename#</xar:mlvar>
-                            </xar:ml>
-                        </td>
+                        <td colspan="#$columns#">No #$itemtypename# to display</td>
                     </tr>
                 <xar:else/>
                     <xar:loop name="$items">

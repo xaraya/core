@@ -3,62 +3,22 @@
 <xar:set name="modstatus">
     xarSessionGetVar('statusmsg')
 </xar:set>
-<xar:set name="imgdisabled">
-    <xar:mlstring>
-        Disabled
-    </xar:mlstring>
-</xar:set>
-<xar:set name="imgactivate">
-    <xar:mlstring>
-        Activate
-    </xar:mlstring>
-</xar:set>
-<xar:set name="imgdeactivate">
-    <xar:mlstring>
-        Deactivate
-    </xar:mlstring>
-</xar:set>
-<xar:set name="imgsetdefault">
-    <xar:mlstring>
-        Set As Default
-    </xar:mlstring>
-</xar:set>
-<xar:set name="imgupgrade">
-    <xar:mlstring>
-        Upgrade
-    </xar:mlstring>
-</xar:set>
-<xar:set name="imginstall">
-    <xar:mlstring>
-        Install
-    </xar:mlstring>
-</xar:set>
-<xar:set name="imgremove">
-    <xar:mlstring>
-        Remove
-    </xar:mlstring>
-</xar:set>
+<xar:set name="imgdisabled">'Disabled'</xar:set>
+<xar:set name="imgactivate">'Activate'</xar:set>
+<xar:set name="imgdeactivate">'Deactivate'</xar:set>
+<xar:set name="imgsetdefault">'Set As Default'</xar:set>
+<xar:set name="imgupgrade">'Upgrade'</xar:set>
+<xar:set name="imginstall">'Install'</xar:set>
+<xar:set name="imgremove">'Remove'</xar:set>
 <div class="xar-mod-head">
-    <span class="xar-mod-title">
-        <xar:mlstring>
-            Themes Administration
-        </xar:mlstring>
-    </span>
+    <span class="xar-mod-title">Themes Administration</span>
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
-    <h2>
-        <xar:mlstring>
-            View Themes
-        </xar:mlstring>
-    </h2>
+    <h2>View Themes</h2>
     <p>
-        <xar:mlstring>
-            Total listed:
-        </xar:mlstring>
-        <xar:set name="modscount">
-            count($listrowsitems)
-        </xar:set>
+        Total listed:
+        <xar:set name="modscount">count($listrowsitems)</xar:set>
         #$modscount#
     </p>
     <form method="post" action="&xar-modurl-themes-admin-settings;">
@@ -69,23 +29,23 @@
             <tr>
                 <th>
                     <label for="selstyle">
-                        <xar:mlstring>
+                        
                             Style
-                        </xar:mlstring>
+                        
                     </label>
                 </th>
                 <th>
                     <label for="filter">
-                        <xar:mlstring>
+                        
                             View
-                        </xar:mlstring>
+                        
                     </label>
                 </th>
                 <th>
                     <label for="class">
-                        <xar:mlstring>
+                        
                             Class
-                        </xar:mlstring>
+                        
                     </label>
                 </th>
                 <th>
@@ -93,9 +53,9 @@
                 </th>
                 <th>
                     <label for="reload">
-                        <xar:mlstring>
+                        
                             Action
-                        </xar:mlstring>
+                        
                     </label>
                 </th>
             </tr>
@@ -148,9 +108,9 @@
                 <td class="xar-align-center">
                     <xar:data-input type="checkbox" name="useicons" checked="$useicons" onchange="this.form.submit()" />
                     <label for="useicons">
-                        <xar:mlstring>
+                        
                             Use Icons
-                        </xar:mlstring>
+                        
                     </label>
                 </td>
                 <td class="xar-align-center">
@@ -163,9 +123,9 @@
                 lets display latest status on themes upgrades if any
             </xar:comment>
             <p>
-                <xar:mlstring>
+                
                     Latest status - the following core modules have been successfully upgraded:
-                </xar:mlstring>
+                
             </p>
             <p>
                 #$modstatus#
@@ -184,13 +144,7 @@
                     <xar:if condition="empty($modinfo['preview'])">
                         <div class="xar-alt xar-alt-outline xar-sub" style="width: 250px; height: 187px;">
                             <div style="padding: 40px 10px 0px 10px">
-                                <xar:ml>
-                                    <xar:mlstring>
-                                        Screenshot not found at
-                                        <em>themes/#(1)/images/preview.jpg</em>
-                                    </xar:mlstring>
-                                    <xar:mlvar>#$modinfo['directory']#</xar:mlvar>
-                                </xar:ml>
+                                Screenshot not found at <em>themes/#$modinfo['directory']#/images/preview.jpg</em>
                             </div>
                         </div>
                     <xar:else />
@@ -206,37 +160,37 @@
 
                     <table>
                     <tr>
-                        <td><strong><xar:mlstring>Name</xar:mlstring></strong></td>
+                        <td><strong>Name</strong></td>
                         <td>#$modinfo['displayname']#</td>
                     </tr>
                     <tr>
                         <td valign="top">
-                            <strong><xar:mlstring>Description</xar:mlstring></strong>
+                            <strong>Description</strong>
                         </td>
                         <td>#$modinfo['description']#</td>
                     </tr>
                     <tr>
-                        <td><strong><xar:mlstring>Version</xar:mlstring></strong></td>
+                        <td><strong>Version</strong></td>
                         <td>#$modinfo['version']#</td>
                     </tr>
                     <tr>
-                        <td><strong><xar:mlstring>Class</xar:mlstring></strong></td>
+                        <td><strong>Class</strong></td>
                         <td>#$modinfo['classlabel']#</td>
                     </tr>
                     <tr>
-                        <td><strong><xar:mlstring>Status</xar:mlstring></strong></td>
+                        <td><strong>Status</strong></td>
                         <td>
                             #$modinfo['statelabel']#
                             <xar:if condition="($modinfo['state'] eq 3) and ($modinfo['class'] eq 2) and $modinfo['directory'] eq $default">
-                                <xar:mlstring>
+                                
                                     (Default)
-                                </xar:mlstring>
+                                
                             </xar:if>
                         </td>
                     </tr>
                     <tr>
                         <td valign="top">
-                            <strong><xar:mlstring>Actions</xar:mlstring></strong>
+                            <strong>Actions</strong>
                         </td>
                         <td>
                             <xar:if condition="$useicons eq true">
@@ -271,15 +225,15 @@
                                 </xar:if>
                             <xar:else />
                                 <a href="#$modinfo['infourlnew']#&amp;theme=print" onclick="window.open(this.getAttribute('href'));return false;">
-                                    <xar:mlstring>
+                                    
                                         Info
-                                    </xar:mlstring>
+                                    
                                 </a>
                                 <noscript>
                                     <a href="#$modinfo['infourl']#">
-                                        <xar:mlstring>
+                                        
                                             Info
-                                        </xar:mlstring>
+                                        
                                     </a>
                                 </noscript>
                                 |
@@ -295,9 +249,9 @@
                                 <xar:if condition="($modinfo['state'] eq 3) and ($modinfo['class'] eq 2) and $modinfo['directory'] ne $default">
                                     |
                                     <a href="#$modinfo['defaulturl']#">
-                                        <xar:mlstring>
+                                        
                                             Set as Default
-                                        </xar:mlstring>
+                                        
                                     </a>
                                 </xar:if>
                             </xar:if>
@@ -317,38 +271,38 @@
                 <tr>
                     <th>
                         <a href="#$sorturl#" title="#$sortlabel#">
-                            <xar:mlstring>
+                            
                                 Name
-                            </xar:mlstring>
+                            
                         </a>
                         <a href="#$sorturl#" title="#$sortlabel#">
                             <img src="#$sortimage#" alt="#$sortlabel#" />
                         </a>
                     </th>
                     <th>
-                        <xar:mlstring>
+                        
                             Version
-                        </xar:mlstring>
+                        
                     </th>
                     <th>
-                        <xar:mlstring>
+                        
                             Info
-                        </xar:mlstring>
+                        
                     </th>
                     <th>
-                        <xar:mlstring>
+                        
                             Class
-                        </xar:mlstring>
+                        
                     </th>
                     <th>
-                        <xar:mlstring>
+                        
                             Status
-                        </xar:mlstring>
+                        
                     </th>
                     <th>
-                        <xar:mlstring>
+                        
                             Actions
-                        </xar:mlstring>
+                        
                     </th>
                 </tr>
                 <xar:foreach in="$listrowsitems" value="$modinfo">
@@ -377,15 +331,15 @@
                                 </noscript>
                                 <xar:else />
                                 <a href="#$modinfo['infourlnew']#&amp;theme=print" onclick="window.open(this.getAttribute('href'));return false;">
-                                    <xar:mlstring>
+                                    
                                         Info
-                                    </xar:mlstring>
+                                    
                                 </a>
                                 <noscript>
                                     <a href="#$modinfo['infourl']#">
-                                        <xar:mlstring>
+                                        
                                             Info
-                                        </xar:mlstring>
+                                        
                                     </a>
                                 </noscript>
                             </xar:if>
@@ -396,9 +350,9 @@
                         <td>
                             #$modinfo['statelabel']#
                             <xar:if condition="($modinfo['state'] eq 3) and ($modinfo['class'] eq 2) and $modinfo['directory'] eq $default">
-                                <xar:mlstring>
+                                
                                     (Default)
-                                </xar:mlstring>
+                                
                             </xar:if>
                         </td>
                         <td class="xar-nowrap xar-align-center">
@@ -437,9 +391,9 @@
                                 <xar:if condition="($modinfo['state'] eq 3) and ($modinfo['class'] eq 2) and $modinfo['directory'] ne $default">
                                     |
                                     <a href="#$modinfo['defaulturl']#">
-                                        <xar:mlstring>
+                                        
                                             Set as Default
-                                        </xar:mlstring>
+                                        
                                     </a>
                                 </xar:if>
                             </xar:if>

@@ -7,16 +7,16 @@
 <div>
     <dl class="xar-tabs">
         <dt class="help" title="#xarML('Select object function')#">
-            <xar:mlstring>
+            
                 Manage
-            </xar:mlstring>
+            
                 :
         </dt>
         <xar:sec mask="EditDynamicData" catch="false">
             <xar:set name="tabclass">$activetab=='view'?'active':''</xar:set>
             <dd class="#$tabclass#">
                 <a href="&xar-modurl-dynamicdata-admin-view;">
-                   <xar:mlstring>View DataObjects</xar:mlstring>
+                   View DataObjects
                 </a>
             </dd>
         </xar:sec>
@@ -24,7 +24,7 @@
             <xar:set name="tabclass">$activetab=='new'?'active':''</xar:set>
             <dd class="#$tabclass#">
                 <a href="&xar-modurl-dynamicdata-admin-new;">
-                   <xar:mlstring>Create DataObject</xar:mlstring>
+                   Create DataObject
                 </a>
             </dd>
         </xar:sec>

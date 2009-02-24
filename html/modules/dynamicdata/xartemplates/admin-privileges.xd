@@ -1,21 +1,15 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>Dynamic Data Administration</xar:mlstring>
+        Dynamic Data Administration
     </span>
 </div>
 <div class="xar-mod-body">
     <h2>
         <xar:if condition="!empty($extcomponent) and $extcomponent eq 'Field'">
-            <xar:ml>
-                <xar:mlstring>Select Fields for Privilege '#(1)'</xar:mlstring>
-                <xar:mlvar>#$extname#</xar:mlvar>
-            </xar:ml>
-            <xar:else />
-            <xar:ml>
-                <xar:mlstring>Select Items for Privilege '#(1)'</xar:mlstring>
-                <xar:mlvar>#$extname#</xar:mlvar>
-            </xar:ml>
+            Select Fields for Privilege '#$extname#'
+        <xar:else />
+            Select Items for Privilege '#$extname#'
         </xar:if>
     </h2>
     <form method="post" action="&xar-modurl-dynamicdata-admin-privileges;">
@@ -28,12 +22,12 @@
         <xar:if condition="!empty($extcomponent) and $extcomponent eq 'Field'">
             <tr>
                 <th class="xar-align-right xar-valign-top">
-                    <xar:mlstring>Name</xar:mlstring>
+                    Name
                 </th>
                 <td>
                     <select name="propname" onchange="submit()">
                         <option value="0">
-                            <xar:mlstring>All</xar:mlstring>
+                            All
                         </option>
                         <xar:foreach in="$propnames" key="$name">
                             <xar:if condition="!empty($propname) and $propname eq $name">
@@ -47,12 +41,12 @@
             </tr>
             <tr>
                 <th class="xar-align-right xar-valign-top">
-                    <xar:mlstring>Type</xar:mlstring>
+                    Type
                 </th>
                 <td>
                     <select name="proptype" onchange="submit()">
                         <option value="0">
-                            <xar:mlstring>All</xar:mlstring>
+                            All
                         </option>
                         <xar:foreach in="$proptypes" key="$type" value="$info">
                             <xar:if condition="!empty($proptype) and $proptype eq $type">
@@ -66,12 +60,12 @@
             </tr>
             <tr>
                 <th class="xar-align-right xar-valign-top">
-                    <xar:mlstring>Property</xar:mlstring>
+                    Property
                 </th>
                 <td>
                     <select name="propid" onchange="submit()">
                         <option value="0">
-                            <xar:mlstring>All</xar:mlstring>
+                            All
                         </option>
                         <xar:foreach in="$propids" key="$object" value="$properties">
                             <xar:foreach in="$properties" key="$id" value="$name">
@@ -88,12 +82,12 @@
             <xar:else />
             <tr>
                 <th class="xar-align-right xar-valign-top">
-                    <xar:mlstring>Module</xar:mlstring>
+                    Module
                 </th>
                 <td>
                     <select name="moduleid" onchange="submit()">
                         <option value="0">
-                            <xar:mlstring>All</xar:mlstring>
+                            All
                         </option>
                         <xar:foreach in="$modlist" key="$modid" value="$modname">
                             <xar:if condition="!empty($moduleid) and $moduleid eq $modid">
@@ -107,7 +101,7 @@
             </tr>
             <tr>
                 <th class="xar-align-right xar-valign-top">
-                    <xar:mlstring>Item Type</xar:mlstring>
+                    Item Type
                 </th>
                 <td>
                     <input type="text" name="itemtype" id="itemtype" value="#$itemtype#" size="10" onchange="submit()" />
@@ -116,7 +110,7 @@
             </tr>
             <tr>
                 <th class="xar-align-right xar-valign-top">
-                    <xar:mlstring>Item ID</xar:mlstring>
+                    Item ID
                 </th>
                 <td>
                     <input type="text" name="itemid" id="itemid" value="#$itemid#" size="10" onchange="submit()" />
@@ -126,71 +120,71 @@
         </xar:if>
         <tr>
             <th class="xar-align-right xar-valign-top">
-                <xar:mlstring>Access Level</xar:mlstring>
+                Access Level
             </th>
             <td>
                 <select name="extlevel" id="extlevel">
                     <xar:if condition="$extlevel eq 0">
                         <option value="0" selected="selected">
-                            <xar:mlstring>None</xar:mlstring>
+                            None
                         </option>
                         <xar:else />
                         <option value="0">
-                            <xar:mlstring>None</xar:mlstring>
+                            None
                         </option>
                     </xar:if>
                     <xar:if condition="$extlevel eq 100">
                         <option value="100" selected="selected">
-                            <xar:mlstring>Overview</xar:mlstring>
+                            Overview
                         </option>
                         <xar:else />
                         <option value="100">
-                            <xar:mlstring>Overview</xar:mlstring>
+                            Overview
                         </option>
                     </xar:if>
                     <xar:if condition="$extlevel eq 200">
                         <option value="200" selected="selected">
-                            <xar:mlstring>Read</xar:mlstring>
+                            Read
                         </option>
                         <xar:else />
                         <option value="200">
-                            <xar:mlstring>Read</xar:mlstring>
+                            Read
                         </option>
                     </xar:if>
                     <xar:if condition="$extlevel eq 500">
                         <option value="500" selected="selected">
-                            <xar:mlstring>Edit</xar:mlstring>
+                            Edit
                         </option>
                         <xar:else />
                         <option value="500">
-                            <xar:mlstring>Edit</xar:mlstring>
+                            Edit
                         </option>
                     </xar:if>
                     <xar:if condition="$extlevel eq 600">
                         <option value="600" selected="selected">
-                            <xar:mlstring>Add</xar:mlstring>
+                            Add
                         </option>
                         <xar:else />
                         <option value="600">
-                            <xar:mlstring>Add</xar:mlstring>
+                            Add
                         </option>
                     </xar:if>
                     <xar:if condition="$extlevel eq 700">
                         <option value="700" selected="selected">
-                            <xar:mlstring>Delete</xar:mlstring>
+                            Delete
                         </option>
                         <xar:else />
                         <option value="700">
-                            <xar:mlstring>Delete</xar:mlstring>
+                            Delete
                         </option>
                     </xar:if>
                     <xar:if condition="$extlevel eq 800">
                         <option value="800" selected="selected">
-                            <xar:mlstring>Admin</xar:mlstring>
+                            Admin
                         </option>
                         <xar:else />
                         <option value="800">
-                            <xar:mlstring>Admin</xar:mlstring>
+                            Admin
                         </option>
                     </xar:if>
                 </select>
@@ -203,10 +197,7 @@
         </tr>
     </table>
     <p>
-        <xar:ml>
-            <xar:mlstring>There are #(1) entries matching these selection criteria at the moment</xar:mlstring>
-            <xar:mlvar>#$numitems#</xar:mlvar>
-        </xar:ml>
+        There are #$numitems# entries matching these selection criteria at the moment
         <hr />
         (Instance Definition #$extinstance#) 
     </p>

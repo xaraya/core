@@ -5,23 +5,21 @@
 <div id="install">
     <xar:template file="upstatus" />
     <h1>
-        <xar:mlstring>Miscelleneous Upgrades</xar:mlstring>
+        Miscelleneous Upgrades
     </h1>
 <p>
 #$content#
 </p>
     <p>
-        <xar:mlstring>
+        
             Please review the considerations for this specific upgrade if you find unexpected results on your site.
-        </xar:mlstring>
+        
     </p>
     <form action="upgrade.php" method="post">
         <p class="center">
             <input type="hidden" name="upgrade_phase" id="upgrade_phase" value="4" />
-            <xar:set name="buttonnext">
-                <xar:mlstring>Continue</xar:mlstring>
-            </xar:set>
-            <input type="submit" value="#$buttonnext#" />
+            <!-- TODO: the value attribute should be eligible for translation, is it? -->
+            <input type="submit" value="Continue" />
         </p>
     </form>
 

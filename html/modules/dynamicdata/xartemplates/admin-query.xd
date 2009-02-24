@@ -2,24 +2,19 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>Dynamic Data Administration</xar:mlstring>
+        Dynamic Data Administration
     </span>
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
-    <h2>
-        <xar:ml>
-            <xar:mlstring>Utilities : Query #(1)</xar:mlstring>
-            <xar:mlvar>#$label#</xar:mlvar>
-        </xar:ml>
-    </h2>
+    <h2>Utilities : Query #$label#</h2>
     <xar:template type="module" file="utility-menu" />
     <form method="post" action="&xar-modurl-dynamicdata-admin-query;">
         <table border="0" cellpadding="5" class="xar-align-left xar-fullwidth">
             <tr>
                 <td>
                     <label for="itemid">
-                        <xar:mlstring>Object:</xar:mlstring>
+                        Object:
                     </label>
                 </td>
                 <td>
@@ -37,7 +32,7 @@
                 </td>
                 <td>
                     <label for="query">
-                        <xar:mlstring>Query:</xar:mlstring>
+                        Query:
                     </label>
                 </td>
                 <td>
@@ -55,7 +50,7 @@
                 </td>
                 <td>
                     <label for="numitems">
-                        <xar:mlstring>Items:</xar:mlstring>
+                        Items:
                     </label>
                 </td>
                 <td>
@@ -63,7 +58,7 @@
                 </td>
                 <td>
                     <label for="groupby">
-                        <xar:mlstring>Group By:</xar:mlstring>
+                        Group By:
                     </label>
                 </td>
                 <td>
@@ -75,7 +70,7 @@
                 <tr>
                     <td>
                         <label for="join">
-                            <xar:mlstring>Join:</xar:mlstring>
+                            Join:
                         </label>
                     </td>
                     <td>
@@ -97,7 +92,7 @@
             <tr>
                 <td>
                     <label for="table">
-                        <xar:mlstring>Table:</xar:mlstring>
+                        Table:
                     </label>
                 </td>
                 <td>
@@ -118,7 +113,7 @@
                 </td>
                 <td>
                     <label for="newquery">
-                        <xar:mlstring>Save As:</xar:mlstring>
+                        Save As:
                     </label>
                 </td>
                 <td>
@@ -126,7 +121,7 @@
                 </td>
                 <td>
                     <label for="startnum">
-                        <xar:mlstring>Start:</xar:mlstring>
+                        Start:
                     </label>
                 </td>
                 <td>
@@ -134,7 +129,7 @@
                 </td>
                 <td>
                     <label for="cache">
-                        <xar:mlstring>Cache:</xar:mlstring>
+                        Cache:
                     </label>
                 </td>
                 <td>
@@ -147,14 +142,14 @@
             <xar:if condition="!empty($properties)">
                 <tr>
                     <td>
-                        <xar:mlstring>Properties:</xar:mlstring>
+                        Properties:
                     </td>
                     <xar:foreach in="$properties" key="$name">
                         <td>
                             <xar:if condition="$name eq '_extra_'">
                                 <select name="field[$name]">
                                     <option value="">
-                                        <xar:mlstring>Select:</xar:mlstring>
+                                        Select:
                                     </option>
                                     <xar:foreach in="$properties" key="$name2">
                                         <xar:if condition="!empty($field[$name]) and $field[$name] eq $name2">
@@ -185,7 +180,7 @@
                 <xar:if condition="!empty($groupby)">
                     <tr>
                         <td>
-                            <xar:mlstring>Operation:</xar:mlstring>
+                            Operation:
                         </td>
                         <xar:foreach in="$properties" key="$name">
                             <td>
@@ -206,7 +201,7 @@
                 </xar:if>
                 <tr>
                     <td>
-                        <xar:mlstring>Conditions:</xar:mlstring>
+                        Conditions:
                     </td>
                     <xar:foreach in="$properties" key="$name">
                         <td>
@@ -238,7 +233,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <xar:mlstring>Sort Order:</xar:mlstring>
+                        Sort Order:
                     </td>
                     <xar:foreach in="$properties" key="$name">
                         <td>
@@ -270,10 +265,10 @@
         </xar:comment>
         <table summary="Query Options" class="xar-align-left xar-fullwidth">
             <tr>
-                <th><xar:mlstring>Properties:</xar:mlstring></th>
-                <th><xar:mlstring>Conditions:</xar:mlstring></th>
-                <th><xar:mlstring>Operation:</xar:mlstring></th>
-                <th><xar:mlstring>Sort Order:</xar:mlstring></th>
+                <th>Properties:</th>
+                <th>Conditions:</th>
+                <th>Operation:</th>
+                <th>Sort Order:</th>
             </tr>
             <xar:if condition="!empty($properties)">
                 <xar:foreach in="$properties" key="$name">
@@ -282,7 +277,7 @@
                             <xar:if condition="$name eq '_extra_'">
                                 <select name="field[$name]">
                                     <option value="">
-                                        <xar:mlstring>Select:</xar:mlstring>
+                                        Select:
                                     </option>
                                     <xar:foreach in="$properties" key="$name2">
                                         <xar:if condition="!empty($field[$name]) and $field[$name] eq $name2">
@@ -365,12 +360,7 @@
     </form>
     <xar:if condition="!empty($viewlink)">
         <p>
-            <a href="#$viewlink#">
-                <xar:ml>
-                    <xar:mlstring>View #(1)</xar:mlstring>
-                    <xar:mlvar>#$label#</xar:mlvar>
-                </xar:ml>
-            </a>
+            <a href="#$viewlink#">View #$label#</a>
         </p>
     </xar:if>
     <xar:if condition="isset($mylist)">
@@ -381,12 +371,7 @@
         </xar:if>
     </xar:if>
     <xar:if condition="!empty($sample)">
-        <p>
-            <xar:ml>
-                <xar:mlstring>Sample Tag : #(1)</xar:mlstring>
-                <xar:mlvar>#$sample#</xar:mlvar>
-            </xar:ml>
-        </p>
+        <p>Sample Tag : #$sample#</p>
     </xar:if>
 </div>
 </xar:template>

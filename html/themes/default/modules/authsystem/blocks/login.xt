@@ -6,19 +6,19 @@
         <input type="hidden" name="redirecturl" id="returnurl#$blockid#" value="#$return_url#" />
 
         <div class="textInputContainer">
-            <label for="uname#$blockid#" title="#xarML('Enter your user name')#"><xar:mlstring>Username:</xar:mlstring></label>
+            <label for="uname#$blockid#" title="#xarML('Enter your user name')#">Username:</label>
             <input type="text" name="uname" id="uname#$blockid#" maxlength="64" />
         </div>
         
         <div class="passInputContainer">
-            <label for="pass#$blockid#" title="#xarML('Enter your password')#"><xar:mlstring>Password:</xar:mlstring></label>
+            <label for="pass#$blockid#" title="#xarML('Enter your password')#">Password:</label>
             <input type="password" name="pass" id="pass#$blockid#" maxlength="64" />
         </div>
 
         <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') ne 'High'">
             <div class="checkInputContainer">
                 <input type="checkbox" name="rememberme" id="rememberme#$blockid#" value="1" />
-                <label for="rememberme#$blockid#"><xar:mlstring>Don't ask for password</xar:mlstring></label>
+                <label for="rememberme#$blockid#">Don't ask for password</label>
             </div>
         </xar:if>
 
@@ -27,7 +27,7 @@
         </div>
 
         <p>
-            <a href="&xar-modurl-roles-user-lostpassword;"><xar:mlstring>Request new password</xar:mlstring></a>
+            <a href="&xar-modurl-roles-user-lostpassword;">Request new password</a>
         </p>
     </fieldset>
 </form>

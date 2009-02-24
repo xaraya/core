@@ -3,9 +3,9 @@
 <xar:set name="active_step">1</xar:set>
 <div id="install">
     <xar:template file="upstatus" />
-    <h1><xar:mlstring>Welcome to Xaraya Upgrade</xar:mlstring></h1>
+    <h1>Welcome to Xaraya Upgrade</h1>
      <xar:if condition="$versionlow ne ''">
-        <p><strong><xar:mlstring>WARNING</xar:mlstring></strong>:</p>
+        <p><strong>WARNING</strong>:</p>
           #$versionlow#
      <xar:else />
         <xar:if condition="$alreadydone ne ''">
@@ -13,54 +13,47 @@
         </xar:if>
         <p>#$descr#</p>
         <p>
-           <xar:set name="xarguidelines">'http://www.xaraya.com/index.php/documentation/586'</xar:set>
-           <xar:ml>
-             <xar:mlstring>
-               Ensure you have reviewed the UPGRADE.txt file or the <a href="#(1)">Xaraya Upgrade Guidelines</a>, and relevant
-               comments for your version upgrade before continuing.
-             </xar:mlstring>
-             <xar:mlvar>#$xarguidelines#</xar:mlvar>
-           </xar:ml>
-           <xar:mlstring>
-               This upgrade process updates your database and some system files but <strong>cannot upgrade</strong> your theme and templates!
-           </xar:mlstring>
+           Ensure you have reviewed the UPGRADE.txt file or the <a
+           href="http://www.xaraya.com/index.php/documentation/586">Xaraya
+           Upgrade Guidelines</a>, and relevant comments for your version
+           upgrade before continuing.
+
+           This upgrade process updates your database and some system files
+           but <strong>cannot upgrade</strong> your theme and templates!
          </p>
          <p>
-           <xar:mlstring>
-            To ensure a quick and smooth upgrade, please check and address the following important theme and template considerations <strong>before</strong> continuing.
-          </xar:mlstring>
+            To ensure a quick and smooth upgrade, please check and address the
+            following important theme and template considerations
+            <strong>before</strong> continuing.
         </p>
         <xar:comment>PLEASE ADD SPECIFIC UPGRADE CONSIDERATIONS FOR THE NEW XAR VERSION HERE BELOW </xar:comment>
         <ol>
-           <li><xar:mlstring>The Adminpanels module has been deprecated as of Version 1.1 and no longer available. The blocks have been moved to the Base module.</xar:mlstring>
+           <li>The Adminpanels module has been deprecated as of Version 1.1 and no longer available. The blocks have been moved to the Base module.
                <ul>
-                 <li><xar:mlstring>Please check your theme templates for use of any Adminpanel module references. You will need to change references to <strong>adminpanels</strong> in your theme or templates
-                 to <strong>base</strong> module. Remember particularly to change 'adminmenu' and 'waiting content' blocks tags to refer now to the base module, and update other Adminpanels links.</xar:mlstring></li>
-                <li><xar:mlstring>Make sure your Adminpanel block templates for any compact menu block, adminmenu or waiting content blocks are also moved to <strong>modules/base</strong> directory in your theme.</xar:mlstring></li>
+                 <li>Please check your theme templates for use of any Adminpanel module references. You will need to change references to <strong>adminpanels</strong> in your theme or templates
+                 to <strong>base</strong> module. Remember particularly to change 'adminmenu' and 'waiting content' blocks tags to refer now to the base module, and update other Adminpanels links.</li>
+                <li>Make sure your Adminpanel block templates for any compact menu block, adminmenu or waiting content blocks are also moved to <strong>modules/base</strong> directory in your theme.</li>
                 </ul>
            </li>
-           <li><xar:mlstring>As of Version 1.1 the core login block and function in the Roles module has been moved to the
-               Authsystem Module at </xar:mlstring><a href="&xar-modurl-authsystem-user-showloginform;">index.php?module=authsystem&amp;function=showloginform</a>
-               <xar:mlstring>You can still login by browsing to </xar:mlstring><a href="&xar-modurl-roles-user-main;">index.php?module=roles</a>.</li>
+           <li>As of Version 1.1 the core login block and function in the Roles module has been moved to the
+               Authsystem Module at <a href="&xar-modurl-authsystem-user-showloginform;">index.php?module=authsystem&amp;function=showloginform</a>
+               You can still login by browsing to <a href="&xar-modurl-roles-user-main;">index.php?module=roles</a>.</li>
            <li>
-              <xar:mlstring>If you allow User Registration on your site, you must ensure you have the <strong>Registration module</strong> in your Xaraya module directory,
+              If you allow User Registration on your site, you must ensure you have the <strong>Registration module</strong> in your Xaraya module directory,
               install, and configure it to continue user registration on your site as from Version 1.1 .
-              </xar:mlstring>
+              
            </li>
            <li>
-               <xar:mlstring>The CountryListing property has changed templates in Version 1.1 to refer to ID as value
+               The CountryListing property has changed templates in Version 1.1 to refer to ID as value
                 instead of Name. If you have been using this DD property, you will have to override the template to
                 continue to use Name as the value.
-               </xar:mlstring>
+               
            </li>
         </ol>
         <form action="upgrade.php" method="post">
             <p class="center">
                 <input type="hidden" name="upgrade_phase" id="upgrade_phase" value="2" />
-                <xar:set name="buttonnext">
-                    <xar:mlstring>Continue</xar:mlstring>
-                </xar:set>
-                <input type="submit" value="#$buttonnext#" />
+                <input type="submit" value="Continue" />
             </p>
         </form>
      </xar:if>

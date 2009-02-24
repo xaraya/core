@@ -1,34 +1,34 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Xaraya Help System</xar:mlstring></span>
+    <span class="xar-mod-title">Xaraya Help System</span>
 </div>
 <div class="xar-mod-body">
 
         <img src="#xarTplGetImage('admin.gif','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
 
     <h2>
-        <xar:mlstring>Help File Not Found</xar:mlstring>
+        Help File Not Found
     </h2>
 
     <p>
-        <xar:mlstring>There is no help information for this Xaraya extension.</xar:mlstring>
+        There is no help information for this Xaraya extension.
     </p>
     <p>
-       <xar:mlstring>The Xaraya help system is not fully implemented at this stage.
+       The Xaraya help system is not fully implemented at this stage.
        Most links display an existing extension Overview. This link will be replaced in the near future by a 
        global Help system.
-       </xar:mlstring>
+       
     </p>
     <p>
-        <xar:mlstring>You can report a missing Overview file by lodging a bug report at </xar:mlstring>
+        You can report a missing Overview file by lodging a bug report at 
         <a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a>
-        <xar:mlstring> If you are interested in helping to write an Overview for a module 
-        see </xar:mlstring><strong>modules/example/xartemplates/admin-main.xd</strong><xar:mlstring> as an example.</xar:mlstring>
+         If you are interested in helping to write an Overview for a module 
+        see <strong>modules/example/xartemplates/admin-main.xd</strong> as an example.
     </p>
 
          <p class="xar-sub">
-             <strong>&#160;<xar:mlstring>Xaraya Help System </xar:mlstring></strong><br />&#160;<xar:mlstring>Version</xar:mlstring> 1.0.0&#160; 2006-02-26
+             <strong>&#160;Xaraya Help System </strong><br />&#160;Version 1.0.0&#160; 2006-02-26
          </p>
 </div>
 

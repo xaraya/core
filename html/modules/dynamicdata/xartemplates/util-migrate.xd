@@ -3,22 +3,18 @@
 <xar:style scope="module" file="dd" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
+        
             Dynamic Data Utilities
-        </xar:mlstring>
+        
     </span>
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:if condition="!empty($mapfrom) and !empty($mapto)">
-            <xar:ml>
-                <xar:mlstring>Utilities - Migrate Items from #(1) to #(2)</xar:mlstring>
-                <xar:mlvar>#$mapfrom#</xar:mlvar>
-                <xar:mlvar>#$mapto#</xar:mlvar>
-            </xar:ml>
+            Utilities - Migrate Items from #$mapfrom# to #$mapto#
         <xar:else/>
-            <xar:mlstring>Utilities - Migrate Module Items</xar:mlstring>
+            Utilities - Migrate Module Items
         </xar:if>
     </h2>
    <xar:template type="module" file="utility-menu" />
@@ -34,13 +30,13 @@
 
         <fieldset>
             <legend>
-                <xar:mlstring>
+                
                     Mapping
-                </xar:mlstring>
+                
             </legend>
                 <div class="xar-form-input-wrapper">
                 <label for="map" title="#xarML('Choose a mapping to migrate data')#" class="xar-form-label">
-                    <xar:mlstring>Use Mapping:</xar:mlstring>
+                    Use Mapping:
                 </label>
                 <xar:if condition="count($maplist) gt 0">
                     <select name="map" id="map">
@@ -55,13 +51,13 @@
                     </select>
                     <input type="submit" name="load" value="#xarML('Load')#" />
                 <xar:else />
-                    <xar:mlstring>No mappings available.</xar:mlstring>
+                    No mappings available.
                   </xar:if>
             </div>
 
             <div class="xar-form-input-wrapper">
                 <label for="newmap" title="#xarML('Enter a new mapping')#" class="xar-form-label">
-                    <xar:mlstring>Create Mapping:</xar:mlstring>
+                    Create Mapping:
                 </label>
                 <input type="text" name="newmap" id="newmap" value="#$newmap#" class="xar-form-textlong" />
                 <input type="submit" name="save" value="#xarML('Save')#" />
@@ -70,12 +66,12 @@
 
         <fieldset class="xar-clearboth">
             <legend>
-                <xar:mlstring>Migration Settings</xar:mlstring>
+                Migration Settings
             </legend>
 
             <div class="xar-form-input-wrapper">
                 <label title="#xarML('Module which provides the original object')#" class="xar-form-label">
-                    <xar:mlstring>Module Route:</xar:mlstring>
+                    Module Route:
                 </label>
                 <span class="xar-nowrap">
                     <xar:if condition="empty($from['module'])">
@@ -96,7 +92,7 @@
                     </xar:if>
 
                     <strong>
-                        <xar:mlstring>To</xar:mlstring>
+                        To
                     </strong>
 
                     <xar:if condition="empty($to['module'])">
@@ -121,7 +117,7 @@
             <xar:if condition="!empty($from['module']) and !empty($to['module'])">
                 <div class="xar-form-input-wrapper">
                     <label title="#xarML('Item type to be migrated from.')#" class="xar-form-label">
-                        <xar:mlstring>Item Type Route:</xar:mlstring>
+                        Item Type Route:
                     </label>
                     <span class="xar-nowrap">
                         <!--  get the list of itemtypes for that module -->
@@ -137,7 +133,7 @@
                         </xar:if>
 
                         <strong>
-                            <xar:mlstring>To</xar:mlstring>
+                            To
                         </strong>
 
                         <xar:if condition="!isset($to['itemtype'])">
@@ -158,7 +154,7 @@
                 <xar:if condition="!empty($from['itemtype']) and !empty($to['itemtype'])">
                     <div class="xar-form-input-wrapper">
                         <label for="from_itemid" title="#xarML('List of items for this module+itemtype')#" class="xar-form-label">
-                            <xar:mlstring>Items:</xar:mlstring>
+                            Items:
                         </label>
                         <!--  get the list of items for that module+itemtype -->
                         <xar:if condition="!isset($from['itemid'])">
@@ -179,7 +175,7 @@
                         <xar:set name="checked">empty($to['itemid'])</xar:set>
                         <xar:data-input type="checkbox" name="to[itemid]" id="to_itemid" checked="$checked" />
                         <label for="to_itemid" title="xarML('Attempt to preserve item id during this migration')#">
-                            <xar:mlstring>Preserve id</xar:mlstring>
+                            Preserve id
                         </label>
                     </div>
 
@@ -212,11 +208,11 @@
             <xar:if condition="!empty($from['itemtype']) and !empty($to['itemtype'])">
                 <fieldset>
                     <legend>
-                        <xar:mlstring>Field and Hook Mappings</xar:mlstring>
+                        Field and Hook Mappings
                     </legend>
 
                     <h4>
-                        <xar:mlstring>Fields</xar:mlstring>
+                        Fields
                     </h4>
 
 
@@ -226,7 +222,7 @@
                                 [#$namefrom#] #$infofrom['label']# (#$infofrom['type']#):
                             </label>
                             <select name="fieldmap[#$namefrom#]" id="fieldmap_#$namefrom#">
-                                <option value=""><xar:mlstring>* not migrated *</xar:mlstring></option>
+                                <option value="">* not migrated *</option>
                                 <xar:foreach in="$tofieldlist" key="$nameto" value="$infoto">
                                     <xar:if condition="!isset($fieldmap[$namefrom]) and $namefrom eq $nameto">
                                         <option value="#$nameto#" selected="selected">[#$nameto#] #$infoto['label']# (#$infoto['type']#)</option>
@@ -241,7 +237,7 @@
                     </xar:foreach>
 
                     <h4>
-                        <xar:mlstring>Hooks</xar:mlstring>
+                        Hooks
                     </h4>
 
                     <xar:if condition="count($fromhooklist) gt 0">
@@ -251,12 +247,12 @@
                                     #$hookmodfrom#:
                                 </label>
                                 <xar:if condition="!in_array($hookmodfrom,$hooksupported)">
-                                    <xar:mlstring>not supported</xar:mlstring>
+                                    not supported
                                 <xar:elseif condition="$hookmodfrom eq 'dynamicdata'"/>
-                                    <xar:mlstring>see field mapping above</xar:mlstring>
+                                    see field mapping above
                                 <xar:else/>
                                     <select name="hookmap[#$hookmodfrom#]" id="hookmap_#$hookmodfrom#">
-                                        <option value=""><xar:mlstring>* not migrated *</xar:mlstring></option>
+                                        <option value="">* not migrated *</option>
                                         <xar:foreach in="$tohooklist" key="$hookmodto" value="$valto">
                                             <xar:if condition="!isset($hookmap[$hookmodfrom]) and $hookmodfrom eq $hookmodto">
                                                 <option value="#$hookmodto#" selected="selected">#$hookmodto#</option>
@@ -274,7 +270,7 @@
                         </xar:foreach>
                     <xar:else />
                         <p>
-                            <xar:mlstring>No hooks assigned.</xar:mlstring>
+                            No hooks assigned.
                         </p>
                     </xar:if>
                 </fieldset>

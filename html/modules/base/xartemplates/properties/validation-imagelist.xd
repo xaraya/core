@@ -3,32 +3,32 @@
 <table class="xar-norm">
   <tr>
     <td>
-      <xar:mlstring>Base directory</xar:mlstring>
+      Base directory
     </td>
     <td>
       <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#" size="#$size#" tabindex="#$tabindex#" />
       <br/>
-      <xar:mlstring>
+      
         Note : {theme} will be replaced by the current theme directory
         - e.g. {theme}/images -&gt; themes/Xaraya_Classic/images
-      </xar:mlstring>
+      
     </td>
   </tr>
   <tr>
     <td>
-      <xar:mlstring>Base URL</xar:mlstring>
+      Base URL
     </td>
     <td>
       <input type="text" name="#$name#[baseurl]" id="#$id#_baseurl" value="#$baseurl#" size="#$size#" tabindex="#$tabindex#" />
       <br/>
-      <xar:mlstring>
+      
         Note : only needed if different from the base directory
-      </xar:mlstring>
+      
     </td>
   </tr>
   <tr>
     <td>
-      <xar:mlstring>File extensions</xar:mlstring>
+      File extensions
     </td>
     <td>
       <xar:foreach in="$filetype" value="$ext">
@@ -40,7 +40,7 @@
   </tr>
   <tr>
     <td>
-      <xar:mlstring>Other rule</xar:mlstring>
+      Other rule
     </td>
     <td>
       <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="#$size#" tabindex="#$tabindex#" />

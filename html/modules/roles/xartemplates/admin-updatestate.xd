@@ -2,15 +2,15 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>Roles Administration</xar:mlstring>
+        Roles Administration
     </span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>Send notification</xar:mlstring>
+        Send notification
     </h2>
     <p>
-    <xar:mlstring>This page allows you to send a notification to the changed user(s)</xar:mlstring>.</p>
+    This page allows you to send a notification to the changed user(s).</p>
     <form name="updatestate" action="&xar-modurl-roles-admin-updatestate;" method="post" enctype="application/x-www-form-urlencoded">
         <table border="0" cellpadding="2" cellspacing="2">
             <tr>
@@ -22,14 +22,14 @@
                     <input type="hidden" name="status" id="status" value="#$status#" />
                     <input type="hidden" name="ids" id="ids" value="#$ids#" />
                     <a href="&xar-modurl-roles-admin-showusers;&amp;phase=#$state#&amp;id=#$groupid#">
-                        <xar:mlstring>Click here if you don't want to send any notification</xar:mlstring>
+                        Click here if you don't want to send any notification
                     </a>
                 </td>
             </tr>
             <tr>
                 <td>
                     <label for="subject">
-                        <xar:mlstring>Email Title</xar:mlstring>
+                        Email Title
                     </label>
                 </td>
                 <td>
@@ -39,7 +39,7 @@
             <tr>
                 <td>
                     <label for="message">
-                        <xar:mlstring>Email Body</xar:mlstring>
+                        Email Body
                     </label>
                 </td>
                 <td>

@@ -1,40 +1,14 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:style scope="module" module="base" file="navtabs" />
-<xar:set name="generalcss">
-    <xar:mlstring>
-        All
-    </xar:mlstring>
-</xar:set>
-<xar:set name="generalcssurl">
-    xarModURL('themes','admin', 'cssconfig')
-</xar:set>
-<xar:set name="modulescss">
-    <xar:mlstring>
-        Modules
-    </xar:mlstring>
-</xar:set>
-<xar:set name="modulescssurl">
-    xarModURL('themes','admin','cssconfig',array('component'=>'modules'))
-</xar:set>
-<xar:set name="themescss">
-    <xar:mlstring>
-        Themes
-    </xar:mlstring>
-</xar:set>
-<xar:set name="themescssurl">
-    xarModURL('themes','admin','cssconfig',array('component'=>'themes'))
-</xar:set>
-<xar:set name="corecss">
-    <xar:mlstring>
-        Core
-    </xar:mlstring>
-</xar:set>
-<xar:set name="corecssurl">
-    xarModURL('themes','admin','cssconfig',array('component'=>'core'))
-</xar:set>
-<xar:set name="currentcssurl">
-    xarServerGetCurrentURL()
-</xar:set>
+<xar:set name="generalcss">'All</xar:set>
+<xar:set name="generalcssurl">xarModURL('themes','admin', 'cssconfig')</xar:set>
+<xar:set name="modulescss">'Modules'</xar:set>
+<xar:set name="modulescssurl">xarModURL('themes','admin','cssconfig',array('component'=>'modules'))</xar:set>
+<xar:set name="themescss">'Themes'</xar:set>
+<xar:set name="themescssurl">xarModURL('themes','admin','cssconfig',array('component'=>'themes'))</xar:set>
+<xar:set name="corecss">'Core'</xar:set>
+<xar:set name="corecssurl">xarModURL('themes','admin','cssconfig',array('component'=>'core'))</xar:set>
+<xar:set name="currentcssurl">xarServerGetCurrentURL()</xar:set>
 <!--
 <xar:if condition=" eq ">
     <xar:set name="tabclass">' class="active"'</xar:set>
@@ -44,9 +18,9 @@
 -->
 <dl class="xar-tabs">
     <dt class="help">
-        <xar:mlstring>
+        
             Component CSS 
-        </xar:mlstring>
+        
         : 
     </dt>
     <xar:if condition="$generalcssurl eq $currentcssurl">

@@ -1,11 +1,11 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Themes Administration</span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>Edit Theme</xar:mlstring>: #$name#
+        Edit Theme: #$name#
     </h2>
 
     <h3>
@@ -20,14 +20,14 @@
 
                     <div class="xar-form-input-wrapper">
                         <label class="xar-form-label">
-                            <xar:mlstring>Name:</xar:mlstring>
+                            Name:
                         </label>
                         #$loop:item['name']#
                     </div>
 
                     <div class="xar-form-input-wrapper">
                         <label for="#$loop:item['name']#" class="xar-form-label">
-                            <xar:mlstring>Value:</xar:mlstring>
+                            Value:
                         </label>
                         <input type="text" name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['value']#" class="xar-form-textlong" />
                     </div>
@@ -40,12 +40,12 @@
                         <div class="xar-form-input-wrapper-after">
                            <input type="checkbox" name="#$loop:item['name']#-del" id="#$loop:item['name']#-del" value="delete" /> Delete
                             <label for="#$loop:item['name']#-del">
-                                <xar:mlstring>Delete</xar:mlstring>
+                                Delete
                             </label>
                         </div>
                     <xar:else />
                         <p>
-                            <xar:mlstring>This is a primary theme variable.</xar:mlstring>
+                            This is a primary theme variable.
                         </p>
                     </xar:if>
 
@@ -53,32 +53,32 @@
             </xar:loop>
         <xar:else />
             <p>
-                <xar:mlstring>Theme has no editable variables</xar:mlstring>
+                Theme has no editable variables
             </p>
         </xar:if>
 
         <fieldset>
             <legend>
-                <xar:mlstring>Add New Theme Variable</xar:mlstring>
+                Add New Theme Variable
             </legend>
 
             <div class="xar-form-input-wrapper">
                 <label for="newvarname" title="#xarML('Name of the new variable')#" class="xar-form-label">
-                    <xar:mlstring>Name:</xar:mlstring>
+                    Name:
                 </label>
                 <input type="text" name="newvarname" id="newvarname" value="" maxlength="64" class="xar-form-textlong" />
             </div>
 
             <div class="xar-form-input-wrapper">
                 <label for="newvarvalue" title="#xarML('Value of the new variable')#" class="xar-form-label">
-                    <xar:mlstring>Name:</xar:mlstring>
+                    Name:
                 </label>
                 <input type="text" name="newvarvalue" id="newvarvalue" value="" maxlength="64" class="xar-form-textlong" />
             </div>
 
             <div class="xar-form-input-wrapper">
                 <label for="newvardescription" title="#xarML('Description of the new variable')#" class="xar-form-label">
-                    <xar:mlstring>Description:</xar:mlstring>
+                    Description:
                 </label>
                 <input type="text" name="newvardescription" id="newvardescription" value="" maxlength="64" class="xar-form-textxlong" />
             </div>
@@ -88,7 +88,7 @@
         <div class="xar-form-input-wrapper-after">
             <input type="checkbox" name="return" id="return" value="1" /> 
             <label for="return" title="#xarML('TITLE')#">
-                <xar:mlstring>Update and return to this screen</xar:mlstring>
+                Update and return to this screen
             </label>
         </div>
 
@@ -100,7 +100,7 @@
     </form>
 
     <h2>
-        <xar:mlstring>Credits</xar:mlstring>
+        Credits
     </h2>
 
     <xar:loop name="$themeInfo">

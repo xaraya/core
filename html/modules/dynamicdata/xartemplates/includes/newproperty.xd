@@ -1,7 +1,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <fieldset>
       <legend>
-        <xar:mlstring>New Property</xar:mlstring>
+        New Property
       </legend>
 
       <div class="xar-form-input-wrapper">

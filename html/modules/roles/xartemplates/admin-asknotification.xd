@@ -2,54 +2,51 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Send notification</xar:mlstring></span>
+    <span class="xar-mod-title">Send notification</span>
 </div>
 <div class="xar-mod-body">
     <h2>
         <a href="&xar-modurl-roles-admin-showusers;">
-            <xar:mlstring>Member List</xar:mlstring>
+            Member List
         </a>:
-        <xar:ml>
-        <xar:mlstring>Send #(1) notification</xar:mlstring>
-        <xar:mlvar>#$mailtype#</xar:mlvar>
-        </xar:ml>
+        Send #$mailtype# notification
     </h2>
 
     <xar:comment>
      Contextual text
     <xar:if condition="$mailtype eq 'validation'">
-        <xar:set name="explanation"><xar:mlstring>This email will be sent to users when they re-validate their account (IE, change email address)</xar:mlstring></xar:set>
+        <xar:set name="explanation">This email will be sent to users when they re-validate their account (IE, change email address)</xar:set>
     <xar:elseif condition="$mailtype eq 'confirmation'"/>
-        <xar:set name="explanation"><xar:mlstring>This email will be sent to users to complete their registration by a link in the email</xar:mlstring></xar:set>
+        <xar:set name="explanation">This email will be sent to users to complete their registration by a link in the email</xar:set>
     <xar:elseif condition="$mailtype eq 'welcome'"/>
-        <xar:set name="explanation"><xar:mlstring>This email will be sent to users to welcome them</xar:mlstring></xar:set>
+        <xar:set name="explanation">This email will be sent to users to welcome them</xar:set>
     <xar:elseif condition="$mailtype eq 'reminder'"/>
-        <xar:set name="explanation"><xar:mlstring>This email will be sent to users who use the lost password option</xar:mlstring></xar:set>
+        <xar:set name="explanation">This email will be sent to users who use the lost password option</xar:set>
     <xar:elseif condition="$mailtype eq 'pending'"/>
-        <xar:set name="explanation"><xar:mlstring>This email will be sent to users when their accounts are pending approval</xar:mlstring></xar:set>
+        <xar:set name="explanation">This email will be sent to users when their accounts are pending approval</xar:set>
     <xar:elseif condition="$mailtype eq 'deactivation'"/>
-        <xar:set name="explanation"><xar:mlstring>This email will be sent to users when their accounts are deactivated</xar:mlstring></xar:set>
+        <xar:set name="explanation">This email will be sent to users when their accounts are deactivated</xar:set>
     <xar:elseif condition="$mailtype eq 'password'"/>
-        <xar:set name="explanation"><xar:mlstring>This email will be sent to users when an administrator change their password</xar:mlstring></xar:set>
+        <xar:set name="explanation">This email will be sent to users when an administrator change their password</xar:set>
     </xar:if>
     </xar:comment>
 
     <p>
-        <xar:mlstring>The changes have been made to the selected user(s), you can now send a notification by submitting the form or go back to the</xar:mlstring> <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;id=#$groupid#"><xar:mlstring>members list</xar:mlstring></a>.
+        The changes have been made to the selected user(s), you can now send a notification by submitting the form or go back to the <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;id=#$groupid#">members list</a>.
     </p>
 
     <form action="&xar-modurl-roles-admin-asknotification;" method="post" enctype="application/x-www-form-urlencoded">
 
         <div class="xar-form-input-wrapper">
             <label for="subject" title="#xarML('Title of the notification')#" class="xar-form-label">
-                <xar:mlstring>Subject:</xar:mlstring>
+                Subject:
             </label>
             <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong" />
         </div>
 
         <div class="xar-form-input-wrapper">
             <label for="message" title="#xarML('Body of the notification')#" class="xar-form-label">
-                <xar:mlstring>Message:</xar:mlstring>
+                Message:
             </label>
             <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
         </div>
@@ -70,7 +67,7 @@
         </fieldset>
 
         <p>
-            <xar:mlstring>The following variables will be replaced in the text with specific information:</xar:mlstring>
+            The following variables will be replaced in the text with specific information:
         </p>
 
          <xar:if condition="$mailtype eq 'confirmation' or $mailtype eq 'validation' ">
@@ -79,7 +76,7 @@
                     $password
                 </span>
                 <span class="xar-padding-thickleft">
-                    <xar:mlstring>Password of the user</xar:mlstring>
+                    Password of the user
                 </span>
             </div>
 
@@ -88,7 +85,7 @@
                     $validationlink
                 </span>
                 <span class="xar-padding-thickleft">
-                    <xar:mlstring>Validation link for the user</xar:mlstring>
+                    Validation link for the user
                 </span>
             </div>
 
@@ -97,7 +94,7 @@
                     $valcode
                 </span>
                 <span class="xar-padding-thickleft">
-                    <xar:mlstring>Validation code for the user</xar:mlstring>
+                    Validation code for the user
                 </span>
             </div>
 
@@ -106,7 +103,7 @@
                     $ipaddress
                 </span>
                 <span class="xar-padding-thickleft">
-                    <xar:mlstring>IP address of the user</xar:mlstring>
+                    IP address of the user
                 </span>
             </div>
 
@@ -117,7 +114,7 @@
                     $password
                 </span>
                 <span class="xar-padding-thickleft">
-                    <xar:mlstring>Password of the user</xar:mlstring>
+                    Password of the user
                 </span>
             </div>
 
@@ -128,7 +125,7 @@
                     $sitename
                 </span>
                 <span class="xar-padding-thickleft">
-                    <xar:mlstring>Name of the site</xar:mlstring>
+                    Name of the site
                 </span>
             </div>
 
@@ -137,7 +134,7 @@
                     $siteadmin
                 </span>
                 <span class="xar-padding-thickleft">
-                    <xar:mlstring>Name of the administrator</xar:mlstring>
+                    Name of the administrator
                 </span>
             </div>
 
@@ -146,7 +143,7 @@
                     $adminmail
                 </span>
                 <span class="xar-padding-thickleft">
-                    <xar:mlstring>Email address of the administrator</xar:mlstring>
+                    Email address of the administrator
                 </span>
             </div>
 
@@ -155,7 +152,7 @@
                     $siteurl
                 </span>
                 <span class="xar-padding-thickleft">
-                    <xar:mlstring>URL of the site</xar:mlstring>
+                    URL of the site
                 </span>
             </div>
 
@@ -164,7 +161,7 @@
                     $myname
                 </span>
                 <span class="xar-padding-thickleft">
-                    <xar:mlstring>Name of the user</xar:mlstring>
+                    Name of the user
                 </span>
             </div>
 
@@ -173,7 +170,7 @@
                     $username
                 </span>
                 <span class="xar-padding-thickleft">
-                    <xar:mlstring>Username of the user</xar:mlstring>
+                    Username of the user
                 </span>
             </div>
 
@@ -182,7 +179,7 @@
                     $useremail
                 </span>
                 <span class="xar-padding-thickleft">
-                    <xar:mlstring>Email address of the user</xar:mlstring>
+                    Email address of the user
                 </span>
             </div>
 
@@ -194,7 +191,7 @@
                         $#xarVarPrepForDisplay($name)#
                     </span>
                     <span class="xar-padding-thickleft">
-                        <xar:data-label property="$properties[$name]" /> <xar:mlstring>(Dynamic property)</xar:mlstring>
+                        <xar:data-label property="$properties[$name]" /> (Dynamic property)
                     </span>
                 </div>
             </xar:foreach>

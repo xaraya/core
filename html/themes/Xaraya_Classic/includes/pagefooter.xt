@@ -2,10 +2,10 @@
 <!-- set local variables to hold the ML text that we intend to use in the titles and alt attributes -->
 <xar:set name="sitefooter"><xar:var scope="module" module="themes" name="SiteFooter" /></xar:set>
 <xar:set name="sitecopyright"><xar:var scope="module" module="themes" name="SiteCopyRight" /></xar:set>
-<xar:set name="validatexhtml"><xar:mlstring>Validate XHTML 1.0 Strict</xar:mlstring></xar:set>
-<xar:set name="validatecss"><xar:mlstring>Validate CSS</xar:mlstring></xar:set>
-<xar:set name="tableless"><xar:mlstring>Tableless layout</xar:mlstring></xar:set>
-<xar:set name="poweredbyxaraya"><xar:mlstring>Powered by Xaraya</xar:mlstring></xar:set>
+<xar:set name="validatexhtml">'Validate XHTML 1.0 Strict'</xar:set>
+<xar:set name="validatecss">'Validate CSS'</xar:set>
+<xar:set name="tableless">'Tableless layout'</xar:set>
+<xar:set name="poweredbyxaraya">'Powered by Xaraya'</xar:set>
 <div id="xc-footer">
     <div id="xc-footer-leftbevel">
         &#160; 

@@ -7,21 +7,21 @@
     <div id="install">
         <xar:template file="status" />
         <h1>
-            <xar:mlstring>Beginning Initialization</xar:mlstring>
+            Beginning Initialization
         </h1>
         <form action="install.php" method="post">
             <h4>
                 <input type="hidden" name="install_phase" id="install_phase" value="6" />
-                <xar:mlstring>This may take a moment, so please wait...</xar:mlstring>
+                This may take a moment, so please wait...
             </h4>
-            <h4><xar:mlstring>Thank you for your patience.</xar:mlstring>
+            <h4>Thank you for your patience.
             </h4>
             <h4 style="margin-top:100px;">
-             <xar:mlstring>Has your browser stopped loading the page?</xar:mlstring>
+             Has your browser stopped loading the page?
              </h4>
-             <h4><xar:mlstring>If your browser does not automatically redirect, please </xar:mlstring><br />
+             <h4>If your browser does not automatically redirect, please <br />
                 <a href="&xar-modurl-installer-admin-bootstrap;&amp;install_language=#$language#">
-                    <xar:mlstring>click to manually continue to next stage</xar:mlstring>
+                    click to manually continue to next stage
                 </a>
             </h4>
         </form>
@@ -30,27 +30,21 @@
     <div id="install">
         <xar:template file="status" />
         <h1>
-            <xar:mlstring>Database Found</xar:mlstring>
+            Database Found
         </h1>
         <div>
             <h4>
-                <xar:mlstring>You already have an installed database.</xar:mlstring>
+                You already have an installed database.
             </h4>
             <h4>
-                <xar:ml>
-                    <xar:mlstring>If you continue, any tables using the #(1)_ prefix will be overwritten.</xar:mlstring>
-                    <xar:mlvar>#$dbPrefix#</xar:mlvar>
-                </xar:ml>
+                If you continue, any tables using the #$dbPrefix#_ prefix will be overwritten.
             </h4>
             <div class="xar-align-center">
                 <form action="install.php" method="post" class="xar-displayinline">
                     <span>
                         <input type="hidden" name="install_phase" id="install_phase" value="4" />
                         <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-                        <xar:set name="buttonprevious">
-                            <xar:mlstring>Back</xar:mlstring>
-                        </xar:set>
-                        <input type="submit" value="#$buttonprevious#" />
+                        <input type="submit" value="Back#" />
                     </span>
                 </form>
                 <form action="install.php" method="post" class="xar-displayinline">
@@ -65,10 +59,7 @@
                         <input type="hidden" name="confirmDB" id="confirmDB" value="true" />
                         <!-- <input type="hidden" name="newDB" id="newDB" value="#$newDB#" /> -->
                         <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-                        <xar:set name="buttonnext">
-                            <xar:mlstring>Continue</xar:mlstring>
-                        </xar:set>
-                        <input type="submit" value="#$buttonnext#" />
+                        <input type="submit" value="Continue" />
                     </span>
                 </form>
             </div>

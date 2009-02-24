@@ -18,50 +18,50 @@
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
+        
             Roles Administration
-        </xar:mlstring>
+        
     </span>
 </div>
 <div class="xar-mod-body">
   <xar:template type="module" file="admin-menu" />
     <h2>
         <a href="&xar-modurl-roles-admin-createmail;">
-            <xar:mlstring>
+            
                 Messaging System:
-            </xar:mlstring>
+            
         </a>
-        <xar:mlstring>
+        
             Send Mail To Users/Groups
-        </xar:mlstring>
+        
     </h2>
     <div>
         <dl class="xar-tabs">
             <dt class="help">
-                <xar:mlstring>
+                
                     Option
-                </xar:mlstring>
+                
                 :
             </dt>
             <dd class="active">
                 <a href="&xar-modurl-roles-admin-createmail;">
-                    <xar:mlstring>
+                    
                         Send mail
-                    </xar:mlstring>
+                    
                 </a>
             </dd>
             <dd>
                 <a href="&xar-modurl-roles-admin-modifyemail;">
-                    <xar:mlstring>
+                    
                         Templates
-                    </xar:mlstring>
+                    
                 </a>
             </dd>
             <dd>
                 <a href="&xar-modurl-roles-admin-modifynotice;">
-                    <xar:mlstring>
+                    
                         Configure
-                    </xar:mlstring>
+                    
                 </a>
             </dd>
         </dl>
@@ -74,46 +74,46 @@
             <tr>
                 <th class="xar-nowrap">
                     <label for="filter" title="#xarML('Select display type')#">
-                        <xar:mlstring>
+                        
                             Show Users
-                        </xar:mlstring>
+                        
                     </label>
                 </th>
                 <th class="xar-nowrap">
                     <label for="filter" title="#xarML('Select a group')#">
-                        <xar:mlstring>
+                        
                             Groups
-                        </xar:mlstring>
+                        
                     </label>
                 </th>
                 <th class="xar-nowrap">
                     <label for="filter" title="#xarML('Select the state of users')#">
-                        <xar:mlstring>
+                        
                             State
-                        </xar:mlstring>
+                        
                     </label>
                 </th>
                 <xar:if condition="$id gt 0">
                     <th class="xar-nowrap">
                         <label for="filter" title="#xarML('Includes subgroups')#">
-                            <xar:mlstring>
+                            
                                 Include Subgroups
-                            </xar:mlstring>
+                            
                         </label>
                     </th>
                 </xar:if>
                 <th class="xar-nowrap">
                     <label for="filter" title="#xarML('Select template for the message')#">
-                        <xar:mlstring>
+                        
                             Templates
-                        </xar:mlstring>
+                        
                     </label>
                 </th>
                 <th class="xar-nowrap">
                     <label for="reload">
-                        <xar:mlstring>
+                        
                             Action
-                        </xar:mlstring>
+                        
                     </label>
                 </th>
             </tr>
@@ -137,29 +137,29 @@
                     <select name="id" id="id" onchange="this.form.submit()">
                         <xar:if condition="$type eq 'single'">
                             <option value="#$id#" selected="selected">
-                                <xar:mlstring>
+                                
                                     Single user
-                                </xar:mlstring>
+                                
                             </option>
                         </xar:if>
                         <xar:if condition="$id eq -1">
                             <option value="#$id#" selected="selected">
-                                <xar:mlstring>
+                                
                                     -- choose --
-                                </xar:mlstring>
+                                
                             </option>
                         </xar:if>
                         <xar:if condition="$id eq 0">
                             <option value="0" selected="selected">
-                                <xar:mlstring>
+                                
                                     All Users
-                                </xar:mlstring>
+                                
                             </option>
                             <xar:else />
                             <option value="0">
-                                <xar:mlstring>
+                                
                                     All Users
-                                </xar:mlstring>
+                                
                             </option>
                         </xar:if>
                         <xar:set name="prevgroup">
@@ -224,12 +224,12 @@
 
     </xar:if>
     <fieldset>
-      <legend><xar:mlstring>Users</xar:mlstring></legend>
+      <legend>Users</legend>
       <xar:if condition="!isset($users)">
         <p>
-            <xar:mlstring>
+            
                 No users selected
-            </xar:mlstring>
+            
             .
         </p>
       <xar:else />
@@ -237,59 +237,50 @@
             the Roles Lists table-based styles (borrow from the Modules list)
         </xar:comment>
         <xar:if condition="$selstyle eq '1'">
-          <p>
-            <xar:ml>
-              <xar:mlstring>
-                #(1) user(s) selected.
-              </xar:mlstring>
-              <xar:mlvar>
-                #$totalselected#
-              </xar:mlvar>
-            </xar:ml>
-          </p>
+            <p>#$totalselected# user(s) selected.</p>
         <xar:elseif condition="$selstyle eq '2'" />
           <xar:if condition="count($users) eq 0">
             <p>
-              <xar:mlstring>
+              
                 No users match
-              </xar:mlstring>
+              
             </p>
           <xar:else />
           <table class="xar-fullwidth">
             <tr>
               <th>
                 <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=name">
-                  <xar:mlstring>
+                  
                     Real name
-                  </xar:mlstring>
+                  
                 </a>
               </th>
               <th>
                 <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=uname">
-                  <xar:mlstring>
+                  
                     Login
-                  </xar:mlstring>
+                  
                 </a>
               </th>
               <th>
                 <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=email">
-                  <xar:mlstring>
+                  
                     Email
-                  </xar:mlstring>
+                  
                 </a>
               </th>
               <th>
                 <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=date_reg">
-                  <xar:mlstring>
+                  
                     Date Registered
-                  </xar:mlstring>
+                  
                 </a>
               </th>
               <th>
                 <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=state">
-                  <xar:mlstring>
+                  
                     State
-                  </xar:mlstring>
+                  
                 </a>
               </th>
             </tr>
@@ -311,21 +302,21 @@
                 </td>
                 <td>
                   <xar:if condition="$loop:item['status'] eq 1">
-                    <xar:mlstring>
+                    
                       Inactive
-                    </xar:mlstring>
+                    
                     <xar:elseif condition="$loop:item['status'] eq 2" />
-                    <xar:mlstring>
+                    
                       Not Validated
-                    </xar:mlstring>
+                    
                     <xar:elseif condition="$loop:item['status'] eq 3" />
-                    <xar:mlstring>
+                    
                       Active
-                    </xar:mlstring>
+                    
                     <xar:elseif condition="$loop:item['status'] eq 4" />
-                    <xar:mlstring>
+                    
                       Pending
-                    </xar:mlstring>
+                    
                   </xar:if>
                 </td>
               </tr>
@@ -345,28 +336,28 @@
       <form action="&xar-modurl-roles-admin-sendmail;" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>
-                <xar:mlstring>
+                
                     Message
-                </xar:mlstring>
+                
             </legend>
         <p>
-            <xar:mlstring>
+            
                 Choose a message template from the Templates dropdown above, or type in your message directly :
-            </xar:mlstring>
+            
         </p>
             <div class="xar-form-input-wrapper">
                 <label for="subject" title="#xarML('Subject line of the email')#" class="xar-form-label">
-                    <xar:mlstring>
+                    
                         Subject:
-                    </xar:mlstring>
+                    
                 </label>
                 <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong" />
             </div>
             <div class="xar-form-input-wrapper">
                 <label for="message" title="#xarML('Body of the email')#" class="xar-form-label">
-                    <xar:mlstring>
+                    
                         Message:
-                    </xar:mlstring>
+                    
                 </label>
                 <div class="xar-form-container-after">
                     <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
@@ -390,14 +381,14 @@
         </fieldset>
     </form>
     <p>
-        <xar:mlstring>
+        
             Look in the file var/messaging/roles/includes/message-vars.xd to see how the different variables used in the templates are defined.
-        </xar:mlstring>
+        
     </p>
     <p>
-        <xar:mlstring>
+        
             Note that some variables (e.g. $myusername in the confirmation template) are defined dynamically during Xaraya processes, such as registration. You cannot use those variables, nor can you send messages that contain them from here.
-        </xar:mlstring>
+        
     </p>
 </div>
 </xar:template>

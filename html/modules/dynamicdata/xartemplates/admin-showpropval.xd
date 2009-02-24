@@ -2,16 +2,11 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>Dynamic Data Administration</xar:mlstring>
+        Dynamic Data Administration
     </span>
 </div>
 <div class="xar-mod-body">
-    <h2>
-        <xar:ml>
-            <xar:mlstring>Validation for DataProperty #(1)</xar:mlstring>
-            <xar:mlvar>#$itemid#</xar:mlvar>
-        </xar:ml>
-    </h2>
+    <h2>Validation for DataProperty #$itemid#</h2>
     <xar:if condition="!empty($isupload)">
         <xar:set name="enc_type">'multipart/form-data'</xar:set>
         <xar:else />
@@ -19,7 +14,7 @@
     </xar:if>
     <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;" enctype="#$enc_type#">
       <fieldset>
-        <legend><xar:mlstring>Property summary</xar:mlstring></legend>
+        <legend>Property summary</legend>
         <xar:set name="fieldlist">array('name','label','objectid','type','validation')</xar:set>
         <xar:data-display object="$object" fieldlist="$fieldlist" />
       </fieldset>

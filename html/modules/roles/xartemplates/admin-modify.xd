@@ -4,24 +4,18 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
+    <span class="xar-mod-title">Roles Administration</span>
 </div>
 
 <div class="xar-mod-body">
   <xar:template type="module" file="admin-menu" />
-    <h2>
-        <xar:ml>
-            <xar:mlstring>Manage #(1) '#(2)':</xar:mlstring>
-            <xar:mlvar>#$object:label#</xar:mlvar>
-            <xar:mlvar>#$object:properties.name:value#</xar:mlvar>
-        </xar:ml>
-    </h2>
+    <h2>Manage #$object:label# '#$object:properties.name:value#':</h2>
 
     <xar:if condition="count($parents) ne 0">
         <div>
             <dl class="xar-tabs">
                 <dt class="help" title="These are the parents that #$object:properties.name:value# is a member of">
-                    <xar:mlstring>Parents:</xar:mlstring>
+                    Parents:
                 </dt>
                 <xar:set name="prevgroup">""</xar:set>
                 <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
@@ -42,27 +36,19 @@
     <!-- Show the general tab list for roles -->
     <xar:template file="tablist" />
     <fieldset>
-      <legend>
-        <xar:ml>
-            <xar:mlstring>#(1) Properties:</xar:mlstring>
-            <xar:mlvar>#$object:label#</xar:mlvar>
-        </xar:ml>
-      </legend>
+      <legend>#$object:label# Properties:</legend>
 
         <form action="&xar-modurl-dynamicdata-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
             <xar:if condition="!xarSecurityCheck('EditRole',0,'Roles',$object:getName())">
                 <xar:data-display object="$object" />
                 <p>
-                <xar:ml>
-                    <xar:mlstring>This #(1) cannot be edited or deleted.</xar:mlstring>
-                    <xar:mlvar>#$object:label#</xar:mlvar>
-                </xar:ml>
+                    This #$object:label# cannot be edited or deleted.
                 </p>
             <xar:else />
                 <xar:if condition="$basetype eq ROLES_GROUPTYPE AND $object:countChildren()">
                     <div class="xar-form-input-wrapper">
                         <label title="#xarML('Type of Role')#" class="xar-form-label">
-                            <xar:mlstring>Type:</xar:mlstring>
+                            Type:
                         </label>
                         #$object:label#
                         <!--
@@ -74,7 +60,7 @@
                 <xar:else />
                     <div class="xar-form-input-wrapper">
                         <label for="itemtype" title="#xarML('Type of Role')#" class="xar-form-label">
-                                <xar:mlstring>Type:</xar:mlstring>
+                                Type:
                         </label>
                         <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
                         <xar:data-input type="itemtype" name="itemtype" value="$itemtype" validation="roles" onchange="$onchange" />
@@ -85,7 +71,7 @@
                 <xar:if condition="in_array('primaryparent',$settings)">
                     <div class="xar-form-input-wrapper">
                         <label for="duvs_primaryparent" title="#xarML('Primary parent group')#" class="xar-form-label">
-                            <xar:mlstring>Primary Parent Group:</xar:mlstring>
+                            Primary Parent Group:
                         </label>
                         <xar:set name="value">
                             xarModAPIFunc('roles','user','getprimaryparent',array('itemid' => $id))
@@ -100,11 +86,11 @@
                 <xar:if condition="in_array('userhome',$settings)">
                     <div class="xar-form-input-wrapper">
                         <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
-                            <xar:mlstring>Home:</xar:mlstring>
+                            Home:
                         </label>
                         <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModUserVars::get('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7" />
                         <p class="xar-form-input-wrapper-after">
-                            <xar:mlstring>You can use the module shortcut syntax available in the Base user menu block.</xar:mlstring>
+                            You can use the module shortcut syntax available in the Base user menu block.
                         </p>
                     </div>
                 </xar:if>
@@ -113,9 +99,9 @@
                     <xar:if condition="in_array('useremailformat',$settings)">
                         <div class="xar-form-input-wrapper">
                             <label for="duvs_useremailformat" title="#xarML('Email Format')#" class="xar-form-label">
-                                <xar:mlstring>
+                                
                                     Email Format:
-                                </xar:mlstring>
+                                
                             </label>
                             <xar:set name="value">
                                 xarModUserVars::get('roles','useremailformat',$id)
@@ -133,7 +119,7 @@
                     <xar:if condition="in_array('usertimezone',$settings)">
                         <div class="xar-form-input-wrapper">
                             <label for="duvs_usertimezone" class="xar-form-label">
-                                <xar:mlstring>User Timezone:</xar:mlstring>
+                                User Timezone:
                             </label>
                             <xar:set name="value">
                                 xarModUserVars::get('roles','usertimezone',$id)
@@ -147,7 +133,7 @@
                             <xar:set name="checked">xarModUserVars::get('roles', 'allowemail',$id)</xar:set>
                             <xar:data-input type="checkbox" name="duvs[allowemail]" id="duvs_allowemail" checked="$checked" />
                             <label for="allowemail" title="#xarML('Allow users to send emails?')#">
-                               <xar:mlstring>User has allowed other users to send them an email?</xar:mlstring>
+                               User has allowed other users to send them an email?
                             </label>
                         </div>
                    </xar:if>
@@ -155,7 +141,7 @@
                     <xar:if condition="in_array('passwordupdate',$settings)">
                         <div class="xar-form-input-wrapper">
                             <label class="xar-form-label">
-                                <xar:mlstring>Password last updated:</xar:mlstring>
+                                Password last updated:
                             </label>
                             #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))# #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
                         </div>
@@ -164,7 +150,7 @@
                     <xar:if condition="in_array('userlastlogin',$settings)">
                         <div class="xar-form-input-wrapper">
                             <label class="xar-form-label">
-                                <xar:mlstring>Last login time:</xar:mlstring>
+                                Last login time:
                             </label>
                                 #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#  #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
                         </div>
@@ -193,11 +179,11 @@
     </fieldset>
 
     <fieldset>
-        <legend><xar:mlstring>Group Memberships</xar:mlstring></legend>
+        <legend>Group Memberships</legend>
         <table class="xar-fullwidth">
             <tr>
-                <th><xar:mlstring>Group</xar:mlstring></th>
-                <th><xar:mlstring>Remove</xar:mlstring></th>
+                <th>Group</th>
+                <th>Remove</th>
             </tr>
             <xar:loop name="$parents">
                 <tr>
@@ -213,10 +199,10 @@
                     <td class="xar-align-center">
                         <xar:if condition="count($parents) ne 1">
                             <a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$id#&amp;parentid=#$loop:item['parentid']#&amp;authid=#xarSecGenAuthKey()#">
-                                <xar:mlstring>Remove</xar:mlstring>
+                                Remove
                             </a>
                         <xar:else />
-                            <xar:mlstring>Cannot Remove</xar:mlstring>
+                            Cannot Remove
                         </xar:if>
                     </td>
                 </tr>
@@ -224,16 +210,13 @@
         </table>
         <xar:if condition="!xarSecurityCheck('EditRole',0,'Roles',$object:getName())">
           <p>
-        <xar:ml>
-            <xar:mlstring>This #(1) cannot be edited or deleted.</xar:mlstring>
-            <xar:mlvar>#$object:label#</xar:mlvar>
-        </xar:ml>
+            This #$object:label# cannot be edited or deleted.
           </p>
-          <xar:else />
+        <xar:else />
           <form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
             <div class="xar-form-input-wrapper">
               <label for="roleid" title="#xarML('Choose a parent to assign membership')#" class="xar-form-label">
-                <xar:mlstring>Add to:</xar:mlstring>
+                Add to:
                     </label>
                     <select name="roleid" id="roleid">
                         <xar:loop name="$groups">

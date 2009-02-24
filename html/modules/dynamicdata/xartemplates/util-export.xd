@@ -3,14 +3,14 @@
 <xar:style scope="module" file="dd" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
+        
             Dynamic Data Administration
-        </xar:mlstring>
+        
     </span>
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
-   <h2><xar:mlstring>Utilities - Export DataObject Definition </xar:mlstring></h2>
+   <h2>Utilities - Export DataObject Definition </h2>
    <xar:template type="module" file="utility-menu" />
     <form>
         <fieldset>
@@ -19,9 +19,9 @@
             </legend>
             <div class="xar-form-input-wrapper">
                 <label for="xml" class="xar-form-label">
-                    <xar:mlstring>
+                    
                         Definition
-                    </xar:mlstring>
+                    
                     :
                 </label>
                 <div class="xar-form-container-after">
@@ -32,26 +32,26 @@
     </form>
     <xar:if condition="!empty($convertlink)">
         <a href="#$convertlink#">
-            <xar:mlstring>
+            
                 Create dedicated table for this object 
-            </xar:mlstring>
+            
         </a>
     </xar:if>
     <xar:if condition="!empty($formlink)">
         <p class="xar-align-center">
             <a href="#$formlink#">
-                <xar:mlstring>
+                
                     Export Data for all Items to Browser 
-                </xar:mlstring>
+                
             </a>
         </p>
     </xar:if>
     <xar:if condition="!empty($filelink)">
         <p class="xar-align-center">
             <a href="#$filelink#">
-                <xar:mlstring>
+                
                     Export Data for all Items to File 
-                </xar:mlstring>
+                
             </a>
         </p>
     </xar:if>

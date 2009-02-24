@@ -1,7 +1,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Roles Tree</xar:mlstring></h2>
+<div class="xar-mod-head"><span class="xar-mod-title">Roles</span></div>
+<div class="xar-mod-body"><h2>Roles Tree</h2>
     <div>
         #$chart#
     </div>

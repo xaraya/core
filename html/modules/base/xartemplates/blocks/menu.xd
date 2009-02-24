@@ -53,9 +53,9 @@
     <ul class="xar-menu-section">
         <li class="xar-menu-section">
             <h4>
-                <xar:mlstring>
+                
                     Modules 
-                </xar:mlstring>
+                
             </h4>
             <ul class="xar-menu-item">
                 <xar:foreach in="$usermods" value="$mod" key="$modname">
@@ -113,9 +113,9 @@
     <p>
         [ 
         <a href="#$printurl#" title="Print View">
-            <xar:mlstring>
+            
                 Print View 
-            </xar:mlstring>
+            
         </a>
         ] 
     </p>
@@ -126,9 +126,9 @@
         <p>
             [ 
             <a href="#$rssurl#" title="Syndication">
-                <xar:mlstring>
+                
                     Syndication 
-                </xar:mlstring>
+                
             </a>
             ] 
         </p>

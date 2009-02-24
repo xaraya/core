@@ -3,7 +3,7 @@
 <table class="xar-norm">
   <tr>
     <td>
-      <xar:mlstring>Store as</xar:mlstring>
+      Store as
     </td>
     <td>
       <select name="#$name#[dbformat]" id="#$id#_dbformat" tabindex="#$tabindex#">
@@ -14,49 +14,24 @@
           Note : timestamp is not an option for ExtendedDate
         -->
         <xar:if condition="empty($class) or $class ne 'dynamic_extendeddate_property'">
-          <option value="">
-            <xar:ml>
-              <xar:mlstring>timestamp : #(1)</xar:mlstring>
-              <xar:mlvar>#$timestamp#</xar:mlvar>
-            </xar:ml>
-          </option>
+          <option value="">timestamp : #$timestamp#</option>
         </xar:if>
         <xar:if condition="!empty($dbformat) and $dbformat == 'datetime'">
-          <option value="datetime" selected="selected">
-            <xar:ml>
-              <xar:mlstring>datetime : #(1)</xar:mlstring>
-              <xar:mlvar>#$datetime#</xar:mlvar>
-            </xar:ml>
-          </option>
+          <option value="datetime" selected="selected">datetime : #$datetime#</option>
         <xar:else/>
-          <option value="datetime">
-            <xar:ml>
-              <xar:mlstring>datetime : #(1)</xar:mlstring>
-              <xar:mlvar>#$datetime#</xar:mlvar>
-            </xar:ml>
-          </option>
+          <option value="datetime">datetime : #$datetime#</option>
         </xar:if>
         <xar:if condition="!empty($dbformat) and $dbformat == 'date'">
-          <option value="date" selected="selected">
-            <xar:ml>
-              <xar:mlstring>date : #(1)</xar:mlstring>
-              <xar:mlvar>#$date#</xar:mlvar>
-            </xar:ml>
-          </option>
+          <option value="date" selected="selected">date : #$date#</option>
         <xar:else/>
-          <option value="date">
-            <xar:ml>
-              <xar:mlstring>date : #(1)</xar:mlstring>
-              <xar:mlvar>#$date#</xar:mlvar>
-            </xar:ml>
-          </option>
+          <option value="date">date : #$date#</option>
         </xar:if>
       </select>
     </td>
   </tr>
   <tr>
     <td>
-      <xar:mlstring>Other rule</xar:mlstring>
+      Other rule
     </td>
     <td>
       <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="50" tabindex="#$tabindex#" />

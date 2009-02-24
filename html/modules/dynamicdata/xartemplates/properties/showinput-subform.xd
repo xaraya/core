@@ -86,13 +86,13 @@
       <xar:if condition="!empty($dropdown) and !empty($title)">
           <tr>
             <td>
-              <xar:mlstring>Select item</xar:mlstring>
+              Select item
             </td>
             <td>
               <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
               <select name="#$name#" id="#$id#" tabindex="#$tabindex#">
                 <option value="0">
-                  <xar:if condition="!empty($input)">[ <xar:mlstring>new item</xar:mlstring> ]</xar:if>
+                  <xar:if condition="!empty($input)">[ new item ]</xar:if>
                 </option>
                 <xar:foreach in="$dropdown" key="$dropid" value="$dropvalue">
                   <xar:if condition="!empty($value) and $value eq $dropid">
@@ -128,7 +128,7 @@
       <xar:if condition="!empty($dropdown) and !empty($count)">
           <tr>
             <td>
-              <xar:mlstring>Select link</xar:mlstring>
+              Select link
             </td>
             <td>
               <!--  use the link property to show the values in a nicer way -->
@@ -136,7 +136,7 @@
 
               <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
               <select name="#$name#" id="#$id#" tabindex="#$tabindex#">
-                <option value="0">[ <xar:mlstring>new link</xar:mlstring> ]</option>
+                <option value="0">[ new link ]</option>
                 <xar:foreach in="$dropdown" key="$dropid" value="$dropvalue">
                   <xar:if condition="!empty($value) and $value eq $dropvalue[$link]">
                     <option value="#$dropvalue[$link]#" selected="selected"><xar:data-output property="$linkprop" value="$dropvalue[$link]" /> (#$dropvalue[$count]#)</option>

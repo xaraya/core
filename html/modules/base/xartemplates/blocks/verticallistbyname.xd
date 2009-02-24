@@ -10,7 +10,7 @@
             <xar:if condition="$showhelp eq '1'">
             <li class="xar-menu-item">
                 <a title="#xarML('System help')#" href="#$overviewlink#">
-                    <xar:mlstring>Help</xar:mlstring>
+                    Help
                 </a>
             </li>
             </xar:if>
@@ -75,7 +75,7 @@
     <ul class="xar-menu-section">
         <li class="xar-menu-item">
             <a title="#xarML('Logout as administrator')#" href="&xar-modurl-base-admin-confirmlogout;">
-                <xar:mlstring>Admin logout</xar:mlstring>
+                Admin logout
             </a>
         </li>
     </ul>

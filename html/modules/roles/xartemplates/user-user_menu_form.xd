@@ -12,9 +12,9 @@
 <div class="xar-mod-body">
 
     <h2>
-        <xar:mlstring>
+        
             Edit User
-        </xar:mlstring>
+        
         : #$uname#
     </h2>
 
@@ -22,16 +22,16 @@
 
         <fieldset>
             <legend>
-                <xar:mlstring>
+                
                     User Details
-                </xar:mlstring>
+                
             </legend>
             <xar:if condition="xarModVars::get('roles', 'requirevalidation')">
                 <div class="xar-form-input-wrapper">
                     <label for="email">
-                        <xar:mlstring>
+                        
                             Changing your email address will require you to revalidate your account.
-                        </xar:mlstring>
+                        
                     </label>
                 </div>
             </xar:if>
@@ -41,19 +41,19 @@
                     <xar:set name="checked">xarModUserVars::get('roles', 'allowemail',$id)</xar:set>
                     <xar:data-input type="checkbox" name="allowemail" id="allowemail" checked="$checked" tabindex="2" />
                     <label for="allowemail" title="#xarML('Allow users to send emails?')#">
-                       <xar:mlstring>Allow other users to send you an email via a form?</xar:mlstring>
+                       Allow other users to send you an email via a form?
                     </label>
                 </div>
                 <p class="xar-form-input-wrapper-after">
-                    <xar:mlstring>Note your email address is never disclosed or displayed in this process.</xar:mlstring>
+                    Note your email address is never disclosed or displayed in this process.
                 </p>
             </xar:if>
             <xar:if condition="xarModVars::get('roles','setuserhome') and xarModVars::get('roles','allowuserhomeedit')">
                 <div class="xar-form-input-wrapper">
                     <label for="home" class="xar-form-label">
-                        <xar:mlstring>
+                        
                             User Home:
-                        </xar:mlstring>
+                        
                     </label>
                     <input type="text" name="home" id="home" value="#$home#" size="40" maxlength="100" />
                 </div>
@@ -63,7 +63,7 @@
             <xar:if condition="xarModVars::get('roles','setpasswordupdate')">
                     <div class="xar-form-input-wrapper">
                         <label for="upasswordupdate" class="xar-form-label">
-                            <xar:mlstring>Password last updated:</xar:mlstring>
+                            Password last updated:
                         </label>
                         #xarLocaleGetFormattedDate('medium', $upasswordupdate)# #xarLocaleGetFormattedTime('medium', $upasswordupdate)#
                     </div>
@@ -72,7 +72,7 @@
                 <xar:if condition="!empty($usercurrentlogin)">
                     <div class="xar-form-input-wrapper">
                         <label for="thislogin" class="xar-form-label">
-                            <xar:mlstring>Time of Current Login:</xar:mlstring>
+                            Time of Current Login:
                         </label>
                             #xarLocaleGetFormattedDate('medium', $usercurrentlogin)#  #xarLocaleGetFormattedTime('medium', $usercurrentlogin)#
                     </div>
@@ -80,7 +80,7 @@
                 <xar:if condition="!empty($userlastlogin)">
                     <div class="xar-form-input-wrapper">
                         <label for="lastlogin" class="xar-form-label">
-                            <xar:mlstring>Time of Last Login:</xar:mlstring>
+                            Time of Last Login:
                         </label>
                             #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#
                     </div>
@@ -91,7 +91,7 @@
                 <xar:if condition="!empty($utimezone)">
                     <div class="xar-form-input-wrapper">
                         <label for="utimezone" class="xar-form-label">
-                            <xar:mlstring>Your Timezone:</xar:mlstring>
+                            Your Timezone:
                         </label>
                         <xar:data-input type="timezone" name="utimezone" id="utimezone" value="$utimezone" />
                     </div>

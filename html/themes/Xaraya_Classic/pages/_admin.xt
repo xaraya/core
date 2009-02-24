@@ -11,9 +11,9 @@
         <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
         <title>
             #$sitename#
-            <xar:mlstring>
+            
                Administration
-            </xar:mlstring>
+            
         </title>
         <meta name="ROBOTS" content="INDEX,FOLLOW" />
         <xar:style scope="common" />

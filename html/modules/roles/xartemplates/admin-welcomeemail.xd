@@ -1,9 +1,9 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Welcome Email</xar:mlstring></h2>
-    <p><xar:mlstring>This email will be sent to users to welcome them.</xar:mlstring></p>
-    <p><xar:mlstring>The welcome email is plain text</xar:mlstring></p>
+<div class="xar-mod-head"><span class="xar-mod-title">Roles Administration</span></div>
+<div class="xar-mod-body"><h2>Welcome Email</h2>
+    <p>This email will be sent to users to welcome them.</p>
+    <p>The welcome email is plain text</p>
     <form action="&xar-modurl-roles-admin-welcomeemail;" method="post" enctype="application/x-www-form-urlencoded">
              <div>
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -11,7 +11,7 @@
         <table>
         <tr>
             <td>
-                <label for="welcometitle"><xar:mlstring>Welcome Email Title</xar:mlstring></label>:
+                <label for="welcometitle">Welcome Email Title</label>:
             </td>
             <td>
                 <input type="text" name="welcometitle" id="welcometitle" value="#$welcometitle#" size="35" maxlength="100" />
@@ -23,14 +23,14 @@
         <input type="submit" value="#$submitlabel#" tabindex="2" />
             </div>
     </form>
-    <p><xar:mlstring>The following variables will be replaced in the text with specific information:</xar:mlstring></p>
+    <p>The following variables will be replaced in the text with specific information:</p>
     <table border="0" width="100%">
         <tr class="xar-align-left">
             <td>
                 %%validationlink%%
             </td>
             <td>
-                <xar:mlstring>The link for the user to click on to complete their registration</xar:mlstring>
+                The link for the user to click on to complete their registration
             </td>
         </tr>
         <tr class="xar-align-left">
@@ -38,7 +38,7 @@
                 %%myname%%
             </td>
             <td>
-                <xar:mlstring>Name given during registration</xar:mlstring>
+                Name given during registration
             </td>
         </tr>
         <tr class="xar-align-left">
@@ -46,7 +46,7 @@
                 %%username%%
             </td>
             <td>
-                <xar:mlstring>Username given during registration</xar:mlstring>
+                Username given during registration
             </td>
         </tr>
         <tr class="xar-align-left">
@@ -54,7 +54,7 @@
                 %%sitename%%
             </td>
             <td>
-                <xar:mlstring>Your Site Name</xar:mlstring>
+                Your Site Name
             </td>
         </tr>
         <tr class="xar-align-left">
@@ -62,7 +62,7 @@
                 %%siteadmin%%
             </td>
             <td>
-                <xar:mlstring>Your name</xar:mlstring>
+                Your name
             </td>
         </tr>
        <xar:if condition="isset($properties)">
@@ -72,7 +72,7 @@
                     %%#$name#%%
                 </td>
                 <td>
-                    (<xar:mlstring>dynamic property</xar:mlstring>)
+                    (dynamic property)
                     <xar:data-label property="$properties[$name]" />
                 </td>
             </tr>

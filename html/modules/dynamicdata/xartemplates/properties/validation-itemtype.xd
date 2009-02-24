@@ -3,44 +3,44 @@
 <table class="xar-norm">
   <tr>
     <td>
-      <xar:mlstring>Module</xar:mlstring>
+      Module
     </td>
     <td>
       <xar:set name="field">$name.'[modid]'</xar:set>
       <xar:data-input type="module" name="$field" value="$modid" tabindex="$tabindex" />
     </td>
     <td>
-      <xar:mlstring>Select the module you want to show item types for</xar:mlstring>
+      Select the module you want to show item types for
     </td>
   </tr>
   <tr>
     <td>
-      <xar:mlstring>Item Type</xar:mlstring>
+      Item Type
     </td>
     <td>
       <xar:set name="field">$name.'[itemtype]'</xar:set>
       <xar:data-input type="itemtype" name="$field" value="$itemtype" validation="$modname" tabindex="$tabindex" />
     </td>
     <td>
-      <xar:mlstring>Select an item type you want to show items for (optional)</xar:mlstring>
+      Select an item type you want to show items for (optional)
     </td>
   </tr>
   <tr>
     <td>
-      <xar:mlstring>List Function</xar:mlstring>
+      List Function
     </td>
     <td>
       <input type="text" name="#$name#[func]" id="#$id#_func" value="#xarVarPrepForDisplay($func)#" size="40" tabindex="#$tabindex#" />
     </td>
     <td>
-      <xar:mlstring>Get the list of items via API function call (optional)</xar:mlstring>
+      Get the list of items via API function call (optional)
       <br/>
-      <xar:mlstring>Syntax : xarModAPIFunc(...)</xar:mlstring>
+      Syntax : xarModAPIFunc(...)
     </td>
   </tr>
   <tr>
     <td>
-      <xar:mlstring>Other rule</xar:mlstring>
+      Other rule
     </td>
     <td colspan="2">
       <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="#$size#" tabindex="#$tabindex#" />

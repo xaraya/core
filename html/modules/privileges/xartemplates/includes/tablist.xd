@@ -5,20 +5,20 @@
 <div>
   <dl class="xar-tabs">
     <dt class="help" title="Choose the privileges to display">
-      <xar:mlstring>Show privileges:</xar:mlstring>
+      Show privileges:
     </dt>
 
     <xar:set name="tabclass">$show=='assigned'?'active':''</xar:set>
     <dd class="#$tabclass#">
       <a href="&xar-modurl-privileges-admin-viewprivileges;&amp;show=assigned">
-        <xar:mlstring>Assigned</xar:mlstring>
+        Assigned
       </a>
     </dd>    
 
     <xar:set name="tabclass">$show=='all'?'active':''</xar:set>
     <dd class="#$tabclass#">
       <a href="&xar-modurl-privileges-admin-viewprivileges;&amp;show=all">
-        <xar:mlstring>All</xar:mlstring>
+        All
       </a>
     </dd>    
 

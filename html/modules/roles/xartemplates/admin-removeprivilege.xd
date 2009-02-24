@@ -1,15 +1,15 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Remove Privilege</xar:mlstring></h2>
+<div class="xar-mod-head"><span class="xar-mod-title">Roles Administration</span></div>
+<div class="xar-mod-body"><h2>Remove Privilege</h2>
 <xar:if condition="count($parents) ne 0">
     <xar:style scope="module" module="base" file="navtabs" />
     <div>
         <dl class="xar-tabs">
             <dt class="help" title="These are the groups that #$rolename# is a member of">
-                <xar:mlstring>
+                
                     Parent Groups
-                </xar:mlstring>
+                
                 :
             </dt>
             <xar:set name="prevgroup">""</xar:set>
@@ -30,35 +30,35 @@
     <div>
         <dl class="xar-tabs">
             <dt class="help" title="These are the groups that #$rolename# is a member of">
-                <xar:mlstring>
+                
                     Actions
-                </xar:mlstring>
+                
                 :
             </dt>
             <dd>
                 <a href="&xar-modurl-roles-admin-display;&amp;id=#$roleid#">
-                    <xar:mlstring>Display</xar:mlstring>
+                    Display
                 </a>
             </dd>
             <dd>
                 <a href="&xar-modurl-roles-admin-modify;&amp;id=#$roleid#">
-                    <xar:mlstring>Modify</xar:mlstring>
+                    Modify
                 </a>
             </dd>
             <dd>
                 <a href="&xar-modurl-roles-admin-delete;&amp;id=#$roleid#">
-                    <xar:mlstring>Delete</xar:mlstring>
+                    Delete
                 </a>
             </dd>
             <dd class="active">
                 <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$roleid#">
-                    <xar:mlstring>Privileges</xar:mlstring>
+                    Privileges
                 </a>
             </dd>
             <xar:if condition="$ptype eq ROLES_GROUPTYPE">
                 <dd>
                     <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$roleid#">
-                        <xar:mlstring>Users</xar:mlstring>
+                        Users
                     </a>
                 </dd>
             </xar:if>
@@ -71,15 +71,15 @@
     <input type="hidden" name="privid" id="privid" value="#$privid#" />
     <input type="hidden" name="confirmation" id="confirmation" value="1" />
 
-    <p><span class="xar-title"><xar:mlstring>Confirm the removal of</xar:mlstring> '#$privname#' <xar:mlstring>from</xar:mlstring>&#160;
-    <xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
-    <xar:else /><xar:mlstring>User</xar:mlstring>
+    <p><span class="xar-title">Confirm the removal of '#$privname#' from&#160;
+    <xar:if condition="$ptype eq 1">Group
+    <xar:else />User
     </xar:if>
     '#$rolename#'</span></p>
 
     <p><input type="submit" value="#$removelabel#"  tabindex="1" /><br /><br />
 
-    <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$roleid#"><xar:mlstring>Cancel Removal</xar:mlstring></a></p>
+    <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$roleid#">Cancel Removal</a></p>
     </div>
 </form>
 </div>

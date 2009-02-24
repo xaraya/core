@@ -5,25 +5,22 @@
 <div id="install">
     <xar:template file="upstatus" />
     <h1>
-        <xar:mlstring>Upgrading your Database</xar:mlstring>
+        Upgrading your Database
     </h1>
 <p>
 #$content#
 </p>
    <xar:if condition="$finishearly ne '1'">
     <p>
-        <xar:mlstring>
+        
             Core module database tables have been updated.
-        </xar:mlstring>
+        
     </p>
 
     <form action="upgrade.php" method="post">
         <p class="center">
             <input type="hidden" name="upgrade_phase" id="upgrade_phase" value="3" />
-            <xar:set name="buttonnext">
-                <xar:mlstring>Continue</xar:mlstring>
-            </xar:set>
-            <input type="submit" value="#$buttonnext#" />
+            <input type="submit" value="Continue" />
         </p>
     </form>
     </xar:if>

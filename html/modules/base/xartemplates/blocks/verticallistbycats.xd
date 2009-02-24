@@ -4,14 +4,14 @@
     <ul class="xar-menu-section">
         <li class="xar-menu-section">
             <h4>
-                <xar:mlstring>
+                
                     Help System
-                </xar:mlstring>
+                
             </h4>
             <ul class="xar-menu-item">
                 <li class="xar-menu-item">
                     <a title="#xarML('System help')#" href="#$overviewlink#">
-                        <xar:mlstring>Help</xar:mlstring>
+                        Help
                     </a>
                 </li>
             </ul>
@@ -101,14 +101,14 @@
     <ul class="xar-menu-section">
         <li class="xar-menu-section">
             <h4>
-                <xar:mlstring>
+                
                     Controls
-                </xar:mlstring>
+                
             </h4>
             <ul class="xar-menu-item">
                 <li class="xar-menu-item">
                     <a title="#xarML('Logout as administrator')#" href="&xar-modurl-base-admin-confirmlogout;">
-                        <xar:mlstring>Admin logout</xar:mlstring>
+                        Admin logout
                     </a>
                 </li>
             </ul>
