@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -86,20 +86,20 @@ class ArrayProperty extends DataProperty
         } else {
             if (empty($value)) $value = array();
             //this code is added to store the values as value1,value2 in the DB for non-associative storage
-            if(!$this->initialization_associative_array) {
-                $items = $value;
-                $elements = "";
-                foreach ($items as $value) {
-                    $element = $value;                  
-                    if($elements == "") {
-                        $elements = $element;
-                    } else {
-                        $elements = $elements . ";" . $element;
-                    }                   
-                }               
-                $this->value = $elements .";";
+        	if(!$this->initialization_associative_array) {
+            	$items = $value;
+            	$elements = "";
+            	foreach ($items as $value) {
+            		$element = $value;            		
+            		if($elements == "") {
+            			$elements = $element;
+            		} else {
+ 				   	 	$elements = $elements . ";" . $element;
+            		}            		
+				}				
+            	$this->value = $elements .";";
             } else {
-                $this->value = serialize($value);
+            	$this->value = serialize($value);
             }
         }
     }
@@ -107,11 +107,11 @@ class ArrayProperty extends DataProperty
     public function getValue()
     {
         try {
-            if(!$this->initialization_associative_array) {
-                $value = $this->value;
-            } else {
-                $value = unserialize($this->value);
-            }            
+        	if(!$this->initialization_associative_array) {
+        		$value = $this->value;
+        	} else {
+        		$value = unserialize($this->value);
+        	}            
         } catch(Exception $e) {
             $value = null;
         }
@@ -177,29 +177,29 @@ class ArrayProperty extends DataProperty
         $data['valuelabel'] = !empty($valuelabel) ? $valuelabel : $this->display_value_label;
         $data['allowinput'] = !empty($allowinput) ? $allowinput : $this->initialization_rows;
         $data['associative_array'] = !empty($associative_array) ? $associative_array : $this->initialization_associative_array;
-        $data['numberofrows'] = count($data['value']);
+		$data['numberofrows'] = count($data['value']);
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
         $value = isset($data['value']) ? $data['value'] : $this->getValue();
-        $data['associative_array'] = !empty($associative_array) ? $associative_array : $this->initialization_associative_array;     
+		$data['associative_array'] = !empty($associative_array) ? $associative_array : $this->initialization_associative_array;		
         if (!is_array($value)) {
-            //this is added to show the value with new line when storage is non-associative                     
-            if(!$this->initialization_associative_array) {              
-                $elements = array();
-                $data['value'] = $value;
-                $lines = explode(';',$value);
-                // remove the last (empty) element
-                 array_pop($lines);
-                 foreach ($lines as $element) {
-                     array_push($elements, $element);
-                 }
-                 $data['value'] = $elements;
-            } else {
-                 $data['value'] = $value;
-            }           
+        	//this is added to show the value with new line when storage is non-associative        	        	
+        	if(!$this->initialization_associative_array) {        		
+	        	$elements = array();
+	            $data['value'] = $value;
+	            $lines = explode(';',$value);
+	            // remove the last (empty) element
+	             array_pop($lines);
+	             foreach ($lines as $element) {
+	            	 array_push($elements, $element);
+	             }
+	             $data['value'] = $elements;
+        	} else {
+        		 $data['value'] = $value;
+        	}        	
         } else {
             if (empty($value)) $value = array();
 
