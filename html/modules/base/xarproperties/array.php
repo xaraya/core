@@ -92,14 +92,14 @@ class ArrayProperty extends DataProperty
         } else {
             if (empty($value)) $value = array();
             //this code is added to store the values as value1,value2 in the DB for non-associative storage
-            if(!$this->initialization_associative_array) {
-                $elements = "";
+        	if(!$this->initialization_associative_array) {
+            	$elements = "";
                 foreach ($value as $element) {
                     $elements .= $element.";";
                 }
                 $this->value = $elements;
             } else {
-                $this->value = serialize($value);
+            	$this->value = serialize($value);
             }
         }
     }
@@ -107,11 +107,11 @@ class ArrayProperty extends DataProperty
     public function getValue()
     {
         try {
-            if(!$this->initialization_associative_array) {
-                $value = $this->value;
-            } else {
-                $value = unserialize($this->value);
-            }            
+        	if(!$this->initialization_associative_array) {
+        		$value = $this->value;
+        	} else {
+        		$value = unserialize($this->value);
+        	}            
         } catch(Exception $e) {
             $value = null;
         }
@@ -177,23 +177,23 @@ class ArrayProperty extends DataProperty
         if (!isset($data['valuelabel'])) $data['valuelabel'] = $this->display_value_label;
         if (!isset($data['allowinput'])) $data['allowinput'] = $this->initialization_rows;
         if (!isset($data['associative_array'])) $data['associative_array'] = $this->initialization_associative_array;
-        $data['numberofrows'] = count($data['value']);
+		$data['numberofrows'] = count($data['value']);
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
         $value = isset($data['value']) ? $data['value'] : $this->getValue();
-        $data['associative_array'] = !empty($associative_array) ? $associative_array : $this->initialization_associative_array;     
+		$data['associative_array'] = !empty($associative_array) ? $associative_array : $this->initialization_associative_array;		
         if (!is_array($value)) {
-            //this is added to show the value with new line when storage is non-associative                     
-            if(!$this->initialization_associative_array) {              
+        	//this is added to show the value with new line when storage is non-associative        	        	
+        	if(!$this->initialization_associative_array) {        		
                 $data['value'] = explode(';',$value);
-                // remove the last (empty) element
+	            // remove the last (empty) element
                  array_pop($data['value']);
-            } else {
-                 $data['value'] = $value;
-            }           
+        	} else {
+        		 $data['value'] = $value;
+        	}        	
         } else {
             if (empty($value)) $value = array();
 
