@@ -3,7 +3,7 @@
  * Exception handlers class
  *
  * @package exceptions
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2006 The Digital Development Foundation
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @author Marcel van der Boom <marcel@hsdev.com>
