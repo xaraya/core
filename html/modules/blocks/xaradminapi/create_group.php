@@ -20,9 +20,8 @@
 function blocks_adminapi_create_group($args)
 {
     // Get arguments from argument array
+    $template = null;
     extract($args);
-
-    if (!isset($template)) $template = '';
 
     // Argument check
     if ((!isset($name))) throw new EmptyParameterException('name');

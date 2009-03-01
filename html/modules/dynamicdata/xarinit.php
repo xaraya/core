@@ -31,7 +31,6 @@ function dynamicdata_init()
     $dynamic_properties = $xartable['dynamic_properties'];
     $dynamic_data = $xartable['dynamic_data'];
     $dynamic_configurations = $xartable['dynamic_configurations'];
-    $dynamic_relations = $xartable['dynamic_relations'];
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
     $modulestable = $xartable['modules'];
 
@@ -54,14 +53,12 @@ function dynamicdata_init()
                 'type'        => 'varchar',
                 'size'        => 64,
                 'null'        => false,
-                'default'     => ''
             ),
             /* the label used for display */
             'label'    => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
-                'default'     => ''
             ),
             /* the module this object relates to */
             'module_id' => array(
@@ -116,7 +113,7 @@ function dynamicdata_init()
             /* use the name of this object as alias for short URLs */
             'isalias'  => array(
                 'type'        => 'boolean',
-                'default'     => '1'
+                'default'     => true
             ),
         );
 
@@ -191,15 +188,13 @@ function dynamicdata_init()
             'name'       => array(
                 'type'        => 'varchar',
                 'size'        => 64,
-                'null'        => false,
-                'default'     => ''
+                'null'        => false
             ),
             /* the label used for display */
             'label'      => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
-                'default'     => ''
             ),
             /* the object this property belong to */
             'object_id'   => array(

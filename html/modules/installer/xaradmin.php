@@ -439,8 +439,8 @@ function installer_admin_phase5()
                               $modversion['version'],
                               $modversion['class'],
                               $modversion['category'],
-                              isset($modversion['admin'])?$modversion['admin']:0,
-                              isset($modversion['user'])?$modversion['user']:0,
+                              isset($modversion['admin']) ? $modversion['admin']:false,
+                              isset($modversion['user'])  ? $modversion['user']:false,
                               3);
             $result = $newStmt->executeUpdate($bindvars);
             $newModId = $dbconn->getLastId($tables['modules']);
@@ -712,10 +712,10 @@ function installer_admin_create_administrator()
 
     // Create default block groups/instances
     //                            name        template
-    $default_blockgroups = array ('left'   => '',
+    $default_blockgroups = array ('left'   => null,
                                   'right'  => 'right',
                                   'header' => 'header',
-                                  'admin'  => '',
+                                  'admin'  => null,
                                   'center' => 'center',
                                   'topnav' => 'topnav'
                                   );
@@ -757,9 +757,7 @@ function installer_admin_create_administrator()
                            array('title'    => 'Admin',
                                  'name'     => 'adminpanel',
                                  'type'     => $adminBlockTypeId,
-                                 'groups'   => array(array('id'      => $leftBlockGroup,
-                                                           'template' => '')),
-                                 'template' => '',
+                                 'groups'   => array(array('id'      => $leftBlockGroup)),
                                  'state'    =>  2))) {
             return;
         }
@@ -783,9 +781,7 @@ function installer_admin_create_administrator()
                                  'name'     => 'reminder',
                                  'content'  => $msg,
                                  'type'     => $htmlBlockTypeId,
-                                 'groups'   => array(array('id'      => $leftBlockGroup,
-                                                           'template' => '')),
-                                 'template' => '',
+                                 'groups'   => array(array('id'      => $leftBlockGroup,)),
                                  'state'    => 2))) {
             return;
         }
@@ -1043,9 +1039,7 @@ function installer_admin_confirm_configuration()
                           array('title' => 'Main Menu',
                                 'name'  => 'mainmenu',
                                 'type'  => $menuBlockTypeId,
-                                'groups' => array(array('id' => $leftBlockGroup,
-                                                        'template' => '',)),
-                                'template' => '',
+                                'groups' => array(array('id' => $leftBlockGroup,)),
                                 'content' => serialize($content),
                                 'state' => 2))) {
                 return;
@@ -1113,9 +1107,7 @@ function installer_admin_cleanup()
                            array('title'    => 'Login',
                                  'name'     => 'login',
                                  'type'     => $loginBlockTypeId,
-                                 'groups'    => array(array('id'     => $rightBlockGroup,
-                                                           'template' => '')),
-                                 'template' => '',
+                                 'groups'    => array(array('id'     => $rightBlockGroup)),
                                  'state'    => 2))) {
         } else {
             throw new Exception('Could not create login block');
@@ -1148,9 +1140,7 @@ function installer_admin_cleanup()
                            array('title'    => 'Meta',
                                  'name'     => 'meta',
                                  'type'     => $metaBlockTypeId,
-                                 'groups'    => array(array('id'      => $headerBlockGroup,
-                                                           'template' => '')),
-                                 'template' => '',
+                                 'groups'    => array(array('id'      => $headerBlockGroup)),
                                  'state'    => 2))) {
         } else {
             throw new Exception('Could not create meta block');

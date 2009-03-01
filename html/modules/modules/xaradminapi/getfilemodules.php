@@ -89,12 +89,12 @@ function modules_adminapi_getfilemodules($args)
 
                     // Work out if admin-capable
                     if (!isset($adminCapable)) {
-                        $adminCapable = 0;
+                        $adminCapable = false;
                     }
 
                     //FIXME: <johnny> remove this when xarversion.php contains the user setting
                     if (file_exists('modules/' . $modOsDir .'/xaruser.php')) {
-                        $userCapable = 1;
+                        $userCapable = true;
                     }
 
                     // No dependency information = ok
@@ -105,10 +105,10 @@ function modules_adminapi_getfilemodules($args)
                     //FIXME: <johnny> this detection isn't finished yet... we should be checking
                     //for xaruser.php and then overriding with if $modFileInfo['user_capable'] is 1
                     // Work out if user-capable
-                    if (1 == $modFileInfo['user_capable']) {
-                        $userCapable = 1;
+                    if (true == $modFileInfo['user_capable']) {
+                        $userCapable = true;
                     } else {
-                        $userCapable = 0;
+                        $userCapable = false;
                     }
 
                     //Check for duplicates

@@ -468,8 +468,7 @@ function xarRemoveMasks($module)
     } elseif ($module == null) {
         $modid = null;
     } else {
-        $modInfo = xarMod::getBaseInfo($module);
-        $modid = $modInfo['systemid'];
+        $modid = xarMod::getID($module);
     }
     return xarMasks::removeMasks($modid);
 }

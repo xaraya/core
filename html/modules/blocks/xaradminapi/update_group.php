@@ -24,6 +24,7 @@
 function blocks_adminapi_update_group($args)
 {
     // Get arguments from argument array
+    $template = null;
     extract($args);
 
     if (!empty($id)) {

@@ -28,11 +28,11 @@ $modversion['credits']      = 'xardocs/credits.txt';
 $modversion['help']         = 'xardocs/help.txt';
 $modversion['changelog']    = 'xardocs/changelog.txt';
 $modversion['license']      = 'xardocs/license.txt';
-$modversion['official']     = 1;
+$modversion['official']     = true;
 $modversion['author']       = 'John Robeson, Greg Allan';
 $modversion['contact']      = 'johnny@xaraya.com';
-$modversion['admin']        = 1;
-$modversion['user']         = 1;
+$modversion['admin']        = true;
+$modversion['user']         = true;
 $modversion['class']        = 'Core Admin';
 $modversion['category']     = 'Global';
 ?>

@@ -27,11 +27,11 @@ $modversion['credits'] = '';
 $modversion['help'] = '';
 $modversion['changelog'] = '';
 $modversion['license'] = '';
-$modversion['official'] = 1;
+$modversion['official'] = true;
 $modversion['author'] = 'Jim McDonald, Paul Rosania';
 $modversion['contact'] = 'http://www.mcdee.net/, paul@xaraya.com';
-$modversion['admin'] = 1;
-$modversion['user'] = 0;
+$modversion['admin'] = true;
+$modversion['user'] = false;
 $modversion['securityschema'] = array('Blocks::Group'    => 'Group name::Group ID',
                                       'Blocks::Instance' => 'Block type:Block title:Block ID');
 $modversion['class'] = 'Core Admin';

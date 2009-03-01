@@ -19,7 +19,7 @@ function blocks_admin_update_group()
     if (!xarVarFetch('authid', 'str:1:', $authid)) {return;}
     if (!xarVarFetch('group_instance_order', 'strlist:;:id', $group_instance_order, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('group_name', 'pre:lower:ftoken:field:Group Name:passthru:str:1:', $name)) {return;}
-    if (!xarVarFetch('group_template', 'pre:trim:lower:ftoken', $template, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('group_template', 'pre:trim:lower:ftoken', $template, null, XARVAR_NOT_REQUIRED)) {return;}
 
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) {return;}

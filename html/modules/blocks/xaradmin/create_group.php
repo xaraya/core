@@ -18,7 +18,7 @@ function blocks_admin_create_group()
 {
     // Get parameters
     if (!xarVarFetch('group_name', 'pre:lower:ftoken:passthru:str:1:', $name)) {return;}
-    if (!xarVarFetch('group_template', 'str:1:', $template, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('group_template', 'str:1:', $template, null, XARVAR_NOT_REQUIRED)) {return;}
 
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) {return;}

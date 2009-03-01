@@ -25,6 +25,7 @@
  */
 function blocks_adminapi_update_instance_groups($args)
 {
+    $template = null;
     extract($args);
 
     // The group instances are updated according to the
@@ -75,7 +76,7 @@ function blocks_adminapi_update_instance_groups($args)
         // creating a new block instance, and assigning it
         // to a group at the same time.
         if (!isset($group['template'])) {
-            $group['template'] = '';
+            $group['template'] = null;
         }
 
         $newgroups[$group['id']] = $group;

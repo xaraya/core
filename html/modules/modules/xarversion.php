@@ -26,11 +26,11 @@ $modversion['credits']            = 'xardocs/credits.txt';
 $modversion['help']               = '';
 $modversion['changelog']          = 'xardocs/changelog.txt';
 $modversion['license']            = '';
-$modversion['official']           = 1;
+$modversion['official']           = true;
 $modversion['author']             = 'Jim McDonald';
 $modversion['contact']            = '';
-$modversion['admin']              = 1;
-$modversion['user']               = 0;
+$modversion['admin']              = true;
+$modversion['user']               = false;
 $modversion['class']              = 'Core Admin';
 $modversion['category']           = 'Global';
 ?>
