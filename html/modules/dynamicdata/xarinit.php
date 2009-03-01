@@ -112,8 +112,10 @@ function dynamicdata_init()
             ),
             /* use the name of this object as alias for short URLs */
             'isalias'  => array(
-                'type'        => 'boolean',
-                'default'     => true
+                'type'        => 'integer',
+                'unsigned'     => true,
+                'size'        => 'tiny',
+                'default'     => '1'
             ),
         );
 
