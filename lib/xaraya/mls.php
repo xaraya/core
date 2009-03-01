@@ -453,16 +453,16 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
         if ($dnType == XARMLS_DNTYPE_MODULE) {
             // Handle in a special way the module type
             // for which it's necessary to load common translations
-            if (!isset($loadedCommons[$dnName])) {
-                $loadedCommons[$dnName] = true;
+            if (!isset($loadedCommons[$dnName.'module'])) {
+                $loadedCommons[$dnName.'module'] = true;
                 if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'common')) return; // throw back
                 if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return; // throw back
             }
         }
         if ($dnType == XARMLS_DNTYPE_THEME) {
             // Load common translations
-            if (!isset($loadedCommons[$dnName])) {
-                $loadedCommons[$dnName] = true;
+            if (!isset($loadedCommons[$dnName.'theme'])) {
+                $loadedCommons[$dnName.'theme'] = true;
                 if (!$GLOBALS['xarMLS_backend']->loadContext('themes:', 'common')) return; // throw back
             }
         }

@@ -56,7 +56,7 @@ function blocks_adminapi_unregister_block_type($args)
             xarModAPIFunc('blocks','admin','delete_instance', array('bid' => $result->getInt(1)));
         }
         // Delete the block type itself
-        $query = "DELETE FROM $block_types_table WHERE module_id = ? AND type = ?";
+        $query = "DELETE FROM $block_types_table WHERE module_id = ? AND name = ?";
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate(array($modId,$blockType));
 

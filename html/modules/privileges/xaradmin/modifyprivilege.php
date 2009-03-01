@@ -79,7 +79,7 @@ function privileges_admin_modifyprivilege()
     if(isset($level)) {$data['plevel'] = $level;}
     else {$data['plevel'] = $priv->getLevel();}
 
-    $instances = xarPrivileges::getinstances(xarMod::getRegID($data['pmodule']),$data['pcomponent']);
+    $instances = xarModAPIFunc('privileges','admin','getinstances',array('modid' => xarMod::getRegID($data['pmodule']),'component' => $data['pcomponent']));
     $numInstances = count($instances); // count the instances to use in later loops
 
     if(count($instance) > 0) {$default = $instance;}
