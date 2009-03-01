@@ -42,10 +42,6 @@ class CheckboxProperty extends DataProperty
 
     public function validateValue($value = null)
     {
-        // this won't do for check boxes !
-        //if (!isset($value)) {
-        //    $value = $this->value;
-        //}
     // TODO: allow different values here, and verify $checked ?
         if (!empty($value)) {
             $this->value = 1;

@@ -1,5 +1,7 @@
 <schema name="#$schemaName#" xmlns="http://xaraya.com/2007/schema" xmlns:xar="http://xaraya.com/2004/blocklayout">
-  <description>Auto generated schema file for development purposes</description>
+  <description>
+    Auto generated schema file for development purposes
+  </description>
   <xar:foreach in="$tables" value="$table">
     <table name="#$table:getName()#">
       <xar:foreach in="#$table:getColumns()#" value="$column">
@@ -85,7 +87,9 @@
           </xar:if>
         </xar:foreach>
       </constraints>
-      <description>End of #$table:getName()#</description>
+      <description>
+        End of #$table:getName()#
+      </description>
     </table>
   </xar:foreach>
 </schema>

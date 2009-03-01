@@ -19,27 +19,15 @@
             <xar:set name="class">"xar-form-label"</xar:set>
         </xar:if>
         <xar:if condition="$for ne 'id' and $for ne 'name'">
-            <xar:if condition="!empty($fieldprefix)">
-                <xar:set name="for">$fieldprefix . "_" . $for</xar:set>
-            </xar:if>
             <label class="#$class#" for="#$for#" title="#$title#" style="#$style#">
                 #$label#
             </label>
         <xar:elseif condition="$for eq 'id' and !empty($id)"/>
-            <xar:if condition="!empty($fieldprefix)">
-                <xar:set name="for">$fieldprefix . "_dd_" . $id</xar:set>
-            <xar:else/>
-                <xar:set name="for">"dd_" . $id</xar:set>
-            </xar:if>
-            <label class="#$class#" for="#$for#" title="#$title#" style="#$style#">
+            <label class="#$class#" for="#$id#" title="#$title#" style="#$style#">
                 #$label#
             </label>
         <xar:elseif condition="$for eq 'name' and !empty($name)"/>
-            <xar:if condition="!empty($fieldprefix)">
-                <xar:set name="for">$fieldprefix . "_" . $name</xar:set>
-            <xar:else/>
-                <xar:set name="for">$name</xar:set>
-            </xar:if>
+            <xar:set name="for">$name</xar:set>
             <label class="#$class#" for="#$for#" title="#$title#" style="#$style#">
                 #$label#
             </label>

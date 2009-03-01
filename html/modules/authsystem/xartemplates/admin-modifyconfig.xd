@@ -16,19 +16,7 @@
         </xar:mlstring>
     </h2>
     <form method="post" action="&xar-modurl-authsystem-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-        <fieldset>
-            <legend>
-                <xar:mlstring>
-                    General Options
-                </xar:mlstring>
-            </legend>
-            <div class="xar-form-input-wrapper">
-                <label for="shorturls" class="xar-form-label" title="#xarML('Enable short URLS?')#">
-                    <xar:mlstring>Enable short URLs?</xar:mlstring>
-                </label>
-                <xar:data-input type="checkbox" name="shorturls" id="shorturls" value="$shorturlschecked" checked="$shorturlschecked" />
-            </div>
-        </fieldset>
+        <xar:template file="display" module="base" subdata="array('modulename' => 'authsystem')" />
         <fieldset>
             <legend>
                 <xar:mlstring>

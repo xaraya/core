@@ -16,49 +16,23 @@
  * @author Marco Canini
  */
 
-/**
- * initialize the block
- */
-function roles_userblock_init()
-{
-    return array(
-        'nocache' => 1, // don't cache by default
-        'pageshared' => 1, // share across pages
-        'usershared' => 0, // don't share across users
-        'cacheexpire' => null);
-}
+sys::import('xaraya.structures.containers.blocks.basicblock');
 
-/**
- * info array
- */
-function roles_userblock_info()
+class UserBlock extends BasicBlock
 {
-    return array(
-        'text_type' => 'User',
-        'text_type_long' => "User's Custom Box",
-        'module' => 'roles',
-        'allow_multiple' => false,
-        'form_content' => false,
-        'form_refresh' => false,
-        'show_preview' => true
-    );
-}
+    public $name                = 'UserBlock';
+    public $module              = 'roles';
+    public $text_type           = 'User';
+    public $text_type_long      = 'User\'s Custom Box';
+    public $show_preview        = true;
 
-/**
- * Display func.
- * @param $blockinfo array containing title,content
- */
-function roles_userblock_display($blockinfo)
-{
-    if ((xarUserIsLoggedIn()) && (xarUserGetVar('ublockon') == 1)) { 
-        $ublock = xarUserGetVar('ublock');
-        if ($ublock === false) {
-            $ublock = '';
-        }
-        $username = xarUserGetVar('name');
-        $blockinfo['title'] = "". xarML('Menu For #(1)', $username);
-        $blockinfo['content'] = $ublock;
-        return $blockinfo;
+    public $no_cache            = 1;
+    public $usershared          = 0;
+
+    function display(Array $data=array())
+    {
+        $data = parent::display($data);
+        if (xarUserIsLoggedIn()) return $data;
     }
 }
 ?>

@@ -1,6 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-form-container">
+    <div class="xar-form-container-after">
         <xar:if condition="$allowinput eq 0">       
             <xar:if condition="is_array($value)">
                 <xar:set name="index">0</xar:set>
@@ -34,9 +34,9 @@
                     </div>
                 </xar:for>
             <xar:else />
-                    <div class="xar-form-input-wrapper-after">
-                        <textarea name="#$name#" rows="8" cols="50" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
-                    </div>
+                <div class="xar-form-input-wrapper-after">
+                    <textarea name="#$name#" rows="8" cols="50" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
+                </div>
             </xar:if>   
         <xar:else/>
             <xar:set name="rowsdisplayed">""</xar:set>
@@ -116,7 +116,9 @@
             <div id="#$id#_removetemplate">         
                 <input type="button" title="#xarML('Remove')#&#160;#$suffixlabel#" value="#xarML('Remove')#&#160;#$suffixlabel#" style="height: 23px; font-size: small;" onclick="javascript:#$id#_removeRow('#$id#','dummy')" />                                                   
             </div>
-        </div>      
+        </div>
+        <!--PSspl:Added hidden field for associative array configuration value. -->
+        <input type="hidden" name="#$name#_associative_array" id="#$name#_associative_array" value="#$associative_array#" />        
         <br class="xar-clearall" />
         <xar:template file="dataproperty_additions" module="base" />        
     </div>

@@ -54,7 +54,7 @@ function dynamicdata_admin_create($args)
     if (!empty($preview) || !$isvalid) {
         $data = array_merge($data, xarModAPIFunc('dynamicdata','admin','menu'));
 
-        $data['object'] = & $myobject;
+        $data['object'] = $myobject;
 
         $data['authid'] = xarSecGenAuthKey();
         $data['preview'] = $preview;

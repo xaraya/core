@@ -345,7 +345,8 @@ class DataProperty extends Object implements iDataProperty
 
         // Add the object's field prefix if there is one
         $prefix = '';
-        if(!empty($this->_fieldprefix))  $prefix = $this->_fieldprefix . '_';
+        // Allow 0 as a fieldprefix
+        if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0)  $prefix = $this->_fieldprefix . '_';
         // A field prefix added here can override the previous one
         if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
         if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
@@ -357,7 +358,11 @@ class DataProperty extends Object implements iDataProperty
 
         if(!isset($data['tabindex'])) $data['tabindex'] = 0;
         if(!isset($data['value']))    $data['value']    = $this->value;
-        $data['invalid']  = !empty($this->invalid) ? xarML($this->invalid) :'';
+        if (!empty($this->invalid)) {
+            $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : xarML($this->invalid);
+        } else {
+            $data['invalid']  = '';
+        }
 
         // Add the configuration options if they have not been overridden
         if(isset($data['configuration'])) {
@@ -429,10 +434,18 @@ class DataProperty extends Object implements iDataProperty
         elseif(is_array($data))
             extract($data);
 
-        $data['id']    = $this->id;
         $data['name']  = $this->name;
+        $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
+        $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
+        if(!isset($data['id'])) $data['id']   = $data['name'];
+        
         $data['label'] = isset($data['label']) ? xarVarPrepForDisplay($data['label']) : xarVarPrepForDisplay($this->label);
-        if(!empty($this->_fieldprefix))  $data['fieldprefix'] = $this->_fieldprefix;
+        // Allow 0 as a fieldprefix
+        if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0)  $data['fieldprefix'] = $this->_fieldprefix;
+        // A field prefix added here can override the previous one
+        if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
+        if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
+        if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
@@ -454,7 +467,8 @@ class DataProperty extends Object implements iDataProperty
 
         // Add the object's field prefix if there is one
         $prefix = '';
-        if(!empty($this->_fieldprefix))  $prefix = $this->_fieldprefix . '_';
+        // Allow 0 as a fieldprefix
+        if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0)  $prefix = $this->_fieldprefix . '_';
         // A field prefix added here can override the previous one
         if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
         if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
