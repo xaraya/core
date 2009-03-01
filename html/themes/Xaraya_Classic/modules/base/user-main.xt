@@ -24,8 +24,7 @@
     </h2>
     <xar:if condition="isset($mtrev)">
         <p>
-            <xar:mlstring>Monotone base revision: </xar:mlstring>
-            <a href="http://trac.xaraya.com/2x/changeset/#$mtrev#">#$mtrev#</a>
+            Monotone base revision: #$versionnum#
         </p>
     </xar:if>
     <p>

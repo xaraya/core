@@ -137,8 +137,9 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->getItem($args);
         }
 
-        if(empty($args['fieldprefix'])) {
-            $args['fieldprefix'] = $this->fieldprefix;
+        // Allow 0 as a fieldprefix
+        if(empty($args['fieldprefix']) || (isset($args['fieldprefix']) && $args['fieldprefix'] !== '0')) {
+            $args['fieldprefix'] = $this->fieldprefix; 
         } else {
             $this->fieldprefix = $args['fieldprefix'];
         }
@@ -163,7 +164,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             // We need to check both the given name and the dd_ name
             // checking for any transitory name given a property via $args needs to be done at the property level
             $ddname = 'dd_' . $this->properties[$name]->id;
-            if (!empty($args['fieldprefix'])) {
+            if (!empty($args['fieldprefix']) || $args['fieldprefix'] === '0') {
                 $name1 = $args['fieldprefix'] . "_" .$name;
                 $name2 = $args['fieldprefix'] . "_" .$ddname;
             } else {
@@ -256,7 +257,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         //FIXME: check these
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
-
+        $args['object'] = $this;
         return xarTplObject($args['tplmodule'],$args['template'],'showform',$args);
     }
 
@@ -335,6 +336,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         //FIXME: check these
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
+        $args['object'] = $this;
         return xarTplObject($args['tplmodule'],$args['template'],'showdisplay',$args);
     }
 
@@ -402,6 +404,21 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
         return $displayvalues;
         */
+    }
+
+    /**
+     * Get and set for field prefixes
+     */
+    public function getFieldPrefix()
+    {
+        return $this->fieldprefix;
+    }
+    public function setFieldPrefix($prefix)
+    {
+        $this->fieldprefix = $prefix;
+        foreach (array_keys($this->properties) as $property)
+            $this->properties[$property]->_fieldprefix = $prefix;
+        return true;
     }
 
     public function createItem(Array $args = array())
@@ -517,8 +534,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function updateItem(Array $args = array())
     {
-        if(count($args) > 0)
-        {
+        if(count($args) > 0) {
             if(!empty($args['itemid']))
                 $this->itemid = $args['itemid'];
 
@@ -526,8 +542,12 @@ class DataObject extends DataObjectMaster implements iDataObject
                 if(isset($this->properties[$name]))
                     $this->properties[$name]->setValue($value);
         }
-        if(empty($this->itemid))
-        {
+        if(empty($this->itemid)) {
+            // Try getting the id value from the item ID property if it exists
+            foreach($this->properties as $property)
+                if ($property->type == 21) $this->itemid = $property->value;
+        }
+        if(empty($this->itemid)) {
             $msg = 'Invalid item id in method #(1)() for dynamic object [#(2)] #(3)';
             $vars = array('updateItem',$this->objectid,$this->name);
             throw new BadParameterException($vars,$msg);
@@ -540,8 +560,8 @@ class DataObject extends DataObjectMaster implements iDataObject
             // Execute any property-specific code first
             if ($store != '_dummy_') {
                 foreach ($this->datastores[$store]->fields as $property) {
-                    if (method_exists($property,'createvalue')) {
-                        $property->createValue($this->itemid);
+                    if (method_exists($property,'updatevalue')) {
+                        $property->updateValue($this->itemid);
                     }
                 }
             }

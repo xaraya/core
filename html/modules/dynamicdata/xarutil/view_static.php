@@ -11,20 +11,30 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * Return static table information (test only)
+ * Return static table information
  */
-function dynamicdata_util_static($args)
+function dynamicdata_util_view_static($args)
 {
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     if(!xarVarFetch('module',   'isset', $module,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('table',    'isset', $table,     '', XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('newtable',    'isset', $newtable,     '', XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('export',  'isset', $export,       0, XARVAR_DONT_SET)) {return;}
 
     extract($args);
 
+    if (!empty($newtable)) {
+        $query = "CREATE TABLE " . $newtable . " (
+          id integer unsigned NOT NULL auto_increment,
+          PRIMARY KEY  (id))";
+        $dbconn = xarDB::getConn();
+        $dbconn->Execute($query);
+        $table = $newtable;
+    }
+    
     $data = array();
     $data['menutitle'] = xarML('Dynamic Data Utilities');
 
@@ -34,21 +44,26 @@ function dynamicdata_util_static($args)
                                   'itemtype' => $itemtype,
                                   'table'    => $table));
 
+    $metas = xarModAPIFunc('dynamicdata','util','getmeta');
+    $data['tables'] = array();
+    foreach ($metas as $name => $value) $data['tables'][] = array('id' => $name, 'name' => $name);
+    $data['table'] = $table;
+
     //debug($static);
     if (!isset($static) || $static == false) {
-        $data['tables'] = array();
+        $data['tabledata'] = array();
     } else {
-        $data['tables'] = array();
+        $data['tabledata'] = array();
         foreach ($static as $field) {
             if (preg_match('/^(\w+)\.(\w+)$/', $field['source'], $matches)) {
                 $table = $matches[1];
-                $data['tables'][$table][$field['name']] = $field;
+                $data['tabledata'][$table][$field['name']] = $field;
             }
         }
     }
 
     $data['export'] = $export;
-     if(!isset($modid) || $modid == 0) $modid = 182;
+    if(!isset($modid) || $modid == 0) $modid = 182;
     $data['modid'] = $modid;
     $modInfo = xarModGetInfo($modid);
     $data['module'] = $modInfo['name'];
@@ -57,7 +72,7 @@ function dynamicdata_util_static($args)
 
     if (xarModVars::get('themes','usedashboard')) {
         $admin_tpl = xarModVars::get('themes','dashtemplate');
-    }else {
+    } else {
        $admin_tpl='default';
     }
     xarTplSetPageTemplateName($admin_tpl);

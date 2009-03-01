@@ -332,6 +332,9 @@ class PropertyRegistration extends DataContainer
             throw $e;
         }
 
+        // Clear the property types from cached memory
+        xarCore::delCached('DynamicData','PropertyTypes');
+        
         // Sort the property types
         ksort($proptypes);
         return $proptypes;

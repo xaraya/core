@@ -44,22 +44,7 @@
     </xar:comment>
     <xar:if condition="$tab eq 'general'">
         <form action="#xarModUrl('blocks', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded">
-            <fieldset>
-                <legend>
-                    <xar:mlstring>
-                        Page Layout 
-                    </xar:mlstring>
-                </legend>
-                <div class="xar-form-input-wrapper">
-                    <label for="itemsperpage" title="#xarML('The number of items to display on a page.')#" class="xar-form-label">
-                        <xar:mlstring>
-                            Items Listed per Page View: 
-                        </xar:mlstring>
-                    </label>
-                    <xar:set name="value"><xar:var scope="module" module="blocks" name="itemsperpage"/></xar:set>
-                    <input type="text" id="itemsperpage" name="itemsperpage" value="#$value#" class="xar-form-textshort" />
-                </div>
-            </fieldset>
+        <xar:template file="display" module="base" subdata="array('modulename' => 'blocks')" />
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />

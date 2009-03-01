@@ -20,7 +20,7 @@ function dynamicdata_admin_showpropval($args)
 
     // get the property id
     if (!xarVarFetch('itemid',  'id',    $itemid)) {return;}
-    if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('exit', 'isset', $exit, NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('confirm', 'isset', $confirm, NULL, XARVAR_DONT_SET)) {return;}
 
     // check security
@@ -61,8 +61,8 @@ function dynamicdata_admin_showpropval($args)
     $data['invalid']    = !empty($invalid) ? $invalid :'';
     $property =& DataPropertyMaster::getProperty($data);
     if (empty($property)) return;
-
-    if (!empty($preview) || !empty($confirm)) {
+    
+    if (!empty($confirm) || !empty($exit)) {
         if (!xarVarFetch($data['name'],'isset',$configuration,NULL,XARVAR_NOT_REQUIRED)) return;
 
         // pass the current value as configuration rule
@@ -73,12 +73,12 @@ function dynamicdata_admin_showpropval($args)
         if ($isvalid) {
             // store the updated configuration rule back in the value
             $myobject->properties['configuration']->value = $property->configuration;
-            if (!empty($confirm)) {
-                if (!xarSecConfirmAuthKey()) return;
+            if (!xarSecConfirmAuthKey()) return;
 
-                $newid = $myobject->updateItem();
-                if (empty($newid)) return;
+            $newid = $myobject->updateItem();
+            if (empty($newid)) return;
 
+            if (!empty($exit)) {
                 if (!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
                 if (empty($return_url)) {
                     // return to modifyprop
@@ -90,7 +90,7 @@ function dynamicdata_admin_showpropval($args)
             }
         } else {
             $myobject->properties['configuration']->invalid = $property->invalid;
-        }
+        }        
     }
 
     // pass the id for the input field here

@@ -184,10 +184,10 @@
                         <xar:mlstring>Definition:</xar:mlstring>
                     </label>
                     <div class="xar-form-container-after">
-                        <textarea name="xml" id="xml" class="xar-form-textarealarge">
-                        <xar:if condition="$export eq 'ddl'">
-                            <xar:template file="exportddl" />
-                        <xar:else />
+<textarea name="xml" id="xml" class="xar-form-textarealarge">
+<xar:if condition="$export eq 'ddl'">
+<xar:template file="exportddl" />
+<xar:else />
 &lt;objects&gt;
     <xar:foreach in="$tables" key="$curtable" value="$fields">
         <xar:set name="tablename">strtr($curtable,'.','_')</xar:set>
@@ -213,8 +213,8 @@
         &lt;/object&gt;
     </xar:foreach>
 &lt;/objects&gt;
-                        </xar:if>
-                        </textarea>
+</xar:if>
+</textarea>
                     </div>
                 </div>
             </fieldset>

@@ -31,6 +31,8 @@ class UserListProperty extends SelectProperty
     public $initialization_group_list = '';
     public $initialization_userlist = '';
     public $initialization_orderlist = '';
+    public $validation_group_list           = null;
+    public $validation_override             = true;
     public $display_showfields = '';
     public $display_showglue = '';
 
@@ -107,6 +109,13 @@ class UserListProperty extends SelectProperty
         return false;
     }
 
+    public function showInput(Array $data = array())
+    {
+        if (isset($data['group_list'])) $this->validation_group_list = $data['group_list'];
+
+        return parent::showInput($data);
+    }
+
     // TODO: format the output according to the 'showfields'.
     // TODO: provide an option to allow admin to decide whether to wrap the user
     // in a link or not.
@@ -131,6 +140,24 @@ class UserListProperty extends SelectProperty
         $data['user'] = $user;
 
         return parent::showOutput($data);
+    }
+
+    public function getOptions()
+    {
+        $select_options = array();
+        /*
+        if (!empty($this->validation_ancestorgroup_list)) {
+            $select_options['ancestor'] = $this->validation_ancestorgroup_list;
+        }
+        if (!empty($this->validation_parentgroup_list)) {
+            $select_options['parent'] = $this->validation_parentgroup_list;
+        }
+        */
+        if (!empty($this->validation_group_list)) {
+            $select_options['group'] = $this->validation_group_list;
+        }
+        $options = xarModAPIFunc('roles', 'user', 'getall', $select_options);
+        return $options;
     }
 
     /*public function parseConfiguration($configuration = '')

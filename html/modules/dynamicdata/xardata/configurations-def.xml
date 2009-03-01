@@ -5,10 +5,10 @@
   <module_id>182</module_id>
   <itemtype>2</itemtype>
   <class>DataObject</class>
-  <filepath></filepath>
+  <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>26</maxid>
-  <config></config>
+  <config>a:0:{}</config>
   <isalias>0</isalias>
   <properties>
     <property name="id">

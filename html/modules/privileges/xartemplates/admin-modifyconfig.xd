@@ -98,6 +98,7 @@
     <!--  Begin General Options -->
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
+            <xar:template file="display" module="base" subdata="array('modulename' => 'privileges')" />
             <fieldset>
                 <legend>
                     <xar:mlstring>

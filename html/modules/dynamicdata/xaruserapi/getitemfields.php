@@ -21,6 +21,7 @@
 function dynamicdata_userapi_getitemfields($args)
 {
     $object = DataObjectMaster::getObject($args);
+    if (!is_object($object)) return array();
     $fields = $object->getProperties();
     $itemfields = array();
     foreach ($fields as $name => $prop) {

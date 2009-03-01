@@ -527,6 +527,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $args['nexturl'],
             $args['sorturl']) = $this->getPager($args['pagerurl']);
 
+        $args['object'] = $this;
         return xarTplObject($args['tplmodule'],$args['template'],'showview',$args);
     }
 
