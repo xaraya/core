@@ -3,7 +3,7 @@
  * Read a block's type info.
  *
  * @package modules
- * @copyright (C) 2002-2006 The copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -46,10 +46,10 @@ function blocks_userapi_read_type_info($args)
 
     $classpath = 'modules/' . $module . '/xarblocks/' . $type . '.php';
     if (function_exists($infofunc)) {
-        // we are using an old time block
+    	// we are using an old time block
         return $infofunc();
     } elseif (file_exists($classpath)) {
-        // we are using a block class
+    	// we are using a block class
         sys::import('modules.' . $module . '.xarblocks.' . $type);
         sys::import('xaraya.structures.descriptor');
         $name = ucfirst($type) . "Block";
