@@ -105,7 +105,7 @@ function roles_userapi_getall($args)
                     roletab.date_reg';
         // Restrict by group(s) - join to the group_members table.
         $query .= ' FROM ' . $rolestable . ' AS roletab, ' . $rolemembtable . ' AS rolememb';
-        $where_clause[] = 'roletab.id = rolememb.id';
+        $where_clause[] = 'roletab.id = rolememb.role_id';
         if (count($group_list) > 1) {
             $bindmarkers = '?' . str_repeat(',?',count($group_list)-1);
             $where_clause[] = 'rolememb.parent_id in (' . $bindmarkers. ')';
