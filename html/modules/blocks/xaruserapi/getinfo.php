@@ -165,7 +165,7 @@ function blocks_userapi_getinfo($args)
         }
     }
 
-    if (is_null($template)) {$template = $blockinfo['template'];}
+    if (empty($template)) {$template = $blockinfo['template'];}
     // Split template name into outer and inner using the ';' separator.
     if (strpos($template, ';') === FALSE) {
         $blockinfo['_bl_box_template'] = $template;
