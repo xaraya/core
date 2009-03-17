@@ -26,7 +26,6 @@ function base_menublock_init()
     return array(
         'displaymodules' => 'None',
         'modulelist' => '',
-        'displayprint' => true,
         'displayrss' => false,
         'displayprint' => false,
         'marker' => '[x]',
