@@ -76,7 +76,7 @@ class DataPropertyMaster extends Object
         $properties = array();
         while ($result->next()) {
             list(
-                $name, $label, $type, $id, $defaultvalue, $source, $fieldstatus,
+                $name, $label, $type, $id, $defaultvalue, $source, $status,
                 $seq, $configuration, $_objectid
                 ) = $result->fields;
 //            if (xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id")) {
@@ -87,7 +87,7 @@ class DataPropertyMaster extends Object
                     'id'            => $id,
                     'defaultvalue'  => $defaultvalue,
                     'source'        => $source,
-                    'status'        => $fieldstatus,
+                    'status'        => $status,
                     'seq'           => $seq,
                     'configuration' => $configuration,
                     // some internal variables
