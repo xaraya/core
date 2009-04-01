@@ -162,8 +162,7 @@ class DataObjectMaster extends Object
 
     function loader(DataObjectDescriptor $descriptor)
     {
-        $this->descriptor = $descriptor;
-        $this->load();
+        $descriptor->refresh($this);
 
         xarMod::loadDbInfo('dynamicdata','dynamicdata');
 
@@ -1057,11 +1056,5 @@ class DataObjectMaster extends Object
 
         return $types;
     }
-
-    protected function load()
-    {
-        $this->descriptor->refresh($this);
-    }
-
 }
 ?>

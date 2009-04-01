@@ -72,7 +72,6 @@ class DataProperty extends Object implements iDataProperty
      */
     public function __construct(ObjectDescriptor $descriptor)
     {
-        $this->descriptor = $descriptor;
         $args = $descriptor->getArgs();
         $this->template = $this->getTemplate();
 
