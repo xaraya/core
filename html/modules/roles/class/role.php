@@ -391,15 +391,14 @@ class Role extends DataObject
     public function getInheritedPrivileges()
     {
         // mrb: is this only dependent on $this->properties['id']->value? if so, we can cache it too.
-        $ancestors = $this->getRoleAncestors();      echo "<pre>";      
-
+        $ancestors = $this->getRoleAncestors();
         $inherited = array();
-        foreach ($ancestors as $ancestor) {unset($ancestor->dbconn);var_dump($ancestor);exit;
+        foreach ($ancestors as $ancestor) {
             $perms = $ancestor->getAssignedPrivileges();
             while (list($key, $perm) = each($perms)) {
                 array_push($inherited, $perm);
             }
-        }exit;
+        }
         return $inherited;
     }
 
