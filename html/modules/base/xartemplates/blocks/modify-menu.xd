@@ -1,208 +1,208 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<!--
-    We know that blocks.css file is already included by admin-modify_instance.xd, so no need to do it twice
--->
-
-<xar:if condition="!empty($content)">
-    <table class="xar-fullwidth">
-        <caption>
-            <xar:mlstring>Edit Items</xar:mlstring>
-        </caption>
-        <tr>
-            <th>
-                <xar:mlstring>Title</xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>URL</xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>Description</xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>Delete</xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>Child</xar:mlstring>
-            </th>
-            <th>
-                <xar:mlstring>Insert Blank</xar:mlstring>
-            </th>
-        </tr>
-        <xar:loop name="$contentlines">
-            <tr>
-                <td>
-                    <input type="text" class="xar-form-textmedium" name="linkname[#$loop:index#]" id="linkname_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[1])#" />
-                </td>
-                <td>
-                    <input type="text" class="xar-form-textlong" name="linkurl[#$loop:index#]" id="linkurl_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[0])#" />
-                </td>
-                <td>
-                    <input type="text" class="xar-form-textlong" name="linkdesc[#$loop:index#]" id="linkdesc_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[2])#" />
-                </td>
-                <td class="xar-align-center">
-                    <input type="checkbox" name="linkdelete[#$loop:index#]" id="linkdelete_#$loop:index#" value="1" />
-                </td>
-                <td class="xar-align-center">
-                    <xar:if condition="empty($loop:item[3])">
-                        <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1" />
-                    <xar:else />
-                        <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1" checked="checked" />
-                    </xar:if>
-                </td>
-                <td class="xar-align-center">
-                    <input type="checkbox" name="linkinsert[#$loop:index#]" id="linkinsert_#$loop:index#" value="1" />
-                </td>
-            </tr>
-        </xar:loop>
-    </table>
-
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!--
-        <table class="fullwidth">
+        We know that blocks.css file is already included by admin-modify_instance.xd, so no need to do it twice
+    -->
+
+    <xar:if condition="!empty($content)">
+        <table class="xar-fullwidth">
             <caption>
-                <xar:mlstring>Modify Structure (TODO obviously)</xar:mlstring>
+                <xar:mlstring>Edit Items</xar:mlstring>
             </caption>
             <tr>
                 <th>
-                    <xar:mlstring>Edit</xar:mlstring>
+                    <xar:mlstring>Title</xar:mlstring>
                 </th>
                 <th>
-                    <xar:mlstring>Preview</xar:mlstring>
+                    <xar:mlstring>URL</xar:mlstring>
+                </th>
+                <th>
+                    <xar:mlstring>Description</xar:mlstring>
+                </th>
+                <th>
+                    <xar:mlstring>Delete</xar:mlstring>
+                </th>
+                <th>
+                    <xar:mlstring>Child</xar:mlstring>
+                </th>
+                <th>
+                    <xar:mlstring>Insert Blank</xar:mlstring>
                 </th>
             </tr>
-            <tr>
-                <td>
-                </td>
-                <td>
-                </td>
-            </tr>
+            <xar:loop name="$contentlines">
+                <tr>
+                    <td>
+                        <input type="text" class="xar-form-textmedium" name="linkname[#$loop:index#]" id="linkname_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[1])#" />
+                    </td>
+                    <td>
+                        <input type="text" class="xar-form-textlong" name="linkurl[#$loop:index#]" id="linkurl_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[0])#" />
+                    </td>
+                    <td>
+                        <input type="text" class="xar-form-textlong" name="linkdesc[#$loop:index#]" id="linkdesc_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[2])#" />
+                    </td>
+                    <td class="xar-align-center">
+                        <input type="checkbox" name="linkdelete[#$loop:index#]" id="linkdelete_#$loop:index#" value="1" />
+                    </td>
+                    <td class="xar-align-center">
+                        <xar:if condition="empty($loop:item[3])">
+                            <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1" />
+                        <xar:else />
+                            <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1" checked="checked" />
+                        </xar:if>
+                    </td>
+                    <td class="xar-align-center">
+                        <input type="checkbox" name="linkinsert[#$loop:index#]" id="linkinsert_#$loop:index#" value="1" />
+                    </td>
+                </tr>
+            </xar:loop>
         </table>
-    -->
-</xar:if>
 
-
-<p class="xar-form-textmedium xar-padding-medium " style="display:block;">
-    <strong><xar:mlstring>Add New Menu Item</xar:mlstring></strong>
-</p>
-
-<div class="xar-form-input-wrapper">
-    <label for="new_linkname" title="#xarML('Item title')#" class="xar-form-label">
-        <xar:mlstring>Title:</xar:mlstring>
-    </label>
-    <input type="text" name="new_linkname" id="new_linkname" maxlength="255" class="xar-form-textmedium" />
-</div>
-
-<div class="xar-form-input-wrapper">
-    <label for="new_linkurl" title="#xarML('Item URL')#" class="xar-form-label">
-        <xar:mlstring>URL:</xar:mlstring>
-    </label>
-    <input type="text" name="new_linkurl" id="new_linkurl" maxlength="255" class="xar-form-textlong" />
-</div>
-
-<div class="xar-form-input-wrapper">
-    <label for="new_linkdesc" title="#xarML('Item description')#" class="xar-form-label">
-        <xar:mlstring>Description (optional):</xar:mlstring>
-    </label>
-    <input type="text" name="new_linkdesc" id="new_linkdesc" maxlength="255" class="xar-form-textlong" />
-</div>
-
-<p class="xar-form-textmedium xar-padding-medium " style="display:block;">
-    <strong><xar:mlstring>Menu Extras</xar:mlstring></strong>
-</p>
-
-<div class="xar-form-input-wrapper">
-    <label for="displaymodules" title="#xarML('To display a restricted list of modules, enter their names separated by commas in the text box at right, and choose Manual List from the dropdown.')#" class="xar-form-label">
-        <xar:mlstring>
-            Display Modules
-        </xar:mlstring>
-    </label>
-    <select name="displaymodules" id="displaymodules">
-        <xar:if condition="$displaymodules eq 'None'">
-            <option value="None" selected="selected">
-                <xar:mlstring>
-                    None
-                </xar:mlstring>
-            </option>
-        <xar:else />
-            <option value="None">
-                <xar:mlstring>
-                    None
-                </xar:mlstring>
-            </option>
-        </xar:if>
-        <xar:if condition="$displaymodules eq 'All'">
-            <option value="All" selected="selected">
-                <xar:mlstring>
-                    All Modules
-                </xar:mlstring>
-            </option>
-        <xar:else />
-            <option value="All">
-                <xar:mlstring>
-                    All Modules
-                </xar:mlstring>
-            </option>
-        </xar:if>
-        <xar:if condition="$displaymodules eq 'List'">
-            <option value="List" selected="selected">
-                <xar:mlstring>
-                    Manual List
-                </xar:mlstring>
-            </option>
-        <xar:else />
-            <option value="List">
-                <xar:mlstring>
-                    Manual List
-                </xar:mlstring>
-            </option>
-        </xar:if>
-    </select>
-    <div class="xar-form-container-after">
-        <p><xar:mlstring>To display a restricted list of modules in the menu, enter their names separated by commas in the field below, and choose Manual List from the dropdown.</xar:mlstring></p>
-        <p><input type="text" name="modulelist" id="modulelist" size="50" maxlength="255" value="#$modulelist#" /></p>
-    </div>
-</div>
-
-<div class="xar-form-input-wrapper-after">
-    <xar:if condition="!empty($showlogout)">
-        <input type="checkbox" value="1" name="showlogout" id="showlogout" checked="checked" />
-    <xar:else />
-        <input type="checkbox" value="1" name="showlogout" id="showlogout" />
+        <!--
+            <table class="fullwidth">
+                <caption>
+                    <xar:mlstring>Modify Structure (TODO obviously)</xar:mlstring>
+                </caption>
+                <tr>
+                    <th>
+                        <xar:mlstring>Edit</xar:mlstring>
+                    </th>
+                    <th>
+                        <xar:mlstring>Preview</xar:mlstring>
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </table>
+        -->
     </xar:if>
-    <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link for non-administrative users at the bottom of the menu.')#">
-        <xar:mlstring>Display Non-Admin User Logout</xar:mlstring>
-    </label>
-</div>
 
-<div class="xar-form-input-wrapper-after">
-    <xar:if condition="!empty($displayprint)">
-        <input type="checkbox" value="1" name="displayprint" id="displayprint" checked="checked" />
-    <xar:else />
-        <input type="checkbox" value="1" name="displayprint" id="displayprint" />
-    </xar:if>
-    <label for="displayprint" title="#xarML('Select if you would like Xaraya to generate a link to your print page at the bottom of the menu.')#">
-        <xar:mlstring>Display Print Link</xar:mlstring>
-    </label>
-</div>
 
-<div class="xar-form-input-wrapper-after">
-    <xar:if condition="!empty($displayrss)">
-        <input type="checkbox" value="1" name="displayrss" id="displayrss" checked="checked" />
-    <xar:else />
-        <input type="checkbox" value="1" name="displayrss" id="displayrss" />
-    </xar:if>
-    <label for="displayrss" title="#xarML('Select if you would like Xaraya to generate a link to your RSS at the bottom of the menu.')#">
-        <xar:mlstring>Display RSS Link</xar:mlstring>
-    </label>
-</div>
+    <p class="xar-form-textmedium xar-padding-medium " style="display:block;">
+        <strong><xar:mlstring>Add New Menu Item</xar:mlstring></strong>
+    </p>
 
-<xar:if condition="!empty($displaymodules)">
     <div class="xar-form-input-wrapper">
-        <label for="marker" title="#xarML('When Xaraya is generating the menu, we can mark the current page.  Use this to configure the marker for that display.')#" class="xar-form-label">
-            <xar:mlstring>Marker:</xar:mlstring>
+        <label for="new_linkname" title="#xarML('Item title')#" class="xar-form-label">
+            <xar:mlstring>Title:</xar:mlstring>
         </label>
-    <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort" />
+        <input type="text" name="new_linkname" id="new_linkname" maxlength="255" class="xar-form-textmedium" />
     </div>
-</xar:if>
+
+    <div class="xar-form-input-wrapper">
+        <label for="new_linkurl" title="#xarML('Item URL')#" class="xar-form-label">
+            <xar:mlstring>URL:</xar:mlstring>
+        </label>
+        <input type="text" name="new_linkurl" id="new_linkurl" maxlength="255" class="xar-form-textlong" />
+    </div>
+
+    <div class="xar-form-input-wrapper">
+        <label for="new_linkdesc" title="#xarML('Item description')#" class="xar-form-label">
+            <xar:mlstring>Description (optional):</xar:mlstring>
+        </label>
+        <input type="text" name="new_linkdesc" id="new_linkdesc" maxlength="255" class="xar-form-textlong" />
+    </div>
+
+    <p class="xar-form-textmedium xar-padding-medium " style="display:block;">
+        <strong><xar:mlstring>Menu Extras</xar:mlstring></strong>
+    </p>
+
+    <div class="xar-form-input-wrapper">
+        <label for="displaymodules" title="#xarML('To display a restricted list of modules, enter their names separated by commas in the text box at right, and choose Manual List from the dropdown.')#" class="xar-form-label">
+            <xar:mlstring>
+                Display Modules
+            </xar:mlstring>
+        </label>
+        <select name="displaymodules" id="displaymodules">
+            <xar:if condition="$displaymodules eq 'None'">
+                <option value="None" selected="selected">
+                    <xar:mlstring>
+                        None
+                    </xar:mlstring>
+                </option>
+            <xar:else />
+                <option value="None">
+                    <xar:mlstring>
+                        None
+                    </xar:mlstring>
+                </option>
+            </xar:if>
+            <xar:if condition="$displaymodules eq 'All'">
+                <option value="All" selected="selected">
+                    <xar:mlstring>
+                        All Modules
+                    </xar:mlstring>
+                </option>
+            <xar:else />
+                <option value="All">
+                    <xar:mlstring>
+                        All Modules
+                    </xar:mlstring>
+                </option>
+            </xar:if>
+            <xar:if condition="$displaymodules eq 'List'">
+                <option value="List" selected="selected">
+                    <xar:mlstring>
+                        Manual List
+                    </xar:mlstring>
+                </option>
+            <xar:else />
+                <option value="List">
+                    <xar:mlstring>
+                        Manual List
+                    </xar:mlstring>
+                </option>
+            </xar:if>
+        </select>
+        <div class="xar-form-container-after">
+            <p><xar:mlstring>To display a restricted list of modules in the menu, enter their names separated by commas in the field below, and choose Manual List from the dropdown.</xar:mlstring></p>
+            <p><input type="text" name="modulelist" id="modulelist" size="50" maxlength="255" value="#$modulelist#" /></p>
+        </div>
+    </div>
+
+    <div class="xar-form-input-wrapper-after">
+        <xar:if condition="!empty($showlogout)">
+            <input type="checkbox" value="1" name="showlogout" id="showlogout" checked="checked" />
+        <xar:else />
+            <input type="checkbox" value="1" name="showlogout" id="showlogout" />
+        </xar:if>
+        <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link for non-administrative users at the bottom of the menu.')#">
+            <xar:mlstring>Display Non-Admin User Logout</xar:mlstring>
+        </label>
+    </div>
+
+    <div class="xar-form-input-wrapper-after">
+        <xar:if condition="!empty($displayprint)">
+            <input type="checkbox" value="1" name="displayprint" id="displayprint" checked="checked" />
+        <xar:else />
+            <input type="checkbox" value="1" name="displayprint" id="displayprint" />
+        </xar:if>
+        <label for="displayprint" title="#xarML('Select if you would like Xaraya to generate a link to your print page at the bottom of the menu.')#">
+            <xar:mlstring>Display Print Link</xar:mlstring>
+        </label>
+    </div>
+
+    <div class="xar-form-input-wrapper-after">
+        <xar:if condition="!empty($displayrss)">
+            <input type="checkbox" value="1" name="displayrss" id="displayrss" checked="checked" />
+        <xar:else />
+            <input type="checkbox" value="1" name="displayrss" id="displayrss" />
+        </xar:if>
+        <label for="displayrss" title="#xarML('Select if you would like Xaraya to generate a link to your RSS at the bottom of the menu.')#">
+            <xar:mlstring>Display RSS Link</xar:mlstring>
+        </label>
+    </div>
+
+    <xar:if condition="!empty($displaymodules)">
+        <div class="xar-form-input-wrapper">
+            <label for="marker" title="#xarML('When Xaraya is generating the menu, we can mark the current page.  Use this to configure the marker for that display.')#" class="xar-form-label">
+                <xar:mlstring>Marker:</xar:mlstring>
+            </label>
+        <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort" />
+        </div>
+    </xar:if>
 
 </xar:template>
