@@ -10,7 +10,7 @@
             <xar:mlstring>View Block Type</xar:mlstring>
         </h2>
         <h4>
-            <a href="&xar-modurl-blocks-admin-new_type;"><xar:mlstring>New Block Type</xar:mlstring></a>
+            <a href="#xarModURL('blocks'.'admin'.'new_type')#"><xar:mlstring>New Block Type</xar:mlstring></a>
         </h4>
         <fieldset>
             <legend>
@@ -115,7 +115,7 @@
             <xar:mlstring>View Block Types</xar:mlstring>
         </h2>
         <h4>
-            <a href="&xar-modurl-blocks-admin-new_type;"><xar:mlstring>New Block Type</xar:mlstring></a>
+            <a href="#xarModURL('blocks'.'admin'.'new_type')#"><xar:mlstring>New Block Type</xar:mlstring></a>
         </h4>
         <table class="xar-fullwidth">
             <tr>

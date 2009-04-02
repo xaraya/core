@@ -14,7 +14,7 @@
             Delete Group
         </xar:mlstring>
     </h2>
-    <form method="post" action="&xar-modurl-blocks-admin-delete_group;">
+    <form method="post" action="#xarModURL('blocks'.'admin'.'delete_group')#">
         <fieldset>
             <legend>
                 <xar:mlstring>

@@ -14,7 +14,7 @@
             Delete Instance
         </xar:mlstring>
     </h2>
-    <form method="post" action="&xar-modurl-blocks-admin-delete_instance;">
+    <form method="post" action="#xarModURL('blocks'.'admin'.'delete_instance')#">
         <fieldset>
             <legend>
                 <xar:mlstring>
