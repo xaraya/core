@@ -71,5 +71,5 @@
             </fieldset>
         </form>
     </xar:if>
-    </div><
-/xar:template>
+    </div>
+</xar:template>

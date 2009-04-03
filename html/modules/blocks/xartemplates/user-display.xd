@@ -4,5 +4,5 @@
            and the block is erm... blocklevel :-)
       -->
       <xar:block instance="$name"/>
-    </div><
-/xar:template>
+    </div>
+</xar:template>
