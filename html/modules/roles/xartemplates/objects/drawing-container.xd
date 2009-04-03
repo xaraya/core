@@ -1,4 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<div class="xar-roletree-#$type#" id="#$type##$nodeindex#">
-    #$content#
-</div></xar:template>
+    <div class="xar-roletree-#$type#" id="#$type##$nodeindex#">
+        #$content#
+    </div><
+/xar:template>
