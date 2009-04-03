@@ -1,110 +1,110 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:set name="active_step">6</xar:set>
-<div id="install">
-    <xar:template file="status" />
-    <h1>
-        <xar:mlstring>Administrator Account Creation</xar:mlstring>
-    </h1>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="active_step">6</xar:set>
+    <div id="install">
+        <xar:template file="status" />
+        <h1>
+            <xar:mlstring>Administrator Account Creation</xar:mlstring>
+        </h1>
 
-    <form action="#xarModURL('installer','admin','create_administrator')#" method="post">
-        <div>
-            <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-            <p class="xar-normal">
-                <xar:mlstring>Please enter the settings for your Administrator account. This information is necessary in order to properly secure your Xaraya installation. These settings can be changed at any point in the future by visiting the Roles module.</xar:mlstring>
-            </p>
+        <form action="#xarModURL('installer','admin','create_administrator')#" method="post">
+            <div>
+                <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+                <p class="xar-normal">
+                    <xar:mlstring>Please enter the settings for your Administrator account. This information is necessary in order to properly secure your Xaraya installation. These settings can be changed at any point in the future by visiting the Roles module.</xar:mlstring>
+                </p>
 
-            <xar:if condition="!empty($msg)">
-                <p class="xar-error"><strong>#$msg#</strong></p>
-            </xar:if>
+                <xar:if condition="!empty($msg)">
+                    <p class="xar-error"><strong>#$msg#</strong></p>
+                </xar:if>
 
-            <h3>
-                <xar:mlstring>Administrator Information</xar:mlstring>
-            </h3>
+                <h3>
+                    <xar:mlstring>Administrator Information</xar:mlstring>
+                </h3>
 
-<!-- Replacement when we move to using dataproperties here
-            <div class="simpleform">
+    <!-- Replacement when we move to using dataproperties here
+                <div class="simpleform">
+                    <p>
+                        <label for="install_admin_name">
+                            <xar:mlstring>Display Name</xar:mlstring>
+                        </label>
+                        <xar:data-input type="textbox" name="install_admin_name"  value="#$install_admin_name#" />
+                        <br class="clear" />
+                    </p>
+                    <p>
+                        <label for="install_admin_username">
+                            <xar:mlstring>Username</xar:mlstring>
+                        </label>
+                        <xar:data-input type="username" name="install_admin_username"  value="#$install_admin_username#" store_type="id" />
+                        <br class="clear" />
+                    </p>
+                    <p>
+                        <label for="install_admin_password">
+                            <xar:mlstring>Password</xar:mlstring>
+                        </label>
+                        <xar:data-input type="password" name="install_admin_password"  value="#$install_admin_password#" confirm_password="1" />
+                        <br class="clear" />
+                    </p>
+                    <p>
+                        <label for="install_admin_email">
+                            <xar:mlstring>Email</xar:mlstring>
+                        </label>
+                        <xar:data-input type="email" name="install_admin_email"  value="#$install_admin_email#" />
+                        <br class="clear" />
+                    </p>
+                </div>
+
+    -->
+                <div class="simpleform">
+                    <p>
+                        <label for="install_admin_name">
+                            <xar:mlstring>Display Name</xar:mlstring>
+                        </label>
+                        <input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="#$install_admin_name#" />
+                        <br class="clear" />
+                    </p>
+                    <p>
+                        <label for="install_admin_username">
+                            <xar:mlstring>Username</xar:mlstring>
+                        </label>
+                        <input type="text" name="install_admin_username" id="install_admin_username" maxlength="80" value="#$install_admin_username#" />
+                        <br class="clear" />
+                    </p>
+                    <p>
+                        <label for="install_admin_password">
+                            <xar:mlstring>Password</xar:mlstring>
+                        </label>
+                        <input type="password" name="install_admin_password" id="install_admin_password" maxlength="80" value="" />
+                        <br class="clear" />
+                    </p>
+                    <p>
+                        <label for="install_admin_password1">
+                            <xar:mlstring>Password Again</xar:mlstring>
+                        </label>
+                        <input type="password" name="install_admin_password1" id="install_admin_password1" maxlength="80" value="" />
+                        <br class="clear" />
+                    </p>
+                    <p>
+                        <label for="install_admin_email">
+                            <xar:mlstring>Email</xar:mlstring>
+                        </label>
+                        <input type="text" name="install_admin_email" id="install_admin_email" maxlength="80" value="#$install_admin_email#" />
+                        <br class="clear" />
+                    </p>
+
+                </div>
+                <br class="clear" />
+
                 <p>
-                    <label for="install_admin_name">
-                        <xar:mlstring>Display Name</xar:mlstring>
-                    </label>
-                    <xar:data-input type="textbox" name="install_admin_name"  value="#$install_admin_name#" />
-                    <br class="clear" />
+                    <xar:mlstring>Your Administrator password is the key to your Xaraya installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation.</xar:mlstring>
                 </p>
-                <p>
-                    <label for="install_admin_username">
-                        <xar:mlstring>Username</xar:mlstring>
-                    </label>
-                    <xar:data-input type="username" name="install_admin_username"  value="#$install_admin_username#" store_type="id" />
-                    <br class="clear" />
-                </p>
-                <p>
-                    <label for="install_admin_password">
-                        <xar:mlstring>Password</xar:mlstring>
-                    </label>
-                    <xar:data-input type="password" name="install_admin_password"  value="#$install_admin_password#" confirm_password="1" />
-                    <br class="clear" />
-                </p>
-                <p>
-                    <label for="install_admin_email">
-                        <xar:mlstring>Email</xar:mlstring>
-                    </label>
-                    <xar:data-input type="email" name="install_admin_email"  value="#$install_admin_email#" />
-                    <br class="clear" />
-                </p>
+
+                <xar:set name="buttonnext">
+                    <xar:mlstring>Continue</xar:mlstring>
+                </xar:set>
+                <input type="submit" name="create" id="create" value="#$buttonnext#" />
+
             </div>
-
--->
-            <div class="simpleform">
-                <p>
-                    <label for="install_admin_name">
-                        <xar:mlstring>Display Name</xar:mlstring>
-                    </label>
-                    <input type="text" name="install_admin_name" id="install_admin_name" maxlength="80" value="#$install_admin_name#" />
-                    <br class="clear" />
-                </p>
-                <p>
-                    <label for="install_admin_username">
-                        <xar:mlstring>Username</xar:mlstring>
-                    </label>
-                    <input type="text" name="install_admin_username" id="install_admin_username" maxlength="80" value="#$install_admin_username#" />
-                    <br class="clear" />
-                </p>
-                <p>
-                    <label for="install_admin_password">
-                        <xar:mlstring>Password</xar:mlstring>
-                    </label>
-                    <input type="password" name="install_admin_password" id="install_admin_password" maxlength="80" value="" />
-                    <br class="clear" />
-                </p>
-                <p>
-                    <label for="install_admin_password1">
-                        <xar:mlstring>Password Again</xar:mlstring>
-                    </label>
-                    <input type="password" name="install_admin_password1" id="install_admin_password1" maxlength="80" value="" />
-                    <br class="clear" />
-                </p>
-                <p>
-                    <label for="install_admin_email">
-                        <xar:mlstring>Email</xar:mlstring>
-                    </label>
-                    <input type="text" name="install_admin_email" id="install_admin_email" maxlength="80" value="#$install_admin_email#" />
-                    <br class="clear" />
-                </p>
-
-            </div>
-            <br class="clear" />
-
-            <p>
-                <xar:mlstring>Your Administrator password is the key to your Xaraya installation. Choose something that you will remember and do not share it or write it down. As a rule of thumb, it should not contain any words, and should contain a mix of upper and lower case letters, numbers and punctuation.</xar:mlstring>
-            </p>
-
-            <xar:set name="buttonnext">
-                <xar:mlstring>Continue</xar:mlstring>
-            </xar:set>
-            <input type="submit" name="create" id="create" value="#$buttonnext#" />
-
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 </xar:template>
