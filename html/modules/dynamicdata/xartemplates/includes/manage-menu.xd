@@ -1,34 +1,34 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:comment>Common Administration menu</xar:comment>
-<xar:style scope="module" module="base" file="navtabs" />
-<xar:set name="request">xarRequestGetInfo()</xar:set>
-<xar:set name="activetab">#$request.2#</xar:set>
-<div>
-    <dl class="xar-tabs">
-        <dt class="help" title="#xarML('Select object function')#">
-            <xar:mlstring>
-                Manage
-            </xar:mlstring>
-                :
-        </dt>
-        <xar:sec mask="EditDynamicData" catch="false">
-            <xar:set name="tabclass">$activetab=='view'?'active':''</xar:set>
-            <dd class="#$tabclass#">
-                <a href="&xar-modurl-dynamicdata-admin-view;">
-                   <xar:mlstring>View DataObjects</xar:mlstring>
-                </a>
-            </dd>
-        </xar:sec>
-        <xar:sec mask="AdminDynamicData" catch="false">
-            <xar:set name="tabclass">$activetab=='new'?'active':''</xar:set>
-            <dd class="#$tabclass#">
-                <a href="&xar-modurl-dynamicdata-admin-new;">
-                   <xar:mlstring>Create DataObject</xar:mlstring>
-                </a>
-            </dd>
-        </xar:sec>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:comment>Common Administration menu</xar:comment>
+    <xar:style scope="module" module="base" file="navtabs" />
+    <xar:set name="request">xarRequestGetInfo()</xar:set>
+    <xar:set name="activetab">#$request.2#</xar:set>
+    <div>
+        <dl class="xar-tabs">
+            <dt class="help" title="#xarML('Select object function')#">
+                <xar:mlstring>
+                    Manage
+                </xar:mlstring>
+                    :
+            </dt>
+            <xar:sec mask="EditDynamicData" catch="false">
+                <xar:set name="tabclass">$activetab=='view'?'active':''</xar:set>
+                <dd class="#$tabclass#">
+                    <a href="&xar-modurl-dynamicdata-admin-view;">
+                       <xar:mlstring>View DataObjects</xar:mlstring>
+                    </a>
+                </dd>
+            </xar:sec>
+            <xar:sec mask="AdminDynamicData" catch="false">
+                <xar:set name="tabclass">$activetab=='new'?'active':''</xar:set>
+                <dd class="#$tabclass#">
+                    <a href="&xar-modurl-dynamicdata-admin-new;">
+                       <xar:mlstring>Create DataObject</xar:mlstring>
+                    </a>
+                </dd>
+            </xar:sec>
 
-        </dl>
-</div>
+            </dl>
+    </div>
 </xar:template>
