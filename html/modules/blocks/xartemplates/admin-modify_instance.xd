@@ -51,34 +51,16 @@
                     <label for="block_state" title="#xarML('This is the default state of the block.  Maximized is visible, hidden is not.')#" class="xar-form-label">
                         <xar:mlstring>Default State:</xar:mlstring>
                     </label>
-                    <select name="block_state" id="block_state">
-                        <xar:if condition="$instance['state'] eq 0">
-                            <option value="0" selected="selected">
-                                <xar:mlstring>
-                                    Hidden
-                                </xar:mlstring>
-                            </option>
-                            <xar:else />
-                            <option value="0">
-                                <xar:mlstring>
-                                    Hidden
-                                </xar:mlstring>
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$instance['state'] eq 2">
-                            <option value="2" selected="selected">
-                                <xar:mlstring>
-                                    Maximized
-                                </xar:mlstring>
-                            </option>
-                            <xar:else />
-                            <option value="2">
-                                <xar:mlstring>
-                                    Maximized
-                                </xar:mlstring>
-                            </option>
-                        </xar:if>
-                    </select>
+                    <xar:set name="options">
+                        array(
+                            array)'id' => 0, 'name' => xarML('Hidden')),
+                            array)'id' => 2, 'name' => xarML('Maximized')),
+                        )
+                    </xar:set>
+                    <xar:set name="value">
+                        $instance['state']
+                    </xar:set>
+                    <xar:data-input type="dropdown" name="block_state" options="$options" value="$value" />
                 </div>
 
                 <!--

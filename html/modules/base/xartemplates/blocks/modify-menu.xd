@@ -116,47 +116,14 @@
                 Display Modules
             </xar:mlstring>
         </label>
-        <select name="displaymodules" id="displaymodules">
-            <xar:if condition="$displaymodules eq 'None'">
-                <option value="None" selected="selected">
-                    <xar:mlstring>
-                        None
-                    </xar:mlstring>
-                </option>
-            <xar:else />
-                <option value="None">
-                    <xar:mlstring>
-                        None
-                    </xar:mlstring>
-                </option>
-            </xar:if>
-            <xar:if condition="$displaymodules eq 'All'">
-                <option value="All" selected="selected">
-                    <xar:mlstring>
-                        All Modules
-                    </xar:mlstring>
-                </option>
-            <xar:else />
-                <option value="All">
-                    <xar:mlstring>
-                        All Modules
-                    </xar:mlstring>
-                </option>
-            </xar:if>
-            <xar:if condition="$displaymodules eq 'List'">
-                <option value="List" selected="selected">
-                    <xar:mlstring>
-                        Manual List
-                    </xar:mlstring>
-                </option>
-            <xar:else />
-                <option value="List">
-                    <xar:mlstring>
-                        Manual List
-                    </xar:mlstring>
-                </option>
-            </xar:if>
-        </select>
+        <xar:set name="options">
+            array(
+                array)'id' => 'None', 'name' => xarML('None')),
+                array)'id' => 'All', 'name' => xarML('All Modules')),
+                array)'id' => 'List', 'name' => xarML('Manual List')),
+            )
+        </xar:set>
+        <xar:data-input type="dropdown" name="displaymodules" options="$options" value="$displaymodules" />
         <div class="xar-form-container-after">
             <p><xar:mlstring>To display a restricted list of modules in the menu, enter their names separated by commas in the field below, and choose Manual List from the dropdown.</xar:mlstring></p>
             <p><input type="text" name="modulelist" id="modulelist" size="50" maxlength="255" value="#$modulelist#" /></p>

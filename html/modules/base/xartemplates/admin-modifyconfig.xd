@@ -342,39 +342,17 @@
                                 Security Level:
                             </xar:mlstring>
                         </label>
-                        <select name="securitylevel" id="securitylevel" size="1">
-                            <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'High'">
-                                <option value="High" selected="selected">
-                                    High
-                                </option>
-                                <option value="Medium">
-                                    Medium
-                                </option>
-                                <option value="Low">
-                                    Low
-                                </option>
-                                <xar:elseif condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Medium'" />
-                                <option value="High">
-                                    High
-                                </option>
-                                <option value="Medium" selected="selected">
-                                    Medium
-                                </option>
-                                <option value="Low">
-                                    Low
-                                </option>
-                                <xar:elseif condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Low'" />
-                                <option value="High">
-                                    High
-                                </option>
-                                <option value="Medium">
-                                    Medium
-                                </option>
-                                <option value="Low" selected="selected">
-                                    Low
-                                </option>
-                            </xar:if>
-                        </select>
+                        <xar:set name="options">
+                            array(
+                                array)'id' => 'High', 'name' => xarML('High')),
+                                array)'id' => 'Medium', 'name' => xarML('Medium')),
+                                array)'id' => 'Low', 'name' => xarML('Low')),
+                            )
+                        </xar:set>
+                        <xar:set name="value">
+                            xarConfigVars::get(null,'Site.Session.SecurityLevel')
+                        </xar:set>
+                        <xar:data-input type="dropdown" name="securitylevel" options="$options" value="$value" />
                     </div>
                     <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Medium'">
                         <div class="xar-form-input-wrapper">
