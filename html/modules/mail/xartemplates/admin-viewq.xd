@@ -9,13 +9,13 @@
             Mail Queue
         </h2>
 
-       <xar:comment>
+       <!--
            We want to show this option so people know it is available.
            We only show this if we can use it eg scheduler is installed and hooked to mail
-       </xar:comment>
+       -->
 
        <xar:if condition="xarModIsAvailable('scheduler') and xarModIsHooked('mail','scheduler')">
-       <xar:comment>We only show this if we can use it eg scheduler is installed and hooked to mail </xar:comment>
+       <!--  We only show this if we can use it eg scheduler is installed and hooked to mail -->
         <xar:if condition="!empty($log)">
             <pre>#$log#</pre>
 

@@ -67,9 +67,9 @@
             </dl>
         </div>
         <form method="post" action="&xar-modurl-roles-admin-createmail;">
-            <xar:comment>
+            <!--
                 Module List Sort and Filter Controls table
-            </xar:comment>
+            -->
             <table class="xar-fullwidth">
                 <tr>
                     <th class="xar-nowrap">
@@ -215,12 +215,12 @@
             </table>
         </form>
         <xar:if condition="$modstatus">
-            <xar:comment>
+            <!--
                 lets display latest status ?? this contains very strange values, so let's not :-)
             <p>
                 #$modstatus#
             </p>
-            </xar:comment>
+            -->
 
         </xar:if>
         <fieldset>
@@ -233,9 +233,9 @@
                 .
             </p>
           <xar:else />
-            <xar:comment>
+            <!--
                 the Roles Lists table-based styles (borrow from the Modules list)
-            </xar:comment>
+            -->
             <xar:if condition="$selstyle eq '1'">
               <p>
                 <xar:ml>

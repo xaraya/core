@@ -81,9 +81,9 @@
                     </select>
                 </div>
 
-                <xar:comment>
+                <!--
                     It is likely this section will be removed, since blocks generally do not use it.
-                </xar:comment>
+                -->
                 <xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
 
                     <div class="xar-form-input-wrapper">
@@ -114,9 +114,9 @@
                     <xar:mlstring>Block Type Properties</xar:mlstring>
                 </legend>
 
-                <xar:comment>
+                <!--
                     This 'content' section is deprecated - it will be removed once the PHP block no longer uses it.
-                </xar:comment>
+                -->
 
                 <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
                     <div class="xar-form-input-wrapper">
@@ -148,9 +148,9 @@
                 </legend>
 
                 <xar:if condition="$group_method eq 'min'">
-                    <xar:comment>
+                    <!--
                         Provide a 'new group' drop-down list.
-                    </xar:comment>
+                    -->
 
                     <div class="xar-form-input-wrapper">
                         <label for="block_new_group" title="#xarML('Add this block instance to the selected block group.')#" class="xar-form-label">

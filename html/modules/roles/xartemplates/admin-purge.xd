@@ -50,7 +50,7 @@
             </h3>
 
             <form method="post" action="&xar-modurl-roles-admin-purge;" enctype="application/x-www-form-urlencoded" >
-                <xar:comment> Module List Sort and Filter Controls table </xar:comment>
+                <!-- Module List Sort and Filter Controls table -->
                 <table class="xar-fullwidth">
                     <tr>
                            <th>
@@ -195,7 +195,7 @@
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="operation" id="operation" value="purge" />
 
-                <xar:comment>Roles List Sort and Filter Controls table</xar:comment>
+                <!-- Roles List Sort and Filter Controls table -->
                 <table class="xar-fullwidth">
                     <tr>
                         <th>

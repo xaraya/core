@@ -73,7 +73,7 @@
 
             </fieldset>
 
-            <xar:comment>Table of overrideable parameters (see xar:block tag)</xar:comment>
+            <!-- Table of overrideable parameters (see xar:block tag) -->
             <xar:if condition="!empty($params)">
 
                 <fieldset>

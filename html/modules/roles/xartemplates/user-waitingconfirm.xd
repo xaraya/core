@@ -1,6 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:comment>Roles module confirmation for existing users revalidating their email</xar:comment>
+    <!-- Roles module confirmation for existing users revalidating their email -->
     <xar:set name="adminemail"><xar:var scope="module" module="mail" name="adminmail"/></xar:set>
     <div class="xar-mod-head">
         <span class="xar-mod-title"><xar:mlstring>Change of Email</xar:mlstring></span>

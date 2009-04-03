@@ -19,9 +19,9 @@
                 <label for="selstyle" title="#xarML('Choose how Block instances are displayed.')#" class="xar-form-label">
                     <xar:mlstring>Preferred Layout:</xar:mlstring>
                 </label>
-                <xar:comment>
+                <!--
                     Module List Sort and Filter Controls
-                </xar:comment>
+                -->
                 <xar:set name="options">
                     array(
                         array('id' => 'plain',   'name' => xarML('Plain')),

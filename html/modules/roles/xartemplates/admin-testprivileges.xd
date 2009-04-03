@@ -33,7 +33,7 @@
         </div>
       </xar:if>
 
-      <xar:comment>TODO set the active tab here</xar:comment>
+      <!-- TODO set the active tab here -->
       <!-- Show the general tab list for roles -->
       <xar:template file="tablist" />
 

@@ -39,9 +39,9 @@
                 </dd>
             </xar:if>
         </dl>
-        <xar:comment>
+        <!--
             - - - - - - - - - - - Begin General Options - - - - - - - - - - - 
-        </xar:comment>
+        -->
         <xar:if condition="$tab eq 'general'">
             <form action="#xarModUrl('blocks', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded">
             <xar:template file="display" module="base" subdata="array('modulename' => 'blocks')" />

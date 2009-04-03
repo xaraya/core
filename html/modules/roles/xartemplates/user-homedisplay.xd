@@ -1,10 +1,10 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:comment>
+    <!--
     Generic page for display of URL in an IFrame.
      Variables: title - string, title of page
                 page - full url of the page to be displayed
-    </xar:comment>
+    -->
     <script type="text/javascript">
     function IntegrateIt() {
         var here = document.getElementById('integratordiv');

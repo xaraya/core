@@ -73,7 +73,7 @@
                         </a>
                     </dd>
                 </xar:if>
-                <xar:comment>
+                <!--
                     <xar:if condition="$tab eq 'grouphooks'">
                         <dd class="active">
                             <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
@@ -91,7 +91,7 @@
                             </a>
                         </dd>
                     </xar:if>
-                </xar:comment>
+                -->
                 <xar:if condition="$tab eq 'memberlist'">
                     <dd class="active">
                         <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist">
@@ -111,9 +111,9 @@
                 </xar:if>
             </dl>
         </div>
-        <xar:comment>
+        <!--
             - - - - - - - - - - - - - - - - - - - Begin General Options - - - - - - - - - - - - - - - - - - - - -
-        </xar:comment>
+        -->
         <xar:if condition="$tab eq 'general'">
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
                 <xar:template file="display" module="base" subdata="array('modulename' => 'roles')" />
@@ -184,9 +184,9 @@
                     </div>
                 </fieldset>
             </form>
-            <xar:comment>
+            <!--
                 - - - - - - - - - - - - - - - - - Begin User Variable Options - - - - - - - - - - - - - - - - - - -
-            </xar:comment>
+            -->
             <xar:elseif condition="$tab eq 'duvs'" />
                 <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
                     <fieldset>
@@ -332,9 +332,9 @@
                         </div>
                     </fieldset>
                 </form>
-            <xar:comment>
+            <!--
                 - - - - - - - - - - - - - - - - - Begin User Hooks Options - - - - - - - - - - - - - - - - - - -
-            </xar:comment>
+            -->
             <xar:elseif condition="$tab eq 'hooks'" />
             <xar:if condition="!empty($hooks)">
               <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
@@ -361,9 +361,9 @@
                     </xar:mlstring>
                 </p>
             </xar:if>
-            <xar:comment>
+            <!--
                 - - - - - - - - - - - - - - - - - Begin Group Hooks Options - - - - - - - - - - - - - - - - - - -
-            </xar:comment>
+            -->
             <xar:elseif condition="$tab eq 'grouphooks'" />
             <xar:if condition="!empty($hooks)">
                 <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
@@ -390,9 +390,9 @@
                     </xar:mlstring>
                 </p>
             </xar:if>
-            <xar:comment>
+            <!--
                 - - - - - - - - - - - - - - - - - Begin Member List Options - - - - - - - - - - - - - - - - - - -
-            </xar:comment>
+            -->
             <xar:elseif condition="$tab eq 'memberlist'" />
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
                 <fieldset>

@@ -18,11 +18,11 @@
                     <xar:set name="children">""</xar:set>
                 </xar:if>
                 <li class="leaf #$islast# #$children#">
-                    <xar:comment> Placeholder spans
-                    </xar:comment>
+                    <!-- Placeholder spans
+                    -->
                     <span class="a #$islast# #$children#"><span class="b"><span class="c">
-                    <xar:comment> Tree branch and description
-                    </xar:comment>
+                    <!-- Tree branch and description
+                    -->
                         <span class="treeattributes">
                             <xar:if condition="$drawchildren eq false">
                                 <span style="padding-left: 1em">
@@ -39,8 +39,8 @@
                                 </a> #$description#
                             </xar:if>
 
-                        <xar:comment> Delete item
-                        </xar:comment>
+                        <!-- Delete item
+                        -->
                             <xar:set name="seccheck">xarSecurityCheck('DeleteRole',0,'Roles',$node['name'])</xar:set>
                             <xar:if condition="($seccheck eq false) or ($node['users'] gt 0) or ($drawchildren eq false)">
                             <xar:else />
@@ -49,16 +49,16 @@
                                 </a>
                             </xar:if>
 
-                        <xar:comment> Users item
-                        </xar:comment>
+                        <!-- Users item
+                        -->
                             <xar:if condition="($node['users'] gt 0) and ($drawchildren)">
                                 <a href="#xarModURL('roles', 'admin', 'showusers', array('id' => $node['id'], 'reload' => 1))#" title="#xarML('Show the Users in this Group')#" style="margin: 0 0.25em 0 0.25em;">
                                     <img src="#xarTplGetImage('users.png')#" alt="" />
                                 </a>
                             </xar:if>
 
-                        <xar:comment> Email item
-                        </xar:comment>
+                        <!-- Email item
+                        -->
                             <xar:if condition="($node['users'] gt 0) and ($drawchildren)">
                             <xar:else />
                                 <a href="#xarModURL('roles', 'admin', 'createmail', array('id' => $node['id']))#" title="#xarML('Email the Users in this Group')#" style="margin: 0 0.25em 0 0.25em;">
@@ -66,16 +66,16 @@
                                 </a>
                             </xar:if>
 
-                        <xar:comment> Show privileges item
-                        </xar:comment>
+                        <!-- Show privileges item
+                        -->
                             <xar:if condition="$drawchildren">
                                 <a href="#xarModURL('roles', 'admin', 'showprivileges', array('id' => $node['id']))#" title="#xarML('Show the Privileges assigned to this Group')#" style="margin: 0 0.25em 0 0.25em;">
                                     <img src="#xarTplGetImage('privileges.png')#" alt="" />
                                 </a>
                             </xar:if>
 
-                        <xar:comment> Test privileges item
-                        </xar:comment>
+                        <!-- Test privileges item
+                        -->
                             <xar:if condition="$drawchildren">
                                 <a href="#xarModURL('roles', 'admin', 'testprivileges', array('id' => $node['id']))#" title="#xarML('Test this Groups\'s Privileges')#" style="margin: 0 0.25em 0 0.25em;">
                                     <img src="#xarTplGetImage('test.png')#" alt="" />
@@ -84,8 +84,8 @@
                         </span>
                     </span></span></span>
 
-                    <xar:comment> Now do the children
-                    </xar:comment>
+                    <!-- Now do the children
+                    -->
                     <xar:if condition="!empty($childrennode)">
                         <xar:template file="tree" subdata="array('treenode'=&gt;$childrennode)"/>
                     </xar:if>
