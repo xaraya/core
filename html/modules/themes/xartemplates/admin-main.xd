@@ -85,7 +85,7 @@
            <code>&lt;xar:var scope="module" module="themes" name="SiteName" /&gt;</code></xar:mlstring></li>
            <li><xar:mlstring><em>Site Slogan</em>: Add your slogan and display it with <br />
            <code>&lt;xar:var scope="module" module="themes" name="SiteSlogan" /&gt;</code></xar:mlstring></li>
-           <li><xar:mlstring><em>Copyright</em>: Defaults to "&copy;
+           <li><xar:mlstring><em>Copyright</em>: Defaults to "&#169;
            Copyright 2003 &lt;administrator name&gt;". Change the text as necessary and
            insert in your theme with <br /><code>&lt;xar:var scope="module" module="themes" name="SiteCopyRight" /&gt;</code></xar:mlstring></li>
            <li><xar:mlstring><em>Footer note</em>: The 'footer' is displayed at the
