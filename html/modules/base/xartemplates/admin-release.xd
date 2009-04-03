@@ -1,35 +1,35 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span>
-</div>
-<div class="xar-mod-body">
- <xar:template type="module" file="admin-menu" />
-    <h2><xar:ml>
-        <xar:mlstring>Last #(1) Xaraya Extension Releases</xar:mlstring>
-        <xar:mlvar>#$releasenumber#
-        </xar:mlvar>
-        </xar:ml>
-    </h2>
-    <xar:if condition="empty($warning)">
-        <xar:if condition="!empty($feedcontent)">
-        <ul>
-            <xar:foreach in="$feedcontent" value="$release">
-            <li>
-                <xar:if condition="!empty($release['link'])">
-                    <a href="#$release['link']#" onclick="window.open(this.getAttribute('href'));return false;">#$release['title']#</a>: 
-                <xar:else />
-                    #$release['title']#: 
-                </xar:if>
-                <xar:if condition="!empty($release['description'])">
-                    #$release['description']#
-                </xar:if>
-            </li>
-            </xar:foreach>
-        </ul>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span>
+    </div>
+    <div class="xar-mod-body">
+     <xar:template type="module" file="admin-menu" />
+        <h2><xar:ml>
+            <xar:mlstring>Last #(1) Xaraya Extension Releases</xar:mlstring>
+            <xar:mlvar>#$releasenumber#
+            </xar:mlvar>
+            </xar:ml>
+        </h2>
+        <xar:if condition="empty($warning)">
+            <xar:if condition="!empty($feedcontent)">
+            <ul>
+                <xar:foreach in="$feedcontent" value="$release">
+                <li>
+                    <xar:if condition="!empty($release['link'])">
+                        <a href="#$release['link']#" onclick="window.open(this.getAttribute('href'));return false;">#$release['title']#</a>: 
+                    <xar:else />
+                        #$release['title']#: 
+                    </xar:if>
+                    <xar:if condition="!empty($release['description'])">
+                        #$release['description']#
+                    </xar:if>
+                </li>
+                </xar:foreach>
+            </ul>
+            </xar:if>
+        <xar:else />
+            <p>#$warning#</p>
         </xar:if>
-    <xar:else />
-        <p>#$warning#</p>
-    </xar:if>
-</div>
+    </div>
 </xar:template>

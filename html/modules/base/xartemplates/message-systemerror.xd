@@ -1,54 +1,54 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<!--
-***********
-* WARNING
-* Modify this template at your own risk.
-* If the template contains errors, the exception system will not be able to process
-* it correctly, leading to unexpected results
-***********
--->
-<div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Error Message</xar:mlstring></span>
-</div>
-<div class="xar-mod-body">
-    <img src="#xarTplGetImage('exception.jpg', 'base')#" alt="#xarML('Exception Icon')#" class="xar-module-icon" />
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!--
+    ***********
+    * WARNING
+    * Modify this template at your own risk.
+    * If the template contains errors, the exception system will not be able to process
+    * it correctly, leading to unexpected results
+    ***********
+    -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title"><xar:mlstring>Error Message</xar:mlstring></span>
+    </div>
+    <div class="xar-mod-body">
+        <img src="#xarTplGetImage('exception.jpg', 'base')#" alt="#xarML('Exception Icon')#" class="xar-module-icon" />
 
-    <h2>#$type#</h2>
+        <h2>#$type#</h2>
 
-    <h3>#$title#</h3>
+        <h3>#$title#</h3>
 
-    <pre>#$short#</pre>
+        <pre>#$short#</pre>
 
-    <xar:if condition = "isset($long) and $long ne ''">
-        <h3>
-            <xar:mlstring>Explanation:</xar:mlstring>
-        </h3>
+        <xar:if condition = "isset($long) and $long ne ''">
+            <h3>
+                <xar:mlstring>Explanation:</xar:mlstring>
+            </h3>
 
-        <p>#$long#</p>
-    </xar:if>
+            <p>#$long#</p>
+        </xar:if>
 
-    <xar:if condition = "isset($hint) and $hint ne ''">
-        <h3>
-            <xar:mlstring>Further Information:</xar:mlstring>
-        </h3>
+        <xar:if condition = "isset($hint) and $hint ne ''">
+            <h3>
+                <xar:mlstring>Further Information:</xar:mlstring>
+            </h3>
 
-        <p>#$hint#</p>
-    </xar:if>
+            <p>#$hint#</p>
+        </xar:if>
 
-    <xar:if condition = "isset($stack) and $stack ne ''">
-        <h3>
-            <xar:mlstring>Stack:</xar:mlstring>
-        </h3>
+        <xar:if condition = "isset($stack) and $stack ne ''">
+            <h3>
+                <xar:mlstring>Stack:</xar:mlstring>
+            </h3>
 
-        <pre>#$stack#</pre>
-    </xar:if>
+            <pre>#$stack#</pre>
+        </xar:if>
 
-    <xar:if condition = "isset($product) and $product ne ''">
-        <p><a href="http://bugs.xaraya.com/enter_bug.cgi?product=#$product#&amp;component=#$component#&amp;comment=#$short#" target="_blank"><xar:mlstring>Click here to raise a bug</xar:mlstring></a></p>
-    <xar:else />
-        <p><a href="http://bugs.xaraya.com/enter_bug.cgi"><xar:mlstring>Click here to raise a bug</xar:mlstring></a></p>
-    </xar:if>
+        <xar:if condition = "isset($product) and $product ne ''">
+            <p><a href="http://bugs.xaraya.com/enter_bug.cgi?product=#$product#&amp;component=#$component#&amp;comment=#$short#" target="_blank"><xar:mlstring>Click here to raise a bug</xar:mlstring></a></p>
+        <xar:else />
+            <p><a href="http://bugs.xaraya.com/enter_bug.cgi"><xar:mlstring>Click here to raise a bug</xar:mlstring></a></p>
+        </xar:if>
 
-</div>
+    </div>
 </xar:template>
