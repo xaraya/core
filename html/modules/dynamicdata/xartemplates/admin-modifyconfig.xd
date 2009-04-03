@@ -13,14 +13,14 @@
         <xar:mlstring>Click Flush Property Cache to clear the DynamicData Property Definitions cache and to reload the properties definitions from the file system.</xar:mlstring>
     </p>
 
-    <form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
+    <form method="post" action="#xarModURL('dynamicdata','admin','updateconfig')#">
         <div class="xar-align-center">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="flushPropertyCache" value="true" />
             <input type="submit" value="Flush Property Cache" />
         </div>
     </form>
-    <form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
+    <form method="post" action="#xarModURL('dynamicdata','admin','updateconfig')#">
         <p>
             <xar:mlstring>The following property types are predefined in Xaraya and may be used in your own dynamic properties.</xar:mlstring>
         </p>
