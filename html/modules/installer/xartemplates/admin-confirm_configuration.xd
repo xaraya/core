@@ -10,7 +10,7 @@
     <h3>
         <xar:mlstring>Privileges</xar:mlstring>
     </h3>
-    <form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
+    <form action="#xarModURL('installer','admin','confirm_configuration')#" method="post">
         <div>
             <input type="hidden" name="install_language" id="install_language" value="#$language#" />
             <input type="hidden" name="configuration" id="configuration" value="#$configuration#" />

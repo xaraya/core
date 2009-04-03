@@ -7,7 +7,7 @@
         <xar:mlstring>Administrator Account Creation</xar:mlstring>
     </h1>
 
-    <form action="&xar-modurl-installer-admin-create_administrator;" method="post">
+    <form action="#xarModURL('installer','admin','create_administrator')#" method="post">
         <div>
             <input type="hidden" name="install_language" id="install_language" value="#$language#" />
             <p class="xar-normal">
