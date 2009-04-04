@@ -20,7 +20,7 @@
                         [
                         <xar:if condition="!empty($loop:item.groups)">
                             <xar:loop name="$loop:item.groups" id="groupsl">
-                                <a href="&xar-modurl-blocks-admin-modify_group;&amp;id=#$loop:groupsl:item.id#" title="#xarML('Edit group')#">
+                                <a href="#xarMOdURL('blocks','admin','modify_group')#&amp;id=#$loop:groupsl:item.id#" title="#xarML('Edit group')#">
                                     #$loop:groupsl:item.name#
                                 </a>
                             </xar:loop>
@@ -52,7 +52,7 @@
                             </xar:mlstring>
                         </xar:if>
                         |
-                        <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item.bid#">
+                        <a href="#xarMOdURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                             <xar:mlstring>
                                 E
                             </xar:mlstring>
@@ -79,7 +79,7 @@
                         [
                         <xar:if condition="!empty($loop:item.groups)">
                             <xar:loop name="$loop:item.groups" id="groupsr">
-                                <a href="&xar-modurl-blocks-admin-modify_group;&amp;id=#$loop:groupsr:item.id#" title="#xarML('Edit group')#">
+                                <a href="#xarMOdURL('blocks','admin','modify_group')#&amp;id=#$loop:groupsr:item.id#" title="#xarML('Edit group')#">
                                     #$loop:groupsr:item.name#
                                 </a>
                             </xar:loop>
@@ -111,7 +111,7 @@
                             </xar:mlstring>
                         </xar:if>
                         |
-                        <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item.bid#">
+                        <a href="#xarMOdURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                             <xar:mlstring>
                                 E
                             </xar:mlstring>
@@ -134,5 +134,5 @@
                 </div>
             </xar:if>
         </xar:loop>
-    </div><
-/xar:template>
+    </div>
+</xar:template>
