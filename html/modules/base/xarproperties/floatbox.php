@@ -9,7 +9,7 @@
  * @link http://xaraya.com/index.php/release/68.html
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.base.xarproperties.textbox');
+sys::import('modules.base.xarproperties.integerbox');
 
 /**
  * Handle floatbox property

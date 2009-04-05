@@ -10,6 +10,7 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 sys::import('modules.base.xarproperties.textbox');
+
 /**
  * Handle the numberbox property
  */
