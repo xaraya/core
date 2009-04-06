@@ -1746,11 +1746,6 @@ function installer_admin_upgrade2()
         }
     }
 
-    // Ensure base timesince tag handler is added
-    xarTplUnregisterTag('base-timesince');
-    xarTplRegisterTag('base', 'base-timesince', array(),
-                      'base_userapi_handletimesincetag');
-
 /* End 1.1.2 Release Upgrades */
 
     $thisdata['content']=$content;
