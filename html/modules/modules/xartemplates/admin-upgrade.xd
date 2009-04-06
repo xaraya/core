@@ -1,24 +1,24 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
-</div>
-<div class="xar-mod-body">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
+    </div>
+    <div class="xar-mod-body">
 
-    <!-- This section deals with dependancies. -->
-    <xar:if condition="!empty($dependencies)">
-    </xar:if>
+        <!-- This section deals with dependancies. -->
+        <xar:if condition="!empty($dependencies)">
+        </xar:if>
 
-    <!-- This section deals with upgrade errors. -->
-    <h2>
-        <xar:mlstring>Module Upgrade Failed</xar:mlstring>
-    </h2>
+        <!-- This section deals with upgrade errors. -->
+        <h2>
+            <xar:mlstring>Module Upgrade Failed</xar:mlstring>
+        </h2>
 
-    <xar:template file="install-errors" type="module" />
+        <xar:template file="install-errors" type="module" />
 
-    <p>
-        <a href="&xar-modurl-modules-admin-list;"><xar:mlstring>Go back to the modules list.</xar:mlstring></a>
+        <p>
+            <a href="&xar-modurl-modules-admin-list;"><xar:mlstring>Go back to the modules list.</xar:mlstring></a>
 
-    </p>
-</div>
+        </p>
+    </div>
 </xar:template>

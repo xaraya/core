@@ -1,43 +1,44 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
-</div>
-<div class="xar-mod-body">
-   <xar:template type="module" file="admin-menu" />
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
+    </div>
+    <div class="xar-mod-body">
+       <xar:template type="module" file="admin-menu" />
 
-  <xar:if condition="xarModVars::get('privileges','showrealms')">
-   <xar:template type="module" file="admin-realms" />
+      <xar:if condition="xarModVars::get('privileges','showrealms')">
+       <xar:template type="module" file="admin-realms" />
 
-        <table class="xar-fullwidth xar-clearboth">
-            <tr>
-                <th style="text-align: left; padding-left: .5em;">
-                    <xar:mlstring>Name</xar:mlstring>
-                </th>
-                <th style="text-align: center; padding-left: .5em;">
-                    <xar:mlstring>Actions</xar:mlstring>
-                </th>
-            </tr>
-            <xar:loop name="$realms">
-                <tr class="xar-norm-outline xar-padding-endsthick xar-align-left">
-                    <td >
-                        <a href="&xar-modurl-privileges-admin-modifyrealm;&amp;id=#$loop:item['id']#">#xarVarPrepForDisplay($loop:item['name'])#</a>
-                    </td>
-                    <td class="xar-align-center">
-                        <a class="xar-valign-middle" href="&xar-modurl-privileges-admin-modifyrealm;&amp;id=#$loop:item['id']#" alt="#xarML('Modify this realm')#" title="#xarML('Modify this realm')#"><img src="#xarTplGetImage('infoicon.gif', 'roles')#" /></a>&#160;
-                        <a class="xar-valign-middle" href="&xar-modurl-privileges-admin-deleterealm;&amp;id=#$loop:item['id']#" alt="#xarML('Delete this realm')#" title="#xarML('Delete this realm')#"><img src="#xarTplGetImage('delete.png', 'roles')#" /></a>
-                    </td>
+            <table class="xar-fullwidth xar-clearboth">
+                <tr>
+                    <th style="text-align: left; padding-left: .5em;">
+                        <xar:mlstring>Name</xar:mlstring>
+                    </th>
+                    <th style="text-align: center; padding-left: .5em;">
+                        <xar:mlstring>Actions</xar:mlstring>
+                    </th>
                 </tr>
-            </xar:loop>
-        </table>
-    <xar:else />
-    <h2>
-            <xar:mlstring>Manage Realms</xar:mlstring>
-    </h2>
-      <p>
-            <xar:mlstring>
-            You can use Realms to 'slice' or divide your site into different areas. You can 'slice' in various ways, such as by theme or domain name.
-            You must </xar:mlstring><a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=realms" title="#xarML('Enable the Realms options')#"><xar:mlstring>enable Realms on your site</xar:mlstring></a>
-            <xar:mlstring> in the Privileges config options. The realms create and modify options will then display here.</xar:mlstring></p>
-    </xar:if>
-</div> <!-- mod body --></xar:template>
+                <xar:loop name="$realms">
+                    <tr class="xar-norm-outline xar-padding-endsthick xar-align-left">
+                        <td >
+                            <a href="&xar-modurl-privileges-admin-modifyrealm;&amp;id=#$loop:item['id']#">#xarVarPrepForDisplay($loop:item['name'])#</a>
+                        </td>
+                        <td class="xar-align-center">
+                            <a class="xar-valign-middle" href="&xar-modurl-privileges-admin-modifyrealm;&amp;id=#$loop:item['id']#" alt="#xarML('Modify this realm')#" title="#xarML('Modify this realm')#"><img src="#xarTplGetImage('infoicon.gif', 'roles')#" /></a>&#160;
+                            <a class="xar-valign-middle" href="&xar-modurl-privileges-admin-deleterealm;&amp;id=#$loop:item['id']#" alt="#xarML('Delete this realm')#" title="#xarML('Delete this realm')#"><img src="#xarTplGetImage('delete.png', 'roles')#" /></a>
+                        </td>
+                    </tr>
+                </xar:loop>
+            </table>
+        <xar:else />
+        <h2>
+                <xar:mlstring>Manage Realms</xar:mlstring>
+        </h2>
+          <p>
+                <xar:mlstring>
+                You can use Realms to 'slice' or divide your site into different areas. You can 'slice' in various ways, such as by theme or domain name.
+                You must </xar:mlstring><a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=realms" title="#xarML('Enable the Realms options')#"><xar:mlstring>enable Realms on your site</xar:mlstring></a>
+                <xar:mlstring> in the Privileges config options. The realms create and modify options will then display here.</xar:mlstring></p>
+        </xar:if>
+    </div> 
+</xar:template>

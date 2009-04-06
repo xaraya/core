@@ -1,9 +1,9 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!--
-    I've put this here because this makes integrating with other modules more
-    easy, if the header needs to be suppressed
--->
-<div class="xar-mod-head">
-  <span class="xar-mod-title">Mail Administration</span>
-</div>
+    <!--
+        I've put this here because this makes integrating with other modules more
+        easy, if the header needs to be suppressed
+    -->
+    <div class="xar-mod-head">
+      <span class="xar-mod-title">Mail Administration</span>
+    </div>
 </xar:template>

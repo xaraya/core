@@ -1,62 +1,62 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:style scope="module" module="base" file="navtabs" />
-<div class="xar-mod-head">
-    <span class="xar-mod-title">
-        <xar:mlstring>
-            Authsystem Authentication Administration
-        </xar:mlstring>
-    </span>
-</div>
-<div class="xar-mod-body">
-<xar:template type="module" file="admin-menu" />
-    <h2>
-        <xar:mlstring>
-            Modify Configuration
-        </xar:mlstring>
-    </h2>
-    <form method="post" action="&xar-modurl-authsystem-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-        <xar:template file="display" module="base" subdata="array('modulename' => 'authsystem')" />
-        <fieldset>
-            <legend>
-                <xar:mlstring>
-                    Login Security Options
-                </xar:mlstring>
-            </legend>
-                <div class="xar-form-input-wrapper">
-                    <label for="uselockout" class="xar-form-label" title="Lock a user out after a number of failed logins">
-                        <xar:mlstring>
-                            Enable lockout option? 
-                        </xar:mlstring>
-                    </label>
-                    <xar:data-input type="checkbox" name="uselockout" id="uselockout" value="$uselockoutchecked" checked="$uselockoutchecked" />
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="lockouttries" class="xar-form-label" title="The number of attempts allowed before lockout">
-                        <xar:mlstring>
-                            Allowed attempts 
-                        </xar:mlstring>
-                        : 
-                    </label>
-                    <xar:data-input type="integerbox" name="lockouttries" id="lockouttries" value="$lockouttries" size="2" maxlength="2" />
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="lockouttime" class="xar-form-label" title="The time a lockout is in effect">
-                        <xar:mlstring>
-                            Lockout time (minutes) 
-                        </xar:mlstring>
-                        : 
-                    </label>
-                    <xar:data-input type="textbox" name="lockouttime" id="lockouttime" value="$lockouttime" size="2" maxlength="2" />
-                </div>
-        </fieldset>
-        <fieldset>
-             <div class="xar-form-input-wrapper-after">
-                    <xar:data-input type="hidden" name="authid" id="authid" value="$authid" />
-                    <xar:data-input type="hidden" name="phase" id="phase" value="update" />
-                    <input type="submit" value="#xarML('Update Authentication Configuration')#" />
-              </div>
-          </fieldset>
-    </form>
-</div>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="module" module="base" file="navtabs" />
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">
+            <xar:mlstring>
+                Authsystem Authentication Administration
+            </xar:mlstring>
+        </span>
+    </div>
+    <div class="xar-mod-body">
+    <xar:template type="module" file="admin-menu" />
+        <h2>
+            <xar:mlstring>
+                Modify Configuration
+            </xar:mlstring>
+        </h2>
+        <form method="post" action="&xar-modurl-authsystem-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+            <xar:template file="display" module="base" subdata="array('modulename' => 'authsystem')" />
+            <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Login Security Options
+                    </xar:mlstring>
+                </legend>
+                    <div class="xar-form-input-wrapper">
+                        <label for="uselockout" class="xar-form-label" title="Lock a user out after a number of failed logins">
+                            <xar:mlstring>
+                                Enable lockout option? 
+                            </xar:mlstring>
+                        </label>
+                        <xar:data-input type="checkbox" name="uselockout" id="uselockout" value="$uselockoutchecked" checked="$uselockoutchecked" />
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="lockouttries" class="xar-form-label" title="The number of attempts allowed before lockout">
+                            <xar:mlstring>
+                                Allowed attempts 
+                            </xar:mlstring>
+                            : 
+                        </label>
+                        <xar:data-input type="integerbox" name="lockouttries" id="lockouttries" value="$lockouttries" size="2" maxlength="2" />
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="lockouttime" class="xar-form-label" title="The time a lockout is in effect">
+                            <xar:mlstring>
+                                Lockout time (minutes) 
+                            </xar:mlstring>
+                            : 
+                        </label>
+                        <xar:data-input type="textbox" name="lockouttime" id="lockouttime" value="$lockouttime" size="2" maxlength="2" />
+                    </div>
+            </fieldset>
+            <fieldset>
+                 <div class="xar-form-input-wrapper-after">
+                        <xar:data-input type="hidden" name="authid" id="authid" value="$authid" />
+                        <xar:data-input type="hidden" name="phase" id="phase" value="update" />
+                        <input type="submit" value="#xarML('Update Authentication Configuration')#" />
+                  </div>
+              </fieldset>
+        </form>
+    </div>
 </xar:template>

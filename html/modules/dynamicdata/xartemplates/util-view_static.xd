@@ -35,13 +35,13 @@
                         Add Relation                     
                     </a>
                 -->
-                    <a href="&xar-modurl-dynamicdata-util-new_static;&amp;table=#$table#" style="float:left">                    
-                        Add a  field to this table                   
+                    <a href="#xarModURL('dynamicdata','util','new_static')#&amp;table=#$table#" style="float:left">                    
+                        Add a field to this table                   
                     </a>
-                    <a href="&xar-modurl-dynamicdata-util-delete_static_table;&amp;table=#$table#" style="float:right">                    
+                    <a href="#xarModURL('dynamicdata','util','delete_static_table')#&amp;table=#$table#" style="float:right">                    
                         Delete this table:                    
                     </a>
-                    <a href="&xar-modurl-dynamicdata-util-rename_static_table;&amp;table=#$table#" style="float:right">                    
+                    <a href="#xarModURL('dynamicdata','util','rename_static_table')#&amp;table=#$table#" style="float:right">                    
                         Rename this table:&#160;|&#160;             
                     </a>
                 </p>
@@ -72,7 +72,7 @@
                     <xar:foreach in="$fields" value="$field">
                         <tr>
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-modify_static;&amp;table=#$table#&amp;field=#$field['name']#">
+                                <a href="#xarModURL('dynamicdata','util','modify_static')#&amp;table=#$table#&amp;field=#$field['name']#">
                                     #$field['name']# 
                                 </a>
                             </td>
@@ -92,7 +92,7 @@
                                 #$field['configuration']# 
                             </td>
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-delete_static;&amp;table=#$table#&amp;field=#$field['name']#">
+                                <a href="#xarModURL('dynamicdata','util','delete_static')#&amp;table=#$table#&amp;field=#$field['name']#">
                                     Delete 
                                 </a>
                             </td>
@@ -100,7 +100,7 @@
                     </xar:foreach>
                 </table>
                             <!--
-                <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
+                <form method="post" action="#xarModURL('dynamicdata','util','importprops')#">
                     <fieldset>
                         <div class="xar-form-input-wrapper-after">
                             <input type="hidden" name="authid" value="#$authid#" />

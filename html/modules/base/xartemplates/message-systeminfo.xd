@@ -1,39 +1,39 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<!--
-***********
-* WARNING
-* Modify this template at your own risk.
-* If the template contains errors, the exception system will not be able to process
-* it correctly, leading to unexpected results
-***********
--->
-<div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>System Message</xar:mlstring></span>
-</div>
-<div class="xar-mod-body">
-    <img src="#xarTplGetImage('sysmessage.jpg', 'base')#" alt="#xarML('Message Icon')#" class="xar-module-icon" />
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!--
+    ***********
+    * WARNING
+    * Modify this template at your own risk.
+    * If the template contains errors, the exception system will not be able to process
+    * it correctly, leading to unexpected results
+    ***********
+    -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title"><xar:mlstring>System Message</xar:mlstring></span>
+    </div>
+    <div class="xar-mod-body">
+        <img src="#xarTplGetImage('sysmessage.jpg', 'base')#" alt="#xarML('Message Icon')#" class="xar-module-icon" />
 
-    <h2>
-         #$title#
-   </h2>
+        <h2>
+             #$title#
+       </h2>
 
-    <p>#$short#</p>
+        <p>#$short#</p>
 
-    <xar:if condition = "$long ne ''">
-        <h3>
-            <xar:mlstring>Explanation:</xar:mlstring>
-        </h3>
+        <xar:if condition = "$long ne ''">
+            <h3>
+                <xar:mlstring>Explanation:</xar:mlstring>
+            </h3>
 
-        <p>#$long#</p>
-    </xar:if>
+            <p>#$long#</p>
+        </xar:if>
 
-    <xar:if condition = "$hint ne ''">
-        <h3>
-            <xar:mlstring>Further Information:</xar:mlstring>
-        </h3>
+        <xar:if condition = "$hint ne ''">
+            <h3>
+                <xar:mlstring>Further Information:</xar:mlstring>
+            </h3>
 
-        <p>#$hint#</p>
-    </xar:if>
-</div>
+            <p>#$hint#</p>
+        </xar:if>
+    </div>
 </xar:template>

@@ -47,7 +47,7 @@
                 <td>
                     <xar:if condition="!empty($loop:item.groups)">
                         <xar:loop name="$loop:item.groups" id="groups">
-                            <a href="&xar-modurl-blocks-admin-modify_group;&amp;id=#$loop:groups:item.id#">
+                            <a href="#xarMOdURL('blocks','admin','modify_group')#&amp;id=#$loop:groups:item.id#">
                                 #$loop:groups:item.name# 
                             </a>
                         </xar:loop>
@@ -82,7 +82,7 @@
                     #$state_desc[$loop:item['state']]# 
                 </td>
                 <td class="xar-align-center">
-                    <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item.bid#">
+                    <a href="#xarMOdURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                         <xar:mlstring>
                             Edit 
                         </xar:mlstring>

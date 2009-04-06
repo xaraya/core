@@ -1,41 +1,41 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:set name="steptext[1]">
-    <xar:mlstring>Selecting Language</xar:mlstring>
-</xar:set>
-<xar:set name="steptext[2]">
-    <xar:mlstring>Agreeing to License</xar:mlstring>
-</xar:set>
-<xar:set name="steptext[3]">
-    <xar:mlstring>Checking System Settings</xar:mlstring>
-</xar:set>
-<xar:set name="steptext[4]">
-    <xar:mlstring>Collecting Database Settings</xar:mlstring>
-</xar:set>
-<xar:set name="steptext[5]">
-    <xar:mlstring>Beginning Initialization</xar:mlstring>
-</xar:set>
-<xar:set name="steptext[6]">
-    <xar:mlstring>Creating an Administrator</xar:mlstring>
-</xar:set>
-<xar:set name="steptext[7]">
-    <xar:mlstring>Choosing a Configuration</xar:mlstring>
-</xar:set>
-<xar:set name="steptext[8]">
-    <xar:mlstring>Choosing Privileges</xar:mlstring>
-</xar:set>
-<div id="status">
-    <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">
-        <p class="complete">
-            #$steptext[$phase]#
+    <xar:set name="steptext[1]">
+        <xar:mlstring>Selecting Language</xar:mlstring>
+    </xar:set>
+    <xar:set name="steptext[2]">
+        <xar:mlstring>Agreeing to License</xar:mlstring>
+    </xar:set>
+    <xar:set name="steptext[3]">
+        <xar:mlstring>Checking System Settings</xar:mlstring>
+    </xar:set>
+    <xar:set name="steptext[4]">
+        <xar:mlstring>Collecting Database Settings</xar:mlstring>
+    </xar:set>
+    <xar:set name="steptext[5]">
+        <xar:mlstring>Beginning Initialization</xar:mlstring>
+    </xar:set>
+    <xar:set name="steptext[6]">
+        <xar:mlstring>Creating an Administrator</xar:mlstring>
+    </xar:set>
+    <xar:set name="steptext[7]">
+        <xar:mlstring>Choosing a Configuration</xar:mlstring>
+    </xar:set>
+    <xar:set name="steptext[8]">
+        <xar:mlstring>Choosing Privileges</xar:mlstring>
+    </xar:set>
+    <div id="status">
+        <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">
+            <p class="complete">
+                #$steptext[$phase]#
+            </p>
+        </xar:for>
+        <p class="active">
+            #$steptext[$active_step]#
         </p>
-    </xar:for>
-    <p class="active">
-        #$steptext[$active_step]#
-    </p>
-    <xar:for start="$phase = $active_step + 1" test="$phase le 8" iter="$phase++">
-        <p class="greyed">
-            #$steptext[$phase]#
-        </p>
-    </xar:for>
-</div>
+        <xar:for start="$phase = $active_step + 1" test="$phase le 8" iter="$phase++">
+            <p class="greyed">
+                #$steptext[$phase]#
+            </p>
+        </xar:for>
+    </div>
 </xar:template>
