@@ -1,190 +1,190 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:base-include-javascript position="head" module="dynamicdata" filename="subform.js" />
-<input type="hidden" id="fieldprefix" value="#$fieldprefix#" />
-<xar:if condition="empty($style) or $style eq 'serialized'">
-  <xar:if condition="!empty($object)">
-        <xar:set name="numitems">count($object)</xar:set>
-        <input type="hidden" id="items" value="#$numitems#" />
-        <div style="clear:both">&#160;</div>
-        <xar:if condition="$repeat">
-            <!--
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:base-include-javascript position="head" module="dynamicdata" filename="subform.js" />
+    <input type="hidden" id="fieldprefix" value="#$fieldprefix#" />
+    <xar:if condition="empty($style) or $style eq 'serialized'">
+      <xar:if condition="!empty($object)">
+            <xar:set name="numitems">count($object)</xar:set>
+            <input type="hidden" id="items" value="#$numitems#" />
+            <div style="clear:both">&#160;</div>
+            <xar:if condition="$repeat">
+                <!--
+                    Use a field prefix for all input fields of the object, so that
+                    you can have several identical objects in the same input form
+                -->
+                <xar:set name="i">0</xar:set>
+                <xar:foreach in="$object" value="$item">
+                    <xar:set name="i">$i+1</xar:set>
+                    <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
+                    <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
+                </xar:foreach>
+            <xar:else />
+              <!--
                 Use a field prefix for all input fields of the object, so that
                 you can have several identical objects in the same input form
-            -->
-            <xar:set name="i">0</xar:set>
-            <xar:foreach in="$object" value="$item">
-                <xar:set name="i">$i+1</xar:set>
-                <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
-                <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
-            </xar:foreach>
-        <xar:else />
-          <!--
-            Use a field prefix for all input fields of the object, so that
-            you can have several identical objects in the same input form
-          -->
-            <xar:if condition="count($object) gt 2">
-                <xar:set name="items">array(array_shift($object))</xar:set>
-                <xar:set name="insert">array_shift($object)</xar:set>
-                <xar:set name="items">array_merge($items,$object)</xar:set>
-                <xar:set name="foo">array_push($items,$insert)</xar:set>
-                <xar:set name="object">$items</xar:set>
-            </xar:if>
-            <xar:set name="i">0</xar:set>
-            <div id="item">
-            <xar:foreach in="$object" value="$item">
-                <xar:set name="i">$i+1</xar:set>
-                <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
-                <div id="#$prefix#">
-                    <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
-                    <xar:if condition="$i gt 1">
-                        <div class="xar-form-input-wrapper-after">
-                            <input type="button" title="Remove" value="Remove" style="height: 23px; font-size: small;" onclick="javascript:removeItem('#$prefix#')" />
-                        </div>
-                    </xar:if>
+              -->
+                <xar:if condition="count($object) gt 2">
+                    <xar:set name="items">array(array_shift($object))</xar:set>
+                    <xar:set name="insert">array_shift($object)</xar:set>
+                    <xar:set name="items">array_merge($items,$object)</xar:set>
+                    <xar:set name="foo">array_push($items,$insert)</xar:set>
+                    <xar:set name="object">$items</xar:set>
+                </xar:if>
+                <xar:set name="i">0</xar:set>
+                <div id="item">
+                <xar:foreach in="$object" value="$item">
+                    <xar:set name="i">$i+1</xar:set>
+                    <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
+                    <div id="#$prefix#">
+                        <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
+                        <xar:if condition="$i gt 1">
+                            <div class="xar-form-input-wrapper-after">
+                                <input type="button" title="Remove" value="Remove" style="height: 23px; font-size: small;" onclick="javascript:removeItem('#$prefix#')" />
+                            </div>
+                        </xar:if>
+                    </div>
+                </xar:foreach>
                 </div>
-            </xar:foreach>
-            </div>
-            <div class="xar-form-input-wrapper-after">
-                <input type="button" title="#xarML('Add Item')#" value="#xarML('Add')#" onclick="addItem();" style="height: 23px; font-size: small;" />
-            </div>
-            <div id="itemtemplate" style="display:none;">
-                <xar:data-form object="$emptyobject" layout="prefix" fieldprefix="Item_dummyfieldprefix" fieldlist="$fieldlist" />
-            </div>
-        </xar:if>
-        <br />
-  </xar:if>
-<!--
-  <xar:if condition="!empty($object)">
-    <table class="xar-norm">
-        <xar:if condition="$repeat">
-            <xar:set name="i">0</xar:set>
-            <xar:foreach in="$object" value="$item">
+                <div class="xar-form-input-wrapper-after">
+                    <input type="button" title="#xarML('Add Item')#" value="#xarML('Add')#" onclick="addItem();" style="height: 23px; font-size: small;" />
+                </div>
+                <div id="itemtemplate" style="display:none;">
+                    <xar:data-form object="$emptyobject" layout="prefix" fieldprefix="Item_dummyfieldprefix" fieldlist="$fieldlist" />
+                </div>
+            </xar:if>
+            <br />
+      </xar:if>
+    <!--
+      <xar:if condition="!empty($object)">
+        <table class="xar-norm">
+            <xar:if condition="$repeat">
+                <xar:set name="i">0</xar:set>
+                <xar:foreach in="$object" value="$item">
+                    <xar:set name="i">$i+1</xar:set>
+                    <xar:set name="prefix">$i . "_" . $fieldprefix</xar:set>
+                    <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
+                </xar:foreach>
+                <br />
+            <xar:else />
+                <xar:set name="i">0</xar:set>
                 <xar:set name="i">$i+1</xar:set>
                 <xar:set name="prefix">$i . "_" . $fieldprefix</xar:set>
-                <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
-            </xar:foreach>
-            <br />
-        <xar:else />
-            <xar:set name="i">0</xar:set>
-            <xar:set name="i">$i+1</xar:set>
-            <xar:set name="prefix">$i . "_" . $fieldprefix</xar:set>
-            <xar:data-form object="$object[0]" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
-            <br />
-            <div id="item"></div>
-            <input type="button" title="#xarML('Add Item')#" value="#xarML('Add')#" onclick="addItem();" style="height: 23px; font-size: small;" />
-        </xar:if>
-    </table>
-    <div id="itemtemplate" style="display:none;">
-        <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
-    </div>
-  </xar:if>
--->
-<xar:elseif condition="$style eq 'itemid'"/>
-  <xar:if condition="!empty($object)">
-    <table class="xar-norm">
-      <xar:if condition="!empty($dropdown) and !empty($title)">
-          <tr>
-            <td>
-              <xar:mlstring>Select item</xar:mlstring>
-            </td>
-            <td>
-              <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
-              <select name="#$name#" id="#$id#" tabindex="#$tabindex#">
-                <option value="0">
-                  <xar:if condition="!empty($input)">[ <xar:mlstring>new item</xar:mlstring> ]</xar:if>
-                </option>
-                <xar:foreach in="$dropdown" key="$dropid" value="$dropvalue">
-                  <xar:if condition="!empty($value) and $value eq $dropid">
-                    <option value="#$dropid#" selected="selected">[#$dropid#] #$dropvalue[$title]#</option>
-                  <xar:else/>
-                    <option value="#$dropid#">[#$dropid#] #$dropvalue[$title]#</option>
-                  </xar:if>
-                </xar:foreach>
-              </select>
-            </td>
-          </tr>
-      <xar:else/>
-        <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
+                <xar:data-form object="$object[0]" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
+                <br />
+                <div id="item"></div>
+                <input type="button" title="#xarML('Add Item')#" value="#xarML('Add')#" onclick="addItem();" style="height: 23px; font-size: small;" />
+            </xar:if>
+        </table>
+        <div id="itemtemplate" style="display:none;">
+            <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
+        </div>
       </xar:if>
-      <xar:if condition="!empty($input) or empty($fieldlist) or empty($title) or count($fieldlist) gt 1">
-      <tr>
-        <td colspan="2">
-          <xar:if condition="!empty($input)">
-            <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" fieldlist="$fieldlist" />
-          <xar:elseif condition="empty($fieldlist) or empty($title) or count($fieldlist) gt 1"/>
-            <!-- don't bother showing this if we only display the title field -->
-            <xar:data-display object="$object" />
+    -->
+    <xar:elseif condition="$style eq 'itemid'"/>
+      <xar:if condition="!empty($object)">
+        <table class="xar-norm">
+          <xar:if condition="!empty($dropdown) and !empty($title)">
+              <tr>
+                <td>
+                  <xar:mlstring>Select item</xar:mlstring>
+                </td>
+                <td>
+                  <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
+                  <select name="#$name#" id="#$id#" tabindex="#$tabindex#">
+                    <option value="0">
+                      <xar:if condition="!empty($input)">[ <xar:mlstring>new item</xar:mlstring> ]</xar:if>
+                    </option>
+                    <xar:foreach in="$dropdown" key="$dropid" value="$dropvalue">
+                      <xar:if condition="!empty($value) and $value eq $dropid">
+                        <option value="#$dropid#" selected="selected">[#$dropid#] #$dropvalue[$title]#</option>
+                      <xar:else/>
+                        <option value="#$dropid#">[#$dropid#] #$dropvalue[$title]#</option>
+                      </xar:if>
+                    </xar:foreach>
+                  </select>
+                </td>
+              </tr>
+          <xar:else/>
+            <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
           </xar:if>
-        </td>
-      </tr>
-      </xar:if>
-    </table>
-  </xar:if>
-
-<xar:elseif condition="$style eq 'childlist' or $style eq 'parentid'"/>
-  <xar:if condition="!empty($object)">
-    <table class="xar-norm">
-      <xar:if condition="!empty($dropdown) and !empty($count)">
+          <xar:if condition="!empty($input) or empty($fieldlist) or empty($title) or count($fieldlist) gt 1">
           <tr>
-            <td>
-              <xar:mlstring>Select link</xar:mlstring>
-            </td>
-            <td>
-              <!--  use the link property to show the values in a nicer way -->
-              <xar:set name="linkprop">#$object:properties[$link]#</xar:set>
-
-              <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
-              <select name="#$name#" id="#$id#" tabindex="#$tabindex#">
-                <option value="0">[ <xar:mlstring>new link</xar:mlstring> ]</option>
-                <xar:foreach in="$dropdown" key="$dropid" value="$dropvalue">
-                  <xar:if condition="!empty($value) and $value eq $dropvalue[$link]">
-                    <option value="#$dropvalue[$link]#" selected="selected"><xar:data-output property="$linkprop" value="$dropvalue[$link]" /> (#$dropvalue[$count]#)</option>
-                  <xar:else/>
-                    <option value="#$dropvalue[$link]#"><xar:data-output property="$linkprop" value="$dropvalue[$link]" /> (#$dropvalue[$count]#)</option>
-                  </xar:if>
-                </xar:foreach>
-              </select>
-              <xar:if condition="empty($value)">
-                <xar:data-input property="$linkprop" name="$name.'_new'" id="$id.'_new'" value="0" />
+            <td colspan="2">
+              <xar:if condition="!empty($input)">
+                <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" fieldlist="$fieldlist" />
+              <xar:elseif condition="empty($fieldlist) or empty($title) or count($fieldlist) gt 1"/>
+                <!-- don't bother showing this if we only display the title field -->
+                <xar:data-display object="$object" />
               </xar:if>
             </td>
           </tr>
-      <xar:elseif condition="$style eq 'parentid'" />
-          <xar:if condition="$repeat">
-              <!--
-                  Use a field prefix for all input fields of the object, so that
-                  you can have several identical objects in the same input form
-              -->
-              <xar:for start="$i = 0" test="$i lt $repeat" iter="$i++">
-                  <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
-                  <xar:data-form object="$object" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" tplmodule="$tplmodule" />
-              </xar:for>
-          <xar:else />
           </xar:if>
-        <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
-        <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
-      <xar:else/>
-        <input type="hidden" name="#$name#_old" id="#$id#_old" value="#xarVarPrepForDisplay($value)#" />
-        <input type="hidden" name="#$name#_new" id="#$id#_new" value="1" />
+        </table>
       </xar:if>
-      <xar:if condition="$style eq 'childlist' or (!empty($dropdown) and !empty($count)) or !empty($value)">
-      <tr>
-        <td colspan="2">
-          <xar:if condition="!empty($input)">
-            <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" fieldlist="$fieldlist" tplmodule="$tplmodule" />
-            <strong>TODO: allow removal/deleting of child items</strong>
+
+    <xar:elseif condition="$style eq 'childlist' or $style eq 'parentid'"/>
+      <xar:if condition="!empty($object)">
+        <table class="xar-norm">
+          <xar:if condition="!empty($dropdown) and !empty($count)">
+              <tr>
+                <td>
+                  <xar:mlstring>Select link</xar:mlstring>
+                </td>
+                <td>
+                  <!--  use the link property to show the values in a nicer way -->
+                  <xar:set name="linkprop">#$object:properties[$link]#</xar:set>
+
+                  <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
+                  <select name="#$name#" id="#$id#" tabindex="#$tabindex#">
+                    <option value="0">[ <xar:mlstring>new link</xar:mlstring> ]</option>
+                    <xar:foreach in="$dropdown" key="$dropid" value="$dropvalue">
+                      <xar:if condition="!empty($value) and $value eq $dropvalue[$link]">
+                        <option value="#$dropvalue[$link]#" selected="selected"><xar:data-output property="$linkprop" value="$dropvalue[$link]" /> (#$dropvalue[$count]#)</option>
+                      <xar:else/>
+                        <option value="#$dropvalue[$link]#"><xar:data-output property="$linkprop" value="$dropvalue[$link]" /> (#$dropvalue[$count]#)</option>
+                      </xar:if>
+                    </xar:foreach>
+                  </select>
+                  <xar:if condition="empty($value)">
+                    <xar:data-input property="$linkprop" name="$name.'_new'" id="$id.'_new'" value="0" />
+                  </xar:if>
+                </td>
+              </tr>
+          <xar:elseif condition="$style eq 'parentid'" />
+              <xar:if condition="$repeat">
+                  <!--
+                      Use a field prefix for all input fields of the object, so that
+                      you can have several identical objects in the same input form
+                  -->
+                  <xar:for start="$i = 0" test="$i lt $repeat" iter="$i++">
+                      <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
+                      <xar:data-form object="$object" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" tplmodule="$tplmodule" />
+                  </xar:for>
+              <xar:else />
+              </xar:if>
+            <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
+            <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
           <xar:else/>
-            <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" fieldlist="$fieldlist" tplmodule="$tplmodule" />
+            <input type="hidden" name="#$name#_old" id="#$id#_old" value="#xarVarPrepForDisplay($value)#" />
+            <input type="hidden" name="#$name#_new" id="#$id#_new" value="1" />
           </xar:if>
-        </td>
-      </tr>
+          <xar:if condition="$style eq 'childlist' or (!empty($dropdown) and !empty($count)) or !empty($value)">
+          <tr>
+            <td colspan="2">
+              <xar:if condition="!empty($input)">
+                <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" fieldlist="$fieldlist" tplmodule="$tplmodule" />
+                <strong>TODO: allow removal/deleting of child items</strong>
+              <xar:else/>
+                <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" fieldlist="$fieldlist" tplmodule="$tplmodule" />
+              </xar:if>
+            </td>
+          </tr>
+          </xar:if>
+
+        </table>
       </xar:if>
 
-    </table>
-  </xar:if>
-
-</xar:if>
+    </xar:if>
 
     <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

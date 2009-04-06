@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:set name="editconfiguration">xarML('Edit configuration for property "#(1)"',$field['name'])</xar:set>
+    <xar:set name="editconfiguration">xarML('Edit configuration for property "#(1)"',$field['name'])</xar:set>
     <xar:set name="otherpropertyfields">xarML('Edit property "#(1)"',$field['name'])</xar:set>
     <fieldset>
         <legend>

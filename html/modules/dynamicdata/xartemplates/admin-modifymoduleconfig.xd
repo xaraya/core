@@ -1,53 +1,51 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html
-</xar:comment>
-<div class="xar-mod-head">
-    <span class="xar-mod-title">
-        <xar:if condition="xarModVars::get('dynamicdata','useModuleAlias')">
-            <xar:var scope="module" module="dynamicdata" name="aliasname" />
-        <xar:else />
-            <xar:mlstring>DynamicData Administration</xar:mlstring>
-        </xar:if>
-    </span>
-</div>
-<div class="xar-mod-body">
-    <h2>
-        <xar:mlstring>
-            Modify Configuration
-        </xar:mlstring>
-    </h2>
-
-    <form method="post" action="&xar-modurl-dynamicdata-admin-modifymoduleconfig;" enctype="application/x-www-form-urlencoded">
-        <h3>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">
+            <xar:if condition="xarModVars::get('dynamicdata','useModuleAlias')">
+                <xar:var scope="module" module="dynamicdata" name="aliasname" />
+            <xar:else />
+                <xar:mlstring>DynamicData Administration</xar:mlstring>
+            </xar:if>
+        </span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>
             <xar:mlstring>
-                General Options
+                Modify Configuration
             </xar:mlstring>
-        </h3>
-        <xar:template file="display" module="base" subdata="array('modulename' => 'dynamicdata')" />
-        <fieldset>
-            <legend>
+        </h2>
+
+        <form method="post" action="#xarModURL('dynamicdata','admin','modifymoduleconfig')#" enctype="application/x-www-form-urlencoded">
+            <h3>
                 <xar:mlstring>
-                    Defaults
+                    General Options
                 </xar:mlstring>
-            </legend>
-            <xar:template file="defaults" />
-        </fieldset>
-        <fieldset>
-            <legend>
-                <xar:mlstring>
-                    Display
-                </xar:mlstring>
-            </legend>
-            <xar:template file="display" />
-        </fieldset>
-        <fieldset>
-            <div class="xar-form-input-wrapper-after">
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="phase" id="phase" value="update" />
-                <input type="submit" value="#xarML('Update Configuration')#" />
-            </div>
-        </fieldset>
-    </form>
-</div>
+            </h3>
+            <xar:template file="display" module="base" subdata="array('modulename' => 'dynamicdata')" />
+            <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Defaults
+                    </xar:mlstring>
+                </legend>
+                <xar:template file="defaults" />
+            </fieldset>
+            <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Display
+                    </xar:mlstring>
+                </legend>
+                <xar:template file="display" />
+            </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="phase" id="phase" value="update" />
+                    <input type="submit" value="#xarML('Update Configuration')#" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </xar:template>

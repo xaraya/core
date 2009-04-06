@@ -1,16 +1,16 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:set name="compare">xarServerGetCurrentURL()</xar:set>
-<xar:set name="tabclass">'inactive'</xar:set>
-<xar:if condition="$compare eq $current">
-    <xar:set name="tabclass">'active'</xar:set>
-</xar:if>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="compare">xarServerGetCurrentURL()</xar:set>
+    <xar:set name="tabclass">'inactive'</xar:set>
+    <xar:if condition="$compare eq $current">
+        <xar:set name="tabclass">'active'</xar:set>
+    </xar:if>
 
-<dd class="#$tabclass#">
-    <a href="#$current##">
-        <xar:mlstring>
-            Select Theme
-        </xar:mlstring>
-    </a>
-</dd>    
+    <dd class="#$tabclass#">
+        <a href="#$current##">
+            <xar:mlstring>
+                Select Theme
+            </xar:mlstring>
+        </a>
+    </dd>    
 </xar:template>

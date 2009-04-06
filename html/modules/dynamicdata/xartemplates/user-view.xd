@@ -1,34 +1,34 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Dynamic Data</xar:mlstring></span>
-</div>
-<div class="xar-mod-body">
-    <xar:if condition="!empty($object)">
-        <!-- here we retrieve the complete object list in the function, and we only pass a reference of it to the data-view tag -->
-        <h2>
-            <xar:mlstring>View</xar:mlstring><xar:data-label object="$object" />
-        </h2>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title"><xar:mlstring>Dynamic Data</xar:mlstring></span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:if condition="!empty($object)">
+            <!-- here we retrieve the complete object list in the function, and we only pass a reference of it to the data-view tag -->
+            <h2>
+                <xar:mlstring>View</xar:mlstring><xar:data-label object="$object" />
+            </h2>
 
-        <xar:data-view layout="$layout" object="$object" />
+            <xar:data-view layout="$layout" object="$object" />
 
-    <xar:elseif condition="!empty($modid)" />
-        <!-- here we only retrieve the parameters in the function, and we let the data-view tag retrieve the complete object list -->
-        <h2>
-            <xar:mlstring>View</xar:mlstring>&#160;  #$label#
-        </h2>
-        <xar:if condition="empty($numitems)">
-           <xar:set name="numitems">30</xar:set>
+        <xar:elseif condition="!empty($modid)" />
+            <!-- here we only retrieve the parameters in the function, and we let the data-view tag retrieve the complete object list -->
+            <h2>
+                <xar:mlstring>View</xar:mlstring>&#160;  #$label#
+            </h2>
+            <xar:if condition="empty($numitems)">
+               <xar:set name="numitems">30</xar:set>
+            </xar:if>
+            <xar:data-view layout="$layout" module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid" />
+
+        <xar:else />
+            <div class="xar-align-center">
+                <a href="&xar-modurl-dynamicdata-user-main;">
+                    <xar:mlstring>Please select one of the available objects</xar:mlstring>
+                </a>
+            </div>
         </xar:if>
-        <xar:data-view layout="$layout" module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid" />
 
-    <xar:else />
-        <div class="xar-align-center">
-            <a href="&xar-modurl-dynamicdata-user-main;">
-                <xar:mlstring>Please select one of the available objects</xar:mlstring>
-            </a>
-        </div>
-    </xar:if>
-
-</div>
+    </div>
 </xar:template>

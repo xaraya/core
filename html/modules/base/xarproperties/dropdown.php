@@ -12,6 +12,8 @@
 /**
  * Handle select property
  */
+sys::import('modules.dynamicdata.class.objects.base');
+
 class SelectProperty extends DataProperty
 {
     public $id   = 6;

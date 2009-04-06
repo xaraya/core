@@ -1,134 +1,134 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head">
-    <span class="xar-mod-title">
-        
-            Mail Administration
-        
-    </span>
-</div>
-<div class="xar-mod-body">
- <xar:template type="module" file="admin-menu" />
-    <img src="#xarTplGetImage('admin.gif', 'mail')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
-    <h2>Overview</h2>
-    <h3>What is it?</h3>
-    <p>
-        The mail module controls the ways that your site sends mail to users or groups of users.
-        This is a utility module that takes information from other modules installed on your site and formats
-        the mail for them. At its heart, this module is using the 
-        <a href="http://phpmailer.sourceforge.net" onclick="window.open(this.getAttribute('href'));return false;">
-        phpmailer</a> classes for processing. These classes extend Xaraya to 
-        allow you to use SMTP, SendMail or the normal PHP Mail functions.
-    </p>
-    <h3>How to use it?</h3>
-    <p>
-        
-             A number of choices are available in the menu:
-        
-    </p>
-    <ul>
-        <li>
-            <strong>Test Configuration</strong>: Test your current mail system configuration
-             settings by sending an email
-        </li>
-        <li>
-            <strong>View Mail Queue</strong>: This option is only available when you have the
-            Scheduler module installed
-        </li>
-        <li>
-            <strong>Notification Template</strong>: Allows you to customize the notification
-            templates that are available.
-        </li>
-        <li>
-            <strong>Modify Configuration</strong>: From this menu option, you can update the
-            necessary configuration options
-        </li>
-    </ul>
-    <h4>View Mail Queue - Scheduling mail</h4>
-        <p>
-            This option allows you to view mail scheduled for sending. Other modules can request 
-            that a certain mail be sent no earlier than a specific time. In order to support that, you must 
-            install Scheduler. You then need to configure the Mail module to use the 'scheduler' and check 
-            if any mails need to be sent e.g. every x hours. Otherwise, those mails will be sent immediately. 
-            Please note that if you stop the scheduler or if it isn't triggered, previously scheduled mails 
-            will not be sent.
-        </p>
-    <h4>Notification Template</h4>
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">
 
-        <p>
-            The Mail module can be hooked to other modules (See Included Hooks) to provide notification 
-            of changes, updates or deletion of content on your site. The Notification Template provides you with the 
-            means to change those templates to suit. There is a separate template for the 'changehook', 'createhook' 
-            and 'deletehook' notification.
-        </p>
+                Mail Administration
 
+        </span>
+    </div>
+    <div class="xar-mod-body">
+     <xar:template type="module" file="admin-menu" />
+        <img src="#xarTplGetImage('admin.gif', 'mail')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
+        <h2>Overview</h2>
+        <h3>What is it?</h3>
         <p>
-            There is also a list of variables provided that you can easily add to your templates for 
-            further customization.
+            The mail module controls the ways that your site sends mail to users or groups of users.
+            This is a utility module that takes information from other modules installed on your site and formats
+            the mail for them. At its heart, this module is using the 
+            <a href="http://phpmailer.sourceforge.net" onclick="window.open(this.getAttribute('href'));return false;">
+            phpmailer</a> classes for processing. These classes extend Xaraya to 
+            allow you to use SMTP, SendMail or the normal PHP Mail functions.
         </p>
-    <h4>Modify Config</h4>
+        <h3>How to use it?</h3>
         <p>
-            There are four sections in the Modify Configuration option.
+
+                 A number of choices are available in the menu:
+
         </p>
         <ul>
-        <li>
-            <strong>Mail Configuration</strong> : default options for email address, email format, 
-            reply to and template debug option
-        </li>
+            <li>
+                <strong>Test Configuration</strong>: Test your current mail system configuration
+                 settings by sending an email
+            </li>
+            <li>
+                <strong>View Mail Queue</strong>: This option is only available when you have the
+                Scheduler module installed
+            </li>
+            <li>
+                <strong>Notification Template</strong>: Allows you to customize the notification
+                templates that are available.
+            </li>
+            <li>
+                <strong>Modify Configuration</strong>: From this menu option, you can update the
+                necessary configuration options
+            </li>
+        </ul>
+        <h4>View Mail Queue - Scheduling mail</h4>
+            <p>
+                This option allows you to view mail scheduled for sending. Other modules can request 
+                that a certain mail be sent no earlier than a specific time. In order to support that, you must 
+                install Scheduler. You then need to configure the Mail module to use the 'scheduler' and check 
+                if any mails need to be sent e.g. every x hours. Otherwise, those mails will be sent immediately. 
+                Please note that if you stop the scheduler or if it isn't triggered, previously scheduled mails 
+                will not be sent.
+            </p>
+        <h4>Notification Template</h4>
 
-        <li>
-            <strong>HTML Options</strong> : option to use and set html headers and footers for your
-            emails
-        </li>
+            <p>
+                The Mail module can be hooked to other modules (See Included Hooks) to provide notification 
+                of changes, updates or deletion of content on your site. The Notification Template provides you with the 
+                means to change those templates to suit. There is a separate template for the 'changehook', 'createhook' 
+                and 'deletehook' notification.
+            </p>
 
-        <li>
-            <strong>Text Options</strong> : various options to specify encoding and mail sending method.
-            Depending on your choice of SMTP, Sendmail, Mail or QMail you may get further options to specify. 
-            You must ensure your SMTP or Sendmail is configured for use if you choose these options SMTP also 
-            has an option for scheduled email.
-        </li>
+            <p>
+                There is also a list of variables provided that you can easily add to your templates for 
+                further customization.
+            </p>
+        <h4>Modify Config</h4>
+            <p>
+                There are four sections in the Modify Configuration option.
+            </p>
+            <ul>
+            <li>
+                <strong>Mail Configuration</strong> : default options for email address, email format, 
+                reply to and template debug option
+            </li>
 
-        <li>
-            <strong>Filtering</strong> : allows you to specify strings for search and replacement
-        </li>
-       </ul>
-    <h3>
-        
-            Included Blocks
-        
-    </h3>
-    <p>
-        
-            The Mail Module has no blocks included at this time.
-        
-    </p>
-    <h3>
-        
-            Included Hooks
-        
-    </h3>
-    <p>
-        
-            The mail hook allows you to send an email to the site admin when something (content, users, etc) 
-            is created, changed or deleted. This can be configured by going to <code>Modules -> Configure Hooks</code> and
-            clicking on Mail module. Check the modules where you want the hook activated for mail notification.
-        
-    </p>
+            <li>
+                <strong>HTML Options</strong> : option to use and set html headers and footers for your
+                emails
+            </li>
 
-   <h3>Further Information</h3>
-   <p>
-      Further information on the Mail module can be found at
-   </p>
-   <ul>
-      <li>Mail Module Extension page at <a title="#xarML('Mail Module - Xaraya Extension 771')#" href="http://www.xaraya.com/index.php/release/771.html">Xaraya Extension and Releases</a>.
-       Click on Version History tab at the bottom to get the latest release information.
-      </li>
-      <li>Related tutorials and documentation on Mail module found at <a href="http://www.xaraya.com/index.php/keywords/mail/" title="#xarML('Related documentation on Mail')#">Xaraya Documentation.</a>
-      </li>
-  </ul>
-  <p class="xar-sub">
-    <strong>&#160;Mail Module - Overview</strong><br />&#160;Version 0.1.1&#160; 2005-11-02
-  </p>
-</div>
+            <li>
+                <strong>Text Options</strong> : various options to specify encoding and mail sending method.
+                Depending on your choice of SMTP, Sendmail, Mail or QMail you may get further options to specify. 
+                You must ensure your SMTP or Sendmail is configured for use if you choose these options SMTP also 
+                has an option for scheduled email.
+            </li>
+
+            <li>
+                <strong>Filtering</strong> : allows you to specify strings for search and replacement
+            </li>
+           </ul>
+        <h3>
+
+                Included Blocks
+
+        </h3>
+        <p>
+
+                The Mail Module has no blocks included at this time.
+
+        </p>
+        <h3>
+
+                Included Hooks
+
+        </h3>
+        <p>
+
+                The mail hook allows you to send an email to the site admin when something (content, users, etc) 
+                is created, changed or deleted. This can be configured by going to <code>Modules -> Configure Hooks</code> and
+                clicking on Mail module. Check the modules where you want the hook activated for mail notification.
+
+        </p>
+
+       <h3>Further Information</h3>
+       <p>
+          Further information on the Mail module can be found at
+       </p>
+       <ul>
+          <li>Mail Module Extension page at <a title="#xarML('Mail Module - Xaraya Extension 771')#" href="http://www.xaraya.com/index.php/release/771.html">Xaraya Extension and Releases</a>.
+           Click on Version History tab at the bottom to get the latest release information.
+          </li>
+          <li>Related tutorials and documentation on Mail module found at <a href="http://www.xaraya.com/index.php/keywords/mail/" title="#xarML('Related documentation on Mail')#">Xaraya Documentation.</a>
+          </li>
+      </ul>
+      <p class="xar-sub">
+        <strong>&#160;Mail Module - Overview</strong><br />&#160;Version 0.1.1&#160; 2005-11-02
+      </p>
+    </div>
 
 </xar:template>

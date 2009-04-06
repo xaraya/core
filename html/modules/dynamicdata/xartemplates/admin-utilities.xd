@@ -24,8 +24,7 @@
                     Options                     :
                 </dt>
                 <xar:if condition="$option eq 'query'">
-           <dd class="active">
-                    <dd>
+                   <dd class="active">
                         <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=query">
                             Query
                         </a>
