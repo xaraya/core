@@ -53,8 +53,8 @@
                     </label>
                     <xar:set name="options">
                         array(
-                            array)'id' => 0, 'name' => xarML('Hidden')),
-                            array)'id' => 2, 'name' => xarML('Maximized')),
+                            array('id' => 0, 'name' => xarML('Hidden')),
+                            array('id' => 2, 'name' => xarML('Maximized')),
                         )
                     </xar:set>
                     <xar:set name="value">

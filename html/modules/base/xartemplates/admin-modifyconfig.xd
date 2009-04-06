@@ -344,9 +344,9 @@
                         </label>
                         <xar:set name="options">
                             array(
-                                array)'id' => 'High', 'name' => xarML('High')),
-                                array)'id' => 'Medium', 'name' => xarML('Medium')),
-                                array)'id' => 'Low', 'name' => xarML('Low')),
+                                array('id' => 'High', 'name' => xarML('High')),
+                                array('id' => 'Medium', 'name' => xarML('Medium')),
+                                array('id' => 'Low', 'name' => xarML('Low')),
                             )
                         </xar:set>
                         <xar:set name="value">
