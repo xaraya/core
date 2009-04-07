@@ -543,7 +543,7 @@ class DataObjectMaster extends Object
      * @param $args['name'] name of the object you're looking for, OR
      * @param $args['moduleid'] module id of the object you're looking for + $args['itemtype'] item type of the object you're looking for
      * @return array containing the name => value pairs for the object
-     * @todo cache on id/name/modid ?
+     * @todo cache on id/name/module_id ?
      * @todo when we had a constructor which was more passive, this could be non-static. (cheap construction is a good rule of thumb)
      * @todo no ref return?
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
