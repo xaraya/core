@@ -29,20 +29,20 @@ function dynamicdata_utilapi_getrelations($args)
 
     extract($args);
 
-    if (empty($modid) && !empty($module)) {
-        $modid = xarMod::getRegID($module);
+    if (empty($module_id) && !empty($module)) {
+        $module_id = xarMod::getRegID($module);
     }
-    if (empty($modid)) {
-        $modid = xarMod::getRegID(xarModGetName());
+    if (empty($module_id)) {
+        $module_id = xarMod::getRegID(xarModGetName());
     }
-    $modinfo = xarModGetInfo($modid);
+    $modinfo = xarModGetInfo($module_id);
     if (empty($itemtype)) {
         $itemtype = 0;
     }
 
     $invalid = array();
-    if (!isset($modid) || !is_numeric($modid) || empty($modinfo['name'])) {
-        $invalid[] = 'module id ' . xarVarPrepForDisplay($modid);
+    if (!isset($module_id) || !is_numeric($module_id) || empty($modinfo['name'])) {
+        $invalid[] = 'module id ' . xarVarPrepForDisplay($module_id);
     }
     if (!isset($itemtype) || !is_numeric($itemtype)) {
         $invalid[] = 'item type';
@@ -53,8 +53,8 @@ function dynamicdata_utilapi_getrelations($args)
         throw new BadParameterException($vars,$msg);
     }
 
-    if (isset($propertybag["$modid:$itemtype"])) {
-        return $propertybag["$modid:$itemtype"];
+    if (isset($propertybag["$module_id:$itemtype"])) {
+        return $propertybag["$module_id:$itemtype"];
     }
 
     // get the list of static properties for this module

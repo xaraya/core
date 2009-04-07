@@ -40,7 +40,7 @@ function dynamicdata_util_view_static($args)
 
     $static = xarModAPIFunc('dynamicdata','util','getstatic',
                             array('module'   => $module,
-                                  'modid'    => $modid,
+                                  'module_id'    => $modid,
                                   'itemtype' => $itemtype,
                                   'table'    => $table));
 
