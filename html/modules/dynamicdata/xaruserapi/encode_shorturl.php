@@ -43,8 +43,8 @@ function dynamicdata_userapi_encode_shorturl($args)
     }
 
     // fill in default values
-    if (empty($modid)) {
-        $modid = xarMod::getRegID('dynamicdata');
+    if (empty($module_id)) {
+        $module_id = xarMod::getRegID('dynamicdata');
     }
     if (empty($itemtype)) {
         $itemtype = 0;
@@ -62,8 +62,8 @@ function dynamicdata_userapi_encode_shorturl($args)
         // no short URLs for this one...
 
     } elseif ($func == 'view') {
-        if (!empty($objectcache[$modid.':'.$itemtype])) {
-            $name = $objectcache[$modid.':'.$itemtype];
+        if (!empty($objectcache[$module_id.':'.$itemtype])) {
+            $name = $objectcache[$module_id.':'.$itemtype];
             $alias = xarModGetAlias($name);
             if ($module == $alias) {
                 // OK, we can use a 'fake' module name here
@@ -78,8 +78,8 @@ function dynamicdata_userapi_encode_shorturl($args)
             // we don't know this one...
         }
     } elseif ($func == 'display' && isset($itemid)) {
-        if (!empty($objectcache[$modid.':'.$itemtype])) {
-            $name = $objectcache[$modid.':'.$itemtype];
+        if (!empty($objectcache[$module_id.':'.$itemtype])) {
+            $name = $objectcache[$module_id.':'.$itemtype];
             $alias = xarModGetAlias($name);
             if ($module == $alias) {
                 // OK, we can use a 'fake' module name here

@@ -23,7 +23,7 @@
  * @param $args['field'] field to use in the dropdown list (required here)
  * @param $args['showoutput'] go through showOutput() for this field (default false)
  * @param $args['module'] module name of the item fields to get, or
- * @param $args['modid'] module id of the item fields to get +
+ * @param $args['module_id'] module id of the item fields to get +
  * @param $args['itemtype'] item type of the item fields to get, or
  * @param $args['table'] database table to turn into an object
  * @returns array
