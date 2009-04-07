@@ -85,7 +85,7 @@ function dynamicdata_adminapi_createproperty($args)
 */
 
     $propid = xarModAPIFunc('dynamicdata', 'admin', 'create',
-                            array('modid'    => xarMod::getRegID('dynamicdata'), //$moduleid,
+                            array('module_id'    => xarMod::getRegID('dynamicdata'),
                                   'itemtype' => 1, //$itemtype,
                                   'itemid'   => $itemid,
                                   'values'   => $values));

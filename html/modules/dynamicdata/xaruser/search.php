@@ -135,10 +135,10 @@ function dynamicdata_user_search($args)
         }
         $data['items'][] = array(
                                  'link'     => xarModURL('dynamicdata','user',$myfunc,
-                                                         array('modid' => $module_id,
+                                                         array('module_id' => $module_id,
                                                                'itemtype' => $itemtype)),
                                  'label'    => $label,
-                                 'modid'    => $module_id,
+                                 'module_id'    => $module_id,
                                  'itemtype' => $itemtype,
                                  'fields'   => $fields,
                                  'result'   => $result,

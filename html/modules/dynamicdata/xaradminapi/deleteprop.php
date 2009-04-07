@@ -15,7 +15,7 @@
  * @author the DynamicData module development team
  * @param $args['id'] property id of the item field to delete
 // TODO: do we want those for security check ? Yes, but the original values...
- * @param $args['modid'] module id of the item field to delete
+ * @param $args['module_id'] module id of the item field to delete
  * @param $args['itemtype'] item type of the item field to delete
  * @param $args['name'] name of the field to delete
  * @param $args['label'] label of the field to delete

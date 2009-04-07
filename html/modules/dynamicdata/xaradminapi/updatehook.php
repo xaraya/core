@@ -55,8 +55,8 @@ function dynamicdata_adminapi_updatehook($args)
         $modname = $extrainfo['module'];
     }
 
-    $modid = xarMod::getRegID($modname);
-    if (empty($modid)) {
+    $module_id = xarMod::getRegID($modname);
+    if (empty($module_id)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('module name', 'admin', $dd_function, 'dynamicdata');
         throw new BadParameterException($vars,$msg);
