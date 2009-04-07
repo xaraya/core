@@ -38,8 +38,8 @@ function dynamicdata_adminapi_removehook($args)
         //return $extrainfo;
     }
 
-    $modid = xarMod::getRegID($objectid);
-    if (empty($modid)) {
+    $module_id = xarMod::getRegID($objectid);
+    if (empty($module_id)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('module ID', 'admin', 'removehook', 'dynamicdata');
         throw new BadParameterException($vars,$msg);
@@ -48,7 +48,7 @@ function dynamicdata_adminapi_removehook($args)
         //return $extrainfo;
     }
 
-    if(!xarSecurityCheck('DeleteDynamicDataItem',0,'Item',"$modid:All:All")) {
+    if(!xarSecurityCheck('DeleteDynamicDataItem',0,'Item',"$module_id:All:All")) {
         // we *must* return $extrainfo for now, or the next hook will fail
         // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
         //return $extrainfo;
@@ -62,7 +62,7 @@ function dynamicdata_adminapi_removehook($args)
 
     $sql = "SELECT id FROM $dynamicprop WHERE moduleid = ?";
     $stmt = $dbconn->prepareStatement($sql);
-    $result = $stmt->executeQuery(array($modid));
+    $result = $stmt->executeQuery(array($module_id));
 
     // TODO: do we want to catch the exception here? or in the callee?
     //return $extrainfo;
