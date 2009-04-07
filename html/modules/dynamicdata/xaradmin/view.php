@@ -46,8 +46,6 @@ function dynamicdata_admin_view($args)
 
     $object->getItems();
     $data['object'] = $object;
-    // TODO: remove this when we turn all the moduleid into modid
-    $data['modid'] = $data['moduleid'];
     // TODO: another stray
     $data['catid'] = $catid;
     // TODO: is this needed?
