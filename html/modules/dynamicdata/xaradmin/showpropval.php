@@ -24,9 +24,9 @@ function dynamicdata_admin_showpropval($args)
     if (!xarVarFetch('confirm', 'isset', $confirm, NULL, XARVAR_DONT_SET)) {return;}
 
     // check security
-    $modid = xarMod::getRegID('dynamicdata');
+    $module_id = xarMod::getRegID('dynamicdata');
     $itemtype = 1; // dynamic properties
-    if (!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
+    if (!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$module_id:$itemtype:$itemid")) return;
 
     // get the object corresponding to this dynamic property
     $myobject = & DataObjectMaster::getObject(array('objectid' => 2,
@@ -41,9 +41,9 @@ function dynamicdata_admin_showpropval($args)
 
     // check if the module+itemtype this property belongs to is hooked to the uploads module
     /* FIXME: can we do without this hardwiring? Comment out for now
-    $modid = $myobject->properties['module_id']->value;
+    $module_id = $myobject->properties['module_id']->value;
     $itemtype = $myobject->properties['itemtype']->value;
-    $modinfo = xarModGetInfo($modid);
+    $modinfo = xarModGetInfo($module_id);
     if (xarModIsHooked('uploads', $modinfo['name'], $itemtype)) {
         xarVarSetCached('Hooks.uploads','ishooked',1);
     }

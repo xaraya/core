@@ -106,7 +106,7 @@ function dynamicdata_admin_updateprop()
             $dd_status[$id] = $display_dd_status[$id] + $input_dd_status[$id];
             if (!xarModAPIFunc('dynamicdata','admin','updateprop',
                               array('id' => $id,
-                              //      'modid' => $modid,
+                              //      'module_id' => $module_id,
                               //      'itemtype' => $itemtype,
                                     'label' => $dd_label[$id],
                                     'type' => $dd_type[$id],
