@@ -106,7 +106,7 @@ function dynamicdata_utilapi_migrate($args)
 
         case 'dynamicdata':
             $items = xarModAPIFunc('dynamicdata','user','getitems',
-                                   array('modid' => $from['module'],
+                                   array('module_id' => $from['module'],
                                          'itemtype' => $from['itemtype'],
                                          'itemids' => $itemids));
             if (!isset($items)) return;
