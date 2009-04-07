@@ -11,7 +11,7 @@
             $moduletabs[$module['name']] = $module;
         }
 
-        $regid = xarModGetIDFromName($tabmodule);
+        $regid = xarMod::getRegID($tabmodule);
         switch (strtolower($phase)) {
             case 'modify':
             default:

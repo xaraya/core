@@ -312,7 +312,7 @@ function base_menublock_display($blockinfo)
             }
             if (empty($usermods)) $usermods = '';
         } else {
-            $modid = xarModGetIDFromName('roles');
+            $modid = xarMod::getRegID('roles');
             $modinfo = xarModGetInfo($modid);
             if ($modinfo){
                 $title = $modinfo['displaydescription'];

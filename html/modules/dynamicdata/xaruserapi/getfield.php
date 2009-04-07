@@ -27,7 +27,7 @@ function dynamicdata_userapi_getfield($args)
     extract($args);
 
     if (empty($modid) && !empty($module)) {
-        $modid = xarModGetIDFromName($module);
+        $modid = xarMod::getRegID($module);
     }
     if (empty($itemtype)) {
         $itemtype = 0;

@@ -38,7 +38,7 @@ function mail_adminapi_hookmailcreate($args)
         }
     }
 
-    $modid = xarModGetIDFromName($modname);
+    $modid = xarMod::getRegID($modname);
     if (empty($modid))  throw new IDNotFoundException("modid for $modname");
 
     if (!isset($itemtype) || !is_numeric($itemtype)) {

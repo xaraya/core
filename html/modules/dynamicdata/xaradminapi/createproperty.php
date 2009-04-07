@@ -52,7 +52,7 @@ function dynamicdata_adminapi_createproperty($args)
 
     if (empty($moduleid)) {
         // defaults to the current module
-        $moduleid = xarModGetIDFromName(xarModGetName());
+        $moduleid = xarMod::getRegID(xarModGetName());
     }
     if (empty($itemtype)) {
         $itemtype = 0;
@@ -85,7 +85,7 @@ function dynamicdata_adminapi_createproperty($args)
 */
 
     $propid = xarModAPIFunc('dynamicdata', 'admin', 'create',
-                            array('modid'    => xarModGetIDFromName('dynamicdata'), //$moduleid,
+                            array('modid'    => xarMod::getRegID('dynamicdata'), //$moduleid,
                                   'itemtype' => 1, //$itemtype,
                                   'itemid'   => $itemid,
                                   'values'   => $values));

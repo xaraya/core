@@ -95,7 +95,7 @@ function dynamicdata_util_migrate($args)
 
     $data['modulesupported'] = array();
     foreach ($modsupported as $modname) {
-        $data['modulesupported'][] = xarModGetIDFromName($modname);
+        $data['modulesupported'][] = xarMod::getRegID($modname);
     }
 
     // list of hooks supported by the migration process (for now)

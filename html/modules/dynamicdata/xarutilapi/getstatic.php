@@ -28,10 +28,10 @@ function dynamicdata_utilapi_getstatic($args)
     extract($args);
 
     if (empty($modid) && !empty($module)) {
-        $modid = xarModGetIDFromName($module);
+        $modid = xarMod::getRegID($module);
     }
     if (empty($modid)) {
-        $modid = xarModGetIDFromName(xarModGetName());
+        $modid = xarMod::getRegID(xarModGetName());
     }
     $modinfo = xarModGetInfo($modid);
     if (empty($itemtype)) {

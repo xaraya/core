@@ -31,7 +31,7 @@ function mail_userapi_getitemtypes($args)
 
     // Get objects
     $objects = xarModAPIFunc('dynamicdata','user','getobjects');
-    $modid = xarModGetIDFromName('mail');
+    $modid = xarMod::getRegID('mail');
     foreach ($objects as $id => $object) {
         // skip any object that doesn't belong to mail itself
         if ($modid != $object['moduleid']) continue;

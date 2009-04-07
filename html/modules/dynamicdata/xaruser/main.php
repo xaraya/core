@@ -27,7 +27,7 @@ function dynamicdata_user_main()
     $objects = xarModAPIFunc('dynamicdata','user','getobjects');
 
     $data['items'] = array();
-    $mymodid = xarModGetIDFromName('dynamicdata');
+    $mymodid = xarMod::getRegID('dynamicdata');
     foreach ($objects as $itemid => $object) {
         // skip the internal objects
         if ($itemid < 3) continue;

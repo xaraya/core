@@ -57,7 +57,7 @@ function dynamicdata_admin_privileges($args)
         if (empty($moduleid) || $moduleid == 'All') {
             $moduleid = 0;
         } elseif (!is_numeric($moduleid)) { // for pre-wizard instances
-            $modid = xarModGetIDFromName($moduleid);
+            $modid = xarMod::getRegID($moduleid);
             if (!empty($modid)) {
                 $moduleid = $modid;
             } else {

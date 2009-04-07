@@ -28,7 +28,7 @@ function dynamicdata_userapi_getmenulinks()
         if (!isset($objects)) {
             return $menulinks;
         }
-        $mymodid = xarModGetIDFromName('dynamicdata');
+        $mymodid = xarMod::getRegID('dynamicdata');
         foreach ($objects as $object) {
             $itemid = $object['objectid'];
             // skip the internal objects

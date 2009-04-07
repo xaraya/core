@@ -44,7 +44,7 @@ function dynamicdata_userapi_encode_shorturl($args)
 
     // fill in default values
     if (empty($modid)) {
-        $modid = xarModGetIDFromName('dynamicdata');
+        $modid = xarMod::getRegID('dynamicdata');
     }
     if (empty($itemtype)) {
         $itemtype = 0;
