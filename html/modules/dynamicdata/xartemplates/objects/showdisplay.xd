@@ -16,8 +16,8 @@
                 <div class="xar-form-input-wrapper">
                     <xar:data-label property="$properties[$name]" for="id" />
                     <xar:if condition="$name eq 'parent'" >
-                        <xar:set name="modid">$properties['module_id']->value</xar:set>
-                        <xar:data-output property="$properties[$name]" modid="$modid" />
+                        <xar:set name="module_id">$properties['module_id']->value</xar:set>
+                        <xar:data-output property="$properties[$name]" modid="$module_id" />
                     <xar:else />
                         <xar:data-output property="$properties[$name]" />
                     </xar:if>
