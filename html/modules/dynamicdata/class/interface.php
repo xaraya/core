@@ -27,15 +27,15 @@ class DataObjectInterface extends Object
     public $list = null;
 
     // module where the main templates for the GUI reside (defaults to the object module)
-    public $urlmodule = null;
+    public $tplmodule = null;
     // main function handling all object method calls (to be handled by the core someday ?)
     public $func = 'main';
 
     function __construct(array $args = array())
     {
         // set a specific GUI module for now
-        if (!empty($args['urlmodule'])) {
-            $this->urlmodule = $args['urlmodule'];
+        if (!empty($args['tplmodule'])) {
+            $this->tplmodule = $args['tplmodule'];
         }
 
         // get some common URL parameters
@@ -117,10 +117,10 @@ class DataObjectInterface extends Object
             $this->object =& DataObjectMaster::getObject($this->args);
             if(empty($this->object)) 
                 return;
-            if(empty($this->urlmodule)) 
+            if(empty($this->tplmodule)) 
             {
                 $modinfo = xarModGetInfo($this->object->moduleid);
-                $this->urlmodule = $modinfo['name'];
+                $this->tplmodule = $modinfo['name'];
             }
         }
         if(!xarSecurityCheck(
@@ -153,7 +153,7 @@ class DataObjectInterface extends Object
                 else 
                 {
                     xarResponseRedirect(xarModURL(
-                        $this->urlmodule, 'user', $this->func,
+                        $this->tplmodule, 'user', $this->func,
                         array('object' => $this->object->name))
                     );
                 }
@@ -180,7 +180,7 @@ class DataObjectInterface extends Object
 
         $this->object->viewfunc = $this->func;
         return xarTplModule(
-            $this->urlmodule,'admin','new',
+            $this->tplmodule,'admin','new',
             array(
                 'object' => $this->object,
                 'preview' => $args['preview'],
@@ -205,10 +205,10 @@ class DataObjectInterface extends Object
             $this->object =& DataObjectMaster::getObject($this->args);
             if(empty($this->object)) 
                 return;
-            if(empty($this->urlmodule)) 
+            if(empty($this->tplmodule)) 
             {
                 $modinfo = xarModGetInfo($this->object->moduleid);
-                $this->urlmodule = $modinfo['name'];
+                $this->tplmodule = $modinfo['name'];
             }
         }
         if(!xarSecurityCheck(
@@ -241,7 +241,7 @@ class DataObjectInterface extends Object
                     xarResponseRedirect($args['return_url']);
                 else 
                     xarResponseRedirect(xarModURL(
-                        $this->urlmodule, 'user', $this->func,
+                        $this->tplmodule, 'user', $this->func,
                         array('object' => $this->object->name))
                     );
                 // Return
@@ -270,7 +270,7 @@ class DataObjectInterface extends Object
 
         $this->object->viewfunc = $this->func;
         return xarTplModule(
-            $this->urlmodule,'admin','modify',
+            $this->tplmodule,'admin','modify',
             array(
                 'object' => $this->object,
                 'hookoutput' => $hooks
@@ -295,10 +295,10 @@ class DataObjectInterface extends Object
             if(empty($this->object)) 
                 return;
 
-            if(empty($this->urlmodule)) 
+            if(empty($this->tplmodule)) 
             {
                 $modinfo = xarModGetInfo($this->object->moduleid);
-                $this->urlmodule = $modinfo['name'];
+                $this->tplmodule = $modinfo['name'];
             }
         }
         if(!empty($args['cancel'])) 
@@ -310,7 +310,7 @@ class DataObjectInterface extends Object
                 xarResponseRedirect($args['return_url']);
             else 
                 xarResponseRedirect(xarModURL(
-                    $this->urlmodule, 'user', $this->func,
+                    $this->tplmodule, 'user', $this->func,
                     array('object' => $this->object->name))
                 );
             // Return
@@ -343,7 +343,7 @@ class DataObjectInterface extends Object
                 xarResponseRedirect($args['return_url']);
             else 
                 xarResponseRedirect(xarModURL(
-                    $this->urlmodule, 'user', $this->func,
+                    $this->tplmodule, 'user', $this->func,
                     array('object' => $this->object->name))
                 );
             // Return
@@ -355,7 +355,7 @@ class DataObjectInterface extends Object
 
         $this->object->viewfunc = $this->func;
         return xarTplModule(
-            $this->urlmodule,'admin','delete',
+            $this->tplmodule,'admin','delete',
             array('object' => $this->object),
             $this->object->template
         );
@@ -375,10 +375,10 @@ class DataObjectInterface extends Object
             if(empty($this->object)) 
                 return;
 
-            if(empty($this->urlmodule)) 
+            if(empty($this->tplmodule)) 
             {
                 $modinfo = xarModGetInfo($this->object->moduleid);
-                $this->urlmodule = $modinfo['name'];
+                $this->tplmodule = $modinfo['name'];
             }
         }
         $title = xarML('Display #(1)', $this->object->label);
@@ -403,7 +403,7 @@ class DataObjectInterface extends Object
         $item['itemtype'] = $this->object->itemtype;
         $item['itemid'] = $this->object->itemid;
         $item['returnurl'] = xarModURL(
-            $this->urlmodule,'user',$this->func,
+            $this->tplmodule,'user',$this->func,
             array(
                 'object' => $this->object->name,
                 'itemid'   => $this->object->itemid
@@ -415,7 +415,7 @@ class DataObjectInterface extends Object
 
         $this->object->viewfunc = $this->func;
         return xarTplModule(
-            $this->urlmodule,'user','display',
+            $this->tplmodule,'user','display',
             array(
                 'object' => $this->object,
                 'hookoutput' => $hooks
@@ -443,10 +443,10 @@ class DataObjectInterface extends Object
             if(empty($this->list)) 
                 return;
             
-            if(empty($this->urlmodule)) 
+            if(empty($this->tplmodule)) 
             {
                 $modinfo = xarModGetInfo($this->list->moduleid);
-                $this->urlmodule = $modinfo['name'];
+                $this->tplmodule = $modinfo['name'];
             }
         }
         $title = xarML('List #(1)', $this->list->label);
@@ -457,7 +457,7 @@ class DataObjectInterface extends Object
         $this->list->viewfunc = $this->func;
         $this->list->linkfunc = $this->func;
         return xarTplModule(
-            $this->urlmodule,'admin','view',
+            $this->tplmodule,'admin','view',
             array('object' => $this->list),
             $this->list->template
         );
@@ -481,10 +481,10 @@ class DataObjectInterface extends Object
             if(empty($this->list)) 
                 return;
 
-            if(empty($this->urlmodule)) 
+            if(empty($this->tplmodule)) 
             {
                 $modinfo = xarModGetInfo($this->list->moduleid);
-                $this->urlmodule = $modinfo['name'];
+                $this->tplmodule = $modinfo['name'];
             }
         }
         $title = xarML('View #(1)', $this->list->label);
@@ -495,7 +495,7 @@ class DataObjectInterface extends Object
         $this->list->viewfunc = $this->func;
         $this->list->linkfunc = $this->func;
         return xarTplModule(
-            $this->urlmodule,'user','view',
+            $this->tplmodule,'user','view',
             array('object' => $this->list),
             $this->list->template
         );

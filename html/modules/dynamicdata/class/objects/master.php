@@ -127,7 +127,6 @@ class DataObjectMaster extends Object
     public $layout = 'default';         // optional layout inside the templates
     public $template = '';              // optional sub-template, e.g. user-objectview-[template].xd (defaults to the object name)
     public $tplmodule = 'dynamicdata';  // optional module where the object templates reside (defaults to 'dynamicdata')
-    public $urlmodule = '';             // optional module for use in xarModURL() (defaults to the object module)
     public $viewfunc = 'view';          // optional view function for use in xarModURL() (defaults to 'view')
 
     public $primary = null;             // primary key is item id

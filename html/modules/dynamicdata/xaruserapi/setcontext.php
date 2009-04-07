@@ -49,13 +49,6 @@ function dynamicdata_userapi_setcontext($args)
         $added = true;
     }
 
-    if (!empty($urlmodule)) {
-        $context['urlmodule'] = $urlmodule;
-    } elseif (empty($urlmodule) && empty($context['urlmodule'])) {
-        $context['urlmodule'] = 'dynamicdata';
-        $added = true;
-    }
-
     if (!empty($tplmodule)) {
         $context['tplmodule'] = $tplmodule;
     } elseif (empty($tplmodule) && empty($context['tplmodule'])) {

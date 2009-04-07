@@ -13,7 +13,7 @@
 
     <xar:sec mask="AddDynamicDataItem" catch="false" component="Item" instance="$moduleid .':' . $itemtype.':All'">
         <xar:if condition="!isset($newlink)">
-            <xar:set name="newlink">#xarModURL($urlmodule,'admin','new',array('itemtype' =&gt; $itemtype,'tplmodule' =&gt; $tplmodule))#</xar:set>
+            <xar:set name="newlink">#xarModURL($tplmodule,'admin','new',array('itemtype' =&gt; $itemtype,'tplmodule' =&gt; $tplmodule))#</xar:set>
         </xar:if>
         <a href="#$newlink#">
                 <strong>
