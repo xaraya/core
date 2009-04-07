@@ -20,19 +20,19 @@
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="modid" class="xar-form-label">
+                    <label for="module_id" class="xar-form-label">
                         <xar:mlstring>
                             Module: 
                         </xar:mlstring>
                     </label>
-                    <xar:data-input type="module" name="modid" value="$modid" />
+                    <xar:data-input type="module" name="module_id" value="$module_id" />
                 </div>
                 <div class="xar-form-input-wrapper-after">
                     <input type="submit" name="select" id="select" value="#xarML('Select')#" />
                 </div>
             </fieldset>
         </form>
-        <xar:if condition="!empty($modid)">
+        <xar:if condition="!empty($module_id)">
             <xar:if condition="count($relations) gt 0">
                 <table class="xar-clearboth">
                     <tr>
@@ -244,7 +244,7 @@
                             Relation Type: 
                         </xar:mlstring>
                     </label>
-                    <input type="hidden" name="modid" value="#$modid#" />
+                    <input type="hidden" name="module_id" value="#$module_id#" />
                     <input type="hidden" name="itemtype" value="#$itemtype#" />
                     <input type="hidden" name="objectid" value="#$objectid#" />
                     <input type="hidden" name="table" value="#$table#" />

@@ -18,7 +18,7 @@ function dynamicdata_util_view_static($args)
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     if(!xarVarFetch('module',   'isset', $module,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('modid',    'isset', $module_id,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     '', XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('newtable',    'isset', $newtable,     '', XARVAR_DONT_SET)) {return;}
@@ -40,7 +40,7 @@ function dynamicdata_util_view_static($args)
 
     $static = xarModAPIFunc('dynamicdata','util','getstatic',
                             array('module'   => $module,
-                                  'module_id'    => $modid,
+                                  'module_id'    => $module_id,
                                   'itemtype' => $itemtype,
                                   'table'    => $table));
 
@@ -63,9 +63,9 @@ function dynamicdata_util_view_static($args)
     }
 
     $data['export'] = $export;
-    if(!isset($modid) || $modid == 0) $modid = 182;
-    $data['modid'] = $modid;
-    $modInfo = xarModGetInfo($modid);
+    if(!isset($module_id) || $module_id == 0) $module_id = 182;
+    $data['module_id'] = $module_id;
+    $modInfo = xarModGetInfo($module_id);
     $data['module'] = $modInfo['name'];
     $data['itemtype'] = $itemtype;
     $data['authid'] = xarSecGenAuthKey();

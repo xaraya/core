@@ -31,7 +31,7 @@
                 </h3>
                 <p>
                 <!--
-                    <a href="&xar-modurl-dynamicdata-util-relations;&amp;modid=#$modid#" style="float:left">                    
+                    <a href="&xar-modurl-dynamicdata-util-relations;&amp;module_id=#$module_id#" style="float:left">                    
                         Add Relation                     
                     </a>
                 -->
@@ -104,7 +104,7 @@
                     <fieldset>
                         <div class="xar-form-input-wrapper-after">
                             <input type="hidden" name="authid" value="#$authid#" />
-                            <input type="hidden" name="modid" value="#$modid#" />
+                            <input type="hidden" name="module_id" value="#$module_id#" />
                             <input type="hidden" name="itemtype" value="#$itemtype#" />
                             <input type="hidden" name="table" value="#$table#" />
                             <input type="submit" value=" #xarML('Import Table')# #$table# " />
@@ -115,7 +115,7 @@
             </xar:foreach>
             <!--
             <div class="xar-align-center">
-                <a href="&xar-modurl-dynamicdata-util-static;&amp;export=1&amp;modid=#$modid#">              
+                <a href="&xar-modurl-dynamicdata-util-static;&amp;export=1&amp;module_id=#$module_id#">              
                     Export to XML                 
                 </a>
             </div>
@@ -156,7 +156,7 @@
                 </fieldset>
             </form>
             <div class="xar-align-center">
-                <a href="&xar-modurl-dynamicdata-util-static;&amp;modid=#$modid#">                
+                <a href="&xar-modurl-dynamicdata-util-static;&amp;module_id=#$module_id#">                
                     Show Table Definitions                 
                 </a>
             </div>

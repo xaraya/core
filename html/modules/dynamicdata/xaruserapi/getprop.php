@@ -103,7 +103,7 @@ function dynamicdata_userapi_getprop($args)
     if (!empty($static)) {
         // get the list of static properties for this module
         $staticlist = xarModAPIFunc('dynamicdata','util','getstatic',
-                                    array('modid' => $module_id,
+                                    array('module_id' => $module_id,
                                           'itemtype' => $itemtype));
 // TODO: watch out for conflicting property ids ?
         $fields = array_merge($staticlist,$fields);
