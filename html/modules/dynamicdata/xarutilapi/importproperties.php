@@ -66,7 +66,7 @@ function dynamicdata_utilapi_importproperties($args)
     }
 
     $fields = xarModAPIFunc('dynamicdata','util','getstatic',
-                            array('modid' => $modid,
+                            array('module_id' => $modid,
                                   'itemtype' => $itemtype,
                                   'table' => $table));
     if (!isset($fields) || !is_array($fields)) return;

@@ -59,7 +59,7 @@ function dynamicdata_utilapi_getrelations($args)
 
     // get the list of static properties for this module
     $static = xarModAPIFunc('dynamicdata','util','getstatic',
-                            array('modid' => $modid,
+                            array('module_id' => $module_id,
                                   'itemtype' => $itemtype));
 
     // get the list of hook modules that are enabled for this module
@@ -86,7 +86,7 @@ function dynamicdata_utilapi_getrelations($args)
         foreach ($modlist as $mod => $val) {
             // get the list of static properties for this hook module
             $modstatic = xarModAPIFunc('dynamicdata','util','getstatic',
-                                       array('modid' => xarMod::getRegID($mod)));
+                                       array('module_id' => xarMod::getRegID($mod)));
                                        // skip this for now
                                        //      'itemtype' => $itemtype));
         // TODO: automatically find the link(s) on module, item type, item id etc.
@@ -97,7 +97,7 @@ function dynamicdata_utilapi_getrelations($args)
         /* for hook modules, those should define the fields *relating to* other modules (not their own item ids etc.)
                 // try predefined field types first
                 if ($field['type'] == 19) { // Module
-                    $links[] = array('from' => $field['source'], 'to' => $modid, 'type' => 'moduleid');
+                    $links[] = array('from' => $field['source'], 'to' => $module_id, 'type' => 'moduleid');
                 } elseif ($field['type'] == 20) { // Item Type
                     $links[] = array('from' => $field['source'], 'to' => $itemtype, 'type' => 'itemtype');
                 } elseif ($field['type'] == 21) { // Item ID
@@ -109,9 +109,9 @@ function dynamicdata_utilapi_getrelations($args)
                 if (preg_match('/_module$/',$field['source'])) {
                     $links[] = array('from' => $field['source'], 'to' => $modinfo['name'], 'type' => 'modulename');
                 } elseif (preg_match('/_moduleid$/',$field['source'])) {
-                    $links[] = array('from' => $field['source'], 'to' => $modid, 'type' => 'moduleid');
+                    $links[] = array('from' => $field['source'], 'to' => $module_id, 'type' => 'moduleid');
                 } elseif (preg_match('/_modid$/',$field['source'])) {
-                    $links[] = array('from' => $field['source'], 'to' => $modid, 'type' => 'moduleid');
+                    $links[] = array('from' => $field['source'], 'to' => $module_id, 'type' => 'moduleid');
 
                 // link on item type
                 } elseif (preg_match('/_itemtype$/',$field['source'])) {

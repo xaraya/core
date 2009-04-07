@@ -134,7 +134,7 @@ function dynamicdata_util_relations($args)
     } elseif (!empty($modid)) {
         // (try to) get the relationships between this module and others
         $data['relations'] = xarModAPIFunc('dynamicdata','util','getrelations',
-                                           array('modid' => $modid,
+                                           array('module_id' => $modid,
                                                  'itemtype' => $itemtype));
     }
     if (!isset($data['relations']) || $data['relations'] == false) {

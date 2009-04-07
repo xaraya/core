@@ -168,7 +168,7 @@ function dynamicdata_admin_modifyprop()
 // TODO: allow other kinds of relationships than hooks
     // (try to) get the relationships between this module and others
     $data['relations'] = xarModAPIFunc('dynamicdata','util','getrelations',
-                                       array('modid' => $module_id,
+                                       array('module_id' => $module_id,
                                              'itemtype' => $itemtype));
     if (!isset($data['relations']) || $data['relations'] == false) {
         $data['relations'] = array();
