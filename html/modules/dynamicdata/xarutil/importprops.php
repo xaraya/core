@@ -40,7 +40,7 @@ function dynamicdata_util_importprops()
     }
 
     xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
-                                  array('modid' => $modid,
+                                  array('module_id' => $modid,
                                         'itemtype' => $itemtype)));
 }
 

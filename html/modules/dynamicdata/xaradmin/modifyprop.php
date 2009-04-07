@@ -78,7 +78,7 @@ function dynamicdata_admin_modifyprop()
 
     $data['fields'] = xarModAPIFunc('dynamicdata','user','getprop',
                                    array('objectid' => $objectid,
-                                            'moduleid' => $modid,
+                                            'module_id' => $modid,
                                             'itemtype' => $itemtype,
                                          'allprops' => true));
     if (!isset($data['fields']) || $data['fields'] == false) {
@@ -135,7 +135,7 @@ function dynamicdata_admin_modifyprop()
                                                    'details' => 1));
         } else {
             $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
-                                             array('modid' => $modid,
+                                             array('module_id' => $modid,
                                                    'itemtype' => empty($itemtype) ? null : $itemtype,
                                                    'details' => 1));
         }
@@ -185,7 +185,7 @@ function dynamicdata_admin_modifyprop()
                                          array('itemid' => $objectid));
     } else {
         $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
-                                         array('modid' => $modid,
+                                         array('module_id' => $modid,
                                                'itemtype' => empty($itemtype) ? null : $itemtype));
     }
 

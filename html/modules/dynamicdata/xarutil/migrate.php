@@ -189,7 +189,7 @@ function dynamicdata_util_migrate($args)
                 // add DD properties to field list
                 if (!empty($data['fromhooklist']['dynamicdata'])) {
                     $props = xarModAPIFunc('dynamicdata','user','getprop',
-                                           array('modid'    => $data['from']['module'],
+                                           array('module_id'    => $data['from']['module'],
                                                  'itemtype' => $data['from']['itemtype']));
                     $proptypes = DataPropertyMaster::getPropertyTypes();
                     foreach ($props as $name => $info) {
@@ -276,7 +276,7 @@ function dynamicdata_util_migrate($args)
                 // add DD properties to field list
                 if (!empty($data['tohooklist']['dynamicdata'])) {
                     $props = xarModAPIFunc('dynamicdata','user','getprop',
-                                           array('modid'    => $data['to']['module'],
+                                           array('module_id'    => $data['to']['module'],
                                                  'itemtype' => $data['to']['itemtype']));
                     $proptypes = DataPropertyMaster::getPropertyTypes();
                     foreach ($props as $name => $info) {

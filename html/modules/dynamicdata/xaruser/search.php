@@ -95,7 +95,7 @@ function dynamicdata_user_search($args)
         $label = $object['label'];
         $itemtype = $object['itemtype'];
         $fields = xarModAPIFunc('dynamicdata','user','getprop',
-                                array('modid' => $modid,
+                                array('module_id' => $modid,
                                       'itemtype' => $itemtype));
         $wherelist = array();
         foreach ($fields as $name => $field) {
