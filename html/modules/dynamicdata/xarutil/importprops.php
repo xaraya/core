@@ -19,11 +19,11 @@ function dynamicdata_util_importprops()
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id',    'isset', $module_id,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
 
-    if (empty($modid)) throw new EmptyParameterException('modid');
+    if (empty($module_id)) throw new EmptyParameterException('module_id');
 
     // Confirm authorisation code.  This checks that the form had a valid
     // authorisation code attached to it.  If it did not then the function will
@@ -32,7 +32,7 @@ function dynamicdata_util_importprops()
     if (!xarSecConfirmAuthKey()) return;
 
     if (!xarModAPIFunc('dynamicdata','util','importproperties',
-                       array('modid' => $modid,
+                       array('module_id' => $module_id,
                              'itemtype' => $itemtype,
                              'table' => $table,
                              'objectid' => $objectid))) {
@@ -40,7 +40,7 @@ function dynamicdata_util_importprops()
     }
 
     xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
-                                  array('module_id' => $modid,
+                                  array('module_id' => $module_id,
                                         'itemtype' => $itemtype)));
 }
 

@@ -30,8 +30,8 @@ function dynamicdata_utilapi_export($args)
         if (empty($objectid)) {
             $objectid = null;
         }
-        if (empty($modid)) {
-            $modid = xarMod::getRegID('dynamicdata');
+        if (empty($module_id)) {
+            $module_id = xarMod::getRegID('dynamicdata');
         }
         if (empty($itemtype)) {
             $itemtype = 0;
