@@ -15,7 +15,7 @@
  *
  * @author the DynamicData module development team
  * @param $args['itemid'] item id of the original item
- * @param $args['modid'] module id for the original item
+ * @param $args['module_id'] module id for the original item
  * @param $args['itemtype'] item type of the original item
  * @returns bool
  * @return true on success, false on failure
@@ -29,7 +29,7 @@ function dynamicdata_adminapi_delete($args)
     if (!isset($itemid) || !is_numeric($itemid)) {
         $invalid[] = 'item id';
     }
-    if (!isset($modid) || !is_numeric($modid)) {
+    if (!isset($module_id) || !is_numeric($module_id)) {
         $invalid[] = 'module id';
     }
     if (count($invalid) > 0) {
@@ -44,9 +44,9 @@ function dynamicdata_adminapi_delete($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
+    if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',"$module_id:$itemtype:$itemid")) return;
 
-    $myobject = DataObjectMaster::getObject(array('moduleid' => $modid,
+    $myobject = DataObjectMaster::getObject(array('moduleid' => $module_id,
                                          'itemtype' => $itemtype,
                                          'itemid'   => $itemid,
                                          'extend' => false));

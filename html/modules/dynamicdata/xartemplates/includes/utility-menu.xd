@@ -13,7 +13,7 @@
             <xar:sec mask="EditDynamicData" catch="false">
                 <xar:set name="tabclass">$activetab=='query'?'active':''</xar:set>
                 <dd class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','admin','query')#">
+                    <a href="#xarModURL('dynamicdata','util','query')#">
                        Query
                     </a>
                 </dd>
@@ -21,7 +21,7 @@
             <xar:sec mask="EditDynamicData" catch="false">
                 <xar:set name="tabclass">$activetab=='import'?'active':''</xar:set>
                 <dd class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','admin','import')#">
+                    <a href="#xarModURL('dynamicdata','util','import')#">
                         Import
                   </a>
                 </dd>
@@ -29,7 +29,7 @@
             <xar:sec mask="EditDynamicData" catch="false">
                 <xar:set name="tabclass">$activetab=='export'?'active':''</xar:set>
                 <dd class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','admin','export')#">
+                    <a href="#xarModURL('dynamicdata','util','export')#">
                         Export
                   </a>
                 </dd>

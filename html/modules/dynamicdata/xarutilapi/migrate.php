@@ -245,7 +245,7 @@ function dynamicdata_utilapi_migrate($args)
                 }
                 if (empty($debug)) {
                     $newid = xarModAPIFunc('dynamicdata','admin','create',
-                                           array('modid'    => $to['module'],
+                                           array('module_id'    => $to['module'],
                                                  'itemtype' => $to['itemtype'],
                                                  // try to preset the itemid if necessary
                                                  'itemid'   => !empty($to['itemid']) ? $itemid : 0,
@@ -455,7 +455,7 @@ function dynamicdata_utilapi_migrate($args)
             case 'dynamicdata':
                 if (empty($debug)) {
                     if (!xarModAPIFunc('dynamicdata','admin','delete',
-                                       array('modid'    => $from['module'],
+                                       array('module_id'    => $from['module'],
                                              'itemtype' => $from['itemtype'],
                                              'itemid'   => $itemid))) {
                         return;
