@@ -77,10 +77,6 @@ function dynamicdata_util_import($args)
         }
         if (empty($objectid)) return;
 
-//        $objectinfo = xarModAPIFunc('dynamicdata','user','getobjectinfo',
-//                                    array('objectid' => $objectid));
-//        if (empty($objectinfo)) return;
-
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
                                       array('itemid' => $objectid)));
         return true;

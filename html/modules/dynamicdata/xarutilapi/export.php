@@ -72,7 +72,7 @@ function dynamicdata_utilapi_export($args)
             } else {
                 // Treat parent fields where module is DD differently
                 if (($name == 'parent') && ($myobject->moduleid == 182)) {
-                    $info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('modid' => 182, 'itemtype' => $myobject->properties[$name]->value));
+                    $info = DataObjectMaster::getObjectInfo(array('modid' => 182, 'itemtype' => $myobject->properties[$name]->value));
                     $value = $info['name'];
                 } else {
                     $value = $myobject->properties[$name]->value;

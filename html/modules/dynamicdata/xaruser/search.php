@@ -66,7 +66,7 @@ function dynamicdata_user_search($args)
     if (empty($data['ishooked']) && !empty($data['gotobject'])) {
         // get the selected object
         $objects = array();
-        $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
+        $object = DataObjectMaster::getObjectInfo(
                                 array('moduleid' => $module_id,
                                       'itemtype' => $itemtype));
         if (!empty($object)) {
