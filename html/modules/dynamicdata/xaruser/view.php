@@ -19,7 +19,7 @@
 function dynamicdata_user_view($args)
 {
     if(!xarVarFetch('objectid', 'int',   $objectid,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'int',   $modid,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id',    'int',   $module_id,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'int',   $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('startnum', 'int',   $startnum,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('numitems', 'int',   $numitems,  NULL, XARVAR_DONT_SET)) {return;}
@@ -38,8 +38,8 @@ function dynamicdata_user_view($args)
         if(!xarSecurityCheck('AdminDynamicData')) return;
     }
 
-    if (empty($modid)) {
-        $modid = xarMod::getRegID('dynamicdata');
+    if (empty($module_id)) {
+        $module_id = xarMod::getRegID('dynamicdata');
     }
     if (empty($itemtype)) {
         $itemtype = 0;
@@ -47,7 +47,7 @@ function dynamicdata_user_view($args)
 
     $object = DataObjectMaster::getObjectList(
                             array('objectid'  => $objectid,
-                                  'moduleid'  => $modid,
+                                  'moduleid'  => $module_id,
                                   'itemtype'  => $itemtype,
                                   'join'      => $join,
                                   'table'     => $table,
@@ -55,12 +55,12 @@ function dynamicdata_user_view($args)
                                   'template'  => $template,
                                   ));
     $data = $object->toArray();
-    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
+    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$module_id:$itemtype:All")) return;
 
     // TODO: is this needed?
     $data = array_merge($data,xarModAPIFunc('dynamicdata','admin','menu'));
-    // TODO: remove this when we turn all the moduleid into modid
-    $data['modid'] = $data['moduleid'];
+    // TODO: remove this when we turn all the moduleid into module_id
+    $data['module_id'] = $data['moduleid'];
     // TODO: another stray
     $data['catid'] = $catid;
 

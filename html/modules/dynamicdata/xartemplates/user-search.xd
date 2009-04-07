@@ -25,8 +25,8 @@
                     <td>
                       <input type="hidden" name="module" value="dynamicdata" />
                       <input type="hidden" name="func" value="search" />
-                      <xar:if condition="!empty($item['modid'])">
-                        <input type="hidden" name="modid" value="#$item['modid']#" />
+                      <xar:if condition="!empty($item['module_id'])">
+                        <input type="hidden" name="module_id" value="#$item['module_id']#" />
                       </xar:if>
                       <xar:if condition="!empty($item['itemtype'])">
                         <input type="hidden" name="itemtype" value="#$item['itemtype']#" />
