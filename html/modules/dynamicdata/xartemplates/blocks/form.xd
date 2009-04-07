@@ -4,7 +4,7 @@
         <xar:data-form module="$moduleid" itemtype="$itemtype" itemid="0" />
         <tr><td class="xar-align-center" colspan="2"><input type="submit" value="#xarML('Create Item')#" /></td></tr>
     </table>
-    <input type="hidden" name="modid" id="modid" value="#$moduleid#" />
+    <input type="hidden" name="module_id" id="module_id" value="#$moduleid#" />
     <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
     <input type="hidden" name="itemid" id="itemid" value="0" />
     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#" />
