@@ -696,25 +696,6 @@ function dynamicdata_delete()
         xarSession::setVar('errormsg', xarML('Could not unregister hook'));
     }
 
-    /**
-     * Unregister BL tags
-     */
-// TODO: move this to some common place in Xaraya ?
-    // Unregister BL tags
-    xarTplUnregisterTag('data-input');
-    xarTplUnregisterTag('data-output');
-    xarTplUnregisterTag('data-form');
-
-    xarTplUnregisterTag('data-display');
-    xarTplUnregisterTag('data-list');
-    xarTplUnregisterTag('data-view');
-
-    xarTplUnregisterTag('data-getitem');
-    xarTplUnregisterTag('data-getitems');
-
-    xarTplUnregisterTag('data-label');
-    xarTplUnregisterTag('data-object');
-
     // Remove Masks and Instances
     xarRemoveMasks('dynamicdata');
     xarRemoveInstances('dynamicdata');
