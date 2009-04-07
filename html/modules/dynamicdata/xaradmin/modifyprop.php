@@ -148,7 +148,7 @@ function dynamicdata_admin_modifyprop()
     // (try to) show the "static" properties, corresponding to fields in dedicated
     // tables for this module
     $data['static'] = xarModAPIFunc('dynamicdata','util','getstatic',
-                                   array('modid' => $module_id,
+                                   array('module_id' => $module_id,
                                          'itemtype' => $itemtype));
     if (!isset($data['static']) || $data['static'] == false) {
         $data['static'] = array();
