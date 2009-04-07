@@ -37,7 +37,7 @@
             <xar:sec mask="EditDynamicData" catch="false">
                 <xar:set name="tabclass">$activetab=='static'?'active':''</xar:set>
                 <dd class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','admin','view_static')#">
+                    <a href="#xarModURL('dynamicdata','util','view_static')#">
                         Manage Tables
                   </a>
                 </dd>
@@ -46,7 +46,7 @@
             <xar:sec mask="EditDynamicData" catch="false">
                 <xar:set name="tabclass">$activetab=='relations'?'active':''</xar:set>
                 <dd class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','admin','relations')#">
+                    <a href="#xarModURL('dynamicdata','util','relations')#">
                         Relationships
                   </a>
                 </dd>
@@ -55,7 +55,7 @@
             <xar:sec mask="EditDynamicData" catch="false">
                 <xar:set name="tabclass">$activetab=='meta'?'active':''</xar:set>
                 <dd class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','admin','meta')#">
+                    <a href="#xarModURL('dynamicdata','util','meta')#">
                         Meta Definitions
                   </a>
                 </dd>
@@ -63,7 +63,7 @@
             <xar:sec mask="EditDynamicData" catch="false">
                 <xar:set name="tabclass">$activetab=='migrate'?'active':''</xar:set>
                 <dd class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','admin','migrate')#">
+                    <a href="#xarModURL('dynamicdata','util','migrate')#">
                         Migrate Items
                   </a>
                 </dd>

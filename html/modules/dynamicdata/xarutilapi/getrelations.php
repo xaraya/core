@@ -17,7 +17,7 @@
  *
  * @author the DynamicData module development team
  * @param $args['module'] module name of the item fields, or
- * @param $args['modid'] module id of the item field to get
+ * @param $args['module_id'] module id of the item field to get
  * @param $args['itemtype'] item type of the item field to get
  * @returns mixed
  * @return value of the field, or false on failure
