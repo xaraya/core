@@ -150,7 +150,7 @@ function dynamicdata_init()
 # Create the object and property dataobjects
 #
 
-        $modid = xarMod::getRegID('dynamicdata');
+        $module_id = xarMod::getRegID('dynamicdata');
 
         // create default objects for dynamic data
         $sql = "INSERT INTO $dynamic_objects (
@@ -161,8 +161,8 @@ function dynamicdata_init()
         $stmt = $dbconn->prepareStatement($sql);
 
         $objects = array(
-            array('objects'   ,'Dynamic Objects'   ,$modid,0,'DataObject','auto',                                 'itemid',0,'a:0:{}'               ,0),
-            array('properties','Dynamic Properties',$modid,1,'DProperty','modules/dynamicdata/class/property.php','itemid',0,'a:0:{}'               ,0),
+            array('objects'   ,'Dynamic Objects'   ,$module_id,0,'DataObject','auto',                                 'itemid',0,'a:0:{}'               ,0),
+            array('properties','Dynamic Properties',$module_id,1,'DProperty','modules/dynamicdata/class/property.php','itemid',0,'a:0:{}'               ,0),
         );
 
         $objectid = array();
