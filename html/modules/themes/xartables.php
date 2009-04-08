@@ -16,10 +16,8 @@
  */
 function themes_xartables()
 {
-    $tables = array();
-
-    $table['themes'] = xarDB::getPrefix() . '_themes';
-
+    $prefix = xarDB::getPrefix();
+    $tables['themes'] = $prefix . '_themes';
     return $tables;
 }
 ?>

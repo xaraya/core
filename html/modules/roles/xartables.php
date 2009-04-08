@@ -19,12 +19,9 @@
  */
 function roles_xartables()
 {
-    $tables = array();
-
     $prefix = xarDB::getPrefix();
     $tables['roles']          = $prefix . '_roles';
     $tables['rolemembers']    = $prefix . '_rolemembers';
-
     return $tables;
 }
 ?>

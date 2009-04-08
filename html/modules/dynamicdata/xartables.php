@@ -18,8 +18,6 @@
  */
 function dynamicdata_xartables()
 {
-    $tables = array();
-
     $prefix = xarDB::getPrefix();
     $tables['dynamic_objects'] = $prefix . '_dynamic_objects';
     $tables['dynamic_properties'] = $prefix . '_dynamic_properties';
@@ -27,7 +25,6 @@ function dynamicdata_xartables()
     $tables['dynamic_relations'] = $prefix . '_dynamic_relations';
     $tables['dynamic_properties_def'] = $prefix . '_dynamic_properties_def';
     $tables['dynamic_configurations'] = $prefix . '_dynamic_configurations';
-
     return $tables;
 }
 ?>

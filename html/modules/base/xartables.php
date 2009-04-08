@@ -16,9 +16,8 @@
  */
 function base_xartables()
 {
-    $tables = array();
-    //@todo move this somewhere else
-    $tables['template_tags'] = xarDB::getPrefix() . '_template_tags';
+    $prefix = xarDB::getPrefix();
+    $tables['template_tags'] = $prefix . '_template_tags';
     return $tables;
 }
 ?>
