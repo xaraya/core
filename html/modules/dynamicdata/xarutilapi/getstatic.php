@@ -14,7 +14,7 @@
  * tables for this module + item type
  *
  * @param $args['module'] module name of table you're looking for, or
- * @param $args['modid'] module id of table you're looking for
+ * @param $args['module_id'] module id of table you're looking for
  * @param $args['itemtype'] item type of table you're looking for
  * @param $args['table']  table name of table you're looking for (better)
  * @return mixed value of the field, or false on failure
@@ -27,20 +27,20 @@ function dynamicdata_utilapi_getstatic($args)
 
     extract($args);
 
-    if (empty($modid) && !empty($module)) {
-        $modid = xarModGetIDFromName($module);
+    if (empty($module_id) && !empty($module)) {
+        $module_id = xarMod::getRegID($module);
     }
-    if (empty($modid)) {
-        $modid = xarModGetIDFromName(xarModGetName());
+    if (empty($module_id)) {
+        $module_id = xarMod::getRegID(xarModGetName());
     }
-    $modinfo = xarModGetInfo($modid);
+    $modinfo = xarModGetInfo($module_id);
     if (empty($itemtype)) {
         $itemtype = 0;
     }
 
     $invalid = array();
-    if (!isset($modid) || !is_numeric($modid) || empty($modinfo['name'])) {
-        $invalid[] = 'module id ' . xarVarPrepForDisplay($modid);
+    if (!isset($module_id) || !is_numeric($module_id) || empty($modinfo['name'])) {
+        $invalid[] = 'module id ' . xarVarPrepForDisplay($module_id);
     }
     if (!isset($itemtype) || !is_numeric($itemtype)) {
         $invalid[] = 'item type';
@@ -53,8 +53,8 @@ function dynamicdata_utilapi_getstatic($args)
     if (empty($table)) {
         $table = '';
     }
-    if (isset($propertybag["$modid:$itemtype:$table"])) {
-        return $propertybag["$modid:$itemtype:$table"];
+    if (isset($propertybag["$module_id:$itemtype:$table"])) {
+        return $propertybag["$module_id:$itemtype:$table"];
     }
 
     $dbconn = xarDB::getConn();
@@ -67,7 +67,8 @@ function dynamicdata_utilapi_getstatic($args)
         // it's easy if the table name is known
         $dbTables[] = $dbInfo->getTable($table);
     } else {
-        $dbTables = $dbInfo->getTables();
+///        $dbTables = $dbInfo->getTables();
+        $dbTables = array();
     }
 
     // TODO: we lost the linkage with modules here
@@ -92,14 +93,14 @@ function dynamicdata_utilapi_getstatic($args)
             }
             $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
 
-            // assign some default validation for now
+            // assign some default configuration for now
             $datatype = strtolower(CreoleTypes::getCreoleName($colInfo->getType()));
             //            $datatype = $colInfo->getNativeType();
             $size = $colInfo->getSize();
 
-            // TODO: improve this based on property type validations
-            $validation = $datatype;
-            $validation .= empty($size) ? '' : ' (' . $size . ')';
+            // TODO: improve this based on property type configurations
+            $configuration = $datatype;
+            $configuration .= empty($size) ? '' : ' (' . $size . ')';
 
             // (try to) assign some default property type for now
             // = obviously limited to basic data types in this case
@@ -109,7 +110,7 @@ function dynamicdata_utilapi_getstatic($args)
             case 'varchar':
                 $proptype = 2; // Text Box
                 if (!empty($size)) {
-                    $validation = "0:$size";
+                    $configuration = "0:$size";
                 }
                 break;
             case 'smallint':
@@ -138,7 +139,7 @@ function dynamicdata_utilapi_getstatic($args)
             case 'clob':
                 $proptype = 4; // Medium Text Area
                 $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
-                $validation ='';
+                $configuration ='';
                 break;
             case 'longvarbinary':
             case 'varbinary':
@@ -158,7 +159,7 @@ function dynamicdata_utilapi_getstatic($args)
             if ($colInfo->isAutoIncrement()) {
                 // not allowed to modify primary key !
                 $proptype = 21; // Item ID
-                $validation ='';
+                $configuration ='';
             }
 
             $static[$name] = array('name' => $name,
@@ -169,11 +170,11 @@ function dynamicdata_utilapi_getstatic($args)
                                    'source' => $table . '.' . $name,
                                    'status' => $status,
                                    'seq' => $order,
-                                   'validation' => $validation);
+                                   'configuration' => $configuration);
             $order++;
         } // next column
     } // next table
-    $propertybag["$modid:$itemtype:$table"] = $static;
+    $propertybag["$module_id:$itemtype:$table"] = $static;
     return $static;
 }
 

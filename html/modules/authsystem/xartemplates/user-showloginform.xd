@@ -12,7 +12,7 @@
                 value="$redirecturl" />
                 <div class="xar-form-input-wrapper">
                     <label for="username" class="xar-form-label">Username</label>
-                    <xar:data-input type="textbox" name="uname" id="username" maxlength="255"
+            <xar:data-input type="textbox" name="uname" id="username" maxlength="255" size="20" tabindex="1" />
                     size="20" tabindex="1" />
                 </div>
                 <div class="xar-form-input-wrapper">
@@ -32,8 +32,12 @@
             <fieldset>
                 <div class="xar-align-center">
                     <input type="submit" value="#$loginlabel#" tabindex="4" />
+            <input type="hidden" name="redirecturl" id="returnurl" value="#$redirecturl#" />
                 </div>
             </fieldset>
         </form>
+        <script type="text/javascript">
+            document.getElementById('username').focus();
+        </script>
     </div>
 </xar:template>

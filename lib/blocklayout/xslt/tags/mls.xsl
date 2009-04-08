@@ -14,13 +14,12 @@
 -->
 <xsl:template match="xar:ml">
   <xsl:processing-instruction name="php">
-    <xsl:text>echo xarML('</xsl:text>
+    <xsl:text>echo xarML(</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>'</xsl:text>
     <xsl:for-each select=".//xar:var">
       <xsl:text>,</xsl:text>
       <xsl:call-template name="xarvar_getcode"/>
-    </xsl:for-each>
+    </xsl:for-each>    
     <xsl:for-each select="xar:mlvar">
       <xsl:if test="count(xar:var)=0">
         <xsl:text>,</xsl:text>
@@ -36,9 +35,8 @@
   do it again (TEMP, ugly)
 -->
 <xsl:template match="xar:set/xar:ml">
-  <xsl:text>xarML('</xsl:text>
+  <xsl:text>xarML(</xsl:text>
   <xsl:apply-templates/>
-  <xsl:text>'</xsl:text>
   <xsl:for-each select=".//xar:var">
     <xsl:text>,</xsl:text>
     <xsl:call-template name="xarvar_getcode"/>
@@ -56,9 +54,12 @@
   xar:var tags as children of xar:ml need to get placeholders
 -->
 <xsl:template match="xar:ml//xar:var">
-  <xsl:text>#(</xsl:text>
+  <xsl:text>.' #(</xsl:text>
   <xsl:number from="xar:ml" level="any"/>
-  <xsl:text>)</xsl:text>
+  <xsl:text>) '</xsl:text>
+  <xsl:if test="position()!=last()">
+    <xsl:text>.</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 
@@ -81,16 +82,15 @@
 
 <!-- mlstring forces translation for now -->
 <xsl:template match="xar:mlstring">
-  <xsl:call-template name="replace">
-    <xsl:with-param name="source" select="."/>
+  <xsl:call-template name="translateText">
+    <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
-
 </xsl:template>
 
-<!-- mlstring inside ml just needs to reolve the text node -->
+<!-- mlstring inside ml just needs to resolve the text node -->
 <xsl:template match="xar:ml/xar:mlstring">
-  <xsl:call-template name="replace">
-    <xsl:with-param name="source" select="."/>
+  <xsl:call-template name="resolveText">
+    <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
 </xsl:template>
 
@@ -102,13 +102,13 @@
 </xsl:template>
 -->
 
-<!-- mlstring inside set just needs to reolve the text node -->
+<!-- mlstring inside set just needs to resolve the text node -->
 <xsl:template match="xar:set/xar:mlstring">
-  <xsl:text>xarML('</xsl:text>
+  <xsl:text>xarML(</xsl:text>
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
-  <xsl:text>')</xsl:text>
+  <xsl:text>)</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

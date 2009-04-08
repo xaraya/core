@@ -19,9 +19,11 @@ sys::import('modules.dynamicdata.class.properties.registration');
 class DataPropertyMaster extends Object
 {
     const DD_DISPLAYSTATE_DISABLED = 0;
-    const DD_DISPLAYSTATE_HIDDEN = 3;
-    const DD_DISPLAYSTATE_DISPLAYONLY = 2;
     const DD_DISPLAYSTATE_ACTIVE = 1;
+    const DD_DISPLAYSTATE_DISPLAYONLY = 2;
+    const DD_DISPLAYSTATE_HIDDEN = 3;
+    const DD_DISPLAYSTATE_VIEWONLY = 4;
+    const DD_DISPLAYSTATE_IGNORED = 5;
 
     const DD_INPUTSTATE_ADDMODIFY = 32;
     const DD_INPUTSTATE_NOINPUT = 64;
@@ -51,7 +53,7 @@ class DataPropertyMaster extends Object
         $bindvars = array();
         $query = "SELECT name, label, type,
                          id, defaultvalue, source,
-                         status, seq, validation,
+                         status, seq, configuration,
                          object_id FROM $dynamicprop ";
         if(empty($args['objectid']))
         {
@@ -74,8 +76,8 @@ class DataPropertyMaster extends Object
         $properties = array();
         while ($result->next()) {
             list(
-                $name, $label, $type, $id, $defaultvalue, $source, $fieldstatus,
-                $seq, $validation, $_objectid
+                $name, $label, $type, $id, $defaultvalue, $source, $status,
+                $seq, $configuration, $_objectid
                 ) = $result->fields;
 //            if (xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id")) {
                 $property = array(
@@ -85,9 +87,9 @@ class DataPropertyMaster extends Object
                     'id'            => $id,
                     'defaultvalue'  => $defaultvalue,
                     'source'        => $source,
-                    'status'        => $fieldstatus,
-                    'seq'         => $seq,
-                    'validation'    => $validation,
+                    'status'        => $status,
+                    'seq'           => $seq,
+                    'configuration' => $configuration,
                     // some internal variables
                     '_objectid'     => $_objectid,
                     'anonymous'     => $anonymous,
@@ -147,6 +149,9 @@ class DataPropertyMaster extends Object
         if ($property->include_reference) {
             $objectref->properties[$property->name]->objectref = $objectref;
         }
+        
+        // Expose the object configuration to the property
+        $objectref->properties[$property->name]->objectconfiguration =& $objectref->configuration;
 
         // if the property involves upload, tell its object
         if(isset($property->upload))

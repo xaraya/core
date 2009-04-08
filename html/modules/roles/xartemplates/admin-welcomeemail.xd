@@ -18,7 +18,7 @@
                         <td>
                         <label for="welcometitle">Welcome Email Title</label>:</td>
                         <td>
-                            <input type="text" name="welcometitle" id="welcometitle"
+                    <input type="text" name="welcometitle" id="welcometitle" value="#$welcometitle#" size="35" maxlength="100" />
                             value="#$welcometitle#" size="35" maxlength="100" />
                         </td>
                     </tr>
@@ -28,7 +28,7 @@
                 <br />
                 <br />
                 <input type="submit" value="#$submitlabel#" tabindex="2" />
-            </div>
+                </div>
         </form>
         <p>The following variables will be replaced in the text with specific information:</p>
         <table border="0" width="100%">

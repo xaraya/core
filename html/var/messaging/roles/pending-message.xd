@@ -1,9 +1,11 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 #$recipientname#,
 
 Your account is pending.
 You'll have to wait for the explicit approval of the administrator to log
 again.
-If you want to know the reason, contact #$adminmail#.
+If you want to know the reason, contact <xar:var scope="module" module="mail" name="adminmail"/>.
 You will receive an email has soon as your account is activated again.
 
---#$siteadmin#
+-- <xar:var scope="module" module="mail" name="adminname"/>
+</xar:template>

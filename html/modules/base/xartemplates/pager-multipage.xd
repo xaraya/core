@@ -39,11 +39,11 @@
         <span title="#$nextblocklabel#">&gt;&gt;</span></xar:if>
         <!-- Display last-page link if we are not on it -->
         <!--
-    <xar:if condition="$currentpagenum ne $lastpagenum">
-        &#160;&#160;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;|</a>
-    <xar:else />
-        &#160;&#160;<span title="#xarML('Last page')#">&gt;|</span>
-    </xar:if>
-    -->
+        <xar:if condition="$currentpagenum ne $lastpagenum">
+            &#160;&#160;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;|</a>
+        <xar:else />
+            &#160;&#160;<span title="#xarML('Last page')#">&gt;|</span>
+        </xar:if>
+        -->
     </div>
 </xar:template>

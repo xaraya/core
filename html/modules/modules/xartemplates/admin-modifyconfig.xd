@@ -6,6 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <form method="post" action="&xar-modurl-modules-admin-updateconfig;">
+            <xar:template file="display" module="base" subdata="array('modulename' => 'modules')" />
             <fieldset>
                 <legend>Configuration settings</legend>
                 <div class="xar-form-input-wrapper-after">

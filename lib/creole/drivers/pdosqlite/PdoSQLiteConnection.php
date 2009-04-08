@@ -80,8 +80,8 @@ class PdoSQLiteConnection extends PdoConnectionCommon implements Connection {
         parent::connect( $dsninfo, $flags, $pdo_dsn );
         
         // make sure sqlite does not give long column names
-        $this->executeQuery('PRAGMA full_column_names=0');
-        $this->executeQuery('PRAGMA short_column_names=1');
+//        $this->executeQuery('PRAGMA full_column_names=0');
+//        $this->executeQuery('PRAGMA short_column_names=1');
     }   
 
     /**

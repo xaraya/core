@@ -12,11 +12,11 @@
             <fieldset>
                 <legend>Status</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="FOR" title="#xarML('TITLE')#" class="xar-form-label">
+                        <label for="FOR" title="#xarML('TITLE')#" class="xar-form-label">
                     #$statusmessage#</label>
                     <input type="button" value="#$togglelabel#"
                     onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=toggle';this.form.submit();" />
-                </div>
+                    </div>
             </fieldset>
             <h3>Configuration</h3>
             <p>On a locked site only the following users and groups will have access.</p>
@@ -25,18 +25,18 @@
             <fieldset>
                 <legend>Groups</legend>
                 <xar:loop name="$roles">
-                    <div class="xar-form-input-wrapper">
+                        <div class="xar-form-input-wrapper">
                         <label class="xar-form-label">#$loop:item['name']#</label>
-                        <xar:if condition="$loop:item['notify'] == 'true'">
-                            <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#"
+                            <xar:if condition="$loop:item['notify'] == 'true'">
+                                <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#" value="#$loop:item['id']#" checked="checked" />
                             value="#$loop:item['id']#" checked="checked" />
                             <xar:else />
-                            <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#"
+                                <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#" value="#$loop:item['id']#" />
                             value="#$loop:item['id']#" />
-                        </xar:if>
+                            </xar:if>
                         <label for="notify_#$loop:item['id']#"
                         title="xarML('Toggle notifications sent to this Group')#">notify</label>
-                        <xar:if condition="count($roles) gt 1">
+                            <xar:if condition="count($roles) gt 1">
                             <input type="button" value="#$deletelabel#"
                             onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();"
                             class="xar-amrgin-thickleft" />
@@ -44,10 +44,10 @@
                             <input type="button" value="#$deletelabel#"
                             onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();"
                             disabled="disabled" class="xar-amrgin-thickleft" />
-                        </xar:if>
-                    </div>
-                </xar:loop>
-                <div class="xar-form-input-wrapper">
+                            </xar:if>
+                        </div>
+                    </xar:loop>
+                    <div class="xar-form-input-wrapper">
                     <label for="newname"
                     title="#xarML('Add a Group to the lock notification list')#"
                     class="xar-form-label">Add Group:</label>
@@ -56,7 +56,7 @@
                     <input type="button" value="#xarML('Add')#"
                     onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=add';this.form.submit();"
                     class="xar-margin-thickleft" />
-                </div>
+                    </div>
             </fieldset>
             <p>The following message will be emailed to members in the above list when the site is
             locked or unlocked.</p>
@@ -67,11 +67,11 @@
                     <label for="notifymsg"
                     title="#xarML('Message sent when site lock status changes')#"
                     class="xar-form-label">Site Lock Email:</label>
-                    <div class="xar-form-container-after">
+                        <div class="xar-form-container-after">
                         <textarea name="notifymsg" id="notifymsg" class="xar-form-textarealarge">
                         #$notifymsg#</textarea>
+                        </div>
                     </div>
-                </div>
             </fieldset>
             <p>The following message will be displayed to members who are locked out when they try
             to login:</p>
@@ -81,11 +81,11 @@
                     <label for="notifymsg"
                     title="#xarML('Text shown to users attempting to log in to a locked site')#"
                     class="xar-form-label">Site Lock Message:</label>
-                    <div class="xar-form-container-after">
+                        <div class="xar-form-container-after">
                         <textarea name="lockedoutmsg" id="lockedoutmsg"
                         class="xar-form-textarealarge">#$lockedoutmsg#</textarea>
+                        </div>
                     </div>
-                </div>
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">

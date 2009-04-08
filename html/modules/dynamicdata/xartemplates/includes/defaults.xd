@@ -1,0 +1,21 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div class="xar-form-input-wrapper">
+        <label for="bar" title="#xarML('An example of a module-specific configuration variable')#" class="xar-form-label">
+            <xar:mlstring>
+                Enable debug mode:
+            </xar:mlstring>
+        </label>
+        <xar:set name="checked">xarModVars::get('dynamicdata', 'debugmode')</xar:set>
+        <xar:data-input type="checkbox" name="debugmode"  checked="$checked" />
+    </div>
+    <xar:set name="users">
+        implode(',', array_keys(unserialize(xarModVars::get('dynamicdata', 'debugusers'))))
+    </xar:set>
+    <div class="xar-form-input-wrapper" style="padding-bottom: 10px;">
+        Enter a list of user names separated by commas. Incorrect user names  will be ignored.<br />
+        <label for="debugusers" title="#xarML('These users can see the Query debug messages')#" class="xar-form-label">
+            <xar:mlstring>Debug Mode Users:</xar:mlstring>
+        </label>
+        <xar:data-input type="textarea" name="debugusers" value="$users"/>
+    </div>
+</xar:template>

@@ -1,8 +1,14 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:if condition="isset($timezone)">#$timezone# 
-    <xar:if condition="isset($offset)">(GMT #$offset#)</xar:if>
-    <xar:elseif condition="isset($offset)" />GMT #$offset# 
-    <xar:elseif condition="!empty($option['name'])" />#$option['name']#</xar:if>
+    <xar:if condition="isset($timezone)">
+        #$timezone#
+        <xar:if condition="isset($offset)">
+            (GMT #$offset#)
+        </xar:if>
+    <xar:elseif condition="isset($offset)" />
+        GMT #$offset#
+    <xar:elseif condition="!empty($option['name'])" />
+        #$option['name']#
+    </xar:if>
 </xar:template>

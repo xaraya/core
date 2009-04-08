@@ -1,14 +1,21 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:set name="stateoptions">array( array('id' =&gt; ROLES_STATE_ALL, 'name' =&gt;
-    xarML('All')), array('id' =&gt; ROLES_STATE_INACTIVE, 'name' =&gt; xarML('Inactive')),
-    array('id' =&gt; ROLES_STATE_NOTVALIDATED, 'name' =&gt; xarML('Not Validated')), array('id'
-    =&gt; ROLES_STATE_ACTIVE, 'name' =&gt; xarML('Active')), array('id' =&gt; ROLES_STATE_PENDING,
-    'name' =&gt; xarML('Pending')), )</xar:set>
-    <xar:set name="modstatus">xarSession::getVar('statusmsg')</xar:set>
-    <xar:set name="messagetitle">#xarML('Write this string in the message body or subject to
-    display the corresponding information')#</xar:set>
+    <xar:set name="stateoptions">
+        array(
+            array('id' => ROLES_STATE_ALL, 'name' => xarML('All')),
+            array('id' => ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')),
+            array('id' => ROLES_STATE_NOTVALIDATED, 'name' => xarML('Not Validated')),
+            array('id' => ROLES_STATE_ACTIVE, 'name' => xarML('Active')),
+            array('id' => ROLES_STATE_PENDING, 'name' => xarML('Pending')),
+        )
+    </xar:set>
+    <xar:set name="modstatus">
+        xarSession::getVar('statusmsg')
+    </xar:set>
+    <xar:set name="messagetitle">
+        #xarML('Write this string in the message body or subject to display the corresponding information')#
+    </xar:set>
     <xar:style scope="module" module="base" file="navtabs" />
     <div class="xar-mod-head">
         <span class="xar-mod-title">Roles Administration</span>
@@ -33,7 +40,9 @@
             </dl>
         </div>
         <form method="post" action="&xar-modurl-roles-admin-createmail;">
-            <xar:comment>Module List Sort and Filter Controls table</xar:comment>
+            <!--
+                Module List Sort and Filter Controls table
+            -->
             <table class="xar-fullwidth">
                 <tr>
                     <th class="xar-nowrap">
@@ -103,19 +112,19 @@
                     </td>
                     <td class="xar-align-center">
                         <xar:set name="firstline">xarML('-- choose --')</xar:set>
-                        <xar:data-input type="dropdown" name="state" tabindex="5"
+                        <xar:data-input type="dropdown" name="state" tabindex="5" onchange="this.form.submit()" firstline="$firstline" options="$stateoptions" value="$state" />
                         onchange="this.form.submit()" firstline="$firstline"
                         options="$stateoptions" value="$state" />
                     </td>
                     <xar:if condition="$id gt 0">
                         <td class="xar-align-center xar-valign-middle">
-                            <xar:data-input type="checkbox" name="includesubgroups"
+                            <xar:data-input type="checkbox" name="includesubgroups" id="includesubgroups" checked="$includesubgroups" onchange="this.form.submit()" />
                             id="includesubgroups" checked="$includesubgroups"
                             onchange="this.form.submit()" />
                         </td>
                     </xar:if>
                     <td class="xar-align-center">
-                        <select name="mailtype" id="mailtype" size="1" tabindex="5"
+                        <select name="mailtype" id="mailtype" size="1" tabindex="5" onchange="this.form.submit()">
                         onchange="this.form.submit()">
                             <xar:loop name="$templates">
                                 <xar:if condition="$mailtype eq $loop:item['key']">
@@ -123,7 +132,8 @@
                                     #$loop:item['value']#</option>
                                     <xar:else />
                                     <option value="#$loop:item['key']#">
-                                    #$loop:item['value']#</option>
+                                        #$loop:item['value']#
+                                    </option>
                                 </xar:if>
                             </xar:loop>
                         </select>
@@ -136,19 +146,32 @@
             </table>
         </form>
         <xar:if condition="$modstatus">
-            <xar:comment>lets display latest status ?? this contains very strange values, so let's
-            not :-) 
-            <p>#$modstatus#</p></xar:comment>
+            <!--
+                lets display latest status ?? this contains very strange values, so let's not :-)
+            <p>
+                #$modstatus#
+            </p>
+            -->
         </xar:if>
         <fieldset>
             <legend>Users</legend>
             <xar:if condition="!isset($users)">
                 <p>No users selected .</p>
-                <xar:else />
-                <xar:comment>the Roles Lists table-based styles (borrow from the Modules
-                list)</xar:comment>
+            <xar:else />
+            <!--
+                the Roles Lists table-based styles (borrow from the Modules list)
+            -->
                 <xar:if condition="$selstyle eq '1'">
-                    <p>#$totalselected# user(s) selected.</p>
+              <p>
+                <xar:ml>
+                  <xar:mlstring>
+                    #(1) user(s) selected.
+                  </xar:mlstring>
+                  <xar:mlvar>
+                    #$totalselected#
+                  </xar:mlvar>
+                </xar:ml>
+              </p>
                     <xar:elseif condition="$selstyle eq '2'" />
                     <xar:if condition="count($users) eq 0">
                         <p>No users match</p>
@@ -206,7 +229,7 @@
                 </xar:if>
             </xar:if>
         </fieldset>
-        <form action="&xar-modurl-roles-admin-sendmail;" method="post"
+          <form action="&xar-modurl-roles-admin-sendmail;" method="post" enctype="application/x-www-form-urlencoded">
         enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Message</legend>
@@ -233,17 +256,17 @@
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="id" id="id" value="#$id#" />
                     <input type="hidden" name="state" id="state" value="#$state#" />
-                    <input type="hidden" name="includesubgroups" id="includesubgroups"
+                    <input type="hidden" name="includesubgroups" id="includesubgroups" value="#$includesubgroups#" />
                     value="#$includesubgroups#" />
                     <!--<input type="hidden" name="ids" id="ids" value="#$ids#" />-->
                     <xar:if condition="!isset($users) or $users eq 0">
-                        <input type="submit" value="#xarML('Send')#" disabled="disabled"
+                        <input type="submit" value="#xarML('Send')#" disabled="disabled" class="xar-margin-thickright" />
                         class="xar-margin-thickright" />
                         <xar:else />
-                        <input type="submit" value="#xarML('Send')#"
+                        <input type="submit" value="#xarML('Send')#" class="xar-margin-thickright" />
                         class="xar-margin-thickright" />
                     </xar:if>
-                    <input type="button" value="#xarML('Cancel')#" onclick="history.back(-1);"
+                    <input type="button" value="#xarML('Cancel')#" onclick="history.back(-1);" class="xar-margin-thickright" />
                     class="xar-margin-thickright" />
                 </div>
             </fieldset>

@@ -39,13 +39,33 @@ function blocks_admin_modify_instance()
     // Execute the function if it exists.
     $usname = preg_replace('/ /', '_', $instance['module']);
     $modfunc = $usname . '_' . $instance['type'] . 'block_modify';
-
+    $classpath = 'modules/' . $instance['module'] . '/xarblocks/' . $instance['type'] . '.php';
     if (function_exists($modfunc)) {
         $extra = $modfunc($instance);
 
         if (is_array($extra)) {
             // Render the extra settings if necessary.
             $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
+        }
+    } elseif (file_exists($classpath)) {
+        sys::import('modules.' . $instance['module'] . '.xarblocks.' . $instance['type']);
+        $name = ucfirst($instance['type']) . "Block";
+        if (class_exists($name)) {
+            sys::import('xaraya.structures.descriptor');
+            $descriptor = new ObjectDescriptor(array());
+            $block = new $name($descriptor);
+
+            $extra = $block->modify($instance);
+            if (is_array($extra)) {
+                // Render the extra settings if necessary.
+                try {
+                    $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
+                } catch (Exception $e) {
+                    $extra = '';
+                }
+            }
+        } else {
+            $extra = '';
         }
     } else {
         $extra = '';

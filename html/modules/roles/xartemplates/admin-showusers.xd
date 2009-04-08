@@ -24,14 +24,14 @@
         <xar:set name="basetype">ROLES_GROUPTYPE</xar:set>
         <xar:template file="tablist" />
         <xar:if condition="$selstyle eq '0'">
-            <xar:elseif condition="$selstyle eq '1'" />
+        <xar:elseif condition="$selstyle eq '1'"/>
             <fieldset>
                 <legend>Role hierarchy</legend>
                 <div name="tree" id="tree" class="tree">
                     <xar:data-input type="rolestree" />
                 </div>
             </fieldset>
-            <xar:elseif condition="$selstyle eq '2'" />
+        <xar:elseif condition="$selstyle eq '2'"/>
             <div>
                 <dl class="xar-tabs">
                     <dt class="help"
@@ -42,7 +42,7 @@
                             <a href="&xar-modurl-roles-admin-showusers;&amp;id=0&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload">
                             All Users (#$totalusers#)</a>
                         </dd>
-                        <xar:else />
+                    <xar:else/>
                         <dd>
                             <a href="&xar-modurl-roles-admin-showusers;&amp;id=0&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload">
                             All Users (#$totalusers#)</a>
@@ -58,7 +58,7 @@
                                     #xarVarPrepForDisplay($groups[$i]['name'])#
                                     (#$groups[$i]['users']#)</a>
                                 </dd>
-                                <xar:else />
+                            <xar:else/>
                                 <dd>
                                     <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$groups[$i]['id']#&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload"
                                     title="#xarML('Display the users in this group')#">
@@ -101,7 +101,7 @@
                             <xar:foreach in="$style" key="$key" value="$value">
                                 <xar:if condition="$key eq $selstyle">
                                     <option value="#$key#" selected="selected">#$value#</option>
-                                    <xar:else />
+                                <xar:else />
                                     <option value="#$key#">#$value#</option>
                                 </xar:if>
                             </xar:foreach>
@@ -113,7 +113,7 @@
                             <xar:if condition="$groupid eq 0">
                                 <option value="0" selected="selected">All Users -
                                 #$totalusers#</option>
-                                <xar:else />
+                            <xar:else/>
                                 <option value="0">All Users - #$totalusers#</option>
                             </xar:if>
                             <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
@@ -122,7 +122,7 @@
                                         <option value="#$groups[$i]['id']#" selected="selected">
                                         #xarVarPrepForDisplay($groups[$i]['name'])# -
                                         #$groups[$i]['users']#</option>
-                                        <xar:else />
+                                    <xar:else/>
                                         <option value="#$groups[$i]['id']#">
                                         #xarVarPrepForDisplay($groups[$i]['name'])# -
                                         #$groups[$i]['users']#</option>
@@ -141,7 +141,7 @@
                         onchange="this.form.submit()" />
                     </td>
                     <td class="xar-align-center">
-                        <input type="text" name="search" id="search" value="#$search#"
+                        <input type="text" name="search" id="search" value="#$search#" maxlength="255" class="xar-form-textshort" />
                         maxlength="255" class="xar-form-textshort" />
                     </td>
                     <td class="xar-align-center">
@@ -153,7 +153,7 @@
         <xar:if condition="count($users) eq 0">
             <p>#$message# 
             <xar:if condition="$search ne ''">&#160;matching '#$search#'</xar:if></p>
-            <xar:else />
+        <xar:else />
             <form method="post" action="&xar-modurl-roles-admin-updatestate;" name="state">
                 <div class="xar-form-input-wrapper">
                     <label for="status"
@@ -165,7 +165,7 @@
                     <input type="hidden" name="groupid" id="groupid" value="#$groupid#" />
                     <input type="hidden" name="state" id="state" value="#$state#" />
                     <input type="hidden" name="order" id="order" value="#$order#" />
-                    <input type="hidden" name="search" id="search"
+                    <input type="hidden" name="search" id="search" value="#xarVarPrepForDisplay($search)#"/>
                     value="#xarVarPrepForDisplay($search)#" />
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="submit" value="#xarML('Change Status')#"
@@ -206,7 +206,7 @@
                                 </td>
                             </xar:foreach>
                             <td class="xar-align-center xar-nowrap">
-                            <xar:if condition="!$users[$itemid]['frozen']">
+                                <xar:if condition="!$users[$itemid]['frozen']">
                             <a href="&xar-modurl-roles-admin-createpassword;&amp;id=#$fields.id#&amp;state=#$state#&amp;groupid=#$groupid#"
                             title="#xarML('Generate a new password for this User')#">
                                 <img src="modules/roles/xarimages/passicon.gif"
@@ -222,7 +222,7 @@
                                 <img src="modules/roles/xarimages/delete.png"
                                 class="xar-valign-middle" />
                             </a>&#160; 
-                            <xar:else />
+                                <xar:else />
                             <img src="modules/roles/xarimages/passicon.gif"
                             class="xar-valign-middle" />&#160; 
                             <img src="modules/roles/xarimages/passicon.gif"
@@ -241,7 +241,7 @@
                             </a></td>
                             <td class="xar-align-center">
                                 <xar:if condition="!$users[$itemid]['frozen']">
-                                    <input type="checkbox" name="ids[#$fields['id']#]"
+                                    <input type="checkbox" name="ids[#$fields['id']#]" id="ids_#$fields['id']#" value="1"/>
                                     id="ids_#$fields['id']#" value="1" />
                                 </xar:if>
                             </td>

@@ -2,19 +2,19 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!--
-***********
-* WARNING
-* Modify this template at your own risk.
-* If the template contains errors, the exception system will not be able to process
-* it correctly, leading to unexpected results
-***********
--->
+    ***********
+    * WARNING
+    * Modify this template at your own risk.
+    * If the template contains errors, the exception system will not be able to process
+    * it correctly, leading to unexpected results
+    ***********
+    -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Error Message</span>
     </div>
     <div class="xar-mod-body">
-        <img src="#xarTplGetImage('exception.jpg', 'base')#" alt="#xarML('Exception Icon')#"
-        class="xar-module-icon" />
+        <img src="#xarTplGetImage('exception.jpg', 'base')#" alt="#xarML('Exception Icon')#" class="xar-module-icon" />
+
         <h2>#$type#</h2>
         <h3>#$title#</h3>
         <p>#$short#</p>

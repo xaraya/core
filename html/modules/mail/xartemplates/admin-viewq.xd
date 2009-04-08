@@ -7,8 +7,12 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
         <h2>Mail Queue</h2>
-        <xar:comment>We want to show this option so people know it is available. We only show this
-        if we can use it eg scheduler is installed and hooked to mail</xar:comment>
+           
+       
+       <!--
+           We want to show this option so people know it is available.
+           We only show this if we can use it eg scheduler is installed and hooked to mail
+       -->
         <xar:if condition="xarModIsAvailable('scheduler') and xarModIsHooked('mail','scheduler')">
             <xar:comment>We only show this if we can use it eg scheduler is installed and hooked to
             mail</xar:comment>

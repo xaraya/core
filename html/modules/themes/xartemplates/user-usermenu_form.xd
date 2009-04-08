@@ -15,7 +15,7 @@
                         <xar:if condition="$loop:item['name'] eq $defaulttheme">
                             <option value="#$loop:item['regid']#" selected="selected">
                             #$loop:item['name']#</option>
-                            <xar:else />
+                        <xar:else />
                             <option value="#$loop:item['regid']#">#$loop:item['name']#</option>
                         </xar:if>
                     </xar:loop>

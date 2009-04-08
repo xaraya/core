@@ -104,21 +104,43 @@ class xarMask extends Object
             $normalform = $this->normalform;
         } else {
             $normalform = array();
-            $normalform[] = strtolower($this->getLevel());
-            $normalform[] = strtolower($this->getRealm());
-            $normalform[] = $this->module_id;
-            $normalform[] = strtolower($this->getComponent());
+            $normalform['id'] = $this->getID();
+            $normalform['name'] = $this->getName();
+            $normalform['level'] = strtolower($this->getLevel());
+            $normalform['realm'] = strtolower($this->getRealm());
+            $normalform['module'] = $this->module_id;
+            $normalform['component'] = strtolower($this->getComponent());
             $thisinstance = strtolower($this->getInstance());
-            $thisinstance = str_replace('myself',xarSession::getVar('role_id'),$thisinstance);
-            $normalform   = array_merge($normalform, explode(':', $thisinstance));
+            $instancearray = $this->getInstanceArray($thisinstance);
+            
+            // Cater to the myself role
+            $normalinstance = array();
+            foreach ($instancearray as $key => $value) 
+                $normalinstance[$key] = $value == 'myself' ? xarSession::getVar('role_id') : $value;
+                
+            $normalform['instance']   = $normalinstance;
             $this->normalform = $normalform;
         }
 
-        for ($i=0;$i<$adds;$i++) {
+/*        for ($i=0;$i<$adds;$i++) {
             $normalform[] = 'all';
         }
-
+*/
         return $normalform;
+    }
+    
+    /**
+     * create an array representing a mask instance
+    */
+    private function getInstanceArray($instancestring=array()) {
+        if (empty($instancestring)) return array();
+        try {
+            // the new way
+            return unserialize($instancestring);
+        } catch(Exception $e) {
+            // the old way
+            return explode(':', $instancestring);
+        }
     }
 
     /**
@@ -263,14 +285,14 @@ class xarMask extends Object
     */
     function implies($mask)
     {
-        $match = $this->includes($mask);
+        $match = xarMasks::includes($this->normalform,$mask->normalform);
         return $match && ($this->getLevel() >= $mask->getLevel()) && ($mask->getLevel() > 0);
     }
 
     function getID()                 { return $this->id; }
     function getName()                 { return $this->name; }
     function getRealm()             { return ($this->realm == null) ? "All" : $this->realm; }
-    function getModule()             { return $this->module; }
+    function getModule()             { return ($this->module_id == 0) ? "All" : $this->module; }
     function getModuleID()            { return $this->module_id; }
     function getComponent()         { return $this->component; }
     function getInstance()             { return $this->instance; }

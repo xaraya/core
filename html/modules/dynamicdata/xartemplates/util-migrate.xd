@@ -16,7 +16,7 @@
         <xar:if condition="!empty($debug)">
             <div>
                 <pre>
-                #$debug#
+                    #$debug#
             
 </pre>
             </div>
@@ -24,21 +24,21 @@
         <form method="post" action="&xar-modurl-dynamicdata-util-migrate;">
             <fieldset>
                 <legend>Mapping</legend>
-                <div class="xar-form-input-wrapper">
+                    <div class="xar-form-input-wrapper">
                     <label for="map" title="#xarML('Choose a mapping to migrate data')#"
                     class="xar-form-label">Use Mapping:</label>
                     <xar:if condition="count($maplist) gt 0">
-                    <select name="map" id="map">
-                        <option value=""></option>
-                        <xar:foreach in="$maplist" value="$maptype">
-                            <xar:if condition="!empty($map) and $map eq $maptype">
-                                <option value="#$maptype#" selected="selected">#$maptype#</option>
+                        <select name="map" id="map">
+                            <option value=""></option>
+                            <xar:foreach in="$maplist" value="$maptype">
+                                <xar:if condition="!empty($map) and $map eq $maptype">
+                                    <option value="#$maptype#" selected="selected">#$maptype#</option>
                                 <xar:else />
-                                <option value="#$maptype#">#$maptype#</option>
-                            </xar:if>
-                        </xar:foreach>
-                    </select>
-                    <input type="submit" name="load" value="#xarML('Load')#" />
+                                    <option value="#$maptype#">#$maptype#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                        <input type="submit" name="load" value="#xarML('Load')#" />
                     <xar:else />No mappings available.</xar:if>
                 </div>
                 <div class="xar-form-input-wrapper">
@@ -56,35 +56,35 @@
                     class="xar-form-label">Module Route:</label>
                     <span class="xar-nowrap">
                         <xar:if condition="empty($from['module'])">
-                        <select name="from[module]" id="from_module">
-                            <xar:foreach in="$modulelist" key="$modid" value="$modlabel">
-                                <xar:if condition="!in_array($modid,$modulesupported)">
+                            <select name="from[module]" id="from_module">
+                                <xar:foreach in="$modulelist" key="$module_id" value="$modlabel">
+                                    <xar:if condition="!in_array($module_id,$modulesupported)">
                                     <xar:elseif condition="$modid eq 151" />
-                                    <!-- TODO: keep this preset to articles? -->
+                                        <!-- TODO: keep this preset to articles? -->
                                     <option value="#$modid#" selected="selected">
                                     #$modlabel#</option>
                                     <xar:else />
-                                    <option value="#$modid#">#$modlabel#</option>
-                                </xar:if>
-                            </xar:foreach>
-                        </select>
+                                        <option value="#$module_id#">#$modlabel#</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>
                         <xar:else />#$modulelist[$from['module']]# 
                         <input type="hidden" name="from[module]"
                         value="#$from['module']#" /></xar:if>
                         <strong>To</strong>
                         <xar:if condition="empty($to['module'])">
-                        <select name="to[module]" id="to_module">
-                            <xar:foreach in="$modulelist" key="$modid" value="$modlabel">
-                                <xar:if condition="!in_array($modid,$modulesupported)">
+                            <select name="to[module]" id="to_module">
+                                <xar:foreach in="$modulelist" key="$module_id" value="$modlabel">
+                                    <xar:if condition="!in_array($module_id,$modulesupported)">
                                     <xar:elseif condition="$modid eq 151" />
-                                    <!-- TODO: keep this preset to articles? -->
+                                        <!-- TODO: keep this preset to articles? -->
                                     <option value="#$modid#" selected="selected">
                                     #$modlabel#</option>
                                     <xar:else />
-                                    <option value="#$modid#">#$modlabel#</option>
-                                </xar:if>
-                            </xar:foreach>
-                        </select>
+                                        <option value="#$module_id#">#$modlabel#</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>
                         <xar:else />#$modulelist[$to['module']]# 
                         <input type="hidden" name="to[module]" value="#$to['module']#" /></xar:if>
                     </span>
@@ -96,24 +96,24 @@
                         <span class="xar-nowrap">
                             <!--  get the list of itemtypes for that module -->
                             <xar:if condition="!isset($from['itemtype'])">
-                            <select name="from[itemtype]" id="from_itemtype">
-                                <xar:foreach in="$fromitemtypes" key="$itemtype" value="$info">
+                                <select name="from[itemtype]" id="from_itemtype">
+                                    <xar:foreach in="$fromitemtypes" key="$itemtype" value="$info">
                                     <option value="#$itemtype#">[#$itemtype#]
                                     #$info['label']#</option>
-                                </xar:foreach>
-                            </select>
+                                    </xar:foreach>
+                                </select>
                             <xar:else />[#$from['itemtype']#]
                             #$fromitemtypes[$from['itemtype']]['label']# 
                             <input type="hidden" name="from[itemtype]" id="from_itemtype"
                             value="#$from['itemtype']#" /></xar:if>
                             <strong>To</strong>
                             <xar:if condition="!isset($to['itemtype'])">
-                            <select name="to[itemtype]" id="to_itemtype">
-                                <xar:foreach in="$toitemtypes" key="$itemtype" value="$info">
+                                <select name="to[itemtype]" id="to_itemtype">
+                                    <xar:foreach in="$toitemtypes" key="$itemtype" value="$info">
                                     <option value="#$itemtype#">[#$itemtype#]
                                     #$info['label']#</option>
-                                </xar:foreach>
-                            </select>
+                                    </xar:foreach>
+                                </select>
                             <xar:else />[#$to['itemtype']#]
                             #$toitemtypes[$to['itemtype']]['label']# 
                             <input type="hidden" name="to[itemtype]"
@@ -135,7 +135,7 @@
                                         #$info['label']#</option>
                                     </xar:foreach>
                                 </select>
-                                <xar:else />
+                            <xar:else/>
                                 <xar:foreach in="$fromitems" key="$itemid" value="$info">
                                 [#$itemid#] #$info['label']# 
                                 <br /></xar:foreach>
@@ -198,7 +198,7 @@
                                             <option value="#$nameto#" selected="selected">
                                             [#$nameto#] #$infoto['label']#
                                             (#$infoto['type']#)</option>
-                                            <xar:else />
+                                        <xar:else/>
                                             <option value="#$nameto#">[#$nameto#]
                                             #$infoto['label']# (#$infoto['type']#)</option>
                                         </xar:if>
@@ -222,7 +222,7 @@
                                         <option value="">* not migrated *</option>
                                         <xar:foreach in="$tohooklist" key="$hookmodto"
                                         value="$valto">
-                                            <xar:if condition="!isset($hookmap[$hookmodfrom]) and $hookmodfrom eq $hookmodto">
+                                                <xar:if condition="!isset($hookmap[$hookmodfrom]) and $hookmodfrom eq $hookmodto">
 
                                                 <option value="#$hookmodto#" selected="selected">
                                                 #$hookmodto#</option>
@@ -233,13 +233,13 @@
                                                 <option value="#$hookmodto#" disabled="disabled">
                                                 #$hookmodto#</option>
                                                 <xar:else />
-                                                <option value="#$hookmodto#">#$hookmodto#</option>
-                                            </xar:if>
-                                        </xar:foreach>
+                                                    <option value="#$hookmodto#">#$hookmodto#</option>
+                                                </xar:if>
+                                            </xar:foreach>
                                     </select></xar:if>
                                 </div>
                             </xar:foreach>
-                            <xar:else />
+                        <xar:else />
                             <p>No hooks assigned.</p>
                         </xar:if>
                     </fieldset>

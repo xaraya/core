@@ -9,6 +9,7 @@
         <xar:template type="module" file="admin-realms" />
         <form id="privilegeform" action="&xar-modurl-privileges-admin-modifyrealm;" method="post"
         enctype="application/x-www-form-urlencoded">
+        <form id="privilegeform" action="&xar-modurl-privileges-admin-modifyrealm;" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Modify Realm</legend>
                 <div class="xar-form-input-wrapper">

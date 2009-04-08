@@ -91,6 +91,8 @@ class xarTemplateCache extends Object implements ixarTemplateCache
     public static function saveKey($fileName)
     {
         if(!self::isActive()) return true;
+        // FIXME: this has to be reviewed
+        if($fileName == 'memory') return true;
         if($fd = fopen(self::$dir . '/CACHEKEYS', 'a')) {
             fwrite($fd, self::getKey($fileName).': '.$fileName."\n");
             fclose($fd);

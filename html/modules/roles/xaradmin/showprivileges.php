@@ -141,11 +141,11 @@ function roles_admin_showprivileges()
             if ($todo['relation'] != $i) continue;
             foreach($privilegesdone as $done) {
                 if (!($done['relation'] < $todo['relation'])) continue;
-                if ($done['object']->includes($todo['object'])) {
+                if (xarMasks::includes($done['object']->normalform,$todo['object']->normalform)) {
                     $todo['status'] = 1;
                     break;
                 }
-                elseif ($todo['object']->includes($done['object'])) {
+                elseif (xarMasks::includes($todo['object']->normalform,$done['object']->normalform)) {
                     $todo['status'] = 2;
                 }
             }
@@ -172,7 +172,7 @@ function roles_admin_showprivileges()
                         $x['status'] = 1;
                         break;
                     }
-                    elseif ($x['object']->includes($y['object']) && !$x['object']->implies($y['object'])) {
+                    elseif (xarMasks::includes($x['object']->normalform,$y['object']->normalform) && !$x['object']->implies($y['object'])) {
                         $x['status'] = 2;
                     }
                 }

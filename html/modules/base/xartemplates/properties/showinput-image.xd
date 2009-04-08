@@ -7,14 +7,14 @@
     <xar:data-input type="fileupload" name="$name"
     validation="var/uploads|(gif|(jpg|jpeg|png|bmp)" />
     <xar:elseif condition="$inputtype eq 'url'" />
-    <xar:data-input type="url" name="$name" value="$value" />
+        <xar:data-input type="url" name="$name" value="$value" />
     <xar:else />
     <xar:data-input type="filepicker" name="$name" value="$value" basedir="$basedir"
     extensions="gif,jpg,jpeg,png,bmp" />
     <xar:set name="showlabel">check</xar:set>
     <xar:if condition="!empty($value)">[ 
-    <a href="#$basedir#/#$value#" target="preview">#$showlabel#</a>]</xar:if></xar:if>
-    <xar:if condition="!empty($invalid)">
-        <span class="xar-error">#$invalid#</span>
+        </xar:if>
     </xar:if>
+    <input type="hidden" name="image_source" value="#$image_source#" />
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

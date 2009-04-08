@@ -2,8 +2,8 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!--
-    We know that blocks.css file is already included by admin-modify_instance.xd, so no need to do it twice
--->
+        We know that blocks.css file is already included by admin-modify_instance.xd, so no need to do it twice
+    -->
     <xar:if condition="!empty($content)">
         <table class="xar-fullwidth">
             <caption>Edit Items</caption>
@@ -18,61 +18,61 @@
             <xar:loop name="$contentlines">
                 <tr>
                     <td>
-                        <input type="text" class="xar-form-textmedium"
+                        <input type="text" class="xar-form-textmedium" name="linkname[#$loop:index#]" id="linkname_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[1])#" />
                         name="linkname[#$loop:index#]" id="linkname_#$loop:index#" maxlength="255"
                         value="#xarVarPrepForDisplay($loop:item[1])#" />
                     </td>
                     <td>
-                        <input type="text" class="xar-form-textlong" name="linkurl[#$loop:index#]"
+                        <input type="text" class="xar-form-textlong" name="linkurl[#$loop:index#]" id="linkurl_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[0])#" />
                         id="linkurl_#$loop:index#" maxlength="255"
                         value="#xarVarPrepForDisplay($loop:item[0])#" />
                     </td>
                     <td>
-                        <input type="text" class="xar-form-textlong" name="linkdesc[#$loop:index#]"
+                        <input type="text" class="xar-form-textlong" name="linkdesc[#$loop:index#]" id="linkdesc_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[2])#" />
                         id="linkdesc_#$loop:index#" maxlength="255"
                         value="#xarVarPrepForDisplay($loop:item[2])#" />
                     </td>
                     <td class="xar-align-center">
-                        <input type="checkbox" name="linkdelete[#$loop:index#]"
+                        <input type="checkbox" name="linkdelete[#$loop:index#]" id="linkdelete_#$loop:index#" value="1" />
                         id="linkdelete_#$loop:index#" value="1" />
                     </td>
                     <td class="xar-align-center">
                         <xar:if condition="empty($loop:item[3])">
-                            <input type="checkbox" name="linkchild[#$loop:index#]"
+                            <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1" />
                             id="linkchild_#$loop:index#" value="1" />
-                            <xar:else />
-                            <input type="checkbox" name="linkchild[#$loop:index#]"
+                        <xar:else />
+                            <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1" checked="checked" />
                             id="linkchild_#$loop:index#" value="1" checked="checked" />
                         </xar:if>
                     </td>
                     <td class="xar-align-center">
-                        <input type="checkbox" name="linkinsert[#$loop:index#]"
+                        <input type="checkbox" name="linkinsert[#$loop:index#]" id="linkinsert_#$loop:index#" value="1" />
                         id="linkinsert_#$loop:index#" value="1" />
                     </td>
                 </tr>
             </xar:loop>
         </table>
         <!--
-        <table class="fullwidth">
-            <caption>
+            <table class="fullwidth">
+                <caption>
                 Modify Structure (TODO obviously)
-            </caption>
-            <tr>
-                <th>
+                </caption>
+                <tr>
+                    <th>
                     Edit
-                </th>
-                <th>
+                    </th>
+                    <th>
                     Preview
-                </th>
-            </tr>
-            <tr>
-                <td>
-                </td>
-                <td>
-                </td>
-            </tr>
-        </table>
-    -->
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </table>
+        -->
     </xar:if>
     <p class="xar-form-textmedium xar-padding-medium" style="display:block;">
         <strong>Add New Menu Item</strong>
@@ -101,23 +101,14 @@
         <label for="displaymodules"
         title="#xarML('To display a restricted list of modules, enter their names separated by commas in the text box at right, and choose Manual List from the dropdown.')#"
         class="xar-form-label">Display Modules</label>
-        <select name="displaymodules" id="displaymodules">
-            <xar:if condition="$displaymodules eq 'None'">
-                <option value="None" selected="selected">None</option>
-                <xar:else />
-                <option value="None">None</option>
-            </xar:if>
-            <xar:if condition="$displaymodules eq 'All'">
-                <option value="All" selected="selected">All Modules</option>
-                <xar:else />
-                <option value="All">All Modules</option>
-            </xar:if>
-            <xar:if condition="$displaymodules eq 'List'">
-                <option value="List" selected="selected">Manual List</option>
-                <xar:else />
-                <option value="List">Manual List</option>
-            </xar:if>
-        </select>
+        <xar:set name="options">
+            array(
+                array('id' => 'None', 'name' => xarML('None')),
+                array('id' => 'All', 'name' => xarML('All Modules')),
+                array('id' => 'List', 'name' => xarML('Manual List')),
+            )
+        </xar:set>
+        <xar:data-input type="dropdown" name="displaymodules" options="$options" value="$displaymodules" />
         <div class="xar-form-container-after">
             <p>To display a restricted list of modules in the menu, enter their names separated by
             commas in the field below, and choose Manual List from the dropdown.</p>
@@ -130,7 +121,7 @@
     <div class="xar-form-input-wrapper-after">
         <xar:if condition="!empty($showlogout)">
             <input type="checkbox" value="1" name="showlogout" id="showlogout" checked="checked" />
-            <xar:else />
+        <xar:else />
             <input type="checkbox" value="1" name="showlogout" id="showlogout" />
         </xar:if>
         <label for="showlogout"
@@ -139,9 +130,9 @@
     </div>
     <div class="xar-form-input-wrapper-after">
         <xar:if condition="!empty($displayprint)">
-            <input type="checkbox" value="1" name="displayprint" id="displayprint"
+            <input type="checkbox" value="1" name="displayprint" id="displayprint" checked="checked" />
             checked="checked" />
-            <xar:else />
+        <xar:else />
             <input type="checkbox" value="1" name="displayprint" id="displayprint" />
         </xar:if>
         <label for="displayprint"
@@ -151,7 +142,7 @@
     <div class="xar-form-input-wrapper-after">
         <xar:if condition="!empty($displayrss)">
             <input type="checkbox" value="1" name="displayrss" id="displayrss" checked="checked" />
-            <xar:else />
+        <xar:else />
             <input type="checkbox" value="1" name="displayrss" id="displayrss" />
         </xar:if>
         <label for="displayrss"

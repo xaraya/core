@@ -54,7 +54,7 @@ function dynamicdata_admin_create($args)
     if (!empty($preview) || !$isvalid) {
         $data = array_merge($data, xarModAPIFunc('dynamicdata','admin','menu'));
 
-        $data['object'] = & $myobject;
+        $data['object'] = $myobject;
 
         $data['authid'] = xarSecGenAuthKey();
         $data['preview'] = $preview;
@@ -62,7 +62,9 @@ function dynamicdata_admin_create($args)
             $data['return_url'] = $return_url;
         }
 
-        $modinfo = xarModGetInfo($myobject->moduleid);
+        // Makes this hooks call explictly from DD
+        //$modinfo = xarModGetInfo($myobject->moduleid);
+        $modinfo = xarModGetInfo(182);
         $item = array();
         foreach (array_keys($myobject->properties) as $name) {
             $item[$name] = $myobject->properties[$name]->value;

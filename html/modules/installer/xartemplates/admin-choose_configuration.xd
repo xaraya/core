@@ -12,16 +12,16 @@
                 <h3>Available Configurations</h3>
                 <xar:if condition="isset($warning)">#$warning# 
                 <xar:else />
-                <xar:set name="configsize">count($names)</xar:set>
-                <select id="configuration" name="configuration" size="#$configsize#">
-                    <xar:loop name="$names">
-                        <xar:if condition="$loop:item['selected']">
-                            <option value="#$loop:item['value']#" selected="selected">
+                    <xar:set name="configsize">count($names)</xar:set>
+                    <select id="configuration" name="configuration" size="#$configsize#">
+                        <xar:loop name="$names">
+                            <xar:if condition="$loop:item['selected']">
+                                <option value="#$loop:item['value']#" selected="selected">
                             #$loop:item['display']#</option>
                             <xar:else />
                             <option value="#$loop:item['value']#">#$loop:item['display']#</option>
                         </xar:if>
-                    </xar:loop>
+                        </xar:loop>
                 </select></xar:if>
                 <p>Each configuration will load a predefined set of modules, menus, hooks etc. as
                 well as create an initial configuration of the security system. On the next page

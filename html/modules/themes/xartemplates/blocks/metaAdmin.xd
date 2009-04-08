@@ -44,7 +44,7 @@
         <div class="xar-form-container-after">
             <div class="xar-displayblock">
                 <xar:if condition="$usedk eq 0">
-                    <input type="radio" name="usedk" id="usedk#$blockid#_none" value="0"
+                    <input type="radio" name="usedk" id="usedk#$blockid#_none" value="0" checked="checked" /> 
                     checked="checked" />
                     <xar:else />
                     <input type="radio" name="usedk" id="usedk#$blockid#_none" value="0" />
@@ -53,7 +53,7 @@
             </div>
             <div class="xar-displayblock">
                 <xar:if condition="$usedk eq 1">
-                    <input type="radio" name="usedk" id="usedk#$blockid#_articles" value="1"
+                    <input type="radio" name="usedk" id="usedk#$blockid#_articles" value="1" checked="checked" /> 
                     checked="checked" />
                     <xar:else />
                     <input type="radio" name="usedk" id="usedk#$blockid#_articles" value="1" />
@@ -62,7 +62,7 @@
             </div>
             <div class="xar-displayblock">
                 <xar:if condition="$usedk eq 2">
-                    <input type="radio" name="usedk" id="usedk#$blockid#_keywords" value="2"
+                    <input type="radio" name="usedk" id="usedk#$blockid#_keywords" value="2" checked="checked" /> 
                     checked="checked" />
                     <xar:else />
                     <input type="radio" name="usedk" id="usedk#$blockid#_keywords" value="2" />
@@ -71,7 +71,7 @@
             </div>
             <div class="xar-displayblock">
                 <xar:if condition="$usedk eq 3">
-                    <input type="radio" name="usedk" id="usedk#$blockid#_both" value="3"
+                    <input type="radio" name="usedk" id="usedk#$blockid#_both" value="3" checked="checked" /> 
                     checked="checked" />
                     <xar:else />
                     <input type="radio" name="usedk" id="usedk#$blockid#_both" value="3" />

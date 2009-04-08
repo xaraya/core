@@ -13,7 +13,7 @@
                 <p>Name: 
                 <xar:var name="$group['name']" /></p>
                 <p>Members: 
-                <xar:if condition="!empty($group['instances'])">
+                    <xar:if condition="!empty($group['instances'])">
                 <xar:loop name="$group['instances']">#$loop:item['title']#</xar:loop>
                 <xar:else />[ none ]</xar:if></p>
                 <p>Template: 
@@ -24,11 +24,11 @@
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="confirm" id="confirm" value="true" />
                     <input type="hidden" name="id" id="id" value="#$group['id']#" />
-                    <input type="submit" value="#xarML('Delete Group')#"
-                    class="xar-margin-thick" />
-                    <xar:set name="returnurl">#xarModURL('blocks', 'admin',
-                    'view_groups')#</xar:set>
-                    <input type="button" value="#xarML('Cancel')#" class="xar-margin-thick"
+                    <input type="submit" value="#xarML('Delete Group')#" class="xar-margin-thick" />
+                    <xar:set name="returnurl">
+                        #xarModURL('blocks', 'admin', 'view_groups')#
+                    </xar:set>
+                    <input type="button" value="#xarML('Cancel')#" class="xar-margin-thick" onclick="window.location='#$returnurl#';" />
                     onclick="window.location='#$returnurl#';" />
                 </div>
             </fieldset>

@@ -392,23 +392,38 @@ class xarMasks extends Object
         } else {
             $role = xarRoles::findRole($rolename);
         }
+        
         // check if we already have the irreducible set of privileges for the current user
-        if (!xarVarIsCached('Security.Variables','privilegeset.'.$mask->module) || !empty($rolename)) {
-            // get the privileges and test against them
-            $privileges = self::irreducibleset(array('roles' => array($role)),$mask->module);
+        if ($rolename == '') {
+            // We are checking the privileges of the current user
+            // See if we have something cached
+            if (!xarVarIsCached('Security.Variables','privilegeset')) {
 
-            // leave this as same-page caching, even if the db cache is finished
-            // if this is the current user, save the irreducible set of privileges to cache
-            if ($rolename == '') {
-                // normalize all privileges before saving, to avoid re-doing that every time
-                self::normalizeprivset($privileges);
-                xarVarSetCached('Security.Variables','privilegeset.'.$mask->module,$privileges);
+                // No go from cache. Try and get it from the session
+                sys::import('modules.privileges.class.privilege');
+                $privileges = unserialize(xarSession::getVar('privilegeset'));
+                if (empty($privileges)) {
+
+                    // Still no go. Assemble the privleges
+                    $privileges = self::irreducibleset(array('roles' => array($role)),$mask->module);
+                    // Save them to the sesssion too
+                    xarSession::setVar('privilegeset',serialize($privileges));
+                }
+
+                // Save them to the cache
+                xarVarSetCached('Security.Variables','privilegeset',$privileges);
+
+            } else {
+                // get the irreducible set of privileges for the current user from cache
+                $privileges = xarVarGetCached('Security.Variables','privilegeset');
             }
         } else {
-            // get the irreducible set of privileges for the current user from cache
-            $privileges = xarVarGetCached('Security.Variables','privilegeset.'.$mask->module);
+            // This is a different user, force recalculation
+            $privileges = self::irreducibleset(array('roles' => array($role)),$mask->module);
         }
-        $pass = self::testprivileges($mask,$privileges,false,$role);
+
+        $pass = self::testprivileges($mask->normalform,$privileges,false,$role);
+//if ($mask->getName() == 'EditPrivilege' && $mask->getComponent() == 'Privileges') {echo "<pre>";var_dump($privileges);}
 
         //$pass = self::testprivileges($mask,self::getprivset($role),false);
 
@@ -416,11 +431,13 @@ class xarMasks extends Object
 
         if ($catch && !$pass) {
             if (xarModVars::get('privileges','exceptionredirect') && !xarUserIsLoggedIn()) {
-                //authsystem will handle the authentication
+                // The current authentication module will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login
                 $requrl = xarServerGetCurrentUrl(array(),false);
-                xarResponseRedirect(xarModURL('authsystem','user','showloginform',array('redirecturl'=> $requrl),false));
+                xarResponseRedirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
             } else {
+//                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
+                xarResponseRedirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
                 $msg = xarML("You don't have the correct privileges for this operation");
                 $candebug = (xarSession::getVar('role_id') == xarModVars::get('privileges','tester'));
                 $test = xarModVars::get('privileges','test') && $candebug;
@@ -428,7 +445,6 @@ class xarMasks extends Object
                 throw new Exception($msg);
             }
         }
-
         return $pass;
     }
 
@@ -494,13 +510,14 @@ class xarMasks extends Object
      * @param   array representing the initial node to start from
      * @return  nested array containing the role's ancestors and privileges
     */
-    public static function irreducibleset($coreset,$modid=null)
+    public static function irreducibleset($coreset,$module_id=null)
     {
         $roles = $coreset['roles'];
+        unset($coreset['roles']);
         $coreset['privileges'] = array();
         $coreset['children'] = array();
         if (count($roles) == 0) return $coreset;
-        if ($modid == null) return $coreset;
+        if ($module_id == null) return $coreset;
 
         $parents = array();
         foreach ($roles as $role) {
@@ -511,21 +528,26 @@ class xarMasks extends Object
             $privs = $role->getAssignedPrivileges();
             $privileges = array();
             foreach ($privs as $priv) {
-                $privileges = array_merge(array($priv),$privileges);
-                $privileges = array_merge($priv->getDescendants(),$privileges);
+                $priv->normalize();
+                $privs = array();
+                $descendants = $priv->getDescendants();
+                foreach ($descendants as $descendant) {
+                    $descendant->normalize();
+                    unset($descendant->dbconn);
+                    $privs[] = $descendant->normalform;
+                }
+                unset($priv->dbconn);
+                $privileges = array_merge(array($priv->normalform),$privileges);
+                $privileges = array_merge($privs,$privileges);
             }
             $privs = array();
-            foreach ($privileges as $priv) {
-                $privModule = $priv->getModule();
-                if ($privModule == self::PRIVILEGES_ALL || $privModule == $modid) {
-                    $privs[] = $priv;
-                }
-            }
+            foreach ($privileges as $priv) $privs[] = $priv;
+            
             $coreset['privileges'] = array_merge($coreset['privileges'],$privs);
             $parents = array_merge($parents,$role->getParents());
         }
         // CHECKME: Tail recursion, could be removed
-        $coreset['children'] = self::irreducibleset(array('roles' => $parents),$modid);
+        $coreset['children'] = self::irreducibleset(array('roles' => $parents),$module_id);
         return $coreset;
     }
 
@@ -568,24 +590,24 @@ class xarMasks extends Object
         $matched = false;
         $pass = false;
         // Note : DENY rules override all others here...
-        $thistest = $testdeny && ($testmask == $mask->getName() || $testmask == "All");
+        $thistest = $testdeny && ($testmask == $mask['name'] || $testmask == "All");
         foreach ($privilegeset['privileges'] as $privilege) {
             if($thistest) {
-                echo "Comparing <font color='blue'>[" . $privilege->present() . "]</font> against  <font color='green'>[". $mask->present() . "]</font> <b>for deny</b>. ";
-                if (($privilege->level == 0) && ($privilege->includes($mask))) echo "<font color='blue'>[" . $privilege->getName() . "]</font> matches. ";
+                echo "Comparing <font color='blue'>[" . self::present($privilege) . "]</font> against  <font color='green'>[". self::present($mask) . "]</font> <b>for deny</b>. ";
+                if (($privilege['level'] == 0) && (self::includes($privilege,$mask))) echo "<font color='blue'>[" . $privilege['name'] . "]</font> matches. ";
                 else echo "<font color='red'>no match</font>";
                 /* debugging output */
-                $msg = "Comparing for DENY.<font color='blue'>".$privilege->present(). "</blue>\n  ".
-                    $mask->present();
-                if (($privilege->level == 0) &&
-                    ($privilege->includes($mask))) {
-                    $msg .= $privilege->getName() . " FOUND. \n";
+                $msg = "Comparing for DENY.<font color='blue'>".self::present($privilege). "</blue>\n  ".
+                    self::present($mask);
+                if (($privilege['level'] == 0) &&
+                    (self::includes($privilege,$mask))) {
+                    $msg .= $privilege['name'] . " FOUND. \n";
                 } else {
                     $msg .= " NOT FOUND. \n";
                 }
                 xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
             }
-            if ($privilege->level == 0 && $privilege->includes($mask)) {
+            if ($privilege['level'] == 0 && self::includes($privilege,$mask)) {
                 if (!xarModVars::get('privileges','inheritdeny') && is_object($role)) {
                     if($thistest) {
                         echo "We don't inherit <strong>denys</strong>, ";
@@ -595,81 +617,79 @@ class xarMasks extends Object
                     foreach ($privs as $priv) {
                         if ($privilege == $priv) {
                             if($thistest) {
-                                echo "but <font color='blue'>[" . $privilege->present() . "] wins</font> because directly assigned. Continuing with other checks...<br />";
+                                echo "but <font color='blue'>[" . self::present($privilege) . "] wins</font> because directly assigned. Continuing with other checks...<br />";
                             }
                             return false;
                             break;
                         }
                     }
                     if($thistest) {
-                        echo "and <font color='blue'>[" . $privilege->present() . "] wins</font> is not directly assigned. Ignoring..<br/>";
+                        echo "and <font color='blue'>[" . self::present($privilege) . "] wins</font> is not directly assigned. Ignoring..<br/>";
                     }
                 } else {
                     if($thistest) {
-                        echo "<font color='blue'>[" . $privilege->present() . "] wins</font>. Continuing with other checks...<br />";
+                        echo "<font color='blue'>[" . self::present($privilege) . "] wins</font>. Continuing with other checks...<br />";
                     }
                     return false;
                 }
             } else {
                 if($thistest) {
-                    echo "Continuing with other checks..<br />";
+                    echo "Continuing with other checks1..<br />";
                 }
             }
         }
 
         foreach ($privilegeset['privileges'] as $privilege) {
-            if($test && ($testmask == $mask->getName() || $testmask == "All")) {
-                echo "Comparing <font color='blue'>[" . $privilege->present() . "]</font> and <font color='green'>[" . $mask->present() . "]</font>. ";
-                $msg = "Comparing \n  Privilege: ".$privilege->present().
-                    "\n       Mask: ".$mask->present();
+            if($test && ($testmask == $mask['name'] || $testmask == "All")) {
+                echo "Comparing <font color='blue'>[" . self::present($privilege) . "]</font> and <font color='green'>[" . self::present($mask) . "]</font>. ";
+                $msg = "Comparing \n  Privilege: ".self::present($privilege).
+                    "\n       Mask: ".self::present($mask);
                 xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
             }
-            if ($privilege->includes($mask)) {
-                if ($privilege->implies($mask)) {
-                    if($test && ($testmask == $mask->getName() || $testmask == "All")) {
-                        echo "<font color='blue'>[" . $privilege->getName() . "] wins</font>. Privilege includes mask. Privilege level greater or equal. Continuing with other checks.. <br />";
-                        $msg = $privilege->getName() . " WINS! ".
+            if (self::includes($privilege,$mask)) {
+                if (self::implies($privilege,$mask)) {
+                    if($test && ($testmask == $mask['name'] || $testmask == "All")) {
+                        echo "<font color='blue'>[" . $privilege['name'] . "] wins</font>. Privilege includes mask. Privilege level greater or equal. Continuing with other checks.. <br />";
+                        $msg = $privilege['name'] . " WINS! ".
                             "Privilege includes mask. ".
                             "Privilege level greater or equal.\n";
                         xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
                     }
-                    if (!$pass || $privilege->getLevel() > $pass->getLevel()) $pass = $privilege;
+                    if (!$pass || $privilege['level'] > $pass['level']) $pass = $privilege;
                 }
                 else {
-                    if($test && ($testmask == $mask->getName() || $testmask == "All")) {
-                        echo "<font color='green'>[" . $mask->getName() . "] wins</font>. Privilege includes mask. Privilege level lesser. Continuing with other checks..<br />";
-                        $msg = $mask->getName() . " MATCHES! ".
+                    if($test && ($testmask == $mask['name'] || $testmask == "All")) {
+                        echo "<font color='green'>[" . $mask['name'] . "] wins</font>. Privilege includes mask. Privilege level lesser. Continuing with other checks..<br />";
+                        $msg = $mask['name'] . " MATCHES! ".
                                 "Privilege includes mask. Privilege level ".
                                 "lesser.\n";
                         xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
                     }
                 }
                 $matched = true;
-            }
-            elseif ($mask->includes($privilege)) {
-                if ($privilege->level >= $mask->level) {
-                    if($test && ($testmask == $mask->getName() || $testmask == "All")) {
-                        echo "<font color='blue'>[" . $privilege->getName() . "] wins</font>. Mask includes privilege. Privilege level greater or equal. Continuing with other checks.. <br />";
+            } elseif (self::includes($mask,$privilege)) {
+                if ($privilege['level'] >= $mask['level']) {
+                    if($test && ($testmask == $mask['name'] || $testmask == "All")) {
+                        echo "<font color='blue'>[" . $privilege['name'] . "] wins</font>. Mask includes privilege. Privilege level greater or equal. Continuing with other checks.. <br />";
                         $msg = $privilege->getName()." WINS! ".
                             "Mask includes privilege. Privilege level ".
                             "greater or equal.\n";
                         xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
                     }
-                    if (!$pass || $privilege->getLevel() > $pass->getLevel()) $pass = $privilege;
+                    if (!$pass || $privilege['level'] > $pass['level']) $pass = $privilege;
                     $matched = true;
                 }
                 else {
-                    if($test && ($testmask == $mask->getName() || $testmask == "All")) {
-                        echo "<font color='blue'>[" . $mask->getName() . "] wins</font>. Mask includes privilege. Privilege level lesser. Continuing with other checks..<br />";
-                        $msg = $mask->getName()." MATCHES! ".
+                    if($test && ($testmask == $mask['name'] || $testmask == "All")) {
+                        echo "<font color='blue'>[" . $mask['name'] . "] wins</font>. Mask includes privilege. Privilege level lesser. Continuing with other checks..<br />";
+                        $msg = $mask['name']." MATCHES! ".
                             "Mask includes privilege. Privilege level ".
                             "lesser.\n";
                         xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
                     }
                 }
-            }
-            else {
-                if($test && ($testmask == $mask->getName() || $testmask == "All")) {
+            } else {
+                if($test && ($testmask == $mask['name'] || $testmask == "All")) {
                     echo "<font color='red'>no match</font>. Continuing with other checks..<br />";
                     $msg = "NO MATCH.\n";
                     xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
@@ -679,6 +699,80 @@ class xarMasks extends Object
         if (!$matched && ($privilegeset['children'] != array()))
             $pass = self::testprivileges($mask,$privilegeset['children'],$pass,$role);
         return $pass;
+    }
+
+    static function present($privilege)
+    {
+        $display = $privilege['name'];
+        $display .= "-" . strtolower($privilege['level']);
+        $display .= ":" . strtolower($privilege['realm']);
+        $display .= ":" . strtolower($privilege['module']);
+        $display .= ":" . strtolower($privilege['component']);
+        $display .= ":" . strtolower(implode(',',$privilege['instance']));
+        return $display;
+    }
+
+    static function includes($privilege,$mask)
+    {
+        if ($mask['name'] == 'EditPrivilege' && $mask['component'] == 'Privileges') var_dump($privilege);
+        $p1 = $privilege;
+        $p2 = $mask;
+
+        // match realm. bail if no match.
+        switch(xarModVars::get('privileges', 'realmcomparison')) {
+            case "contains":
+                $fails = $p1['realm']!=$p2['realm'];
+            case "exact":
+            default:
+                $fails = $p1['realm']!=$p2['realm'];
+                break;
+        }
+        if (($p1['realm'] != 'all') && ($fails)) return false;
+
+        // match module and component. bail if no match.
+        if (($p1['module'] == null) || (($p1['module'] != self::PRIVILEGES_ALL) && ($p1['module']!=$p2['module']))) {
+            return false;
+        }
+        if (($p1['component'] != 'all') && ($p1['component']!=$p2['component'])) {
+            return false;
+        }
+
+        // now match the instances
+        $p1count = count($p1['instance']);
+        $p2count = count($p2['instance']);
+        if($p1count != $p2count) {
+            if($p1count > $p2count) {
+                $p = $p2;
+                $p2 = self::normalize($p2,$p1count - $p2count);
+            } else {
+                $p = $p1;
+                $p1 = self::normalize($p1,$p2count - $p1count);
+            }
+            if (count($p1['instance']) != count($p2['instance'])) {
+                $msg = xarML('#(1) and #(2) do not have the same instances. #(3) | #(4) | #(5)',$mask['name'],$privilege['name'],implode(',',$p2['instance']),implode(',',$p1['instance']),self::present($privilege) . "|" . self::present($mask));
+                throw new Exception($msg);
+            }
+        }
+        for ( $i = 0, $p1count = count($p1['instance']); $i < $p1count; $i++) {
+            if (($p1['instance'][$i] != 'all') && ($p1['instance'][$i]!=$p2['instance'][$i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static function implies($privilege,$mask)
+    {
+        $match = self::includes($privilege,$mask);
+        return $match && ($privilege['level'] >= $mask['level']) && ($mask['level'] > 0);
+    }
+
+    static function normalize($privilege,$adds=0)
+    {
+        for ($i=0;$i<$adds;$i++) {
+            $privilege['instance'][] = 'all';
+        }
+        return $privilege;
     }
 
     /**
@@ -724,6 +818,38 @@ class xarMasks extends Object
         sys::import('modules.privileges.class.mask');
         return new xarMask($pargs);
     }
-}
 
+    /**
+     * Clear the cached privileges from all sessions
+     * @access public
+     * TODO: This should likely be integrated into the sessions handler, but that leads to other issues
+     */
+    public static function clearCache()
+    {
+        self::$dbconn = xarDB::getConn();
+        $xartable = xarDB::getTables();
+        $sessions = $xartable['session_info'];
+        $query = "SELECT id, last_use, vars FROM $sessions";
+        $stmt = self::$dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array(),ResultSet::FETCHMODE_NUM);
+        
+        $query = "UPDATE " . $sessions . " SET vars = ? WHERE id = ?";
+        $stmt = self::$dbconn->prepareStatement($query);
+        $sessions = array();
+        while($result->next()) {
+            list($id, $lastused, $vars) = $result->getRow();
+            // in case garbage collection didn't have the opportunity to do its job
+            if (!empty($GLOBALS['xarSession_systemArgs']['securityLevel']) &&
+                $GLOBALS['xarSession_systemArgs']['securityLevel'] == 'High') {
+                $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
+                if ($lastused < $timeoutSetting) {
+                    $vars = '';
+                }
+            } else {      
+                $vars = preg_replace('/' . xarSession::PREFIX . 'privilegeset\|(.*?);(?=' . xarSession::PREFIX . '|$)/', '', $vars);
+            }
+            $stmt->executeQuery(array($vars,$id));
+        }
+    }
+}
 ?>

@@ -11,7 +11,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <img src="#xarTplGetImage('admin.gif','blocks')#" alt="#xarML('official icon')#" width="96"
+        <img src="#xarTplGetImage('admin.gif','blocks')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
         height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <h3>What is it?</h3>
@@ -143,7 +143,7 @@
         instance or modify an existing one. Using the Blocks module, there are two places you can
         set either the inner template, the outer template or both.</p>
         <br />
-        <ul>
+            <ul>
             <li>The field labelled 
             <strong>Instance Template (optional):</strong>sets the default inner and outer template
             used for the block instance and any block group. You can specify inner, outer, both
@@ -180,7 +180,7 @@
             template if required by adding 
             <code>left;</code>or 
             <code>;weeklyfeature</code>to specify outer and inner respectively.</li>
-        </ul>
+            </ul>
         <br />
         <h3>Included Blocks</h3>
         <p>The Blocks Module has no blocks included at this time.</p>

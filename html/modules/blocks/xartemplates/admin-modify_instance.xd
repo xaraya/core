@@ -40,21 +40,21 @@
                     <label for="block_state"
                     title="#xarML('This is the default state of the block. Maximized is visible, hidden is not.')#"
                     class="xar-form-label">Default State:</label>
-                    <select name="block_state" id="block_state">
-                        <xar:if condition="$instance['state'] eq 0">
-                            <option value="0" selected="selected">Hidden</option>
-                            <xar:else />
-                            <option value="0">Hidden</option>
-                        </xar:if>
-                        <xar:if condition="$instance['state'] eq 2">
-                            <option value="2" selected="selected">Maximized</option>
-                            <xar:else />
-                            <option value="2">Maximized</option>
-                        </xar:if>
-                    </select>
+                    <xar:set name="options">
+                        array(
+                            array('id' => 0, 'name' => xarML('Hidden')),
+                            array('id' => 2, 'name' => xarML('Maximized')),
+                        )
+                    </xar:set>
+                    <xar:set name="value">
+                        $instance['state']
+                    </xar:set>
+                    <xar:data-input type="dropdown" name="block_state" options="$options" value="$value" />
                 </div>
                 <xar:comment>It is likely this section will be removed, since blocks generally do
                 not use it.</xar:comment>
+                <!--
+                    It is likely this section will be removed, since blocks generally do not use it.
                 <xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
 
                     <div class="xar-form-input-wrapper">
@@ -85,7 +85,9 @@
                 <xar:comment>This 'content' section is deprecated - it will be removed once the PHP
                 block no longer uses it.</xar:comment>
                 <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
-
+                <!--
+                    This 'content' section is deprecated - it will be removed once the PHP block no longer uses it.
+               <!-- <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
                     <div class="xar-form-input-wrapper">
                         <label for="block_content"
                         title="#xarML('Enter the content that is shown in the block instance.')#"
@@ -95,9 +97,13 @@
                     </div>
                 </xar:if>
                 <xar:if condition="!empty($extra_fields)">#$extra_fields# 
-                <xar:if condition="!empty($hooks)">
-                    <xar:foreach in="$hooks" key="$module" value="$output">#$output#</xar:foreach>
-                </xar:if>
+                <xar:if condition="!empty($extra_fields)">
+                        #$extra_fields#
+                    <xar:if condition="!empty($hooks)">
+                        <xar:foreach in="$hooks" key="$module" value="$output">
+                            #$output#
+                        </xar:foreach>
+                    </xar:if>
                 <xar:else />
                 <p>No extra settings for this block type.</p></xar:if>
             </fieldset>
@@ -105,6 +111,7 @@
                 <legend>Block Groups and Group Templates</legend>
                 <xar:if condition="$group_method eq 'min'">
                     <xar:comment>Provide a 'new group' drop-down list.</xar:comment>
+                    <!--
                     <div class="xar-form-input-wrapper">
                         <label for="block_new_group"
                         title="#xarML('Add this block instance to the selected block group.')#"
@@ -114,7 +121,8 @@
                             <xar:loop name="$block_groups">
                                 <xar:if condition="empty($loop:item['selected'])">
                                     <option value="#$loop:item['id']#">
-                                    #xarVarPrepForDisplay($loop:item['name'])#</option>
+                                        #xarVarPrepForDisplay($loop:item['name'])#
+                                    </option>
                                 </xar:if>
                             </xar:loop>
                         </select>
@@ -134,7 +142,7 @@
                                 class="xar-form-textlong" />
                                 <xar:if condition="$group_method eq 'min'">
                                     <xar:if condition="!empty($loop:item['selected'])">
-                                        <input type="checkbox"
+                                        <input type="checkbox" name="block_remove_groups[#$loop:item.id#]" id="block_remove_groups_#$loop:item.id#" value="on" />
                                         name="block_remove_groups[#$loop:item.id#]"
                                         id="block_remove_groups_#$loop:item.id#" value="on" />
                                         <label for="block_remove_groups_#$loop:item.id#">
@@ -142,13 +150,13 @@
                                         <input type="hidden" name="block_groups[#$loop:item.id#]"
                                         id="block_groups_#$loop:item.id#" value="on" />
                                     </xar:if>
-                                    <xar:else />
+                                <xar:else />
                                     <xar:if condition="!empty($loop:item['selected'])">
-                                        <input type="checkbox" name="block_groups[#$loop:item.id#]"
+                                        <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" checked="checked" />
                                         id="block_groups_#$loop:item.id#" value="on"
                                         checked="checked" />
-                                        <xar:else />
-                                        <input type="checkbox" name="block_groups[#$loop:item.id#]"
+                                    <xar:else />
+                                        <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" />
                                         id="block_groups_#$loop:item.id#" value="on" />
                                     </xar:if>
                                     <label for="block_groups_#$loop:item.id#">Selected</label>

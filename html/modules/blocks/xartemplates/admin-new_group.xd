@@ -3,12 +3,12 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:base-include-javascript module="base" filename="formcheck.js" />
     <script type="text/javascript">
-        <!--
-    // Enter name of mandatory fields
-    var blocks_fieldRequired = Array("group_name");
-    // Enter field description to appear in the dialog box
-    var blocks_fieldDescription = Array("Name");
-//-->
+    <!--
+        // Enter name of mandatory fields
+        var blocks_fieldRequired = Array("group_name");
+        // Enter field description to appear in the dialog box
+        var blocks_fieldDescription = Array("Name");
+    //-->
     </script>
     <xar:style scope="common" />
     <div class="xar-mod-head">

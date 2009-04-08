@@ -35,10 +35,16 @@ class DataObject extends DataObjectMaster implements iDataObject
       // get the object type information from our parent class
         $this->loader($descriptor);
 
-        // set the specific item id (or 0)
+        // Set the configuration parameters
         $args = $descriptor->getArgs();
-        if(isset($args['itemid']))
-            $this->itemid = $args['itemid'];
+        try {
+            $configargs = unserialize($args['config']);
+            foreach ($configargs as $key => $value) $this->{$key} = $value;
+            $this->configuration = $configargs;
+        } catch (Exception $e) {}
+
+        // set the specific item id (or 0)
+        if(isset($args['itemid'])) $this->itemid = $args['itemid'];
 
         // see if we can access this object, at least in overview
 /*        if(!xarSecurityCheck(
@@ -46,6 +52,11 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->moduleid.':'.$this->itemtype.':'.$this->itemid)
         ) return;
         */
+        
+        // Get a reference to each property's value
+        foreach ($this->properties as $property) {
+            $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);
+        }
     }
 
     /**
@@ -56,9 +67,11 @@ class DataObject extends DataObjectMaster implements iDataObject
         if(!empty($args['itemid']))
         {
             if($args['itemid'] != $this->itemid)
-                // initialise the properties again
-                foreach(array_keys($this->properties) as $name)
-                    $this->properties[$name]->value = $this->properties[$name]->defaultvalue;
+                // initialise the properties again and refresh the contents of the object configuration
+                foreach($this->properties as $property) {
+                    $property->value = $property->defaultvalue;
+                    $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);
+                }
 
             $this->itemid = $args['itemid'];
         }
@@ -124,8 +137,9 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->getItem($args);
         }
 
-        if(empty($args['fieldprefix'])) {
-            $args['fieldprefix'] = $this->fieldprefix;
+        // Allow 0 as a fieldprefix
+        if(empty($args['fieldprefix']) || (isset($args['fieldprefix']) && $args['fieldprefix'] !== '0')) {
+            $args['fieldprefix'] = $this->fieldprefix; 
         } else {
             $this->fieldprefix = $args['fieldprefix'];
         }
@@ -139,8 +153,9 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         $this->missingfields = array();
         foreach($fields as $name) {
-            // Ignore disabled properties
-            if($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+            // Ignore disabled or ignored properties
+            if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+            || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED))
                 continue;
 
             // Give the property this object's reference so it can send back info on missing fields
@@ -149,7 +164,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             // We need to check both the given name and the dd_ name
             // checking for any transitory name given a property via $args needs to be done at the property level
             $ddname = 'dd_' . $this->properties[$name]->id;
-            if (!empty($args['fieldprefix'])) {
+            if (!empty($args['fieldprefix']) || $args['fieldprefix'] === '0') {
                 $name1 = $args['fieldprefix'] . "_" .$name;
                 $name2 = $args['fieldprefix'] . "_" .$ddname;
             } else {
@@ -204,26 +219,45 @@ class DataObject extends DataObjectMaster implements iDataObject
         // Set all properties based on what is passed in.
         $properties = $this->getProperties($args);
 
-        $args['properties'] = array();
-        foreach ($properties as $property) {
-            if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
-                $args['properties'][$property->name] = $property;
+        if (!empty($args['fieldlist']) && !is_array($args['fieldlist'])) {
+            $args['fieldlist'] = explode(',',$args['fieldlist']);
+            if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
         }
+        
+        if(count($args['fieldlist']) > 0 || !empty($this->status)) {
+            $args['properties'] = array();
+            foreach($args['fieldlist'] as $name) {
+                if(isset($this->properties[$name])) {
+                    if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                    || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
+                    || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)) continue;
+                        $args['properties'][$name] = $this->properties[$name];
+                }
+            }
+        } else {
+            $args['properties'] = array();
+            foreach ($properties as $property) {
+                if(($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)) continue;
+                    $args['properties'][$property->name] = $property;
+            }
 
-        // Order the fields if this is an extended object
-        if (!empty($this->fieldorder)) {
-            $tempprops = array();
-            foreach ($this->fieldorder as $field)
-                if (isset($args['properties'][$field]))
-                    $tempprops[$field] = $args['properties'][$field];
-            $args['properties'] = $tempprops;
+            // Order the fields if this is an extended object
+            if (!empty($this->fieldorder)) {
+                $tempprops = array();
+                foreach ($this->fieldorder as $field)
+                    if (isset($args['properties'][$field]))
+                        $tempprops[$field] = $args['properties'][$field];
+                $args['properties'] = $tempprops;
+            }
         }
 
         // pass some extra template variables for use in BL tags, API calls etc.
         //FIXME: check these
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
-
+        $args['object'] = $this;
         return xarTplObject($args['tplmodule'],$args['template'],'showform',$args);
     }
 
@@ -236,18 +270,28 @@ class DataObject extends DataObjectMaster implements iDataObject
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview'])) $this->checkInput();
 
+        if (!empty($args['fieldlist']) && !is_array($args['fieldlist'])) {
+            $args['fieldlist'] = explode(',',$args['fieldlist']);
+            if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
+        }
         if(count($args['fieldlist']) > 0 || !empty($this->status)) {
-            $properties = $this->getProperties($args);
             $args['properties'] = array();
-            foreach ($properties as $property) {
-                if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
-                    $args['properties'][$property->name] = $property;
+            foreach($args['fieldlist'] as $name) {
+                if(isset($this->properties[$name])) {
+                    if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                    || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
+                    || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)) continue;
+                    $args['properties'][$name] = $this->properties[$name];
+                }
             }
         } else {
             $args['properties'] =& $this->properties;
             // TODO: this is exactly the same as in the display function, consolidate it.
             $totransform = array(); $totransform['transform'] = array();
             foreach($this->properties as $pname => $pobj) {
+                if(($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
+                || ($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)) continue;
                 // *never* transform an ID
                 // TODO: there is probably lots more to skip here.
                 if($pobj->type == '21') continue;
@@ -264,6 +308,8 @@ class DataObject extends DataObjectMaster implements iDataObject
             foreach($this->properties as $property) {
                 if(
                     ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) &&
+                    ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY) &&
+                    ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) &&
                     ($property->type != 21) &&
                     isset($transformed[$property->name])
                 )
@@ -275,38 +321,39 @@ class DataObject extends DataObjectMaster implements iDataObject
                 }
             }
 
-        }
+            // Order the fields if this is an extended object
+            if (!empty($this->fieldorder)) {
+                $tempprops = array();
+                foreach ($this->fieldorder as $field)
+                    if (isset($args['properties'][$field]))
+                        $tempprops[$field] = $args['properties'][$field];
+                $args['properties'] = $tempprops;
+            }
 
-        // Order the fields if this is an extended object
-        if (!empty($this->fieldorder)) {
-            $tempprops = array();
-            foreach ($this->fieldorder as $field)
-                if (isset($args['properties'][$field]))
-                    $tempprops[$field] = $args['properties'][$field];
-            $args['properties'] = $tempprops;
         }
 
         // pass some extra template variables for use in BL tags, API calls etc.
         //FIXME: check these
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
+        $args['object'] = $this;
         return xarTplObject($args['tplmodule'],$args['template'],'showdisplay',$args);
     }
 
     /**
      * Get the names and values of
      */
-    public function getFieldValues(Array $args = array())
+    public function getFieldValues(Array $args = array(), $bypass = 0)
     {
         $fields = array();
         $properties = $this->getProperties($args);
-        foreach ($properties as $property) {
-            if(xarSecurityCheck(
-                'ReadDynamicDataField',0,'Field',
-                $property->name.':'.$property->type.':'.$property->id)
-            )
-            {
+        if ($bypass) {
+            foreach ($properties as $property) {
                 $fields[$property->name] = $property->value;
+            }
+        } else {
+            foreach ($properties as $property) {
+                $fields[$property->name] = $property->getValue();
             }
         }
         return $fields;
@@ -359,6 +406,21 @@ class DataObject extends DataObjectMaster implements iDataObject
         */
     }
 
+    /**
+     * Get and set for field prefixes
+     */
+    public function getFieldPrefix()
+    {
+        return $this->fieldprefix;
+    }
+    public function setFieldPrefix($prefix)
+    {
+        $this->fieldprefix = $prefix;
+        foreach (array_keys($this->properties) as $property)
+            $this->properties[$property]->_fieldprefix = $prefix;
+        return true;
+    }
+
     public function createItem(Array $args = array())
     {
         if(count($args) > 0) {
@@ -375,7 +437,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         // special case when we try to create a new object handled by dynamicdata
         if(
             $this->objectid == 1 &&
-            $this->properties['module_id']->value == xarModGetIDFromName('dynamicdata')
+            $this->properties['module_id']->value == xarMod::getRegID('dynamicdata')
             //&& $this->properties['itemtype']->value < 2
         )
         {
@@ -409,6 +471,14 @@ class DataObject extends DataObjectMaster implements iDataObject
                     // add the primary to the data store fields if necessary
                     if(!empty($this->fieldlist) && !in_array($primaryobject->primary,$this->fieldlist))
                         $this->datastores[$primarystore]->addField($this->properties[$this->primary]); // use reference to original property
+
+                    // Execute any property-specific code first
+                    foreach ($this->datastores[$primarystore]->fields as $property) {
+                        if (method_exists($property,'createvalue')) {
+                            $property->createValue($this->itemid);
+                        }
+                    }
+
                     $this->itemid = $this->datastores[$primarystore]->createItem($this->toArray());
                 } else {
                     $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
@@ -426,6 +496,16 @@ class DataObject extends DataObjectMaster implements iDataObject
             if(isset($primarystore) && $store == $primarystore)
                 continue;
 
+            // Execute any property-specific code first
+            if ($store != '_dummy_') {
+                foreach ($this->datastores[$store]->fields as $property) {
+                    if (method_exists($property,'createvalue')) {
+                        $property->createValue($this->itemid);
+                    }
+                }
+            }
+            
+            // Now run the create routine of the this datastore
             $itemid = $this->datastores[$store]->createItem($args);
             if(empty($itemid))
                 return;
@@ -454,8 +534,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function updateItem(Array $args = array())
     {
-        if(count($args) > 0)
-        {
+        if(count($args) > 0) {
             if(!empty($args['itemid']))
                 $this->itemid = $args['itemid'];
 
@@ -463,8 +542,12 @@ class DataObject extends DataObjectMaster implements iDataObject
                 if(isset($this->properties[$name]))
                     $this->properties[$name]->setValue($value);
         }
-        if(empty($this->itemid))
-        {
+        if(empty($this->itemid)) {
+            // Try getting the id value from the item ID property if it exists
+            foreach($this->properties as $property)
+                if ($property->type == 21) $this->itemid = $property->value;
+        }
+        if(empty($this->itemid)) {
             $msg = 'Invalid item id in method #(1)() for dynamic object [#(2)] #(3)';
             $vars = array('updateItem',$this->objectid,$this->name);
             throw new BadParameterException($vars,$msg);
@@ -474,6 +557,16 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['itemid'] = $this->itemid;
         foreach(array_keys($this->datastores) as $store)
         {
+            // Execute any property-specific code first
+            if ($store != '_dummy_') {
+                foreach ($this->datastores[$store]->fields as $property) {
+                    if (method_exists($property,'updatevalue')) {
+                        $property->updateValue($this->itemid);
+                    }
+                }
+            }
+
+            // Now run the update routine of the this datastore
             $itemid = $this->datastores[$store]->updateItem($args);
             if(empty($itemid))
                 return;

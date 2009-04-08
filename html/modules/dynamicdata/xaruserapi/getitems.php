@@ -16,7 +16,7 @@
  *
  * @author the DynamicData module development team
  * @param string $args['module'] module name of the item fields to get, or
- * @param int $args['modid'] module id of the item fields to get +
+ * @param int $args['module_id'] module id of the item fields to get +
  * @param int $args['itemtype'] item type of the item fields to get, or
  * @param $args['table'] database table to turn into an object
  * @param array $args['itemids'] array of item ids to return
@@ -37,28 +37,26 @@ function &dynamicdata_userapi_getitems($args)
 {
     extract($args);
     $nullreturn = null;
-    if (empty($modid) && empty($moduleid)) {
+    if (empty($module_id)) {
         if (empty($module)) {
             $modname = xarModGetName();
         } else {
             $modname = $module;
         }
         if (is_numeric($modname)) {
-            $modid = $modname;
+            $module_id = $modname;
         } else {
-            $modid = xarModGetIDFromName($modname);
+            $module_id = xarMod::getRegID($modname);
         }
-    } elseif (empty($modid)) {
-        $modid = $moduleid;
     }
-    $modinfo = xarModGetInfo($modid);
+    $modinfo = xarModGetInfo($module_id);
 
     if (empty($itemtype)) {
         $itemtype = 0;
     }
 
     $invalid = array();
-    if (!isset($modid) || !is_numeric($modid) || empty($modinfo['name'])) {
+    if (!isset($module_id) || !is_numeric($module_id) || empty($modinfo['name'])) {
         $invalid[] = 'module id';
     }
     if (!isset($itemtype) || !is_numeric($itemtype)) {
@@ -70,7 +68,7 @@ function &dynamicdata_userapi_getitems($args)
         throw new BadParameterException($vars,$msg);
     }
 
-    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return $nullreturn;
+    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$module_id:$itemtype:All")) return $nullreturn;
 
     if (empty($itemids)) {
         $itemids = array();
@@ -79,7 +77,7 @@ function &dynamicdata_userapi_getitems($args)
     }
 
     foreach ($itemids as $itemid) {
-        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:$itemid")) return $nullreturn;
+        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$module_id:$itemtype:$itemid")) return $nullreturn;
     }
 
     // check the optional field list
@@ -124,7 +122,7 @@ function &dynamicdata_userapi_getitems($args)
         $catid = '';
     }
 
-    $object = & DataObjectMaster::getObjectList(array('moduleid'  => $modid,
+    $object = & DataObjectMaster::getObjectList(array('moduleid'  => $module_id,
                                            'itemtype'  => $itemtype,
                                            'itemids' => $itemids,
                                            'sort' => $sort,

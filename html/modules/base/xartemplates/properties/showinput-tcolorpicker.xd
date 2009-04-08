@@ -8,7 +8,5 @@
     <a href="javascript:TCP.popup(document.getElementById('#$id#'), 1)">
         <img src="#$pickerimage#" class="xar-noborder" alt="#$alttext#" />
     </a>
-    <xar:if condition="!empty($invalid)">
-        <span class="xar-error">#$invalid#</span>
-    </xar:if>
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

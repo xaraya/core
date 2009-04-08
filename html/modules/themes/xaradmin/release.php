@@ -27,8 +27,6 @@ function themes_admin_release()
         throw new ConfigurationException('allow_url_fopen','PHP is not currently configured to allow URL retrieval
                              of remote files.  Please turn on #(1) to use the base module getfile userapi.');
     }
-    // Require the xmlParser class
-    sys::import('modules.base.xarclass.xmlParser');
     // Require the feedParser class
     sys::import('modules.base.xarclass.feedParser');
     // Check and see if a feed has been supplied to us.

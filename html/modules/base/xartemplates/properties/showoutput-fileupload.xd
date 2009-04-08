@@ -4,7 +4,7 @@
     <xar:if condition="!empty($basedir)">
         <!-- TODO: convert basedir to base URL when necessary ? -->
         <a href="#$basedir#/#$value#" title="#xarML('Download')#">#$value#</a>
-        <xar:else />
+    <xar:else/> 
         <!-- something went wrong here - the file doesn't exist -->
         <xar:var name="value" prep="true" />
     </xar:if>

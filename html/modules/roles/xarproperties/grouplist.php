@@ -21,9 +21,15 @@ class GroupListProperty extends SelectProperty
     public $desc       = 'Group List';
     public $reqmodules = array('roles');
 
-    public $ancestorlist = array();
-    public $parentlist   = array();
-    public $grouplist    = array();
+    public $previous_groupid = 0;
+    public $current_groupid  = 0;
+
+    public $initialization_update_behavior  = 'replace';
+    public $initialization_basegroup        = 1;
+    public $validation_ancestorgroup_list   = null;
+    public $validation_parentgroup_list     = null;
+    public $validation_group_list           = null;
+    public $validation_override             = true;
 
     /*
     * Options available to group selection
@@ -40,50 +46,34 @@ class GroupListProperty extends SelectProperty
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/roles/xarproperties';
-
-        if (count($this->options) == 0) {
-            $this->options = $this->getOptions();
-        }
-
     }
 
-    public function getOptions()
+    public function checkInput($name = '', $value = null)
     {
-        $select_options = array();
-        if (!empty($this->ancestorlist)) {
-            $select_options['ancestor'] = implode(',', $this->ancestorlist);
-        }
-        if (!empty($this->parentlist)) {
-            $select_options['parent'] = implode(',', $this->parentlist);
-        }
-        if (!empty($this->grouplist)) {
-            $select_options['group'] = implode(',', $this->grouplist);
-        }
-        // TODO: handle large # of groups too (optional - less urgent than for users)
-        $groups = xarModAPIFunc('roles', 'user', 'getallgroups', $select_options);
-        $options = array();
-        foreach ($groups as $group) {
-            $options[] = array('id' => $group['id'], 'name' => $group['name']);
-        }
-        return $options;
+        $name = empty($name) ? 'dd_'.$this->id : $name;
+        // store the fieldname for validations who need them (e.g. file uploads)
+        $this->fieldname = $name;
+        
+        // Get the previous group from the form
+        if (!xarVarFetch($name . '_previous_value', 'int', $previous_value, 0, XARVAR_NOT_REQUIRED)) return;
+        $this->previous_groupid = $previous_value;
+
+        return parent::checkInput();
     }
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
         if (!empty($value)) {
             // check if this is a valid group id
             $group = xarModAPIFunc('roles','user','get',
                                    array('id' => $value,
-                                         'itemtype' => 1)); // we're looking for a group here
+                                         'itemtype' => 3)); // we're looking for a group here
             if (!empty($group)) {
-                $this->value = $value;
+                $this->current_groupid = $value;
                 return true;
             }
         } elseif (empty($value)) {
-            $this->value = $value;
             return true;
         }
         $this->invalid = xarML('selection: #(1)', $this->name);
@@ -91,60 +81,115 @@ class GroupListProperty extends SelectProperty
         return false;
     }
 
-    public function parseValidation($validation = '')
+    public function createValue($itemid=0)
     {
-        foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
-            // Semi-colons can be escaped with a '\' prefix.
-            $option = str_replace('\;', ';', $option);
-            // An option comes in two parts: option-type:option-value
-            if (strchr($option, ':')) {
-                list($option_type, $option_value) = explode(':', $option, 2);
-                if ($option_type == 'ancestor') {
-                    $this->ancestorlist = array_merge($this->ancestorlist, explode(',', $option_value));
-                }
-                if ($option_type == 'parent') {
-                    $this->parentlist = array_merge($this->parentlist, explode(',', $option_value));
-                }
-                if ($option_type == 'group') {
-                    $this->grouplist = array_merge($this->grouplist, explode(',', $option_value));
+        $xartable = xarDB::getTables();
+        
+        if ($this->initialization_update_behavior == 'replace' && $this->previous_groupid) {
+            if (!$itemid) {
+                $q = new xarQuery('DELETE',$xartable['rolemembers']);
+                $q->eq('parent_id',$this->previous_groupid);
+                if (!$q->run()) return;
+            } else {
+                $q = new xarQuery('UPDATE',$xartable['rolemembers']);
+                $q->addfield('parent_id',$this->current_groupid);
+                $q->eq('role_id',$itemid);
+                $q->eq('parent_id',$this->previous_groupid);
+                if (!$q->run()) return;
+            }
+        } else {
+            if (!$itemid) return true;
+            $q = new xarQuery('INSERT',$xartable['rolemembers']);
+            $q->addfield('role_id',$itemid);
+            $q->addfield('parent_id',$this->current_groupid);
+            if (!$q->run()) return;
+        }        
+        return true;
+    }
+
+    public function updateValue($itemid=0)
+    {
+        return $this->createValue($itemid);
+    }
+
+    public function deleteValue($itemid=0)
+    {
+        return $itemid;
+    }
+
+    public function retrieveValue($itemid)
+    {
+        $this->value = $itemid;
+        $value = 0;
+        $basegroup = xarRoles::get($this->initialization_basegroup);
+        if (!empty($basegroup)) {
+            $xartable = xarDB::getTables();
+            $q = new xarQuery('SELECT',$xartable['rolemembers']);
+            $q->addfield('parent_id');
+            $q->eq('role_id',$itemid);
+            if (!$q->run()) return;
+            foreach ($q->output() as $row) {
+                $candidate = xarRoles::get($row['parent_id']);
+                if ($candidate->isAncestor($basegroup) || ($candidate->getId() == $basegroup->getId())) {
+                    $value = $row['parent_id'];
+                    break;
                 }
             }
         }
+        return $value;
     }
 
     public function showInput(Array $data = array())
     {
-        if (!empty($data['validation']))
-            $this->parseValidation($data['validation']);
-            $this->options = $this->getOptions();
+        if (isset($data['behavior'])) $this->initialization_update_behavior = $data['behavior'];
+        if (isset($data['basegroup'])) $this->initialization_basegroup = $data['basegroup'];
+
+        // If we are not standalone get the group value first 
+        if ($this->_itemid) {
+            $data['value'] = $this->retrieveValue($this->_itemid);
+        }
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
-        extract($data);
+        if (isset($data['behavior'])) $this->initialization_update_behavior = $data['behavior'];
+        if (isset($data['basegroup'])) $this->initialization_basegroup = $data['basegroup'];
 
-        if (!isset($value)) $value = $this->value;
-
-        if (empty($value)) {
-            $group = array();
-            $groupname = '';
-        } else {
-            $group = xarModAPIFunc('roles','user','get',
-                                   array('id' => $value,
-                                         'itemtype' => ROLES_GROUPTYPE)); // we're looking for a group here
-            if (empty($group) || empty($group['name'])) {
-                $groupname = '';
-            } else {
-                $groupname = $group['name'];
-            }
+        // If we are not standalone get the group value first 
+        if ($this->_itemid) {
+            // It's a standalone property
+            $data['value'] = $this->retrieveValue($this->_itemid);
+        } elseif ($data['_itemid']) {
+            // It's a row in an objectlist
+            $data['value'] = $this->retrieveValue($data['_itemid']);
         }
-        $data['value']=$value;
-        $data['group']=$group;
-        $data['groupname']=xarVarPrepForDisplay($groupname);
-
+        $group = xarRoles::get($data['value']);
+        if (!empty($group)) {
+            $data['value'] = $group->getName();
+        } else {
+            $data['value'] = '';
+        }
         return parent::showOutput($data);
     }
+
+    public function getOptions()
+    {
+        $select_options = array();
+        if (!empty($this->validation_ancestorgroup_list)) {
+            $select_options['ancestor'] = $this->validation_ancestorgroup_list;
+        }
+        if (!empty($this->validation_parentgroup_list)) {
+            $select_options['parent'] = $this->validation_parentgroup_list;
+        }
+        if (!empty($this->validation_group_list)) {
+            $select_options['group'] = $this->validation_group_list;
+        }
+        // TODO: handle large # of groups too (optional - less urgent than for users)
+        $groups = xarModAPIFunc('roles', 'user', 'getallgroups', $select_options);
+        return $groups;
+    }
+
 }
 
 ?>

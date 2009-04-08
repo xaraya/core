@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:if condition="!empty($fieldprefix)">
         <xar:set name="fieldprefix">$fieldprefix . '_'</xar:set>
-        <xar:else />
+    <xar:else/>
         <xar:set name="fieldprefix">''</xar:set>
     </xar:if>
     <table class="xar-norm">
@@ -23,7 +23,7 @@
                         <xar:set name="fieldname">$fieldprefix . 'dd_' . $propid . '[' . $itemid .
                         ']'</xar:set>
                         <xar:if condition="!empty($fields[$name])">
-                            <xar:data-input property="$properties[$name]" name="$fieldname"
+                            <xar:data-input property="$properties[$name]" name="$fieldname" size="10" value="$fields[$name]" />
                             size="10" value="$fields[$name]" />
                             <xar:else />
                             <xar:data-input property="$properties[$name]" name="$fieldname"
@@ -40,7 +40,7 @@
                         <xar:else />
                         <!--
                 <input type="checkbox" name="#$fieldprefix#dd_delete[#$objectid#]" id="#$fieldprefix#dd_delete_#$objectid#_#$itemid#" value="#$itemid#" /><label for="#$fieldprefix#dd_delete_#$objectid#_#$itemid#">Delete</label>
-            -->
+                -->
                     </xar:if>
                 </td>
             </tr>

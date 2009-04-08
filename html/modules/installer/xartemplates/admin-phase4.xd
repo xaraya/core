@@ -10,7 +10,7 @@
             <p>Enter your database settings. You can connect to databases on non-standard ports
             using 'hostname:port' in the Host field. (e.g. 'localhost:12345')</p>
             <p>Note the following: 
-            <ul>
+                <ul>
                 <li>If you do not have root access to your database (due to virtual hosting etc),
                 you will need to have a pre-existing database installed and configured before you
                 proceed.</li>
@@ -35,11 +35,11 @@
                             <xar:if condition="!$info.available">
                                 <option value="#$dbdriver#" disabled="disabled">#$info.name# [not
                                 available]</option>
-                                <xar:else />
+                            <xar:else/>
                                 <xar:if condition="$database_type == $dbdriver">
                                     <option selected="selected" value="#$dbdriver#">
                                     #$info.name#</option>
-                                    <xar:else />
+                                <xar:else/>
                                     <option value="#$dbdriver#">#$info.name#</option>
                                 </xar:if>
                             </xar:if>
@@ -77,7 +77,7 @@
                     <span class="xar-sub">(for Table Sharing)</span>
                 </p>
             </div>
-            <br class="clear" />
+            <br class="clear"/>
             <p>
                 <label class="block" for="install_create_database">
                 <input type="checkbox" name="install_create_database" id="install_create_database"
@@ -90,9 +90,9 @@
             <strong>not</strong>be able to create the database for you. It will be able to populate
             an already existing database.</p>
             <input type="hidden" name="install_phase" id="install_phase" value="5" />
-            <div class="center">
+        <div class="center">
                 <input type="submit" value="Continue" />
-            </div>
+        </div>
         </form>
     </div>
 </xar:template>

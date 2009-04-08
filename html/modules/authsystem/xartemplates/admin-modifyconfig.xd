@@ -10,43 +10,35 @@
         <h2>Modify Configuration</h2>
         <form method="post" action="&xar-modurl-authsystem-admin-modifyconfig;"
         enctype="application/x-www-form-urlencoded">
-            <fieldset>
-                <legend>General Options</legend>
-                <div class="xar-form-input-wrapper">
-                    <label for="shorturls" class="xar-form-label"
-                    title="#xarML('Enable short URLS?')#">Enable short URLs?</label>
-                    <xar:data-input type="checkbox" name="shorturls" id="shorturls"
-                    value="$shorturlschecked" checked="$shorturlschecked" />
-                </div>
-            </fieldset>
+            <xar:template file="display" module="base" subdata="array('modulename' => 'authsystem')" />
             <fieldset>
                 <legend>Login Security Options</legend>
-                <div class="xar-form-input-wrapper">
+                    <div class="xar-form-input-wrapper">
                     <label for="uselockout" class="xar-form-label"
                     title="Lock a user out after a number of failed logins">Enable lockout
                     option?</label>
                     <xar:data-input type="checkbox" name="uselockout" id="uselockout"
                     value="$uselockoutchecked" checked="$uselockoutchecked" />
-                </div>
-                <div class="xar-form-input-wrapper">
+                    </div>
+                    <div class="xar-form-input-wrapper">
                     <label for="lockouttries" class="xar-form-label"
                     title="The number of attempts allowed before lockout">Allowed attempts
                     :</label>
                     <xar:data-input type="integerbox" name="lockouttries" id="lockouttries"
                     value="$lockouttries" size="2" maxlength="2" />
-                </div>
-                <div class="xar-form-input-wrapper">
+                    </div>
+                    <div class="xar-form-input-wrapper">
                     <label for="lockouttime" class="xar-form-label"
                     title="The time a lockout is in effect">Lockout time (minutes) :</label>
                     <xar:data-input type="textbox" name="lockouttime" id="lockouttime"
                     value="$lockouttime" size="2" maxlength="2" />
-                </div>
+                    </div>
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:data-input type="hidden" name="authid" id="authid" value="$authid" />
-                    <xar:data-input type="hidden" name="phase" id="phase" value="update" />
-                    <input type="submit" value="#xarML('Update Authentication Configuration')#" />
+                        <xar:data-input type="hidden" name="authid" id="authid" value="$authid" />
+                        <xar:data-input type="hidden" name="phase" id="phase" value="update" />
+                        <input type="submit" value="#xarML('Update Authentication Configuration')#" />
                 </div>
             </fieldset>
         </form>

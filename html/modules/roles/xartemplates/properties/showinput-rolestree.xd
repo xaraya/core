@@ -15,10 +15,10 @@
                     </xar:for>
                     <span class="treeattributes">
                         <xar:if condition="$drawchildren eq false">
-                        <span style="padding-left: 1em">
+                            <span style="padding-left: 1em">
                         <b>#$node-&gt;name#</b>see the entry above</span>
                         <xar:else />
-                        <xar:set name="numofsubgroups">count($children)</xar:set>
+                            <xar:set name="numofsubgroups">count($children)</xar:set>
                         <xar:set name="subgroups">$numofsubgroups == 1 ? xarML('subgroup') :
                         xarML('subgroups')</xar:set>
                         <xar:set name="numofusers">$users == 1 ? xarML('user') :
@@ -32,7 +32,7 @@
                         xarSecurityCheck('DeleteRole',0,'Roles',$node-&gt;name)</xar:set>
                         <xar:if condition="($seccheck eq false) or ($users gt 0) or ($drawchildren eq false)">
 
-                            <xar:else />
+                        <xar:else />
                             <a href="#xarModURL('roles', 'admin', 'delete', array('id' =&gt; $id))#"
                             title="#xarML('Delete this Group')#"
                             style="margin: 0 0.25em 0 0.25em;">
@@ -47,7 +47,7 @@
                             </a>
                         </xar:if>
                         <xar:if condition="($users gt 0) and ($drawchildren)">
-                            <xar:else />
+                        <xar:else />
                             <a href="#xarModURL('roles', 'admin', 'createmail', array('id' =&gt; $id))#"
                             title="#xarML('Email the Users in this Group')#"
                             style="margin: 0 0.25em 0 0.25em;">

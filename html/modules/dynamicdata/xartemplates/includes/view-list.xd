@@ -24,7 +24,7 @@
                             </a>
                         </th>
                         <td>
-                            <xar:data-output property="$properties[$name]"
+                            <xar:data-output property="$properties[$name]" _itemid="$itemid" value="$fields[$name]" />
                             value="$fields[$name]" />
                         </td>
                     </tr>

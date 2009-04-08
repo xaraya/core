@@ -5,24 +5,24 @@
     <xar:style scope="module" module="base" file="navtabs" />
     <script type="text/javascript">
         <!--
-    var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
-    function doOnLoad() {
-        oldOnLoadFunction();
-        xarTree_init('PrivilegesTree');
-    }
-    var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;");
-    function doOnUnload() {
-        oldOnUnloadFunction();
-        xarTree_init('PrivilegesTree');
-    }
+        var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
+        function doOnLoad() {
+            oldOnLoadFunction();
+            xarTree_init('PrivilegesTree');
+        }
+        var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;");
+        function doOnUnload() {
+            oldOnUnloadFunction();
+            xarTree_init('PrivilegesTree');
+        }
 
-    window.onload = doOnLoad;
-    window.onunload = doOnUnload;
+        window.onload = doOnLoad;
+        window.onunload = doOnUnload;
 
-    function setaction(target){
-    document.forms['privilegeform'].action = target;
-    document.forms['privilegeform'].submit();}
-// -->
+        function setaction(target){
+        document.forms['privilegeform'].action = target;
+        document.forms['privilegeform'].submit();}
+    // -->
     </script>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Privileges Administration</span>
@@ -40,7 +40,7 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <dd>
-                                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$parents.$i.parentid#"
+                  <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
                                 title="#xarML('Show this privilege')#">
                                 #$parents[$i]['parentname']#</a>
                             </dd>
@@ -73,7 +73,7 @@
             </dl>
         </div>
         <form name="privilegeform" id="privilegeform"
-        action="&xar-modurl-privileges-admin-updateprivilege;" method="post"
+      <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-updateprivilege;" method="post" enctype="application/x-www-form-urlencoded">
         enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Privilege properties</legend>
@@ -93,16 +93,16 @@
                     xarModURL('privileges','admin','modifyprivilege') .
                     "';this.form.submit()";</xar:set>
                     <!-- FIXME: make this dprop support onclick, cause IE6 doesn't do onchange
-        <div class="xar-form-input-wrapper-after">
-            <xar:set name="options">
-                array(
-                    array('id' => 'empty', 'name' => 'empty'),
-                    array('id' => 'full', 'name' => 'with rights'),
-                )
-            </xar:set>
-            <xar:data-input type="radio" name="ptype" id="ptype" options="$options" value="$ptype" onclick="$onclick" />
-        </div>
-        -->
+            <div class="xar-form-input-wrapper-after">
+                <xar:set name="options">
+                    array(
+                        array('id' => 'empty', 'name' => 'empty'),
+                        array('id' => 'full', 'name' => 'with rights'),
+                    )
+                </xar:set>
+                <xar:data-input type="radio" name="ptype" id="ptype" options="$options" value="$ptype" onclick="$onclick" />
+            </div>
+            -->
                     <xar:if condition="$ptype eq 'empty'">
                         <div class="xar-form-input-wrapper-after">
                             <input type="radio" name="ptype" id="ptype1_empty" value="empty"
@@ -124,7 +124,7 @@
                             title="#xarML('This privilege has no children')#">empty</label>
                         </div>
                         <div class="xar-form-input-wrapper-after">
-                            <input type="radio" name="ptype" id="ptype_full" value="full"
+                <input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();" />
                             checked="checked"
                             onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();" />
                             <label for="ptype_full" title="#xarML('This privilege has children')#">
@@ -190,11 +190,11 @@
                                 <label for="pinstance#$id#" class="xar-form-label">
                                 #$instance['header']#</label>
                                 <xar:if condition="$instance['type'] eq 'manual'">
-                                    <input type="text" name="pinstance['#$id#']"
+                    <input type="text" name="pinstance['#$id#']" id="pinstance#$id#" value="#$instance['default']#" size="20" tabindex="7" />
                                     id="pinstance#$id#" value="#$instance['default']#" size="20"
                                     tabindex="7" />
                                     <xar:else />
-                                    <select name="pinstance['#$id#']" id="pinstance#$id#" size="1"
+                    <select name="pinstance['#$id#']" id="pinstance#$id#" size="1" tabindex="7">
                                     tabindex="7">
                                         <xar:foreach in="$instance['dropdown']" value="$option">
                                             <xar:if condition="$option['name'] eq $instance['default']">
@@ -246,7 +246,7 @@
                 </div>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="poldcomponent" id="poldcomponent"
+            <input type="hidden" name="poldcomponent" id="poldcomponent" value="#$oldcomponent#" />
                     value="#$oldcomponent#" />
                     <input type="hidden" name="id" id="id" value="#$ppid#" />
                     <input type="button" value="Add"

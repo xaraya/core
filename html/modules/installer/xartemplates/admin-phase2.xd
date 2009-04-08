@@ -174,7 +174,7 @@
         TERMS AND CONDITIONS</textarea>
         <form action="install.php" method="post">
             <p>
-                <input type="hidden" name="install_language" id="install_language"
+                <input type="hidden" name="install_language" id="install_language" value="#$language#" />
                 value="#$language#" />
                 <input type="hidden" name="install_phase" id="install_phase" value="3" />
                 <label class="block" for="agree">

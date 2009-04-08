@@ -19,7 +19,7 @@
                         tabindex="#$tabindex#" />
                         <br />
                     </xar:foreach>
-                    <input type="text" name="#$name#[filetype][]" value="" size="5"
+          <input type="text" name="#$name#[filetype][]" value="" size="5" tabindex="#$tabindex#" />
                     tabindex="#$tabindex#" />
                 </td>
             </tr>
@@ -45,7 +45,7 @@
                         <xar:if condition="!empty($multiple)">
                             <option value="1" selected="selected">yes</option>
                             <option value="0">no</option>
-                            <xar:else />
+          <xar:else/>
                             <option value="1">yes</option>
                             <option value="0" selected="selected">no</option>
                         </xar:if>
@@ -61,7 +61,7 @@
                             <input type="checkbox" name="#$name#[methods][#$method#]"
                             id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#"
                             checked="checked" />
-                            <xar:else />
+            <xar:else/>
                             <input type="checkbox" name="#$name#[methods][#$method#]"
                             id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#" />
                         </xar:if>
@@ -103,7 +103,5 @@
             </td>
         </tr>
     </table>
-    <xar:if condition="!empty($invalid)">
-        <span class="xar-error">#$invalid#</span>
-    </xar:if>
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

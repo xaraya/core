@@ -4,7 +4,7 @@
         <span class="xar-mod-title">#$displayname# Module Configuration</span>
     </div>
     <div class="xar-mod-body">
-        <form action="#xarModURL('modules', 'admin', 'updateinstalloptions', array('regid' =&gt; $regid))#"
+        <form action="#xarModURL('modules', 'admin', 'updateinstalloptions', array('regid' => $regid))#" method="post" enctype="application/x-www-form-urlencoded" >
         method="post" enctype="application/x-www-form-urlencoded">
             <xar:template module="$modname" file="installoptions" />
             <!--        <xar:module main="false" module="#$modname#" type="admin" func="installoptions" /> -->

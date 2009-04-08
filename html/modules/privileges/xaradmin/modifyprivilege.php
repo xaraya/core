@@ -79,7 +79,7 @@ function privileges_admin_modifyprivilege()
     if(isset($level)) {$data['plevel'] = $level;}
     else {$data['plevel'] = $priv->getLevel();}
 
-    $instances = xarPrivileges::getinstances(xarMod::getRegID($data['pmodule']),$data['pcomponent']);
+    $instances = xarModAPIFunc('privileges','admin','getinstances',array('module' => $data['pmodule'],'component' => $data['pcomponent']));
     $numInstances = count($instances); // count the instances to use in later loops
 
     if(count($instance) > 0) {$default = $instance;}
@@ -111,12 +111,17 @@ function privileges_admin_modifyprivilege()
     if(isset($show)) {$data['show'] = $show;}
     else {$data['show'] = 'assigned';}
 
+    $accesslevels = SecurityLevel::$displayMap;
+    unset($accesslevels[-1]);
+    $data['levels'] = array();
+    foreach ($accesslevels as $key => $value) $data['levels'][] = array('id' => $key, 'name' => $value);
+    
     $data['oldcomponent'] = $component;
     $data['authid'] = xarSecGenAuthKey();
     $data['parents'] = $parents;
     $data['privileges'] = $privileges;
     $data['realms'] = xarPrivileges::getrealms();;
-    $data['components'] = xarPrivileges::getcomponents(xarMod::getRegID($data['pmodule']));
+    $data['components'] = xarModAPIFunc('privileges','admin','getcomponents',array('modid' => xarMod::getRegID($data['pmodule'])));
     $data['refreshlabel'] = xarML('Refresh');
     return $data;
 }

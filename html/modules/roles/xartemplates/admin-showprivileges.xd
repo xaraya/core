@@ -8,7 +8,13 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <h2>Show privileges #$itemtypename# '#$pname#':</h2>
+        <h2>
+            <xar:ml>
+                <xar:mlstring>Show privileges #(1) '#(2)':</xar:mlstring>
+                <xar:mlvar>#$itemtypename#</xar:mlvar>
+                <xar:mlvar>#$pname#</xar:mlvar>
+            </xar:ml>
+        </h2>
         <xar:if condition="count($parents) ne 0">
             <div>
                 <dl class="xar-tabs">
@@ -18,7 +24,7 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <dd>
-                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#"
+                    <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#">
                                 title="#xarML('Show this group')#">
                                     <xar:var name="parents[$i].parentname" prep="true" />
                                 </a>
@@ -36,7 +42,14 @@
         <xar:set name="id">$roleid</xar:set>
         <xar:template file="tablist" />
         <fieldset>
-            <legend>Privileges inherited by #xarVarPrepForDisplay($pname)#:</legend>
+          <legend>
+            <xar:ml>
+                <xar:mlstring>Privileges inherited by #(1):</xar:mlstring>
+                <xar:mlvar>
+                    #xarVarPrepForDisplay($pname)#
+                </xar:mlvar>
+            </xar:ml>
+          </legend>
             <xar:if condition="count($inherited) eq 0">
                 <p>No privileges inherited.</p>
                 <xar:else />
@@ -140,7 +153,7 @@
                     </xar:loop>
                 </table>
             </xar:if>
-            <form action="&xar-modurl-roles-admin-addprivilege;" method="post"
+          <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
             enctype="application/x-www-form-urlencoded">
                 <div class="xar-form-input-wrapper">
                     <label for="privid" title="#xarML('Select the Privilege to add')#"

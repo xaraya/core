@@ -41,15 +41,15 @@ function dynamicdata_user_search($args)
         $data['ishooked'] = 0;
         $data['q'] = isset($q) ? xarVarPrepForDisplay($q) : null;
 
-        if(!xarVarFetch('modid',    'int',   $modid,     NULL, XARVAR_DONT_SET)) {return;}
+        if(!xarVarFetch('module_id',    'int',   $module_id,     NULL, XARVAR_DONT_SET)) {return;}
         if(!xarVarFetch('itemtype', 'int',   $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
-        if (empty($modid) && empty($itemtype)) {
+        if (empty($module_id) && empty($itemtype)) {
             $data['gotobject'] = 0;
         } else {
             $data['gotobject'] = 1;
         }
-        if (empty($modid)) {
-            $modid = xarModGetIDFromName('dynamicdata');
+        if (empty($module_id)) {
+            $module_id = xarMod::getRegID('dynamicdata');
         }
         if (empty($itemtype)) {
             $itemtype = 0;
@@ -66,8 +66,8 @@ function dynamicdata_user_search($args)
     if (empty($data['ishooked']) && !empty($data['gotobject'])) {
         // get the selected object
         $objects = array();
-        $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
-                                array('moduleid' => $modid,
+        $object = DataObjectMaster::getObjectInfo(
+                                array('moduleid' => $module_id,
                                       'itemtype' => $itemtype));
         if (!empty($object)) {
             $objects[$object['objectid']] = $object;
@@ -78,7 +78,7 @@ function dynamicdata_user_search($args)
     }
 
     $data['items'] = array();
-    $mymodid = xarModGetIDFromName('dynamicdata');
+    $mymodid = xarMod::getRegID('dynamicdata');
     if ($data['ishooked']) {
         $myfunc = 'view';
     } else {
@@ -87,15 +87,15 @@ function dynamicdata_user_search($args)
     foreach ($objects as $itemid => $object) {
         // skip the internal objects
         if ($itemid < 3) continue;
-        $modid = $object['moduleid'];
+        $module_id = $object['moduleid'];
         // don't show data "belonging" to other modules for now
-        if ($modid != $mymodid) {
+        if ($module_id != $mymodid) {
             continue;
         }
         $label = $object['label'];
         $itemtype = $object['itemtype'];
         $fields = xarModAPIFunc('dynamicdata','user','getprop',
-                                array('modid' => $modid,
+                                array('module_id' => $module_id,
                                       'itemtype' => $itemtype));
         $wherelist = array();
         foreach ($fields as $name => $field) {
@@ -110,12 +110,12 @@ function dynamicdata_user_search($args)
             $where = join(' or ',$wherelist);
             $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
             $pagerurl = xarModURL('dynamicdata','user','search',
-                                  array('modid' => ($modid == $mymodid) ? null : $modid,
+                                  array('module_id' => ($module_id == $mymodid) ? null : $module_id,
                                         'itemtype' => empty($itemtype) ? null : $itemtype,
                                         'q' => $q,
                                         'dd_check' => $dd_check));
             $result = xarModAPIFunc('dynamicdata','user','showview',
-                                    array('modid' => $modid,
+                                    array('module_id' => $module_id,
                                           'itemtype' => $itemtype,
                                           'where' => $where,
                                           'startnum' => $startnum,
@@ -127,18 +127,18 @@ function dynamicdata_user_search($args)
             $result = null;
         }
         // nice(r) URLs
-        if ($modid == $mymodid) {
-            $modid = null;
+        if ($module_id == $mymodid) {
+            $module_id = null;
         }
         if ($itemtype == 0) {
             $itemtype = null;
         }
         $data['items'][] = array(
                                  'link'     => xarModURL('dynamicdata','user',$myfunc,
-                                                         array('modid' => $modid,
+                                                         array('module_id' => $module_id,
                                                                'itemtype' => $itemtype)),
                                  'label'    => $label,
-                                 'modid'    => $modid,
+                                 'module_id'    => $module_id,
                                  'itemtype' => $itemtype,
                                  'fields'   => $fields,
                                  'result'   => $result,

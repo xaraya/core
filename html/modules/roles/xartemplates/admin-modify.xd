@@ -9,7 +9,13 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <h2>Manage #$object:label# '#$object:properties.name:value#':</h2>
+        <h2>
+            <xar:ml>
+                <xar:mlstring>Manage #(1) '#(2)':</xar:mlstring>
+                <xar:mlvar>#$object:label#</xar:mlvar>
+                <xar:mlvar>#$object:properties.name:value#</xar:mlvar>
+            </xar:ml>
+        </h2>
         <xar:if condition="count($parents) ne 0">
             <div>
                 <dl class="xar-tabs">
@@ -41,23 +47,23 @@
                 <xar:if condition="!xarSecurityCheck('EditRole',0,'Roles',$object:getName())">
                     <xar:data-display object="$object" />
                     <p>This #$object:label# cannot be edited or deleted.</p>
-                    <xar:else />
+                <xar:else />
                     <xar:if condition="$basetype eq ROLES_GROUPTYPE AND $object:countChildren()">
                         <div class="xar-form-input-wrapper">
-                        <label title="#xarML('Type of Role')#" class="xar-form-label">
+                            <label title="#xarML('Type of Role')#" class="xar-form-label">
                         Type:</label>#$object:label# 
-                        <!--
-                            value should still be there in the form, otherwise validation will fail,
-                            do it with a hidden input now, but this should really be done with readonly attribute
-                        -->
+                            <!--
+                                value should still be there in the form, otherwise validation will fail,
+                                do it with a hidden input now, but this should really be done with readonly attribute
+                            -->
                         <input type="hidden" name="itemtype" value="#$itemtype#" /></div>
-                        <xar:else />
+                    <xar:else />
                         <div class="xar-form-input-wrapper">
                             <label for="itemtype" title="#xarML('Type of Role')#"
                             class="xar-form-label">Type:</label>
                             <xar:set name="onchange">"this.form.action='" .
                             xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
-                            <xar:data-input type="itemtype" name="itemtype" value="$itemtype"
+                            <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1" />
                             validation="roles" onchange="$onchange" />
                         </div>
                     </xar:if>
@@ -69,8 +75,8 @@
                             <label for="duvs_primaryparent" title="#xarML('Primary parent group')#"
                             class="xar-form-label">Primary Parent Group:</label>
                             <xar:set name="value">
-                            xarModAPIFunc('roles','user','getprimaryparent',array('itemid' =&gt;
-                            $id))</xar:set>
+                                xarModAPIFunc('roles','user','getprimaryparent',array('itemid' => $id))
+                            </xar:set>
                             <xar:set name="options">
                             xarModAPIFunc('roles','user','getancestors',array('id' =&gt; $id,
                             'parents' =&gt; 1))</xar:set>
@@ -183,7 +189,7 @@
                         </td>
                         <td class="xar-align-center">
                             <xar:if condition="count($parents) ne 1">
-                            <a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$id#&amp;parentid=#$loop:item['parentid']#&amp;authid=#xarSecGenAuthKey()#">
+                                <a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$id#&amp;parentid=#$loop:item['parentid']#&amp;authid=#xarSecGenAuthKey()#">
                             Remove</a>
                             <xar:else />Cannot Remove</xar:if>
                         </td>
@@ -193,7 +199,7 @@
             <xar:if condition="!xarSecurityCheck('EditRole',0,'Roles',$object:getName())">
                 <p>This #$object:label# cannot be edited or deleted.</p>
                 <xar:else />
-                <form action="&xar-modurl-roles-admin-addmember;" method="post"
+              <form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
                 enctype="application/x-www-form-urlencoded">
                     <div class="xar-form-input-wrapper">
                         <label for="roleid" title="#xarML('Choose a parent to assign membership')#"

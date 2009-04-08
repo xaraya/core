@@ -92,6 +92,8 @@ class xarPrivilege extends xarMask
         $bindvars = array($member->getID(), $this->getID());
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
@@ -108,10 +110,12 @@ class xarPrivilege extends xarMask
     {
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('DELETE',$this->privmemberstable);
-        $q->eq('id', $member->getID());
+        $q->eq('privilege_id', $member->getID());
         $q->eq('parent_id', $this->getID());
         if (!$q->run()) return;
 
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
@@ -143,6 +147,9 @@ class xarPrivilege extends xarMask
                           $this->getID());
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
+
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
@@ -159,7 +166,6 @@ class xarPrivilege extends xarMask
     */
     function remove()
     {
-
         // set up the DELETE query
         $query = "DELETE FROM $this->privilegestable WHERE id=?";
         //Execute the query, bail if an exception was thrown
@@ -167,7 +173,7 @@ class xarPrivilege extends xarMask
 
         // set up a query to get all the parents of this child
         $query = "SELECT parent_id FROM $this->privmemberstable
-              WHERE id=?";
+              WHERE privilege_id=?";
         //Execute the query, bail if an exception was thrown
         $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));

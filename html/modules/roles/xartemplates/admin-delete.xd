@@ -7,7 +7,13 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <h2>Manage #$itemtypename# '#$name#':</h2>
+        <h2>
+            <xar:ml>
+                <xar:mlstring>Manage #(1) '#(2)':</xar:mlstring>
+                <xar:mlvar>#$itemtypename#</xar:mlvar>
+                <xar:mlvar>#$name#</xar:mlvar>
+            </xar:ml>
+        </h2>
         <xar:if condition="count($parents) gt 0">
             <div>
                 <dl class="xar-tabs">
@@ -52,8 +58,8 @@
         </div>
         <xar:if condition="$frozen">
             <p>You do not have the privileges to delete #$itemtypename# #$name#</p>
-            <xar:else />
-            <form method="post" action="&xar-modurl-roles-admin-delete;"
+        <xar:else />
+            <form method="post" action="&xar-modurl-roles-admin-delete;" enctype="application/x-www-form-urlencoded">
             enctype="application/x-www-form-urlencoded">
                 <h3 class="xar-align-center">Confirm the deletion of #$itemtypename# #$name#</h3>
                 <div class="xar-align-center">

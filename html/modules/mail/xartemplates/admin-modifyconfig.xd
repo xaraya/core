@@ -2,9 +2,12 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <script type="text/javascript">
-        <xar:comment>// Enter name of mandatory fields var mail_fieldRequired = Array("adminname",
-        "adminmail"); // Enter field description to appear in the dialog box var
-        mail_fieldDescription = Array("Admin Name", "Admin Email"); //</xar:comment>
+    <xar:comment>
+        // Enter name of mandatory fields
+        var mail_fieldRequired = Array("adminname", "adminmail");
+        // Enter field description to appear in the dialog box
+        var mail_fieldDescription = Array("Admin Name", "Admin Email");
+    //</xar:comment>
     </script>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Mail Administration</span>
@@ -46,11 +49,12 @@
             </dd>
         </dl>
         <form method="post" action="&xar-modurl-mail-admin-updateconfig;"
-        onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);"
+        <form method="post" action="&xar-modurl-mail-admin-updateconfig;" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded" >
         enctype="application/x-www-form-urlencoded">
             <xar:data-input type="hidden" name="tab" id="tab" value="$tab" />
             <!-- General tab -->
             <xar:if condition="$tab eq 'general'">
+                <xar:template file="display" module="base" subdata="array('modulename' => 'mail')" />
                 <fieldset>
                     <legend>Mail Configuration</legend>
                     <div class="xar-form-input-wrapper">
@@ -122,7 +126,7 @@
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                        <input type="submit" value="#xarML('Update')#"
+                        <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
                         class="xar-margin-thickright" />
                     </div>
                 </fieldset>
@@ -135,8 +139,8 @@
                             <xar:var scope="module" module="mail" name="html" />
                         </xar:set>
                         <xar:data-input type="checkbox" name="html" checked="$htmlmail" />
-                        <label for="html"
-                        title="#xarML('Check this box if you would like Xaraya to send HTML formatted emails rather than plain text.')#">
+                        <label for="html" title="#xarML('Check this box if you would like Xaraya to send HTML formatted emails rather than plain text.')#">
+                            Send HTML Emails
                         Send HTML Emails</label>
                     </div>
                     <div class="xar-form-input-wrapper-after">
@@ -151,11 +155,14 @@
                     </div>
                     <xar:if condition="#$htmluseheadfoot#">
                         <div class="xar-form-input-wrapper">
-                            <label for="htmlheader"
-                            title="#xarML('Enter the header that you wish displayed in your HTML emails.')#"
+                            <label for="htmlheader" title="#xarML('Enter the header that you wish displayed in your HTML emails.')#" class="xar-form-label">
+                                HTML Email Header:
                             class="xar-form-label">HTML Email Header:</label>
                             <xar:set name="htmlheader">
                                 <xar:var scope="module" module="mail" name="htmlheader"
+                            </label>
+                            <xar:set name="htmlheader"><xar:var scope="module" module="mail" name="htmlheader" prep="true"/></xar:set>
+                            <xar:data-input type="textarea_large" name="htmlheader" id="htmlheader" value="$htmlheader"/>
                                 prep="true" />
                             </xar:set>
                             <xar:data-input type="textarea_large" name="htmlheader" id="htmlheader"
@@ -194,10 +201,10 @@
                             <xar:var scope="module" module="mail" name="priority" />
                         </xar:set>
                         <xar:set name="o">$options=array()</xar:set>
-                        <xar:set name="o">$options[] = array('id' =&gt; 1, 'name' =&gt;
-                        xarML('High'))</xar:set>
-                        <xar:set name="o">$options[] = array('id' =&gt; 3, 'name' =&gt;
-                        xarML('Normal'))</xar:set>
+                        <xar:set name="o">$options[] = array('id' => 1, 'name' => xarML('High'))</xar:set>
+                        <xar:set name="o">$options[] = array('id' => 3, 'name' => xarML('Normal'))</xar:set>
+                        <xar:set name="o">$options[] = array('id' => 5, 'name' => xarML('Low'))</xar:set>
+                        <xar:data-input type="dropdown" name="priority" id="priority" value="$priority" options="$options"/>
                         <xar:set name="o">$options[] = array('id' =&gt; 5, 'name' =&gt;
                         xarML('Low'))</xar:set>
                         <xar:data-input type="dropdown" name="priority" id="priority"
@@ -208,12 +215,12 @@
                         title="#xarML('Enter the encoding to send messages.')#"
                         class="xar-form-label">Default Encoding:</label>
                         <xar:set name="o">$options=array()</xar:set>
-                        <xar:set name="o">$options[] = array('id' =&gt; '7bit', 'name'
-                        =&gt;'7-bit')</xar:set>
-                        <xar:set name="o">$options[] = array('id' =&gt; '8bit', 'name' =&gt;
-                        '8-bit')</xar:set>
-                        <xar:set name="o">$options[] = array('id' =&gt; 'binary', 'name' =&gt;
-                        'binary')</xar:set>
+                        <xar:set name="o">$options[] = array('id' => '7bit', 'name' =>'7-bit')</xar:set>
+                        <xar:set name="o">$options[] = array('id' => '8bit', 'name' => '8-bit')</xar:set>
+                        <xar:set name="o">$options[] = array('id' => 'binary', 'name' => 'binary')</xar:set>
+                        <xar:set name="o">$options[] = array('id' => 'quoted-printable', 'name' => 'quoted-printable')</xar:set>
+                        <xar:set name="o">$options[] = array('id' => 'base64', 'name' => 'base64')</xar:set>
+                        <xar:data-input type="dropdown" value="$encoding" name="encoding" id="encoding" options="$options"/>
                         <xar:set name="o">$options[] = array('id' =&gt; 'quoted-printable', 'name'
                         =&gt; 'quoted-printable')</xar:set>
                         <xar:set name="o">$options[] = array('id' =&gt; 'base64', 'name' =&gt;
@@ -266,11 +273,11 @@
                             <xar:var scope="module" module="mail" name="server" />
                         </xar:set>
                         <xar:set name="o">$options=array()</xar:set>
-                        <xar:set name="o">$options[] = array('id' =&gt; 'smtp', 'name'
-                        =&gt;'SMTP-server')</xar:set>
-                        <xar:set name="o">$options[] = array('id' =&gt; 'qmail', 'name' =&gt;
-                        'QMail')</xar:set>
-                        <xar:set name="o">$options[] = array('id' =&gt; 'mail', 'name' =&gt;
+                        <xar:set name="o">$options[] = array('id' => 'smtp', 'name' =>'SMTP-server')</xar:set>
+                        <xar:set name="o">$options[] = array('id' => 'qmail', 'name' => 'QMail')</xar:set>
+                        <xar:set name="o">$options[] = array('id' => 'mail', 'name' => 'Mail')</xar:set>
+                        <xar:set name="o">$options[] = array('id' => 'sendmail', 'name' => 'SendMail')</xar:set>
+                        <xar:data-input type="dropdown" value="$server" id="server" name="server" onchange="this.form.submit()" options="$options"/>
                         'Mail')</xar:set>
                         <xar:set name="o">$options[] = array('id' =&gt; 'sendmail', 'name' =&gt;
                         'SendMail')</xar:set>
@@ -352,15 +359,22 @@
                         title="#xarML('Specify the interval to check for mails to send.')#"
                         class="xar-form-label">Support Scheduled Mail:</label>
                         <xar:if condition="xarModIsAvailable('scheduler')">
-                        <xar:data-input type="dropdown" options="$intervals" value="$interval" />
+                            <xar:data-input type="dropdown" options="$intervals" value="$interval" />
                         <xar:else />
-                        <xar:data-input type="hidden" name="interval" value="" />You need to
-                        install the 'scheduler' module for this</xar:if>
+                            <xar:data-input type="hidden" name="interval" value="" />
+                            You need to install the 'scheduler' module for this
+                        </xar:if>
                     </div>
                     <xar:if condition="!empty($unsent)">
-                        <p>Mails Scheduled: #$unsent#</p>
-                        <p>Please note that if you stop the scheduler or if it isn't triggered,
-                        previously scheduled mails will not be sent.</p>
+                        <p>
+                            <xar:ml>
+                                <xar:mlstring>Mails Scheduled: #(1)</xar:mlstring>
+                                <xar:mlvar>#$unsent#</xar:mlvar>
+                            </xar:ml>
+                        </p>
+                        <p>
+                            Please note that if you stop the scheduler or if it isn't triggered, previously scheduled mails will not be sent.
+                        </p>
                     </xar:if>
                 </fieldset>
                 <fieldset class="xar-clearboth">

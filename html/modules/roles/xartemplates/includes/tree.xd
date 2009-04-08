@@ -9,12 +9,12 @@
                 <xar:set name="drawchildren">true</xar:set>
                 <xar:if condition="$i eq $lastnode">
                     <xar:set name="islast">"lastnode"</xar:set>
-                    <xar:else />
+                <xar:else />
                     <xar:set name="islast">""</xar:set>
                 </xar:if>
                 <xar:if condition="!empty($childrennode)">
                     <xar:set name="children">"children"</xar:set>
-                    <xar:else />
+                <xar:else />
                     <xar:set name="children">""</xar:set>
                 </xar:if>
                 <li class="leaf #$islast# #$children#">
@@ -27,7 +27,7 @@
                                     <xar:if condition="$drawchildren eq false">
                                     <span style="padding-left: 1em">
                                     <b>#$node['name']#</b>see the entry above</span>
-                                    <xar:else />
+                            <xar:else />
                                     <xar:set name="numofsubgroups">
                                     count(xarRoles::getsubgroups($node['id']))</xar:set>
                                     <xar:set name="numofsubgroups">1</xar:set>
@@ -46,7 +46,7 @@
                                     xarSecurityCheck('DeleteRole',0,'Roles',$node['name'])</xar:set>
                                     <xar:if condition="($seccheck eq false) or ($node['users'] gt 0) or ($drawchildren eq false)">
 
-                                        <xar:else />
+                            <xar:else />
                                         <a href="#xarModURL('roles', 'admin', 'delete', array('id' =&gt; $node['id']))#"
                                         title="#xarML('Delete this Group')#"
                                         style="margin: 0 0.25em 0 0.25em;">

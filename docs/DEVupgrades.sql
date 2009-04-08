@@ -504,6 +504,8 @@ ALTER TABLE `xar_privileges`
     during upgrade
 */
 
+/* DynamicData table changes */
+
 ALTER TABLE `xar_dynamic_properties`
   CHANGE COLUMN `prop_id` `id` INTEGER NOT NULL AUTO_INCREMENT,
   CHANGE COLUMN `prop_name` `name` varchar(30) NOT NULL default '',
@@ -549,10 +551,24 @@ ALTER TABLE `xar_dynamic_objects`
   CHANGE COLUMN `object_urlparam` `urlparam` varchar(30) NOT NULL default 'itemid',
   CHANGE COLUMN `object_maxid` `maxid` INTEGER NOT NULL default '0',
   CHANGE COLUMN `object_config` `config` text,
-  CHANGE COLUMN `object_isalias` `isalias` tinyint(4) NOT NULL default '1',
-  CHANGE COLUMN `object_class` 'class' varchar(255) NOT NULL default 'DataObject',
-  CHANGE COLUMN `object_filepath` 'filepath' varchar(255) NOT NULL default 'modules/dynamicdata/class/objects/base.php';
+  CHANGE COLUMN `object_isalias` `isalias` tinyint(4) NOT NULL default '1';
 
+UPDATE `xar_dynamic_properties` SET name = 'defaultvalue' WHERE name = 'default' AND objectid = 2;
+UPDATE `xar_dynamic_properties` SET name = 'seq' WHERE name = 'order' AND objectid = 2;
+
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_objects.object_", "xar_dynamic_objects.");
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.prop_", "xar_dynamic_properties.");
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.default", "xar_dynamic_properties.defaultvalue");
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.order", "xar_dynamic_properties.seq");
+UPDATE `xar_dynamic_properties` SET objectid = 24 WHERE name = 'parent' AND objectid = 1;
+
+ALTER TABLE `xar_dynamic_properties`
+  CHANGE COLUMN `validation` `configuration` text;
+
+ALTER TABLE `xar_dynamic_properties_def`
+  CHANGE COLUMN `validation` `configuration` varchar(254) default NULL;
+
+UPDATE `xar_dynamic_properties` SET name = 'configuration' WHERE name = 'validation' AND objectid = 2;
 UPDATE `xar_dynamic_properties` SET name = 'defaultvalue' WHERE name = 'default' AND objectid = 2;
 UPDATE `xar_dynamic_properties` SET name = 'seq' WHERE name = 'order' AND objectid = 2;
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_objects.object_", "xar_dynamic_objects.");
@@ -560,11 +576,23 @@ UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_prop
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.default", "xar_dynamic_properties.defaultvalue");
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.order", "xar_dynamic_properties.seq");
 UPDATE `xar_dynamic_properties` SET objectid = 24 WHERE name = 'parent' AND objectid = 1;
+UPDATE `xar_dynamic_properties` SET label = 'Configuration' WHERE label = 'Validation' AND objectid = 2;
+UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_dynamic_properties.validation", "xar_dynamic_properties.configuration");
+
+CREATE TABLE `xar_dynamic_configurations` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(254) NOT NULL default '',
+  `description` varchar(254) NOT NULL default '',
+  `property_id` int(11) NOT NULL default '0',
+  `label` varchar(254) NOT NULL default '',
+  `configuration` mediumtext,
+  PRIMARY KEY  (`id`));
 
 /*
-    Remove all the privmember entries with parentid = 0
+  Remove all the privmember and rolemember entries with parentid = 0
 */
 DELETE FROM `xar_privmembers` WHERE `parentid` = 0;
+DELETE FROM `xar_rolemembers` WHERE `id` = 1;
 
 ALTER TABLE `xar_block_types` CHANGE `modid` `module_id` INTEGER UNSIGNED NOT NULL DEFAULT '0';
 UPDATE `xar_security_instances` SET `query` = REPLACE(query, "modid", "module_id");
@@ -578,7 +606,7 @@ ALTER TABLE `xar_privmembers` CHANGE COLUMN `parentid` `parent_id` INTEGER  UNSI
 ALTER TABLE `xar_privmembers` CHANGE COLUMN `id` `privilege_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
 UPDATE `xar_security_instances` SET instancechildid='privilege_id' WHERE instancetable2='xar_privmembers';
 UPDATE `xar_security_instances` SET instanceparentid='parent_id' WHERE instancetable2='xar_privmembers';
-
+  
 # rolemembers ddl adjustments
 ALTER TABLE `xar_rolemembers` CHANGE COLUMN `parentid` `parent_id` INTEGER UNSIGNED NOT NULL DEFAULT 0;
 UPDATE `xar_security_instances` SET instanceparentid='parent_id' WHERE instancetable2='xar_rolemembers';
@@ -593,7 +621,6 @@ ALTER TABLE `xar_security_acl` CHANGE COLUMN `permid` `privilege_id` INTEGER UNS
 ALTER TABLE `xar_dynamic_data` CHANGE `propid` `property_id` INT NOT NULL DEFAULT 0;
 # dynamic_data object_id
 ALTER TABLE `xar_dynamic_properties` CHANGE `objectid` `object_id` INT NOT NULL DEFAULT '0';
-
 ALTER TABLE `xar_security_instances`
   DROP `instancetable2`,
   DROP `instancechildid`,
@@ -627,6 +654,9 @@ ALTER TABLE `xar_privileges` CHANGE `type` `itemtype`                   integer 
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_roles.type", "xar_roles.itemtype");
 UPDATE `xar_dynamic_properties` SET `source` = REPLACE(source, "xar_privileges.type", "xar_privileges.itemtype");
 ALTER TABLE `xar_cache_blocks` CHANGE `id` `blockinstance_id`           integer unsigned NOT NULL;
+UPDATE `xar_dynamic_properties` SET `defaultvalue` = REPLACE(defaultvalue, "xarMod::getID(xarModVars::get('roles', 'defaultauthmodule'))", "xarModVars::get('roles', 'defaultauthmodule')") WHERE source = 'xar_roles.auth_module_id';
+UPDATE `xar_dynamic_properties` SET `defaultvalue` = REPLACE(defaultvalue, "xarModVars::get", "xarModVars::get");
+UPDATE `xar_security_instances` SET `query` = REPLACE(query, "type FROM xar_block_types", "name FROM xar_block_types");
 
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
@@ -660,7 +690,7 @@ ALTER TABLE `xar_cache_blocks` CHANGE `blockinstance_id` `blockinstance_id`  int
 ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`                    bool default '0';
 ALTER TABLE `xar_cache_blocks` CHANGE `page` `page`                          integer NOT NULL default '0';
 ALTER TABLE `xar_cache_blocks` CHANGE `user` `user`                          integer unsigned NOT NULL;
-ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`                      tinyint default NULL;
+ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`                      integer unsigned default '0';
 
 ALTER TABLE `xar_dynamic_data` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_dynamic_data` CHANGE `property_id` `property_id` integer unsigned NOT NULL;
@@ -680,29 +710,29 @@ ALTER TABLE `xar_dynamic_objects` CHANGE `maxid` `maxid`          integer unsign
 ALTER TABLE `xar_dynamic_objects` CHANGE `config` `config`        text;
 ALTER TABLE `xar_dynamic_objects` CHANGE `isalias` `isalias`      bool default '1';
 
-ALTER TABLE `xar_dynamic_properties` CHANGE `id` `id`                      integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_dynamic_properties` CHANGE `id` `id`                            integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_dynamic_properties` CHANGE `name` `name`                  varchar(64) NOT NULL;
-ALTER TABLE `xar_dynamic_properties` CHANGE `label` `label`                varchar(254) NOT NULL;
-ALTER TABLE `xar_dynamic_properties` CHANGE `object_id` `object_id`        integer unsigned NOT NULL;
-ALTER TABLE `xar_dynamic_properties` CHANGE `type` `type`                  integer NOT NULL;
-ALTER TABLE `xar_dynamic_properties` CHANGE `defaultvalue` `defaultvalue`  varchar(254) default NULL;
-ALTER TABLE `xar_dynamic_properties` CHANGE `source` `source`              varchar(254) NOT NULL default 'dynamic_data';
+ALTER TABLE `xar_dynamic_properties` CHANGE `label` `label`                      varchar(254) NOT NULL default '';
+ALTER TABLE `xar_dynamic_properties` CHANGE `object_id` `object_id`              integer unsigned NOT NULL;
+ALTER TABLE `xar_dynamic_properties` CHANGE `type` `type`                        integer NOT NULL;
+ALTER TABLE `xar_dynamic_properties` CHANGE `defaultvalue` `defaultvalue`        varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties` CHANGE `source` `source`                    varchar(254) NOT NULL default 'dynamic_data';
 ALTER TABLE `xar_dynamic_properties` CHANGE `status` `status`              tinyint unsigned NOT NULL default '33';
 ALTER TABLE `xar_dynamic_properties` CHANGE `seq` `seq`                    tinyint unsigned NOT NULL;
-ALTER TABLE `xar_dynamic_properties` CHANGE `validation` `validation`      text;
+ALTER TABLE `xar_dynamic_properties` CHANGE `configuration` `configuration`      text;
 
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `id` `id`                  integer unsigned NOT NULL auto_increment;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `id` `id`                        integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_dynamic_properties_def` CHANGE `name` `name`              varchar(64) default NULL;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `label` `label`            varchar(254) default NULL;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `filepath` `filepath`      varchar(254) default NULL;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `class` `class`            varchar(254) default NULL;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `validation` `validation`  varchar(254) default NULL;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `source` `source`          varchar(254) default NULL;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `reqfiles` `reqfiles`      varchar(254) default NULL;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `modid` `modid`            integer unsigned NOT NULL;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `args` `args`              mediumtext NOT NULL;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `aliases` `aliases`        varchar(254) default NULL;
-ALTER TABLE `xar_dynamic_properties_def` CHANGE `format` `format`          integer default '0';
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `label` `label`                  varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `filepath` `filepath`            varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `class` `class`                  varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `configuration` `configuration`  varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `source` `source`                varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `reqfiles` `reqfiles`            varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `modid` `modid`                  integer unsigned NOT NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `args` `args`                    mediumtext NOT NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `aliases` `aliases`              varchar(254) default NULL;
+ALTER TABLE `xar_dynamic_properties_def` CHANGE `format` `format`                integer default '0';
 
 ALTER TABLE `xar_hooks` CHANGE `id` `id`                     integer unsigned NOT NULL auto_increment;
 ALTER TABLE `xar_hooks` CHANGE `object` `object`             varchar(64) NOT NULL;
@@ -792,13 +822,16 @@ ALTER TABLE `xar_themes` CHANGE `directory` `directory`             varchar(64) 
 ALTER TABLE `xar_themes` CHANGE `version` `version`                 varchar(10) NOT NULL;
 ALTER TABLE `xar_themes` CHANGE `state` `state`                     tinyint unsigned NOT NULL default '1';
 
-/* boolean fields in mysql are an alias for tinyint(1), bit(1) is better, rangewise. 
-   In the API this mapping is done automatically and the fieldtype is indeed called boolean there
-*/
-ALTER TABLE `xar_session_info` CHANGE `remember` `remember`         bit(1) default 0;
-ALTER TABLE `xar_block_instances` CHANGE `refresh` `refresh`        bit(1) default 0;
-ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`           bit(1) default 0;
-ALTER TABLE `xar_dynamic_objects` CHANGE `isalias` `isalias`        bit(1) default 1;
+# ----- 13.10.2008
+INSERT INTO `xar_module_vars` (module_id, name, value)
+    SELECT mods.id, 'debugusers', 'a:0:{}' FROM xar_modules mods
+    WHERE mods.name = 'dynamicdata';
+    
+# ----- 17.11.2008
+ALTER TABLE xar_categories 
+    ADD COLUMN `child_object` varchar(255) default NULL;
+ALTER TABLE xar_categories_linkage
+    ADD COLUMN `child_category_id` int(11) NOT NULL;
 
 /* User is a reserved word in postgres and we are likely to refactor cache_blocks anyways */
 ALTER TABLE `xar_cache_blocks` CHANGE `user` `theuser`              integer unsigned NOT NULL;

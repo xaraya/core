@@ -16,7 +16,7 @@
  *
  * @author the DynamicData module development team
  * @param string $args['module'] module name of the item fields to get or
- * @param int $args['modid'] module id of the item fields to get +
+ * @param int $args['module_id'] module id of the item fields to get +
  * @param int $args['itemtype'] item type of the item fields to get, or
  * @param $args['table'] database table to turn into an object
  * @param int $args['itemid'] item id of the item fields to get
@@ -38,18 +38,18 @@ function &dynamicdata_userapi_getitem($args)
     // other functions should be investigated.
     $nullreturn = NULL;
 
-    if (empty($modid) && empty($moduleid)) {
+    if (empty($module_id) && empty($moduleid)) {
         $modname = empty($module) ? xarModGetName() : $module;
-        $modid   = is_numeric($modname) ? $modname : xarModGetIDFromName($modname);
-    } elseif (empty($modid)) {
-        $modid = $moduleid;
+        $module_id   = is_numeric($modname) ? $modname : xarMod::getRegID($modname);
+    } elseif (empty($module_id)) {
+        $module_id = $moduleid;
     }
-    $modinfo = xarModGetInfo($modid);
+    $modinfo = xarModGetInfo($module_id);
 
     if (empty($itemtype)) $itemtype = 0;
 
     $invalid = array();
-    if (!isset($modid) || !is_numeric($modid) || empty($modinfo['name'])) {
+    if (!isset($module_id) || !is_numeric($module_id) || empty($modinfo['name'])) {
         $invalid[] = 'module id';
     }
     if (!isset($itemtype) || !is_numeric($itemtype)) {
@@ -64,7 +64,7 @@ function &dynamicdata_userapi_getitem($args)
         throw new BadParameterException($vars,$msg);
     }
 
-    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:$itemid")) return $nullreturn;
+    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$module_id:$itemtype:$itemid")) return $nullreturn;
 
     // check the optional field list
     if (empty($fieldlist)) {
@@ -83,7 +83,7 @@ function &dynamicdata_userapi_getitem($args)
     // make some database table available via DD
     if (empty($table)) $table = '';
 
-    $object =& DataObjectMaster::getObject(array('moduleid'  => $modid,
+    $object =& DataObjectMaster::getObject(array('moduleid'  => $module_id,
                                        'itemtype'  => $itemtype,
                                        'itemid'    => $itemid,
                                        'fieldlist' => $fieldlist,

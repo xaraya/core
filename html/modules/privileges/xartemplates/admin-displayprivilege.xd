@@ -5,25 +5,25 @@
     <xar:style scope="module" file="privtree" />
     <xar:base-include-javascript module="privileges" filename="xarTree.js" />
     <script type="javascript">
-        <!--
-    var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
-    function doOnLoad() {
-    oldOnLoadFunction();
-    xarTree_init('PrivilegesTree');
-    }
-    var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;");
-    function doOnUnload() {
-    oldOnUnloadFunction();
-    xarTree_init('PrivilegesTree');
-    }
+    <!--
+        var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
+        function doOnLoad() {
+        oldOnLoadFunction();
+        xarTree_init('PrivilegesTree');
+        }
+        var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;");
+        function doOnUnload() {
+        oldOnUnloadFunction();
+        xarTree_init('PrivilegesTree');
+        }
 
-    window.onload = doOnLoad;
-    window.onunload = doOnUnload;
+        window.onload = doOnLoad;
+        window.onunload = doOnUnload;
 
-    function setaction(target){
-    document.forms['privilegeform'].action = target;
-    document.forms['privilegeform'].submit();}
-// -->
+        function setaction(target){
+        document.forms['privilegeform'].action = target;
+        document.forms['privilegeform'].submit();}
+    // -->
     </script>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Privileges Administration</span>

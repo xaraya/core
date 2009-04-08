@@ -27,6 +27,15 @@ class UserListProperty extends SelectProperty
     public $orderlist = array();
     public $showglue = '; ';
 
+    public $initialization_user_state = ROLES_STATE_ALL;
+    public $initialization_group_list = '';
+    public $initialization_userlist = '';
+    public $initialization_orderlist = '';
+    public $validation_group_list           = null;
+    public $validation_override             = true;
+    public $display_showfields = '';
+    public $display_showglue = '';
+
     /*
     * Options available to user selection
     * ===================================
@@ -51,28 +60,24 @@ class UserListProperty extends SelectProperty
 
         if (count($this->options) == 0) {
             $select_options = array();
-            if ($this->userstate <> -1) {
-                $select_options['state'] = $this->userstate;
-            }
-            if (!empty($this->orderlist)) {
-                $select_options['order'] = implode(',', $this->orderlist);
-            }
-            if (!empty($this->grouplist)) {
-                $select_options['group'] = implode(',', $this->grouplist);
-            }
-            $users = xarModAPIFunc('roles', 'user', 'getall', $select_options);
-
+            if (($this->initialization_user_state <> ROLES_STATE_ALL)) $select_options['state'] = $this->initialization_user_state;
+            if (!empty($this->initialization_orderlist)) $select_options['order'] = implode(',', $this->initialization_orderlist);
+            if (!empty($this->initialization_group_list)) $select_options['group'] = implode(',', $this->initialization_group_list);
+//            $users = xarModAPIFunc('roles', 'user', 'getall', $select_options);
+            // FIXME: this function needs to be reviewed
+            $users = array();
             // Loop for each user retrived and populate the options array.
-            if (empty($this->showlist)) {
+            if (empty($this->display_showfields)) {
                 // Simple case (default) -
                 foreach ($users as $user) {
                     $this->options[] = array('id' => $user['id'], 'name' => $user['name']);
                 }
             } else {
+                $showfields = explode(',',$this->display_showfields);
                 // Complex case: allow specific fields to be selected.
                 foreach ($users as $user) {
                     $namevalue = array();
-                    foreach ($this->showlist as $showfield) {
+                    foreach ($showfields as $showfield) {
                         $namevalue[] = $user[$showfield];
                     }
                     $this->options[] = array('id' => $user['id'], 'name' => implode($this->showglue, $namevalue));
@@ -84,22 +89,19 @@ class UserListProperty extends SelectProperty
     // TODO: validate the selected user against the specified group(s).
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
+
         if (!empty($value)) {
             // check if this is a valid user id
             try {
                 $uname = xarUserGetVar('uname', $value);
                 if (isset($uname)) {
-                    $this->value = $value;
                     return true;
                 }
             } catch (NotFoundExceptions $e) {
                 // Nothing to do?
             }
         } elseif (empty($value)) {
-            $this->value = $value;
             return true;
         }
         $this->invalid = xarML('selection: #(1)', $this->name);
@@ -107,7 +109,14 @@ class UserListProperty extends SelectProperty
         return false;
     }
 
-    // TODO: format the output according to the 'showlist'.
+    public function showInput(Array $data = array())
+    {
+        if (isset($data['group_list'])) $this->validation_group_list = $data['group_list'];
+
+        return parent::showInput($data);
+    }
+
+    // TODO: format the output according to the 'showfields'.
     // TODO: provide an option to allow admin to decide whether to wrap the user
     // in a link or not.
     public function showOutput(Array $data = array())
@@ -133,12 +142,30 @@ class UserListProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
-    public function parseValidation($validation = '')
+    public function getOptions()
     {
-        if (preg_match('/^xarModAPIFunc/i',$validation)) {
-            return parent::parseValidation($validation);
+        $select_options = array();
+        /*
+        if (!empty($this->validation_ancestorgroup_list)) {
+            $select_options['ancestor'] = $this->validation_ancestorgroup_list;
+        }
+        if (!empty($this->validation_parentgroup_list)) {
+            $select_options['parent'] = $this->validation_parentgroup_list;
+        }
+        */
+        if (!empty($this->validation_group_list)) {
+            $select_options['group'] = $this->validation_group_list;
+        }
+        $options = xarModAPIFunc('roles', 'user', 'getall', $select_options);
+        return $options;
+    }
+
+    /*public function parseConfiguration($configuration = '')
+    {
+        if (preg_match('/^xarModAPIFunc/i',$configuration)) {
+            return parent::parseConfiguration($configuration);
         } else {
-            foreach(preg_split('/(?<!\\\);/', $validation) as $option) {
+            foreach(preg_split('/(?<!\\\);/', $configuration) as $option) {
                 // Semi-colons can be escaped with a '\' prefix.
                 $option = str_replace('\;', ';', $option);
                 // An option comes in two parts: option-type:option-value
@@ -168,7 +195,7 @@ class UserListProperty extends SelectProperty
             }
         }
     }
-
+*/
     /**
      * Show the current validation rule in a specific form for this property type
      *
@@ -179,7 +206,7 @@ class UserListProperty extends SelectProperty
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showValidation(Array $args = array())
+    /*public function showConfiguration(Array $args = array())
     {
         extract($args);
 
@@ -191,9 +218,9 @@ class UserListProperty extends SelectProperty
         $data['size']       = !empty($size) ? $size : 50;
 
         if (isset($validation)) {
-            $this->validation = $validation;
+            $this->configuration = $validation;
         // CHECKME: reset grouplist et al. first if we call this from elsewhere ?
-            $this->parseValidation($validation);
+            $this->parseConfiguration($validation);
         }
 
     // TODO: adapt if the template uses a multi-select for groups
@@ -211,7 +238,7 @@ class UserListProperty extends SelectProperty
 
         return xarTplProperty($module, $template, 'validation', $data);
     }
-
+*/
     /**
      * Update the current validation rule in a specific way for this property type
      *
@@ -221,19 +248,19 @@ class UserListProperty extends SelectProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    public function updateValidation(Array $args = array())
+    /*public function updateConfiguration(Array $args = array())
     {
         extract($args);
 
         // in case we need to process additional input fields based on the name
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // do something with the validation and save it in $this->validation
+        // do something with the validation and save it in $this->configuration
         if (isset($validation)) {
             if (!is_array($validation)) {
-                $this->validation = $validation;
+                $this->configuration = $validation;
 
             } elseif (!empty($validation['other'])) {
-                $this->validation = $validation['other'];
+                $this->configuration = $validation['other'];
 
             } else {
                 $options = array();
@@ -264,12 +291,12 @@ class UserListProperty extends SelectProperty
                     $validation['showglue'] = str_replace(';', '\;', $validation['showglue']);
                     $options[] = 'showglue:' . $validation['showglue'];
                 }
-                $this->validation = join(';', $options);
+                $this->configuration = join(';', $options);
             }
         }
 
         // tell the calling function that everything is OK
         return true;
-    }
+    }*/
 }
 ?>

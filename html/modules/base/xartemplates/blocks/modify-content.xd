@@ -9,9 +9,9 @@
     </div>
     <div class="xar-form-input-wrapper-after">
         <xar:if condition="!empty($hide_empty)">
-            <input type="checkbox" name="hide_empty" id="hide_empty_block_#$bid#" value="1"
+            <input type="checkbox" name="hide_empty" id="hide_empty_block_#$bid#" value="1" checked="checked" />
             checked="checked" />
-            <xar:else />
+        <xar:else />
             <input type="checkbox" name="hide_empty" id="hide_empty_block_#$bid#" value="1" />
         </xar:if>
         <label for="hide_empty_block_#$bid#"
@@ -19,9 +19,9 @@
     </div>
     <div class="xar-form-input-wrapper-after">
         <xar:if condition="!empty($hide_errors)">
-            <input type="checkbox" name="hide_errors" id="hide_errors_block_#$bid#" value="1"
+            <input type="checkbox" name="hide_errors" id="hide_errors_block_#$bid#" value="1" checked="checked" />
             checked="checked" />
-            <xar:else />
+        <xar:else />
             <input type="checkbox" name="hide_errors" id="hide_errors_block_#$bid#" value="1" />
         </xar:if>
         <label for="hide_errors_block_#$bid#"
@@ -36,7 +36,7 @@
                 <xar:if condition="$content_type eq $loop:item.value">
                     <option id="content_type_block_#$bid#_#$loop:item.value#"
                     value="#$loop:item.value#" selected="selected">#$loop:item.label#</option>
-                    <xar:else />
+                <xar:else/>
                     <option id="content_type_block_#$bid#_#$loop:item.value#"
                     value="#$loop:item.value#">#$loop:item.label#</option>
                 </xar:if>

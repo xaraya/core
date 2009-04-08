@@ -6,7 +6,7 @@
         <xar:template file="status" />
         <h1 class="xar-pagetitle">Choose Privileges Setup</h1>
         <h3>Privileges</h3>
-        <form action="&xar-modurl-installer-admin-confirm_configuration;" method="post">
+        <form action="#xarModURL('installer','admin','confirm_configuration')#" method="post">
             <div>
                 <input type="hidden" name="install_language" id="install_language"
                 value="#$language#" />
@@ -16,11 +16,11 @@
                 <xar:loop name="$options1">
                     <p>
                         <xar:if condition="$loop:item['option'] eq ''">#$loop:item['comment']# 
-                        <xar:else />
-                        <xar:if condition="$loop:item['option'] == 'true'">
-                            <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#"
-                            value="#$loop:item['item']#" checked="checked" />
                             <xar:else />
+                            <xar:if condition="$loop:item['option'] == 'true'">
+                                <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
+                            value="#$loop:item['item']#" checked="checked" />
+                                <xar:else />
                             <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#"
                             value="#$loop:item['item']#" checked="checked" />
                         </xar:if>
@@ -31,55 +31,55 @@
                 with minimal access. The administrator you created in Step 6 will always have full
                 access to the site.</p>
                 <!--
-            <div class="configuration">
+                <div class="configuration">
 
-                <h4>
+                    <h4>
                     Configuration Modules
-                </h4>
+                    </h4>
 
-                <div class="scroller">
-                    <xar:if condition="$missing eq '' and count($options2) eq 0">
-                        <p>
+                    <div class="scroller">
+                        <xar:if condition="$missing eq '' and count($options2) eq 0">
+                            <p>
                             This configuration does not need to load any modules.
-                        </p>
-                    <xar:else />
-                        <xar:loop name="$options2">
-                        <xar:if condition="$loop:item['option'] eq ''">
-                            <p class="xar-normal">
-                                #$loop:item['comment']#
                             </p>
-                            <xar:else />
-                            <p class="xar-normal">
-                                <xar:if condition="$loop:item['option'] == 'true'">
-                                    <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
-                                    <xar:else />
-                                    <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" />
-                                </xar:if>
-                                <label for="chosen2_#$loop:index#">
+                        <xar:else />
+                            <xar:loop name="$options2">
+                            <xar:if condition="$loop:item['option'] eq ''">
+                                <p class="xar-normal">
                                     #$loop:item['comment']#
-                                </label>
-                            </p>
-                        </xar:if>
-                    </xar:loop>
-                </xar:if>
-            </div>
-            <xar:if condition="$installed ne ''">
-                <p class="xar-normal">
+                                </p>
+                                <xar:else />
+                                <p class="xar-normal">
+                                    <xar:if condition="$loop:item['option'] == 'true'">
+                                        <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
+                                        <xar:else />
+                                        <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" />
+                                    </xar:if>
+                                    <label for="chosen2_#$loop:index#">
+                                        #$loop:item['comment']#
+                                    </label>
+                                </p>
+                            </xar:if>
+                        </xar:loop>
+                    </xar:if>
+                </div>
+                <xar:if condition="$installed ne ''">
+                    <p class="xar-normal">
                     The following modules for this configuration are already installed:
-                    #$installed#
-                </p>
-            </xar:if>
-            <xar:if condition="$missing ne ''">
-                <p>
+                        #$installed#
+                    </p>
+                </xar:if>
+                <xar:if condition="$missing ne ''">
+                    <p>
                     The following modules for this configuration are missing in the modules directory:
-                    #$missing#
-                </p>
-            </xar:if>
-            </div>
-            <p>
+                        #$missing#
+                    </p>
+                </xar:if>
+                </div>
+                <p>
                 All of the above modules can be installed or removed at any later time in the Modules module.
-            </p>
-        -->
+                </p>
+            -->
                 <input type="submit" name="create" id="create" value="Continue" />
             </div>
         </form>

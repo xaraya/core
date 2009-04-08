@@ -9,7 +9,7 @@
                     <xar:if condition="$loop:item['selected']">
                         <option value="#$loop:item['id']#" selected="selected">
                         #$loop:item['name']#</option>
-                        <xar:else />
+                    <xar:else/>
                         <option value="#$loop:item['id']#">#$loop:item['name']#</option>
                     </xar:if>
                 </xar:loop>

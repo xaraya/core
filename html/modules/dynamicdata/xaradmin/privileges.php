@@ -57,9 +57,9 @@ function dynamicdata_admin_privileges($args)
         if (empty($moduleid) || $moduleid == 'All') {
             $moduleid = 0;
         } elseif (!is_numeric($moduleid)) { // for pre-wizard instances
-            $modid = xarModGetIDFromName($moduleid);
-            if (!empty($modid)) {
-                $moduleid = $modid;
+            $module_id = xarMod::getRegID($moduleid);
+            if (!empty($module_id)) {
+                $moduleid = $module_id;
             } else {
                 $moduleid = 0;
             }
@@ -126,11 +126,11 @@ function dynamicdata_admin_privileges($args)
     }
     foreach ($objects as $id => $object) {
         $objectlist[$id] = $object['label'];
-        $modid = $object['moduleid'];
+        $module_id = $object['moduleid'];
         // Check whether the module exists before trying to fetch the details.
-        if (in_array($modid, $all_module_ids)) {
-            $modinfo = xarModGetInfo($modid);
-            $modlist[$modid] = $modinfo['displayname'];
+        if (in_array($module_id, $all_module_ids)) {
+            $modinfo = xarModGetInfo($module_id);
+            $modlist[$module_id] = $modinfo['displayname'];
         }
     }
 

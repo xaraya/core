@@ -22,30 +22,19 @@
                 </dd>
             </xar:if>
         </dl>
-        <xar:comment>- - - - - - - - - - - Begin General Options - - - - - - - - - -
-        -</xar:comment>
+        <!--
+            - - - - - - - - - - - Begin General Options - - - - - - - - - - - 
+        -->
         <xar:if condition="$tab eq 'general'">
-            <form action="#xarModUrl('blocks', 'admin', 'modifyconfig')#" method="post"
-            enctype="application/x-www-form-urlencoded">
+            <form action="#xarModUrl('blocks', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded">
+            <xar:template file="display" module="base" subdata="array('modulename' => 'blocks')" />
                 <fieldset>
-                    <legend>Page Layout</legend>
-                    <div class="xar-form-input-wrapper">
-                        <label for="itemsperpage"
-                        title="#xarML('The number of items to display on a page.')#"
-                        class="xar-form-label">Items Listed per Page View:</label>
-                        <xar:set name="value">
-                            <xar:var scope="module" module="blocks" name="itemsperpage" />
-                        </xar:set>
-                        <input type="text" id="itemsperpage" name="itemsperpage" value="#$value#"
                         class="xar-form-textshort" />
-                    </div>
-                </fieldset>
-                <fieldset>
                     <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="authid" id="authid" value="#$authid#" />
                         <input type="hidden" name="update" id="update" value="update" />
                         <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                        <input type="submit" value="#xarML('Update Blocks Configuration')#"
+                        <input type="submit" value="#xarML('Update Blocks Configuration')#" class="xar-margin-thickright" />
                         class="xar-margin-thickright" />
                         <!--<input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft" />-->
                     </div>

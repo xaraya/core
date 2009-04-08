@@ -13,7 +13,7 @@
  * Update the dynamic properties for a module + itemtype
  *
  * @param int objectid
- * @param int modid
+ * @param int module_id
  * @param int itemtype
  * @throws BAD_PARAM
  * @return bool true on success and redirect to modifyprop
@@ -21,7 +21,7 @@
 function dynamicdata_admin_updateprop()
 {
     if(!xarVarFetch('objectid',          'isset', $objectid,          NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',             'isset', $modid,             NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id',             'isset', $module_id,             NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype',          'int:1:', $itemtype,         0, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',             'isset', $table,             NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_label',          'isset', $dd_label,          NULL, XARVAR_DONT_SET)) {return;}
@@ -30,30 +30,30 @@ function dynamicdata_admin_updateprop()
     if(!xarVarFetch('dd_source',         'isset', $dd_source,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('display_dd_status', 'isset', $display_dd_status, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('input_dd_status',   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_validation',     'isset', $dd_validation,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_configuration',     'isset', $dd_configuration,     NULL, XARVAR_DONT_SET)) {return;}
 
     if (!xarSecConfirmAuthKey()) return;
 
     $objectinfo = DataObjectMaster::getObjectInfo(
                                     array(
                                     'objectid' => $objectid,
-                                    'moduleid' => $modid,
+                                    'moduleid' => $module_id,
                                     'itemtype' => $itemtype,
                                     ));
 
     if (isset($objectinfo)) {
         $objectid = $objectinfo['objectid'];
-        $modid = $objectinfo['moduleid'];
+        $module_id = $objectinfo['moduleid'];
         $itemtype = $objectinfo['itemtype'];
-    } elseif (!empty($modid)) {
-        $modinfo = xarModGetInfo($modid);
+    } elseif (!empty($module_id)) {
+        $modinfo = xarModGetInfo($module_id);
         if (!empty($modinfo['name'])) {
             $name = $modinfo['name'];
             if (!empty($itemtype)) {
                 $name .= '_' . $itemtype;
             }
             $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
-                                      array('moduleid' => $modid,
+                                      array('moduleid' => $module_id,
                                             'itemtype' => $itemtype,
                                             'name' => $name,
                                             'label' => ucfirst($name)));
@@ -61,14 +61,14 @@ function dynamicdata_admin_updateprop()
         }
     }
 
-    if (empty($modid)) {
+    if (empty($module_id)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('module id', 'admin', 'updateprop', 'dynamicdata');
         throw new BadParameterException($vars,$msg);
     }
 
     $fields = xarModAPIFunc('dynamicdata','user','getprop',
-                           array('modid' => $modid,
+                           array('module_id' => $module_id,
                                  'itemtype' => $itemtype,
                                  'allprops' => true));
     $isprimary = 0;
@@ -94,8 +94,8 @@ function dynamicdata_admin_updateprop()
                 $lf = chr(10);
                 $dd_defaultvalue[$id] = preg_replace('/\[LF\]/',$lf,$dd_defaultvalue[$id]);
             }
-            if (!isset($dd_validation[$id])) {
-                $dd_validation[$id] = null;
+            if (!isset($dd_configuration[$id])) {
+                $dd_configuration[$id] = null;
             }
             if (!isset($display_dd_status[$id])) {
                 $display_dd_status[$id] = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
@@ -106,14 +106,14 @@ function dynamicdata_admin_updateprop()
             $dd_status[$id] = $display_dd_status[$id] + $input_dd_status[$id];
             if (!xarModAPIFunc('dynamicdata','admin','updateprop',
                               array('id' => $id,
-                              //      'modid' => $modid,
+                              //      'module_id' => $module_id,
                               //      'itemtype' => $itemtype,
                                     'label' => $dd_label[$id],
                                     'type' => $dd_type[$id],
                                     'defaultvalue' => $dd_defaultvalue[$id],
                               //      'source' => $dd_source[$id],
                                     'status' => $dd_status[$id],
-                                    'validation' => $dd_validation[$id]))) {
+                                    'configuration' => $dd_configuration[$id]))) {
                 return;
             }
             if ($dd_type[$id] == 21) { // item id
@@ -139,24 +139,22 @@ function dynamicdata_admin_updateprop()
                                 array('name' => $name,
                                       'label' => $dd_label[0],
                                       'objectid' => $objectid,
-                                      'moduleid' => $modid,
+                                      'moduleid' => $module_id,
                                       'itemtype' => $itemtype,
                                       'type' => $dd_type[0],
                                       'defaultvalue' => $dd_defaultvalue[0],
                                       'source' => $dd_source[0],
                                       'status' => $dd_status[0],
-                                      'seq' => $i,
-                                      'validation' => $dd_validation[0]));
-        if (empty($id)) {
-            return;
-        }
+                                      'seq' => $i));
+        if (empty($id)) return;
+
         if ($dd_type[0] == 21) { // item id
             $isprimary = 1;
         }
     }
 
     if ($isprimary) {
-        $modinfo = xarModGetInfo($modid);
+        $modinfo = xarModGetInfo($module_id);
         xarModCallHooks('module','updateconfig',$modinfo['name'],
                         array('module' => $modinfo['name'],
                               'itemtype' => $itemtype));

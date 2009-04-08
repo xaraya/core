@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="empty($layout) or $layout eq 'default'">
-    <table width="100%" border="1" cellspacing="0" cellpadding="4">
+        <table width="100%" border="1" cellspacing="0" cellpadding="4">
         <tr>
             <xar:foreach in="$labels" value="$item">
                 <th class="xar-align-center">#$item['label']#</th>
@@ -12,7 +12,7 @@
         <xar:foreach in="$items" value="$item">
             <tr>
                 <!-- we don't use xar:data-form or xar:data-input here, because this
-         is typically not an input form -->
+             is typically not an input form -->
                 <xar:foreach in="$item['fields']" value="$field">
                     <td>
                         <xar:data-output type="$field['type']" name="dd_'.$field['id'].'"
@@ -35,19 +35,19 @@
                 </td>
             </tr>
         </xar:if>
-    </table>
-    <xar:if condition="!empty($prevurl) or !empty($nexturl)">
-        <br />
-        <div class="xar-align-center">
+        </table>
+        <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+            <br />
+            <div class="xar-align-center">
         <xar:if condition="!empty($prevurl)">
         <a href="#$prevurl#">&lt;&lt;</a>
         <xar:else />---</xar:if>&#160;&#160;&#160; 
         <xar:if condition="!empty($nexturl)">
         <a href="#$nexturl#">&gt;&gt;</a>
         <xar:else />---</xar:if></div>
-    </xar:if>
+        </xar:if>
     <xar:elseif condition="$layout eq 'cells'" />
-    <table width="100%" border="1" cellspacing="0" cellpadding="4">
+        <table width="100%" border="1" cellspacing="0" cellpadding="4">
         <tr>
             <xar:foreach in="$labels" value="$item">
                 <th class="xar-align-center">#$item['label']#</th>
@@ -73,16 +73,16 @@
                 </td>
             </tr>
         </xar:if>
-    </table>
-    <xar:if condition="!empty($prevurl) or !empty($nexturl)">
-        <div class="xar-align-center">
+        </table>
+        <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+            <div class="xar-align-center">
         <xar:if condition="!empty($prevurl)">
         <a href="#$prevurl#">&lt;&lt;</a>
         <xar:else />---</xar:if>&#160;&#160;&#160; 
         <xar:if condition="!empty($nexturl)">
         <a href="#$nexturl#">&gt;&gt;</a>
         <xar:else />---</xar:if></div>
-    </xar:if>
+        </xar:if>
     <!-- TODO: multi-column output -->
     <xar:else />Specify your own layout here... 
     <br />

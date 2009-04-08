@@ -10,7 +10,7 @@
             <xar:if condition="(($loop:index + 1) % 2)">
                 <div class="xar-floatleft xar-halfwidth xar-border-thinbottom">
                     <div class="xar-sub xar-floatright xar-align-right">[ 
-                    <xar:if condition="!empty($loop:item.groups)">
+                        <xar:if condition="!empty($loop:item.groups)">
                     <xar:loop name="$loop:item.groups" id="groupsl">
                         <a href="&xar-modurl-blocks-admin-modify_group;&amp;id=#$loop:groupsl:item.id#"
                         title="#xarML('Edit group')#">#$loop:groupsl:item.name#</a>
@@ -23,20 +23,20 @@
                     <xar:else />#$loop:item['group_template']# &#160;</xar:if></xar:if>| 
                     <xar:if condition="$loop:item['state'] eq '0'">H 
                     <xar:else />M</xar:if>| 
-                    <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item.bid#">
+                        <a href="#xarMOdURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                     E</a>| 
                     <a href="#$loop:item['deleteurl']#"
                     onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
                     R</a>]</div>
                     <xar:if condition="empty($loop:item['title'])">#$loop:item['name']# 
-                    <xar:else />
-                    <span title="#xarVarPrepfordisplay($loop:item['title'])#">
+                        <xar:else />
+                        <span title="#xarVarPrepfordisplay($loop:item['title'])#">
                     #$loop:item['name']#</span></xar:if>
                 </div>
                 <xar:else />
                 <div class="xar-floatright xar-halfwidth xar-border-thinbottom">
                     <div class="xar-sub xar-floatright xar-align-right">[ 
-                    <xar:if condition="!empty($loop:item.groups)">
+                        <xar:if condition="!empty($loop:item.groups)">
                     <xar:loop name="$loop:item.groups" id="groupsr">
                         <a href="&xar-modurl-blocks-admin-modify_group;&amp;id=#$loop:groupsr:item.id#"
                         title="#xarML('Edit group')#">#$loop:groupsr:item.name#</a>
@@ -49,14 +49,14 @@
                     <xar:else />#$loop:item['group_template']# &#160;</xar:if></xar:if>| 
                     <xar:if condition="$loop:item['state'] eq '0'">H 
                     <xar:else />M</xar:if>| 
-                    <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item.bid#">
+                        <a href="#xarMOdURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                     E</a>| 
                     <a href="#$loop:item['deleteurl']#"
                     onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
                     R</a>]</div>
                     <xar:if condition="empty($loop:item['title'])">#$loop:item['name']# 
-                    <xar:else />
-                    <span title="#xarVarPrepfordisplay($loop:item['title'])#">
+                        <xar:else />
+                        <span title="#xarVarPrepfordisplay($loop:item['title'])#">
                     #$loop:item['name']#</span></xar:if>
                 </div>
             </xar:if>

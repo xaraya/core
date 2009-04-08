@@ -8,13 +8,16 @@
                 <ul class="xar-menu-item">
                     <xar:foreach in="$usercontent" value="$item">
                         <xar:if condition="empty($item['url'])">
-                            <li class="xar-menu-item">#$item['title']#</li>
+                            <li class="xar-menu-item">
+                                #$item['title']# 
+                            </li>
                             <xar:elseif condition="!empty($item['child']) and ($item['here'])" />
                             <li class="xar-menu-item-current">
                                 <ul class="xar-menu-subitem">
                                     <li class="xar-menu-subitem-current">
                                         <a href="#$item['url']#" title="#$item['comment']#">
-                                        #$item['title']#</a>
+                                            #$item['title']# 
+                                        </a>
                                     </li>
                                 </ul>
                             </li>
@@ -35,7 +38,8 @@
                             <xar:else />
                             <li class="xar-menu-item">
                                 <a href="#$item['url']#" title="#$item['comment']#">
-                                #$item['title']#</a>
+                                    #$item['title']# 
+                                </a>
                             </li>
                         </xar:if>
                     </xar:foreach>
@@ -54,22 +58,22 @@
                                 <a name="activeitem" title="#$mod['desc']#">#$mod['label']#</a>
                                 <xar:if condition="$indlinks ne ''">
                                     <ul class="xar-menu-subitem">
-                                        <xar:foreach in="$indlinks" value="$sublinks"
+                                        <xar:foreach in="$indlinks" value="$sublinks" key="$sublink">
                                         key="$sublink">
                                             <!--
-                                            determine and indicate current states of module functions display 
-                                        -->
+                                                determine and indicate current states of module functions display 
+                                            -->
                                             <xar:if condition="$sublinks['funcactive']">
                                                 <li class="xar-menu-subitem-current">
-                                                    <a name="activesubitem"
-                                                    title="#$sublinks['usertitle']#">
-                                                    #$sublinks['userlabel']# #$marker#</a>
+                                                    <a name="activesubitem" title="#$sublinks['usertitle']#">
+                                                        #$sublinks['userlabel']# #$marker# 
+                                                    </a>
                                                 </li>
                                                 <xar:else />
                                                 <li class="xar-menu-subitem">
-                                                    <a href="#$sublinks['userlink']#"
-                                                    title="#$sublinks['usertitle']#">
-                                                    #$sublinks['userlabel']#</a>
+                                                    <a href="#$sublinks['userlink']#" title="#$sublinks['usertitle']#">
+                                                        #$sublinks['userlabel']# 
+                                                    </a>
                                                 </li>
                                             </xar:if>
                                         </xar:foreach>
@@ -77,10 +81,14 @@
                                 </xar:if>
                             </li>
                             <xar:elseif condition="$mod['modactive'] and !$mod['link']" />
-                            <li class="xar-menu-section">#$mod['label']#</li>
+                            <li class="xar-menu-section">
+                                #$mod['label']# 
+                            </li>
                             <xar:else />
                             <li class="xar-menu-item">
-                                <a href="#$mod['link']#" title="#$mod['desc']#">#$mod['label']#</a>
+                                <a href="#$mod['link']#" title="#$mod['desc']#">
+                                    #$mod['label']# 
+                                </a>
                             </li>
                         </xar:if>
                     </xar:foreach>
@@ -90,8 +98,9 @@
     </xar:if>
     <!-- Logout only if not admin or anomymous -->
     <xar:if condition="$showlogout">
-        <p>[ 
-        <a href="#$logouturl#">#$logoutlabel#</a>]</p>
+        <p>
+            [<a href="#$logouturl#">#$logoutlabel#</a>] 
+        </p>
     </xar:if>
     <xar:if condition="(xarThemeIsAvailable('print')) and !empty($displayprint)">
         <p>[ 

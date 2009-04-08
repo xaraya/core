@@ -25,7 +25,7 @@
             </dl>
         </div>
         <form method="post" action="&xar-modurl-roles-admin-modifynotice;"
-        enctype="application/x-www-form-urlencoded">
+        <form method="post" action="&xar-modurl-roles-admin-modifynotice;" enctype="application/x-www-form-urlencoded" >
             <fieldset>
                 <legend>Notification Email :</legend>
                 <p class="xar-form-input-wrapper-before xar-padding-thick">Admin will be prompted
@@ -41,8 +41,8 @@
                     checked="$checked" />
                     <label for="askpendingemail"
                     title="#xarML('When user state is changed to \'pending\'')#">Pending</label>
-                </div>
-                <div class="xar-form-input-wrapper-after">
+                    </div>
+                    <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked">
                         <xar:var scope="module" module="roles" name="askwelcomeemail" />
                     </xar:set>
@@ -50,8 +50,8 @@
                     checked="$checked" />
                     <label for="askwelcomeemail"
                     title="#xarML('When user state is changed to \'active\'')#">Active</label>
-                </div>
-                <div class="xar-form-input-wrapper-after">
+                    </div>
+                    <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked">
                         <xar:var scope="module" module="roles" name="askdeactivationemail" />
                     </xar:set>
@@ -59,8 +59,8 @@
                     id="askdeactivationemail" checked="$checked" />
                     <label for="askdeactivationemail"
                     title="#xarML('When user state is changed to \'inactive\'')#">Inactive</label>
-                </div>
-                <div class="xar-form-input-wrapper-after">
+                    </div>
+                    <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked">
                         <xar:var scope="module" module="roles" name="askvalidationemail" />
                     </xar:set>
@@ -69,10 +69,10 @@
                     <label for="askvalidationemail"
                     title="#xarML('When user state is changed to \'not validated\'')#">Not
                     Validated</label>
-                </div>
+                    </div>
                 <p class="xar-form-input-wrapper-before xar-padding-thick">Ask about sending a
                 notification when an administrator:</p>
-                <div class="xar-form-input-wrapper-after">
+                    <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked">
                         <xar:var scope="module" module="roles" name="askpasswordemail" />
                     </xar:set>
@@ -81,16 +81,16 @@
                     <label for="askpasswordemail"
                     title="#xarML('When administrator changes a user\'s password')#">Changes A
                     User's Password</label>
-                </div>
+                    </div>
                 <!-- jojodee - we already have user hooks in the modifyconfig user hooks sections,
-                 so comment out until we know if there is another good reason to have them here as well -->
+                     so comment out until we know if there is another good reason to have them here as well -->
                 <!--
-            <xar:if condition="!empty($hooks)">
-                <xar:foreach in="$hooks" key="$module" value="$output">
-                    #$output#
-                </xar:foreach>
-            </xar:if>
-            -->
+                <xar:if condition="!empty($hooks)">
+                    <xar:foreach in="$hooks" key="$module" value="$output">
+                        #$output#
+                    </xar:foreach>
+                </xar:if>
+                -->
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">

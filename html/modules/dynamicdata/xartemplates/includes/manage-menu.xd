@@ -20,6 +20,6 @@
                     <a href="&xar-modurl-dynamicdata-admin-new;">Create DataObject</a>
                 </dd>
             </xar:sec>
-        </dl>
+            </dl>
     </div>
 </xar:template>

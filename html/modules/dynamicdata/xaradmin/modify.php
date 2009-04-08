@@ -16,7 +16,7 @@
  * wishes to modify a current module item
  *
  * @param int objectid the id of the item to be modified
- * @param int modid the id of the module where the item comes from
+ * @param int module_id the id of the module where the item comes from
  * @param int itemtype the id of the itemtype of the item
  * @param join
  * @param table
@@ -28,7 +28,7 @@ function dynamicdata_admin_modify($args)
 
     if(!xarVarFetch('objectid', 'id',    $objectid,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'isset', $moduleid,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id',    'isset', $module_id,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
@@ -44,7 +44,7 @@ function dynamicdata_admin_modify($args)
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,
-                                         'moduleid' => $moduleid,
+                                         'moduleid' => $module_id,
                                          'itemtype' => $itemtype,
                                          'join'     => $join,
                                          'table'    => $table,
@@ -63,7 +63,7 @@ function dynamicdata_admin_modify($args)
     $data['object'] = & $myobject;
 
     // if we're editing a dynamic property, save its property type to cache
-    // for correct processing of the validation rule (ValidationProperty)
+    // for correct processing of the configuration rule (ValidationProperty)
     if ($myobject->objectid == 2) {
         xarVarSetCached('dynamicdata','currentproptype', $myobject->properties['type']);
     }
@@ -74,7 +74,9 @@ function dynamicdata_admin_modify($args)
     $data['preview'] = $preview;
     $data['tplmodule'] = $args['tplmodule'];   //TODO: is this needed
 
-    $modinfo = xarModGetInfo($args['moduleid']);
+    // $modinfo = xarModGetInfo($args['moduleid']);
+    // Makes this hooks call explictly from DD
+    $modinfo = xarModGetInfo(182);
     $item = array();
     foreach (array_keys($myobject->properties) as $name) {
         $item[$name] = $myobject->properties[$name]->value;

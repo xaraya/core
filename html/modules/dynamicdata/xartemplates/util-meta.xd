@@ -35,15 +35,15 @@
                                 #$curtable#</a>
                             </td>
                             <td class="xar-align-center">
-                            <a href="&xar-modurl-dynamicdata-admin-view;&amp;table=#$curtable#">
+                                <a href="&xar-modurl-dynamicdata-admin-view;&amp;table=#$curtable#">
                             View</a>| 
-                            <a href="&xar-modurl-dynamicdata-admin-query;&amp;table=#$curtable#">
+                                <a href="&xar-modurl-dynamicdata-admin-query;&amp;table=#$curtable#">
                             Query</a>| 
-                            <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$curtable#&amp;export=object">
+                                <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$curtable#&amp;export=object">
                             Export Object</a>| 
-                            <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$curtable#&amp;export=ddl">
+                                <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$curtable#&amp;export=ddl">
                             Export DDL</a>| 
-                            <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$curtable#">
+                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$curtable#">
                             Add Relation</a></td>
                         </tr>
                     </xar:foreach>
@@ -53,9 +53,9 @@
                 <p>
                 <a href="&xar-modurl-dynamicdata-admin-view;&amp;table=#$table#">View</a>| 
                 <a href="&xar-modurl-dynamicdata-admin-query;&amp;table=#$table#">Query</a>| 
-                <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$table#&amp;export=object">
+                    <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$table#&amp;export=object">
                 Export Object</a>| 
-                <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$table#&amp;export=ddl">
+                    <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$table#&amp;export=ddl">
                 Export DDL</a>| 
                 <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$table#">Add
                 Relation</a></p>
@@ -92,7 +92,7 @@
             <a href="&xar-modurl-dynamicdata-util-meta;&amp;export=ddl">Export all tables to
             DDL</a>| 
             <a href="&xar-modurl-dynamicdata-util-meta;&amp;showdb=1">Show other databases</a></p>
-            <xar:else />
+        <xar:else />
             <form method="post" action="&xar-modurl-dynamicdata-util-import;">
                 <fieldset>
                     <legend>Metatable definition for #$table#</legend>

@@ -15,7 +15,7 @@
  *
  * @author the DynamicData module development team
  * @param string $args['module'] module name of the item field to get, or
- * @param int $args['modid'] module id of the item field to get
+ * @param int $args['module_id'] module id of the item field to get
  * @param int $args['itemtype'] item type of the item field to get
  * @param int $args['itemid'] item id of the item field to get
  * @param string $args['name'] name of the field to get
@@ -26,15 +26,15 @@ function dynamicdata_userapi_getfield($args)
 {
     extract($args);
 
-    if (empty($modid) && !empty($module)) {
-        $modid = xarModGetIDFromName($module);
+    if (empty($module_id) && !empty($module)) {
+        $module_id = xarMod::getRegID($module);
     }
     if (empty($itemtype)) {
         $itemtype = 0;
     }
 
     $invalid = array();
-    if (!isset($modid) || !is_numeric($modid)) {
+    if (!isset($module_id) || !is_numeric($module_id)) {
         $invalid[] = 'module id';
     }
     if (!isset($itemtype) || !is_numeric($itemtype)) {
@@ -52,7 +52,7 @@ function dynamicdata_userapi_getfield($args)
         throw new BadParameterException($vars,$msg);
     }
 
-    $object = & DataObjectMaster::getObject(array('moduleid'  => $modid,
+    $object = & DataObjectMaster::getObject(array('moduleid'  => $module_id,
                                        'itemtype'  => $itemtype,
                                        'itemid'    => $itemid,
                                        'fieldlist' => array($name)));

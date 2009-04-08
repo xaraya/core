@@ -21,7 +21,7 @@ function dynamicdata_util_export($args)
 
     if(!xarVarFetch('objectid', 'isset', $objectid, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',     'isset', $name    , NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'isset', $moduleid, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id',    'isset', $moduleid, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tofile',   'isset', $tofile,   NULL, XARVAR_DONT_SET)) {return;}
@@ -103,7 +103,12 @@ function dynamicdata_util_export($args)
                 $xml .= '  <'.$mylist->name.' itemid="'.$itemid.'">'."\n";
                 foreach (array_keys($mylist->properties) as $name) {
                     if (isset($item[$name])) {
-                        $xml .= "    <$name>" . xarVarPrepForDisplay($item[$name]);
+                        if ($name == 'configuration') {
+                        // don't replace anything in the serialized value
+                            $xml .= "    <$name>" . $item[$name];
+                        }else {
+                            $xml .= "    <$name>" . xarVarPrepForDisplay($item[$name]);
+                        }
                     } else {
                         $xml .= "    <$name>";
                     }

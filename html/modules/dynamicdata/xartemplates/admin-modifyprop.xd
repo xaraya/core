@@ -26,12 +26,19 @@
                     </dd>
                     <xar:if condition="!empty($fields)">
                         <dd>
-                            <script type="text/javascript">function xar_dynamicdata_formpreview() {
-                            var my_window = window.open('#$urlform#', 'FormPreview',
-                            'width=780,height=580,status=no,scrollbars=1,resizable=yes,top=0,left=0,dependent=yes,alwaysRaised=yes');
-                            my_window.opener = window; my_window.focus(); }</script>
-                            <a href="javascript:xar_dynamicdata_formpreview();">Preview Input
-                            Form</a>
+                            <script type="text/javascript">
+                            function xar_dynamicdata_formpreview()
+                            {
+                                var my_window = window.open('#$urlform#',
+                                                            'FormPreview',
+                                                            'width=780,height=580,status=no,scrollbars=1,resizable=yes,top=0,left=0,dependent=yes,alwaysRaised=yes');
+                                my_window.opener = window;
+                                my_window.focus();
+                            }
+                            </script>
+                            <a href="javascript:xar_dynamicdata_formpreview();">
+                                <xar:mlstring>Preview Input Form</xar:mlstring>
+                            </a>
                         </dd>
                     </xar:if>
                 </dl>
@@ -58,7 +65,7 @@
         You can adapt the property name by clicking on the ID link above.</p>
         <!-- <xar:data-view object="$myobject" layout="$layout"  /> -->
         <p>[ 
-        <xar:if condition="empty($details)">
+            <xar:if condition="empty($details)">
             <a href="#$detailslink#">Show Static Properties and Relations</a>
             <xar:else />
             <a href="#$detailslink#">Hide Static Properties and Relations</a>
@@ -67,8 +74,8 @@
             <fieldset>
                 <legend>#$statictitle#</legend>
                 <!--
-        TODO: very much under construction, obviously :-)
-        -->
+            TODO: very much under construction, obviously :-)
+            -->
                 <!-- don't accept updates for this (for now) -->
                 <table class="xar-fullwidth">
                     <tr>
@@ -102,7 +109,7 @@
                             <div class="xar-align-center">
                                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                                 <input type="hidden" name="modid" id="modid" value="#$modid#" />
-                                <input type="hidden" name="itemtype" id="itemtype"
+                            <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
                                 value="#$itemtype#" />
                                 <input type="hidden" name="table" id="table" value="#$table#" />
                                 <input type="submit" value="#xarML('Import table')# #$table#" />
@@ -115,8 +122,8 @@
         <xar:if condition="count($relations) gt 0">
             <h2>#$relationstitle#</h2>
             <!--
-        TODO: very much under construction, obviously :-)
-        -->
+            TODO: very much under construction, obviously :-)
+            -->
             <form method="post" action="&xar-modurl-dynamicdata-admin-modifyprop;">
                 <!-- don't accept updates for this (for now) -->
                 <xar:foreach in="$relations" value="$relation">

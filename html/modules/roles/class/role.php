@@ -46,8 +46,6 @@ class Role extends DataObject
     public function __construct(DataObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $args = $descriptor->getArgs();
-        extract($args);
 
         $this->dbconn = xarDB::getConn();
 
@@ -87,11 +85,11 @@ class Role extends DataObject
             if (empty($data['uname'])) $data['uname'] = $this->getUser();
             $q->eq('uname',$data['uname']);
         }
-
         if (!$q->run()) return;
 
         if ($q->getrows() > 0) {
-            throw new DuplicateException(array('role',($this->basetype == ROLES_GROUPTYPE)?$this->getName():$this->getUname()));
+            $result = $q->row();
+            throw new DuplicateException(array('role',($this->basetype == ROLES_GROUPTYPE) ? $result['name'] :$result['uname'] ));
         }
 
         $id = parent::createItem($data);
@@ -184,6 +182,9 @@ class Role extends DataObject
         $item['itemtype'] = $this->getType();
         $item['itemid']   = $this->getID();
         xarModCallHooks('item', 'link', $this->getID(), $item);
+
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
@@ -222,6 +223,9 @@ class Role extends DataObject
         $item['itemtype'] = $this->getType();
         $item['itemid']   = $this->getID();
         xarModCallHooks('item', 'unlink', $this->getID(), $item);
+
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
@@ -263,14 +267,15 @@ class Role extends DataObject
             }
         }
 
-        //Let's not remove the role yet.  Instead, we want to deactivate it
-        // <mrb> i'm not a fan of the name munging
+        //Let's not remove the role yet. Instead, we want to deactivate it
         $deleted = xarML('deleted');
         $args = array(
+            'itemid' => $this->getID(),
             'user' => "[" . $deleted . "]" . time(),
             'email' => "[" . $deleted . "]" . time(),
             'state' => ROLES_STATE_DELETED,
         );
+        if (isset($data['authmodule'])) $args['authmodule'] = $data['authmodule'];
         $this->updateItem($args);
 
         // get all the privileges that were assigned to this role
@@ -427,6 +432,9 @@ class Role extends DataObject
         $query = "INSERT INTO $this->acltable VALUES (?,?)";
         $bindvars = array($this->getID(),$privilege->getID());
         $this->dbconn->Execute($query,$bindvars);
+
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
@@ -444,6 +452,9 @@ class Role extends DataObject
                   WHERE role_id= ? AND privilege_id= ?";
         $bindvars = array($this->properties['id']->value, $privilege->getID());
         $this->dbconn->Execute($query,$bindvars);
+
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
@@ -646,36 +657,32 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param int state get users in this state
-     * @param int $groupflag
-     * @return array list of users with elements <objectid> => <object>
+     * @param int $grpflag
+     * @return array list of users
+     * @todo evaluate performance of this (3 loops, of which 2 nested)
      */
-    public function getDescendants($state = ROLES_STATE_CURRENT, $groupflag=0)
+    public function getDescendants($state = ROLES_STATE_CURRENT, $grpflag=0)
     {
-        $groups = xarRoles::getgroups();
+        $users = $this->getUsers($state);
 
-        $queue = array($this->getID());
-        while (true) {
-            if (empty($queue)) break;
-            $parent = array_shift($queue);
-            $parents[] = $parent;
-            foreach ($groups as $group) {
-                if ($group['id'] == $parent) {unset($group); continue;}
-                if ($group['parentid'] == $parent) {$queue[] = $group['id']; unset($group);}
-            }
+        $groups = xarRoles::getSubGroups($this->getID());
+        $ua = array();
+        foreach($users as $user){
+            //using the ID as the key so that if a person is in more than one sub group they only get one email (mrb: email?)
+            $ua[$user->getID()] = $user;
         }
-        $descendants = array();
-        foreach($parents as $id){
-            $role = xarRoles::get($id);
-            if ($groupflag) {
-                $descendants[$id] = $role;
+        //Get the sub groups and go for another round
+        foreach($groups as $group){
+            $role = xarRoles::get($group['id']);
+            if ($grpflag) {
+                $ua[$group['id']] = $role;
             }
-            $users = $role->getUsers($state);
+            $users = $role->getDescendants($state);
             foreach($users as $user){
-                $descendants[$user->getID()] = $user;
+                $ua[$user->getID()] = $user;
             }
         }
-
-        return($descendants);
+        return($ua);
     }
 
     /**
@@ -793,6 +800,7 @@ class Role extends DataObject
         return $this->parentlevel;
     }
 
+    function setID($var) { $this->properties['id']->setValue($var); }
     function setName($var) { $this->properties['name']->setValue($var); }
     function setUname($var) { $this->properties['uname']->setValue($var); }
     function setType($var) { $this->properties['itemtype']->setValue($var); }

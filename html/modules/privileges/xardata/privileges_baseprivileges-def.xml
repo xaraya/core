@@ -17,7 +17,7 @@
       <source>xar_privileges.id</source>
       <status>65</status>
       <seq>1</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
   </properties>
 </object>

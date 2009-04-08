@@ -431,7 +431,6 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo = NULL, $
     $isGUI = false;
 
     // TODO: #3
-
     // Call each hook
     foreach ($hooklist as $hook) {
         //THIS IS BROKEN
@@ -896,7 +895,7 @@ class xarMod extends Object implements IxarMod
     static function getRegId($modName, $type = 'module')
     {
         $ids = self::getIds($modName);
-        return $ids['regid'];
+        return !is_null($ids['regid']) ? (int)$ids['regid'] : null;
     }
 
     /**
@@ -926,8 +925,8 @@ class xarMod extends Object implements IxarMod
      */
     static function getState($modRegId, $type = 'module')
     {
-        $tmp = self::getInfo($modRegid, $type);
-        return $tmp['state'];
+        $tmp = self::getInfo($modRegId, $type);
+        return (int)$tmp['state'];
     }
 
     /**
@@ -954,7 +953,7 @@ class xarMod extends Object implements IxarMod
         // The module details will be cached anyway.
         $modBaseInfo = self::getBaseInfo($modName, $type);
 
-        // Return null if the result wasn't set
+        // Return false if the result wasn't set
         if (!isset($modBaseInfo)) return false; // throw back
 
         if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modAvailableCache[$modBaseInfo['name']])) {
@@ -985,7 +984,6 @@ class xarMod extends Object implements IxarMod
 
         switch($type) {
         case 'module':
-        default:
             if (xarCore::isCached('Mod.Infos', $modRegId)) {
                 return xarCore::getCached('Mod.Infos', $modRegId);
             }
@@ -995,6 +993,8 @@ class xarMod extends Object implements IxarMod
                 return xarCore::getCached('Theme.Infos', $modRegId);
             }
             break;
+        default:
+            throw new BadParameterException('module/theme type');
         }
         // Log it when it doesnt come from the cache
         xarLogMessage("xarMod::getInfo ". $modRegId ." / " . $type);
@@ -1209,7 +1209,7 @@ class xarMod extends Object implements IxarMod
         if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
 
         if (empty($GLOBALS['xarMod_noCacheState']) && xarCore::isCached('Mod.getFileInfos', $modOsDir)) {
-            return xarCore::getCached('Mod.getFileInfos', $modOsDir);
+            return xarCore::getCached('Mod.getFileInfos', $modOsDir ." / " . $type);
         }
         // Log it when it didnt came from cache
         xarLogMessage("xarMod::getFileInfo ". $modOsDir ." / " . $type);
@@ -1218,7 +1218,6 @@ class xarMod extends Object implements IxarMod
         // TODO redo legacy support via type.
         switch($type) {
         case 'module':
-        default:
             // Spliffster, additional mod info from modules/$modDir/xarversion.php
             $fileName = 'modules/' . $modOsDir . '/xarversion.php';
             $part = 'xarversion';
@@ -1230,6 +1229,8 @@ class xarMod extends Object implements IxarMod
             $fileName = xarModVars::get('themes', 'themesdirectory'). '/' . $modOsDir . '/xartheme.php';
             $part = 'xartheme';
             break;
+        default:
+            throw new BadParameterException('module/theme type');
         }
 
         if (!file_exists($fileName)) {
@@ -1282,7 +1283,7 @@ class xarMod extends Object implements IxarMod
         }
         $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
 
-        xarCore::setCached('Mod.getFileInfos', $modOsDir, $FileInfo);
+        xarCore::setCached('Mod.getFileInfos', $modOsDir ." / " . $type, $FileInfo);
         return $FileInfo;
     }
 

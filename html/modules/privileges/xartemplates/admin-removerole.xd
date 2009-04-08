@@ -14,7 +14,7 @@
             <xar:if condition="$ptype eq 1">
                 <h3 class="xar-align-center">Confirm the removal of Privilege '#$privname#' from
                 Group '#$rolename#'</h3>
-                <xar:else />
+            <xar:else />
                 <h3 class="xar-align-center">Confirm the removal of Privilege '#$privname#' from
                 User '#$rolename#'</h3>
             </xar:if>

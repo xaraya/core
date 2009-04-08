@@ -38,7 +38,7 @@
                             <xar:foreach in="$style" key="$key" value="$value">
                                 <xar:if condition="$key eq $selstyle">
                                     <option value="#$key#" selected="selected">#$value#</option>
-                                    <xar:else />
+                                <xar:else />
                                     <option value="#$key#">#$value#</option>
                                 </xar:if>
                             </xar:foreach>
@@ -49,7 +49,7 @@
                             <xar:foreach in="$filter" key="$key" value="$value">
                                 <xar:if condition="$key eq $selfilter">
                                     <option value="#$key#" selected="selected">#$value#</option>
-                                    <xar:else />
+                                <xar:else />
                                     <option value="#$key#">#$value#</option>
                                 </xar:if>
                             </xar:foreach>
@@ -60,7 +60,7 @@
                             <xar:foreach in="$sort" key="$key" value="$value">
                                 <xar:if condition="$key eq $selsort">
                                     <option value="#$key#" selected="selected">#$value#</option>
-                                    <xar:else />
+                                <xar:else />
                                     <option value="#$key#">#$value#</option>
                                 </xar:if>
                             </xar:foreach>
@@ -85,10 +85,10 @@
             <!-- the Module Lists css-based styles -->
             <xar:if condition="$selstyle eq 'compacta' or $selstyle eq 'compactb'">
                 <xar:template file="compactlist-ab" type="module" />
-                <xar:else />
+            <xar:else />
                 <!-- the Module Lists table-based styles -->
-                <table class="xar-fullwidth">
-                    <tr>
+                    <table class="xar-fullwidth">
+                        <tr>
                         <th>Name</th>
                         <th>Version</th>
                         <th>Info</th>
@@ -96,50 +96,52 @@
                         <th>Actions</th>
                         <th>Properties</th>
                         <th>Hooks</th>
-                    </tr>
-                    <xar:foreach in="$listrowsitems" value="$modinfo">
-                        <tr>
-                            <!--
-                            please note any element can be a named anchor as long as
-                            it has id (and name for some browsers) so we shouldnt waste
-                            space with empty anchors here
-                            -->
-                            <td name="#$modinfo['name']#" id="#$modinfo['name']#">
-                                <!-- if module is active and configurable (admin type) make its name a link to module main admin function -->
-                                <xar:if condition="$modinfo['modconfigurl'] ne ''">
+                        </tr>
+                        <xar:foreach in="$listrowsitems" value="$modinfo">
+                            <tr>
+                                <!--
+                                please note any element can be a named anchor as long as
+                                it has id (and name for some browsers) so we shouldnt waste
+                                space with empty anchors here
+                                -->
+                                <td name="#$modinfo['name']#" id="#$modinfo['name']#">
+                                    <!-- if module is active and configurable (admin type) make its name a link to module main admin function -->
+                                    <xar:if condition="$modinfo['modconfigurl'] ne ''">
                                 <a href="#$modinfo['modconfigurl']#"
                                 title="#$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#">
                                 #$modinfo['name']#</a>
                                 <xar:else />#$modinfo['name']#</xar:if>
-                            </td>
-                            <td class="xar-align-right">#$modinfo['version']#</td>
-                            <td class="xar-align-center">
-                                <xar:if condition="$selstyle eq 'pro'">
-                                    <input type="submit" name="info" id="info"
+                                </td>
+                                <td class="xar-align-right">
+                                    #$modinfo['version']#
+                                </td>
+                                <td class="xar-align-center">
+                                    <xar:if condition="$selstyle eq 'pro'">
+                                        <input type="submit" name="info" id="info" value="#$infolabel#" />
                                     value="#$infolabel#" />
                                     <xar:elseif condition="$selstyle eq 'icons'" />
-                                    <a href="#$modinfo['infourlnew']#&amp;theme=print"
+                                        <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new"><img src="#$infoimg#" alt="#$infolabel#" /></a>
                                     target="_new">
                                         <img src="#$infoimg#" alt="#$infolabel#" />
                                     </a>
-                                    <noscript>
+                                        <noscript>
                                         <a href="#$modinfo['infourl']#">
                                             <img src="#$infoimg#" alt="#$infolabel#" />
                                         </a>
-                                    </noscript>
+                                        </noscript>
                                     <xar:else />
-                                    <a href="#$modinfo['infourlnew']#&amp;theme=print"
+                                        <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new"><xar:mlstring>Info</xar:mlstring></a>
                                     target="_new">Info</a>
-                                    <noscript>
+                                        <noscript>
                                         <a href="#$modinfo['infourl']#">Info</a>
-                                    </noscript>
-                                </xar:if>
-                            </td>
+                                        </noscript>
+                                    </xar:if>
+                                </td>
                             <td>#$modinfo['statelabel']#</td>
-                            <td class="xar-nowrap">
-                                <xar:if condition="$selstyle eq 'pro'">
-                                    <xar:if condition="$modinfo['coremod']">
-                                        <select name="action" id="action" disabled="disabled">
+                                <td class="xar-nowrap">
+                                    <xar:if condition="$selstyle eq 'pro'">
+                                        <xar:if condition="$modinfo['coremod']">
+                                            <select name="action" id="action" disabled="disabled">
                                             <option label="Disabled" selected="selected"
                                             disabled="disabled"></option>
                                             <option label="Initialise" disabled="disabled">
@@ -147,10 +149,10 @@
                                             <option label="Activate" disabled="disabled"></option>
                                             <option label="Deactivate" disabled="disabled">
                                             </option>
-                                            <option label="Remove" disabled="disabled"></option>
-                                        </select>
+                                                <option label="Remove" disabled="disabled"></option>
+                                            </select>
                                         <noscript>
-                                            <input type="submit" name="ok" id="ok" value="OK"
+                                            <input type="submit" name="ok" id="ok" value="OK" disabled="disabled" />
                                             disabled="disabled" />
                                         </noscript>
                                         <xar:else />
@@ -161,34 +163,34 @@
                                             <option label="Activate"></option>
                                             <option label="Deactivate" disabled="disabled">
                                             </option>
-                                            <option label="Remove" disabled="disabled"></option>
-                                        </select>
-                                        <noscript>
-                                            <input type="submit" name="ok" id="ok" value="OK" />
-                                        </noscript>
-                                    </xar:if>
+                                                <option label="Remove" disabled="disabled"></option>
+                                            </select>
+                                            <noscript>
+                                                <input type="submit" name="ok" id="ok" value="OK" />
+                                            </noscript>
+                                        </xar:if>
                                     <xar:elseif condition="$selstyle eq 'icons'" />
-                                    <xar:if condition="$modinfo['actionurl'] eq ''">
-                                        <img src="#$modinfo['actionimg1']#"
+                                        <xar:if condition="$modinfo['actionurl'] eq ''">
+                                            <img src="#$modinfo['actionimg1']#" alt="#$modinfo['actionlabel']#" />
                                         alt="#$modinfo['actionlabel']#" />
                                         <xar:else />
                                         <a href="#$modinfo['actionurl']#">
                                             <img src="#$modinfo['actionimg1']#"
                                             alt="#$modinfo['actionlabel']#" />
                                         </a>
-                                    </xar:if>
-                                    <xar:if condition="$modinfo['removeurl'] eq ''">
-                                        <img src="#$modinfo['actionimg2']#"
+                                        </xar:if>
+                                        <xar:if condition="$modinfo['removeurl'] eq ''">
+                                            <img src="#$modinfo['actionimg2']#" alt="#$modinfo['actionlabel']#" />
                                         alt="#$modinfo['actionlabel']#" />
                                         <xar:else />
                                         <a href="#$modinfo['removeurl']#">
                                             <img src="#$modinfo['actionimg2']#"
                                             alt="#$modinfo['actionlabel2']#" />
                                         </a>
-                                    </xar:if>
+                                        </xar:if>
                                     <xar:else />
-                                    <xar:if condition="$modinfo['coremod']">
-                                        <xar:if condition="$modinfo['state'] eq 5 or $modinfo['state'] eq 2">
+                                        <xar:if condition="$modinfo['coremod']">
+                                            <xar:if condition="$modinfo['state'] eq 5 or $modinfo['state'] eq 2">
                                         <a href="#$modinfo['actionurl']#">
                                         #$modinfo['actionlabel']#</a>
                                         <xar:else />#$modinfo['actionlabel']#</xar:if>
@@ -198,38 +200,38 @@
                                         <xar:if condition="$modinfo['state'] eq 2">| 
                                         <a href="#$modinfo['removeurl']#">
                                         #$modinfo['removelabel']#</a></xar:if>
+                                        </xar:if>
                                     </xar:if>
-                                </xar:if>
-                            </td>
-                            <td class="xar-align-center">
-                                <xar:if condition="$modinfo['modid'] ne 1 and ($modinfo['state'] eq XARMOD_STATE_INACTIVE or $modinfo['state'] eq XARMOD_STATE_ACTIVE)">
+                                </td>
+                                <td class="xar-align-center">
+                                    <xar:if condition="$modinfo['modid'] ne 1 and ($modinfo['state'] eq XARMOD_STATE_INACTIVE or $modinfo['state'] eq XARMOD_STATE_ACTIVE)">
                                 <xar:if condition="$selstyle eq 'pro'">
                                     <input type="submit" name="prop" id="prop" value="Set" />
                                     <xar:elseif condition="$selstyle eq 'icons'" />
                                     <a href="#$modinfo['propurl']#">
                                         <img src="#$propimg#" alt="#$modinfo['prop']#" />
                                     </a>
-                                    <xar:else />
+                                        <xar:else />
                                     <a href="#$modinfo['propurl']#">#$modinfo['prop']#</a>
                                 </xar:if>
                                 <xar:else />&#160;</xar:if>
-                            </td>
-                            <td class="xar-align-center">
+                                </td>
+                                <td class="xar-align-center">
                                 <xar:if condition="xarModIsAvailable($modinfo['name'])">
                                     <xar:if condition="$selstyle eq 'pro'">
                                         <input type="submit" name="edit" id="edit" value="Edit" />
-                                        <xar:elseif condition="$selstyle eq 'icons'" />
+                                    <xar:elseif condition="$selstyle eq 'icons'"/>
                                         <a href="#$modinfo['editurl']#">
                                             <img src="#$editimg#" alt="#$modinfo['edit']#" />
                                         </a>
-                                        <xar:else />
+                                    <xar:else />
                                         <a href="#$modinfo['editurl']#">#$modinfo['edit']#</a>
                                     </xar:if>
                                 </xar:if>
-                            </td>
-                        </tr>
-                    </xar:foreach>
-                </table>
+                                </td>
+                            </tr>
+                        </xar:foreach>
+                    </table>
             </xar:if>
         </form>
     </div>

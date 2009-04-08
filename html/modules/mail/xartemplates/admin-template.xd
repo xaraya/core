@@ -4,8 +4,9 @@
     <xar:if condition="xarModVars::get('base','editor') eq 'htmlarea'">
         <xar:template file="htmlarea_insert" module="htmlarea" type="module" />
     </xar:if>
-    <xar:set name="messagetitle">#xarML('Write this string in the message body or subject to
-    display the corresponding information')#</xar:set>
+    <xar:set name="messagetitle">
+        #xarML('Write this string in the message body or subject to display the corresponding information')# 
+    </xar:set>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Mail Administration</span>
     </div>
@@ -67,7 +68,7 @@
                 </p>
             </fieldset>
         </form>
-        <form action="&xar-modurl-mail-admin-template;" method="post"
+        <form action="&xar-modurl-mail-admin-template;" method="post" enctype="application/x-www-form-urlencoded">
         enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Template Details</legend>

@@ -46,7 +46,7 @@ function base_javascriptapi__findfile($args)
 
     // Get the module ID from the module name.
     if (empty($modid) && !empty($module)) {
-        $modid = xarModGetIDFromName($module);
+        $modid = xarMod::getRegID($module);
     }
 
     // Get details for the module if we have a valid module id.

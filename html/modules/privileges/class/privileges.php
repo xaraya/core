@@ -183,14 +183,23 @@ class xarPrivileges extends xarMasks
         $role = xarRoles::findRole($rolename);
         $roleid = $role->getID();
 
+        $bindvars = array($roleid,$privid);
+        
+        // Check if the privilege already exists
+        $query = "SELECT * FROM " . parent::$acltable . " WHERE role_id = ? and privilege_id = ?";
+        $stmt = parent::$dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
+        if ($result->first()) return true;
+        
         // Add the assignation as an entry to the acl table
         $query = "INSERT INTO " . parent::$acltable . " VALUES (?,?)";
-        $bindvars = array($roleid,$privid);
         parent::$dbconn->Execute($query,$bindvars);
 
         // empty the privset cache
         //        parent::$forgetprivsets();
 
+        // Refresh the privileges cached for the current sessions
+        xarMasks::clearCache();
         return true;
     }
 
@@ -434,208 +443,12 @@ class xarPrivileges extends xarMasks
         return $allmodules;
     }
 
-    /**
-     * getcomponents: returns all the current components of a module.
-     *
-     * Returns an array of all the components that have been registered for a given module.
-     * The components correspond to masks in the masks table. Each one can be used to
-     * construct a privilege's xarSecurityCheck.
-     * They are used to populate dropdowns in displays
-     *
-     * @author  Marc Lutolf <marcinmilan@xaraya.com>
-     * @access  public
-     * @param   string with module name
-     * @return  array of component ids and names
-     * @throws  none
-     * @todo    this isn't really the right place for this function
-    */
-    public static function getcomponents($modid=null)
-    {
-        if (is_null($modid)) return array();
-        if (!empty($modid)) $modid = xarMod::getID(xarModGetNameFromID($modid));
-
-        parent::initialize();
-        $query = "SELECT DISTINCT component
-                  FROM " . parent::$instancestable . "
-                  WHERE module_id = ?
-                  ORDER BY component";
-        $stmt = parent::$dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($modid));
-        $iter = $result->next();
-
-        $components = array();
-        if (empty($modid)){
-            $components[] = array('id' => -2,
-                               'name' => 'All');
-        }
-        elseif(count($result->fields) == 0) {
-            $components[] = array('id' => -1,
-                               'name' => 'All');
-//          $components[] = array('id' => 0,
-//                             'name' => 'None');
-        }
-        else {
-            $components[] = array('id' => -1,
-                               'name' => 'All');
-//          $components[] = array('id' => 0,
-//                             'name' => 'None');
-            $ind = 2;
-            while($iter) {
-                $name = $result->getString(1);
-                if (($name != 'All') && ($name != 'None')) {
-                    $ind = $ind + 1;
-                    $components[] = array(
-                        'id'   => $name,
-                        'name' => $name
-                    );
-                }
-                $iter = $result->next();
-            }
-        }
-        return $components;
-    }
-
-    /**
-     * getinstances: returns all the current instances of a module.
-     *
-     * Returns an array of all the instances that have been defined for a given module.
-     * The instances for each module are registered at initialization.
-     * They are used to populate dropdowns in displays
-     *
-     * @author  Marc Lutolf <marcinmilan@xaraya.com>
-     * @access  public
-     * @param   string with module name
-     * @return  array of instance ids and names for the module
-     * @throws  none
-     * @todo    this isn't really the right place for this function
-    */
-    public static function getinstances($modid=null, $component)
-    {
-        if (is_null($modid)) return array();
-        if (!empty($modid)) $modid = xarMod::getID(xarModGetNameFromID($modid));
-
-        parent::initialize();
-
-        if ($component =="All") {
-            $componentstring = "";
-        }
-        else {
-            $componentstring = "AND ";
-        }
-        $query = "SELECT header, query, ddlimit
-                  FROM " . parent::$instancestable ."
-                  WHERE module_id = ? AND component = ?
-                  ORDER BY component,id";
-        $bindvars = array($modid,$component);
-
-        $instances = array();
-        $stmt = parent::$dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars);
-        while($result->next()) {
-            list($header,$selection,$ddlimit) = $result->fields;
-
-            // Check if an external instance wizard is requested, if so redirect using the URL in the 'query' part
-            // This is indicated by the keyword 'external' in the 'header' of the instance definition
-            if ($header == 'external') {
-                return array('external' => 'yes',
-                             'target'   => $selection);
-            }
-
-            // check if the query is there
-            if ($selection =='') {
-                $msg = xarML('A query is missing in component #(1) of module #(2)', $component, xarModGetNameFromID($modid));
-                // TODO: make it descendent from xarExceptions.
-                throw new Exception($msg);
-            }
-
-            // We cant prepare this outside the loop as we have no idea what it is.
-            $stmt1 = parent::$dbconn->prepareStatement($selection);
-            $result1 = $stmt1->executeQuery();
-
-            $dropdown = array();
-            if (empty($modid)){
-                $dropdown[] = array('id' => -2,'name' => '');
-            }  elseif($result->EOF) { // FIXME: this never gets executed it think? it's outside the while condition.
-                $dropdown[] = array('id' => -1,'name' => 'All');
-    //          $dropdown[] = array('id' => 0, 'name' => 'None');
-            }  else {
-                $dropdown[] = array('id' => -1,'name' => 'All');
-    //          $dropdown[] = array('id' => 0, 'name' => 'None');
-            }
-            while($result1->next()) {
-                list($dropdownline) = $result1->fields;
-                if (($dropdownline != 'All') && ($dropdownline != 'None')){
-                    $dropdown[] = array('id' => $dropdownline, 'name' => $dropdownline);
-                }
-            }
-
-            if (count($dropdown) > $ddlimit) {
-                $type = "manual";
-            } else {
-                $type = "dropdown";
-            }
-            $instances[] = array('header' => $header,'dropdown' => $dropdown, 'type' => $type);
-        }
-
-        return $instances;
-    }
-
     public static function getprivilegefast($id)
     {
         foreach(self::getprivileges() as $privilege){
             if ($privilege['id'] == $id) return $privilege;
         }
         return false;
-    }
-
-    /**
-     * returnPrivilege: adds or modifies a privilege coming from an external wizard .
-     *
-     *
-     * @author  Marc Lutolf <marcinmilan@xaraya.com>
-     * @access  public
-     * @param   strings with id, name, realm, module, component, instances and level
-     * @return  mixed id if OK, void if not
-    */
-    public static function returnPrivilege($id,$name,$realm,$module,$component,$instances,$level)
-    {
-        $instance = "";
-        foreach ($instances as $inst) { // mrb: why not use join()?
-            $instance .= $inst . ":";
-        }
-        if ($instance =="") {
-            $instance = "All";
-        }
-        else {
-            $instance = substr($instance,0,strlen($instance)-1);
-        }
-
-        if($id==0) {
-            $pargs = array('name' => $name,
-                           'realm' => $realm,
-                           'module' => $module,
-                           'module_id'=>xarMod::getID($module),
-                           'component' => $component,
-                           'instance' => $instance,
-                           'level' => $level,
-                           'parentid' => 0
-                           );
-            sys::import('modules.privileges.class.privilege');
-            $priv = new xarPrivilege($pargs);
-            if ($priv->add()) return $priv->getID();
-        } else {
-            sys::import('modules.privileges.class.privileges');
-            $priv = xarPrivileges::getPrivilege($id);
-            $priv->setName($name);
-            $priv->setRealm($realm);
-            $priv->setModule($module);
-            $priv->setModuleID($module);
-            $priv->setComponent($component);
-            $priv->setInstance($instance);
-            $priv->setLevel($level);
-            if ($priv->update()) return $priv->getID();
-        }
-        return;
     }
 
     /**
@@ -759,8 +572,7 @@ class xarPrivileges extends xarMasks
         LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.itemtype = ? AND p.module_id = ?";
         //Execute the query, bail if an exception was thrown
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, $module));
-
+        $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, xarMod::getID($module)));
         while ($result->next()) {
             list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$module) = $result->fields;
             $pargs = array(

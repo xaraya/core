@@ -39,7 +39,7 @@
                         <td class="xar-align-right">#$field['id']#</td>
                         <td>#$field['name']#</td>
                         <td>
-                            <input type="text" name="label[#$field['id']#]"
+                            <input type="text" name="label[#$field['id']#]" id="label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium" />
                             id="label_#$field['id']#" value="#$field['label']#"
                             class="xar-form-textmedium" />
                         </td>
@@ -47,7 +47,7 @@
                             <xar:data-output property="$fieldtypeprop" value="$field['format']" />
                         </td>
                         <td>
-                            <input type="text" name="validation[#$field['id']#]"
+                            <input type="text" name="configuration[#$field['id']#]" id="configuration_#$field['id']#" value="#$field['configuration']#" class="xar-form-textmedium" />
                             id="validation_#$field['id']#" value="#$field['validation']#"
                             class="xar-form-textmedium" />
                         </td>
@@ -70,15 +70,15 @@
                         class="xar-form-textmedium" />
                     </td>
                     <td>
-                        <input type="text" name="label[0]" id="label_0"
+                        <input type="text" name="label[0]" id="label_0" class="xar-form-textmedium" />
                         class="xar-form-textmedium" />
                     </td>
                     <td>
-                        <xar:data-input property="$fieldtypeprop" name="format[0]" id="format_0"
+                        <xar:data-input property="$fieldtypeprop" name="format[0]" id="format_0" value="" />
                         value="" />
                     </td>
                     <td>
-                        <input type="text" name="validation[0]" id="validation_0" value=""
+                        <input type="text" name="validation[0]" id="validation_0" value="" class="xar-form-textmedium" />
                         class="xar-form-textmedium" />
                     </td>
                 </tr>

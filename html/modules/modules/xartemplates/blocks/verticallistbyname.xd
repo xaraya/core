@@ -2,9 +2,9 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!--
-    this is a simplified version of vertical list template
-    for full comments and examples see file verticallistbycats.xd
--->
+        this is a simplified version of vertical list template
+        for full comments and examples see file verticallistbycats.xd
+    -->
     <ul class="xar-menu-section">
         <li class="xar-menu-section">
             <ul class="xar-menu-item">
@@ -21,7 +21,7 @@
                             <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
                             <a href="#$mod['features']['link']#"
                             title="#$mod['features']['maintitle']#">#$mod['features']['label']#</a>
-                            <xar:else />
+              <xar:else />
                             <a href="#$mod['features']['link']#"
                             title="#$mod['features']['maintitle']#">#$mod['features']['label']#</a>
                         </xar:if>

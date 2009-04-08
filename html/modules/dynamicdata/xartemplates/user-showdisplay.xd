@@ -9,7 +9,7 @@
                         <strong>#$field['label']# :</strong>
                     </td>
                     <td class="xar-align-left">
-                        <xar:data-output type="$field['type']" name="dd_'.$field['id'].'"
+                        <xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" />
                         value="$field['value']" />
                     </td>
                 </tr>

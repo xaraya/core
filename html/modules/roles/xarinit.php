@@ -129,7 +129,7 @@ function roles_activate()
     // Create some modvars
     //
     //TODO: improve on this hardwiring
-    xarModVars::set('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem')); //Setting a default
+    xarModVars::set('roles', 'defaultauthmodule', 'authsystem'); 
     xarModVars::set('roles', 'defaultregmodule', '');
     if (xarModVars::get('roles','itemsperpage')) return true;
     xarModVars::set('roles', 'rolesdisplay', 'tabbed');
@@ -251,77 +251,8 @@ function roles_upgrade($oldVersion)
 {
     // Upgrade dependent on old version number
     switch ($oldVersion) {
-        case '1.01':
+        case '2.0.0':
             break;
-        case '1.1.1':
-            // is there an authentication module?
-            $regid = xarModGetIDFromName('authentication');
-
-            if (isset($regid)) {
-                // remove the login block type and block from roles
-                $result = xarModAPIfunc('blocks', 'admin', 'delete_type', array('module' => 'roles', 'type' => 'login'));
-
-                // install the authentication module
-                if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
-                    // Activate the module
-                if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
-
-                // create the new authentication modvars
-                // TODO: dont do this here, but i dont know how to do it otherwise, since apparently the
-                //       roles values are needed
-                xarModVars::set('authentication', 'allowregistration', xarModVars::get('roles', 'allowregistration'));
-                xarModVars::set('authentication', 'requirevalidation', xarModVars::get('roles', 'requirevalidation'));
-                xarModVars::set('authentication', 'itemsperpage', xarModVars::get('roles', 'rolesperpage'));
-                xarModVars::set('authentication', 'uniqueemail', xarModVars::get('roles', 'uniqueemail'));
-                xarModVars::set('authentication', 'askwelcomeemail', xarModVars::get('roles', 'askwelcomeemail'));
-                xarModVars::set('authentication', 'askvalidationemail', xarModVars::get('roles', 'askvalidationemail'));
-                xarModVars::set('authentication', 'askdeactivationemail', xarModVars::get('roles', 'askdeactivationemail'));
-                xarModVars::set('authentication', 'askpendingemail', xarModVars::get('roles', 'askpendingemail'));
-                xarModVars::set('authentication', 'askpasswordemail', xarModVars::get('roles', 'askpasswordemail'));
-                xarModVars::set('authentication', 'defaultgroup', xarModVars::get('roles', 'defaultgroup'));
-                xarModVars::set('authentication', 'lockouttime', 15);
-                xarModVars::set('authentication', 'lockouttries', 3);
-                xarModVars::set('authentication', 'minage', xarModVars::get('roles', 'minage'));
-                xarModVars::set('authentication', 'disallowednames', xarModVars::get('roles', 'disallowednames'));
-                xarModVars::set('authentication', 'disallowedemails', xarModVars::get('roles', 'disallowedemails'));
-                xarModVars::set('authentication', 'disallowedips', xarModVars::get('roles', 'disallowedips'));
-
-                // delete the old roles modvars
-                xarModVars::delete('roles', 'allowregistration');
-                xarModVars::delete('roles', 'requirevalidation');
-                xarModVars::delete('roles', 'rolesperpage');
-                xarModVars::delete('roles', 'uniqueemail');
-                xarModVars::delete('roles', 'askwelcomeemail');
-                xarModVars::delete('roles', 'askvalidationemail');
-                xarModVars::delete('roles', 'askdeactivationemail');
-                xarModVars::delete('roles', 'askpendingemail');
-                xarModVars::delete('roles', 'askpasswordemail');
-                xarModVars::delete('roles', 'defaultgroup');
-                xarModVars::delete('roles', 'lockouttime');
-                xarModVars::delete('roles', 'lockouttries');
-                xarModVars::delete('roles', 'minage');
-                xarModVars::delete('roles', 'disallowednames');
-                xarModVars::delete('roles', 'disallowedemails');
-                xarModVars::delete('roles', 'disallowedips');
-
-                // create one new roles modvar
-                xarModVars::set('roles', 'defaultauthmodule', xarModGetIDFromName('authentication'));
-            } else {
-                throw new Exception('I could not load the authentication module. Please make it available and try again');
-            }
-            break;
-        case '1.1.1':
-            $roles_objects = array('role','user','group');
-            $existing_objects  = xarModApiFunc('dynamicdata','user','getobjects');
-            foreach($existing_objects as $objectid => $objectinfo) {
-                if(in_array($objectinfo['name'], $roles_objects)) {
-                    // KILL
-                    if(!xarModApiFunc('dynamicdata','admin','deleteobject', array('objectid' => $objectid))) return;
-                }
-            }
-            if (!xarModAPIFunc('roles','admin','createobjects')) return;
-            break;
-
     }
     // Update successful
     return true;

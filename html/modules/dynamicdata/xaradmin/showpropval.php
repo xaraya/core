@@ -1,6 +1,6 @@
 <?php
 /**
- * Show validation of some property
+ * Show configuration of some property
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -11,7 +11,7 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * Show validation of some property
+ * Show configuration of some property
  * @return array
  */
 function dynamicdata_admin_showpropval($args)
@@ -20,13 +20,13 @@ function dynamicdata_admin_showpropval($args)
 
     // get the property id
     if (!xarVarFetch('itemid',  'id',    $itemid)) {return;}
-    if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('exit', 'isset', $exit, NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('confirm', 'isset', $confirm, NULL, XARVAR_DONT_SET)) {return;}
 
     // check security
-    $modid = xarModGetIDFromName('dynamicdata');
+    $module_id = xarMod::getRegID('dynamicdata');
     $itemtype = 1; // dynamic properties
-    if (!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
+    if (!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$module_id:$itemtype:$itemid")) return;
 
     // get the object corresponding to this dynamic property
     $myobject = & DataObjectMaster::getObject(array('objectid' => 2,
@@ -41,9 +41,9 @@ function dynamicdata_admin_showpropval($args)
 
     // check if the module+itemtype this property belongs to is hooked to the uploads module
     /* FIXME: can we do without this hardwiring? Comment out for now
-    $modid = $myobject->properties['module_id']->value;
+    $module_id = $myobject->properties['module_id']->value;
     $itemtype = $myobject->properties['itemtype']->value;
-    $modinfo = xarModGetInfo($modid);
+    $modinfo = xarModGetInfo($module_id);
     if (xarModIsHooked('uploads', $modinfo['name'], $itemtype)) {
         xarVarSetCached('Hooks.uploads','ishooked',1);
     }
@@ -52,7 +52,7 @@ function dynamicdata_admin_showpropval($args)
     $data = array();
     // get a new property of the right type
     $data['type'] = $myobject->properties['type']->value;
-    $id = $myobject->properties['validation']->id;
+    $id = $myobject->properties['configuration']->id;
 
     $data['name']       = 'dd_'.$id;
     // pass the actual id for the property here
@@ -61,24 +61,24 @@ function dynamicdata_admin_showpropval($args)
     $data['invalid']    = !empty($invalid) ? $invalid :'';
     $property =& DataPropertyMaster::getProperty($data);
     if (empty($property)) return;
+    
+    if (!empty($confirm) || !empty($exit)) {
+        if (!xarVarFetch($data['name'],'isset',$configuration,NULL,XARVAR_NOT_REQUIRED)) return;
 
-    if (!empty($preview) || !empty($confirm)) {
-        if (!xarVarFetch($data['name'],'isset',$value,NULL,XARVAR_NOT_REQUIRED)) return;
+        // pass the current value as configuration rule
+        $data['configuration'] = isset($configuration) ? $configuration : '';
 
-        // pass the current value as validation rule
-        $data['validation'] = isset($value) ? $value : '';
-
-        $isvalid = $property->updateValidation($data);
+        $isvalid = $property->updateConfiguration($data);
 
         if ($isvalid) {
-            // store the updated validation rule back in the value
-            $myobject->properties['validation']->value = $property->validation;
-            if (!empty($confirm)) {
-                if (!xarSecConfirmAuthKey()) return;
+            // store the updated configuration rule back in the value
+            $myobject->properties['configuration']->value = $property->configuration;
+            if (!xarSecConfirmAuthKey()) return;
 
-                $newid = $myobject->updateItem();
-                if (empty($newid)) return;
+            $newid = $myobject->updateItem();
+            if (empty($newid)) return;
 
+            if (!empty($exit)) {
                 if (!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
                 if (empty($return_url)) {
                     // return to modifyprop
@@ -89,8 +89,8 @@ function dynamicdata_admin_showpropval($args)
                 return true;
             }
         } else {
-            $myobject->properties['validation']->invalid = $property->invalid;
-        }
+            $myobject->properties['configuration']->invalid = $property->invalid;
+        }        
     }
 
     // pass the id for the input field here
@@ -98,16 +98,16 @@ function dynamicdata_admin_showpropval($args)
     $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
     $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
     $data['size']       = !empty($size) ? $size : 50;
-    // pass the current value as validation rule
-    if (!empty($myobject->properties['validation'])) {
-        $value = $myobject->properties['validation']->value;
+    // pass the current value as configuration rule
+    if (!empty($myobject->properties['configuration'])) {
+        $value = $myobject->properties['configuration']->value;
     } else {
         $value = null;
     }
-    $data['validation'] = $value;
+    $data['configuration'] = $value;
 
-    // call its showValidation() method and return
-    $data['showval'] = $property->showValidation($data);
+    // call its showConfiguration() method and return
+    $data['showval'] = $property->showConfiguration($data);
     $data['itemid'] = $itemid;
     $data['object'] =& $myobject;
 

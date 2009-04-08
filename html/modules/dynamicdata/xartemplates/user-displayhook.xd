@@ -2,12 +2,12 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!--
-    Note: display hooks are currently disabled by default in DD - you should use
-    the corresponding xar:data-* BL tags directly in your templates instead
--->
+        Note: display hooks are currently disabled by default in DD - you should use
+        the corresponding xar:data-* BL tags directly in your templates instead
+    -->
     <!--
-    You can use different user-displayhook-[objectname].xd templates for different objects
--->
+        You can use different user-displayhook-[objectname].xd templates for different objects
+    -->
     <table width="100%" border="0" cellspacing="0" cellpadding="4">
         <xar:foreach in="$properties" key="$name" value="$property">
             <xar:if condition="$properties[$name]:getDisplayStatus() ne DataPropertyMaster::DD_DISPLAYSTATE_DISABLED">

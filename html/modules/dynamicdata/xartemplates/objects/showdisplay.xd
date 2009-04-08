@@ -10,9 +10,11 @@
         <xar:set name="layout">'default'</xar:set>
     </xar:if>
     <xar:if condition="$layout eq 'default'">
+        <table class="xar-fullwidth">
         <xar:foreach in="$properties" key="$name" value="$property">
+            <tr><td>
             <div class="xar-form-input-wrapper">
-                <xar:data-label property="$properties[$name]" label="id" />
+                    <xar:data-label property="$properties[$name]" for="id" />
                 <xar:if condition="$name eq 'parent'">
                     <xar:set name="modid">$properties['module_id']-&gt;value</xar:set>
                     <xar:data-output property="$properties[$name]" modid="$modid" />
@@ -20,8 +22,10 @@
                     <xar:data-output property="$properties[$name]" />
                 </xar:if>
             </div>
+            </td></tr>
         </xar:foreach>
-        <xar:else />
+        </table>
+    <xar:else />
         <!-- You can include your own layout here or specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->
         <xar:template module="$tplmodule" file="display-$layout" />
     </xar:if>

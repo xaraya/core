@@ -33,26 +33,13 @@ class EmailProperty extends TextBoxProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!parent::validateValue($value)) return false;
 
-         if (!empty($value) && strlen($value) > $this->maxlength) {
-            $this->invalid = xarML('E-Mail : must be less than #(1) characters long',$this->maxlength + 1);
-            $this->value = $value;
-            return false;
-        } elseif (isset($this->min) && strlen($value) < $this->min) {
-            $this->invalid = xarML('E-Mail : must be at least #(1) characters long',$this->min);
-            $this->value = $value;
-            return false;
-        }
         if (!empty($value)) {
             // cfr. pnVarValidate in pnLegacy.php
             $regexp = '/^(?:[^\s\000-\037\177\(\)<>@,;:\\"\[\]]\.?)+@(?:[^\s\000-\037\177\(\)<>@,;:\\\"\[\]]\.?)+\.[a-z]{2,6}$/Ui';
-            if (preg_match($regexp,$value)) {
-                $this->value = $value;
-            } else {
-                $this->invalid = xarML('E-Mail: #(1)', $this->name);
+            if (!preg_match($regexp,$value)) {
+                $this->invalid = xarML('#(1) #(2): the format is incorrect', $this->name, $this->desc);
                 $this->value = $value;
                 return false;
             }

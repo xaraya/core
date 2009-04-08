@@ -6,7 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <img src="#xarTplGetImage('admin.gif','base')#" alt="#xarML('official icon')#" width="96"
+        <img src="#xarTplGetImage('admin.gif','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
         height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <h3>What is it?</h3>
@@ -18,7 +18,7 @@
         <h3>How to use it?</h3>
         <p>The Administration menu allows you to have control over various global aspects on your
         site and includes:</p>
-        <ol>
+            <ol>
             <li>System Information: Allows you to view your server and php set-up for trouble
             shooting.</li>
             <li>Extension Releases: View recently released extensions from the xaraya.com Extension
@@ -31,9 +31,9 @@
                 <li>Languages, Locales and Security</li>
                 <li>Cookie settings, and other defaults such as WYSIWYG editor</li>
             </ul></li>
-        </ol>
+            </ol>
         <h4>The Others Tab</h4>
-        <p>
+            <p>
         <strong>Timezone setting:</strong>Xaraya stores date/times in UTC. This timezone is used to
         calculate the time shown to users of your site. Note that you can have users choose their
         own timezone when you allow them to.</p>
@@ -120,13 +120,13 @@
         information.</p>
         <h3>Privilege Masks</h3>
         <p>You can set privileges for this module based on the following included masks:</p>
-        <ul>
-            <li>ViewBase</li>
-            <li>ReadBase</li>
-            <li>AdminBase</li>
+            <ul>
+                <li>ViewBase</li>
+                <li>ReadBase</li>
+                <li>AdminBase</li>
             <li>ViewBaseBlocks, ReadBaseBlocks, EditBaseBlocks, AddBaseBlocks, DeleteBaseBlocks,
             AdminBaseBlocks.</li>
-        </ul>
+            </ul>
         <p>See the documentation for further information on privileges, masks and configuring them
         in your system.</p>
         <h3>For Developers</h3>

@@ -9,7 +9,7 @@
         <xar:if condition="$pending or $pending =='1'">
             <p>Your account has been validated, but must be reviewed by the administrator before it
             is activated. Your account should be activated shortly.</p>
-            <xar:else />
+        <xar:else />
             <p>Your account has been validated! You will now be redirected to the login page.</p>
             <p>If you are not redirected automatically in a few seconds, please go to 
             <a href="#$loginlink#">log in</a>.</p>

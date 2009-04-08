@@ -19,7 +19,7 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <dd>
-                                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$parents[$i]['parentid']#"
+                                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$parents[$i]['parentid']#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
                                 title="#xarML('Show this privilege')#">
                                 #$parents[$i]['parentname']#</a>
                             </dd>
@@ -41,7 +41,7 @@
                     <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$id#">Modify</a>
                 </dd>
                 <dd class="active">
-                    <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$id#"
+                    <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$id#" class="active"><xar:mlstring>Delete</xar:mlstring></a>
                     class="active">Delete</a>
                 </dd>
                 <dd>

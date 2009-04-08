@@ -1,10 +1,14 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:style scope="block" file="onlineblock" />
-    <xar:comment>the above stylesheet has been included more like example how to include a
-    stylesheet in a block rather than a pure necessity here. Tables really shouldn't be used for
-    layout, only for tablular data, but since it's used it could be put right via css (comment by
-    andyv)</xar:comment>
+    <!--
+        the above stylesheet has been included more like example
+        how to include a stylesheet in a block rather than a pure necessity here.
+        Tables really shouldn't be used for layout, only for tablular data,
+        but since it's used it could be put right via css
+        (comment by andyv)
+    -->
+     <xar:if condition="!empty($activeusers) AND $showusers">
     <table class="xar-fullwidth xar-roles-nicetable">
         <xar:if condition="!empty($test1)">
             <tr>
@@ -20,23 +24,24 @@
                     <td>&#160;</td>
                     <td>&#160;</td>
                     <td class="xar-align-center">
-                        <img src="#xarTplGetImage('ob_mail_unreaded.gif','roles')#"
+                         <img src="#xarTplGetImage('ob_mail_unreaded.gif','roles')#" alt="#xarML('Unread messages')#" />
                         alt="#xarML('Unread messages')#" />
                     </td>
                     <td class="xar-align-center">
-                        <img src="#xarTplGetImage('ob_mail_total.gif','roles')#"
+                         <img src="#xarTplGetImage('ob_mail_total.gif','roles')#" alt="#xarML('Total messages')#" />
                         alt="#xarML('Total messages')#" />
                     </td>
                 </tr>
             </xar:if>
+             <xar:foreach in="$activeusers" value="$dd">
             <xar:foreach in="$test1" value="$dd">
                 <tr>
                     <td>
                         <xar:if condition="!empty($dd['userurl'])">
-                            <img src="#xarTplGetImage('ob_user.gif','roles')#" alt=""
+                             <img src="#xarTplGetImage('ob_user.gif','roles')#" alt="" class="xar-valign-middle" />
                             class="xar-valign-middle" />
                             <xar:else />
-                            <img src="#xarTplGetImage('ob_user_other.gif','roles')#" alt=""
+                             <img src="#xarTplGetImage('ob_user_other.gif','roles')#" alt="" class="xar-valign-middle" />
                             class="xar-valign-middle" />
                         </xar:if>
                         <a href="#$dd['userurl']#">#xarVarPrepForDisplay($dd['name'])#</a>
@@ -50,6 +55,7 @@
                     </td>
                 </tr>
             </xar:foreach>
+        </table>
         </xar:if>
         <tr>
             <td colspan="4">&#160;</td>
@@ -61,6 +67,8 @@
             <td></td>
             <td class="xar-align-center" colspan="2">#$numusers#</td>
         </tr>
+            </xar:if>
+            <xar:if condition="$showanontotal">
         <tr>
             <td>
             <img src="#xarTplGetImage('ob_users_an.gif','roles')#" alt=""
@@ -68,6 +76,7 @@
             <td></td>
             <td class="xar-align-center" colspan="2">#$numguests#</td>
         </tr>
+            </xar:if>
     </table>
     <xar:if condition="isset($lastuser)">
         <p>Welcome to our latest member, 

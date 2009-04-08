@@ -6,8 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <img src="#xarTplGetImage('admin.gif', 'mail')#" alt="#xarML('official icon')#" width="96"
-        height="96" class="xar-module-icon" />
+        <img src="#xarTplGetImage('admin.gif', 'mail')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <h3>What is it?</h3>
         <p>The mail module controls the ways that your site sends mail to users or groups of users.
@@ -49,7 +48,7 @@
         further customization.</p>
         <h4>Modify Config</h4>
         <p>There are four sections in the Modify Configuration option.</p>
-        <ul>
+            <ul>
             <li>
             <strong>Mail Configuration</strong>: default options for email address, email format,
             reply to and template debug option</li>

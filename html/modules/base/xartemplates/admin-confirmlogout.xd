@@ -11,5 +11,5 @@
         <xar:set name="authdata">xarModAPIFunc('roles','user','getdefaultauthdata')</xar:set>[ 
         <a href="#xarModURL($authdata['defaultlogoutmodname'],'user','logout')#">Logout</a>] [ 
         <a href="javascript:top.history.go(-1)">Cancel</a>]</div>
-    </div>
+        </div>
 </xar:template>

@@ -17,7 +17,7 @@
       <source>xar_privileges.id</source>
       <status>65</status>
       <seq>1</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="name">
       <id>50</id>
@@ -27,7 +27,7 @@
       <source>xar_privileges.name</source>
       <status>33</status>
       <seq>2</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="realm">
       <id>51</id>
@@ -37,7 +37,7 @@
       <source>xar_privileges.realm_id</source>
       <status>33</status>
       <seq>3</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="module">
       <id>52</id>
@@ -47,7 +47,7 @@
       <source>xar_privileges.module_id</source>
       <status>33</status>
       <seq>4</seq>
-      <validation>a:2:{s:10:&quot;validation&quot;;s:8:&quot;systemid&quot;;s:8:&quot;override&quot;;s:1:&quot;1&quot;;}</validation>
+      <configuration>a:2:{s:10:&quot;validation&quot;;s:8:&quot;systemid&quot;;s:8:&quot;override&quot;;s:1:&quot;1&quot;;}</configuration>
     </property>
     <property name="component">
       <id>53</id>
@@ -57,7 +57,7 @@
       <source>xar_privileges.component</source>
       <status>33</status>
       <seq>5</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="instance">
       <id>54</id>
@@ -67,7 +67,7 @@
       <source>xar_privileges.instance</source>
       <status>33</status>
       <seq>6</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="level">
       <id>55</id>
@@ -77,7 +77,7 @@
       <source>xar_privileges.level</source>
       <status>33</status>
       <seq>7</seq>
-      <validation>0,No Access;100,Overview;200,Read;300,Comment;400,Moderate;500,Edit;600,Add;700,Delete;800,Adminster;-1,Invalid</validation>
+      <configuration>0,No Access;100,Overview;200,Read;300,Comment;400,Moderate;500,Edit;600,Add;700,Delete;800,Adminster;-1,Invalid</configuration>
     </property>
     <property name="description">
       <id>56</id>
@@ -87,7 +87,7 @@
       <source>xar_privileges.description</source>
       <status>65</status>
       <seq>8</seq>
-      <validation></validation>
+      <configuration></configuration>
     </property>
     <property name="priv_type">
       <id>57</id>
@@ -97,7 +97,7 @@
       <source>xar_privileges.itemtype</source>
       <status>65</status>
       <seq>8</seq>
-      <validation>0,Base;1,Privilege;3,Mask</validation>
+      <configuration>0,Base;1,Privilege;3,Mask</configuration>
     </property>
   </properties>
 </object>

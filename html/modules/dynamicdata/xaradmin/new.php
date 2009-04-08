@@ -21,7 +21,7 @@ function dynamicdata_admin_new($args)
 
     if(!xarVarFetch('objectid', 'id', $objectid,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'id', $modid,        182,  XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id',    'id', $module_id,        182,  XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'id', $itemtype,     0,    XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,    0,    XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('preview',  'isset', $preview,   NULL, XARVAR_DONT_SET)) {return;}
@@ -31,13 +31,13 @@ function dynamicdata_admin_new($args)
     if(!xarVarFetch('notfresh', 'isset', $notfresh,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule','str',   $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
 
-    if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$modid:$itemtype:All")) return;
+    if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$module_id:$itemtype:All")) return;
 
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
-    $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
+    $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name'      => $name,
-                                         'moduleid'  => $modid,
+                                         'moduleid'  => $module_id,
                                          'itemtype'  => $itemtype,
                                          'join'      => $join,
                                          'table'     => $table,
@@ -53,7 +53,9 @@ function dynamicdata_admin_new($args)
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
 
-    $modinfo = xarModGetInfo($myobject->moduleid);
+    // Makes this hooks call explictly from DD
+    //$modinfo = xarModGetInfo($myobject->moduleid);
+    $modinfo = xarModGetInfo(182);
     $item = array();
     foreach (array_keys($myobject->properties) as $name) {
         $item[$name] = $myobject->properties[$name]->value;

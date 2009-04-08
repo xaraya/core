@@ -8,8 +8,9 @@
             <!-- Array of items for a given position -->
             <xar:if condition="!empty($position) and is_array($loop:top:item)">
                 <xar:if condition="$loop:top:item.type == 'code' and (empty($type) or $type == 'code')">
-
-                    <script type="text/javascript">#$loop:top:item.data#</script>
+                    <script type="text/javascript">
+                    #$loop:top:item.data#
+                    </script>
                 </xar:if>
                 <xar:if condition="$loop:top:item.type == 'src' and (empty($type) or $type == 'src')">
 
@@ -20,8 +21,9 @@
             <xar:if condition="empty($position) and is_array($loop:top:item)">
                 <xar:loop name="$loop:top:item" id="detail">
                     <xar:if condition="$loop:detail:item.type == 'code' and (empty($type) or $type == 'code')">
-
-                        <script type="text/javascript">#$loop:detail:item.data#</script>
+                        <script type="text/javascript">
+                        #$loop:detail:item.data#
+                        </script>
                     </xar:if>
                     <xar:if condition="$loop:detail:item.type == 'src' and (empty($type) or $type == 'src')">
 

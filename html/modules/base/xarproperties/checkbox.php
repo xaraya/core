@@ -32,7 +32,7 @@ class CheckboxProperty extends DataProperty
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // store the fieldname for validations who need them (e.g. file uploads)
+        // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
             if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
@@ -42,10 +42,6 @@ class CheckboxProperty extends DataProperty
 
     public function validateValue($value = null)
     {
-        // this won't do for check boxes !
-        //if (!isset($value)) {
-        //    $value = $this->value;
-        //}
     // TODO: allow different values here, and verify $checked ?
         if (!empty($value)) {
             $this->value = 1;
@@ -57,9 +53,7 @@ class CheckboxProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
-        if (!isset($data['value'])) {
-            $data['value'] = $this->value;
-        }
+        if (!isset($data['value'])) $data['value'] = $this->value;
 
         $data['checked']  = ((isset($data['value']) && $data['value']) || (isset($data['checked']) && $data['checked'])) ? true : false;
         if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do

@@ -52,7 +52,7 @@
             or updates.</li>
             <li>
             <strong>Modify Config</strong>: Set general site options including: 
-            <ul>
+                <ul>
                 <li>designated site Administrator and default registration User group</li>
                 <li>default Authentication and Registration module</li>
                 <li>activation of user variables and Dynamic Data for roles such as Last Login,
@@ -68,17 +68,17 @@
         <p>Xaraya also comes preconfigured with a minimal set of roles that are loaded when you run
         the installer. This configuration is shown below:</p>
         <pre>
-        Everybody
-        |
-        |---Anonymous
-        |
-        |---Administrators
-        |   |
-        |   |---Admin
-        |
-        |---Users
+            Everybody
+            |
+            |---Anonymous
+            |
+            |---Administrators
+            |   |
+            |   |---Admin
+            |
+            |---Users
 
-</pre>
+    </pre>
         <p>At installation time you are asked to choose a configuration that affects preinstalled
         privileges assigned to the above roles. The privileges can be changed after installation.
         The default roles and minimum privileges at installation time are.</p>
@@ -132,7 +132,7 @@
         other module on your site.</p>
         <h3>Further Information</h3>
         <p>Further information on the Roles module can be found at:</p>
-        <ul>
+       <ul>
             <li>Roles Module Extension page at 
             <a title="#xarML('Roles Module - Xaraya Extension 27')#"
             href="http://www.xaraya.com/index.php/release/27.html">Xaraya Extension and

@@ -11,7 +11,7 @@
                 <strong>Your validation code has been sent again to the email address you have
                 registered.</strong>
             </p>
-            <xar:else />
+    <xar:else />
             <p>Your account has not yet been activated. You need to finish these final steps in
             order to complete your account activation.</p>
         </xar:if>
@@ -21,8 +21,8 @@
             'valcode'=&gt;$valcode))</xar:set>
             <p>To continue, please follow 
             <a href="#$validationlink#">this link</a>.</p>
-            <xar:else />
-            <form action="&xar-modurl-roles-user-getvalidation;" method="post"
+    <xar:else />
+        <form action="&xar-modurl-roles-user-getvalidation;" method="post" enctype="application/x-www-form-urlencoded">
             enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Start Validation</legend>

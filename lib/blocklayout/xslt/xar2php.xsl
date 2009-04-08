@@ -30,7 +30,7 @@
   <!--
     The defaults for html type stuff
   -->
-  <xsl:import href="defaults/html.xsl" />
+  <xsl:include href="defaults/html.xsl" />
 
   <!--
     Debugging templates, this (tries to) be more verbose.
@@ -98,16 +98,23 @@
   <xsl:include href="tags/blockgroup.xsl"/>
   <!-- xar:blocklayout -->
   <xsl:include href="tags/blocklayout.xsl"/>
+  <!-- xar:br -->
+  <xsl:include href="tags/br.xsl"/>
   <!-- xar:break -->
   <xsl:include href="tags/break.xsl"/>
   <!-- xar:comment -->
   <xsl:include href="tags/comment.xsl"/>
   <!-- xar:continue -->
   <xsl:include href="tags/continue.xsl"/>
+  <!-- xar:button -->
+  <xsl:include href="tags/button.xsl"/>
 
   <!-- TODO: organize this -->
   <!-- xar:data-view/output/label etc. -->
   <xsl:include href="tags/data.xsl"/>
+  <xsl:include href="tags/articles.xsl"/>
+  <xsl:include href="tags/calendar.xsl"/>
+  <!-- <xsl:include href="tags/recommend.xsl"/> -->
 
   <!-- xar:else -->
   <xsl:include href="tags/else.xsl"/>
@@ -165,10 +172,12 @@
   <xsl:choose>
     <!-- If we have zero or one hash, just output the text node -->
     <xsl:when test="$nrOfHashes &lt; 2">
+      <xsl:text>'</xsl:text>
       <!-- Escape any quote marks in the text and output -->
       <xsl:call-template name="replace">
-        <xsl:with-param name="source" select="$expr"/>
+        <xsl:with-param name="source" select="normalize-space($expr)"/>
       </xsl:call-template>
+      <xsl:text>'</xsl:text>
     </xsl:when>
 
     <!-- Resolve left to right -->
@@ -183,27 +192,33 @@
       </xsl:variable>
 
       <!-- [....]#....#.... : get the first part out of the way -->
-
+ 
       <!-- Just escape the quotes and display the first part -->
-      <xsl:call-template name="replace">
-        <xsl:with-param name="source" select="substring($expr,0,$delimiter-position)"/>
-      </xsl:call-template>
+      <xsl:if test="$delimiter-position &gt; 1">
+        <xsl:text>'</xsl:text>
+        <xsl:call-template name="replace">
+          <xsl:with-param name="source" select="substring($expr,0,$delimiter-position)"/>
+        </xsl:call-template>
+        <xsl:text>'</xsl:text>
+        <xsl:if test="substring($expr,0,$delimiter-position) != $expr">
+          <xsl:text>.</xsl:text>
+        </xsl:if>
+      </xsl:if>
 
       <!-- Resolve the part in between -->
       <!-- Left at this point: ....#[....]#.... -->
       <xsl:variable name="expr-after" select="substring($expr,$delimiter-position + 1)"/>
-      <xsl:if test="substring-before($expr-after,'#') !=''">
-          <xsl:text>'.</xsl:text>
-          <xsl:call-template name="resolvePHP">
-              <xsl:with-param name="expr" select="substring-before($expr-after,'#')"/>
-          </xsl:call-template>
-          <xsl:text>.'</xsl:text>
-      </xsl:if>
-
-      <!-- ....#....#[....#....#....etc.] -->
-      <xsl:call-template name="resolveText">
-        <xsl:with-param name="expr" select="substring-after($expr-after,'#')"/>
+      <xsl:call-template name="resolvePHP">
+          <xsl:with-param name="expr" select="substring-before($expr-after,'#')"/>
       </xsl:call-template>
+
+      <xsl:if test="string-length(substring-after($expr-after,'#')) &gt; 0">
+        <xsl:text>.</xsl:text>
+        <!-- ....#....#[....#....#....etc.] -->
+        <xsl:call-template name="resolveText">
+          <xsl:with-param name="expr" select="substring-after($expr-after,'#')"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -220,42 +235,22 @@
 <xsl:template name="translateText">
   <xsl:param name="expr" />
   <xsl:choose>
-    <!-- We have an empty node -->
-    <!-- Not real elegant. how to do better? (random) -->
-    <xsl:when test="normalize-space($expr) = '&#160;'">
-      <xsl:copy />
+    <xsl:when test="string(number($expr))!='NaN'">
+      <xsl:value-of select="$expr"/>
     </xsl:when>
-    <xsl:when test="normalize-space($expr) = ' '">
-      <xsl:copy />
-    </xsl:when>
-    <xsl:when test="normalize-space($expr) = ''">
-      <xsl:copy />
-    </xsl:when>
-
-    <!-- We have a non-empty node -->
     <xsl:otherwise>
       <xsl:processing-instruction name="php">
-        <xsl:text>echo xarML('</xsl:text>
+        <xsl:text>echo xarML(</xsl:text>
         <xsl:call-template name="resolveText">
           <xsl:with-param name="expr" select="$expr"/>
         </xsl:call-template>
-        <xsl:text>');</xsl:text>
+        <xsl:text>);</xsl:text>
       </xsl:processing-instruction>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
-<!-- Stuff in pre tags should not be translated -->
-<xsl:template match="pre/text()">
-  <xsl:value-of select="."/>
-</xsl:template>
-
-<!-- Stuff in script tags should not be translated -->
-<xsl:template match="script/text()">
-  <xsl:value-of select="."/>
-</xsl:template>
-
-<!-- Stuff in ml tags is laready in PHP mode -->
+<!-- Stuff in ml tags is already in PHP mode -->
 <xsl:template match="xar:ml/text()">
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
@@ -319,7 +314,7 @@
   <xsl:text>array(</xsl:text>
   <xsl:if test="$nodeset">
     <xsl:for-each select="$nodeset">
-      <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>' =&gt;</xsl:text>
+      <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>'=&gt;</xsl:text>
       <xsl:choose>
         <xsl:when test="starts-with(normalize-space(.),'$') or not(string(number(.))='NaN')">
           <xsl:value-of select="."/><xsl:text>,</xsl:text>
@@ -353,6 +348,21 @@
             </xsl:variable>
             <xsl:value-of select="$initial-position + 1 + $add-on-position" />
           </xsl:when>
+          
+          <!-- Honor the #(n) construct here. Replace this with the matches function at some point -->
+          <!-- matches function requires regex support in libxsl -->
+          <xsl:when test="starts-with(substring-after($expr,$delimiter),'(')
+                          and number(substring-before(substring-after($expr,concat($delimiter,'(')),')')) > 0
+          ">
+            <xsl:variable name="add-on-position">
+              <xsl:call-template name="return-delimiter-position">
+                <xsl:with-param name="expr" select="substring($expr,$initial-position + 1)"/>
+              </xsl:call-template>
+            </xsl:variable>
+            <xsl:value-of select="$initial-position + 1 + $add-on-position" />
+          </xsl:when>
+          <!-- End of #(n) clause -->
+
           <xsl:otherwise>
             <xsl:value-of select="$initial-position" />
           </xsl:otherwise>

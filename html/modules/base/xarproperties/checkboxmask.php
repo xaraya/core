@@ -10,11 +10,11 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /* include the base class */
-sys::import('modules.base.xarproperties.dropdown');
+sys::import('modules.base.xarproperties.checkboxlist');
 /**
  * Handle checkbox mask property
  */
-class CheckboxMaskProperty extends SelectProperty
+class CheckboxMaskProperty extends CheckboxListProperty
 {
     public $id         = 1114;
     public $name       = 'checkboxmask';
@@ -29,14 +29,10 @@ class CheckboxMaskProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!SelectProperty::validateValue($value)) return false;
 
         if(is_array($value)) {
             $this->value = maskImplode($value);
-        } else {
-            $this->value = $value;
         }
 
         return true;
@@ -44,23 +40,17 @@ class CheckboxMaskProperty extends SelectProperty
 
     public function showInput(Array $data = array())
     {
-        if (!isset($data['value'])) {
-            $data['value'] = $this->value;
-        }
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        else $this->value = $data['value'];
 
-        if (!is_array($data['value']) && is_string($data['value'])) {
-            $data['value'] = maskExplode($data['value']);
-        }
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        else $this->value = $data['value'];
 
-        if (!isset($data['options']) || count($data['options']) == 0) {
-            $this->getOptions();
-            $options = array();
-            foreach($this->options as $key => $option) {
-                $option['checked'] = in_array($option['id'], $data['value']);
-                $data['options'][$key] = $option;
-            }
+        if (empty($data['value'])) {
+            $data['value'] = array();
+        } elseif (!is_array($data['value']) && is_string($data['value'])) {
+            $data['value'] = maskExplode(',', $data['value']);
         }
-
         return parent::showInput($data);
     }
 
@@ -88,7 +78,6 @@ class CheckboxMaskProperty extends SelectProperty
 
         return parent::showOutput($data);
     }
-
 }
 
 function maskImplode($anArray)

@@ -1374,7 +1374,7 @@ class xarQuery
     {
         $q = $this;
         unset($q->dbconn);
-        xarSession::setVar($x, serialize($q));
+        xarSession::setVar($x, serialize($this));
     }
     function setdistinct($x = 1)
     {

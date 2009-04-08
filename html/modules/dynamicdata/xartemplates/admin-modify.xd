@@ -6,29 +6,19 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <h2>Modify Item #$object:itemid# in #$object:label#</h2>
+        <h2>
+            <xar:ml>
+                <xar:mlstring>Modify Item #(1) in #(2)</xar:mlstring>
+                <xar:mlvar>#$object:itemid#</xar:mlvar>
+                <xar:mlvar>#$object:label#</xar:mlvar>
+            </xar:ml>
+        </h2>
         <xar:if condition="!empty($objectid) and $objectid eq 1">
-            <xar:style scope="module" module="base" file="navtabs" />
-            <div>
-                <dl class="xar-tabs">
-                    <dt class="help">Options:</dt>
-                    <dd class="active">
-                        <a href="#xarServerGetCurrentUrl()#">Modify Object definition</a>
-                    </dd>
-                    <dd>
-                        <a href="&xar-modurl-dynamicdata-admin-modifyprop;&amp;itemid=#$itemid#">
+            <xar:set name="action">'modify'</xar:set>
+            <xar:template file="object-actions" />
                         Modify DataProperties</a>
-                    </dd>
-                    <dd>
-                        <a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#">
                         Export Object Definition to XML</a>
-                    </dd>
-                    <dd>
-                        <a href="&xar-modurl-dynamicdata-admin-view;&amp;itemid=#$itemid#">View
                         Items</a>
-                    </dd>
-                </dl>
-            </div>
         </xar:if>
         <xar:if condition="isset($preview)">
             <fieldset>
@@ -39,7 +29,7 @@
         <xar:set name="isupload">#$object:upload#</xar:set>
         <xar:if condition="!empty($isupload)">
             <xar:set name="enc_type">'multipart/form-data'</xar:set>
-            <xar:else />
+        <xar:else/>
             <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
         </xar:if>
         <form method="post" action="&xar-modurl-dynamicdata-admin-update;" enctype="#$enc_type#">
@@ -52,36 +42,39 @@
                     caution.</p>
                 </xar:if>
                 <!-- this does most of the hard work :) -->
+            <xar:template file="showinvalids" module="dynamicdata" />
                 <xar:data-form object="$object" />
                 <xar:if condition="!empty($hooks)">
-                    <xar:foreach in="$hooks" key="$module" value="$output">#$output#</xar:foreach>
-                </xar:if>
+                <xar:foreach in="$hooks" key="$module" value="$output">
+                    #$output#
+                </xar:foreach>
+            </xar:if>
             </fieldset>
             <fieldset>
                 <div class="xar-align-center">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="objectid" id="objectid"
+                <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#" />
                     value="#$object:objectid#" />
                     <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
                     <input type="hidden" name="join" id="join" value="#$object:join#" />
                     <input type="hidden" name="table" id="table" value="#$object:table#" />
                     <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#" />
                     <xar:if condition="!empty($return_url)">
-                        <input type="hidden" name="return_url" id="return_url"
+                  <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
                         value="#$return_url#" />
-                    </xar:if>
-                    <input type="submit" name="preview" value="#xarML('Preview')#"
-                    class="xar-margin-thickright" />
-                    <input type="hidden" name="notfresh" id="notfresh" value="true" />
-                    <input type="submit" value="#xarML('Update')#" class="xar-margin-thickleft" />
-                </div>
-                <xar:if condition="!empty($objectid) and $objectid eq 2">
-                    <p>
-                        <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#">
-                        Edit validation</a>
-                    </p>
                 </xar:if>
-            </fieldset>
+                <input type="submit" name="preview" value="#xarML('Preview')#" class="xar-margin-thickright" />
+                    class="xar-margin-thickright" />
+                <input type="hidden" name="notfresh" id="notfresh" value="true" />
+                <input type="submit" value="#xarML('Update')#" class="xar-margin-thickleft" />
+            </div>
+            <xar:if condition="!empty($objectid) and $objectid eq 2">
+                <p>
+                    <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#">
+                        Edit validation</a>
+                </p>
+            </xar:if>
+          </fieldset>
         </form>
     </div>
 </xar:template>

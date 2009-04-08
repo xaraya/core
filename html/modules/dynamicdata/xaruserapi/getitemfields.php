@@ -15,12 +15,13 @@
  * utility function to pass item field definitions to whoever
  *
  * @param int $args['itemtype'] item type
- * @param int modid ID of the module
+ * @param int module ID of the module
  * @return array containing the item field definitions
  */
 function dynamicdata_userapi_getitemfields($args)
 {
     $object = DataObjectMaster::getObject($args);
+    if (!is_object($object)) return array();
     $fields = $object->getProperties();
     $itemfields = array();
     foreach ($fields as $name => $prop) {

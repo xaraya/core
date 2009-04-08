@@ -29,7 +29,6 @@ function modules_adminapi_standarddeinstall($args)
     $xartables =& xarDB::getTables();
 
     // Remove database tables
-    // FIXME: this assumes modules name their tables prefixed by their own name!!
     xarMod::apiLoad($module);
     try {
         $tablenameprefix = xarDB::getPrefix() . '_' . $module;

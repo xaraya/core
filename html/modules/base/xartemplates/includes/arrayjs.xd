@@ -1,0 +1,58 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <script type="text/javascript" >
+        function #$id#_addRow(removeflag)
+        {			
+        	//get the div in which the rows are displayed            
+            var itemdiv = document.getElementById('#$id#_rows');
+            // Get value for the next row and increment the last row ID
+            var lastrowfield = document.getElementById('#$id#_lastrow');
+            var lastrow = lastrowfield.value;
+            lastrow++;
+            lastrowfield.value = lastrow;
+            
+            // Add the next row number to the list of rows
+            var rowsdisplayedfield = document.getElementById('#$id#_rowsdisplayed');            
+            var rowsdisplayed = rowsdisplayedfield.value;            
+            rowsdisplayed = rowsdisplayed + ',' + lastrow;
+            rowsdisplayedfield.value = rowsdisplayed;
+            
+            //create a new div for the new rows with proper name
+            var divIdName = "#$id#_" + lastrow +  "";            
+            var newdiv = document.createElement('div');
+            newdiv.setAttribute("id",divIdName);
+            newdiv.setAttribute("class","xar-form-input-wrapper");            
+            	            
+            // Replace the placeholder text with the new row
+            var rowtemplate = document.getElementById('#$id#_rowtemplate');            
+            var rowhtml = rowtemplate.innerHTML;
+            //check for the remove button to be added or not                                                        	
+ 			if(removeflag) {
+ 				var removetemplate = document.getElementById('#$id#_removetemplate');
+ 				var removehtml = removetemplate.innerHTML; 			           
+            	newdiv.innerHTML = rowhtml + removehtml;
+            } else {
+            	newdiv.innerHTML = rowhtml;
+            }
+            //to have proper name for the div to be added replace the two dummy names
+            // Create the HTML for the new row,remove button and insert the new row and button 
+            var regex = new RegExp ('dummyid', 'gi') ;
+           	newdiv.innerHTML = newdiv.innerHTML.replace(regex,'#$id#');           	            
+			var regex = new RegExp ('dummy', 'gi') ;
+           	newdiv.innerHTML = newdiv.innerHTML.replace(regex,lastrow);           		                                                    
+            itemdiv.appendChild(newdiv);            
+        }
+
+        function #$id#_removeRow(Id, row)
+        {        	
+            var d = document.getElementById('#$id#_rows');
+            var olddiv = document.getElementById(Id + "_" + row + "");            
+            d.removeChild(olddiv);
+            
+			//Update the "rowsdisplayed" value after removing the row
+            var rowsdisplayedfield = document.getElementById('#$id#_rowsdisplayed');
+            var rowsdisplayed = rowsdisplayedfield.value;                        
+            rowsdisplayed = rowsdisplayed.replace(',' + row, '');            
+            rowsdisplayedfield.value = rowsdisplayed;    
+        }
+    </script>
+</xar:template>

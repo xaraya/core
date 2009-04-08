@@ -23,19 +23,19 @@
                     <p class="param">
                         <label for="linkoptions">Method of serving</label>
                         <xar:if condition="$csslinkoption eq 'static'">
-                        <select name="linkoptions" id="linkoptions" size="1">
+                            <select name="linkoptions" id="linkoptions" size="1">
                             <option value="static" selected="selected">Static (default)</option>
                             <option value="dynamic">Dynamic</option>
                             <option value="none">None</option>
-                        </select>
-                        <xar:elseif condition="$csslinkoption eq 'dynamic'" />
-                        <select name="linkoptions" id="linkoptions" size="1">
+                            </select>
+                            <xar:elseif condition="$csslinkoption eq 'dynamic'" />
+                            <select name="linkoptions" id="linkoptions" size="1">
                             <option value="static">Static (default)</option>
                             <option value="dynamic" selected="selected">Dynamic</option>
                             <option value="none">None</option>
-                        </select>
-                        <xar:else />
-                        <select name="linkoptions" id="linkoptions" size="1">
+                            </select>
+                            <xar:else />
+                            <select name="linkoptions" id="linkoptions" size="1">
                             <option value="static">Static (default)</option>
                             <option value="dynamic">Dynamic</option>
                             <option value="none" selected="selected">None</option>
@@ -51,9 +51,9 @@
                         </p>
                         <xar:elseif condition="$csslinkoption eq 'dynamic'" />
                         <p class="param">
-                        <label for="resetsource">
-                            <input id="resetsource" name="resetsource" type="checkbox" value="1" />
-                        </label>
+                            <label for="resetsource">
+                                <input id="resetsource" name="resetsource" type="checkbox" value="1" />
+                            </label>
                         <strong>#$resetbutton#</strong>(Warning! All modifications will be
                         lost)</p>
                         <p class="param">

@@ -27,7 +27,7 @@
                         <label for="subject">Email Title</label>
                     </td>
                     <td>
-                        <input type="text" name="subject" id="subject" value="#$subject#" size="35"
+                        <input type="text" name="subject" id="subject" value="#$subject#" size="35" maxlength="100" />
                         maxlength="100" />
                     </td>
                 </tr>

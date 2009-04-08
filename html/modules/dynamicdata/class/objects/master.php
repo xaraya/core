@@ -107,14 +107,15 @@ class DataObjectMaster extends Object
 
     public $urlparam    = 'itemid';
     public $maxid       = 0;
-    public $config      = '';
+    public $config      = 'a:0:{}';       // the configuration parameters for this DD object
+    public $configuration;                // the exploded configuration parameters for this DD object
     public $isalias     = 0;
     public $join        = '';
     public $table       = '';
     public $extend      = true;
 
     public $class       = 'DataObject'; // the class name of this DD object
-    public $filepath    = '';           // the path to the class of this DD object (can be empty for DataObject)
+    public $filepath    = 'auto';       // the path to the class of this DD object (can be empty or 'auto' for DataObject)
     public $properties  = array();      // list of properties for the DD object
     public $datastores  = array();      // similarly the list of datastores (arguably in the wrong place here)
     public $fieldlist   = array();      // array of properties to be displayed
@@ -126,12 +127,11 @@ class DataObjectMaster extends Object
     public $layout = 'default';         // optional layout inside the templates
     public $template = '';              // optional sub-template, e.g. user-objectview-[template].xd (defaults to the object name)
     public $tplmodule = 'dynamicdata';  // optional module where the object templates reside (defaults to 'dynamicdata')
-    public $urlmodule = '';             // optional module for use in xarModURL() (defaults to the object module)
     public $viewfunc = 'view';          // optional view function for use in xarModURL() (defaults to 'view')
 
     public $primary = null;             // primary key is item id
     public $secondary = null;           // secondary key could be item type (e.g. for articles)
-    public $filter = true;              // set this true to automatically filter by current itemtype on secondary key
+    public $filter = false;             // set this true to automatically filter by current itemtype on secondary key
     public $upload = false;             // flag indicating if this object has some property that provides file upload
 
     /**
@@ -161,8 +161,7 @@ class DataObjectMaster extends Object
 
     function loader(DataObjectDescriptor $descriptor)
     {
-        $this->descriptor = $descriptor;
-        $this->load();
+        $descriptor->refresh($this);
 
         xarMod::loadDbInfo('dynamicdata','dynamicdata');
 
@@ -186,18 +185,7 @@ class DataObjectMaster extends Object
                 $this->addProperty($propinfo);
         }
 
-        // FIXME: we need to go to the database if the object exists but we don't have all the data
-        //        what would be the correct condition for that?
-/*        if(empty($this->label))
-        {
-            $info = self::getObjectInfo($this->descriptor->getArgs());
-            if (!empty($info)) {
-                $this->descriptor->setArgs($info);
-                $this->load();
-                $this->descriptor->store($this);
-            }
-        }
-*/        // use the object name as default template override (*-*-[template].x*)
+        // use the object name as default template override (*-*-[template].x*)
         if(empty($this->template) && !empty($this->name))
             $this->template = $this->name;
 
@@ -281,24 +269,6 @@ class DataObjectMaster extends Object
     **/
     private function addAncestors($object=null)
     {
-        /*
-        // Determine how we are going to get the ancestors
-        $params = array();
-        if(!empty($this->objectid))
-        {
-            // We already have an object, so it can't be native
-            $params['objectid'] = $this->objectid;
-            $params['top']      = false;
-        }
-        else
-        {
-            $params['moduleid'] = $this->moduleid;
-            $params['itemtype'] = $this->itemtype;
-            $params['top']      = true;
-        }
-        // Retrieve the ancestors
-        $ancestors = self::getAncestors($params);
-        */
         $ancestors = $this->getAncestors();
 
         // If this is an extended object add the ancestor properties for display purposes
@@ -573,7 +543,7 @@ class DataObjectMaster extends Object
      * @param $args['name'] name of the object you're looking for, OR
      * @param $args['moduleid'] module id of the object you're looking for + $args['itemtype'] item type of the object you're looking for
      * @return array containing the name => value pairs for the object
-     * @todo cache on id/name/modid ?
+     * @todo cache on id/name/module_id ?
      * @todo when we had a constructor which was more passive, this could be non-static. (cheap construction is a good rule of thumb)
      * @todo no ref return?
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
@@ -592,7 +562,7 @@ class DataObjectMaster extends Object
             $info['moduleid'] = 182;
             $info['itemtype'] = 0;
             $info['parent'] = 1;
-            $info['filepath'] = '';
+            $info['filepath'] = 'auto';
             $info['urlparam'] = 'itemid';
             $info['maxid'] = 0;
             $info['config'] = '';
@@ -668,7 +638,7 @@ class DataObjectMaster extends Object
         if ($info != null) $args = array_merge($args,$info);
         else return $info;
 
-        if(!empty($args['filepath'])) include_once($args['filepath']);
+        if(!empty($args['filepath']) && ($args['filepath'] != 'auto')) include_once($args['filepath']);
         if (!empty($args['class'])) {
             if(!class_exists($args['class'])) {
                 throw new ClassNotFoundException($args['class']);
@@ -680,7 +650,13 @@ class DataObjectMaster extends Object
         // here we can use our own classes to retrieve this
         $descriptor = new DataObjectDescriptor($args);
 
-        $object = new $args['class']($descriptor);
+        // Try to get the object from the cache
+        if (xarCore::isCached('DDObject', MD5(serialize($args)))) {
+            $object = clone xarCore::getCached('DDObject', MD5(serialize($args)));
+        } else {
+            $object = new $args['class']($descriptor);
+//            xarCore::setCached('DDObject', MD5(serialize($args)), clone $object);
+        }
         return $object;
     }
 
@@ -794,8 +770,7 @@ class DataObjectMaster extends Object
 
         // Update specific part
         $itemid = $object->getItem(array('itemid' => $args['objectid']));
-        if(empty($itemid))
-            return;
+        if(empty($itemid)) return;
         $itemid = $object->updateItem($args);
         unset($object);
         return $itemid;
@@ -962,15 +937,6 @@ class DataObjectMaster extends Object
     **/
     function getAncestors()
     {
-//        if(!xarSecurityCheck('ViewDynamicDataItems')) return;
-
-//        extract($args);
-
-/*        if (!(isset($moduleid) && isset($itemtype)) && !isset($objectid) && !isset($name)) {
-            $msg = xarML('Wrong arguments to DataObjectMaster::getAncestors.');
-            throw new BadParameterException(array(),$msg);
-        }
-*/
         $top = isset($top) ? $top : false;
         $base = isset($base) ? $base : true;
         $ancestors = array();
@@ -978,33 +944,7 @@ class DataObjectMaster extends Object
 
         $xartable = xarDB::getTables();
         $topobject = self::getObjectInfo(array('objectid' => $this->objectid));
-/*        // Get the info of this object
-        if (isset($objectid)) {
-            // We have an objectid - get the moduleid and itemtype
-            $topobject = self::getObjectInfo(array('objectid' => $objectid));
-            $moduleid = $topobject['moduleid'];
-            $itemtype = $topobject['itemtype'];
-        } else {
-            if (isset($name)) {
-                $topobject = self::getObjectInfo(array('name' => $name));
-                $moduleid = $topobject['moduleid'];
-                $itemtype = $topobject['itemtype'];
-            } else {
-                $topobject = self::getObjectInfo(array('moduleid' => $moduleid, 'itemtype' => $itemtype));
-            }
-            // We have a moduleid and itemtype - get the objectid
-            if (empty($topobject)) {
-                if ($base) {
-                    $types = self::getModuleItemTypes(array('moduleid' => $moduleid));
-                    $info = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => xarModGetNameFromID($moduleid));
-                    $ancestors[] = $info;
-                    return $ancestors;
-                }
-                return $ancestors;
-            }
-            $objectid = $topobject['objectid'];
-       }
-*/
+
         // Include the last descendant (this object) or not
         if ($top) {
             $ancestors[] = self::getObjectInfo(array('objectid' => $this->objectid));
@@ -1013,7 +953,6 @@ class DataObjectMaster extends Object
         // Get all the dynamic objects at once
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-//        $q->open();
         $q->addfields(array('id AS objectid','name AS objectname','module_id AS moduleid','itemtype AS itemtype','parent_id AS parent'));
         $q->eq('module_id',$this->moduleid);
         if (!$q->run()) return;
@@ -1029,15 +968,14 @@ class DataObjectMaster extends Object
         for(;;) {
             $thisobject     = $objects[$parentitemtype];
 
-//            if ($parentitemtype >= 1000 || $this->moduleid == 182) {
-                // This is a DD descendent object. add it to the ancestor array
-                $moduleid       = $thisobject['moduleid'];
-                $objectid       = $thisobject['objectid'];
-                $itemtype       = $thisobject['itemtype'];
-                $name           = $thisobject['objectname'];
-                $parentitemtype = $thisobject['parent'];
-                $this->baseancestor = $objectid;
-                $ancestors[] = $thisobject;
+            // This is a DD descendent object. add it to the ancestor array
+            $moduleid       = $thisobject['moduleid'];
+            $objectid       = $thisobject['objectid'];
+            $itemtype       = $thisobject['itemtype'];
+            $name           = $thisobject['objectname'];
+            $parentitemtype = $thisobject['parent'];
+            $this->baseancestor = $objectid;
+            $ancestors[] = $thisobject;
             if (!$thisobject['parent']) break;
         }
         $ancestors = array_reverse($ancestors, true);
@@ -1085,28 +1023,37 @@ class DataObjectMaster extends Object
             $module = $info['name'];
         }
 
-        $types = array();
-        // Get all the objects at once
-        $xartable = xarDB::getTables();
-        sys::import('modules.roles.class.xarQuery');
-        $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-        $q->addfields(array('id AS objectid','label AS objectlabel','module_id AS moduleid','itemtype AS itemtype','parent_id AS parent'));
-        $q->eq('module_id',$moduleid);
-        if (!$q->run()) return;
+        $native = isset($native) ? $native : true;
+        $extensions = isset($extensions) ? $extensions : true;
 
-        // put in itemtype as key for easier manipulation
-        foreach($q->output() as $row)
-            $types [$row['itemtype']] = array(
-                                        'label' => $row['objectlabel'],
-                                        'title' => xarML('View #(1)',$row['objectlabel']),
-                                        'url' => xarModURL('dynamicdata','user','view',array('itemtype' => $row['itemtype'])));
+        $types = array();
+        if ($native) {
+            // Try to get the itemtypes
+            try {
+                // @todo create an adaptor class for procedural getitemtypes in modules
+                $types = xarModAPIFunc($module,'user','getitemtypes',array());
+            } catch ( FunctionNotFoundException $e) {
+                // No worries
+            }
+        }
+        if ($extensions) {
+            // Get all the objects at once
+            $xartable = xarDB::getTables();
+            sys::import('modules.roles.class.xarQuery');
+            $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
+            $q->addfields(array('id AS objectid','label AS objectlabel','module_id AS moduleid','itemtype AS itemtype','parent_id AS parent'));
+            $q->eq('module_id',$moduleid);
+            if (!$q->run()) return;
+
+            // put in itemtype as key for easier manipulation
+            foreach($q->output() as $row)
+                $types [$row['itemtype']] = array(
+                                            'label' => $row['objectlabel'],
+                                            'title' => xarML('View #(1)',$row['objectlabel']),
+                                            'url' => xarModURL('dynamicdata','user','view',array('itemtype' => $row['itemtype'])));
+        }
+
         return $types;
     }
-
-    protected function load()
-    {
-        $this->descriptor->refresh($this);
-    }
-
 }
 ?>

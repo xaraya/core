@@ -1,0 +1,32 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:style scope="module" module="base" file="navtabs" />
+    <br />
+    <dl class="xar-tabs">
+        <dt class="help">
+            <xar:mlstring>
+                Module:
+            </xar:mlstring>
+        </dt>
+        <xar:if condition="$tab eq 'all'">
+            <xar:set name="class">"active"</xar:set>
+        <xar:else/>
+            <xar:set name="class">""</xar:set>
+        </xar:if>
+        <dd class="#$class#">
+            <a href="#xarModURL('privileges', 'admin', 'assignprivileges', array('tabmodule' => 'All Modules', 'tab' => 'all'))#">
+            <xar:mlstring>All modules</xar:mlstring></a>
+        </dd>
+        <xar:foreach in="$moduletabs" key="$tabname" value="$thistab">
+            <xar:if condition="$tab eq $tabname">
+                <xar:set name="class">"active"</xar:set>
+            <xar:else/>
+                <xar:set name="class">""</xar:set>
+            </xar:if>
+            <dd class="#$class#">
+                <a href="#xarModURL('privileges', 'admin', 'assignprivileges', array('tabmodule' => $tabname,'tab' => $tabname))#">
+                    #$thistab['displayname']#
+                </a>
+            </dd>
+        </xar:foreach>
+    </dl>
+</xar:template>

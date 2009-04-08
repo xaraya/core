@@ -6,7 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <img src="#xarTplGetImage('admin.gif', 'base')#" alt="official icon" width="96" height="96"
+        <img src="#xarTplGetImage('admin.gif', 'base')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
         class="xar-module-icon" />
         <h2>Overview</h2>
         <p>Many modules are basically dealing with the equivalent of real-life objects, like news
@@ -34,15 +34,15 @@
         <p>If you want to get the dynamic properties and values for your items, and include them
         somewhere in your own view/list.</p>
         <p>Available tags: (replace 'users', '&#36;idlist' and '&#36;id' with your own)</p>
-        <pre>
+            <pre>
 <code>&lt;!-- this retrieves the dynamic properties defined for the 'users' module,
-     and their value for all items listed in &#36;idlist. You'll need to build
+         and their value for all items listed in &#36;idlist. You'll need to build
      that id list in your module function and pass it along to the template --&gt;
-&lt;xar:data-getitems name="&#36;properties" value="&#36;values" module="users"
- itemids="&#36;idlist" /&gt;
+    &lt;xar:data-getitems name="&#36;properties" value="&#36;values" module="users"
+     itemids="&#36;idlist" /&gt;
 
 &lt;!-- this shows the label for dynamic property '&#36;name' --&gt;
-&lt;xar:data-label property="&#36;properties[&#36;name]" /&gt;
+    &lt;xar:data-label property="&#36;properties[&#36;name]" /&gt;
 
 &lt;!-- this shows the value of dynamic property '&#36;name' for item &#36;id,
  formatted for output --&gt;
@@ -57,143 +57,143 @@
 </pre>
         <p>Sample use:</p>
         <p>(somewhere near the beginning of your template)</p>
-        <pre>
-<code>
-&lt;xar:data-getitems name="&#36;properties" value="&#36;values" module="users"
- itemids="&#36;idlist" /&gt;
-</code>
-</pre>
+            <pre>
+
+    &lt;xar:data-getitems name="&#36;properties" value="&#36;values" module="users"
+     itemids="&#36;idlist" /&gt;
+
+    </pre>
         <p>(when you're building some table headers, and you want to add labels for the dynamic
         properties)</p>
         <pre>
-<code>
-    &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
-        &lt;th width="10%"&gt;
-            &lt;xar:data-label property="&#36;properties[&#36;name]" /&gt;
-        &lt;/th&gt;
-    &lt;/xar:foreach&gt;
-</code>
-</pre>
+
+        &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
+            &lt;th width="10%"&gt;
+                &lt;xar:data-label property="&#36;properties[&#36;name]" /&gt;
+            &lt;/th&gt;
+        &lt;/xar:foreach&gt;
+
+    </pre>
         <p>(when you're looping over the individual items, and you want to add the dynamic values
         for item &#36;id)</p>
-        <pre>
-<code>
-    &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
-        &lt;td class="xar-norm"&gt;
+            <pre>
+
+        &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
+            &lt;td class="xar-norm"&gt;
         &lt;!-- avoid errors if the value isn't defined for this
  item (yet) --&gt;
-        &lt;xar:if condition="isset(&#36;values[&#36;id][&#36;name])"&gt;
-            &lt;xar:data-output property="&#36;properties[&#36;name]"
- value="&#36;values[&#36;id][&#36;name]" /&gt;
-        &lt;xar:else /&gt;
-            &amp;nbsp;
-        &lt;/xar:if&gt;
-        &lt;/td&gt;
-    &lt;/xar:foreach&gt;
-</code>
-</pre>
+            &lt;xar:if condition="isset(&#36;values[&#36;id][&#36;name])"&gt;
+                &lt;xar:data-output property="&#36;properties[&#36;name]"
+     value="&#36;values[&#36;id][&#36;name]" /&gt;
+            &lt;xar:else /&gt;
+                &amp;nbsp;
+            &lt;/xar:if&gt;
+            &lt;/td&gt;
+        &lt;/xar:foreach&gt;
+
+    </pre>
         <p>If you want to show a standard list of items, with all the dynamic properties that are
         defined for that object.</p>
-        <pre>
-<code>&lt;xar:data-view module="example" /&gt;
+            <pre>
+    &lt;xar:data-view module="example" /&gt;
 
-&lt;xar:data-view module="example" linkfield="name" /&gt;
+    &lt;xar:data-view module="example" linkfield="name" /&gt;
 
-&lt;xar:data-view module="example" static="yes" /&gt; (disabled)
+    &lt;xar:data-view module="example" static="yes" /&gt; (disabled)
 
-&lt;xar:data-view module="example" fieldlist="exid,name" /&gt;
+    &lt;xar:data-view module="example" fieldlist="exid,name" /&gt;
 
-&lt;xar:data-view module="articles" itemtype="2" /&gt;
+    &lt;xar:data-view module="articles" itemtype="2" /&gt;
 
-&lt;xar:data-view module="example" itemids="1,20,273" /&gt;
+    &lt;xar:data-view module="example" itemids="1,20,273" /&gt;
 
-&lt;xar:data-view module="articles" itemtype="2" sort="hitcount,title"
- where="authorid eq 2" numitems="20" /&gt;
+    &lt;xar:data-view module="articles" itemtype="2" sort="hitcount,title"
+     where="authorid eq 2" numitems="20" /&gt;
 
-&lt;xar:data-view module="example" layout="list" /&gt;
+    &lt;xar:data-view module="example" layout="list" /&gt;
 
-&lt;xar:data-view module="articles" itemtype="2" template="myarticles" /&gt;
+    &lt;xar:data-view module="articles" itemtype="2" template="myarticles" /&gt;
 
-&lt;xar:data-view object="&#36;mylist" /&gt;</code>
-</pre>
+    &lt;xar:data-view object="&#36;mylist" /&gt;
+    </pre>
         <p>Idem for</p>
         <pre>
 &lt;xar:data-view ... /&gt;
-</pre>
+    </pre>
         <p>(Todo : group, join ?)</p>
         <h4>User display and admin form (for one item)</h4>
         <p>If you want to get the dynamic properties for this item, and include them manually in
         your own display.</p>
         <pre>
 <code>&lt;!-- this retrieves the dynamic properties defined for the 'users' module
-     and item &#36;id. Note that we don't use value="..." here, since we only
+         and item &#36;id. Note that we don't use value="..." here, since we only
      have one item --&gt;
-&lt;xar:data-getitem name="&#36;properties" module="users" itemid="&#36;id" /&gt;</code>
-</pre>
+    &lt;xar:data-getitem name="&#36;properties" module="users" itemid="&#36;id" /&gt;
+    </pre>
         <p>(where you want to add the dynamic labels and values for this item)</p>
         <pre>
-<code>&lt;xar:foreach in="&#36;properties" key="&#36;field"&gt;
-    &lt;tr class="xar-norm xar-valign-top"&gt;
-        &lt;td&gt;
-            &lt;xar:data-label property="&#36;properties[&#36;field]" /&gt;:
-        &lt;/td&gt;
-        &lt;td&gt;
-            &lt;xar:data-output property="&#36;properties[&#36;field]" /&gt;
-        &lt;/td&gt;
-    &lt;/tr&gt;
-&lt;/xar:foreach&gt;
+    &lt;xar:foreach in="&#36;properties" key="&#36;field"&gt;
+        &lt;tr class="xar-norm xar-valign-top"&gt;
+            &lt;td&gt;
+                &lt;xar:data-label property="&#36;properties[&#36;field]" /&gt;:
+            &lt;/td&gt;
+            &lt;td&gt;
+                &lt;xar:data-output property="&#36;properties[&#36;field]" /&gt;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/xar:foreach&gt;
 
 Idem for input forms, where you'd use &lt;xar:data-input ... /&gt; to show input fields</code>
-</pre>
+    </pre>
         <p>If you simply want to display the dynamic properties for this item (= easier in most
         cases).</p>
         <pre>
 <code>
 &lt;!-- this will use the default layout of user-objectdisplay.xd --&gt;
-&lt;xar:data-display module="example" itemid="&#36;exid" /&gt;
+    &lt;xar:data-display module="example" itemid="&#36;exid" /&gt;
 
 &lt;!-- this will use layout 'mylayout' of user-objectdisplay.xd --&gt;
-&lt;xar:data-display module="users" itemid="&#36;id" layout="mylayout" /&gt;
+    &lt;xar:data-display module="users" itemid="&#36;id" layout="mylayout" /&gt;
 
 &lt;!-- this will use the template user-objectdisplay-myusers.xd --&gt;
-&lt;xar:data-display module="users" itemid="&#36;id" template="myusers" /&gt;
+    &lt;xar:data-display module="users" itemid="&#36;id" template="myusers" /&gt;
 
-&lt;xar:data-display object="&#36;object" /&gt;
+    &lt;xar:data-display object="&#36;object" /&gt;
 
 Idem for &lt;xar:data-form ... /&gt;</code>
-</pre>
+    </pre>
         <h4>User output and admin input (for one field of an item)</h4>
         <pre>
-<code>&lt;xar:data-input name="hello" type="3" value="&#36;myval" /&gt;
+    &lt;xar:data-input name="hello" type="3" value="&#36;myval" /&gt;
 
-&lt;xar:data-input property="&#36;property" /&gt;
+    &lt;xar:data-input property="&#36;property" /&gt;
 
 Idem for &lt;xar:data-output ... /&gt;</code>
-</pre>
+    </pre>
         <h3>Included hooks</h3>
-        <ul>
-            <li>
+            <ul>
+                <li>
             <strong>Admin Hook</strong>: new/create/modify/update/delete plus
             modifyconf/updateconfig. 
             <br />You can hook Dynamic Data to other modules by going to Modules -&gt; Configure
             Hooks and clicking on Dynamic Data. Activate the hook by checking the checkbox next to
             the module where you would like to use Dynamic Data.</li>
             <li>user : display ( deprecated )</li>
-        </ul>
+            </ul>
         <h3>Using API calls</h3>
-        <ul>
+            <ul>
             <li>Property Types</li>
             <li>Dynamic Objects And Object Lists</li>
             <li>Dynamic Properties</li>
             <li>items : getitems(), getitem(), getfield()</li>
-        </ul>
+            </ul>
         <h3>Using Object Oriented Programming</h3>
-        <ul>
+            <ul>
             <li>Property Types</li>
             <li>Dynamic Objects And Object Lists</li>
             <li>Dynamic Properties</li>
             <li>items : getitems(), getitem(), getfield()</li>
-        </ul>
+            </ul>
         <h3>Customising Dynamic Data</h3>
         <p>templates, data sources, functions, validation, ...</p>
         <h3>Integrate utility modules via hooks or dynamic data (or both) ?</h3>
@@ -203,7 +203,7 @@ Idem for &lt;xar:data-output ... /&gt;</code>
         access your whole database via DD]</p>
         <h3>Further Information</h3>
         <p>Further information on the DynamicData module can be found at:</p>
-        <ul>
+            <ul>
             <li>DynamicData Module Extension page at 
             <a title="#xarML('DynamicData Module - Xaraya Extension 182')#"
             href="http://www.xaraya.com/index.php/release/182.html">Xaraya Extension and

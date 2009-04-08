@@ -20,6 +20,8 @@ class CheckboxListProperty extends SelectProperty
     public $name       = 'checkboxlist';
     public $desc       = 'Checkbox List';
 
+    public $display_columns = 3;
+
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
@@ -30,7 +32,7 @@ class CheckboxListProperty extends SelectProperty
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? 'dd_'.$this->id : $name;
-        // store the fieldname for validations who need them (e.g. file uploads)
+        // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
             xarVarFetch($name, 'isset', $value,  NULL, XARVAR_NOT_REQUIRED);
@@ -41,40 +43,22 @@ class CheckboxListProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        // this won't do for check boxes !
-        //if (!isset($value)) {
-        //    $value = $this->value;
-        //}
-
-        if (!isset($value)) {
-            $this->value = '';
-        } elseif ( is_array($value) ) {
-            $this->value = implode ( ',', $value);
-        } else {
-            $this->value = $value;
-        }
-
+        if (!isset($value)) $this->value = '';
+        elseif ( is_array($value) ) $this->value = implode ( ',', $value);
+        else $this->value = $value;
         return true;
     }
 
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
+        else $this->value = $data['value'];
 
+        if (!isset($data['rows_cols'])) $data['rows_cols'] = $this->display_columns;
         if (empty($data['value'])) {
             $data['value'] = array();
         } elseif (!is_array($data['value']) && is_string($data['value'])) {
             $data['value'] = explode(',', $data['value']);
-        }
-
-        if (!isset($data['options']) || count($data['options']) == 0) {
-            $options = $this->getOptions();
-        } else {
-            $options = $data['options'];
-        }
-        foreach ($options as $key => $option) {
-            $option['checked'] = in_array($option['id'],$data['value']);
-            $data['options'][$key] = $option;
         }
         return parent::showInput($data);
     }

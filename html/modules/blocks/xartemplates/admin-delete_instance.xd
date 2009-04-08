@@ -15,7 +15,7 @@
                     <p>Title: #xarVarPrepForDisplay($instance['title'])#</p>
                 </xar:if>
                 <p>Groups: 
-                <xar:if condition="!empty($instance['groups'])">
+                    <xar:if condition="!empty($instance['groups'])">
                 <xar:loop name="$instance['groups']">
                 #xarVarPrepForDisplay($loop:item.name)#</xar:loop>
                 <xar:else />[ none ]</xar:if></p>
@@ -27,11 +27,11 @@
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="confirm" id="confirm" value="true" />
                     <input type="hidden" name="bid" id="bid" value="#$instance['bid']#" />
-                    <input type="submit" value="#xarML('Delete Block')#"
-                    class="xar-margin-thick" />
-                    <xar:set name="returnurl">#xarModURL('blocks', 'admin',
-                    'view_instances')#</xar:set>
-                    <input type="button" value="#xarML('Cancel')#" class="xar-margin-thick"
+                    <input type="submit" value="#xarML('Delete Block')#" class="xar-margin-thick" />
+                    <xar:set name="returnurl">
+                        #xarModURL('blocks', 'admin', 'view_instances')#
+                    </xar:set>
+                    <input type="button" value="#xarML('Cancel')#" class="xar-margin-thick" onclick="window.location='#$returnurl#';" />
                     onclick="window.location='#$returnurl#';" />
                 </div>
             </fieldset>

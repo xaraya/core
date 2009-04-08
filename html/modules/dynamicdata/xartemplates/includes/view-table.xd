@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- TODO: multi-column output -->
     <div class="xar-fullwidth">
@@ -34,7 +34,7 @@
                                 <xar:data-output property="$properties[$name]"
                                 value="$fields[$name]" />
                             </a>
-                            <xar:else />
+                        <xar:else />
                             <xar:data-output property="$properties[$name]"
                             value="$fields[$name]" /></xar:if>
                         </td>
@@ -42,11 +42,11 @@
                     <xar:if condition="empty($linkfield)">
                         <td class="xar-align-center">
                             <xar:if condition="!empty($links[$itemid]) and count($links[$itemid]) gt 0">
-                            <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
+                                <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
                                 <xar:if condition="!empty($option['olink'])">#$option['ojoin']# 
                                 <a href="#$option['olink']#">#$option['otitle']#</a>
                                 <xar:else />#$option['ojoin']# #$option['otitle']#</xar:if>
-                            </xar:foreach>
+                                </xar:foreach>
                             <xar:else />&#160;</xar:if>
                         </td>
                     </xar:if>

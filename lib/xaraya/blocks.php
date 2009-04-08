@@ -69,6 +69,7 @@ function xarBlock_render($blockinfo)
 
     // Get the block display function name.
     $displayFuncName = "{$modName}_{$blockType}block_display";
+    $classpath = 'modules/' . $modName . '/xarblocks/' . $blockType . '.php';
 
     // Fetch complete blockinfo array.
     if (function_exists($displayFuncName)) {
@@ -108,6 +109,38 @@ function xarBlock_render($blockinfo)
                 $blockinfo['_bl_block_template'],
                 !empty($blockinfo['_bl_template_base']) ? $blockinfo['_bl_template_base'] : NULL
             );
+        }
+    } elseif (file_exists($classpath)) {
+        sys::import('modules.' . $modName . '.xarblocks.' . $blockType);
+        sys::import('xaraya.structures.descriptor');
+        $name = ucfirst($blockType) . "Block";
+        $descriptor = new ObjectDescriptor(array());
+        $block = new $name($descriptor);
+
+        $blockinfo = $block->display($blockinfo);
+        if (!is_array($blockinfo)) {return '';}
+        if (is_array($blockinfo['content'])) {
+            // Here $blockinfo['content'] is template data.
+
+            // Set some additional details that the could be useful in the block.
+            // TODO: prefix these extra variables (_bl_) to indicate they are supplied by the core.
+            $blockinfo['content']['blockid'] = $blockinfo['bid'];
+            $blockinfo['content']['blockname'] = $blockinfo['name'];
+            $blockinfo['content']['blocktypename'] = $blockinfo['type'];
+            if (isset($blockinfo['bgid'])) {
+                // The block may not be rendered as part of a group.
+                $blockinfo['content']['blockgid'] = $blockinfo['bgid'];
+                $blockinfo['content']['blockgroupname'] = $blockinfo['group_name'];
+            }
+
+            // Render this block template data.
+            $blockinfo['content'] = xarTplBlock(
+                $modName, $blockType, $blockinfo['content'],
+                $blockinfo['_bl_block_template'],
+                !empty($blockinfo['_bl_template_base']) ? $blockinfo['_bl_template_base'] : NULL
+            );
+        } else {
+            return "";
         }
     }
 

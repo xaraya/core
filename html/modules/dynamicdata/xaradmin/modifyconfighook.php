@@ -32,8 +32,8 @@ function dynamicdata_admin_modifyconfighook($args)
         $modname = $extrainfo['module'];
     }
 
-    $modid = xarModGetIDFromName($modname);
-    if (empty($modid)) {
+    $module_id = xarMod::getRegID($modname);
+    if (empty($module_id)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('module name', 'admin', 'modifyconfighook', 'dynamicdata');
         throw new BadParameterException($vars,$msg);
@@ -48,7 +48,7 @@ function dynamicdata_admin_modifyconfighook($args)
     if (!xarModAPILoad('dynamicdata', 'user')) return;
 
     $fields = xarModAPIFunc('dynamicdata','user','getprop',
-                           array('modid' => $modid,
+                           array('module_id' => $module_id,
                                  'itemtype' => $itemtype));
     if (!isset($fields) || $fields == false) {
         $fields = array();
@@ -61,7 +61,7 @@ function dynamicdata_admin_modifyconfighook($args)
                     'type' => xarML('Field Format'),
                     'defaultvalue' => xarML('Default'),
                     'source' => xarML('Data Source'),
-                    'validation' => xarML('Validation'),
+                    'configuration' => xarML('Configuration'),
                    );
 
     $labels['dynamicdata'] = xarML('Dynamic Data Fields');
@@ -70,12 +70,12 @@ function dynamicdata_admin_modifyconfighook($args)
     $data = array();
     $data['labels'] = $labels;
     $data['link'] = xarModURL('dynamicdata','admin','modifyprop',
-                              array('modid' => $modid,
+                              array('module_id' => $module_id,
                                     'itemtype' => $itemtype));
     $data['fields'] = $fields;
     $data['fieldtypeprop'] = & DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
 
-    $object = & DataObjectMaster::getObject(array('moduleid' => $modid,
+    $object = & DataObjectMaster::getObject(array('module_id' => $module_id,
                                                        'itemtype' => $itemtype,
                                                        'extend' => false));
     if (!isset($object)) return;

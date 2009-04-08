@@ -70,14 +70,15 @@ function roles_admin_createmail()
         if(empty($q->tables)) {
             $q = new xarQuery('SELECT');
             $q->addtable($xartable['roles'],'r');
+        }
             $q->addfields(array('r.id AS id',
                                 'r.name AS name',
                                 'r.uname AS uname',
                                 'r.email AS email',
                                 'r.state AS state',
                                 'r.date_reg AS date_reg'));
-            $q->eq('itemtype',xarRoles::ROLES_USERTYPE);
-        }
+            $q->eq('r.itemtype',xarRoles::ROLES_USERTYPE);
+            $q->ne('r.email','');
         // Set the paging and order stuff for this particular page
         $numitems = xarModVars::get('roles', 'itemsperpage');
         $q->setrowstodo($numitems);

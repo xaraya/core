@@ -24,6 +24,7 @@ function themes_admin_updateconfig()
     if (!xarVarFetch('sitename', 'str:1:', $sitename, 'Your Site Name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('separator', 'str:1:', $separator, ' :: ', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pagetitle', 'str:1:', $pagetitle, 'default', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('showphpcbit', 'checkbox', $showphpcbit, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('showtemplates', 'checkbox', $showtemplates, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('cachetemplates', 'checkbox', $cachetemplates, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('var_dump', 'checkbox', $var_dump, false, XARVAR_NOT_REQUIRED)) return;
@@ -45,6 +46,7 @@ function themes_admin_updateconfig()
     xarModVars::set('themes', 'SiteSlogan', $slogan);
     xarModVars::set('themes', 'SiteCopyRight', $copyright);
     xarModVars::set('themes', 'SiteFooter', $footer);
+    xarModVars::set('themes', 'ShowPHPCommentBlockInTemplates', $showphpcbit);
     xarModVars::set('themes', 'ShowTemplates', $showtemplates);
     xarModVars::set('themes', 'AtomTag', $atomtag);
     xarModVars::set('themes', 'var_dump', $var_dump);
@@ -67,7 +69,16 @@ function themes_admin_updateconfig()
     // Only go through updatehooks() if there was a change.
     if (xarModIsHooked('themes', 'roles') != $usermenu) {
 
+		sys::import('xaraya.structures.hooks.observer');
+		$observer = new BasicObserver('themes','user','usermenu');
+	    $subject = new HookSubject('roles');
+			$subject->detach($observer);
+        if ($usermenu) {
+			$subject->attach($observer);
+        } else {
+        }
 
+        /* Why all this?
         $hooked_roles = array();
         if ($usermenu) {
             $hooked_roles[0] = 1;
@@ -95,8 +106,7 @@ function themes_admin_updateconfig()
             'hooked_roles' => $hooked_roles,
             'return_url' => xarModURL('themes', 'admin', 'modifyconfig'),
         ));
-    } else {
-        $redirecturl = xarModURL('themes', 'admin', 'modifyconfig');
+        */
     }
 
     // lets update status and display updated configuration

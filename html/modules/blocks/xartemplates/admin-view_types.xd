@@ -10,6 +10,7 @@
             <h2>View Block Type</h2>
             <h4>
                 <a href="&xar-modurl-blocks-admin-new_type;">New Block Type</a>
+                <a href="#xarModURL('blocks'.'admin'.'new_type')#"><xar:mlstring>New Block Type</xar:mlstring></a>
             </h4>
             <fieldset>
                 <legend>Selected Block Type Properties</legend>
@@ -17,7 +18,7 @@
                 <label class="xar-form-label">Block
                 Type:</label>#xarVarPrepForDisplay($detail['type'])#</div>
                 <div class="xar-form-input-wrapper">
-                <label class="xar-form-label">
+                    <label class="xar-form-label">
                 Module:</label>#xarVarPrepForDisplay($detail['module'])#</div>
                 <xar:if condition="!empty($info['text_type'])">
                     <div class="xar-form-input-wrapper">
@@ -38,11 +39,11 @@
                 </xar:if>
                 <xar:if condition="!empty($info['notes'])">
                     <div class="xar-form-input-wrapper">
-                    <label class="xar-form-label">
+                        <label class="xar-form-label">
                     Notes:</label>#xarVarPrepForDisplay($info['notes'])#</div>
                 </xar:if>
             </fieldset>
-            <xar:comment>Table of overrideable parameters (see xar:block tag)</xar:comment>
+            <!-- Table of overrideable parameters (see xar:block tag) -->
             <xar:if condition="!empty($params)">
                 <fieldset>
                     <legend>Block Properties Customisable Through &lt;xar:block&gt; Tag</legend>
@@ -71,10 +72,11 @@
                     </table>
                 </fieldset>
             </xar:if>
-            <xar:else />
+        <xar:else />
             <h2>View Block Types</h2>
             <h4>
                 <a href="&xar-modurl-blocks-admin-new_type;">New Block Type</a>
+                <a href="#xarModURL('blocks'.'admin'.'new_type')#"><xar:mlstring>New Block Type</xar:mlstring></a>
             </h4>
             <table class="xar-fullwidth">
                 <tr>
@@ -98,10 +100,11 @@
                         </td>
                         <td>
                             <xar:if condition="!empty($loop:item['info']['text_type_long'])">
-                            #xarVarPrepForDisplay($loop:item['info']['text_type_long'])#</xar:if>
+                                #xarVarPrepForDisplay($loop:item['info']['text_type_long'])#
+                            </xar:if>
                         </td>
                         <td class="xar-align-center">
-                            <a href="#$loop:item['refreshurl']#"
+                            <a href="#$loop:item['refreshurl']#" title="#xarML('Refresh block details')#"><xar:mlstring>Refresh</xar:mlstring></a>
                             title="#xarML('Refresh block details')#">Refresh</a>
                         </td>
                     </tr>

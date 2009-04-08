@@ -1,0 +1,115 @@
+<object name="modules">
+  <objectid>9</objectid>
+  <label>Modules</label>
+  <parent>objects</parent>
+  <module_id>182</module_id>
+  <itemtype>4</itemtype>
+  <class>DataObject</class>
+  <filepath></filepath>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>1</isalias>
+  <properties>
+    <property name="id">
+      <id>55</id>
+      <label>ID</label>
+      <type>itemid</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.id</source>
+      <status>65</status>
+      <seq>2</seq>
+      <configuration></configuration>
+    </property>
+    <property name="name">
+      <id>56</id>
+      <label>Name</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.name</source>
+      <status>33</status>
+      <seq>3</seq>
+      <configuration></configuration>
+    </property>
+    <property name="regid">
+      <id>57</id>
+      <label>Regid</label>
+      <type>integerbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.regid</source>
+      <status>33</status>
+      <seq>4</seq>
+      <configuration></configuration>
+    </property>
+    <property name="directory">
+      <id>58</id>
+      <label>Directory</label>
+      <type>textarea</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.directory</source>
+      <status>34</status>
+      <seq>5</seq>
+      <configuration></configuration>
+    </property>
+    <property name="version">
+      <id>59</id>
+      <label>Version</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.version</source>
+      <status>33</status>
+      <seq>6</seq>
+      <configuration></configuration>
+    </property>
+    <property name="class">
+      <id>60</id>
+      <label>Class</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.class</source>
+      <status>33</status>
+      <seq>7</seq>
+      <configuration></configuration>
+    </property>
+    <property name="category">
+      <id>61</id>
+      <label>Category</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.category</source>
+      <status>33</status>
+      <seq>8</seq>
+      <configuration></configuration>
+    </property>
+    <property name="admin_capable">
+      <id>62</id>
+      <label>Admin Capable</label>
+      <type>checkbox</type>
+      <defaultvalue>1</defaultvalue>
+      <source>xar_modules.admin_capable</source>
+      <status>34</status>
+      <seq>9</seq>
+      <configuration></configuration>
+    </property>
+    <property name="user_capable">
+      <id>63</id>
+      <label>User Capable</label>
+      <type>checkbox</type>
+      <defaultvalue>1</defaultvalue>
+      <source>xar_modules.user_capable</source>
+      <status>34</status>
+      <seq>10</seq>
+      <configuration></configuration>
+    </property>
+    <property name="state">
+      <id>64</id>
+      <label>State</label>
+      <type>dropdown</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_modules.state</source>
+      <status>33</status>
+      <seq>11</seq>
+      <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:213:"1,Unititialized;2,Inactive;3,Active;4,Missing Uninitialized;5,Upgraded;6,Installed;7,Missing Inactive;8,Missing Active;9,Missing Upgraded;10,Error Uninitialized;11,Error Inactive;12,Error Active;13,Error Upgraded;";s:25:"initialization_other_rule";s:0:"";}</configuration>
+    </property>
+  </properties>
+</object>

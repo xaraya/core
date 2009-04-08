@@ -35,9 +35,9 @@ function initializeSetup()
    //--------------------------------- Roles Module
     $info = xarMod::getBaseInfo('roles');
     $sysid = $info['systemid'];
-    $query1 = "SELECT DISTINCT type FROM $blockTypesTable WHERE modid = $sysid";
-    $query2 = "SELECT DISTINCT instances.title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE modid = $sysid";
-    $query3 = "SELECT DISTINCT instances.id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE modid = $sysid";
+    $query1 = "SELECT DISTINCT name FROM $blockTypesTable WHERE module_id = $sysid";
+    $query2 = "SELECT DISTINCT instances.title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE module_id = $sysid";
+    $query3 = "SELECT DISTINCT instances.id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE module_id = $sysid";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),
@@ -73,9 +73,9 @@ function initializeSetup()
     // ----------------------------- Base Module
     $info = xarMod::getBaseInfo('base');
     $sysid = $info['systemid'];
-    $query1 = "SELECT DISTINCT type FROM $blockTypesTable WHERE modid = $sysid";
-    $query2 = "SELECT DISTINCT instances.title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE modid = $sysid";
-    $query3 = "SELECT DISTINCT instances.id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE modid = $sysid";
+    $query1 = "SELECT DISTINCT name FROM $blockTypesTable WHERE module_id = $sysid";
+    $query2 = "SELECT DISTINCT instances.title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE module_id = $sysid";
+    $query3 = "SELECT DISTINCT instances.id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE module_id = $sysid";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),
@@ -100,9 +100,9 @@ function initializeSetup()
 
     $info = xarMod::getBaseInfo('themes');
     $sysid = $info['systemid'];
-    $query1 = "SELECT DISTINCT type FROM $blockTypesTable WHERE modid = $sysid";
-    $query2 = "SELECT DISTINCT instances.title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE modid = $sysid";
-    $query3 = "SELECT DISTINCT instances.id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE modid = $sysid";
+    $query1 = "SELECT DISTINCT name FROM $blockTypesTable WHERE module_id = $sysid";
+    $query2 = "SELECT DISTINCT instances.title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE module_id = $sysid";
+    $query3 = "SELECT DISTINCT instances.id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE module_id = $sysid";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),

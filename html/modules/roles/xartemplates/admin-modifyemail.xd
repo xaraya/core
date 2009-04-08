@@ -38,17 +38,17 @@
                     class="xar-form-label">Template:</label>
                     <select name="mailtype" id="mailtype" size="1" tabindex="5"
                     onchange="this.form.submit()">
-                        <xar:loop name="$templates">
-                            <xar:if condition="$mailtype eq $loop:item['key']">
-                                <option value="#$loop:item['key']#" selected="selected">
+                            <xar:loop name="$templates">
+                                <xar:if condition="$mailtype eq $loop:item['key']">
+                                    <option value="#$loop:item['key']#" selected="selected">
                                 #$loop:item['value']#</option>
                                 <xar:else />
                                 <option value="#$loop:item['key']#">#$loop:item['value']#</option>
-                            </xar:if>
-                        </xar:loop>
-                    </select>
-                </div>
-                <p>
+                                </xar:if>
+                            </xar:loop>
+                        </select>
+                    </div>
+                    <p>
                     <xar:if condition="$mailtype eq 'validation'">This email will be sent to users
                     when they re-validate their account (i.e. change email address). 
                     <xar:elseif condition="$mailtype eq 'confirmation'" />This email will be sent
@@ -65,7 +65,7 @@
                     users when an administrator changes their password. 
                     <xar:else />This email will be sent to users when an administrator changes
                     their password.</xar:if>
-                </p>
+                    </p>
             </fieldset>
         </form>
         <form action="&xar-modurl-roles-admin-modifyemail;" method="post"
@@ -78,15 +78,15 @@
                     <input type="text" name="subject" id="subject"
                     value="#xarVarPrepForDisplay($subject)#" maxlength="150"
                     class="xar-form-textxlong" />
-                </div>
-                <div class="xar-form-input-wrapper">
+                    </div>
+                    <div class="xar-form-input-wrapper">
                     <label for="message" title="#xarML('Body of the notification')#"
                     class="xar-form-label">Message:</label>
-                    <div class="xar-form-container-after">
+                        <div class="xar-form-container-after">
                         <textarea name="message" id="message" class="xar-form-textareaxlarge">
                         #xarVarPrepForDisplay($message)#</textarea>
+                        </div>
                     </div>
-                </div>
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">

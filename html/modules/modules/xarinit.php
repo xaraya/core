@@ -184,7 +184,8 @@ function modules_init()
                          // the configuration settings pertaining to modules for the base module
                          array($modulesmodid,'defaultmoduletype','user'),
                          array($modulesmodid,'defaultmodule','base'),
-                         array($modulesmodid,'defaultmodulefunction','main'));
+                         array($modulesmodid,'defaultmodulefunction','main'),
+                         array($modulesmodid,'defaultdatapath','lib/'));
 
         foreach($modvars as &$modvar) {
             $stmt->executeUpdate($modvar);

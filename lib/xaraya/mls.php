@@ -167,7 +167,8 @@ function xarML($string/*, ...*/)
 {
     // if an empty string is passed in, just return an empty string. it's
     // the most sensible thing to do
-    if(empty($string)) return '';
+    $string = trim($string);
+    if($string == '') return '';
 
     // Make sure string is sane
     // - hex 0D -> ''
@@ -308,13 +309,13 @@ function xarLocaleGetList($filter=array())
  *  @access protected
  *  @return int unix timestamp.
  */
-function xarMLS_userTime($time=null)
+function xarMLS_userTime($time=null,$flag=1)
 {
     // get the current UTC time
     if (!isset($time)) {
         $time = time();
     }
-    $time += xarMLS_userOffset($time) * 3600;
+    if ($flag) $time += xarMLS_userOffset($time) * 3600;
     // return the corrected timestamp
     return $time;
 }
@@ -453,16 +454,16 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
         if ($dnType == XARMLS_DNTYPE_MODULE) {
             // Handle in a special way the module type
             // for which it's necessary to load common translations
-            if (!isset($loadedCommons[$dnName])) {
-                $loadedCommons[$dnName] = true;
+            if (!isset($loadedCommons[$dnName.'module'])) {
+                $loadedCommons[$dnName.'module'] = true;
                 if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'common')) return; // throw back
                 if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return; // throw back
             }
         }
         if ($dnType == XARMLS_DNTYPE_THEME) {
             // Load common translations
-            if (!isset($loadedCommons[$dnName])) {
-                $loadedCommons[$dnName] = true;
+            if (!isset($loadedCommons[$dnName.'theme'])) {
+                $loadedCommons[$dnName.'theme'] = true;
                 if (!$GLOBALS['xarMLS_backend']->loadContext('themes:', 'common')) return; // throw back
             }
         }

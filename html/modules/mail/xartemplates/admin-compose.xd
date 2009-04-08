@@ -2,9 +2,12 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <script type="text/javascript">
-        <xar:comment>// Enter name of mandatory fields var mail_fieldRequired = Array("subject",
-        "message"); // Enter field description to appear in the dialog box var
-        mail_fieldDescription = Array("Subject", "Message"); //</xar:comment>
+    <xar:comment>
+        // Enter name of mandatory fields
+        var mail_fieldRequired = Array("subject", "message");
+        // Enter field description to appear in the dialog box
+        var mail_fieldDescription = Array("Subject", "Message");
+    // </xar:comment>
     </script>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Mail Administration</span>

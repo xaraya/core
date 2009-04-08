@@ -19,15 +19,15 @@ function dynamicdata_admin_form($args)
     extract($args);
 
     if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id',    'isset', $module_id,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('preview',  'isset', $preview,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
 
-    if (empty($modid)) {
-        $modid = xarModGetIDFromName('dynamicdata');
+    if (empty($module_id)) {
+        $module_id = xarMod::getRegID('dynamicdata');
     }
     if (!isset($itemtype)) {
         $itemtype = 0;
@@ -38,12 +38,12 @@ function dynamicdata_admin_form($args)
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$modid:$itemtype:All")) return;
+    if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$module_id:$itemtype:All")) return;
 
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
-                                         'moduleid' => $modid,
+                                         'moduleid' => $module_id,
                                          'itemtype' => $itemtype,
                                          'join'     => $join,
                                          'table'    => $table,

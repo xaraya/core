@@ -47,7 +47,7 @@
                                     <xar:if condition="isset($dependencyinfo[$modInfo['regid']]) AND !is_numeric($dependencyinfo[$modInfo['regid']])">
                                     Missing a module #$modInfo['name']# (ID #$modInfo['regid']#). 
                                     <xar:else />
-                                    <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
+                                        <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
                                     Missing a module with ID #$modInfo['regid']#. Click this line
                                     to get information on this missing module.</a></xar:if>
                                     <br />Install this module first, then try this installation
@@ -56,7 +56,7 @@
                                     <xar:if condition="isset($dependencyinfo[$modInfo['regid']])">
                                     Missing a module #$dependencyinfo[$modInfo]# (ID #$modInfo#). 
                                     <xar:else />
-                                    <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
+                                        <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
                                     Missing a module with name #$modInfo['displayname']#. Click
                                     this line to get information on this missing
                                     module.</a></xar:if>
@@ -64,7 +64,7 @@
                                     again. 
                                     <xar:elseif condition="is_numeric($modInfo) AND isset($dependencyinfo[$modInfo])" />Missing
                                     a module #$dependencyinfo[$modInfo]# (ID #$modInfo#). 
-                                    <xar:else />
+                                <xar:else />
                                     <a href="http://www.php.net/manual-lookup.php?pattern=#$modInfo#">
                                     Get Information for the missing PHP extension
                                     #$modInfo#</a></xar:if>
@@ -72,7 +72,7 @@
                             </xar:foreach>
                         </ul>
                         <xar:else />
-                        <input type="submit" name="command" id="command"
+                    <input type="submit" name="command" id="command" value="#xarML('Install All')#" tabindex="9" />
                         value="#xarML('Install All')#" tabindex="9" />
                     </xar:if>
                 </div>

@@ -3,12 +3,12 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:base-include-javascript module="base" filename="formcheck.js" />
     <script type="text/javascript">
-        <!--
-    // Enter name of mandatory fields
-    //var blocks_fieldRequired = Array("modulename", "blockname");
-    // Enter field description to appear in the dialog box
-    //var blocks_fieldDescription = Array("Module Name", "Block Name");
-//-->
+    <!--
+        // Enter name of mandatory fields
+        //var blocks_fieldRequired = Array("modulename", "blockname");
+        // Enter field description to appear in the dialog box
+        //var blocks_fieldDescription = Array("Module Name", "Block Name");
+    //-->
     </script>
     <xar:style scope="common" />
     <div class="xar-mod-head">
@@ -18,7 +18,7 @@
         <xar:template type="module" file="admin-menu" />
         <h2>New Block Type</h2>
         <form action="#xarModURL('blocks', 'admin', 'new_type')#" method="post"
-        onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);"
+        <form action="#xarModURL('blocks', 'admin', 'new_type')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
         enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Block Type Properties</legend>
@@ -49,7 +49,7 @@
                             </xar:loop>
                         </select>
                         <xar:else />
-                        <input type="text" name="blockname" id="blockname" value="" maxlength="255"
+                        <input type="text" name="blockname" id="blockname" value="" maxlength="255" class="xar-form-textlong" />
                         class="xar-form-textlong" />
                     </xar:if>
                     <input type="submit" name="scan" value="#xarML('Scan Module')#" />
@@ -57,7 +57,7 @@
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="submit" name="submit" value="#xarML('Add Block Type')#"
+                    <input type="submit" name="submit" value="#xarML('Add Block Type')#" class="xar-margin-thick" />
                     class="xar-margin-thick" />
                 </div>
             </fieldset>

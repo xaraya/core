@@ -41,7 +41,7 @@
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <xar:if condition="!empty($return_url)">
-                        <input type="hidden" name="return_url" id="return_url"
+                        <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
                         value="#$return_url#" />
                     </xar:if>
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />

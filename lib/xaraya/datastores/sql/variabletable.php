@@ -84,7 +84,7 @@ class VariableTableDataStore extends SQLDataStore
 
         foreach ($propids as $propid) {
             // get the value from the corresponding property
-            $value = $this->fields[$propid]->getValue();
+            $value = $this->fields[$propid]->value;
 
             // invalid prop_id or undefined value (empty is OK, though !)
             if (empty($propid) || !is_numeric($propid) || !isset($value)) {
@@ -135,7 +135,7 @@ class VariableTableDataStore extends SQLDataStore
 
         foreach ($propids as $propid) {
             // get the value from the corresponding property
-            $value = $this->fields[$propid]->getValue();
+            $value = $this->fields[$propid]->value;
 
             // invalid prop_id or undefined value (empty is OK, though !)
             if (empty($propid) || !is_numeric($propid) || !isset($value)) {
@@ -425,9 +425,9 @@ class VariableTableDataStore extends SQLDataStore
                 foreach ($this->where as $whereitem) {
                     // Postgres does not support column aliases in HAVING clauses, but you can use the same aggregate function
                     if (substr($dbtype,0,8) == 'postgres') {
-                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'MAX(CASE WHEN property_id = ' . $whereitem['field'] . " THEN $propval ELSE '' END) " . $whereitem['clause'] . $whereitem['post'] . ' ';
+                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'MAX(CASE WHEN property_id = ' . 'dd_' . $whereitem['field'] . " THEN $propval ELSE '' END) " . $whereitem['clause'] . $whereitem['post'] . ' ';
                     } else {
-                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
+                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
                     }
                 }
             }

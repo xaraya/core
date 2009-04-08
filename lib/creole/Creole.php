@@ -75,10 +75,10 @@ class Creole {
     const COMPAT_ALL = 96;
 
     /**
-	 * MySQL connection flags to explicitly set multiple statement/result support
-	 */
-	const MYSQL_CLIENT_MULTI_STATEMENTS = 65536;
-	const MYSQL_CLIENT_MULTI_RESULTS = 131072;
+     * MySQL connection flags to explicitly set multiple statement/result support
+     */
+    const MYSQL_CLIENT_MULTI_STATEMENTS = 65536;
+    const MYSQL_CLIENT_MULTI_RESULTS = 131072;
 
     /**
      * Map of built-in drivers.
@@ -186,14 +186,14 @@ class Creole {
         }
 
         // gather any flags from the DSN
-		if ( isset ( $dsninfo['persistent'] ) && ! empty ( $dsninfo['persistent'] ) )
-			$flags |= Creole::PERSISTENT;
-		if ( isset ( $dsninfo['compat_assoc_lower'] ) && ! empty ( $dsninfo['compat_assoc_lower'] ) )
-			$flags |= Creole::COMPAT_ASSOC_LOWER;
-		if ( isset ( $dsninfo['compat_rtrim_string'] ) && ! empty ( $dsninfo['compat_rtrim_string'] ) )
-			$flags |= Creole::COMPAT_RTRIM_STRING;
-		if ( isset ( $dsninfo['compat_all'] ) && ! empty ( $dsninfo['compat_all'] ) )
-			$flags |= Creole::COMPAT_ALL;
+        if ( isset ( $dsninfo['persistent'] ) && ! empty ( $dsninfo['persistent'] ) )
+            $flags |= Creole::PERSISTENT;
+        if ( isset ( $dsninfo['compat_assoc_lower'] ) && ! empty ( $dsninfo['compat_assoc_lower'] ) )
+            $flags |= Creole::COMPAT_ASSOC_LOWER;
+        if ( isset ( $dsninfo['compat_rtrim_string'] ) && ! empty ( $dsninfo['compat_rtrim_string'] ) )
+            $flags |= Creole::COMPAT_RTRIM_STRING;
+        if ( isset ( $dsninfo['compat_all'] ) && ! empty ( $dsninfo['compat_all'] ) )
+            $flags |= Creole::COMPAT_ALL;
 
         if ($flags & Creole::NO_ASSOC_LOWER) {
             trigger_error("The Creole::NO_ASSOC_LOWER flag has been deprecated, and is now the default behavior. Use Creole::COMPAT_ASSOC_LOWER to lowercase resulset keys.", E_USER_WARNING);
@@ -309,51 +309,51 @@ class Creole {
             'database' => null
         );
 
-		$preg_query = "!^(([a-z0-9]+)(\(([^()]+)\))?)(://((((([^@/:]+)(:([^@/]+))?)@)?((([a-z]+)\((([^?():]+)(:([^()?]+))?)\))|((([^/?:]+)(:([^/?]+))?))))/?)?([^?]+)?(\?(.+))?)?$!i";
+        $preg_query = "!^(([a-z0-9]+)(\(([^()]+)\))?)(://((((([^@/:]+)(:([^@/]+))?)@)?((([a-z]+)\((([^?():]+)(:([^()?]+))?)\))|((([^/?:]+)(:([^/?]+))?))))/?)?([^?]+)?(\?(.+))?)?$!i";
 
-		$info = array();
+        $info = array();
 
-		if (preg_match($preg_query,$dsn,$info)) { // only if it is matching
+        if (preg_match($preg_query,$dsn,$info)) { // only if it is matching
 
-			$parsed['phptype'] = @$info[2]; // Group 2 should always exist.
+            $parsed['phptype'] = @$info[2]; // Group 2 should always exist.
 
-			// Don't know what to do with Group 4: phptype(xx) should => check first if available
+            // Don't know what to do with Group 4: phptype(xx) should => check first if available
 
-			if (isset($info[5])) { // There is more than just the phptype
+            if (isset($info[5])) { // There is more than just the phptype
 
-				if (strlen($info[10]) > 0) { // There is a username specified
-					$parsed['username'] = @$info[10];
+                if (strlen($info[10]) > 0) { // There is a username specified
+                    $parsed['username'] = @$info[10];
         }
 
-				if (strlen($info[12]) > 0) { // There is a password specified
-					$parsed['password'] = @$info[12];
-				}
+                if (strlen($info[12]) > 0) { // There is a password specified
+                    $parsed['password'] = @$info[12];
+                }
 
-				if (strlen($info[15]) > 0) { // There is a protocol specified: protocol(hostspec)
-					$parsed['protocol'] = @$info[15];
+                if (strlen($info[15]) > 0) { // There is a protocol specified: protocol(hostspec)
+                    $parsed['protocol'] = @$info[15];
 
-					if ($parsed["protocol"] === "unix") {
-						$parsed['socket'] = @$info[16];
+                    if ($parsed["protocol"] === "unix") {
+                        $parsed['socket'] = @$info[16];
             } else {
-						$parsed["hostspec"] = @$info[17];
-						if (strlen($info[19]) > 0) {
-							$parsed["port"] = @$info[19];
+                        $parsed["hostspec"] = @$info[17];
+                        if (strlen($info[19]) > 0) {
+                            $parsed["port"] = @$info[19];
             }
         }
-				} elseif (strlen($info[20]) > 0) {
-					$parsed["hostspec"] = @$info[22];
+                } elseif (strlen($info[20]) > 0) {
+                    $parsed["hostspec"] = @$info[22];
 
-					if ((isset($info[24]) && (strlen($info[24]) > 0))) { // There is a port set (not always available)
-						$parsed["port"] = @$info[24];
+                    if ((isset($info[24]) && (strlen($info[24]) > 0))) { // There is a port set (not always available)
+                        $parsed["port"] = @$info[24];
         }
-				}
+                }
 
-				if ((isset($info[25])) && (strlen($info[25]) > 0)) { // There is a database
-					$parsed["database"] = @$info[25];
-				}
+                if ((isset($info[25])) && (strlen($info[25]) > 0)) { // There is a database
+                    $parsed["database"] = @$info[25];
+                }
 
-				if ((isset($info[27])) && (strlen($info[27]) >0)) { // There is a query
-					$opts = explode('&', $info[27]);
+                if ((isset($info[27])) && (strlen($info[27]) >0)) { // There is a query
+                    $opts = explode('&', $info[27]);
                 foreach ($opts as $opt) {
                     list($key, $value) = explode('=', $opt);
                     if (!isset($parsed[$key])) { // don't allow params overwrite
@@ -362,8 +362,8 @@ class Creole {
                 }
         }
 
-			}
-		}
+            }
+        }
 
         return $parsed;
     }

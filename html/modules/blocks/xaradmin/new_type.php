@@ -20,7 +20,7 @@ function blocks_admin_new_type()
     if (!xarSecurityCheck('AdminBlock', 0, 'Instance')) {return;}
 
     // Get parameters
-    if (!xarVarFetch('moduleid',   'id:', $modid, xarModGetIDFromName('base'), XARVAR_NOT_REQUIRED)) { return; }
+    if (!xarVarFetch('moduleid',   'id:', $modid, xarMod::getRegID('base'), XARVAR_NOT_REQUIRED)) { return; }
     if (!xarVarFetch('blockname', 'str:1:', $blockname, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('submit', 'str:1:', $submit, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('scan', 'str:1:', $scan, '', XARVAR_NOT_REQUIRED)) {return;}

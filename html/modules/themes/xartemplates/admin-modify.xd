@@ -10,7 +10,7 @@
             <xar:var scope="session" name="$themes_statusmsg" />
         </h3>
         <form action="&xar-modurl-themes-admin-update;" method="post"
-        enctype="application/x-www-form-urlencoded">
+        <form action="&xar-modurl-themes-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
             <xar:if condition="count($themevars) gt 0">
                 <xar:loop name="$themevars">
                     <fieldset>
@@ -29,12 +29,12 @@
                             <input type="checkbox" name="#$loop:item['name']#-del"
                             id="#$loop:item['name']#-del" value="delete" />Delete 
                             <label for="#$loop:item['name']#-del">Delete</label></div>
-                            <xar:else />
+                        <xar:else />
                             <p>This is a primary theme variable.</p>
                         </xar:if>
                     </fieldset>
                 </xar:loop>
-                <xar:else />
+            <xar:else />
                 <p>Theme has no editable variables</p>
             </xar:if>
             <fieldset>

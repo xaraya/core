@@ -15,14 +15,14 @@
  * @author the DynamicData module development team
  * @param $args['id'] property id of the item field to delete
 // TODO: do we want those for security check ? Yes, but the original values...
- * @param $args['modid'] module id of the item field to delete
+ * @param $args['module_id'] module id of the item field to delete
  * @param $args['itemtype'] item type of the item field to delete
  * @param $args['name'] name of the field to delete
  * @param $args['label'] label of the field to delete
  * @param $args['type'] type of the field to delete
  * @param $args['defaultvalue'] default of the field to delete
  * @param $args['source'] data source of the field to delete
- * @param $args['validation'] validation of the field to delete
+ * @param $args['configuration'] configuration of the field to delete
  * @returns bool
  * @return true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION

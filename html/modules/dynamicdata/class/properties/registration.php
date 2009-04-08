@@ -25,7 +25,7 @@ class PropertyRegistration extends DataContainer
     public $type       = 1;
     public $parent     = '';                     // this type is derived from?
     public $class      = '';                     // what is the class?
-    public $validation = '';                     // what is its default validation?
+    public $configuration = '';                     // what is its default configuration?
     public $source     = 'dynamic_data';         // what source is default for this type?
     public $reqfiles   = array();                // do we require some files to be present?
     public $reqmodules = array();                // do we require some modules to be present?
@@ -92,7 +92,7 @@ class PropertyRegistration extends DataContainer
         // Make sure the db is the same as in the old days
         assert('count($this->reqmodules)==1; /* The reqmodules registration should only contain the name of the owning module */');
         $modInfo = xarMod::getBaseInfo($this->reqmodules[0]);
-        $modId = $modInfo['systemid'];
+        $module_id = $modInfo['systemid'];
 
         if($this->format == 0) $this->format = $this->id;
 
@@ -108,7 +108,7 @@ class PropertyRegistration extends DataContainer
         $sql = "INSERT INTO $propdefTable
                 (id, name, label,
                  filepath, class,
-                 format, validation, source,
+                 format, configuration, source,
                  reqfiles, modid, args, aliases)
                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         if(!isset($stmt))
@@ -117,8 +117,8 @@ class PropertyRegistration extends DataContainer
         $bindvars = array(
             (int) $this->id, $this->name, $this->desc,
             $this->filepath, $this->class,
-            $this->format, $this->validation, $this->source,
-            serialize($this->reqfiles), $modId, is_array($this->args) ? serialize($this->args) : $this->args, serialize($this->aliases)
+            $this->format, $this->configuration, $this->source,
+            serialize($this->reqfiles), $module_id, is_array($this->args) ? serialize($this->args) : $this->args, serialize($this->aliases)
         );
 
         // Ignore if we already have this dataproperty
@@ -154,7 +154,7 @@ class PropertyRegistration extends DataContainer
         // Sort by required module(s) and then by name
         $query = "SELECT  p.id, p.name, p.label,
                           p.filepath, p.class,
-                          p.format, p.validation, p.source,
+                          p.format, p.configuration, p.source,
                           p.reqfiles, m.name, p.args,
                           p.aliases
                   FROM    $tables[dynamic_properties_def] p INNER JOIN $tables[modules] m
@@ -169,7 +169,7 @@ class PropertyRegistration extends DataContainer
             {
                 list(
                     $id,$name,$label,$filepath,$class,$format,
-                    $validation,$source,$reqfiles,$modname,$args,$aliases
+                    $configuration,$source,$reqfiles,$modname,$args,$aliases
                 ) = $result->fields;
 
                 $property['id']             = $id;
@@ -177,14 +177,18 @@ class PropertyRegistration extends DataContainer
                 $property['label']          = $label;
                 $property['format']         = $format;
                 $property['filepath']       = $filepath;
-                $property['validation']     = $validation;
+                $property['configuration']  = $configuration;
                 $property['source']         = $source;
                 $property['dependancies']   = unserialize($reqfiles);
                 $property['requiresmodule'] = $modname;
                 $property['args']           = $args;
                 $property['class']          = $class;
-                // TODO: this return a serialized array of objects, does that hurt?
-                $property['aliases']        = unserialize($aliases);
+                // TODO: this returns a serialized array of objects, does that hurt?
+                try{
+                    $property['aliases']        = unserialize($aliases);
+                } catch(Exception $e) {
+                    $property['aliases']        = array();
+                }
 
                 $proptypes[$id] = $property;
             }
@@ -253,7 +257,11 @@ class PropertyRegistration extends DataContainer
                     if (!isset($loaded[$file])) {
                         // FIXME: later -> include
                         $dp = str_replace('/','.',substr($PropertiesDir . "/" . basename($file),0,-4));
-                        sys::import($dp);
+                        try {
+                            sys::import($dp);
+                        } catch (Exception $e) {
+                            throw new Exception(xarML('The file #(1) could not be loaded', $dp . '.php'));
+                        }
                         $loaded[$file] = true;
                     }
                 } // loop over the files in a directory
@@ -264,9 +272,9 @@ class PropertyRegistration extends DataContainer
             $newClasses = get_declared_classes();
 
             // See what class(es) we have here
+            $i=0;
             foreach($newClasses as $index => $propertyClass) {
                 // If it doesnt exist something weird is goin on
-
                 if (!is_subclass_of($propertyClass, 'DataProperty')) {;continue;}
                 $processedClasses[] = $propertyClass;
 
@@ -275,7 +283,11 @@ class PropertyRegistration extends DataContainer
                 if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
                 $descriptor = new ObjectDescriptor(array());
                 $baseInfo = new PropertyRegistration($descriptor);
-                $property = new $propertyClass($descriptor);
+                try {
+                    $property = new $propertyClass($descriptor);
+                } catch (Exception $e) {
+                    throw new Exception(xarML('The property #(1) could not be instantiated', $propertyClass));
+                }
                 if (empty($property->id)) continue;   // Don't register the base property
                 $baseInfo->getRegistrationInfo($property);
                 
@@ -320,6 +332,9 @@ class PropertyRegistration extends DataContainer
             throw $e;
         }
 
+        // Clear the property types from cached memory
+        xarCore::delCached('DynamicData','PropertyTypes');
+        
         // Sort the property types
         ksort($proptypes);
         return $proptypes;

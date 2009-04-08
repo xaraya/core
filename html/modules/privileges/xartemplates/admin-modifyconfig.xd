@@ -16,7 +16,7 @@
                         <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=general">
                         General</a>
                     </dd>
-                    <xar:else />
+                <xar:else />
                     <dd>
                         <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=general">
                         General</a>
@@ -39,7 +39,7 @@
                             <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=lastresort">
                             Last Resort</a>
                         </dd>
-                        <xar:else />
+                    <xar:else />
                         <dd>
                             <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=lastresort">
                             Last Resort</a>
@@ -51,7 +51,7 @@
                         <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=masks">
                         Masks</a>
                     </dd>
-                    <xar:else />
+                <xar:else />
                     <dd>
                         <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=masks">
                         Masks</a>
@@ -62,7 +62,7 @@
                         <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=testing">
                         Testing</a>
                     </dd>
-                    <xar:else />
+                <xar:else />
                     <dd>
                         <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=testing">
                         Testing</a>
@@ -72,8 +72,8 @@
         </div>
         <!--  Begin General Options -->
         <xar:if condition="$tab eq 'general'">
-            <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;"
-            enctype="application/x-www-form-urlencoded">
+            <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
+                <xar:template file="display" module="base" subdata="array('modulename' => 'privileges')" />
                 <fieldset>
                     <legend>Sitewide Settings</legend>
                     <div class="xar-form-input-wrapper">
@@ -90,15 +90,15 @@
                     exception error message that can be changed with a base module override
                     template (message-NO_PRIVILEGES.xt).</div>
                     <!--
-                <div class="xar-form-input-wrapper">
-                    <label for="inheritdeny" title="#xarML('Enable or disable inheritance of deny privileges')#" class="xar-form-label">
+                    <div class="xar-form-input-wrapper">
+                        <label for="inheritdeny" title="#xarML('Enable or disable inheritance of deny privileges')#" class="xar-form-label">
                         Inherit Deny Privileges:
-                    </label>
-                    <xar:set name="checked"><xar:var scope="module" module="privileges" name="inheritdeny"/></xar:set>
-                    <xar:data-input type="checkbox" name="inheritdeny" id="inheritdeny" checked="$checked" />
+                        </label>
+                        <xar:set name="checked"><xar:var scope="module" module="privileges" name="inheritdeny"/></xar:set>
+                        <xar:data-input type="checkbox" name="inheritdeny" id="inheritdeny" checked="$checked" />
                     Warning: This setting affects the way privileges work on your site. If changed you should retest all the privileges on your site.
-                </div>
-                -->
+                    </div>
+                    -->
                 </fieldset>
                 <fieldset>
                     <legend>Last Resort</legend>
@@ -125,7 +125,7 @@
         </xar:if>
         <!-- Begin Realms Options -->
         <xar:if condition="$tab eq 'realms'">
-            <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;"
+            <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
             enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Working With Realms</legend>
@@ -209,7 +209,7 @@
                         <xar:if condition="!empty($lastresortname)">
                             <p>Enter a name and password to replace the existing Last Resort
                             administrator.</p>
-                            <xar:else />
+                        <xar:else />
                             <p>Enter a name and password to create a Last Resort administrator.</p>
                         </xar:if>
                     </div>
@@ -288,13 +288,13 @@
                             <xar:if condition="$grouplist[$k]['id'] eq $testergroup">
                                 <option value="#$grouplist[$k]['id']#" selected="selected">
                                 #$grouplist[$k]['name']#</option>
-                                <xar:else />
+                            <xar:else />
                                 <option name="testgroup.#$grouplist[$k]#"
                                 value="#$grouplist[$k]['id']#">#$grouplist[$k]['name']#</option>
                             </xar:if>
                         </xar:foreach>
-                    </select>
-                    <!--<xar:data-input type="grouplist" name="testergroup" is="testergroup" value="$testergroup" onchange="this.form.action=this.form.submit();"/>-->
+                        </select>
+                        <!--<xar:data-input type="grouplist" name="testergroup" is="testergroup" value="$testergroup" onchange="this.form.action=this.form.submit();"/>-->
                     Group to select tester from</div>
                     <div class="xar-form-input-wrapper">
                         <label for="tester"
@@ -305,11 +305,11 @@
                                 <xar:if condition="$testusers[$k]['id'] eq $tester">
                                     <option value="#$testusers[$k]['id']#" selected="selected">
                                     #$testusers[$k]['uname']#</option>
-                                    <xar:else />
+                            <xar:else />
                                     <option name="tester.#$testusers[$k]#"
                                     value="#$testusers[$k]['id']#">
                                     #$testusers[$k]['uname']#</option>
-                                </xar:if>
+                            </xar:if>
                             </xar:foreach>
                         </select>
                         <!--<xar:data-input type="userlist" name="tester" id="4" value="$tester" />-->
@@ -328,7 +328,7 @@
                     <xar:data-input type="checkbox" name="test" id="test" checked="$checked" />Show
                     checks not involving DENYs</div>
                     <div class="xar-form-input-wrapper">
-                    <label for="testdeny" title="#xarML('Deny checks')#" class="xar-form-label">
+                        <label for="testdeny" title="#xarML('Deny checks')#" class="xar-form-label">
                     DENY checks</label>
                     <xar:set name="checked">
                         <xar:var scope="module" module="privileges" name="testdeny" />
@@ -343,12 +343,12 @@
                         only the checks involving that mask</p>
                     </div>
                 </fieldset>
-                <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="phase" id="phase" value="update" />
-                    <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                    <input type="submit" value="#xarML('Update Tester Configuration')#" />
-                </div>
+                    <div class="xar-form-input-wrapper-after">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                        <input type="hidden" name="phase" id="phase" value="update" />
+                        <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                        <input type="submit" value="#xarML('Update Tester Configuration')#" />
+                    </div>
             </form>
         </xar:if>
     </div>

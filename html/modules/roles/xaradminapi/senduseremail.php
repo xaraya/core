@@ -37,10 +37,8 @@ function roles_adminapi_senduseremail($args)
     // Get the predefined email if none is defined
     $strings = xarModAPIFunc('roles','admin','getmessagestrings', array('module' => 'roles','template' => $mailtype));
 
-    $vars  = xarModAPIFunc('roles','admin','getmessageincludestring', array('module' => 'roles','template' => 'message-vars'));
-
-    if (!isset($subject)) $subject = xarTplCompileString($vars . $strings['subject']);
-    if (!isset($message)) $message = xarTplCompileString($vars . $strings['message']);
+    if (!isset($subject)) $subject = xarTplCompileString($strings['subject']);
+    if (!isset($message)) $message = xarTplCompileString($strings['message']);
 
     //Get the common search and replace values
     //if (is_array($id)) {

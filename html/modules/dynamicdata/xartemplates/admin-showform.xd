@@ -6,7 +6,7 @@
             <tr class="xar-align-left xar-valign-middle">
                 <td>#$field['label']#</td>
                 <td>
-                    <xar:data-input type="$field['type']" name="dd_'.$field['id'].'"
+                    <xar:data-input type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" validation="$field['validation']" />
                     value="$field['value']" validation="$field['validation']" />
                     <xar:if condition="!empty($field['invalid'])">
                         <span class="xar-error">Invalid#$field['invalid']#</span>

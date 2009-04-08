@@ -3,9 +3,9 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-form-input-wrapper-after">
         <xar:if condition="$showlogout eq 1">
-            <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1"
+            <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1" checked="checked" />
             checked="checked" />
-            <xar:else />
+        <xar:else />
             <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1" />
         </xar:if>
         <label for="showlogout#$blockid#"
@@ -16,7 +16,7 @@
         <xar:if condition="$showhelp eq 1">
             <input type="checkbox" name="showhelp" id="showhelp#$blockid#" value="1"
             checked="checked" />
-            <xar:else />
+        <xar:else />
             <input type="checkbox" name="showhelp" id="showhelp#$blockid#" value="1" />
         </xar:if>
         <label for="showhelp#$blockid#"
@@ -30,7 +30,7 @@
             <xar:foreach in="$sortorder" value="$v" key="$k">
                 <xar:if condition="$k eq $menustyle">
                     <option value="#$k#" selected="selected">#$v#</option>
-                    <xar:else />
+                <xar:else />
                     <option value="#$k#">#$v#</option>
                 </xar:if>
             </xar:foreach>

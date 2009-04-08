@@ -86,11 +86,11 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- No start with #, just copy it -->
-        <xsl:text>'</xsl:text>
+        <xsl:text>xarML('</xsl:text>
         <xsl:call-template name="replace">
           <xsl:with-param name="source" select="normalize-space(.)"/>
         </xsl:call-template>
-        <xsl:text>'</xsl:text>
+        <xsl:text>')</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -107,9 +107,11 @@
     <xsl:choose>
       <!-- Modvars -->
       <xsl:when test="@scope = 'module'">
-        <xsl:text>xarModVars::get('</xsl:text>
-        <xsl:value-of select="@module"/>
-        <xsl:text>', '</xsl:text>
+        <xsl:text>xarModVars::get("</xsl:text>
+          <xsl:call-template name="resolvePHP">
+            <xsl:with-param name="expr" select="@module"/>
+          </xsl:call-template>
+        <xsl:text>", '</xsl:text>
         <xsl:value-of select="@name"/>
         <xsl:text>')</xsl:text>
       </xsl:when>

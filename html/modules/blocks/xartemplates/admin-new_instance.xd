@@ -3,12 +3,12 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:base-include-javascript module="base" filename="formcheck.js" />
     <script type="text/javascript">
-        <!--
-    // Enter name of mandatory fields
-    var blocks_fieldRequired = Array("block_name");
-    // Enter field description to appear in the dialog box
-    var blocks_fieldDescription = Array("Name");
-//-->
+    <!--
+        // Enter name of mandatory fields
+        var blocks_fieldRequired = Array("block_name");
+        // Enter field description to appear in the dialog box
+        var blocks_fieldDescription = Array("Name");
+    //-->
     </script>
     <xar:style scope="common" />
     <div class="xar-mod-head">
@@ -29,8 +29,8 @@
                     <select name="block_type" id="block_type">
                         <xar:loop name="$block_types">
                             <option value="#$loop:item['tid']#">
-                            #xarVarPrepForDisplay($loop:item['module'])# /
-                            #xarVarPrepForDisplay($loop:item['type'])#</option>
+                                #xarVarPrepForDisplay($loop:item['module'])# / #xarVarPrepForDisplay($loop:item['type'])#
+                            </option>
                         </xar:loop>
                     </select>
                 </div>
@@ -64,7 +64,8 @@
                         <option value="">-- no group --</option>
                         <xar:loop name="$block_groups">
                             <option value="#$loop:item['id']#">
-                            #xarVarPrepForDisplay($loop:item['name'])#</option>
+                                #xarVarPrepForDisplay($loop:item['name'])#
+                            </option>
                         </xar:loop>
                     </select>
                 </div>
@@ -82,7 +83,7 @@
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-                    <input type="submit" value="#xarML('Create Instance')#"
+                    <input type="submit" value="#xarML('Create Instance')#" class="xar-margin-thickright" />
                     class="xar-margin-thickright" />
                 </div>
             </fieldset>

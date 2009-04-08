@@ -10,8 +10,8 @@
                     <xar:set name="datetime">#xarLocaleFormatDate('%Y-%m-%d %H:%M:%S')#</xar:set>
                     <xar:set name="date">#xarLocaleFormatDate('%Y-%m-%d')#</xar:set>
                     <!--
-          Note : timestamp is not an option for ExtendedDate
-        -->
+              Note : timestamp is not an option for ExtendedDate
+            -->
                     <xar:if condition="empty($class) or $class ne 'dynamic_extendeddate_property'">
                         <option value="">timestamp : #$timestamp#</option>
                     </xar:if>
@@ -23,7 +23,7 @@
                     </xar:if>
                     <xar:if condition="!empty($dbformat) and $dbformat == 'date'">
                         <option value="date" selected="selected">date : #$date#</option>
-                        <xar:else />
+            <xar:else/>
                         <option value="date">date : #$date#</option>
                     </xar:if>
                 </select>
@@ -37,7 +37,5 @@
             </td>
         </tr>
     </table>
-    <xar:if condition="!empty($invalid)">
-        <span class="xar-error">#$invalid#</span>
-    </xar:if>
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

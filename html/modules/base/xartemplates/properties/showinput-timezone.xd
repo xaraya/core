@@ -24,10 +24,10 @@
                         <xar:set name="plus">'+'</xar:set>
                     </xar:if>
                     <!-- if you want to show the current time (without daylight saving)
-                <xar:set name="fields">explode(':',$option['offset'])</xar:set>
-                <xar:set name="offset">($fields[0] * 60 + $fields[1]) * 60</xar:set>
-                <xar:set name="gmtime">gmdate('H:i',$now + $offset)</xar:set>
-            -->
+                    <xar:set name="fields">explode(':',$option['offset'])</xar:set>
+                    <xar:set name="offset">($fields[0] * 60 + $fields[1]) * 60</xar:set>
+                    <xar:set name="gmtime">gmdate('H:i',$now + $offset)</xar:set>
+                -->
                     <xar:set name="label">$option['name'] . ' (GMT ' . $plus . $option['offset'] .
                     ')'</xar:set>
                     <xar:else />
@@ -41,7 +41,5 @@
             </xar:foreach>
         </select>
     </xar:if>
-    <xar:if condition="!empty($invalid)">
-        <span class="xar-error">#$invalid#</span>
-    </xar:if>
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

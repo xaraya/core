@@ -75,24 +75,7 @@ class xarCurl extends Object
     // The basic constants.
     // There are enough subtleties in the names that we can't
     // generalise them. Shame.
-    public $info_types = array(
-        CURLINFO_EFFECTIVE_URL => 'url',
-        CURLINFO_HTTP_CODE => 'http_code',
-        CURLINFO_HEADER_SIZE => 'header_size',
-        CURLINFO_REQUEST_SIZE => 'request_size',
-        CURLINFO_FILETIME => 'filetime',
-        CURLINFO_SSL_VERIFYRESULT => 'ssl_verify_result',
-        CURLINFO_TOTAL_TIME => 'total_time',
-        CURLINFO_NAMELOOKUP_TIME => 'namelookup_time',
-        CURLINFO_CONNECT_TIME => 'connect_time',
-        CURLINFO_PRETRANSFER_TIME => 'pretransfer_time',
-        CURLINFO_SIZE_UPLOAD => 'size_upload',
-        CURLINFO_SIZE_DOWNLOAD => 'size_download',
-        CURLINFO_SPEED_DOWNLOAD => 'speed_download',
-        CURLINFO_SPEED_UPLOAD => 'speed_upload',
-        CURLINFO_CONTENT_LENGTH_DOWNLOAD => 'download_content_length',
-        CURLINFO_CONTENT_LENGTH_UPLOAD => 'upload_content_length'
-    );
+    public $info_types;
 
     // The textual descriptions of known HTTP codes.
     // TODO: Some of these codes have related header records, such as
@@ -132,7 +115,7 @@ class xarCurl extends Object
      * A session will be opened immediately the object is created.
      * @return array
      */
-    function xarCurl($args)
+    function __construct($args)
     {
         extract($args);
 
@@ -152,7 +135,7 @@ class xarCurl extends Object
         }
 
         // Later versions of curl have extra info types. Add these on now.
-        if (defined('CURLINFO_CONTENT_TYPE')) {
+        if (constant('CURLINFO_CONTENT_TYPE') != null) {
             $this->info_types = array_merge(
                 $this->info_types,
                 array(
@@ -178,6 +161,12 @@ class xarCurl extends Object
         $this->close();
 
         $this->curl = curl_init();
+
+        // Curl info types: the information flags that getinfo() can accept.
+        // The basic constants.
+        // There are enough subtleties in the names that we can't
+        // generalise them. Shame.
+        $this->info_types = curl_getinfo($this->curl);
 
         // Set a few default options.
         $this->setopt(CURLOPT_HEADER, 1);
@@ -363,7 +352,7 @@ class xarCurl extends Object
             }
         }
 
-        // Decode transfer-encoding
+        /* Decode transfer-encoding
         if (isset($this->header['Transfer-Encoding']) && $this->header['Transfer-Encoding'] == 'chunked'){
             if (!$result = $this->_decode_chunked($result)){
                 $this->errno = -1;
@@ -371,7 +360,7 @@ class xarCurl extends Object
                 return false;
             }
         }
-
+        */
         // Decode content-encoding.
         if (isset($this->header['Content-Encoding']) && $this->header['Content-Encoding'] != ''){
             if ($this->header['Content-Encoding'] == 'deflate' || $this->header['Content-Encoding'] == 'gzip') {

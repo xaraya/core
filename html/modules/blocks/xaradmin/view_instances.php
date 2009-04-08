@@ -16,11 +16,19 @@ function blocks_admin_view_instances()
 {
     if (!xarVarFetch('filter', 'str', $filter, "", XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('startat', 'int', $startat,   1,      XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('currenttab', 'str', $data['currenttab'],   "",      XARVAR_NOT_REQUIRED)) {return;}
 
 // Security Check
     if (!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
     $authid = xarSecGenAuthKey();
 
+    // Get current style.
+    $data['selstyle'] = xarModUserVars::get('blocks', 'selstyle');
+
+    if ($data['selstyle'] == 'bytype') {
+    } 
+    elseif ($data['selstyle'] == 'bygroup') {
+    }
     // Get all block instances (whether they have group membership or not.
     // CHECKME: & removed below for php 4.4.
     $rowstodo = xarModVars::get('blocks','itemsperpage');
@@ -32,9 +40,6 @@ function blocks_admin_view_instances()
                                                                  'order' => 'name',
                                                                  'rowstodo' => $rowstodo,
                                                                  'startat' => $startat));
-    // Get current style.
-    $data['selstyle'] = xarModUserVars::get('blocks', 'selstyle');
-
     // Create extra links and confirmation text.
     foreach ($instances as $index => $instance) {
         $instances[$index]['deleteurl'] = xarModUrl(
@@ -61,9 +66,19 @@ function blocks_admin_view_instances()
                             xarModURL('blocks', 'admin', 'view_instances',array('startat' => '%%')),
                             $rowstodo);
 
-    // Select vars for drop-down menus.
-    $data['style']['plain'] = xarML('Plain');
-    $data['style']['compact'] = xarML('Compact');
+    if ($data['selstyle'] == 'bytype') {
+        $tabs = xarModAPIfunc('blocks', 'user', 'getallblocktypes');
+        $data['tabs'] = array();
+        foreach ($tabs as $tab) {
+            $tab['name'] = $tab['info']['text_type'];
+            $data['tabs'][] = $tab;
+        }
+        if (empty($data['currenttab'])) $data['currenttab'] = 'Login';
+    } 
+    elseif ($data['selstyle'] == 'bygroup') {
+        $data['tabs'] = xarModAPIfunc('blocks', 'user', 'getallgroups');
+        if (empty($data['currenttab'])) $data['currenttab'] = 'left';
+    }
 
     // State descriptions.
     $data['state_desc'][0] = xarML('Hidden');

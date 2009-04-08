@@ -7,19 +7,19 @@
     <div class="xar-mod-body">
         <h2>Recent Theme Extensions</h2>
         <xar:if condition="empty($warning)">
-        <xar:if condition="!empty($feedcontent)">
-            <ul>
-                <xar:loop name="$feedcontent">
-                    <li>
-                        <xar:if condition="!empty($loop:item['link'])">
+            <xar:if condition="!empty($feedcontent)">
+                <ul>
+                    <xar:loop name="$feedcontent">
+                        <li>
+                            <xar:if condition="!empty($loop:item['link'])">
                         <a href="#$loop:item['link']#" target="_BLANK">#$loop:item['title']#</a>: 
                         <xar:else />#$loop:item['title']#:</xar:if>
-                        <xar:if condition="!empty($loop:item['description'])">
+                            <xar:if condition="!empty($loop:item['description'])">
                         #$loop:item['description']#</xar:if>
-                    </li>
-                </xar:loop>
+                        </li>
+                    </xar:loop>
             </ul>
-        </xar:if>
+            </xar:if>
         <xar:else />#$warning#</xar:if>
     </div>
 </xar:template>

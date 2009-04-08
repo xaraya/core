@@ -18,7 +18,7 @@
                             <input type="checkbox" name="#$name#[methods][#$method#]"
                             id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#"
                             checked="checked" />
-                            <xar:else />
+            <xar:else/>
                             <input type="checkbox" name="#$name#[methods][#$method#]"
                             id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#" />
                         </xar:if>
@@ -60,7 +60,5 @@
             </td>
         </tr>
     </table>
-    <xar:if condition="!empty($invalid)">
-        <span class="xar-error">#$invalid#</span>
-    </xar:if>
+    <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

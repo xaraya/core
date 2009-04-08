@@ -4,9 +4,12 @@
     <!-- TODO: split this file up in parts -->
     <xar:base-include-javascript module="base" filename="formcheck.js" />
     <script type="text/javascript">
-        <xar:comment>// Enter name of mandatory fields var base_fieldRequired =
-        Array("defaultfunction"); // Enter field description to appear in the dialog box var
-        base_fieldDescription = Array("Default Module Function"); //</xar:comment>
+    <xar:comment>
+        // Enter name of mandatory fields
+        var base_fieldRequired = Array("defaultfunction");
+        // Enter field description to appear in the dialog box
+        var base_fieldDescription = Array("Default Module Function");
+    //</xar:comment>
     </script>
     <xar:style scope="module" module="base" file="navtabs" />
     <div class="xar-mod-head">
@@ -61,17 +64,78 @@
         </dl>
         <!-- Begin Site Display Options -->
         <xar:if condition="$tab eq 'display'">
-            <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post"
+            <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
             onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);"
             enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Version Information</legend>
                     <div class="xar-form-input-wrapper">
-                    <label title="#xarML('Current Version.')#" class="xar-form-label">Xaraya
-                    Core:</label>
-                    <xar:var name="XARCORE_VERSION_ID" />version 
-                    <xar:var name="XARCORE_VERSION_NUM" />( 
-                    <xar:var name="XARCORE_VERSION_SUB" />)</div>
+                        <label title="#xarML('Current Version.')#" class="xar-form-label">
+                            <xar:mlstring>
+                                Xaraya Core:
+                            </xar:mlstring>
+                        </label>
+                        <!--
+                        <xar:set name="versionid">$XARCORE_VERSION_ID</xar:set>
+                        <xar:set name="versionnum">$XARCORE_VERSION_NUM</xar:set>
+                        <xar:set name="versionsub">$XARCORE_VERSION_SUB</xar:set>
+                        <xar:var name="versionid" /> version <xar:var name="versionnum" /> (<xar:var name="versionsub" />)
+                         -->
+                        <xar:ml>
+                            <xar:mlstring>#(1) version #(2) (#(3))</xar:mlstring>
+                            <xar:mlvar>#$XARCORE_VERSION_ID#</xar:mlvar>
+                            <xar:mlvar>#$XARCORE_VERSION_NUM#</xar:mlvar>
+                            <xar:mlvar>#$XARCORE_VERSION_SUB#</xar:mlvar>
+                         </xar:ml>
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label title="#xarML('Current Version.')#" class="xar-form-label">
+                            <xar:mlstring>
+                                BlockLayout compiler version:
+                            </xar:mlstring>
+                        </label>
+                        <xar:set name="options">
+                            array(
+                                array('id' => 'FOO', 'name' => 'BL1'),
+                                array('id' => 'XAR_BL_USE_XSLT', 'name' => 'BL2'),
+                            )
+                        </xar:set>
+                        <xar:set name="value">
+                            <xar:var scope="config" name="Site.BL.CompilerVersion"/>
+                        </xar:set>
+                        <xar:data-input type="radio" name="compilerversion" value="$value" options="$options" />
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <xar:mlstring>
+                            Database Information
+                        </xar:mlstring>
+                    </legend>
+                    <div class="xar-form-input-wrapper">
+                        <label title="#xarML('Host')#" class="xar-form-label">
+                            <xar:mlstring>
+                                Host:
+                            </xar:mlstring>
+                        </label>
+                        #xarSystemVars::get(sys::CONFIG, 'DB.Host')#
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label title="#xarML('Database Type')#" class="xar-form-label">
+                            <xar:mlstring>
+                                Database Type:
+                            </xar:mlstring>
+                        </label>
+                        #xarSystemVars::get(sys::CONFIG, 'DB.Type')#
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label title="#xarML('Current Database')#" class="xar-form-label">
+                            <xar:mlstring>
+                                Current Database:
+                            </xar:mlstring>
+                        </label>
+                        #xarSystemVars::get(sys::CONFIG, 'DB.Name')#
+                    </div>
                 </fieldset>
                 <fieldset>
                     <legend>Site Default Front Page Settings</legend>
@@ -86,7 +150,7 @@
                         <xar:if condition="xarModVars::get('modules', 'defaultmoduletype') == 'admin'">
 
                             <xar:set name="filter">array('AdminCapable' =&gt; 1)</xar:set>
-                            <xar:else />
+                        <xar:else />
                             <xar:set name="filter">array('UserCapable' =&gt; 1)</xar:set>
                         </xar:if>
                         <xar:set name="value">
@@ -147,6 +211,22 @@
                 </fieldset>
                 <fieldset>
                     <legend>General Display Options</legend>
+                            Module Data Path
+                        </xar:mlstring>
+                    </legend>
+                    <div class="xar-form-input-wrapper">
+                        <label for="defaultdatapath" title="#xarML('The path to the library where the module\'s data is held.')#" class="xar-form-label">
+                            <xar:mlstring>
+                                Path to Module Data:
+                            </xar:mlstring>
+                        </label>
+                        <xar:set name="value"><xar:var scope="module" module="modules" name="defaultdatapath"/></xar:set>
+                        <input type="text" id="defaultdatapath" name="defaultdatapath" value="#$value#" maxlength="100" class="xar-form-textlong" />
+                    </div>
+               </fieldset>
+               <fieldset>
+                    <legend>
+                        <xar:mlstring>
                     <div class="xar-form-input-wrapper-after">
                         <xar:set name="checked">
                             <xar:var scope="config" name="Site.Core.EnableShortURLsSupport" />
@@ -182,7 +262,7 @@
                     <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="authid" id="authid" value="#$authid#" />
                         <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                        <input type="submit" value="#xarML('Update')#"
+                        <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
                         class="xar-margin-thickright" />
                     </div>
                 </fieldset>
@@ -198,7 +278,7 @@
                 <script type="text/javascript">xar_base_reorder_warn = '#xarML('You must select the
                 authentication module you want to move.')#';</script>
             </xar:if>
-            <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post"
+            <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
             onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);"
             enctype="application/x-www-form-urlencoded">
                 <fieldset>
@@ -216,22 +296,17 @@
                     <div class="xar-form-input-wrapper">
                         <label for="securitylevel" title="#xarML('Security options for sessions')#"
                         class="xar-form-label">Security Level:</label>
-                        <select name="securitylevel" id="securitylevel" size="1">
-                            <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'High'">
-
-                                <option value="High" selected="selected">High</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Low">Low</option>
-                                <xar:elseif condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Medium'" />
-                                <option value="High">High</option>
-                                <option value="Medium" selected="selected">Medium</option>
-                                <option value="Low">Low</option>
-                                <xar:elseif condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Low'" />
-                                <option value="High">High</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Low" selected="selected">Low</option>
-                            </xar:if>
-                        </select>
+                        <xar:set name="options">
+                            array(
+                                array('id' => 'High', 'name' => xarML('High')),
+                                array('id' => 'Medium', 'name' => xarML('Medium')),
+                                array('id' => 'Low', 'name' => xarML('Low')),
+                            )
+                        </xar:set>
+                        <xar:set name="value">
+                            xarConfigVars::get(null,'Site.Session.SecurityLevel')
+                        </xar:set>
+                        <xar:data-input type="dropdown" name="securitylevel" options="$options" value="$value" />
                     </div>
                     <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Medium'">
 
@@ -242,16 +317,16 @@
                             <xar:set name="value">
                                 <xar:var scope="config" name="Site.Session.Duration" />
                             </xar:set>
-                            <input type="text" id="sessionduration" name="sessionduration"
+                            <input type="text" id="sessionduration" name="sessionduration" value="#$value#" maxlength="3" class="xar-form-textshort" />
                             value="#$value#" maxlength="3" class="xar-form-textshort" />
                         </div>
                     </xar:if>
                     <div class="xar-form-input-wrapper">
                         <label for="sessiontimeout" title="#xarML('Session times out in minutes')#"
                         class="xar-form-label">Session Inactivity Time Out:</label>
-                        <xar:set name="value">
-                            <xar:var scope="config" name="Site.Session.InactivityTimeout" />
-                        </xar:set>
+                            <xar:set name="value">
+                                <xar:var scope="config" name="Site.Session.InactivityTimeout" />
+                            </xar:set>
                         <input type="text" id="sessiontimeout" name="sessiontimeout"
                         value="#$value#" maxlength="3" class="xar-form-textshort" />
                     </div>
@@ -260,40 +335,40 @@
                         title="#xarML('Change the order of authentication')#"
                         class="xar-form-label">Authentication Modules:</label>
                         <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
-                        <div class="xar-floatleft">
                             <div class="xar-floatleft">
+                                <div class="xar-floatleft">
                                 <button onclick="return xar_base_reorder('authmodules', true, 'authmodule_order');"
                                 title="#xarML('Move Up')#"
                                 class="xar-displayblock xar-margin-thickbottom">
                                     <img src="#xarTplGetImage('up.gif','blocks')#"
                                     alt="#xarML('Up Arrow')#" />
-                                </button>
+                                    </button>
                                 <button onclick="return xar_base_reorder('authmodules', false, 'authmodule_order');"
                                 title="#xarML('Move Down')#"
                                 class="xar-displayblock xar-margin-thicktop">
                                     <img src="#xarTplGetImage('down.gif','blocks')#"
                                     alt="#xarML('Down Arrow')#" />
-                                </button>
-                            </div>
-                            <div class="xar-floatleft xar-margin-thickleft">
+                                    </button>
+                                </div>
+                                <div class="xar-floatleft xar-margin-thickleft">
                                 <xar:set name="size">count($authmodules)</xar:set>
-                                <select name="authmodules" id="authmodules" size="#$size#">
-                                    <xar:foreach in="$authmodules" value="$authmodule">
+                                    <select name="authmodules" id="authmodules" size="#$size#">
+                                        <xar:foreach in="$authmodules" value="$authmodule">
                                         <option value="#$authmodule#">#$authmodule#</option>
-                                    </xar:foreach>
-                                </select>
+                                        </xar:foreach>
+                                    </select>
                                 <input type="hidden" name="authmodule_order" id="authmodule_order"
                                 value="" />
+                                </div>
                             </div>
-                        </div>
                         <xar:else />#$authmodules[0]#</xar:if>
                     </div>
                     <div class="xar-form-input-wrapper">
                     <label for="cookiename" title="#xarML('Override the default cookie name')#"
                     class="xar-form-label">Cookie Name:</label>
-                    <xar:set name="value">
-                        <xar:var scope="config" name="Site.Session.CookieName" />
-                    </xar:set>
+                        <xar:set name="value">
+                            <xar:var scope="config" name="Site.Session.CookieName" />
+                        </xar:set>
                     <input type="text" id="cookiename" name="cookiename" value="#$value#"
                     maxlength="20" class="xar-form-textmedium" />&#160;Default: XARAYASID</div>
                     <div class="xar-form-input-wrapper">
@@ -310,9 +385,9 @@
                     <div class="xar-form-input-wrapper">
                     <label for="cookiedomain" title="#xarML('Override the default cookie domain')#"
                     class="xar-form-label">Cookie Domain:</label>
-                    <xar:set name="value">
-                        <xar:var scope="config" name="Site.Session.CookieDomain" />
-                    </xar:set>
+                        <xar:set name="value">
+                            <xar:var scope="config" name="Site.Session.CookieDomain" />
+                        </xar:set>
                     <input type="text" id="cookiedomain" name="cookiedomain" value="#$value#"
                     maxlength="20" class="xar-form-textmedium" />&#160;Default: none (not shared
                     across hosts)</div>
@@ -340,7 +415,7 @@
             </form>
             <!-- Begin Locale Options -->
             <xar:elseif condition="$tab eq 'locales'" />
-            <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post"
+            <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
             onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);"
             enctype="application/x-www-form-urlencoded">
                 <xar:template file="modifyconfig-locales" module="base" type="module" />
@@ -355,7 +430,7 @@
             </form>
             <!-- Begin Other Options -->
             <xar:elseif condition="$tab eq 'other'" />
-            <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post"
+            <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
             onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);"
             enctype="application/x-www-form-urlencoded">
                 <fieldset>

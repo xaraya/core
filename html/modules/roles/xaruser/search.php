@@ -63,7 +63,7 @@ function roles_user_search()
         if (!xarModAPILoad('dynamicdata','user')) return $data;
 
         // get a new object list for roles
-        $object = new DataObjectList(array('moduleid'  => xarModGetIDFromName('roles')));
+        $object = new DataObjectList(array('moduleid'  => xarMod::getRegID('roles')));
 
         if (isset($object) && !empty($object->objectid)) {
             // save the properties for the search form

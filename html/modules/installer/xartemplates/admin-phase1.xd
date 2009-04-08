@@ -17,7 +17,7 @@
                     <xar:foreach in="$languages" key="$key" value="$value">
                         <xar:if condition="$install_language == $key">
                             <option value="#$key#" selected="selected">#$value# (#$key#)</option>
-                            <xar:else />
+                        <xar:else />
                             <option value="#$key#">#$value# (#$key#)</option>
                         </xar:if>
                     </xar:foreach>
