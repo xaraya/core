@@ -48,9 +48,7 @@
                 <a href="#xarServerGetCurrentUrl($params)#">Outgoing</a>
             </dd>
         </dl>
-        <form method="post" action="&xar-modurl-mail-admin-updateconfig;"
         <form method="post" action="&xar-modurl-mail-admin-updateconfig;" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded" >
-        enctype="application/x-www-form-urlencoded">
             <xar:data-input type="hidden" name="tab" id="tab" value="$tab" />
             <!-- General tab -->
             <xar:if condition="$tab eq 'general'">
@@ -157,16 +155,11 @@
                         <div class="xar-form-input-wrapper">
                             <label for="htmlheader" title="#xarML('Enter the header that you wish displayed in your HTML emails.')#" class="xar-form-label">
                                 HTML Email Header:
-                            class="xar-form-label">HTML Email Header:</label>
-                            <xar:set name="htmlheader">
-                                <xar:var scope="module" module="mail" name="htmlheader"
                             </label>
-                            <xar:set name="htmlheader"><xar:var scope="module" module="mail" name="htmlheader" prep="true"/></xar:set>
-                            <xar:data-input type="textarea_large" name="htmlheader" id="htmlheader" value="$htmlheader"/>
-                                prep="true" />
+                            <xar:set name="htmlheader">
+                                <xar:var scope="module" module="mail" name="htmlheader" prep="true"/>
                             </xar:set>
-                            <xar:data-input type="textarea_large" name="htmlheader" id="htmlheader"
-                            value="$htmlheader" />
+                            <xar:data-input type="textarea_large" name="htmlheader" id="htmlheader" value="$htmlheader"/>
                         </div>
                         <div class="xar-form-input-wrapper">
                             <label for="htmlfooter"
@@ -277,12 +270,9 @@
                         <xar:set name="o">$options[] = array('id' => 'qmail', 'name' => 'QMail')</xar:set>
                         <xar:set name="o">$options[] = array('id' => 'mail', 'name' => 'Mail')</xar:set>
                         <xar:set name="o">$options[] = array('id' => 'sendmail', 'name' => 'SendMail')</xar:set>
-                        <xar:data-input type="dropdown" value="$server" id="server" name="server" onchange="this.form.submit()" options="$options"/>
-                        'Mail')</xar:set>
                         <xar:set name="o">$options[] = array('id' =&gt; 'sendmail', 'name' =&gt;
                         'SendMail')</xar:set>
-                        <xar:data-input type="dropdown" value="$server" id="server" name="server"
-                        onchange="this.form.submit()" options="$options" />
+                        <xar:data-input type="dropdown" value="$server" id="server" name="server" onchange="this.form.submit()" options="$options"/>
                     </div>
                     <xar:if condition="$server eq 'sendmail'">
                         <div class="xar-form-input-wrapper">
