@@ -40,9 +40,9 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <dd>
-                  <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
-                                title="#xarML('Show this privilege')#">
-                                #$parents[$i]['parentname']#</a>
+                                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this privilege')#">
+                                    #$parents[$i]['parentname']#
+                                </a>
                             </dd>
                         </xar:if>
                         <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
@@ -72,9 +72,7 @@
                 </dd>
             </dl>
         </div>
-        <form name="privilegeform" id="privilegeform"
       <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-updateprivilege;" method="post" enctype="application/x-www-form-urlencoded">
-        enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Privilege properties</legend>
                 <xar:if condition="$frozen">
@@ -82,7 +80,7 @@
                     <span class="xar-form-label">Name:</span>#$pname# 
                     <input type="hidden" name="pname" id="pname" value="#$pname#" /></div>
                     <p>This privilege cannot be edited or deleted</p>
-                    <xar:else />
+                <xar:else />
                     <div class="xar-form-input-wrapper">
                         <label for="pname" title="#xarML('TITLE')#" class="xar-form-label">
                         Name:</label>
@@ -93,16 +91,16 @@
                     xarModURL('privileges','admin','modifyprivilege') .
                     "';this.form.submit()";</xar:set>
                     <!-- FIXME: make this dprop support onclick, cause IE6 doesn't do onchange
-            <div class="xar-form-input-wrapper-after">
-                <xar:set name="options">
-                    array(
-                        array('id' => 'empty', 'name' => 'empty'),
-                        array('id' => 'full', 'name' => 'with rights'),
-                    )
-                </xar:set>
-                <xar:data-input type="radio" name="ptype" id="ptype" options="$options" value="$ptype" onclick="$onclick" />
-            </div>
-            -->
+                    <div class="xar-form-input-wrapper-after">
+                        <xar:set name="options">
+                            array(
+                                array('id' => 'empty', 'name' => 'empty'),
+                                array('id' => 'full', 'name' => 'with rights'),
+                            )
+                        </xar:set>
+                        <xar:data-input type="radio" name="ptype" id="ptype" options="$options" value="$ptype" onclick="$onclick" />
+                    </div>
+                    -->
                     <xar:if condition="$ptype eq 'empty'">
                         <div class="xar-form-input-wrapper-after">
                             <input type="radio" name="ptype" id="ptype1_empty" value="empty"
@@ -124,7 +122,7 @@
                             title="#xarML('This privilege has no children')#">empty</label>
                         </div>
                         <div class="xar-form-input-wrapper-after">
-                <input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();" />
+                            <input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();" />
                             checked="checked"
                             onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();" />
                             <label for="ptype_full" title="#xarML('This privilege has children')#">

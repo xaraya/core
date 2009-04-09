@@ -102,7 +102,6 @@
                     </xar:foreach>
                 </table>
             </xar:if>
-            <form action="&xar-modurl-roles-admin-addprivilege;" method="post"
           <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
                 <div class="xar-form-input-wrapper">
                     <label for="roleid"
