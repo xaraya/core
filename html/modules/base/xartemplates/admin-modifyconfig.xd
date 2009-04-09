@@ -210,23 +210,19 @@
                     </div>
                 </fieldset>
                 <fieldset>
-                    <legend>General Display Options</legend>
-                            Module Data Path
-                        </xar:mlstring>
+                    <legend>
+                        Module Data Path
                     </legend>
                     <div class="xar-form-input-wrapper">
                         <label for="defaultdatapath" title="#xarML('The path to the library where the module\'s data is held.')#" class="xar-form-label">
-                            <xar:mlstring>
-                                Path to Module Data:
-                            </xar:mlstring>
+                            Path to Module Data:
                         </label>
                         <xar:set name="value"><xar:var scope="module" module="modules" name="defaultdatapath"/></xar:set>
                         <input type="text" id="defaultdatapath" name="defaultdatapath" value="#$value#" maxlength="100" class="xar-form-textlong" />
                     </div>
                </fieldset>
                <fieldset>
-                    <legend>
-                        <xar:mlstring>
+                    <legend>General Display Options</legend>
                     <div class="xar-form-input-wrapper-after">
                         <xar:set name="checked">
                             <xar:var scope="config" name="Site.Core.EnableShortURLsSupport" />

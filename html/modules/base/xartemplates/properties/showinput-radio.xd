@@ -15,10 +15,8 @@
             </xar:if>
             <xar:if condition="$option['id'] eq $value" >
                 <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked" />
-                onchange="#$evt_change#" checked="checked" />
             <xar:else />
                 <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" />
-                onchange="#$evt_change#" />
             </xar:if>
             <label for="#$theID#">#$option['name']# </label>
         </xar:foreach>
@@ -37,13 +35,11 @@
                 </xar:if>
                 <xar:if condition="$option['id'] eq $value" >
                     <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked" />
-                onchange="#$evt_change#" checked="checked" />
                 <xar:else />
                     <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" />
-                onchange="#$evt_change#" />
                 </xar:if>
                 <label for="#$theID#">#$option['name']# </label>
-            <br />
+            </div>
         </xar:foreach>
     <xar:else />
     <p>
@@ -54,5 +50,4 @@
     </p>
     </xar:if>
     <xar:template file="dataproperty_additions" module="base" />
-    </div>
 </xar:template>
