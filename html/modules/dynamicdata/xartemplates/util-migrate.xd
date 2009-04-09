@@ -59,9 +59,9 @@
                             <select name="from[module]" id="from_module">
                                 <xar:foreach in="$modulelist" key="$module_id" value="$modlabel">
                                     <xar:if condition="!in_array($module_id,$modulesupported)">
-                                    <xar:elseif condition="$modid eq 151" />
+                                    <xar:elseif condition="$module_id eq 151" />
                                         <!-- TODO: keep this preset to articles? -->
-                                    <option value="#$modid#" selected="selected">
+                                    <option value="#$module_id#" selected="selected">
                                     #$modlabel#</option>
                                     <xar:else />
                                         <option value="#$module_id#">#$modlabel#</option>
@@ -76,9 +76,9 @@
                             <select name="to[module]" id="to_module">
                                 <xar:foreach in="$modulelist" key="$module_id" value="$modlabel">
                                     <xar:if condition="!in_array($module_id,$modulesupported)">
-                                    <xar:elseif condition="$modid eq 151" />
+                                    <xar:elseif condition="$module_id eq 151" />
                                         <!-- TODO: keep this preset to articles? -->
-                                    <option value="#$modid#" selected="selected">
+                                    <option value="#$module_id#" selected="selected">
                                     #$modlabel#</option>
                                     <xar:else />
                                         <option value="#$module_id#">#$modlabel#</option>

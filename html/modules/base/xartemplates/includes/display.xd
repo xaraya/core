@@ -12,7 +12,9 @@
                         Items Per Page:
                     </xar:mlstring>
                 </label>
-                <xar:set name="value"><xar:var scope="module" module="$modulename" name="itemsperpage" /></xar:set>
+                <xar:set name="value">
+                    <xar:var scope="module" module="$modulename" name="itemsperpage" />
+                </xar:set>
                 <input type="text" name="itemsperpage" id="itemsperpage" value="#$value#" maxlength="3" class="xar-form-textshort" />
             </div>
             <div class="xar-form-input-wrapper">

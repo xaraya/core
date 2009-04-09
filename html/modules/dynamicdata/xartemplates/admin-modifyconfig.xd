@@ -21,11 +21,11 @@
             dynamic properties.</p>
             <table class="xar-fullwidth">
                 <tr>
-                    <th>#$labels['id']#</th>
-                    <th>#$labels['name']#</th>
-                    <th>#$labels['label']#</th>
-                    <th>#$labels['informat']#</th>
-                    <th>#$labels['validation']#</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Display Name</th>
+                    <th>Input Format</th>
+                    <th>#$labels['configuration']#</th>
                 </tr>
                 <xar:set name="lastmod">''</xar:set>
                 <xar:foreach in="$fields" value="$field">
@@ -40,16 +40,12 @@
                         <td>#$field['name']#</td>
                         <td>
                             <input type="text" name="label[#$field['id']#]" id="label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium" />
-                            id="label_#$field['id']#" value="#$field['label']#"
-                            class="xar-form-textmedium" />
                         </td>
                         <td>
                             <xar:data-output property="$fieldtypeprop" value="$field['format']" />
                         </td>
                         <td>
                             <input type="text" name="configuration[#$field['id']#]" id="configuration_#$field['id']#" value="#$field['configuration']#" class="xar-form-textmedium" />
-                            id="validation_#$field['id']#" value="#$field['validation']#"
-                            class="xar-form-textmedium" />
                         </td>
                     </tr>
                 </xar:foreach>
@@ -57,21 +53,19 @@
             <p>Add a new Property Type using the fields below. (TODO)</p>
             <table class="xar-fullwidth">
                 <tr>
-                    <th>#$labels['id']#</th>
-                    <th>#$labels['name']#</th>
-                    <th>#$labels['label']#</th>
-                    <th>#$labels['informat']#</th>
-                    <th>#$labels['validation']#</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Display Name</th>
+                    <th>Input Format</th>
+                    <th>#$labels['configuration']#</th>
                 </tr>
                 <tr>
                     <td>#$labels['new']#</td>
                     <td>
-                        <input type="text" name="name[0]" id="name_0"
-                        class="xar-form-textmedium" />
+                        <input type="text" name="name[0]" id="name_0" class="xar-form-textmedium" />
                     </td>
                     <td>
                         <input type="text" name="label[0]" id="label_0" class="xar-form-textmedium" />
-                        class="xar-form-textmedium" />
                     </td>
                     <td>
                         <xar:data-input property="$fieldtypeprop" name="format[0]" id="format_0" value="" />
@@ -79,7 +73,6 @@
                     </td>
                     <td>
                         <input type="text" name="validation[0]" id="validation_0" value="" class="xar-form-textmedium" />
-                        class="xar-form-textmedium" />
                     </td>
                 </tr>
             </table>

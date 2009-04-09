@@ -6,8 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <img src="#xarTplGetImage('admin.gif', 'roles')#" alt="official icon" width="96"
-        height="96" class="xar-module-icon" />
+        <img src="#xarTplGetImage('admin.gif', 'roles')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <h3>What is it?</h3>
         <p>The Roles module lets you manage users and groups on your site. Roles are

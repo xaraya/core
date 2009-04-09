@@ -19,7 +19,7 @@
         <xar:elseif condition="$style eq 'childlist' or $style eq 'parentid'" />
         <xar:if condition="!empty($object)">
             <xar:data-view object="$object" layout="subform" />
-            <xar:else />
+        <xar:else />
             <xar:var name="value" prep="true" />
         </xar:if>
     </xar:if>

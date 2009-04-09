@@ -175,8 +175,7 @@
                             'Exact Match'), array('id' =&gt; 'contains', 'name' =&gt; 'Privilege
                             Contains Mask Name'),)</xar:set>
                             <xar:set name="realmcomparison">
-                                <xar:var scope="module" module="privileges"
-                                name="realmcomparison" />
+                                <xar:var scope="module" module="privileges" name="realmcomparison" />
                             </xar:set>
                             <div class="xar-form-container-after">
                                 <xar:data-input type="radio" name="realmcomparison" id="realmvalue"

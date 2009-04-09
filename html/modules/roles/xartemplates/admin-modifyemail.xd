@@ -168,9 +168,9 @@
             </div>
             <xar:foreach in="$properties" key="$name">
                 <div class="xar-form-input-wrapper">
-                    <span title="#$messagetitle#"
-                    class="xar-form-label xar-align-right xar-padding-thickright">##$ 
-                    <xar:var name="name" />##</span>
+                    <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                        ##$<xar:var name="name"/>##
+                    </span>
                     <span class="xar-padding-thickleft">
                         <xar:data-label property="$properties[$name]" />
                     </span>

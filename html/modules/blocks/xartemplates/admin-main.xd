@@ -12,7 +12,6 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
         <img src="#xarTplGetImage('admin.gif','blocks')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
-        height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <h3>What is it?</h3>
         <p>The Blocks Module controls the configuration, display position and grouping of 'blocks'

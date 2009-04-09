@@ -71,7 +71,6 @@
                             <tr>
                                 <td>
                                     <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$loop:item['privid']#">
-
                                         <xar:var name="loop:item.name" prep="true" />
                                     </a>
                                 </td>
@@ -123,7 +122,6 @@
                         <tr>
                             <td>
                                 <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$loop:item['privid']#">
-
                                     <xar:var name="loop:item.name" prep="true" />
                                 </a>
                             </td>

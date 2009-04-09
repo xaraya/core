@@ -83,7 +83,7 @@ function dynamicdata_userapi_showview($args)
     // select in some category
     if (empty($catid)) $catid = '';
 
-    $object = & DataObjectMaster::getObjectList(array('moduleid'  => $args ['moduleid'],
+    $object = DataObjectMaster::getObjectList(array('moduleid'  => $args ['moduleid'],
                                            'itemtype'  => $args ['itemtype'],
                                            'itemids' => $itemids,
                                            'sort' => $sort,

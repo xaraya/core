@@ -163,8 +163,7 @@
 
                         <div class="xar-form-input-wrapper-after">
                             <xar:set name="checked">
-                                <xar:var scope="module" module="base"
-                                name="UseAlternatePageTemplate" />
+                                <xar:var scope="module" module="base" name="UseAlternatePageTemplate" />
                             </xar:set>
                             <xar:data-input type="checkbox" name="alternatepagetemplate"
                             id="alternatepagetemplate" checked="$checked" />
@@ -177,8 +176,7 @@
                             title="#xarML('The name of the alternate page template to use.')#"
                             class="xar-form-label">Alt. Page Template Name:</label>
                             <xar:set name="value">
-                                <xar:var scope="module" module="base"
-                                name="AlternatePageTemplateName" />
+                                <xar:var scope="module" module="base" name="AlternatePageTemplateName" />
                             </xar:set>
                             <input type="text" id="alternatepagetemplatename"
                             name="alternatepagetemplatename" value="#$value#"
@@ -202,8 +200,7 @@
                         title="#xarML('The default function of module to be loaded.')#"
                         class="xar-form-label">Default Module Function:</label>
                         <xar:set name="value">
-                            <xar:var scope="module" module="modules"
-                            name="defaultmodulefunction" />
+                            <xar:var scope="module" module="modules" name="defaultmodulefunction" />
                         </xar:set>
                         <input type="text" id="defaultfunction" name="defaultfunction"
                         value="#$value#" maxlength="100" class="xar-form-textlong" />
@@ -217,7 +214,9 @@
                         <label for="defaultdatapath" title="#xarML('The path to the library where the module\'s data is held.')#" class="xar-form-label">
                             Path to Module Data:
                         </label>
-                        <xar:set name="value"><xar:var scope="module" module="modules" name="defaultdatapath"/></xar:set>
+                        <xar:set name="value">
+                            <xar:var scope="module" module="modules" name="defaultdatapath"/>
+                        </xar:set>
                         <input type="text" id="defaultdatapath" name="defaultdatapath" value="#$value#" maxlength="100" class="xar-form-textlong" />
                     </div>
                </fieldset>

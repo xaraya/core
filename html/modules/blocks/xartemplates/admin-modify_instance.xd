@@ -69,7 +69,7 @@
                                     <option value="#$loop:item['id']#" selected="selected">
                                         <xar:var name="$loop:item['name']" />
                                     </option>
-                                    <xar:else />
+                                <xar:else />
                                     <option value="#$loop:item['id']#">
                                         <xar:var name="$loop:item['name']" />
                                     </option>

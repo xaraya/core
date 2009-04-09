@@ -14,7 +14,6 @@
     </div>
     <div class="xar-mod-body">
         <img src="#xarTplGetImage('sysmessage.jpg', 'base')#" alt="#xarML('Message Icon')#"
-        class="xar-module-icon" />
         <h2>#$title#</h2>
         <p>#$short#</p>
         <xar:if condition="$long ne ''">

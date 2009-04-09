@@ -180,10 +180,9 @@
                         <td>
                             <xar:if condition="$loop:item['parentid'] gt 4">
                                 <a href="&xar-modurl-roles-admin-modify;&amp;id=#$loop:item['parentid']#">
-
                                     <xar:var name="loop:item.parentname" prep="true" />
                                 </a>
-                                <xar:else />
+                            <xar:else />
                                 <xar:var name="loop:item.parentname" prep="true" />
                             </xar:if>
                         </td>

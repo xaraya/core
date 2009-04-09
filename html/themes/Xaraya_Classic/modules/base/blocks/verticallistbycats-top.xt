@@ -46,11 +46,10 @@
                                         <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
 
                                             <ul>
-                                                <xar:foreach in="$mod['indlinks']"
-                                                value="$sublinks" key="$sublink">
-                                                    <xar:comment>determine and indicate current
+                                                <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
+                                                    <!-- determine and indicate current
                                                     states of module functions
-                                                    display</xar:comment>
+                                                    display< -->
                                                     <xar:if condition="$sublinks['funcactive']">
                                                         <li>
                                                             <a name="activesubitem"
@@ -75,11 +74,10 @@
                                         <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
 
                                             <ul>
-                                                <xar:foreach in="$mod['indlinks']"
-                                                value="$sublinks" key="$sublink">
-                                                    <xar:comment>determine and indicate current
+                                                <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
+                                                    <!-- determine and indicate current
                                                     states of module functions
-                                                    display</xar:comment>
+                                                    display -->
                                                     <xar:if condition="$sublinks['funcactive']">
                                                         <li>
                                                             <a name="activesubitem"
@@ -104,11 +102,10 @@
                                         <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
 
                                             <ul>
-                                                <xar:foreach in="$mod['indlinks']"
-                                                value="$sublinks" key="$sublink">
-                                                    <xar:comment>determine and indicate current
+                                                <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
+                                                    <!-- determine and indicate current
                                                     states of module functions
-                                                    display</xar:comment>
+                                                    display -->
                                                     <xar:if condition="$sublinks['funcactive']">
                                                         <li>
                                                             <a name="activesubitem"

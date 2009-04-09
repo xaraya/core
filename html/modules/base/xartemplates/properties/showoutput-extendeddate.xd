@@ -6,7 +6,10 @@
         but we could use locale-dependent years, months, days etc.
     -->
     <xar:if condition="!empty($year)">#$year#-#$mon#-#$day# 
-    <xar:if condition="!empty($format) and $format eq 'datetime'">#$hour#:#$min#:#$sec#</xar:if>
+        <xar:if condition="!empty($format) and $format eq 'datetime'">
+            #$hour#:#$min#:#$sec#
+        </xar:if>
     <xar:else />
-    <xar:var name="value" prep="true" /></xar:if>
+        <xar:var name="value" prep="true" />
+    </xar:if>
 </xar:template>

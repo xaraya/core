@@ -8,6 +8,7 @@
         <xar:template type="module" file="admin-menu" />
         <h2>Utilities - Static Table Definitions</h2>
         <xar:template type="module" file="utility-menu" />
+        <xar:var name="firstline">Choose a table</xar:var>
         <form action="#xarServerGetCurrentURL()#" method="post">
             <div style="float:left">
                 Current Table:&#160;
@@ -23,7 +24,7 @@
         </form>
         <div style="clear: both">&#160;</div>
         <xar:if condition="empty($export)">
-            <xar:foreach in="$tables" key="$table" value="$fields">
+            <xar:foreach in="$tabledata" key="$table" value="$fields">
                 <h3>#$table#</h3>
                 <p>
                 <!--
@@ -47,26 +48,36 @@
                         <th>Type</th>
                         <th>Default</th>
                         <th>Source</th>
-                        <th>Validation</th>
-                            Action                         
+                        <th>Configuration</th>
+                        <th>Action</th>
                     </tr>
                     <xar:foreach in="$fields" value="$field">
                         <tr>
-                            <td>#$field['name']#</td>
-                            <td>#$field['label']#</td>
                             <td>
-                                <a href="#xarModURL('dynamicdata','util','modify_static')#&amp;table=#$table#&amp;field=#$field['name']#">
-                                value="$field['type']" />
+                                <a href="&xar-modurl-dynamicdata-util-modify_static;&amp;table=#$table#&amp;field=#$field['name']#">
+                                    #$field['name']# 
                                 </a>
                             </td>
                             <td>
-                                <a href="#xarModURL('dynamicdata','util','delete_static')#&amp;table=#$table#&amp;field=#$field['name']#">
+                                #$field['label']# 
+                            </td>
+                            <td>
+                                <xar:data-output type="fieldtype" name="dummy" value="$field['type']" />
+                            </td>
+                            <td>
+                                #$field['defaultvalue']# 
+                            </td>
+                            <td>
+                                #$field['source']# 
+                            </td>
+                            <td>
+                                #$field['configuration']# 
+                            </td>
+                            <td>
+                                <a href="&xar-modurl-dynamicdata-util-delete_static;&amp;table=#$table#&amp;field=#$field['name']#">
                                     Delete 
                                 </a>
                             </td>
-                            <td>#$field['defaultvalue']#</td>
-                            <td>#$field['source']#</td>
-                            <td>#$field['validation']#</td>
                         </tr>
                     </xar:foreach>
                 </table>

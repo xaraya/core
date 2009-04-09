@@ -30,7 +30,7 @@
             <xar:sec mask="EditDynamicData" catch="false">
                 <xar:set name="tabclass">$activetab=='static'?'active':''</xar:set>
                 <dd class="#$tabclass#">
-                    <a href="&xar-modurl-dynamicdata-util-static;">Table Definition</a>
+                    <a href="&xar-modurl-dynamicdata-util-view_static;">Table Definition</a>
                 </dd>
             </xar:sec>
             <!--
