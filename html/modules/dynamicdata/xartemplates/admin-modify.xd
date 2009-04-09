@@ -16,9 +16,6 @@
         <xar:if condition="!empty($objectid) and $objectid eq 1">
             <xar:set name="action">'modify'</xar:set>
             <xar:template file="object-actions" />
-                        Modify DataProperties</a>
-                        Export Object Definition to XML</a>
-                        Items</a>
         </xar:if>
         <xar:if condition="isset($preview)">
             <fieldset>
@@ -42,7 +39,7 @@
                     caution.</p>
                 </xar:if>
                 <!-- this does most of the hard work :) -->
-            <xar:template file="showinvalids" module="dynamicdata" />
+                <xar:template file="showinvalids" module="dynamicdata" />
                 <xar:data-form object="$object" />
                 <xar:if condition="!empty($hooks)">
                 <xar:foreach in="$hooks" key="$module" value="$output">

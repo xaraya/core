@@ -26,6 +26,7 @@
             <xar:foreach in="$tables" key="$table" value="$fields">
                 <h3>#$table#</h3>
                 <p>
+                <!--
                     <a href="&xar-modurl-dynamicdata-util-relations;&amp;modid=#$modid#">Add
                     Relation</a>
                 -->
@@ -37,6 +38,7 @@
                     </a>
                     <a href="#xarModURL('dynamicdata','util','rename_static_table')#&amp;table=#$table#" style="float:right">                    
                         Rename this table:&#160;|&#160;             
+                    </a>
                 </p>
                 <table class="xar-fullwidth">
                     <tr>

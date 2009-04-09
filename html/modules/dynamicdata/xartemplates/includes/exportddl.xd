@@ -90,8 +90,6 @@ xmlns:xar="http://xaraya.com/2004/blocklayout">
                 </xar:foreach>
             </constraints>
             <description>End of #$table:getName()#</description>
-        End of #$table:getName()#
-      </description>
         </table>
     </xar:foreach>
 </schema>

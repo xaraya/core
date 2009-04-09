@@ -7,7 +7,6 @@
         modify the properties of this object may break the Dynamic Data module. Proceed with
         caution.</h3>
     </xar:if>
-    <xar:set name="propertyfields">xarModAPIFunc('dynamicdata','user','getprop', array('objectid'
     <xar:set name="propertyfields">xarModAPIFunc('dynamicdata','user','getprop',
                                        array('objectid' => 2,
                                              'allprops' => true))
@@ -29,14 +28,14 @@
     <fieldset>
         <div class="xar-align-center">
             <!--
-        Optional extra table for data sources - use a text box if you want to make this configurable
-        <input type="text" name="table" id="table" value="#$table#" />
-      -->
-  <xar:if condition="!empty($table)">
-    <input type="hidden" name="table" id="table" value="#$table#" />
-  </xar:if>
-  <input type="hidden" name="authid" id="authid" value="#$authid#" />
-  <input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
+            Optional extra table for data sources - use a text box if you want to make this configurable
+            <input type="text" name="table" id="table" value="#$table#" />
+            -->
+            <xar:if condition="!empty($table)">
+                <input type="hidden" name="table" id="table" value="#$table#" />
+            </xar:if>
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
             <input type="hidden" name="modid" id="modid" value="#$modid#" />
             <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
             <input type="submit" value="#xarML('Update Properties')#" />
