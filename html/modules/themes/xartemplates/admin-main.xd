@@ -77,7 +77,7 @@
                 <code>&lt;xar:var scope="module" module="themes" name="SiteSlogan"
                 /&gt;</code></li>
                 <li>
-                <em>Copyright</em>: Defaults to "&copy; Copyright 2003 &lt;administrator name&gt;".
+                <em>Copyright</em>: Defaults to "&#169; Copyright 2003 &lt;administrator name&gt;".
                 Change the text as necessary and insert in your theme with 
                 <br />
                 <code>&lt;xar:var scope="module" module="themes" name="SiteCopyRight"

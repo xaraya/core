@@ -9,7 +9,6 @@
         <h3>
             <xar:var scope="session" name="$themes_statusmsg" />
         </h3>
-        <form action="&xar-modurl-themes-admin-update;" method="post"
         <form action="&xar-modurl-themes-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
             <xar:if condition="count($themevars) gt 0">
                 <xar:loop name="$themevars">

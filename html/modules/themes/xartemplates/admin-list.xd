@@ -225,7 +225,7 @@
                         </tr>
                     </table>
                 </xar:foreach>
-                <xar:else />
+            <xar:else />
                 <!--
                     the Module Lists table-based styles
                 -->
@@ -252,6 +252,8 @@
                                 <!--
                                     if module is active and configurable (admin type) make its name a link to module main admin function
                                 -->
+                                #$modinfo['displayname']#
+                            </td>
                             <td class="xar-align-right">#$modinfo['version']#</td>
                             <td class="xar-align-center">
                                 <xar:if condition="$useicons eq true">
