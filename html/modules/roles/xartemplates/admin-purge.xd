@@ -36,8 +36,7 @@
         </div>
         <xar:if condition="$operation eq 'recall'">
             <h3>Recall Deleted Groups and Users</h3>
-            <form method="post" action="&xar-modurl-roles-admin-purge;"
-            enctype="application/x-www-form-urlencoded">
+            <form method="post" action="&xar-modurl-roles-admin-purge;" enctype="application/x-www-form-urlencoded">
                 <!-- Module List Sort and Filter Controls table -->
                 <table class="xar-fullwidth">
                     <tr>
@@ -59,11 +58,8 @@
                     </tr>
                     <tr>
                         <td class="xar-align-center">
-                            <input type="text" name="recallsearch" id="recallsearch"
-                            value="#$recallsearch#" maxlength="255"
-                            class="xar-form-textmedium xar-margin-thickright" />
-                            <input type="submit" name="search" id="search"
-                            value="#xarML('Search')#" class="xar-margin-thickleft" />
+                            <input type="text" name="recallsearch" id="recallsearch" value="#$recallsearch#" maxlength="255"class="xar-form-textmedium xar-margin-thickright" />
+                            <input type="submit" name="search" id="search" value="#xarML('Search')#" class="xar-margin-thickleft" />
                         </td>
                         <td class="xar-align-center">
                             <select name="groupid" id="groupid">

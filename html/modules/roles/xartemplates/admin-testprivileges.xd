@@ -29,8 +29,7 @@
         </xar:if>
         <!-- Show the general tab list for roles -->
         <xar:template file="tablist" />
-        <form action="&xar-modurl-roles-admin-testprivileges;" method="post"
-        enctype="application/x-www-form-urlencoded">
+        <form action="&xar-modurl-roles-admin-testprivileges;" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Scope</legend>
                 <div class="xar-form-input-wrapper">

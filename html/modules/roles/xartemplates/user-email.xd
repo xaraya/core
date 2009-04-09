@@ -7,11 +7,10 @@
     <div class="xar-mod-body">
         <h2>
         <a href="&xar-modurl-roles-user-viewlist;">Member List</a>&#160;&gt;&#160; 
-            <a href="&xar-modurl-roles-user-display;&amp;id=#$id#">
+        <a href="&xar-modurl-roles-user-display;&amp;id=#$id#">
         #xarVarPrepForDisplay($name)#</a>&#160;&gt;&#160; Send an Email to
         &#160;#xarVarPrepForDisplay($name)#</h2>
-        <form method="post" action="&xar-modurl-roles-user-email;&amp;phase=confirm#"
-        enctype="application/x-www-form-urlencoded">
+        <form method="post" action="&xar-modurl-roles-user-email;&amp;phase=confirm#" enctype="application/x-www-form-urlencoded">
             <div>
                 <xar:if condition="!empty($error_message)">
                     <div class="xar-error">#xarVarPrepForDisplay($error_message)#</div>

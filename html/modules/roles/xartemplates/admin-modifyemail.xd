@@ -68,8 +68,7 @@
                     </p>
             </fieldset>
         </form>
-        <form action="&xar-modurl-roles-admin-modifyemail;" method="post"
-        enctype="application/x-www-form-urlencoded">
+        <form action="&xar-modurl-roles-admin-modifyemail;" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Email</legend>
                 <div class="xar-form-input-wrapper">

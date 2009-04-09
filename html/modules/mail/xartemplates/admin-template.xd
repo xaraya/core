@@ -73,7 +73,6 @@
             </fieldset>
         </form>
         <form action="&xar-modurl-mail-admin-template;" method="post" enctype="application/x-www-form-urlencoded">
-        enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Template Details</legend>
                 <div class="xar-form-input-wrapper">

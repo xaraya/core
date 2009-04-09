@@ -160,8 +160,7 @@
                     title="#xarML('Change the state of the users who have been selected below')#"
                     class="xar-form-label" style="width: 200px">Change state of selected
                     users:</label>
-                    <xar:data-input type="dropdown" name="status" id="status" options="$statelist"
-                    class="xar-margin-thickright" />
+                    <xar:data-input type="dropdown" name="status" id="status" options="$statelist" class="xar-margin-thickright" />
                     <input type="hidden" name="groupid" id="groupid" value="#$groupid#" />
                     <input type="hidden" name="state" id="state" value="#$state#" />
                     <input type="hidden" name="order" id="order" value="#$order#" />

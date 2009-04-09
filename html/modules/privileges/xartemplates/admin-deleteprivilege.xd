@@ -50,8 +50,7 @@
                 </dd>
             </dl>
         </div>
-        <form method="post" action="&xar-modurl-privileges-admin-deleteprivilege;"
-        enctype="application/x-www-form-urlencoded">
+        <form method="post" action="&xar-modurl-privileges-admin-deleteprivilege;" enctype="application/x-www-form-urlencoded">
             <h3 class="xar-align-center">Confirm deletion of all instances of Privilege
             '#$pname#'</h3>
             <div class="xar-align-center">

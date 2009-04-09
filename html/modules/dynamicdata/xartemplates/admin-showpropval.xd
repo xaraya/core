@@ -12,21 +12,21 @@
             <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
         </xar:if>
         <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;" enctype="#$enc_type#">
-        enctype="#$enc_type#">
-        <fieldset>
-            <legend>Property summary</legend>
-            <xar:set name="fieldlist">
-            array('name','label','objectid','type','validation')</xar:set>
-            <xar:data-display object="$object" fieldlist="$fieldlist" />
-        </fieldset>
+            <fieldset>
+                <legend>Property summary</legend>
+                <xar:set name="fieldlist">
+                array('name','label','objectid','type','validation')</xar:set>
+                <xar:data-display object="$object" fieldlist="$fieldlist" />
+            </fieldset>
             <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-        <input type="hidden" name="itemid" id="itemid" value="#$itemid#" />#$showval# 
-        <fieldset>
-            <div class="xar-align-center">
-                <input type="submit" name="preview" value="#xarML('Preview')#" />
-                <input type="submit" name="confirm" value="#xarML('Update')#" />
-              <input type="submit" name="exit" value="#xarML('Update and Exit')#" /> 
-            </div>
-        </fieldset></form>
+            <input type="hidden" name="itemid" id="itemid" value="#$itemid#" />#$showval# 
+            <fieldset>
+                <div class="xar-align-center">
+                    <input type="submit" name="preview" value="#xarML('Preview')#" />
+                    <input type="submit" name="confirm" value="#xarML('Update')#" />
+                  <input type="submit" name="exit" value="#xarML('Update and Exit')#" /> 
+                </div>
+            </fieldset>
+        </form>
     </div>
 </xar:template>

@@ -36,8 +36,7 @@
         submitting the form or go back to the 
         <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;id=#$groupid#">members
         list</a>.</p>
-        <form action="&xar-modurl-roles-admin-asknotification;" method="post"
-        enctype="application/x-www-form-urlencoded">
+        <form action="&xar-modurl-roles-admin-asknotification;" method="post" enctype="application/x-www-form-urlencoded">
             <div class="xar-form-input-wrapper">
                 <label for="subject" title="#xarML('Title of the notification')#"
                 class="xar-form-label">Subject:</label>

@@ -9,8 +9,7 @@
     </div>
     <div class="xar-mod-body">
         <h2>Remove Privilege From Role</h2>
-        <form method="post" action="&xar-modurl-privileges-admin-removerole;"
-        enctype="application/x-www-form-urlencoded">
+        <form method="post" action="&xar-modurl-privileges-admin-removerole;" enctype="application/x-www-form-urlencoded">
             <xar:if condition="$ptype eq 1">
                 <h3 class="xar-align-center">Confirm the removal of Privilege '#$privname#' from
                 Group '#$rolename#'</h3>

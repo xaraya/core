@@ -4,8 +4,7 @@
     <!-- common admin menu for this module - remove link to the current function -->
     <div class="xar-mod-body">
         <h2>Select Theme</h2>
-        <form action="&xar-modurl-themes-user-usermenu;" method="post"
-        enctype="application/x-www-form-urlencoded">
+        <form action="&xar-modurl-themes-user-usermenu;" method="post" enctype="application/x-www-form-urlencoded">
             <div class="xar-form-input-wrapper">
                 <label for="defaulttheme"
                 title="#xarML('Select the theme you would like to use on this site.')#"

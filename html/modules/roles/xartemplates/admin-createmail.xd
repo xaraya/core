@@ -230,7 +230,6 @@
             </xar:if>
         </fieldset>
           <form action="&xar-modurl-roles-admin-sendmail;" method="post" enctype="application/x-www-form-urlencoded">
-        enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Message</legend>
                 <p>Choose a message template from the Templates dropdown above, or type in your

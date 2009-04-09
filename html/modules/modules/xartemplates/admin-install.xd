@@ -10,8 +10,7 @@
             <h2>Module Installation: Unsatisfied Dependencies</h2>
             <p>The module #$displayname# you are trying to install depends on additional
             components. Please review the listing below:</p>
-            <form action="&xar-modurl-modules-admin-install;" method="post"
-            enctype="application/x-www-form-urlencoded">
+            <form action="&xar-modurl-modules-admin-install;" method="post" enctype="application/x-www-form-urlencoded">
                 <div>
                     <input type="hidden" name="id" id="id" value="#$id#" />
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />

@@ -65,8 +65,6 @@
         <!-- Begin Site Display Options -->
         <xar:if condition="$tab eq 'display'">
             <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
-            onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);"
-            enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Version Information</legend>
                     <div class="xar-form-input-wrapper">
@@ -258,7 +256,6 @@
                         <input type="hidden" name="authid" id="authid" value="#$authid#" />
                         <input type="hidden" name="tab" id="tab" value="#$tab#" />
                         <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
-                        class="xar-margin-thickright" />
                     </div>
                 </fieldset>
             </form>

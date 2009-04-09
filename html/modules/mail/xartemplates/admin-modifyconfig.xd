@@ -122,7 +122,6 @@
                     <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="authid" id="authid" value="#$authid#" />
                         <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
-                        class="xar-margin-thickright" />
                     </div>
                 </fieldset>
                 <xar:elseif condition="$tab eq 'outgoing'" />

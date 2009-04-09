@@ -8,8 +8,7 @@
     </xar:if>
     <div class="xar-mod-body">
         <h2>Edit User : #$uname#</h2>
-        <form action="&xar-modurl-roles-user-usermenu;" method="post" id="post" name="post"
-        enctype="#$enc_type#">
+        <form action="&xar-modurl-roles-user-usermenu;" method="post" id="post" name="post" enctype="#$enc_type#">
             <fieldset>
                 <legend>User Details</legend>
                 <xar:if condition="xarModVars::get('roles', 'requirevalidation')">
