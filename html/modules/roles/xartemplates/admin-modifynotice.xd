@@ -24,7 +24,6 @@
                 </dd>
             </dl>
         </div>
-        <form method="post" action="&xar-modurl-roles-admin-modifynotice;"
         <form method="post" action="&xar-modurl-roles-admin-modifynotice;" enctype="application/x-www-form-urlencoded" >
             <fieldset>
                 <legend>Notification Email :</legend>

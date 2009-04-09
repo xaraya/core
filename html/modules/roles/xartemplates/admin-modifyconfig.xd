@@ -75,8 +75,6 @@
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
                 <xar:template file="display" module="base" subdata="array('modulename' => 'roles')" />
                 <fieldset>
-                        maxlength="3" class="xar-form-textshort" />
-                        URLs</label>
                     <legend>Default Group and Site Administrator</legend>
                     <div class="xar-form-input-wrapper">
                         <label for="siteadmin"
@@ -88,8 +86,7 @@
                                     <option name="#$loop:item['id']#" id="#$loop:item['id']#" value="#$loop:item['id']#" selected="selected">
                                         #$loop:item['name']#
                                     </option>
-                                    #$loop:item['name']#</option>
-                                    <xar:else />
+                                <xar:else />
                                     <option name="#$loop:item['id']#" id="#$loop:item['id']#" value="#$loop:item['id']#">
                                         #$loop:item['name']#
                                     </option>
@@ -137,7 +134,6 @@
             -->
             <xar:elseif condition="$tab eq 'duvs'" />
                 <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-            enctype="application/x-www-form-urlencoded">
                     <fieldset>
                     <legend>Basic User Variables</legend>
                     <p>Always available in a user role, and can be retrieved as 
@@ -290,14 +286,13 @@
             -->
             <xar:elseif condition="$tab eq 'memberlist'" />
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-            enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Member Options</legend>
                     <div class="xar-form-input-wrapper-after">
                         <xar:if condition="xarModVars::get('roles', 'searchbyemail')">
                             <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" checked="checked" />
                             value="1" checked="checked" />
-                            <xar:else />
+                        <xar:else />
                             <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" />
                             value="1" />
                         </xar:if>

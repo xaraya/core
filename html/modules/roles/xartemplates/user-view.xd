@@ -59,7 +59,6 @@
                                     <xar:set name="items">$list->items</xar:set>
                                     <xar:set name="properties">$list->getProperties()</xar:set>
                                     <xar:foreach in="$properties" key="$key" value="$value">
-                                        <xar:if condition="isset($items[$id][$key])">
                                         <xar:if condition="isset($items[$id][$key]) AND in_array($name,array('name','uname','email'))">
                                             <td>
                                                 <xar:data-output property="$properties[$key]"

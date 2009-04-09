@@ -17,8 +17,9 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <dd>
-                  <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a>
-                                title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a>
+                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#">
+                                    #$parents[$i]['parentname']#
+                                </a>
                             </dd>
                         </xar:if>
                         <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
@@ -26,7 +27,6 @@
                 </dl>
             </div>
         </xar:if>
-      <!-- TODO set the active tab here -->
         <!-- Show the general tab list for roles -->
         <xar:template file="tablist" />
         <form action="&xar-modurl-roles-admin-testprivileges;" method="post"
