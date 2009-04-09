@@ -9,8 +9,7 @@
         <xar:if condition="!empty($tid)">
             <h2>View Block Type</h2>
             <h4>
-                <a href="&xar-modurl-blocks-admin-new_type;">New Block Type</a>
-                <a href="#xarModURL('blocks'.'admin'.'new_type')#"><xar:mlstring>New Block Type</xar:mlstring></a>
+                <a href="#xarModURL('blocks'.'admin'.'new_type')#">New Block Type</a>
             </h4>
             <fieldset>
                 <legend>Selected Block Type Properties</legend>
@@ -75,8 +74,7 @@
         <xar:else />
             <h2>View Block Types</h2>
             <h4>
-                <a href="&xar-modurl-blocks-admin-new_type;">New Block Type</a>
-                <a href="#xarModURL('blocks'.'admin'.'new_type')#"><xar:mlstring>New Block Type</xar:mlstring></a>
+                <a href="#xarModURL('blocks'.'admin'.'new_type')#">New Block Type</a>
             </h4>
             <table class="xar-fullwidth">
                 <tr>
@@ -105,7 +103,6 @@
                         </td>
                         <td class="xar-align-center">
                             <a href="#$loop:item['refreshurl']#" title="#xarML('Refresh block details')#"><xar:mlstring>Refresh</xar:mlstring></a>
-                            title="#xarML('Refresh block details')#">Refresh</a>
                         </td>
                     </tr>
                 </xar:loop>

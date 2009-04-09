@@ -10,8 +10,7 @@
         <xar:template type="module" file="admin-menu" />
         <h2>View Block Groups</h2>
         <h4>
-            <a href="&xar-modurl-blocks-admin-new_group;">New Block Group</a>
-            <a href="#xarModURL('blocks'.'admin'.'new_group')#"><xar:mlstring>New Block Group</xar:mlstring></a>
+            <a href="#xarModURL('blocks'.'admin'.'new_group')#">New Block Group</a>
         </h4>
         <table class="xar-fullwidth">
             <tr>
@@ -33,11 +32,8 @@
                                 <xar:if condition="$loop:index gt 0"> | </xar:if>
                                 <xar:if condition="!empty($loop:item['title'])">
                                     <a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['id']))#" title="#xarVarPrepForDisplay($loop:item['title'])#">#$loop:item['name']#</a>
-                                title="#xarVarPrepForDisplay($loop:item['title'])#">
-                                #$loop:item['name']#</a>
                                 <xar:else />
                                     <a href="#xarModUrl('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['id']))#">#$loop:item['name']#</a>
-                                #$loop:item['name']#</a>
                                 </xar:if>
                             </xar:loop>
                         <xar:else />[ none ]</xar:if>

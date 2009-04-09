@@ -11,14 +11,14 @@
                 <div class="xar-floatleft xar-halfwidth xar-border-thinbottom">
                     <div class="xar-sub xar-floatright xar-align-right">[ 
                         <xar:if condition="!empty($loop:item.groups)">
-                    <xar:loop name="$loop:item.groups" id="groupsl">
-                        <a href="&xar-modurl-blocks-admin-modify_group;&amp;id=#$loop:groupsl:item.id#"
-                        title="#xarML('Edit group')#">#$loop:groupsl:item.name#</a>
-                    </xar:loop>
-                    <xar:else />none</xar:if>| 
-                    <xar:if condition="$loop:item['template'] ne NULL">#$loop:item['template']#
-                    &#160; 
-                    <xar:else />
+                            <xar:loop name="$loop:item.groups" id="groupsl">
+                                <a href="#xarModURL('blocks'.'admin'.'modify_group')#&amp;id=#$loop:groupsl:item.id#"
+                                title="#xarML('Edit group')#">#$loop:groupsl:item.name#</a>
+                            </xar:loop>
+                        <xar:else />none</xar:if>| 
+                        <xar:if condition="$loop:item['template'] ne NULL">#$loop:item['template']#
+                            &#160; 
+                        <xar:else />
                     <xar:if condition="empty($loop:item['group_template'])">D 
                     <xar:else />#$loop:item['group_template']# &#160;</xar:if></xar:if>| 
                     <xar:if condition="$loop:item['state'] eq '0'">H 
@@ -38,7 +38,7 @@
                     <div class="xar-sub xar-floatright xar-align-right">[ 
                         <xar:if condition="!empty($loop:item.groups)">
                     <xar:loop name="$loop:item.groups" id="groupsr">
-                        <a href="&xar-modurl-blocks-admin-modify_group;&amp;id=#$loop:groupsr:item.id#"
+                        <a href="#xarModURL('blocks'.'admin'.'modify_group')#&amp;id=#$loop:groupsr:item.id#"
                         title="#xarML('Edit group')#">#$loop:groupsr:item.name#</a>
                     </xar:loop>
                     <xar:else />none</xar:if>| 

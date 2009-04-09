@@ -7,7 +7,7 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
         <h2>Delete Instance</h2>
-        <form method="post" action="&xar-modurl-blocks-admin-delete_instance;">
+        <form method="post" action="#xarModURL('blocks', 'admin', 'delete_instance')#">
             <fieldset>
                 <legend>Confirm deleting this block?</legend>
                 <p>Name: #xarVarPrepForDisplay($instance['name'])#</p>
@@ -16,11 +16,15 @@
                 </xar:if>
                 <p>Groups: 
                     <xar:if condition="!empty($instance['groups'])">
-                <xar:loop name="$instance['groups']">
-                #xarVarPrepForDisplay($loop:item.name)#</xar:loop>
-                <xar:else />[ none ]</xar:if></p>
+                        <xar:loop name="$instance['groups']">
+                        #xarVarPrepForDisplay($loop:item.name)#</xar:loop>
+                    <xar:else />
+                        [ none ]
+                    </xar:if>
+                </p>
                 <p>Type: #xarVarPrepForDisplay($instance['module'])# /
-                #xarVarPrepForDisplay($instance['type'])#</p>
+                #xarVarPrepForDisplay($instance['type'])#
+                </p>
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
@@ -32,7 +36,6 @@
                         #xarModURL('blocks', 'admin', 'view_instances')#
                     </xar:set>
                     <input type="button" value="#xarML('Cancel')#" class="xar-margin-thick" onclick="window.location='#$returnurl#';" />
-                    onclick="window.location='#$returnurl#';" />
                 </div>
             </fieldset>
         </form>

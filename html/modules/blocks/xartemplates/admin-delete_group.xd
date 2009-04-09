@@ -7,15 +7,18 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
         <h2>Delete Group</h2>
-        <form method="post" action="&xar-modurl-blocks-admin-delete_group;">
+        <form method="post" action="#xarModURL('blocks', 'admin', 'delete_group')#">
             <fieldset>
                 <legend>Confirm deleting this group?</legend>
                 <p>Name: 
                 <xar:var name="$group['name']" /></p>
                 <p>Members: 
                     <xar:if condition="!empty($group['instances'])">
-                <xar:loop name="$group['instances']">#$loop:item['title']#</xar:loop>
-                <xar:else />[ none ]</xar:if></p>
+                        <xar:loop name="$group['instances']">#$loop:item['title']#</xar:loop>
+                    <xar:else />
+                        [ none ]
+                    </xar:if>
+                </p>
                 <p>Template: 
                 <xar:var name="$group['template']" /></p>
             </fieldset>
@@ -29,7 +32,6 @@
                         #xarModURL('blocks', 'admin', 'view_groups')#
                     </xar:set>
                     <input type="button" value="#xarML('Cancel')#" class="xar-margin-thick" onclick="window.location='#$returnurl#';" />
-                    onclick="window.location='#$returnurl#';" />
                 </div>
             </fieldset>
         </form>

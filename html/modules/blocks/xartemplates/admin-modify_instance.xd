@@ -8,8 +8,7 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
         <h2>Modify Block</h2>
-        <form action="#xarModURL('blocks', 'admin', 'update_instance')#" method="post"
-        enctype="application/x-www-form-urlencoded">
+        <form action="#xarModURL('blocks', 'admin', 'update_instance')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Block Properties</legend>
                 <div class="xar-form-input-wrapper">
@@ -55,8 +54,8 @@
                 not use it.</xar:comment>
                 <!--
                     It is likely this section will be removed, since blocks generally do not use it.
+                -->
                 <xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
-
                     <div class="xar-form-input-wrapper">
                         <label for="block_refresh"
                         title="#xarML('If your block uses a refresh time, this field needs to be filled in.')#"
@@ -82,12 +81,10 @@
             </fieldset>
             <fieldset>
                 <legend>Block Type Properties</legend>
-                <xar:comment>This 'content' section is deprecated - it will be removed once the PHP
-                block no longer uses it.</xar:comment>
-                <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
                 <!--
                     This 'content' section is deprecated - it will be removed once the PHP block no longer uses it.
-               <!-- <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
+                --> 
+                <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
                     <div class="xar-form-input-wrapper">
                         <label for="block_content"
                         title="#xarML('Enter the content that is shown in the block instance.')#"
@@ -96,22 +93,21 @@
                         class="xar-form-textareaxlarge">#$instance['content']#</textarea>
                     </div>
                 </xar:if>
-                <xar:if condition="!empty($extra_fields)">#$extra_fields# 
                 <xar:if condition="!empty($extra_fields)">
-                        #$extra_fields#
+                    #$extra_fields#
                     <xar:if condition="!empty($hooks)">
                         <xar:foreach in="$hooks" key="$module" value="$output">
                             #$output#
                         </xar:foreach>
                     </xar:if>
                 <xar:else />
-                <p>No extra settings for this block type.</p></xar:if>
+                    <p>No extra settings for this block type.</p>
+                </xar:if>
             </fieldset>
             <fieldset>
                 <legend>Block Groups and Group Templates</legend>
                 <xar:if condition="$group_method eq 'min'">
-                    <xar:comment>Provide a 'new group' drop-down list.</xar:comment>
-                    <!--
+                    <!-- Provide a 'new group' drop-down list.-->
                     <div class="xar-form-input-wrapper">
                         <label for="block_new_group"
                         title="#xarML('Add this block instance to the selected block group.')#"
@@ -135,7 +131,6 @@
                             title="#xarML('Format is: [outer-template][semi-colon][inner-template].')#">
                             #xarVarPrepForDisplay($loop:item['name'])# Group:</label>
                             <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
-
                                 <input type="text" name="group_templates[#$loop:item.id#]"
                                 id="group_templates_#$loop:item.id#"
                                 value="#xarVarPrepForDisplay($loop:item.template)#" maxlength="100"
