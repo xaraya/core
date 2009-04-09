@@ -120,18 +120,18 @@
                                         <input type="submit" name="info" id="info" value="#$infolabel#" />
                                     value="#$infolabel#" />
                                     <xar:elseif condition="$selstyle eq 'icons'" />
-                                        <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new"><img src="#$infoimg#" alt="#$infolabel#" /></a>
-                                    target="_new">
-                                        <img src="#$infoimg#" alt="#$infolabel#" />
-                                    </a>
+                                        <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new">
+                                            <img src="#$infoimg#" alt="#$infolabel#" />
+                                        </a>
                                         <noscript>
                                         <a href="#$modinfo['infourl']#">
                                             <img src="#$infoimg#" alt="#$infolabel#" />
                                         </a>
                                         </noscript>
                                     <xar:else />
-                                        <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new"><xar:mlstring>Info</xar:mlstring></a>
-                                    target="_new">Info</a>
+                                        <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new">
+                                            Info
+                                        </a>
                                         <noscript>
                                         <a href="#$modinfo['infourl']#">Info</a>
                                         </noscript>

@@ -14,7 +14,6 @@
                 </xar:foreach>
             </ul>
         </xar:if>
-        <form action="&xar-modurl-modules-admin-deactivate;" method="post"
         <form action="&xar-modurl-modules-admin-deactivate;" method="post" enctype="application/x-www-form-urlencoded">
             <div class="xar-align-center">
                 <input type="hidden" name="id" id="id" value="#$id#" />
