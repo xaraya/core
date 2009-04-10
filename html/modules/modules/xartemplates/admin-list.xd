@@ -235,11 +235,8 @@
             </xar:if>
         </form>
     </div>
-    <div class="xar-mod-foot xar-align-center">
-        <p>Note to module developers: removal of all core modules is currently disabled from GUI;
-        you may need to re-classify your modules in accordance with 
-        <a href="http://www.xaraya.com/documentation/rfcs/rfc0013.html">RFC-13</a></p>
-        <xar:if condition="$selstyle eq 'icons'">
+    <xar:if condition="$selstyle eq 'icons'">
+        <div class="xar-mod-foot xar-align-center">
             <div class="xar-accent-outline xar-margin-thick xar-padding-thick">
             <img src="#xarTplGetImage('set1/disabled.png')#" alt="disabled" hspace="5" />Disabled 
             <img src="#xarTplGetImage('set1/activate.png')#" alt="activate" hspace="5" />Activate 
@@ -249,6 +246,6 @@
             <img src="#xarTplGetImage('set1/initialise.png')#" alt="initialise"
             hspace="5" />Install 
             <img src="#xarTplGetImage('set1/remove.png')#" alt="remove" hspace="5" />Remove</div>
-        </xar:if>
-    </div>
+        </div>
+    </xar:if>
 </xar:template>
