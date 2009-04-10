@@ -21,7 +21,7 @@
     <xar:if condition="$expirein ne 0">
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">
-                <xar:mlstring>This Block Will Expire:</xar:mlstring>
+                This Block Will Expire:
             </label>
             <xar:ml>
                 <xar:mlstring>#(1) hours from now.</xar:mlstring>

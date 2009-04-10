@@ -19,9 +19,7 @@
             </xar:ml>
         </h2>
         <p>
-            <xar:mlstring>
-                All fields are required to create a new role on the system.
-            </xar:mlstring>
+            All fields are required to create a new role on the system.
         </p>
         <form id="newrole" action="&xar-modurl-dynamicdata-admin-create;" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>

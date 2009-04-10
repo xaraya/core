@@ -65,7 +65,7 @@
             </div>
             <div class="xar-form-input-wrapper">
                 <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$field.id#" title="#xarVarPrepForDisplay($editconfiguration)#">
-                    <xar:mlstring>Edit the configuration</xar:mlstring>
+                    Edit the configuration
                 </a>
             </div>
         </div>

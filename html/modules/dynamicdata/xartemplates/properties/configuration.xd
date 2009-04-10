@@ -2,7 +2,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="!empty($initialization)">
         <fieldset>
-            <legend><xar:mlstring>Initialization options</xar:mlstring></legend>
+            <legend>Initialization options</legend>
             <xar:foreach in="$initialization" key="$key" value="$init">
                 <xar:set name="fieldname">$name . '[' . $key . ']'</xar:set>
                 <xar:set name="fieldid">$id . '_' . $key</xar:set>
@@ -22,7 +22,7 @@
     </xar:if>
     <xar:if condition="!empty($validation)">
         <fieldset>
-            <legend><xar:mlstring>Validation options</xar:mlstring></legend>
+            <legend>Validation options</legend>
             <xar:if condition="is_array($validation)">
                 <xar:foreach in="$validation" key="$key" value="$init">
                 
@@ -67,7 +67,7 @@
     </xar:if>
     <xar:if condition="!empty($display)">
         <fieldset>
-            <legend><xar:mlstring>Display options</xar:mlstring></legend>
+            <legend>Display options</legend>
             <xar:foreach in="$display" key="$key" value="$init">
                 <xar:set name="fieldname">$name . '[' . $key . ']'</xar:set>
                 <xar:set name="fieldid">$id . '_' . $key</xar:set>

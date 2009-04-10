@@ -37,7 +37,7 @@
                             }
                             </script>
                             <a href="javascript:xar_dynamicdata_formpreview();">
-                                <xar:mlstring>Preview Input Form</xar:mlstring>
+                                Preview Input Form
                             </a>
                         </dd>
                     </xar:if>

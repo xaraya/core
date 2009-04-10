@@ -4,7 +4,7 @@
         <xar:set name="invalids">$object->getInvalids()</xar:set>
         <xar:if condition="!empty($invalids)" >
           <fieldset>
-            <legend><xar:mlstring>Invalid Values</xar:mlstring></legend>
+            <legend>Invalid Values</legend>
             <xar:foreach in="$invalids" key="$key" value="$value">
                 <div>
                     #$key#:&#160;#$value#

@@ -8,15 +8,13 @@
             <xar:if condition="xarModVars::get('privileges','useModuleAlias')">
                 <xar:var scope="module" module="privileges" name="aliasname" />
             <xar:else />
-                <xar:mlstring>Privileges Administration</xar:mlstring>
+                Privileges Administration
             </xar:if>
         </span>
     </div>
     <div class="xar-mod-body">
-        <h2>
-            <xar:mlstring>
-                Assign Privileges
-            </xar:mlstring>
+        <h2>            
+            Assign Privileges            
         </h2>
         <xar:template module="privileges" file="admin-menu" />
 
@@ -62,7 +60,7 @@
 
                         <xar:if condition="count($groupassignments) eq 0">
                             <tr>
-                                <td colspan="5" style="text-align: center"><xar:mlstring>No assignments to display</xar:mlstring></td>
+                                <td colspan="5" style="text-align: center">No assignments to display</td>
                             </tr>
                         <xar:else />
                             <xar:loop name="$groupassignments">
@@ -127,7 +125,7 @@
 
                         <xar:if condition="count($anonassignments) eq 0">
                             <tr>
-                                <td colspan="5" style="text-align: center"><xar:mlstring>No assignments to display</xar:mlstring></td>
+                                <td colspan="5" style="text-align: center">No assignments to display</td>
                             </tr>
                         <xar:else />
                             <xar:loop name="$anonassignments">
@@ -194,7 +192,7 @@
 
                         <xar:if condition="count($userassignments) eq 0">
                             <tr>
-                                <td colspan="5" style="text-align: center"><xar:mlstring>No assignments to display</xar:mlstring></td>
+                                <td colspan="5" style="text-align: center">No assignments to display</td>
                             </tr>
                         <xar:else />
                             <xar:loop name="$userassignments">

@@ -30,7 +30,7 @@
                 </a>
                 <div class="xar-form-input-wrapper">
                     <label class="xar-form-label">
-                        <xar:mlstring>Last Login</xar:mlstring>
+                        Last Login
                     </label>
                     #xarLocaleGetFormattedDate('medium', xarModItemVars::get('roles','userlastlogin',$id))#  #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
                 </div>

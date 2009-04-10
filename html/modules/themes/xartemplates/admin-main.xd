@@ -7,7 +7,7 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
         <img src="#xarTplGetImage('admin.gif','themes')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
-        <h2><xar:mlstring>Overview</xar:mlstring></h2>
+        <h2>Overview</h2>
         <h2>Overview</h2>
         <h3>What is it?</h3>
         <p>The Themes Module controls the the display of your website by managing the themes
@@ -141,7 +141,7 @@
                 </ul>
             </li>
         </ol>
-    <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
+    <h3>Included Blocks</h3>
         <p>The Themes Module supplies the Metablock. The meta block is installed by default at
         installation time. You can edit this block by going to Blocks -&gt; View Instances and
         clicking on Edit next to the Meta block entry.</p>

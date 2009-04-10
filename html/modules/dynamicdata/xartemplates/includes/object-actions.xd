@@ -3,57 +3,57 @@
     <div>
         <dl class="xar-tabs">
             <dt class="help">
-                <xar:mlstring>Actions:</xar:mlstring>
+                Actions:
             </dt>
             <xar:if condition="$action eq 'modify'">
                 <dd class="active">
                   <a href="#xarServerGetCurrentUrl()#">
-                    <xar:mlstring>Modify Object definition</xar:mlstring>
+                    Modify Object definition
                   </a>
                 </dd>
             <xar:else />
                 <dd>
                     <a href="&xar-modurl-dynamicdata-admin-modify;&amp;itemid=#$itemid#&amp;name=#$object:name#">
-                        <xar:mlstring>Modify Object definition</xar:mlstring>
+                        Modify Object definition
                     </a>
                 </dd>
             </xar:if>
             <xar:if condition="$action eq 'modifyprop'">
                 <dd class="active">
                   <a href="#xarServerGetCurrentUrl()#">
-                    <xar:mlstring>Modify DataProperties</xar:mlstring>
+                    Modify DataProperties
                   </a>
                 </dd>
             <xar:else />
                 <dd>
                     <a href="&xar-modurl-dynamicdata-admin-modifyprop;&amp;itemid=#$itemid#&amp;name=#$object:name#">
-                        <xar:mlstring>Modify DataProperties</xar:mlstring>
+                        Modify DataProperties
                     </a>
                 </dd>
             </xar:if>
             <xar:if condition="$action eq 'export'">
                 <dd class="active">
                   <a href="#xarServerGetCurrentUrl()#">
-                    <xar:mlstring>Export Object Definition to XML</xar:mlstring>
+                    Export Object Definition to XML
                   </a>
                 </dd>
             <xar:else />
                 <dd>
                     <a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#&amp;name=#$object:name#">
-                        <xar:mlstring>Export Object Definition to XML</xar:mlstring>
+                        Export Object Definition to XML
                     </a>
                 </dd>
             </xar:if>
             <xar:if condition="$action eq 'view'">
                 <dd class="active">
                   <a href="#xarServerGetCurrentUrl()#">
-                    <xar:mlstring>View Items</xar:mlstring>
+                    View Items
                   </a>
                 </dd>
             <xar:else />
                 <dd>
                     <a href="&xar-modurl-dynamicdata-admin-view;&amp;itemid=#$itemid#&amp;name=#$object:name#">
-                        <xar:mlstring>View Items</xar:mlstring>
+                        View Items
                     </a>
                 </dd>
             </xar:if>

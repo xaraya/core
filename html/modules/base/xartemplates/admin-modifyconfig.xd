@@ -68,10 +68,8 @@
                 <fieldset>
                     <legend>Version Information</legend>
                     <div class="xar-form-input-wrapper">
-                        <label title="#xarML('Current Version.')#" class="xar-form-label">
-                            <xar:mlstring>
-                                Xaraya Core:
-                            </xar:mlstring>
+                        <label title="#xarML('Current Version.')#" class="xar-form-label">                            
+                            Xaraya Core:                            
                         </label>
                         <!--
                         <xar:set name="versionid">$XARCORE_VERSION_ID</xar:set>
@@ -87,10 +85,8 @@
                          </xar:ml>
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label title="#xarML('Current Version.')#" class="xar-form-label">
-                            <xar:mlstring>
-                                BlockLayout compiler version:
-                            </xar:mlstring>
+                        <label title="#xarML('Current Version.')#" class="xar-form-label">                            
+                            BlockLayout compiler version:                            
                         </label>
                         <xar:set name="options">
                             array(
@@ -105,32 +101,24 @@
                     </div>
                 </fieldset>
                 <fieldset>
-                    <legend>
-                        <xar:mlstring>
-                            Database Information
-                        </xar:mlstring>
+                    <legend>                        
+                        Database Information                        
                     </legend>
                     <div class="xar-form-input-wrapper">
-                        <label title="#xarML('Host')#" class="xar-form-label">
-                            <xar:mlstring>
-                                Host:
-                            </xar:mlstring>
+                        <label title="#xarML('Host')#" class="xar-form-label">                            
+                            Host:                            
                         </label>
                         #xarSystemVars::get(sys::CONFIG, 'DB.Host')#
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label title="#xarML('Database Type')#" class="xar-form-label">
-                            <xar:mlstring>
-                                Database Type:
-                            </xar:mlstring>
+                        <label title="#xarML('Database Type')#" class="xar-form-label">                            
+                            Database Type:                            
                         </label>
                         #xarSystemVars::get(sys::CONFIG, 'DB.Type')#
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label title="#xarML('Current Database')#" class="xar-form-label">
-                            <xar:mlstring>
-                                Current Database:
-                            </xar:mlstring>
+                        <label title="#xarML('Current Database')#" class="xar-form-label">                            
+                            Current Database:                            
                         </label>
                         #xarSystemVars::get(sys::CONFIG, 'DB.Name')#
                     </div>

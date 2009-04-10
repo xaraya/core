@@ -5,7 +5,7 @@
         </xar:set>
         Enter a list of user names separated by commas. Incorrect user names  will be ignored.<br />
         <label for="administrators" title="#xarML('These users have full access to the dynamicdata module')#" class="xar-form-label">
-            <xar:mlstring>List of Administrators:</xar:mlstring>
+            List of Administrators:
         </label>
         <xar:data-input type="textarea" name="administrators" value="$value"/>
     </div>

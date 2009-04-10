@@ -123,47 +123,37 @@
                     <div class="xar-form-input-wrapper-after">
                         <xar:set name="checked"><xar:var scope="module" module="themes" name="ShowPHPCommentBlockInTemplates"/></xar:set>
                         <xar:data-input type="checkbox" name="showphpcbit" id="showphpcbit" checked="$checked" />
-                        <label for="showphpcbit">
-                            <xar:mlstring>
-                                Show php comment block header in compiled templates
-                            </xar:mlstring>
+                        <label for="showphpcbit">                            
+                            Show php comment block header in compiled templates                            
                         </label>
                     </div>
                 </xar:if>
                 <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked"><xar:var scope="module" module="themes" name="ShowTemplates"/></xar:set>
                     <xar:data-input type="checkbox" name="showtemplates" id="showtemplates" checked="$checked" />
-                    <label for="showtemplates">
-                        <xar:mlstring>
-                            Show template filenames in HTML comments
-                        </xar:mlstring>
+                    <label for="showtemplates">                        
+                        Show template filenames in HTML comments                        
                     </label>
                 </div>
                 <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked"><xar:var scope="config" name="Site.BL.CacheTemplates"/></xar:set>
                     <xar:data-input type="checkbox" name="cachetemplates" id="cachetemplates" checked="$checked" />
-                    <label for="cachetemplates">
-                        <xar:mlstring>
-                            Cache templates
-                        </xar:mlstring>
+                    <label for="cachetemplates">                        
+                        Cache templates                        
                     </label>
                 </div>
                 <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked"><xar:var scope="module" module="themes" name="var_dump"/></xar:set>
                     <xar:data-input type="checkbox" name="var_dump" id="var_dump" checked="$checked" />
-                    <label for="var_dump">
-                        <xar:mlstring>
-                            Debug Templates by Showing Variables Available
-                        </xar:mlstring>
+                    <label for="var_dump">                        
+                        Debug Templates by Showing Variables Available                        
                     </label>
                 </div>
                 <xar:if condition="xarThemeIsAvailable('atom')">
                     <!-- This should be moved if we ever fully support the atom spec -->
                     <div class="xar-form-input-wrapper">
-                        <label for="AtomTag" class="xar-form-label">
-                            <xar:mlstring>
-                                Atom Tag
-                            </xar:mlstring>
+                        <label for="AtomTag" class="xar-form-label">                            
+                            Atom Tag                            
                         </label>
                         <xar:set name="value"><xar:var scope="module" module="themes" name="AtomTag"/></xar:set>
                         <input type="text" name="AtomTag" id="AtomTag" value="#$value#" size="30" maxlength="100" />

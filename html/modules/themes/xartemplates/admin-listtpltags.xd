@@ -1,37 +1,35 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
-        <span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span>
+        <span class="xar-mod-title">Themes Administration</span>
     </div>
     <div class="xar-mod-body">
        <xar:template type="module" file="admin-menu" />
         <h2>
-            <xar:mlstring>Template Tags</xar:mlstring>
+            Template Tags
         </h2>
         <p class="xar-error">
-            <xar:mlstring>Warning - Core System Settings</xar:mlstring>
+            Warning - Core System Settings
         </p>
-        <p>
-            <xar:mlstring>
-                This list contains core system template tags and is supplied for developer convenience. 
-                You should not have to visit this page or modify any tags here unless you are a developer
-                creating your own template tags. In this latter case, the tags would usually
-                be registered during the initialization of the module that supplies the tag.
-            </xar:mlstring>
+        <p>            
+            This list contains core system template tags and is supplied for developer convenience. 
+            You should not have to visit this page or modify any tags here unless you are a developer
+            creating your own template tags. In this latter case, the tags would usually
+            be registered during the initialization of the module that supplies the tag.            
         </p>
 
-        <p>[<a href="#$addurl#"><xar:mlstring>Add a new Tag</xar:mlstring></a>]</p>
+        <p>[<a href="#$addurl#">Add a new Tag</a>]</p>
 
         <table class="xar-fullwidth">
             <tr>
                 <th>
-                    <xar:mlstring>Name</xar:mlstring>
+                    Name
                 </th>
                 <th>
-                    <xar:mlstring>Module</xar:mlstring>
+                    Module
                 </th>
                 <th>
-                    <xar:mlstring>Actions</xar:mlstring>
+                    Actions
                 </th>
             </tr>
             <xar:foreach in="$tags" value="$item">
@@ -43,8 +41,8 @@
                         #$item['module']#
                     </td>
                     <td class="xar-align-center">
-                        <a href="#$item['editurl']#"><xar:mlstring>Edit</xar:mlstring></a> | 
-                        <a href="#$item['deleteurl']#" onclick="return confirm('#xarML('Are you sure you want to delete the tag: ')##$item['name']# ?');"><xar:mlstring>Delete</xar:mlstring></a>
+                        <a href="#$item['editurl']#">Edit</a> | 
+                        <a href="#$item['deleteurl']#" onclick="return confirm('#xarML('Are you sure you want to delete the tag: ')##$item['name']# ?');">Delete</a>
                     </td>
                 </tr>
             </xar:foreach> 

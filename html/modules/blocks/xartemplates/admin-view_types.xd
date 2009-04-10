@@ -102,7 +102,7 @@
                             </xar:if>
                         </td>
                         <td class="xar-align-center">
-                            <a href="#$loop:item['refreshurl']#" title="#xarML('Refresh block details')#"><xar:mlstring>Refresh</xar:mlstring></a>
+                            <a href="#$loop:item['refreshurl']#" title="#xarML('Refresh block details')#">Refresh</a>
                         </td>
                     </tr>
                 </xar:loop>
