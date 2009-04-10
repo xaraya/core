@@ -59,7 +59,6 @@
                                 <xar:if condition="$indlinks ne ''">
                                     <ul class="xar-menu-subitem">
                                         <xar:foreach in="$indlinks" value="$sublinks" key="$sublink">
-                                        key="$sublink">
                                             <!--
                                                 determine and indicate current states of module functions display 
                                             -->

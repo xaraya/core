@@ -38,7 +38,6 @@
                                     <a name="activeitem" title="#$mod['features']['label']#">
                                     #$mod['features']['label']#</a>
                                     <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
-
                                         <ul class="xar-menu-subitem">
                                             <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
                                                 <!-- determine and indicate current states of module functions display -->
@@ -194,6 +193,5 @@
             - every listitem contains a link
             - a link can be either real or 'empty' (named anchors) depending on its *-current* status
             - this built-in implementation of vertical menus uses empty links as means of providing visual feedback in all browsers, including those that dont support :hover state on anything except links (surprise: IE/Win)
-
     -->
 </xar:template>
