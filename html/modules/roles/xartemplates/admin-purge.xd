@@ -58,7 +58,7 @@
                     </tr>
                     <tr>
                         <td class="xar-align-center">
-                            <input type="text" name="recallsearch" id="recallsearch" value="#$recallsearch#" maxlength="255"class="xar-form-textmedium xar-margin-thickright" />
+                            <input type="text" name="recallsearch" id="recallsearch" value="#$recallsearch#" maxlength="255" class="xar-form-textmedium xar-margin-thickright" />
                             <input type="submit" name="search" id="search" value="#xarML('Search')#" class="xar-margin-thickleft" />
                         </td>
                         <td class="xar-align-center">

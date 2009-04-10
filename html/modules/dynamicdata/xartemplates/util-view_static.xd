@@ -54,7 +54,7 @@
                     <xar:foreach in="$fields" value="$field">
                         <tr>
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-modify_static;&amp;table=#$table#&amp;field=#$field['name']#">
+                                <a href="#xarModURL('dynamicdata','util','modify_static')#&amp;table=#$table#&amp;field=#$field['name']#">
                                     #$field['name']# 
                                 </a>
                             </td>
@@ -74,7 +74,7 @@
                                 #$field['configuration']# 
                             </td>
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-delete_static;&amp;table=#$table#&amp;field=#$field['name']#">
+                                <a href="#xarModURL('dynamicdata','util','delete_static')#&amp;table=#$table#&amp;field=#$field['name']#">
                                     Delete 
                                 </a>
                             </td>
