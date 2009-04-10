@@ -8,10 +8,8 @@
     </xar:if>
     <xar:if condition="$checked">
       <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" checked="checked" />
-        tabindex="#$tabindex#" checked="checked" />
     <xar:else/>
       <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" />
-        tabindex="#$tabindex#" />
     </xar:if>
     <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

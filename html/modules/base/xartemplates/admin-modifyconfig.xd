@@ -310,7 +310,6 @@
                                 <xar:var scope="config" name="Site.Session.Duration" />
                             </xar:set>
                             <input type="text" id="sessionduration" name="sessionduration" value="#$value#" maxlength="3" class="xar-form-textshort" />
-                            value="#$value#" maxlength="3" class="xar-form-textshort" />
                         </div>
                     </xar:if>
                     <div class="xar-form-input-wrapper">

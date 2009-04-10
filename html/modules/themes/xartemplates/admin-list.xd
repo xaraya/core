@@ -80,7 +80,6 @@
                     </td>
                     <td class="xar-align-center">
                         <input type="submit" name="reload" id="reload" value="#xarML('Refresh')#" />
-                        value="#xarML('Refresh')#" />
                     </td>
                 </tr>
             </table>

@@ -126,7 +126,6 @@
         <!-- Begin Realms Options -->
         <xar:if condition="$tab eq 'realms'">
             <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-            enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Working With Realms</legend>
                     <div class="xar-form-input-wrapper">

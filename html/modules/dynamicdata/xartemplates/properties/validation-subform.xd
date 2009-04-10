@@ -178,8 +178,7 @@
         <tr>
             <td>Number of repetitions</td>
             <td>
-                <input type="text" name="#$name#[repeat]" id="#$id#_repeat" value="#$repeat#"
-                size="#$size#" tabindex="#$tabindex#" class="xar-form-textshort" />
+                <input type="text" name="#$name#[repeat]" id="#$id#_repeat" value="#$repeat#" size="#$size#" tabindex="#$tabindex#" class="xar-form-textshort" />
             </td>
             <td>
                 <ul>

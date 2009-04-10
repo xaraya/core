@@ -29,8 +29,7 @@
             <form action="#xarModUrl('blocks', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded">
             <xar:template file="display" module="base" subdata="array('modulename' => 'blocks')" />
                 <fieldset>
-                        class="xar-form-textshort" />
-                    <div class="xar-form-input-wrapper-after">
+                       <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="authid" id="authid" value="#$authid#" />
                         <input type="hidden" name="update" id="update" value="update" />
                         <input type="hidden" name="tab" id="tab" value="#$tab#" />

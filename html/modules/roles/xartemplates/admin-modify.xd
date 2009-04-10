@@ -63,7 +63,6 @@
                             <xar:set name="onchange">"this.form.action='" .
                             xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
                             <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1" />
-                            validation="roles" onchange="$onchange" />
                         </div>
                     </xar:if>
                     <xar:data-form object="$object" />
@@ -198,7 +197,6 @@
                 <p>This #$object:label# cannot be edited or deleted.</p>
                 <xar:else />
               <form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
-                enctype="application/x-www-form-urlencoded">
                     <div class="xar-form-input-wrapper">
                         <label for="roleid" title="#xarML('Choose a parent to assign membership')#"
                         class="xar-form-label">Add to:</label>

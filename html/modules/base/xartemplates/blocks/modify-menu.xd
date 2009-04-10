@@ -154,8 +154,7 @@
             <label for="marker"
             title="#xarML('When Xaraya is generating the menu, we can mark the current page. Use this to configure the marker for that display.')#"
             class="xar-form-label">Marker:</label>
-            <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#"
-            maxlength="255" class="xar-form-textshort" />
+            <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort" />
         </div>
     </xar:if>
 </xar:template>

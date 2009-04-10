@@ -15,10 +15,9 @@
         <h2>Configure Notification Template</h2>
         <xar:if condition="!empty($settings)">
             <p>
-            <xar:set name="hookurl">xarModURL('modules','admin','hooks', array('hook' =&gt;
-            'mail'))</xar:set>
-            <xar:set name="hooktitle">Configure mail hooks</xar:set>
-            <xar:set name="hooklinktext">Hook the mail module to content types</xar:set>
+            <xar:set name="hookurl">xarModURL('modules','admin','hooks', array('hook' => 'mail'))</xar:set>
+            <xar:var name="hooktitle">Configure mail hooks</xar:var>
+            <xar:var name="hooklinktext">Hook the mail module to content types</xar:var>
             <a href="#$hookurl#" title="#$hooktitle#">#$hooklinktext#</a>to receive notifications
             on add, edit or delete.</p>
             <p>The mail module is currently hooked to the following modules :</p>
