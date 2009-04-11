@@ -13,7 +13,6 @@
         <fieldset>
             <legend>Registered mail queues</legend>
             <xar:data-view modid="$qdef['moduleid']" itemtype="$qdef['itemtype']" layout="list" linkfield="name" sort="id" tplmodule="mail" />
-            linkfield="name" sort="id" tplmodule="mail" />
         </fieldset>
         <fieldset>
             <xar:if condition="$itemid gt 0">

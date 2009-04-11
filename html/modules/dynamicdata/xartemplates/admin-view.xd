@@ -21,12 +21,8 @@
         </xar:if>
         <xar:if condition="isset($object)">
             <xar:data-view layout="$layout" object="$object" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid" sort="$sort" />
-            param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid"
-            sort="$sort" />
         <xar:else />
             <xar:data-view layout="$layout" module="$module_id" itemtype="$itemtype" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid" sort="$sort" />
-            table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum"
-            catid="$catid" sort="$sort" />
         </xar:if>
         <xar:if condition="!empty($querylink)">
             <p>
