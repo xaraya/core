@@ -9,7 +9,7 @@
                 </td>
             </tr>
         </table>
-        <input type="hidden" name="modid" id="modid" value="#$moduleid#" />
+        <input type="hidden" name="module_id" id="module_id" value="#$module_id#" />
         <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
         <input type="hidden" name="itemid" id="itemid" value="0" />
         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#" />

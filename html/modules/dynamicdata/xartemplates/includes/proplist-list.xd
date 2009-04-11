@@ -18,7 +18,7 @@
     </xar:foreach>
     <!-- Include the part for creating a new property -->
     <xar:template file="newproperty" module="dynamicdata" />
-    <xar:if condition="$modid eq 182">
+    <xar:if condition="$module_id eq 182">
         <p>Note: for completely dynamic Objects like this one, you need to define one property that
         is of type "Item ID"</p>
     </xar:if>
@@ -36,7 +36,7 @@
             </xar:if>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
-            <input type="hidden" name="modid" id="modid" value="#$modid#" />
+            <input type="hidden" name="module_id" id="module_id" value="#$module_id#" />
             <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
             <input type="submit" value="#xarML('Update Properties')#" />
         </div>

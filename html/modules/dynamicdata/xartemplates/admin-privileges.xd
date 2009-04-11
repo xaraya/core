@@ -73,12 +73,12 @@
                         <td>
                             <select name="moduleid" onchange="submit()">
                                 <option value="0">All</option>
-                                <xar:foreach in="$modlist" key="$modid" value="$modname">
-                                    <xar:if condition="!empty($moduleid) and $moduleid eq $modid">
-                                        <option value="#$modid#" selected="selected">
+                                <xar:foreach in="$modlist" key="$module_id" value="$modname">
+                                    <xar:if condition="!empty($moduleid) and $moduleid eq $module_id">
+                                        <option value="#$module_id#" selected="selected">
                                         #$modname#</option>
                                         <xar:else />
-                                        <option value="#$modid#">#$modname#</option>
+                                        <option value="#$module_id#">#$modname#</option>
                                     </xar:if>
                                 </xar:foreach>
                             </select>

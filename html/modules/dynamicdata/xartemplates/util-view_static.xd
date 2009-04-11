@@ -28,7 +28,7 @@
                 <h3>#$table#</h3>
                 <p>
                 <!--
-                    <a href="&xar-modurl-dynamicdata-util-relations;&amp;modid=#$modid#">Add
+                    <a href="&xar-modurl-dynamicdata-util-relations;&amp;module_id=#$module_id#">Add
                     Relation</a>
                 -->
                     <a href="#xarModURL('dynamicdata','util','new_static')#&amp;table=#$table#" style="float:left">                    
@@ -97,7 +97,7 @@
             </xar:foreach>
             <!--
             <div class="xar-align-center">
-                <a href="&xar-modurl-dynamicdata-util-static;&amp;export=1&amp;modid=#$modid#">
+                <a href="&xar-modurl-dynamicdata-util-static;&amp;export=1&amp;module_id=#$module_id#">
                 Export to XML</a>
             </div>
             -->
@@ -128,7 +128,7 @@
                 </fieldset>
             </form>
             <div class="xar-align-center">
-                <a href="&xar-modurl-dynamicdata-util-static;&amp;modid=#$modid#">Show Table
+                <a href="&xar-modurl-dynamicdata-util-static;&amp;module_id=#$module_id#">Show Table
                 Definitions</a>
             </div>
         </xar:if>

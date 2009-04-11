@@ -21,7 +21,7 @@
                         <a href="#xarServerGetCurrentUrl()#">Modify DataProperties</a>
                     </dd>
                     <dd>
-                        <a href="&xar-modurl-dynamicdata-util-export;&amp;modid=#$modid#&amp;itemtype=#$itemtype#">
+                        <a href="&xar-modurl-dynamicdata-util-export;&amp;module_id=#$module_id#&amp;itemtype=#$itemtype#">
                         Export Object Definition to XML</a>
                     </dd>
                     <xar:if condition="!empty($fields)">
@@ -108,7 +108,7 @@
                         <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
                             <div class="xar-align-center">
                                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                                <input type="hidden" name="modid" id="modid" value="#$modid#" />
+                                <input type="hidden" name="module_id" id="module_id" value="#$module_id#" />
                             <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
                                 value="#$itemtype#" />
                                 <input type="hidden" name="table" id="table" value="#$table#" />
