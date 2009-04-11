@@ -22,12 +22,13 @@
 */
 function mail_admin_main()
 {
-    // Security Check
     if (!xarSecurityCheck('EditMail')) return;
 
-    xarResponseRedirect(xarModURL('mail', 'admin', 'modifyconfig'));
-
-    // success
-    return true;
+    if (xarModVars::get('modules', 'disableoverview') == 0){
+        return xarTplModule('mail','admin','overview');
+    } else {
+        xarResponseRedirect(xarModURL('mail', 'admin', 'modifyconfig'));
+        return true;
+    }
 } 
 ?>

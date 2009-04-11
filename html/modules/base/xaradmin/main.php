@@ -20,13 +20,14 @@
  */
 function base_admin_main()
 {
-// Security Check
-    if(!xarSecurityCheck('AdminBase')) return;
+    if(!xarSecurityCheck('EditBase')) return;
 
-    xarResponseRedirect(xarModURL('base', 'admin', 'sysinfo'));
-
-    // success
-    return true;
+    if (xarModVars::get('modules', 'disableoverview') == 0){
+        return xarTplModule('base','admin','overview');
+    } else {
+        xarResponseRedirect(xarModURL('base', 'admin', 'modifyconfig'));
+        return true;
+    }
 }
 
 ?>

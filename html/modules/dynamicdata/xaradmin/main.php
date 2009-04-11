@@ -17,19 +17,14 @@
  */
 function dynamicdata_admin_main()
 {
-// Security Check
     if(!xarSecurityCheck('EditDynamicData')) return;
 
     if (xarModVars::get('modules', 'disableoverview') == 0){
-        $data = xarModAPIFunc('dynamicdata','admin','menu');
-
-        // Return the template variables defined in this function
-        return $data;
+        return xarTplModule('dynamicdata','admin','overview');
     } else {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
+        return true;
     }
-
-    return true;
 }
 
 ?>

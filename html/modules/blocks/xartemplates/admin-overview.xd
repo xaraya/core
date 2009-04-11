@@ -2,9 +2,9 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="relateddocurl">'http://www.xaraya.com/index.php/keywords/blocks/'</xar:set>
-    <xar:set name="relateddocurltext">Related documentation on Blocks</xar:set>
+    <xar:var name="relateddocurltext">Related documentation on Blocks</xar:var>
     <xar:set name="moduledocurl">'http://www.xaraya.com/index.php/release/13.html'</xar:set>
-    <xar:set name="moduledocurltext">Blocks Module - Xaraya Extension 13</xar:set>
+    <xar:var name="moduledocurltext">Blocks Module - Xaraya Extension 13</xar:var>
     <xar:style scope="common" />
     <div class="xar-mod-head">
         <span class="xar-mod-title">Blocks Administration</span>

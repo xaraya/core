@@ -3,7 +3,7 @@
     function privileges_dataapi_adminmenu()
     {
         return array(
-                array('includes' => array('main','overview'), 'target' => 'overview', 'label' => xarML(' Privileges Overview')),
+                array('includes' => array('main','overview'), 'target' => 'main', 'label' => xarML(' Privileges Overview')),
                 array('mask' => 'EditPrivilege', 'includes' => 'viewprivileges', 'target' => 'viewprivileges', 'title' => xarML('View all privileges on the system'), 'label' => xarML('View Privileges')),
                 array('mask' => 'AddPrivilege', 'includes' => 'new', 'target' => 'new', 'title' => xarML('Add a new privilege to the system'), 'label' => xarML('Add Privilege')),
                 array('mask' => 'AdminPrivilege', 'includes' => 'assignprivileges', 'target' => 'assignprivileges', 'title' => xarML('Assign privileges to groups and users'), 'label' => xarML('Assign Privileges')),
