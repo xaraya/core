@@ -1,0 +1,25 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<div id="xc-rightbg-wrapper">
+    <div id="xc-outermargin-noleft-wrapper">
+        <div id="xc-inner-wrapper">
+            <div id="xc-innerbg">
+                <div id="xc-center-wrapper">
+                    <div id="xc-center">
+                        <xar:var name="centerblocksgroup" />
+                        <xar:module class="modulespace" main="true" />
+                    </div>
+                </div>
+                <div id="xc-right">
+                    <div class="xc-side-content">
+                        <xar:var name="rightblocksgroup" />
+                    </div>
+                </div>
+                <div id="xc-clear">
+                    &#160;
+                    <xar:comment>this is the height clearing empty element</xar:comment>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</xar:template>

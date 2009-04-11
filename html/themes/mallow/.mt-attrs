@@ -1,0 +1,20 @@
+        file "images/back.gif"
+manual_merge "true"
+
+        file "images/banner.jpg"
+manual_merge "true"
+
+        file "images/css.gif"
+manual_merge "true"
+
+        file "images/csstableless.gif"
+manual_merge "true"
+
+        file "images/microbadge.gif"
+manual_merge "true"
+
+        file "images/rap.gif"
+manual_merge "true"
+
+        file "images/xhtml10.gif"
+manual_merge "true"

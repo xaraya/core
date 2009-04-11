@@ -1,0 +1,11 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<xar:if condition="!empty($leftblocksgroup) and !empty($rightblocksgroup)">
+    <xar:template file="content_3col" type="theme" />
+<xar:elseif condition="!empty($leftblocksgroup) and empty($rightblocksgroup)" />
+    <xar:template file="content_2col_lc" type="theme" />
+<xar:elseif condition="empty($leftblocksgroup) and !empty($rightblocksgroup)" />
+    <xar:template file="content_2col_cr" type="theme" />
+<xar:else />
+    <xar:template file="content_1col" type="theme" />
+</xar:if>
+</xar:template>

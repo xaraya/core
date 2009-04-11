@@ -1,0 +1,5 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<!-- begin header block -->
+#$content#
+<!-- end header block -->
+</xar:template>

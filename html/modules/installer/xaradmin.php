@@ -581,7 +581,7 @@ function installer_admin_bootstrap()
     }
 
     // Set the state and activate the following themes
-    $themelist = array('print','rss','Xaraya_Classic');
+    $themelist = array('print','rss','mallow');
     foreach ($themelist as $theme) {
         // Set state to inactive
         $regid = xarThemeGetIDFromName($theme);

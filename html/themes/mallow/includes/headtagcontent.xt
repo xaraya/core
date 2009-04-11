@@ -1,0 +1,11 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<title>#$tpl:pageTitle#</title>
+<xar:blockgroup name="header" id="header" />
+<base href="&xar-baseurl;index.php" />
+
+<xar:style />
+<xar:style scope="common" />
+<xar:style scope="theme" file="ie_win" condition="lt IE 7" />
+<xar:additional-styles />
+<xar:base-render-javascript position="head" />
+</xar:template>

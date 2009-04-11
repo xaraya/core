@@ -157,14 +157,14 @@
         </ul>
         <p>
         <strong>An example:</strong>if you create an articles' featureditems block instance and you
-        are using the Xaraya_Classic default theme</p>
+        are using the Mallow default theme</p>
         <ul>
             <li>By default, this block instance will use the article module's inner template called
             
             <code>featureditems.xd</code>located in modules/articles/xartemplates/blocks</li>
             <li>If you have allocated the featured article block instance to a block group called
             'right' it will use, by default, the outer template located at 
-            <code>themes/Xaraya_Classic/blocks/right.xt</code>. If the 'right' outer template did
+            <code>themes/mallow/blocks/right.xt</code>. If the 'right' outer template did
             not exist it will use one called 'default.xt' in that same directory.</li>
             <li>If you wish to override both outer and inner templates for the featureditems block
             then the syntax example of: 
@@ -172,9 +172,9 @@
             and called 
             <code>
             <strong>left</strong>.xt</code>in the 
-            <code>themes/Xaraya_Classic/blocks</code>directory. The article module's featureditems
+            <code>themes/mallow/blocks</code>directory. The article module's featureditems
             block instance will be displayed using the 
-            <code>themes/Xaraya_Classic/modules/articles/blocks/featureditems- 
+            <code>themes/mallow/modules/articles/blocks/featureditems- 
             <strong>weeklyfeature</strong>.xt</code>template. You could just specify outer or inner
             template if required by adding 
             <code>left;</code>or 
