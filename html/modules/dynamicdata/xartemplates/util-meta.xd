@@ -66,7 +66,7 @@
                         <th>Type</th>
                         <th>Default</th>
                         <th>Source</th>
-                        <th>Validation</th>
+                        <th>Configuration</th>
                     </tr>
                     <xar:foreach in="$tables" key="$curtable" value="$fields">
                         <xar:if condition="!empty($table) and $curtable eq $table">
@@ -79,7 +79,7 @@
                                     </td>
                                     <td>#$field['defaultvalue']#</td>
                                     <td>#$field['source']#</td>
-                                    <td>#$field['validation']#</td>
+                                    <td>#$field['configuration']#</td>
                                 </tr>
                             </xar:foreach>
                         </xar:if>

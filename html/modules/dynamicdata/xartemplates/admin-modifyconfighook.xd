@@ -31,7 +31,7 @@
                     </td>
                     <td>#$field.source#</td>
                     <td>
-                        <xar:var name="field.validation" prep="true" />
+                        <xar:var name="field.configuration" prep="true" />
                     </td>
                 </tr>
             </xar:foreach>

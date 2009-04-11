@@ -99,7 +99,7 @@
                     <th>Property Type</th>
                     <th>Default</th>
                     <th>Source</th>
-                    <th>Validation</th>
+                    <th>Configuration</th>
                 </tr>
                 <xar:foreach in="$fields" key="$name" value="$property">
                     <tr>
@@ -111,7 +111,7 @@
                         </td>
                         <td>#$property:defaultvalue#</td>
                         <td>#$property:source#</td>
-                        <td>#$property:validation#</td>
+                        <td>#$property:configuration#</td>
                     </tr>
                 </xar:foreach>
             </table>

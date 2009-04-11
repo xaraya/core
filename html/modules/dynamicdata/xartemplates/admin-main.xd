@@ -27,7 +27,7 @@
         (auto-generated), some utility module from Xaraya or a user function you'll specify.</p>
         <p>The starting point for all this is of course the admin interface.</p>
         <h3>Admin interface of the Dynamic Data module</h3>
-        <p>Explain property types, data sources, validation, input &amp; output representation.</p>
+        <p>Explain property types, data sources, configuration, input &amp; output representation.</p>
         <h3>Using the &lt;xar:data-* ...&gt; tags in your templates</h3>
         <h4>User view and admin list (for several items)</h4>
         <p>If you want to get the dynamic properties and values for your items, and include them

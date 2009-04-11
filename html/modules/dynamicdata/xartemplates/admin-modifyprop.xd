@@ -84,7 +84,7 @@
                         <th>Property Type</th>
                         <th>Default</th>
                         <th>Data Source</th>
-                        <th>Validation</th>
+                        <th>Configuration</th>
                     </tr>
                     <xar:foreach in="$static" value="$field">
                         <tr>
@@ -96,7 +96,7 @@
                             </td>
                             <td>#$field['defaultvalue']#</td>
                             <td>#$field['source']#</td>
-                            <td>#$field['validation']#</td>
+                            <td>#$field['configuration']#</td>
                         </tr>
                     </xar:foreach>
                 </table>
