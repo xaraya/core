@@ -5,7 +5,7 @@
     <div id="install">
         <xar:template file="status" />
         <h1>Choose a Configuration</h1>
-        <form action="#xarModURL(installer,'admin','confirm_configuration')#" method="post">
+        <form action="#xarModURL('installer','admin','confirm_configuration')#" method="post">
             <div>
                 <input type="hidden" name="install_language" id="install_language" value="#$language#" />
                 <h3>Available Configurations</h3>

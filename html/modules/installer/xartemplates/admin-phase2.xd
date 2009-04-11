@@ -175,20 +175,21 @@
         <form action="install.php" method="post">
             <p>
                 <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-                value="#$language#" />
                 <input type="hidden" name="install_phase" id="install_phase" value="3" />
                 <label class="block" for="agree">
-                <input type="radio" name="agree" id="agree" value="agree" />I have read and agree
+                <input type="radio" name="agree" id="agree" value="agree" />
+                I have read and agree
                 to abide by the Terms and Conditions as stated above</label>
                 <br />
                 <label class="block" for="disagree">
-                <input type="radio" name="agree" id="disagree" value="disagree"
-                checked="checked" />I have read and do NOT agree to abide by the Terms and
+                <input type="radio" name="agree" id="disagree" value="disagree" checked="checked" />
+                I have read and do NOT agree to abide by the Terms and
                 Conditions as stated above</label>
             </p>
             <xar:if condition="$retry eq 1">
-                <p style="color: red;">We ask you agree to the Terms and Conditions above in order
-                to continue installing.</p>
+                <p style="color: red;">
+                    We ask you agree to the Terms and Conditions above in order to continue installing.
+                </p>
             </xar:if>
             <div class="xar-align-center">
                 <input type="submit" value="Continue" />
