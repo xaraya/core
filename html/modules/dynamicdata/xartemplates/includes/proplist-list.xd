@@ -18,10 +18,6 @@
     </xar:foreach>
     <!-- Include the part for creating a new property -->
     <xar:template file="newproperty" module="dynamicdata" />
-    <xar:if condition="$module_id eq 182">
-        <p>Note: for completely dynamic Objects like this one, you need to define one property that
-        is of type "Item ID"</p>
-    </xar:if>
     <xar:if condition="!empty($hooks)">
         <xar:foreach in="$hooks" key="$module" value="$output">#$output#</xar:foreach>
     </xar:if>

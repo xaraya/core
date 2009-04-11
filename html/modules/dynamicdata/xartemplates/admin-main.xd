@@ -34,7 +34,7 @@
         somewhere in your own view/list.</p>
         <p>Available tags: (replace 'users', '&#36;idlist' and '&#36;id' with your own)</p>
             <pre>
-<code>&lt;!-- this retrieves the dynamic properties defined for the 'users' module,
+&lt;!-- this retrieves the dynamic properties defined for the 'users' module,
          and their value for all items listed in &#36;idlist. You'll need to build
      that id list in your module function and pass it along to the template --&gt;
     &lt;xar:data-getitems name="&#36;properties" value="&#36;values" module="users"
@@ -51,7 +51,7 @@
 &lt;!-- this shows the value of dynamic property '&#36;name' for item &#36;id,
  formatted for input --&gt;
 &lt;xar:data-input property="&#36;properties[&#36;name]" value="&#36;values[&#36;id][&#36;name]"
-/&gt;</code>
+/&gt;
         
 </pre>
         <p>Sample use:</p>
@@ -124,13 +124,13 @@
         <p>If you want to get the dynamic properties for this item, and include them manually in
         your own display.</p>
         <pre>
-<code>&lt;!-- this retrieves the dynamic properties defined for the 'users' module
+&lt;!-- this retrieves the dynamic properties defined for the 'users' module
          and item &#36;id. Note that we don't use value="..." here, since we only
      have one item --&gt;
     &lt;xar:data-getitem name="&#36;properties" module="users" itemid="&#36;id" /&gt;
-    </code></pre>
+    </pre>
         <p>(where you want to add the dynamic labels and values for this item)</p>
-        <pre><code>
+        <pre>
     &lt;xar:foreach in="&#36;properties" key="&#36;field"&gt;
         &lt;tr class="xar-norm xar-valign-top"&gt;
             &lt;td&gt;
@@ -142,12 +142,11 @@
         &lt;/tr&gt;
     &lt;/xar:foreach&gt;
 
-Idem for input forms, where you'd use &lt;xar:data-input ... /&gt; to show input fields</code>
+Idem for input forms, where you'd use &lt;xar:data-input ... /&gt; to show input fields
     </pre>
         <p>If you simply want to display the dynamic properties for this item (= easier in most
         cases).</p>
         <pre>
-<code>
 &lt;!-- this will use the default layout of user-objectdisplay.xd --&gt;
     &lt;xar:data-display module="example" itemid="&#36;exid" /&gt;
 
@@ -159,15 +158,15 @@ Idem for input forms, where you'd use &lt;xar:data-input ... /&gt; to show input
 
     &lt;xar:data-display object="&#36;object" /&gt;
 
-Idem for &lt;xar:data-form ... /&gt;</code>
+Idem for &lt;xar:data-form ... /&gt;
     </pre>
         <h4>User output and admin input (for one field of an item)</h4>
-        <pre><code>
+        <pre>
     &lt;xar:data-input name="hello" type="3" value="&#36;myval" /&gt;
 
     &lt;xar:data-input property="&#36;property" /&gt;
 
-Idem for &lt;xar:data-output ... /&gt;</code>
+Idem for &lt;xar:data-output ... /&gt;
     </pre>
         <h3>Included hooks</h3>
             <ul>
