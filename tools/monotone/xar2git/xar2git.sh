@@ -28,11 +28,20 @@ echo "1. Pulling $MTNHOST for new revisions..."
 $MTN pull $MTNHOST "com.xaraya.core.unstable"
 $MTN pull $MTNHOST "com.xaraya.core.jamaica"
 
-# 2. Update the git repository, saving import and export marks
+# 2. Update the git repository, reading in import and saving export marks
 MTNARGS="--authors-file=$AUTHORS  --export-marks=$MTNMARKS "
 if [ -f $MTNMARKS ]; then
   # Marks file is there, must have been run before, read them in
   MTNARGS="$MTNARGS --import-marks=$MTNMARKS"
 fi
-echo "2. Exporting these new revisions into git..."
-$MTN git_export $MTNARGS | git fast-import --export-marks=$GITMARKS
+echo "2. Exporting these new revisions..."
+$MTN git_export $MTNARGS > mtn.exported.tmp
+
+GITARGS="--export-marks=$GITMARKS"
+if [ -f $GITMARKS ]; then
+  # Marks file is there, must have been run before, read them in
+  GITARGS="$GITARGS --import-marks=$GITMARKS"
+fi
+echo "3. Reading the new revision into git repository..."
+git fast-import $GITARGS < mtn.exported.tmp
+
