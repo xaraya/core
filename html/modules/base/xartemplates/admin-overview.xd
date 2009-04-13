@@ -36,6 +36,11 @@
         <h3>Included Blocks</h3>
         <ul>
             <li>
+                <strong>Adminmenu Block</strong>- defines an administration menu for the site. 
+            </li>
+        </ul>
+        <ul>
+            <li>
                 <p>
                 <strong>Admin menu - Adminpanels</strong>: An Adminpanel block can be configured in
                 a number of ways. After creating the Adminpanel Menu block instance you have the

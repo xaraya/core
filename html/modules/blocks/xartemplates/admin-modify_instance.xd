@@ -86,8 +86,7 @@
                 --> 
                 <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
                     <div class="xar-form-input-wrapper">
-                        <label for="block_content"
-                        title="#xarML('Enter the content that is shown in the block instance.')#"
+                        <label for="block_content" title="#xarML('Enter the content that is shown in the block instance.')#"
                         class="xar-form-label">Content:</label>
                         <textarea name="block_content" id="block_content"
                         class="xar-form-textareaxlarge">#$instance['content']#</textarea>
@@ -138,21 +137,16 @@
                                 <xar:if condition="$group_method eq 'min'">
                                     <xar:if condition="!empty($loop:item['selected'])">
                                         <input type="checkbox" name="block_remove_groups[#$loop:item.id#]" id="block_remove_groups_#$loop:item.id#" value="on" />
-                                        name="block_remove_groups[#$loop:item.id#]"
-                                        id="block_remove_groups_#$loop:item.id#" value="on" />
                                         <label for="block_remove_groups_#$loop:item.id#">
-                                        Remove</label>
-                                        <input type="hidden" name="block_groups[#$loop:item.id#]"
-                                        id="block_groups_#$loop:item.id#" value="on" />
+                                            Remove
+                                        </label>
+                                        <input type="hidden" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" />
                                     </xar:if>
                                 <xar:else />
                                     <xar:if condition="!empty($loop:item['selected'])">
                                         <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" checked="checked" />
-                                        id="block_groups_#$loop:item.id#" value="on"
-                                        checked="checked" />
                                     <xar:else />
                                         <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" />
-                                        id="block_groups_#$loop:item.id#" value="on" />
                                     </xar:if>
                                     <label for="block_groups_#$loop:item.id#">Selected</label>
                                 </xar:if>

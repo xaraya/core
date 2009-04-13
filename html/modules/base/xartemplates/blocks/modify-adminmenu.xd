@@ -4,7 +4,6 @@
     <div class="xar-form-input-wrapper-after">
         <xar:if condition="$showlogout eq 1">
             <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1" checked="checked" />
-            checked="checked" />
         <xar:else />
             <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1" />
         </xar:if>
