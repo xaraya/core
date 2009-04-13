@@ -15,11 +15,13 @@
  */
 function roles_admin_main()
 {
-    // Security Check
     if (!xarSecurityCheck('EditRole')) return;
 
+    if (xarModVars::get('modules', 'disableoverview') == 0){
+        return xarTplModule('roles','admin','overview');
+    } else {
         xarResponseRedirect(xarModURL('roles', 'admin', 'showusers'));
-    // success
-    return true;
+        return true;
+    }
 }
 ?>

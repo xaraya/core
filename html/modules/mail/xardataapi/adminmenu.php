@@ -3,7 +3,7 @@
     function mail_dataapi_adminmenu() 
     {
         return array(
-                array('includes' => array('main','overview'), 'target' => 'overview', 'label' => xarML('Mail Overview')),
+                array('includes' => array('main','overview'), 'target' => 'main', 'label' => xarML('Mail Overview')),
                 array('mask' => 'AdminMail', 'includes' => 'compose', 'target' => 'compose', 'title' => xarML('Test your email configuration'), 'label' => xarML('Test Configuration')),
                 array('mask' => 'AdminMail', 'includes' => 'view', 'target' => 'view', 'title' => xarML('Manage queues for mail item handling'), 'label' => xarML('Queue Management')),
                 array('mask' => 'AdminMail', 'includes' => 'template', 'target' => 'template', 'title' => xarML('Change the mail template for notifications'), 'label' => xarML('Notification Template')),

@@ -6,8 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <img src="#xarTplGetImage('admin.gif','themes')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
-        <h2>Overview</h2>
+        <img src="#xarTplGetImage('themes.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <h3>What is it?</h3>
         <p>The Themes Module controls the the display of your website by managing the themes

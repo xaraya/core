@@ -6,7 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <img src="#xarTplGetImage('admin.gif', 'base')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
+        <img src="#xarTplGetImage('dynamicdata.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <p>Many modules are basically dealing with the equivalent of real-life objects, like news
         articles, projects, surveys, race tracks or whatever.</p>

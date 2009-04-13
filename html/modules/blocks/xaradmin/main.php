@@ -16,14 +16,14 @@
  */
 function blocks_admin_main()
 {
-
-// Security Check
     if(!xarSecurityCheck('EditBlock')) return;
 
-    xarResponseRedirect(xarModURL('blocks', 'admin', 'view_instances'));
-
-    // success
-    return true;
+    if (xarModVars::get('modules', 'disableoverview') == 0){
+        return xarTplModule('blocks','admin','overview');
+    } else {
+        xarResponseRedirect(xarModURL('blocks', 'admin', 'view_instances'));
+        return true;
+    }
 }
 
 ?>

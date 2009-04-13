@@ -8,7 +8,7 @@
     message templates</xar:comment>
     <div class="xar-mod-body">
         <div class="xar-bordermedium">
-            <img src="#xarTplGetImage('usererror.gif', 'base')#" alt="#xarML('User ErrorIcon')#" class="xar-module-icon" />
+            <img src="#xarTplGetImage('user-error.png', 'base')#" alt="#xarML('User ErrorIcon')#" class="xar-module-icon" />
             <!--<h2>#$type#</h2>-->
             <h3>A login error has occurred</h3>
             <p>#$short#</p>

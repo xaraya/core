@@ -90,6 +90,7 @@ function themes_init()
     xarModVars::set('themes', 'adminpagemenu', 0);
 
     xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
+    xarRegisterMask('EditThemes','All','themes','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminTheme','All','themes','All','All','ACCESS_ADMIN');
 
     // Initialisation successful

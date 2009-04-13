@@ -2,16 +2,16 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="relateddocurl">'http://www.xaraya.com/index.php/keywords/blocks/'</xar:set>
-    <xar:set name="relateddocurltext">Related documentation on Blocks</xar:set>
+    <xar:var name="relateddocurltext">Related documentation on Blocks</xar:var>
     <xar:set name="moduledocurl">'http://www.xaraya.com/index.php/release/13.html'</xar:set>
-    <xar:set name="moduledocurltext">Blocks Module - Xaraya Extension 13</xar:set>
+    <xar:var name="moduledocurltext">Blocks Module - Xaraya Extension 13</xar:var>
     <xar:style scope="common" />
     <div class="xar-mod-head">
         <span class="xar-mod-title">Blocks Administration</span>
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <img src="#xarTplGetImage('admin.gif','blocks')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
+        <img src="#xarTplGetImage('blocks.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <h3>What is it?</h3>
         <p>The Blocks Module controls the configuration, display position and grouping of 'blocks'
