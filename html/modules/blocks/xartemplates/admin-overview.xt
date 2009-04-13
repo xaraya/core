@@ -11,7 +11,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <img src="#xarTplGetImage('admin.gif','blocks')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
+        <img src="#xarTplGetImage('blocks.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <h3>What is it?</h3>
         <p>The Blocks Module controls the configuration, display position and grouping of 'blocks'
@@ -157,14 +157,14 @@
         </ul>
         <p>
         <strong>An example:</strong>if you create an articles' featureditems block instance and you
-        are using the Mallow default theme</p>
+        are using the default theme</p>
         <ul>
             <li>By default, this block instance will use the article module's inner template called
             
             <code>featureditems.xd</code>located in modules/articles/xartemplates/blocks</li>
             <li>If you have allocated the featured article block instance to a block group called
             'right' it will use, by default, the outer template located at 
-            <code>themes/mallow/blocks/right.xt</code>. If the 'right' outer template did
+            <code>themes/default/blocks/right.xt</code>. If the 'right' outer template did
             not exist it will use one called 'default.xt' in that same directory.</li>
             <li>If you wish to override both outer and inner templates for the featureditems block
             then the syntax example of: 
@@ -172,9 +172,9 @@
             and called 
             <code>
             <strong>left</strong>.xt</code>in the 
-            <code>themes/mallow/blocks</code>directory. The article module's featureditems
+            <code>themes/default/blocks</code>directory. The article module's featureditems
             block instance will be displayed using the 
-            <code>themes/mallow/modules/articles/blocks/featureditems- 
+            <code>themes/default/modules/articles/blocks/featureditems- 
             <strong>weeklyfeature</strong>.xt</code>template. You could just specify outer or inner
             template if required by adding 
             <code>left;</code>or 

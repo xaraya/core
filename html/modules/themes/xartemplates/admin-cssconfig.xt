@@ -68,7 +68,7 @@
             <h4>Note: About stylesheet tags</h4>
             <p>With the manager come the custom template tags. These should be used in modules and
             theme templates instead of (old) xarTplAddStyleLink and $tpl:additionalStyles. See
-            examples in the mallow theme and in this module templates. The complete list of
+            examples in the Default theme and in this module templates. The complete list of
             the tags is also available in "Template Tags" panel, although modifying the tags from
             that interface would probably not be advisable.</p>
             <xar:elseif condition="$component eq 'core'" />

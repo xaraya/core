@@ -25,7 +25,7 @@ class ImageListProperty extends FilePickerProperty
         parent::__construct($descriptor);
         if (empty($this->validation_file_extensions)) $this->validation_file_extensions = 'gif,jpg,jpeg,png,bmp';
 
-        // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/mallow/images
+        // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/default/images
         if (!empty($this->initialization_basedirectory) && preg_match('/\{theme\}/',$this->initialization_basedirectory)) {
             $curtheme = xarTplGetThemeDir();
             $this->initialization_basedirectory = preg_replace('/\{theme\}/',$curtheme,$this->initialization_basedirectory);
