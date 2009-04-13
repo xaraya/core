@@ -9,7 +9,7 @@
                 <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#"
                 size="#$size#" tabindex="#$tabindex#" />
                 <br />Note : {theme} will be replaced by the current theme directory - e.g.
-                {theme}/images -&gt; themes/Xaraya_Classic/images</td>
+                {theme}/images -&gt; themes/default/images</td>
             </tr>
             <tr>
                 <td>File extensions</td>

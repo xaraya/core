@@ -74,7 +74,7 @@ class FileUploadProperty extends DataProperty
 
         if (empty($this->validation_file_extensions)) $this->validation_file_extensions = '';
 
-        // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/Xaraya_Classic/images
+        // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/default/images
         if (!empty($this->initialization_basedirectory) && preg_match('/\{theme\}/',$this->initialization_basedirectory)) {
             $curtheme = xarTplGetThemeDir();
             $this->initialization_basedirectory = preg_replace('/\{theme\}/',$curtheme,$this->initialization_basedirectory);
