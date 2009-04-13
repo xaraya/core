@@ -45,7 +45,9 @@
         <br />
         <h3>Included Blocks</h3>
         <ul>
-            <li>Login Block allows users to login</li>
+            <li>
+                <strong>Login Block</strong>- lets users log in to the site, or logged in users to log out
+            </li>
         </ul>
         <br />
         <h3>Included Hooks</h3>

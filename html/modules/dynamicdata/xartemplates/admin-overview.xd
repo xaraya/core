@@ -166,6 +166,12 @@ Idem for &lt;xar:data-form ... /&gt;
 
 Idem for &lt;xar:data-output ... /&gt;
     </pre>
+        <h3>Included Blocks</h3>
+        <ul>
+            <li>
+                <strong>Form Block</strong>- displays an input form for a dataobject. This can be used for "quick entry" of data by users, such as a registration.or a feedback submission.
+            </li>
+        </ul>
         <h3>Included hooks</h3>
             <ul>
                 <li>

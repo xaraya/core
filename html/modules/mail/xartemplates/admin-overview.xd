@@ -61,7 +61,7 @@
             replacement</li>
         </ul>
         <h3>Included Blocks</h3>
-        <p>The Mail Module has no blocks included at this time.</p>
+        <p>The Mail module has no included blocks.</p>
         <h3>Included Hooks</h3>
         <p>The mail hook allows you to send an email to the site admin when something (content,
         users, etc) is created, changed or deleted. This can be configured by going to 

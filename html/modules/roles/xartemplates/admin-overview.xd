@@ -116,9 +116,14 @@
         <h3>Included Blocks</h3>
         <ul>
             <li>
-            <strong>Online Block</strong>shows the number visiting your site right now</li>
+                <strong>Language Block</strong>- allows user to select the language the site displays in to him/her
+            </li>
             <li>
-            <strong>Language Block</strong>- allow users to select their default language</li>
+                <strong>Online Block</strong>shows information on the number visiting your site right now
+            </li>
+            <li>
+                <strong>User Block</strong>- displays information on the current user's profile
+            </li>
         </ul>
         <h3>Included Hooks</h3>
         <p>The roles module does not provide any hooks. It does allows other modules to provide a
