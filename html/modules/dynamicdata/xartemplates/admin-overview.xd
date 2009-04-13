@@ -18,9 +18,7 @@
         structure, which makes it difficult to e.g. add another property to your objects without
         rewriting half the module code (and templates).</p>
         <h3>What is it?</h3>
-        <p>The Dynamic Data module allows you to dynamically add properties to your module objects,
-        and to integrate them with the rest of the site without much effort - regardless of whether
-        you're the module developer, a third-party solution designer or the website admin. The DynamicData module is a core module within Xaraya and cannot be removed. </p>
+        <p>The Dynamic Data module lets you create and manage custom objects ("dataobjects") on a Xaraya site. Dataobjects hold certain types of information and interact with Xaraya. You can use them to replace or extend objects Xaraya already has available (such as users, privileges, blocks etc.), or to create completely new objects for your site, representing e.g. customers, surveys, publications etc., according to your specific needs. The DynamicData module is a core module within Xaraya and cannot be removed. </p>
         <p>And no-one says you're limited to existing modules - you could just as easily create
         whole new objects by defining their properties and telling the Dynamic Data module where
         their data should be coming from : dedicated module tables, dynamic data fields
