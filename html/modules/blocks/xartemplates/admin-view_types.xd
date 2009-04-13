@@ -9,7 +9,7 @@
         <xar:if condition="!empty($tid)">
             <h2>View Block Type</h2>
             <h4>
-                <a href="#xarModURL('blocks'.'admin'.'new_type')#">New Block Type</a>
+                <a href="#xarModURL('blocks','admin','new_type')#">New Block Type</a>
             </h4>
             <fieldset>
                 <legend>Selected Block Type Properties</legend>
@@ -74,7 +74,7 @@
         <xar:else />
             <h2>View Block Types</h2>
             <h4>
-                <a href="#xarModURL('blocks'.'admin'.'new_type')#">New Block Type</a>
+                <a href="#xarModURL('blocks','admin','new_type')#">New Block Type</a>
             </h4>
             <table class="xar-fullwidth">
                 <tr>

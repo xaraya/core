@@ -29,7 +29,7 @@
                 <td>
                     <xar:if condition="!empty($loop:item.groups)">
                     <xar:loop name="$loop:item.groups" id="groups">
-                        <a href="#xarModURL('blocks'.'admin'.'modify_group')#&amp;id=#$loop:groups:item.id#">
+                        <a href="#xarModURL('blocks','admin','modify_group')#&amp;id=#$loop:groups:item.id#">
                         #$loop:groups:item.name#</a>
                     </xar:loop>
                     <xar:else />[ none ]</xar:if>
@@ -48,7 +48,7 @@
                 </td>
                 <td class="xar-align-center">#$state_desc[$loop:item['state']]#</td>
                 <td class="xar-align-center">
-                <a href="#xarModURL('blocks'.'admin'.'modify_instance')#&amp;bid=#$loop:item.bid#">
+                <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                 Edit</a>| 
                 <a href="#$loop:item['deleteurl']#"
                 onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">

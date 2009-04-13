@@ -10,7 +10,7 @@
         <xar:template type="module" file="admin-menu" />
         <h2>View Block Groups</h2>
         <h4>
-            <a href="#xarModURL('blocks'.'admin'.'new_group')#">New Block Group</a>
+            <a href="#xarModURL('blocks','admin','new_group')#">New Block Group</a>
         </h4>
         <table class="xar-fullwidth">
             <tr>
