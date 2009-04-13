@@ -35,7 +35,7 @@ class ImageProperty extends TextBoxProperty
         parent::__construct($descriptor);
         $this->template  = 'image';
 
-        // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/mallow/images
+        // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/Xaraya_Classic/images
         if (!empty($this->initialization_basedirectory) && preg_match('/\{theme\}/',$this->initialization_basedirectory)) {
             $curtheme = xarTplGetThemeDir();
             $this->initialization_basedirectory = preg_replace('/\{theme\}/',$curtheme,$this->initialization_basedirectory);
