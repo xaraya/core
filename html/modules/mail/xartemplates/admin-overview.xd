@@ -9,13 +9,9 @@
         <img src="#xarTplGetImage('mail.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <h3>What is it?</h3>
-        <p>The mail module controls the ways that your site sends mail to users or groups of users.
-        This is a utility module that takes information from other modules installed on your site
-        and formats the mail for them. At its heart, this module is using the 
-        <a href="http://phpmailer.sourceforge.net"
-        onclick="window.open(this.getAttribute('href'));return false;">phpmailer</a>classes for
-        processing. These classes extend Xaraya to allow you to use SMTP, SendMail or the normal
-        PHP Mail functions.</p>
+        <p>The Mail module controls the ways that your site sends email to users or groups of users.
+        This is a utility module that takes information from other modules installed on your site,
+        and formats and sends email for them. The Mail module is a core module within Xaraya and cannot be removed.</p>
         <h3>How to use it?</h3>
         <p>A number of choices are available in the menu:</p>
         <ul>

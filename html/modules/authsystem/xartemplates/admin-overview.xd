@@ -9,13 +9,13 @@
         <img src="#xarTplGetImage('authsystem.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <h3>What is it?</h3>
-        <p>The Authsystem is the default Authentication module and part of the Xaraya Core package.
-        It handles user authentication on your site by checking for a valid user log in.</p>
+        <p>The Authsystem module is Xaraya's default authentication module.
+        It handles user authentication on your site by checking for a valid user log in. The Authsystem module is a core module within Xaraya and cannot be removed.</p>
         <h3>How to use it?</h3>
         <p>The Authsystem module is installed as part of the Core installation package and comes
-        ready activated for your use. Once Xaraya is installed you should go to 
-        <strong>Admin Panel - Authentication - Modify Config</strong>to confirm setup of the
-        Authentication options.</p>
+        already activated for your use. Once Xaraya is installed you should go to 
+        <strong>Admin Panel - Authentication - Modify Config</strong>to confirm the setup of your site's
+        authentication options.</p>
         <br />
         <ul>
             <li>

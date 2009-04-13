@@ -9,9 +9,7 @@
         <img src="#xarTplGetImage('themes.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <h3>What is it?</h3>
-        <p>The Themes Module controls the the display of your website by managing the themes
-        available for use in your Xaraya installation. It also allows you to set various theme
-        related variables and meta data, caching options, and provides theme developer options.</p>
+        <p>The Themes module manages the themes available on your Xaraya installation, which in turn define the site's display and look-and-feel. It also provides performance and development options for administrators and theme developers. The Themes module is a core module within Xaraya and cannot be removed. </p>
         <h3>How to use it?</h3>
         <p>From the menu, you have three choices:</p>
         <ol>

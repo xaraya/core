@@ -9,11 +9,8 @@
         <img src="#xarTplGetImage('base.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <h3>What is it?</h3>
-        <p>The base module provides overall site configuration and informational options in the
-        Administration menu and provides a means to add custom static pages. It also serves as a
-        collection of classes, custom block layout tags, include templates, and javascript
-        functions that can be used throughout your site, as well as being the location of the
-        system wide default css classes.</p>
+        <p>The Base module provides overall site configuration options and displays global information about the site to the administrator(s) through
+        its administration menu. It also provides a simple means of adding custom static pages to your site. The Base module is a core module within Xaraya and cannot be removed.</p>
         <h3>How to use it?</h3>
         <p>The Administration menu allows you to have control over various global aspects on your
         site and includes:</p>

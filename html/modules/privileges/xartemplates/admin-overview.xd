@@ -9,9 +9,9 @@
         <img src="#xarTplGetImage('privileges.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
         <h3>What is it?</h3>
-        <p>The Privileges module lets you manage access rights on your site. Privileges give roles
-        access to certain resources of your choosing. They are the basic components of the security
-        system.</p>
+        <p>The Privileges module manages privileges on a Xaraya site. Privileges give users and groups
+        different types of access (viewing, changing, deleting etc.) to resources and content on the site. They are the basic components of Xaraya's security
+        system. The Privileges module is a core module within Xaraya and cannot be removed. </p>
         <p>Here are some of the things you can do with privileges:</p>
         <ul>
             <li>Xaraya's privileges are extremely flexible. You can define privileges at the level
