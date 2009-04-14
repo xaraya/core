@@ -27,6 +27,7 @@ class BLException extends xarExceptions
     protected $message = 'Unknown blocklayout exception (TODO)';
 }
 
+sys::import('xaraya.variables.config');
 
 /**
  * Initializes the BlockLayout Template Engine
@@ -98,7 +99,7 @@ function xarTplGetThemeName()
  */
 function xarTplSetThemeName($themeName)
 {
-    $currentBase = xarConfigVars::get(null, 'Site.BL.ThemesDirectory');
+    $currentBase = xarConfigVars::get(null, 'Site.BL.ThemesDirectory','themes');
     
     assert('$themeName != "" && $themeName{0} != "/"');
     if (!file_exists($currentBase.'/'.$themeName)) {
@@ -121,7 +122,7 @@ function xarTplSetThemeName($themeName)
  */
 function xarTplSetThemeDir($themeDir)
 {
-    $currentBase = xarConfigVars::get(null, 'Site.BL.ThemesDirectory');
+    $currentBase = xarConfigVars::get(null, 'Site.BL.ThemesDirectory','themes');
     if (!file_exists($currentBase .'/'.$themeDir)) {
         throw new DirectoryNotFoundException(array("$currentBase/$themeDir, xarTplSetThemeDir: Nonexistent theme directory #(1)"));
     }
@@ -141,7 +142,7 @@ function xarTplSetThemeDir($themeDir)
  */
 function xarTpl__SetThemeNameAndDir($name)
 {
-    $currentBase = xarConfigVars::get(null, 'Site.BL.ThemesDirectory');
+    $currentBase = xarConfigVars::get(null, 'Site.BL.ThemesDirectory','themes');
     // dir and name are still required to be the same
     $GLOBALS['xarTpl_themeName'] = $name;
     $GLOBALS['xarTpl_themeDir']  = $currentBase . '/' . $name;
