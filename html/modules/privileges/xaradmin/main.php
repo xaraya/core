@@ -21,7 +21,7 @@ function privileges_admin_main()
     if (xarModVars::get('modules', 'disableoverview') == 0){
         return xarTplModule('privileges','admin','overview');
     } else {
-        xarResponseRedirect(xarModURL('privileges', 'admin', 'viewprivileges'));
+        xarResponse::Redirect(xarModURL('privileges', 'admin', 'viewprivileges'));
         return true;
     }
 }
