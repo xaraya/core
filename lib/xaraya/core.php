@@ -364,8 +364,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     $systemArgs = array(
         'enableTemplatesCaching' => xarConfigVars::get(null, 'Site.BL.CacheTemplates'),
-        'themesBaseDirectory'    => xarModVars::get('themes', 'themesdirectory'),
-        'defaultThemeDir'        => xarModVars::get('themes','default'),
+        'defaultThemeDir'        => xarModVars::get('themes', 'default','default'),
         'generateXMLURLs'        => true
     );
 
