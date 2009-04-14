@@ -48,7 +48,7 @@ function authsystem_user_login()
     if (!xarVarFetch('pass','str:1:100',$pass)) {
         throw new EmptyParameterException('password');
     }
-    $redirect=xarServerGetBaseURL();
+    $redirect=xarServer::getBaseURL();
     if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('redirecturl','str:1:254',$redirecturl,$redirect,XARVAR_NOT_REQUIRED)) return;
 
@@ -166,7 +166,7 @@ function authsystem_user_login()
 
         case ROLES_STATE_NOTVALIDATED:
             //User still must validate
-            xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation'));
+            xarResponse::Redirect(xarModURL('roles', 'user', 'getvalidation'));
 
             break;
 
@@ -246,7 +246,7 @@ function authsystem_user_login()
             if (xarModVars::get('roles', 'loginredirect')) { //only redirect to home page if this option is set
                 $settings = unserialize(xarModVars::get('roles', 'duvsettings'));
                 if (in_array('userhome', $settings)) {
-                    $truecurrenturl = xarServerGetCurrentURL(array(), false);
+                    $truecurrenturl = xarServer::getCurrentURL(array(), false);
                     $url = xarModAPIFunc('roles','user','getuserhome',array('itemid' => $user['id']));
                     if (empty($url)) {
                         $urldata['redirecturl'] = xarModURL(xarModVars::get('modules','defaultmodule'),xarModVars::get('modules','defaulttypename'),xarModVars::get('modules','defaultfuncname'));
@@ -258,7 +258,7 @@ function authsystem_user_login()
                     $data = array();
                     if (!is_array($urldata) || !$urldata) {
                         $externalurl = false;
-                        $redirecturl = xarServerGetBaseURL();
+                        $redirecturl = xarServer::getBaseURL();
                     } else{
                         $externalurl = $urldata['externalurl'];
                         $redirecturl = $urldata['redirecturl'];
@@ -271,9 +271,9 @@ function authsystem_user_login()
                    $data['title'] = xarML('Home Page');
                    return xarTplModule('roles','user','homedisplay', $data);
                  */
-                 xarResponseRedirect($redirecturl);
+                 xarResponse::Redirect($redirecturl);
             }else {
-                xarResponseRedirect($redirecturl);
+                xarResponse::Redirect($redirecturl);
             }
 
             return true;
