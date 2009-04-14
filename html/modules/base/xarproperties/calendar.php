@@ -105,7 +105,7 @@ class CalendarProperty extends DataProperty
                             'filename' => 'calendar.js'));
 
         // $timeval = xarLocaleFormatDate($dateformat, $value);
-        $data['baseuri']    = xarServerGetBaseURI();
+        $data['baseuri']    = xarServer::getBaseURI();
         $data['dateformat'] = $dateformat;
         $data['jsID']       = str_replace(array('[', ']'), '_', $id);
         // $data['timeval']    = $timeval;

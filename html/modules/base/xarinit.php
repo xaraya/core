@@ -154,7 +154,6 @@ function base_init()
      * Set site configuration variables
      ******************************************************************/
     xarConfigVars::set(null, 'Site.BL.CacheTemplates',true);
-    xarConfigVars::set(null, 'Site.BL.CompilerVersion','XAR_BL_USE_XSLT');
     xarConfigVars::set(null, 'Site.Core.FixHTMLEntities',true);
     xarConfigVars::set(null, 'Site.Core.TimeZone', 'Etc/UTC');
     xarConfigVars::set(null, 'Site.Core.EnableShortURLsSupport', false);
@@ -166,7 +165,7 @@ function base_init()
      outside of installer. Consider setting config vars at later point rather than here.
     */
     $REQ_URI = parse_url(xarServerGetVar('HTTP_REFERER'));
-    // IIS seems to set HTTPS = off for some reason (cfr. xarServerGetProtocol)
+    // IIS seems to set HTTPS = off for some reason (cfr. xarServer::getProtocol)
     if (!empty($HTTPS) && $HTTPS != 'off' && $REQ_URI['scheme'] == 'https') {
         xarConfigVars::set(null, 'Site.Core.EnableSecureServer', true);
     } else {

@@ -59,17 +59,17 @@ function base_userapi_getfile($args)
         if (substr($url,0,7) != 'http://' && substr($url,0,6) != 'ftp://') {
             $invalid = true;
         }
-        $server = xarServerGetHost();
+        $server = xarServer::getHost();
         if (preg_match("!://($server|localhost|127\.0\.0\.1)(:\d+|)/!",$url)) {
             $islocal = true;
         }
     } elseif (substr($url,0,1) == '/') {
-        $server = xarServerGetHost();
-        $protocol = xarServerGetProtocol();
+        $server = xarServer::getHost();
+        $protocol = xarServer::getProtocol();
         $url = $protocol . '://' . $server . $url;
         $islocal = true;
     } else {
-        $baseurl = xarServerGetBaseURL();
+        $baseurl = xarServer::getBaseURL();
         $url = $baseurl . $url;
         $islocal = true;
     }
@@ -145,7 +145,7 @@ function base_userapi_getfile($args)
             if (!$superrors)
                 throw new BadParameterException(array($errno,$errstr,$url),'Socket error #(1) : #(2) while retrieving URL #(3)');
         }
-        $baseurl = xarServerGetBaseURL();
+        $baseurl = xarServer::getBaseURL();
         $request = "GET $url HTTP/1.0\r\nHost: $proxyhost\r\nUser-Agent: Xaraya (http://www.xaraya.com/)\r\nReferer: $baseurl\r\nConnection: close\r\n\r\n";
         $size = fwrite($fp, $request);
         if (!$size) {
@@ -244,5 +244,4 @@ function base_userapi_getfile($args)
 
     return $content;
 }
-
 ?>
