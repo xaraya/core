@@ -166,22 +166,21 @@ Idem for &lt;xar:data-form ... /&gt;
 
 Idem for &lt;xar:data-output ... /&gt;
     </pre>
+
         <h3>Available Blocks</h3>
         <ul>
             <li>
-                <strong>Form Block</strong>- displays an input form for a dataobject. This can be used for "quick entry" of data by users, such as a registration.or a feedback submission.
+                <strong>Form Block</strong>:&#160;displays an input form for a dataobject. This can be used for "quick entry" of data by users, such as a registration.or a feedback submission.
             </li>
         </ul>
-        <h3>Included hooks</h3>
-            <ul>
-                <li>
-            <strong>Admin Hook</strong>: new/create/modify/update/delete plus
-            modifyconf/updateconfig. 
-            <br />You can hook Dynamic Data to other modules by going to Modules -&gt; Configure
-            Hooks and clicking on Dynamic Data. Activate the hook by checking the checkbox next to
-            the module where you would like to use Dynamic Data.</li>
-            <li>user : display ( deprecated )</li>
-            </ul>
+
+        <h3>Available Hooks</h3>
+        <ul>
+            <li>
+                <strong>Search Hook</strong>:&#160;allows user to search the content of the Dynamicdata module. This hook is known to be used by the Search module (a non-core module).
+            </li>
+        </ul>
+
         <h3>Using API calls</h3>
             <ul>
             <li>Property Types</li>

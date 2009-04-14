@@ -107,10 +107,13 @@
         Management function to define realm names for your site. See 
         <a href="http://xaraya.com/index.php/documentation/607">Xaraya Realms</a>for more
         information.</p>
+
         <h3>Available Blocks</h3>
         <p>The Privileges module has no blocks.</p>
-        <h3>Included Hooks</h3>
-        <p>There are no included hooks.</p>
+
+        <h3>Available Hooks</h3>
+        <p>The Privileges module has no hooks</p>
+
         <h3>Further Information</h3>
         <p>Further information on the Privileges module can be found at:</p>
         <ul>

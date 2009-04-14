@@ -33,31 +33,27 @@
         <strong>Timezone setting:</strong>Xaraya stores date/times in UTC. This timezone is used to
         calculate the time shown to users of your site. Note that you can have users choose their
         own timezone when you allow them to.</p>
+
         <h3>Available Blocks</h3>
         <ul>
             <li>
-                <strong>Adminmenu Block</strong>- defines and displays an administration menu for the site. The nlock has options for displaying a logout menu item, a help link, and sorting by module name or category.
+                <strong>Adminmenu Block</strong>:&#160;defines and displays an administration menu for the site. The nlock has options for displaying a logout menu item, a help link, and sorting by module name or category.
             </li>
             <li>
-                <strong>Content Block</strong>- runs code and displays content in different forms: html, text, php. included file
+                <strong>Content Block</strong>:&#160;runs code and displays content in different forms: html, text, php. included file
             </li>
             <li>
-                <strong>Menu Block</strong>- defines and displays a user menu for the site. The block has a number of options for displaying and sorting entries of different sets of modules
+                <strong>Menu Block</strong>:&#160;defines and displays a user menu for the site. The block has a number of options for displaying and sorting entries of different sets of modules
             </li>
             <li>
-                <strong>Waiting Content Block</strong>- display content waiting for administrator approval for any modules that supply a hook for waiting content  To use it, create a block and then hook the module
+                <strong>Waiting Content Block</strong>:&#160;display content waiting for administrator approval for any modules that supply a hook for waiting content  To use it, create a block and then hook the module
                 supplying the waiting content to the Base module.
             </li>
         </ul>
-        <p>
-            <strong>Expire a Block</strong>
-        </p>
-        <p>Currently, the HTML and Text blocks can both expire content if you wish. If you have a
-        message that you would like to only have visible for a certain period of time, you can
-        expire the block. This functionality can be used in conjunction with any placement or block
-        group that you assign the block.</p>
-        <h3>Included Hooks</h3>
-        <p>The Base Module has no hooks included at this time.</p>
+
+        <h3>Available Hooks</h3>
+        <p>The Base module has no hooks</p>
+
         <h3>Dynamic Data Properties</h3>
         <p>The Base Module provides a number of Dynamic Data properties that you can use to extend
         existing Xaraya functionality by hooking Dynamic Data to your modules, or for developers,

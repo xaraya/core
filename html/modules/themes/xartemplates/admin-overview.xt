@@ -138,25 +138,21 @@
                 </ul>
             </li>
         </ol>
-    <h3>Available Blocks</h3>
+
+        <h3>Available Blocks</h3>
         <ul>
             <li>
-                <strong>Meta Block</strong>- installed by default, this block lets you enter a meta description for your site, activate GEOUrl and set usability pages. You can also set keywords for the site manually or activate dynamic keywords supplied by the Articles, Keywords or other modules that support keywords.
+                <strong>Meta Block</strong>:&#160;installed by default, this block lets you enter a meta description for your site, activate GEOUrl and set usability pages. You can also set keywords for the site manually or activate dynamic keywords supplied by the Articles, Keywords or other modules that support keywords.
             </li>
         </ul>
-        <h3>Included Hooks</h3>
-        <p>The Themes module supplies a user menu hook. A user menu hook displays additional
-        functionality in the user's account page. When activated, this Themes user menu hook allows
-        the users of your Xaraya site to change their preferred theme for browsing your site. They
-        can choose a theme from any of those installed and active on your site.</p>
-        <p>To activate the hook:</p>
+
+        <h3>Available Hooks</h3>
         <ul>
-            <li>go to 
-            <code>Modules -&gt; Configure Hooks</code></li>
-            <li>click on Themes</li>
-            <li>Scroll down to the Roles module and check the checkbox to activate the Themes hook
-            for the roles module</li>
+            <li>
+                <strong>Usermenu Hook</strong>:&#160;if hooked to the Roles module, shows a tab in the user's account page with a dropdown that allows the user to define the theme for the site to display in.
+            </li>
         </ul>
+
         <h3>Further Information</h3>
         <p>Further information on the Themes module can be found at</p>
         <ul>
