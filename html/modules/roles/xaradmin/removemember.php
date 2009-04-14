@@ -47,6 +47,6 @@ function roles_admin_removemember()
     xarModCallHooks('item', 'unlink', $parentid, $pargs);
 
     // redirect to the next page
-    xarResponseRedirect(xarModURL('roles', 'admin', 'modify',  array('id' => $childid)));
+    xarResponse::Redirect(xarModURL('roles', 'admin', 'modify',  array('id' => $childid)));
 }
 ?>

@@ -23,7 +23,7 @@ function roles_adminapi_getmessagestrings($args)
 
     //FIXME: the default is always roles
     if(!isset($module)){
-        list($module) = xarRequestGetInfo();
+        list($module) = xarRequest::getInfo();
     }
 
     $messaginghome = sys::varpath() . "/messaging/" . $module;

@@ -8,35 +8,19 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <h2>
-            <xar:ml>
-                <xar:mlstring>
-                    Add #(1)
-                </xar:mlstring>
-                <xar:mlvar>
-                    #$object:label#
-                </xar:mlvar>
-            </xar:ml>
-        </h2>
+        <h2>Add #$object:label#</h2>
         <p>
             All fields are required to create a new role on the system.
         </p>
         <form id="newrole" action="&xar-modurl-dynamicdata-admin-create;" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>
-                    <xar:ml>
-                        <xar:mlstring>
-                            #(1) Details
-                        </xar:mlstring>
-                        <xar:mlvar>
-                            #$object:label#
-                        </xar:mlvar>
-                    </xar:ml>
+                  #$object:label# Details
                 </legend>
                 <div class="xar-form-input-wrapper">
                     <label for="ptype" title="#xarML('Type of Role')#" class="xar-form-label">
                     Type:</label>
-                    <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() ."';this.form.submit();"</xar:set>
+                    <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() ."';this.form.submit();"</xar:set>
                     <xar:data-input type="itemtype" name="itemtype" value="$itemtype" validation="roles" onchange="$onchange" />
                 </div>
                 <xar:data-form object="$object" />

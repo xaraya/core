@@ -242,7 +242,7 @@ function roles_user_usermenu($args)
                 }
             }
 
-            xarResponseRedirect(xarModURL('roles', 'user', 'account'));
+            xarResponse::Redirect(xarModURL('roles', 'user', 'account'));
     }
     return $data;
 }

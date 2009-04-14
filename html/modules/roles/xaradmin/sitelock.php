@@ -91,7 +91,7 @@ function roles_admin_sitelock($args)
                               'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
             xarModVars::set('roles', 'lockdata', serialize($lockdata));
-            xarResponseRedirect(xarModURL('roles', 'admin', 'sitelock'));
+            xarResponse::Redirect(xarModURL('roles', 'admin', 'sitelock'));
         }
 
         elseif ($cmd == 'toggle') {
