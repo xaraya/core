@@ -10,19 +10,13 @@
         <h3>For Module: #$displayname#</h3>
         <xar:if condition="count($hooklist) eq 0 or !$available">
         <p>
-          <xar:ml>
-            <xar:mlstring>No hooks available for #(1)</xar:mlstring>
-            <xar:mlvar>#$displayname#             </xar:mlvar>
-          </xar:ml>
+            No hooks available for #$displayname#
         </p>
       <xar:else />
         <!-- The form for editting the module settings and hooks -->
         <form action="&xar-modurl-modules-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
           <p>
-            <xar:ml>
-              <xar:mlstring>Available hooks for #(1): </xar:mlstring>
-              <xar:mlvar>#$displayname#</xar:mlvar>
-            </xar:ml>
+              Available hooks for #$displayname#:
           </p>
           <xar:foreach in="$hooklist" value="$hookmod">
             <fieldset>

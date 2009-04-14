@@ -23,7 +23,7 @@ function modules_admin_main()
     if (xarModVars::get('modules', 'disableoverview') == 0){
         return xarTplModule('modules','admin','overview');
     } else {
-        xarResponseRedirect(xarModURL('modules', 'admin', 'list'));
+        xarResponse::Redirect(xarModURL('modules', 'admin', 'list'));
         return true;
     }
 }
