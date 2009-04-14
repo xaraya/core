@@ -28,7 +28,7 @@
                 <xar:set name="tabclass">'active'</xar:set>
             </xar:if>
             <dd class="#$tabclass#">
-                <a href="#xarServerGetCurrentUrl($params)#">General</a>
+                <a href="#xarServer::getCurrentURL($params)#">General</a>
             </dd>
             <xar:set name="tabclass">''</xar:set>
             <xar:if condition="$tab eq 'incoming'">
@@ -36,7 +36,7 @@
             </xar:if>
             <xar:set name="y">$params['tab']='incoming'</xar:set>
             <dd class="#$tabclass#">
-                <a href="#xarServerGetCurrentUrl($params)#">Incoming</a>
+                <a href="#xarServer::getCurrentURL($params)#">Incoming</a>
             </dd>
             <xar:set name="tabclass">''</xar:set>
             <xar:set name="y">$params['tab']='outgoing'</xar:set>
@@ -45,7 +45,7 @@
             </xar:if>
             <xar:set name="y">$params['tab']='outgoing'</xar:set>
             <dd class="#$tabclass#">
-                <a href="#xarServerGetCurrentUrl($params)#">Outgoing</a>
+                <a href="#xarServer::getCurrentURL($params)#">Outgoing</a>
             </dd>
         </dl>
         <form method="post" action="&xar-modurl-mail-admin-updateconfig;" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded" >
@@ -346,10 +346,7 @@
                     </div>
                     <xar:if condition="!empty($unsent)">
                         <p>
-                            <xar:ml>
-                                <xar:mlstring>Mails Scheduled: #(1)</xar:mlstring>
-                                <xar:mlvar>#$unsent#</xar:mlvar>
-                            </xar:ml>
+                          Mails Scheduled: #$unsent#
                         </p>
                         <p>
                             Please note that if you stop the scheduler or if it isn't triggered, previously scheduled mails will not be sent.
