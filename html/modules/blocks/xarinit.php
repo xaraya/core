@@ -223,7 +223,10 @@ function blocks_init()
 }
 
 /**
- * upgrade the blocks module from an old version
+ * Upgrade this module from an old version
+ *
+ * @param oldVersion
+ * @returns bool
  */
 function blocks_upgrade($oldVersion)
 {
@@ -237,7 +240,9 @@ function blocks_upgrade($oldVersion)
 }
 
 /**
- * delete the blocks module
+ * Delete this module
+ *
+ * @return bool
  */
 function blocks_delete()
 {

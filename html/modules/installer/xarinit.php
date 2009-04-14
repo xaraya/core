@@ -22,10 +22,10 @@ function installer_init()
 }
 
 /**
- * Upgrade Xaraya
+ * Upgrade this module from an old version
  *
- * @param string $oldVersion the version we're upgrading from.
- * @return bool
+ * @param oldVersion
+ * @returns bool
  */
 function installer_upgrade($oldVersion)
 {
@@ -39,7 +39,7 @@ function installer_upgrade($oldVersion)
 }
 
 /**
- * Delete Installer module
+ * Delete this module
  *
  * @return bool
  */

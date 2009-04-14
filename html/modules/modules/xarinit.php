@@ -229,11 +229,10 @@ function modules_activate()
 }
 
 /**
- * Upgrade the modules module from an old version
+ * Upgrade this module from an old version
  *
- * @param oldversion $ the old version to upgrade from
+ * @param oldVersion
  * @returns bool
- * @todo include setting moduservars in next upgrade (2.1)
  */
 function modules_upgrade($oldVersion)
 {
@@ -247,9 +246,9 @@ function modules_upgrade($oldVersion)
 }
 
 /**
- * Delete the modules module
+ * Delete this module
  *
- * @returns bool
+ * @return bool
  */
 function modules_delete()
 {

@@ -98,10 +98,10 @@ function themes_init()
 }
 
 /**
- * Upgrade the themes theme from an old version
+ * Upgrade this module from an old version
  *
- * @param string oldversion the old version to upgrade from
- * @return bool
+ * @param oldVersion
+ * @returns bool
  */
 function themes_upgrade($oldversion)
 {
@@ -115,7 +115,7 @@ function themes_upgrade($oldversion)
 }
 
 /**
- * Delete the themes theme
+ * Delete this module
  *
  * @return bool
  */

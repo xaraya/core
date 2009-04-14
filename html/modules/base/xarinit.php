@@ -229,7 +229,7 @@ function base_init()
 }
 
 /**
- * Upgrade the base module from an old version
+ * Upgrade this module from an old version
  *
  * @param oldVersion
  * @returns bool
@@ -246,10 +246,9 @@ function base_upgrade($oldVersion)
 }
 
 /**
- * Delete the base module
+ * Delete this module
  *
- * @param none
- * @return bool false, as this module cannot be removed
+ * @return bool
  */
 function base_delete()
 {
