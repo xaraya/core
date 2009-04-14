@@ -70,10 +70,8 @@ class xarConfigVars extends xarVars implements IxarVars
      * @todo the vars which are not in the database should probably be systemvars, not configvars
      * @todo bench the preloading
      */
-    public static function get($scope, $name)
+    public static function get($scope, $name, $value=null)
     {
-        $value = null;
-
         // Preload the config vars once
         if(!self::$preloaded)
             self::preload();
@@ -126,7 +124,7 @@ class xarConfigVars extends xarVars implements IxarVars
             xarCore::setCached(self::$KEY, $result->getString(1), $value);
         }
         $result->close();
-        // @todo we really should except here.
+        // @todo we probably should except here, as a config variable should have a value always.
         return $value;
     }
 
