@@ -21,7 +21,7 @@ function blocks_admin_main()
     if (xarModVars::get('modules', 'disableoverview') == 0){
         return xarTplModule('blocks','admin','overview');
     } else {
-        xarResponseRedirect(xarModURL('blocks', 'admin', 'view_instances'));
+        xarResponse::Redirect(xarModURL('blocks', 'admin', 'view_instances'));
         return true;
     }
 }
