@@ -113,7 +113,7 @@ function dynamicdata_util_relations($args)
             }
             $relations = serialize($data['relations']);
             xarModVars::set('dynamicdata','relations',$relations);
-            xarResponseRedirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarResponse::Redirect(xarModURL('dynamicdata', 'util', 'relations',
                                           array('table' => $table)));
             return true;
         } elseif (!empty($delete)) {
@@ -127,7 +127,7 @@ function dynamicdata_util_relations($args)
             }
             $relations = serialize($data['relations']);
             xarModVars::set('dynamicdata','relations',$relations);
-            xarResponseRedirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarResponse::Redirect(xarModURL('dynamicdata', 'util', 'relations',
                                           array('table' => $table)));
             return true;
         }
