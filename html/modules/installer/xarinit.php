@@ -29,10 +29,11 @@ function installer_init()
  */
 function installer_upgrade($oldVersion)
 {
-    switch($oldVersion) {
-    case '1.0':
-        // compatability upgrade, nothing to be done
-        break;
+    // Upgrade dependent on old version number
+    switch ($oldversion) {
+        case '2.0':
+        case '2.1':
+      break;
     }
     return true;
 }

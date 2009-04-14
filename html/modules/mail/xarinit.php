@@ -65,44 +65,11 @@ function mail_activate()
  */
 function mail_upgrade($oldVersion)
 {
-    switch($oldVersion) {
-    case '0.1':
-    case '0.1.0':
-        // clean up double hook registrations
-        xarModUnregisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
-        xarModRegisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
-        $hookedmodules = xarModAPIFunc('modules', 'admin', 'gethookedmodules',
-                                       array('hookModName' => 'mail'));
-        if (isset($hookedmodules) && is_array($hookedmodules)) {
-            foreach ($hookedmodules as $modname => $value) {
-                foreach ($value as $itemtype => $val) {
-                    xarModAPIFunc('modules','admin','enablehooks',
-                                  array('hookModName' => 'mail',
-                                        'callerModName' => $modname,
-                                        'callerItemType' => $itemtype));
-                }
-            }
-        }
-
-    case '0.1.1':
-        xarModVars::set('mail', 'ShowTemplates', false);
-        xarModVars::set('mail', 'suppresssending', false);
-        xarModVars::set('mail', 'redirectsending', false);
-        xarModVars::set('mail', 'redirectaddress', '');
-
-
-        // From 0.1.1 -> 2.0.0 we added a mod var which holds the admin id for mail, the adminname is obsolete (no free email choice anymore)
-        // Try to find a reasonable admin (the designated one, for example ;-) )
-        $desigAdmin = xarModVars::get('roles','admin');
-        // In current xar this always fails as mail is installed before roles gets initialized
-        // in the off chance someone is actually ugrading, we leave it in.
-        if(!empty($desigAdmin)) {
-            xarModVars::set('mail','admin_outgoing', $desigAdmin);
-        }
-        xarModVars::delete('mail','adminname');
-        xarModVars::delete('mail','adminmail');
-    case'2.0.0':
-        // current version
+    // Upgrade dependent on old version number
+    switch ($oldversion) {
+        case '2.0':
+        case '2.1':
+      break;
     }
     return true;
 }

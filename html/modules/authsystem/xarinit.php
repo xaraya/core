@@ -55,41 +55,12 @@ function authsystem_activate()
  */
 function authsystem_upgrade($oldVersion)
 {
-    /* Upgrade dependent on old version number */
-    switch ($oldVersion) {
-        case '0.91':
-        case '0.91.0':
-
-           //Set the default authmodule if not already set
-           $isdefaultauth = xarModVars::get('roles','defaultauthmodule');
-           if (empty($isdefaultauth)) {
-               xarModVars::get('roles', 'defaultauthmodule', 'authsystem');
-           }
-
-           $dbconn =& xarDB::getConn();
-           $xartable =& xarDB::getTables();
-           $modulesTable = xarDB::getPrefix() .'_modules';
-           $modid = xarMod::getRegID('authsystem');
-           // update the modversion class and admin capable
-           $query = "UPDATE $modulesTable SET class=?, admin_capable=?
-                     WHERE regid = ?";
-           $bindvars = array('Authentication',true,$modid);
-           $result = $dbconn->Execute($query,$bindvars);
-
-           // Create the login block
-           if (!$result) return;
-            //create the blocktype
-            $bid = xarModAPIFunc('blocks','admin','register_block_type',
-                   array('modName' => 'authsystem',
-                         'blockType' => 'login'));
-           if (!$bid) return;
-
-        case '1.0.0': // current version
-
-        break;
-
+    // Upgrade dependent on old version number
+    switch ($oldversion) {
+        case '2.0':
+        case '2.1':
+      break;
     }
-    // Update successful
     return true;
 }
 

@@ -504,41 +504,11 @@ function dynamicdata_init()
 function dynamicdata_upgrade($oldVersion)
 {
     // Upgrade dependent on old version number
-    switch($oldVersion) {
-    case '1.0':
-    case '1.1':
-        // Fall through to next upgrade
-
-    case '1.1.0':
-        xarRemoveInstances('dynamicdata');
-        $instances = array(
-                           array('header' => 'external', // this keyword indicates an external "wizard"
-                                 'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
-                                 'limit'  => 0
-                                )
-                        );
-        xarDefineInstance('dynamicdata','Field',$instances);
-
-        $instances = array(
-                           array('header' => 'external', // this keyword indicates an external "wizard"
-                                 'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
-                                 'limit'  => 0
-                                )
-                        );
-        xarDefineInstance('dynamicdata','Item',$instances);
-
-        // Fall through to next upgrade
-    case '1.2.0':
-        // Add Dynamic Data Properties Definition Table
-        if( !dynamicdata_createPropDefTable() ) return;
-
-        // Fall through to next upgrade
-    case '2.0.0':
-        // Code to upgrade from version 2.0.0 goes here
-        break;
+    switch ($oldversion) {
+        case '2.0':
+        case '2.1':
+      break;
     }
-
-    // Update successful
     return true;
 }
 

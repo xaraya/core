@@ -248,11 +248,11 @@ function roles_activate()
 function roles_upgrade($oldVersion)
 {
     // Upgrade dependent on old version number
-    switch ($oldVersion) {
-        case '2.0.0':
-            break;
+    switch ($oldversion) {
+        case '2.0':
+        case '2.1':
+      break;
     }
-    // Update successful
     return true;
 }
 

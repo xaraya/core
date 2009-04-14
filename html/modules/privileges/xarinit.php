@@ -258,9 +258,11 @@ function privileges_activate()
  */
 function privileges_upgrade($oldVersion)
 {
-    switch($oldVersion) {
-    case '2.0.0':
-        break;
+    // Upgrade dependent on old version number
+    switch ($oldversion) {
+        case '2.0':
+        case '2.1':
+      break;
     }
     return true;
 }
