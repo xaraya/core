@@ -43,7 +43,7 @@
         <p>In the case of authentication modules other than the default, you should set your
         Default Authentication module for Roles in the Roles module Modify Config.</p>
         <br />
-        <h3>Included Blocks</h3>
+        <h3>Available Blocks</h3>
         <ul>
             <li>
                 <strong>Login Block</strong>- lets users log in to the site, or logged in users to log out

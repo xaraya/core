@@ -113,7 +113,7 @@
         <h3>Extending Roles</h3>
         <p>You can extend roles by hooking in the functionality of other modules to roles or adding
         fields directly to the user object via the admin interface in dynamicdata</p>
-        <h3>Included Blocks</h3>
+        <h3>Available Blocks</h3>
         <ul>
             <li>
                 <strong>Language Block</strong>- allows user to select the language the site displays in to him/her

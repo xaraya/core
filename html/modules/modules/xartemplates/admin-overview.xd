@@ -102,8 +102,8 @@
         <p>The last option allows you to activate the hook and display Comments in say News or
         Reviews, but not Documents for example.</p>
         <br />
-        <h3>Included Blocks</h3>
-        <p>The Modules module has no included blocks.</p>
+        <h3>Available Blocks</h3>
+        <p>The Modules module has no blocks.</p>
         <h3>Included Hooks</h3>
         <p>The Modules Module has no hooks included at this time.</p>
         <h3>Included Dynamic Data Properties</h3>

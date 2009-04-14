@@ -138,7 +138,7 @@
                 </ul>
             </li>
         </ol>
-    <h3>Included Blocks</h3>
+    <h3>Available Blocks</h3>
         <ul>
             <li>
                 <strong>Meta Block</strong>- installed by default, this block lets you enter a meta description for your site, activate GEOUrl and set usability pages. You can also set keywords for the site manually or activate dynamic keywords supplied by the Articles, Keywords or other modules that support keywords.
