@@ -43,7 +43,7 @@ function xarMain()
     xarCoreInit(XARCORE_SYSTEM_ALL);
 
     // Get module parameters
-    list($modName, $modType, $funcName) = xarRequestGetInfo();
+    list($modName, $modType, $funcName) = xarRequest::getInfo();
 
     // Default Page Title
     $SiteSlogan = xarModVars::Get('themes', 'SiteSlogan');
