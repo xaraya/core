@@ -16,7 +16,7 @@
                     title="#xarML('The default directory for site themes - no trailing slash.')#"
                     class="xar-form-label">Default Theme Directory:</label>
                     <xar:set name="value">
-                        <xar:var scope="module" module="themes" name="themesdirectory" />
+                        <xar:var scope="config"  name="Site.BL.ThemesDirectory" />
                     </xar:set>
                     <input type="text" id="themedir" name="themedir" value="#$value#"
                     maxlength="100" class="xar-form-textlong" />

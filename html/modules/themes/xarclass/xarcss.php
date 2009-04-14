@@ -153,7 +153,7 @@ class xarCSS extends Object
     function geturl($dir = null)
     {
         // it's static var already in core
-        $url = xarServerGetBaseURL();
+        $url = xarServer::getBaseURL();
 
         if(isset($dir)){
             $fullurl = $url.$dir;

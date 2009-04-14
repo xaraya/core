@@ -39,7 +39,6 @@ function themes_admin_updateconfig()
     if (!xarVarFetch('usermenu', 'checkbox', $usermenu, false, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('themedir','str:1:',$defaultThemeDir,'themes',XARVAR_NOT_REQUIRED)) return;
 
-    xarModVars::set('themes', 'themesdirectory', $defaultThemeDir);
     xarModVars::set('themes', 'SiteName', $sitename);
     xarModVars::set('themes', 'SiteTitleSeparator', $separator);
     xarModVars::set('themes', 'SiteTitleOrder', $pagetitle);
@@ -53,6 +52,7 @@ function themes_admin_updateconfig()
     xarModVars::set('themes', 'usedashboard', ($dashboard) ? 1 : 0);
     xarModVars::set('themes', 'adminpagemenu', ($adminpagemenu) ? 1 : 0);
     xarModVars::set('themes', 'dashtemplate', $dashtemplate);
+    xarConfigVars::set(null,'Site.BL.ThemesDirectory', $defaultThemeDir);
     xarConfigVars::set(null, 'Site.BL.CacheTemplates',$cachetemplates);
 
     // make sure we dont miss empty variables (which were not passed thru)
@@ -111,7 +111,7 @@ function themes_admin_updateconfig()
 
     // lets update status and display updated configuration
     $redirecturl = xarModURL('themes', 'admin', 'modifyconfig');
-    xarResponseRedirect($redirecturl);
+    xarResponse::Redirect($redirecturl);
 
     return true;
 }

@@ -29,7 +29,7 @@ function themes_adminapi_initialise($args)
         throw new ThemeNotFoundException($regid,'Theme (regid: #(1) does not exist.');
     }
 
-    $xarinitfilename = xarModVars::get('themes', 'themesdirectory') . '/'. $themeInfo['directory']  . '/xartheme.php';
+    $xarinitfilename = xarConfigVars::get(null,'Site.BL.ThemesDirectory') . '/'. $themeInfo['directory']  . '/xartheme.php';
     if (!file_exists($xarinitfilename)) {
         throw new FileNotFounException($xarinitfilename);
     }
