@@ -165,8 +165,6 @@ function roles_activate()
     xarModRegisterHook('item', 'search', 'GUI','roles', 'user', 'search');
     xarModRegisterHook('item', 'usermenu', 'GUI','roles', 'user', 'usermenu');
 
-//    xarModAPIFunc('modules', 'admin', 'enablehooks', array('callerModName' => 'roles', 'hookModName' => 'roles'));
-
     // --------------------------------------------------------
     //
     // Enter some default groups and users and put them in a hierarchy

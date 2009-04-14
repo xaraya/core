@@ -29,21 +29,9 @@ function mail_init()
     xarModVars::set('mail', 'encoding', '8bit');
     xarModVars::set('mail', 'html', false);
 
-    // when a module item is created
-    if (!xarModRegisterHook('item', 'create', 'API',
-            'mail', 'admin', 'hookmailcreate')) {
-        return false;
-    }
-    // when a module item is deleted
-    if (!xarModRegisterHook('item', 'delete', 'API',
-            'mail', 'admin', 'hookmaildelete')) {
-        return false;
-    }
-    // when a module item is changed
-    if (!xarModRegisterHook('item', 'update', 'API',
-            'mail', 'admin', 'hookmailchange')) {
-        return false;
-    }
+    xarModRegisterHook('item', 'create', 'API', 'mail', 'admin', 'hookmailcreate');
+    xarModRegisterHook('item', 'delete', 'API', 'mail', 'admin', 'hookmaildelete');
+    xarModRegisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
 
     xarRegisterMask('EditMail','All','mail','All','All','ACCESS_EDIT');
     xarRegisterMask('AddMail','All','mail','All','All','ACCESS_ADD');

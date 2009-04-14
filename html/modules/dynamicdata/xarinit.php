@@ -441,40 +441,6 @@ function dynamicdata_init()
     /**
      * Register hooks
      */
-    // when a new module item is being specified
-    xarModRegisterHook('item', 'new', 'GUI', 'dynamicdata', 'admin', 'newhook');
-
-    // when a module item is created (uses 'dd_*')
-    xarModRegisterHook('item', 'create', 'API','dynamicdata', 'admin', 'createhook');
-
-    // when a module item is being modified (uses 'dd_*')
-    xarModRegisterHook('item', 'modify', 'GUI','dynamicdata', 'admin', 'modifyhook');
-
-    // when a module item is updated (uses 'dd_*')
-    xarModRegisterHook('item', 'update', 'API','dynamicdata', 'admin', 'updatehook');
-
-    // when a module item is deleted
-    xarModRegisterHook('item', 'delete', 'API', 'dynamicdata', 'admin', 'deletehook');
-
-    // when a module configuration is being modified (uses 'dd_*')
-    xarModRegisterHook('module', 'modifyconfig', 'GUI','dynamicdata', 'admin', 'modifyconfighook');
-
-    // when a module configuration is updated (uses 'dd_*')
-    xarModRegisterHook('module', 'updateconfig', 'API','dynamicdata', 'admin', 'updateconfighook');
-
-    // when a whole module is removed, e.g. via the modules admin screen
-    // (set object ID to the module name !)
-    xarModRegisterHook('module', 'remove', 'API','dynamicdata', 'admin', 'removehook');
-
-    //  Ideally, people should be able to use the dynamic fields in their
-    //  module templates as if they were normal fields, this means
-    //  adapting the get() function in the user API of the module, and/or
-    //  using some common data retrieval function (DD) in the future...
-
-    /*  display hook is now disabled by default - use the BL tags or APIs instead
-     // when a module item is being displayed
-     xarModRegisterHook('item', 'display', 'GUI','dynamicdata', 'user', 'displayhook');
-    */
 
     xarModRegisterHook('item', 'search', 'GUI', 'dynamicdata', 'user', 'search');
 
@@ -646,51 +612,6 @@ function dynamicdata_delete()
      * Unregister hooks
      */
     // Remove module hooks
-    if (!xarModUnregisterHook('item', 'new', 'GUI',
-                             'dynamicdata', 'admin', 'newhook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('item', 'create', 'API',
-                             'dynamicdata', 'admin', 'createhook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('item', 'modify', 'GUI',
-                             'dynamicdata', 'admin', 'modifyhook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('item', 'update', 'API',
-                             'dynamicdata', 'admin', 'updatehook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('item', 'delete', 'API',
-                             'dynamicdata', 'admin', 'deletehook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('module', 'modifyconfig', 'GUI',
-                             'dynamicdata', 'admin', 'modifyconfighook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('module', 'updateconfig', 'API',
-                             'dynamicdata', 'admin', 'updateconfighook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('module', 'remove', 'API',
-                             'dynamicdata', 'admin', 'removehook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-
-//  Ideally, people should be able to use the dynamic fields in their
-//  module templates as if they were 'normal' fields -> this means
-//  adapting the get() function in the user API of the module, and/or
-//  using some common data retrieval function (DD) in the future...
-
-/*  display hook is now disabled by default - use the BL tags or APIs instead
-    if (!xarModUnregisterHook('item', 'display', 'GUI',
-                             'dynamicdata', 'user', 'displayhook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-*/
-
     if (!xarModUnregisterHook('item', 'search', 'GUI',
                              'dynamicdata', 'user', 'search')) {
         xarSession::setVar('errormsg', xarML('Could not unregister hook'));
