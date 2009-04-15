@@ -42,17 +42,6 @@ function themes_admin_updatetpltag()
         }
     }
    */
-    // action update = delete and re-add
-    // action insert = add
-    if ($action == 'update') {
-        if(!xarTplUnregisterTag($tagname)) {
-            throw new TagRegistrationException($tagname,'Could not unregister tag (#(1)).');
-        }
-    }
-    
-    if(!xarTplRegisterTag($module, $tagname, $aAttributes, $handler)) {
-        throw new TagRegistrationException($tagname);
-    }
 
     xarResponse::Redirect(xarModUrl('themes', 'admin', 'listtpltags'));
     

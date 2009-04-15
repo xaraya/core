@@ -299,10 +299,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * We deal with users through the sessions subsystem
      *
      */
-    $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID');
-    // fall back to default id 2 during installation (cfr. bootstrap function)
-    // @todo this kind of thing should a.) not be happening and b.) not be done here
-    $anonid = !empty($anonid) ? $anonid : 2;
+    // @todo Assuming a fixed 2 here needs to be reviewed, core is a too low level system to assume this.
+    $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID',2);
     define('_XAR_ID_UNREGISTERED', $anonid);
 
     if ($whatToLoad & XARCORE_SYSTEM_SESSION)

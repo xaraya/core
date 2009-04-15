@@ -62,7 +62,7 @@ class LanguageBlock extends BasicBlock
         $args['locales'] = $locales;
         $args['blockid'] = $data['bid'];
 
-        if (xarServerGetVar('REQUEST_METHOD') == 'GET') {
+        if (xarServer::getVar('REQUEST_METHOD') == 'GET') {
             // URL of this page
             $args['return_url'] = xarServer::getCurrentURL();
         } else {

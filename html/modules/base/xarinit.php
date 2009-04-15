@@ -154,17 +154,18 @@ function base_init()
      * Set site configuration variables
      ******************************************************************/
     xarConfigVars::set(null, 'Site.BL.CacheTemplates',true);
+    xarConfigVars::set(null, 'Site.BL.ThemesDirectory','themes');
     xarConfigVars::set(null, 'Site.Core.FixHTMLEntities',true);
     xarConfigVars::set(null, 'Site.Core.TimeZone', 'Etc/UTC');
     xarConfigVars::set(null, 'Site.Core.EnableShortURLsSupport', false);
     // when installing via https, we assume that we want to support that :)
-    $HTTPS = xarServerGetVar('HTTPS');
+    $HTTPS = xarServer::getVar('HTTPS');
     /* jojodee - monitor this fix.
      Localized fix for installer where HTTPS shows incorrectly as being on in
      some environments. Fix is ok as long as we dont access directly
      outside of installer. Consider setting config vars at later point rather than here.
     */
-    $REQ_URI = parse_url(xarServerGetVar('HTTP_REFERER'));
+    $REQ_URI = parse_url(xarServer::getVar('HTTP_REFERER'));
     // IIS seems to set HTTPS = off for some reason (cfr. xarServer::getProtocol)
     if (!empty($HTTPS) && $HTTPS != 'off' && $REQ_URI['scheme'] == 'https') {
         xarConfigVars::set(null, 'Site.Core.EnableSecureServer', true);
@@ -187,11 +188,10 @@ function base_init()
 
     // The installer should now set the default locale based on the
     // chosen language, let's make sure that is true
-    if(!xarConfigVars::get(null, 'Site.MLS.DefaultLocale')) {
-        xarConfigVars::set(null, 'Site.MLS.DefaultLocale', 'en_US.utf-8');
-        $allowedLocales = array('en_US.utf-8');
-        xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $allowedLocales);
-    }
+    xarConfigVars::get(null, 'Site.MLS.DefaultLocale','en_US.utf-8');
+    $allowedLocales = array('en_US.utf-8');
+    xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $allowedLocales);
+
     // Minimal information for timezone offset handling (see also Site.Core.TimeZone)
     xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', 0);
 

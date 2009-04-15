@@ -70,7 +70,7 @@ function themes_skinblock_display($blockinfo)
     $tplData['blockid'] = $blockinfo['bid'];
     $tplData['authid'] = xarSecGenAuthKey();
 
-    if (xarServerGetVar('REQUEST_METHOD') == 'GET') {
+    if (xarServer::getVar('REQUEST_METHOD') == 'GET') {
         // URL of this page
         $tplData['return_url'] = xarServer::getCurrentURL();
     } else {

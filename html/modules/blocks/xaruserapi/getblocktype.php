@@ -30,8 +30,8 @@ function blocks_userapi_getblocktype($args)
     // @todo: Is this an error? If so, throw exception, if not return array()
     if (count($types) <> 1) 
     {
-        //debug($types);
         return;
+        throw new Exception("Blocktypes should be unique, I'm getting multiple results, strangeness!");
     }
 
     return(array_pop($types));

@@ -829,13 +829,13 @@ class PHPMailer extends Object
 
         // Get  client IP addr
         //
-        $forwarded = xarServerGetVar('HTTP_X_FORWARDED_FOR');
+        $forwarded = xarServer::getVar('HTTP_X_FORWARDED_FOR');
         if (!empty($forwarded)) {
             $ipAddress = preg_replace('/,.*/', '', $forwarded);
         } else {
-            $ipAddress = xarServerGetVar('REMOTE_ADDR');
+            $ipAddress = xarServer::getVar('REMOTE_ADDR');
         }
-        $result .= $this->HeaderLine("Received", "from [$ipAddress] by " . xarServerGetVar('HTTP_HOST') . "; " . date('r'));
+        $result .= $this->HeaderLine("Received", "from [$ipAddress] by " . xarServer::getVar('HTTP_HOST') . "; " . date('r'));
 
         $result .= sprintf("Message-ID: <%s@%s>%s", $uniq_id, $this->ServerHostname(), $this->LE);
         $result .= $this->HeaderLine("X-Priority", $this->Priority);

@@ -364,7 +364,7 @@
                         </xar:set>
                         <input type="text" id="referercheck" name="referercheck" value="#$value#"
                         maxlength="40" class="xar-form-textmedium" />
-                        <span>&#160;Default: #xarServerGetVar('HTTP_HOST')# for security level
+                        <span>&#160;Default: #xarServer::getVar('HTTP_HOST')# for security level
                         'High'</span>
                     </div>
                 </fieldset>

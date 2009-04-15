@@ -27,7 +27,7 @@
         </xar:if>
         <xar:if condition="isset($stack) and $stack ne ''">
             <h3>Stack:</h3>
-            <p>#$stack#</p>
+            <p style="text-align: left;">#$stack#</p>
         </xar:if>
     </div>
 </xar:template>

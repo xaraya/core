@@ -73,7 +73,7 @@ function authsystem_loginblock_display($blockinfo)
         } else {
             return;
         }
-    } elseif (xarServerGetVar('REQUEST_METHOD') == 'GET') {
+    } elseif (xarServer::getVar('REQUEST_METHOD') == 'GET') {
         // URL of this page
         $args['return_url'] = xarServer::getCurrentURL();
     } else {

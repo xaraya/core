@@ -16,9 +16,12 @@
         <img src="#xarTplGetImage('exception.png', 'base')#" alt="#xarML('Exception Icon')#" class="xar-module-icon" />
         <h2>#$type#</h2>
         <h3>#$title#</h3>
-        <pre>
+        <pre style="text-align: left;">
 #$short#
 </pre>
+        <p>
+          Raised in: #$file#, line #$line#
+        </p>
         <xar:if condition="isset($long) and $long ne ''">
             <h3>Explanation:</h3>
             <p>#$long#</p>
@@ -29,7 +32,7 @@
         </xar:if>
         <xar:if condition="isset($stack) and $stack ne ''">
             <h3>Stack:</h3>
-            <pre>
+            <pre style="text-align: left;">
 #$stack#
 </pre>
         </xar:if>
