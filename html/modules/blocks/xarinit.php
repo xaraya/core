@@ -304,7 +304,7 @@ function blocks_init()
  * @param oldVersion
  * @returns bool
  */
-function blocks_upgrade($oldVersion)
+function blocks_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {

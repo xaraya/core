@@ -258,7 +258,7 @@ function privileges_activate()
  * @param oldVersion
  * @returns bool
  */
-function privileges_upgrade($oldVersion)
+function privileges_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {

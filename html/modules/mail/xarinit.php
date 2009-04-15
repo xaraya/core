@@ -62,7 +62,7 @@ function mail_activate()
  * @todo allow mail gateway functionality
  */
 
-function mail_upgrade($oldVersion)
+function mail_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {

@@ -77,7 +77,7 @@ function authsystem_activate()
  * @param oldVersion
  * @returns bool
  */
-function authsystem_upgrade($oldVersion)
+function authsystem_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {

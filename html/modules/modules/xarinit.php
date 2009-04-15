@@ -233,7 +233,7 @@ function modules_activate()
  * @param oldVersion
  * @returns bool
  */
-function modules_upgrade($oldVersion)
+function modules_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {

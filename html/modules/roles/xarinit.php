@@ -244,7 +244,7 @@ function roles_activate()
  * @param oldVersion
  * @returns bool
  */
-function roles_upgrade($oldVersion)
+function roles_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {

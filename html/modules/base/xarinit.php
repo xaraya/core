@@ -233,7 +233,7 @@ function base_init()
  * @param oldVersion
  * @returns bool
  */
-function base_upgrade($oldVersion)
+function base_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
