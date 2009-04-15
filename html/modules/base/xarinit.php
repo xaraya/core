@@ -228,26 +228,26 @@ function base_init()
 }
 
 /**
- * Upgrade the base module from an old version
+ * Upgrade this module from an old version
  *
  * @param oldVersion
  * @returns bool
  */
 function base_upgrade($oldVersion)
 {
-    switch($oldVersion) {
-    case '0.1':
-        // compatability upgrade, nothing to be done
-        break;
+    // Upgrade dependent on old version number
+    switch ($oldversion) {
+        case '2.0':
+        case '2.1':
+      break;
     }
     return true;
 }
 
 /**
- * Delete the base module
+ * Delete this module
  *
- * @param none
- * @return bool false, as this module cannot be removed
+ * @return bool
  */
 function base_delete()
 {

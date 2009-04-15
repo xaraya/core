@@ -166,22 +166,52 @@ Idem for &lt;xar:data-form ... /&gt;
 
 Idem for &lt;xar:data-output ... /&gt;
     </pre>
+
         <h3>Available Blocks</h3>
         <ul>
             <li>
-                <strong>Form Block</strong>- displays an input form for a dataobject. This can be used for "quick entry" of data by users, such as a registration.or a feedback submission.
+                <strong>Form Block</strong>:&#160;displays an input form for a dataobject. This can be used for "quick entry" of data by users, such as a registration.or a feedback submission.
             </li>
         </ul>
-        <h3>Included hooks</h3>
-            <ul>
-                <li>
-            <strong>Admin Hook</strong>: new/create/modify/update/delete plus
-            modifyconf/updateconfig. 
-            <br />You can hook Dynamic Data to other modules by going to Modules -&gt; Configure
-            Hooks and clicking on Dynamic Data. Activate the hook by checking the checkbox next to
-            the module where you would like to use Dynamic Data.</li>
-            <li>user : display ( deprecated )</li>
-            </ul>
+
+        <h3>Available Hooks</h3>
+        <ul>
+            <li>
+                <strong>Search Hook</strong>:&#160;allows user to search the content of the Dynamicdata module. This hook is known to be used by the Search module (a non-core module).
+            </li>
+        </ul>
+
+        <h3>Available Dataproperties</h3>
+        <ul>
+            <li>
+                <strong>Configuration</strong>:&#160;used for input and display of a dataproperty's configuration.
+            </li>
+            <li>
+                <strong>Datasource</strong>:&#160;displays a list of datasources of a dataobject as a dropdown.
+            </li>
+            <li>
+                <strong>Fieldstatus</strong>:&#160;displays the input and display status of a dataproperty as a set of two dropdowns.
+            </li>
+            <li>
+                <strong>Fieldtype</strong>:&#160;displays the list of available dataproperty types as a dropdown.
+            </li>
+            <li>
+                <strong>Itemid</strong>:&#160;used for input and display of autoincremented dataobject IDs.
+            </li>
+            <li>
+                <strong>Itemtype</strong>:&#160;a Combobox property used for input and display of dataobject itemtypes.
+            </li>
+            <li>
+                <strong>Object</strong>:&#160;an ObjectRef property used to display the items of the Objects dataobject (i.e. the available dataobjects).
+            </li>
+            <li>
+                <strong>Object</strong>:&#160;a Select property used to display the items of a dataobject.
+            </li>
+            <li>
+                <strong>Subform</strong>:&#160;a property used to model subitems of a dataobject.
+            </li>
+        </ul>
+
         <h3>Using API calls</h3>
             <ul>
             <li>Property Types</li>

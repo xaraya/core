@@ -12,20 +12,17 @@
                 value="$redirecturl" />
                 <div class="xar-form-input-wrapper">
                     <label for="username" class="xar-form-label">Username</label>
-            <xar:data-input type="textbox" name="uname" id="username" maxlength="255" size="20" tabindex="1" />
-                    size="20" tabindex="1" />
+                    <xar:data-input type="textbox" name="uname" id="username" maxlength="255" size="20" tabindex="1" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="password" class="xar-form-label">Password</label>
-                    <xar:data-input type="password" name="pass" id="password" maxlength="64"
-                    size="20" tabindex="2" />
+                    <xar:data-input type="password" name="pass" id="password" maxlength="64" size="20" tabindex="2" />
                 </div>
                 <p class="xar-form-input-wrapper-after">
                     <a href="&xar-modurl-roles-user-lostpassword;">Request a new password</a>
                 </p>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:data-input type="checkbox" name="rememberme" id="remembermeform" value="1"
-                    tabindex="3" />
+                    <xar:data-input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3" />
                     <label for="remembermeform">Remember me</label>
                 </div>
             </fieldset>

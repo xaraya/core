@@ -178,13 +178,16 @@
             <code>left;</code>or 
             <code>;weeklyfeature</code>to specify outer and inner respectively.</li>
             </ul>
-        <br />
+
         <h3>Available Blocks</h3>
         <p>The Blocks Module has no blocks</p>
-        <br />
-        <h3>Included Hooks</h3>
-        <p>The Blocks Module has no hooks included at this time.</p>
-        <br />
+
+        <h3>Available Hooks</h3>
+        <p>The Blocks module has no hooks</p>
+
+        <h3>Available Dataproperties</h3>
+        <p>The Blocks module has no dataproperties</p>
+
         <h3>Further Information</h3>
         <p>Further information on the Blocks module can be found at</p>
         <ul>

@@ -101,14 +101,20 @@
         </ul>
         <p>The last option allows you to activate the hook and display Comments in say News or
         Reviews, but not Documents for example.</p>
-        <br />
+
         <h3>Available Blocks</h3>
         <p>The Modules module has no blocks.</p>
-        <h3>Included Hooks</h3>
-        <p>The Modules Module has no hooks included at this time.</p>
-        <h3>Included Dynamic Data Properties</h3>
-        <p>For developers, the Dynamic Module property is included and provides a drop down
-        selection list of available Modules.</p>
+
+        <h3>Available Hooks</h3>
+        <p>The Modules module has no hooks</p>
+
+        <h3>Available Dataproperties</h3>
+        <ul>
+            <li>
+                <strong>Module</strong>:&#160;displays a list of modules of the site as a dropdown.
+            </li>
+        </ul>
+        
         <h3>Further Information</h3>
         <p>Further information on the Modules module can be found at</p>
         <ul>

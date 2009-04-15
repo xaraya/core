@@ -60,13 +60,26 @@
             <strong>Filtering</strong>: allows you to specify strings for search and
             replacement</li>
         </ul>
+
         <h3>Available Blocks</h3>
         <p>The Mail module has no blocks.</p>
-        <h3>Included Hooks</h3>
-        <p>The mail hook allows you to send an email to the site admin when something (content,
-        users, etc) is created, changed or deleted. This can be configured by going to 
-        <code>Modules -&gt; Configure Hooks</code>and clicking on Mail module. Check the modules
-        where you want the hook activated for mail notification.</p>
+
+        <h3>Available Hooks</h3>
+        <ul>
+            <li>
+                <strong>Create Hook</strong>:&#160;lets other modules send an email when an item is created.
+            </li>
+            <li>
+                <strong>Delete Hook</strong>:&#160;lets other modules send an email when an item is deleted.
+            </li>
+            <li>
+                <strong>Update Hook</strong>:&#160;lets other modules send an email when an item is updated.
+            </li>
+        </ul>
+
+        <h3>Available Dataproperties</h3>
+        <p>The Mail module has no dataproperties</p>
+
         <h3>Further Information</h3>
         <p>Further information on the Mail module can be found at</p>
         <ul>

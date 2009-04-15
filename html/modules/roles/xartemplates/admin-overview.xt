@@ -113,27 +113,64 @@
         <h3>Extending Roles</h3>
         <p>You can extend roles by hooking in the functionality of other modules to roles or adding
         fields directly to the user object via the admin interface in dynamicdata</p>
+
         <h3>Available Blocks</h3>
         <ul>
             <li>
-                <strong>Language Block</strong>- allows user to select the language the site displays in to him/her
+                <strong>Language Block</strong>:&#160;allows user to select the language the site displays in to him/her
             </li>
             <li>
-                <strong>Online Block</strong>shows information on the number visiting your site right now
+                <strong>Online Block</strong>:&#160;shows information on the number visiting your site right now
             </li>
             <li>
-                <strong>User Block</strong>- displays information on the current user's profile
+                <strong>User Block</strong>:&#160;displays information on the current user's profile
             </li>
         </ul>
-        <h3>Included Hooks</h3>
-        <p>The roles module does not provide any hooks. It does allows other modules to provide a
-        User Menu hook that when activated can enhance a user's visit. If a module providing a User
-        Menu hook is hooked to Roles, content from the module will be displayed in the User's
-        account page. Examples of modules that provide User Menu hooks are Themes, and
-        Comments.</p>
-        <h3>Included Dynamic Data Properties</h3>
-        <p>Roles provides a number of Dynamic Data properties that you can use either in Roles or
-        other module on your site.</p>
+
+        <h3>Available Hooks</h3>
+        <ul>
+            <li>
+                <strong>Search Hook</strong>:&#160;allows user to search the content of the Roles module. This hook is known to be used by the Search module (a non-core module).
+            </li>
+            <li>
+                <strong>Usermenu Hook</strong>:&#160;lets other modules display content in the current user's account page. This hook is used by e.g. the Themes module, allowing the user to define the theme for the site to display in.
+            </li>
+        </ul>
+
+        <h3>Available Dataproperties</h3>
+        <ul>
+            <li>
+                <strong>Affero</strong>:&#160;accepts as input or displays a user's Affero user name.
+            </li>
+            <li>
+                <strong>AIM</strong>:&#160;accepts as input or displays a user's AIM user name.
+            </li>
+            <li>
+                <strong>Email</strong>:&#160;accepts as input or displays an email address.
+            </li>
+            <li>
+                <strong>Grouplist</strong>:&#160;displays a list of groups of the site as a dropdown.
+            </li>
+            <li>
+                <strong>ICQ</strong>:&#160;accepts as input or displays an ICQ user address.
+            </li>
+            <li>
+                <strong>Password</strong>:&#160;accepts a password as input.
+            </li>
+            <li>
+                <strong>Rolestree</strong>:&#160;displays a tree of groups and users.
+            </li>
+            <li>
+                <strong>Userlist</strong>:&#160;displays a list of users of the site as a dropdown.
+            </li>
+            <li>
+                <strong>Username</strong>:&#160;accepts as input or displays a user's user name.
+            </li>
+            <li>
+                <strong>Yahoo</strong>:&#160;accepts as input or displays a Yahoo user address.
+            </li>
+        </ul>
+        
         <h3>Further Information</h3>
         <p>Further information on the Roles module can be found at:</p>
        <ul>
