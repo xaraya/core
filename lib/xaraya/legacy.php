@@ -118,4 +118,20 @@ function xarRequestGetInfo()                              { return xarRequest::g
 function xarRequestIsLocalReferer()                       { return xarRequest::IsLocalReferer(); }
 function xarResponseRedirect($redirectURL)                { return xarResponse::Redirect($redirectURL); }
 
+
+/**
+ * Wrapper function to support Xaraya 1 API Database functions
+ *
+**/
+function &xarDBGetConn($index = 0)   { return xarDB::getConn($index);}
+function xarDBGetSystemTablePrefix() { return xarDB::getPrefix(); }
+function xarDBGetSiteTablePrefix()   { return xarDBGetSystemTablePrefix(); }
+function &xarDBGetTables()           { return xarDB::getTables();}
+// Does this work?
+function xarDBLoadTableMaintenanceAPI() { return sys::import('xaraya.tableddl'); }
+function xarDBGetType()              { return xarDB::getType(); }
+function &xarDBNewDataDict(Connection &$dbconn, $mode = 'READONLY') 
+{
+    throw new ApiDeprecationException(array('xarDBNewDataDict','[TO BE DETERMINED]'));
+}
 ?>
