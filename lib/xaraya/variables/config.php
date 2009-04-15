@@ -109,11 +109,12 @@ class xarConfigVars extends xarVars implements IxarVars
 
         // Need to retrieve it
         // @todo checkme What should we do here? preload again, or just fetch the one?
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
-        if(empty($tables)) {
+        try  {
+          $dbconn = xarDB::getConn();
+          $tables = xarDB::getTables();
+        } catch (Exception $e) {
           // No tables, probably installing
-          if($value == null) throw new VariableNotFoundException($name, "Variable #(1) not found");
+          if($value == null) throw new VariableNotFoundException($name, "Variable #(1) not found (no tables found, in fact)");
           return $value;
         } 
         $varstable = $tables['config_vars'];
@@ -127,10 +128,12 @@ class xarConfigVars extends xarVars implements IxarVars
             $value = $result->get(2);
             $value = unserialize($value);
             xarCore::setCached(self::$KEY, $result->getString(1), $value);
+            $result->close();
+            return $value;
         }
-        $result->close();
-        // @todo we probably should except here, as a config variable should have a value always.
-        return $value;
+        // @todo: We found nothing, return the default if we had one
+        if($value !== null) return $value;        
+        throw new VariableNotFoundException($name, "Variable #(1) not found");
     }
 
     public static function delete($scope, $name)
@@ -158,9 +161,12 @@ class xarConfigVars extends xarVars implements IxarVars
      */
     private static function preload()
     {
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
-        if(empty($tables)) return false;
+        try {
+          $dbconn = xarDB::getConn();
+          $tables = xarDB::getTables();
+        } catch (Exception $e) {
+          return false;
+        }
         
         $query = "SELECT name, value FROM $tables[config_vars] WHERE module_id is null";
         $stmt = $dbconn->prepareStatement($query);
