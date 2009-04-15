@@ -50,8 +50,10 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
                                   'major'     => 'MAJOR TBD (Code was: '. $e->getCode().')',
                                   'type'      => get_class($e), // consider stripping of 'Exception'
                                   'title'     => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
-                                  'short'     => htmlspecialchars($e->getMessage()),)
-                                );
+                                  'short'     => htmlspecialchars($e->getMessage()),
+                                  'line'      => $e->getLine(),
+                                  'file'      => $e->getFile(),
+                                ));
             // If we have em, use em
 
             if(function_exists('xarTplGetThemeDir') && function_exists('xarTplFile')) {
