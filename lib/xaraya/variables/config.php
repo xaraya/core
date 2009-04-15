@@ -111,6 +111,11 @@ class xarConfigVars extends xarVars implements IxarVars
         // @todo checkme What should we do here? preload again, or just fetch the one?
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
+        if(empty($table)) {
+          // No tables, probably installing
+          if($value == null) throw new VariableNotFoundException($name, "Variable #(1) not found");
+          return $value;
+        } 
         $varstable = $tables['config_vars'];
         $query = "SELECT name, value FROM $varstable WHERE module_id is null AND name = ?";
 
@@ -155,7 +160,8 @@ class xarConfigVars extends xarVars implements IxarVars
     {
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
-
+        if(empty($tables)) return false;
+        
         $query = "SELECT name, value FROM $tables[config_vars] WHERE module_id is null";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(),ResultSet::FETCHMODE_ASSOC);
