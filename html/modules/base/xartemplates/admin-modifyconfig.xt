@@ -73,17 +73,6 @@
                         </label>
                         #$XARCORE_VERSION_ID# version #$XARCORE_VERSION_NUM# (#$XARCORE_VERSION_SUB#)
                     </div>
-                    <div class="xar-form-input-wrapper">
-                        <label title="#xarML('Current Version.')#" class="xar-form-label">                            
-                            BlockLayout compiler version:                            
-                        </label>
-                        <xar:set name="options">
-                            array(
-                                array('id' => 'FOO', 'name' => 'BL1'),
-                                array('id' => 'XAR_BL_USE_XSLT', 'name' => 'BL2'),
-                            )
-                        </xar:set>
-                    </div>
                 </fieldset>
                 <fieldset>
                     <legend>                        
