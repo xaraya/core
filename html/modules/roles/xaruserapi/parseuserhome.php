@@ -24,7 +24,6 @@ function roles_userapi_parseuserhome($args)
         throw new BadParameterException(null,'Wrong arguments to roles_userapi_userhome.');
     }
 
-    if(!xarSecurityCheck('ReadRole')) return;
     $data=array();
     $externalurl=false; //used as a flag for userhome external url
     // FIXME: this probably causes bug #3393
