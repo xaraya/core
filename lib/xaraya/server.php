@@ -478,8 +478,12 @@ class xarRequest extends Object
      */
     private static function resolveModuleAlias($var)
     {
-        $aliasesMap = xarConfigVars::get(null, 'System.ModuleAliases');
-        return (!empty($aliasesMap[$var])) ? $aliasesMap[$var] : $var;
+        try {
+          $aliasesMap = xarConfigVars::get(null, 'System.ModuleAliases');
+          return $aliasesMap[$var];
+        } catch (VariableNotFoundException $e) {
+          return $var;
+        }
     }
 }
 
