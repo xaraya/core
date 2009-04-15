@@ -21,8 +21,32 @@
  */
 function authsystem_init()
 {
-    /* This init function brings authsystem to version 0.91; run the upgrades for the rest of the initialisation */
-    return authsystem_upgrade('0.91');
+    //Set the default authmodule if not already set
+    $isdefaultauth = xarModVars::get('roles','defaultauthmodule');
+    if (empty($isdefaultauth)) {
+       xarModVars::get('roles', 'defaultauthmodule', 'authsystem');
+    }
+
+    $dbconn =& xarDB::getConn();
+    $xartable =& xarDB::getTables();
+    $modulesTable = xarDB::getPrefix() .'_modules';
+    $modid = xarModGetIDFromName('authsystem');
+    // update the modversion class and admin capable
+    $query = "UPDATE $modulesTable SET class=?, admin_capable=?
+             WHERE regid = ?";
+    $bindvars = array('Authentication',1,$modid);
+    $result = $dbconn->Execute($query,$bindvars);
+
+    // Create the login block
+    if (!$result) return;
+    //create the blocktype
+    $bid = xarModAPIFunc('blocks','admin','register_block_type',
+           array('modName' => 'authsystem',
+                 'blockType' => 'login'));
+    if (!$bid) return;
+
+    // Installation complete; check for upgrades
+    return authsystem_upgrade('2.0');
 }
 /*
  * We don't have all modules activated at install time
@@ -43,7 +67,8 @@ function authsystem_activate()
     xarModVars::set('authsystem', 'lockouttries', 3);
     xarModVars::set('authsystem', 'uselockout', false);
 
-    return true;
+    // Installation complete; check for upgrades
+    return authsystem_upgrade('2.0');
 }
 
 /**
@@ -52,7 +77,7 @@ function authsystem_activate()
  * @param oldVersion
  * @returns bool
  */
-function authsystem_upgrade($oldVersion)
+function authsystem_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {

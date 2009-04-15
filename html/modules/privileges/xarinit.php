@@ -233,7 +233,9 @@ function privileges_init()
         $dbconn->rollback();
         throw $e;
     }
-    return true;
+
+    // Installation complete; check for upgrades
+    return privileges_upgrade('2.0');
 }
 
 function privileges_activate()
@@ -256,7 +258,7 @@ function privileges_activate()
  * @param oldVersion
  * @returns bool
  */
-function privileges_upgrade($oldVersion)
+function privileges_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {

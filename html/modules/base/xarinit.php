@@ -223,8 +223,8 @@ function base_init()
                         'generateXMLURLs' => false);
     xarMod::init($systemArgs);
 
-    // Initialisation successful
-    return true;
+    // Installation complete; check for upgrades
+    return base_upgrade('2.0');
 }
 
 /**
@@ -233,7 +233,7 @@ function base_init()
  * @param oldVersion
  * @returns bool
  */
-function base_upgrade($oldVersion)
+function base_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {

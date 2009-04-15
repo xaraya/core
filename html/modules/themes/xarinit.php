@@ -109,7 +109,24 @@ function themes_init()
     xarModVars::set('themes', 'selclass', 'all');
     xarModVars::set('themes', 'useicons', false);
 
-    // Initialisation successful
+    if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
+        return false;
+    }
+
+    if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
+        array('modName' => 'themes', 'blockType' => 'meta'))) return;
+
+    // Ensure the meta blocktype is registered
+    if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))) {
+        if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
+                            array('modName' => 'themes',
+                                  'blockType' => 'meta'))) return;
+    }
+
+    xarModVars::set('themes', 'selclass', 'all');
+    xarModVars::set('themes', 'useicons', false);
+
+    // Installation complete; check for upgrades
     return themes_upgrade('2.0');
 }
 

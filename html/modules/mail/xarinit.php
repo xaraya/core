@@ -38,8 +38,8 @@ function mail_init()
     xarRegisterMask('DeleteMail', 'All','mail','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminMail','All','mail','All','All','ACCESS_ADMIN');
 
-    /* This init function brings authsystem to version 0.01 run the upgrades for the rest of the initialisation */
-    return mail_upgrade('0.1');
+    // Installation complete; check for upgrades
+    return mail_upgrade('2.0');
 }
 
 /**
@@ -62,7 +62,7 @@ function mail_activate()
  * @todo allow mail gateway functionality
  */
 
-function mail_upgrade($oldVersion)
+function mail_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
