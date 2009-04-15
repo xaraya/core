@@ -224,8 +224,8 @@ function base_init()
                         'generateXMLURLs' => false);
     xarMod::init($systemArgs);
 
-    // Initialisation successful
-    return true;
+    // Installation complete; check for upgrades
+    return base_upgrade('2.0');
 }
 
 /**

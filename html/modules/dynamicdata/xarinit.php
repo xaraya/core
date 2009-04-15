@@ -493,8 +493,8 @@ function dynamicdata_init()
     );
     xarDefineInstance('dynamicdata','Field',$instances);
 
-    // Initialisation successful
-    return true;
+    // Installation complete; check for upgrades
+    return dynamicdata_upgrade('2.0');
 }
 
     /**

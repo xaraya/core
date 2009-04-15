@@ -233,7 +233,9 @@ function privileges_init()
         $dbconn->rollback();
         throw $e;
     }
-    return true;
+
+    // Installation complete; check for upgrades
+    return privileges_upgrade('2.0');
 }
 
 function privileges_activate()

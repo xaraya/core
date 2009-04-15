@@ -198,9 +198,8 @@ function modules_init()
         throw $e;
     }
 
-    // Initialisation successful
-    return true;
-}
+    // Installation complete; check for upgrades
+    return modules_upgrade('2.0');}
 
 /**
  * Activates the modules module

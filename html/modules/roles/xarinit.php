@@ -234,7 +234,8 @@ function roles_activate()
     $rolefields['parentid'] = $topid;
     $user->createItem($rolefields);
 
-    return true;
+    // Installation complete; check for upgrades
+    return roles_upgrade('2.0');
 }
 
 /**
