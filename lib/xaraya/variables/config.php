@@ -111,7 +111,7 @@ class xarConfigVars extends xarVars implements IxarVars
         // @todo checkme What should we do here? preload again, or just fetch the one?
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
-        if(empty($table)) {
+        if(empty($tables)) {
           // No tables, probably installing
           if($value == null) throw new VariableNotFoundException($name, "Variable #(1) not found");
           return $value;
