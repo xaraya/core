@@ -10,13 +10,7 @@
         </span>
     </div>
     <div class="xar-mod-body">
-        <h2>
-            <xar:ml>
-                <xar:mlstring>Modify Item #(1) in #(2)</xar:mlstring>
-                <xar:mlvar>#$object:itemid#</xar:mlvar>
-                <xar:mlvar>#$object:label#</xar:mlvar>
-            </xar:ml>
-        </h2>
+        <h2>Modify Item #$object:itemid# in #$object:label#</h2>
 
         <xar:if condition="isset($preview)">
             <fieldset>
@@ -25,7 +19,7 @@
             </fieldset>
         </xar:if>
 
-        <form method="post" action="#xarServerGetCurrentURL()#">
+        <form method="post" action="#xarServer::getCurrentURL()#">
           <fieldset>
             <legend>Modify item details</legend>
             <xar:data-form object="$object" />

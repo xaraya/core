@@ -22,7 +22,7 @@ function dynamicdata_admin_main()
     if (xarModVars::get('modules', 'disableoverview') == 0){
         return xarTplModule('dynamicdata','admin','overview');
     } else {
-        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
+        xarResponse::Redirect(xarModURL('dynamicdata', 'admin', 'view'));
         return true;
     }
 }

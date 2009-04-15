@@ -20,7 +20,7 @@ function roles_admin_main()
     if (xarModVars::get('modules', 'disableoverview') == 0){
         return xarTplModule('roles','admin','overview');
     } else {
-        xarResponseRedirect(xarModURL('roles', 'admin', 'showusers'));
+        xarResponse::Redirect(xarModURL('roles', 'admin', 'showusers'));
         return true;
     }
 }

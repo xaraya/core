@@ -40,7 +40,7 @@ function authsystem_admin_modifyconfig()
             xarModVars::set('authsystem', 'uselockout', $uselockout);
             xarModVars::set('authsystem', 'lockouttime', $lockouttime);
             xarModVars::set('authsystem', 'lockouttries', $lockouttries);
-            xarResponseRedirect(xarModURL('authsystem', 'admin', 'modifyconfig'));
+            xarResponse::Redirect(xarModURL('authsystem', 'admin', 'modifyconfig'));
             // Return
             return true;
             break;

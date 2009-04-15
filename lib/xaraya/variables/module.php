@@ -24,16 +24,14 @@ class xarModVars extends xarVars implements IxarModVars
      * @access public
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
+     * @param  mixed  $value If a default value should be returned, it can be passed in.
      * @return mixed The value of the variable or void if variable doesn't exist
      * @throws EmptyParameterException
      */
-    static function get($scope, $name)
+    static function get($scope, $name, $value=null)
     {
         if (empty($scope)) throw new EmptyParameterException('modName');
         if (empty($name)) throw new EmptyParameterException('name');
-
-        // Initialize
-        $value = null;
 
         // Preload per module, once
         if(!isset(self::$preloaded[$scope]))
@@ -50,7 +48,7 @@ class xarModVars extends xarVars implements IxarModVars
 
         // Still no luck, let's do the hard work then
         $modBaseInfo = xarMod::getBaseInfo($scope);
-        if (!isset($modBaseInfo)) return; // throw back
+        assert('isset($scope)');
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();

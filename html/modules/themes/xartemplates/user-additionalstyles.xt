@@ -2,10 +2,10 @@
     <xar:if condition="isset($styles) and is_array($styles)">
     <xar:foreach in="$styles" key="$scope" value="$style">
     <xar:if condition="$comments">
-    <xar:comment> <xar:mlstring>the following styles were supplied from component</xar:mlstring> #$scope# </xar:comment></xar:if>
+    <xar:comment> the following styles were supplied from component #$scope# </xar:comment></xar:if>
     <xar:foreach in="$style" key="$method" value="$attributes">
     <xar:if condition="$comments">
-    <xar:comment> #$method# <xar:mlstring>style</xar:mlstring> </xar:comment></xar:if>
+    <xar:comment> #$method# style </xar:comment></xar:if>
     <xar:loop name="$attributes">
     <xar:if condition="$method eq 'link'">
     <xar:if condition="$loop:item['title'] ne ''">

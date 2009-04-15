@@ -76,7 +76,7 @@ function roles_admin_sendmail()
         'siteslogan' => xarModVars::get('themes', 'SiteSlogan'),
         'siteadmin'  => xarModVars::get('mail', 'adminname'),
         'adminmail'  => xarModVars::get('mail', 'adminmail'),
-        'siteurl'    => xarServerGetBaseURL(),
+        'siteurl'    => xarServer::getBaseURL(),
         'myname'     => xarUserGetVar('name'),
         'myuname'    => xarUserGetVar('uname'),
         'myuid'      => xarUserGetVar('id'),
@@ -103,7 +103,7 @@ function roles_admin_sendmail()
     // If it was on, turn it back on
     xarModVars::set('themes','ShowTemplates',$themecomments);
 
-    xarResponseRedirect(xarModURL('roles', 'admin', 'createmail'));
+    xarResponse::Redirect(xarModURL('roles', 'admin', 'createmail'));
     return true;
 }
 ?>

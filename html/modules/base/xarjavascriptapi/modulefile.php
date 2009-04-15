@@ -44,7 +44,7 @@ function base_javascriptapi_modulefile($args)
 
         // A failure to find a file is recorded, but does not stop subsequent files.
         if (!empty($filePath)) {
-            $result = $result & xarTplAddJavaScript($position, 'src', xarServerGetBaseURL() . $filePath, $filePath);
+            $result = $result & xarTplAddJavaScript($position, 'src', xarServer::getBaseURL() . $filePath, $filePath);
         } else {
             $result = false;
         }

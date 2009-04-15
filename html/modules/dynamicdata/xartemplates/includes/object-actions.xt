@@ -7,7 +7,7 @@
             </dt>
             <xar:if condition="$action eq 'modify'">
                 <dd class="active">
-                  <a href="#xarServerGetCurrentUrl()#">
+                  <a href="#xarServer::getCurrentURL()#">
                     Modify Object definition
                   </a>
                 </dd>
@@ -20,7 +20,7 @@
             </xar:if>
             <xar:if condition="$action eq 'modifyprop'">
                 <dd class="active">
-                  <a href="#xarServerGetCurrentUrl()#">
+                  <a href="#xarServer::getCurrentURL()#">
                     Modify DataProperties
                   </a>
                 </dd>
@@ -33,7 +33,7 @@
             </xar:if>
             <xar:if condition="$action eq 'export'">
                 <dd class="active">
-                  <a href="#xarServerGetCurrentUrl()#">
+                  <a href="#xarServer::getCurrentURL()#">
                     Export Object Definition to XML
                   </a>
                 </dd>
@@ -46,7 +46,7 @@
             </xar:if>
             <xar:if condition="$action eq 'view'">
                 <dd class="active">
-                  <a href="#xarServerGetCurrentUrl()#">
+                  <a href="#xarServer::getCurrentURL()#">
                     View Items
                   </a>
                 </dd>

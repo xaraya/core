@@ -75,10 +75,10 @@ function authsystem_loginblock_display($blockinfo)
         }
     } elseif (xarServerGetVar('REQUEST_METHOD') == 'GET') {
         // URL of this page
-        $args['return_url'] = xarServerGetCurrentURL();
+        $args['return_url'] = xarServer::getCurrentURL();
     } else {
         // Base URL of the site
-        $args['return_url'] = xarServerGetBaseURL();
+        $args['return_url'] = xarServer::getBaseURL();
     }
 
     // Used in the templates.

@@ -99,7 +99,7 @@
                 the site</p>
                 <p>
                 <span class="xar-form-label" title="#$messagetitle#">$siteurl</span>URL of the site
-                ( #xarServerGetBaseURL()# )</p>
+                ( #xarServer::getBaseURL()# )</p>
                 <p>
                 <span class="xar-form-label" title="#$messagetitle#">$siteadmin</span>Name of the
                 administrator</p>

@@ -25,7 +25,7 @@ function base_admin_main()
     if (xarModVars::get('modules', 'disableoverview') == 0){
         return xarTplModule('base','admin','overview');
     } else {
-        xarResponseRedirect(xarModURL('base', 'admin', 'modifyconfig'));
+        xarResponse::Redirect(xarModURL('base', 'admin', 'modifyconfig'));
         return true;
     }
 }

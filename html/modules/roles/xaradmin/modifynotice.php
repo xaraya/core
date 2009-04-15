@@ -51,7 +51,7 @@ function roles_admin_modifynotice()
             xarModCallHooks('module', 'updateconfig', 'roles',
                 array('module' => 'roles'));
 
-            xarResponseRedirect(xarModURL('roles', 'admin', 'modifynotice'));
+            xarResponse::Redirect(xarModURL('roles', 'admin', 'modifynotice'));
             // Return
             return true;
 

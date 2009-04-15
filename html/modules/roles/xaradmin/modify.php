@@ -65,7 +65,7 @@ function roles_admin_modify()
     }
 
     xarSession::setVar('ddcontext.roles', array(
-                                            'return_url' => xarServerGetCurrentURL(),
+                                            'return_url' => xarServer::getCurrentURL(),
                                             'parents' => $parents,
                                             'groups' => $groups,
                                             'basetype' => $data['basetype'],

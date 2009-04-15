@@ -96,7 +96,7 @@ function themes_admin_list()
         $sortimage = xarTplGetImage('arrow_down.gif', 'base');
         $sortlabel = xarML('Sort Descending');
     }
-    $data['sorturl'] = xarServerGetCurrentURL(array('sort' => $newsort));
+    $data['sorturl'] = xarServer::getCurrentURL(array('sort' => $newsort));
     $data['sortimage'] = $sortimage;
     $data['sortlabel'] = $sortlabel;
 

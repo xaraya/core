@@ -8,7 +8,7 @@
         <xar:template type="module" file="admin-menu" />
         <h2>Utilities - Relationships</h2>
         <xar:template type="module" file="utility-menu" />
-        <form method="post" action="#xarServerGetCurrentURL()#">
+        <form method="post" action="#xarServer::getCurrentURL()#">
             <fieldset>
                 <legend>Relations With Other Modules/Properties</legend>
                 <div class="xar-form-input-wrapper">

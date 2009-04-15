@@ -29,7 +29,7 @@ function themes_admin_removetpltag()
         throw new TagRegistrationException($tagname,'Could not unregister tag (#(1)).');
     }
 
-    xarResponseRedirect(xarModUrl('themes', 'admin', 'listtpltags'));
+    xarResponse::Redirect(xarModUrl('themes', 'admin', 'listtpltags'));
     
     return true;
 } 

@@ -5,7 +5,7 @@
         <div class="xar-form-input-wrapper">
             <xar:data-label property="$properties[$name]" for="id"/>
             <xar:if condition="$name eq 'module_id'">
-                <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
+                <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"</xar:set>
                 <!-- FIXME remove the validation attribute when we go from regids to systemids  -->
                 <xar:data-input property="$properties[$name]" onchange="$onchange" store_prop="regid" />
             <xar:elseif condition="$name eq 'parent'" />

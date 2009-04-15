@@ -3,11 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">
-            <xar:ml>
-                <xar:mlstring>#(1) #(2) Information</xar:mlstring>
-                <xar:mlvar>#$itemtypename#</xar:mlvar>
-                <xar:mlvar>#$uname#</xar:mlvar>
-            </xar:ml>
+                #$itemtypename# #$uname# Information
         </span>
     </div>
     <div class="xar-mod-body">
@@ -19,14 +15,7 @@
           <xar:if condition="in_array('userlastlogin',$settings)">
                 <strong>Email</strong>: 
                 <a href="&xar-modurl-roles-user-email;&amp;id=#$id#">
-                    <xar:ml>
-                        <xar:mlstring>
-                            Send an Email to #(1)
-                        </xar:mlstring>
-                        <xar:mlvar>
-                            #xarVarPrepForDisplay($name)#
-                        </xar:mlvar>
-                    </xar:ml>
+                            Send an Email to #xarVarPrepForDisplay($name)#
                 </a>
                 <div class="xar-form-input-wrapper">
                     <label class="xar-form-label">
@@ -42,14 +31,7 @@
                     Email
                 </label>
                 <a href="&xar-modurl-roles-user-email;&amp;id=#$id#">
-                    <xar:ml>
-                        <xar:mlstring>
-                            Send an Email to #(1)
-                        </xar:mlstring>
-                        <xar:mlvar>
-                            #xarVarPrepForDisplay($name)#
-                        </xar:mlvar>
-                    </xar:ml>
+                            Send an Email to #xarVarPrepForDisplay($name)#
                 </a>
             </div>
         </xar:if>

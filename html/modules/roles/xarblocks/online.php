@@ -52,7 +52,7 @@
             $activetime = time() - (xarConfigVars::get(null, 'Site.Session.Duration') * 60);
             if($dbconn->databaseType == 'sqlite') {
                 $sql = "SELECT COUNT(*)
-                        FROM (SELECT DISTINCT toles_id FROM $sessioninfotable
+                FROM (SELECT DISTINCT role_id FROM $sessioninfotable
                               WHERE last_use > ? AND role_id > ?)";
             } else {
                 $sql = "SELECT COUNT(DISTINCT role_id)

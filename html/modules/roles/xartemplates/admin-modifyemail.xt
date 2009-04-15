@@ -148,7 +148,7 @@
                 <span title="#$messagetitle#"
                 class="xar-form-label xar-align-right xar-padding-thickright">##$siteurl##</span>
                 <span class="xar-padding-thickleft">URL of the
-                site&#160;(#xarServerGetBaseURL()#)</span>
+                site&#160;(#xarServer::getBaseURL()#)</span>
             </div>
             <div class="xar-form-input-wrapper">
                 <span title="#$messagetitle#"

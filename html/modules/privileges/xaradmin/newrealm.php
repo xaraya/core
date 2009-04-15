@@ -43,7 +43,7 @@ function privileges_admin_newrealm()
         if(!$q->run()) return;
 
         //Redirect to view page
-        xarResponseRedirect(xarModURL('privileges', 'admin', 'viewrealms'));
+        xarResponse::Redirect(xarModURL('privileges', 'admin', 'viewrealms'));
     }
 
     $data['authid'] = xarSecGenAuthKey();
