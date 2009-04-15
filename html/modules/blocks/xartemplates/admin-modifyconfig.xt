@@ -13,7 +13,7 @@
             Configure:</dt>
             <xar:if condition="$tab eq 'general'">
                 <dd class="active">
-                    <a href="#xarServerGetCurrentURL()#">General</a>
+                    <a href="#xarServer::getCurrentURL()#">General</a>
                 </dd>
                 <xar:else />
                 <dd>

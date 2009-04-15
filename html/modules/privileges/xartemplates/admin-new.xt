@@ -113,12 +113,7 @@
                 <xar:if condition="$ptype ne null">
                     <xar:if condition="($pcomponent ne 'All') and empty($target)">
                         <p>
-                            <xar:ml>                                
-                                    <xar:mlstring>Allow instances of component #(1) that have:</xar:mlstring>                                
-                                <xar:mlvar>
-                                    #$pcomponent#
-                                </xar:mlvar>
-                            </xar:ml>
+                          Allow instances of component #$pcomponent# that have:                                
                         </p>
                         <xar:loop name="$instances">
                             <div class="xar-form-input-wrapper">

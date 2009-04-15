@@ -65,7 +65,7 @@ function blocks_admin_new_type()
             array('module' => $modulename, 'type' => $blockname))
         ) {return;}
 
-        xarResponseRedirect(xarModURL('blocks', 'admin', 'view_types'));
+        xarResponse::Redirect(xarModURL('blocks', 'admin', 'view_types'));
         return true;
     } else {
         // Nothing submitted yet - return a blank form.

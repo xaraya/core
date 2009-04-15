@@ -23,12 +23,7 @@
         </div>
 
         <h3>
-            <xar:ml>
-                <xar:mlstring>
-                    Privilege Assignments for #(1)
-                </xar:mlstring>
-                <xar:mlvar>#$tabmodule#</xar:mlvar>
-            </xar:ml>
+            Privilege Assignments for #$tabmodule#
         </h3>
         <form id="groupassignments" method="post" action="&xar-modurl-privileges-admin-assignprivileges;" enctype="application/x-www-form-urlencoded">
             <fieldset>

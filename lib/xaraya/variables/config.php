@@ -70,10 +70,8 @@ class xarConfigVars extends xarVars implements IxarVars
      * @todo the vars which are not in the database should probably be systemvars, not configvars
      * @todo bench the preloading
      */
-    public static function get($scope, $name)
+    public static function get($scope, $name, $value=null)
     {
-        $value = null;
-
         // Preload the config vars once
         if(!self::$preloaded)
             self::preload();
@@ -113,6 +111,11 @@ class xarConfigVars extends xarVars implements IxarVars
         // @todo checkme What should we do here? preload again, or just fetch the one?
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
+        if(empty($tables)) {
+          // No tables, probably installing
+          if($value == null) throw new VariableNotFoundException($name, "Variable #(1) not found");
+          return $value;
+        } 
         $varstable = $tables['config_vars'];
         $query = "SELECT name, value FROM $varstable WHERE module_id is null AND name = ?";
 
@@ -126,7 +129,7 @@ class xarConfigVars extends xarVars implements IxarVars
             xarCore::setCached(self::$KEY, $result->getString(1), $value);
         }
         $result->close();
-        // @todo we really should except here.
+        // @todo we probably should except here, as a config variable should have a value always.
         return $value;
     }
 
@@ -157,7 +160,8 @@ class xarConfigVars extends xarVars implements IxarVars
     {
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
-
+        if(empty($tables)) return false;
+        
         $query = "SELECT name, value FROM $tables[config_vars] WHERE module_id is null";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(),ResultSet::FETCHMODE_ASSOC);

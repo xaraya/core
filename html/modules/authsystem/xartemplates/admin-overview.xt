@@ -54,8 +54,9 @@
         <h3>Available Hooks</h3>
         <p>The Authsystem module has no hooks</p>
 
-        <h3>Included Dynamic Data Properties</h3>
-        <p>None</p>
+        <h3>Available Dataproperties</h3>
+        <p>The Authsystem module has no dataproperties</p>
+
         <h3>Further Information</h3>
         <p>Further information on the Authsystem Authentication module can be found at:</p>
         <ul>

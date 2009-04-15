@@ -23,7 +23,7 @@
             Modify:</dt>
             <xar:if condition="$tab eq 'display'">
                 <dd class="active">
-                    <a href="#xarServerGetCurrentURL()#">Site Display</a>
+                    <a href="#xarServer::getCurrentURL()#">Site Display</a>
                 </dd>
                 <xar:else />
                 <dd>
@@ -33,7 +33,7 @@
             </xar:if>
             <xar:if condition="$tab eq 'security'">
                 <dd class="active">
-                    <a href="#xarServerGetCurrentURL()#">Sessions/Security</a>
+                    <a href="#xarServer::getCurrentURL()#">Sessions/Security</a>
                 </dd>
                 <xar:else />
                 <dd>
@@ -43,7 +43,7 @@
             </xar:if>
             <xar:if condition="$tab eq 'locales'">
                 <dd class="active">
-                    <a href="#xarServerGetCurrentURL()#">Languages and Locales</a>
+                    <a href="#xarServer::getCurrentURL()#">Languages and Locales</a>
                 </dd>
                 <xar:else />
                 <dd>
@@ -53,7 +53,7 @@
             </xar:if>
             <xar:if condition="$tab eq 'other'">
                 <dd class="active">
-                    <a href="#xarServerGetCurrentURL()#">Other</a>
+                    <a href="#xarServer::getCurrentURL()#">Other</a>
                 </dd>
                 <xar:else />
                 <dd>
@@ -71,18 +71,7 @@
                         <label title="#xarML('Current Version.')#" class="xar-form-label">                            
                             Xaraya Core:                            
                         </label>
-                        <!--
-                        <xar:set name="versionid">$XARCORE_VERSION_ID</xar:set>
-                        <xar:set name="versionnum">$XARCORE_VERSION_NUM</xar:set>
-                        <xar:set name="versionsub">$XARCORE_VERSION_SUB</xar:set>
-                        <xar:var name="versionid" /> version <xar:var name="versionnum" /> (<xar:var name="versionsub" />)
-                         -->
-                        <xar:ml>
-                            <xar:mlstring>#(1) version #(2) (#(3))</xar:mlstring>
-                            <xar:mlvar>#$XARCORE_VERSION_ID#</xar:mlvar>
-                            <xar:mlvar>#$XARCORE_VERSION_NUM#</xar:mlvar>
-                            <xar:mlvar>#$XARCORE_VERSION_SUB#</xar:mlvar>
-                         </xar:ml>
+                        #$XARCORE_VERSION_ID# version #$XARCORE_VERSION_NUM# (#$XARCORE_VERSION_SUB#)
                     </div>
                     <div class="xar-form-input-wrapper">
                         <label title="#xarML('Current Version.')#" class="xar-form-label">                            
@@ -94,10 +83,6 @@
                                 array('id' => 'XAR_BL_USE_XSLT', 'name' => 'BL2'),
                             )
                         </xar:set>
-                        <xar:set name="value">
-                            <xar:var scope="config" name="Site.BL.CompilerVersion"/>
-                        </xar:set>
-                        <xar:data-input type="radio" name="compilerversion" value="$value" options="$options" />
                     </div>
                 </fieldset>
                 <fieldset>
@@ -358,7 +343,7 @@
                         </xar:set>
                         <input type="text" id="cookiepath" name="cookiepath" value="#$value#"
                         maxlength="20" class="xar-form-textmedium" />
-                        <span>&#160;Default: #xarServerGetBaseURI()# (limited to the Xaraya
+                        <span>&#160;Default: #xarServer::getBaseURI()# (limited to the Xaraya
                         directory)</span>
                     </div>
                     <div class="xar-form-input-wrapper">

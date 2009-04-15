@@ -92,7 +92,7 @@ function roles_admin_asknotification($args)
             if (!xarModAPIFunc('roles','admin','senduseremail', array( 'id' => $id, 'mailtype' => $data['mailtype'], 'subject' => $data['subject'], 'message' => $data['message'], 'pass' => $data['pass'], 'ip' => $data['ip']))) {
                 return;
             }
-            xarResponseRedirect(xarModURL('roles', 'admin', 'showusers',
+            xarResponse::Redirect(xarModURL('roles', 'admin', 'showusers',
                               array('id' => $data['groupid'], 'state' => $data['state'])));
            break;
     }

@@ -72,11 +72,10 @@ function authsystem_activate()
 }
 
 /**
- * Upgrade the authsystem module from an old version
+ * Upgrade this module from an old version
  *
- * @access public
- * @param oldVersion $
- * @return bool true on success of upgrade
+ * @param oldVersion
+ * @returns bool
  */
 function authsystem_upgrade($oldVersion)
 {
@@ -90,36 +89,14 @@ function authsystem_upgrade($oldVersion)
 }
 
 /**
- * Delete the authsystem module
+ * Delete this module
  *
- * @access public
- * @param none $
- * @return bool true on success of deletion
+ * @return bool
  */
 function authsystem_delete()
 {
-    /* Get all available block types for this module */
-    $blocktypes = xarModAPIfunc(
-        'blocks', 'user', 'getallblocktypes',
-        array('module' => 'authsystem')
-    );
-
-    /* Delete block types. */
-    if (is_array($blocktypes) && !empty($blocktypes)) {
-        foreach($blocktypes as $blocktype) {
-            $result = xarModAPIfunc(
-                'blocks', 'admin', 'delete_type', $blocktype
-            );
-        }
-    }
-
-    /* Remove modvars, instances and masks */
-    xarModVars::delete_all('authsystem');
-    xarRemoveMasks('authsystem');
-    xarRemoveInstances('authsystem');
-
-    /* Deletion successful */
-    return true;
+  //this module cannot be removed
+  return false;
 }
 
 ?>

@@ -18,7 +18,7 @@
                         Modify Object Definition</a>
                     </dd>
                     <dd class="active">
-                        <a href="#xarServerGetCurrentUrl()#">Modify DataProperties</a>
+                        <a href="#xarServer::getCurrentURL()#">Modify DataProperties</a>
                     </dd>
                     <dd>
                         <a href="&xar-modurl-dynamicdata-util-export;&amp;module_id=#$module_id#&amp;itemtype=#$itemtype#">

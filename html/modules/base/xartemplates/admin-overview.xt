@@ -54,10 +54,103 @@
         <h3>Available Hooks</h3>
         <p>The Base module has no hooks</p>
 
-        <h3>Dynamic Data Properties</h3>
-        <p>The Base Module provides a number of Dynamic Data properties that you can use to extend
-        existing Xaraya functionality by hooking Dynamic Data to your modules, or for developers,
-        for use in your own module development.</p>
+        <h3>Available Dataproperties</h3>
+        <ul>
+            <li>
+                <strong>Array</strong>:&#160;used for input and display of array data.
+            </li>
+            <li>
+                <strong>Calendar</strong>:&#160;displays a calendar popup for input.
+            </li>
+            <li>
+                <strong>Checkbox</strong>:&#160;used for input and display of checkboxes.
+            </li>
+            <li>
+                <strong>Checkboxlist</strong>:&#160;used for input and display of groups of checkboxes.
+            </li>
+            <li>
+                <strong>Combobox</strong>:&#160;displays a dropdown of items and/or a textbox for input.
+            </li>
+            <li>
+                <strong>Countrylisting</strong>:&#160; a Select property that displays a list of countries of the world.
+            </li>
+            <li>
+                <strong>Dateformat</strong>:&#160;displays a dropdown of data formats.
+            </li>
+            <li>
+                <strong>Select</strong>:&#160;displays a genereic dropdown.
+            </li>
+            <li>
+                <strong>Extendeddate</strong>:&#160;a Calendar property that translates its values.to a universal YYYY-MM-DD format, rather than a UNIX timestamp.
+            </li>
+            <li>
+                <strong>Filepicker</strong>:&#160;displays a dropdown of files in a given directory..
+            </li>
+            <li>
+                <strong>Fileupload</strong>:&#160;displays a file upload box that lets a user upload a file. The configuration options include the target directory and the allowed file extensions, among others..
+            </li>
+            <li>
+                <strong>Floatbox</strong>:&#160;used for input and display of floating numbers.
+            </li>
+            <li>
+                <strong>Hidden</strong>:&#160;used for input and display of floating numbers.
+            </li>
+            <li>
+                <strong>Image</strong>:&#160;used for input and display of images.
+            </li>
+            <li>
+                <strong>Imagelist</strong>:&#160;used for input and display of a group of images.
+            </li>
+            <li>
+                <strong>Integerbox</strong>:&#160;used for input and display of integers.
+            </li>
+            <li>
+                <strong>Integerlist</strong>:&#160;used for input and display of groups of integers.
+            </li>
+            <li>
+                <strong>Language</strong>:&#160;displays a dropdown of languages, as given by the available site locales..
+            </li>
+            <li>
+                <strong>Multiselect</strong>:&#160;displays a select box that accepts multiple inputs.
+            </li>
+            <li>
+                <strong>Radio</strong>:&#160;displays a set of radio buttons.
+            </li>
+            <li>
+                <strong>Statelisting</strong>:&#160;a Select property that displays a dropdown of the US states.
+            </li>
+            <li>
+                <strong>Static</strong>:&#160;displays data as static text..
+            </li>
+            <li>
+                <strong>ColorPicker</strong>:&#160;displays a color palette to choose a color from.
+            </li>
+            <li>
+                <strong>Textarea</strong>:&#160;used for input and display of large text items.
+            </li>
+            <li>
+                <strong>Textbox</strong>:&#160;used for input and display of strings.
+            </li>
+            <li>
+                <strong>Textupload</strong>:&#160;
+            </li>
+            <li>
+                <strong>Timezone</strong>:&#160;displays a dropdown of time zones.
+            </li>
+            <li>
+                <strong>URL</strong>:&#160;used for input and display of URLs.
+            </li>
+            <li>
+                <strong>URLIcon</strong>:&#160;allows input and displays a URL and associated icon
+            </li>
+            <li>
+                <strong>URLTitle</strong>:&#160;allows input and displays a URL and associated title
+            </li>
+            <li>
+                <strong>Webpage</strong>:&#160;used for input and display of HTML data.
+            </li>
+        </ul>
+
         <h3>Custom Templates and Static Pages</h3>
         <p>As well as providing a means to provide a custom template for your front page by
         creating an override for the base user-main.xd template, you can also create further custom

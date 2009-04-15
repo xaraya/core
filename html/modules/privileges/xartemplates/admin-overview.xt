@@ -114,6 +114,13 @@
         <h3>Available Hooks</h3>
         <p>The Privileges module has no hooks</p>
 
+        <h3>Available Dataproperties</h3>
+        <ul>
+            <li>
+                <strong>Privilegestree</strong>:&#160;displays a tree of privileges.
+            </li>
+        </ul>
+
         <h3>Further Information</h3>
         <p>Further information on the Privileges module can be found at:</p>
         <ul>

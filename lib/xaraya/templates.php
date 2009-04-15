@@ -27,6 +27,7 @@ class BLException extends xarExceptions
     protected $message = 'Unknown blocklayout exception (TODO)';
 }
 
+sys::import('xaraya.variables.config');
 
 /**
  * Initializes the BlockLayout Template Engine
@@ -36,26 +37,22 @@ class BLException extends xarExceptions
  * @global string xarTpl_defaultThemeName
  * @global string xarTpl_doctype
  * @global string xarTpl_JavaScript
- * @param  array  $args                  Elements: themesBaseDir, defaultThemeName, enableTemplateCaching
- * @throws DirectoryNotFoundException, FileNotFoundException, ConfigurationException
+ * @param  array  $args                  Elements: defaultThemeName, enableTemplateCaching
+ * @throws FileNotFoundException
  * @return bool true
 **/
 function xarTpl_init(&$args)
 {
-    $table['template_tags'] = xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix') . '_template_tags';
-    sys::import('xaraya.database');
-    xarDB::importTables($table);
-
-    $GLOBALS['xarTpl_themesBaseDir']   = $args['themesBaseDirectory'];
+    // This is the theme directory, solo (aka, themename)
     $GLOBALS['xarTpl_defaultThemeDir'] = $args['defaultThemeDir'];
+    xarTplSetThemeDir($args['defaultThemeDir']);
+    
+    // This should be always true or better defined if it's a client thing (js internal code generation for example)
     $GLOBALS['xarTpl_generateXMLURLs'] = $args['generateXMLURLs'];
+
     // set when page template root tag is compiled (dtd attribute value)
     $GLOBALS['xarTpl_doctype'] = '';
-
-    if (!xarTplSetThemeDir($args['defaultThemeDir'])) {
-        // If there is no theme, there is no page template, we dont know what to do now.
-        throw new DirectoryNotFoundException(array($args['defaultThemeDir'],"xarTpl_init: Nonexistent theme directory #(1)"));
-    }
+    
     if (!xarTplSetPageTemplateName('default')) {
         // If there is no page template, we can't show anything
         throw new FileNotFoundException('default.xt',"xarTpl_init: Nonexistent #(1) page in theme directory '". xarTplGetThemeDir() ."'");
@@ -102,8 +99,10 @@ function xarTplGetThemeName()
  */
 function xarTplSetThemeName($themeName)
 {
+    $currentBase = xarConfigVars::get(null, 'Site.BL.ThemesDirectory','themes');
+    
     assert('$themeName != "" && $themeName{0} != "/"');
-    if (!file_exists($GLOBALS['xarTpl_themesBaseDir'].'/'.$themeName)) {
+    if (!file_exists($currentBase.'/'.$themeName)) {
         return false;
     }
 
@@ -119,12 +118,13 @@ function xarTplSetThemeName($themeName)
  * @global string xarTpl_themeDir
  * @param  string themeDir
  * @return bool
+ * @todo   on removal of the global, we need to bring in standard caching here!!
  */
 function xarTplSetThemeDir($themeDir)
 {
-    assert('$themeDir != "" && $themeDir{0} != "/"');
-    if (!file_exists($GLOBALS['xarTpl_themesBaseDir'].'/'.$themeDir)) {
-        return false;
+    $currentBase = xarConfigVars::get(null, 'Site.BL.ThemesDirectory','themes');
+    if (!file_exists($currentBase .'/'.$themeDir)) {
+        throw new DirectoryNotFoundException(array("$currentBase/$themeDir, xarTplSetThemeDir: Nonexistent theme directory #(1)"));
     }
 
     xarTpl__SetThemeNameAndDir($themeDir);
@@ -138,12 +138,14 @@ function xarTplSetThemeDir($themeDir)
  * @param  string $name Name of the theme
  * @todo theme name and dir are not required to be identical
  * @return void
+ * @todo   on removal of the global, we need to bring in standard caching here!!
  */
 function xarTpl__SetThemeNameAndDir($name)
 {
+    $currentBase = xarConfigVars::get(null, 'Site.BL.ThemesDirectory','themes');
     // dir and name are still required to be the same
     $GLOBALS['xarTpl_themeName'] = $name;
-    $GLOBALS['xarTpl_themeDir']  = $GLOBALS['xarTpl_themesBaseDir'] . '/' . $name;
+    $GLOBALS['xarTpl_themeDir']  = $currentBase . '/' . $name;
 }
 
 /**
@@ -912,7 +914,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
         $thismodule = trim($module);
         $sourceFileName = xarTplGetThemeDir() . "/modules/$thismodule/includes/$templateName.xt";
     if (!file_exists($sourceFileName)) {
-            $sourceFileName = "modules/$thismodule/xartemplates/includes/$templateName.xd";
+            $sourceFileName = "modules/$thismodule/xartemplates/includes/$templateName.xt";
     }
         if (file_exists($sourceFileName)) break;
     }
@@ -1198,8 +1200,4 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
     }
     return $foundHeaderContent;
 }
-
-// Make sure we expose the same api as yesterday
-sys::import('blocklayout.template.tags');
-
 ?>

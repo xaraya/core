@@ -19,12 +19,12 @@
 function authsystem_user_showloginform($args = array())
 {
     extract($args);
-    xarVarFetch('redirecturl', 'str:1:254', $data['redirecturl'], xarServerGetBaseURL(), XARVAR_NOT_REQUIRED);
+    xarVarFetch('redirecturl', 'str:1:254', $data['redirecturl'], xarServer::getBaseURL(), XARVAR_NOT_REQUIRED);
 
     if (!xarUserIsLoggedIn()) {
         return $data;
     } else {
-        xarResponseRedirect($data['redirecturl']);
+        xarResponse::Redirect($data['redirecturl']);
         return true;
     }
 }

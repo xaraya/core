@@ -354,7 +354,7 @@ function dynamicdata_util_migrate($args)
             // return and load the same map again
             $url = xarModURL('dynamicdata','util','migrate',
                              array('load' => 1, 'map' => $map));
-            xarResponseRedirect($url);
+            xarResponse::Redirect($url);
             return true;
         }
     }

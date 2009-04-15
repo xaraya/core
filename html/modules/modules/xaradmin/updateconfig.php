@@ -31,7 +31,7 @@ function modules_admin_updateconfig()
 
     xarModVars::set('modules', 'disableoverview', $disableoverview);
      // lets update status and display updated configuration
-    xarResponseRedirect(xarModURL('modules', 'admin', 'modifyconfig'));
+    xarResponse::Redirect(xarModURL('modules', 'admin', 'modifyconfig'));
 
     // Return
     return true;

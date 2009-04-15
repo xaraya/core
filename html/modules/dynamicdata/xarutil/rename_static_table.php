@@ -19,13 +19,13 @@
 
         if ($data['confirm']) {
             if (empty($data['newtable'])) 
-                xarResponseRedirect(xarModURL('dynamicdata','util','view_static',array('table' => $data['table'])));
+                xarResponse::Redirect(xarModURL('dynamicdata','util','view_static',array('table' => $data['table'])));
             $query = 'RENAME TABLE ' . $data['table'] . ' TO ' . $data['newtable'];
             $dbconn = xarDB::getConn();
             $dbconn->Execute($query);
 
             // Jump to the next page
-            xarResponseRedirect(xarModURL('dynamicdata','util','view_static',array('table' => $data['newtable'])));
+            xarResponse::Redirect(xarModURL('dynamicdata','util','view_static',array('table' => $data['newtable'])));
             return true;
         }
         return $data;

@@ -42,7 +42,7 @@ function modules_admin_activate()
     // set the target location (anchor) to go to within the page
     $target=$minfo['name'];
 
-    xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+    xarResponse::Redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
 
     return true;
 }

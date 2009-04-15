@@ -84,7 +84,7 @@ function mail_adminapi_hookmaildelete($args)
         'siteslogan' => xarModVars::get('themes', 'SiteSlogan'),
         'siteadmin'  => xarModVars::get('mail', 'adminname'),
         'adminmail'  => xarModVars::get('mail', 'adminmail'),
-        'siteurl'    => xarServerGetBaseURL(),
+        'siteurl'    => xarServer::getBaseURL(),
         'myname'     => xarUserGetVar('name'),
         'myuname'    => xarUserGetVar('uname'),
         'myuid'      => xarUserGetVar('id'),

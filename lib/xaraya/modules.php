@@ -832,6 +832,7 @@ class xarMod extends Object implements IxarMod
             $modinfo = self::getInfo($regID);
             $modName = $modinfo['name'];
         }
+        assert('!empty($modName)');
         return $modName;
     }
 
@@ -843,6 +844,7 @@ class xarMod extends Object implements IxarMod
      * @access public
      * @param modName string registered name of module
      * @return string the displayable name
+     * @todo   re-evaluate this, i think it causes more harm than joy
      */
     static function getDisplayName($modName = NULL, $type = 'module')
     {
@@ -1226,7 +1228,7 @@ class xarMod extends Object implements IxarMod
                 xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
             break;
         case 'theme':
-            $fileName = xarModVars::get('themes', 'themesdirectory'). '/' . $modOsDir . '/xartheme.php';
+            $fileName = xarConfigVars::get(null,'Site.BL.ThemesDirectory') . '/' . $modOsDir . '/xartheme.php';
             $part = 'xartheme';
             break;
         default:

@@ -513,87 +513,15 @@ function dynamicdata_upgrade($oldVersion)
 }
 
 /**
- * delete the dynamicdata module
- * This function is only ever called once during the lifetime of a particular
- * module instance
+ * Upgrade this module from an old version
+ *
+ * @param oldVersion
+ * @returns bool
  */
 function dynamicdata_delete()
 {
-
   //this module cannot be removed
   return false;
-
-    /**
-     * Drop tables
-     */
-    $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
-
-
-    // Generate the SQL to drop the table using the API
-    $query = xarDBDropTable($xartable['dynamic_objects']);
-    if (empty($query)) return; // throw back
-    $result = $dbconn->Execute($query);
-    if (!isset($result)) return;
-
-    // Generate the SQL to drop the table using the API
-    $query = xarDBDropTable($xartable['dynamic_properties']);
-    if (empty($query)) return; // throw back
-    $result = $dbconn->Execute($query);
-    if (!isset($result)) return;
-
-    // Generate the SQL to drop the table using the API
-    $query = xarDBDropTable($xartable['dynamic_data']);
-    if (empty($query)) return; // throw back
-    $result = $dbconn->Execute($query);
-    if (!isset($result)) return;
-
-    // Generate the SQL to drop the table using the API
-    $query = xarDBDropTable($xartable['dynamic_relations']);
-    if (empty($query)) return; // throw back
-    $result = $dbconn->Execute($query);
-    if (!isset($result)) return;
-
-    // Generate the SQL to drop the table using the API
-    $query = xarDBDropTable($xartable['dynamic_properties_def']);
-    if (empty($query)) return; // throw back
-    $result = $dbconn->Execute($query);
-    if (!isset($result)) return;
-
-    /**
-     * Delete module variables
-     */
-    xarModVars::delete_all('dynamicdata');
-
-    /**
-     * Unregister blocks
-     */
-    if (!xarModAPIFunc(
-        'blocks',
-        'admin',
-        'unregister_block_type',
-        array(
-            'modName'  => 'dynamicdata',
-            'blockType'=> 'form'
-        )
-    )) return;
-
-    /**
-     * Unregister hooks
-     */
-    // Remove module hooks
-    if (!xarModUnregisterHook('item', 'search', 'GUI',
-                             'dynamicdata', 'user', 'search')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-
-    // Remove Masks and Instances
-    xarRemoveMasks('dynamicdata');
-    xarRemoveInstances('dynamicdata');
-
-
-    // Deletion successful
-    return true;
 }
 
 function dynamicdata_createPropDefTable()

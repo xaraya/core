@@ -37,14 +37,14 @@ function base_userapi_extractlinks($args)
     } elseif (preg_match('!<base[^>]*?\shref="([^"]+)"!im',$args['content'],$matches)) {
         $baseurl = $matches[1];
     } else {
-        $baseurl = xarServerGetBaseURL();
+        $baseurl = xarServer::getBaseURL();
     }
     if (preg_match('!^(https?)://([^/]+)/!',$baseurl,$matches)) {
         $server = $matches[2]; // possibly with port number
         $protocol = $matches[1];
     } else {
-        $server = xarServerGetHost();
-        $protocol = xarServerGetProtocol();
+        $server = xarServer::getHost();
+        $protocol = xarServer::getProtocol();
     }
 
     $links = array();

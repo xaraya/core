@@ -239,12 +239,10 @@ function roles_activate()
 }
 
 /**
- * Upgrade the roles module from an old version
+ * Upgrade this module from an old version
  *
- * @access public
- * @param oldVersion $
+ * @param oldVersion
  * @returns bool
- * @throws DATABASE_ERROR
  */
 function roles_upgrade($oldVersion)
 {
@@ -258,49 +256,13 @@ function roles_upgrade($oldVersion)
 }
 
 /**
- * Delete the roles module
+ * Delete this module
  *
- * @access public
- * @param none $
- * @returns bool
- * @throws DATABASE_ERROR
+ * @return bool
  */
 function roles_delete()
 {
-    // this module cannot be removed
-    return false;
-
-    /**
-     * Drop the tables
-     */
-    // Get database information
-    $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
-
-    try {
-        $dbconn->begin();
-        // drop roles table
-        $query = xarDBDropTable($tables['roles']);
-        $dbconn->Execute($query);
-
-        // drop role_members table
-        $query = xarDBDropTable($tables['rolemembers']);
-        $dbconn->Execute($query);
-
-        /**
-         * Remove modvars, instances and masks
-         */
-        xarModVars::delete_all('roles');
-        xarRemoveMasks('roles');
-        xarRemoveInstances('roles');
-
-        $dbconn->commit();
-    } catch (Exception $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
-
-    // Deletion successful
-    return true;
+  //this module cannot be removed
+  return false;
 }
 ?>

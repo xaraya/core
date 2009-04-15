@@ -49,7 +49,7 @@ function dynamicdata_admin_modifymoduleconfig()
             }
             xarModVars::set('dynamicdata', 'debugusers', serialize($newusers));
 
-            xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifymoduleconfig'));
+            xarResponse::Redirect(xarModURL('dynamicdata', 'admin', 'modifymoduleconfig'));
             return true;
             break;
 

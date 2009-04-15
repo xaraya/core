@@ -253,9 +253,9 @@ function privileges_activate()
 }
 
 /**
- * Upgrade the privileges module from an old version
+ * Upgrade this module from an old version
  *
- * @param oldVersion the old version to upgrade from
+ * @param oldVersion
  * @returns bool
  */
 function privileges_upgrade($oldVersion)
@@ -270,49 +270,13 @@ function privileges_upgrade($oldVersion)
 }
 
 /**
- * Delete the privileges module
+ * Delete this module
  *
- * @param none
- * @returns boolean
+ * @return bool
  */
 function privileges_delete()
 {
     // this module cannot be removed
     return false;
-
-    /*********************************************************************
-    * Drop the tables
-    *********************************************************************/
-
-    // Get database information
-    $dbconn =& xarDB::getConn();
-    $tables =& xarDB::getTables();
-
-    // TODO: wrap in transaction? (this section is only for testing anyways)
-    $query = xarDBDropTable($tables['privileges']);
-    if (empty($query)) return; // throw back
-    $dbconn->Execute($query);
-
-    $query = xarDBDropTable($tables['privmembers']);
-    if (empty($query)) return; // throw back
-    $dbconn->Execute($query);
-
-    $query = xarDBDropTable($tables['security_realms']);
-    if (empty($query)) return; // throw back
-    $dbconn->Execute($query);
-
-    $query = xarDBDropTable($tables['security_acl']);
-    if (empty($query)) return; // throw back
-    $dbconn->Execute($query);
-
-    $query = xarDBDropTable($tables['security_masks']);
-    if (empty($query)) return; // throw back
-    $dbconn->Execute($query);
-
-    $query = xarDBDropTable($tables['security_instances']);
-    if (empty($query)) return; // throw back
-    $dbconn->Execute($query);
-
-    return true;
 }
 ?>

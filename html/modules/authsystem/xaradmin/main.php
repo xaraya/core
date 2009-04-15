@@ -22,7 +22,7 @@ function authsystem_admin_main()
     if (xarModVars::get('modules', 'disableoverview') == 0){
         return xarTplModule('authsystem','admin','overview');
     } else {
-        xarResponseRedirect(xarModURL('authsystem', 'admin', 'modifyconfig'));
+        xarResponse::Redirect(xarModURL('authsystem', 'admin', 'modifyconfig'));
         return true;
     }
 }

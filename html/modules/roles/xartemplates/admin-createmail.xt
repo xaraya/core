@@ -162,16 +162,7 @@
                 the Roles Lists table-based styles (borrow from the Modules list)
             -->
                 <xar:if condition="$selstyle eq '1'">
-              <p>
-                <xar:ml>
-                  <xar:mlstring>
-                    #(1) user(s) selected.
-                  </xar:mlstring>
-                  <xar:mlvar>
-                    #$totalselected#
-                  </xar:mlvar>
-                </xar:ml>
-              </p>
+              <p>#$totalselected# user(s) selected.</p>
                     <xar:elseif condition="$selstyle eq '2'" />
                     <xar:if condition="count($users) eq 0">
                         <p>No users match</p>

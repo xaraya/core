@@ -12,7 +12,7 @@
     <xar:set name="corecss">'Core'</xar:set>
     <xar:set name="corecssurl">
     xarModURL('themes','admin','cssconfig',array('component'=&gt;'core'))</xar:set>
-    <xar:set name="currentcssurl">xarServerGetCurrentURL()</xar:set>
+    <xar:set name="currentcssurl">xarServer::getCurrentURL()</xar:set>
     <!--
     <xar:if condition=" eq ">
         <xar:set name="tabclass">' class="active"'</xar:set>

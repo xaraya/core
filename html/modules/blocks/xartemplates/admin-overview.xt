@@ -185,6 +185,9 @@
         <h3>Available Hooks</h3>
         <p>The Blocks module has no hooks</p>
 
+        <h3>Available Dataproperties</h3>
+        <p>The Blocks module has no dataproperties</p>
+
         <h3>Further Information</h3>
         <p>Further information on the Blocks module can be found at</p>
         <ul>

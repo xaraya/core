@@ -137,9 +137,40 @@
             </li>
         </ul>
 
-        <h3>Included Dynamic Data Properties</h3>
-        <p>Roles provides a number of Dynamic Data properties that you can use either in Roles or
-        other module on your site.</p>
+        <h3>Available Dataproperties</h3>
+        <ul>
+            <li>
+                <strong>Affero</strong>:&#160;accepts as input or displays a user's Affero user name.
+            </li>
+            <li>
+                <strong>AIM</strong>:&#160;accepts as input or displays a user's AIM user name.
+            </li>
+            <li>
+                <strong>Email</strong>:&#160;accepts as input or displays an email address.
+            </li>
+            <li>
+                <strong>Grouplist</strong>:&#160;displays a list of groups of the site as a dropdown.
+            </li>
+            <li>
+                <strong>ICQ</strong>:&#160;accepts as input or displays an ICQ user address.
+            </li>
+            <li>
+                <strong>Password</strong>:&#160;accepts a password as input.
+            </li>
+            <li>
+                <strong>Rolestree</strong>:&#160;displays a tree of groups and users.
+            </li>
+            <li>
+                <strong>Userlist</strong>:&#160;displays a list of users of the site as a dropdown.
+            </li>
+            <li>
+                <strong>Username</strong>:&#160;accepts as input or displays a user's user name.
+            </li>
+            <li>
+                <strong>Yahoo</strong>:&#160;accepts as input or displays a Yahoo user address.
+            </li>
+        </ul>
+        
         <h3>Further Information</h3>
         <p>Further information on the Roles module can be found at:</p>
        <ul>
