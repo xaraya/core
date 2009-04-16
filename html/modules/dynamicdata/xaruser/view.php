@@ -63,12 +63,12 @@ function dynamicdata_user_view($args)
     $data['module_id'] = $data['moduleid'];
     // TODO: another stray
     $data['catid'] = $catid;
-
+    $data['template'] = $template;
     if (file_exists('modules/' . $data['tplmodule'] . '/xartemplates/user-view.xt') ||
         file_exists('modules/' . $data['tplmodule'] . '/xartemplates/user-view-' . $data['template'] . '.xt')) {
         return xarTplModule($data['tplmodule'],'user','view',$data,$data['template']);
     } else {
-        return xarTplModule('dynamicdata','user','view',$data,$args['template']);
+        return xarTplModule('dynamicdata','user','view',$data,$data['template']);
     }
 }
 
