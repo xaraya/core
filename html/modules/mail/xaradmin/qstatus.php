@@ -23,7 +23,7 @@ function mail_admin_qstatus($args)
     foreach($queues as $index => $qInfo) {
         // Get some info on the Q
         $qName = 'q_'.$qInfo['name'];
-        $qStore = xarModApiFunc('dynamicdata','user','getobjectinfo',array('name'=>$qName));
+        $qStore = DataObjectMaster::getObjectInfo(array('name'=>$qName));
         if(!isset($qStore)) {
             // Not there, we know enough
             $queues[$index]['status'] = 'problematic';
