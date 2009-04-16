@@ -118,9 +118,9 @@
         </label>
         <xar:set name="options">
             array(
-                array)'id' => 'None', 'name' => xarML('None')),
-                array)'id' => 'All', 'name' => xarML('All Modules')),
-                array)'id' => 'List', 'name' => xarML('Manual List')),
+                array('id' => 'None', 'name' => xarML('None')),
+                array('id' => 'All', 'name' => xarML('All Modules')),
+                array('id' => 'List', 'name' => xarML('Manual List')),
             )
         </xar:set>
         <xar:data-input type="dropdown" name="displaymodules" options="$options" value="$displaymodules" />

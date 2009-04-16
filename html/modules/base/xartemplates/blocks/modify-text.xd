@@ -8,12 +8,12 @@
         <xar:set name="expireseconds">$expirein * 3600</xar:set>
         <xar:set name="options">
             array(
-                array)'id' => 86400, 'name' => xarML('1 Day')),
-                array)'id' => 172800, 'name' => xarML('2 Days')),
-                array)'id' => 432000, 'name' => xarML('5 Days')),
-                array)'id' => 1296000, 'name' => xarML('15 Days')),
-                array)'id' => 2592000, 'name' => xarML('30 Days')),
-                array)'id' => 0, 'name' => xarML('Unlimited')),
+                array('id' => 86400, 'name' => xarML('1 Day')),
+                array('id' => 172800, 'name' => xarML('2 Days')),
+                array('id' => 432000, 'name' => xarML('5 Days')),
+                array('id' => 1296000, 'name' => xarML('15 Days')),
+                array('id' => 2592000, 'name' => xarML('30 Days')),
+                array('id' => 0, 'name' => xarML('Unlimited')),
             )
         </xar:set>
         <xar:data-input type="dropdown" name="expire" options="$options" value="$expireseconds" />
