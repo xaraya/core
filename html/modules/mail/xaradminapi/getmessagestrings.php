@@ -26,7 +26,7 @@ function mail_adminapi_getmessagestrings($args)
     }
 
     $messaginghome = sys::varpath() . "/messaging/" . $module;
-    $subjtemplate = $messaginghome . "/" . $template . "-subject.xd";
+    $subjtemplate = $messaginghome . "/" . $template . "-subject.xt";
     if (!file_exists($subjtemplate)) throw new FileNotFoundException($subjtemplate);
     $string = '';
     $fd = fopen($subjtemplate, 'r');
@@ -37,7 +37,7 @@ function mail_adminapi_getmessagestrings($args)
     $subject = $string;
     fclose($fd);
 
-    $msgtemplate = $messaginghome . "/" . $template . "-message.xd";
+    $msgtemplate = $messaginghome . "/" . $template . "-message.xt";
     if (!file_exists($msgtemplate)) throw new FileNotFoundException($msgtemplate);
 
     $string = '';

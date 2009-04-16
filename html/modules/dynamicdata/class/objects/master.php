@@ -125,7 +125,7 @@ class DataObjectMaster extends Object
     public $anonymous   = 0;            // if true forces display of names of properties instead of dd_xx designations
 
     public $layout = 'default';         // optional layout inside the templates
-    public $template = '';              // optional sub-template, e.g. user-objectview-[template].xd (defaults to the object name)
+    public $template = '';              // optional sub-template, e.g. user-objectview-[template].xt (defaults to the object name)
     public $tplmodule = 'dynamicdata';  // optional module where the object templates reside (defaults to 'dynamicdata')
     public $viewfunc = 'view';          // optional view function for use in xarModURL() (defaults to 'view')
 
