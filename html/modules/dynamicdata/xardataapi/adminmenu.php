@@ -8,7 +8,7 @@
                 array('mask' => 'AdminDynamicData', 'includes' => 'modifyconfig', 'target' => 'modifyconfig', 'title' => xarML('Configure the default dataproperty types'), 'label' => xarML('DataProperty Types')),
 //                array('mask' => 'AdminDynamicData', 'includes' => 'relations', 'target' => 'relations', 'title' => xarML('Configure relationships'), 'label' => xarML('Relationships')),
                 array('mask' => 'AdminDynamicData', 'includes' => array('utilities','query','util'), 'target' => 'utilities', 'title' => xarML('Import/export and other utilities'), 'label' => xarML('Utilities')),
-                array('mask' => 'AdminDynamicData', 'includes' => array('modifymoduleconfig'), 'target' => 'modifymoduleconfig', 'title' => xarML('Modify the configuration of this module'), 'label' => xarML('ModifyConfig')),
+                array('mask' => 'AdminDynamicData', 'includes' => array('modifymoduleconfig'), 'target' => 'modifymoduleconfig', 'title' => xarML('Modify the configuration of this module'), 'label' => xarML('Modify Configuration')),
         );
     }
 ?>
