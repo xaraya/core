@@ -13,10 +13,17 @@
         <xar:template type="module" file="admin-menu" />
         <img src="#xarTplGetImage('blocks.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
+
         <h3>What is it?</h3>
-        <p>The Blocks module lets site administrator(s) create and manage the configuration, display position and grouping of 'blocks' of content or functionality on a Xaraya site. The Blocks module is a core module within
-        Xaraya and cannot be removed.</p>
-        <h2>How to use it?</h2>
+        <p>
+            The Blocks module lets site administrator(s) create and manage the configuration, display position and grouping of 'blocks' of content or functionality on a Xaraya site. The Blocks module is a core module within
+            Xaraya and cannot be removed.
+        </p>
+
+        <h3>How to use it?</h3>
+        <p>
+            As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Blocks &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
+        </p>
         <h3>Block Types</h3>
         <p>Each module can provide a block type along with the code and templates for it. A block
         type defines a specific display of content or functionality that you can place on your

@@ -8,7 +8,7 @@
                 array('mask' => 'AddPrivilege', 'includes' => 'new', 'target' => 'new', 'title' => xarML('Add a new privilege to the system'), 'label' => xarML('Add Privilege')),
                 array('mask' => 'AdminPrivilege', 'includes' => 'assignprivileges', 'target' => 'assignprivileges', 'title' => xarML('Assign privileges to groups and users'), 'label' => xarML('Assign Privileges')),
                 array('mask' => 'AdminPrivilege', 'includes' => array('viewrealms','newrealm','modifyrealm','deleterealm'), 'target' => 'viewrealms', 'title' => xarML('Add, change or delete realms'), 'label' => xarML('Manage Realms')),
-                array('mask' => 'AdminPrivilege', 'includes' => 'modifyconfig', 'target' => 'modifyconfig', 'title' => xarML('Modify the privileges module configuration'), 'label' => xarML('Modify Config')),
+                array('mask' => 'AdminPrivilege', 'includes' => 'modifyconfig', 'target' => 'modifyconfig', 'title' => xarML('Modify the privileges module configuration'), 'label' => xarML('Modify Configuration')),
         );
     }
 ?>

@@ -8,9 +8,16 @@
         <xar:template type="module" file="admin-menu" />
         <img src="#xarTplGetImage('modules.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
+
         <h3>What is it?</h3>
-        <p>The Modules module controls the installation, upgrade, and removal of modules on your Xaraya site. The module also lets you connect different modules via "hooks" to allow them to share functionality  The Modules module is a core module within Xaraya and cannot be removed. </p>
+        <p>
+            The Modules module controls the installation, upgrade, and removal of modules on your Xaraya site. The module also lets you connect different modules via "hooks" to allow them to share functionality  The Modules module is a core module within Xaraya and cannot be removed. 
+        </p>
+
         <h3>How to use it?</h3>
+        <p>
+            As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Modules &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
+        </p>
         <p>From the menu, you have two choices:</p>
         <ul>
             <li>

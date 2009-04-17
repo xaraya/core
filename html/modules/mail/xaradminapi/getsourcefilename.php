@@ -15,10 +15,10 @@ function mail_adminapi_getsourcefilename($args)
     extract($args);  
     
     // Template search order:
-    // 1. var/messaging/{module}/{type}-{template Name}-{message part}-{mail type}.xd
-    // 2. var/messaging/{module}/{type}-{template Name}-{message part}.xd
-    // 3. var/messaging/{template Name}-{message part}-{mail type}.xd
-    // 4. var/messaging/{template Name}-{message part}.xd
+    // 1. var/messaging/{module}/{type}-{template Name}-{message part}-{mail type}.xt
+    // 2. var/messaging/{module}/{type}-{template Name}-{message part}.xt
+    // 3. var/messaging/{template Name}-{message part}-{mail type}.xt
+    // 4. var/messaging/{template Name}-{message part}.xt
     // 5. complain (later on)
    
     $tplMessagingDir = sys::varpath() . "/messaging/$modName";    
@@ -27,20 +27,20 @@ function mail_adminapi_getsourcefilename($args)
     
     unset($sourceFileName);
 
-    xarLogMessage("TPL: 1. $tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xd");
-    xarLogMessage("TPL: 2. $tplMessagingDir/$modType-$templateName-$messagepart.xd");
+    xarLogMessage("TPL: 1. $tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt");
+    xarLogMessage("TPL: 2. $tplMessagingDir/$modType-$templateName-$messagepart.xt");
        
     if(!empty($templateName) &&
-        file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xd")) {
+        file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt")) {
         
     } elseif(!empty($templateName) &&
-        file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$messagepart.xd")) { 
+        file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$messagepart.xt")) { 
 
     } elseif(!empty($templateName) &&
-        file_exists($sourceFileName = "$tplMessagingDir/$templateName-$messagepart-$mailType.xd")) { 
+        file_exists($sourceFileName = "$tplMessagingDir/$templateName-$messagepart-$mailType.xt")) { 
             
     } elseif(!empty($templateName) &&
-        file_exists($sourceFileName = "$tplMessagingDir/$templateName-$messagepart.xd")) {
+        file_exists($sourceFileName = "$tplMessagingDir/$templateName-$messagepart.xt")) {
             
     } else{
         throw new FileNotFoundException(xarML('No template was found corresponding to #(1) #(2)',$templateName,$messagepart));

@@ -30,7 +30,7 @@ function mail_adminapi_getmessagetemplates($args)
     $templates = array();
     while (($filename = readdir($dd)) !== false) {
         if (!is_dir($messaginghome . "/" . $filename)) {
-            $pos = strpos($filename,'-message.xd');
+            $pos = strpos($filename,'-message.xt');
             if (!($pos === false)) {
                 $templatename = substr($filename,0,$pos);
                 $templatelabel = ucfirst($templatename);

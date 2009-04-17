@@ -483,7 +483,7 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
-     * For use in DD tags : preset="yes" - this can typically be used in admin-new.xd templates
+     * For use in DD tags : preset="yes" - this can typically be used in admin-new.xt templates
      * for individual properties you'd like to automatically preset via GET or POST parameters
      *
      * Note: don't use this if you already check the input for the whole object or in the code

@@ -8,11 +8,18 @@
         <xar:template type="module" file="admin-menu" />
         <img src="#xarTplGetImage('mail.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
+
         <h3>What is it?</h3>
-        <p>The Mail module controls the ways that your site sends email to users or groups of users.
-        This is a utility module that takes information from other modules installed on your site,
-        and formats and sends email for them. The Mail module is a core module within Xaraya and cannot be removed.</p>
+        <p>
+            The Mail module controls the ways that your site sends email to users or groups of users.
+            This is a utility module that takes information from other modules installed on your site,
+            and formats and sends email for them. The Mail module is a core module within Xaraya and cannot be removed.
+        </p>
+
         <h3>How to use it?</h3>
+        <p>
+            As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Mail &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
+        </p>
         <p>A number of choices are available in the menu:</p>
         <ul>
             <li>

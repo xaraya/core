@@ -1,6 +1,6 @@
 <?php
 /**
- * Psspl : Added API function to read the contents of template files (.xd) as plain text
+ * Psspl : Added API function to read the contents of template files (.xt) as plain text
  */
 function mail_adminapi_getsourcestring($args)
 {   

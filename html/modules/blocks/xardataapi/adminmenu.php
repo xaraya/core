@@ -10,7 +10,7 @@
                 array('mask' => 'AddBlock', 'includes' => array('new_group'), 'target' => 'new_group', 'title' => xarML('Add a new group of blocks'), 'label' => xarML('New Block Group')),
                 array('mask' => 'AdminBlock', 'includes' => 'view_types', 'target' => 'view_types', 'label' => xarML('Block Types')),
                 array('mask' => 'AddBlock', 'includes' => array('new_type'), 'target' => 'new_type', 'title' => xarML('Add a new block type into the system'), 'label' => xarML('New Block Type')),
-                array('mask' => 'AdminBlock', 'includes' => 'modifyconfig', 'target' => 'modifyconfig', 'title' => xarML('Add a new block type into the system'), 'label' => xarML('Modify Config')),
+                array('mask' => 'AdminBlock', 'includes' => 'modifyconfig', 'target' => 'modifyconfig', 'title' => xarML('Add a new block type into the system'), 'label' => xarML('Modify Configuration')),
         );
     }
 ?>

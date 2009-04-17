@@ -12,6 +12,8 @@
 
 sys::import('xaraya.structures.tree');
 sys::import('modules.privileges.class.privileges');
+sys::import('modules.dynamicdata.class.properties.base');
+
 /**
  * Handle Privileges Tree property
  */
