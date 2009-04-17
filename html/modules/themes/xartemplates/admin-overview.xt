@@ -8,9 +8,16 @@
         <xar:template type="module" file="admin-menu" />
         <img src="#xarTplGetImage('themes.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
+
         <h3>What is it?</h3>
-        <p>The Themes module manages the themes available on your Xaraya installation, which in turn define the site's display and look-and-feel. It also provides performance and development options for administrators and theme developers. The Themes module is a core module within Xaraya and cannot be removed. </p>
+        <p>
+            The Themes module manages the themes available on your Xaraya installation, which in turn define the site's display and look-and-feel. It also provides performance and development options for administrators and theme developers. The Themes module is a core module within Xaraya and cannot be removed. 
+        </p>
+
         <h3>How to use it?</h3>
+        <p>
+            As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Themes &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
+        </p>
         <p>From the menu, you have three choices:</p>
         <ol>
             <li>
