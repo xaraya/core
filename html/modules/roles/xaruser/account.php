@@ -20,7 +20,7 @@
 function roles_user_account()
 {
     if(!xarVarFetch('moduleload','str', $data['moduleload'], 'roles', XARVAR_NOT_REQUIRED)) {return;}
-
+    // REMOVEME: (for commit)
     //let's make sure other modules that refer here get to a default and existing login or logout form
     $defaultauthdata      = xarModAPIFunc('roles','user','getdefaultauthdata');
     $defaultauthmodname   = $defaultauthdata['defaultauthmodname'];
