@@ -19,16 +19,15 @@
         <p>
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Authsystem &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
         </p>
-        <br />
-        <ul>
-            <li>
-            <strong>Short URLs :</strong>There is short URL support that you can configure in the
-            Admin Modify Config menu option</li>
-            <li>
-            <strong>Login Security Options :</strong>can also be configured and currently include
-            login attempts and lockout time.</li>
-        </ul>
-        <br />
+        <p>
+            In addition, this module also supports the following configuration options:
+            <ul>
+                <li>
+                    <strong>User lockout:</strong>&#160;If this option is active, then users who incoorectly attempt to login a specified number times are locked out of the site for a specified amount of time.
+                </li>
+            </ul>
+        </p>
+
         <p>
         <strong>NOTE:</strong>If you also require the ability to have users register and log in on
         your site, you should install the Registration module. The Registration module manages user

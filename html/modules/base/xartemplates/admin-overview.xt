@@ -23,6 +23,35 @@
                 <li><strong>Module alias:</strong>&#160; whether this module should display an alias name in its displays, rather than the standard name (i.e. "base"). The alias can be defined in the text box below. If the alias checkbox is checked and the textbox is empty, the standard module name is used.</li>
             </ul>
         </p>
+        <p>
+            In addition, this module also supports the following configuration options:
+            <ul>
+                <li>
+                    <strong>Front page settings:</strong>&#160;sets the default page to be displayed when a user first accesses the site..
+                </li>
+                <li>
+                    <strong>Session and security settings:</strong>&#160;Session duration and inactivity timeout can be set. Xaraya uses its own cookies, whose name path and domain can be set. An overall security setting (low, medium, high) can be set for use by modules that recognize it.
+                </li>
+                <li>
+                    <strong>Locales:</strong>&#160;The locales available to the site can be set (the corresponding locale folders must be available under var/locales) as well as the default locale to be used. A setting also exists to allow (or not) users to switch locales/languages via e.g. the Language block in the Roles module.
+                </li>
+                <li>
+                    <strong>Timezones:</strong>&#160;Server and host timezones can be set separately.
+                </li>
+                <li>
+                    <strong>Proxy server:</strong>&#160;If the site's webserver uses a proxy server for outgoing connections, its configuration can be added..
+                </li>
+                <li>
+                    <strong>WYSIWYG editors:</strong>&#160;A default WYSIWYG editor can be chosen from a dropdown of available editors (these need to be installed by their modules).
+                </li>
+                <li>
+                    <strong>Legacy support:</strong>&#160;Activating legacy support will allow earlier versions of Xaraya modules to run on the site. Note that legacy support changes as versions are released, so the setting  in general provides support only for the most recent versions. 
+                </li>
+                <li>
+                    <strong>ShortURLs:</strong>&#160;a global setting which defines whether the site supports short URLs. Single modules must have their own settings enabled to activate their own support for short URLs.
+                </li>
+            </ul>
+        </p>
         <p>The Administration menu allows you to have control over various global aspects on your
         site and includes:</p>
             <ol>
