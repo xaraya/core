@@ -194,16 +194,6 @@
                     </div>
                     <div class="xar-form-input-wrapper-after">
                         <xar:set name="checked">
-                            <xar:var scope="module" module="base" name="SupportShortURLs" />
-                        </xar:set>
-                        <xar:data-input type="checkbox" name="baseshorturl" id="baseshorturl"
-                        checked="$checked" />
-                        <label for="baseshorturl"
-                        title="#xarML('Enable short URL support in the base module.')#">Enable Base
-                        Module Short URLs</label>
-                    </div>
-                    <div class="xar-form-input-wrapper-after">
-                        <xar:set name="checked">
                             <xar:var scope="config" name="Site.Core.FixHTMLEntities" />
                         </xar:set>
                         <xar:data-input type="checkbox" name="htmlenitites" id="htmlenitites"
@@ -213,6 +203,7 @@
                         Entities</label>
                     </div>
                 </fieldset>
+                <xar:template file="display" module="base" subdata="array('modulename' => 'base')" />
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="authid" id="authid" value="#$authid#" />
