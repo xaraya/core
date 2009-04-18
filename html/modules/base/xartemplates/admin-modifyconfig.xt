@@ -233,8 +233,6 @@
                 authentication module you want to move.')#';</script>
             </xar:if>
             <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
-            onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);"
-            enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Sessions and Security</legend>
                     <div class="xar-form-input-wrapper-after">
@@ -369,8 +367,6 @@
             <!-- Begin Locale Options -->
             <xar:elseif condition="$tab eq 'locales'" />
             <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
-            onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);"
-            enctype="application/x-www-form-urlencoded">
                 <xar:template file="modifyconfig-locales" module="base" type="module" />
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
@@ -384,8 +380,6 @@
             <!-- Begin Other Options -->
             <xar:elseif condition="$tab eq 'other'" />
             <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
-            onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);"
-            enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>General Options</legend>
                     <div class="xar-form-input-wrapper">
