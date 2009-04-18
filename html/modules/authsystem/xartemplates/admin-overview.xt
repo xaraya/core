@@ -23,7 +23,7 @@
             In addition, this module also supports the following configuration options:
             <ul>
                 <li>
-                    <strong>User lockout:</strong>&#160;If this option is active, then users who incoorectly attempt to login a specified number times are locked out of the site for a specified amount of time.
+                    <strong>User lockout:</strong>&#160;If this option is active, then users who incorrectly attempt to login a specified number times are locked out of the site for a specified amount of time.
                 </li>
             </ul>
         </p>

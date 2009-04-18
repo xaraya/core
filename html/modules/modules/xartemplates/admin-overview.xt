@@ -18,6 +18,14 @@
         <p>
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Modules &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
         </p>
+        <p>
+            In addition, this module also supports the following configuration options:
+            <ul>
+                <li>
+                    <strong>Disable overviews:</strong>&#160;If this option is active, the module overview page will not be displayed when going to the admin menu of a module.
+                </li>
+            </ul>
+        </p>
         <p>From the menu, you have two choices:</p>
         <ul>
             <li>

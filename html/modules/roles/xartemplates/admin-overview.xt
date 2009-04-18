@@ -34,6 +34,23 @@
         <p>
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Roles &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
         </p>
+        <p>
+            In addition, this module also supports the following configuration options:
+            <ul>
+                <li>
+                    <strong>Designated site administrator:</strong>&#160;defines a "root" administrator for the site who is guaranteed to have unrestricted access at all times. The designated site admin is by definition a member of the Administrators group.
+                </li>
+                <li>
+                    <strong>Default grou for new users:</strong>&#160;When creating new users on the site they will automatically be made members of this group, unless specifically overridden.
+                </li>
+                <li>
+                    <strong>Authentication module:</strong>&#160;defines the module to be used when users log in to the site. The default is the core Authsystem module.
+                </li>
+                <li>
+                    <strong>Registration module:</strong>&#160;defines the module to be used for registering new users.
+                </li>
+            </ul>
+        </p>
         <p>The roles module provides key functions to manage the users and groups on your site:</p>
         <ul>
             <li>

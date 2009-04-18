@@ -18,14 +18,90 @@
         <p>
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Themes &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
         </p>
+        <p>
+            In addition, this module also supports the following configuration options:
+            <ul>
+                <li>
+                    <strong>User defined theme:</strong>&#160;If this option is active, then users can define the theme to view the site with fomr their account page 
+                </li>
+                <li>
+                    <strong>Admin Dashboard</strong>
+                    <ul>
+                        <li>
+                            <em>Enable the Admin Dashboard:</em>&#160;The Admin Dashboard is a special theme
+                            that uses the dashboard.xt template (by default) if it exists in your themes/yourtheme/pages directory. If you check this option the Admin Dashboard provides admin options in a special Admin page view instead of through the Admin Menu.
+                        </li>
+                        <li>
+                            <em>Dashboard Template Name:</em>&#160;This is the name of the Admin Dashboard
+                            template located in your themes/yourtheme/pages directory. By default it is called 
+                            dashboard.xt, but you can change it with this option. Do not include the .xt extension in the name when using this option.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Site Display Options</strong>&#160;These are variables that can be inserted into your templates for display on your site. They are all used in the Default theme at installation time. To display these variables on your site, insert them in your templates with the appropriate <pre>&lt;xar:var /&gt;</pre> blocklayout tag. 
+                    <ul>
+                        <li>
+                            <em>Site Name</em>:
+                            <pre>&lt;xar:var scope="module" module="themes" name="SiteName" /&gt;</pre></li>
+                        <li>
+                            <em>Site Slogan</em>:
+                            <pre>&lt;xar:var scope="module" module="themes" name="SiteSlogan" /&gt;</pre>
+                        </li>
+                        <li>
+                            <em>Copyright</em>: Defaults to "&#169; Copyright 2009 &lt;administrator name&gt;".
+                            Change the text as necessary and insert in your theme with 
+                            <pre>&lt;xar:var scope="module" module="themes" name="SiteCopyRight" /&gt;</pre></li>
+                        <li>
+                            <em>Footer note</em>: The 'footer' is displayed at the bottom (the 'foot') of every page on your site in the Default theme.
+                            <pre>&lt;xar:var scope="module" module="themes" name="SiteFooter" /&gt;</pre>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Page Title Options</strong>
+                    <ul>
+                        <li>
+                            <em>Page Title Separator:</em>&#160;defines the separation character(s) in your
+                            page titles. Example: "Themes :: Your Site Slogan :: Your Site Name"
+                        </li>
+                        <li>
+                            <em>Page Title Order:</em>&#160;defines how the page titles are displayed (e.g. site name - page name). You can choose from a dropdown of several options.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Template Debugging Options</strong>
+                    <ul>
+                        <li>
+                            <em>Show php comment block header in compiled templates:</em>&#160;This
+                            feature enables you to inspect a compiled template and know which template it
+                            refers to.
+                        </li>
+                        <li>
+                            <em>Show template filenames in HTML comments:</em>&#160;When you view the
+                            source of a page, checking this option will display the start and end point of
+                            each template used in the page. This is useful for identifying which
+                            template to override and edit when you need to customize your theme. This
+                            option should be turned off on a live site.
+                        </li>
+                        <li>
+                            <em>Cache templates:</em>&#160;This option enables caching of templates. It
+                            is important for performance that you have Cache Templates checked and active
+                            on a site. Turn it off when developing your theme.</li>
+                        <li>
+                        <em>Debug Templates by showing variables available:</em>&#160;Shows the variables
+                        used in each template which is handy for debugging template errors.
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </p>
         <p>From the menu, you have three choices:</p>
         <ol>
             <li>
             <strong>View Themes</strong>: Displays the themes currently installed on your system,
             and the current state that they are in.</li>
-            <li>
-            <strong>Template tags</strong>: Allows you view, edit or delete template tags on the
-            system, as well as add new tags</li>
             <li>
             <strong>Modify Configuration</strong>: Allows you to set various site wide
             configuration options. This is an important option and you should review these options
@@ -51,100 +127,6 @@
         Version, basic Info, theme Status, and Actions available to you for each theme. The Default
         Theme used to display your site is also indicated.</p>
         <br />
-        <h4>Template Tags</h4>
-        <p>Template tags are custom Block Layout tags that developers can create to provide extra
-        functionality or easy access to functionality in their modules. This page lists the
-        available custom tags, in addition to Block Layout tags, available for use in creating your
-        templates. These tags are usually always installed when the module is installed or
-        upgraded.</p>
-        <p>It is rare that you would have to access any options on this page unless you are a
-        developer or wish to install a new tag that has not yet been installed in the usual
-        way.</p>
-        <br />
-        <h4>Modify Config</h4>
-        <p>You have a three main groups of configuration options.</p>
-        <ol>
-            <li>
-            <strong>Site Display Options</strong>
-            <br />These are variables that can be inserted into your templates for display on your
-            site. They are all used in the Default theme at installation time. To display these
-            variables on your site, insert them in your templates with the 
-            <code>&lt;xar:var /&gt;</code>blocklayout tag. 
-            <ul>
-                <li>
-                <em>Site Name</em>: add your site name with 
-                <br />
-                <code>&lt;xar:var scope="module" module="themes" name="SiteName" /&gt;</code></li>
-                <li>
-                <em>Site Slogan</em>: Add your slogan and display it with 
-                <br />
-                <code>&lt;xar:var scope="module" module="themes" name="SiteSlogan"
-                /&gt;</code></li>
-                <li>
-                <em>Copyright</em>: Defaults to "&#169; Copyright 2003 &lt;administrator name&gt;".
-                Change the text as necessary and insert in your theme with 
-                <br />
-                <code>&lt;xar:var scope="module" module="themes" name="SiteCopyRight"
-                /&gt;</code></li>
-                <li>
-                <em>Footer note</em>: The 'footer' is displayed at the bottom (the 'foot') of each
-                and every page on your site in the Default theme. Display this footer note with 
-                <br />
-                <code>&lt;xar:var scope="module" module="themes" name="SiteFooter"
-                /&gt;</code></li>
-            </ul></li>
-            <li>
-                <strong>Admin Dashboard</strong>
-                <ul>
-                    <li>
-                    <em>Enable the Admin Dashboard</em>: The Admin Dashboard is a special theme
-                    that uses the 
-                    <code>dashboard.xt</code>template (by default) if it exists in your 
-                    <code>themes/yourtheme/pages</code>directory. If you check this option the
-                    Admin Dashboard provides admin options in a special Admin page view instead of
-                    through the Admin Menu.</li>
-                    <li>
-                    <em>Dashboard Template Name</em>: This is the name of the Admin Dashboard
-                    template located in your 
-                    <code>themes/yourtheme/pages</code>directory. By default it is called 
-                    <code>dashboard.xt</code>but you can change it with this option. Do not include
-                    the .xt extension when using this option.</li>
-                </ul>
-            </li>
-            <li>
-                <strong>Page Title Options</strong>
-                <ul>
-                    <li>
-                    <em>Page Title Separator</em>: This will be the separation character(s) in your
-                    title. Example: "Themes :: Your Site Slogan :: Your Site Name"</li>
-                    <li>
-                    <em>Page Title Order</em>: Determines how the page title is displayed. The
-                    results of the display options are:</li>
-                </ul>
-            </li>
-            <li>
-                <strong>Template Debugging Options</strong>
-                <ul>
-                    <li>
-                    <strong>Show php comment block header in compiled templates</strong>: This
-                    feature enables you to inspect a compiled template and know which template it
-                    refers to.</li>
-                    <li>
-                    <strong>Show template filenames in HTML comments</strong>: When you view the
-                    source of a page, checking this option will display the start and end point of
-                    each template used in the page. It is very useful for identifying which
-                    template to override and edit when you need to customize your theme. Turn this
-                    option off on a live site.</li>
-                    <li>
-                    <strong>Cache templates</strong>: This option enables caching of templates. It
-                    is important for performance that you have Cache Templates checked and active
-                    on a site. Turn it of when developing your theme.</li>
-                    <li>
-                    <em>Debug Templates by Showing Variables Available</em>: Shows the variables
-                    used in each template which is handy for debugging template errors.</li>
-                </ul>
-            </li>
-        </ol>
 
         <h3>Available Blocks</h3>
         <ul>
