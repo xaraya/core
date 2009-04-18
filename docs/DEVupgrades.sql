@@ -662,6 +662,8 @@ INSERT INTO `xar_privileges` (id, name, realm_id, module_id, component, instance
 INSERT INTO `xar_privileges` (id, name, realm_id, module_id, component, instance, level, description, itemtype)
     SELECT 0,'EditThemes', realm_id, module_id, 'All', 'All', 500, '',3 FROM `xar_privileges` WHERE name = 'AdminTheme';
 
+DROP TABLE xar_template_tags;
+
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
 */
