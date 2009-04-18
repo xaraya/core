@@ -19,36 +19,27 @@
         <div class="xar-mod-body">
             <xar:template type="module" file="admin-menu" />
             <h2>Modify Configuration</h2>
-            <form action="&xar-modurl-themes-admin-updateconfig;" method="post"
-            enctype="application/x-www-form-urlencoded">
+            <form action="&xar-modurl-themes-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Configuration Options</legend>
                     <div class="textInputContainer">
-                        <xar:set name="valThemedir">xarModVars::get('themes',
-                        'themesdirectory')</xar:set>
-                        <xar:data-label label="Default Theme Directory" for="themedir"
-                        title="The default directory for site themes - no trailing slash." />
-                        <xar:data-input id="themedir" name="themedir" type="textbox" size="15"
-                        maxlength="100" value="$valThemedir" />
+                        <xar:set name="valThemedir">xarModVars::get('themes', 'themesdirectory')</xar:set>
+                        <xar:data-label label="Default Theme Directory" for="themedir" title="The default directory for site themes - no trailing slash." />
+                        <xar:data-input id="themedir" name="themedir" type="textbox" size="15" maxlength="100" value="$valThemedir" />
                     </div>
                     <fieldset>
                         <legend>Admin Dashboard</legend>
                         <div class="checkInputContainer">
-                            <xar:data-input type="checkbox" name="dashboard"
-                            checked="$dashboard" />
-                            <xar:data-label label="Enable the Admin Dashboard" for="dashboard"
-                            title="Use the Admin Dashboard to manage all your Admin settings from a single page." />
+                            <xar:data-input type="checkbox" name="dashboard" checked="$dashboard" />
+                            <xar:data-label label="Enable the Admin Dashboard" for="dashboard" title="Use the Admin Dashboard to manage all your Admin settings from a single page." />
                         </div>
                         <div class="textInputContainer">
-                            <xar:data-label label="Dashboard Template name" for="dashtemplate"
-                            title="Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'" />
+                            <xar:data-label label="Dashboard Template name" for="dashtemplate" title="Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'" />
                             <div class="infoAddedInput">
                                 <xar:set name="valDashtamplate">
                                     <xar:var scope="module" module="themes" name="dashtemplate" />
                                 </xar:set>
-                                <xar:data-input id="dashtamplate" name="dashtamplate"
-                                type="textbox" value="$valDashtamplate" size="30"
-                                maxlength="100" />
+                                <xar:data-input id="dashtamplate" name="dashtamplate" type="textbox" value="$valDashtamplate" size="30" maxlength="100" />
                                 <span class="inputIndication">(without the .xt extension)</span>
                                 <p>The Admin Dashboard is automatically used with all admin
                                 functions. The default page template name is 
@@ -56,24 +47,20 @@
                                 <p>A page template called 
                                 <strong>admin.xt</strong>will be used automatically without this
                                 switch and can be customised on a module by module basis (eg
-                                admin-articles.xt).</p>
+                                admin-articles.xt).
+                                </p>
                             </div>
                         </div>
                     </fieldset>
                     <div class="checkInputContainer">
                         <xar:set name="checkAdminpagemenu">$adminpagemenu</xar:set>
-                        <xar:data-input type="checkbox" name="adminpagemenu" id="adminpagemenu"
-                        checked="$checkAdminpagemenu" />
-                        <xar:data-label label="Enable InPage Admin SubMenus" for="adminpagemenu"
-                        title="Use submenus in the page for admin functions." />
+                        <xar:data-input type="checkbox" name="adminpagemenu" id="adminpagemenu" checked="$checkAdminpagemenu" />
+                        <xar:data-label label="Enable InPage Admin SubMenus" for="adminpagemenu" title="Use submenus in the page for admin functions." />
                     </div>
                     <div class="checkInputContainer">
                         <xar:set name="checkUsermenu">xarModIsHooked('themes', 'roles')</xar:set>
-                        <xar:data-input type="checkbox" name="usermenu" id="usermenu"
-                        checked="$checkUsermenu" />
-                        <xar:data-label label="Allow users to set their theme in User Account page"
-                        for="usermenu"
-                        title="Allow users to select themes from their Account Details page." />
+                        <xar:data-input type="checkbox" name="usermenu" id="usermenu" checked="$checkUsermenu" />
+                        <xar:data-label label="Allow users to set their theme in User Account page" for="usermenu" title="Allow users to select themes from their Account Details page." />
                     </div>
                 </fieldset>
                 <fieldset>
@@ -99,8 +86,7 @@
                     <xar:set name="valCopyright">xarModVars::get('themes', 'SiteCopyRight',
                     1)</xar:set>
                     <xar:data-label label="Copyright" for="copyright" />
-                    <xar:data-input type="textbox" name="copyright" id="copyright"
-                    value="$valCopyright" />
+                    <xar:data-input type="textbox" name="copyright" id="copyright" value="$valCopyright" />
                 </div>#xarVarDelCached('Mod.Variables.themes','SiteCopyRight')# 
                 <div class="textareaContainer">
                     <xar:set name="valFooternote">xarModVars::get('themes', 'SiteFooter',
@@ -110,8 +96,7 @@
                     value="$valFooternote" />
                 </div>#xarVarDelCached('Mod.Variables.themes','SiteFooter')# 
                 <div class="textInputContainer">
-                    <xar:set name="valSeperator">xarModVars::get('themes', 'SiteTitleSeparator',
-                    1)</xar:set>
+                    <xar:set name="valSeperator">xarModVars::get('themes', 'SiteTitleSeparator', 1)</xar:set>
                     <xar:data-label label="Page Title Separator" for="separator" />
                     <xar:data-input type="textbox" name="separator" id="separator"
                     value="$valSeperator" />
