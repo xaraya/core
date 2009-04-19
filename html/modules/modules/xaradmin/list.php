@@ -83,7 +83,7 @@ function modules_admin_list()
     $img_activate       = xarTplGetImage('icons/activate.png', 'base');
     $img_deactivate     = xarTplGetImage('icons/deactivate.png', 'base');
     $img_upgrade        = xarTplGetImage('icons/upgrade.png', 'base');
-    $img_initialise     = xarTplGetImage('icons/initialise.png', 'base');
+    $img_initialise     = xarTplGetImage('icons/initialize.png', 'base');
     $img_remove         = xarTplGetImage('icons/remove.png', 'base');
 
     // get other images
