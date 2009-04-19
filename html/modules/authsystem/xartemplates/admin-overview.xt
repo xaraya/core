@@ -28,24 +28,6 @@
             </ul>
         </p>
 
-        <p>
-        <strong>NOTE:</strong>If you also require the ability to have users register and log in on
-        your site, you should install the Registration module. The Registration module manages user
-        registration and options for that process (which was previously handled by Roles module in
-        earlier Xaraya versions). It is available in the Xaraya Base distribution and Module code
-        repository</p>
-        <p>The Roles module will use the default Login page and block of the Default Authentication
-        module wish is by default, Authsystem.</p>
-        <br />
-        <h3>Other Authentication Methods</h3>
-        <p>Xaraya also has the ability to add other types of Authentication modules such as
-        AuthLDAP, AuthURL, AuthEmail and so on, that are available in our 3rd party module code
-        repository in addition to 3rd party providers' sites. Please see the documentation for the
-        relevant authentication module.</p>
-        <p>In the case of authentication modules other than the default, you should set your
-        Default Authentication module for Roles in the Roles module Modify Config.</p>
-        <br />
-
         <h3>Available Blocks</h3>
         <ul>
             <li>
@@ -53,11 +35,22 @@
             </li>
         </ul>
 
+        <h3>Available Dataproperties</h3>
+        <p>The Authsystem module has no dataproperties</p>
+
         <h3>Available Hooks</h3>
         <p>The Authsystem module has no hooks</p>
 
-        <h3>Available Dataproperties</h3>
-        <p>The Authsystem module has no dataproperties</p>
+        <h3>Related Information</h3>
+        <p>
+            Xaraya can work with other types of authentication modules such as AuthLDAP, AuthURL, AuthEmail and so on, that are available at www.xaraya.com or from 3rd party providers. You can search for such modules at the <a href="http://www.xaraya.com/index.php?module=release&amp;func=search" target="_blank">Extensions page</a> on www.xaraya.com 
+        </p>
+        <p>
+            To have Xaraya recognize an installed authentication module other than the default, go to the Roles module configuration page <strong>Admin Menu &#8594; Roles &#8594; Modify Configuration</strong> and set the authentication module you want to use as the default authentication module.
+        </p>
+        <p>
+            If your site also requires the ability to have users register, install the Registration module, which manages the user registration process. It is available in the Xaraya Base distribution and on www.xaraya.com
+        </p>
 
         <!--
         <h3>Further Information</h3>
