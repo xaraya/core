@@ -9,6 +9,15 @@
     <xar:style scope="module" module="base" file="navtabs" />
     <xar:style scope="module" file="roletree" />
     <xar:additional-styles />
+
+    <xar:set name="icon_password">xarTplGetImage('icons/user-password.png','base')</xar:set>
+    <xar:set name="icon_info">xarTplGetImage('icons/info.png','base')</xar:set>
+    <xar:set name="icon_privileges">xarTplGetImage('icons/privileges.png','base')</xar:set>
+    <xar:set name="icon_delete">xarTplGetImage('icons/delete.png','base')</xar:set>
+    <xar:set name="icon_modify">xarTplGetImage('icons/modify.png','base')</xar:set>
+    <xar:set name="icon_none">xarTplGetImage('icons/none.png','base')</xar:set>
+    <xar:set name="icon_test">xarTplGetImage('icons/test.png','base')</xar:set>
+
     <div class="xar-mod-head">
         <span class="xar-mod-title">Roles Administration</span>
     </div>
@@ -164,21 +173,18 @@
                     <input type="hidden" name="state" id="state" value="#$state#" />
                     <input type="hidden" name="order" id="order" value="#$order#" />
                     <input type="hidden" name="search" id="search" value="#xarVarPrepForDisplay($search)#"/>
-                    value="#xarVarPrepForDisplay($search)#" />
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="submit" value="#xarML('Change Status')#"
                     class="xar-margin-thick-left" />
                 </div>
                 <!-- @todo: add this to the filter GUI? -->
                 <xar:set name="fieldlist">array('id','uname','email','regdate')</xar:set>
-                <xar:data-getitems object="$object" value="$values" name="$properties" sort="$order" fieldlist="$fieldlist" />
+                <xar:data-getitems object="$object" value="values" name="properties" sort="$order" fieldlist="$fieldlist" />
                 <table class="xar-fullwidth xar-clearboth">
                     <tr>
                         <xar:foreach in="$properties" key="$name">
                             <th class="xar-align-center">
-                                <a title="Sort by #$name#"
-                                href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;id=#$groupid#&amp;order=#$name#&amp;search=#$search#">
-
+                                <a title="Sort by #$name#" href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;id=#$groupid#&amp;order=#$name#&amp;search=#$search#">
                                     <xar:data-label property="$properties[$name]" />
                                 </a>
                             </th>
@@ -191,67 +197,56 @@
                                 <td>
                                     <xar:if condition="!empty($fields[$name])">
                                         <xar:if condition="$name eq 'name' and $users[$itemid]['frozen']">
-                                        <strong>#xarVarPrepForDisplay($fields['name'])#</strong>
-                                        <xar:elseif condition="$name eq 'uname' and $users[$itemid]['frozen']" />#xarVarPrepForDisplay($fields['uname'])#
-                                        
-                                        <xar:elseif condition="$name eq 'email' and $users[$itemid]['frozen']" />None
-                                        
+                                            <strong>#xarVarPrepForDisplay($fields['name'])#</strong>
+                                        <xar:elseif condition="$name eq 'uname' and $users[$itemid]['frozen']" />
+                                            #xarVarPrepForDisplay($fields['uname'])#                                        
+                                        <xar:elseif condition="$name eq 'email' and $users[$itemid]['frozen']" />
+                                            None
                                         <xar:else />
-                                        <xar:data-output property="$properties[$name]"
-                                        value="$fields[$name]" /></xar:if>
+                                            <xar:data-output property="$properties[$name]" value="$fields[$name]" />
+                                        </xar:if>
                                     </xar:if>
                                 </td>
                             </xar:foreach>
                             <td class="xar-align-center xar-nowrap">
                                 <xar:if condition="!$users[$itemid]['frozen']">
-                            <a href="&xar-modurl-roles-admin-createpassword;&amp;id=#$fields.id#&amp;state=#$state#&amp;groupid=#$groupid#"
-                            title="#xarML('Generate a new password for this User')#">
-                                <img src="modules/roles/xarimages/passicon.gif"
-                                class="xar-valign-middle" />
-                            </a>&#160; 
-                            <a href="&xar-modurl-roles-admin-modify;&amp;id=#$fields.id#"
-                            title="#xarML('Modify this user')#">
-                                <img src="modules/roles/xarimages/infoicon.gif"
-                                class="xar-valign-middle" />
-                            </a>&#160; 
-                            <a href="&xar-modurl-roles-admin-delete;&amp;id=#$fields.id#"
-                            title="#xarML('Delete this User')#">
-                                <img src="modules/roles/xarimages/delete.png"
-                                class="xar-valign-middle" />
-                            </a>&#160; 
+                                    <a href="&xar-modurl-roles-admin-createpassword;&amp;id=#$fields.id#&amp;state=#$state#&amp;groupid #$groupid#" title="#xarML('Generate a new password for this User')#">
+                                        <img src="#$icon_password#" class="xar-valign-middle" />
+                                    </a>&#160; 
+                                    <a href="&xar-modurl-roles-admin-modify;&amp;id=#$fields.id#" title="#xarML('Modify this user')#">
+                                        <img src="#$icon_modify#" class="xar-valign-middle" />
+                                    </a>&#160; 
+                                    <a href="&xar-modurl-roles-admin-delete;&amp;id=#$fields.id#" title="#xarML('Delete this User')#">
+                                        <img src="#$icon_delete#" class="xar-valign-middle" />
+                                    </a>&#160; 
                                 <xar:else />
-                            <img src="modules/roles/xarimages/passicon.gif"
-                            class="xar-valign-middle" />&#160; 
-                            <img src="modules/roles/xarimages/passicon.gif"
-                            class="xar-valign-middle" />&#160; 
-                            <img src="modules/roles/xarimages/passicon.gif"
-                            class="xar-valign-middle" />&#160;</xar:if>
-                            <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$fields.id#"
-                            title="#xarML('Show the Privileges assigned to this User')#">
-                                <img src="modules/roles/xarimages/privileges.png"
-                                class="xar-valign-middle" />
-                            </a>&#160; 
-                            <a href="&xar-modurl-roles-admin-testprivileges;&amp;id=#$fields.id#"
-                            title="#xarML('Test the Privileges of this User')#">
-                                <img src="modules/roles/xarimages/test.png"
-                                class="xar-valign-middle" />
-                            </a></td>
+                                    <img src="#$icon_none#" class="xar-valign-middle" />&#160; 
+                                    <img src="#$icon_none#" class="xar-valign-middle" />&#160; 
+                                    <img src="#$icon_none#" class="xar-valign-middle" />&#160;
+                                </xar:if>
+                                <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$fields.id#" title="#xarML('Show the Privileges assigned to this User')#">
+                                    <img src="#$icon_privileges#" class="xar-valign-middle" />
+                                </a>&#160; 
+                                <a href="&xar-modurl-roles-admin-testprivileges;&amp;id=#$fields.id#" title="#xarML('Test the Privileges of this User')#">
+                                    <img src="#$icon_test#" class="xar-valign-middle" />
+                                </a>
+                            </td>
                             <td class="xar-align-center">
                                 <xar:if condition="!$users[$itemid]['frozen']">
                                     <input type="checkbox" name="ids[#$fields['id']#]" id="ids_#$fields['id']#" value="1"/>
-                                    id="ids_#$fields['id']#" value="1" />
                                 </xar:if>
                             </td>
                         </tr>
                     </xar:foreach>
                 </table>
                 <div class="xar-align-right">
-                <a href="javascript:void(0);"
-                onclick="xar_base_checkall(document.forms['state'],true);return false;">Check
-                All</a>| 
-                <a href="javascript:void(0);"
-                onclick="xar_base_checkall(document.forms['state'],false);return false;">Uncheck
-                All</a></div>
+                    <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['state'],true);return false;">Check
+                        All
+                    </a>| 
+                    <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['state'],false);return false;">Uncheck
+                        All
+                    </a>
+                </div>
                 <xar:if condition="!empty($pager)">
                     <div class="xar-align-center">#$pager#</div>
                 </xar:if>
