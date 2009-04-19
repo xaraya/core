@@ -26,28 +26,26 @@
                     <xar:set name="parentid">$node-&gt;parent</xar:set>
                     <xar:set name="level">$node-&gt;getLevel()</xar:set>
                     <div class="preamble">
-                        <xar:sec mask="DeletePrivilege" catch="false" component="Privileges"
-                        instance="#$name#">
+                        <xar:sec mask="DeletePrivilege" catch="false" component="Privileges" instance="#$name#">
                             <xar:set name="dellink">
-                            xarModUrl('privileges','admin','deleteprivilege',array('id'=&gt;
-                            $id))</xar:set>
+                                xarModUrl('privileges','admin','deleteprivilege',array('id'=&gt; $id))
+                            </xar:set>
                             <a href="#$dellink#" title="#xarML('Delete this privilege')#">
-                                <img src="#xarTplGetImage('delete.gif')#" />
+                                <img src="#xarTplGetImage('icons/delete.png','base')#" />
                             </a>
                         </xar:sec>
                         <xar:set name="userslink">
-                        xarModUrl('privileges','admin','viewroles',array('id'=&gt; $id))</xar:set>
-                        <a href="#$userslink#"
-                        title="xarML('Show the Groups/Users this Privilege is assigned to')#">
-                            <img src="#xarTplGetImage('usersgroups.gif')#" />
+                            xarModUrl('privileges','admin','viewroles',array('id'=&gt; $id))
+                        </xar:set>
+                        <a href="#$userslink#" title="xarML('Show the Groups/Users this Privilege is assigned to')#">
+                            <img src="#xarTplGetImage('icons/system-user-groups.png','base')#" />
                         </a>
                         <xar:if condition="$parentid ne 0">
                             <xar:set name="removelink">
-                            xarModUrl('privileges','admin','removebranch',array('id'=&gt;
-                            $id))</xar:set>
-                            <a href="#$removelink#"
-                            title="#xarML('Remove this privilege from its parent')#">
-                                <img src="#xarTplGetImage('remove.gif')#" />
+                                xarModUrl('privileges','admin','removebranch',array('id'=&gt; $id))
+                            </xar:set>
+                            <a href="#$removelink#" title="#xarML('Remove this privilege from its parent')#">
+                                <img src="#xarTplGetImage('icons/remove.png','base')#" />
                             </a>
                         </xar:if>
                     </div>
@@ -56,9 +54,11 @@
                             <img src="#xarTplGetImage('blank.png')#" />
                         </xar:for>
                         <xar:set name="modlink">
-                        xarModUrl('privileges','admin','modifyprivilege',array('id'=&gt;
-                        $id))</xar:set>
-                        <a href="#$modlink#" title="#$description#">#$name#</a>
+                            xarModUrl('privileges','admin','modifyprivilege',array('id'=&gt; $id))
+                        </xar:set>
+                        <a href="#$modlink#" title="#$description#">
+                            #$name#
+                        </a>
                     </li>
                 </xar:foreach>
             </ul>
