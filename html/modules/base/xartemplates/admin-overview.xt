@@ -241,6 +241,8 @@
             <li>Curl Class</li>
             <li>XML Parser Class</li>
         </ol>
+
+        <!--
         <h3>Further Information</h3>
         <p>Further information on the Base module can be found at</p>
         <ul>
@@ -256,5 +258,6 @@
         <p class="xar-sub">
         <strong>&#160;Base Module Overview</strong>
         <br />&#160;Version 1.0.2&#160; 2006-02-09</p>
+        -->
     </div>
 </xar:template>

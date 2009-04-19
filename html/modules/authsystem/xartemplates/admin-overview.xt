@@ -59,6 +59,7 @@
         <h3>Available Dataproperties</h3>
         <p>The Authsystem module has no dataproperties</p>
 
+        <!--
         <h3>Further Information</h3>
         <p>Further information on the Authsystem Authentication module can be found at:</p>
         <ul>
@@ -74,5 +75,6 @@
         <p class="xar-sub">
         <strong>&#160;Authentication Module - Overview</strong>
         <br />&#160;Version 1.0.0&#160; 2006-02-04</p>
+        -->
     </div>
 </xar:template>

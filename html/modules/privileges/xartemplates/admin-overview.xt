@@ -127,6 +127,7 @@
             </li>
         </ul>
 
+        <!--
         <h3>Further Information</h3>
         <p>Further information on the Privileges module can be found at:</p>
         <ul>
@@ -145,5 +146,6 @@
         <p class="xar-sub">
         <strong>&#160;Privileges Module Overview</strong>
         <br />&#160;Version 1.0.0&#160; 2006-05-03</p>
+        -->
     </div>
 </xar:template>

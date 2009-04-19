@@ -195,6 +195,7 @@
         <h3>Available Dataproperties</h3>
         <p>The Blocks module has no dataproperties</p>
 
+        <!--
         <h3>Further Information</h3>
         <p>Further information on the Blocks module can be found at</p>
         <ul>
@@ -208,5 +209,6 @@
         <p class="xar-sub">
         <strong>&#160;Blocks Module Overview</strong>
         <br />&#160;Version 1.1.1&#160; 2006-07-20</p>
+        -->
     </div>
 </xar:template>

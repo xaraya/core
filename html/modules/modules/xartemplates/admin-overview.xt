@@ -130,6 +130,7 @@
             </li>
         </ul>
         
+        <!--
         <h3>Further Information</h3>
         <p>Further information on the Modules module can be found at</p>
         <ul>
@@ -145,5 +146,6 @@
         <p class="xar-sub">
         <strong>&#160;Modules Module Overview</strong>
         <br />&#160;Version 2.3.1&#160; 2006-02-08</p>
+        -->
     </div>
 </xar:template>

@@ -87,6 +87,7 @@
         <h3>Available Dataproperties</h3>
         <p>The Mail module has no dataproperties</p>
 
+        <!--
         <h3>Further Information</h3>
         <p>Further information on the Mail module can be found at</p>
         <ul>
@@ -102,5 +103,6 @@
         <p class="xar-sub">
         <strong>&#160;Mail Module - Overview</strong>
         <br />&#160;Version 0.1.1&#160; 2005-11-02</p>
+        -->
     </div>
 </xar:template>

@@ -242,6 +242,8 @@ Idem for &lt;xar:data-output ... /&gt;
         <p>Usage : Export object definitions and/or data - and import them elsewhere...</p>
         <p>[+ Easter Egg : util meta -&gt; export to XML -&gt; save to file -&gt; util import -&gt;
         access your whole database via DD]</p>
+        
+        <!--
         <h3>Further Information</h3>
         <p>Further information on the DynamicData module can be found at:</p>
             <ul>
@@ -256,5 +258,6 @@ Idem for &lt;xar:data-output ... /&gt;
         <p class="xar-sub">
         <strong>&#160;DynamicData Module - Overview</strong>
         <br />&#160;Version 1.2.1&#160; 2005-11-03</p>
+        -->
     </div>
 </xar:template>
