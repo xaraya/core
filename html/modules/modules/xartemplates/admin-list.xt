@@ -107,8 +107,7 @@
                                 <td name="#$modinfo['name']#" id="#$modinfo['name']#">
                                     <!-- if module is active and configurable (admin type) make its name a link to module main admin function -->
                                     <xar:if condition="$modinfo['modconfigurl'] ne ''">
-                                <a href="#$modinfo['modconfigurl']#"
-                                title="#$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#">
+                                <a href="#$modinfo['modconfigurl']#" title="#$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#">
                                 #$modinfo['name']#</a>
                                 <xar:else />#$modinfo['name']#</xar:if>
                                 </td>
@@ -118,7 +117,6 @@
                                 <td class="xar-align-center">
                                     <xar:if condition="$selstyle eq 'pro'">
                                         <input type="submit" name="info" id="info" value="#$infolabel#" />
-                                    value="#$infolabel#" />
                                     <xar:elseif condition="$selstyle eq 'icons'" />
                                         <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new">
                                             <img src="#$infoimg#" alt="#$infolabel#" />
@@ -153,7 +151,6 @@
                                             </select>
                                         <noscript>
                                             <input type="submit" name="ok" id="ok" value="OK" disabled="disabled" />
-                                            disabled="disabled" />
                                         </noscript>
                                         <xar:else />
                                         <select name="action" id="action"
@@ -172,62 +169,63 @@
                                     <xar:elseif condition="$selstyle eq 'icons'" />
                                         <xar:if condition="$modinfo['actionurl'] eq ''">
                                             <img src="#$modinfo['actionimg1']#" alt="#$modinfo['actionlabel']#" />
-                                        alt="#$modinfo['actionlabel']#" />
                                         <xar:else />
-                                        <a href="#$modinfo['actionurl']#">
-                                            <img src="#$modinfo['actionimg1']#"
-                                            alt="#$modinfo['actionlabel']#" />
-                                        </a>
+                                            <a href="#$modinfo['actionurl']#">
+                                                <img src="#$modinfo['actionimg1']#" alt="#$modinfo['actionlabel']#" />
+                                            </a>
                                         </xar:if>
                                         <xar:if condition="$modinfo['removeurl'] eq ''">
                                             <img src="#$modinfo['actionimg2']#" alt="#$modinfo['actionlabel']#" />
-                                        alt="#$modinfo['actionlabel']#" />
                                         <xar:else />
-                                        <a href="#$modinfo['removeurl']#">
-                                            <img src="#$modinfo['actionimg2']#"
-                                            alt="#$modinfo['actionlabel2']#" />
-                                        </a>
+                                            <a href="#$modinfo['removeurl']#">
+                                                <img src="#$modinfo['actionimg2']#" alt="#$modinfo['actionlabel2']#" />
+                                            </a>
                                         </xar:if>
                                     <xar:else />
                                         <xar:if condition="$modinfo['coremod']">
                                             <xar:if condition="$modinfo['state'] eq 5 or $modinfo['state'] eq 2">
-                                        <a href="#$modinfo['actionurl']#">
-                                        #$modinfo['actionlabel']#</a>
-                                        <xar:else />#$modinfo['actionlabel']#</xar:if>
+                                                <a href="#$modinfo['actionurl']#">
+                                                #$modinfo['actionlabel']#</a>
+                                            <xar:else />
+                                                #$modinfo['actionlabel']#
+                                            </xar:if>
                                         <xar:else />
-                                        <a href="#$modinfo['actionurl']#">
-                                        #$modinfo['actionlabel']#</a>
-                                        <xar:if condition="$modinfo['state'] eq 2">| 
-                                        <a href="#$modinfo['removeurl']#">
-                                        #$modinfo['removelabel']#</a></xar:if>
+                                            <a href="#$modinfo['actionurl']#">
+                                            #$modinfo['actionlabel']#</a>
+                                            <xar:if condition="$modinfo['state'] eq 2">| 
+                                                <a href="#$modinfo['removeurl']#">
+                                                #$modinfo['removelabel']#</a>
+                                            </xar:if>
                                         </xar:if>
                                     </xar:if>
                                 </td>
                                 <td class="xar-align-center">
                                     <xar:if condition="$modinfo['modid'] ne 1 and ($modinfo['state'] eq XARMOD_STATE_INACTIVE or $modinfo['state'] eq XARMOD_STATE_ACTIVE)">
-                                <xar:if condition="$selstyle eq 'pro'">
-                                    <input type="submit" name="prop" id="prop" value="Set" />
-                                    <xar:elseif condition="$selstyle eq 'icons'" />
-                                    <a href="#$modinfo['propurl']#">
-                                        <img src="#$propimg#" alt="#$modinfo['prop']#" />
-                                    </a>
-                                        <xar:else />
-                                    <a href="#$modinfo['propurl']#">#$modinfo['prop']#</a>
-                                </xar:if>
-                                <xar:else />&#160;</xar:if>
+                                        <xar:if condition="$selstyle eq 'pro'">
+                                            <input type="submit" name="prop" id="prop" value="Set" />
+                                        <xar:elseif condition="$selstyle eq 'icons'" />
+                                            <a href="#$modinfo['propurl']#">
+                                                <img src="#$propimg#" alt="#$modinfo['prop']#" />
+                                            </a>
+                                                <xar:else />
+                                            <a href="#$modinfo['propurl']#">#$modinfo['prop']#</a>
+                                        </xar:if>
+                                    <xar:else />
+                                        &#160;
+                                    </xar:if>
                                 </td>
                                 <td class="xar-align-center">
-                                <xar:if condition="xarModIsAvailable($modinfo['name'])">
-                                    <xar:if condition="$selstyle eq 'pro'">
-                                        <input type="submit" name="edit" id="edit" value="Edit" />
-                                    <xar:elseif condition="$selstyle eq 'icons'"/>
-                                        <a href="#$modinfo['editurl']#">
-                                            <img src="#$editimg#" alt="#$modinfo['edit']#" />
-                                        </a>
-                                    <xar:else />
-                                        <a href="#$modinfo['editurl']#">#$modinfo['edit']#</a>
+                                    <xar:if condition="xarModIsAvailable($modinfo['name'])">
+                                        <xar:if condition="$selstyle eq 'pro'">
+                                            <input type="submit" name="edit" id="edit" value="Edit" />
+                                        <xar:elseif condition="$selstyle eq 'icons'"/>
+                                            <a href="#$modinfo['editurl']#">
+                                                <img src="#$editimg#" alt="#$modinfo['edit']#" />
+                                            </a>
+                                        <xar:else />
+                                            <a href="#$modinfo['editurl']#">#$modinfo['edit']#</a>
+                                        </xar:if>
                                     </xar:if>
-                                </xar:if>
                                 </td>
                             </tr>
                         </xar:foreach>
@@ -238,14 +236,12 @@
     <xar:if condition="$selstyle eq 'icons'">
         <div class="xar-mod-foot xar-align-center">
             <div class="xar-accent-outline xar-margin-thick xar-padding-thick">
-            <img src="#xarTplGetImage('set1/disabled.png')#" alt="disabled" hspace="5" />Disabled 
-            <img src="#xarTplGetImage('set1/activate.png')#" alt="activate" hspace="5" />Activate 
-            <img src="#xarTplGetImage('set1/deactivate.png')#" alt="deactivate"
-            hspace="5" />Deactivate 
-            <img src="#xarTplGetImage('set1/upgrade.png')#" alt="upgrade" hspace="5" />Upgrade 
-            <img src="#xarTplGetImage('set1/initialise.png')#" alt="initialise"
-            hspace="5" />Install 
-            <img src="#xarTplGetImage('set1/remove.png')#" alt="remove" hspace="5" />Remove</div>
+            <img src="#xarTplGetImage('icons/disabled.png', 'base')#" alt="disabled" hspace="5" />Disabled 
+            <img src="#xarTplGetImage('icons/activate.png', 'base')#" alt="activate" hspace="5" />Activate 
+            <img src="#xarTplGetImage('icons/deactivate.png', 'base')#" alt="deactivate"  hspace="5" />Deactivate 
+            <img src="#xarTplGetImage('icons/upgrade.png', 'base')#" alt="upgrade" hspace="5" />Upgrade 
+            <img src="#xarTplGetImage('icons/initialise.png', 'base')#" alt="initialise" hspace="5" />Install 
+            <img src="#xarTplGetImage('icons/remove.png', 'base')#" alt="remove" hspace="5" />Remove</div>
         </div>
     </xar:if>
 </xar:template>
