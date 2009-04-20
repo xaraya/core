@@ -21,7 +21,7 @@ function themes_admin_main()
     // Security Check
     if(!xarSecurityCheck('AdminTheme')) return;
 
-        xarResponseRedirect(xarModURL('themes', 'admin', 'list'));
+        xarResponse::Redirect(xarModURL('themes', 'admin', 'list'));
 
     // success
     return true;

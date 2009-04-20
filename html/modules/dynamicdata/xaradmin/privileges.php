@@ -57,7 +57,7 @@ function dynamicdata_admin_privileges($args)
         if (empty($moduleid) || $moduleid == 'All') {
             $moduleid = 0;
         } elseif (!is_numeric($moduleid)) { // for pre-wizard instances
-            $modid = xarModGetIDFromName($moduleid);
+            $modid = xarMod::getRegID($moduleid);
             if (!empty($modid)) {
                 $moduleid = $modid;
             } else {
@@ -105,7 +105,7 @@ function dynamicdata_admin_privileges($args)
         }
 
         // redirect to the privilege
-        xarResponseRedirect(xarModURL('privileges', 'admin', 'modifyprivilege',
+        xarResponse::Redirect(xarModURL('privileges', 'admin', 'modifyprivilege',
                                       array('pid' => $pid)));
         return true;
     }

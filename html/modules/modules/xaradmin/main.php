@@ -21,7 +21,7 @@ function modules_admin_main()
     // Security Check
     if(!xarSecurityCheck('AdminModules')) return;
 
-    xarResponseRedirect(xarModURL('modules', 'admin', 'list'));
+    xarResponse::Redirect(xarModURL('modules', 'admin', 'list'));
 
     // success
     return true;

@@ -34,7 +34,7 @@ function privileges_admin_addmember()
     if(!xarVarFetch('privid', 'isset', $privid, NULL, XARVAR_DONT_SET)) {return;}
 
     if (empty($id) || empty($privid)) {
-        xarResponseRedirect(xarModURL('privileges',
+        xarResponse::Redirect(xarModURL('privileges',
                                       'admin',
                                       'modifyprivilege',
                                       array('id'=>$id)));
@@ -66,7 +66,7 @@ function privileges_admin_addmember()
     xarSession::setVar('privileges_statusmsg', xarML('Added to Privilege',
                     'privileges'));
 // redirect to the next page
-    xarResponseRedirect(xarModURL('privileges',
+    xarResponse::Redirect(xarModURL('privileges',
                              'admin',
                              'modifyprivilege',
                              array('id'=>$id)));

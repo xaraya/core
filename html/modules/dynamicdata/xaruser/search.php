@@ -49,7 +49,7 @@ function dynamicdata_user_search($args)
             $data['gotobject'] = 1;
         }
         if (empty($modid)) {
-            $modid = xarModGetIDFromName('dynamicdata');
+            $modid = xarMod::getRegID('dynamicdata');
         }
         if (empty($itemtype)) {
             $itemtype = 0;
@@ -78,7 +78,7 @@ function dynamicdata_user_search($args)
     }
 
     $data['items'] = array();
-    $mymodid = xarModGetIDFromName('dynamicdata');
+    $mymodid = xarMod::getRegID('dynamicdata');
     if ($data['ishooked']) {
         $myfunc = 'view';
     } else {

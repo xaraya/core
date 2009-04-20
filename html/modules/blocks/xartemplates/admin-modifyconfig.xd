@@ -23,7 +23,7 @@
             </dt>
             <xar:if condition="$tab eq 'general'">
                 <dd class="active">
-                    <a href="#xarServerGetCurrentURL()#">
+                    <a href="#xarServer::getCurrentURL()#">
                         <xar:mlstring>
                             General 
                         </xar:mlstring>

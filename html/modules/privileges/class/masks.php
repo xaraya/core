@@ -434,10 +434,10 @@ class xarMasks extends Object
                 // The current authentication module will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login
                 $requrl = xarServerGetCurrentUrl(array(),false);
-                xarResponseRedirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
+                xarResponse::Redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
             } else {
 //                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
-                xarResponseRedirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
+                xarResponse::Redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
                 $msg = xarML("You don't have the correct privileges for this operation");
                 $candebug = (xarSession::getVar('role_id') == xarModVars::get('privileges','tester'));
                 $test = xarModVars::get('privileges','test') && $candebug;

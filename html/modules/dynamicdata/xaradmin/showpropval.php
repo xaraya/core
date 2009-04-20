@@ -24,7 +24,7 @@ function dynamicdata_admin_showpropval($args)
     if (!xarVarFetch('confirm', 'isset', $confirm, NULL, XARVAR_DONT_SET)) {return;}
 
     // check security
-    $modid = xarModGetIDFromName('dynamicdata');
+    $modid = xarMod::getRegID('dynamicdata');
     $itemtype = 1; // dynamic properties
     if (!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
@@ -85,7 +85,7 @@ function dynamicdata_admin_showpropval($args)
                     $return_url = xarModURL('dynamicdata', 'admin', 'modifyprop',
                                             array('itemid' => $myobject->properties['objectid']->value));
                 }
-                xarResponseRedirect($return_url);
+                xarResponse::Redirect($return_url);
                 return true;
             }
         } else {

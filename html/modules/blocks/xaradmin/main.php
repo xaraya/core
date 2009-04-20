@@ -20,7 +20,7 @@ function blocks_admin_main()
 // Security Check
     if(!xarSecurityCheck('EditBlock')) return;
 
-    xarResponseRedirect(xarModURL('blocks', 'admin', 'view_instances'));
+    xarResponse::Redirect(xarModURL('blocks', 'admin', 'view_instances'));
 
     // success
     return true;

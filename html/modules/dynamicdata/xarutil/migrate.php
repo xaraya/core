@@ -95,7 +95,7 @@ function dynamicdata_util_migrate($args)
 
     $data['modulesupported'] = array();
     foreach ($modsupported as $modname) {
-        $data['modulesupported'][] = xarModGetIDFromName($modname);
+        $data['modulesupported'][] = xarMod::getRegID($modname);
     }
 
     // list of hooks supported by the migration process (for now)
@@ -354,7 +354,7 @@ function dynamicdata_util_migrate($args)
             // return and load the same map again
             $url = xarModURL('dynamicdata','util','migrate',
                              array('load' => 1, 'map' => $map));
-            xarResponseRedirect($url);
+            xarResponse::Redirect($url);
             return true;
         }
     }

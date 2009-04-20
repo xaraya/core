@@ -25,7 +25,7 @@
             </fieldset>
         </xar:if>
 
-        <form method="post" action="#xarServerGetCurrentURL()#">
+        <form method="post" action="#xarServer::getCurrentURL()#">
           <fieldset>
             <legend>Modify item details</legend>
             <xar:data-form object="$object" />

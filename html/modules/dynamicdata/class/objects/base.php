@@ -437,7 +437,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         // special case when we try to create a new object handled by dynamicdata
         if(
             $this->objectid == 1 &&
-            $this->properties['module_id']->value == xarModGetIDFromName('dynamicdata')
+            $this->properties['module_id']->value == xarMod::getRegID('dynamicdata')
             //&& $this->properties['itemtype']->value < 2
         )
         {

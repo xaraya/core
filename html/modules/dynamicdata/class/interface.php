@@ -61,7 +61,7 @@ class DataObjectInterface extends Object
             );
             $args = array_merge($args, $info);
         } elseif (!empty($args['module']) && empty($args['moduleid'])) { 
-            $args['moduleid'] = xarModGetIDFromName($args['module']);
+            $args['moduleid'] = xarMod::getRegID($args['module']);
         }
 
         // fill in the default object variables
@@ -148,11 +148,11 @@ class DataObjectInterface extends Object
                     return;
                 if(!empty($args['return_url'])) 
                 {
-                    xarResponseRedirect($args['return_url']);
+                    xarResponse::Redirect($args['return_url']);
                 } 
                 else 
                 {
-                    xarResponseRedirect(xarModURL(
+                    xarResponse::Redirect(xarModURL(
                         $this->urlmodule, 'user', $this->func,
                         array('object' => $this->object->name))
                     );
@@ -238,9 +238,9 @@ class DataObjectInterface extends Object
                     return;
                     
                 if(!empty($args['return_url'])) 
-                    xarResponseRedirect($args['return_url']);
+                    xarResponse::Redirect($args['return_url']);
                 else 
-                    xarResponseRedirect(xarModURL(
+                    xarResponse::Redirect(xarModURL(
                         $this->urlmodule, 'user', $this->func,
                         array('object' => $this->object->name))
                     );
@@ -307,9 +307,9 @@ class DataObjectInterface extends Object
                 return;
                 
             if(!empty($args['return_url'])) 
-                xarResponseRedirect($args['return_url']);
+                xarResponse::Redirect($args['return_url']);
             else 
-                xarResponseRedirect(xarModURL(
+                xarResponse::Redirect(xarModURL(
                     $this->urlmodule, 'user', $this->func,
                     array('object' => $this->object->name))
                 );
@@ -340,9 +340,9 @@ class DataObjectInterface extends Object
                 return;
                 
             if(!empty($args['return_url'])) 
-                xarResponseRedirect($args['return_url']);
+                xarResponse::Redirect($args['return_url']);
             else 
-                xarResponseRedirect(xarModURL(
+                xarResponse::Redirect(xarModURL(
                     $this->urlmodule, 'user', $this->func,
                     array('object' => $this->object->name))
                 );

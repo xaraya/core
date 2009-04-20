@@ -38,7 +38,7 @@ function dynamicdata_adminapi_removehook($args)
         //return $extrainfo;
     }
 
-    $modid = xarModGetIDFromName($objectid);
+    $modid = xarMod::getRegID($objectid);
     if (empty($modid)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('module ID', 'admin', 'removehook', 'dynamicdata');

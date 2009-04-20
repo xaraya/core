@@ -25,7 +25,7 @@ function mail_admin_main()
     // Security Check
     if (!xarSecurityCheck('EditMail')) return;
 
-    xarResponseRedirect(xarModURL('mail', 'admin', 'modifyconfig'));
+    xarResponse::Redirect(xarModURL('mail', 'admin', 'modifyconfig'));
 
     // success
     return true;

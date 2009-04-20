@@ -31,7 +31,7 @@ function dynamicdata_utilapi_export($args)
             $objectid = null;
         }
         if (empty($modid)) {
-            $modid = xarModGetIDFromName('dynamicdata');
+            $modid = xarMod::getRegID('dynamicdata');
         }
         if (empty($itemtype)) {
             $itemtype = 0;

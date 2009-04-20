@@ -209,7 +209,7 @@
                     ##$siteurl##
                 </span>
                 <span class="xar-padding-thickleft">
-                    <xar:mlstring>URL of the site</xar:mlstring>&#160;(#xarServerGetBaseURL()#)
+                    <xar:mlstring>URL of the site</xar:mlstring>&#160;(#xarServer::getBaseURL()#)
                 </span>
             </div>
 

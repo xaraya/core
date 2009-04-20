@@ -69,7 +69,7 @@ function authsystem_upgrade($oldVersion)
            $dbconn =& xarDB::getConn();
            $xartable =& xarDB::getTables();
            $modulesTable = xarDB::getPrefix() .'_modules';
-           $modid = xarModGetIDFromName('authsystem');
+           $modid = xarMod::getRegID('authsystem');
            // update the modversion class and admin capable
            $query = "UPDATE $modulesTable SET class=?, admin_capable=?
                      WHERE regid = ?";

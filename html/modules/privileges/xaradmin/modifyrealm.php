@@ -48,7 +48,7 @@ function privileges_admin_modifyrealm()
         $q->addfield('name', $newname);
         $q->eq('id', $id);
         if(!$q->run()) return;
-        xarResponseRedirect(xarModURL('privileges', 'admin', 'viewrealms'));
+        xarResponse::Redirect(xarModURL('privileges', 'admin', 'viewrealms'));
     }
 
     $data['id'] = $id;

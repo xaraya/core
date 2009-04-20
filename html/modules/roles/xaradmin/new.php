@@ -27,7 +27,7 @@ function roles_admin_new()
     $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('objectid' => $data['object']->objectid));
 
     xarSession::setVar('ddcontext.roles', array(
-                                            'return_url' => xarServerGetCurrentURL(),
+                                            'return_url' => xarServer::getCurrentURL(),
                                             'basetype' => $data['basetype'],
                                             'parentid' => $data['parentid'],
                                                 ));

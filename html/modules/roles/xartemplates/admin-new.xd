@@ -44,7 +44,7 @@
                             Type:
                         </xar:mlstring>
                     </label>
-                    <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
+                    <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"</xar:set>
                     <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1" />
                 </div>
 

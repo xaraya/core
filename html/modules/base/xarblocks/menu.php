@@ -118,8 +118,8 @@ function base_menublock_display($blockinfo)
     $loggedin = xarUserIsLoggedIn();
 
     // Get current URL
-    $truecurrenturl = xarServerGetCurrentURL(array(), false);
-    $currenturl = xarServerGetCurrentURL();
+    $truecurrenturl = xarServer::getCurrentURL(array(), false);
+    $currenturl = xarServer::getCurrentURL();
 
     // Added Content For non-modules list.
     if (!empty($vars['content'])) {
@@ -312,7 +312,7 @@ function base_menublock_display($blockinfo)
             }
             if (empty($usermods)) $usermods = '';
         } else {
-            $modid = xarModGetIDFromName('roles');
+            $modid = xarMod::getRegID('roles');
             $modinfo = xarModGetInfo($modid);
             if ($modinfo){
                 $title = $modinfo['displaydescription'];
@@ -345,8 +345,8 @@ function base_menublock_display($blockinfo)
         $showlogout = true;
     }
 
-    $rssurl         = xarServerGetCurrentURL(array('theme' => 'rss'));
-    $printurl       = xarServerGetCurrentURL(array('theme' => 'print'));
+    $rssurl         = xarServer::getCurrentURL(array('theme' => 'rss'));
+    $printurl       = xarServer::getCurrentURL(array('theme' => 'print'));
 
     if (isset($vars['displayprint'])) {
         $displayprint = $vars['displayprint'];

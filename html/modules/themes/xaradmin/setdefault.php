@@ -35,7 +35,7 @@ function themes_admin_setdefault()
     $themeInfo = xarThemeGetInfo($defaulttheme);
 
     if ($themeInfo['class'] != 2) {
-        xarResponseRedirect(xarModURL('themes', 'admin', 'modifyconfig'));
+        xarResponse::Redirect(xarModURL('themes', 'admin', 'modifyconfig'));
     }
 
     if (xarVarIsCached('Mod.Variables.themes', 'default')) {
@@ -44,7 +44,7 @@ function themes_admin_setdefault()
 
     //update the database - activate the theme
     if (!xarModAPIFunc('themes','admin','install',array('regid'=>$defaulttheme))) {
-        xarResponseRedirect(xarModURL('themes', 'admin', 'modifyconfig'));
+        xarResponse::Redirect(xarModURL('themes', 'admin', 'modifyconfig'));
     }
 
     // update the data
@@ -53,7 +53,7 @@ function themes_admin_setdefault()
 
     // set the target location (anchor) to go to within the page
     $target = $themeInfo['name'];
-    xarResponseRedirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
+    xarResponse::Redirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
     return true;
 }
 ?>

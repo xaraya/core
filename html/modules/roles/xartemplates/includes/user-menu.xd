@@ -25,7 +25,7 @@
                     </dt>
                     <xar:if condition="($compare eq $current) or ($compare eq $account)">
                         <dd class="active">
-                            <a href="#xarServerGetCurrentURL()#">
+                            <a href="#xarServer::getCurrentURL()#">
                                 <xar:mlstring>
                                     Display your profile
                                 </xar:mlstring>

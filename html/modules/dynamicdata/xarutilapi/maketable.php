@@ -45,7 +45,7 @@ function dynamicdata_utilapi_maketable($args)
             $objectid = null;
         }
         if (empty($modid)) {
-            $modid = xarModGetIDFromName('dynamicdata');
+            $modid = xarMod::getRegID('dynamicdata');
         }
         if (empty($itemtype)) {
             $itemtype = 0;

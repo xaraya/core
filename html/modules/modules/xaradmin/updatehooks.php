@@ -24,7 +24,7 @@ function modules_admin_updatehooks()
     // Curhook contains module name
     if (!xarVarFetch('curhook', 'str:1:', $curhook)) {return;}
 
-    $regId = xarModGetIDFromName($curhook);
+    $regId = xarMod::getRegID($curhook);
     if (!isset($curhook) || !isset($regId)) {
         $msg = xarML('Invalid hook');
         throw new Exception($msg);
@@ -39,9 +39,9 @@ function modules_admin_updatehooks()
 
     if (!xarVarFetch('return_url', 'isset', $return_url, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!empty($return_url)) {
-        xarResponseRedirect($return_url);
+        xarResponse::Redirect($return_url);
     } else {
-        xarResponseRedirect(xarModURL('modules', 'admin', 'hooks',
+        xarResponse::Redirect(xarModURL('modules', 'admin', 'hooks',
                                       array('hook' => $curhook)));
     }
     return true;

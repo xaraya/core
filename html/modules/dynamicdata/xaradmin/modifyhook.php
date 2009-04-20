@@ -35,7 +35,7 @@ function dynamicdata_admin_modifyhook($args)
         $modname = $extrainfo['module'];
     }
 
-    $modid = xarModGetIDFromName($modname);
+    $modid = xarMod::getRegID($modname);
     if (empty($modid)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('module name', 'admin', 'modifyhook', 'dynamicdata');

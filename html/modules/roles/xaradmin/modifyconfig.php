@@ -117,7 +117,7 @@ function roles_admin_modifyconfig()
             switch ($data['tab']) {
                 case 'general':
                     if (!xarVarFetch('itemsperpage',      'str:1:4:', $itemsperpage,     '20', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('defaultauthmodule', 'str:1:',   $defaultauthmodule, xarModGetIDFromName('authsystem'), XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+                    if (!xarVarFetch('defaultauthmodule', 'str:1:',   $defaultauthmodule, xarMod::getRegID('authsystem'), XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                     if (!xarVarFetch('defaultregmodule',  'str:1:',   $defaultregmodule, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                     if (!xarVarFetch('shorturls',         'checkbox', $shorturls,        false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('siteadmin',         'int:1',    $siteadmin,        xarModVars::get('roles','admin'), XARVAR_NOT_REQUIRED)) return;
@@ -191,7 +191,7 @@ function roles_admin_modifyconfig()
             // Update module variables
 //            xarModVars::set('roles', 'allowinvisible', $allowinvisible);
 
-            xarResponseRedirect(xarModURL('roles', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
+            xarResponse::Redirect(xarModURL('roles', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
             // Return
             return true;
             break;

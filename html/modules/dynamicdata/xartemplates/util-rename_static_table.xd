@@ -17,7 +17,7 @@
             </xar:ml>
         </h2>
 
-        <form method="post" action="#xarServerGetCurrentURL()#">
+        <form method="post" action="#xarServer::getCurrentURL()#">
             <fieldset>
                 <legend>
                     <xar:mlstring>Rename this item?</xar:mlstring>

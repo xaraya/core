@@ -33,7 +33,7 @@ function privileges_admin_removebranch()
    }
 
 // redirect to the next page
-    xarResponseRedirect(xarModURL('privileges',
+    xarResponse::Redirect(xarModURL('privileges',
                              'admin',
                              'viewprivileges'));
 }

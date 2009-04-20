@@ -8,6 +8,6 @@
     <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
     <input type="hidden" name="itemid" id="itemid" value="0" />
     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#" />
-    <input type="hidden" name="return_url" id="return_url" value="#xarServerGetCurrentURL()#" />
+    <input type="hidden" name="return_url" id="return_url" value="#xarServer::getCurrentURL()#" />
     </form>
 </xar:template>

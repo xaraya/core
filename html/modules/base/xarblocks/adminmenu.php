@@ -96,7 +96,7 @@ function base_adminmenublock_display($blockinfo)
 
     // Get current URL for later comparisons because we need to compare
     // xhtml compliant url, we fetch the default 'XML'-formatted URL.
-    $currenturl = xarServerGetCurrentURL();
+    $currenturl = xarServer::getCurrentURL();
 
     // Admin types
     // FIXME: this is quite ad-hoc here

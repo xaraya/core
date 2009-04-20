@@ -54,7 +54,7 @@ function themes_admin_updatetpltag()
         throw new TagRegistrationException($tagname);
     }
 
-    xarResponseRedirect(xarModUrl('themes', 'admin', 'listtpltags'));
+    xarResponse::Redirect(xarModUrl('themes', 'admin', 'listtpltags'));
     
     return true;
 } 

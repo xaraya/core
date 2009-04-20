@@ -28,7 +28,7 @@ function roles_user_account()
     $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
 
     if (!xarUserIsLoggedIn()){
-        xarResponseRedirect(xarModURL($defaultloginmodname,'user','showloginform'));
+        xarResponse::Redirect(xarModURL($defaultloginmodname,'user','showloginform'));
     }
 
     $data['id']          = xarUserGetVar('id');

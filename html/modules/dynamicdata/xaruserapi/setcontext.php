@@ -20,7 +20,7 @@ function dynamicdata_userapi_setcontext($args)
     $added = false;
 
     if (empty($modid) && !empty($module)) {
-        $modid = xarModGetIDFromName($module);
+        $modid = xarMod::getRegID($module);
     }
     if (empty($modid) && !empty($moduleid)) {
         $modid = $moduleid;

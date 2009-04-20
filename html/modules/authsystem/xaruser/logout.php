@@ -17,7 +17,7 @@
  */
 function authsystem_user_logout()
 {
-    $redirect=xarServerGetBaseURL();
+    $redirect=xarServer::getBaseURL();
 
     // Get input parameters
     if (!xarVarFetch('redirecturl','str:1:254',$redirecturl,$redirect,XARVAR_NOT_REQUIRED)) return;
@@ -35,7 +35,7 @@ function authsystem_user_logout()
     if (!xarUserLogOut()) {
         throw new ForbiddenOperationException(array('authsystem', 'logout'),xarML('Problem Logging Out.  Module #(1) Function #(2)'));
     }
-    xarResponseRedirect($redirecturl);
+    xarResponse::Redirect($redirecturl);
     return true;
 }
 ?>

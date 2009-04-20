@@ -33,7 +33,7 @@
         xarModURL('themes','admin','cssconfig',array('component'=>'core'))
     </xar:set>
     <xar:set name="currentcssurl">
-        xarServerGetCurrentURL()
+        xarServer::getCurrentURL()
     </xar:set>
     <!--
     <xar:if condition=" eq ">

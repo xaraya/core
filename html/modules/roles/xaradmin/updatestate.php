@@ -34,7 +34,7 @@ function roles_admin_updatestate()
     }
      if (isset($invalid)) {
         // if so, return to the previous template
-        return xarResponseRedirect(xarModURL('roles','admin', 'showusers',
+        return xarResponse::Redirect(xarModURL('roles','admin', 'showusers',
                              array('authid'  => $data['authid'],
                                    'state'   => $data['state'],
                                    'invalid' => $invalid,
@@ -87,12 +87,12 @@ function roles_admin_updatestate()
     $ids = $idnotify;
     // Success
      if ((!xarModVars::get('roles', 'ask'.$mailtype.'email')) || (count($idnotify) == 0)) {
-            xarResponseRedirect(xarModURL('roles', 'admin', 'showusers',
+            xarResponse::Redirect(xarModURL('roles', 'admin', 'showusers',
                           array('id' => $data['groupid'], 'state' => $data['state'])));
             return true;
      }
      else {
-        xarResponseRedirect(xarModURL('roles', 'admin', 'asknotification',
+        xarResponse::Redirect(xarModURL('roles', 'admin', 'asknotification',
                           array('id' => $ids, 'mailtype' => $mailtype, 'groupid' => $data['groupid'], 'state' => $data['state'])));
      }
 }

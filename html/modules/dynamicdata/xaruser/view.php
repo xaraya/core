@@ -39,7 +39,7 @@ function dynamicdata_user_view($args)
     }
 
     if (empty($modid)) {
-        $modid = xarModGetIDFromName('dynamicdata');
+        $modid = xarMod::getRegID('dynamicdata');
     }
     if (empty($itemtype)) {
         $itemtype = 0;

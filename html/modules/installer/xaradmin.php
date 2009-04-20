@@ -133,7 +133,7 @@ function installer_admin_phase3()
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
-        xarResponseRedirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
+        xarResponse::Redirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
     }
 
     //Defaults
@@ -507,7 +507,7 @@ function installer_admin_bootstrap()
     $modlist = array('dynamicdata');
     foreach ($modlist as $mod) {
         // Initialise the module
-        $regid = xarModGetIDFromName($mod);
+        $regid = xarMod::getRegID($mod);
         if (isset($regid)) {
             if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid)))
                  throw new Exception("Initalising module with regid : $regid failed");
@@ -557,7 +557,7 @@ function installer_admin_bootstrap()
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
 
 
-    $regid = xarModGetIDFromName('authsystem');
+    $regid = xarMod::getRegID('authsystem');
     if (empty($regid)) {
         die(xarML('I cannot load the Authsystem module. Please make it available and reinstall'));
     }
@@ -568,7 +568,7 @@ function installer_admin_bootstrap()
    $modlist = array('roles','privileges');
     foreach ($modlist as $mod) {
         // Set state to inactive first
-        $regid=xarModGetIDFromName($mod);
+        $regid=xarMod::getRegID($mod);
         if (!xarModAPIFunc('modules','admin','setstate',
                            array('regid'=> $regid, 'state'=> XARMOD_STATE_INACTIVE)))
             throw new Exception("setting state of $regid failed");//return;
@@ -602,7 +602,7 @@ function installer_admin_bootstrap()
     }
 
     // Initialise and activate mail
-    $regid = xarModGetIDFromName('mail');
+    $regid = xarMod::getRegID('mail');
     if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid)))
         throw new Exception("Initalising module with regid : $regid failed");
     // Activate the module
@@ -610,14 +610,14 @@ function installer_admin_bootstrap()
         throw new Exception("Activating module with regid: $regid failed");
 
     //initialise and activate base module by setting the states
-    $baseId = xarModGetIDFromName('base');
+    $baseId = xarMod::getRegID('base');
     if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_INACTIVE)))
         throw new Exception("Setting state for module with regid: $baseId failed");
     // Set module state to active
     if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE)))
         throw new Exception("Activating base $baseId module failed");
 
-    xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
+    xarResponse::Redirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
 
 /**
@@ -790,7 +790,7 @@ function installer_admin_create_administrator()
             return;
         }
     }
-    xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
+    xarResponse::Redirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
 
 /**
@@ -1052,9 +1052,9 @@ function installer_admin_confirm_configuration()
             }
         }
      //TODO: Check why this var is being reset to null in sqlite install - reset here for now to be sure
-     //xarModVars::set('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+     //xarModVars::set('roles', 'defaultauthmodule', xarMod::getRegID('authsystem'));
 
-        xarResponseRedirect(xarModURL('installer', 'admin', 'cleanup'));
+        xarResponse::Redirect(xarModURL('installer', 'admin', 'cleanup'));
     }
 
 }
@@ -1188,12 +1188,12 @@ function installer_admin_finish()
 
     switch ($returnurl) {
         case ('modules'):
-            xarResponseRedirect(xarModURL('modules','admin','list'));
+            xarResponse::Redirect(xarModURL('modules','admin','list'));
         case ('blocks'):
-            xarResponseRedirect(xarModURL('blocks','admin','view_instances'));
+            xarResponse::Redirect(xarModURL('blocks','admin','view_instances'));
         case ('site'):
         default:
-            xarResponseRedirect('index.php');
+            xarResponse::Redirect('index.php');
     }
     return true;
 }

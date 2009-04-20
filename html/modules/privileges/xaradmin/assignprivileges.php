@@ -11,7 +11,7 @@
             $moduletabs[$module['name']] = $module;
         }
 
-        $regid = xarModGetIDFromName($tabmodule);
+        $regid = xarMod::getRegID($tabmodule);
         switch (strtolower($phase)) {
             case 'modify':
             default:
@@ -54,7 +54,7 @@
                     if (!$dbconn->Execute($query,$bindvars)) return;
                 }
 
-                xarResponseRedirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
+                xarResponse::Redirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
                 return true;
                 break;
             case 'remove':
@@ -69,7 +69,7 @@
                     $dbconn->Execute($query,$bindvars);
                 }
 
-                xarResponseRedirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
+                xarResponse::Redirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
                 return true;
                 break;
         }

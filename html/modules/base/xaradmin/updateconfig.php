@@ -145,7 +145,7 @@ function base_admin_updateconfig()
     // Call updateconfig hooks
     xarModCallHooks('module','updateconfig','base', array('module' => 'base'));
 
-    xarResponseRedirect(xarModURL('base', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
+    xarResponse::Redirect(xarModURL('base', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
 
     return true;
 }

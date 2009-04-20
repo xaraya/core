@@ -26,7 +26,7 @@ function dynamicdata_admin_main()
         // Return the template variables defined in this function
         return $data;
     } else {
-        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view'));
+        xarResponse::Redirect(xarModURL('dynamicdata', 'admin', 'view'));
     }
 
     return true;

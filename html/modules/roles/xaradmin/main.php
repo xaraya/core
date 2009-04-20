@@ -18,7 +18,7 @@ function roles_admin_main()
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;
 
-        xarResponseRedirect(xarModURL('roles', 'admin', 'showusers'));
+        xarResponse::Redirect(xarModURL('roles', 'admin', 'showusers'));
     // success
     return true;
 }

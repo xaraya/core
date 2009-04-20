@@ -640,7 +640,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // TODO: count items before calling getItems() if we want some better pager
 
         // Get current URL (this uses &amp; by default now)
-        if(empty($currenturl)) $currenturl = xarServerGetCurrentURL();
+        if(empty($currenturl)) $currenturl = xarServer::getCurrentURL();
 
         // TODO: clean up generation of sort URL
 

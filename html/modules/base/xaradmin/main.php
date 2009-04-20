@@ -23,7 +23,7 @@ function base_admin_main()
 // Security Check
     if(!xarSecurityCheck('AdminBase')) return;
 
-    xarResponseRedirect(xarModURL('base', 'admin', 'sysinfo'));
+    xarResponse::Redirect(xarModURL('base', 'admin', 'sysinfo'));
 
     // success
     return true;

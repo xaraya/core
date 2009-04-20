@@ -96,9 +96,9 @@ function roles_admin_delete()
         }
         // redirect to the next page
         if (empty($returnurl)) {
-            xarResponseRedirect(xarModURL('roles', 'admin', 'showusers'));
+            xarResponse::Redirect(xarModURL('roles', 'admin', 'showusers'));
         } else {
-            xarResponseRedirect($returnurl);
+            xarResponse::Redirect($returnurl);
         }
     }
 }

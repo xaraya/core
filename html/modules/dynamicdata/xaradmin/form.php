@@ -27,7 +27,7 @@ function dynamicdata_admin_form($args)
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
 
     if (empty($modid)) {
-        $modid = xarModGetIDFromName('dynamicdata');
+        $modid = xarMod::getRegID('dynamicdata');
     }
     if (!isset($itemtype)) {
         $itemtype = 0;

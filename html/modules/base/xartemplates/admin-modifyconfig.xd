@@ -33,7 +33,7 @@
             </dt>
             <xar:if condition="$tab eq 'display'">
                 <dd class="active">
-                    <a href="#xarServerGetCurrentURL()#">
+                    <a href="#xarServer::getCurrentURL()#">
                         <xar:mlstring>
                             Site Display
                         </xar:mlstring>
@@ -50,7 +50,7 @@
             </xar:if>
             <xar:if condition="$tab eq 'security'">
                 <dd class="active">
-                    <a href="#xarServerGetCurrentURL()#">
+                    <a href="#xarServer::getCurrentURL()#">
                         <xar:mlstring>
                             Sessions/Security
                         </xar:mlstring>
@@ -67,7 +67,7 @@
             </xar:if>
             <xar:if condition="$tab eq 'locales'">
                 <dd class="active">
-                    <a href="#xarServerGetCurrentURL()#">
+                    <a href="#xarServer::getCurrentURL()#">
                         <xar:mlstring>
                             Languages and Locales
                         </xar:mlstring>
@@ -84,7 +84,7 @@
             </xar:if>
             <xar:if condition="$tab eq 'other'">
                 <dd class="active">
-                    <a href="#xarServerGetCurrentURL()#">
+                    <a href="#xarServer::getCurrentURL()#">
                         <xar:mlstring>
                             Other
                         </xar:mlstring>

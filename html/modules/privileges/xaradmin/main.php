@@ -20,7 +20,7 @@ function privileges_admin_main()
 // Security Check
     if(!xarSecurityCheck('EditPrivilege')) return;
 
-    xarResponseRedirect(xarModURL('privileges', 'admin', 'viewprivileges'));
+    xarResponse::Redirect(xarModURL('privileges', 'admin', 'viewprivileges'));
 
     // success
     return true;
