@@ -25,7 +25,7 @@ function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target
 function xarRequestGetVar($name, $allowOnlyMethod = NULL) { return xarRequest::getVar($name, $allowOnlyMethod);}
 function xarRequestGetInfo()                              { return xarRequest::getInfo();        }
 function xarRequestIsLocalReferer()                       { return xarRequest::IsLocalReferer(); }
-function xarResponse::Redirect($redirectURL)                { return xarResponse::Redirect($redirectURL); }
+function xarResponseRedirect($redirectURL)                { return xarResponse::Redirect($redirectURL); }
 
 /**
  * Convenience classes
