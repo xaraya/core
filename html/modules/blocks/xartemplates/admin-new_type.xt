@@ -24,7 +24,7 @@
                 <input type="hidden" name="confirm" id="confirm" value="true" />
                 <div class="xar-form-input-wrapper">
                     <label for="modulename" title="#xarML('This is the name of the module that this block is to be associated with. Blocks must be associated with modules. When in doubt use the base module.')#" class="xar-form-label">Module Name:</label>
-                    <xar:data-input type="module" name="moduleid" id="moduleid" value="$moduleid" />
+                    <xar:data-input type="module" name="module_id" value="$module_id" store_prop="regid" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="blockname" title="#xarML('This is the exact name of the block. It must be case specific, otherwise the block will not function correctly.')#" class="xar-form-label">Block Name:</label>
