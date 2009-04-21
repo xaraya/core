@@ -27,7 +27,15 @@ function base_adminapi_menuarray($args)
     $menuarray = xarModAPIFunc('base','admin','loadadminmenuarray',array('module' => $args['module']));
     if (!empty($menuarray)) {
         foreach ($menuarray as $menuitem) {
-            $url = isset($menuitem['target']) ? xarModURL($args['module'],'admin',$menuitem['target']) : xarServer::getBaseURL();
+            if (isset($menuitem['target'])) {
+                if ($menuitem['target'] == 'overview') {
+                    $url = xarModURL('base','admin',$menuitem['target'],array('overview' => $args['module']));
+                } else {
+                    $url = xarModURL($args['module'],'admin',$menuitem['target']);
+                }
+            } else {
+                $url = xarServer::getBaseURL();
+            }
             $link = array('url'   => $url,
                           'title' => $menuitem['title'],
                           'label' => $menuitem['label']
@@ -43,7 +51,15 @@ function base_adminapi_menuarray($args)
     } elseif (xarModAPIFunc($args['module'],'data','adminmenu',0)) {
         $tabs = xarModAPIFunc($args['module'],'data','adminmenu');
         foreach($tabs as $tab) {
-            $url = isset($tab['target']) ? xarModURL($args['module'],'admin',$tab['target']) : xarServer::getBaseURL();
+            if (isset($tab['target'])) {
+                if ($tab['target'] == 'overview') {
+                    $url = xarModURL('base','admin',$tab['target'],array('overview' => $args['module']));
+                } else {
+                    $url = xarModURL($args['module'],'admin',$tab['target']);
+                }
+            } else {
+                $url = xarServer::getBaseURL();
+            }
             $label = isset($tab['label']) ? $tab['label'] : xarML('Missing label');
             $title = isset($tab['title']) ? $tab['title'] : $label;
             $link = array('url'   => $url,
