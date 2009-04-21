@@ -30,19 +30,41 @@
             site. Xaraya modules can provide their own block types. For example the Roles module provides a 'language' block type that lets the user choose the site's langauge. The Base module provides a 'menu' block type for displaying menus, and so on.
         </p>
         <p>
-            A module's block types are available when the module is installed, and removed when it is uninstalled. The following pages let you manage block types: 
+            A module's block types are available when the module is installed, and removed when it is uninstalled. Block types are managed through the <strong>Block Types</strong>&#160;page, which lists all the block types available in your Xaraya installation and the modules they belong to. The page also contains a link to the <strong>New Block Type</strong> page, which can scan a module for its block types and let you add any that are not yet available. This option is used in the (exceptional) case when a block type was not properly installed in the course of a normal module release or upgrade.
+        </p>
+
+        <h4>Blocks</h4>
+        <p>
+            A block is an instance of a block type. You can create as many blocks from a given block type as required, each with their own behavior and content (several menu block on the same page, for isntance)..The following pages let you manage blocks:
         </p>
         <ul>
             <li>
-                <strong>Block Types:</strong>&#160;lists all the block types available in your Xaraya installation and the modules they belong to.</li>
+                <strong>View Blocks:</strong>&#160;displays all the current blocks that are available for use in your Xaraya site and lets you modify or delete them. The page also has a link to the <strong>New Block</strong>&#160;page.
+            </li>
             <li>
-                <strong>New Block Type:</strong>&#160;scans a module for its block types and lets you add any that are not yet available. This option is used in the (exceptional) case when a block type was not properly installed in the course of a normal module release or upgrade.
+                <strong>New Block:</strong>&#160;lets you create and make available a new block of a given block type, and. optionally assign it to a block group (see below).
             </li>
         </ul>
-        <br />
-        <p>
-            A block is an instance of a block type. Xaraya modules can provide their own block types. For example the Roles module provides a 'language' block type that lets the user choose the site's langauge. The Base module provides a 'menu' block type for displaying menus, and so on.
+            <p>
+            You can go to a block's configuration page by clicking on its Edit link in the <strong>View Blocks</strong>&#160;page. You can then:
         </p>
+        <ul>
+            <li>
+                Change the block's name (used by Xaraya to identify it) and its title (the title in the block's display).
+            </li>
+            <li>
+                Set the block to be displayed or hidden on template pages.
+            </li>
+            <li>
+                Assign the block to be displayed in one or more block groups.
+            </li>
+            <li>
+                Specify whether special templates should be used to display the block. You can override the standard templates by defining an "inner" template for the block and an "outer" template for its group (see Templating Blocks and Block Groups below)
+            </li>
+            <li>
+                Set any block-specific configuration options. Most blocks will have special settings pertinent to their functionality that can be modified according to your needs.
+            </li>
+        </ul>
         <h3>Using Blocks and Block Groups</h3>
         <p>There are a number of steps required to create a new block of content or functionality
         for your site, and display it:</p>
@@ -87,32 +109,7 @@
                 <strong>Add Block Group:</strong>
             </a>option presents a simple input screen so you can add a new block group</li>
         </ul>
-        <h4>Creating, Viewing and Modifying Block Instances</h4>
-        <p>Creating and modifying block instances with Xaraya is simple:</p>
-        <ul>
-            <li>
-            <a name="view_instances">
-                <strong>View Block Instances:</strong>
-            </a>displays all current block instances that are available for use in your Xaraya
-            site. From this menu option you can 
-            <code>modify</code>or 
-            <code>delete</code>any of the listed block instances.</li>
-            <li>
-            <a name="new_instance">
-                <strong>Add New Block Instance:</strong>
-            </a>Create and make available a new block instance for display on your site. As part of
-            this process you may nominate which block type to use for creation of the block
-            instance, and optionally assign the block instance to a Block Group.</li>
-            <li>
-            <a name="modify_instance">
-                <strong>Modify a Block Instance:</strong>
-            </a>from the View Block Instance listing provides the option to allocate the block
-            instance to one or more Block Groups. In addition, you can optionally specify whether
-            the block instances should use an override block instance (inner) template or block
-            group (outer) template (see Templating Blocks and Block Groups). Each module also
-            specifies any special content here that is available for configuration for this
-            specific block type.</li>
-        </ul>
+
         <h3>Templating Blocks and Block Groups</h3>
         <p>As with other Xaraya content, you can provide your own override templates for block
         instances and create your own templates for block groups. To do this note the
