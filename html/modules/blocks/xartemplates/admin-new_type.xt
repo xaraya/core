@@ -23,16 +23,11 @@
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="confirm" id="confirm" value="true" />
                 <div class="xar-form-input-wrapper">
-                    <label for="modulename"
-                    title="#xarML('This is the name of the module that this block is to be associated with. Blocks must be associated with modules. When in doubt use the base module.')#"
-                    class="xar-form-label">Module Name:</label>
-                    <xar:data-input type="module" name="moduleid" id="moduleid"
-                    value="$moduleid" />
+                    <label for="modulename" title="#xarML('This is the name of the module that this block is to be associated with. Blocks must be associated with modules. When in doubt use the base module.')#" class="xar-form-label">Module Name:</label>
+                    <xar:data-input type="module" name="moduleid" id="moduleid" value="$moduleid" />
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="blockname"
-                    title="#xarML('This is the exact name of the block. It must be case specific, otherwise the block will not function correctly.')#"
-                    class="xar-form-label">Block Name:</label>
+                    <label for="blockname" title="#xarML('This is the exact name of the block. It must be case specific, otherwise the block will not function correctly.')#" class="xar-form-label">Block Name:</label>
                     <xar:if condition="!empty($type_list)">
                         <select name="blockname" id="blockname">
                             <xar:loop name="$type_list">
@@ -48,7 +43,6 @@
                         </select>
                         <xar:else />
                         <input type="text" name="blockname" id="blockname" value="" maxlength="255" class="xar-form-textlong" />
-                        class="xar-form-textlong" />
                     </xar:if>
                     <input type="submit" name="scan" value="#xarML('Scan Module')#" />
                 </div>
@@ -56,7 +50,6 @@
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="submit" name="submit" value="#xarML('Add Block Type')#" class="xar-margin-thick" />
-                    class="xar-margin-thick" />
                 </div>
             </fieldset>
         </form>
