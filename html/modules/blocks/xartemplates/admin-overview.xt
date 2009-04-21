@@ -24,32 +24,25 @@
         <p>
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Blocks &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
         </p>
-        <h3>Block Types</h3>
-        <p>Each module can provide a block type along with the code and templates for it. A block
-        type defines a specific display of content or functionality that you can place on your
-        site. For example the Articles module provides a 'featured article' block type, and a 'top
-        items' block type. The Base module provides a 'menu' block type, among others.</p>
-        <p>These different block types are installed at the time of module installation, and
-        removed when a module is uninstalled. The block types are also upgraded when a module is
-        upgraded.</p>
-        <p>The Blocks module enables you to work with 
-        <strong>Block Types</strong>to:</p>
+        <h4>Block Types</h4>
+        <p>
+            A block type defines a specific display of content or functionality that you can place on your
+            site. Xaraya modules can provide their own block types. For example the Roles module provides a 'language' block type that lets the user choose the site's langauge. The Base module provides a 'menu' block type for displaying menus, and so on.
+        </p>
+        <p>
+            A module's block types are available when the module is installed, and removed when it is uninstalled. The following pages let you manage block types: 
+        </p>
         <ul>
             <li>
-            <a name="view_types">
-                <strong>View Block Types:</strong>
-            </a>lists all the registered block types in your Xaraya installation with reference to
-            which module they belong.</li>
+                <strong>Block Types:</strong>&#160;lists all the block types available in your Xaraya installation and the modules they belong to.</li>
             <li>
-            <a name="new_type">
-                <strong>Add a New Block Type:</strong>
-            </a>scans a module for a new block type. This option is added mainly for Developer
-            convenience. Sometimes a developer provides a block type or upgrade of a block outside
-            of a normal module release or upgrade. This option allows the block to be loaded and
-            registered in your Xaraya installation. Normally you should never need to use this
-            option in the process of administering your site.</li>
+                <strong>New Block Type:</strong>&#160;scans a module for its block types and lets you add any that are not yet available. This option is used in the (exceptional) case when a block type was not properly installed in the course of a normal module release or upgrade.
+            </li>
         </ul>
         <br />
+        <p>
+            A block is an instance of a block type. Xaraya modules can provide their own block types. For example the Roles module provides a 'language' block type that lets the user choose the site's langauge. The Base module provides a 'menu' block type for displaying menus, and so on.
+        </p>
         <h3>Using Blocks and Block Groups</h3>
         <p>There are a number of steps required to create a new block of content or functionality
         for your site, and display it:</p>
