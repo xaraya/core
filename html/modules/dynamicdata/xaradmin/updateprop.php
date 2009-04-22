@@ -22,7 +22,7 @@ function dynamicdata_admin_updateprop()
 {
     if(!xarVarFetch('objectid',          'isset', $objectid,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',             'isset', $modid,             NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype',          'int:1:', $itemtype,         0, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('itemtype',          'int:1:', $itemtype,         0,    XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',             'isset', $table,             NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_label',          'isset', $dd_label,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_type',           'isset', $dd_type,           NULL, XARVAR_DONT_SET)) {return;}
@@ -30,7 +30,7 @@ function dynamicdata_admin_updateprop()
     if(!xarVarFetch('dd_source',         'isset', $dd_source,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('display_dd_status', 'isset', $display_dd_status, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('input_dd_status',   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_configuration',     'isset', $dd_configuration,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_configuration',  'isset', $dd_configuration,  NULL, XARVAR_DONT_SET)) {return;}
 
     if (!xarSecConfirmAuthKey()) return;
 
