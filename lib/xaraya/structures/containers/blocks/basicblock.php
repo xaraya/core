@@ -38,10 +38,43 @@
 
         function display(Array $data=array())
         {
-            if (!xarSecurityCheck('View' . $data['module'], 0, 'Block', $data['type'] . ":" . $data['name'] . ":" . "$data[bid]")) {return;}
             // Get variables from content block
             if (!is_array($data['content'])) $data['content'] = unserialize($data['content']);
             if (empty($data['content'])) $data['content'] = array();
+
+            $access = isset($data['content']['access']) ? $data['content']['access'] : array();
+            
+            // FIXME: remove this once all blocks have access data
+            if (empty($access)) {
+                if (!xarSecurityCheck('View' . $data['module'], 0, 'Block', $data['type'] . ":" . $data['name'] . ":" . "$data[bid]")) {return;}
+                return $data;
+            }
+            
+            // Decide whether this block is displayed to the current user
+            $data['allowaccess'] = false;
+            $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
+            if (($access['group'] == $anonID)) {
+                if (!xarUserIsLoggedIn()) $data['allowaccess'] = true;
+            } elseif (($access['group'] == -$anonID)) {
+                if (xarUserIsLoggedIn()) $data['allowaccess'] = true;
+            } elseif ($access['group']) {
+                $group = xarRoles::getRole($access['group']);
+                $thisuser = xarCurrentRole();
+                if ($thisuser->isAncestor($group)) $data['allowaccess'] = true;
+            } else {
+                if (xarSecurityCheck('', 
+                                  0, 
+                                  'Block', 
+                                  $data['type'] . ":" . $data['name'] . ":" . "$data[bid]",
+                                  $data['module'],
+                                  '',
+                                  0,
+                                  $access['level'])) {$data['allowaccess'] = true;
+                }
+            }
+            
+            //Pass the access data along
+            $data['access'] = $access;
             return $data;
         }
 
@@ -55,6 +88,7 @@
                 $data = array_merge($data,$data['content']);
             }
             $data['blockid'] = $data['bid'];
+//            echo "<pre>";var_dump($data);exit;
             return $data;
         }
 
@@ -75,6 +109,9 @@
                 if (!xarVarFetch('text_content', 'str:1', $text_content, '', XARVAR_DONT_SET)) {return;}
                 $vars['text_content'] = $text_content;
             }
+            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+            $accessproperty->checkInput($data['name']);
+            $vars['access'] = $accessproperty->value;
 
             $data['content'] = $vars;
             return $data;

@@ -198,7 +198,13 @@
                     <input type="text" name="block_template" id="block_template" value="#xarVarPrepForDisplay($instance['template'])#" maxlength="255" class="xar-form-textlong" />
                     (Specified as <code>outer<strong>;</strong>inner</code>)
                 </div>
+            </fieldset>
 
+            <fieldset>
+                <legend>
+                    Block Access
+                </legend>
+                <xar:data-input type="access" name="$instance['name']" value="$instance['access']" />
             </fieldset>
 
             <fieldset>

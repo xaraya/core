@@ -56,6 +56,7 @@ function blocks_admin_modify_instance()
             $block = new $name($descriptor);
 
             $extra = $block->modify($instance);
+            $instance['access'] = $extra['access'];
             if (is_array($extra)) {
                 // Render the extra settings if necessary.
                 try {

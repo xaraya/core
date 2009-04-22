@@ -119,6 +119,13 @@ function xarBlock_render($blockinfo)
 
         $blockinfo = $block->display($blockinfo);
         if (!is_array($blockinfo)) {return '';}
+        if (isset($blockinfo['allowaccess']) && !$blockinfo['allowaccess']) {
+            if (isset($blockinfo['access']) && $blockinfo['access']['failure']) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
+            } else {
+                return '';
+            }
+        }
         if (is_array($blockinfo['content'])) {
             // Here $blockinfo['content'] is template data.
 

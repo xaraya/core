@@ -30,14 +30,8 @@
         function display(Array $data=array())
         {
             $data = parent::display($data);
-            if (!xarSecurityCheck('ViewRoles',0,'Block',"online:$data[title]:$data[bid]")) {return;}
-
-            // Get variables from content block
-            if (!is_array($data['content'])) {
-                $args = unserialize($data['content']);
-            } else {
-                $args = $data['content'];
-            }
+            $args = $data['content'];
+            
             if (!isset($args['showusers']))     $args['showusers'] = 0;
             if (!isset($args['showusertotal'])) $args['showusertotal'] = 0;
             if (!isset($args['showanontotal'])) $args['showanontotal'] = 0;
