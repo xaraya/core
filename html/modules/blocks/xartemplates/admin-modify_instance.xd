@@ -200,12 +200,14 @@
                 </div>
             </fieldset>
 
-            <fieldset>
-                <legend>
-                    Block Access
-                </legend>
-                <xar:data-input type="access" name="$instance['name']" value="$instance['access']" />
-            </fieldset>
+            <xar:if condition="isset($instance['access'])">
+                <fieldset>
+                    <legend>
+                        Block Access
+                    </legend>
+                    <xar:data-input type="access" name="$instance['name']" value="$instance['access']" />
+                </fieldset>
+            </xar:if>
 
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
