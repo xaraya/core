@@ -97,36 +97,6 @@
                 </li>
             </ul>
         </p>
-        <p>From the menu, you have three choices:</p>
-        <ol>
-            <li>
-            <strong>View Themes</strong>: Displays the themes currently installed on your system,
-            and the current state that they are in.</li>
-            <li>
-            <strong>Modify Configuration</strong>: Allows you to set various site wide
-            configuration options. This is an important option and you should review these options
-            carefully. Pay particular attention to the debug options including 
-            <strong>Cache Templates</strong>, and 
-            <strong>Show Template File Names</strong>. Be sure to understand what these options
-            do.</li>
-        </ol>
-        <h4>View Themes</h4>
-        <p>The View Themes option displays a list of all themes that are available but not
-        necessarily active and installed in your Xaraya installation. All valid Xaraya themes found
-        in your Xaraya themes directory should be listed here.</p>
-        <ol>
-            <li>You can add more themes to this list at any time by adding them to your Xaraya
-            themes directory and clicking the Refresh button</li>
-            <li>Themes must be installed and active to be available for use on your Xaraya
-            site.</li>
-            <li>You cannot uninstall or deactivate core modules</li>
-        </ol>
-        <p>You have a number of options with drop down selection lists to choose from including
-        Style of display, View (by Status), and Sort by.</p>
-        <p>Within the list of themes you can view further information on each theme including Name,
-        Version, basic Info, theme Status, and Actions available to you for each theme. The Default
-        Theme used to display your site is also indicated.</p>
-        <br />
 
         <h3>Available Blocks</h3>
         <ul>
@@ -135,6 +105,9 @@
             </li>
         </ul>
 
+        <h3>Available Dataproperties</h3>
+        <p>The Themes module has no dataproperties</p>
+
         <h3>Available Hooks</h3>
         <ul>
             <li>
@@ -142,9 +115,43 @@
             </li>
         </ul>
 
-        <h3>Available Dataproperties</h3>
-        <p>The Themes module has no dataproperties</p>
+        <h3>Viewing and Setting Themes</h3>
+        <p>
+            The View Themes option displays a list of all themes that are available but not
+            necessarily active and installed in your Xaraya installation.
+        </p>
+        <ul>
+            <li>
+                You can add more themes to this list at any time by adding them to your Xaraya
+                themes directory and clicking the Refresh button
+            </li>
+            <li>
+                Themes must be initialized and active to be available for use on your Xaraya
+                site.
+            </li>
+        </ul>
+        <p>
+            Within the list of themes you can view further information on each theme by clicking on its link in the Info column.
+            If more than one theme is active, the themes the site is <em>not</em> displayed in by default will have a Set as Default link in the Actions column. Clicking on the link will make that theme the default theme for displaying the site. 
+        </p>
 
+        <p>
+            The controls at the top of the display offer a number of options for viewing themes:
+        </p>
+        <ul>
+            <li>
+                <strong>Style:</strong>&#160;show a simple listing or display each item with a thumbnail of the theme (if one exists).
+            </li>
+            <li>
+                <strong>View:</strong>&#160;a dropdown with a number of filtering options for displaying only certain themes.
+            </li>
+            <li>
+                <strong>Class:</strong>&#160;a dropdown that filters and displays themes by their class (System, Utility, User).
+            </li>
+            <li>
+                <strong>Use Icons:</strong>&#160;when checked substitutes the text links on the page with icon links.
+            </li>
+        </ul>
         <!--
         <h3>Further Information</h3>
         <p>Further information on the Themes module can be found at</p>
