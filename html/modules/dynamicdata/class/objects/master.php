@@ -760,7 +760,7 @@ class DataObjectMaster extends Object
         $descriptor = new DataObjectDescriptor($args);
         $objectid = $object->createItem($descriptor->getArgs());
         $classname = get_class($object);
-        xarLogMessage("Creating an object of class " . $classname . ". Objectid: " . $objectid . ", module: " . $args['moduleid'] . ", itemtype: " . $args['itemtype']);
+        xarLogMessage("Creating an object of class " . $classname . ". Objectid: " . $objectid . ", module: " . $args['module_id'] . ", itemtype: " . $args['itemtype']);
         unset($object);
         return $objectid;
     }
