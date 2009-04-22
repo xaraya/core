@@ -52,7 +52,8 @@ function dynamicdata_admin_updateprop()
             if (!empty($itemtype)) {
                 $name .= '_' . $itemtype;
             }
-            $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
+            sys::import('modules.dynamicdata.class.objects.master');
+            $objectid = DataObjectMaster::createObject(
                                       array('moduleid' => $modid,
                                             'itemtype' => $itemtype,
                                             'name' => $name,
