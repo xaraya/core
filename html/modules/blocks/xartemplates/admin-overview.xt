@@ -97,7 +97,7 @@
         <a href="#$rfcblocklink#">RFC0010</a>for details on using this tag.</p>
         <h4>Creating and Viewing Block Groups</h4>
         <p>The Blocks module provides a number of options to work with 
-        <strong>Block Goups</strong>:</p>
+        <strong>Block Groups</strong>:</p>
         <ul>
             <li>
             <a name="view_groups">
@@ -110,27 +110,22 @@
             </a>option presents a simple input screen so you can add a new block group</li>
         </ul>
 
-        <h3>Templating Blocks and Block Groups</h3>
-        <p>As with other Xaraya content, you can provide your own override templates for block
-        instances and create your own templates for block groups. To do this note the
-        following:</p>
+        <h4>Templating Blocks and Block Groups</h4>
+        <p>
+            As with other Xaraya content, you can provide your own override templates for blocks and create your own templates for block groups:
+        </p>
         <ol>
             <li>
-            <strong>Inner template</strong>is used for display of the content in a block instance
-            and supplied by the module that provides the block type. They can be overridden like
-            any other Xaraya template. Overrides for for block instance 
-            <strong>inner</strong>templates should be be placed in 
-            <code>themes/[yourtheme]/modules/[themodule]/blocks</code>where 
-            <code>[themodule]</code>is the module providing the block type. The general name for
-            the template is 
-            <code>blocktype-innertemplatename.xt</code></li>
+                <strong>Inner template</strong>&#160;is used for display of the content in a block, and is supplied by the module that provides the block type. It can be overridden like any other Xaraya template. Overrides for block inner templates should be be placed in 
+                <pre>themes/[yourtheme]/modules/[themodule]/blocks</pre>
+                where [themodule] is the module providing the block type. The general name for the template is 
+                <pre>blocktype-innertemplatename.xt</pre>
+            </li>
             <li>
-            <strong>Outer template</strong>is the name given to the template used for the block
-            instance's block group. Some 'outer' templates are installed by default with Xaraya,
-            but you can also create your own 'outer' templates. The 
-            <strong>outer templates</strong>are stored in your 
-            <code>theme/[yourtheme]/blocks</code>directory. If there is no specific block group
-            template the block group will use the preinstalled 'default' block group template.</li>
+                <strong>Outer template</strong>&#160;is the name given to the template used for the block's block group. Some 'outer' templates are installed by default with Xaraya, but you can also create your own 'outer' templates. The outer templates are stored in your 
+                <pre>theme/[yourtheme]/blocks</pre>
+                directory. If there is no specific block group template the block group will use the preinstalled 'default' block group template.
+            </li>
         </ol>
         <h4>How to tell Xaraya which inner and outer templates to use</h4>
         <p>You can tell Xaraya which inner and outer templates to use when you create a new block
