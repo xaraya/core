@@ -56,14 +56,48 @@ function blocks_admin_modify_instance()
             $block = new $name($descriptor);
 
             $extra = $block->modify($instance);
-            $instance['access'] = $extra['access'];
-            if (is_array($extra)) {
-                // Render the extra settings if necessary.
-                try {
-                    $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
-                } catch (Exception $e) {
-                    $extra = '';
+            $instance['display_access'] = isset($extra['display_access']) ? $extra['display_access'] : array();
+            $instance['modify_access'] = isset($extra['modify_access']) ? $extra['modify_access'] : array();
+
+            $access = $instance['modify_access'];
+            // Decide whether this block is modifiable to the current user
+            $instance['allowaccess'] = false;
+            if (isset($access['group'])) {
+                $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
+                if (($access['group'] == $anonID)) {
+                    if (!xarUserIsLoggedIn()) $instance['allowaccess'] = true;
+                } elseif (($access['group'] == -$anonID)) {
+                    if (xarUserIsLoggedIn()) $instance['allowaccess'] = true;
+                } elseif ($access['group']) {
+                    $group = xarRoles::getRole($access['group']);
+                    $thisuser = xarCurrentRole();
+                    if (is_object($group)) {
+                        if ($thisuser->isAncestor($group)) $instance['allowaccess'] = true;
+                    } 
+                } else {
+                    if (xarSecurityCheck('', 
+                                      0, 
+                                      'Block', 
+                                      $instance['type'] . ":" . $instance['name'] . ":" . "$instance[bid]",
+                                      $instance['module'],
+                                      '',
+                                      0,
+                                      $access['level'])) {$instance['allowaccess'] = true;
+                    }
                 }
+            }
+            if ($instance['allowaccess']) {
+                if (is_array($extra)) {
+                    // Render the extra settings if necessary.
+                    try {
+                        $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
+                    } catch (Exception $e) {
+                        $extra = '';
+                    }
+                }
+            } elseif (!empty($access['failure'])) {
+                $extra = xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
+            } else {
             }
         } else {
             $extra = '';
