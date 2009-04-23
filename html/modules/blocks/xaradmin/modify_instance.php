@@ -98,6 +98,7 @@ function blocks_admin_modify_instance()
             } elseif (!empty($access['failure'])) {
                 $extra = xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
             } else {
+                $extra = '';
             }
         } else {
             $extra = '';
