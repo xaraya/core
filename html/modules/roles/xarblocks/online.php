@@ -26,7 +26,6 @@
         public $allow_multiple      = true;
         public $show_preview        = true;
 
-
         function display(Array $data=array())
         {
             $data = parent::display($data);
@@ -179,7 +178,7 @@
             if (!xarVarFetch('showusertotal', 'checkbox', $args['showusertotal'], false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('showanontotal', 'checkbox', $args['showanontotal'], false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('showlastuser',  'checkbox', $args['showlastuser'], false, XARVAR_NOT_REQUIRED)) return;
-            $data['content'] = $args;            
+            $data['content'] = array_merge($data['content'],$args);            
             return $data;
         }
     }
