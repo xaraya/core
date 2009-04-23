@@ -43,14 +43,16 @@
             if (empty($data['content'])) $data['content'] = array();
 
             $access = isset($data['content']['display_access']) ? $data['content']['display_access'] : array();
+            $data['allowaccess'] = false;
             
             // FIXME: remove this once all blocks have access data
             if (empty($access)) {
-                if (!xarSecurityCheck('View' . $data['module'], 0, 'Block', $data['type'] . ":" . $data['name'] . ":" . "$data[bid]")) {return;}
+                if (xarSecurityCheck('View' . $data['module'], 0, 'Block', $data['type'] . ":" . $data['name'] . ":" . "$data[bid]")) {
+                    $data['allowaccess'] = true;
+                }
                 return $data;
             }
             // Decide whether this block is displayed to the current user
-            $data['allowaccess'] = false;
             $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
             if (($access['group'] == $anonID)) {
                 if (!xarUserIsLoggedIn()) $data['allowaccess'] = true;
