@@ -5,12 +5,26 @@
     <xar:set name="steptext[3]">'Upgrade Miscellaneous'</xar:set>
     <xar:set name="steptext[4]">'Finalize Upgrade'</xar:set>
     <div id="status">
-        <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">
-            <p class="complete">#$steptext[$phase]#</p>
-        </xar:for>
-        <p class="active">#$steptext[$active_step]#</p>
-        <xar:for start="$phase = $active_step + 1" test="$phase le 4" iter="$phase++">
-            <p class="greyed">#$steptext[$phase]#</p>
-        </xar:for>
+        <div id="status_body">
+            <div class="xar-align-center">
+                <img src="./modules/installer/xarimages/upgrader.png" alt="#xarML('Upgrade icon')#" />
+            </div>
+            <ul>
+                <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">
+                    <li class="complete">
+                        #$steptext[$phase]# 
+                    </li>
+                </xar:for>
+                <li class="active">
+                    #$steptext[$active_step]# 
+                </li>
+                <xar:for start="$phase = $active_step + 1" test="$phase le 4" iter="$phase++">
+                    <li class="greyed">
+                        #$steptext[$phase]# 
+                    </li>
+                </xar:for>
+            </ul>
+        </div>
+        <div id="status_foot"></div>
     </div>
 </xar:template>

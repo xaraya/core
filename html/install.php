@@ -91,7 +91,7 @@ xarResponse::init($systemArgs);
 // templateable too obviously
 $systemArgs = array('enableTemplatesCaching' => false,
                     'themesBaseDirectory'    => 'themes',
-                    'defaultThemeDir'        => 'Xaraya_Classic',
+                    'defaultThemeDir'        => 'installer',
                     'generateXMLURLs'        => false);
 xarTpl_init($systemArgs);
 
@@ -112,7 +112,7 @@ if(is_dir($locale_dir)) {
         while (($file = readdir($dh)) !== false) {
             // Exclude the current, previous and the Bitkeeper folder
             // (just for us to be able to test, wont affect users who use a build)
-            if($file == '.' || $file == '..' || $file == 'SCCS' || filetype($locale_dir . $file) == 'file' ) continue;
+            if($file == '.' || $file == '..' || filetype($locale_dir . $file) == 'file' ) continue;
             if(filetype(realpath($locale_dir . $file)) == 'dir' &&
                file_exists(realpath($locale_dir . $file . '/locale.xml'))) {
                 $allowedLocales[] = $file;
@@ -150,8 +150,8 @@ function xarInstallMain()
 
     // Make sure we can render a page
     xarTplSetPageTitle(xarML('Xaraya installer'));
-    if(!xarTplSetThemeName('Xaraya_Classic'))
-        throw new Exception('You need the Xaraya_Classic theme if you want to install Xaraya.');
+    if(!xarTplSetThemeName('installer'))
+        throw new Exception('You need the installer theme if you want to install Xaraya.');
 
     // Handle installation phase designation
     xarVarFetch('install_phase','int:1:6',$phase,1,XARVAR_NOT_REQUIRED);
@@ -185,7 +185,7 @@ function xarInstallMain()
     }
 
     // Render page using the installer.xt page template
-    $pageOutput = xarTpl_renderPage($mainModuleOutput,'installer');
+    $pageOutput = xarTpl_renderPage($mainModuleOutput,'default');
 
     echo $pageOutput;
     return true;

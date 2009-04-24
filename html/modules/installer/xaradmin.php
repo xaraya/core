@@ -622,71 +622,46 @@ function installer_admin_create_administrator()
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     xarVarSetCached('installer','installing', true);
-    xarTplSetPageTemplateName('installer');
+    xarTplSetThemeName('installer');
 
     $data['language'] = $install_language;
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Create Administrator');
 
     sys::import('modules.roles.class.roles');
-    $role = xarRoles::ufindRole('admin');
+    $data['admin'] = xarRoles::getRole(xarModVars::get('roles','admin'));
+    $data['properties'] = $data['admin']->getProperties();
 
     if (!xarVarFetch('create', 'isset', $create, FALSE, XARVAR_NOT_REQUIRED)) return;
     if (!$create) {
-        // create a role from the data
-
-        // assemble the template data
-        $data['install_admin_username'] = $role->getUser();
-        $data['install_admin_name']     = $role->getName();
-        $data['install_admin_email']    = $role->getEmail();
         return $data;
     }
-
-    if (!xarVarFetch('install_admin_username','str:1:100',$userName)) return;
-    if (!xarVarFetch('install_admin_name','str:1:100',$name)) return;
-    if (!xarVarFetch('install_admin_password','str:4:100',$pass)) return;
-    if (!xarVarFetch('install_admin_password1','str:4:100',$pass1)) return;
-    if (!xarVarFetch('install_admin_email','str:1:100',$email)) return;
-
-    xarModVars::set('mail', 'adminname', $name);
-    xarModVars::set('mail', 'adminmail', $email);
-    xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright ' . date("Y") . ' ' . $name);
-
-    if ($pass != $pass1) {
-        $msg = xarML('The passwords do not match');
-        throw new Exception($msg);
+    
+    // Set up some custom validation checks and messges
+    $data['admin']->properties['name']->validation_min_length = 4;
+    $data['admin']->properties['name']->validation_min_length_invalid = xarML('The display name must be at least 4 characters long');
+    $data['admin']->properties['uname']->validation_min_length = 4;
+    $data['admin']->properties['uname']->validation_min_length_invalid = xarML('The user name must be at least 4 characters long');
+    $data['admin']->properties['password']->validation_min_length = 4;
+    $data['admin']->properties['password']->validation_min_length_invalid = xarML('The password must be at least 4 characters long');
+    $data['admin']->properties['password']->validation_password_confirm = 1;
+    $data['admin']->properties['email']->validation_min_length = 1;
+    $data['admin']->properties['email']->validation_min_length_invalid = xarML('An email address must be entered');
+    
+    $isvalid = $data['admin']->checkInput();var_dump($data['admin']->getInvalids());
+    if (!$isvalid) {
+        return xarTplModule('installer','admin','create_administrator',$data);
     }
-
-    if (empty($userName)) {
-        $msg = xarML('You must provide a preferred username to continue.');
-        throw new Exception($msg);
-    }
-    // check for spaces in the username
-    if (preg_match("/[[:space:]]/",$userName)) {
-        $msg = xarML('There is a space in the username.');
-        throw new Exception($msg);
-    }
-    // check the length of the username
-    if (strlen($userName) > 255) {
-        $msg = xarML('Your username is too long.');
-        throw new Exception($msg);
-    }
-
-    // assemble the args into an array for the role constructor
-    $args =  array('itemid'     => $role->getID(),
-                   'name'       => $name,
-                   'uname'      => $userName,
-                   'email'      => $email,
-                   // CHECKME: can we transform this in the dproperty
-                   'password'   => $pass,
-                   'state'      => ROLES_STATE_ACTIVE);
-
-    xarModVars::set('roles', 'lastuser', $userName);
-    xarModVars::set('roles', 'adminpass', $pass);// <-- come again? why store the pass?
+    
+    xarModVars::set('mail', 'adminname', $data['admin']->properties['name']->value);
+    xarModVars::set('mail', 'adminmail', $data['admin']->properties['email']->value);
+    xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright ' . date("Y") . ' ' . $data['admin']->properties['name']->value);
+    xarModVars::set('roles', 'lastuser', $data['admin']->properties['uname']->value);
+    xarModVars::set('roles', 'adminpass', $data['admin']->properties['password']->password);
 
     //Try to update the role to the repository and bail if an error was thrown
-    $modifiedrole = $role->updateItem($args);
-    if (!$modifiedrole) {return;}
+    $itemid = $data['admin']->updateItem();
+    if (!$itemid) {return;}
 
     // Register Block types from modules installed before block apis (base)
     $blocks = array('adminmenu','waitingcontent','finclude','html','menu','php','text','content');
@@ -790,7 +765,7 @@ function installer_admin_choose_configuration()
     $data['language'] = $install_language;
     $data['phase'] = 7;
     $data['phase_label'] = xarML('Choose your configuration');
-    xarTplSetPageTemplateName('installer');
+    xarTplSetThemeName('installer');
 
     //Get all modules in the filesystem
     $fileModules = xarModAPIFunc('modules','admin','getfilemodules');
@@ -868,7 +843,7 @@ function installer_admin_confirm_configuration()
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     xarVarSetCached('installer','installing', true);
-    xarTplSetPageTemplateName('installer');
+    xarTplSetThemeName('installer');
 
     if(!xarVarFetch('configuration', 'isset', $configuration, NULL,  XARVAR_DONT_SET))  return;
     if(!isset($configuration)) {
@@ -1044,7 +1019,7 @@ function installer_admin_confirm_configuration()
 function installer_admin_cleanup()
 {
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
-    xarTplSetPageTemplateName('installer');
+    xarTplSetThemeName('installer');
 
     xarUserLogOut();
     // log in admin user

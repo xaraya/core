@@ -271,7 +271,7 @@ E: Next page;
             <xar:var>#$third#</xar:var>
             <!-- anon var gets value of variable $third -->
             <xar:mlvar>#$third#</xar:mlvar>
-            <xar:var>#xarServerGetVar('HTTP_HOST')#</xar:var>
+            <xar:var>#xarServer::getVar('HTTP_HOST')#</xar:var>
         </div>
         <xar:comment>End of the tests</xar:comment>
         <!-- Some tests which dont need to do anything, but also should not error out -->

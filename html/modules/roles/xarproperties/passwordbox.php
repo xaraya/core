@@ -27,7 +27,7 @@ class PassBoxProperty extends TextBoxProperty
     public $display_size                    = 25;
     public $validation_min_length           = 4;
     public $validation_max_length           = 30;
-    public $validation_password_confirm = 0;
+    public $validation_password_confirm     = 0;
     public $validation_password_confirm_invalid;
 
     function __construct(ObjectDescriptor $descriptor)

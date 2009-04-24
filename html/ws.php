@@ -144,7 +144,7 @@ function xarWebservicesMain()
             break;
 
     default:
-        if (xarServerGetVar('QUERY_STRING') == 'wsdl') {
+        if (xarServer::getVar('QUERY_STRING') == 'wsdl') {
             // FIXME: for now wsdl description is in soapserver module
             // consider making the webservices module a container for wsdl files (multiple?)
             header('Location: ' . xarServerGetBaseURL() . 'modules/soapserver/xaraya.wsdl');

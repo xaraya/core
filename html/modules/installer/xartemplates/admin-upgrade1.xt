@@ -2,8 +2,10 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="active_step">1</xar:set>
-    <div id="install">
+    <div id="main_right">
         <xar:template file="upstatus" />
+    </div>
+    <div id="main_left">
         <h1>Welcome to Xaraya Upgrade</h1>
         <xar:if condition="$versionlow ne ''">
         <p>

@@ -2,95 +2,61 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="active_step">6</xar:set>
-    <div id="install">
+    <div id="main_right">
         <xar:template file="status" />
+    </div>
+    <div id="main_left">
         <h1>Administrator Account Creation</h1>
         <form action="#xarModURL('installer','admin','create_administrator')#" method="post">
-            <div>
-                <input type="hidden" name="install_language" id="install_language"
-                value="#$language#" />
-                <p class="xar-normal">Please enter the settings for your Administrator account.
+            <p>
+                Please enter the settings for your Administrator account.
                 This information is necessary in order to properly secure your Xaraya installation.
                 These settings can be changed at any point in the future by visiting the Roles
-                module.</p>
-                <xar:if condition="!empty($msg)">
-                    <p class="xar-error">
-                        <strong>#$msg#</strong>
-                    </p>
-                </xar:if>
-                <h3>Administrator Information</h3>
-    <!-- Replacement when we move to using dataproperties here
-                <div class="simpleform">
-                    <p>
-                        <label for="install_admin_name">
-                            Display Name
-                        </label>
-                        <xar:data-input type="textbox" name="install_admin_name"  value="#$install_admin_name#" />
-                        <br class="clear" />
-                    </p>
-                    <p>
-                        <label for="install_admin_username">
-                            Username
-                        </label>
-                        <xar:data-input type="username" name="install_admin_username"  value="#$install_admin_username#" store_type="id" />
-                        <br class="clear" />
-                    </p>
-                    <p>
-                        <label for="install_admin_password">
-                            Password
-                        </label>
-                        <xar:data-input type="password" name="install_admin_password"  value="#$install_admin_password#" confirm_password="1" />
-                        <br class="clear" />
-                    </p>
-                    <p>
-                        <label for="install_admin_email">
-                            Email
-                        </label>
-                        <xar:data-input type="email" name="install_admin_email"  value="#$install_admin_email#" />
-                        <br class="clear" />
-                    </p>
-                </div>
+                module.
+            </p>
 
-    -->
-                <div class="simpleform">
-                    <p>
-                        <label for="install_admin_name">Display Name</label>
-                        <input type="text" name="install_admin_name" id="install_admin_name"
-                        maxlength="80" value="#$install_admin_name#" />
-                        <br class="clear" />
-                    </p>
-                    <p>
-                        <label for="install_admin_username">Username</label>
-                        <input type="text" name="install_admin_username"
-                        id="install_admin_username" maxlength="80"
-                        value="#$install_admin_username#" />
-                        <br class="clear" />
-                    </p>
-                    <p>
-                        <label for="install_admin_password">Password</label>
-                        <input type="password" name="install_admin_password"
-                        id="install_admin_password" maxlength="80" value="" />
-                        <br class="clear" />
-                    </p>
-                    <p>
-                        <label for="install_admin_password1">Password Again</label>
-                        <input type="password" name="install_admin_password1"
-                        id="install_admin_password1" maxlength="80" value="" />
-                        <br class="clear" />
-                    </p>
-                    <p>
-                        <label for="install_admin_email">Email</label>
-                        <input type="text" name="install_admin_email" id="install_admin_email"
-                        maxlength="80" value="#$install_admin_email#" />
-                        <br class="clear" />
-                    </p>
-                </div>
-                <br class="clear" />
-                <p>Your Administrator password is the key to your Xaraya installation. Choose
+            <h2>Administrator Information</h2>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label" for="install_admin_name">
+                    Display Name
+                </label>
+                <xar:data-input property="$properties['name']" />
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label" for="install_admin_username">
+                    Username&#160;(Used for logon)
+                </label>
+                <xar:data-input property="$properties['uname']" />
+                
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label" for="install_admin_password">
+                    Password
+                </label>
+                <xar:data-input property="$properties['password']" />
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label" for="install_admin_email">
+                    Email
+                </label>
+                <xar:data-input property="$properties['email']" />
+            </div>
+
+            <p>
+                Your Administrator password is the key to your Xaraya installation. Choose
                 something that you will remember and do not share it or write it down. As a rule of
                 thumb, it should not contain any words, and should contain a mix of upper and lower
-                case letters, numbers and punctuation.</p>
-                <input type="submit" name="create" id="create" value="Continue" />
+                case letters, numbers and punctuation.
+            </p>
+            <div class="xar-align-center" style="margin: 2em 0;">
+                <input type="submit" name="create" id="create" value="#xarML('Continue')#" />
+                <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+                <xar:data-input property="$properties['id']" hidden="hidden"/>
+                <xar:data-input property="$properties['role_type']" hidden="hidden"/>
+                <xar:data-input property="$properties['regdate']" hidden="hidden"/>
+                <xar:data-input property="$properties['valcode']" hidden="hidden"/>
+                <xar:data-input property="$properties['state']" hidden="hidden"/>
+                <xar:data-input property="$properties['authmodule']" hidden="hidden"/>
             </div>
         </form>
     </div>
