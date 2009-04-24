@@ -228,6 +228,13 @@
                         <xar:set name="propname">$instance['name'] . '_modify'</xar:set>
                         <xar:data-input type="access" name="$propname" value="$instance['modify_access']" />
                     </fieldset>
+                    <fieldset>
+                        <legend>
+                            Block Delete Access
+                        </legend>
+                        <xar:set name="propname">$instance['name'] . '_delete'</xar:set>
+                        <xar:data-input type="access" name="$propname" value="$instance['delete_access']" />
+                    </fieldset>
                 </xar:if>
             </xar:if>
 

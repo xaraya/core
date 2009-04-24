@@ -12,6 +12,10 @@ class AccessProperty extends DataProperty
     public $level      = 100;
     public $failure    = 0;
 
+    public $module     = 'All';
+    public $component  = 'All';
+    public $instance   = 'All';
+
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
@@ -132,6 +136,40 @@ class AccessProperty extends DataProperty
             );
         }
         return $value;
+    }
+
+    public function check(Array $data=array())
+    {
+        if (isset($data['group']))     $this->group = $data['group'];
+        if (isset($data['level']))     $this->level = $data['level'];
+        if (isset($data['module']))    $this->module = $data['module'];
+        if (isset($data['component'])) $this->component = $data['component'];
+        if (isset($data['instance']))  $this->instance = $data['instance'];
+        
+        $access = false;
+        $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
+        if (($this->group == $anonID)) {
+            if (!xarUserIsLoggedIn()) $access = true;
+        } elseif ($this->group == -$anonID) {
+            if (xarUserIsLoggedIn()) $access = true;
+        } elseif ($this->group) {
+            $group = xarRoles::getRole($this->group);
+            $thisuser = xarCurrentRole();
+            if (is_object($group)) {
+                if ($thisuser->isAncestor($group)) $access = true;
+            } 
+        } else {
+            if (xarSecurityCheck('', 
+                              0, 
+                              $this->component, 
+                              $this->instance, 
+                              $this->module, 
+                              '',
+                              0,
+                              $this->level)) {$access = true;
+            }
+        }
+        return $access;
     }
 }
 ?>

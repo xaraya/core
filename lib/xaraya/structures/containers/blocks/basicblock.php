@@ -52,29 +52,17 @@
                 }
                 return $data;
             }
+
             // Decide whether this block is displayed to the current user
-            $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
-            if (($access['group'] == $anonID)) {
-                if (!xarUserIsLoggedIn()) $data['allowaccess'] = true;
-            } elseif (($access['group'] == -$anonID)) {
-                if (xarUserIsLoggedIn()) $data['allowaccess'] = true;
-            } elseif ($access['group']) {
-                $group = xarRoles::getRole($access['group']);
-                $thisuser = xarCurrentRole();
-                if (is_object($group)) {
-                    if ($thisuser->isAncestor($group)) $data['allowaccess'] = true;
-                } 
-            } else {
-                if (xarSecurityCheck('', 
-                                  0, 
-                                  'Block', 
-                                  $data['type'] . ":" . $data['name'] . ":" . "$data[bid]",
-                                  $data['module'],
-                                  '',
-                                  0,
-                                  $access['level'])) {$data['allowaccess'] = true;
-                }
-            }
+            $args = array(
+                'module' => $data['module'],
+                'component' => 'Block',
+                'instance' => $data['type'] . ":" . $data['name'] . ":" . "$data[bid]",
+                'group' => $access['group'],
+                'level' => $access['level'],
+            );
+            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+            $data['allowaccess'] = $accessproperty->check($args);
             
             //Pass the access data along
             $data['display_access'] = $access;
@@ -117,6 +105,8 @@
             $vars['display_access'] = $accessproperty->value;
             $isvalid = $accessproperty->checkInput($data['name'] . '_modify');
             $vars['modify_access'] = $accessproperty->value;
+            $isvalid = $accessproperty->checkInput($data['name'] . '_delete');
+            $vars['delete_access'] = $accessproperty->value;
 
             $data['content'] = $vars;
             return $data;

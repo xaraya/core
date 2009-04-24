@@ -40,6 +40,7 @@ function blocks_admin_view_types()
                     'type' => $detail['type']
                 )
             );
+            if(!isset($info['new_access'])) $info['new_access'] = array();
 
             // Get initialisation data.
             $init = xarModAPIfunc(

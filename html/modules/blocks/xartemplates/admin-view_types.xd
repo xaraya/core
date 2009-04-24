@@ -109,6 +109,13 @@
                         </xar:loop>
                     </table>
                 </fieldset>
+                <fieldset>
+                    <legend>
+                        Block Add Access
+                    </legend>
+                    <xar:set name="propname">$detail['type'] . '_new'</xar:set>
+                    <xar:data-input type="access" name="$propname" value="$info['new_access']" />
+                </fieldset>
             </xar:if>
         <xar:else />
             <h2>
