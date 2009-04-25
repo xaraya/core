@@ -61,16 +61,19 @@ function blocks_admin_modify_instance()
             $instance['delete_access'] = isset($extra['delete_access']) ? $extra['delete_access'] : array();
 
             $access = $instance['modify_access'];
-            // Decide whether this block is modifiable to the current user
-            $args = array(
-                'module' => $instance['module'],
-                'component' => 'Block',
-                'instance' => $instance['type'] . ":" . $instance['name'] . ":" . "$instance[bid]",
-                'group' => $access['group'],
-                'level' => $access['level'],
-            );
-            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
-            $instance['allowaccess'] = $accessproperty->check($args);
+            $instance['allowaccess'] = false;
+            if (!empty($access)) {
+                // Decide whether this block is modifiable to the current user
+                $args = array(
+                    'module' => $instance['module'],
+                    'component' => 'Block',
+                    'instance' => $instance['type'] . ":" . $instance['name'] . ":" . "$instance[bid]",
+                    'group' => $access['group'],
+                    'level' => $access['level'],
+                );
+                $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+                $instance['allowaccess'] = $accessproperty->check($args);
+            }
 
             if ($instance['allowaccess']) {
                 if (is_array($extra)) {
