@@ -247,7 +247,6 @@
                     </div>
                 </fieldset>
             </xar:if>
-
         </form>
     </div>
 </xar:template>

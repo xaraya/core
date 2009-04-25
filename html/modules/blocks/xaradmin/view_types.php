@@ -20,15 +20,14 @@ function blocks_admin_view_types()
 
     // Parameter to indicate a block type for which to get further details.
     if (!xarVarFetch('tid', 'id', $tid, 0, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('confirm', 'int', $confirm, 0, XARVAR_NOT_REQUIRED)) {return;}
 
     $params = array();
     $info = array();
     $detail = array();
     if (!empty($tid)) {
         // Get details for a specific block type.
-        $detail = xarModAPIfunc(
-            'blocks', 'user', 'getblocktype', array('tid' => $tid)
-        );
+        $detail = xarModAPIfunc('blocks', 'user', 'getblocktype', array('tid' => $tid));
         if (!empty($detail)) {
             // The block type exists.
 
@@ -80,11 +79,16 @@ function blocks_admin_view_types()
                 }
             }
         }
+        if ($confirm) {
+            sys::import('modules.dynamicdata.class.properties.master');
+            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+            $isvalid = $accessproperty->checkInput($detail['type'] . '_new');
+            $info['new_access'] = $accessproperty->value;
+            xarModAPIfunc('blocks', 'admin', 'update_type_info', array('tid' => $tid, 'info' => $info));
+        }        
     }
 
-    $block_types = xarModAPIfunc(
-        'blocks', 'user', 'getallblocktypes', array('order' => 'modid,type')
-    );
+    $block_types = xarModAPIfunc('blocks', 'user', 'getallblocktypes', array('order' => 'modid,type'));
 
     // Add in some extra details.
     foreach($block_types as $index => $block_type) {

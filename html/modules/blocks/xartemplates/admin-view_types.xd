@@ -109,6 +109,8 @@
                         </xar:loop>
                     </table>
                 </fieldset>
+            </xar:if>
+            <form action="#xarServerGetCurrentURL()#" method="post">
                 <fieldset>
                     <legend>
                         Block Add Access
@@ -116,7 +118,15 @@
                     <xar:set name="propname">$detail['type'] . '_new'</xar:set>
                     <xar:data-input type="access" name="$propname" value="$info['new_access']" />
                 </fieldset>
-            </xar:if>
+                <fieldset>
+                    <div class="xar-form-input-wrapper-after">
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+                        <input type="hidden" name="tid" id="tid" value="#$tid#" />
+                        <input type="hidden" name="confirm" id="confirm" value="1" />
+                        <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
+                    </div>
+                </fieldset>
+            </form>
         <xar:else />
             <h2>
                 <xar:mlstring>View Block Types</xar:mlstring>
