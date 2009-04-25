@@ -95,29 +95,19 @@
                         </select>
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="defaultgroup"
-                        title="#xarML('New Users automatically get assigned to this Group')#"
-                        class="xar-form-label">Default Group For New Users:</label>
-                        <xar:data-input type="grouplist" name="defaultgroup" id="defaultgroup"
-                        value="$defaultgroup" />
+                        <label for="defaultgroup" title="#xarML('New Users automatically get assigned to this Group')#" class="xar-form-label">Default Group For New Users:</label>
+                        <xar:data-input type="grouplist" name="defaultgroup" id="defaultgroup" value="$defaultgroup" />
                     </div>
                 </fieldset>
                 <fieldset>
                     <legend>Default Authentication &amp; Registration Modules</legend>
                     <div class="xar-form-input-wrapper">
-                        <label for="defaultauthmodule"
-                        title="#xarML('Select the module that manages authentication of users')#"
-                        class="xar-form-label">Authentication:</label>
-                        <xar:data-input type="module" name="defaultauthmodule"
-                        class="Authentication" value="$defaultauthmod" validation="name"
-                        firstline="Choose a module" />
+                        <label for="defaultauthmodule" title="#xarML('Select the module that manages authentication of users')#" class="xar-form-label">Authentication:</label>
+                        <xar:data-input type="module" name="defaultauthmodule" class="Authentication" value="$defaultauthmod" validation="name" firstline="Choose a module" />
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="defaultregmodule"
-                        title="#xarML('Select the module that manages registration of users')#"
-                        class="xar-form-label">Registration:</label>
-                        <xar:data-input type="module" name="defaultregmodule" class="Registration"
-                        value="$defaultregmod" validation="name" firstline="Choose a module" />
+                        <label for="defaultregmodule" title="#xarML('Select the module that manages registration of users')#" class="xar-form-label">Registration:</label>
+                        <xar:data-input type="module" name="defaultregmodule" class="Registration" value="$defaultregmod" validation="name" firstline="Choose a module" />
                     </div>
                 </fieldset>
                 <fieldset>
@@ -140,23 +130,23 @@
                     <strong>xarUserGetVar('varname')</strong></p>
                         <table style="width: 90%">
                             <tr>
-                            <th style="width: 100px">Name</th>
-                            <th style="width: 400px">Description</th>
+                                <th style="width: 100px">Name</th>
+                                <th style="width: 400px">Description</th>
                             </tr>
                             <tr>
-                            <td style="width: 100px">uname</td>
-                            <td style="width: 400px">The handle or nick under which the user is
-                            known to the site. The uname is unique to each user.</td>
+                                <td style="width: 100px">uname</td>
+                                <td style="width: 400px">The handle or nick under which the user is
+                                known to the site. The uname is unique to each user.</td>
                             </tr>
                             <tr>
-                            <td style="width: 100px">name</td>
-                            <td style="width: 400px">The user's display name, as shown in the
-                            members list and other displays. The name need not be unique.</td>
+                                <td style="width: 100px">name</td>
+                                <td style="width: 400px">The user's display name, as shown in the
+                                members list and other displays. The name need not be unique.</td>
                             </tr>
                             <tr>
-                            <td style="width: 100px">email</td>
-                            <td style="width: 400px">The user's email address. The email address
-                            can be defined by the site administrator to be unique or not.</td>
+                                <td style="width: 100px">email</td>
+                                <td style="width: 400px">The user's email address. The email address
+                                can be defined by the site administrator to be unique or not.</td>
                             </tr>
                         </table>
                     </fieldset>
@@ -181,46 +171,46 @@
                         <br />
                         <table style="width: 90%">
                             <tr>
-                            <th style="width: 100px">Name</th>
-                            <th style="width: 400px">Description</th>
+                                <th style="width: 100px">Name</th>
+                                <th style="width: 400px">Description</th>
                             </tr>
                             <tr>
-                            <td style="width: 100px">userhome</td>
-                            <td style="width: 400px">The role's home page, which is initially
-                            displayed when the user logs in. The home page can be role/user
-                            specific or inherited from the direct parent group. The home page is
-                            specified in a similar manner to user menu item shortcuts in the modify
-                            or edit role page.</td>
+                                <td style="width: 100px">userhome</td>
+                                <td style="width: 400px">The role's home page, which is initially
+                                displayed when the user logs in. The home page can be role/user
+                                specific or inherited from the direct parent group. The home page is
+                                specified in a similar manner to user menu item shortcuts in the modify
+                                or edit role page.</td>
                             </tr>
                             <tr>
-                            <td style="width: 100px">primaryparent</td>
-                            <td style="width: 400px">The role's primary parent group. A primary
-                            parent take precendence over other parent groups for realm and user
-                            role home settings.</td>
+                                <td style="width: 100px">primaryparent</td>
+                                <td style="width: 400px">The role's primary parent group. A primary
+                                parent take precendence over other parent groups for realm and user
+                                role home settings.</td>
                             </tr>
                             <tr>
-                            <td style="width: 100px">passwordupdate</td>
-                            <td style="width: 400px">The date and time this role's password was
-                            last changed.</td>
+                                <td style="width: 100px">passwordupdate</td>
+                                <td style="width: 400px">The date and time this role's password was
+                                last changed.</td>
                             </tr>
                             <tr>
-                            <td style="width: 100px">userlastlogin</td>
-                            <td style="width: 400px">The date and time this role last logged
-                            in.</td>
+                                <td style="width: 100px">userlastlogin</td>
+                                <td style="width: 400px">The date and time this role last logged
+                                in.</td>
                             </tr>
                             <tr>
-                            <td style="width: 100px">usertimezone</td>
-                            <td style="width: 400px">This role's timezone.</td>
+                                <td style="width: 100px">usertimezone</td>
+                                <td style="width: 400px">This role's timezone.</td>
                             </tr>
                             <tr>
-                            <td style="width: 100px">allowemails</td>
-                            <td style="width: 400px">This role's preference to receive emails from
-                            others or not.</td>
+                                <td style="width: 100px">allowemails</td>
+                                <td style="width: 400px">This role's preference to receive emails from
+                                others or not.</td>
                             </tr>
                             <tr>
-                            <td style="width: 100px">emailformat</td>
-                            <td style="width: 400px">This role's preferred email format (text or
-                            html).</td>
+                                <td style="width: 100px">emailformat</td>
+                                <td style="width: 400px">This role's preferred email format (text or
+                                html).</td>
                             </tr>
                         </table>
                     </fieldset>
@@ -243,7 +233,8 @@
                   <fieldset>
                         <legend>Default Hooks For Users</legend>
                         <xar:foreach in="$hooks" key="$hookmodule">
-                        #$hooks[$hookmodule]#</xar:foreach>
+                            #$hooks[$hookmodule]#
+                        </xar:foreach>
                   </fieldset>
                   <fieldset>
                     <div class="xar-form-input-wrapper-after">
@@ -289,13 +280,10 @@
                 <fieldset>
                     <legend>Member Options</legend>
                     <div class="xar-form-input-wrapper-after">
-                        <xar:if condition="xarModVars::get('roles', 'searchbyemail')">
-                            <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" checked="checked" />
-                            value="1" checked="checked" />
-                        <xar:else />
-                            <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" />
-                            value="1" />
-                        </xar:if>
+                        <xar:set name="checked">
+                            <xar:var scope="module" module="roles" name="searchbyemail" />
+                        </xar:set>
+                        <xar:data-input type="checkbox" name="searchbyemail" checked="$checked" />
                         <label for="searchbyemail"
                         title="#xarML('Allow user search by email address')#">
                             <strong>Allow Searching By Email</strong>
@@ -307,8 +295,7 @@
                         <xar:set name="checked">
                             <xar:var scope="module" module="roles" name="allowemail" />
                         </xar:set>
-                        <xar:data-input type="checkbox" name="allowemail" id="allowemail"
-                        checked="$checked" />
+                        <xar:data-input type="checkbox" name="allowemail" id="allowemail" checked="$checked" />
                         <label for="allowemail" title="#xarML('Allow users to send emails?')#">
                             <strong>Allow User Email Page?</strong>
                         </label>
@@ -319,10 +306,8 @@
                         <xar:set name="checked">
                             <xar:var scope="module" module="roles" name="usereditaccount" />
                         </xar:set>
-                        <xar:data-input type="checkbox" name="usereditaccount" id="usereditaccount"
-                        checked="$checked" />
-                        <label for="usereditaccount"
-                        title="#xarML('Allow users to edit their account details')#">
+                        <xar:data-input type="checkbox" name="usereditaccount" id="usereditaccount" checked="$checked" />
+                        <label for="usereditaccount" title="#xarML('Allow users to edit their account details')#">
                             <strong>Allow users to edit their member account details</strong>
                         </label>
                     </div>
@@ -332,11 +317,8 @@
                         <xar:set name="checked">
                             <xar:var scope="module" module="roles" name="requirevalidation" />
                         </xar:set>
-                        <xar:data-input type="checkbox" name="requirevalidation"
-                        id="requirevalidation" checked="$checked" />
-                        <label for="requirevalidation"
-                        title="#xarML('Require users to revalidate when they change email address?')#">
-
+                        <xar:data-input type="checkbox" name="requirevalidation" id="requirevalidation" checked="$checked" />
+                        <label for="requirevalidation" title="#xarML('Require users to revalidate when they change email address?')#">
                             <strong>Members must validate if they change their email
                             account?</strong>
                         </label>
@@ -345,10 +327,8 @@
                         <xar:set name="checked">
                             <xar:var scope="module" module="roles" name="displayrolelist" />
                         </xar:set>
-                        <xar:data-input type="checkbox" name="displayrolelist" id="displayrolelist"
-                        checked="$checked" />
-                        <label for="displayrolelist"
-                        title="#xarML('Display roles (memberlist) in user menu?')#">
+                        <xar:data-input type="checkbox" name="displayrolelist" id="displayrolelist" checked="$checked" />
+                        <label for="displayrolelist" title="#xarML('Display roles (memberlist) in user menu?')#">
                             <strong>Display member list as Roles menu option?</strong>
                         </label>
                     </div>
@@ -363,10 +343,8 @@
                             <xar:set name="checked">
                                 <xar:var scope="module" module="roles" name="loginredirect" />
                             </xar:set>
-                            <xar:data-input type="checkbox" name="loginredirect" id="loginredirect"
-                            checked="$checked" />
-                            <label for="loginredirect"
-                            title="#xarML('Redirect users to Home Page on login?')#">
+                            <xar:data-input type="checkbox" name="loginredirect" id="loginredirect" checked="$checked" />
+                            <label for="loginredirect" title="#xarML('Redirect users to Home Page on login?')#">
                                 <strong>Redirect users to Home Page on login?</strong>
                             </label>
                         </div>
@@ -374,11 +352,8 @@
                             <xar:set name="checked">
                                 <xar:var scope="module" module="roles" name="allowuserhomeedit" />
                             </xar:set>
-                            <xar:data-input type="checkbox" name="userhomeedit" id="userhomeedit"
-                            checked="$checked" />
-                            <label for="userhomeedit"
-                            title="#xarML('Allow users to edit their user home page in their account')#">
-
+                            <xar:data-input type="checkbox" name="userhomeedit" id="userhomeedit" checked="$checked" />
+                            <label for="userhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
                                 <strong>Allow users to set Home Page in their member
                                 account</strong>
                             </label>
@@ -387,31 +362,31 @@
                             <xar:set name="checked">
                                 <xar:var scope="module" module="roles" name="allowexternalurl" />
                             </xar:set>
-                            <xar:data-input type="checkbox" name="allowexternalurl"
-                            id="allowexternalurl" checked="$checked" />
-                            <label for="allowexternalurl"
-                            title="#xarML('Allow users to set external URLS for their user home page')#">
-
+                            <xar:data-input type="checkbox" name="allowexternalurl" id="allowexternalurl" checked="$checked" />
+                            <label for="allowexternalurl" title="#xarML('Allow users to set external URLS for their user home page')#">
                                 <strong>Allow users to set external URLS in their Home
                                 Page?</strong>
                             </label>
                         </div>
                         <xar:else />
                         <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                        &#160;&#160;&#160;&#160; 
-                        <label for="allowuserhomeedit"
-                        title="#xarML('Allow users to edit their user home page in their account')#">
-                        <strong>Allow users to set Home Page in their member account</strong>
-                        <br />(options for Home Page are only available if the dynamic roles user
-                        variable 'userhome' is activated)</label></div>
+                            &#160;&#160;&#160;&#160; 
+                            <label for="allowuserhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
+                                <strong>Allow users to set Home Page in their member account</strong>
+                                <br />(options for Home Page are only available if the dynamic roles user
+                                variable 'userhome' is activated)
+                            </label>
+                        </div>
                     </xar:if>
                 </fieldset>
+                <fieldset>
                     <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="authid" id="authid" value="#$authid#" />
                         <input type="hidden" name="phase" id="phase" value="update" />
                         <input type="hidden" name="tab" id="tab" value="#$tab#" />
                         <input type="submit" value="#xarML('Update Roles Configuration')#" />
                     </div>
+                </fieldset>
             </form>
         </xar:if>
     </div>

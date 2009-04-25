@@ -14,23 +14,14 @@
             The Roles module lets you create and manage roles on your Xaraya site. Roles are
             representations of the site's registered users and the different groups they can belong to. The Roles module is a core module within Xaraya and cannot be removed. 
         </p>
-        <br />
-        <ul>
-            <li>Roles can be members of other roles, to any degree. You can, for instance, use
-            roles to represent a company's organization chart, or the set of classes at a
-            university. A role can be a member of as many other roles as you like (as long as the
-            parents are groups).</li>
-            <li>Roles can be assigned privileges. By doing so, you define what a given role may or
-            may not do on the site. You can use the test functionality of the Roles module to see
-            what parts of the site a role with a given set of privileges has access to.</li>
-            <li>Roles have inheritance. A role inherits all the privileges of all of its parents,
-            but can override them. If you give a group editing privileges, for instance, any other
-            role that is a member of that group inherits the editing privileges. If you want to
-            restrict the privileges of some of the members, simply assign them a different set of
-            privileges (say reading), and the privileges of the parent will be overridden.</li>
-        </ul>
-        <h2>How to use it?</h2>
-        <h3>Menu Options</h3>
+        <p>
+            Roles represent <em>users</em> and <em>groups of users</em> in Xaraya. Roles can be members of other roles, to any degree. You can, for instance, use roles to represent a company's organization chart, or class enrolements at a university.
+        </p>
+        <p>
+            By assigning privileges to roles, you define what a given role may or may not do on the site. Moreover, roles inherit the privileges of their ancestors, so in assigning a role to a specific group, it automatically has the privileges common to the group. The inherited privileges can be supplemented or constrained by assigning further privileges directly to the role. 
+        </p>
+        
+        <h3>How to use it?</h3>
         <p>
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Roles &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
         </p>
@@ -41,7 +32,7 @@
                     <strong>Designated site administrator:</strong>&#160;defines a "root" administrator for the site who is guaranteed to have unrestricted access at all times. The designated site admin is by definition a member of the Administrators group.
                 </li>
                 <li>
-                    <strong>Default grou for new users:</strong>&#160;When creating new users on the site they will automatically be made members of this group, unless specifically overridden.
+                    <strong>Default group for new users:</strong>&#160;When creating new users on the site they will automatically be made members of this group, unless specifically overridden.
                 </li>
                 <li>
                     <strong>Authentication module:</strong>&#160;defines the module to be used when users log in to the site. The default is the core Authsystem module.
@@ -49,94 +40,40 @@
                 <li>
                     <strong>Registration module:</strong>&#160;defines the module to be used for registering new users.
                 </li>
+                <li>
+                    <strong>User variables:</strong>&#160;Common variable such as Last Login, User Home Page, Last Password Update and Timezone can be activated for roles as needed.
+                </li>
+                <li>
+                    <strong>User hooks:</strong>&#160;access to user hooks defined for roles in the dynamicdata module..
+                </li>
+                <li>
+                    <strong>Account options:</strong>&#160;various configurations pertaining to managing and displaying users' accounts.
+                </li>
             </ul>
         </p>
         <p>The roles module provides key functions to manage the users and groups on your site:</p>
         <ul>
             <li>
-            <strong>View Groups/users</strong>: a tabbed interface to user and roles listings with
+            <strong>View Groups/users:</strong>&#160;a tabbed interface to user and roles listings with
             a variety of display options. You can also add users from this view, delete or modify
             users, email groups of users, test their privileges, and view users by various sorting
             and selection criteria.</li>
             <li>
-            <strong>Add Group/User</strong>: A form for creation of a new user or group. If you
+            <strong>Add Group/User:</strong>&#160;A form for creation of a new user or group. If you
             have hooked Dynamic Data to Roles and created extra properties for your users, these
             will also be displayed here.</li>
             <li>
-            <strong>Email Messaging</strong>: Configure email notifications to users on
+            <strong>Email Messaging:</strong>&#160;Configure email notifications to users on
             registration, change of passwords, and account activation including template
             customization. You can also email groups of users from this view.</li>
             <li>
-            <strong>Recall/Purge</strong>: Users or groups that have been deleted can be recalled
+            <strong>Recall/Purge:</strong>&#160;Users or groups that have been deleted can be recalled
             from this screen or purged for good from the system.</li>
             <li>
-            <strong>Site Lock</strong>: Lock your site to registration or login during maintenance
+            <strong>Site Lock:</strong>&#160;Lock your site to registration or login during maintenance
             or updates.</li>
-            <li>
-            <strong>Modify Config</strong>: Set general site options including: 
-                <ul>
-                <li>designated site Administrator and default registration User group</li>
-                <li>default Authentication and Registration module</li>
-                <li>activation of user variables and Dynamic Data for roles such as Last Login,
-                User Home, Last Password Update, Timezone</li>
-                <li>Role Member Account Options related to User Home, editing of Member Account,
-                and search by Email</li>
-            </ul></li>
         </ul>
-        <h3>Default Roles</h3>
-        <p>The roles on your site are arranged in a tree. At the top of the tree is a role called
-        Everybody, which represents the "group of all groups" on your site. Every user and every
-        group is a member or descendent of Everybody.</p>
-        <p>Xaraya also comes preconfigured with a minimal set of roles that are loaded when you run
-        the installer. This configuration is shown below:</p>
-        <pre>
-            Everybody
-            |
-            |---Anonymous
-            |
-            |---Administrators
-            |   |
-            |   |---Admin
-            |
-            |---Users
-
-    </pre>
-        <p>At installation time you are asked to choose a configuration that affects preinstalled
-        privileges assigned to the above roles. The privileges can be changed after installation.
-        The default roles and minimum privileges at installation time are.</p>
-        <ul>
-            <li>
-            <strong>Everybody</strong>: the role containing all other roles. This role has no
-            access privileges.</li>
-            <li>
-            <strong>Anonymous</strong>: a user that represents any unregistered users on your site.
-            This role is initially configured with privileges only to access the front page of the
-            site and the login block.</li>
-            <li>
-            <strong>Administrators</strong>: a group that has administration privileges.</li>
-            <li>
-            <strong>Admin</strong>: a member of Administrators. This is the Admin role you create
-            with the Xaraya installer.</li>
-            <li>
-            <strong>Users</strong>: a group that normally holds registered users of the site. N.B.:
-            this role does not come preconfigured with any privileges. 
-            <em>Its members will not have access to the site until you assign some
-            privileges.</em></li>
-            <li>
-            <strong>Myself</strong>: this is a special role that enables you to assign privileges
-            that will be applied to the current user's content. For example if you assign edit
-            privileges for articles to the Myself role, then users will be able to edit only their
-            own articles.</li>
-        </ul>
-        <p>The preconfigured roles cannot be changed or removed. You can, however, add members to
-        them. You can also define as many more roles in the tree as you wish in whatever
-        configuration you choose.</p>
-        <p>Always keep in mind: When you create a role, until you've assigned it some privileges,
-        it will only have those privileges it inherits from its parents.</p>
-        <h3>Extending Roles</h3>
-        <p>You can extend roles by hooking in the functionality of other modules to roles or adding
-        fields directly to the user object via the admin interface in dynamicdata</p>
-
+        
         <h3>Available Blocks</h3>
         <ul>
             <li>
@@ -147,16 +84,6 @@
             </li>
             <li>
                 <strong>User Block</strong>:&#160;displays information on the current user's profile
-            </li>
-        </ul>
-
-        <h3>Available Hooks</h3>
-        <ul>
-            <li>
-                <strong>Search Hook</strong>:&#160;allows user to search the content of the Roles module. This hook is known to be used by the Search module (a non-core module).
-            </li>
-            <li>
-                <strong>Usermenu Hook</strong>:&#160;lets other modules display content in the current user's account page. This hook is used by e.g. the Themes module, allowing the user to define the theme for the site to display in.
             </li>
         </ul>
 
@@ -193,6 +120,61 @@
                 <strong>Yahoo</strong>:&#160;accepts as input or displays a Yahoo user address.
             </li>
         </ul>
+        
+        <h3>Available Hooks</h3>
+        <ul>
+            <li>
+                <strong>Search Hook</strong>:&#160;allows user to search the content of the Roles module. This hook is known to be used by the Search module (a non-core module).
+            </li>
+            <li>
+                <strong>Usermenu Hook</strong>:&#160;lets other modules display content in the current user's account page. This hook is used by e.g. the Themes module, allowing the user to define the theme for the site to display in.
+            </li>
+        </ul>
+
+        <h3>Default Roles on Xaraya Sites</h3>
+        <p>
+            The roles on your site are arranged in a tree, at the top of which is a role called Everybody, which represents the "group of all groups" on your site. Every user and every group is a member or descendent of Everybody. The structure of the default roles that are installed with Xaraya is shown below:
+        </p>
+        <pre>
+            Everybody (group)
+            |
+            |---Anonymous (user)
+            |
+            |---Administrators (group)
+            |   |
+            |   |---Admin (user)
+            |
+            |---Users (group)
+
+        </pre>
+        <p>
+            At installation time you are asked to choose a configuration that affects preinstalled
+            privileges assigned to the default roles. The privileges can be changed after installation.
+            The default roles and minimum privileges at installation time are.
+        </p>
+        <ul>
+            <li>
+                <strong>Everybody:</strong>&#160;the role containing all other roles. The access privileges are defined by the configuration chosen.
+            </li>
+            <li>
+                <strong>Anonymous:</strong>&#160;a user that represents the unregistered users on your site. The access privileges are defined by the configuration chosen. This role can be initially configured with privileges only to access the front page of the site and the login block.
+            </li>
+            <li>
+                <strong>Administrators:</strong>&#160;a group that has administration privileges. By default it has complete access to the site.
+            </li>
+            <li>
+                <strong>Admin:</strong>&#160;a member of Administrators. This is the Admin role you create with the Xaraya installer. It inherits the privileges of its parent group.
+            </li>
+            <li>
+                <strong>Users:</strong>&#160;a group that normally holds registered users of the site. N.B.: this role does not come preconfigured with any privileges. <em>Its members will not have access to the site until you assign some privileges.</em>
+            </li>
+            <li>
+                <strong>Myself:</strong>&#160;a special role that enables you to create privileges that will apply to the current user's content. For example if you create an "Edit" privilege with the Myself role as the author/creator, then users who have that privilege will be able to edit only their own content.
+            </li>
+        </ul>
+        <p>
+            To reduce the risk of inadvertent damage Xaraya places constraints on how preconfigured roles can be changed or removed. However, you can define as many more roles in the tree as you wish in whatever configuration you choose.
+        </p>
         
         <!--
         <h3>Further Information</h3>
