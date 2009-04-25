@@ -172,9 +172,6 @@
                 <strong>Textbox</strong>:&#160;used for input and display of strings.
             </li>
             <li>
-                <strong>Textupload</strong>:&#160;
-            </li>
-            <li>
                 <strong>Timezone</strong>:&#160;displays a dropdown of time zones.
             </li>
             <li>
