@@ -65,7 +65,7 @@
                 <label class="xar-form-label" for="install_database_password">
                     Password
                 </label>
-                <input type="text" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#" />
+                <input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#" />
                 &#160;(Only valid characters)
             </div>
             <div class="xar-form-input-wrapper">
