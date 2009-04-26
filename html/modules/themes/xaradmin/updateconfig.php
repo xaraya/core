@@ -2,7 +2,7 @@
 /**
  * Update the configuration parameters
  * @package modules
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -69,12 +69,12 @@ function themes_admin_updateconfig()
     // Only go through updatehooks() if there was a change.
     if (xarModIsHooked('themes', 'roles') != $usermenu) {
 
-        sys::import('xaraya.structures.hooks.observer');
-        $observer = new BasicObserver('themes','user','usermenu');
-        $subject = new HookSubject('roles');
-            $subject->detach($observer);
+		sys::import('xaraya.structures.hooks.observer');
+		$observer = new BasicObserver('themes','user','usermenu');
+	    $subject = new HookSubject('roles');
+			$subject->detach($observer);
         if ($usermenu) {
-            $subject->attach($observer);
+			$subject->attach($observer);
         } else {
         }
 

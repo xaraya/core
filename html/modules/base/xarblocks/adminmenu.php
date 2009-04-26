@@ -3,7 +3,7 @@
  * Base block management
  *
  * @package modules
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -73,7 +73,7 @@ function base_adminmenublock_display($blockinfo)
 
     // are there any admin modules, then get the whole list sorted by names
     // checking this as early as possible
-    $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => 1)));
+    $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => true)));
 
 
     // which module is loaded atm?

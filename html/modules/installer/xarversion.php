@@ -3,7 +3,7 @@
  * Installer Initialization file
  *
  * @package Installer
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -26,11 +26,11 @@ $modversion['credits'] = '';
 $modversion['help'] = '';
 $modversion['changelog'] = '';
 $modversion['license'] = '';
-$modversion['official'] = 1;
+$modversion['official'] = true;
 $modversion['author'] = 'Paul Rosania, Johnny Robeson';
 $modversion['contact'] = 'paul@xaraya.com, johnny@xaraya.com';
-$modversion['admin'] = 0;
-$modversion['user'] = 0;
+$modversion['admin'] = false;
+$modversion['user'] = false;
 $modversion['securityschema'] = array('Installer::' => '::');
 $modversion['class'] = 'Core Admin';
 $modversion['category'] = 'Global';

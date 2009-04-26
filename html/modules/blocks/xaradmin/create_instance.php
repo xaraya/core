@@ -2,7 +2,7 @@
 /**
  * Block management - create a new block instance
  * @package modules
- * @copyright (C) 2002-2006 The copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -20,7 +20,7 @@ function blocks_admin_create_instance()
     if (!xarVarFetch('block_name', 'pre:lower:ftoken:passthru:str:1:', $name)) {return;}
     if (!xarVarFetch('block_state', 'int:0:2', $state)) {return;}
     if (!xarVarFetch('block_title', 'str:1:', $title, '', XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('block_template', 'str:1:', $template, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_template', 'str:1:', $template, null, XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('block_groups', 'array', $groups, array(), XARVAR_NOT_REQUIRED)) {return;}
 
     // Confirm Auth Key

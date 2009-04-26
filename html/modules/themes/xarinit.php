@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -37,10 +37,10 @@ function themes_init()
     /**
      * CREATE TABLE xar_themes (
      *   id integer unsigned NOT NULL auto_increment,
-     *   name varchar(64) NOT NULL default '',
+     *   name varchar(64) NOT NULL,
      *   regid int(10) INTEGER unsigned NOT NULL,
-     *   directory varchar(64) NOT NULL default '',
-     *   version varchar(10) NOT NULL default '',
+     *   directory varchar(64) NOT NULL,
+     *   version varchar(10) NOT NULL,
      *   class int(10) INTEGER NOT NULL default '0',
      *   state tinyint(3) not null default '1'
      *   PRIMARY KEY  (id)

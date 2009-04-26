@@ -3,8 +3,6 @@ html, body {
     padding: 0;
 }
 body {
-    background-color: #020;
-    background-color: #F6E7D2;
     background: #F6F0E7 url(../images/background3.jpg) repeat-x left top;
     color: #020;
     font: .8em/1.5em Arial, Helvetica, sans-serif;
@@ -134,10 +132,9 @@ a:active {
     list-style-type: none;
 }
 .sideInfo li li li {
-    padding-left: 0;
-    margin-left: 1.25em;
-    list-style-type: disc;
-    list-style-image: url(../images/li-bullet2-5.png);
+    padding-left: 1em;
+    margin-left: .25em;
+    background: transparent url(../images/li-bullet2-5.png) no-repeat center left;
 }
 .sideInfo h4 {
     margin: 0;
@@ -210,6 +207,38 @@ form p {
 }
 #main .textInputContainer .infoAddedInput input, #main .passInputContainer .infoAddedInput input {
     margin: 0;
+}
+
+/* standard tables */
+table {
+    width: 100%;
+    margin: 1.5em 0;
+    border-collapse: collapse;
+    border: 1px dotted #D77043;
+    border-width: 1px 0;
+    background-color: #F6F0E7;
+}
+table + table {
+    margin-top: 3em;
+}
+tr:nth-child(odd) {
+    background-color: #F7F5F3; /* lighter */
+    background-color: #F5EADC; /* darker */
+}
+th, td {
+    padding: .125em .25em;
+    text-align: left;
+    font-weight: normal;
+}
+thead, th {
+    border-bottom: 2px solid #D77043;
+    text-transform: uppercase;
+    font-size: .88em;
+    letter-spacing: .1em;
+/*    color: #D77043;*/
+}
+tfoot {
+    border-top: 1px solid #D77043;
 }
 
 /* specific blocks */

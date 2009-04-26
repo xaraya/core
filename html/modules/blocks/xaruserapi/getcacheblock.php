@@ -3,7 +3,7 @@
  * Retrieve a cache block instance
  *
  * @package modules
- * @copyright (C) 2002-2006 The copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -24,7 +24,7 @@ function blocks_userapi_getcacheblock($args)
     $cacheBlockTable = $xartable['cache_blocks'];
     $instance = array();
 
-    $query = "SELECT blockinstance_id, nocache, page, user, expire
+    $query = "SELECT blockinstance_id, nocache, page, theuser, expire
               FROM $cacheBlockTable
               WHERE blockinstance_id = ?";
     $result = $dbconn->Execute($query,array($bid));

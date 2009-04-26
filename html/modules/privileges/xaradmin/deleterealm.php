@@ -3,7 +3,7 @@
  * Delete a realm
  *
  * @package core modules
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *

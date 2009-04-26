@@ -2,7 +2,7 @@
 /**
  * Module initialization
  * @package modules
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -26,11 +26,11 @@ $modversion['credits']            = 'xardocs/credits.txt';
 $modversion['help']               = '';
 $modversion['changelog']          = 'xardocs/changelog.txt';
 $modversion['license']            = '';
-$modversion['official']           = 1;
+$modversion['official']           = true;
 $modversion['author']             = 'Jim McDonald';
 $modversion['contact']            = '';
-$modversion['admin']              = 1;
-$modversion['user']               = 0;
+$modversion['admin']              = true;
+$modversion['user']               = false;
 $modversion['class']              = 'Core Admin';
 $modversion['category']           = 'Global';
 ?>

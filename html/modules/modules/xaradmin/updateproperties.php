@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -29,8 +29,8 @@ function modules_admin_updateproperties()
     xarVarFetch('displayname','str::',$displayname);
     xarVarFetch('admincapable','isset',$admincapable, NULL, XARVAR_DONT_SET);
     xarVarFetch('usercapable','isset',$usercapable, NULL, XARVAR_DONT_SET);
-    $admincapable = isset($admincapable) ? 1 : 0;
-    $usercapable = isset($usercapable) ? 1 : 0;
+    $admincapable = isset($admincapable) ? true : false;
+    $usercapable = isset($usercapable) ? true : false;
 
     if (empty($displayname)) $displayname = olddisplayname;;
 

@@ -3,7 +3,7 @@
  * Initialise the Authsystem module
  *
  * @package modules
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -28,11 +28,11 @@ $modversion['credits'] = 'xardocs/credits.txt';
 $modversion['help'] = 'xardocs/help.txt';
 $modversion['changelog'] = 'xardocs/changelog.txt';
 $modversion['license'] = 'docs/license.txt';
-$modversion['official'] = 1;
+$modversion['official'] = true;
 $modversion['author'] = 'Marco Canini, Jo Dalle Nogare';
 $modversion['contact'] = 'marco.canini@xaraya.com, jojodee@xaraya.com';
-$modversion['admin'] = 1;
-$modversion['user'] = 0;
+$modversion['admin'] = true;
+$modversion['user'] = false;
 $modversion['class'] = 'Authentication';
 $modversion['category'] = 'Global';
 ?>

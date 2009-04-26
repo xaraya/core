@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) copyright-placeholderetobject
+ * @copyright (C) 2002-2007 The Digital Development Foundationetobject
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *

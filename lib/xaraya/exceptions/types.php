@@ -3,7 +3,7 @@
  * Exception types
  *
  * @package exceptions
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2006 by The Digital Development Foundation
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>

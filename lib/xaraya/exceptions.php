@@ -5,7 +5,7 @@
  * For all documentation about exceptions see RFC-0054
  *
  * @package exceptions
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
@@ -31,7 +31,7 @@ sys::import('xaraya.exceptions.handlers');
  *
  * @todo do we want this abstracted?
 **/
-set_exception_handler(array('ExceptionHandlers','defaulthandler'));
+set_exception_handler(array('ExceptionHandlers','debughandler'));
 set_error_handler(array('ExceptionHandlers','phperrors'));
 
 /**

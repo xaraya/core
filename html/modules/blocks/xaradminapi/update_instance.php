@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -25,6 +25,7 @@
 function blocks_adminapi_update_instance($args)
 {
     // Get arguments from argument array
+    $template = null;
     extract($args);
 
     // Optional arguments
@@ -39,10 +40,6 @@ function blocks_adminapi_update_instance($args)
         $content = serialize($content);
     }
 
-    if (!isset($template)) {
-        $template = '';
-    }
-
     // Argument check
     if (!xarVarValidate('pre:lower:ftoken:passthru:str:1', $name) ||
         (!isset($bid) || !is_numeric($bid)) ||
@@ -55,7 +52,7 @@ function blocks_adminapi_update_instance($args)
     // Legacy support of group_id
     if (!isset($groups) && isset($group_id)) {
         $groups = array(
-            array('id' => $group_id, 'template' => '')
+            array('id' => $group_id, 'template' => null)
         );
     }
 

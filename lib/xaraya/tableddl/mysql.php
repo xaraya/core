@@ -290,7 +290,13 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             break;
 
         case 'boolean':
-            $this_field['type'] = "BOOL";
+            // mrb: Mysql has no native boolean, BOOL evaluates to TinyInt(1), which 
+            //      i dont really understand, they could have used BIT(1)
+            $this_field['type'] = "BIT(1)";
+            if (isset($parameters['default'])) {
+                // default values are numbers, not strings
+                $parameters['default'] = $parameters['default'] ? 1 : 0;
+            }
             break;
 
         case 'datetime':
@@ -394,12 +400,16 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
                         : '';
 
     // Test for DEFAULTS
-    $this_field['default'] = (isset($parameters['default']))
-                           ? (($parameters['default'] == 'NULL')
-                                    ? 'DEFAULT NULL'
-                                    : "DEFAULT '".$parameters['default']."'")
-                           : '';
-
+    $this_field['default'] ='';
+    if(isset($parameters['default'])) 
+        if($parameters['default']=='NULL') 
+            $this_field['default'] = "DEFAULT NULL";
+        else
+            if(is_string($parameters['default']))   
+                $this_field['default'] = "DEFAULT '".$parameters['default']."'";
+            else
+                $this_field['default'] = "DEFAULT ".$parameters['default'];
+    
     // Test for AUTO_INCREMENT
     $this_field['auto_increment'] = (isset($parameters['increment']) && $parameters['increment'] == true)
                                   ? 'AUTO_INCREMENT'

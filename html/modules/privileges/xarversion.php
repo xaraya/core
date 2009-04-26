@@ -2,7 +2,7 @@
 /**
  * Initialization function
  * @package core modules
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -23,11 +23,11 @@ $modversion['version'] = '1.0.1';
 $modversion['displayname'] = xarML('Privileges');
 $modversion['description'] = 'Modify privileges security';
 $modversion['displaydescription'] = xarML('Modify privileges security');
-$modversion['official'] = 1;
+$modversion['official'] = true;
 $modversion['author'] = 'Marc Lutolf';
 $modversion['contact'] = 'http://www.xaraya.com/';
-$modversion['admin'] = 1;
-$modversion['user'] = 0;
+$modversion['admin'] = true;
+$modversion['user'] = false;
 $modversion['securityschema'] = array('Privileges::' => 'name:id');
 $modversion['class'] = 'Core Complete';
 $modversion['category'] = 'Users & Groups';

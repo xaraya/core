@@ -3,7 +3,7 @@
  * User System
  *
  * @package core
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -143,9 +143,9 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
 
     // Catch common variations (0, false, '', ...)
     if (empty($rememberMe))
-        $rememberMe = 0;
+        $rememberMe = false;
     else
-        $rememberMe = 1;
+        $rememberMe = true;
 
     // Set user session information
     // TODO: make this a class static in xarSession.php
@@ -200,7 +200,7 @@ function xarUserLogOut()
     $userId = xarSessionGetVar('id');
 
     // Reset user session information
-    $res = xarSession_setUserInfo(_XAR_ID_UNREGISTERED, 0);
+    $res = xarSession_setUserInfo(_XAR_ID_UNREGISTERED, false);
     if (!isset($res)) {
         return; // throw back
     }

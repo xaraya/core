@@ -3,7 +3,7 @@
  * Initialise the blocks module
  *
  * @package modules
- * @copyright (C) 2002-2007 The copyright-placeholder
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -25,40 +25,31 @@ function blocks_init()
     // Create tables inside a transaction
     try {
         $dbconn->begin();
-
+        
+        // prototypes
+        $id_type       = array('type'=>'integer', 'unsigned'=>true, 'null'=>false, 'increment'=>true, 'primary_key'=>true);
+        $idref_type    = array('type'=>'integer', 'unsigned'=>true, 'null'=>false);
+        $template_type = array('type'=>'varchar', 'size'=>254, 'null'=>true, 'default'=>null);
+        
         // *_block_groups
         $query = xarDBCreateTable($prefix . '_block_groups',
-                                  array('id'         => array('type'        => 'integer',
-                                                                  'unsigned'    => true,
-                                                                  'null'        => false,
-                                                                  'increment'   => true,
-                                                                  'primary_key' => true),
+                                  array('id'          => $id_type,
                                         'name'        => array('type'        => 'varchar',
                                                                    'size'        => 64,
-                                                                   'null'        => false,
-                                                                   'default'     => ''),
-                                        'template'    => array('type'        => 'varchar',
-                                                                   'size'        => 254,
-                                                                   'null'        => false,
-                                                                   'default'     => '')));
+                                                                   'null'        => false),
+                                        'template'    => $template_type));
         $dbconn->Execute($query);
 
         $query = xarDBCreateIndex($prefix . '_block_groups',
-                                  array('name'   => $prefix . '_block_groups',
+                                  array('name'   => $prefix . '_block_groups_name',
                                         'fields' => array('name'),
                                         'unique' => 'true'));
         $dbconn->Execute($query);
 
         // *_block_instances
         $query = xarDBCreateTable($prefix . '_block_instances',
-                                  array('id'          => array('type'        => 'integer',
-                                                                   'unsigned'    => true,
-                                                                   'null'        => false,
-                                                                   'increment'   => true,
-                                                                   'primary_key' => true),
-                                        'type_id'     => array('type'        => 'integer',
-                                                                   'unsigned'    => true,
-                                                                   'null'        => false),
+                                  array('id'          => $id_type,
+                                        'type_id'     => $idref_type,
                                         'name'       => array('type'        => 'varchar',
                                                                   'size'        => 64,
                                                                   'null'        => false,
@@ -69,17 +60,14 @@ function blocks_init()
                                                                    'default'     => NULL),
                                         'content'     => array('type'        => 'text',
                                                                    'null'        => false),
-                                        'template'    => array('type'        => 'varchar',
-                                                                   'size'        => 254,
-                                                                   'null'        => true,
-                                                                   'default'     => NULL),
+                                        'template'    => $template_type,
                                         'state'       => array('type'        => 'integer',
                                                                    'size'        => 'tiny',
                                                                    'unsigned'    => true,
                                                                    'null'        => false,
                                                                    'default'     => '2'),
                                         'refresh'     => array('type'        => 'boolean',
-                                                                   'default'     => '0'),
+                                                                   'default'     => false),
                                         'last_update' => array('type'        => 'integer',
                                                                    'unsigned'    => true,
                                                                    'null'        => false,
@@ -88,7 +76,7 @@ function blocks_init()
         $dbconn->Execute($query);
 
         $query = xarDBCreateIndex($prefix . '_block_instances',
-                                  array('name'   => $prefix . '_block_instances',
+                                  array('name'   => $prefix . '_block_instances_type_id',
                                         'fields' => array('type_id'),
                                         'unique' => false));
         $dbconn->Execute($query);
@@ -102,24 +90,13 @@ function blocks_init()
         // *_block_types
         $query = xarDBCreateTable($prefix . '_block_types',
                                   array(
-                                        'id' => array(
-                                                          'type'          => 'integer',
-                                                          'unsigned'    => true,
-                                                          'null'          => false,
-                                                          'increment'     => true,
-                                                          'primary_key'   => true
-                                                          ),
+                                        'id' => $id_type,
                                         'name' => array(
                                                             'type'          => 'varchar',
                                                             'size'          => 64,
                                                             'null'          => false,
-                                                            'default'       => ''
                                                             ),
-                                        'module_id' => array(
-                                                              'type'          => 'integer',
-                                                              'unsigned'      => true,
-                                                              'null'          => false
-                                                              ),
+                                        'module_id' => $idref_type,
                                         'info' => array(
                                                             'type'          => 'text',
                                                             'null'          => true
@@ -144,21 +121,10 @@ function blocks_init()
         */
         // *_block_group_instances
         $query = xarDBCreateTable($prefix . '_block_group_instances',
-                                  array('id'          => array('type'        => 'integer',
-                                                                   'unsigned'    => true,
-                                                                   'null'        => false,
-                                                                   'increment'   => true,
-                                                                   'primary_key' => true),
-                                        'group_id'    => array('type'        => 'integer',
-                                                                   'unsigned'    => true,
-                                                                   'null'        => false),
-                                        'instance_id' => array('type'        => 'integer',
-                                                                   'unsigned'    => true,
-                                                                   'null'        => false),
-                                        'template'    => array('type'        => 'varchar',
-                                                                   'size'        => 100,
-                                                                   'null'        => true,
-                                                                   'default'     => NULL),
+                                  array('id'          => $id_type,
+                                        'group_id'    => $idref_type,
+                                        'instance_id' => $idref_type,
+                                        'template'    => $template_type,
                                         'position'    => array('type'            => 'integer',
                                                                    'size'        => 'tiny',
                                                                    'unsigned'    => true,
@@ -167,13 +133,13 @@ function blocks_init()
         $dbconn->Execute($query);
 
         $query = xarDBCreateIndex($prefix . '_block_group_instances',
-                                  array('name' => $prefix . '_block_group_instances',
+                                  array('name' => $prefix . '_block_group_instances_group_id',
                                         'fields' => array('group_id'),
                                         'unique' => false));
         $dbconn->Execute($query);
 
         $query = xarDBCreateIndex($prefix . '_block_group_instances',
-                                  array('name' => $prefix . '_block_group_instances_2',
+                                  array('name' => $prefix . '_block_group_instances_instance_id',
                                         'fields' => array('instance_id'),
                                         'unique' => false));
         $dbconn->Execute($query);
@@ -193,7 +159,7 @@ function blocks_init()
                                         'page' => array('type'        => 'integer',
                                                             'null'        => false,
                                                             'default'     => '0'),
-                                        'user'    => array('type'        => 'integer',
+                                        'theuser'    => array('type'        => 'integer',
                                                                'unsigned'    => true,
                                                                'null'        => false),
                                         'expire'    => array('type'        => 'integer',

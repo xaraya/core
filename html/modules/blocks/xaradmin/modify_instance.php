@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -134,7 +134,7 @@ function blocks_admin_modify_instance()
             $block_groups[$key]['template'] = $instance['groups'][$id]['group_inst_template'];
         } else {
             $block_groups[$key]['selected'] = false;
-            $block_groups[$key]['template'] = '';
+            $block_groups[$key]['template'] = null;
         }
     }
 

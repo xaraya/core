@@ -7,6 +7,7 @@ Documentation references:
 - postgres: http://developer.postgresql.org/pgdocs/postgres/
 - mssql   : http://msdn2.microsoft.com/en-us/library/ms189826.aspx
 - oracle  : http://download-uk.oracle.com/docs/cd/B19306_01/server.102/b14200/toc.htm
+- oracle  : http://www.fdi.ucm.es/profesor/hector/DB-II/SQL_Reference.pdf (the mother of all Oracle SQL language references)
 
 VIEWS support:
 -------------

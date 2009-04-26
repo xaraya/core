@@ -3,7 +3,7 @@
  * Initialise the Authsystem module
  *
  * @package modules
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -73,7 +73,7 @@ function authsystem_upgrade($oldVersion)
            // update the modversion class and admin capable
            $query = "UPDATE $modulesTable SET class=?, admin_capable=?
                      WHERE regid = ?";
-           $bindvars = array('Authentication',1,$modid);
+           $bindvars = array('Authentication',true,$modid);
            $result = $dbconn->Execute($query,$bindvars);
 
            // Create the login block

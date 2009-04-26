@@ -3,7 +3,7 @@
  * Session Support
  *
  * @package sessions
- * @copyright (C) copyright-placeholder
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Jim McDonald
@@ -477,7 +477,7 @@ class xarSession extends Object implements IsessionHandler
             // Low security - delete session info if user decided not to
             //                remember themself
             $where = "remember = ? AND  last_use < ?";
-            $bindvars[] = 0;
+            $bindvars[] = false;
             $bindvars[] = $timeoutSetting;
             break;
         case 'Medium':
@@ -485,7 +485,7 @@ class xarSession extends Object implements IsessionHandler
             //                   expired or user decided not to remember
             //                   themself
             $where = "(remember = ? AND last_use <  ?) OR first_use < ?";
-            $bindvars[] = 0;
+            $bindvars[] = false;
             $bindvars[] = $timeoutSetting;
             $bindvars[] = (time()- ($GLOBALS['xarSession_systemArgs']['duration'] * 86400));
             break;

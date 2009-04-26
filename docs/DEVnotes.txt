@@ -7,6 +7,11 @@ revisit later on before trusting the branch to be released or used.
 DB-CHANGES:
 ===========
 
+------------------------------------------------------------------------------
+!!!  WE CHANGED MANY MORE THINGS BUT WE DID NOT WRITE THEM DOWN BELOW, 
+   SO EXPECT MORE THAN JUST WHAT IS IN HERE  !!!
+------------------------------------------------------------------------------
+
 * module_uservars is now module_itemvars where item is an item in a
   module, not only roles. The columns are adapted accordingly.
 * hooks table now registers the mod id in the columns smodid and
@@ -61,7 +66,11 @@ DB-CHANGES:
 * fields dynamic_objects.filepath and dynamicobject.class added
 * privileges.realmid renamed to privileges.realm_id
 * modules.regid is now not null default '0'
-* 
+
+------------------------------------------------------------------------------
+!!!  WE CHANGED MANY MORE THINGS BUT WE DID NOT WRITE THEM DOWN ABOVE, 
+   SO EXPECT MORE THAN JUST WHAT IS IN HERE  !!!
+------------------------------------------------------------------------------
 
 (see `browser:docs/DEVupgrades.sql`:trac: for details on all of the above)
 

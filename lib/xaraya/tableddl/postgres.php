@@ -238,6 +238,9 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
 
         case 'boolean':
             $this_field['type'] = 'BOOLEAN';
+            if (isset($parameters['default'])) {
+                $parameters['default'] = $parameters['default'] ? 'true' : 'false';
+            }
             break;
 
         case 'timestamp':
