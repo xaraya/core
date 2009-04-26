@@ -72,7 +72,7 @@
             $mods = xarModAPIFunc('modules',
                                   'admin',
                                   'getlist',
-                                  array('filter'     => array('UserCapable' => 1)));
+                                  array('filter'     => array('UserCapable' => 1, 'State' => XARMOD_STATE_ACTIVE)));
             if(empty($mods)) {
             // there aren't any user capable modules, dont display user menu
                 return;
@@ -224,8 +224,22 @@
                         $mods = $list;
                         if ($list == array()) $usermods = '';
                     }
-
+                    
+                    $access = isset($args['view_access']) ? $args['view_access'] : array();
                     foreach($mods as $mod){
+                        if (isset($access[$mod['name']])) {
+                            // Decide whether this block is modifiable to the current user
+                            $args = array(
+                                'module' => 'base',
+                                'component' => 'Block',
+                                'instance' => $data['title'] . "All:All",
+                                'group' => $access[$mod['name']]['group'],
+                                'level' => $access[$mod['name']]['level'],
+                            );
+                            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+                            if (!$accessproperty->check($args)) continue;
+                        }
+
                         if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$data['name']. ":" . $mod['name'])) continue;
                         /* Check for active module alias */
                         /* jojodee -  We need to review the module alias functions and, thereafter it's use here */
@@ -368,7 +382,7 @@
             if (empty($data['displaymodules'])) $data['displaymodules'] = $this->displaymodules;
             if (empty($data['modulelist'])) $data['modulelist'] = '';
 
-            $data['modules'] = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+            $data['modules'] = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('UserCapable' => 1, 'State' => XARMOD_STATE_ACTIVE)));
             // Prepare output array
             $c=0;
             if (!empty($data['content'])) {
