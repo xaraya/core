@@ -150,7 +150,7 @@ function dynamicdata_init()
 # Create the object and property dataobjects
 #
 
-        $module_id = xarMod::getRegID('dynamicdata');
+        $modid = xarMod::getRegID('dynamicdata');
 
         // create default objects for dynamic data
         $sql = "INSERT INTO $dynamic_objects (
