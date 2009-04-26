@@ -1,9 +1,10 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:if condition="!empty($query)">
-<item>
-<title>Search term : #$query#</title>
-<author>#$name#</author>
-<description>#$output#</description>
-</item>
-</xar:if>
+    <xar:if condition="!empty($query)">
+        <item>
+            <title>Search term : #$query#</title>
+            <author>#$name#</author>
+            <description>#$output#</description>
+        </item>
+    </xar:if>
 </xar:template>

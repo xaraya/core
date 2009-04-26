@@ -1,16 +1,17 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- Compose the layout structure based on the available blockgroups -->
-<xar:if condition="!empty($leftblocksgroup) and !empty($rightblocksgroup)">
-    <!-- All three columns layout  -->
-    <xar:template file="content_3col" type="theme" />
-    <xar:elseif condition="!empty($leftblocksgroup) and empty($rightblocksgroup)" />
+    <!-- Compose the layout structure based on the available blockgroups -->
+    <xar:if condition="!empty($leftblocksgroup) and !empty($rightblocksgroup)">
+        <!-- All three columns layout  -->
+        <xar:template file="content_3col" type="theme" />
+        <xar:elseif condition="!empty($leftblocksgroup) and empty($rightblocksgroup)" />
         <!-- Two columns layout - left and center blocksgroups -->
         <xar:template file="content_2col_lc" type="theme" />
-    <xar:elseif condition="empty($leftblocksgroup) and !empty($rightblocksgroup)" />
+        <xar:elseif condition="empty($leftblocksgroup) and !empty($rightblocksgroup)" />
         <!-- Two columns layout - center and right blocksgroups -->
-    <xar:template file="content_2col_cr" type="theme" />
-    <xar:else />
+        <xar:template file="content_2col_cr" type="theme" />
+        <xar:else />
         <!-- One column layout - just center blocksgroup -->
-    <xar:template file="content_1col" type="theme" />
-</xar:if>
+        <xar:template file="content_1col" type="theme" />
+    </xar:if>
 </xar:template>

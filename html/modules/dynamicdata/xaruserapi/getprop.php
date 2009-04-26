@@ -15,7 +15,7 @@
  * @author the DynamicData module development team
  * @param $args['objectid'] object id of the properties to get
  * @param $args['module'] module name of the item fields, or
- * @param $args['modid'] module id of the item field to get
+ * @param $args['module_id'] module id of the item field to get
  * @param $args['itemtype'] item type of the item field to get
  * @param $args['fieldlist'] array of field labels to retrieve (default is all)
  * @param $args['status'] limit to property fields of a certain status (e.g. active)
@@ -32,10 +32,10 @@ function dynamicdata_userapi_getprop($args)
     if (empty($args)) return array();
 
     extract($args);
-    $modid = $args['moduleid'];
+    $module_id = $args['moduleid'];
 
-    if (empty($modid) && !empty($module)) {
-        $modid = xarMod::getRegID($module);
+    if (empty($module_id) && !empty($module)) {
+        $module_id = xarMod::getRegID($module);
     }
     if (empty($itemtype)) {
         $itemtype = 0;
@@ -62,7 +62,7 @@ function dynamicdata_userapi_getprop($args)
     }
 
     $invalid = array();
-    if (!isset($modid) || !is_numeric($modid)) {
+    if (!isset($module_id) || !is_numeric($module_id)) {
         $invalid[] = 'module id';
     }
     if (!isset($itemtype) || !is_numeric($itemtype)) {
@@ -74,43 +74,43 @@ function dynamicdata_userapi_getprop($args)
         throw new BadParameterException($vars,$msg);
     }
 
-    if (empty($static) && isset($propertybag["$modid:$itemtype"])) {
+    if (empty($static) && isset($propertybag["$module_id:$itemtype"])) {
         if (!empty($fieldlist)) {
             $myfields = array();
             foreach ($fieldlist as $name) {
-                if (isset($propertybag["$modid:$itemtype"][$name])) {
-                    $myfields[$name] = $propertybag["$modid:$itemtype"][$name];
+                if (isset($propertybag["$module_id:$itemtype"][$name])) {
+                    $myfields[$name] = $propertybag["$module_id:$itemtype"][$name];
                 }
             }
             return $myfields;
         } elseif (isset($status)) {
             $myfields = array();
-            foreach ($propertybag["$modid:$itemtype"] as $name => $field) {
+            foreach ($propertybag["$module_id:$itemtype"] as $name => $field) {
                 if ($field['status'] == $status) {
-                    $myfields[$name] = $propertybag["$modid:$itemtype"][$name];
+                    $myfields[$name] = $propertybag["$module_id:$itemtype"][$name];
                 }
             }
             return $myfields;
         } else {
-            return $propertybag["$modid:$itemtype"];
+            return $propertybag["$module_id:$itemtype"];
         }
     }
 
     $fields = DataPropertyMaster::getProperties(array('objectid' => $objectid,
-                                                           'moduleid' => $modid,
+                                                           'moduleid' => $module_id,
                                                            'itemtype' => $itemtype,
                                                            'allprops' => $allprops));
     if (!empty($static)) {
         // get the list of static properties for this module
         $staticlist = xarModAPIFunc('dynamicdata','util','getstatic',
-                                    array('modid' => $modid,
+                                    array('module_id' => $module_id,
                                           'itemtype' => $itemtype));
 // TODO: watch out for conflicting property ids ?
         $fields = array_merge($staticlist,$fields);
     }
 
     if (empty($static)) {
-        $propertybag["$modid:$itemtype"] = $fields;
+        $propertybag["$module_id:$itemtype"] = $fields;
     }
     if (!empty($fieldlist)) {
         $myfields = array();

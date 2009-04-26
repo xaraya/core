@@ -1,5 +1,6 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<div class="xar-block-body-topnav">
-    <xar:var name="content"/>
-</div>
+    <div class="xar-block-body-topnav">
+        <xar:var name="content" />
+    </div>
 </xar:template>

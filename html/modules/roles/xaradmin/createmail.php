@@ -153,7 +153,7 @@ function roles_admin_createmail()
     $templates = array(array('key' => 'blank', 'value' => xarML('Empty')));
     while ($filename = readdir($dd)) {
         if (!is_dir($messaginghome . "/" . $filename)) {
-            $pos = strpos($filename,'-message.xd');
+            $pos = strpos($filename,'-message.xt');
             if (!($pos === false)) {
                 $templatename = substr($filename,0,$pos);
                 $templatelabel = ucfirst($templatename);

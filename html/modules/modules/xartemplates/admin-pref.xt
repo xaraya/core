@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Modules Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>Preferences</h2>
+        <p>Modules List</p>
+        <p>Style:</p>
+        <p>View number of modules per page:</p>
+        <p>Most preferences for this module have default values. Changing your preferences does not
+        affect other users [admins] e.g., people who use different login name than your own.</p>
+        <p>Your preferences can be reset to defaults from this page, so that you can, for instance,
+        see the same startup page as a new admin..</p>
+        <form method="post" action="&xar-modurl-modules-admin-pref;">
+            <div>
+                <input type="submit" name="restore" value="Restore" />
+            </div>
+            <p>Status: your current preferences are the same as defaults</p>
+        </form>
+    </div>
+</xar:template>

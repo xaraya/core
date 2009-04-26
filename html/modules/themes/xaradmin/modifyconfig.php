@@ -36,7 +36,7 @@ function themes_admin_modifyconfig()
     if (!isset($data['dashtemplate']) || trim ($data['dashtemplate']=='')) {
         $data['dashtemplate']='dashboard';
     }
-    // everything else happens in Template for now
+
     return $data;
 }
 ?>

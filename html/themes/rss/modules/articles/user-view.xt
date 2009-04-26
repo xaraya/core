@@ -1,9 +1,8 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:if condition="!empty($number)">
-    <xar:foreach in="$columns" key="$col">
-        <xar:foreach in="$columns[$col]" key="$row">
-            #$columns[$col][$row]#
+    <xar:if condition="!empty($number)">
+        <xar:foreach in="$columns" key="$col">
+            <xar:foreach in="$columns[$col]" key="$row">#$columns[$col][$row]#</xar:foreach>
         </xar:foreach>
-    </xar:foreach>
-</xar:if>
+    </xar:if>
 </xar:template>

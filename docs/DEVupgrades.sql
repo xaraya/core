@@ -657,6 +657,12 @@ ALTER TABLE `xar_cache_blocks` CHANGE `id` `blockinstance_id`           integer 
 UPDATE `xar_dynamic_properties` SET `defaultvalue` = REPLACE(defaultvalue, "xarMod::getID(xarModVars::get('roles', 'defaultauthmodule'))", "xarModVars::get('roles', 'defaultauthmodule')") WHERE source = 'xar_roles.auth_module_id';
 UPDATE `xar_dynamic_properties` SET `defaultvalue` = REPLACE(defaultvalue, "xarModVars::get", "xarModVars::get");
 UPDATE `xar_security_instances` SET `query` = REPLACE(query, "type FROM xar_block_types", "name FROM xar_block_types");
+INSERT INTO `xar_privileges` (id, name, realm_id, module_id, component, instance, level, description, itemtype)
+    SELECT 0,'EditBase', realm_id, module_id, 'All', 'All', 500, '',3 FROM `xar_privileges` WHERE name = 'EditBaseBlock';
+INSERT INTO `xar_privileges` (id, name, realm_id, module_id, component, instance, level, description, itemtype)
+    SELECT 0,'EditThemes', realm_id, module_id, 'All', 'All', 500, '',3 FROM `xar_privileges` WHERE name = 'AdminTheme';
+
+DROP TABLE IF EXISTS xar_template_tags;
 
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here

@@ -291,7 +291,7 @@ class xarMasks extends Object
 
             // get the masks pertaining to the current module and the component requested
             // <mikespub> why do you need this in the first place ?
-            if ($module == '') list($module) = xarRequestGetInfo();
+            if ($module == '') list($module) = xarRequest::getInfo();
 
             // I'm a bit lost on this line. Does this var ever get set?
             // <mikespub> this gets set in xarBlock_render, to replace the xarModVars::set /
@@ -335,7 +335,7 @@ class xarMasks extends Object
                 $mask->setRealm(xarModVars::get('themes', 'default'));
                 break;
             case "domain":
-                $host = xarServerGetHost();
+                $host = xarServer::getHost();
                 $parts = explode('.',$host);
                 if (count($parts) < 2) {
                     $mask->setRealm('All');
@@ -434,7 +434,7 @@ class xarMasks extends Object
             if (xarModVars::get('privileges','exceptionredirect') && !xarUserIsLoggedIn()) {
                 // The current authentication module will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login
-                $requrl = xarServerGetCurrentUrl(array(),false);
+                $requrl = xarServer::getCurrentURL(array(),false);
                 xarResponse::Redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
             } else {
                 xarResponse::Redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));

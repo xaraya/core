@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="!empty($nodes)">
+        <ul>
+            <xar:set name="nodecount">count($nodes)</xar:set>
+            <xar:foreach in="$nodes" value="$node">
+                <xar:set name="children">$node-&gt;children</xar:set>
+                <xar:set name="level">$node-&gt;getLevel()</xar:set>
+                <xar:set name="users">$node-&gt;users</xar:set>
+                <xar:set name="id">$node-&gt;id</xar:set>
+                <xar:set name="drawchildren">true</xar:set>
+                <li style="border: none">
+                    <xar:for start="$i = 1" test="$i le $level+1" iter="$i++">
+                        <img src="#xarTplGetImage('blank.png')#" />
+                    </xar:for>
+                    <span class="treeattributes">
+                        <xar:if condition="$drawchildren eq false">
+                            <span style="padding-left: 1em">
+                            <b>#$node-&gt;name#</b>see the entry above</span>
+                        <xar:else />
+                            <xar:set name="numofsubgroups">count($children)</xar:set>
+                            <xar:set name="subgroups">$numofsubgroups == 1 ? xarML('subgroup') : xarML('subgroups')</xar:set>
+                            <xar:set name="numofusers">$users == 1 ? xarML('user') : xarML('users')</xar:set>
+                            <xar:set name="description">$numofsubgroups . " " . $subgroups . ' | ' . $users . " " . $numofusers</xar:set>
+                            <a href="#xarModURL('roles', 'admin', 'modify', array('id' =&gt; $id))#" title="#xarML('Modify this Group')#" style="margin: 0 0.25em 0 0.25em;">
+                                #$node-&gt;name#
+                            </a>
+                            #$description#
+                        </xar:if>
+                        <xar:set name="seccheck">
+                            xarSecurityCheck('DeleteRole',0,'Roles',$node-&gt;name)
+                        </xar:set>
+                        <xar:if condition="($seccheck eq false) or ($users gt 0) or ($drawchildren eq false)">
+
+                        <xar:else />
+                            <a href="#xarModURL('roles', 'admin', 'delete', array('id' =&gt; $id))#" title="#xarML('Delete this Group')#" style="margin: 0 0.25em 0 0.25em;">
+                                <img src="#xarTplGetImage('icons/delete.png', 'base')#" alt="" />
+                            </a>
+                        </xar:if>
+                        <xar:if condition="($users gt 0) and ($drawchildren)">
+                            <a href="#xarModURL('roles', 'admin', 'showusers', array('id' =&gt; $id, 'reload' =&gt; 1))#" title="#xarML('Show the Users in this Group')#" style="margin: 0 0.25em 0 0.25em;">
+                                <img src="#xarTplGetImage('icons/system-users.png','base')#" alt="" />
+                            </a>
+                        </xar:if>
+                        <xar:if condition="($users gt 0) and ($drawchildren)">
+                        <xar:else />
+                            <a href="#xarModURL('roles', 'admin', 'createmail', array('id' =&gt; $id))#" title="#xarML('Email the Users in this Group')#" style="margin: 0 0.25em 0 0.25em;">
+                                <img src="#xarTplGetImage('icons/mail-message-new.png','base')#" alt="" />
+                            </a>
+                        </xar:if>
+                        <xar:if condition="$drawchildren">
+                            <a href="#xarModURL('roles', 'admin', 'showprivileges', array('id' =&gt; $id))#" title="#xarML('Show the Privileges assigned to this Group')#" style="margin: 0 0.25em 0 0.25em;">
+                                <img src="#xarTplGetImage('icons/privileges.png','base')#" alt="" />
+                            </a>
+                        </xar:if>
+                        <xar:if condition="$drawchildren">
+                            <a href="#xarModURL('roles', 'admin', 'testprivileges', array('id' =&gt; $id))#" title="#xarML('Test this Groups\'s Privileges')#" style="margin: 0 0.25em 0 0.25em;">
+                                <img src="#xarTplGetImage('icons/test.png','base')#" alt="" />
+                            </a>
+                        </xar:if>
+                    </span>
+                </li>
+            </xar:foreach>
+        </ul>
+    </xar:if>
+</xar:template>

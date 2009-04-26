@@ -78,18 +78,18 @@ function modules_admin_list()
     $modlist = xarModAPIFunc('modules','admin','getlist',array('filter' => array('State' => $data['selfilter'], 'numitems' =>20)));
 
     // get action icons/images
-    $img_disabled       = xarTplGetImage('set1/disabled.png');
-    $img_none           = xarTplGetImage('set1/none.png');
-    $img_activate       = xarTplGetImage('set1/activate.png');
-    $img_deactivate     = xarTplGetImage('set1/deactivate.png');
-    $img_upgrade        = xarTplGetImage('set1/upgrade.png');
-    $img_initialise     = xarTplGetImage('set1/initialise.png');
-    $img_remove         = xarTplGetImage('set1/remove.png');
+    $img_disabled       = xarTplGetImage('icons/disabled.png', 'base');
+    $img_none           = xarTplGetImage('icons/none.png', 'base');
+    $img_activate       = xarTplGetImage('icons/activate.png', 'base');
+    $img_deactivate     = xarTplGetImage('icons/deactivate.png', 'base');
+    $img_upgrade        = xarTplGetImage('icons/upgrade.png', 'base');
+    $img_initialise     = xarTplGetImage('icons/initialize.png', 'base');
+    $img_remove         = xarTplGetImage('icons/remove.png', 'base');
 
     // get other images
-    $data['infoimg']    = xarTplGetImage('set1/info.png');
-    $data['editimg']    = xarTplGetImage('set1/hooks.png');
-    $data['propimg']    = xarTplGetImage('set1/hooks.png');
+    $data['infoimg']    = xarTplGetImage('icons/info.png', 'base');
+    $data['editimg']    = xarTplGetImage('icons/hooks.png', 'base');
+    $data['propimg']    = xarTplGetImage('icons/hooks.png', 'base');
 
     $data['listrowsitems'] = array();
     $listrows = array();

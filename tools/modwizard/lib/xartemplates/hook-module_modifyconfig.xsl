@@ -11,10 +11,10 @@
 <xsl:document href="{$output}/xartemplates/hook-module_modifyconfig.xd" format="text" omit-xml-declaration="yes" xml:space="preserve">
 
     <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-        <p><xar:mlstring><xsl:value-of select="about/name" /> Configuration</xar:mlstring></p>
+        <p><xsl:value-of select="about/name" /> Configuration</p>
     </div>
     <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-        <p><xar:mlstring>Add the configuration options here.</xar:mlstring></p>
+        <p>Add the configuration options here.</p>
     </div>
 
 </xsl:document>

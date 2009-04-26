@@ -13,7 +13,7 @@
                 <div style="clear: both; padding-top: 10px;">
                 <span style="float: left; width: 20%; text-align: right;">
                         <!-- The span class help displays help as a tool tip. -->
-                        <span class="help" title="#xarML('Enter the number of items to display.')#"><label for="numitems#$blockid#"><xar:mlstring>Number of Items</xar:mlstring></label>:</span>
+                        <span class="help" title="#xarML('Enter the number of items to display.')#"><label for="numitems#$blockid#">Number of Items</label>:</span>
                 </span>
                 <span style="float: right; width: 78%; text-align: left;">
                          <input type="text" name="numitems" id="numitems#$blockid#" value="#$numitems#" size="5" maxlength="5" />

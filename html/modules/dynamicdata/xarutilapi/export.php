@@ -30,8 +30,8 @@ function dynamicdata_utilapi_export($args)
         if (empty($objectid)) {
             $objectid = null;
         }
-        if (empty($modid)) {
-            $modid = xarMod::getRegID('dynamicdata');
+        if (empty($module_id)) {
+            $module_id = xarMod::getRegID('dynamicdata');
         }
         if (empty($itemtype)) {
             $itemtype = 0;
@@ -72,7 +72,7 @@ function dynamicdata_utilapi_export($args)
             } else {
                 // Treat parent fields where module is DD differently
                 if (($name == 'parent') && ($myobject->moduleid == 182)) {
-                    $info = DataObjectMaster::getObjectInfo(array('modid' => 182, 'itemtype' => $myobject->properties[$name]->value));
+                    $info = DataObjectMaster::getObjectInfo(array('module_id' => 182, 'itemtype' => $myobject->properties[$name]->value));
                     $value = $info['name'];
                 } else {
                     $value = $myobject->properties[$name]->value;

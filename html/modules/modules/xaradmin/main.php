@@ -18,13 +18,14 @@
  */
 function modules_admin_main()
 {
-    // Security Check
-    if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurityCheck('EditModules')) return;
 
-    xarResponse::Redirect(xarModURL('modules', 'admin', 'list'));
-
-    // success
-    return true;
+    if (xarModVars::get('modules', 'disableoverview') == 0){
+        return xarTplModule('modules','admin','overview');
+    } else {
+        xarResponse::Redirect(xarModURL('modules', 'admin', 'list'));
+        return true;
+    }
 }
 
 ?>

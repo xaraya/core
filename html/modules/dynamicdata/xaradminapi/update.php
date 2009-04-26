@@ -14,7 +14,7 @@
  *
  * @author the DynamicData module development team
  * @param $args['itemid'] item id of the original item
- * @param $args['modid'] module id for the original item
+ * @param $args['module_id'] module id for the original item
  * @param $args['itemtype'] item type of the original item
  * @param $args['values'] array of id => value, or
  * @param $args['fields'] array containing the field definitions and values
@@ -30,7 +30,7 @@ function dynamicdata_adminapi_update($args)
     if (!isset($itemid) || !is_numeric($itemid) || empty($itemid)) { // we can't accept item id 0 here
         $invalid[] = 'item id';
     }
-    if (!isset($modid) || !is_numeric($modid)) {
+    if (!isset($module_id) || !is_numeric($module_id)) {
         $invalid[] = 'module id';
     }
     if ((isset($fields) && is_array($fields)) ||
@@ -50,7 +50,7 @@ function dynamicdata_adminapi_update($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
+    if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$module_id:$itemtype:$itemid")) return;
 
     if (!isset($fields) || !is_array($fields)) {
         $fields = array();
@@ -60,7 +60,7 @@ function dynamicdata_adminapi_update($args)
     }
 
 // TODO: test this
-    $myobject = & DataObjectMaster::getObject(array('moduleid' => $modid,
+    $myobject = & DataObjectMaster::getObject(array('moduleid' => $module_id,
                                          'itemtype' => $itemtype,
                                          'itemid'   => $itemid));
     if (empty($myobject)) return;

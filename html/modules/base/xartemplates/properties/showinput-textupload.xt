@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <textarea class="xar-form-textarealarge" name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#">
+        #$value#
+    </textarea>
+    <xar:if condition="!empty($uploads_hooked)">#$uploads_hooked# 
+    <xar:else />
+        <input type="hidden" name="MAX_FILE_SIZE" value="#$maxsize#" />
+        <input class="xar-fullwidth" type="file" name="#$upname#" size="#$size#" id="#$upid#" tabindex="#$tabindex#" />#$allowed#
+    </xar:if>
+    <xar:template file="dataproperty_additions" module="base" />
+</xar:template>

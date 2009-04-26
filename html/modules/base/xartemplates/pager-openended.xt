@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!--
+    Open-ended pager where you don't know the number of pages in total.
+    Set the total pages to current_page + 1 for correct display.
+-->
+    <div class="xar-pager">
+        <!-- Display first-page link or text if there is more than one page -->
+        <xar:if condition="$totalpages gt 1">
+            <xar:if condition="$currentpagenum ne $firstpagenum">&#160;&#160; 
+            <a title="#xarML('First page')#" href="#$firsturl#">|&lt;</a>
+            <xar:else />&#160;&#160;|&lt;</xar:if>
+        </xar:if>
+        <!-- Display previous-block link if there is more than one block -->
+        <xar:if condition="$totalblocks gt 1 and $pagesperblock gt 1">
+            <xar:if condition="$currentblock ne $firstblock">
+            <xar:set name="prevblocklabel">xarML('Previous #(1)
+            pages',$prevblockpages)</xar:set>&#160;&#160; 
+            <a title="#$prevblocklabel#" href="#$prevblockurl#">&lt;&lt;</a>
+            <xar:else />&#160;&#160;&lt;&lt;</xar:if>
+        </xar:if>
+        <!-- Display previous-page link if there is just one block -->
+        <xar:if condition="$totalblocks eq 1 or $pagesperblock eq 1">
+            <xar:if condition="$prevpageitems gt 0">&#160;&#160; 
+            <a title="#xarML('Previous page')#" href="#$prevpageurl#">&lt;</a>
+            <xar:else />&#160;&#160;&lt;</xar:if>
+        </xar:if>
+        <xar:foreach in="$middleurls" key="$pagenumber" value="$pageurl">
+            <xar:if condition="$pagenumber ne $currentpage">
+            <xar:set name="pageurllabel">xarML('Page #(1)',$pagenumber)</xar:set>
+            <xar:if condition="$pagenumber eq $lastpagenum">&#160;&#160; 
+            <a href="#$pageurl#" title="#$pageurllabel#">#$pagenumber#...</a>
+            <xar:else />&#160;&#160; 
+            <a href="#$pageurl#" title="#$pageurllabel#">#$pagenumber#</a></xar:if>
+            <xar:else />&#160;&#160;#$pagenumber#</xar:if>
+        </xar:foreach>
+        <!-- Display next-page link if there is just one block -->
+        <xar:if condition="$currentpagenum ne $lastpagenum">
+            <xar:if condition="$nextpageitems gt 0">&#160;&#160; 
+            <a title="#xarML('Next page')#" href="#$nextpageurl#">&gt;</a>
+            <xar:else />&#160;&#160;&gt;</xar:if>
+        </xar:if>
+    </div>
+</xar:template>

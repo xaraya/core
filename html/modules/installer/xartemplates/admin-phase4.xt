@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:set name="active_step">4</xar:set>
+    <div id="install">
+        <xar:template file="status" />
+        <h1>Database Settings Collection</h1>
+        <form action="install.php" method="post">
+            <input type="hidden" name="install_language" id="install_language"
+            value="#$language#" />
+            <p>Enter your database settings. You can connect to databases on non-standard ports
+            using 'hostname:port' in the Host field. (e.g. 'localhost:12345')</p>
+            <p>Note the following: 
+                <ul>
+                <li>If you do not have root access to your database (due to virtual hosting etc),
+                you will need to have a pre-existing database installed and configured before you
+                proceed.</li>
+                <li>If you plan to use a SQLite or PostgreSQL database please ensure your database
+                already exists before your proceed.</li>
+                <li>If you plan on 
+                <strong>upgrading</strong>an existing Xaraya then please run the 
+                <strong>upgrade.php</strong>script, not this install script.</li>
+                <li>If you plan to convert from another Weblog/CMS to Xaraya, first install Xaraya
+                as normal and then run the appropriate import script to import your prior
+                Weblog/CMS data.</li>
+                <li>Make sure you only use valid characters in the username and password for the
+                database (eg no spaces, '$' or others which not supported by your database
+                type.</li>
+            </ul></p>
+            <h3>Database Information</h3>
+            <div class="simpleform">
+                <p>
+                    <label for="install_database_type">Database Type</label>
+                    <select name="install_database_type" id="install_database_type">
+                        <xar:foreach in="$database_types" key="$dbdriver" value="$info">
+                            <xar:if condition="!$info.available">
+                                <option value="#$dbdriver#" disabled="disabled">#$info.name# [not
+                                available]</option>
+                            <xar:else/>
+                                <xar:if condition="$database_type == $dbdriver">
+                                    <option selected="selected" value="#$dbdriver#">
+                                    #$info.name#</option>
+                                <xar:else/>
+                                    <option value="#$dbdriver#">#$info.name#</option>
+                                </xar:if>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </p>
+                <p>
+                    <label for="install_database_host">Host</label>
+                    <input type="text" name="install_database_host" id="install_database_host"
+                    maxlength="80" value="#$database_host#" />
+                    <br class="clear" />
+                </p>
+                <p>
+                    <label for="install_database_username">Username</label>
+                    <input type="text" name="install_database_username"
+                    id="install_database_username" maxlength="80" value="#$database_username#" />
+                    <br class="clear" />
+                </p>
+                <p>
+                    <label for="install_database_password">Password</label>
+                    <input type="password" name="install_database_password"
+                    id="install_database_password" maxlength="80" value="#$database_password#" />
+                    <span class="xar-sub">(Only valid characters)</span>
+                </p>
+                <p>
+                    <label for="install_database_name">Database Name</label>
+                    <input type="text" name="install_database_name" id="install_database_name"
+                    maxlength="80" value="#$database_name#" />
+                    <br class="clear" />
+                </p>
+                <p>
+                    <label for="install_database_prefix">Table Prefix</label>
+                    <input type="text" name="install_database_prefix" id="install_database_prefix"
+                    maxlength="10" value="#$database_prefix#" />
+                    <span class="xar-sub">(for Table Sharing)</span>
+                </p>
+            </div>
+            <br class="clear"/>
+            <p>
+                <label class="block" for="install_create_database">
+                <input type="checkbox" name="install_create_database" id="install_create_database"
+                value="1" />Create the database (MySQL only)</label>
+            </p>
+            <p class="xar-sub">If checked, this Create the Database option allows the install
+            process to create an empty database for you rather than just populating an existing
+            one. If you cannot create databases through phpMyAdmin because of virtual hosting or
+            MySQL security settings, the installer will 
+            <strong>not</strong>be able to create the database for you. It will be able to populate
+            an already existing database.</p>
+            <input type="hidden" name="install_phase" id="install_phase" value="5" />
+        <div class="center">
+                <input type="submit" value="Continue" />
+        </div>
+        </form>
+    </div>
+</xar:template>

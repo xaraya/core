@@ -1,0 +1,62 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:style scope="module" module="base" file="navtabs" />
+    <div>
+        <dl class="xar-tabs">
+            <dt class="help">
+                Actions:
+            </dt>
+            <xar:if condition="$action eq 'modify'">
+                <dd class="active">
+                  <a href="#xarServer::getCurrentURL()#">
+                    Modify Object definition
+                  </a>
+                </dd>
+            <xar:else />
+                <dd>
+                    <a href="&xar-modurl-dynamicdata-admin-modify;&amp;itemid=#$itemid#&amp;name=#$object:name#">
+                        Modify Object definition
+                    </a>
+                </dd>
+            </xar:if>
+            <xar:if condition="$action eq 'modifyprop'">
+                <dd class="active">
+                  <a href="#xarServer::getCurrentURL()#">
+                    Modify DataProperties
+                  </a>
+                </dd>
+            <xar:else />
+                <dd>
+                    <a href="&xar-modurl-dynamicdata-admin-modifyprop;&amp;itemid=#$itemid#&amp;name=#$object:name#">
+                        Modify DataProperties
+                    </a>
+                </dd>
+            </xar:if>
+            <xar:if condition="$action eq 'export'">
+                <dd class="active">
+                  <a href="#xarServer::getCurrentURL()#">
+                    Export Object Definition to XML
+                  </a>
+                </dd>
+            <xar:else />
+                <dd>
+                    <a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#&amp;name=#$object:name#">
+                        Export Object Definition to XML
+                    </a>
+                </dd>
+            </xar:if>
+            <xar:if condition="$action eq 'view'">
+                <dd class="active">
+                  <a href="#xarServer::getCurrentURL()#">
+                    View Items
+                  </a>
+                </dd>
+            <xar:else />
+                <dd>
+                    <a href="&xar-modurl-dynamicdata-admin-view;&amp;itemid=#$itemid#&amp;name=#$object:name#">
+                        View Items
+                    </a>
+                </dd>
+            </xar:if>
+        </dl>
+    </div>
+</xar:template>

@@ -22,33 +22,33 @@
             </xar:if>
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>What is it?</xar:mlstring></p>
+            <p>What is it?</p>
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>Describe your module here.</xar:mlstring></p>
+            <p>Describe your module here.</p>
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>How to use it?</xar:mlstring></p>
+            <p>How to use it?</p>
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-                <p><xar:mlstring>
+                <p>
                 Describe the usage of your module here.
-                </xar:mlstring></p>
+                </p>
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>Included Blocks</xar:mlstring></p>
+            <p>Included Blocks</p>
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-        <p><xar:mlstring>Describe the block included with your module here.</xar:mlstring></p>
+        <p>Describe the block included with your module here.</p>
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>Included Hooks</xar:mlstring></p>
+            <p>Included Hooks</p>
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>Describe the provided hooks or delete this section.</xar:mlstring></p>
+            <p>Describe the provided hooks or delete this section.</p>
         </div>
         <div class="xar-norm-outline xar-accent" style="text-align: center; padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-            <p><xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring></p>
+            <p>Extended information about this module can be found here. [modules module]</p>
         </div>
     </div>
 </div>

@@ -12,6 +12,7 @@
 
 sys::import('xaraya.structures.tree');
 sys::import('modules.roles.class.roles');
+sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * Handle Roles Tree Property

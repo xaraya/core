@@ -28,7 +28,7 @@
                   or configuration/capabilities/supportshorturls/text() = 'yes'">
 
         <tr>
-            <td><label for="supportshorturls"><xar:mlstring>Short URL Support</xar:mlstring></label></td>
+            <td><label for="supportshorturls">Short URL Support</label></td>
             <td>
                 <xsl:element name="xar:data-input" xml:space="default">
                     <xsl:attribute name="id">supportshorturls</xsl:attribute>

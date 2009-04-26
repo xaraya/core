@@ -161,8 +161,8 @@ function dynamicdata_init()
         $stmt = $dbconn->prepareStatement($sql);
 
         $objects = array(
-            array('objects'   ,'Dynamic Objects'   ,$modid,0,'DataObject','auto',                                 'itemid',0,'a:0:{}'               ,0),
-            array('properties','Dynamic Properties',$modid,1,'DProperty','modules/dynamicdata/class/property.php','itemid',0,'a:0:{}'               ,0),
+            array('objects'   ,'Dynamic Objects'   ,$module_id,0,'DataObject','auto',                                 'itemid',0,'a:0:{}'               ,0),
+            array('properties','Dynamic Properties',$module_id,1,'DProperty','modules/dynamicdata/class/property.php','itemid',0,'a:0:{}'               ,0),
         );
 
         $objectid = array();
@@ -441,74 +441,8 @@ function dynamicdata_init()
     /**
      * Register hooks
      */
-    // when a new module item is being specified
-    xarModRegisterHook('item', 'new', 'GUI', 'dynamicdata', 'admin', 'newhook');
-
-    // when a module item is created (uses 'dd_*')
-    xarModRegisterHook('item', 'create', 'API','dynamicdata', 'admin', 'createhook');
-
-    // when a module item is being modified (uses 'dd_*')
-    xarModRegisterHook('item', 'modify', 'GUI','dynamicdata', 'admin', 'modifyhook');
-
-    // when a module item is updated (uses 'dd_*')
-    xarModRegisterHook('item', 'update', 'API','dynamicdata', 'admin', 'updatehook');
-
-    // when a module item is deleted
-    xarModRegisterHook('item', 'delete', 'API', 'dynamicdata', 'admin', 'deletehook');
-
-    // when a module configuration is being modified (uses 'dd_*')
-    xarModRegisterHook('module', 'modifyconfig', 'GUI','dynamicdata', 'admin', 'modifyconfighook');
-
-    // when a module configuration is updated (uses 'dd_*')
-    xarModRegisterHook('module', 'updateconfig', 'API','dynamicdata', 'admin', 'updateconfighook');
-
-    // when a whole module is removed, e.g. via the modules admin screen
-    // (set object ID to the module name !)
-    xarModRegisterHook('module', 'remove', 'API','dynamicdata', 'admin', 'removehook');
-
-    //  Ideally, people should be able to use the dynamic fields in their
-    //  module templates as if they were normal fields, this means
-    //  adapting the get() function in the user API of the module, and/or
-    //  using some common data retrieval function (DD) in the future...
-
-    /*  display hook is now disabled by default - use the BL tags or APIs instead
-     // when a module item is being displayed
-     xarModRegisterHook('item', 'display', 'GUI','dynamicdata', 'user', 'displayhook');
-    */
 
     xarModRegisterHook('item', 'search', 'GUI', 'dynamicdata', 'user', 'search');
-
-    /**
-     * Register BL tags
-     */
-    // TODO: move this to some common place in Xaraya ?
-    // Register BL user tags
-    // output this property
-    xarTplRegisterTag('dynamicdata', 'data-output', array(), 'dynamicdata_userapi_handleOutputTag');
-    // display this item
-    xarTplRegisterTag('dynamicdata', 'data-display',array(), 'dynamicdata_userapi_handleDisplayTag');
-    // view a list of these items
-    xarTplRegisterTag('dynamicdata', 'data-view', array(),'dynamicdata_userapi_handleViewTag');
-
-    // Register BL admin tags
-    // input field for this property
-    xarTplRegisterTag('dynamicdata', 'data-input', array(), 'dynamicdata_adminapi_handleInputTag');
-    // input form for this item
-    xarTplRegisterTag('dynamicdata', 'data-form', array(), 'dynamicdata_adminapi_handleFormTag');
-    // admin list for these items
-    xarTplRegisterTag('dynamicdata', 'data-list', array(), 'dynamicdata_userapi_handleViewTag');
-
-    // Register BL item tags to get properties and values directly in the template
-    // get properties for this item
-    xarTplRegisterTag('dynamicdata', 'data-getitem', array(),'dynamicdata_userapi_handleGetItemTag');
-    // get properties and item values for these items
-    xarTplRegisterTag('dynamicdata', 'data-getitems', array(),'dynamicdata_userapi_handleGetItemsTag');
-
-    // Register BL utility tags to avoid OO problems with the BL compiler
-    // get label for this object or property
-    xarTplRegisterTag('dynamicdata', 'data-label', array(),'dynamicdata_userapi_handleLabelTag');
-    // get value or invoke method for this object or property
-    xarTplRegisterTag('dynamicdata', 'data-object', array(), 'dynamicdata_userapi_handleObjectTag');
 
     /*********************************************************************
      * Register the module components that are privileges objects
@@ -559,215 +493,35 @@ function dynamicdata_init()
     );
     xarDefineInstance('dynamicdata','Field',$instances);
 
-    // Initialisation successful
-    return true;
+    // Installation complete; check for upgrades
+    return dynamicdata_upgrade('2.0');
 }
 
     /**
  * upgrade the dynamicdata module from an old version
  * This function can be called multiple times
  */
-function dynamicdata_upgrade($oldVersion)
+function dynamicdata_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
-    switch($oldVersion) {
-    case '1.0':
-        // Code to upgrade from version 1.0 goes here
-
-        // Register BL item tags to get properties and values directly in the template
-        // get properties for this item
-        xarTplRegisterTag('dynamicdata', 'data-getitem',
-                          array(),
-                          'dynamicdata_userapi_handleGetItemTag');
-        // get properties and item values for these items
-        xarTplRegisterTag('dynamicdata', 'data-getitems',
-                          array(),
-                          'dynamicdata_userapi_handleGetItemsTag');
-
-        // for the switch from blob to text of the value field, no upgrade is necessary for MySQL,
-        // and no simple upgrade is possible for PostgreSQL
-    case '1.1':
-        // Fall through to next upgrade
-
-    case '1.1.0':
-        xarRemoveInstances('dynamicdata');
-        $instances = array(
-                           array('header' => 'external', // this keyword indicates an external "wizard"
-                                 'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
-                                 'limit'  => 0
-                                )
-                        );
-        xarDefineInstance('dynamicdata','Field',$instances);
-
-        $instances = array(
-                           array('header' => 'external', // this keyword indicates an external "wizard"
-                                 'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
-                                 'limit'  => 0
-                                )
-                        );
-        xarDefineInstance('dynamicdata','Item',$instances);
-
-        // Fall through to next upgrade
-    case '1.2.0':
-        // Add Dynamic Data Properties Definition Table
-        if( !dynamicdata_createPropDefTable() ) return;
-
-        // Fall through to next upgrade
-    case '2.0.0':
-        // Code to upgrade from version 2.0.0 goes here
-        break;
+    switch ($oldversion) {
+        case '2.0':
+        case '2.1':
+      break;
     }
-
-    // Update successful
     return true;
 }
 
 /**
- * delete the dynamicdata module
- * This function is only ever called once during the lifetime of a particular
- * module instance
+ * Upgrade this module from an old version
+ *
+ * @param oldVersion
+ * @returns bool
  */
 function dynamicdata_delete()
 {
-
   //this module cannot be removed
   return false;
-
-    /**
-     * Drop tables
-     */
-    $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
-
-
-    // Generate the SQL to drop the table using the API
-    $query = xarDBDropTable($xartable['dynamic_objects']);
-    if (empty($query)) return; // throw back
-    $result = $dbconn->Execute($query);
-    if (!isset($result)) return;
-
-    // Generate the SQL to drop the table using the API
-    $query = xarDBDropTable($xartable['dynamic_properties']);
-    if (empty($query)) return; // throw back
-    $result = $dbconn->Execute($query);
-    if (!isset($result)) return;
-
-    // Generate the SQL to drop the table using the API
-    $query = xarDBDropTable($xartable['dynamic_data']);
-    if (empty($query)) return; // throw back
-    $result = $dbconn->Execute($query);
-    if (!isset($result)) return;
-
-    // Generate the SQL to drop the table using the API
-    $query = xarDBDropTable($xartable['dynamic_relations']);
-    if (empty($query)) return; // throw back
-    $result = $dbconn->Execute($query);
-    if (!isset($result)) return;
-
-    // Generate the SQL to drop the table using the API
-    $query = xarDBDropTable($xartable['dynamic_properties_def']);
-    if (empty($query)) return; // throw back
-    $result = $dbconn->Execute($query);
-    if (!isset($result)) return;
-
-    /**
-     * Delete module variables
-     */
-    xarModVars::delete_all('dynamicdata');
-
-    /**
-     * Unregister blocks
-     */
-    if (!xarModAPIFunc(
-        'blocks',
-        'admin',
-        'unregister_block_type',
-        array(
-            'modName'  => 'dynamicdata',
-            'blockType'=> 'form'
-        )
-    )) return;
-
-    /**
-     * Unregister hooks
-     */
-    // Remove module hooks
-    if (!xarModUnregisterHook('item', 'new', 'GUI',
-                             'dynamicdata', 'admin', 'newhook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('item', 'create', 'API',
-                             'dynamicdata', 'admin', 'createhook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('item', 'modify', 'GUI',
-                             'dynamicdata', 'admin', 'modifyhook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('item', 'update', 'API',
-                             'dynamicdata', 'admin', 'updatehook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('item', 'delete', 'API',
-                             'dynamicdata', 'admin', 'deletehook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('module', 'modifyconfig', 'GUI',
-                             'dynamicdata', 'admin', 'modifyconfighook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('module', 'updateconfig', 'API',
-                             'dynamicdata', 'admin', 'updateconfighook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-    if (!xarModUnregisterHook('module', 'remove', 'API',
-                             'dynamicdata', 'admin', 'removehook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-
-//  Ideally, people should be able to use the dynamic fields in their
-//  module templates as if they were 'normal' fields -> this means
-//  adapting the get() function in the user API of the module, and/or
-//  using some common data retrieval function (DD) in the future...
-
-/*  display hook is now disabled by default - use the BL tags or APIs instead
-    if (!xarModUnregisterHook('item', 'display', 'GUI',
-                             'dynamicdata', 'user', 'displayhook')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-*/
-
-    if (!xarModUnregisterHook('item', 'search', 'GUI',
-                             'dynamicdata', 'user', 'search')) {
-        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
-    }
-
-    /**
-     * Unregister BL tags
-     */
-// TODO: move this to some common place in Xaraya ?
-    // Unregister BL tags
-    xarTplUnregisterTag('data-input');
-    xarTplUnregisterTag('data-output');
-    xarTplUnregisterTag('data-form');
-
-    xarTplUnregisterTag('data-display');
-    xarTplUnregisterTag('data-list');
-    xarTplUnregisterTag('data-view');
-
-    xarTplUnregisterTag('data-getitem');
-    xarTplUnregisterTag('data-getitems');
-
-    xarTplUnregisterTag('data-label');
-    xarTplUnregisterTag('data-object');
-
-    // Remove Masks and Instances
-    xarRemoveMasks('dynamicdata');
-    xarRemoveInstances('dynamicdata');
-
-
-    // Deletion successful
-    return true;
 }
 
 function dynamicdata_createPropDefTable()

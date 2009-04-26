@@ -13,7 +13,7 @@
 /**
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['template'] name of the template without .xd extension
+ * @param $args['template'] name of the template without .xt extension
  * @param $args['module'] module directory in var/messaging
  * @return string of file contents read
  */
@@ -23,12 +23,12 @@ function roles_adminapi_getmessageincludestring($args)
     if (!isset($template)) throw new EmptyParameterException('template');
 
     if(!isset($module)){
-        list($module) = xarRequestGetInfo();
+        list($module) = xarRequest::getInfo();
     }
 
 // Get the template that defines the substitution vars
     $messaginghome = sys::varpath() . "/messaging/" . $module;
-    $msgtemplate = $messaginghome . "/includes/" . $template . ".xd";
+    $msgtemplate = $messaginghome . "/includes/" . $template . ".xt";
     if (!file_exists($msgtemplate)) throw new FileNotFoundException($msgtemplate);
 
     $string = '';

@@ -25,7 +25,7 @@ function mail_adminapi_updatemessagestrings($args)
     if (empty($template)) throw new EmptyParameterException('template');
 
     if (empty($module)) {
-        list($module) = xarRequestGetInfo();
+        list($module) = xarRequest::getInfo();
     }
     if (empty($subject)) {
         $subject = '';
@@ -39,7 +39,7 @@ function mail_adminapi_updatemessagestrings($args)
         throw new DirectoryNotFoundException($messaginghome);
     }
 
-    $filename = $messaginghome . '/' . $template . '-subject.xd';
+    $filename = $messaginghome . '/' . $template . '-subject.xt';
     if (is_writable($filename)) {
         unlink($filename);
         if (!$handle = fopen($filename, 'a')) {
@@ -51,7 +51,7 @@ function mail_adminapi_updatemessagestrings($args)
         fclose($handle);
     }
 
-    $filename = $messaginghome . '/' . $template . '-message.xd';
+    $filename = $messaginghome . '/' . $template . '-message.xt';
     if (is_writable($filename)) {
         unlink($filename);
         if (!$handle = fopen($filename, 'a')) {

@@ -13,7 +13,7 @@
  * Update the dynamic properties for a module + itemtype
  *
  * @param int objectid
- * @param int modid
+ * @param int module_id
  * @param int itemtype
  * @throws BAD_PARAM
  * @return bool true on success and redirect to modifyprop
@@ -21,7 +21,7 @@
 function dynamicdata_admin_updateprop()
 {
     if(!xarVarFetch('objectid',          'isset', $objectid,          NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',             'isset', $modid,             NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id',         'isset', $module_id,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype',          'int:1:', $itemtype,         0,    XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',             'isset', $table,             NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_label',          'isset', $dd_label,          NULL, XARVAR_DONT_SET)) {return;}
@@ -37,16 +37,16 @@ function dynamicdata_admin_updateprop()
     $objectinfo = DataObjectMaster::getObjectInfo(
                                     array(
                                     'objectid' => $objectid,
-                                    'moduleid' => $modid,
+                                    'moduleid' => $module_id,
                                     'itemtype' => $itemtype,
                                     ));
 
     if (isset($objectinfo)) {
         $objectid = $objectinfo['objectid'];
-        $modid = $objectinfo['moduleid'];
+        $module_id = $objectinfo['moduleid'];
         $itemtype = $objectinfo['itemtype'];
-    } elseif (!empty($modid)) {
-        $modinfo = xarModGetInfo($modid);
+    } elseif (!empty($module_id)) {
+        $modinfo = xarModGetInfo($module_id);
         if (!empty($modinfo['name'])) {
             $name = $modinfo['name'];
             if (!empty($itemtype)) {
@@ -54,7 +54,7 @@ function dynamicdata_admin_updateprop()
             }
             sys::import('modules.dynamicdata.class.objects.master');
             $objectid = DataObjectMaster::createObject(
-                                      array('module_id' => $modid,
+                                      array('moduleid' => $modid,
                                             'itemtype' => $itemtype,
                                             'name' => $name,
                                             'label' => ucfirst($name)));
@@ -62,14 +62,14 @@ function dynamicdata_admin_updateprop()
         }
     }
 
-    if (empty($modid)) {
+    if (empty($module_id)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('module id', 'admin', 'updateprop', 'dynamicdata');
         throw new BadParameterException($vars,$msg);
     }
 
     $fields = xarModAPIFunc('dynamicdata','user','getprop',
-                           array('modid' => $modid,
+                           array('module_id' => $module_id,
                                  'itemtype' => $itemtype,
                                  'allprops' => true));
     $isprimary = 0;
@@ -107,7 +107,7 @@ function dynamicdata_admin_updateprop()
             $dd_status[$id] = $display_dd_status[$id] + $input_dd_status[$id];
             if (!xarModAPIFunc('dynamicdata','admin','updateprop',
                               array('id' => $id,
-                              //      'modid' => $modid,
+                              //      'module_id' => $module_id,
                               //      'itemtype' => $itemtype,
                                     'label' => $dd_label[$id],
                                     'type' => $dd_type[$id],
@@ -140,7 +140,7 @@ function dynamicdata_admin_updateprop()
                                 array('name' => $name,
                                       'label' => $dd_label[0],
                                       'objectid' => $objectid,
-                                      'moduleid' => $modid,
+                                      'moduleid' => $module_id,
                                       'itemtype' => $itemtype,
                                       'type' => $dd_type[0],
                                       'defaultvalue' => $dd_defaultvalue[0],
@@ -155,7 +155,7 @@ function dynamicdata_admin_updateprop()
     }
 
     if ($isprimary) {
-        $modinfo = xarModGetInfo($modid);
+        $modinfo = xarModGetInfo($module_id);
         xarModCallHooks('module','updateconfig',$modinfo['name'],
                         array('module' => $modinfo['name'],
                               'itemtype' => $itemtype));

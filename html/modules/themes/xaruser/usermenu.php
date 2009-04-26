@@ -27,7 +27,7 @@ function themes_user_usermenu($args)
     switch(strtolower($phase)) {
         case 'menu':
 
-            $icon = xarTplGetImage('themes.gif','themes'); //'modules/themes/xarimages/themes.gif';
+            $icon = xarTplGetImage('themes.png','base'); //'modules/themes/xarimages/themes.gif';
             $current = xarModURL('roles', 'user', 'account', array('moduleload' => 'themes'));
             $data = xarTplModule('themes', 'user', 'usermenu_icon', array('icon' => $icon, 'current' => $current));
 

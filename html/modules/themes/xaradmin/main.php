@@ -18,13 +18,14 @@
  */
 function themes_admin_main()
 {
-    // Security Check
-    if(!xarSecurityCheck('AdminTheme')) return;
+    if(!xarSecurityCheck('EditThemes')) return;
 
+    if (xarModVars::get('modules', 'disableoverview') == 0){
+        return xarTplModule('themes','admin','overview');
+    } else {
         xarResponse::Redirect(xarModURL('themes', 'admin', 'list'));
-
-    // success
-    return true;
+        return true;
+    }
 }
 
 ?>

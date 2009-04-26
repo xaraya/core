@@ -1,106 +1,66 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!--
+    <!--
      In 2.x each x[d|t] file *can* have a root tag in the form
      of an open xar:template tag. It is very likely that the optional
      character of this might change to a requirement in the 2.x line.
 -->
-<xar:template>
-    <h1 class="xar-mod-head">
-    <xar:mlstring>
-        Thank you for installing and trying Xaraya!
-    </xar:mlstring>
-</h1>
-<div class="xar-mod-body xar-overflow-auto">
-    <xar:set name="versionnum">xarCore::VERSION_NUM</xar:set>
-    <xar:if condition="defined('XARCORE_VERSION_REV')">
-        <xar:set name="mtrev">XARCORE_VERSION_REV</xar:set>
-    </xar:if>
+    <xar:template>
+        <h1 class="xar-mod-head">Thank you for installing and trying Xaraya!</h1>
+        <div class="xar-mod-body xar-overflow-auto">
+            <xar:set name="versionnum">xarCore::VERSION_NUM</xar:set>
+            <xar:if condition="defined('XARCORE_VERSION_REV')">
+                <xar:set name="mtrev">XARCORE_VERSION_REV</xar:set>
+            </xar:if>
+            <h2>Xaraya has reached Production Stable Version #$versionnum#</h2>
+            <xar:if condition="isset($mtrev)">
+                <p>Monotone base revision: 
+                <a href="http://trac.xaraya.com/2x/changeset/#$mtrev#">#$mtrev#</a></p>
+            </xar:if>
+            <p>The advantage of Xaraya is in it's flexibility and powerful Blocklayout theme
+            system. These work together enabling you to meet the most demanding of project
+            specifications. Whether your requirements are small business or a community site, a
+            company intranet or multi-server web installation, you can feel confident knowing that
+            Xaraya not only provides the flexibility you need but key features of performance,
+            stability, security, and ease of maintenance.</p>
+            <h2>Getting started</h2>
+            <p>In Xaraya, User and Group Roles and Privileges set by the site Administrator dictate
+            what a user can and cannot see or do on the site. If you are new to Xaraya and are used
+            to a separate Admin area you may prefer a separate look to your Administration area
+            rather than the default Admin Menu. Start by logging into your site as Administrator
+            and turning on the Admin Dashboard 
+            <xar:if condition="xarUserIsLoggedIn() and xarSecurityCheck('AdminTheme',0)">in your 
+            <a href="&xar-modurl-themes-admin-modifyconfig;">Themes Module Modify Config</a>option.
+            
+            <xar:else />in your Themes Module Modify Config option.</xar:if></p>
+            <h4>Explore</h4>
+            <p>Explore Xaraya by starting with the modules in your Admin Menu and reading the
+            Overviews. Some of the core modules such as Base, Themes, Blocks, and Roles are good
+            places to start. For example, the Base module is set as the default module in this
+            installation, and provides the site frontpage. You can change this 'default' module in,
+            coincidentally, the Base module.</p>
+            <p>You can activate and install additional non-core modules in your Modules
+            Administration to explore further.</p>
+            <p>You can add a new 
+            <em>block</em>of content anywhere on your page by defining a new block instance in the
+            Blocks module and assigning to a default blockgroup. You can explore Blocklayout for
+            even further control of layout in your theme.</p>
+            <div class="xar-floatright xar-halfwidth xar-margin-thick xar-padding-thick xar-mod-body xar-alt xar-sidebox">
 
-    <h2>
-        <xar:ml>
-            <xar:mlstring>Xaraya has reached Production Stable Version #(1)</xar:mlstring>
-            <xar:mlvar>#$versionnum#</xar:mlvar>
-        </xar:ml>
-    </h2>
-    <xar:if condition="isset($mtrev)">
-        <p>
-            Monotone base revision: #$versionnum#
-        </p>
-    </xar:if>
-    <p>
-        <xar:mlstring>
-            The advantage of Xaraya is in it's flexibility and powerful Blocklayout theme system. These work together
-            enabling you to meet the most demanding of project specifications. Whether your requirements are
-            small business or a community site, a company intranet or multi-server web installation, you can feel confident
-            knowing that Xaraya not only provides the flexibility you need but key features of performance, stability, security, and ease of maintenance.
-        </xar:mlstring>
-    </p>
-
-    <h2>
-       <xar:mlstring>Getting started</xar:mlstring>
-    </h2>
-
-    <p>
-        <xar:mlstring>
-           In Xaraya, User and Group Roles and Privileges set by the site Administrator dictate what a user can and cannot see or do on the site.
-           If you are new to Xaraya and are used to a separate Admin area you may prefer a separate look to your Administration area rather than the default Admin Menu.
-           Start by logging into your site as Administrator and turning on the Admin Dashboard
-        </xar:mlstring>
-        <xar:if condition="xarUserIsLoggedIn() and xarSecurityCheck('AdminTheme',0)">
-            <xar:mlstring>in your </xar:mlstring><a href="&xar-modurl-themes-admin-modifyconfig;"><xar:mlstring>Themes Module Modify Config</xar:mlstring></a><xar:mlstring> option.</xar:mlstring>
-        <xar:else />
-            <xar:mlstring>in your Themes Module Modify Config option.</xar:mlstring>
-        </xar:if>
-    </p>
-
-    <h4><xar:mlstring>Explore</xar:mlstring></h4>
-
-    <p>
-        <xar:mlstring>
-          Explore Xaraya by starting with the modules in your Admin Menu and reading the Overviews.
-          Some of the core modules such as Base, Themes, Blocks, and Roles are good places to start. For example,
-          the Base module is set as the default module in this installation, and provides the site frontpage. You can change this 'default' module in, coincidentally, the Base module.
-        </xar:mlstring>
-    </p>
-    <p>
-        <xar:mlstring>
-          You can activate and install additional non-core modules in your Modules Administration to explore further.
-        </xar:mlstring>
-    </p>
-    <p>
-        <xar:mlstring>
-          You can add a new <em>block</em> of content anywhere on your page by defining a new block instance in the Blocks module and assigning to a default blockgroup.
-          You can explore Blocklayout for even further control of layout in your theme.
-        </xar:mlstring>
-    </p>
-
-    <div class="xar-floatright xar-halfwidth xar-margin-thick xar-padding-thick xar-mod-body xar-alt xar-sidebox">
-        <xar:template file="hint.xt" type="system" />
-    </div>
-    <xar:module main="false" module="base" func="main" page="glimpse" />
-
-    <xar:comment>
-        Another easy way is to specify a static template as an extra page template of base module:
-    </xar:comment>
-
-    <h4><xar:mlstring>Getting Help</xar:mlstring></h4>
-    <p>
-        <xar:mlstring>
-            We invite you to become further involved in our community by joining our development or user discussions
-            at </xar:mlstring><a href="http://www.xaraya.com">http://www.xaraya.com</a><xar:mlstring>, via
-            mailing lists or IRC.
-        </xar:mlstring>
-        <xar:mlstring>
-            You can contribute easily to making Xaraya an even better product by filing any unexpected functionality in our </xar:mlstring>
-            <a href="http://bugs.xaraya.com"><xar:mlstring>bug tracker</xar:mlstring></a>.<xar:mlstring> Thank you for your support.
-            For more information on Xaraya, please visit
-            <a href="http://www.xaraya.com">
-                Xaraya's
-            </a>
-            website.
-        </xar:mlstring>
-
-    </p>
-</div>
-</xar:template>
+                <xar:template file="hint.xt" type="system" />
+            </div>
+            <xar:module main="false" module="base" func="main" page="glimpse" />
+            <xar:comment>Another easy way is to specify a static template as an extra page template
+            of base module:</xar:comment>
+            <h4>Getting Help</h4>
+            <p>We invite you to become further involved in our community by joining our development
+            or user discussions at 
+            <a href="http://www.xaraya.com">http://www.xaraya.com</a>, via mailing lists or IRC.
+            You can contribute easily to making Xaraya an even better product by filing any
+            unexpected functionality in our 
+            <a href="http://bugs.xaraya.com">bug tracker</a>. Thank you for your support. For more
+            information on Xaraya, please visit 
+            <a href="http://www.xaraya.com">Xaraya's</a>website.</p>
+        </div>
+    </xar:template>
 </xar:template>

@@ -1,0 +1,322 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu" />
+        <h2>Utilities - Relationships</h2>
+        <xar:template type="module" file="utility-menu" />
+        <form method="post" action="#xarServer::getCurrentURL()#">
+            <fieldset>
+                <legend>Relations With Other Modules/Properties</legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="module_id" class="xar-form-label">Module:</label>
+                    <xar:data-input type="module" name="module_id" value="$module_id" />
+                </div>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="submit" name="select" id="select" value="#xarML('Select')#" />
+                </div>
+            </fieldset>
+        </form>
+        <xar:if condition="!empty($module_id)">
+            <xar:if condition="count($relations) gt 0">
+                <table class="xar-clearboth">
+                    <tr>
+                        <th>Module</th>
+                        <th>Link Type</th>
+                        <th>From</th>
+                        <th>To</th>
+                    </tr>
+                    <xar:foreach in="$relations" value="$relation">
+                        <xar:if condition="count($relation['links']) gt 0">
+                            <xar:foreach in="$relation['links']" value="$link">
+                                <tr>
+                                    <td>#$relation['module']#</td>
+                                    <td>#$link['type']#</td>
+                                    <td>#$link['from']#</td>
+                                    <td>#$link['to']#</td>
+                                </tr>
+                            </xar:foreach>
+                            <xar:else />
+                            <tr>
+                                <td>#$relation['module']#</td>
+                                <td>( not found )</td>
+                                <td>-</td>
+                                <td>( not found )</td>
+                            </tr>
+                        </xar:if>
+                    </xar:foreach>
+                </table>
+                <xar:else />
+                <p>No relationships for this module.</p>
+            </xar:if>
+        </xar:if>
+        <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
+            <fieldset>
+                <legend>Relations With Other Objects/Tables</legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="objectid" class="xar-form-label">Object:</label>
+                    <select name="objectid" id="objectid">
+                        <option value=""></option>
+                        <xar:foreach in="$objects" key="$id" value="$object">
+                            <xar:if condition="!empty($objectid) and $objectid eq $id">
+                                <option value="#$id#" selected="selected">
+                                #$object['label']#</option>
+                                <xar:else />
+                                <option value="#$id#">#$object['label']#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="table" class="xar-form-label">Table:</label>
+                    <select name="table" id="table">
+                        <option value=""></option>
+                        <xar:foreach in="$tables" value="$tblInfo">
+                            <xar:if condition="!empty($table) and $table eq $tblInfo:getName()">
+                                <option value="#$tblInfo:getName()#" selected="selected">
+                                #$tblInfo:getName()#</option>
+                                <xar:else />
+                                <option value="#$tblInfo:getName()#">#$tblInfo:getName()#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </div>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="submit" name="select" id="select" value="Select" />
+                </div>
+            </fieldset>
+        </form>
+        <xar:if condition="!empty($table) or !empty($objectid)">
+            <h3>#$table#</h3>
+            <a href="&xar-modurl-dynamicdata-admin-view;&amp;table=#$table#">View Table</a>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Label</th>
+                    <th>Property Type</th>
+                    <th>Default</th>
+                    <th>Source</th>
+                    <th>Configuration</th>
+                </tr>
+                <xar:foreach in="$fields" key="$name" value="$property">
+                    <tr>
+                        <td>#$name#</td>
+                        <td>#$property:label#</td>
+                        <td>
+                            <xar:set name="type">#$property:type#</xar:set>
+                            <xar:data-output property="$prop" value="$type" />
+                        </td>
+                        <td>#$property:defaultvalue#</td>
+                        <td>#$property:source#</td>
+                        <td>#$property:configuration#</td>
+                    </tr>
+                </xar:foreach>
+            </table>
+            <xar:set name="authid">#xarSecGenAuthKey()#</xar:set>
+            <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
+                <div class="xar-form-input-wrapper">
+                    <label class="xar-form-label">Relation Type:</label>
+                    <input type="hidden" name="module_id" value="#$module_id#" />
+                    <input type="hidden" name="itemtype" value="#$itemtype#" />
+                    <input type="hidden" name="objectid" value="#$objectid#" />
+                    <input type="hidden" name="table" value="#$table#" />
+                    <input type="hidden" name="authid" value="#$authid#" />
+                    <select name="relation" id="relation">
+                        <option value="parent">is parent of (one-to-many)</option>
+                        <option value="child">is child of (many-to-one)</option>
+                        <option value="direct">is linked to (one-to-one)</option>
+                        <option value="directfrom">is linked from (one-to-one)</option>
+                        <option value="recursive">is recursive with</option>
+                        <option value="extension">extends</option>
+                        <option value="extended">is extended by</option>
+                    </select>
+                    <select name="withtable" id="withtable">
+                        <xar:foreach in="$tables" value="$name">
+                            <xar:if condition="!empty($withtable) and $withtable eq $name">
+                                <option value="#$name#" selected="selected">#$name#</option>
+                                <xar:else />
+                                <option value="#$name#">#$name#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </div>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="submit" name="add" id="add" value="#xarML('Add Relation')#" />
+                </div>
+                <xar:if condition="!empty($withtable)">
+                    <div class="xar-floatleft xar-thirdwidth">
+                        <h4>From #$table#</h4>
+                        <div class="xar-form-input-wrapper">
+                            <label for="field" class="xar-form-labelshort">Field:</label>
+                            <select name="field" id="field">
+                                <option value=""></option>
+                                <xar:foreach in="$fields" key="$name">
+                                    <xar:if condition="!empty($field) and $field eq $name">
+                                        <option value="#$name#" selected="selected">
+                                        #$name#</option>
+                                        <xar:else />
+                                        <option value="#$name#">#$name#</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <label for="value" class="xar-form-labelshort">Value:</label>
+                            <input type="textbox" name="value" id="value" value="#$value#"
+                            class="xar-form-textmedium" />
+                        </div>
+                    </div>
+                    <div class="xar-floatleft xar-thirdwidth">
+                        <h4>To #$table#</h4>
+                        <div class="xar-form-input-wrapper">
+                            <label for="withfield" class="xar-form-labelshort">Field:</label>
+                            <select name="withfield" id="withfield">
+                                <option value=""></option>
+                                <xar:foreach in="$withfields" key="$name">
+                                    <xar:if condition="!empty($withfield) and $withfield eq $name">
+                                        <option value="#$name#" selected="selected">
+                                        #$name#</option>
+                                        <xar:else />
+                                        <option value="#$name#">#$name#</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <label for="withvalue" class="xar-form-labelshort">Value:</label>
+                            <input type="textbox" name="withvalue" id="withvalue"
+                            value="#$withvalue#" class="xar-form-textmedium" />
+                        </div>
+                    </div>
+                    <div class="xar-form-input-wrapper-after">
+                        <input type="submit" name="confirm" value="#xarML('Confirm')#" />
+                    </div>
+                </xar:if>
+            </form>
+            <xar:if condition="!empty($objectid)">
+                <xar:set name="table">$objectid</xar:set>
+            </xar:if>
+            <xar:if condition="!empty($relations[$table])">
+                <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
+                    <table>
+                        <tr>
+                            <th>Delete</th>
+                            <th>Parents</th>
+                            <th>Direct From</th>
+                            <th>-</th>
+                            <th>Direct To</th>
+                            <th>Children</th>
+                        </tr>
+                        <xar:foreach in="$relations[$table]" key="$where" value="$links">
+                            <!-- TODO: check this section, it contains greater than signs, dummy xar:sets and some other hackery -->
+                            <xar:if condition="is_numeric($where)">
+                                <xar:set name="relobject">'objectid'</xar:set>
+                                <xar:set name="wherename">#$objects[$where]['label']#</xar:set>
+                                <xar:else />
+                                <xar:set name="relobject">'table'</xar:set>
+                                <xar:set name="wherename">#$where#</xar:set>
+                            </xar:if>
+                            <xar:foreach in="$links" key="$idx" value="$link">
+                                <xar:if condition="is_numeric($link['to'])">
+                                    <!-- TODO: this needs to go -->
+                                    <xar:set name="dummy">1; $link['from'] = $link['from'] . ' = '
+                                    . $link['to']; $link['to'] = '&#160;'</xar:set>
+                                    <xar:elseif condition="is_numeric($link['from'])" />
+                                    <!-- TODO: this needs to go -->
+                                    <xar:set name="dummy">1; $link['to'] = $link['to'] . ' = ' .
+                                    $link['from']; $link['from'] = '&#160;'</xar:set>
+                                </xar:if>
+                                <xar:if condition="$link['type'] eq 'child'">
+                                    <tr>
+                                        <td class="xar-align-center">
+                                            <input type="checkbox" name="what[#$where#][#$idx#]"
+                                            id="what_#$where#_#$idx#" value="1" />
+                                        </td>
+                                        <td>
+                                            <a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
+                                        #$wherename#</a>
+                                        <br />#$link['to']#</td>
+                                        <td>&#160;</td>
+                                        <td>#$link['from']#</td>
+                                        <td class="xar-nowrap">&#160;</td>
+                                        <td class="xar-nowrap">&#160;</td>
+                                    </tr>
+                                    <xar:elseif condition="$link['type'] eq 'recursive'" />
+                                    <tr>
+                                        <td class="xar-align-center">
+                                            <input type="checkbox" name="what[#$where#][#$idx#]" id="what_#$where#_#$idx#" value="1" />
+                                            id="what_#$where#_#$idx#" value="1" />
+                                        </td>
+                                        <td>
+                                            <a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
+                                        #$wherename#</a>
+                                        <br />#$link['from']#</td>
+                                        <td>&#160;</td>
+                                        <td>#$link['to']#</td>
+                                        <td class="xar-nowrap">&#160;</td>
+                                        <td class="xar-nowrap">&#160;</td>
+                                    </tr>
+                                    <xar:elseif condition="$link['type'] eq 'parent'" />
+                                    <tr>
+                                        <td class="xar-align-center">
+                                            <input type="checkbox" name="what[#$where#][#$idx#]"
+                                            id="what_#$where#_#$idx#" value="1" />
+                                        </td>
+                                        <td>&#160;</td>
+                                        <td>&#160;</td>
+                                        <td>#$link['from']#</td>
+                                        <td class="xar-nowrap">&#160;</td>
+                                        <td>
+                                            <a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
+                                        #$wherename#</a>
+                                        <br />#$link['to']#</td>
+                                    </tr>
+                                    <xar:elseif condition="$link['type'] eq 'direct' or $link['type'] eq 'extended'" />
+                                    <tr>
+                                        <td class="xar-align-center">
+                                            <input type="checkbox" name="what[#$where#][#$idx#]"
+                                            id="what_#$where#_#$idx#" value="1" />
+                                        </td>
+                                        <td>&#160;</td>
+                                        <td>&#160;</td>
+                                        <td>#$link['from']#</td>
+                                        <td>
+                                            <a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
+                                        #$wherename#</a>
+                                        <br />#$link['to']#</td>
+                                        <td class="xar-nowrap">&#160;</td>
+                                    </tr>
+                                    <xar:elseif condition="$link['type'] eq 'directfrom' or $link['type'] eq 'extension'" />
+                                    <tr>
+                                        <td class="xar-align-center">
+                                            <input type="checkbox" name="what[#$where#][#$idx#]"
+                                            id="what_#$where#_#$idx#" value="1" />
+                                        </td>
+                                        <td>&#160;</td>
+                                        <td>
+                                            <a href="&xar-modurl-dynamicdata-util-relations;#$relobject#=#$where#">
+                                        #$wherename#</a>
+                                        <br />#$link['to']#</td>
+                                        <td>#$link['from']#</td>
+                                        <td class="xar-nowrap">&#160;</td>
+                                        <td class="xar-nowrap">&#160;</td>
+                                    </tr>
+                                    <xar:else />
+                                </xar:if>
+                            </xar:foreach>
+                        </xar:foreach>
+                    </table>
+                    <div class="xar-form-input-wrapper-after">
+                        <input type="hidden" name="objectid" value="#$objectid#" />
+                        <input type="hidden" name="table" value="#$table#" />
+                        <input type="hidden" name="authid" value="#$authid#" />
+                        <input type="submit" name="delete" id="delete" value="#xarML('Delete')#" />
+                    </div>
+                </form>
+            </xar:if>
+        </xar:if>
+    </div>
+</xar:template>

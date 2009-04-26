@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="module" module="base" file="navtabs" />
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Roles Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu" />
+        <h2>Manage #$itemtypename# '#$name#':</h2>
+        <xar:if condition="count($parents) gt 0">
+            <div>
+                <dl class="xar-tabs">
+                    <dt class="help" title="These are the groups that #$name# is a member of">
+                    Parent Groups:</dt>
+                    <xar:set name="prevgroup">""</xar:set>
+                    <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+                        <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+                            <dd>
+                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#"
+                                title="#xarML('Show this group')#">
+                                #xarVarPrepForDisplay($parents[$i]['parentname'])#</a>
+                            </dd>
+                        </xar:if>
+                        <xar:set name="prevgroup">
+                        #xarVarPrepForDisplay($parents[$i]['parentname'])#</xar:set>
+                    </xar:for>
+                </dl>
+            </div>
+        </xar:if>
+        <div>
+            <dl class="xar-tabs">
+                <dt class="help">Actions:</dt>
+                <dd>
+                    <a href="&xar-modurl-roles-admin-display;&amp;id=#$id#">Display</a>
+                </dd>
+                <dd>
+                    <a href="&xar-modurl-roles-admin-modify;&amp;id=#$id#">Modify</a>
+                </dd>
+                <dd class="active">
+                    <a href="&xar-modurl-roles-admin-delete;&amp;id=#$id#">Delete</a>
+                </dd>
+                <dd>
+                    <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$id#">Privileges</a>
+                </dd>
+                <xar:if condition="$ptype eq 1">
+                    <dd>
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$id#">Users</a>
+                    </dd>
+                </xar:if>
+            </dl>
+        </div>
+        <xar:if condition="$frozen">
+            <p>You do not have the privileges to delete #$itemtypename# #$name#</p>
+        <xar:else />
+            <form method="post" action="&xar-modurl-roles-admin-delete;" enctype="application/x-www-form-urlencoded">
+                <h3 class="xar-align-center">Confirm the deletion of #$itemtypename# #$name#</h3>
+                <div class="xar-align-center">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="id" id="id" value="#$id#" />
+                    <input type="hidden" name="confirmation" id="confirmation" value="1" />
+                    <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#" />
+                    <input type="submit" value="#xarML('Delete')#" class="xar-margin-thickright" />
+                    <input type="button" value="#xarML('Cancel')#"
+                    onclick="document.location='&xar-modurl-roles-admin-display;&amp;id=#$id#';"
+                    class="xar-margin-thickleft" />
+                </div>
+            </form>
+        </xar:if>
+    </div>
+</xar:template>

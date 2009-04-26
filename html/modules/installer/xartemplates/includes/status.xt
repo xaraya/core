@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:set name="steptext[1]">'Selecting Language'</xar:set>
+    <xar:set name="steptext[2]">'Agreeing to License'</xar:set>
+    <xar:set name="steptext[3]">'Checking System Settings'</xar:set>
+    <xar:set name="steptext[4]">'Collecting Database Settings'</xar:set>
+    <xar:set name="steptext[5]">'Beginning Initialization'</xar:set>
+    <xar:set name="steptext[6]">'Creating an Administrator'</xar:set>
+    <xar:set name="steptext[7]">'Choosing a Configuration'</xar:set>
+    <xar:set name="steptext[8]">'Choosing Privileges'</xar:set>
+    <div id="status">
+        <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">
+            <p class="complete">#$steptext[$phase]#</p>
+        </xar:for>
+        <p class="active">#$steptext[$active_step]#</p>
+        <xar:for start="$phase = $active_step + 1" test="$phase le 8" iter="$phase++">
+            <p class="greyed">#$steptext[$phase]#</p>
+        </xar:for>
+    </div>
+</xar:template>

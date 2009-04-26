@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="check">'check'</xar:set>
+    <xar:set name="preview">'preview'</xar:set>
+    <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#"
+    id="#$id#" tabindex="#$tabindex#" class="xar-form-textlong" />
+    <xar:if condition="!empty($link)">[ 
+    <a href="#$link#" target="#$preview#">#$check#</a>]</xar:if>
+    <xar:if condition="!empty($invalid)">&#160; 
+    <span class="xar-error">#$invalid#</span></xar:if>
+</xar:template>

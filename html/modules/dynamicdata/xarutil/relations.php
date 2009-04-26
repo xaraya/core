@@ -19,7 +19,7 @@ function dynamicdata_util_relations($args)
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     if(!xarVarFetch('module',    'isset', $module,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',     'isset', $modid,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id',     'isset', $module_id,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype',  'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('objectid',  'isset', $objectid,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',     'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
@@ -34,7 +34,7 @@ function dynamicdata_util_relations($args)
     if(!xarVarFetch('delete',    'isset', $delete,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('what',      'isset', $what,      NULL, XARVAR_DONT_SET)) {return;}
 
-    $data = array('modid' => $modid,
+    $data = array('module_id' => $module_id,
                   'itemtype' => $itemtype,
                   'objectid' => $objectid,
                   'table' => $table,
@@ -131,10 +131,10 @@ function dynamicdata_util_relations($args)
                                           array('table' => $table)));
             return true;
         }
-    } elseif (!empty($modid)) {
+    } elseif (!empty($module_id)) {
         // (try to) get the relationships between this module and others
         $data['relations'] = xarModAPIFunc('dynamicdata','util','getrelations',
-                                           array('modid' => $modid,
+                                           array('module_id' => $module_id,
                                                  'itemtype' => $itemtype));
     }
     if (!isset($data['relations']) || $data['relations'] == false) {

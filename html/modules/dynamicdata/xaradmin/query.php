@@ -167,7 +167,7 @@ function dynamicdata_admin_query($args)
             // (try to) show the "static" properties, corresponding to fields in dedicated
             // tables for this module
                 $static = xarModAPIFunc('dynamicdata','util','getstatic',
-                                        array('modid' => $data['object']->moduleid,
+                                        array('module_id' => $data['object']->moduleid,
                                               'itemtype' => $data['object']->itemtype));
                 $data['jointables'] = array();
                 if (!empty($static)) {

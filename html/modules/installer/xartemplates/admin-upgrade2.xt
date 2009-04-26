@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="active_step">2</xar:set>
+    <div id="install">
+        <xar:template file="upstatus" />
+        <h1>Upgrading your Database</h1>
+        <p>#$content#</p>
+        <xar:if condition="$finishearly ne '1'">
+            <p>Core module database tables have been updated.</p>
+            <form action="upgrade.php" method="post">
+                <p class="center">
+                    <input type="hidden" name="upgrade_phase" id="upgrade_phase" value="3" />
+                    <input type="submit" value="Continue" />
+                </p>
+            </form>
+        </xar:if>
+    </div>
+</xar:template>

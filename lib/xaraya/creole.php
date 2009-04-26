@@ -56,12 +56,20 @@ class xarDB extends Creole
      *
      * @return object database connection object
      */
-    public static function &getConn($index = 0) { return self::$connections[$index]; }
+    public static function &getConn($index = 0) 
+    { 
+      // CHECKME: I've spent almost a day debuggin this when not assigning
+      //          it first to a temporary variable before returning. 
+      // The observed effect was that an exception did not occur when $index
+      // whas 0 (the default case) in $connections and it didn't exist.
+      // I believe this to be a PHP bug
+      $conn = self::$connections[$index]; 
+      return $conn;
+    }
 
     // Overridden
     public static function getConnection($dsn, $flags = 0)
     {
-        $conn = null;
         $conn = parent::getConnection($dsn, $flags);
         self::$connections[] =& $conn;
         self::$count++;

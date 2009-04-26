@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-form-input-wrapper-after">
+        <xar:if condition="$showlogout eq 1">
+            <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1"
+            checked="checked" />
+        <xar:else />
+            <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1" />
+        </xar:if>
+        <label for="showlogout#$blockid#"
+        title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
+        Show a logout link in this menu</label>
+    </div>
+    <div class="xar-form-input-wrapper-after">
+        <xar:if condition="$overview eq 1">
+            <input type="checkbox" name="overview" id="overview#$blockid#" value="1" checked="checked" />
+            checked="checked" />
+        <xar:else />
+            <input type="checkbox" name="overview" id="overview#$blockid#" value="1" />
+        </xar:if>
+        <label for="overview#$blockid#"
+        title="#xarML('By checking this box the menu will NOT show the overview page of the module by default.')#">
+        Disable the module overview by default</label>
+    </div>
+    <div class="xar-form-input-wrapper">
+        <label for="menustyle" title="#xarML('How should the menu items be ordered?')#"
+        class="xar-form-label">Sort menuitems:</label>
+        <select name="menustyle" id="menustyle">
+            <xar:foreach in="$sortorder" value="$v" key="$k">
+                <xar:if condition="$k eq $menustyle">
+                    <option value="#$k#" selected="selected">#$v#</option>
+                <xar:else />
+                    <option value="#$k#">#$v#</option>
+                </xar:if>
+            </xar:foreach>
+        </select>
+    </div>
+</xar:template>

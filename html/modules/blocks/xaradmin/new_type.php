@@ -20,14 +20,14 @@ function blocks_admin_new_type()
     if (!xarSecurityCheck('AdminBlock', 0, 'Instance')) {return;}
 
     // Get parameters
-    if (!xarVarFetch('moduleid',   'id:', $modid, xarMod::getRegID('base'), XARVAR_NOT_REQUIRED)) { return; }
+    if (!xarVarFetch('module_id',   'id:', $module_id, xarMod::getRegID('base'), XARVAR_NOT_REQUIRED)) { return; }
     if (!xarVarFetch('blockname', 'str:1:', $blockname, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('submit', 'str:1:', $submit, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('scan', 'str:1:', $scan, '', XARVAR_NOT_REQUIRED)) {return;}
 
     // Initialise the list.
     $type_list = array();
-    $modinfo = xarModGetInfo($modid);
+    $modinfo = xarModGetInfo($module_id);
     if (!empty($scan)) {
         // 'Scan' button pressed.
     
@@ -71,7 +71,7 @@ function blocks_admin_new_type()
         // Nothing submitted yet - return a blank form.
         return array(
             'authid' => xarSecGenAuthKey(),
-            'moduleid' => $modid,
+            'module_id' => $module_id,
             'type_list' => $type_list,
             'blockname' => $blockname
         );

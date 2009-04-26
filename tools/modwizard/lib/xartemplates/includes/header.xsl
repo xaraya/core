@@ -12,7 +12,7 @@
 <xar:if condition="!empty($common)">
 
     <xar:if condition="isset( $common['type']) and $common['type'] = 'admin'">
-    <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Administration - <xsl:value-of select="about/name" /></xar:mlstring></span></div>
+    <div class="xar-mod-head"><span class="xar-mod-title">Administration - <xsl:value-of select="about/name" /></span></div>
     </xar:if>
 
     <div class="xar-mod-body">

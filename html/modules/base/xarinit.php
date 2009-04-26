@@ -154,19 +154,19 @@ function base_init()
      * Set site configuration variables
      ******************************************************************/
     xarConfigVars::set(null, 'Site.BL.CacheTemplates',true);
-    xarConfigVars::set(null, 'Site.BL.CompilerVersion','XAR_BL_USE_XSLT');
+    xarConfigVars::set(null, 'Site.BL.ThemesDirectory','themes');
     xarConfigVars::set(null, 'Site.Core.FixHTMLEntities',true);
     xarConfigVars::set(null, 'Site.Core.TimeZone', 'Etc/UTC');
     xarConfigVars::set(null, 'Site.Core.EnableShortURLsSupport', false);
     // when installing via https, we assume that we want to support that :)
-    $HTTPS = xarServerGetVar('HTTPS');
+    $HTTPS = xarServer::getVar('HTTPS');
     /* jojodee - monitor this fix.
      Localized fix for installer where HTTPS shows incorrectly as being on in
      some environments. Fix is ok as long as we dont access directly
      outside of installer. Consider setting config vars at later point rather than here.
     */
-    $REQ_URI = parse_url(xarServerGetVar('HTTP_REFERER'));
-    // IIS seems to set HTTPS = off for some reason (cfr. xarServerGetProtocol)
+    $REQ_URI = parse_url(xarServer::getVar('HTTP_REFERER'));
+    // IIS seems to set HTTPS = off for some reason (cfr. xarServer::getProtocol)
     if (!empty($HTTPS) && $HTTPS != 'off' && $REQ_URI['scheme'] == 'https') {
         xarConfigVars::set(null, 'Site.Core.EnableSecureServer', true);
     } else {
@@ -188,67 +188,46 @@ function base_init()
 
     // The installer should now set the default locale based on the
     // chosen language, let's make sure that is true
-    if(!xarConfigVars::get(null, 'Site.MLS.DefaultLocale')) {
-        xarConfigVars::set(null, 'Site.MLS.DefaultLocale', 'en_US.utf-8');
-        $allowedLocales = array('en_US.utf-8');
-        xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $allowedLocales);
-    }
+    xarConfigVars::get(null, 'Site.MLS.DefaultLocale','en_US.utf-8');
+    $allowedLocales = array('en_US.utf-8');
+    xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $allowedLocales);
+
     // Minimal information for timezone offset handling (see also Site.Core.TimeZone)
     xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', 0);
 
     $authModules = array('authsystem');
     xarConfigVars::set(null, 'Site.User.AuthenticationModules',$authModules);
 
-    $templateTagsTable = $prefix . '_template_tags';
-    /*********************************************************************
-     * CREATE TABLE xar_template_tags (
-     *  id        integer NOT NULL auto_increment,
-     *  name      varchar(255) NOT NULL default '',
-     *  module_id integer default 0,
-     *  handler   varchar(255) NOT NULL default '',
-     *  data      text,
-     *  PRIMARY KEY (id)
-     * )
-     *********************************************************************/
-    $fields = array('id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
-                    'name'    => array('type'=>'varchar','size'=>255,'null'=>false),
-                    'module_id'   => array('type'=>'integer','null'=>false,'default'=>'0'),
-                    'handler' => array('type'=>'varchar','size'=>255,'null'=>false),
-                    'data'    => array('type'=>'text')
-                    );
-    $query = xarDBCreateTable($templateTagsTable,$fields);
-    $dbconn->Execute($query);
-
     // Start Modules Support
     $systemArgs = array('enableShortURLsSupport' => false,
                         'generateXMLURLs' => false);
     xarMod::init($systemArgs);
 
-    // Initialisation successful
-    return true;
+    // Installation complete; check for upgrades
+    return base_upgrade('2.0');
 }
 
 /**
- * Upgrade the base module from an old version
+ * Upgrade this module from an old version
  *
  * @param oldVersion
  * @returns bool
  */
-function base_upgrade($oldVersion)
+function base_upgrade($oldversion)
 {
-    switch($oldVersion) {
-    case '0.1':
-        // compatability upgrade, nothing to be done
-        break;
+    // Upgrade dependent on old version number
+    switch ($oldversion) {
+        case '2.0':
+        case '2.1':
+      break;
     }
     return true;
 }
 
 /**
- * Delete the base module
+ * Delete this module
  *
- * @param none
- * @return bool false, as this module cannot be removed
+ * @return bool
  */
 function base_delete()
 {

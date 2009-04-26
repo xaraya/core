@@ -29,29 +29,17 @@ function mail_init()
     xarModVars::set('mail', 'encoding', '8bit');
     xarModVars::set('mail', 'html', false);
 
-    // when a module item is created
-    if (!xarModRegisterHook('item', 'create', 'API',
-            'mail', 'admin', 'hookmailcreate')) {
-        return false;
-    }
-    // when a module item is deleted
-    if (!xarModRegisterHook('item', 'delete', 'API',
-            'mail', 'admin', 'hookmaildelete')) {
-        return false;
-    }
-    // when a module item is changed
-    if (!xarModRegisterHook('item', 'update', 'API',
-            'mail', 'admin', 'hookmailchange')) {
-        return false;
-    }
+    xarModRegisterHook('item', 'create', 'API', 'mail', 'admin', 'hookmailcreate');
+    xarModRegisterHook('item', 'delete', 'API', 'mail', 'admin', 'hookmaildelete');
+    xarModRegisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
 
     xarRegisterMask('EditMail','All','mail','All','All','ACCESS_EDIT');
     xarRegisterMask('AddMail','All','mail','All','All','ACCESS_ADD');
     xarRegisterMask('DeleteMail', 'All','mail','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminMail','All','mail','All','All','ACCESS_ADMIN');
 
-    /* This init function brings authsystem to version 0.01 run the upgrades for the rest of the initialisation */
-    return mail_upgrade('0.1');
+    // Installation complete; check for upgrades
+    return mail_upgrade('2.0');
 }
 
 /**
@@ -66,87 +54,34 @@ function mail_activate()
 }
 
 /**
- * Upgrade the mail module from an old version
+ * Upgrade this module from an old version
  *
- * @author John Cox <niceguyeddie@xaraya.com>
- * @access public
- * @param  $oldVersion
- * @return true on success or false on failure
+ * @param oldVersion
+ * @returns bool
  * @todo create separate xar_mail_queue someday
  * @todo allow mail gateway functionality
  */
-function mail_upgrade($oldVersion)
+
+function mail_upgrade($oldversion)
 {
-    switch($oldVersion) {
-    case '0.1':
-    case '0.1.0':
-        // clean up double hook registrations
-        xarModUnregisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
-        xarModRegisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
-        $hookedmodules = xarModAPIFunc('modules', 'admin', 'gethookedmodules',
-                                       array('hookModName' => 'mail'));
-        if (isset($hookedmodules) && is_array($hookedmodules)) {
-            foreach ($hookedmodules as $modname => $value) {
-                foreach ($value as $itemtype => $val) {
-                    xarModAPIFunc('modules','admin','enablehooks',
-                                  array('hookModName' => 'mail',
-                                        'callerModName' => $modname,
-                                        'callerItemType' => $itemtype));
-                }
-            }
-        }
-
-    case '0.1.1':
-        xarModVars::set('mail', 'ShowTemplates', false);
-        xarModVars::set('mail', 'suppresssending', false);
-        xarModVars::set('mail', 'redirectsending', false);
-        xarModVars::set('mail', 'redirectaddress', '');
-
-
-        // From 0.1.1 -> 2.0.0 we added a mod var which holds the admin id for mail, the adminname is obsolete (no free email choice anymore)
-        // Try to find a reasonable admin (the designated one, for example ;-) )
-        $desigAdmin = xarModVars::get('roles','admin');
-        // In current xar this always fails as mail is installed before roles gets initialized
-        // in the off chance someone is actually ugrading, we leave it in.
-        if(!empty($desigAdmin)) {
-            xarModVars::set('mail','admin_outgoing', $desigAdmin);
-        }
-        xarModVars::delete('mail','adminname');
-        xarModVars::delete('mail','adminmail');
-    case'2.0.0':
-        // current version
+    // Upgrade dependent on old version number
+    switch ($oldversion) {
+        case '2.0':
+        case '2.1':
+      break;
     }
     return true;
 }
 
 /**
- * Delete the mail module
+ * Delete this module
  *
- * @author John Cox <niceguyeddie@xaraya.com>
- * @access public
- * @return true on success or false on failure
- * @todo restore the default behaviour prior to 1.0 release
+ * @return bool
  */
 function mail_delete()
 {
-// TODO: delete separate xar_mail_queue table here someday
-    xarModVars::delete('mail', 'server');
-    xarModVars::delete('mail', 'replyto');
-    xarModVars::delete('mail', 'wordwrap');
-    xarModVars::delete('mail', 'priority');
-    xarModVars::delete('mail', 'smtpPort');
-    xarModVars::delete('mail', 'smtpHost');
-    xarModVars::delete('mail', 'encoding');
-    xarModVars::delete('mail', 'ShowTemplates');
-    xarModVars::delete('mail', 'ShowTemplates');
-    xarModVars::delete('mail', 'suppresssending');
-    xarModVars::delete('mail', 'redirectsending');
-    xarModVars::delete('mail', 'redirectaddress');
-    // Remove Masks and Instances
-    xarRemoveMasks('mail');
-    xarRemoveInstances('mail');
-
-    return true;
+  //this module cannot be removed
+  return false;
 }
 
 ?>

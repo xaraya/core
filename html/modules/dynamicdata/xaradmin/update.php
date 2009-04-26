@@ -16,7 +16,7 @@
  * form supplied by xarModFunc('dynamicdata','admin','modify') to update a current item
  *
  * @param int    objectid
- * @param int    modid
+ * @param int    module_id
  * @param int    itemtype
  * @param int    itemid
  * @param string return_url

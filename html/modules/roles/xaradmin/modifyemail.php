@@ -31,7 +31,7 @@ function roles_admin_modifyemail($args)
     $templates = array();
     while (($filename = readdir($dd)) !== false) {
         if (!is_dir($messaginghome . "/" . $filename)) {
-            $pos = strpos($filename,'-message.xd');
+            $pos = strpos($filename,'-message.xt');
             if (!($pos === false)) {
                 $templatename = substr($filename,0,$pos);
                 $templatelabel = ucfirst($templatename);
@@ -70,7 +70,7 @@ function roles_admin_modifyemail($args)
             $messaginghome = sys::varpath() . "/messaging/roles";
             $filebase = $messaginghome . "/" . $data['mailtype'] . "-";
 
-            $filename = $filebase . 'subject.xd';
+            $filename = $filebase . 'subject.xt';
             if (is_writable($filename) && is_writable($messaginghome)) {
                unlink($filename);
                if (!$handle = fopen($filename, 'a')) {
@@ -84,7 +84,7 @@ function roles_admin_modifyemail($args)
                 $msg = 'The messaging template "#(1)" is not writable or it is not allowed to delete files from #(2)';
                 throw new ConfigurationException(array($filename,$messaginghome),$msg);
             }
-            $filename = $filebase . 'message.xd';
+            $filename = $filebase . 'message.xt';
             if (is_writable($filename) && is_writable($messaginghome)) {
                unlink($filename);
                if (!$handle = fopen($filename, 'a')) {

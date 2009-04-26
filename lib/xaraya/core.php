@@ -299,10 +299,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * We deal with users through the sessions subsystem
      *
      */
-    $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID');
-    // fall back to default id 2 during installation (cfr. bootstrap function)
-    // @todo this kind of thing should a.) not be happening and b.) not be done here
-    $anonid = !empty($anonid) ? $anonid : 2;
+    // @todo Assuming a fixed 2 here needs to be reviewed, core is a too low level system to assume this.
+    $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID',2);
     define('_XAR_ID_UNREGISTERED', $anonid);
 
     if ($whatToLoad & XARCORE_SYSTEM_SESSION)
@@ -364,8 +362,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     $systemArgs = array(
         'enableTemplatesCaching' => xarConfigVars::get(null, 'Site.BL.CacheTemplates'),
-        'themesBaseDirectory'    => xarModVars::get('themes', 'themesdirectory'),
-        'defaultThemeDir'        => xarModVars::get('themes','default'),
+        'defaultThemeDir'        => xarModVars::get('themes', 'default','default'),
         'generateXMLURLs'        => true
     );
 
@@ -512,7 +509,7 @@ class xarCore extends Object
     const GENERATION = 2;
     // The actual version information
     const VERSION_NUM = XARCORE_VERSION_REV;
-    const VERSION_ID  = 'Anacreon';
+    const VERSION_ID  = 'Jamaica';
     const VERSION_SUB = 'post rabiem risus';
 
     private static $cacheCollection = array();

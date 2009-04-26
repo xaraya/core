@@ -13,21 +13,6 @@
 **/
 
 /**
- * Wrapper functions to support Xaraya 1 API Server functions
- *
-**/
-function xarServerGetVar($name) { return xarServer::getVar($name); }
-function xarServerGetBaseURI()  { return xarServer::getBaseURI();  }
-function xarServerGetHost()     { return xarServer::getHost();     }
-function xarServerGetProtocol() { return xarServer::getProtocol(); }
-function xarServerGetBaseURL()  { return xarServer::getBaseURL();  }
-function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL) { return xarServer::getCurrentURL($args, $generateXMLURL, $target); }
-function xarRequestGetVar($name, $allowOnlyMethod = NULL) { return xarRequest::getVar($name, $allowOnlyMethod);}
-function xarRequestGetInfo()                              { return xarRequest::getInfo();        }
-function xarRequestIsLocalReferer()                       { return xarRequest::IsLocalReferer(); }
-function xarResponseRedirect($redirectURL)                { return xarResponse::Redirect($redirectURL); }
-
-/**
  * Convenience classes
  *
 **/
@@ -493,8 +478,12 @@ class xarRequest extends Object
      */
     private static function resolveModuleAlias($var)
     {
-        $aliasesMap = xarConfigVars::get(null, 'System.ModuleAliases');
-        return (!empty($aliasesMap[$var])) ? $aliasesMap[$var] : $var;
+        try {
+          $aliasesMap = xarConfigVars::get(null, 'System.ModuleAliases');
+          return $aliasesMap[$var];
+        } catch (VariableNotFoundException $e) {
+          return $var;
+        }
     }
 }
 

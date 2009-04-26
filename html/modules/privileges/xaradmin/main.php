@@ -16,15 +16,14 @@
  */
 function privileges_admin_main()
 {
-
-// Security Check
     if(!xarSecurityCheck('EditPrivilege')) return;
 
-    xarResponse::Redirect(xarModURL('privileges', 'admin', 'viewprivileges'));
-
-    // success
-    return true;
-
+    if (xarModVars::get('modules', 'disableoverview') == 0){
+        return xarTplModule('privileges','admin','overview');
+    } else {
+        xarResponse::Redirect(xarModURL('privileges', 'admin', 'viewprivileges'));
+        return true;
+    }
 }
 
 ?>

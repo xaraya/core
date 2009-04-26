@@ -1,5 +1,7 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:foreach in="$properties" key="$name">
-  <xar:element name="#$properties.$name:name#">#xarVarPrepForDisplay($properties.$name:value)#</xar:element>
-</xar:foreach>
+    <xar:foreach in="$properties" key="$name">
+        <xar:element name="#$properties.$name:name#">
+        #xarVarPrepForDisplay($properties.$name:value)#</xar:element>
+    </xar:foreach>
 </xar:template>

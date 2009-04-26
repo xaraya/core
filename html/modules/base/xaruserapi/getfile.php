@@ -59,13 +59,13 @@ function base_userapi_getfile($args)
         if (substr($url,0,7) != 'http://' && substr($url,0,6) != 'ftp://') {
             $invalid = true;
         }
-        $server = xarServerGetHost();
+        $server = xarServer::getHost();
         if (preg_match("!://($server|localhost|127\.0\.0\.1)(:\d+|)/!",$url)) {
             $islocal = true;
         }
     } elseif (substr($url,0,1) == '/') {
-        $server = xarServerGetHost();
-        $protocol = xarServerGetProtocol();
+        $server = xarServer::getHost();
+        $protocol = xarServer::getProtocol();
         $url = $protocol . '://' . $server . $url;
         $islocal = true;
     } else {
@@ -244,5 +244,4 @@ function base_userapi_getfile($args)
 
     return $content;
 }
-
 ?>

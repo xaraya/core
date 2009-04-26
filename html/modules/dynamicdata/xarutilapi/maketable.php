@@ -44,8 +44,8 @@ function dynamicdata_utilapi_maketable($args)
         if (empty($objectid)) {
             $objectid = null;
         }
-        if (empty($modid)) {
-            $modid = xarMod::getRegID('dynamicdata');
+        if (empty($module_id)) {
+            $module_id = xarMod::getRegID('dynamicdata');
         }
         if (empty($itemtype)) {
             $itemtype = 0;
@@ -55,7 +55,7 @@ function dynamicdata_utilapi_maketable($args)
         }
 
         $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
-                                             'moduleid' => $modid,
+                                             'moduleid' => $module_id,
                                              'itemtype' => $itemtype,
                                              'itemid'   => $itemid,
                                              'allprops' => true));

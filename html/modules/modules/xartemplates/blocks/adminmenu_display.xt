@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="$menustyle eq byname">
+        <p>By Name 
+        <br />#$data#</p>
+    <xar:elseif condition="$menustyle eq bycat" />
+        <p>By Category 
+        <br />#$data#</p>
+    <xar:elseif condition="$menustyle eq byweight" />
+        <p>By Weight 
+        <br />#$data#</p>
+    <xar:elseif condition="$menustyle eq bygroup" />
+        <p>By Group 
+        <br />#$data#</p>
+    <xar:else />
+        <p>By Category 
+        <br />#$data#</p>
+    </xar:if>
+</xar:template>

@@ -22,10 +22,10 @@
     <div style="padding: 1px;" class="xar-norm-outline">
 
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">
-            <p><xar:mlstring>Add your content here</xar:mlstring></p>
+            <p>Add your content here</p>
         </div>
         <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
-            <p><xar:mlstring>Add the content for your module here. I have not worked hard on the layout here assuming this is your part :)</xar:mlstring></p>
+            <p>Add the content for your module here. I have not worked hard on the layout here assuming this is your part :)</p>
         </div>
     </div>
 </div>

@@ -21,8 +21,32 @@
  */
 function authsystem_init()
 {
-    /* This init function brings authsystem to version 0.91; run the upgrades for the rest of the initialisation */
-    return authsystem_upgrade('0.91');
+    //Set the default authmodule if not already set
+    $isdefaultauth = xarModVars::get('roles','defaultauthmodule');
+    if (empty($isdefaultauth)) {
+       xarModVars::get('roles', 'defaultauthmodule', 'authsystem');
+    }
+
+    $dbconn =& xarDB::getConn();
+    $xartable =& xarDB::getTables();
+    $modulesTable = xarDB::getPrefix() .'_modules';
+    $modid = xarModGetIDFromName('authsystem');
+    // update the modversion class and admin capable
+    $query = "UPDATE $modulesTable SET class=?, admin_capable=?
+             WHERE regid = ?";
+    $bindvars = array('Authentication',1,$modid);
+    $result = $dbconn->Execute($query,$bindvars);
+
+    // Create the login block
+    if (!$result) return;
+    //create the blocktype
+    $bid = xarModAPIFunc('blocks','admin','register_block_type',
+           array('modName' => 'authsystem',
+                 'blockType' => 'login'));
+    if (!$bid) return;
+
+    // Installation complete; check for upgrades
+    return authsystem_upgrade('2.0');
 }
 /*
  * We don't have all modules activated at install time
@@ -43,87 +67,36 @@ function authsystem_activate()
     xarModVars::set('authsystem', 'lockouttries', 3);
     xarModVars::set('authsystem', 'uselockout', false);
 
-    return true;
+    // Installation complete; check for upgrades
+    return authsystem_upgrade('2.0');
 }
 
 /**
- * Upgrade the authsystem module from an old version
+ * Upgrade this module from an old version
  *
- * @access public
- * @param oldVersion $
- * @return bool true on success of upgrade
+ * @param oldVersion
+ * @returns bool
  */
-function authsystem_upgrade($oldVersion)
+function authsystem_upgrade($oldversion)
 {
-    /* Upgrade dependent on old version number */
-    switch ($oldVersion) {
-        case '0.91':
-        case '0.91.0':
-
-           //Set the default authmodule if not already set
-           $isdefaultauth = xarModVars::get('roles','defaultauthmodule');
-           if (empty($isdefaultauth)) {
-               xarModVars::get('roles', 'defaultauthmodule', 'authsystem');
-           }
-
-           $dbconn =& xarDB::getConn();
-           $xartable =& xarDB::getTables();
-           $modulesTable = xarDB::getPrefix() .'_modules';
-           $modid = xarMod::getRegID('authsystem');
-           // update the modversion class and admin capable
-           $query = "UPDATE $modulesTable SET class=?, admin_capable=?
-                     WHERE regid = ?";
-           $bindvars = array('Authentication',true,$modid);
-           $result = $dbconn->Execute($query,$bindvars);
-
-           // Create the login block
-           if (!$result) return;
-            //create the blocktype
-            $bid = xarModAPIFunc('blocks','admin','register_block_type',
-                   array('modName' => 'authsystem',
-                         'blockType' => 'login'));
-           if (!$bid) return;
-
-        case '1.0.0': // current version
-
-        break;
-
+    // Upgrade dependent on old version number
+    switch ($oldversion) {
+        case '2.0':
+        case '2.1':
+      break;
     }
-    // Update successful
     return true;
 }
 
 /**
- * Delete the authsystem module
+ * Delete this module
  *
- * @access public
- * @param none $
- * @return bool true on success of deletion
+ * @return bool
  */
 function authsystem_delete()
 {
-    /* Get all available block types for this module */
-    $blocktypes = xarModAPIfunc(
-        'blocks', 'user', 'getallblocktypes',
-        array('module' => 'authsystem')
-    );
-
-    /* Delete block types. */
-    if (is_array($blocktypes) && !empty($blocktypes)) {
-        foreach($blocktypes as $blocktype) {
-            $result = xarModAPIfunc(
-                'blocks', 'admin', 'delete_type', $blocktype
-            );
-        }
-    }
-
-    /* Remove modvars, instances and masks */
-    xarModVars::delete_all('authsystem');
-    xarRemoveMasks('authsystem');
-    xarRemoveInstances('authsystem');
-
-    /* Deletion successful */
-    return true;
+  //this module cannot be removed
+  return false;
 }
 
 ?>

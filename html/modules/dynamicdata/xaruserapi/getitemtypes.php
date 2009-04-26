@@ -23,10 +23,10 @@ function dynamicdata_userapi_getitemtypes($args)
     // Get objects
     $objects = xarModAPIFunc('dynamicdata','user','getobjects');
 
-    $modid = xarMod::getRegID('dynamicdata');
+    $module_id = xarMod::getRegID('dynamicdata');
     foreach ($objects as $id => $object) {
         // skip any object that doesn't belong to dynamicdata itself
-        if ($modid != $object['moduleid']) continue;
+        if ($module_id != $object['moduleid']) continue;
         // skip the "internal" DD objects
         if ($object['objectid'] < 3) continue;
         $itemtypes[$object['itemtype']] = array('label' => xarVarPrepForDisplay($object['label']),

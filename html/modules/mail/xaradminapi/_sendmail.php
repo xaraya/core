@@ -94,7 +94,7 @@ function mail_adminapi__sendmail($args)
             $mail->IsSMTP(); // telling the class to use SMTP
             $mail->Host = xarModVars::get('mail', 'smtpHost'); // SMTP server
             $mail->Port = xarModVars::get('mail', 'smtpPort'); // SMTP Port default 25.
-            $mail->Helo = xarServerGetVar('SERVER_NAME'); // identification string sent to MTA at smtpHost
+            $mail->Helo = xarServer::getVar('SERVER_NAME'); // identification string sent to MTA at smtpHost
 
             // the smtp server might require authentication
             if (xarModVars::get('mail', 'smtpAuth')) {

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Roles Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>Send notification</h2>
+        <p>This page allows you to send a notification to the changed user(s).</p>
+        <form name="updatestate" action="&xar-modurl-roles-admin-updatestate;" method="post" enctype="application/x-www-form-urlencoded">
+            <table border="0" cellpadding="2" cellspacing="2">
+                <tr>
+                    <td colspan="2">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                        <input type="hidden" name="updatephase" id="updatephase" value="notify" />
+                        <input type="hidden" name="groupid" id="groupid" value="#$groupid#" />
+                        <input type="hidden" name="state" id="state" value="#$state#" />
+                        <input type="hidden" name="status" id="status" value="#$status#" />
+                        <input type="hidden" name="ids" id="ids" value="#$ids#" />
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;phase=#$state#&amp;id=#$groupid#">
+                        Click here if you don't want to send any notification</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="subject">Email Title</label>
+                    </td>
+                    <td>
+                        <input type="text" name="subject" id="subject" value="#$subject#" size="35" maxlength="100" />
+                        maxlength="100" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="message">Email Body</label>
+                    </td>
+                    <td>
+                        <textarea name="message" id="message" rows="20" cols="80" tabindex="1">
+                        #$message#</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="xar-align-center">
+                        <input type="submit" value="Send Notification(s)" tabindex="9" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</xar:template>

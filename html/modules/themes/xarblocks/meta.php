@@ -126,7 +126,7 @@ function themes_metablock_display($blockinfo)
     $meta['activepageatom'] = xarServer::getCurrentURL(array('theme' => 'atom'));
     $meta['activepageprint'] = xarServer::getCurrentURL(array('theme' => 'print'));
 
-    $meta['baseurl'] = xarServerGetBaseUrl();
+    $meta['baseurl'] = xarServer::getBaseURL();
     if (isset($vars['copyrightpage'])){
         $meta['copyrightpage'] = $vars['copyrightpage'];
     } else {

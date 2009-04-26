@@ -27,7 +27,7 @@
         </colgroup>
 
         <tr>
-            <td><label for="itemsperpage"><xar:mlstring>Item's per page</xar:mlstring></label></td>
+            <td><label for="itemsperpage">Item's per page</label></td>
             <td>
                 <xsl:element name="xar:data-input" xml:space="default">
                     <xsl:attribute name="size">3</xsl:attribute>

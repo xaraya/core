@@ -1,0 +1,43 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">
+            <xar:if condition="xarModVars::get('dynamicdata','useModuleAlias')">
+                <xar:var scope="module" module="dynamicdata" name="aliasname" />
+            <xar:else />
+                DynamicData Administration
+            </xar:if>
+        </span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>            
+            Modify Configuration            
+        </h2>
+
+        <form method="post" action="#xarModURL('dynamicdata','admin','modifymoduleconfig')#" enctype="application/x-www-form-urlencoded">
+            <h3>                
+                General Options                
+            </h3>
+            <xar:template file="display" module="base" subdata="array('modulename' => 'dynamicdata')" />
+            <fieldset>
+                <legend>                    
+                    Defaults                    
+                </legend>
+                <xar:template file="defaults" />
+            </fieldset>
+            <fieldset>
+                <legend>                    
+                    Display                    
+                </legend>
+                <xar:template file="display" />
+            </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="phase" id="phase" value="update" />
+                    <input type="submit" value="#xarML('Update Configuration')#" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</xar:template>

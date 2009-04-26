@@ -78,7 +78,7 @@ function base_adminmenublock_display($blockinfo)
 
     // which module is loaded atm?
     // we need it's name, type and function - dealing only with admin type mods, aren't we?
-    list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();
+    list($thismodname, $thismodtype, $thisfuncname) = xarRequest::getInfo();
 
     // SETTING 1: Show a logout link in the block?
     $showlogout = false;

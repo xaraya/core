@@ -87,6 +87,7 @@ function xarConfigGetVar($name)         { return xarConfigVars::get(null, $name)
 
 sys::import('xaraya.variables.module');
 sys::import('xaraya.variables.moduser');
+
 /**
  * Wrapper functions to support Xaraya 1 API for modvars and moduservars
 **/
@@ -102,5 +103,35 @@ function xarModSetUserVar($modName, $name, $value, $id=NULL)        {   return x
 function xarMakePrivilegeRoot($privilege)        {   return true; }
 function xarMakeRoleRoot($name) { return true; }
 
+/**
+ * Wrapper functions to support Xaraya 1 API Server functions
+ *
+**/
+function xarServerGetVar($name) { return xarServer::getVar($name); }
+function xarServerGetBaseURI()  { return xarServer::getBaseURI();  }
+function xarServerGetHost()     { return xarServer::getHost();     }
+function xarServerGetProtocol() { return xarServer::getProtocol(); }
+function xarServerGetBaseURL()  { return xarServer::getBaseURL();  }
+function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL) { return xarServer::getCurrentURL($args, $generateXMLURL, $target); }
+function xarRequestGetVar($name, $allowOnlyMethod = NULL) { return xarRequest::getVar($name, $allowOnlyMethod);}
+function xarRequestGetInfo()                              { return xarRequest::getInfo();        }
+function xarRequestIsLocalReferer()                       { return xarRequest::IsLocalReferer(); }
+function xarResponseRedirect($redirectURL)                { return xarResponse::Redirect($redirectURL); }
 
+
+/**
+ * Wrapper function to support Xaraya 1 API Database functions
+ *
+**/
+function &xarDBGetConn($index = 0)   { return xarDB::getConn($index);}
+function xarDBGetSystemTablePrefix() { return xarDB::getPrefix(); }
+function xarDBGetSiteTablePrefix()   { return xarDBGetSystemTablePrefix(); }
+function &xarDBGetTables()           { return xarDB::getTables();}
+// Does this work?
+function xarDBLoadTableMaintenanceAPI() { return sys::import('xaraya.tableddl'); }
+function xarDBGetType()              { return xarDB::getType(); }
+function &xarDBNewDataDict(Connection &$dbconn, $mode = 'READONLY') 
+{
+    throw new ApiDeprecationException(array('xarDBNewDataDict','[TO BE DETERMINED]'));
+}
 ?>

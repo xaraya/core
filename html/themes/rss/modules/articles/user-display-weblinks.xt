@@ -1,9 +1,10 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<item>
-<title>#$title#</title>
-<link>#$notes#</link>
-<description>#$summary#</description>
-<author>#$author#</author>
-<PubDate>#xarLocaleFormatUTCDate("%a, %d %b %Y %H:%M:%S GMT",$pubdate)#</PubDate>
-</item>
+    <item>
+        <title>#$title#</title>
+        <link>#$notes#</link>
+        <description>#$summary#</description>
+        <author>#$author#</author>
+        <PubDate>#xarLocaleFormatUTCDate("%a, %d %b %Y %H:%M:%S GMT",$pubdate)#</PubDate>
+    </item>
 </xar:template>

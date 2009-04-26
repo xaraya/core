@@ -52,7 +52,6 @@ function roles_userapi_getdefaultauthdata()
                               'defaultlogoutmodname'  => $defaultauthmodlogout,
                               'defaultloginmodname'   => $defaultauthmodlogin
                               );
-
     return $defaultauthdata;
 }
 

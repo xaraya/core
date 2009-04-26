@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:base-include-javascript module="base" filename="orderitem.js" position="head" />
+    <script type="text/javascript">
+        xar_base_reorder_warn = '#xarML('You must select the block to move.')#';
+    </script>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Blocks Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu" />
+        <h2>Modify Block Group</h2>
+        <form action="#xarModURL('blocks', 'admin', 'update_group')#" method="post" enctype="application/x-www-form-urlencoded" >
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="id" id="id" value="#$group['id']#" />
+            <input type="hidden" name="group_instance_order" id="group_instance_order" value="" />
+            <fieldset>
+                <legend>Group Configuration</legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="group_name"
+                    title="#xarML('Enter the name of the group. This value is used in your theme template to call the block group.')#"
+                    class="xar-form-label">Name:</label>
+                    <input type="text" name="group_name" id="group_name" value="#$group['name']#"
+                    maxlength="255" class="xar-form-textlong" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="group_template"
+                    title="#xarML('If you wish to override the default template you may do so by entering a template name. Otherwise the default.xt template will be used.')#"
+                    class="xar-form-label">Default Template (optional):</label>
+                    <input type="text" name="group_template" id="group_template"
+                    value="#$group['template']#" maxlength="255" class="xar-form-textlong" />
+                </div>
+                <div class="xar-form-input-wrapper xar-clearboth">
+                    <label for="group_instances"
+                    title="#xarML('You may reorder the members in this block group by selecting the block to reorder and then using the up and down arrows to chose the position.')#"
+                    class="xar-form-label">Members:</label>
+                    <xar:if condition="$instance_count gt 0">
+                        <div class="xar-floatleft">
+                            <div class="xar-floatleft">
+                                <button onclick="return xar_base_reorder('group_instances', true, 'group_instance_order');" title="#$moveuplabel#" class="xar-displayblock xar-margin-thickbottom">
+                                    <img src="#$up_arrow_src#" alt="#xarML('Up Arrow')#" />
+                                </button>
+                                <button onclick="return xar_base_reorder('group_instances', false, 'group_instance_order');" title="#$movedownlabel#" class="xar-displayblock xar-margin-thicktop">
+                                    <img src="#$down_arrow_src#" alt="#xarML('Down Arrow')#" />
+                                </button>
+                            </div>
+                            <div class="xar-floatleft xar-margin-thickleft">
+                                <xar:if condition="$instance_count gt 2">
+                                    <xar:set name="list_size">#$instance_count#</xar:set>
+                                <xar:else />
+                                    <xar:set name="list_size">3</xar:set>
+                                </xar:if>
+                                <select name="group_instances" id="group_instances" size="#$instance_count#">
+                                    <xar:loop name="$group['instances']">
+                                        <xar:if condition="empty($loop:item['title'])">
+                                            <option value="#$loop:item['id']#">#$loop:item['name']#</option>
+                                        <xar:else />
+                                            <option value="#$loop:item['id']#">#$loop:item['name']# (#$loop:item['title']#)</option>
+                                        </xar:if>
+                                    </xar:loop>
+                                </select>
+                            </div>
+                        </div>
+                    <xar:else />[ none ]</xar:if>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="submit" value="#xarML('Update Group')#" class="xar-margin-thick" />
+                    class="xar-margin-thick" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</xar:template>

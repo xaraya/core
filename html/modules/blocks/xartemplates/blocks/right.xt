@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if id="title_condition" condition="!empty($title)">
+        <div class="xar-block-head-right">
+            <div class="xar-block-title-right">#$title#</div>
+        </div>
+    </xar:if>
+    <div class="xar-block-body-right">#$content#</div>
+    <div class="xar-block-foot-right"></div>
+</xar:template>

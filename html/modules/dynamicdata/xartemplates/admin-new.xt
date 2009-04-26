@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu" />
+        <h2>Manage - Create New Item in #$object:label#</h2>
+        <xar:template type="module" file="manage-menu" />
+        <xar:if condition="!empty($preview)">
+            <h3>Preview</h3>
+            <xar:data-display object="$object" />
+        </xar:if>
+        <xar:set name="isupload">#$object:upload#</xar:set>
+        <xar:if condition="!empty($isupload)">
+            <xar:set name="enc_type">'multipart/form-data'</xar:set>
+        <xar:else/>
+            <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
+        </xar:if>
+        <form method="post" action="&xar-modurl-dynamicdata-admin-create;" enctype="#$enc_type#">
+            <fieldset>
+                <legend>Item details</legend>
+                <xar:data-form object="$object" />
+            <!-- Remove hooks from DD for now
+                <xar:if condition="!empty($hooks)">
+                    <xar:foreach in="$hooks" key="$module" value="$output">#$output#</xar:foreach>
+                </xar:if>
+            -->
+
+            </fieldset>
+            <fieldset>
+                <div class="xar-align-center">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#" />
+                    value="#$object:objectid#" />
+                    <input type="hidden" name="join" id="join" value="#$object:join#" />
+                    <input type="hidden" name="table" id="table" value="#$object:table#" />
+                    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
+                    <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#" />
+                    <input type="hidden" name="notfresh" id="notfresh" value="true" />
+                    <xar:if condition="!empty($return_url)">
+                <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
+                        value="#$return_url#" />
+              </xar:if>
+              <input type="submit" name="preview" value="#xarML('Preview')#" class="xar-margin-thickright" />
+                    class="xar-margin-thickright" />
+                    <input type="submit" value="#xarML('Create')#" class="xar-margin-thickleft" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</xar:template>

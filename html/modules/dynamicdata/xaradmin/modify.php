@@ -16,7 +16,7 @@
  * wishes to modify a current module item
  *
  * @param int objectid the id of the item to be modified
- * @param int modid the id of the module where the item comes from
+ * @param int module_id the id of the module where the item comes from
  * @param int itemtype the id of the itemtype of the item
  * @param join
  * @param table
@@ -28,7 +28,7 @@ function dynamicdata_admin_modify($args)
 
     if(!xarVarFetch('objectid', 'id',    $objectid,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'isset', $moduleid,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id',    'isset', $module_id,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
@@ -44,7 +44,7 @@ function dynamicdata_admin_modify($args)
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,
-                                         'moduleid' => $moduleid,
+                                         'moduleid' => $module_id,
                                          'itemtype' => $itemtype,
                                          'join'     => $join,
                                          'table'    => $table,
@@ -88,8 +88,8 @@ function dynamicdata_admin_modify($args)
     $hooks = xarModCallHooks('item', 'modify', $args['itemid'], $item, $modinfo['name']);
     $data['hooks'] = $hooks;
 
-    if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xd') ||
-        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xd')) {
+    if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xt') ||
+        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xt')) {
         return xarTplModule($args['tplmodule'],'admin','modify',$data,$args['template']);
     } else {
         return xarTplModule('dynamicdata','admin','modify',$data,$args['template']);

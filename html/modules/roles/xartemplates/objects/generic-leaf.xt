@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <a href="#$leafitemurl#" title="#$leafitemtitle#" style="margin: 0 0.25em 0 0.25em;">
+        <img src="#$leafitemimage#" style="vertical-align: middle;" alt="" />
+    </a>
+</xar:template>

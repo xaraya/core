@@ -198,9 +198,8 @@ function modules_init()
         throw $e;
     }
 
-    // Initialisation successful
-    return true;
-}
+    // Installation complete; check for upgrades
+    return modules_upgrade('2.0');}
 
 /**
  * Activates the modules module
@@ -229,33 +228,26 @@ function modules_activate()
 }
 
 /**
- * Upgrade the modules module from an old version
+ * Upgrade this module from an old version
  *
- * @param oldversion $ the old version to upgrade from
+ * @param oldVersion
  * @returns bool
- * @todo include setting moduservars in next upgrade (2.1)
  */
-function modules_upgrade($oldVersion)
+function modules_upgrade($oldversion)
 {
-    // Get database information
-    $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
-
-    switch($oldVersion) {
-    case '2.3.0':
-        // 1.0 version, add upgrade code to 2.x here
-        // - hooks: removed columns smodule, tmodule in xar_hooks, made them smodid and tmodid
-        // - module states: table removed
-    case '2.4.0':
-        //current version
+    // Upgrade dependent on old version number
+    switch ($oldversion) {
+        case '2.0':
+        case '2.1':
+      break;
     }
     return true;
 }
 
 /**
- * Delete the modules module
+ * Delete this module
  *
- * @returns bool
+ * @return bool
  */
 function modules_delete()
 {

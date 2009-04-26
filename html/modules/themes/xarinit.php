@@ -58,7 +58,7 @@ function themes_init()
     $query = xarDBCreateTable($tables['themes'], $fields);
     $result =& $dbconn->Execute($query);
 
-    xarModVars::set('themes', 'default', 'Xaraya_Classic');
+    xarModVars::set('themes', 'default', 'default');
     xarModVars::set('themes', 'selsort', 'nameasc');
 
     // Make sure we dont miss empty variables (which were not passed thru)
@@ -68,7 +68,6 @@ function themes_init()
     if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
     if (empty($hidecore)) $hidecore = 0;
 
-    xarModVars::set('themes', 'themesdirectory', 'themes');
     xarModVars::set('themes', 'hidecore', $hidecore);
     xarModVars::set('themes', 'selstyle', $selstyle);
     xarModVars::set('themes', 'selfilter', $selfilter);
@@ -90,63 +89,66 @@ function themes_init()
     xarModVars::set('themes', 'adminpagemenu', 0);
 
     xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
+    xarRegisterMask('EditThemes','All','themes','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminTheme','All','themes','All','All','ACCESS_ADMIN');
+    
+    if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
+        return false;
+    }
 
-    // Initialisation successful
-    return themes_upgrade('1.0');
+    if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
+        array('modName' => 'themes', 'blockType' => 'meta'))) return;
+
+    // Ensure the meta blocktype is registered
+    if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))) {
+        if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
+                            array('modName' => 'themes',
+                                  'blockType' => 'meta'))) return;
+    }
+
+    xarModVars::set('themes', 'selclass', 'all');
+    xarModVars::set('themes', 'useicons', false);
+
+    if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
+        return false;
+    }
+
+    if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
+        array('modName' => 'themes', 'blockType' => 'meta'))) return;
+
+    // Ensure the meta blocktype is registered
+    if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))) {
+        if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
+                            array('modName' => 'themes',
+                                  'blockType' => 'meta'))) return;
+    }
+
+    xarModVars::set('themes', 'selclass', 'all');
+    xarModVars::set('themes', 'useicons', false);
+
+    // Installation complete; check for upgrades
+    return themes_upgrade('2.0');
 }
 
 /**
- * Upgrade the themes theme from an old version
+ * Upgrade this module from an old version
  *
- * @param string oldversion the old version to upgrade from
- * @return bool
+ * @param oldVersion
+ * @returns bool
  */
 function themes_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '1.0':
-            if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
-                return false;
-            }
-
-        case '1.1':
-            if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
-                array('modName' => 'themes', 'blockType' => 'meta'))) return;
-
-        case '1.2':
-        case '1.3.0':
-            // Register additional styles tag.
-            // This is for bug 3868 only - available to those that want to use it, but
-            // not a permanent replacement for the additional styles global or corecss.
-
-            // register complete set of css tags is now encapsulated in the module's api function
-            if(!xarModAPIFunc('themes', 'css', 'registercsstags', array())) {
-                return false;
-            }
-
-            // Ensure the meta blocktype is registered
-            if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))) {
-                if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
-                                    array('modName' => 'themes',
-                                          'blockType' => 'meta'))) return;
-            }
-      case '1.7.0':
-
-       xarModVars::set('themes', 'selclass', 'all');
-       xarModVars::set('themes', 'useicons', false);
-
-      case '1.8.0' : //current version
-
+        case '2.0':
+        case '2.1':
       break;
     }
-    // Update successful
     return true;
 }
 
 /**
- * Delete the themes theme
+ * Delete this module
  *
  * @return bool
  */

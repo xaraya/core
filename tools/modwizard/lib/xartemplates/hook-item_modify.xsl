@@ -12,10 +12,10 @@
 
     <div style="clear: both; padding-top: 10px;">
     <span style="float: left; width: 20%; text-align: right;">
-        <span class="help" title="#xarML('Add your help text.')#"><xar:mlstring><xsl:value-of select="about/name" /></xar:mlstring>:</span>
+        <span class="help" title="#xarML('Add your help text.')#"><xsl:value-of select="about/name" />:</span>
     </span>
     <span style="float: right; width: 78%; text-align: left;">
-        <xar:mlstring>No options yet.</xar:mlstring>
+        No options yet.
     </span>
     </div>
 
