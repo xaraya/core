@@ -369,7 +369,6 @@
             if (empty($data['modulelist'])) $data['modulelist'] = '';
 
             $data['modules'] = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
-            
             // Prepare output array
             $c=0;
             if (!empty($data['content'])) {
@@ -445,6 +444,14 @@
 
             $args['content'] = implode("LINESPLIT", $content);
 
+            $modules = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+            sys::import('modules.dynamicdata.class.properties.master');
+            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+            $data['content']['view_access'] = array();
+            foreach ($modules as $module) {
+                $isvalid = $accessproperty->checkInput('access_' . $module['name']);echo $isvalid;
+                $data['content']['view_access'][$module['name']] = $accessproperty->value;
+            }
             $data['content'] = array_merge($data['content'],$args);                   
             return $data;
         }

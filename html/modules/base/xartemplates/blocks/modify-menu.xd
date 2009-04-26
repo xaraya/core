@@ -144,9 +144,8 @@
                         #$module['name']#
                     </td>
                     <td>
-                        <xar:set name="accessname">'access[' . $module['name'] . ']'</xar:set>
-                        <xar:set name="accessid">'access_' . $module['name']</xar:set>
-                        <xar:data-input type="access" name="$accessname" id="$accessid" layout="horizontal" failure="1" />
+                        <xar:set name="accessname">'access_' . $module['name']</xar:set>
+                        <xar:data-input type="access" name="$accessname" layout="horizontal" failure="1" />
                     </td>
                 </tr>
             </xar:foreach>
