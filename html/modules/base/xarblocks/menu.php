@@ -368,6 +368,8 @@
             if (empty($data['displaymodules'])) $data['displaymodules'] = $this->displaymodules;
             if (empty($data['modulelist'])) $data['modulelist'] = '';
 
+            $data['modules'] = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+            
             // Prepare output array
             $c=0;
             if (!empty($data['content'])) {

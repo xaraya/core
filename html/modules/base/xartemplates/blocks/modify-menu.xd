@@ -129,6 +129,29 @@
         </div>
     </div>
 
+        <table class="xar-fullwidth">
+            <tr>
+                <th style="text-align: left">
+                    <xar:mlstring>Module</xar:mlstring>
+                </th>
+                <th style="text-align: left">
+                    <xar:mlstring>Required Access Group or Level</xar:mlstring>
+                </th>
+            </tr>
+            <xar:foreach in="$modules" value="$module">
+                <tr>
+                    <td>
+                        #$module['name']#
+                    </td>
+                    <td>
+                        <xar:set name="accessname">'access[' . $module['name'] . ']'</xar:set>
+                        <xar:set name="accessid">'access_' . $module['name']</xar:set>
+                        <xar:data-input type="access" name="$accessname" id="$accessid" layout="horizontal" failure="1" />
+                    </td>
+                </tr>
+            </xar:foreach>
+        </table>
+
     <p>
         <strong><xar:mlstring>Display Options</xar:mlstring></strong>
     </p>
