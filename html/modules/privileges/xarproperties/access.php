@@ -54,7 +54,11 @@ class AccessProperty extends DataProperty
         $value = $this->getValue();
         if (!isset($data['level'])) $data['level'] = $value['level'];
         if (!isset($data['group'])) $data['group'] = $value['group'];
-        if (!isset($data['failure'])) $data['failure'] = $value['failure'];
+        if (!isset($data['failure'])) {
+            $data['failure'] = $value['failure'];
+        } else {
+            $data['showfailure'] = 1;
+        }
         
         $data['groupoptions'] = $this->getgroupoptions();
         $data['leveloptions'] = $this->getleveloptions();
@@ -69,7 +73,11 @@ class AccessProperty extends DataProperty
         $value = $this->getValue();
         if (!isset($data['level'])) $data['level'] = $value['level'];
         if (!isset($data['group'])) $data['group'] = $value['group'];
-        if (!isset($data['failure'])) $data['failure'] = $value['failure'];
+        if (!isset($data['failure'])) {
+            $data['failure'] = $value['failure'];
+        } else {
+            $data['showfailure'] = 1;
+        }
         
         $data['groupoptions'] = $this->getgroupoptions();
         $data['leveloptions'] = $this->getleveloptions();
