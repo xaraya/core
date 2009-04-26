@@ -140,25 +140,27 @@
     <div class="xar-form-input-wrapper">
         <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link for non-administrative users at the bottom of the menu.')#" class="xar-form-label">
             Display User Logout
-        Display Non-Admin User Logout</label>
+        </label>
         <xar:data-input type="checkbox" name="showlogout" checked="$showlogout" />
     </div>
     <div class="xar-form-input-wrapper">
         <label for="displayprint" title="#xarML('Select if you would like Xaraya to generate a link to your print page at the bottom of the menu.')#" class="xar-form-label">
-        Display Print Link</label>
+            Display Print Link
+        </label>
         <xar:data-input type="checkbox" name="displayprint" checked="$displayprint" />
     </div>
     <div class="xar-form-input-wrapper">
         <label for="displayrss" title="#xarML('Select if you would like Xaraya to generate a link to your RSS at the bottom of the menu.')#" class="xar-form-label">
-        title="#xarML('Select if you would like Xaraya to generate a link to your RSS at the bottom of the menu.')#">
-        Display RSS Link</label>
+            Display RSS Link
+        </label>
         <xar:data-input type="checkbox" name="displayrss" checked="$displayrss" />
     </div>
     <xar:if condition="!empty($displaymodules)">
         <div class="xar-form-input-wrapper">
             <label for="marker"
-            title="#xarML('When Xaraya is generating the menu, we can mark the current page. Use this to configure the marker for that display.')#"
-            class="xar-form-label">Marker:</label>
+            title="#xarML('When Xaraya is generating the menu, we can mark the current page. Use this to configure the marker for that display.')#" class="xar-form-label">
+                Marker:
+            </label>
             <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort" />
         </div>
     </xar:if>
