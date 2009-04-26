@@ -1,32 +1,49 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <table>
-        <tr>
-            <td>
-                <div class="xar-form-input-wrapper">
-                    <xar:set name="propname">$name . '_group'</xar:set>
-                    <label for="#$propname#" title="#xarML('The group the current user must belong to')#" class="xar-form-label">
-                        Required Group Membership:
-                    </label>
-                    <xar:data-input type="grouplist" name="$propname" options="$groupoptions" value="$group" />
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <xar:set name="propname">$name . '_level'</xar:set>
-                    <label for="#$propname#" title="#xarML('The access level the current user must have')#" class="xar-form-label">
-                        Required Access Level:
-                    </label>
-                    <xar:data-input type="dropdown" name="$propname" options="$leveloptions" value="$level" />&#160;
-                    (applies if <em>No requirement</em> is chosen above)
-                </div>
-                <div class="xar-form-input-wrapper">
+    <xar:if condition="$layout eq 'horizontal'">
+        <xar:set name="propname">$name . '_group'</xar:set>
+        <xar:data-input type="grouplist" name="$propname" options="$groupoptions" value="$group" />
+        <xar:set name="propname">$name . '_level'</xar:set>
+        <xar:data-input type="dropdown" name="$propname" options="$leveloptions" value="$level" />
+        <xar:set name="propname">$name . '_failure'</xar:set>
+        <xar:if condition="!isset($showfailure)">
+            <xar:data-input type="radio" name="$propname" options="$failureoptions" value="$failure" />
+        <xar:else />
+            <xar:data-input type="radio" name="$propname" options="$failureoptions" value="$failure" hidden="hidden"/>
+        </xar:if>
+    <xar:else />
+        <table>
+            <tr>
+                <td>
+                    <div class="xar-form-input-wrapper">
+                        <xar:set name="propname">$name . '_group'</xar:set>
+                        <label for="#$propname#" title="#xarML('The group the current user must belong to')#" class="xar-form-label">
+                            Required Group Membership:
+                        </label>
+                        <xar:data-input type="grouplist" name="$propname" options="$groupoptions" value="$group" />
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <xar:set name="propname">$name . '_level'</xar:set>
+                        <label for="#$propname#" title="#xarML('The access level the current user must have')#" class="xar-form-label">
+                            Required Access Level:
+                        </label>
+                        <xar:data-input type="dropdown" name="$propname" options="$leveloptions" value="$level" />&#160;
+                        (applies if <em>No requirement</em> is chosen above)
+                    </div>
                     <xar:set name="propname">$name . '_failure'</xar:set>
-                    <label for="#$propname#" title="#xarML('What happens when the security check fails')#" class="xar-form-label">
-                        Behavior on Failure:
-                    </label>
-                    <xar:data-input type="radio" name="$propname" options="$failureoptions" value="$failure" />
-                </div>
-            </td>
-        </tr>
-    </table>
+                    <xar:if condition="!isset($showfailure)">
+                        <div class="xar-form-input-wrapper">
+                            <label for="#$propname#" title="#xarML('What happens when the security check fails')#" class="xar-form-label">
+                                Behavior on Failure:
+                            </label>
+                            <xar:data-input type="radio" name="$propname" options="$failureoptions" value="$failure" />
+                        </div>
+                    <xar:else />
+                        <xar:data-input type="radio" name="$propname" options="$failureoptions" value="$failure" hidden="hidden"/>
+                    </xar:if>
+                </td>
+            </tr>
+        </table>
+    </xar:if>
     <xar:template file="dataproperty_additions" module="base" />
 </xar:template>
