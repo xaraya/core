@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE blocklayout PUBLIC "-//XAR//DTD BL 1.0 Strict//EN" "http://xaraya.com/bl1/DTD/bl1-strict.dtd">
+<?xar type="page"?>
+<xar:blocklayout version="1.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>#$tpl:pageTitle#</title>
+    <meta name="ROBOTS" content="NOINDEX,NOFOLLOW" />
+    <meta name="resource-type" content="document" />
+    <meta http-equiv="expires" content="0" />
+    <meta name="generator" content="Xaraya; - http://www.xaraya.com" />
+    <meta name="rating" content="General" />
+    <link rel="stylesheet" type="text/css" href="themes/installer/style/style.css" />
+    <link rel="stylesheet" type="text/css" href="modules/base/xarstyles/xarcore-xhtml1-strict.css" />
+</head>
+<body>
+    <xar:set name="isupgrade">#xarVarGetCached('Upgrade', 'upgrading')#</xar:set>
+    <div id="header">
+        <div id="header_logo">
+            <div id="head_link">Xaraya</div>
+            <div id="header_content_wrap">
+                <div id="header_content">
+                    <div id="header_tlcorner"><div id="header_trcorner">&#160;</div></div>
+
+                    <div id="header_contentcore">
+                        <xar:set name="context">basename(xarServer::getVar('SCRIPT_NAME'))</xar:set>
+                        <xar:if condition="$context eq 'install.php'">
+                            <h1>Xaraya Installer</h1>
+                            <p>
+                                <xar:mlstring>This script will install the Xaraya database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the <a href="http://www.xaraya.com/index.php/xarbb">support forums</a> or live IRC support for help.</xar:mlstring>
+                            </p>
+                        <xar:else />
+                            <h1>Xaraya Upgrade</h1>
+                            <p>
+                                <xar:mlstring>This script will upgrade the Xaraya database and adjust the settings for your new version of Xaraya. This process will take approximately five (5) minutes.   If you need assistance at any point, visit the <a href="http://www.xaraya.com/index.php/xarbb">support forums</a> or live IRC support for help.</xar:mlstring>
+                            </p>
+                        </xar:if>
+                    </div>
+                    <div id="header_blcorner"><div id="header_brcorner">&#160;</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="navbar">
+        <div id="navbar_inner">
+            <ul id="navbar_core">
+                <li class="navbar-item">
+                    <a href="http://www.xaraya.com/index.php/xarbb"><xar:mlstring>Support Forums</xar:mlstring></a>
+                </li>
+                <li class="navbar-item">
+                    <a href="news://news.xaraya.com"><xar:mlstring>Newsgroups</xar:mlstring></a>
+                </li>
+                <li class="navbar-item">
+                    <a href="irc://irc.xaraya.com"><xar:mlstring>IRC Support</xar:mlstring></a>
+                </li>
+                <xar:if condition="$isupgrade eq '1'">
+                    <li class="navbar-item">
+                        <a href="http://www.xaraya.com/index.php/documentation/586"><xar:mlstring>Upgrade Guide</xar:mlstring></a>
+                    </li>
+                <xar:else />
+                    <li class="navbar-item">
+                        <a href="http://www.xaraya.com/index.php/documentation/96"><xar:mlstring>Prepare for Install</xar:mlstring></a>
+                    </li>
+                    <li class="navbar-item">
+                        <a href="http://www.xaraya.com/index.php/documentation/97"><xar:mlstring>Install Guide</xar:mlstring></a>
+                    </li>
+                </xar:if>
+            </ul>
+        </div>
+    </div>
+
+    <div id="contentouter">
+        <div id="contentwrap">
+            <div id="contentmain">
+                <div id="contentmain_inner"><div id="contentmain_tlcorner"><div id="contentmain_trcorner">&#160;</div></div>
+                    <div id="contentmain_core">
+                        <xar:module main="true" />
+                    </div>
+                    <div id="contentmain_blcorner"><div id="contentmain_brcorner">&#160;</div></div>
+                </div>
+            </div>
+        </div>
+        <br class="xar-clearboth" />
+    </div>
+</body>
+</html>
+</xar:blocklayout>

@@ -13,9 +13,9 @@
             <fieldset>
                 <legend>View Options</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="selstyle"
-                    title="#xarML('Choose how Block instances are displayed.')#"
-                    class="xar-form-label">Preferred Layout:</label>
+                    <label for="selstyle" title="#xarML('Choose how Block instances are displayed.')#" class="xar-form-label">
+                        Preferred Layout:
+                    </label>
                 <!--
                     Module List Sort and Filter Controls
                 -->
@@ -31,10 +31,10 @@
                 <input type="submit" value="#xarML('Refresh')#" />
             </div>
             <div class="xar-form-input-wrapper">
-                    <label for="filter" title="#xarML('Filter the instances to be shown.')#"
-                    class="xar-form-label">Filter:</label>
-                    <input type="text" id="filter" name="filter" value="#$filter#"
-                    class="xar-form-textmedium" />
+                    <label for="filter" title="#xarML('Filter the instances to be shown.')#" class="xar-form-label">
+                        Filter:
+                    </label>
+                    <input type="text" id="filter" name="filter" value="#$filter#" class="xar-form-textmedium" />
                 </div>
             </fieldset>
             <xar:if condition="$selstyle eq 'compact'">
