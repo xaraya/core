@@ -13,7 +13,7 @@ function mail_adminapi_getqdef($args)
     $qDef = xarModVars::get('mail','queue-definition');
     if($qDef != NULL) {
         // Modvar has a value, fetch the info
-        $qdefInfo = xarModApiFunc('dynamicdata','user','getobjectinfo',array('name' => $qDef));
+        $qdefInfo = DataObjectMaster::getObjectInfo(array('name' => $qDef));
         if(isset($qdefInfo)) return $qdefInfo;
     }
     return false;
