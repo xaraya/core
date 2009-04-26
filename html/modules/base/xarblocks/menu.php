@@ -449,7 +449,7 @@
             $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
             $data['content']['view_access'] = array();
             foreach ($modules as $module) {
-                $isvalid = $accessproperty->checkInput('access_' . $module['name']);echo $isvalid;
+                $isvalid = $accessproperty->checkInput('view_access_' . $module['name']);echo $isvalid;
                 $data['content']['view_access'][$module['name']] = $accessproperty->value;
             }
             $data['content'] = array_merge($data['content'],$args);                   
