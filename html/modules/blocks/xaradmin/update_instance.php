@@ -29,7 +29,7 @@ function blocks_admin_update_instance()
     // TODO: check out where 'block_refresh' is used. Could it be used more effectively?
     // Could the caching be supported in a more consistent way, so individual blocks don't
     // need to handle it themselves?
-    if (!xarVarFetch('block_refresh', 'int:0:', $refresh, '0', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_refresh', 'int:0:1', $refresh, 0, XARVAR_NOT_REQUIRED)) {return;}
 
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) {return;}
