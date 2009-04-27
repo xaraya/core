@@ -46,6 +46,7 @@
                         </dd>
                     </xar:if>
                 </xar:if>
+                <!--
                 <xar:if condition="$tab eq 'masks'">
                     <dd class="active">
                         <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=masks">
@@ -57,6 +58,7 @@
                         Masks</a>
                     </dd>
                 </xar:if>
+                -->
                 <xar:if condition="$tab eq 'testing'">
                     <dd class="active">
                         <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=testing">
@@ -77,22 +79,22 @@
                 <fieldset>
                     <legend>Sitewide Settings</legend>
                     <div class="xar-form-input-wrapper">
-                    <label for="exceptionredirect"
-                    title="#xarML('Show exceptions messages or redirect to a login screen')#"
-                    class="xar-form-label">Exception Redirect:</label>
-                    <xar:set name="checked">
-                        <xar:var scope="module" module="privileges" name="exceptionredirect" />
-                    </xar:set>
-                    <xar:data-input type="checkbox" name="exceptionredirect" id="exceptionredirect"
-                    checked="$checked" />This redirects a non-logged in user to the login screen if
-                    they don't have the proper privileges.</div>
+                        <label for="exceptionredirect" title="#xarML('Show exceptions messages or redirect to a login screen')#" class="xar-form-label">
+                            Exception Redirect:
+                        </label>
+                        <xar:set name="checked">
+                            <xar:var scope="module" module="privileges" name="exceptionredirect" />
+                        </xar:set>
+                        <xar:data-input type="checkbox" name="exceptionredirect" id="exceptionredirect" checked="$checked" />&#160;This redirects a non-logged in user to the login screen if
+                        they don't have the proper privileges.
+                    </div>
                     <div class="xar-form-input-wrapper-after">A logged in user will see the
                     exception error message that can be changed with a base module override
                     template (message-NO_PRIVILEGES.xt).</div>
                     <!--
                     <div class="xar-form-input-wrapper">
                         <label for="inheritdeny" title="#xarML('Enable or disable inheritance of deny privileges')#" class="xar-form-label">
-                        Inherit Deny Privileges:
+                            Inherit Deny Privileges:
                         </label>
                         <xar:set name="checked"><xar:var scope="module" module="privileges" name="inheritdeny"/></xar:set>
                         <xar:data-input type="checkbox" name="inheritdeny" id="inheritdeny" checked="$checked" />
@@ -103,15 +105,15 @@
                 <fieldset>
                     <legend>Last Resort</legend>
                     <div class="xar-form-input-wrapper">
-                    <label for="lastresort"
-                    title="#xarML('Enable or disable an administrator of last resort')#"
-                    class="xar-form-label">Last Resort Admin:</label>
-                    <xar:set name="checked">
-                        <xar:var scope="module" module="privileges" name="lastresort" />
-                    </xar:set>
-                    <xar:data-input type="checkbox" name="lastresort" id="lastresort"
-                    checked="$checked" />Warning: This setting opens a tab to enable you to create
-                    an administrator whose privileges cannot be removed.</div>
+                        <label for="lastresort" title="#xarML('Enable or disable an administrator of last resort')#" class="xar-form-label">
+                            Last Resort Admin:
+                        </label>
+                        <xar:set name="checked">
+                            <xar:var scope="module" module="privileges" name="lastresort" />
+                        </xar:set>
+                        <xar:data-input type="checkbox" name="lastresort" id="lastresort" checked="$checked" />&#160;Warning: This setting opens a tab to enable you to create
+                        an administrator whose privileges cannot be removed.
+                    </div>
                 </fieldset>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
@@ -135,20 +137,20 @@
                     <xar:set name="checked">
                         <xar:var scope="module" module="privileges" name="showrealms" />
                     </xar:set>
-                    <xar:data-input type="checkbox" name="enablerealms" id="enablerealms"
-                    checked="$checked" />Checking this enables the Manage Realms item on the
-                    Privileges menu</div>
+                    <xar:data-input type="checkbox" name="enablerealms" id="enablerealms" checked="$checked" />
+                        &#160;Checking this enables the Manage Realms item on the Privileges menu
+                    </div>
                 </fieldset>
                 <xar:if condition="xarModVars::get('privileges', 'showrealms')">
                     <fieldset>
                         <legend>Realm Privilege Options</legend>
-                        <p class="xar-form-input-wrapper-after xar-padding-endsthick">Security
-                        checks will look for a match on the realm part of any privilege you define,
-                        with the 'realm mask' as defined below.</p>
+                        <p class="xar-form-input-wrapper-after xar-padding-endsthick">
+                            Security checks will look for a match on the realm part of any privilege you define, with the 'realm mask' as defined below.
+                        </p>
                         <div class="xar-form-input-wrapper">
-                            <label for="maskvalue"
-                            title="#xarML('The following choice will be inserted into any mask')#"
-                            class="xar-form-label">Realm Value for Masks</label>
+                            <label for="maskvalue" title="#xarML('The following choice will be inserted into any mask')#" class="xar-form-label">
+                                Realm Value for Masks
+                            </label>
                             <xar:set name="realmoptions">array( array('id' =&gt; 'none', 'name'
                             =&gt; xarML('No Value')), array('id' =&gt; 'domain', 'name' =&gt;
                             xarML('Current Domain')), array('id' =&gt; 'theme', 'name' =&gt;
@@ -161,11 +163,12 @@
                             </div>
                         </div>
                         <div class="xar-form-input-wrapper">
-                        <label for="textvalue" title="#xarML('Text value for realm')#"
-                        class="xar-form-label">Text Value:</label>
-                        <input type="text" name="textvalue" id="textvalue" value="#$textvalue#"
-                        size="50" maxlength="100" class="xar-form-textmedium" />&#160; (only
-                        applies when Text Value option is chosen)</div>
+                            <label for="textvalue" title="#xarML('Text value for realm')#" class="xar-form-label">
+                                Text Value:
+                            </label>
+                            <input type="text" name="textvalue" id="textvalue" value="#$textvalue#" size="50" maxlength="100" class="xar-form-textmedium" />
+                            &#160;(only applies when Text Value option is chosen)
+                        </div>
                         <div class="xar-form-input-wrapper">
                             <label for="maskvalue"
                             title="#xarML('The following choice will be inserted into any mask')#"
