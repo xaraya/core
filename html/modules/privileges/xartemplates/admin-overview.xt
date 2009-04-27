@@ -31,6 +31,24 @@
         <p>
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Privileges &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
         </p>
+        <p>
+            In addition, this module also supports the following configuration options:
+            <ul>
+                <li>
+                    <strong>Exception redirect:</strong>&#160;insufficient access rights usually result in an error message. If this option is checked users that are logged in will be redirected to the login page instead..
+                </li>
+                <li>
+                    <strong>Last resort admin:</strong>&#160;lets you create an emergency user that can be useful in recovering a site if normal users are shut out because privileges have been misconfigured or corrupted. Checking this option will display a link to the page where the last resort admin is created.
+                </li>
+                <li>
+                    <strong>Realms support:</strong>&#160;checking this option opens a page which lets you define the behavior of <em>realms</em> in your privileges, and also an entry on the Privileges menu for creating and managing realms. Realms are used in conjunction with privileges to create different "views" of a site according to which realms users "belong" to. For more information on realms see <a href="http://xaraya.com/index.php/documentation/607">Xaraya Realms</a>.
+                </li>
+                <li>
+                    <strong>Testing settings:</strong>&#160;lets you display debugging information on privleges to certain users. This is useful for testing new privilege situations on running sites. 
+                </li>
+            </ul>
+        </p>
+        
         <p>Clicking on the 
         <strong>View Privileges</strong>link gives you an overview of all the privileges on your
         system. Compound privileges are collapsed, but you can click on them to open them up and
@@ -59,66 +77,9 @@
         combine privileges by using them as elements to create compound privileges, or make new
         privileges of your choosing. There is no limit to the number of privileges you can create
         or their levels of nesting.</p>
-        <h3>Level of Access</h3>
-        <p>When you create a privilege you can assign one of a number of predefined levels of
-        access for that privilege to a module, a component of that module, or an instance (eg an
-        itemtype). A module author will determine how those levels are applied in their module.
-        Generally they are:</p>
-        <ul>
-            <li>
-            <em>None</em>: no access</li>
-            <li>
-            <em>Overview</em>: access to some part of the content, but not full content. For
-            example, in Articles module the overview access will allow viewing of article summaries
-            but not full article display.</li>
-            <li>
-            <em>Read</em>: full read access</li>
-            <li>
-            <em>Comment</em>: allows a user to submit content eg Submit a document, submit a
-            comment</li>
-            <li>
-            <em>Moderate</em>: may vary from module to module but usually allows editing of other
-            users' content</li>
-            <li>
-            <em>Edit</em>: can edit content but not add or delete</li>
-            <li>
-            <em>Add</em>: can add and edit but not delete</li>
-            <li>
-            <em>Delete</em>: can delete content as well as add and edit</li>
-            <li>
-            <em>Admin</em>: full administration access</li>
-        </ul>
-        <p>Remember that you can assign privileges to the 
-        <strong>Myself</strong>role, and those privileges will only apply to a specific user and
-        the content owned or authored by that specific eg they could edit their own articles, or
-        comments but not articles or comments created by others.</p>
-        <h3>
-        <a name="modifyconfig"></a>Privileges Configuration Settings</h3>
-        <h4>
-        <a name="lastresort"></a>
-        <a name="modifyconfig"></a>Last Resort Admin</h4>
-        <p>
-        <strong>Last Resort Administrator</strong>is a special Administrator that lies outside the
-        roles and privileges system in Xaraya. The Last Resort Administrator can always access your
-        site. Creation of a Last Resort administrator is optional by going to 
-        <strong>Privileges - Modify Config</strong>and checking the Last Resort option.</p>
-        <p>You will be prompted for a username for the Last Resort administrator and a password. If
-        you do create a Last Resort administrator be sure to protect the user name and password as
-        this Admin will always be able to access the site irregardless of what happens to the site
-        privileges.</p>
-        <h4>Realms</h4>
-        <p>Realms is a feature new in Xaraya 1.1. By activating Realms you will be prompted to
-        specify a privilege mask that will be by privileges for testing whether a realm is current
-        or not. In addition to the Realm definition, you will also be provided an additional Realms
-        Management function to define realm names for your site. See 
-        <a href="http://xaraya.com/index.php/documentation/607">Xaraya Realms</a>for more
-        information.</p>
 
         <h3>Available Blocks</h3>
         <p>The Privileges module has no blocks.</p>
-
-        <h3>Available Hooks</h3>
-        <p>The Privileges module has no hooks</p>
 
         <h3>Available Dataproperties</h3>
         <ul>
@@ -126,6 +87,46 @@
                 <strong>Privilegestree</strong>:&#160;displays a tree of privileges.
             </li>
         </ul>
+
+        <h3>Available Hooks</h3>
+        <p>The Privileges module has no hooks</p>
+
+        <h3>Access Levels</h3>
+        <p>
+            When you create a privilege that applies to a given module, component and instance, you give it an access level whcih represents the rights a user with the provilege has in the area it applies to. The access levels are:
+            <ul>
+                <li>
+                    <em>None:</em>&#160;no access
+                </li>
+                <li>
+                    <em>Overview:</em>&#160;access to some part of the content, but not full content. This level is often used deciding which items in a list to show.
+                </li>
+                <li>
+                    <em>Read:</em>&#160;full read access
+                </li>
+                <li>
+                    <em>Comment:</em>&#160;allows a user to submit content eg submit a document, submit a
+                    comment
+                </li>
+                <li>
+                    <em>Moderate:</em>&#160;may vary from module to module but usually allows editing of other
+                    users' content
+                </li>
+                <li>
+                    <em>Edit:</em>&#160;can edit content but not add or delete
+                </li>
+                <li>
+                    <em>Add:</em>&#160;can add and edit but not delete
+                </li>
+                <li>
+                    <em>Delete:</em>&#160;can delete content as well as add and edit. This level is also known as <em>Manage</em>, and is usually used to allow full modification of a module's data, without access to its configuration settings.
+                </li>
+                <li>
+                    <em>Admin:</em>&#160;full administration access
+                </li>
+            </ul>.
+            Note that the exact meaning of the access levels will vary somewhat across modules. Module authors are free to define how access levels apply to their module(s).
+        </p>
 
         <!--
         <h3>Further Information</h3>
