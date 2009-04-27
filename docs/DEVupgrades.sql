@@ -684,7 +684,7 @@ ALTER TABLE `xar_block_instances` CHANGE `title` `title`             varchar(254
 ALTER TABLE `xar_block_instances` CHANGE `content` `content`         text NOT NULL;
 ALTER TABLE `xar_block_instances` CHANGE `template` `template`       varchar(254) default NULL;
 ALTER TABLE `xar_block_instances` CHANGE `state` `state`             tinyint unsigned NOT NULL default '2';
-ALTER TABLE `xar_block_instances` CHANGE `refresh` `refresh`         tinyint unsigned NOT NULL default '0';
+ALTER TABLE `xar_block_instances` CHANGE `refresh` `refresh`         bool default '0';
 ALTER TABLE `xar_block_instances` CHANGE `last_update` `last_update` integer unsigned NOT NULL default '0';
 
 ALTER TABLE `xar_block_types` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
