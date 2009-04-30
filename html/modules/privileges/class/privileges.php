@@ -327,6 +327,10 @@ class xarPrivileges extends xarMasks
             $query .= ", " . self::$acltable . " acl
                         WHERE p.id = acl.privilege_id AND
                               pm.parent_id IS NULL ";
+        } elseif ($arg == "unassigned") {
+            $query .= " LEFT JOIN " . self::$acltable . " acl
+                        ON p.id = acl.privilege_id WHERE
+                              pm.parent_id IS NULL AND acl.privilege_id IS NULL ";
         }
         $query .=" AND p.itemtype = ?";
         $query .=" ORDER BY p.name";

@@ -11,9 +11,9 @@
                 <a href="&xar-modurl-privileges-admin-viewprivileges;&amp;show=assigned">
                 Assigned</a>
             </dd>
-            <xar:set name="tabclass">$show=='all'?'active':''</xar:set>
+            <xar:set name="tabclass">$show=='unassigned'?'active':''</xar:set>
             <dd class="#$tabclass#">
-                <a href="&xar-modurl-privileges-admin-viewprivileges;&amp;show=all">All</a>
+                <a href="&xar-modurl-privileges-admin-viewprivileges;&amp;show=unassigned">Unassigned</a>
             </dd>
         </dl>
     </div>
