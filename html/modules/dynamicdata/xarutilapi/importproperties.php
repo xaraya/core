@@ -54,7 +54,8 @@ function dynamicdata_utilapi_importproperties($args)
             if (!empty($itemtype)) {
                 $name .= '_' . $itemtype;
             }
-            $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
+            sys::import('modules.dynamicdata.class.objects.master');
+            $objectid = DataObjectMaster::createObject(
                                       array('moduleid' => $module_id,
                                             'itemtype' => $itemtype,
                                             'name' => $name,
