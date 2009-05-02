@@ -74,8 +74,8 @@
         public function update(Array $data=array())
         {
             $data = parent::update($data);
-           if (!xarVarFetch('expire', 'str:1', $vars['expire'], 0, XARVAR_NOT_REQUIRED)) {return;}
-           if (!xarVarFetch('html_content', 'str:1', $vars['html_content'], '', XARVAR_NOT_REQUIRED)) {return;}
+            if (!xarVarFetch('expire', 'str:1', $vars['expire'], 0, XARVAR_NOT_REQUIRED)) {return;}
+            if (!xarVarFetch('html_content', 'str:1', $vars['html_content'], '', XARVAR_NOT_REQUIRED)) {return;}
 
             // Defaults
             if ($vars['expire'] != 0) {

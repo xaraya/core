@@ -49,35 +49,20 @@
             </ul>
         </p>
         
-        <p>Clicking on the 
-        <strong>View Privileges</strong>link gives you an overview of all the privileges on your
-        system. Compound privileges are collapsed, but you can click on them to open them up and
-        view their components.</p>
-        <p>When adding or modifying a privilege, you can define it to have its own access rights,
-        or simply to serve as a container for other privileges.</p>
-        <p>Xaraya comes preconfigured with a minimal set of privileges that are loaded when you run
-        the installer. These will vary according to the configuration you chose. Examples are:</p>
-        <ul>
-            <li>
-            <strong>Administration</strong>: a privilege that gives a role complete access to all
-            resources on the site. At installation this privilege is assigned to the role
-            Administrators and is inherited by the user Admin.</li>
-            <li>
-            <strong>CasualAccess</strong>: this is the privilege assigned to unregistered users on
-            the site. It is initially defined to allow viewing access of the front page, as well as
-            access to the login block.</li>
-            <li>
-            <strong>GeneralLock</strong>: a privilege that restricts access to certain basic roles
-            and privileges the system requires, such as the default admin. This is to avoid
-            inadvertent removal.</li>
-        </ul>
-        <p>All privileges in the system can be changed or removed but it is recommended you do not
-        remove the default and Locked privileges unless you are sure you understand what you are
-        doing (for those protected by GeneralLock above this takes a bit more doing). You can also
-        combine privileges by using them as elements to create compound privileges, or make new
-        privileges of your choosing. There is no limit to the number of privileges you can create
-        or their levels of nesting.</p>
+        <p>
+            Clicking on the <strong>View Privileges</strong>link in the Admin menu gives you an overview of all the privileges on your
+            system, both those assigned to roles and those unassigned. Compound privileges are collapsed, but you can click on them to open them up and view their components.
+        </p>
+        <p>
+            Clicking on the <strong>Add Privilege</strong>link in the Admin menu lets you create a new unassigned privilege.When adding or modifying a privilege, you can define it to have its own access rights, or simply to serve as a container for other privileges.
+        </p>
+        <p>
+            Clicking on the <strong>Assign Privileges</strong>link in the Admin menu lets you assign existing privileges to existing users and groups..
+        </p>
 
+        <p>
+            Clicking on the <strong>Manage Realms</strong>link in the Admin menu lets create and manage realms. This menu itme is available only if realms support is active (see above).
+        </p>
         <h3>Available Blocks</h3>
         <p>The Privileges module has no blocks.</p>
 
@@ -91,7 +76,16 @@
         <h3>Available Hooks</h3>
         <p>The Privileges module has no hooks</p>
 
-        <h3>Access Levels</h3>
+        <h3>Concepts</h3>
+        <h4>Masks</h4>
+        <p>
+            Masks are the "barriers to entry" that restrict access to code and data. The are created during the installation of Xaraya, or whenever a new module is added. Masks are deployed in <em>security checks</em> throughout the system. A security check compares the current user's privileges against its mask, and decides whether to grant access or not.
+        </p>
+        <h4>Privileges</h4>
+        <p>
+            Privileges grant certain acess rights to the users or groups they are assigned to. Most modules and Xaray itself come with a set of predefined privileges that can be used, but site administrators can create. modify and assign new privileges as required. You can also combine privileges by using them as elements to create compound privileges. There is no limit to the number of privileges you can create or their levels of nesting.
+        </p>
+        <h4>Access Levels</h4>
         <p>
             When you create a privilege that applies to a given module, component and instance, you give it an access level whcih represents the rights a user with the provilege has in the area it applies to. The access levels are:
             <ul>
@@ -127,6 +121,27 @@
             </ul>.
             Note that the exact meaning of the access levels will vary somewhat across modules. Module authors are free to define how access levels apply to their module(s).
         </p>
+        <h4>Predefined Privileges</h4>
+        <p>
+             Xaraya comes preconfigured with a minimal set of privileges that are loaded when you run the installer. These will vary according to the configuration you chose. Examples are:
+        </p>
+        <ul>
+            <li>
+                <strong>Administration:</strong> a privilege that gives a role complete access to all
+                resources on the site. At installation this privilege is assigned to the role Administrators group and is inherited by the default site administrator (known as <em>admin</em>).
+            </li>
+            <li>
+                <strong>CasualAccess:</strong> this is the privilege assigned to unregistered users (known as <em>anonymous</em>) on the site. It is initially defined to allow viewing access of the front page, as well as
+                access to the login block.
+            </li>
+            <li>
+                <strong>GeneralLock:</strong> a privilege that restricts access to certain basic roles and privileges the system requires, such as the default admininstrator. This is to avoid inadvertent removal.
+            </li>
+        </ul>
+        <p>
+            All privileges in the system can be changed or removed but it is recommended you do not remove the default and lock privileges unless you are sure you understand what you are doing.
+        </p>
+
 
         <!--
         <h3>Further Information</h3>
