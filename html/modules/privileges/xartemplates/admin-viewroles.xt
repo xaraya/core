@@ -124,30 +124,19 @@
         </fieldset>
         <fieldset>
             <legend>Current Privileges</legend>
-            <form name="privilegeform" id="privilegeform"
-            action="&xar-modurl-privileges-admin-viewroles;" method="post"
-            enctype="application/x-www-form-urlencoded">
+            <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-viewroles;" method="post" enctype="application/x-www-form-urlencoded">
                 <input type="hidden" name="id" id="id" value="#$id#" />
                 <p>
                     <a href="&xar-modurl-privileges-admin-newprivilege;">Add Privilege</a>
                 </p>
                 <p>Show Privileges that are: 
-                <xar:if condition="$show eq 'assigned'">
-                    <input type="radio" name="show" id="show_assigned" value="assigned"
-                    checked="checked" onclick="this.form.submit();" />
-                    <xar:else />
-                    <input type="radio" name="show" id="show_assigned" value="assigned" onclick="this.form.submit();" />
-                    onclick="this.form.submit();" />
-                </xar:if>
-                <label for="show_assigned">Assigned</label>
-                <xar:if condition="$show eq 'all'">
-                    <input type="radio" name="show" id="show_all" value="all" checked="checked" onclick="this.form.submit();"/>
-                    onclick="this.form.submit();" />
-                <xar:else />
-                    <input type="radio" name="show" id="show_all" value="all" onclick="this.form.submit();" />
-                    onclick="this.form.submit();" />
-                </xar:if>
-                <label for="show_all">All</label></p>
+                <xar:set name="options">
+                    array(
+                        array('id' => 'assigned', 'name' => xarML('Assigned')),
+                        array('id' => 'unassigned', 'name' => xarML('Unassigned')),
+                    )
+                </xar:set>
+                <xar:data-input type="radio" options="$options" value="$show"  onclick="this.form.submit();"/>
             </form>
             <xar:data-input type="privilegestree" show="$show" />
         </fieldset>

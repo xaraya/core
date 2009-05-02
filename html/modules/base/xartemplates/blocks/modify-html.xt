@@ -2,9 +2,9 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-form-input-wrapper">
-        <label for="expire#$blockid#"
-        title="#xarML('Select when the block will expire, if at all.')#" class="xar-form-label">
-        Block Expiration:</label>
+        <label for="expire#$blockid#" title="#xarML('Select when the block will expire, if at all.')#" class="xar-form-label">
+            Block Expiration:
+        </label>
         <xar:set name="expireseconds">$expirein * 3600</xar:set>
         <xar:set name="options">
             array(
@@ -23,14 +23,13 @@
             <label class="xar-form-label">
                 This Block Will Expire:
             </label>
-            #expirein# hours from now.
+            #$expirein# hours from now.
         </div>
     </xar:if>
     <div class="xar-form-input-wrapper">
-        <label for="html_content#$blockid#"
-        title="#xarML('Enter the HTML to display in the block.')#" class="xar-form-label">
-        HTML:</label>
-        <textarea name="html_content" id="html_content#$blockid#" class="xar-form-textarealarge">
-        #xarVarPrepForDisplay($html_content)#</textarea>
+        <label for="html_content#$blockid#" title="#xarML('Enter the HTML to display in the block.')#" class="xar-form-label">
+            HTML:
+        </label>
+        <textarea name="html_content" id="html_content#$blockid#" class="xar-form-textarealarge">#xarVarPrepForDisplay($html_content)#</textarea>
     </div>
 </xar:template>

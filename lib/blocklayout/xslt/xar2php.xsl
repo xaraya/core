@@ -175,7 +175,7 @@
       <xsl:text>'</xsl:text>
       <!-- Escape any quote marks in the text and output -->
       <xsl:call-template name="replace">
-        <xsl:with-param name="source" select="normalize-space($expr)"/>
+        <xsl:with-param name="source" select="$expr"/>
       </xsl:call-template>
       <xsl:text>'</xsl:text>
     </xsl:when>

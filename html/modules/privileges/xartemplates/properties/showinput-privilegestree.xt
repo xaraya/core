@@ -37,7 +37,7 @@
                         <xar:set name="userslink">
                             xarModUrl('privileges','admin','viewroles',array('id'=&gt; $id))
                         </xar:set>
-                        <a href="#$userslink#" title="xarML('Show the Groups/Users this Privilege is assigned to')#">
+                        <a href="#$userslink#" title="#xarML('Show the Groups/Users this Privilege is assigned to')#">
                             <img src="#xarTplGetImage('icons/system-user-groups.png','base')#" />
                         </a>
                         <xar:if condition="$parentid ne 0">
