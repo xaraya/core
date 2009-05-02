@@ -87,7 +87,7 @@
             // which module is loaded atm?
             // we need it's name, type and function - dealing only with user type mods, aren't we?
             // This needs to be deprecated for multi-modules setups later on
-    list($thismodname, $thismodtype, $thisfuncname) = xarRequest::getInfo();
+            list($thismodname, $thismodtype, $thisfuncname) = xarRequest::getInfo();
 
             // Sort Order, Status, Common Labels and Links Display preparation
             $logoutlabel = xarVarPrepForDisplay(xarML('logout'));

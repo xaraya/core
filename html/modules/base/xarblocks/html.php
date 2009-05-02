@@ -83,7 +83,7 @@
                 $vars['expire'] = $vars['expire'] + $now;
             }
 
-            $data['content'] = $vars;
+            $data['content'] = array_merge($data['content'],$vars);                   
             return $data;
         }
     }
