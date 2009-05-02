@@ -51,28 +51,18 @@
                 </li>
             </ul>
         </p>
-        <p>The roles module provides key functions to manage the users and groups on your site:</p>
-        <ul>
-            <li>
-            <strong>View Groups/users:</strong>&#160;a tabbed interface to user and roles listings with
-            a variety of display options. You can also add users from this view, delete or modify
-            users, email groups of users, test their privileges, and view users by various sorting
-            and selection criteria.</li>
-            <li>
-            <strong>Add Group/User:</strong>&#160;A form for creation of a new user or group. If you
-            have hooked Dynamic Data to Roles and created extra properties for your users, these
-            will also be displayed here.</li>
-            <li>
-            <strong>Email Messaging:</strong>&#160;Configure email notifications to users on
-            registration, change of passwords, and account activation including template
-            customization. You can also email groups of users from this view.</li>
-            <li>
-            <strong>Recall/Purge:</strong>&#160;Users or groups that have been deleted can be recalled
-            from this screen or purged for good from the system.</li>
-            <li>
-            <strong>Site Lock:</strong>&#160;Lock your site to registration or login during maintenance
-            or updates.</li>
-        </ul>
+        <p>
+            Clicking on the <strong>Groups &amp; Users</strong>link in the Admin menu a tabbed interface to user and roles listings with a variety of display  options. You can also add users from this view, delete or modify users, email groups of users, test their privileges, and view users by various sorting and selection criteria.
+        </p>
+        <p>
+            Clicking on the <strong>Messaging</strong> link in the Admin menu lets you configure email notifications to users on registration, change of passwords, and account activation, including template customization. You can also email groups of users from this view.
+        </p>
+        <p>
+            Clicking on the <strong>Recall/Purge</strong> link in the Admin menu lets you recover users or groups that have been deleted, or purge them for good from the system.
+        </p>
+        <p>
+            Clicking on the <strong>Site Lock</strong>link in the Admin menu lets you lock your site to registration or login during maintenance or updates.
+        </p>
         
         <h3>Available Blocks</h3>
         <ul>
@@ -131,7 +121,8 @@
             </li>
         </ul>
 
-        <h3>Default Roles on Xaraya Sites</h3>
+        <h3>Concepts</h3>
+        <h4>Default Roles in Xaraya</h4>
         <p>
             The roles on your site are arranged in a tree, at the top of which is a role called Everybody, which represents the "group of all groups" on your site. Every user and every group is a member or descendent of Everybody. The structure of the default roles that are installed with Xaraya is shown below:
         </p>
@@ -145,7 +136,6 @@
             |   |---Admin (user)
             |
             |---Users (group)
-
         </pre>
         <p>
             At installation time you are asked to choose a configuration that affects preinstalled
