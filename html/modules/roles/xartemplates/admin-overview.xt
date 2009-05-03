@@ -52,7 +52,7 @@
             </ul>
         </p>
         <p>
-            Clicking on the <strong>Groups &amp; Users</strong>link in the Admin menu a tabbed interface to user and roles listings with a variety of display  options. You can also add users from this view, delete or modify users, email groups of users, test their privileges, and view users by various sorting and selection criteria.
+            Clicking on the <strong>Groups &amp; Users</strong>link in the Admin menu displays a tabbed interface to roles listings with a variety of display options. You can also add users and groups from this view, delete or modify users, and assign and test their privileges, and view them by various sorting and selection criteria.
         </p>
         <p>
             Clicking on the <strong>Messaging</strong> link in the Admin menu lets you configure email notifications to users on registration, change of passwords, and account activation, including template customization. You can also email groups of users from this view.
