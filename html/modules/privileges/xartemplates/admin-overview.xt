@@ -50,8 +50,7 @@
         </p>
         
         <p>
-            Clicking on the <strong>View Privileges</strong>link in the Admin menu gives you an overview of all the privileges on your
-            system, both those assigned to roles and those unassigned. Compound privileges are collapsed, but you can click on them to open them up and view their components.
+            Clicking on the <strong>View Privileges</strong>link in the Admin menu gives you an overview of all the privileges on your system, both those assigned to roles and those unassigned. Compound privileges are collapsed, but you can click on them to open them up and view their components.
         </p>
         <p>
             Clicking on the <strong>Add Privilege</strong>link in the Admin menu lets you create a new unassigned privilege.When adding or modifying a privilege, you can define it to have its own access rights, or simply to serve as a container for other privileges.
