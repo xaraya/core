@@ -32,6 +32,41 @@
                 <li>
                     <strong>Show templates in emails:</strong> If this option is checked, the names of the templates used in emails will appear in the email texts. This is a debugging aid and should not be checked in production sites.
                 </li>
+                <li>
+                    <strong>HTML options:</strong> lets you define a HTML header and footer for emails sent as HTML..
+                </li>
+                <li>
+                    <strong>Text options:</strong> lets you define settings for emails sent as plain text..
+                </li>
+                <li>
+                    <strong>Sending server options:</strong> lets you define the server for outgoing mail. The choices are:
+                    <ul>
+                        <li>
+                            <em>Sendmail:</em> the Sendmail MTA needs to be installed on your server for this to work..
+                        </li>
+                        <li>
+                            <em>Qmail:</em> the Qmail MTA needs to be installed on your server for this to work..
+                        </li>
+                        <li>
+                            <em>Mail:</em> uses the PHP mail() function to send emails..
+                        </li>
+                        <li>
+                            <em>SMTP server:</em> lets you define your own SMTP server for the Mail module to use...
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Scheduled mails:</strong> lets send emails at predetermined intervals. The Scheduler module must be installed in order to configure this option..
+                </li>
+                <li>
+                    <strong>Filtering options:</strong> lets you filter email texts fro certain strings and replace them with others. This can be used to customize generic email templates for specific purposes.
+                </li>
+                <li>
+                    <strong>Redirect emails:</strong> This debugging option lets you redirect all mail output to a defined email address. CCs and BCCs are suppressed...
+                </li>
+                <li>
+                    <strong>Supress emails:</strong> This debugging option suppresses emails sent from the Mail module. You can use it to test other modules using email without actually sending the mail.
+                </li>
             </ul>
         </p>
         <p>
@@ -44,38 +79,6 @@
             Clicking on the <strong>Notification Templates</strong>link in the Admin menu lets you to customize the notification
             templates that are sent when the Mail module is hooked to another module.
         </p>
-
-        <p>This option allows you to view mail scheduled for sending. Other modules can request
-        that a certain mail be sent no earlier than a specific time. In order to support that, you
-        must install Scheduler. You then need to configure the Mail module to use the 'scheduler'
-        and check if any mails need to be sent e.g. every x hours. Otherwise, those mails will be
-        sent immediately. Please note that if you stop the scheduler or if it isn't triggered,
-        previously scheduled mails will not be sent.</p>
-        <h4>Notification Template</h4>
-        <p>The Mail module can be hooked to other modules (See Included Hooks) to provide
-        notification of changes, updates or deletion of content on your site. The Notification
-        Template provides you with the means to change those templates to suit. There is a separate
-        template for the 'changehook', 'createhook' and 'deletehook' notification.</p>
-        <p>There is also a list of variables provided that you can easily add to your templates for
-        further customization.</p>
-        <h4>Modify Config</h4>
-        <p>There are four sections in the Modify Configuration option.</p>
-            <ul>
-            <li>
-            <strong>Mail Configuration</strong>: default options for email address, email format,
-            reply to and template debug option</li>
-            <li>
-            <strong>HTML Options</strong>: option to use and set html headers and footers for your
-            emails</li>
-            <li>
-            <strong>Text Options</strong>: various options to specify encoding and mail sending
-            method. Depending on your choice of SMTP, Sendmail, Mail or QMail you may get further
-            options to specify. You must ensure your SMTP or Sendmail is configured for use if you
-            choose these options SMTP also has an option for scheduled email.</li>
-            <li>
-            <strong>Filtering</strong>: allows you to specify strings for search and
-            replacement</li>
-        </ul>
 
         <h3>Available Blocks</h3>
         <p>The Mail module has no blocks.</p>
