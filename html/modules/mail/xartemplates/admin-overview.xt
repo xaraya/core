@@ -21,6 +21,20 @@
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Mail &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
         </p>
         <p>
+            In addition, this module also supports the following configuration options:
+            <ul>
+                <li>
+                    <strong>Mail Admin:</strong> lets you define the user that will receive notification emails. This must be a member of the Administrators group. This is also the user whose email address is the reply-to address on the emails Xaraya sends.
+                </li>
+                <li>
+                    <strong>Different reply-to:</strong> lets you define a different reply-to address on the emails Xaraya sends to users.
+                </li>
+                <li>
+                    <strong>Show templates in emails:</strong> If this option is checked, the names of the templates used in emails will appear in the email texts. This is a debugging aid and should not be checked in production sites.
+                </li>
+            </ul>
+        </p>
+        <p>
             Clicking on the <strong>Test Configuration</strong>link in the Admin menu lets you send a test email to an email address of your choice (the default is the site administrator email address entered when Xaraya is installed).
         </p>
         <p>
