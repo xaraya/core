@@ -70,6 +70,7 @@ function roles_userapi_getall($args)
                 $group_list[] = (int) $group['id'];
             }
         }
+        if (empty($group_list)) return array();
     }
 
     $where_clause = array();
