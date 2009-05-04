@@ -20,22 +20,17 @@
         <p>
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Mail &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
         </p>
-        <p>A number of choices are available in the menu:</p>
-        <ul>
-            <li>
-            <strong>Test Configuration</strong>: Test your current mail system configuration
-            settings by sending an email</li>
-            <li>
-            <strong>View Mail Queue</strong>: This option is only available when you have the
-            Scheduler module installed</li>
-            <li>
-            <strong>Notification Template</strong>: Allows you to customize the notification
-            templates that are available.</li>
-            <li>
-            <strong>Modify Configuration</strong>: From this menu option, you can update the
-            necessary configuration options</li>
-        </ul>
-        <h4>View Mail Queue - Scheduling mail</h4>
+        <p>
+            Clicking on the <strong>Test Configuration</strong>link in the Admin menu lets you send a test email to an email address of your choice (the default is the site administrator email address entered when Xaraya is installed).
+        </p>
+        <p>
+            Clicking on the <strong>Queue Management</strong>link in the Admin menu lets you create and manage mail queues in your Xaraya installation.
+        </p>
+        <p>
+            Clicking on the <strong>Notification Templates</strong>link in the Admin menu lets you to customize the notification
+            templates that are sent when the Mail module is hooked to another module.
+        </p>
+
         <p>This option allows you to view mail scheduled for sending. Other modules can request
         that a certain mail be sent no earlier than a specific time. In order to support that, you
         must install Scheduler. You then need to configure the Mail module to use the 'scheduler'
@@ -71,6 +66,9 @@
         <h3>Available Blocks</h3>
         <p>The Mail module has no blocks.</p>
 
+        <h3>Available Dataproperties</h3>
+        <p>The Mail module has no dataproperties</p>
+
         <h3>Available Hooks</h3>
         <ul>
             <li>
@@ -83,9 +81,6 @@
                 <strong>Update Hook</strong>:&#160;lets other modules send an email when an item is updated.
             </li>
         </ul>
-
-        <h3>Available Dataproperties</h3>
-        <p>The Mail module has no dataproperties</p>
 
         <!--
         <h3>Further Information</h3>
