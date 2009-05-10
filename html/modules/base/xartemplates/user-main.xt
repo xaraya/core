@@ -1,19 +1,72 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <![CDATA[
+    <script type="">
+        function showtab (selectedindex, items)
+        {
+            for (i=1;i<=items;i++) {
+                document.getElementById('page-' + i).style.display = "none";
+                document.getElementById('tab-' + i).className = "nothing";
+            }
+            document.getElementById('page-' + selectedindex).style.display = "block";
+            document.getElementById('tab-' + selectedindex).className = "active";
+        }
+    </script>
+    ]]>
+    <xar:style scope="module" module="base" file="navtabs" />
     <div class="xar-mod-head">
         <span class="xar-mod-title">Base Module</span>
     </div>
     <div class="xar-mod-body">
-        <h2>Welcome to Xaraya</h2>
-        <p>Xaraya is now at Production Stable. If you notice any unexpected functionality, please
-        use our bug tracker at 
-        <a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a>. Thank you for your support,
-        and feel free to join our development or user discussions to become involved in our
-        community.</p>
-        <p>For more information on Xaraya, please visit 
-        <a href="http://www.xaraya.com">xaraya.com</a>.</p>
-        <p>This message can be edited by creating an override template (
-        themes/themename/modules/base/user-main.xt ) for the base module.</p>
+
+        <h2>Congratulations!</h2>
+        <p>You have successfully installed a 'release candidate' of Xaraya 2  <em>code-name Jamaica</em>!
+        This message can be edited by creating an override template ( themes/themename/modules/base/user-main.xt ) for the base module.</p>
+                
+        <dl class="xar-tabs">
+            <dd class="active" id="tab-1">
+                <a href="javascript:showtab(1,2)">
+                    Overview
+                </a>
+            </dd>
+            <dd id="tab-2">
+                <a href="javascript:showtab(2,2)">
+                    More Info
+                </a>
+            </dd>
+        </dl>
+
+        <div id="page-1">
+
+        <h3>Highlights of this release</h3>
+        <ul>
+            <li>Rewritten core: faster and lighter</li>
+            <li>Rewritten Blocklayout templating system based on XSLT </li>
+            <li>Enhanced dynamicdata functionality: more consistent and flexible objects and properties for more power and better performance</li>
+        </ul>
+                
+        <h3>Support</h3>
+        <p>In addition to the support is available on the xaraya website, further help can be found at:</p>
+        <ul>
+            <li>Forums - <a href="http://xaraya.com/index.php/xarbb">http://xaraya.com/index.php/xarbb</a></li>
+            <li>IRC - irc.xaraya.com, in the #support channel. Also accessible through <a href="http://xaraya.com/index.php/chat">http://xaraya.com/index.php/chat</a></li>
+            <li>Newsgroup - news.xaraya.com</li>
+            <li>Email - <a href="http://xaraya.com/index.php/sitecontact">http://xaraya.com/index.php/sitecontact</a></li>
+        </ul>
+        <p>If you enjoy Xaraya and want to show your support, you can contact us by any of the above mentioned methods.</p>
+        
+        <h3>Additional Resources</h3>
+        <p>Modules and themes can be downloaded from the Xaraya Monotone repository.</p>
+        <ul>
+            <li>Modules - <a href="http://mt.xaraya.com/download/nightly/modules">http://mt.xaraya.com/download/nightly/modules</a></li>
+            <li>Themes - <a href="http://mt.xaraya.com/download/nightly/themes">http://mt.xaraya.com/download/nightly/themes</a></li>
+        </ul>
+                
+        <p>Bugs can be reported to <a href="http://bugs.xaraya.com/">http://bugs.xaraya.com/</a></p>
+        </div>
+        
+        <div id="page-2" style="display: none">
+        </div>
     </div>
 </xar:template>
