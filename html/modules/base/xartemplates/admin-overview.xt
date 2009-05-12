@@ -91,9 +91,6 @@
             </li>
         </ul>
 
-        <h3>Available Hooks</h3>
-        <p>The Base module has no hooks</p>
-
         <h3>Available Dataproperties</h3>
         <ul>
             <li>
@@ -188,37 +185,28 @@
             </li>
         </ul>
 
-        <h3>Custom Templates and Static Pages</h3>
-        <p>As well as providing a means to provide a custom template for your front page by
-        creating an override for the base user-main.xd template, you can also create further custom
-        'static' pages using base module templates. See the documentation for further
-        information.</p>
-        <h3>System Wide CSS</h3>
-        <p>The system wide default CSS used by all core templates, and for use in module templates
-        is found in the base module's 
-        <code>modules/base/xarstyles</code>directory along with other css used commonly throughout
-        core and modules.</p>
-        <h3>Custom Tags</h3>
-        <p>The Base Module provides a number of custom tags that can be used by theme creators and
-        module developers to incorporate javascript into templates. These include the 
-        <code>&lt;xar:base-render-javascript ... /&gt;, &lt;xar:base-include-javascript ...
-        /&gt;</code>and 
-        <code>&lt;xar:base-trigger-javascript ... /&gt;</code>tags.</p>
-        <p>You can use the javascript tags to include your own javascript or some of the library of
-        javascript functions in the 
-        <code>modules/base/xartemplates/includes</code>directory. See the documentation for more
-        information.</p>
-        <h3>Privilege Masks</h3>
-        <p>You can set privileges for this module based on the following included masks:</p>
-            <ul>
-                <li>ViewBase</li>
-                <li>ReadBase</li>
-                <li>AdminBase</li>
-            <li>ViewBaseBlocks, ReadBaseBlocks, EditBaseBlocks, AddBaseBlocks, DeleteBaseBlocks,
-            AdminBaseBlocks.</li>
-            </ul>
-        <p>See the documentation for further information on privileges, masks and configuring them
-        in your system.</p>
+        <h3>Available Hooks</h3>
+        <p>The Base module has no hooks</p>
+
+        <h3>Concepts</h3>
+        <h4>Custom Templates and Static Pages</h4>
+        <p>
+            As well as providing a means to provide a custom template for your front page by creating an override for the base user-main.xd template, you can also create further custom 'static' pages using base module templates. See the documentation for further information.
+        </p>
+        <h4>System Wide CSS</h4>
+        <p>
+            Xaraya comes with a rich ste of CSS classes that are located in the xarstyles directory of the Base module. These classes are used by the core module templates and are also available to the themes. Individual themes can override or ignore these classes simply by overriding the file modules/base/xarstyles/xarcore-xhtml1-strict.css in the theme.
+        </p>
+        <h4>Custom Tags</h4>
+        <p>
+            The Base Module provides a number of tags that can be used by theme creators and
+            module developers to incorporate javascript into templates. These include notably the <pre>&lt;xar:base-include-javascript .../&gt;</pre> tag, which signals the inclusion of a javascript snippet or file in a template, and the
+            <pre>&lt;xar:base-render-javascript ... /&gt;</pre> which is used to position the javascript snippet or file inclusion on the compiled page when it is sent to the browser.
+        </p>
+        <p>
+            You can use these javascript tags to add javascript files located in the xartemplates/includes directory of your modules to your templates.
+        </p>
+
         <h3>For Developers</h3>
         <p>The Base module contains a number of useful classes and miscellaneous functions
         including:</p>
