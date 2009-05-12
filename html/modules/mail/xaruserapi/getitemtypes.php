@@ -22,7 +22,7 @@ function mail_userapi_getitemtypes($args)
         return $itemtypes;
         throw new Exception('Mail queue definition does not exist');
     }
-    $qdefObjectInfo = xarModApiFunc('dynamicdata','user','getobjectinfo',array('name' => $qdefName));
+    $qdefObjectInfo = DataObjectMaster::getObjectInfo(array('name' => $qdefName));
     if(!$qdefObjectInfo)
         return $itemtypes;
 
