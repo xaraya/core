@@ -41,9 +41,10 @@
         <h3>Available Hooks</h3>
         <p>The Authsystem module has no hooks</p>
 
-        <h3>Related Information</h3>
+        <h3>Concepts</h3>
+        <h4>Authentication modules</h4>
         <p>
-            Xaraya can work with other types of authentication modules such as AuthLDAP, AuthURL, AuthEmail and so on, that are available at www.xaraya.com or from 3rd party providers. You can search for such modules at the <a href="http://www.xaraya.com/index.php?module=release&amp;func=search" target="_blank">Extensions page</a> on www.xaraya.com 
+            An authentication module is used to log users in to a Xaraya site. The Authsystem module used by default in Xaraya authenticates by checking the user name and password given, but this is only one possible way of authentication. Xaraya can work with different types of authentication modules that are available at www.xaraya.com or from 3rd party providers. You can search for such modules at the <a href="http://www.xaraya.com/index.php?module=release&amp;func=search" target="_blank">Extensions page</a> on www.xaraya.com 
         </p>
         <p>
             To have Xaraya recognize an installed authentication module other than the default, go to the Roles module configuration page <strong>Admin Menu &#8594; Roles &#8594; Modify Configuration</strong> and set the authentication module you want to use as the default authentication module.
