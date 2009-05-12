@@ -207,25 +207,21 @@
             You can use these javascript tags to add javascript files located in the xartemplates/includes directory of your modules to your templates.
         </p>
 
-        <h3>For Developers</h3>
-        <p>The Base module contains a number of useful classes and miscellaneous functions
-        including:</p>
-        <ol>
-            <li>RSS Class 
-            <p>The RSS capabilities in Xaraya use 
-            <a href="http://freshmeat.net/projects/phpfeedparser/?topic_id=914">PHP
-            feedParser</a>as their backend. The notes for the feedParser by Reverend Jim are as
-            follows:</p>
-            <p>feedParser was created due to the lack of a good, flexible, class-based RSS feed
-            parser for PHP. It has been built as a class, and currently handles RSS 0.91, RSS 0.92,
-            RSS 0.93, RSS 1.0, and RSS 2.0 feeds. For channels it grabs the title, description,
-            link, and creator. For items it grabs the title, description, link, and date. It also
-            provides a form of the date converted into the local timezone to facilitate
-            chronological sorting of items. The dates are provided in UNIX timestamp format for
-            easy manipulation by other PHP functions.</p></li>
-            <li>Curl Class</li>
-            <li>XML Parser Class</li>
-        </ol>
+        <h3>Special classes</h3>
+        <p>
+            The Base module contains a several useful PHP classes:
+        </p>
+        <ul>
+            <li>
+                <strong>RSS Class:</strong> The RSS capabilities in Xaraya use <a href="http://freshmeat.net/projects/phpfeedparser/?topic_id=914">PHP feedParser</a> written by the Reverend Jim as their backend.
+            </li>
+            <li>
+                <strong>Curl Class:</strong> a conveniet wrapper for the PHP cURL functions, written by Jason Judge.
+            </li>
+        </ul>
+        <p>
+            Note that the classes for XML parsing support in Xaraya 1x have been replace by calls to the XML functions and classes in PHP5.
+        </p>
 
         <!--
         <h3>Further Information</h3>
