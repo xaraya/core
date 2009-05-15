@@ -52,27 +52,12 @@
                 </li>
             </ul>
         </p>
-        <p>The Administration menu allows you to have control over various global aspects on your
-        site and includes:</p>
-            <ol>
-            <li>System Information: Allows you to view your server and php set-up for trouble
-            shooting.</li>
-            <li>Extension Releases: View recently released extensions from the xaraya.com Extension
-            and Release RSS feed.</li>
-            <li>Modify Config: Allows you to change some of the key settings controlling the core
-            behaviour of the site. 
-            <ul>
-                <li>Default module providing display on your site's front page</li>
-                <li>Short URL Master switch</li>
-                <li>Languages, Locales and Security</li>
-                <li>Cookie settings, and other defaults such as WYSIWYG editor</li>
-            </ul></li>
-            </ol>
-        <h4>The Others Tab</h4>
-            <p>
-        <strong>Timezone setting:</strong>Xaraya stores date/times in UTC. This timezone is used to
-        calculate the time shown to users of your site. Note that you can have users choose their
-        own timezone when you allow them to.</p>
+        <p>
+            Clicking on the <strong>System Information</strong>link in the Admin menu lets you see your PHP configuration via the standard phpinfo() function.
+        </p>
+        <p>
+            Clicking on the <strong>Latest Releases</strong>link in the Admin menu lists the 10 latest extension releases from www.xaraya.com.
+        </p>
 
         <h3>Available Blocks</h3>
         <ul>
@@ -199,7 +184,7 @@
         </p>
         <h4>Custom Tags</h4>
         <p>
-            The Base Module provides a number of tags that can be used by theme creators and
+            The Base Module provides several tags that can be used by theme creators and
             module developers to incorporate javascript into templates. These include notably the <pre>&lt;xar:base-include-javascript .../&gt;</pre> tag, which signals the inclusion of a javascript snippet or file in a template, and the
             <pre>&lt;xar:base-render-javascript ... /&gt;</pre> which is used to position the javascript snippet or file inclusion on the compiled page when it is sent to the browser.
         </p>
@@ -207,25 +192,21 @@
             You can use these javascript tags to add javascript files located in the xartemplates/includes directory of your modules to your templates.
         </p>
 
-        <h3>For Developers</h3>
-        <p>The Base module contains a number of useful classes and miscellaneous functions
-        including:</p>
-        <ol>
-            <li>RSS Class 
-            <p>The RSS capabilities in Xaraya use 
-            <a href="http://freshmeat.net/projects/phpfeedparser/?topic_id=914">PHP
-            feedParser</a>as their backend. The notes for the feedParser by Reverend Jim are as
-            follows:</p>
-            <p>feedParser was created due to the lack of a good, flexible, class-based RSS feed
-            parser for PHP. It has been built as a class, and currently handles RSS 0.91, RSS 0.92,
-            RSS 0.93, RSS 1.0, and RSS 2.0 feeds. For channels it grabs the title, description,
-            link, and creator. For items it grabs the title, description, link, and date. It also
-            provides a form of the date converted into the local timezone to facilitate
-            chronological sorting of items. The dates are provided in UNIX timestamp format for
-            easy manipulation by other PHP functions.</p></li>
-            <li>Curl Class</li>
-            <li>XML Parser Class</li>
-        </ol>
+        <h3>Special classes</h3>
+        <p>
+            The Base module contains a several useful PHP classes:
+        </p>
+        <ul>
+            <li>
+                <strong>RSS Class:</strong> The RSS capabilities in Xaraya use <a href="http://freshmeat.net/projects/phpfeedparser/?topic_id=914">PHP feedParser</a> written by the Reverend Jim as their backend.
+            </li>
+            <li>
+                <strong>Curl Class:</strong> a convenient wrapper for the PHP cURL functions, written by Jason Judge.
+            </li>
+        </ul>
+        <p>
+            Note that the classes for XML parsing support in Xaraya 1x have been replace by calls to the XML functions and classes in PHP5.
+        </p>
 
         <!--
         <h3>Further Information</h3>
