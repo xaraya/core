@@ -49,7 +49,7 @@
             Note that the classes for XML parsing support in Xaraya 1x have been replace by calls to the XML functions and classes in PHP5.
         </p>
 
-        <h3>How to use it?</h3>
+        <h3>The Admin interface</h3>
         <p>
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Base &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules:.
             <ul>

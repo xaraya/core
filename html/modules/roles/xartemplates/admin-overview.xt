@@ -75,7 +75,7 @@
             The designated site admin is used in several places in Xaraya for privileged access. It can be thought of as the "root" user of a Xaraya site and is by convention a member of the Administrator's group (although Xaraya places no restriction on which user can be the designated site admin.
         </p>
         
-        <h3>How to use it?</h3>
+        <h3>The Admin interface</h3>
         <p>
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Roles &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
         </p>

@@ -62,7 +62,7 @@
                 Block groups are clusters of blocks on your site's pages. The blocks assigned to a given group are all displayed in the area of a page that group occupies. Xaraya comes pre-configured with block groups created at installation time that include <em>right</em>, <em>left</em>, <em>center</em>, <em>topnav</em>and <em>header</em> block groups. Block group tags are used in theme pages to postion and display each group and its blocks (the name of a group is of no importance and can be changed). A block can be assigned to more than one group and is displayed in each group it is assigned to.
             </p>
 
-            <h3>How to use it?</h3>
+            <h3>The Admin interface</h3>
             <p>
                 As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Blocks &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
             </p>
