@@ -40,11 +40,6 @@
             <p>
                 The Dynamic Data module lets you create and manage custom objects ("dataobjects") on a Xaraya site. Dataobjects hold certain types of information and interact with Xaraya. You can use them to replace or extend objects Xaraya already has available (such as users, privileges, blocks etc.), or to create completely new objects for your site, representing e.g. customers, surveys, publications etc., according to your specific needs. The DynamicData module is a core module within Xaraya and cannot be removed. 
             </p>
-            <p>And no-one says you're limited to existing modules - you could just as easily create
-            whole new objects by defining their properties and telling the Dynamic Data module where
-            their data should be coming from : dedicated module tables, dynamic data fields
-            (auto-generated), some utility module from Xaraya or a user function you'll specify.</p>
-            <p>The starting point for all this is of course the admin interface.</p>
 
             <h3>Concepts</h3>
             <h4>Dataobjects</h4>
@@ -120,6 +115,25 @@
                 </li>
             </ul>
 
+            <!--
+            <h3>Further Information</h3>
+            <p>Further information on the DynamicData module can be found at:</p>
+                <ul>
+                <li>DynamicData Module Extension page at 
+                <a title="#xarML('DynamicData Module - Xaraya Extension 182')#"
+                href="http://www.xaraya.com/index.php/release/182.html">Xaraya Extension and
+                Releases</a>.</li>
+                <li>Related tutorials and documentation on DynamicData module at 
+                <a href="http://www.xaraya.com/index.php/keywords/dynamicdata/"
+                title="#xarML('Related documentation on DynamicData')#">Xaraya Documentation.</a></li>
+            </ul>
+            <p class="xar-sub">
+            <strong>&#160;DynamicData Module - Overview</strong>
+            <br />&#160;Version 1.2.1&#160; 2005-11-03</p>
+            -->
+        </div>
+        
+        <div id="page-2" style="display: none">
             <h3>Using API calls</h3>
                 <ul>
                 <li>Property Types</li>
@@ -142,25 +156,7 @@
             <p>[+ Easter Egg : util meta -&gt; export to XML -&gt; save to file -&gt; util import -&gt;
             access your whole database via DD]</p>
 
-            <!--
-            <h3>Further Information</h3>
-            <p>Further information on the DynamicData module can be found at:</p>
-                <ul>
-                <li>DynamicData Module Extension page at 
-                <a title="#xarML('DynamicData Module - Xaraya Extension 182')#"
-                href="http://www.xaraya.com/index.php/release/182.html">Xaraya Extension and
-                Releases</a>.</li>
-                <li>Related tutorials and documentation on DynamicData module at 
-                <a href="http://www.xaraya.com/index.php/keywords/dynamicdata/"
-                title="#xarML('Related documentation on DynamicData')#">Xaraya Documentation.</a></li>
-            </ul>
-            <p class="xar-sub">
-            <strong>&#160;DynamicData Module - Overview</strong>
-            <br />&#160;Version 1.2.1&#160; 2005-11-03</p>
-            -->
-        </div>
-        
-        <div id="page-2" style="display: none">
+
                 <h3>Using the &lt;xar:data-* ...&gt; tags in your templates</h3>
                 <h4>User view and admin list (for several items)</h4>
                 <p>If you want to get the dynamic properties and values for your items, and include them
