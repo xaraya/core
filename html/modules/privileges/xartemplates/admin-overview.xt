@@ -27,54 +27,6 @@
             sharing the same resources.</li>
         </ul>
 
-        <h3>How to use it?</h3>
-        <p>
-            As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Privileges &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
-        </p>
-        <p>
-            In addition, this module also supports the following configuration options:
-            <ul>
-                <li>
-                    <strong>Exception redirect:</strong>&#160;insufficient access rights usually result in an error message. If this option is checked users that are logged in will be redirected to the login page instead..
-                </li>
-                <li>
-                    <strong>Last resort admin:</strong>&#160;lets you create an emergency user that can be useful in recovering a site if normal users are shut out because privileges have been misconfigured or corrupted. Checking this option will display a link to the page where the last resort admin is created.
-                </li>
-                <li>
-                    <strong>Realms support:</strong>&#160;checking this option opens a page which lets you define the behavior of <em>realms</em> in your privileges, and also an entry on the Privileges menu for creating and managing realms. Realms are used in conjunction with privileges to create different "views" of a site according to which realms users "belong" to. For more information on realms see <a href="http://xaraya.com/index.php/documentation/607">Xaraya Realms</a>.
-                </li>
-                <li>
-                    <strong>Testing settings:</strong>&#160;lets you display debugging information on privleges to certain users. This is useful for testing new privilege situations on running sites. 
-                </li>
-            </ul>
-        </p>
-        
-        <p>
-            Clicking on the <strong>View Privileges</strong>link in the Admin menu gives you an overview of all the privileges on your system, both those assigned to roles and those unassigned. Compound privileges are collapsed, but you can click on them to open them up and view their components.
-        </p>
-        <p>
-            Clicking on the <strong>Add Privilege</strong>link in the Admin menu lets you create a new unassigned privilege.When adding or modifying a privilege, you can define it to have its own access rights, or simply to serve as a container for other privileges.
-        </p>
-        <p>
-            Clicking on the <strong>Assign Privileges</strong>link in the Admin menu lets you assign existing privileges to existing users and groups..
-        </p>
-
-        <p>
-            Clicking on the <strong>Manage Realms</strong>link in the Admin menu lets create and manage realms. This menu itme is available only if realms support is active (see above).
-        </p>
-        <h3>Available Blocks</h3>
-        <p>The Privileges module has no blocks.</p>
-
-        <h3>Available Dataproperties</h3>
-        <ul>
-            <li>
-                <strong>Privilegestree</strong>:&#160;displays a tree of privileges.
-            </li>
-        </ul>
-
-        <h3>Available Hooks</h3>
-        <p>The Privileges module has no hooks</p>
-
         <h3>Concepts</h3>
         <h4>Masks</h4>
         <p>
@@ -141,6 +93,53 @@
             All privileges in the system can be changed or removed but it is recommended you do not remove the default and lock privileges unless you are sure you understand what you are doing.
         </p>
 
+        <h3>How to use it?</h3>
+        <p>
+            As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Privileges &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
+        </p>
+        <p>
+            In addition, this module also supports the following configuration options:
+            <ul>
+                <li>
+                    <strong>Exception redirect:</strong>&#160;insufficient access rights usually result in an error message. If this option is checked users that are logged in will be redirected to the login page instead..
+                </li>
+                <li>
+                    <strong>Last resort admin:</strong>&#160;lets you create an emergency user that can be useful in recovering a site if normal users are shut out because privileges have been misconfigured or corrupted. Checking this option will display a link to the page where the last resort admin is created.
+                </li>
+                <li>
+                    <strong>Realms support:</strong>&#160;checking this option opens a page which lets you define the behavior of <em>realms</em> in your privileges, and also an entry on the Privileges menu for creating and managing realms. Realms are used in conjunction with privileges to create different "views" of a site according to which realms users "belong" to. For more information on realms see <a href="http://xaraya.com/index.php/documentation/607">Xaraya Realms</a>.
+                </li>
+                <li>
+                    <strong>Testing settings:</strong>&#160;lets you display debugging information on privleges to certain users. This is useful for testing new privilege situations on running sites. 
+                </li>
+            </ul>
+        </p>
+        
+        <p>
+            Clicking on the <strong>View Privileges</strong>link in the Admin menu gives you an overview of all the privileges on your system, both those assigned to roles and those unassigned. Compound privileges are collapsed, but you can click on them to open them up and view their components.
+        </p>
+        <p>
+            Clicking on the <strong>Add Privilege</strong>link in the Admin menu lets you create a new unassigned privilege.When adding or modifying a privilege, you can define it to have its own access rights, or simply to serve as a container for other privileges.
+        </p>
+        <p>
+            Clicking on the <strong>Assign Privileges</strong>link in the Admin menu lets you assign existing privileges to existing users and groups..
+        </p>
+
+        <p>
+            Clicking on the <strong>Manage Realms</strong>link in the Admin menu lets create and manage realms. This menu itme is available only if realms support is active (see above).
+        </p>
+        <h3>Available Blocks</h3>
+        <p>The Privileges module has no blocks.</p>
+
+        <h3>Available Dataproperties</h3>
+        <ul>
+            <li>
+                <strong>Privilegestree</strong>:&#160;displays a tree of privileges.
+            </li>
+        </ul>
+
+        <h3>Available Hooks</h3>
+        <p>The Privileges module has no hooks</p>
 
         <!--
         <h3>Further Information</h3>

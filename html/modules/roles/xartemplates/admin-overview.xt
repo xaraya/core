@@ -14,11 +14,57 @@
             The Roles module lets you create and manage roles on your Xaraya site. Roles are
             representations of the site's registered users and the different groups they can belong to. The Roles module is a core module within Xaraya and cannot be removed. 
         </p>
+        
+        <h3>Concepts</h3>
+        <h4>Roles</h4>
         <p>
             Roles represent <em>users</em> and <em>groups of users</em> in Xaraya. Roles can be members of other roles, to any degree. You can, for instance, use roles to represent a company's organization chart, or class enrolements at a university.
         </p>
         <p>
             By assigning privileges to roles, you define what a given role may or may not do on the site. Moreover, roles inherit the privileges of their ancestors, so in assigning a role to a specific group, it automatically has the privileges common to the group. The inherited privileges can be supplemented or constrained by assigning further privileges directly to the role. 
+        </p>
+        <h4>Default Roles in Xaraya</h4>
+        <p>
+            The roles on your site are arranged in a tree, at the top of which is a role called Everybody, which represents the "group of all groups" on your site. Every user and every group is a member or descendent of Everybody. The structure of the default roles that are installed with Xaraya is shown below:
+        </p>
+        <pre>
+            Everybody (group)
+            |
+            |---Anonymous (user)
+            |
+            |---Administrators (group)
+            |   |
+            |   |---Admin (user)
+            |
+            |---Users (group)
+        </pre>
+        <p>
+            At installation time you are asked to choose a configuration that affects preinstalled
+            privileges assigned to the default roles. The privileges can be changed after installation.
+            The default roles and minimum privileges at installation time are.
+        </p>
+        <ul>
+            <li>
+                <strong>Everybody:</strong>&#160;the role containing all other roles. The access privileges are defined by the configuration chosen.
+            </li>
+            <li>
+                <strong>Anonymous:</strong>&#160;a user that represents the unregistered users on your site. The access privileges are defined by the configuration chosen. This role can be initially configured with privileges only to access the front page of the site and the login block.
+            </li>
+            <li>
+                <strong>Administrators:</strong>&#160;a group that has administration privileges. By default it has complete access to the site.
+            </li>
+            <li>
+                <strong>Admin:</strong>&#160;a member of Administrators. This is the Admin role you create with the Xaraya installer. It inherits the privileges of its parent group.
+            </li>
+            <li>
+                <strong>Users:</strong>&#160;a group that normally holds registered users of the site. N.B.: this role does not come preconfigured with any privileges. <em>Its members will not have access to the site until you assign some privileges.</em>
+            </li>
+            <li>
+                <strong>Myself:</strong>&#160;a special role that enables you to create privileges that will apply to the current user's content. For example if you create an "Edit" privilege with the Myself role as the author/creator, then users who have that privilege will be able to edit only their own content.
+            </li>
+        </ul>
+        <p>
+            To reduce the risk of inadvertent damage Xaraya places constraints on how preconfigured roles can be changed or removed. However, you can define as many more roles in the tree as you wish in whatever configuration you choose.
         </p>
         
         <h3>How to use it?</h3>
@@ -121,51 +167,6 @@
             </li>
         </ul>
 
-        <h3>Concepts</h3>
-        <h4>Default Roles in Xaraya</h4>
-        <p>
-            The roles on your site are arranged in a tree, at the top of which is a role called Everybody, which represents the "group of all groups" on your site. Every user and every group is a member or descendent of Everybody. The structure of the default roles that are installed with Xaraya is shown below:
-        </p>
-        <pre>
-            Everybody (group)
-            |
-            |---Anonymous (user)
-            |
-            |---Administrators (group)
-            |   |
-            |   |---Admin (user)
-            |
-            |---Users (group)
-        </pre>
-        <p>
-            At installation time you are asked to choose a configuration that affects preinstalled
-            privileges assigned to the default roles. The privileges can be changed after installation.
-            The default roles and minimum privileges at installation time are.
-        </p>
-        <ul>
-            <li>
-                <strong>Everybody:</strong>&#160;the role containing all other roles. The access privileges are defined by the configuration chosen.
-            </li>
-            <li>
-                <strong>Anonymous:</strong>&#160;a user that represents the unregistered users on your site. The access privileges are defined by the configuration chosen. This role can be initially configured with privileges only to access the front page of the site and the login block.
-            </li>
-            <li>
-                <strong>Administrators:</strong>&#160;a group that has administration privileges. By default it has complete access to the site.
-            </li>
-            <li>
-                <strong>Admin:</strong>&#160;a member of Administrators. This is the Admin role you create with the Xaraya installer. It inherits the privileges of its parent group.
-            </li>
-            <li>
-                <strong>Users:</strong>&#160;a group that normally holds registered users of the site. N.B.: this role does not come preconfigured with any privileges. <em>Its members will not have access to the site until you assign some privileges.</em>
-            </li>
-            <li>
-                <strong>Myself:</strong>&#160;a special role that enables you to create privileges that will apply to the current user's content. For example if you create an "Edit" privilege with the Myself role as the author/creator, then users who have that privilege will be able to edit only their own content.
-            </li>
-        </ul>
-        <p>
-            To reduce the risk of inadvertent damage Xaraya places constraints on how preconfigured roles can be changed or removed. However, you can define as many more roles in the tree as you wish in whatever configuration you choose.
-        </p>
-        
         <!--
         <h3>Further Information</h3>
         <p>Further information on the Roles module can be found at:</p>

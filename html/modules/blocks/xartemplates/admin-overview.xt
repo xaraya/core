@@ -43,6 +43,25 @@
                 Xaraya and cannot be removed.
             </p>
 
+            <h3>Concepts</h3>
+            <h4>Block Types</h4>
+            <p>
+                A block type defines a specific display of content or functionality that you can place on your site. Xaraya modules can provide their own block types. For example the Roles module provides a 'language' block type to create blocks that let the user choose the site's langauge. The Base module provides a 'menu' block type for displaying menus, and so on.
+            </p>
+            <p>
+                A module's block types are available when the module is installed, and removed when it is uninstalled. Block types are managed through the <strong>Block Types</strong>&#160;page, which lists all the block types available in your Xaraya installation and the modules they belong to. 
+            </p>
+
+            <h4>Blocks</h4>
+            <p>
+                A block is an instance of a block type. You can create as many blocks from a given block type as required, each with its own behavior and content (several menu block on the same page, for instance). In general blocks are displayed on a site's pages by assigning them to one or more block group, but a block can also be displayed anywhere on a page by using a block tag (see <a href="http://xaraya.com/documentation/rfcs/rfc0010.html" target="_blank">RFC0010</a>for details about using block and block group tags).
+            </p>
+
+            <h4>Block Groups</h4>
+            <p>
+                Block groups are clusters of blocks on your site's pages. The blocks assigned to a given group are all displayed in the area of a page that group occupies. Xaraya comes pre-configured with block groups created at installation time that include <em>right</em>, <em>left</em>, <em>center</em>, <em>topnav</em>and <em>header</em> block groups. Block group tags are used in theme pages to postion and display each group and its blocks (the name of a group is of no importance and can be changed). A block can be assigned to more than one group and is displayed in each group it is assigned to.
+            </p>
+
             <h3>How to use it?</h3>
             <p>
                 As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Blocks &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
@@ -75,25 +94,6 @@
             </p>
             <p>
                 Clicking on the <strong>Block Groups</strong>link in the Admin menu displays all the defined block groups on your site with links to Edit or Delete options. The page also has a link to the <strong>New Block Group</strong>&#160;page, which presents a simple input screen through which you can add a new block group to your site.
-            </p>
-
-            <h3>Concepts</h3>
-            <h4>Block Types</h4>
-            <p>
-                A block type defines a specific display of content or functionality that you can place on your site. Xaraya modules can provide their own block types. For example the Roles module provides a 'language' block type to create blocks that let the user choose the site's langauge. The Base module provides a 'menu' block type for displaying menus, and so on.
-            </p>
-            <p>
-                A module's block types are available when the module is installed, and removed when it is uninstalled. Block types are managed through the <strong>Block Types</strong>&#160;page, which lists all the block types available in your Xaraya installation and the modules they belong to. 
-            </p>
-
-            <h4>Blocks</h4>
-            <p>
-                A block is an instance of a block type. You can create as many blocks from a given block type as required, each with its own behavior and content (several menu block on the same page, for instance). In general blocks are displayed on a site's pages by assigning them to one or more block group, but a block can also be displayed anywhere on a page by using a block tag (see <a href="http://xaraya.com/documentation/rfcs/rfc0010.html" target="_blank">RFC0010</a>for details about using block and block group tags).
-            </p>
-
-            <h4>Block Groups</h4>
-            <p>
-                Block groups are clusters of blocks on your site's pages. The blocks assigned to a given group are all displayed in the area of a page that group occupies. Xaraya comes pre-configured with block groups created at installation time that include <em>right</em>, <em>left</em>, <em>center</em>, <em>topnav</em>and <em>header</em> block groups. Block group tags are used in theme pages to postion and display each group and its blocks (the name of a group is of no importance and can be changed). A block can be assigned to more than one group and is displayed in each group it is assigned to.
             </p>
 
             <h3>Available Blocks</h3>

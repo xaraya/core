@@ -46,13 +46,33 @@
             (auto-generated), some utility module from Xaraya or a user function you'll specify.</p>
             <p>The starting point for all this is of course the admin interface.</p>
 
+            <h3>Concepts</h3>
+            <h4>Dataobjects</h4>
+            <p>
+                Dataobjects are Xaraya constructs that represent "things with data" in a Xaraya application. These can be real-life objects, such as news articles, projects, surveys, race tracks (depending on your application); or they can be Xaraya objects such as roles or privileges. Representing such diverse things as dataobjects lets you manage them in a consistent, and in may cases use the DynamicData module's own methods to do so. This saves development time and avoids duplication.                
+            </p>
+            <p>
+                Dataobjects have a simple basic structure. Each is given a unique ID, unique name, a label and some configuration settings. What sets one dataobject apart from another is the dataproperties it is given and the data they contain.
+            </p>
+            <h4>Dataproperties</h4>
+            <p>
+               A dataobject is characterized by its dataproperties. A dataproperty represents a certain type of information a dataobject contains. In the case of a news article this might be a title, author or article text. In the case of a role this might be a username, password, registration date, and so on. Dataobjects can have any number of dataproperties. Note that to be useful, however, a dataobject should always have an Itemid property, which represents a unique idea for that particular set of data (an "item") the dataobject contains.
+            </p>
+            <p>
+               Dataproperties come in different flavors, or "types". Some of these model HTML constructs such as textboxes, radio buttons, file uploads, etc., and can also be used as standalone HTML widgets without reference to a dataobject. Others model more abstract or complex concepts: there are is, instance, a username dataproperty, a password dataproperty and so on. A summary list of each module's dataproperties is given in its overview page (see above).
+            </p>
+            <h4>Items</h4>
+            <p>
+               A dataobject and its dataproperties cna be thought of as a container for holding different sets of data. A news article dataobject can contain specific articles, a roles dataobject can contain different users and groups. We refer to these sets of data as the dataobject's <em>items</em>.
+            </p>
+            <p>
+               Note that different dataobjects can have the same items. For instance, a roles object used in a user's profile display will show the.name, user name, date of registration etc. A different dataobject used by the site administrator to track users may show the same item with additional fields, such as state and group memberships.
+            </p>
+
             <h3>How to use it?</h3>
             <p>
                 As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Dynamicdata &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
             </p>
-
-            <h3>Admin interface of the Dynamic Data module</h3>
-            <p>Explain property types, data sources, configuration, input &amp; output representation.</p>
 
 
             <h3>Available Blocks</h3>
@@ -121,29 +141,6 @@
             <p>Usage : Export object definitions and/or data - and import them elsewhere...</p>
             <p>[+ Easter Egg : util meta -&gt; export to XML -&gt; save to file -&gt; util import -&gt;
             access your whole database via DD]</p>
-
-            <h3>Concepts</h3>
-            <h4>Dataobjects</h4>
-            <p>
-                Dataobjects are Xaraya constructs that represent "things with data" in a Xaraya application. These can be real-life objects, such as news articles, projects, surveys, race tracks (depending on your application); or they can be Xaraya objects such as roles or privileges. Representing such diverse things as dataobjects lets you manage them in a consistent, and in may cases use the DynamicData module's own methods to do so. This saves development time and avoids duplication.                
-            </p>
-            <p>
-                Dataobjects have a simple basic structure. Each is given a unique ID, unique name, a label and some configuration settings. What sets one dataobject apart from another is the dataproperties it is given and the data they contain.
-            </p>
-            <h4>Dataproperties</h4>
-            <p>
-               A dataobject is characterized by its dataproperties. A dataproperty represents a certain type of information a dataobject contains. In the case of a news article this might be a title, author or article text. In the case of a role this might be a username, password, registration date, and so on. Dataobjects can have any number of dataproperties. Note that to be useful, however, a dataobject should always have an Itemid property, which represents a unique idea for that particular set of data (an "item") the dataobject contains.
-            </p>
-            <p>
-               Dataproperties come in different flavors, or "types". Some of these model HTML constructs such as textboxes, radio buttons, file uploads, etc., and can also be used as standalone HTML widgets without reference to a dataobject. Others model more abstract or complex concepts: there are is, instance, a username dataproperty, a password dataproperty and so on. A summary list of each module's dataproperties is given in its overview page (see above).
-            </p>
-            <h4>Items</h4>
-            <p>
-               A dataobject and its dataproperties cna be thought of as a container for holding different sets of data. A news article dataobject can contain specific articles, a roles dataobject can contain different users and groups. We refer to these sets of data as the dataobject's <em>items</em>.
-            </p>
-            <p>
-               Note that different dataobjects can have the same items. For instance, a roles object used in a user's profile display will show the.name, user name, date of registration etc. A different dataobject used by the site administrator to track users may show the same item with additional fields, such as state and group memberships.
-            </p>
 
             <!--
             <h3>Further Information</h3>
