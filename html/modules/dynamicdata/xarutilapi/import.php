@@ -79,8 +79,16 @@ function dynamicdata_utilapi_import($args)
         $object = DataObjectMaster::getObject(array('objectid' => 1));
         $objectproperties = array_keys($object->properties);
         foreach($objectproperties as $property) {
-            if (isset($xmlobject->{$property}[0]))
-                $args[$property] = (string)$xmlobject->{$property}[0];
+            if (isset($xmlobject->{$property}[0])) {
+                $value = (string)$xmlobject->{$property}[0];
+                try {
+                    eval('$value = ' . (string)$xmlobject->{$property}[0] . ';');      
+                } catch (Exception $e) {
+                    eval('$value = "' . (string)$xmlobject->{$property}[0] . '";');
+   
+                }
+                $args[$property] = $value;
+            }
         }
         // Backwards Compatibility with old defintions
         $args['moduleid'] = (string)$xmlobject->module_id;
