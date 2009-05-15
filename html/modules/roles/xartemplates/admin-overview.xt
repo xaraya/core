@@ -66,6 +66,14 @@
         <p>
             To reduce the risk of inadvertent damage Xaraya places constraints on how preconfigured roles can be changed or removed. However, you can define as many more roles in the tree as you wish in whatever configuration you choose.
         </p>
+        <h4>Designated Site Administrator</h4>
+        <p>
+            The designated site admin is a role that is distinguished among others. Xaraya keepts track fo this role's ID, and its value can be retrieved at any time through a special module variable:
+            <pre>
+                xarModVars::get('roles', 'admin')
+            </pre>
+            The designated site admin is used in several places in Xaraya for privileged access. It can be thought of as the "root" user of a Xaraya site and is by convention a member of the Administrator's group (although Xaraya places no restriction on which user can be the designated site admin.
+        </p>
         
         <h3>How to use it?</h3>
         <p>
