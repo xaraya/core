@@ -25,13 +25,18 @@
 
         <dl class="xar-tabs">
             <dd class="active" id="tab-1">
-                <a href="javascript:showtab(1,2)">
+                <a href="javascript:showtab(1,3)">
                     Overview
                 </a>
             </dd>
             <dd id="tab-2">
-                <a href="javascript:showtab(2,2)">
+                <a href="javascript:showtab(2,3)">
                     How To
+                </a>
+            </dd>
+            <dd id="tab-3">
+                <a href="javascript:showtab(3,3)">
+                    Examples
                 </a>
             </dd>
         </dl>
@@ -134,29 +139,6 @@
         </div>
         
         <div id="page-2" style="display: none">
-            <h3>Using API calls</h3>
-                <ul>
-                <li>Property Types</li>
-                <li>Dynamic Objects And Object Lists</li>
-                <li>Dynamic Properties</li>
-                <li>items : getitems(), getitem(), getfield()</li>
-                </ul>
-            <h3>Using Object Oriented Programming</h3>
-                <ul>
-                <li>Property Types</li>
-                <li>Dynamic Objects And Object Lists</li>
-                <li>Dynamic Properties</li>
-                <li>items : getitems(), getitem(), getfield()</li>
-                </ul>
-            <h3>Customising Dynamic Data</h3>
-            <p>templates, data sources, functions, validation, ...</p>
-            <h3>Integrate utility modules via hooks or dynamic data (or both) ?</h3>
-            <h3>Import/Export Utilities</h3>
-            <p>Usage : Export object definitions and/or data - and import them elsewhere...</p>
-            <p>[+ Easter Egg : util meta -&gt; export to XML -&gt; save to file -&gt; util import -&gt;
-            access your whole database via DD]</p>
-
-
                 <h3>Using the &lt;xar:data-* ...&gt; tags in your templates</h3>
                 <h4>User view and admin list (for several items)</h4>
                 <p>If you want to get the dynamic properties and values for your items, and include them
@@ -297,6 +279,78 @@
 
         Idem for &lt;xar:data-output ... /&gt;
             </pre>
+        </div>
+        
+        <div id="page-3" style="display: none">
+            <h3>Dataproperty examples</h3>
+            <table>
+                <tr>
+                    <td valign="middle">
+                        <xar:data-input type="grouplist" />
+                    </td>
+                    <td valign="middle">
+                        <pre>
+                        &lt;xar:data-input type="grouplist" />
+                        </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:set name="options">
+                            array(
+                                array('id' => 'red', 'name' => 'Dark red'),
+                                array('id' => 'green', 'name' => 'Light green'),
+                            )
+                        </xar:set>
+                        <xar:data-input type="radio" options="$options" value="green" layout="vertical"/>
+                    </td>
+                    <td valign="middle">
+                        <pre>
+                        &lt;xar:set name="options">
+                            array(
+                                array('id' => 'red', 'name' => 'Dark red'),
+                                array('id' => 'green', 'name' => 'Light green'),
+                            )
+                        &lt;/xar:set>
+                        &lt;xar:data-input type="radio" 
+                            options="$options" value="green" layout="vertical"/>
+                        </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:set name="value">
+                            xarUserGetVar('uname')
+                        </xar:set>
+                        <xar:data-output type="username" value="$value"/>
+                    </td>
+                    <td valign="middle">
+                        <pre>
+                        &lt;xar:set name="value">
+                            xarUserGetVar('uname')
+                        &lt;/xar:set>
+                        &lt;xar:data-output type="username" value="$value"/>
+                        </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:set name="value">
+                            xarUserGetVar('uname')
+                        </xar:set>
+                        <xar:data-output type="urlicon" link="http://www.xaraya.com" />
+                    </td>
+                    <td valign="middle">
+                        <pre>
+                        &lt;xar:set name="value">
+                            xarUserGetVar('uname')
+                        &lt;/xar:set>
+                        &lt;xar:data-output type="username" value="$value"/>
+                        </pre>
+                    </td>
+                </tr>
+            </table>
+
         </div>
     </div>
 </xar:template>
