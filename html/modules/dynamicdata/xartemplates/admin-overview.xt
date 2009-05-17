@@ -283,15 +283,18 @@
         
         <div id="page-3" style="display: none">
             <h3>Dataproperty examples</h3>
-            <table>
+            <p>
+                Dataproperties can be deployed as fields in a dataobject or as standalone widgets. The following are some examples of standalone dataproperties that can be included as tags on web pages.
+            </p>
+            <table border="1">
                 <tr>
                     <td valign="middle">
                         <xar:data-input type="grouplist" />
                     </td>
                     <td valign="middle">
-                        <pre>
-                        &lt;xar:data-input type="grouplist" />
-                        </pre>
+    <pre>
+    &lt;xar:data-input type="grouplist" />
+    </pre>
                     </td>
                 </tr>
                 <tr>
@@ -305,16 +308,38 @@
                         <xar:data-input type="radio" options="$options" value="green" layout="vertical"/>
                     </td>
                     <td valign="middle">
-                        <pre>
-                        &lt;xar:set name="options">
+    <pre>
+    &lt;xar:set name="options">
+        array(
+            array('id' => 'red', 'name' => 'Dark red'),
+            array('id' => 'green', 'name' => 'Light green'),
+        )
+    &lt;/xar:set>
+    &lt;xar:data-input type="radio" 
+        options="$options" value="green" layout="vertical"/>
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:set name="options">
                             array(
                                 array('id' => 'red', 'name' => 'Dark red'),
                                 array('id' => 'green', 'name' => 'Light green'),
                             )
-                        &lt;/xar:set>
-                        &lt;xar:data-input type="radio" 
-                            options="$options" value="green" layout="vertical"/>
-                        </pre>
+                        </xar:set>
+                        <xar:data-input type="checkboxlist" options="$options" value="green"/>
+                    </td>
+                    <td valign="middle">
+    <pre>
+    &lt;xar:set name="options">
+        array(
+            array('id' => 'red', 'name' => 'Dark red'),
+            array('id' => 'green', 'name' => 'Light green'),
+        )
+    &lt;/xar:set>
+    &lt;xar:data-input type="checkboxlist" options="$options" value="green" />
+    </pre>
                     </td>
                 </tr>
                 <tr>
@@ -325,12 +350,12 @@
                         <xar:data-output type="username" value="$value"/>
                     </td>
                     <td valign="middle">
-                        <pre>
-                        &lt;xar:set name="value">
-                            xarUserGetVar('uname')
-                        &lt;/xar:set>
-                        &lt;xar:data-output type="username" value="$value"/>
-                        </pre>
+    <pre>
+    &lt;xar:set name="value">
+        xarUserGetVar('uname')
+    &lt;/xar:set>
+    &lt;xar:data-output type="username" value="$value"/>
+    </pre>
                     </td>
                 </tr>
                 <tr>
@@ -341,12 +366,32 @@
                         <xar:data-output type="urlicon" link="http://www.xaraya.com" />
                     </td>
                     <td valign="middle">
-                        <pre>
-                        &lt;xar:set name="value">
-                            xarUserGetVar('uname')
-                        &lt;/xar:set>
-                        &lt;xar:data-output type="username" value="$value"/>
-                        </pre>
+    <pre>
+    &lt;xar:set name="value">
+        xarUserGetVar('uname')
+    &lt;/xar:set>
+    &lt;xar:data-output type="urlicon" link="http://www.xaraya.com" />
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:data-input type="filepicker" basedir="var/messaging/roles"/>
+                    </td>
+                    <td valign="middle">
+    <pre>
+    &lt;xar:data-input type="filepicker" basedir="var/messaging/roles"/>
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:data-input type="calendar" />
+                    </td>
+                    <td valign="middle">
+    <pre>
+    &lt;xar:data-input type="calendar" />
+    </pre>
                     </td>
                 </tr>
             </table>
