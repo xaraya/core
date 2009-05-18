@@ -292,6 +292,7 @@
                         <xar:data-input type="grouplist" />
                     </td>
                     <td valign="middle">
+                        Displays a dropdown of Xaraya groups:
     <pre>
     &lt;xar:data-input type="grouplist" />
     </pre>
@@ -308,6 +309,7 @@
                         <xar:data-input type="radio" options="$options" value="green" layout="vertical"/>
                     </td>
                     <td valign="middle">
+                        Displays a configurable group of radio buttons for input:
     <pre>
     &lt;xar:set name="options">
         array(
@@ -331,6 +333,7 @@
                         <xar:data-input type="checkboxlist" options="$options" value="green"/>
                     </td>
                     <td valign="middle">
+                        Displays a configurable group of checkboxes for input:
     <pre>
     &lt;xar:set name="options">
         array(
@@ -344,32 +347,22 @@
                 </tr>
                 <tr>
                     <td valign="middle">
-                        <xar:set name="value">
-                            xarUserGetVar('uname')
-                        </xar:set>
-                        <xar:data-output type="username" value="$value"/>
+                        <xar:data-output type="username" user="myself"/>
                     </td>
                     <td valign="middle">
+                        Displays the user name of the current user:
     <pre>
-    &lt;xar:set name="value">
-        xarUserGetVar('uname')
-    &lt;/xar:set>
-    &lt;xar:data-output type="username" value="$value"/>
+    &lt;xar:data-output type="username" user="myself"/>
     </pre>
                     </td>
                 </tr>
                 <tr>
                     <td valign="middle">
-                        <xar:set name="value">
-                            xarUserGetVar('uname')
-                        </xar:set>
                         <xar:data-output type="urlicon" link="http://www.xaraya.com" />
                     </td>
                     <td valign="middle">
+                        Displays a link to a url in an icon:
     <pre>
-    &lt;xar:set name="value">
-        xarUserGetVar('uname')
-    &lt;/xar:set>
     &lt;xar:data-output type="urlicon" link="http://www.xaraya.com" />
     </pre>
                     </td>
@@ -379,6 +372,7 @@
                         <xar:data-input type="filepicker" basedir="var/messaging/roles"/>
                     </td>
                     <td valign="middle">
+                        Displays a dropdown of the files in a directory:
     <pre>
     &lt;xar:data-input type="filepicker" basedir="var/messaging/roles"/>
     </pre>
@@ -389,6 +383,7 @@
                         <xar:data-input type="calendar" />
                     </td>
                     <td valign="middle">
+                        Displays a popup calendar for dae input:
     <pre>
     &lt;xar:data-input type="calendar" />
     </pre>
