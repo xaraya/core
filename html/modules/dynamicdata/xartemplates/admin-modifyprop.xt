@@ -22,7 +22,7 @@
                     </dd>
                     <dd>
                         <a href="&xar-modurl-dynamicdata-util-export;&amp;module_id=#$module_id#&amp;itemtype=#$itemtype#">
-                        Export Object Definition to XML</a>
+                        Export to XML</a>
                     </dd>
                     <xar:if condition="!empty($fields)">
                         <dd>

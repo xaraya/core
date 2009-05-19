@@ -34,13 +34,13 @@
             <xar:if condition="$action eq 'export'">
                 <dd class="active">
                   <a href="#xarServer::getCurrentURL()#">
-                    Export Object Definition to XML
+                    Export to XML
                   </a>
                 </dd>
             <xar:else />
                 <dd>
                     <a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#&amp;name=#$object:name#">
-                        Export Object Definition to XML
+                        Export to XML
                     </a>
                 </dd>
             </xar:if>

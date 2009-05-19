@@ -1,11 +1,21 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:set name="relateddocurl">'http://www.xaraya.com/index.php/keywords/blocks/'</xar:set>
-    <xar:var name="relateddocurltext">Related documentation on Blocks</xar:var>
-    <xar:set name="moduledocurl">'http://www.xaraya.com/index.php/release/13.html'</xar:set>
-    <xar:var name="moduledocurltext">Blocks Module - Xaraya Extension 13</xar:var>
-    <xar:style scope="common" />
+    <![CDATA[
+    <script type="">
+        function showtab (selectedindex, items)
+        {
+            for (i=1;i<=items;i++) {
+                document.getElementById('page-' + i).style.display = "none";
+                document.getElementById('tab-' + i).className = "nothing";
+            }
+            document.getElementById('page-' + selectedindex).style.display = "block";
+            document.getElementById('tab-' + selectedindex).className = "active";
+        }
+    </script>
+    ]]>
+    <xar:style scope="module" module="base" file="navtabs" />
+
     <div class="xar-mod-head">
         <span class="xar-mod-title">Blocks Administration</span>
     </div>
@@ -14,186 +24,178 @@
         <img src="#xarTplGetImage('blocks.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
 
-        <h3>What is it?</h3>
-        <p>
-            The Blocks module lets site administrator(s) create and manage the configuration, display position and grouping of 'blocks' of content or functionality on a Xaraya site. The Blocks module is a core module within
-            Xaraya and cannot be removed.
-        </p>
-
-        <h3>How to use it?</h3>
-        <p>
-            As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Blocks &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
-        </p>
-        <h4>Block Types</h4>
-        <p>
-            A block type defines a specific display of content or functionality that you can place on your
-            site. Xaraya modules can provide their own block types. For example the Roles module provides a 'language' block type that lets the user choose the site's langauge. The Base module provides a 'menu' block type for displaying menus, and so on.
-        </p>
-        <p>
-            A module's block types are available when the module is installed, and removed when it is uninstalled. Block types are managed through the <strong>Block Types</strong>&#160;page, which lists all the block types available in your Xaraya installation and the modules they belong to. The page also contains a link to the <strong>New Block Type</strong> page, which can scan a module for its block types and let you add any that are not yet available. This option is used in the (exceptional) case when a block type was not properly installed in the course of a normal module release or upgrade.
-        </p>
-
-        <h4>Blocks</h4>
-        <p>
-            A block is an instance of a block type. You can create as many blocks from a given block type as required, each with their own behavior and content (several menu block on the same page, for isntance)..The following pages let you manage blocks:
-        </p>
-        <ul>
-            <li>
-                <strong>View Blocks:</strong>&#160;displays all the current blocks that are available for use in your Xaraya site and lets you modify or delete them. The page also has a link to the <strong>New Block</strong>&#160;page.
-            </li>
-            <li>
-                <strong>New Block:</strong>&#160;lets you create and make available a new block of a given block type, and. optionally assign it to a block group (see below).
-            </li>
-        </ul>
+        <dl class="xar-tabs">
+            <dd class="active" id="tab-1">
+                <a href="javascript:showtab(1,2)">
+                    Overview
+                </a>
+            </dd>
+            <dd id="tab-2">
+                <a href="javascript:showtab(2,2)">
+                    How To
+                </a>
+            </dd>
+        </dl>
+        <div id="page-1">
+            <h3>What is it?</h3>
             <p>
-            You can go to a block's configuration page by clicking on its Edit link in the <strong>View Blocks</strong>&#160;page. You can then:
-        </p>
-        <ul>
-            <li>
-                Change the block's name (used by Xaraya to identify it) and its title (the title in the block's display).
-            </li>
-            <li>
-                Set the block to be displayed or hidden on template pages.
-            </li>
-            <li>
-                Assign the block to be displayed in one or more block groups.
-            </li>
-            <li>
-                Specify whether special templates should be used to display the block. You can override the standard templates by defining an "inner" template for the block and an "outer" template for its group (see Templating Blocks and Block Groups below)
-            </li>
-            <li>
-                Set any block-specific configuration options. Most blocks will have special settings pertinent to their functionality that can be modified according to your needs.
-            </li>
-        </ul>
-        <h3>Using Blocks and Block Groups</h3>
-        <p>There are a number of steps required to create a new block of content or functionality
-        for your site, and display it:</p>
-        <ol>
-            <li>Create a new block instance based on any of your installed block types</li>
-            <li>Assign the block instance to an existing block group during block creation or
-            modification (optional)</li>
-            <li>If you need a new block group, create one and then assign the block instance to
-            it</li>
-            <li>Add a 
-            <strong>blockgroup tag</strong>in your theme template so Xaraya knows where to display
-            your blocks. eg 
-            <code>&lt;xar:blockgroup name="right" id="right" /&gt;</code>.</li>
-        </ol>
-        <p>Xaraya has pre-configured block groups created at installation time that include 
-        <em>right</em>, 
-        <em>left</em>, 
-        <em>center</em>, 
-        <em>topnav</em>and 
-        <em>header</em>block groups. Special block group tags are used in the default Xaraya theme
-        to place and display them and the block instances already assigned to them. In the case of
-        the default block groups their name reflects the position where they are located in the
-        default theme. You can rename these block groups as the names are not significant in
-        themselves</p>
-        <xar:set name="rfcblocklink">
-        'http://xaraya.com/documentation/rfcs/rfc0010.html#block'</xar:set>
-        <p>Note: you do not have to allocated a block instance to a blockgroup. You can place the
-        block instance display directly into your theme templates using a 
-        <strong>block</strong>tag. Please check 
-        <a href="#$rfcblocklink#">RFC0010</a>for details on using this tag.</p>
-        <h4>Creating and Viewing Block Groups</h4>
-        <p>The Blocks module provides a number of options to work with 
-        <strong>Block Groups</strong>:</p>
-        <ul>
-            <li>
-            <a name="view_groups">
-                <strong>View Block Groups:</strong>
-            </a>displays all the defined Block Groups on your site with links to Edit or Delete
-            options</li>
-            <li>
-            <a name="new_group">
-                <strong>Add Block Group:</strong>
-            </a>option presents a simple input screen so you can add a new block group</li>
-        </ul>
+                The Blocks module lets site administrator(s) create and manage the configuration, display position and grouping of 'blocks' of content or functionality on a Xaraya site. The Blocks module is a core module within
+                Xaraya and cannot be removed.
+            </p>
 
-        <h4>Templating Blocks and Block Groups</h4>
-        <p>
-            As with other Xaraya content, you can provide your own override templates for blocks and create your own templates for block groups:
-        </p>
-        <ol>
-            <li>
-                <strong>Inner template</strong>&#160;is used for display of the content in a block, and is supplied by the module that provides the block type. It can be overridden like any other Xaraya template. Overrides for block inner templates should be be placed in 
-                <pre>themes/[yourtheme]/modules/[themodule]/blocks</pre>
-                where [themodule] is the module providing the block type. The general name for the template is 
-                <pre>blocktype-innertemplatename.xt</pre>
-            </li>
-            <li>
-                <strong>Outer template</strong>&#160;is the name given to the template used for the block's block group. Some 'outer' templates are installed by default with Xaraya, but you can also create your own 'outer' templates. The outer templates are stored in your 
-                <pre>theme/[yourtheme]/blocks</pre>
-                directory. If there is no specific block group template the block group will use the preinstalled 'default' block group template.
-            </li>
-        </ol>
-        <h4>How to tell Xaraya which inner and outer templates to use</h4>
-        <p>You can tell Xaraya which inner and outer templates to use when you create a new block
-        instance or modify an existing one. Using the Blocks module, there are two places you can
-        set either the inner template, the outer template or both.</p>
-        <br />
+            <h3>Concepts</h3>
+            <h4>Block Types</h4>
+            <p>
+                A block type defines a specific display of content or functionality that you can place on your site. Xaraya modules can provide their own block types. For example the Roles module provides a 'language' block type to create blocks that let the user choose the site's langauge. The Base module provides a 'menu' block type for displaying menus, and so on.
+            </p>
+            <p>
+                A module's block types are available when the module is installed, and removed when it is uninstalled. Block types are managed through the <strong>Block Types</strong>&#160;page, which lists all the block types available in your Xaraya installation and the modules they belong to. 
+            </p>
+
+            <h4>Blocks</h4>
+            <p>
+                A block is an instance of a block type. You can create as many blocks from a given block type as required, each with its own behavior and content (several menu block on the same page, for instance). In general blocks are displayed on a site's pages by assigning them to one or more block group, but a block can also be displayed anywhere on a page by using a block tag (see <a href="http://xaraya.com/documentation/rfcs/rfc0010.html" target="_blank">RFC0010</a>for details about using block and block group tags).
+            </p>
+
+            <h4>Block Groups</h4>
+            <p>
+                Block groups are clusters of blocks on your site's pages. The blocks assigned to a given group are all displayed in the area of a page that group occupies. Xaraya comes pre-configured with block groups created at installation time that include <em>right</em>, <em>left</em>, <em>center</em>, <em>topnav</em>and <em>header</em> block groups. Block group tags are used in theme pages to postion and display each group and its blocks (the name of a group is of no importance and can be changed). A block can be assigned to more than one group and is displayed in each group it is assigned to.
+            </p>
+
+            <h3>The Admin interface</h3>
+            <p>
+                As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Blocks &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
+            </p>
+            <p>
+                Clicking on the <strong>View Blocks</strong>link in the Admin menu displays all the current blocks that are available for use in your Xaraya site and lets you modify or delete them. The page also has a link to the <strong>New Block</strong>&#160;page. You can go to a block's configuration page by clicking on its Edit link in the <strong>View Blocks</strong>&#160;page. You can then:
+                <ul>
+                    <li>
+                        Change the block's name (used by Xaraya to identify it) and its title (the title in the block's display).
+                    </li>
+                    <li>
+                        Set the block to be displayed or hidden on template pages.
+                    </li>
+                    <li>
+                        Assign the block to be displayed in one or more block groups.
+                    </li>
+                    <li>
+                        Specify whether special templates should be used to display the block. You can override the standard templates by defining an "inner" template for the block and an "outer" template for its group (see Templating Blocks and Block Groups in the How To section of this page)
+                    </li>
+                    <li>
+                        Set any block-specific configuration options. Most blocks will have special settings pertinent to their functionality that can be modified according to your needs.
+                    </li>
+                </ul>
+            </p>
+            <p>
+                Clicking on the <strong>New Block</strong>link in the Admin menu lets you create and make available a new block of a given block type, and optionally assign it to a block group (see below).
+            </p>
+            <p>
+                Clicking on the <strong>Block Types</strong>link in the Admin menu displays all the defined Block Types on your site with a link to a detail display of each Block Type's configuration. The page also contains a link to the <strong>New Block Type</strong> page, which can scan a module for its block types and lets you add any that are not yet available. Xaraya does not actually allow you to create new block types. Rather, this option is used in the (exceptional) case when a block type was not properly installed in the course of a normal module release or upgrade.
+            </p>
+            <p>
+                Clicking on the <strong>Block Groups</strong>link in the Admin menu displays all the defined block groups on your site with links to Edit or Delete options. The page also has a link to the <strong>New Block Group</strong>&#160;page, which presents a simple input screen through which you can add a new block group to your site.
+            </p>
+
+            <h3>Available Blocks</h3>
+            <p>The Blocks Module has no blocks</p>
+
+            <h3>Available Dataproperties</h3>
+            <p>The Blocks module has no dataproperties</p>
+
+            <h3>Available Hooks</h3>
+            <p>The Blocks module has no hooks</p>
+
+            <!--
+            <h3>Further Information</h3>
+            <xar:set name="relateddocurl">'http://www.xaraya.com/index.php/keywords/blocks/'</xar:set>
+            <xar:var name="relateddocurltext">Related documentation on Blocks</xar:var>
+            <xar:set name="moduledocurl">'http://www.xaraya.com/index.php/release/13.html'</xar:set>
+            <xar:var name="moduledocurltext">Blocks Module - Xaraya Extension 13</xar:var>
+            <p>Further information on the Blocks module can be found at</p>
             <ul>
-            <li>The field labelled 
-            <strong>Instance Template (optional):</strong>sets the default inner and outer template
-            used for the block instance and any block group. You can specify inner, outer, both
-            inner and outer or none. You use the following format: 
-            <code>[outer-template][semi-colon][inner-template]</code>. Both are specified without
-            the file extension.</li>
-            <li>If you add a block instance to a block group, another input field will appear,
-            labelled with the name of the block group. You can also add a specific inner, outer or
-            both inner and outer template in this field using the same syntax. Specifying an inner
-            or outer template in this block group template field will override any other
-            templates.</li>
-        </ul>
-        <p>
-        <strong>An example:</strong>if you create an articles' featureditems block instance and you
-        are using the default theme</p>
-        <ul>
-            <li>By default, this block instance will use the article module's inner template called
-            
-            <code>featureditems.xd</code>located in modules/articles/xartemplates/blocks</li>
-            <li>If you have allocated the featured article block instance to a block group called
-            'right' it will use, by default, the outer template located at 
-            <code>themes/default/blocks/right.xt</code>. If the 'right' outer template did
-            not exist it will use one called 'default.xt' in that same directory.</li>
-            <li>If you wish to override both outer and inner templates for the featureditems block
-            then the syntax example of: 
-            <strong>left;weeklyfeature</strong>would mean means the outer template is one created
-            and called 
-            <code>
-            <strong>left</strong>.xt</code>in the 
-            <code>themes/default/blocks</code>directory. The article module's featureditems
-            block instance will be displayed using the 
-            <code>themes/default/modules/articles/blocks/featureditems- 
-            <strong>weeklyfeature</strong>.xt</code>template. You could just specify outer or inner
-            template if required by adding 
-            <code>left;</code>or 
-            <code>;weeklyfeature</code>to specify outer and inner respectively.</li>
+                <li>Blocks Module Extension page at 
+                <a href="#$moduledocurl#" title="#$moduledocurltext#">Xaraya Extension and
+                Releases</a>. Click on Version History tab at the bottom to get the latest release
+                information.</li>
+                <li>Related tutorials and documentation on Blocks found at 
+                <a href="#$relateddocurl#" title="#$relateddocurltext#">Xaraya Documentation.</a></li>
             </ul>
+            <p class="xar-sub">
+            <strong>&#160;Blocks Module Overview</strong>
+            <br />&#160;Version 1.1.1&#160; 2006-07-20</p>
+            -->
+        </div>
+        
+        <div id="page-2" style="display: none">
+            <h3>Creating a Block</h3>
+            <p>
+                There are a number of steps required to create a new block of content or functionality
+                for your site, and display it:
+                <ol>
+                    <li>
+                        Go to <strong>Admin Menu &#8594; Blocks &#8594; New Block</strong> and create a new block instance based on one of your installed block types.
+                    </li>
+                    <li>
+                        Assign the block instance to an existing block group,either when you create it or at any later time. Make sure its state is "Maximize" so that it is displayed.
+                    </li>
+                    <li>
+                        If you need a new block group for displaying the block, create one and then assign the block to it
+                    </li>
+                    <li>
+                        Add a <strong>blockgroup tag</strong>in your theme template so Xaraya knows where to display
+                        your blocks. e.g. <pre>&lt;xar:blockgroup name="right" id="right" /&gt;</pre>.
+                    </li>
+                </ol>
+                Note: you do not have to allocated a block instance to a block group. You can place the block directly into your theme templates by using a <strong>block</strong>tag (see <a href="http://xaraya.com/documentation/rfcs/rfc0010.html" target="_blank">RFC0010</a>for details).
+            </p>
 
-        <h3>Available Blocks</h3>
-        <p>The Blocks Module has no blocks</p>
+            <h3>Templating Blocks and Block Groups</h3>
+            <p>
+                As with other Xaraya content, you can provide your own override templates for blocks and the block groups they are assigned to.
+            </p>
+            <ol>
+                <li>
+                    <strong>Inner template</strong>&#160;is used for display of the content in a block, and is supplied by the module that provides the block type. It can be overridden like any other Xaraya template. Overrides for block inner templates should be be placed in 
+                    <pre>themes/[yourtheme]/modules/[themodule]/blocks</pre>
+                    where [themodule] is the module providing the block type. The general name for the template is 
+                    <pre>blocktype-innertemplatename.xt</pre>
+                </li>
+                <li>
+                    <strong>Outer template</strong>&#160;is the name given to the template used for the block's block group. Some 'outer' templates are installed by default with Xaraya, but you can also create your own 'outer' templates. The outer templates are stored in your 
+                    <pre>theme/[yourtheme]/blocks</pre>
+                    directory. If there is no specific block group template the block group will use the preinstalled 'default' block group template.
+                </li>
+            </ol>
+            
+            <h3>How to tell Xaraya which inner and outer templates to use</h3>
+            <p>
+                You can tell Xaraya which inner and outer templates to use when you create a new block instance or modify an existing one. Using the Blocks module, there are two places you can set either the inner template, the outer template or both.
+                <ul>
+                    <li>The field labelled 
+                    <strong>Instance Template (optional):</strong>sets the default inner and outer template
+                    used for the block instance and any block group. You can specify inner, outer, both
+                    inner and outer or none. You use the following format: 
+                    <pre>[outer-template][semi-colon][inner-template]</pre>. Both are specified without
+                    the file extension.</li>
+                    <li>If you add a block instance to a block group, another input field will appear,
+                    labelled with the name of the block group. You can also add a specific inner, outer or
+                    both inner and outer template in this field using the same syntax. Specifying an inner
+                    or outer template in this block group template field will override any other
+                    templates.</li>
+                </ul>
+                <strong>An example:</strong>if you create a roles user block (which displays the current user's profile information) and you are using the default theme:
+            </p>
+            <ul>
+                <li>By default, this block will use the roles module's inner template called
 
-        <h3>Available Hooks</h3>
-        <p>The Blocks module has no hooks</p>
-
-        <h3>Available Dataproperties</h3>
-        <p>The Blocks module has no dataproperties</p>
-
-        <!--
-        <h3>Further Information</h3>
-        <p>Further information on the Blocks module can be found at</p>
-        <ul>
-            <li>Blocks Module Extension page at 
-            <a href="#$moduledocurl#" title="#$moduledocurltext#">Xaraya Extension and
-            Releases</a>. Click on Version History tab at the bottom to get the latest release
-            information.</li>
-            <li>Related tutorials and documentation on Blocks found at 
-            <a href="#$relateddocurl#" title="#$relateddocurltext#">Xaraya Documentation.</a></li>
-        </ul>
-        <p class="xar-sub">
-        <strong>&#160;Blocks Module Overview</strong>
-        <br />&#160;Version 1.1.1&#160; 2006-07-20</p>
-        -->
+                <pre>user.xd</pre>located in modules/roles/xartemplates/blocks</li>
+                <li>
+                If you have allocated the user block to a block group called 'right' it will use, by default, the outer template located at <pre>themes/default/blocks/right.xt</pre>. If the 'right' outer template does not exist it will use one called 'default.xt' in that same directory.
+                </li>
+                <li>
+                If you wish to override both outer and inner templates for the user block then the syntax example of:<strong>left;userprofile</strong>would mean the outer template is one created and called 
+                <pre> <strong>left</strong>.xt</pre>in the <pre>themes/default/blocks</pre>directory. The roles module's user block will be displayed using the <pre>themes/default/modules/roles/blocks/user-<strong>userprofile</strong>.xt</pre>template. You could just specify outer or inner template if required by adding <pre>left;</pre>or <pre>;userprofile</pre>to specify outer and inner respectively.</li>
+            </ul>
+        </div>
     </div>
 </xar:template>

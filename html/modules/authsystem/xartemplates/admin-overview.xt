@@ -15,7 +15,19 @@
             It handles user authentication on your site by checking for a valid user log in. The Authsystem module is a core module within Xaraya and cannot be removed.
         </p>
 
-        <h3>How to use it?</h3>
+        <h3>Concepts</h3>
+        <h4>Authentication modules</h4>
+        <p>
+            An authentication module is used to log users in to a Xaraya site. The Authsystem module used by default in Xaraya authenticates by checking the user name and password given, but this is only one possible way of authentication. Xaraya can work with different types of authentication modules that are available at www.xaraya.com or from 3rd party providers. You can search for such modules at the <a href="http://www.xaraya.com/index.php?module=release&amp;func=search" target="_blank">Extensions page</a> on www.xaraya.com 
+        </p>
+        <p>
+            To have Xaraya recognize an installed authentication module other than the default, go to the Roles module configuration page <strong>Admin Menu &#8594; Roles &#8594; Modify Configuration</strong> and set the authentication module you want to use as the default authentication module.
+        </p>
+        <p>
+            If your site also requires the ability to have users register, install the Registration module, which manages the user registration process. It is available in the Xaraya Base distribution and on www.xaraya.com
+        </p>
+
+        <h3>The Admin interface</h3>
         <p>
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Authsystem &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
         </p>
@@ -40,18 +52,6 @@
 
         <h3>Available Hooks</h3>
         <p>The Authsystem module has no hooks</p>
-
-        <h3>Concepts</h3>
-        <h4>Authentication modules</h4>
-        <p>
-            An authentication module is used to log users in to a Xaraya site. The Authsystem module used by default in Xaraya authenticates by checking the user name and password given, but this is only one possible way of authentication. Xaraya can work with different types of authentication modules that are available at www.xaraya.com or from 3rd party providers. You can search for such modules at the <a href="http://www.xaraya.com/index.php?module=release&amp;func=search" target="_blank">Extensions page</a> on www.xaraya.com 
-        </p>
-        <p>
-            To have Xaraya recognize an installed authentication module other than the default, go to the Roles module configuration page <strong>Admin Menu &#8594; Roles &#8594; Modify Configuration</strong> and set the authentication module you want to use as the default authentication module.
-        </p>
-        <p>
-            If your site also requires the ability to have users register, install the Registration module, which manages the user registration process. It is available in the Xaraya Base distribution and on www.xaraya.com
-        </p>
 
         <!--
         <h3>Further Information</h3>
