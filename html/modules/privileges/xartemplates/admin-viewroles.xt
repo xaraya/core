@@ -129,13 +129,15 @@
                 <p>
                     <a href="&xar-modurl-privileges-admin-newprivilege;">Add Privilege</a>
                 </p>
-                <p>Show Privileges that are: 
-                <xar:set name="options">
-                    array(
-                        array('id' => 'assigned', 'name' => xarML('Assigned')),
-                        array('id' => 'unassigned', 'name' => xarML('Unassigned')),
-                    )
-                </xar:set>
+                <p>
+                    Show Privileges that are: 
+                    <xar:set name="options">
+                        array(
+                            array('id' => 'assigned', 'name' => xarML('Assigned')),
+                            array('id' => 'unassigned', 'name' => xarML('Unassigned')),
+                        )
+                    </xar:set>
+                </p>
                 <xar:data-input type="radio" options="$options" value="$show"  onclick="this.form.submit();"/>
             </form>
             <xar:data-input type="privilegestree" show="$show" />
