@@ -1,4 +1,4 @@
-<?php  
+<?php 
 /**
  * Xaraya Web Interface Entry Point
  *
