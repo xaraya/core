@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:style module='roles' type='module' file='roletree.css' />
+    <xar:style module='base' type='module' file='tree' />
     <script type="text/javascript" src="modules/roles/xartemplates/xarTree.js"></script>
     <script type="text/javascript">
         <!--
