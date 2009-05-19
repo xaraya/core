@@ -25,13 +25,18 @@
 
         <dl class="xar-tabs">
             <dd class="active" id="tab-1">
-                <a href="javascript:showtab(1,2)">
+                <a href="javascript:showtab(1,3)">
                     Overview
                 </a>
             </dd>
             <dd id="tab-2">
-                <a href="javascript:showtab(2,2)">
+                <a href="javascript:showtab(2,3)">
                     How To
+                </a>
+            </dd>
+            <dd id="tab-3">
+                <a href="javascript:showtab(3,3)">
+                    Examples
                 </a>
             </dd>
         </dl>
@@ -134,29 +139,6 @@
         </div>
         
         <div id="page-2" style="display: none">
-            <h3>Using API calls</h3>
-                <ul>
-                <li>Property Types</li>
-                <li>Dynamic Objects And Object Lists</li>
-                <li>Dynamic Properties</li>
-                <li>items : getitems(), getitem(), getfield()</li>
-                </ul>
-            <h3>Using Object Oriented Programming</h3>
-                <ul>
-                <li>Property Types</li>
-                <li>Dynamic Objects And Object Lists</li>
-                <li>Dynamic Properties</li>
-                <li>items : getitems(), getitem(), getfield()</li>
-                </ul>
-            <h3>Customising Dynamic Data</h3>
-            <p>templates, data sources, functions, validation, ...</p>
-            <h3>Integrate utility modules via hooks or dynamic data (or both) ?</h3>
-            <h3>Import/Export Utilities</h3>
-            <p>Usage : Export object definitions and/or data - and import them elsewhere...</p>
-            <p>[+ Easter Egg : util meta -&gt; export to XML -&gt; save to file -&gt; util import -&gt;
-            access your whole database via DD]</p>
-
-
                 <h3>Using the &lt;xar:data-* ...&gt; tags in your templates</h3>
                 <h4>User view and admin list (for several items)</h4>
                 <p>If you want to get the dynamic properties and values for your items, and include them
@@ -297,6 +279,118 @@
 
         Idem for &lt;xar:data-output ... /&gt;
             </pre>
+        </div>
+        
+        <div id="page-3" style="display: none">
+            <h3>Dataproperty examples</h3>
+            <p>
+                Dataproperties can be deployed as fields in a dataobject or as standalone widgets. The following are some examples of standalone dataproperties that can be included as tags on web pages.
+            </p>
+            <table border="1">
+                <tr>
+                    <td valign="middle">
+                        <xar:data-input type="grouplist" />
+                    </td>
+                    <td valign="middle">
+                        Displays a dropdown of Xaraya groups:
+    <pre>
+    &lt;xar:data-input type="grouplist" />
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:set name="options">
+                            array(
+                                array('id' => 'red', 'name' => 'Dark red'),
+                                array('id' => 'green', 'name' => 'Light green'),
+                            )
+                        </xar:set>
+                        <xar:data-input type="radio" options="$options" value="green" layout="vertical"/>
+                    </td>
+                    <td valign="middle">
+                        Displays a configurable group of radio buttons for input:
+    <pre>
+    &lt;xar:set name="options">
+        array(
+            array('id' => 'red', 'name' => 'Dark red'),
+            array('id' => 'green', 'name' => 'Light green'),
+        )
+    &lt;/xar:set>
+    &lt;xar:data-input type="radio" 
+        options="$options" value="green" layout="vertical"/>
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:set name="options">
+                            array(
+                                array('id' => 'red', 'name' => 'Dark red'),
+                                array('id' => 'green', 'name' => 'Light green'),
+                            )
+                        </xar:set>
+                        <xar:data-input type="checkboxlist" options="$options" value="green"/>
+                    </td>
+                    <td valign="middle">
+                        Displays a configurable group of checkboxes for input:
+    <pre>
+    &lt;xar:set name="options">
+        array(
+            array('id' => 'red', 'name' => 'Dark red'),
+            array('id' => 'green', 'name' => 'Light green'),
+        )
+    &lt;/xar:set>
+    &lt;xar:data-input type="checkboxlist" options="$options" value="green" />
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:data-output type="username" user="myself"/>
+                    </td>
+                    <td valign="middle">
+                        Displays the user name of the current user:
+    <pre>
+    &lt;xar:data-output type="username" user="myself"/>
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:data-output type="urlicon" link="http://www.xaraya.com" />
+                    </td>
+                    <td valign="middle">
+                        Displays a link to a url in an icon:
+    <pre>
+    &lt;xar:data-output type="urlicon" link="http://www.xaraya.com" />
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:data-input type="filepicker" basedir="var/messaging/roles"/>
+                    </td>
+                    <td valign="middle">
+                        Displays a dropdown of the files in a directory:
+    <pre>
+    &lt;xar:data-input type="filepicker" basedir="var/messaging/roles"/>
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:data-input type="calendar" />
+                    </td>
+                    <td valign="middle">
+                        Displays a popup calendar for dae input:
+    <pre>
+    &lt;xar:data-input type="calendar" />
+    </pre>
+                    </td>
+                </tr>
+            </table>
+
         </div>
     </div>
 </xar:template>

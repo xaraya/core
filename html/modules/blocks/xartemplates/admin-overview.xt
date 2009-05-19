@@ -127,19 +127,19 @@
         </div>
         
         <div id="page-2" style="display: none">
-            <h3>Creating Blocks</h3>
+            <h3>Creating a Block</h3>
             <p>
                 There are a number of steps required to create a new block of content or functionality
                 for your site, and display it:
                 <ol>
                     <li>
-                        Create a new block instance based on any of your installed block types by going to the New Block page.
+                        Go to <strong>Admin Menu &#8594; Blocks &#8594; New Block</strong> and create a new block instance based on one of your installed block types.
                     </li>
                     <li>
                         Assign the block instance to an existing block group,either when you create it or at any later time. Make sure its state is "Maximize" so that it is displayed.
                     </li>
                     <li>
-                        If you need a new block group, create one and then assign the block instance to it
+                        If you need a new block group for displaying the block, create one and then assign the block to it
                     </li>
                     <li>
                         Add a <strong>blockgroup tag</strong>in your theme template so Xaraya knows where to display
@@ -151,7 +151,7 @@
 
             <h3>Templating Blocks and Block Groups</h3>
             <p>
-                As with other Xaraya content, you can provide your own override templates for blocks and create your own templates for block groups:
+                As with other Xaraya content, you can provide your own override templates for blocks and the block groups they are assigned to.
             </p>
             <ol>
                 <li>
@@ -183,29 +183,18 @@
                     or outer template in this block group template field will override any other
                     templates.</li>
                 </ul>
-                <strong>An example:</strong>if you create an articles' featureditems block instance and you are using the default theme
+                <strong>An example:</strong>if you create a roles user block (which displays the current user's profile information) and you are using the default theme:
             </p>
             <ul>
-                <li>By default, this block instance will use the article module's inner template called
+                <li>By default, this block will use the roles module's inner template called
 
-                <pre>featureditems.xd</pre>located in modules/articles/xartemplates/blocks</li>
-                <li>If you have allocated the featured article block instance to a block group called
-                'right' it will use, by default, the outer template located at 
-                <pre>themes/default/blocks/right.xt</pre>. If the 'right' outer template did
-                not exist it will use one called 'default.xt' in that same directory.</li>
-                <li>If you wish to override both outer and inner templates for the featureditems block
-                then the syntax example of: 
-                <strong>left;weeklyfeature</strong>would mean means the outer template is one created
-                and called 
-                <pre>
-                <strong>left</strong>.xt</pre>in the 
-                <pre>themes/default/blocks</pre>directory. The article module's featureditems
-                block instance will be displayed using the 
-                <pre>themes/default/modules/articles/blocks/featureditems- 
-                <strong>weeklyfeature</strong>.xt</pre>template. You could just specify outer or inner
-                template if required by adding 
-                <pre>left;</pre>or 
-                <pre>;weeklyfeature</pre>to specify outer and inner respectively.</li>
+                <pre>user.xd</pre>located in modules/roles/xartemplates/blocks</li>
+                <li>
+                If you have allocated the user block to a block group called 'right' it will use, by default, the outer template located at <pre>themes/default/blocks/right.xt</pre>. If the 'right' outer template does not exist it will use one called 'default.xt' in that same directory.
+                </li>
+                <li>
+                If you wish to override both outer and inner templates for the user block then the syntax example of:<strong>left;userprofile</strong>would mean the outer template is one created and called 
+                <pre> <strong>left</strong>.xt</pre>in the <pre>themes/default/blocks</pre>directory. The roles module's user block will be displayed using the <pre>themes/default/modules/roles/blocks/user-<strong>userprofile</strong>.xt</pre>template. You could just specify outer or inner template if required by adding <pre>left;</pre>or <pre>;userprofile</pre>to specify outer and inner respectively.</li>
             </ul>
         </div>
     </div>
