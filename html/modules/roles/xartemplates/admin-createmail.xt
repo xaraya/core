@@ -101,7 +101,7 @@
                                     <xar:if condition="$id eq $loop:item['id']">
                                         <option value="#$loop:item['id']#" selected="selected">
                                         #$loop:item['name']#</option>
-                                        <xar:else />
+                                    <xar:else />
                                         <option value="#$loop:item['id']#">
                                         #$loop:item['name']#</option>
                                     </xar:if>
@@ -113,14 +113,10 @@
                     <td class="xar-align-center">
                         <xar:set name="firstline">xarML('-- choose --')</xar:set>
                         <xar:data-input type="dropdown" name="state" tabindex="5" onchange="this.form.submit()" firstline="$firstline" options="$stateoptions" value="$state" />
-                        onchange="this.form.submit()" firstline="$firstline"
-                        options="$stateoptions" value="$state" />
                     </td>
                     <xar:if condition="$id gt 0">
                         <td class="xar-align-center xar-valign-middle">
                             <xar:data-input type="checkbox" name="includesubgroups" id="includesubgroups" checked="$includesubgroups" onchange="this.form.submit()" />
-                            id="includesubgroups" checked="$includesubgroups"
-                            onchange="this.form.submit()" />
                         </td>
                     </xar:if>
                     <td class="xar-align-center">
@@ -203,8 +199,7 @@
                                     #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#</td>
                                     <td>
                                         <xar:if condition="$loop:item['status'] eq 1">Inactive 
-                                        <xar:elseif condition="$loop:item['status'] eq 2" />Not
-                                        Validated 
+                                        <xar:elseif condition="$loop:item['status'] eq 2" />Not Validated 
                                         <xar:elseif condition="$loop:item['status'] eq 3" />Active 
                                         <xar:elseif condition="$loop:item['status'] eq 4" />Pending</xar:if>
                                     </td>
@@ -228,9 +223,7 @@
                 <div class="xar-form-input-wrapper">
                     <label for="subject" title="#xarML('Subject line of the email')#"
                     class="xar-form-label">Subject:</label>
-                    <input type="text" name="subject" id="subject"
-                    value="#xarVarPrepForDisplay($subject)#" maxlength="150"
-                    class="xar-form-textxlong" />
+                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="message" title="#xarML('Body of the email')#"
@@ -247,17 +240,13 @@
                     <input type="hidden" name="id" id="id" value="#$id#" />
                     <input type="hidden" name="state" id="state" value="#$state#" />
                     <input type="hidden" name="includesubgroups" id="includesubgroups" value="#$includesubgroups#" />
-                    value="#$includesubgroups#" />
                     <!--<input type="hidden" name="ids" id="ids" value="#$ids#" />-->
                     <xar:if condition="!isset($users) or $users eq 0">
                         <input type="submit" value="#xarML('Send')#" disabled="disabled" class="xar-margin-thickright" />
-                        class="xar-margin-thickright" />
-                        <xar:else />
+                    <xar:else />
                         <input type="submit" value="#xarML('Send')#" class="xar-margin-thickright" />
-                        class="xar-margin-thickright" />
                     </xar:if>
                     <input type="button" value="#xarML('Cancel')#" onclick="history.back(-1);" class="xar-margin-thickright" />
-                    class="xar-margin-thickright" />
                 </div>
             </fieldset>
         </form>

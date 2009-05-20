@@ -28,7 +28,6 @@
                         <label class="xar-form-label">#$loop:item['name']#</label>
                             <xar:if condition="$loop:item['notify'] == 'true'">
                                 <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#" value="#$loop:item['id']#" checked="checked" />
-                            value="#$loop:item['id']#" checked="checked" />
                             <xar:else />
                                 <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#" value="#$loop:item['id']#" />
                             value="#$loop:item['id']#" />
@@ -36,13 +35,9 @@
                         <label for="notify_#$loop:item['id']#"
                         title="xarML('Toggle notifications sent to this Group')#">notify</label>
                             <xar:if condition="count($roles) gt 1">
-                            <input type="button" value="#$deletelabel#"
-                            onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();"
-                            class="xar-amrgin-thickleft" />
+                                <input type="button" value="#$deletelabel#" onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();" class="xar-amrgin-thickleft" />
                             <xar:else />
-                            <input type="button" value="#$deletelabel#"
-                            onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();"
-                            disabled="disabled" class="xar-amrgin-thickleft" />
+                                <input type="button" value="#$deletelabel#" onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();" disabled="disabled" class="xar-amrgin-thickleft" />
                             </xar:if>
                         </div>
                     </xar:loop>
