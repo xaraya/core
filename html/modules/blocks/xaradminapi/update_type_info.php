@@ -36,10 +36,14 @@ function blocks_adminapi_update_type_info($args)
     }
 
     // Load and execute the info function of the block.
-    $block_info = xarModAPIfunc('blocks', 'user', 'read_type_info',
-                                array('module' => $type['module'],
-                                      'type' => $type['type']));
-    if (empty($block_info)) {return;}
+    if (empty($args['info'])) {
+        $block_info = xarModAPIfunc('blocks', 'user', 'read_type_info',
+                                    array('module' => $type['module'],
+                                          'type' => $type['type']));
+        if (empty($block_info)) {return;}
+    } else {
+        $block_info = $args['info'];
+    }
 
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
