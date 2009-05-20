@@ -58,11 +58,9 @@
                 <input type="hidden" name="id" id="id" value="#$id#" />
                 <input type="hidden" name="confirm" id="confirm" value="1" />
                 <input type="hidden" name="confirmation" id="confirmation" value="1" />
-                <input type="submit" value="#xarML('Delete Privilege')#"
-                class="xar-margin-thickright" />
-                <input type="button" value="#xarML('Cancel')#"
-                onclick="document.location='&xar-modurl-privileges-admin-newprivilege;';"
-                class="xar-margin-thickleft" />
+                <input type="submit" value="#xarML('Delete Privilege')#" class="xar-margin-thickright" />
+                <xar:var name="label">Cancel</xar:var>
+                <xar:button type="cancel" label="$label" class="xar-margin-thickleft" />                
             </div>
         </form>
     </div>
