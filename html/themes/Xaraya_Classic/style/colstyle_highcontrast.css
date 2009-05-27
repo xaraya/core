@@ -128,3 +128,25 @@ div#classicthemecontrols a#xc-switch-grey:hover { height: 25px; }
     color: #FFFFFF;
     background-color: #BFBFBF;
 }
+
+/* inactive tab override for contrast  */
+ul.xar-tabs li.xar-tab a {
+    background-color: #FFFFFF;
+    color: #CC3333;
+}
+/* active tab override for contrast  */  
+ul.xar-tabs li.xar-tab-active a {
+    background-color: #CBCBCB;
+    color: #CC3333;
+}
+
+/* inactive tab link hover - not handled elsewhere */
+ul.xar-tabs li.xar-tab a:hover {
+    background-color: #F2F2F2;
+}
+/* active tab link hover - not handled elsewhere */
+ul.xar-tabs li.xar-tab-active a:hover {
+    background-color: #EEEEEE;
+}
+
+

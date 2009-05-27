@@ -73,35 +73,37 @@ a img {
 }
 a:link {
     color: #2380A8;
-    border-bottom: 1px dotted #2380A8;
-    text-decoration: none;
+/*    border-bottom: 1px dotted #2380A8;
+    text-decoration: none; */
 }
 a:visited {
     color: #8F5D59;
-    border-bottom: 1px dotted #8F5D59;
-    text-decoration: none;
+/*    border-bottom: 1px dotted #8F5D59;
+    text-decoration: none;*/
 }
 a:visited {
     color: #6B5273;
-    border-bottom: 1px dotted #6B5273;
-    text-decoration: none;
+/*    border-bottom: 1px dotted #6B5273;
+    text-decoration: none; */
 }
 a:visited {
     color: #845161;
-    border-bottom: 1px dotted #845161;
-    text-decoration: none;
+/*    border-bottom: 1px dotted #845161;
+    text-decoration: none; */
 }
 a:hover, a:focus {
     color: #2352A8;
-    border-bottom: 1px solid #2352A8;
+/*    border-bottom: 1px solid #2352A8; */
 }
 a:active {
     color: #D77043;
-    border-bottom: 1px solid #D77043;
+/*    border-bottom: 1px solid #D77043; */
 }
 #main h2 {
     font: italic normal 1.5em Georgia, Times, "Times New Roman", serif;
     text-align: center;
+}
+.xar-mod-head {
 }
 .xar-mod-title {
     text-transform: uppercase;
@@ -109,6 +111,70 @@ a:active {
     letter-spacing: .1em;
     color: #D77043;
 }
+.xar-mod-body {
+}
+.xar-mod-foot {
+}
+.xar-norm {
+    background-color: #f6f0e7;
+}
+.xar-norm-outline {
+    border-color: #002200;
+}
+.xar-alt {
+    background-color: #F5DCBB;
+}
+.xar-alt-outline {
+    border-color: #6B5273;
+}
+.xar-accent {
+    background-color: #f9d57f;
+}
+.xar-accent-outline {
+    border-color: #2352a8;
+}
+.xar-sub {
+}
+
+/* tab structure (margin, padding, float, etc is controlled in core css in 
+   the base module.  Colors (border, background) are inherited from the norm, 
+   alt, accent classes above.  The below rules are intended to be 
+   theme-specific supplements.
+*/
+
+/* tabs parent element */
+ul.xar-tabs {
+    font-size: .9em;
+}
+/* tabs label */
+ul.xar-tabs li.xar-tabs-label {
+    color: #D77043;
+    text-transform: uppercase;
+}
+/* inactive tab */
+ul.xar-tabs li.xar-tab {
+}
+/* active tab */
+ul.xar-tabs li.xar-tab-active {
+}
+/* inactive tab link */
+ul.xar-tabs li.xar-tab a {
+    text-decoration: none;
+}
+/* active tab link */
+ul.xar-tabs li.xar-tab-active a {
+    text-decoration: none;
+}
+/* inactive tab link hover - not handled elsewhere */
+ul.xar-tabs li.xar-tab a:hover {
+    background-color: #F5EADC;
+}
+/* active tab link hover - not handled elsewhere */
+ul.xar-tabs li.xar-tab-active a:hover {
+    background-color: #f5dcbb;
+}
+
+
 .sideInfo .xar-block-title {
     text-transform: uppercase;
     font-size: .88em;
@@ -139,6 +205,31 @@ a:active {
 .sideInfo h4 {
     margin: 0;
     font: italic normal 1em Georgia, Times, "Times New Roman", serif;
+}
+.xar-menu-section {
+}
+.xar-menu-section-current {
+}
+.xar-menu-item {
+}
+.xar-menu-item-current {
+}
+.xar-menu-item:hover {
+}
+.xar-menu-subitem {
+}
+.xar-menu-subitem:hover {
+
+}
+.xar-menu-subitem-current {
+}
+.xar-menu-item-current > .xar-menu-subitem > a {
+}
+.xar-menu-item-current > .xar-menu-subitem > a:visited {
+}
+.xar-title {
+}
+.xar-error {
 }
 
 /* standard forms */

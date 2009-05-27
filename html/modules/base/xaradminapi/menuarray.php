@@ -25,8 +25,8 @@ function base_adminapi_menuarray($args)
     }
     $menulinks = array();
     $menuarray = xarModAPIFunc('base','admin','loadadminmenuarray',array('module' => $args['module']));
-    if (!empty($menuarray)) {
-        foreach ($menuarray as $menuitem) {
+    if (!empty($menuarray['items'])) {
+        foreach ($menuarray['items'] as $menuitem) {
             $url = isset($menuitem['target']) ? xarModURL($args['module'],'admin',$menuitem['target']) : xarServer::getBaseURL();
             $link = array('url'   => $url,
                           'title' => $menuitem['title'],
