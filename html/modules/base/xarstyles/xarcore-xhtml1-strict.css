@@ -353,13 +353,13 @@ ul.xar-tabs li.xar-tabs-label {
 ul.xar-tabs li.xar-tab {
     list-style: none !important;
     float: left;
-    margin: .0em 1px 0 1px !important;
+    margin: 0 1px 0 1px !important;
     padding: 0 !important;
 }
 ul.xar-tabs li.xar-tab-active {
     list-style: none !important;
     float: left;
-    margin: .0em 1px 0 1px !important;
+    margin: 0 1px 0 1px !important;
     padding: 0 !important;
 }
 ul.xar-tabs li.xar-tab a {
@@ -374,7 +374,8 @@ ul.xar-tabs li.xar-tab-active a {
     float: left;
     border-width: 1px 1px 0 1px !important;
     border-style: solid;
-    padding: .1em .75em .7em .75em !important;
+    padding: .1em .75em .69em .75em !important; /* .69 bottom not subject to rounding errors
+                                                   causing active tab to wrap badly at .70 */
     position: relative;
     margin: -.3em 0 0 0 !important;
 }
