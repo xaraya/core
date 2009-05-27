@@ -231,16 +231,34 @@
         &lt;xar:data-view ... /&gt;
             </pre>
                 <p>(Todo : group, join ?)</p>
-                <h4>User display and admin form (for one item)</h4>
-                <p>If you want to get the dynamic properties for this item, and include them manually in
-                your own display.</p>
+
+                <h4>Working with a single items</h4>
+                <p>
+                    We can display a form for entering an item, or simply display an object item's data:
+                </p>
                 <pre>
-        &lt;!-- this retrieves the dynamic properties defined for the 'users' module
-                 and item &#36;id. Note that we don't use value="..." here, since we only
-             have one item --&gt;
-            &lt;xar:data-getitem name="&#36;properties" module="users" itemid="&#36;id" /&gt;
+            &lt;xar:data-form object="&#36;object" /&gt;
+            &lt;xar:data-display object="&#36;object" /&gt;
             </pre>
-                <p>(where you want to add the dynamic labels and values for this item)</p>
+                <p>
+                    The tags can accept attributes, for instance to customize their display:
+                </p>
+                <pre>
+            &lt;xar:data-form object="&#36;object" template="mytemplate" layout="mylayout" /&gt;
+            </pre>
+                <p>
+                    In the above example the object $object already contains the item we are interested in. We can load a specific item by specifying an itemid attribute:
+                <pre>
+            &lt;xar:data-form object="&#36;object" itemid="666" /&gt;
+            </pre>                    
+                    We can also assemble an object item by getting the item first via a getitem tag:
+                </p>
+                <pre>
+            &lt;xar:data-getitem name="&#36;properties" object="$myobject" itemid="&#36;id" /&gt;
+            </pre>
+                <p>
+                    Note that in this example the attribute object can refer to an onject or its name. The itemid attribute defines which item's data to retrieve, and the output is an array of fields with that data, called $properties. We can then use the $properties array to define a custom display, such as givne below (a custom form for input would simply use data-input, rather than data-output, tags):
+                </p>
                 <pre>
             &lt;xar:foreach in="&#36;properties" key="&#36;field"&gt;
                 &lt;tr class="xar-norm xar-valign-top"&gt;
@@ -252,32 +270,28 @@
                     &lt;/td&gt;
                 &lt;/tr&gt;
             &lt;/xar:foreach&gt;
-
-        Idem for input forms, where you'd use &lt;xar:data-input ... /&gt; to show input fields
             </pre>
-                <p>If you simply want to display the dynamic properties for this item (= easier in most
-                cases).</p>
+
+                <h4>Working with a single item fields</h4>
+                <p>
+                    We can assemble the field from scratch by stipulating its attributes in a tag:
+                </p>
                 <pre>
-        &lt;!-- this will use the default layout of user-objectdisplay.xd --&gt;
-            &lt;xar:data-display module="example" itemid="&#36;exid" /&gt;
-
-        &lt;!-- this will use layout 'mylayout' of user-objectdisplay.xd --&gt;
-            &lt;xar:data-display module="users" itemid="&#36;id" layout="mylayout" /&gt;
-
-        &lt;!-- this will use the template user-objectdisplay-myusers.xd --&gt;
-            &lt;xar:data-display module="users" itemid="&#36;id" template="myusers" /&gt;
-
-            &lt;xar:data-display object="&#36;object" /&gt;
-
-        Idem for &lt;xar:data-form ... /&gt;
+            &lt;xar:set name="myval"&gt;'hello'&lt;/xar:set&gt; 
+            &lt;xar:data-input name="greeting" type="textbox" value="&#36;myval" /&gt;
             </pre>
-                <h4>User output and admin input (for one field of an item)</h4>
+                <p>
+                    By passing the tag a dataproperty object, it will take on the properties of that object (type, value etc.)
+                </p>
                 <pre>
-            &lt;xar:data-input name="hello" type="3" value="&#36;myval" /&gt;
-
-            &lt;xar:data-input property="&#36;property" /&gt;
-
-        Idem for &lt;xar:data-output ... /&gt;
+            &lt;xar:data-input property="&#36;myproperty" /&gt;
+            </pre>
+                <p>
+                    We can also override properties by explicitly adding other values as attributes:
+                </p>
+                <pre>
+            &lt;xar:set name="myval"&gt;'hello'&lt;/xar:set&gt; 
+            &lt;xar:data-input property="&#36;myproperty" value="&#36;myval" /&gt;
             </pre>
         </div>
         
