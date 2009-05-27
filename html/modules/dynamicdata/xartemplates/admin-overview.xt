@@ -140,98 +140,105 @@
         
         <div id="page-2" style="display: none">
                 <h3>Using the &lt;xar:data-* ...&gt; tags in your templates</h3>
-                <h4>User view and admin list (for several items)</h4>
-                <p>If you want to get the dynamic properties and values for your items, and include them
-                somewhere in your own view/list.</p>
-                <p>Available tags: (replace 'users', '&#36;idlist' and '&#36;id' with your own)</p>
-                    <pre>
-        &lt;!-- this retrieves the dynamic properties defined for the 'users' module,
-                 and their value for all items listed in &#36;idlist. You'll need to build
-             that id list in your module function and pass it along to the template --&gt;
-            &lt;xar:data-getitems name="&#36;properties" value="&#36;values" module="users"
-             itemids="&#36;idlist" /&gt;
-
-        &lt;!-- this shows the label for dynamic property '&#36;name' --&gt;
-            &lt;xar:data-label property="&#36;properties[&#36;name]" /&gt;
-
-        &lt;!-- this shows the value of dynamic property '&#36;name' for item &#36;id,
-         formatted for output --&gt;
-        &lt;xar:data-output property="&#36;properties[&#36;name]" value="&#36;values[&#36;id][&#36;name]"
-        /&gt;
-
-        &lt;!-- this shows the value of dynamic property '&#36;name' for item &#36;id,
-         formatted for input --&gt;
-        &lt;xar:data-input property="&#36;properties[&#36;name]" value="&#36;values[&#36;id][&#36;name]"
-        /&gt;
-
-        </pre>
-                <p>Sample use:</p>
-                <p>(somewhere near the beginning of your template)</p>
-                    <pre>
-
-            &lt;xar:data-getitems name="&#36;properties" value="&#36;values" module="users"
-             itemids="&#36;idlist" /&gt;
-
-            </pre>
-                <p>(when you're building some table headers, and you want to add labels for the dynamic
-                properties)</p>
+                
+                <h4>Available tags</h4>
+                <p>
+                    Tags on properties:show their input or output displays, or their labels: 
+                </p>
                 <pre>
+            &lt;xar:data-input ... /&gt;
+            &lt;xar:data-output ... /&gt;
+            &lt;xar:data-label ... /&gt;
+                </pre>
+                <p>
+                    Tags on objects:show their forms, or item displays (one item) or item lists (many items): 
+                </p>
+                <pre>
+            &lt;xar:data-form ... /&gt;
+            &lt;xar:data-display ... /&gt;
+            &lt;xar:data-view ... /&gt;
+                </pre>
+                <p>
+                    Special tags can be used to retrieve properties and values related to one or more items 
+                </p>
+                <pre>
+            &lt;xar:data-getitem ... /&gt;
+            &lt;xar:data-getitems ... /&gt;
+                </pre>
 
-                &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
-                    &lt;th width="10%"&gt;
-                        &lt;xar:data-label property="&#36;properties[&#36;name]" /&gt;
-                    &lt;/th&gt;
-                &lt;/xar:foreach&gt;
 
+                <h4>Working with lists of items (I)</h4>
+                <p>
+                    The data-getitems tag retrieves a list of properties and item values from a dataobject:
+                </p>
+                <pre>
+            &lt;xar:data-getitems name="&#36;properties" value="&#36;values" object="$myobject" /&gt;
+                </pre>
+                <p>
+                    The properties and values (from the name and value attributes) can be used to display the list of items (see below). The list can be restricted by passing the tag an array of itemids::
+                </p>
+                <pre>
+            &lt;xar:data-getitems name="&#36;properties" value="&#36;values"  object="$myobject"
+                itemids="&#36;idlist" /&gt;
             </pre>
-                <p>(when you're looping over the individual items, and you want to add the dynamic values
-                for item &#36;id)</p>
+                <p>
+                    We can build headers for the list using the data-label tag:
+                </p>
+                <pre>
+            &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
+                &lt;th width="10%"&gt;
+                    &lt;xar:data-label property="&#36;properties[&#36;name]" /&gt;
+                &lt;/th&gt;
+            &lt;/xar:foreach&gt;
+                </pre>
+                <p>
+                    When looping over the individual items, the value for item &#36;id) can be added dynamically:
+                </p>
+
+                <pre>
+            &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
+                &lt;td class="xar-norm"&gt;
+                &lt;xar:if condition="isset(&#36;values[&#36;id][&#36;name])"&gt;
+                    &lt;xar:data-output property="&#36;properties[&#36;name]" value="&#36;values[&#36;id][&#36;name]" /&gt;
+                &lt;xar:else /&gt;
+                    &amp;nbsp;
+                &lt;/xar:if&gt;
+                &lt;/td&gt;
+            &lt;/xar:foreach&gt;
+                </pre>
+            
+                <h4>Working with lists of items (II)</h4>
+                <p>
+                    The basic data-view tag shows all the items of an object 
+                </p>
+                <pre>
+            &lt;xar:data-view object="$myobject" /&gt;
+                </pre>
+                <p>
+                    The display of hte data can be adapted by using a custom template  or layout
+                </p>
                     <pre>
+            &lt;xar:data-view object="$myobject" layout="list" /&gt;
+            &lt;xar:data-view object="$myobject" template="mylist" /&gt;
+                </pre>
 
-                &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
-                    &lt;td class="xar-norm"&gt;
-                &lt;!-- avoid errors if the value isn't defined for this
-         item (yet) --&gt;
-                    &lt;xar:if condition="isset(&#36;values[&#36;id][&#36;name])"&gt;
-                        &lt;xar:data-output property="&#36;properties[&#36;name]"
-             value="&#36;values[&#36;id][&#36;name]" /&gt;
-                    &lt;xar:else /&gt;
-                        &amp;nbsp;
-                    &lt;/xar:if&gt;
-                    &lt;/td&gt;
-                &lt;/xar:foreach&gt;
+                <p>
+                    We can specify that only certain fields (properties) be shown. They will be displayed in the order entered (left to right, top to bottom). We can also select to display only certain items, given by their ids.
+                </p>
+                <pre>
+            &lt;xar:data-view object="$myobject" fieldlist="exid,name" /&gt;
+            &lt;xar:data-view object="$myobject" itemids="1,20,273" /&gt;
+                </pre>
 
-            </pre>
-                <p>If you want to show a standard list of items, with all the dynamic properties that are
-                defined for that object.</p>
-                    <pre>
-            &lt;xar:data-view module="example" /&gt;
-
-            &lt;xar:data-view module="example" linkfield="name" /&gt;
-
-            &lt;xar:data-view module="example" static="yes" /&gt; (disabled)
-
-            &lt;xar:data-view module="example" fieldlist="exid,name" /&gt;
-
-            &lt;xar:data-view module="articles" itemtype="2" /&gt;
-
-            &lt;xar:data-view module="example" itemids="1,20,273" /&gt;
-
-            &lt;xar:data-view module="articles" itemtype="2" sort="hitcount,title"
+                <p>
+                    We can specify sorts, number of items to be displayed, and specify filters (given by the where attribute):
+                </p>
+                <pre>
+            &lt;xar:data-view object="$myobject" sort="hitcount,title"
              where="authorid eq 2" numitems="20" /&gt;
+                </pre>
 
-            &lt;xar:data-view module="example" layout="list" /&gt;
-
-            &lt;xar:data-view module="articles" itemtype="2" template="myarticles" /&gt;
-
-            &lt;xar:data-view object="&#36;mylist" /&gt;
-            </pre>
-                <p>Idem for</p>
-                <pre>
-        &lt;xar:data-view ... /&gt;
-            </pre>
-                <p>(Todo : group, join ?)</p>
-
+                
                 <h4>Working with a single items</h4>
                 <p>
                     We can display a form for entering an item, or simply display an object item's data:
@@ -239,23 +246,23 @@
                 <pre>
             &lt;xar:data-form object="&#36;object" /&gt;
             &lt;xar:data-display object="&#36;object" /&gt;
-            </pre>
+                </pre>
                 <p>
                     The tags can accept attributes, for instance to customize their display:
                 </p>
                 <pre>
             &lt;xar:data-form object="&#36;object" template="mytemplate" layout="mylayout" /&gt;
-            </pre>
+                </pre>
                 <p>
                     In the above example the object $object already contains the item we are interested in. We can load a specific item by specifying an itemid attribute:
                 <pre>
             &lt;xar:data-form object="&#36;object" itemid="666" /&gt;
-            </pre>                    
+                </pre>                    
                     We can also assemble an object item by getting the item first via a getitem tag:
                 </p>
                 <pre>
             &lt;xar:data-getitem name="&#36;properties" object="$myobject" itemid="&#36;id" /&gt;
-            </pre>
+                </pre>
                 <p>
                     Note that in this example the attribute object can refer to an onject or its name. The itemid attribute defines which item's data to retrieve, and the output is an array of fields with that data, called $properties. We can then use the $properties array to define a custom display, such as givne below (a custom form for input would simply use data-input, rather than data-output, tags):
                 </p>
@@ -270,7 +277,7 @@
                     &lt;/td&gt;
                 &lt;/tr&gt;
             &lt;/xar:foreach&gt;
-            </pre>
+                </pre>
 
                 <h4>Working with a single item fields</h4>
                 <p>
@@ -279,20 +286,20 @@
                 <pre>
             &lt;xar:set name="myval"&gt;'hello'&lt;/xar:set&gt; 
             &lt;xar:data-input name="greeting" type="textbox" value="&#36;myval" /&gt;
-            </pre>
+                </pre>
                 <p>
                     By passing the tag a dataproperty object, it will take on the properties of that object (type, value etc.)
                 </p>
                 <pre>
             &lt;xar:data-input property="&#36;myproperty" /&gt;
-            </pre>
+                </pre>
                 <p>
                     We can also override properties by explicitly adding other values as attributes:
                 </p>
                 <pre>
             &lt;xar:set name="myval"&gt;'hello'&lt;/xar:set&gt; 
             &lt;xar:data-input property="&#36;myproperty" value="&#36;myval" /&gt;
-            </pre>
+                </pre>
         </div>
         
         <div id="page-3" style="display: none">
