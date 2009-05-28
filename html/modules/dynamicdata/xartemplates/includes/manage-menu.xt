@@ -6,20 +6,24 @@
     <xar:set name="request">xarRequest::getInfo()</xar:set>
     <xar:set name="activetab">#$request.2#</xar:set>
     <div>
-        <dl class="xar-tabs">
-            <dt class="help" title="#xarML('Select object function')#">Manage :</dt>
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <xar:var name="title">Select object function</xar:var>
+            <xar:var name="label">Manage</xar:var>
+            <li class="xar-tabs-label" title="#$title#">#$label#</li>
             <xar:sec mask="EditDynamicData" catch="false">
-                <xar:set name="tabclass">$activetab=='view'?'active':''</xar:set>
-                <dd class="#$tabclass#">
-                    <a href="&xar-modurl-dynamicdata-admin-view;">View DataObjects</a>
-                </dd>
+                <xar:set name="tabclass">$activetab=='view'?'xar-tab-active':'xar-tab'</xar:set>
+                <xar:set name="linkclass">$activetab=='view'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+                <li class="#$tabclass#">
+                    <a href="&xar-modurl-dynamicdata-admin-view;" class="#$linkclass#">View DataObjects</a>
+                </li>
             </xar:sec>
             <xar:sec mask="AdminDynamicData" catch="false">
-                <xar:set name="tabclass">$activetab=='new'?'active':''</xar:set>
-                <dd class="#$tabclass#">
-                    <a href="&xar-modurl-dynamicdata-admin-new;">Create DataObject</a>
-                </dd>
+                <xar:set name="tabclass">$activetab=='new'?'xar-tab-active':'xar-tab'</xar:set>
+                <xar:set name="linkclass">$activetab=='new'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+                <li class="#$tabclass#">
+                    <a href="&xar-modurl-dynamicdata-admin-new;" class="#$linkclass#">Create DataObject</a>
+                </li>
             </xar:sec>
-            </dl>
+        </ul>
     </div>
 </xar:template>

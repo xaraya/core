@@ -12,78 +12,80 @@
         </xar:if>
         <h2>Dynamic Data Utilities</h2>
         <div>
-            <dl class="xar-tabs">
-                <dt class="help">Options :</dt>
+            <ul class="xar-tabs xar-alt xar-norm-outline">
+                <xar:var name="title">Options</xar:var>
+                <xar:var name="label">Options</xar:var>
+                <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <xar:if condition="$option eq 'query'">
-                    <dd class="active">
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=query">Query</a>
-                    </dd>
-                    <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=query">Query</a>
-                    </dd>
+                    <li class="xar-tab-active">
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=query" class="xar-accent xar-accent-outline">Query</a>
+                    </li>
+                <xar:else />
+                    <li class="xar-tab>
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=query" class="xar-norm xar-norm-outline">Query</a>
+                    </li>
                 </xar:if>
                 <xar:if condition="$option eq 'import'">
-                    <dd class="active">
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=import">Import</a>
-                    </dd>
-                    <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=import">Import</a>
-                    </dd>
+                    <li class="xar-tab-active">
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=import" class="xar-accent xar-accent-outline">Import</a>
+                    </li>
+                <xar:else />
+                    <li class="xar-tab>
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=import" class="xar-norm xar-norm-outline">Import</a>
+                    </li>
                 </xar:if>
                 <xar:if condition="$option eq 'export'">
-                    <dd class="active">
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=export">Export</a>
-                    </dd>
-                    <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=export">Export</a>
-                    </dd>
+                    <li class="xar-tab-active">
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=export" class="xar-accent xar-accent-outline">Export</a>
+                    </li>
+                <xar:else />
+                    <li class="xar-tab>
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=export" class="xar-norm xar-norm-outline">Export</a>
+                    </li>
                 </xar:if>
                 <xar:if condition="$option eq 'static'">
-                    <dd class="active">
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=static">Table
+                    <li class="xar-tab-active">
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=static" class="xar-accent xar-accent-outline">Table
                         Definition</a>
-                    </dd>
-                    <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=static">Table
+                    </li>
+                <xar:else />
+                    <li class="xar-tab>
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=static" class="xar-norm xar-norm-outline">Table
                         Definition</a>
-                    </dd>
+                    </li>
                 </xar:if>
                 <xar:if condition="$option eq 'relations'">
-                    <dd class="active">
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=relations">
+                    <li class="xar-tab-active">
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=relations" class="xar-accent xar-accent-outline">
                         Relationships</a>
-                    </dd>
-                    <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=relations">
+                    </li>
+                <xar:else />
+                    <li class="xar-tab>
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=relations" class="xar-norm xar-norm-outline">
                         Relationships</a>
-                    </dd>
+                    </li>
                 </xar:if>
                 <xar:if condition="$option eq 'meta'">
-                    <dd class="active">
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=meta">Meta
+                    <li class="xar-tab-active">
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=meta" class="xar-accent xar-accent-outline">Meta
                         Definitions</a>
-                    </dd>
-                    <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=meta">Meta
+                    </li>
+                <xar:else />
+                    <li class="xar-tab>
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=meta" class="xar-norm xar-norm-outline">Meta
                         Definitions</a>
-                    </dd>
+                    </li>
                 </xar:if>
                 <xar:if condition="$option eq 'migrate'">
-                    <dd class="active">
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=migrate">Migrate
+                    <li class="xar-tab-active">
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=migrate" class="xar-accent xar-accent-outline">Migrate
                         Items</a>
-                    </dd>
-                    <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=migrate">Migrate
+                    </li>
+                <xar:else />
+                    <li class="xar-tab">
+                        <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=migrate" class="xar-norm xar-norm-outline">Migrate
                         Items</a>
-                    </dd>
+                    </li>
                 </xar:if>
             </dl>
         </div>

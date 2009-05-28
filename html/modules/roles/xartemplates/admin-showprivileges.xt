@@ -13,24 +13,24 @@
         </h2>
         <xar:if condition="count($parents) ne 0">
             <div>
-                <dl class="xar-tabs">
-                    <dt class="help" title="These are the groups that #$pname# is a member of">
-                    Parent Groups:</dt>
+                <ul class="xar-tabs xar-alt xar-norm-outline">
+                    <xar:var name="title">These are the groups that #$pname# is a member of</xar:var>
+                    <xar:var name="label">Parent Groups</xar:var>
+                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
                     <xar:set name="prevgroup">""</xar:set>
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                            <dd>
-                    <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#">
-                                title="#xarML('Show this group')#">
+                            <li class="xar-tab">
+                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
                                     <xar:var name="parents[$i].parentname" prep="true" />
                                 </a>
-                            </dd>
+                            </li>
                         </xar:if>
                         <xar:set name="prevgroup">
                             <xar:var name="parents[$i].parentname" prep="true" />
                         </xar:set>
                     </xar:for>
-                </dl>
+                </ul>
             </div>
         </xar:if>
         <xar:comment>TODO set the active tab here</xar:comment>

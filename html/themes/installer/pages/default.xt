@@ -11,8 +11,9 @@
     <meta http-equiv="expires" content="0" />
     <meta name="generator" content="Xaraya; - http://www.xaraya.com" />
     <meta name="rating" content="General" />
-    <link rel="stylesheet" type="text/css" href="themes/installer/style/style.css" />
-    <link rel="stylesheet" type="text/css" href="modules/base/xarstyles/xarcore-xhtml1-strict.css" />
+    <xar:style scope="theme" theme="installer" file="style" />
+    <xar:style scope="module" module="base" file="xarcore-xhtml1-strict" />
+    <xar:style scope="module" module="base" file="tabs" />
 </head>
 <body>
     <xar:set name="isupgrade">#xarVarGetCached('Upgrade', 'upgrading')#</xar:set>

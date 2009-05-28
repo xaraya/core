@@ -23,7 +23,7 @@
 
                                     <option value="#$item['objectid']#" selected="selected">
                                     #$item['label']#</option>
-                                    <xar:else />
+                                <xar:else />
                                     <option value="#$item['objectid']#">#$item['label']#</option>
                                 </xar:if>
                             </xar:foreach>
@@ -39,7 +39,7 @@
                             <xar:foreach in="$queries" value="$item">
                                 <xar:if condition="!empty($query) and $query eq $item">
                                     <option value="#$item#" selected="selected">#$item#</option>
-                                    <xar:else />
+                                <xar:else />
                                     <option value="#$item#">#$item#</option>
                                 </xar:if>
                             </xar:foreach>
@@ -50,15 +50,13 @@
                     </td>
                     <td>
                         <input type="text" name="numitems" id="numitems" value="#$numitems#" size="5" />
-                        size="5" />
                     </td>
                     <td>
                         <label for="groupby">Group By:</label>
                     </td>
                     <td>
                         <xar:set name="checked">!empty($groupby)</xar:set>
-                        <xar:data-input type="checkbox" name="groupby" id="groupby"
-                        onchange="submit()" checked="$checked" />
+                        <xar:data-input type="checkbox" name="groupby" id="groupby" onchange="submit()" checked="$checked" />
                     </td>
                 </tr>
                 <xar:if condition="!empty($jointables)">
@@ -74,7 +72,7 @@
                                     <xar:if condition="!empty($join) and $join eq $item">
                                         <option value="#$item#" selected="selected">
                                         #$item#</option>
-                                        <xar:else />
+                                    <xar:else />
                                         <option value="#$item#">#$item#</option>
                                     </xar:if>
                                 </xar:foreach>
@@ -94,7 +92,7 @@
                             <xar:foreach in="$tables" value="$item">
                                 <xar:if condition="!empty($table) and $table eq $item">
                                     <option value="#$item#" selected="selected">#$item#</option>
-                                    <xar:else />
+                                <xar:else />
                                     <option value="#$item#">#$item#</option>
                                 </xar:if>
                             </xar:foreach>
@@ -144,7 +142,7 @@
                                                 <option value="#$name2#" selected="selected">
                                                     <xar:data-label property="$properties[$name2]" />
                                                 </option>
-                                                <xar:else />
+                                            <xar:else />
                                                 <option value="#$name2#">
                                                     <xar:data-label property="$properties[$name2]" />
                                                 </option>
@@ -266,11 +264,10 @@
                                         <option value="">Select:</option>
                                         <xar:foreach in="$properties" key="$name2">
                                             <xar:if condition="!empty($field[$name]) and $field[$name] eq $name2">
-
                                                 <option value="#$name2#" selected="selected">
                                                     <xar:data-label property="$properties[$name2]" />
                                                 </option>
-                                                <xar:else />
+                                            <xar:else />
                                                 <option value="#$name2#">
                                                     <xar:data-label property="$properties[$name2]" />
                                                 </option>
@@ -297,10 +294,8 @@
                                         <option value=""></option>
                                         <xar:foreach in="$operationoptions" value="$option">
                                             <xar:if condition="!empty($operation[$name]) and $operation[$name] eq $option['id']">
-
-                                                <option value="#$option['id']#"
-                                                selected="selected">#$option['name']#</option>
-                                                <xar:else />
+                                                <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                                            <xar:else />
                                                 <option value="#$option['id']#">
                                                 #$option['name']#</option>
                                             </xar:if>
@@ -337,10 +332,9 @@
                                     <option value=""></option>
                                     <xar:foreach in="$sortoptions" value="$option">
                                         <xar:if condition="!empty($sort[$name]) and $sort[$name] eq $option['id']">
-
                                             <option value="#$option['id']#" selected="selected">
                                             #$option['name']#</option>
-                                            <xar:else />
+                                        <xar:else />
                                             <option value="#$option['id']#">
                                             #$option['name']#</option>
                                         </xar:if>
@@ -351,8 +345,7 @@
                     </xar:foreach>
                 </xar:if>
                 <tr>
-                    <th class="xar-align-left">Submit</th>
-                    <td colspan="3">
+                    <td colspan="4">
                         <input type="submit" value="#$submit#" />
                     </td>
                 </tr>
@@ -366,7 +359,7 @@
         <xar:if condition="isset($mylist)">
             <xar:if condition="!empty($groupby)">
                 <xar:data-view object="$mylist" layout="list" />
-                <xar:else />
+            <xar:else />
                 <xar:data-view object="$mylist" />
             </xar:if>
         </xar:if>

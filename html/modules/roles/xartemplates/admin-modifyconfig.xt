@@ -9,64 +9,66 @@
       <xar:template type="module" file="admin-menu" />
         <h2>Modify Configuration</h2>
         <div>
-            <dl class="xar-tabs">
-                <dt class="help">Configure:</dt>
+            <ul class="xar-tabs xar-alt xar-norm-outline">
+                <xar:var name="title">Configure</xar:var>
+                <xar:var name="label">Configure</xar:var>
+                <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <xar:if condition="$tab eq 'general'">
-                    <dd class="active">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=general">General</a>
-                    </dd>
+                    <li class="xar-tab-active">
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=general" class="xar-accent xar-accent-outline">General</a>
+                    </li>
                 <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=general">General</a>
-                    </dd>
+                    <li class="xar-tab">
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=general" class="xar-norm xar-norm-outline">General</a>
+                    </li>
                 </xar:if>
                 <xar:if condition="$tab eq 'duvs'">
-                    <dd class="active">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs">User
+                    <li class="xar-tab-active">
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs" class="xar-accent xar-accent-outline">User
                         Variables</a>
-                    </dd>
-                    <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs">User
+                    </li>
+                <xar:else />
+                    <li class="xar-tab">
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs" class="xar-norm xar-norm-outline">User
                         Variables</a>
-                    </dd>
+                    </li>
                 </xar:if>
                 <xar:if condition="$tab eq 'hooks'">
-                    <dd class="active">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=hooks">User
+                    <li class="xar-tab-active">
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=hooks" class="xar-accent xar-accent-outline">User
                         Hooks</a>
-                    </dd>
+                    </li>
                 <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=hooks">User
+                    <li class="xar-tab">
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=hooks" class="xar-norm xar-norm-outline">User
                         Hooks</a>
-                    </dd>
+                    </li>
                 </xar:if>
                 <!--
                     <xar:if condition="$tab eq 'grouphooks'">
-                        <dd class="active">
-                            <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
+                        <li class="xar-tab-active">
+                            <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks" class="xar-accent xar-accent-outline">
                             Group Hooks</a>
-                        </dd>
+                        </li>
                     <xar:else />
-                        <dd>
-                            <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
+                        <li class="xar-tab">
+                            <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks" class="xar-norm xar-norm-outline">
                             Group Hooks</a>
-                        </dd>
+                        </li>
                     </xar:if>
                 -->
                 <xar:if condition="$tab eq 'memberlist'">
-                    <dd class="active">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist">Member
+                    <li class="xar-tab-active">
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist" class="xar-accent xar-accent-outline">Member
                         Options</a>
-                    </dd>
+                    </li>
                 <xar:else />
-                    <dd>
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist">Member
+                    <li class="xar-tab">
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist" class="xar-norm xar-norm-outline">Member
                         Options</a>
-                    </dd>
+                    </li>
                 </xar:if>
-            </dl>
+            </ul>
         </div>
         <!--
             - - - - - - - - - - - - - - - - - - - Begin General Options - - - - - - - - - - - - - - - - - - - - -

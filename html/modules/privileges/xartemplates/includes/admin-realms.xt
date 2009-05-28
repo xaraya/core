@@ -7,21 +7,30 @@
     <xar:set name="activetab">#$request.2#</xar:set>
     <h2>Manage Realms</h2>
     <div>
-        <dl class="xar-tabs">
-            <dt class="help" title="#xarML('Choose an action to perform')#">Manage Realms:</dt>
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <xar:var name="title">Choose an action to perform</xar:var>
+            <xar:var name="label">Manage Realms</xar:var>
+            <li class="xar-tabs-label" title="#$title#">#$label#</li>
             <xar:if condition="$activetab eq 'viewrealms' or $activetab eq 'modifyrealm' or $activetab eq 'deleterealm'">
-
-                <xar:set name="tabclass">'active'</xar:set>
-                <xar:else />
-                <xar:set name="tabclass">''</xar:set>
+                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+            <xar:else />
+                <xar:set name="tabclass">'xar-tab'</xar:set>
+                <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             </xar:if>
-            <dd class="#$tabclass#">
-                <a href="&xar-modurl-privileges-admin-viewrealms;">View Realms</a>
-            </dd>
-            <xar:set name="tabclass">$activetab=='newrealm'?'active':''</xar:set>
-            <dd class="#$tabclass#">
-                <a href="&xar-modurl-privileges-admin-newrealm;">Add Realm</a>
-            </dd>
+            <li class="#$tabclass#">
+                <a href="&xar-modurl-privileges-admin-viewrealms;" class="#$linkclass#">View Realms</a>
+            </li>
+            <xar:if condition="$activetab eq 'newrealm'">
+                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+            <xar:else />
+                <xar:set name="tabclass">'xar-tab'</xar:set>
+                <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+            </xar:if>
+            <li class="#$tabclass#">
+                <a href="&xar-modurl-privileges-admin-newrealm;" class="#$linkclass#">Add Realm</a>
+            </li>
         </dl>
     </div>
 </xar:template>

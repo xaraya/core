@@ -42,44 +42,44 @@
             </fieldset>
         <xar:elseif condition="$selstyle eq '2'"/>
             <div>
-                <dl class="xar-tabs">
-                    <dt class="help"
-                    title="#xarML('Click on a group tab to display users from that group')#">Groups
-                    :</dt>
+                <ul class="xar-tabs xar-alt xar-norm-outline">
+                    <xar:var name="title">Click on a group tab to display users from that group</xar:var>
+                    <xar:var name="label">Help</xar:var>
+                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
                     <xar:if condition="$groupid eq 0">
-                        <dd class="active">
-                            <a href="&xar-modurl-roles-admin-showusers;&amp;id=0&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload">
+                            <li class="xar-tab-active">
+                            <a href="&xar-modurl-roles-admin-showusers;&amp;id=0&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload" class="xar-accent xar-accent-outline">
                             All Users (#$totalusers#)</a>
-                        </dd>
+                        </li>
                     <xar:else/>
-                        <dd>
-                            <a href="&xar-modurl-roles-admin-showusers;&amp;id=0&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload">
+                        <li class="xar-tab">
+                            <a href="&xar-modurl-roles-admin-showusers;&amp;id=0&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload" class="xar-norm xar-norm-outline">
                             All Users (#$totalusers#)</a>
-                        </dd>
+                        </li>
                     </xar:if>
                     <xar:set name="prevgroup">""</xar:set>
                     <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
                         <xar:if condition="$prevgroup ne $groups[$i]['name']">
                             <xar:if condition="$groupid eq $groups[$i]['id']">
-                                <dd class="active">
+                                <li class="xar-tab-active">
                                     <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$groups[$i]['id']#&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload"
-                                    title="#xarML('Display the users in this group')#">
+                                    title="#xarML('Display the users in this group')#" class="xar-accent xar-accent-outline">
                                     #xarVarPrepForDisplay($groups[$i]['name'])#
                                     (#$groups[$i]['users']#)</a>
-                                </dd>
+                                </li>
                             <xar:else/>
-                                <dd>
+                                <li class="xar-tab">
                                     <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$groups[$i]['id']#&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload"
-                                    title="#xarML('Display the users in this group')#">
+                                    title="#xarML('Display the users in this group')#" class="xar-norm xar-norm-outline">
                                     #xarVarPrepForDisplay($groups[$i]['name'])#
                                     (#$groups[$i]['users']#)</a>
-                                </dd>
+                                </li>
                             </xar:if>
                         </xar:if>
                         <xar:set name="prevgroup">
                         #xarVarPrepForDisplay($groups[$i]['name'])#</xar:set>
                     </xar:for>
-                </dl>
+                </ul>
             </div>
         </xar:if>
         <form method="post" action="&xar-modurl-roles-admin-showusers;&amp;reload=reload">

@@ -6,71 +6,73 @@
     </div>
     <div class="xar-mod-body">
         <h2>Member List</h2>
-            <xar:style scope="module" module="base" file="navtabs" />
-            <dl class="xar-tabs">
-            <dt class="help">Sort :</dt>
+        <xar:style scope="module" module="base" file="navtabs" />
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <xar:var name="title">Sort</xar:var>
+            <xar:var name="label">Sort</xar:var>
+            <li class="xar-tabs-label" title="#$title#">#$label#</li>
             <xar:if condition="$letter eq ''">
-                <dd class="active">
-                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#">
+                <li class="xar-tab-active">
+                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#" class="xar-accent xar-accent-outline">
                     All</a>
-                </dd>
-                    <xar:else />
-                <dd>
-                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#">
+                </li>
+            <xar:else />
+                <li class="xar-tab">
+                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#" class="xar-norm xar-norm-outline">
                     All</a>
-                </dd>
+                </li>
             </xar:if>
                 <xar:foreach in="$alphabet" value="$ltr">
                     <xar:if condition="$letter eq $ltr">
-                        <dd class="active">
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#">
+                        <li class="xar-tab-active">
+                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#" class="xar-accent xar-accent-outline">
                         #$ltr#</a>
-                        </dd>
+                        </li>
                     <xar:else />
-                        <dd>
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#">
+                        <li class="xar-tab">
+                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#" class="xar-norm xar-norm-outline">
                         #$ltr#</a>
-                        </dd>
+                        </li>
                     </xar:if>
                 </xar:foreach>
             <xar:if condition="$letter eq 'Other'">
-                <dd class="active">
-                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#">
+                <li class="xar-tab-active">
+                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#" class="xar-accent xar-accent-outline">
                     Other</a>
-                </dd>
-                    <xar:else />
-                <dd>
-                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#">
+                </li>
+            <xar:else />
+                <li class="xar-tab">
+                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#" class="xar-norm xar-norm-outline">
                     Other</a>
-                </dd>
+                </li>
             </xar:if>
             </dl>
             <div>
                 <dl class="xar-tabs">
                 <dt class="help">Show :</dt>
                     <xar:if condition="$phase ne 'active'">
-                        <dd class="active">
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
+                        <li class="xar-tab-active">
+                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#" class="xar-accent xar-accent-outline">
                         All</a>
-                        </dd>
+                        </li>
                     <xar:else />
-                        <dd>
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
+                        <li class="xar-tab">
+                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#" class="xar-norm xar-norm-outline">
                         All</a>
-                        </dd>
+                        </li>
                     </xar:if>
                     <xar:if condition="$phase eq 'active'">
-                        <dd class="active">
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
+                        <li class="xar-tab-active">
+                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#" class="xar-accent xar-accent-outline">
                         Online</a>
-                        </dd>
+                        </li>
                     <xar:else />
-                        <dd>
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#">
+                        <li class="xar-tab">
+                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#" class="xar-norm xar-norm-outline">
                         Online</a>
-                        </dd>
+                        </li>
                     </xar:if>
-                </dl>
+                </ul>
             </div>
             <div class="xar-clearboth">&#160;</div>
         <xar:if condition="!empty($message)">

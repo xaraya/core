@@ -26,18 +26,19 @@
         <a href="&xar-modurl-roles-admin-createmail;">Messaging System:</a>Send Mail To
         Users/Groups</h2>
         <div>
-            <dl class="xar-tabs">
-                <dt class="help">Option :</dt>
-                <dd class="active">
-                    <a href="&xar-modurl-roles-admin-createmail;">Send mail</a>
-                </dd>
-                <dd>
-                    <a href="&xar-modurl-roles-admin-modifyemail;">Templates</a>
-                </dd>
-                <dd>
-                    <a href="&xar-modurl-roles-admin-modifynotice;">Configure</a>
-                </dd>
-            </dl>
+            <ul class="xar-tabs xar-alt xar-norm-outline">
+                <xar:var name="label">Option</xar:var>
+                <li class="xar-tabs-label" title="#$label#">#$label#</li>
+                <li class="xar-tab-active">
+                    <a href="&xar-modurl-roles-admin-createmail;" class="xar-accent xar-accent-outline">Send mail</a>
+                </li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-roles-admin-modifyemail;" class="xar-norm xar-norm-outline">Templates</a>
+                </li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-roles-admin-modifynotice;" class="xar-norm xar-norm-outline">Configure</a>
+                </li>
+            </ul>
         </div>
         <form method="post" action="&xar-modurl-roles-admin-createmail;">
             <!--

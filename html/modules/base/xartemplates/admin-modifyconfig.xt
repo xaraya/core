@@ -18,50 +18,51 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
         <h2>Modify System Configuration</h2>
-        <dl class="xar-tabs">
-            <dt class="help" title="#xarML('Choose a set of configuration options to modify')#">
-            Modify:</dt>
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <xar:var name="title">Choose a set of configuration options to modify</xar:var>
+            <xar:var name="label">Modify</xar:var>
+            <li class="xar-tabs-label" title="#$title#">#$label#</li>
             <xar:if condition="$tab eq 'display'">
-                <dd class="active">
-                    <a href="#xarServer::getCurrentURL()#">Site Display</a>
-                </dd>
+                <li class="xar-tab-active">
+                    <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Site Display</a>
+                </li>
                 <xar:else />
-                <dd>
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'display'))#">
+                <li class="xar-tab">
+                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'display'))#" class="xar-norm xar-norm-outline">
                     Site Display</a>
-                </dd>
+                </li>
             </xar:if>
             <xar:if condition="$tab eq 'security'">
-                <dd class="active">
-                    <a href="#xarServer::getCurrentURL()#">Sessions/Security</a>
-                </dd>
+                <li class="xar-tab-active">
+                    <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Sessions/Security</a>
+                </li>
                 <xar:else />
-                <dd>
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'security'))#">
+                <li class="xar-tab">
+                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'security'))#" class="xar-norm xar-norm-outline">
                     Sessions and Security</a>
-                </dd>
+                </li>
             </xar:if>
             <xar:if condition="$tab eq 'locales'">
-                <dd class="active">
-                    <a href="#xarServer::getCurrentURL()#">Languages and Locales</a>
-                </dd>
+                <li class="xar-tab-active">
+                    <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Languages and Locales</a>
+                </li>
                 <xar:else />
-                <dd>
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'locales'))#">
+                <li class="xar-tab">
+                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'locales'))#" class="xar-norm xar-norm-outline">
                     Languages and Locales</a>
-                </dd>
+                </li>
             </xar:if>
             <xar:if condition="$tab eq 'other'">
-                <dd class="active">
-                    <a href="#xarServer::getCurrentURL()#">Other</a>
-                </dd>
+                <li class="xar-tab-active">
+                    <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Other</a>
+                </li>
                 <xar:else />
-                <dd>
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'other'))#">
+                <li class="xar-tab">
+                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'other'))#" class="xar-norm xar-norm-outline">
                     Other</a>
-                </dd>
+                </li>
             </xar:if>
-        </dl>
+        </ul>
         <!-- Begin Site Display Options -->
         <xar:if condition="$tab eq 'display'">
             <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">

@@ -8,20 +8,21 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
         <h2>Modify Blocks Configuration</h2>
-        <dl class="xar-tabs">
-            <dt class="help" title="#xarML('Choose a set of configuration options')#">
-            Configure:</dt>
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <xar:var name="title">Choose a set of configuration options</xar:var>
+            <xar:var name="label">Configure</xar:var>
+            <li class="xar-tabs-label" title="#$title#">#$label#</li>
             <xar:if condition="$tab eq 'general'">
-                <dd class="active">
-                    <a href="#xarServer::getCurrentURL()#">General</a>
-                </dd>
-                <xar:else />
-                <dd>
-                    <a href="#xarModURL('blocks', 'admin', 'modifyconfig', array('tab' =&gt; 'general'))#">
+                <li class="xar-tab-active">
+                    <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">General</a>
+                </li>
+            <xar:else />
+                <li class="xar-tab">
+                    <a href="#xarModURL('blocks', 'admin', 'modifyconfig', array('tab' =&gt; 'general'))#" class="xar-norm xar-norm-outline">
                     General</a>
-                </dd>
+                </li>
             </xar:if>
-        </dl>
+        </ul>
         <!--
             - - - - - - - - - - - Begin General Options - - - - - - - - - - - 
         -->

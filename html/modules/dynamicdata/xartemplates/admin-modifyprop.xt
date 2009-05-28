@@ -11,21 +11,23 @@
         <xar:if condition="!empty($objectid)">
             <xar:style scope="module" module="base" file="navtabs" />
             <div>
-                <dl class="xar-tabs">
-                    <dt class="help">Options:</dt>
-                    <dd>
-                        <a href="&xar-modurl-dynamicdata-admin-modify;&amp;itemid=#$objectid#">
+                <ul class="xar-tabs xar-alt xar-norm-outline">
+                    <xar:var name="title">Options</xar:var>
+                    <xar:var name="label">Options</xar:var>
+                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
+                    <li class="xar-tab">
+                        <a href="&xar-modurl-dynamicdata-admin-modify;&amp;itemid=#$objectid#" class="xar-norm xar-norm-outline">
                         Modify Object Definition</a>
-                    </dd>
-                    <dd class="active">
-                        <a href="#xarServer::getCurrentURL()#">Modify DataProperties</a>
-                    </dd>
-                    <dd>
-                        <a href="&xar-modurl-dynamicdata-util-export;&amp;module_id=#$module_id#&amp;itemtype=#$itemtype#">
+                    </li>
+                    <li class="xar-tab-active">
+                        <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Modify DataProperties</a>
+                    </li>
+                    <li class="xar-tab">
+                        <a href="&xar-modurl-dynamicdata-util-export;&amp;module_id=#$module_id#&amp;itemtype=#$itemtype#" class="xar-norm xar-norm-outline">
                         Export to XML</a>
-                    </dd>
+                    </li>
                     <xar:if condition="!empty($fields)">
-                        <dd>
+                        <li class="xar-tab">
                             <script type="text/javascript">
                             function xar_dynamicdata_formpreview()
                             {
@@ -36,12 +38,12 @@
                                 my_window.focus();
                             }
                             </script>
-                            <a href="javascript:xar_dynamicdata_formpreview();">
+                            <a href="javascript:xar_dynamicdata_formpreview();" class="xar-norm xar-norm-outline">
                                 Preview Input Form
                             </a>
-                        </dd>
+                        </li>
                     </xar:if>
-                </dl>
+                </ul>
             </div>
             <fieldset>
                 <legend>Object summary</legend>

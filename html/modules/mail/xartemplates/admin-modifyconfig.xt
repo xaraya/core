@@ -20,34 +20,42 @@
             <xar:set name="tab">'general'</xar:set>
         </xar:if>
         <xar:set name="tabclass">''</xar:set>
-        <dl class="xar-tabs">
-            <dt class="help" title="#xarML('Choose mail aspect to configure')#">Aspect</dt>
-            <xar:set name="tabclass">''</xar:set>
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <xar:var name="title">Choose mail aspect to configure</xar:var>
+            <xar:var name="label">Aspect</xar:var>
+            <li class="xar-tabs-label" title="#$title#">#$label#</li>
+            <xar:set name="tabclass">'xar-tab'</xar:set>
+            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             <xar:set name="y">$params['tab']='general'</xar:set>
             <xar:if condition="$tab eq 'general'">
-                <xar:set name="tabclass">'active'</xar:set>
+                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
             </xar:if>
-            <dd class="#$tabclass#">
-                <a href="#xarServer::getCurrentURL($params)#">General</a>
-            </dd>
-            <xar:set name="tabclass">''</xar:set>
+            <li class="#$tabclass#">
+                <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">General</a>
+            </li>
+            <xar:set name="tabclass">'xar-tab'</xar:set>
+            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             <xar:if condition="$tab eq 'incoming'">
-                <xar:set name="tabclass">'active'</xar:set>
+                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
             </xar:if>
             <xar:set name="y">$params['tab']='incoming'</xar:set>
-            <dd class="#$tabclass#">
-                <a href="#xarServer::getCurrentURL($params)#">Incoming</a>
-            </dd>
-            <xar:set name="tabclass">''</xar:set>
+            <li class="#$tabclass#">
+                <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">Incoming</a>
+            </li>
             <xar:set name="y">$params['tab']='outgoing'</xar:set>
+            <xar:set name="tabclass">'xar-tab'</xar:set>
+            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             <xar:if condition="$tab eq 'outgoing'">
-                <xar:set name="tabclass">'active'</xar:set>
+                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
             </xar:if>
             <xar:set name="y">$params['tab']='outgoing'</xar:set>
-            <dd class="#$tabclass#">
-                <a href="#xarServer::getCurrentURL($params)#">Outgoing</a>
-            </dd>
-        </dl>
+            <li class="#$tabclass#">
+                <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">Outgoing</a>
+            </li>
+        </ul>
         <form method="post" action="&xar-modurl-mail-admin-updateconfig;" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded" >
             <xar:data-input type="hidden" name="tab" value="$tab" />
             <!-- General tab -->

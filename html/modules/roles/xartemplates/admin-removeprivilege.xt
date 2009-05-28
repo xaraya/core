@@ -9,46 +9,48 @@
         <xar:if condition="count($parents) ne 0">
             <xar:style scope="module" module="base" file="navtabs" />
             <div>
-                <dl class="xar-tabs">
-                    <dt class="help" title="These are the groups that #$rolename# is a member of">
-                    Parent Groups :</dt>
+                <ul class="xar-tabs xar-alt xar-norm-outline">
+                    <xar:var name="title">These are the groups that #$rolename# is a member of</xar:var>
+                    <xar:var name="label">Parent Groups</xar:var>
+                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
                     <xar:set name="prevgroup">""</xar:set>
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                            <dd>
+                            <li class="xar-tab">
                                 <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#"
-                                title="#xarML('Show this group')#">#$parents[$i]['parentname']#</a>
-                            </dd>
+                                title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">#$parents[$i]['parentname']#</a>
+                            </li>
                         </xar:if>
                         <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
                     </xar:for>
-                </dl>
+                </ul>
             </div>
         </xar:if>
         <xar:style scope="module" module="base" file="navtabs" />
         <div>
-            <dl class="xar-tabs">
-                <dt class="help" title="These are the groups that #$rolename# is a member of">
-                Actions :</dt>
-                <dd>
-                    <a href="&xar-modurl-roles-admin-display;&amp;id=#$roleid#">Display</a>
-                </dd>
-                <dd>
-                    <a href="&xar-modurl-roles-admin-modify;&amp;id=#$roleid#">Modify</a>
-                </dd>
-                <dd>
-                    <a href="&xar-modurl-roles-admin-delete;&amp;id=#$roleid#">Delete</a>
-                </dd>
-                <dd class="active">
-                    <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$roleid#">
+            <ul class="xar-tabs xar-alt xar-norm-outline">
+                <xar:var name="title">Action</xar:var>
+                <xar:var name="label">Action</xar:var>
+                <li class="xar-tabs-label" title="#$title#">#$label#</li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-roles-admin-display;&amp;id=#$roleid#" class="xar-norm xar-norm-outline">Display</a>
+                </li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-roles-admin-modify;&amp;id=#$roleid#" class="xar-norm xar-norm-outline">Modify</a>
+                </li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-roles-admin-delete;&amp;id=#$roleid#" class="xar-norm xar-norm-outline">Delete</a>
+                </li>
+                <li class="xar-tab-active">
+                    <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$roleid#" class="xar-accent xar-accent-outline">
                     Privileges</a>
-                </dd>
+                </li>
                 <xar:if condition="$ptype eq ROLES_GROUPTYPE">
-                    <dd>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$roleid#">Users</a>
-                    </dd>
+                    <li class="xar-tab">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$roleid#" class="xar-norm xar-norm-outline">Users</a>
+                    </li>
                 </xar:if>
-            </dl>
+            </ul>
         </div>
         <form method="post" action="&xar-modurl-roles-admin-removeprivilege;" enctype="application/x-www-form-urlencoded" >
             <div>
