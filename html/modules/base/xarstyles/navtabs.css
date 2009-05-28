@@ -4,9 +4,9 @@ dl.xar-tabs {
     padding: 3px 0 0 0;
     width: 100%;
     float: left;
-    background-color: #f0f0f0;
+/*    background-color: #f0f0f0;*/
     line-height: 1.6em;
-    border-bottom: 1px solid #a0a0a0;
+/*    border-bottom: 1px solid #a0a0a0;*/
 }
 
 html * dl.xar-tabs {
@@ -19,7 +19,7 @@ dl.xar-tabs dt.help {
     padding: 2px 6px;
     margin-bottom: -2px;
     line-height: 1.6em;
-    border: 0 none;
+/*    border: 0 none; */
     font-weight: bold;
 }
 
@@ -34,23 +34,23 @@ dl.xar-tabs dd {
 dl.xar-tabs dd a {
     display: block;
     padding: 0 .5em;
-    color: #a0a0a0;
-    background-color: #f9f9f9;
+/*    color: #a0a0a0;*/
+/*    background-color: #f9f9f9;*/
     text-decoration: none;
     white-space: nowrap;
 }
 
 dl.xar-tabs dd a:hover {
-    color: #ffffff;
-    background-color: #bbbbbb;
+/*    color: #ffffff;*/
+/*    background-color: #bbbbbb;*/
     text-decoration: none;
 }
 
 dl.xar-tabs dd.active a {
-    color: #990000;
+/*    color: #990000;
     background-color: white;
     border: 1px solid #990000;
-    border-bottom: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;*/
 }
 
 /* ie5-mac seems to need this */

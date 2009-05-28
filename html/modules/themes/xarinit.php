@@ -86,7 +86,7 @@ function themes_init()
     //Moved here in 1.1.x series
     xarModVars::set('themes', 'usedashboard', 0);
     xarModVars::set('themes', 'dashtemplate', 'dashboard');
-    xarModVars::set('themes', 'adminpagemenu', 0);
+    xarModVars::set('themes', 'adminpagemenu', 1);
 
     xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditThemes','All','themes','All','All','ACCESS_EDIT');

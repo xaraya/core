@@ -1,0 +1,64 @@
+<adminmenu>
+    <menuitems>
+        <menuitem>
+            <includes>
+                <includeitem>main</includeitem>
+                <includeitem>overview</includeitem>
+            </includes>
+            <target>main</target>
+            <label>Overview</label>
+        </menuitem>
+        <menuitem>
+            <mask>EditRole</mask>
+            <includes>
+                <includeitem>showusers</includeitem>
+                <includeitem>display</includeitem>
+                <includeitem>modify</includeitem>
+                <includeitem>delete</includeitem>
+                <includeitem>showprivileges</includeitem>
+                <includeitem>testprivileges</includeitem>
+            </includes>
+            <target>showusers</target>
+            <title>View and edit all groups/users on the system</title>
+            <label>Groups &amp; Users</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminRole</mask>
+            <includes>
+                <includeitem>createmail</includeitem>
+                <includeitem>modifyemail</includeitem>
+                <includeitem>modifynotice</includeitem>
+            </includes>
+            <target>createmail</target>
+            <title>Manage system emails</title>
+            <label>Messaging</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminRole</mask>
+            <includes>
+                <includeitem>purge</includeitem>
+            </includes>
+            <target>purge</target>
+            <title>Undelete or permanently remove users/groups</title>
+            <label>Recall/Purge</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminRole</mask>
+            <includes>
+                <includeitem>sitelock</includeitem>
+            </includes>
+            <target>sitelock</target>
+            <title>Lock the site to all but selected users</title>
+            <label>SiteLock</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminRole</mask>
+            <includes>
+                <includeitem>modifyconfig</includeitem>
+            </includes>
+            <target>modifyconfig</target>
+            <title>Modify the roles module configuration</title>
+            <label>Modify Configuration</label>
+        </menuitem>
+    </menuitems>
+</adminmenu>

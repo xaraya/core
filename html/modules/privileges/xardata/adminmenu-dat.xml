@@ -1,0 +1,60 @@
+<adminmenu>
+    <menuitems>
+        <menuitem>
+            <includes>
+                <includeitem>main</includeitem>
+                <includeitem>overview</includeitem>
+            </includes>
+            <target>main</target>
+            <label>Overview</label>
+        </menuitem>
+        <menuitem>
+            <mask>EditPrivilege</mask>
+            <includes>
+                <includeitem>viewprivileges</includeitem>
+            </includes>
+            <target>viewprivileges</target>
+            <title>View all privileges on the system</title>
+            <label>View Privileges</label>
+        </menuitem>
+        <menuitem>
+            <mask>AddPrivilege</mask>
+            <includes>
+                <includeitem>new</includeitem>
+            </includes>
+            <target>new</target>
+            <title>Add a new privilege to the system</title>
+            <label>Add Privilege</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminPrivilege</mask>
+            <includes>
+                <includeitem>assignprivileges</includeitem>
+            </includes>
+            <target>assignprivileges</target>
+            <title>Assign privileges to groups and users</title>
+            <label>Assign Privileges</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminPrivilege</mask>
+            <includes>
+                <includeitem>viewrealms</includeitem>
+                <includeitem>newrealm</includeitem>
+                <includeitem>modifyrealm</includeitem>
+                <includeitem>deleterealm</includeitem>
+            </includes>
+            <target>viewrealms</target>
+            <title>Add, change or delete realms</title>
+            <label>Manage Realms</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminPrivilege</mask>
+            <includes>
+                <includeitem>modifyconfig</includeitem>
+            </includes>
+            <target>modifyconfig</target>
+            <title>Modify the privileges module configuration</title>
+            <label>Modify Configuration</label>
+        </menuitem>
+    </menuitems>
+</adminmenu>
