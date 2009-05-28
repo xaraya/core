@@ -1,0 +1,61 @@
+<adminmenu>
+    <menuitems>
+        <menuitem>
+            <includes>
+                <includeitem>main</includeitem>
+                <includeitem>overview</includeitem>
+            </includes>
+            <target>main</target>
+            <label>Overview</label>
+        </menuitem>
+        <menuitem>
+            <mask>EditBlock</mask>
+            <includes>
+                <includeitem>view_instances</includeitem>
+                <includeitem>modify_instance</includeitem>
+                <includeitem>delete_instance</includeitem>
+            </includes>
+            <target>view_instances</target>
+            <title>View or edit all block instances</title>
+            <label>View Blocks</label>
+        </menuitem>
+        <menuitem>
+            <mask>AddBlock</mask>
+            <includes>
+                <includeitem>new_instance</includeitem>
+            </includes>
+            <target>new_instance</target>
+            <title>Add a new block instance</title>
+            <label>New Block</label>
+        </menuitem>
+        <menuitem>
+            <mask>DeleteBlock</mask>
+            <includes>
+                <includeitem>view_groups</includeitem>
+                <includeitem>modify_group</includeitem>
+                <includeitem>delete_group</includeitem>
+            </includes>
+            <target>view_groups</target>
+            <title>View the defined block groups</title>
+            <label>Block Groups</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminBlock</mask>
+            <includes>
+                <includeitem>view_types</includeitem>
+            </includes>
+            <target>view_types</target>
+            <title>View Block Types</title>
+            <label>Block Types</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminBlock</mask>
+            <includes>
+                <includeitem>modifyconfig</includeitem>
+            </includes>
+            <target>modifyconfig</target>
+            <title>Modify Blocks configuration values</title>
+            <label>Modify Configuration</label>
+        </menuitem>
+    </menuitems>
+</adminmenu>

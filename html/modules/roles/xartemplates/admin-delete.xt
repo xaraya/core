@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:style scope="module" module="base" file="navtabs" />
     <div class="xar-mod-head">
         <span class="xar-mod-title">Roles Administration</span>
     </div>
@@ -10,45 +9,48 @@
         <h2>Manage #$itemtypename# '#$name#':</h2>
         <xar:if condition="count($parents) gt 0">
             <div>
-                <dl class="xar-tabs">
-                    <dt class="help" title="These are the groups that #$name# is a member of">
-                    Parent Groups:</dt>
+                <ul class="xar-tabs xar-alt xar-norm-outline">
+                    <xar:var name="title">These are the groups that #$name# is a member of</xar:var>
+                    <xar:var name="label">Parent Groups</xar:var>
+                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
                     <xar:set name="prevgroup">""</xar:set>
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                            <dd>
+                            <li class="xar-tab">
                                 <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#"
-                                title="#xarML('Show this group')#">
+                                title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
                                 #xarVarPrepForDisplay($parents[$i]['parentname'])#</a>
-                            </dd>
+                            </li>
                         </xar:if>
                         <xar:set name="prevgroup">
                         #xarVarPrepForDisplay($parents[$i]['parentname'])#</xar:set>
                     </xar:for>
-                </dl>
+                </ul>
             </div>
         </xar:if>
         <div>
-            <dl class="xar-tabs">
-                <dt class="help">Actions:</dt>
-                <dd>
-                    <a href="&xar-modurl-roles-admin-display;&amp;id=#$id#">Display</a>
-                </dd>
-                <dd>
-                    <a href="&xar-modurl-roles-admin-modify;&amp;id=#$id#">Modify</a>
-                </dd>
-                <dd class="active">
-                    <a href="&xar-modurl-roles-admin-delete;&amp;id=#$id#">Delete</a>
-                </dd>
-                <dd>
-                    <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$id#">Privileges</a>
-                </dd>
+            <ul class="xar-tabs xar-alt xar-norm-outline">
+                <xar:var name="title">Actions</xar:var>
+                <xar:var name="label">Actions</xar:var>
+                <li class="xar-tabs-label" title="#$title#">#$label#</li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-roles-admin-display;&amp;id=#$id#" class="xar-norm xar-norm-outline">Display</a>
+                </li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-roles-admin-modify;&amp;id=#$id#" class="xar-norm xar-norm-outline">Modify</a>
+                </li>
+                <li class="xar-tab-active">
+                    <a href="&xar-modurl-roles-admin-delete;&amp;id=#$id#" class="xar-accent xar-accent-outline">Delete</a>
+                </li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$id#" class="xar-norm xar-norm-outline">Privileges</a>
+                </li>
                 <xar:if condition="$ptype eq 1">
-                    <dd>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$id#">Users</a>
-                    </dd>
+                    <li class="xar-tab">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$id#" class="xar-norm xar-norm-outline">Users</a>
+                    </li>
                 </xar:if>
-            </dl>
+            </ul>
         </div>
         <xar:if condition="$frozen">
             <p>You do not have the privileges to delete #$itemtypename# #$name#</p>

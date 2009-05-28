@@ -2,19 +2,20 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <![CDATA[
-    <script type="">
+    <script type="text/javascript">
         function showtab (selectedindex, items)
         {
             for (i=1;i<=items;i++) {
                 document.getElementById('page-' + i).style.display = "none";
-                document.getElementById('tab-' + i).className = "nothing";
+                document.getElementById('tab-' + i).className = "xar-tab";
+                document.getElementById('href-' + i).className = "xar-norm xar-norm-outline";
             }
             document.getElementById('page-' + selectedindex).style.display = "block";
-            document.getElementById('tab-' + selectedindex).className = "active";
+            document.getElementById('tab-' + selectedindex).className = "xar-tab-active";
+            document.getElementById('href-' + selectedindex).className = "xar-accent xar-accent-outline";
         }
     </script>
     ]]>
-    <xar:style scope="module" module="base" file="navtabs" />
 
     <div class="xar-mod-head">
         <span class="xar-mod-title">Blocks Administration</span>
@@ -24,18 +25,18 @@
         <img src="#xarTplGetImage('blocks.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
         <h2>Overview</h2>
 
-        <dl class="xar-tabs">
-            <dd class="active" id="tab-1">
-                <a href="javascript:showtab(1,2)">
+        <ul class="xar-tabs xar-alt xar-norm-outline" style="clear:both">
+            <li class="xar-tab-active" id="tab-1">
+                <a id="href-1" href="javascript:showtab(1,2)" class="xar-accent xar-accent-outline">
                     Overview
                 </a>
-            </dd>
-            <dd id="tab-2">
-                <a href="javascript:showtab(2,2)">
+            </li>
+            <li class="xar-tab" id="tab-2">
+                <a id="href-2" href="javascript:showtab(2,2)" class="xar-norm xar-norm-outline">
                     How To
                 </a>
-            </dd>
-        </dl>
+            </li>
+        </ul>
         <div id="page-1">
             <h3>What is it?</h3>
             <p>
@@ -198,4 +199,7 @@
             </ul>
         </div>
     </div>
+    <script type="text/javascript">
+        showtab (1,2)
+    </script>
 </xar:template>

@@ -4,3 +4,14 @@ div#classicthemecontrols a#xc-switch-blue {
 }
 
 div#classicthemecontrols a#xc-switch-blue:hover { height: 25px; }
+
+/* inactive tab link hover - not handled elsewhere */
+ul.xar-tabs li.xar-tab a:hover {
+    background-color: #E4E4ED;
+    color: #CC3300;
+}
+/* active tab link hover - not handled elsewhere */
+ul.xar-tabs li.xar-tab-active a:hover {
+    background-color: #BFBFD9;
+    color: #FFFFFF;
+}

@@ -1,0 +1,39 @@
+<adminmenu>
+    <menuitems>
+        <menuitem>
+            <includes>
+                <includeitem>main</includeitem>
+                <includeitem>overview</includeitem>
+            </includes>
+            <target>main</target>
+            <label>Overview</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminModules</mask>
+            <includes>
+                <includeitem>list</includeitem>
+            </includes>
+            <target>list</target>
+            <title>View list of all installed modules on the system</title>
+            <label>View Modules</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminModules</mask>
+            <includes>
+                <includeitem>hooks</includeitem>
+            </includes>
+            <target>hooks</target>
+            <title>Extend the functionality of your modules via hooks</title>
+            <label>Configure Hooks</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminModules</mask>
+            <includes>
+                <includeitem>modifyconfig</includeitem>
+            </includes>
+            <target>modifyconfig</target>
+            <title>Modify configuration parameters</title>
+            <label>Modify Configuration</label>
+        </menuitem>
+    </menuitems>
+</adminmenu>

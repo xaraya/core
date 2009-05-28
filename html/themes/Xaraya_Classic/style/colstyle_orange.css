@@ -127,3 +127,25 @@ div#classicthemecontrols a#xc-switch-orange:hover { height: 25px; }
     color: #FFFFFF;
     background-color: #BFB8A8;
 }
+
+/* inactive tab override for contrast  */
+ul.xar-tabs li.xar-tab a {
+    background-color: #F8F6DF;
+    color: #996600;
+}
+/* active tab override for contrast  */
+ul.xar-tabs li.xar-tab-active a {
+    background-color: #EFE7D7;
+    color: #996600;
+}
+
+/* inactive tab link hover - not handled elsewhere */
+ul.xar-tabs li.xar-tab a:hover {
+    background-color: #FFFFC2;
+}
+/* active tab link hover - not handled elsewhere */
+ul.xar-tabs li.xar-tab-active a:hover {
+    background-color: #D9D0BF;
+    color: #FFFFFF;
+}
+

@@ -2,7 +2,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:base-include-javascript module="privileges" filename="xarTree.js" />
-    <xar:style scope="module" module="base" file="navtabs" />
     <script type="text/javascript">
         <!--
         var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
@@ -32,45 +31,46 @@
         <h2>Modify Privilege: #$pname#</h2>
         <xar:if condition="count($parents) ne 0">
             <div>
-                <dl class="xar-tabs">
-                    <dt class="help"
-                    title="These are the privileges that contain #$pname# as a component">Used in
-                    :</dt>
+                <ul class="xar-tabs xar-alt xar-norm-outline">
+                    <xar:var name="title">These are the privileges that contain #$pname# as a component</xar:var>
+                    <xar:var name="label">Used in</xar:var>
+                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
                     <xar:set name="prevgroup">""</xar:set>
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                            <dd>
-                                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this privilege')#">
+                            <li class="xar-tab">
+                                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">
                                     #$parents[$i]['parentname']#
                                 </a>
-                            </dd>
+                            </li>
                         </xar:if>
                         <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
                     </xar:for>
-                </dl>
+                </ul>
             </div>
         </xar:if>
         <div>
-            <dl class="xar-tabs">
-                <dt class="help" title="#xarML('Choose an action to perform on this privilege')#">
-                Manage privilege :</dt>
-                <dd>
-                    <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$ppid#">
+            <ul class="xar-tabs xar-alt xar-norm-outline">
+                <xar:var name="title">Choose an action to perform on this privilege</xar:var>
+                <xar:var name="label">Manage privilege</xar:var>
+                <li class="xar-tabs-label" title="#$title#">#$label#</li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$ppid#" class="xar-norm xar-norm-outline">
                     Display</a>
-                </dd>
-                <dd class="active">
+                </li>
+                <li class="xar-tab-active">
                     <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$ppid#"
-                    class="active">Modify</a>
-                </dd>
-                <dd>
-                    <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$ppid#">
+                     class="xar-accent xar-accent-outline">Modify</a>
+                </li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$ppid#" class="xar-norm xar-norm-outline">
                     Delete</a>
-                </dd>
-                <dd>
-                    <a href="&xar-modurl-privileges-admin-viewroles;&amp;id=#$ppid#">
+                </li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-privileges-admin-viewroles;&amp;id=#$ppid#" class="xar-norm xar-norm-outline">
                     Groups/Users</a>
-                </dd>
-            </dl>
+                </li>
+            </ul>
         </div>
       <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-updateprivilege;" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>

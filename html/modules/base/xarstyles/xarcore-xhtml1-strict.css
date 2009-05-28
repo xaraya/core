@@ -1,3 +1,5 @@
+@import url(tabs.css);
+
 /* explicit removal of default or inherited borders */
 .xar-noborder { border: 0 none; }
 

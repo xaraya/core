@@ -27,13 +27,21 @@ function base_adminapi_loadadminmenuarray($args)
     try {
         $menufile = 'modules/' . $args['module'] . '/xardata/adminmenu-dat.xml';
         $xmlobject = simplexml_load_file($menufile);
-        foreach ($xmlobject->children() as $menuitem) {
+        $menuarray = array();
+        if(isset($xmlobject->menutitle)) {
+            $menutitle = $xmlobject->menutitle;
+            $menuarray['title'] = array();
+            $menuarray['title']['label'] = isset($menutitle->label) ? trim((string)$menutitle->label) : xarML('Actions');
+            $menuarray['title']['title'] = isset($menutitle->title) ? trim((string)$menutitle->title) : null;
+
+        }
+        foreach ($xmlobject->menuitems->children() as $menuitem) {
             $target = isset($menuitem->target) ? trim((string)$menuitem->target) : null;
             $label = isset($menuitem->label) ? trim((string)$menuitem->label) : xarML('Missing label');
             $title = isset($menuitem->title) ? trim((string)$menuitem->title) : $label;
             $mask = isset($menuitem->mask) ? trim((string)$menuitem->mask) : null;
             $includes = isset($menuitem->includes) ? trim((string)$menuitem->includes->children()) : array();
-            $menuarray[] = array(
+            $menuarray['items'][] = array(
                         'target' => $target,
                         'title' => $title,
                         'label' => $label,

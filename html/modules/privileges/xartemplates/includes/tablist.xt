@@ -1,20 +1,33 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:style scope="module" module="base" file="navtabs" />
     <xar:set name="request">xarRequest::getInfo()</xar:set>
     <xar:set name="activetab">#$request.2#</xar:set>
     <div>
-        <dl class="xar-tabs">
-            <dt class="help" title="Choose the privileges to display">Show privileges:</dt>
-            <xar:set name="tabclass">$show=='assigned'?'active':''</xar:set>
-            <dd class="#$tabclass#">
-                <a href="&xar-modurl-privileges-admin-viewprivileges;&amp;show=assigned">
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <xar:var name="title">Choose the privileges to display</xar:var>
+            <xar:var name="label">Show privileges</xar:var>
+            <li class="xar-tabs-label" title="#$title#">#$label#</li>
+            <xar:if condition="$show eq 'assigned'">
+                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+            <xar:else />
+                <xar:set name="tabclass">'xar-tab'</xar:set>
+                <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+            </xar:if>
+            <li class="#$tabclass#">
+                <a href="&xar-modurl-privileges-admin-viewprivileges;&amp;show=assigned" class="#$linkclass#">
                 Assigned</a>
-            </dd>
-            <xar:set name="tabclass">$show=='unassigned'?'active':''</xar:set>
-            <dd class="#$tabclass#">
-                <a href="&xar-modurl-privileges-admin-viewprivileges;&amp;show=unassigned">Unassigned</a>
-            </dd>
-        </dl>
+            </li>
+            <xar:if condition="$show eq 'unassigned'">
+                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+            <xar:else />
+                <xar:set name="tabclass">'xar-tab'</xar:set>
+                <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+            </xar:if>
+            <li class="#$tabclass#">
+                <a href="&xar-modurl-privileges-admin-viewprivileges;&amp;show=unassigned" class="#$linkclass#">Unassigned</a>
+            </li>
+        </ul>
     </div>
 </xar:template>

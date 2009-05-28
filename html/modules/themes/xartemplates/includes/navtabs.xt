@@ -1,17 +1,13 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:style scope="module" module="base" file="navtabs" />
-    <xar:set name="generalcss">'All</xar:set>
+    <xar:set name="generalcss">'All'</xar:set>
     <xar:set name="generalcssurl">xarModURL('themes','admin', 'cssconfig')</xar:set>
     <xar:set name="modulescss">'Modules'</xar:set>
-    <xar:set name="modulescssurl">
-    xarModURL('themes','admin','cssconfig',array('component'=&gt;'modules'))</xar:set>
+    <xar:set name="modulescssurl">xarModURL('themes','admin','cssconfig',array('component'=&gt;'modules'))</xar:set>
     <xar:set name="themescss">'Themes'</xar:set>
-    <xar:set name="themescssurl">
-    xarModURL('themes','admin','cssconfig',array('component'=&gt;'themes'))</xar:set>
+    <xar:set name="themescssurl">xarModURL('themes','admin','cssconfig',array('component'=&gt;'themes'))</xar:set>
     <xar:set name="corecss">'Core'</xar:set>
-    <xar:set name="corecssurl">
-    xarModURL('themes','admin','cssconfig',array('component'=&gt;'core'))</xar:set>
+    <xar:set name="corecssurl">xarModURL('themes','admin','cssconfig',array('component'=&gt;'core'))</xar:set>
     <xar:set name="currentcssurl">xarServer::getCurrentURL()</xar:set>
     <!--
     <xar:if condition=" eq ">
@@ -20,43 +16,45 @@
         <xar:set name="tabclass">''</xar:set>    
     </xar:if>
     -->
-    <dl class="xar-tabs">
-        <dt class="help">Component CSS :</dt>
+    <ul class="xar-tabs xar-alt xar-norm-outline">
+        <xar:var name="title">Component CSS</xar:var>
+        <xar:var name="label">Component CSS</xar:var>
+        <li class="xar-tabs-label" title="#$title#">#$label#</li>
         <xar:if condition="$generalcssurl eq $currentcssurl">
-            <dd class="active">
-                <a href="#$generalcssurl#" title="#$generalcss#">#$generalcss#</a>
-            </dd>
-            <xar:else />
-            <dd>
-                <a href="#$generalcssurl#" title="#$generalcss#">#$generalcss#</a>
-            </dd>
+            <li class="xar-tab-active">
+                <a href="#$generalcssurl#" title="#$generalcss#" class="xar-accent xar-accent-outline">#$generalcss#</a>
+            </li>
+        <xar:else />
+            <li class="xar-tab">
+                <a href="#$generalcssurl#" title="#$generalcss#" class="xar-norm xar-norm-outline">#$generalcss#</a>
+            </li>
         </xar:if>
         <xar:if condition="$themescssurl eq $currentcssurl">
-            <dd class="active">
-                <a href="#$themescssurl#" title="#$themescss#">#$themescss#</a>
-            </dd>
-            <xar:else />
-            <dd>
-                <a href="#$themescssurl#" title="#$themescss#">#$themescss#</a>
-            </dd>
+            <li class="xar-tab-active">
+                <a href="#$themescssurl#" title="#$themescss#" class="xar-accent xar-accent-outline">#$themescss#</a>
+            </li>
+        <xar:else />
+            <li class="xar-tab">
+                <a href="#$themescssurl#" title="#$themescss#" class="xar-norm xar-norm-outline">#$themescss#</a>
+            </li>
         </xar:if>
         <xar:if condition="$modulescssurl eq $currentcssurl">
-            <dd class="active">
-                <a href="#$modulescssurl#" title="#$modulescss#">#$modulescss#</a>
-            </dd>
-            <xar:else />
-            <dd>
-                <a href="#$modulescssurl#" title="#$modulescss#">#$modulescss#</a>
-            </dd>
+            <li class="xar-tab-active">
+                <a href="#$modulescssurl#" title="#$modulescss#" class="xar-accent xar-accent-outline">#$modulescss#</a>
+            </li>
+        <xar:else />
+            <li class="xar-tab">
+                <a href="#$modulescssurl#" title="#$modulescss#" class="xar-norm xar-norm-outline">#$modulescss#</a>
+            </li>
         </xar:if>
         <xar:if condition="$corecssurl eq $currentcssurl">
-            <dd class="active">
-                <a href="#$corecssurl#" title="#$corecss#">#$corecss#</a>
-            </dd>
-            <xar:else />
-            <dd>
-                <a href="#$corecssurl#" title="#$corecss#">#$corecss#</a>
-            </dd>
+            <li class="xar-tab-active">
+                <a href="#$corecssurl#" title="#$corecss#" class="xar-accent xar-accent-outline">#$corecss#</a>
+            </li>
+        <xar:else />
+            <li class="xar-tab">
+                <a href="#$corecssurl#" title="#$corecss#" class="xar-norm xar-norm-outline">#$corecss#</a>
+            </li>
         </xar:if>
-    </dl>
+    </ul>
 </xar:template>

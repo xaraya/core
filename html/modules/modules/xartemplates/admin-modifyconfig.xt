@@ -5,6 +5,8 @@
         <span class="xar-mod-title">Modules Administration</span>
     </div>
     <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu" />
+        <h2>Modify Configuration</h2>
         <form method="post" action="&xar-modurl-modules-admin-updateconfig;">
             <xar:template file="display" module="base" subdata="array('modulename' => 'modules')" />
             <fieldset>

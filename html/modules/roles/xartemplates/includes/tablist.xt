@@ -1,39 +1,48 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:style scope="module" module="base" file="navtabs" />
     <xar:set name="request">xarRequest::getInfo()</xar:set>
     <xar:set name="activetab">#$request.2#</xar:set>
     <div>
-        <dl class="xar-tabs">
-            <dt class="help" title="#xarML('Choose an action to perform on the selected user')#">
-            Manage role:</dt>
-            <xar:set name="tabclass">$activetab=='display'?'active':''</xar:set>
-            <dd class="#$tabclass#">
-                <a href="&xar-modurl-roles-admin-display;&amp;id=#$id#">Display</a>
-            </dd>
-            <xar:set name="tabclass">$activetab=='modify'?'active':''</xar:set>
-            <dd class="#$tabclass#">
-                <a href="&xar-modurl-roles-admin-modify;&amp;id=#$id#">Modify</a>
-            </dd>
-            <xar:set name="tabclass">$activetab=='delete'?'active':''</xar:set>
-            <dd class="#$tabclass#">
-                <a href="&xar-modurl-roles-admin-delete;&amp;id=#$id#">Delete</a>
-            </dd>
-            <xar:set name="tabclass">$activetab=='showprivileges'?'active':''</xar:set>
-            <dd class="#$tabclass#">
-                <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$id#">Privileges</a>
-            </dd>
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <li class="xar-tabs-label" title="#xarML('Choose an action to perform on the selected user')#">Manage role:</li>
+
+            <xar:set name="tabclass">$activetab=='display'?'xar-tab-active':'xar-tab'</xar:set>
+            <xar:set name="linkclass">$activetab=='display'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+            <li class="#$tabclass#">
+                <a href="#xarModURL('roles','admin','display',array('id' =&gt; $id))#" class="#$linkclass#">Display</a>
+            </li>
+
+            <xar:set name="tabclass">$activetab=='modify'?'xar-tab-active':'xar-tab'</xar:set>
+            <xar:set name="linkclass">$activetab=='modify'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+            <li class="#$tabclass#">
+                <a href="#xarModURL('roles','admin','modify',array('id' =&gt; $id))#" class="#$linkclass#">Modify</a>
+            </li>
+
+            <xar:set name="tabclass">$activetab=='delete'?'xar-tab-active':'xar-tab'</xar:set>
+            <xar:set name="linkclass">$activetab=='delete'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+            <li class="#$tabclass#">
+                <a href="#xarModURL('roles','admin','delete',array('id' =&gt; $id))#" class="#$linkclass#">Delete</a>
+            </li>
+
+            <xar:set name="tabclass">$activetab=='showprivileges'?'xar-tab-active':'xar-tab'</xar:set>
+            <xar:set name="linkclass">$activetab=='showprivileges'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+            <li class="#$tabclass#">
+                <a href="#xarModURL('roles','admin','showprivileges',array('id' =&gt; $id))#" class="#$linkclass#">Privileges</a>
+            </li>
+
             <xar:if condition="$basetype eq ROLES_GROUPTYPE">
-                <xar:set name="tabclass">$activetab=='showusers'?'active':''</xar:set>
-                <dd class="#$tabclass#">
-                    <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$id#&amp;reload=reload#">
-                    Users</a>
-                </dd>
+                <xar:set name="tabclass">$activetab=='showusers'?'xar-tab-active':'xar-tab'</xar:set>
+                <xar:set name="linkclass">$activetab=='showusers'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarModURL('roles','admin','showusers',array('id' =&gt; $id))#&amp;reload=reload#" class="#$linkclass#">Users</a>
+                </li>
             </xar:if>
-            <xar:set name="tabclass">$activetab=='testprivileges'?'active':''</xar:set>
-            <dd class="#$tabclass#">
-                <a href="&xar-modurl-roles-admin-testprivileges;&amp;id=#$id#">Test privileges</a>
-            </dd>
-        </dl>
+
+            <xar:set name="tabclass">$activetab=='testprivileges'?'xar-tab-active':'xar-tab'</xar:set>
+            <xar:set name="linkclass">$activetab=='testprivileges'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+            <li class="#$tabclass#">
+                <a href="#xarModURL('roles','admin','testprivileges',array('id' =&gt; $id))#" class="#$linkclass#">Test privileges</a>
+            </li>
+        </ul>
     </div>
 </xar:template>

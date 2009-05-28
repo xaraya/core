@@ -1,0 +1,30 @@
+<adminmenu>
+    <menuitems>
+        <menuitem>
+            <includes>
+                <includeitem>main</includeitem>
+                <includeitem>overview</includeitem>
+            </includes>
+            <target>main</target>
+            <label>Overview</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminTheme</mask>
+            <includes>
+                <includeitem>list</includeitem>
+            </includes>
+            <target>list</target>
+            <title>View installed themes on the system</title>
+            <label>View Themes</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminTheme</mask>
+            <includes>
+                <includeitem>modifyconfig</includeitem>
+            </includes>
+            <target>modifyconfig</target>
+            <title>Modify Themes configuration values</title>
+            <label>Modify Configuration</label>
+        </menuitem>
+    </menuitems>
+</adminmenu>
