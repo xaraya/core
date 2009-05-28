@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:style scope="module" module="base" file="navtabs" />
     <div class="xar-mod-head">
         <span class="xar-mod-title">Roles Administration</span>
     </div>

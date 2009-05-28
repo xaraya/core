@@ -5,7 +5,6 @@
     <xar:if condition="!isset($itemid)">
         <xar:set name="itemid">0</xar:set>
     </xar:if>
-    <xar:style scope="module" module="base" file="navtabs" />
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
         <xar:set name="active_tab">'registration'</xar:set>

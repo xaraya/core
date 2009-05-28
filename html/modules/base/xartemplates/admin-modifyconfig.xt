@@ -11,7 +11,6 @@
         var base_fieldDescription = Array("Default Module Function");
     //</xar:comment>
     </script>
-    <xar:style scope="module" module="base" file="navtabs" />
     <div class="xar-mod-head">
         <span class="xar-mod-title">Base Administration</span>
     </div>

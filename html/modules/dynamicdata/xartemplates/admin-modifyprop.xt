@@ -9,7 +9,6 @@
         <xar:template type="module" file="admin-menu" />
         <h2>Modify DataProperties #$label#</h2>
         <xar:if condition="!empty($objectid)">
-            <xar:style scope="module" module="base" file="navtabs" />
             <div>
                 <ul class="xar-tabs xar-alt xar-norm-outline">
                     <xar:var name="title">Options</xar:var>

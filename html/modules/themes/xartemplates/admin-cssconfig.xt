@@ -12,7 +12,6 @@
     </div>
     <div class="xar-mod-body">
         <h2>Cascading Style Sheets (CSS) Manager</h2>
-        <xar:template file="navtabs" type="module" />
         <xar:if condition="$component eq ''">
             <h3>CSS Options</h3>
             <p>The CSS subsystem can function in one of two modes: configurable (managed) or

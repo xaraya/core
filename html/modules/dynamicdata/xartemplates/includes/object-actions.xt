@@ -1,5 +1,4 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:style scope="module" module="base" file="navtabs" />
     <div>
         <ul class="xar-tabs xar-alt xar-norm-outline">
             <xar:var name="title">Action</xar:var>

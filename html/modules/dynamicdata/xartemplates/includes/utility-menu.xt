@@ -2,7 +2,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:comment>Common Administration menu</xar:comment>
-    <xar:style scope="module" module="base" file="navtabs" />
     <xar:set name="request">xarRequest::getInfo()</xar:set>
     <xar:set name="activetab">#$request.2#</xar:set>
     <xar:set name="activetype">#$request.1#</xar:set>

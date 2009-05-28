@@ -16,7 +16,6 @@
         }
     </script>
     ]]>
-    <xar:style scope="module" module="base" file="navtabs" />
     <div class="xar-mod-head">
         <span class="xar-mod-title">Base Module</span>
     </div>

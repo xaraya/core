@@ -16,7 +16,6 @@
     <xar:set name="messagetitle">
         #xarML('Write this string in the message body or subject to display the corresponding information')#
     </xar:set>
-    <xar:style scope="module" module="base" file="navtabs" />
     <div class="xar-mod-head">
         <span class="xar-mod-title">Roles Administration</span>
     </div>

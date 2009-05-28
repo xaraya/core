@@ -6,7 +6,6 @@
     </div>
     <div class="xar-mod-body">
         <h2>Member List</h2>
-        <xar:style scope="module" module="base" file="navtabs" />
         <ul class="xar-tabs xar-alt xar-norm-outline">
             <xar:var name="title">Sort</xar:var>
             <xar:var name="label">Sort</xar:var>

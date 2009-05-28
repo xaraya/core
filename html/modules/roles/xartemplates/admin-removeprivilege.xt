@@ -7,7 +7,6 @@
     <div class="xar-mod-body">
         <h2>Remove Privilege</h2>
         <xar:if condition="count($parents) ne 0">
-            <xar:style scope="module" module="base" file="navtabs" />
             <div>
                 <ul class="xar-tabs xar-alt xar-norm-outline">
                     <xar:var name="title">These are the groups that #$rolename# is a member of</xar:var>
@@ -26,7 +25,6 @@
                 </ul>
             </div>
         </xar:if>
-        <xar:style scope="module" module="base" file="navtabs" />
         <div>
             <ul class="xar-tabs xar-alt xar-norm-outline">
                 <xar:var name="title">Action</xar:var>

@@ -6,7 +6,6 @@
     <xar:base-include-javascript module="base" filename="checkall.js" position="head" />
     <xar:base-include-javascript module="roles" filename="xarTree.js" position="head" />
     <xar:base-include-javascript module="roles" filename="tree.js" position="head" />
-    <xar:style scope="module" module="base" file="navtabs" />
     <xar:style scope="module" module="base" file="tree" />
     <xar:additional-styles />
 
