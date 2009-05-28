@@ -18,23 +18,37 @@
                         <li class="xar-tabs-label">#$tabs.title.label#:</li>
                     </xar:if>
                 </xar:if>
-                <xar:foreach in="$tabs['items']" value="$tab">
-                    <xar:set name="functions">
-                        isset($tab['includes']) ? $tab['includes'] : array()
-                    </xar:set>
-                    <xar:if condition="is_array($functions)">
-                        <xar:set name="condition">false</xar:set>
-                        <xar:foreach in="$tab['includes']" value="$function">
-                            <xar:set name="condition">
-                                $condition || ($activetab == $function)
-                            </xar:set>
-                        </xar:foreach>
-                    <xar:else />
-                        <xar:set name="condition">$activetab == $tab['includes']</xar:set>
-                    </xar:if>
-                    <xar:if condition="isset($tab['mask'])">
-                        <xar:set name="mask">$tab['mask']</xar:set>
-                        <xar:sec mask="$mask" catch="false">
+                <xar:if condition="isset($tabs['items'])">
+                    <xar:foreach in="$tabs['items']" value="$tab">
+                        <xar:set name="functions">
+                            isset($tab['includes']) ? $tab['includes'] : array()
+                        </xar:set>
+                        <xar:if condition="is_array($functions)">
+                            <xar:set name="condition">false</xar:set>
+                            <xar:foreach in="$tab['includes']" value="$function">
+                                <xar:set name="condition">
+                                    $condition || ($activetab == $function)
+                                </xar:set>
+                            </xar:foreach>
+                        <xar:else />
+                            <xar:set name="condition">$activetab == $tab['includes']</xar:set>
+                        </xar:if>
+                        <xar:if condition="isset($tab['mask'])">
+                            <xar:set name="mask">$tab['mask']</xar:set>
+                            <xar:sec mask="$mask" catch="false">
+                                <xar:if condition="$condition">
+                                    <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                                    <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                                <xar:else />
+                                    <xar:set name="tabclass">'xar-tab'</xar:set>
+                                    <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                                </xar:if>
+                                <li class="#$tabclass#">
+                                    <a href="#xarModURL($urlinfo[0],$urlinfo[1],$tab['target'])#" class="#$linkclass#">
+                                    #$tab['label']#</a>
+                                </li>
+                            </xar:sec>
+                        <xar:else />
                             <xar:if condition="$condition">
                                 <xar:set name="tabclass">'xar-tab-active'</xar:set>
                                 <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
@@ -44,24 +58,12 @@
                             </xar:if>
                             <li class="#$tabclass#">
                                 <a href="#xarModURL($urlinfo[0],$urlinfo[1],$tab['target'])#" class="#$linkclass#">
-                                #$tab['label']#</a>
+                                    #$tab['label']#
+                                </a>
                             </li>
-                        </xar:sec>
-                    <xar:else />
-                        <xar:if condition="$condition">
-                            <xar:set name="tabclass">'xar-tab-active'</xar:set>
-                            <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
-                        <xar:else />
-                            <xar:set name="tabclass">'xar-tab'</xar:set>
-                            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
                         </xar:if>
-                        <li class="#$tabclass#">
-                            <a href="#xarModURL($urlinfo[0],$urlinfo[1],$tab['target'])#" class="#$linkclass#">
-                                #$tab['label']#
-                            </a>
-                        </li>
-                    </xar:if>
-                </xar:foreach>
+                    </xar:foreach>
+                </xar:if>
             </ul>
         </div>
     </xar:if>
