@@ -351,7 +351,7 @@
                                 array('id' => 'green', 'name' => 'Light green'),
                             )
                         </xar:set>
-                        <xar:data-input type="checkboxlist" options="$options" value="green"/>
+                        <xar:data-input type="checkboxlist" options="$options" value="green" layout="vertical"/>
                     </td>
                     <td valign="middle">
                         Displays a configurable group of checkboxes for input:
@@ -362,7 +362,8 @@
             array('id' => 'green', 'name' => 'Light green'),
         )
     &lt;/xar:set>
-    &lt;xar:data-input type="checkboxlist" options="$options" value="green" />
+    &lt;xar:data-input type="checkboxlist" options="$options"
+        value="green" layout="vertical" />
     </pre>
                     </td>
                 </tr>
@@ -395,7 +396,8 @@
                     <td valign="middle">
                         Displays a dropdown of the files in a directory:
     <pre>
-    &lt;xar:data-input type="filepicker" basedir="var/messaging/roles"/>
+    &lt;xar:data-input type="filepicker" 
+        basedir="var/messaging/roles"/>
     </pre>
                     </td>
                 </tr>
