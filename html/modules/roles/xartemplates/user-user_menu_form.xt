@@ -17,7 +17,12 @@
                         revalidate your account.</label>
                     </div>
                 </xar:if>
-                <xar:data-form object="$object" />
+                <xar:data-form object="$object" fieldlist="name,uname,email,password,regdate"/>
+                <xar:data-input property="$object->properties['id']" hidden="hidden" />
+                <xar:data-input property="$object->properties['name']" hidden="hidden" />
+                <xar:data-input property="$object->properties['state']" hidden="hidden" />
+                <xar:data-input property="$object->properties['valcode']" hidden="hidden" />
+                <xar:data-input property="$object->properties['authmodule']" hidden="hidden" />
                 <xar:if condition="xarModVars::get('roles','allowemail')">
                     <div class="xar-form-input-wrapper-after">
                         <xar:set name="checked">xarModUserVars::get('roles',
