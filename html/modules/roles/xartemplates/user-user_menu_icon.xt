@@ -2,7 +2,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="compare">xarServer::getCurrentURL()</xar:set>
-    <xar:set name="tabclass">'inactive'</xar:set>
     <xar:if condition="$compare eq $current">
         <xar:set name="tabclass">'xar-tab-active'</xar:set>
         <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>

@@ -31,8 +31,18 @@
                         </li>
                     </xar:if>
                     <xar:if condition="!empty($output)">
-                        <xar:foreach in="$output" key="$module" value="$hookoutput">
-                            #$hookoutput#
+                        <xar:foreach in="$output" key="$module" value="$value">
+                            <xar:set name="data">unserialize($value)</xar:set>
+                            <xar:if condition="$compare eq $data['link']">
+                                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                            <xar:else />
+                                <xar:set name="tabclass">'xar-tab'</xar:set>
+                                <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                            </xar:if>
+                            <li class="#$tabclass#">
+                                <a href="#$data['link']#" class="#$linkclass#">#$data['label']#</a>
+                            </li>
                         </xar:foreach>
                     </xar:if>
                     <xar:if condition="!empty($logoutmodule)">

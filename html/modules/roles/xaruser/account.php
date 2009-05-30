@@ -45,12 +45,7 @@ function roles_user_account()
         $item = array();
         $item['module'] = 'roles';
         $item['itemtype'] = ROLES_USERTYPE;
-        $output = xarModCallHooks('item', 'usermenu', '', array('module' => 'roles'));
-
-        if (empty($output)){
-            $message = xarML('There are no account options configured.');
-        }
-        $data['output'] = $output;
+        $data['output'] = xarModCallHooks('item', 'usermenu', '', array('module' => 'roles'));
 
         if (empty($message)){
             $data['message'] = '';

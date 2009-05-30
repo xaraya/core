@@ -24,12 +24,10 @@ function roles_user_usermenu($args)
     $hooks = array();
     switch(strtolower($phase)) {
         case 'menu':
-            // This is the usual point of entry. Delete any sessionvar left from previous attempts. Start over!
-            xarSession::delVar('user_object');
-            $iconbasic = xarTplGetImage('home.gif', 'roles');
-            $current = xarModURL('roles', 'user', 'account', array('moduleload' => 'roles'));
-            $data = xarTplModule('roles','user', 'user_menu_icon', array('iconbasic'    => $iconbasic,
-                                                                         'current'      => $current));
+            $data['icon'] = xarTplGetImage('home.gif', 'roles');
+            $data['link'] = xarModURL('roles', 'user', 'account', array('moduleload' => 'roles'));
+            $data['label'] = xarML('Edit Profile');
+            return (serialize($data));                                                                         
             break;
         case 'form':
         case 'formbasic':
