@@ -68,7 +68,7 @@ function dynamicdata_admin_updateprop()
     }
 
     $fields = xarModAPIFunc('dynamicdata','user','getprop',
-                           array('module_id' => $module_id,
+                           array('moduleid' => $module_id,
                                  'itemtype' => $itemtype,
                                  'allprops' => true));
     $isprimary = 0;
