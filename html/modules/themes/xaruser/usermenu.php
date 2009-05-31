@@ -44,11 +44,12 @@ function themes_user_usermenu($args)
             $name = xarUserGetVar('name');
             $id = xarUserGetVar('id');
             $authid = xarSecGenAuthKey('themes');
-            $data = xarTplModule('themes', 'user', 'usermenu_form', array('authid' => $authid,
+            $data = array('authid' => $authid,
                     'name' => $name,
                     'id' => $id,
                     'defaulttheme' => $defaulttheme,
-                    'themes' => $data['themes']));
+                    'themes' => $data['themes']);
+                                  return serialize($data);
             break;
 
         case 'update':

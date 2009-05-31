@@ -46,10 +46,10 @@ function roles_user_account()
         $item['module'] = 'roles';
         $item['itemtype'] = ROLES_USERTYPE;
         $data['output'] = xarModCallHooks('item', 'usermenu', '', array('module' => 'roles'));
+        $moduledata = xarModFunc($data['moduleload'],'user','usermenu',array('phase' => 'form'));
+        $data = array_merge($data,unserialize($moduledata));
 
-        if (empty($message)){
-            $data['message'] = '';
-        }
+        if (empty($message)) $data['message'] = '';
     }
     return $data;
 }

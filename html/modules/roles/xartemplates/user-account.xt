@@ -1,14 +1,16 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:set name="compare">xarServer::getCurrentURL()</xar:set>
+    <xar:if condition="empty($compare)">
+        <xar:set name="compare">xarServer::getCurrentURL()</xar:set>
+    </xar:if>
     <xar:set name="account">&xar-modurl-roles-user-account;</xar:set>
     <xar:template file="user-menu" />
     <xar:if condition="$compare eq $account">
         <xar:module main="false" module="roles" type="user" func="display" />
     <xar:else />
-    <!--
         <xar:template file="usermenu_form" module="$moduleload" />
+    <!--
         <xar:module main="false" module="#$moduleload#" type="user" func="usermenu" phase="form" />
         -->
     </xar:if>
