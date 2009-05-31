@@ -40,7 +40,7 @@ function roles_admin_removeprivilege()
         (($roleid == 2) && ($privid == 6)) ||
         (($roleid == 4) && ($privid == 2)))
         {
-            throw new ForbiddenOperationException(null,'This privilege cannot be removed');
+            return xarTplModule('roles','user','errors',array('layout' => 'remove_privilege'));
         }
 
     // Security Check

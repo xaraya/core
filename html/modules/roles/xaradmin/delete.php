@@ -45,17 +45,14 @@ function roles_admin_delete()
 
     // Prohibit removal of any groups that have children
     if($role->countChildren()) {
-        $msg = 'The group #(1) has children. If you want to remove this group you have to delete the children first.';
-        throw new ForBiddenOperationException($role->getName(),$msg);
+        return xarTplModule('roles','user','errors',array('layout' => 'remove_nonempty_group', 'user' => $role->getName()));
     }
     // Prohibit removal of any groups or users the system needs
     if($id == xarModVars::get('roles','admin')) {
-        $msg = 'The user #(1) is the designated site administrator. If you want to remove this user change the site admin in the roles configuration setting first.';
-        throw new ForbiddenOperationException($role->getName(),$msg);
+        return xarTplModule('roles','user','errors',array('layout' => 'remove_siteadmin', 'user' => $role->getName()));
     }
     if($id == xarModVars::get('roles','defaultgroup')) {
-        $msg = 'The group #(1) is the default group for new users. If you want to remove this group change the roles configuration setting first.';
-        throw new ForbiddenOperationException($role->getName(),$msg);
+        return xarTplModule('roles','user','errors',array('layout' => 'default_usergroup', 'group' => $role->getName()));
     }
 
     $types = xarModAPIFunc('roles','user','getitemtypes');
@@ -92,7 +89,7 @@ function roles_admin_delete()
             $pargs['itemid'] = $id;
             xarModCallHooks('item', 'delete', $id, $pargs);
         } else {
-            throw new ForbiddenOperation($role->getName(),'The user "#(1)" has an active session and can not be removed at this time.');
+            return xarTplModule('roles','user','errors',array('layout' => 'remove_active_session', 'user' => $role->getName()));
         }
         // redirect to the next page
         if (empty($returnurl)) {

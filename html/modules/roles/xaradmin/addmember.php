@@ -38,13 +38,14 @@ function roles_admin_addmember()
     if(!xarSecurityCheck('AttachRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
 
     // check that this assignment hasn't already been made
-    if ($member->isEqual($role)) throw new ForbiddenOperationException(null,'This assignment is not possible');
+    if ($member->isEqual($role))
+        return xarTplModule('roles','user','errors',array('layout' => 'self_assignment'));
 
     // check that this assignment hasn't already been made
-    if ($member->isParent($role)) throw new DuplicateException(array('role assignment','below the specified parent'));
+        return xarTplModule('roles','user','errors',array('layout' => 'duplicate_assignment'));
 
     // check that the parent is not already a child of the child
-    if ($role->isAncestor($member)) throw new ForbiddenOperation(null,'The parent is already a child of the specified child');
+        return xarTplModule('roles','user','errors',array('layout' => 'circular_assignment'));
 
     // assign the child to the parent and bail if an error was thrown
     if (!xarModAPIFUnc('roles','user','addmember', array('id' => $id, 'gid' => $roleid))) return;

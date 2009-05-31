@@ -24,9 +24,8 @@ function roles_adminapi_purge($args)
     extract($args);
 
 
-    if ($state == ROLES_STATE_ACTIVE) {
-        throw new ForbiddenOperation(null,'Purging active users is not allowed');
-    }
+    if ($state == ROLES_STATE_ACTIVE)
+        return xarTplModule('roles','user','errors',array('layout' => 'purge_active_user'));
 
     $items = xarModAPIFunc('roles',
              'user',
