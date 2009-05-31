@@ -31,7 +31,7 @@ function authsystem_user_login()
     global $xarUser_authenticationModules;
 
     if (!$_COOKIE) {
-        return xarTplModule('authsystem','user','login_errors',array('layout' => 'no_cookies'));
+        return xarTplModule('authsystem','user','errors',array('layout' => 'no_cookies'));
     }
 
     $unlockTime  = (int) xarSession::getVar('authsystem.login.lockedout');
@@ -39,7 +39,7 @@ function authsystem_user_login()
     $lockouttries = xarModVars::get('authsystem','lockouttries') ? xarModVars::get('authsystem','lockouttries') : 3;
 
     if ((time() < $unlockTime) && (xarModVars::get('authsystem','uselockout') == true)) {
-        return xarTplModule('authsystem','user','login_errors',array('layout' => 'locked_out', 'lockouttime' => $lockouttime));
+        return xarTplModule('authsystem','user','errors',array('layout' => 'locked_out', 'lockouttime' => $lockouttime));
     }
 
     if (!xarVarFetch('uname','str:1:100',$uname)) {
@@ -112,7 +112,7 @@ function authsystem_user_login()
                 // Make sure we haven't already found authldap module
                 if (empty($user) && ($extAuthentication == false))
                 {
-                    return xarTplModule('authsystem','user','login_errors',array('layout' => 'bad_data'));
+                    return xarTplModule('authsystem','user','errors',array('layout' => 'bad_data'));
                 } elseif (empty($user)) {
                     // Check if user has been deleted.
                     try {
@@ -155,13 +155,13 @@ function authsystem_user_login()
         case ROLES_STATE_DELETED:
 
             // User is deleted by all means.  Return a message that says the same.
-            return xarTplModule('authsystem','user','login_errors',array('layout' => 'account_deleted'));
+            return xarTplModule('authsystem','user','errors',array('layout' => 'account_deleted'));
             break;
 
         case ROLES_STATE_INACTIVE:
 
             // User is inactive.  Return message stating.
-            return xarTplModule('authsystem','user','login_errors',array('layout' => 'account_inactive'));
+            return xarTplModule('authsystem','user','errors',array('layout' => 'account_inactive'));
             break;
 
         case ROLES_STATE_NOTVALIDATED:
@@ -208,7 +208,7 @@ function authsystem_user_login()
                 }
 
                 if (!$letthru) {
-                    return xarTplModule('authsystem','user','login_errors',array('layout' => 'site_locked', 'message'  => $lockvars['message']));
+                    return xarTplModule('authsystem','user','errors',array('layout' => 'site_locked', 'message'  => $lockvars['message']));
                 }
             }
 
@@ -227,11 +227,11 @@ function authsystem_user_login()
                     // Set the time for fifteen minutes from now
                     xarSession::setVar('authsystem.login.lockedout', time() + (60 * $lockouttime));
                     xarSession::setVar('authsystem.login.attempts', 0);
-                    return xarTplModule('authsystem','user','login_errors',array('layout' => 'bad_tries_exceeded', 'lockouttime' => $lockouttime));
+                    return xarTplModule('authsystem','user','errors',array('layout' => 'bad_tries_exceeded', 'lockouttime' => $lockouttime));
                 } else{
                     $newattempts = $attempts + 1;
                     xarSession::setVar('authsystem.login.attempts', $newattempts);
-                    return xarTplModule('authsystem','user','login_errors',array('layout' => 'bad_try', 'attempts' => $newattempts));
+                    return xarTplModule('authsystem','user','errors',array('layout' => 'bad_try', 'attempts' => $newattempts));
                 }
             }
             //FR for last login - first capture the last login for this user
@@ -281,7 +281,7 @@ function authsystem_user_login()
         case ROLES_STATE_PENDING:
 
             // User is pending activation
-                return xarTplModule('authsystem','user','login_errors',array('layout' => 'account_pending'));
+                return xarTplModule('authsystem','user','errors',array('layout' => 'account_pending'));
             break;
     }
 
