@@ -45,10 +45,12 @@
                     Other</a>
                 </li>
             </xar:if>
-            </dl>
+            </ul>
             <div>
-                <dl class="xar-tabs">
-                <dt class="help">Show :</dt>
+                <ul class="xar-tabs">
+                    <xar:var name="title">Show</xar:var>
+                    <xar:var name="label">Show</xar:var>
+                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
                     <xar:if condition="$phase ne 'active'">
                         <li class="xar-tab-active">
                             <a href="&xar-modurl-roles-user-viewlist;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#" class="xar-accent xar-accent-outline">
