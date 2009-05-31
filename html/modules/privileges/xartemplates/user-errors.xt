@@ -31,5 +31,11 @@
                 </div>                    
             </xar:if>                
         </fieldset>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <xar:var name="label">Go back</xar:var>
+                <xar:button type="cancel" label="$label" />
+            </div>
+        </fieldset>
     </div>
 </xar:template>

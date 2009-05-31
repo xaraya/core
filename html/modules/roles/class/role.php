@@ -240,9 +240,8 @@ class Role extends DataObject
     {
         if (!empty($data['itemid'])) $this->setID($data['itemid']);
 
-        // FIXME: park this here for the moment
         if($this->getID() == xarModVars::get('roles','defaultgroup'))
-            throw new ForbiddenOperationException($defaultgroup,'The group #(1) is the default group for new users. If you want to remove it change the appropriate configuration setting first.');
+            return xarTplModule('roles','user','errors',array('layout' => 'remove_defaultusergroup', 'group' => $this->getID()));
 
         // get a list of all relevant entries in the rolemembers table
         // where this role is the child
@@ -251,9 +250,8 @@ class Role extends DataObject
         $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
 
-        // FIXME: park this here for the moment
         if(count($result->fields) == 1)
-            throw new ForbiddenOperationException(null,'The user has one parent group, removal is not allowed');
+            return xarTplModule('roles','user','errors',array('layout' => 'remove_sole_parent'));
 
         // go through the list, retrieving the roles and detaching each one
         // we need to do it this way because the method removeMember is more than just

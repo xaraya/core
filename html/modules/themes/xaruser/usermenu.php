@@ -26,13 +26,11 @@ function themes_user_usermenu($args)
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Your Account Preferences')));
     switch(strtolower($phase)) {
         case 'menu':
-
-            $icon = xarTplGetImage('themes.png','base'); //'modules/themes/xarimages/themes.gif';
-            $current = xarModURL('roles', 'user', 'account', array('moduleload' => 'themes'));
-            $data = xarTplModule('themes', 'user', 'usermenu_icon', array('icon' => $icon, 'current' => $current));
-
+            $data['icon'] = xarTplGetImage('themes.png','base');
+            $data['link'] = xarModURL('roles', 'user', 'account', array('moduleload' => 'themes'));
+            $data['label'] = xarML('Choose Theme');
+            return (serialize($data));                                                                         
             break;
-
         case 'form':
             // Get list of themes
             $filter['Class'] = 2;
@@ -46,11 +44,12 @@ function themes_user_usermenu($args)
             $name = xarUserGetVar('name');
             $id = xarUserGetVar('id');
             $authid = xarSecGenAuthKey('themes');
-            $data = xarTplModule('themes', 'user', 'usermenu_form', array('authid' => $authid,
+            $data = array('authid' => $authid,
                     'name' => $name,
                     'id' => $id,
                     'defaulttheme' => $defaulttheme,
-                    'themes' => $data['themes']));
+                    'themes' => $data['themes']);
+                                  return serialize($data);
             break;
 
         case 'update':

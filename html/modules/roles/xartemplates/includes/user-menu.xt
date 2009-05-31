@@ -6,9 +6,6 @@
         </span>
     </div>
     <div class="xar-mod-body">
-        <h2>
-            #xarVarPrepForDisplay($name)#
-        </h2>
         <xar:if condition="!empty($message)">
             #$message#
             <xar:else />
@@ -17,7 +14,7 @@
                     <xar:var name="title">Your Profile</xar:var>
                     <xar:var name="label">Your Profile</xar:var>
                     <li class="xar-tabs-label" title="#$title#">#$label#</li>
-                    <xar:if condition="($compare eq $current) or ($compare eq $account)">
+                    <xar:if condition="$compare eq $account">
                         <li class="xar-tab-active">
                             <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">                                
                                 Display your profile                                
@@ -31,13 +28,24 @@
                         </li>
                     </xar:if>
                     <xar:if condition="!empty($output)">
-                        <xar:foreach in="$output" key="$module" value="$hookoutput">
-                            #$hookoutput#
+                        <xar:foreach in="$output" key="$module" value="$value">
+                            <xar:set name="data">unserialize($value)</xar:set>
+                            <xar:if condition="$compare eq $data['link']">
+                                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                            <xar:else />
+                                <xar:set name="tabclass">'xar-tab'</xar:set>
+                                <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                            </xar:if>
+                            <li class="#$tabclass#">
+                                <a href="#$data['link']#" class="#$linkclass#">#$data['label']#</a>
+                            </li>
                         </xar:foreach>
                     </xar:if>
-                    <xar:if condition="!empty($logoutmodule)">
+                    <xar:set name="defaultauthdata">xarModAPIFunc('roles','user','getdefaultauthdata')</xar:set>
+                    <xar:if condition="!empty($defaultauthdata['defaultlogoutmodname'])">
                         <li class="xar-tab">
-                            <a href="#xarModURL($logoutmodule,'user','logout')#" class="xar-norm xar-norm-outline">                                
+                            <a href="#xarModURL($defaultauthdata['defaultlogoutmodname'],'user','logout')#" class="xar-norm xar-norm-outline">                                
                                 Logout                                
                             </a>
                         </li>
