@@ -168,6 +168,7 @@ function installer_admin_phase3()
 
     // Extension Check
     $data['xmlextension']             = extension_loaded('xml');
+    $data['xslextension']             = extension_loaded('xsl');
     $data['mysqlextension']           = extension_loaded('mysql');
     $data['pgsqlextension']           = extension_loaded('pgsql');
     $data['sqliteextension']          = extension_loaded('sqlite');
