@@ -47,6 +47,7 @@
     <div id="navbar">
         <div id="navbar_inner">
             <ul id="navbar_core">
+                <!--
                 <li class="navbar-item">
                     <a href="http://www.xaraya.com/index.php/xarbb"><xar:mlstring>Support Forums</xar:mlstring></a>
                 </li>
@@ -56,17 +57,23 @@
                 <li class="navbar-item">
                     <a href="irc://irc.xaraya.com"><xar:mlstring>IRC Support</xar:mlstring></a>
                 </li>
+                -->
+                <li class="navbar-item">
+                    <a href="http://www.xaraya.com/index.php/xarpages/support" target="_blank"><xar:mlstring>Support</xar:mlstring></a>
+                </li>
                 <xar:if condition="$isupgrade eq '1'">
                     <li class="navbar-item">
                         <a href="http://www.xaraya.com/index.php/documentation/586"><xar:mlstring>Upgrade Guide</xar:mlstring></a>
                     </li>
                 <xar:else />
+                <!--
                     <li class="navbar-item">
                         <a href="http://www.xaraya.com/index.php/documentation/96"><xar:mlstring>Prepare for Install</xar:mlstring></a>
                     </li>
                     <li class="navbar-item">
                         <a href="http://www.xaraya.com/index.php/documentation/97"><xar:mlstring>Install Guide</xar:mlstring></a>
                     </li>
+                    -->
                 </xar:if>
             </ul>
         </div>
