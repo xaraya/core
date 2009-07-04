@@ -19,9 +19,8 @@ dtd="xhtml1-strict">
             <div id="wrapper">
                 <div id="main">
                     <div id="logo">
-                        <a href="/" title="home">
-                            <img src="/#xarTplGetThemeDir()#/images/xarLogo3.png" width="90"
-                            height="90" alt="Xaraya Logo" title="home" />
+                        <a href="index.php" title="home">
+                            <img src="#xarTplGetThemeDir()#/images/xarLogo2.png" width="90" height="90" alt="Xaraya Logo" title="home" />
                         </a>
                         <p>
                             <xar:var name="SiteSlogan" scope="module" module="themes" />
