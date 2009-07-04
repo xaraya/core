@@ -649,7 +649,7 @@ function installer_admin_create_administrator()
     $data['admin']->properties['email']->validation_min_length = 1;
     $data['admin']->properties['email']->validation_min_length_invalid = xarML('An email address must be entered');
     
-    $isvalid = $data['admin']->checkInput();var_dump($data['admin']->getInvalids());
+    $isvalid = $data['admin']->checkInput();
     if (!$isvalid) {
         return xarTplModule('installer','admin','create_administrator',$data);
     }
