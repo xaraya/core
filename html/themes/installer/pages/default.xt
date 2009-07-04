@@ -25,8 +25,9 @@
                     <div id="header_tlcorner"><div id="header_trcorner">&#160;</div></div>
 
                     <div id="header_contentcore">
-                        <xar:set name="context">basename(xarServer::getVar('SCRIPT_NAME'))</xar:set>
-                        <xar:if condition="$context eq 'install.php'">
+                        <xar:set name="script">basename(xarServer::getVar('SCRIPT_NAME'))</xar:set>
+                        <xar:set name="dummy">1;xarVarFetch('module','str',$modulename,'',XARVAR_NOT_REQUIRED)</xar:set>
+                        <xar:if condition="$script eq 'install.php' OR $modulename eq 'installer'">
                             <h1>Xaraya Installer</h1>
                             <p>
                                 <xar:mlstring>This script will install the Xaraya database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the <a href="http://www.xaraya.com/index.php/xarbb">support forums</a> or live IRC support for help.</xar:mlstring>
