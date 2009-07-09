@@ -47,7 +47,8 @@ class NumberBoxProperty extends TextBoxProperty
             } elseif (isset($this->validation_max_value)) {
                 $this->setValue($this->validation_max_value);
             } else {
-                $this->setValue();
+                $this->setValue(0);
+                return true;
             }
         } elseif (is_numeric($value)) {
             $value = $this->castType($value);
