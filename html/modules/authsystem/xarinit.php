@@ -46,7 +46,7 @@ function authsystem_init()
     if (!$bid) return;
 
     // Installation complete; check for upgrades
-    return authsystem_upgrade('2.0');
+    return authsystem_upgrade('2.0.0');
 }
 /*
  * We don't have all modules activated at install time
@@ -68,7 +68,7 @@ function authsystem_activate()
     xarModVars::set('authsystem', 'uselockout', false);
 
     // Installation complete; check for upgrades
-    return authsystem_upgrade('2.0');
+    return authsystem_upgrade('2.0.0');
 }
 
 /**
@@ -81,8 +81,8 @@ function authsystem_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0':
-        case '2.1':
+        case '2.0.0':
+        case '2.1.0':
       break;
     }
     return true;
