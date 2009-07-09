@@ -12,16 +12,7 @@
     <column name="remember"><boolean default="false"/></column>
   </table>
 
-  <table name="template_tags">
-    <column id="template_tags.id" name="id" required="true" auto="true"><number size="10" /></column>
-    <column name="name" required="true"><text size="255"/></column>
-    <column id="template_tags.module_id" name="module_id" required="true"><number size="10" default="0"/></column>
-    <column name="handler" required="true"><text size="255"/></column>
-    <column name="data"><text size="16K"/></column>
-  </table>
-
   <constraints>
-    <primary><columnref id="template_tags.id"/></primary>
     <primary><columnref id="session_info.id"/></primary>
 
     <index name="i_session_role_id"><columnref id="session_info.role_id"/></index>
