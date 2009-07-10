@@ -16,7 +16,7 @@ sys::import('blocklayout.template.compiled');
 interface ISourceTemplate
 {
     function &compile();
-    function &execute($args);
+    function &execute(&$args);
 }
 
 /**
