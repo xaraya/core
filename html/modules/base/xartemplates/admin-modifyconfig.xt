@@ -242,19 +242,19 @@
             <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Sessions and Security</legend>
-                    <div class="xar-form-input-wrapper-after">
+                    <div class="xar-form-input-wrapper">
+                        <label for="secureserver" title="#xarML('Configure to run on a secure server.')#" class="xar-form-label">
+                            Configure for Secure Server
+                        </label>
                         <xar:set name="checked">
                             <xar:var scope="config" name="Site.Core.EnableSecureServer" />
                         </xar:set>
-                        <xar:data-input type="checkbox" name="secureserver" id="secureserver"
-                        checked="$checked" />
-                        <label for="secureserver"
-                        title="#xarML('Configure to run on a secure server.')#">Configure to run on
-                        Secure Server</label>
+                        <xar:data-input type="checkbox" name="secureserver" id="secureserver" checked="$checked" />
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="securitylevel" title="#xarML('Security options for sessions')#"
-                        class="xar-form-label">Security Level:</label>
+                        <label for="securitylevel" title="#xarML('Security options for sessions')#" class="xar-form-label">
+                            Security Level:
+                        </label>
                         <xar:set name="options">
                             array(
                                 array('id' => 'High', 'name' => xarML('High')),
