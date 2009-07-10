@@ -71,21 +71,7 @@ class CompiledTemplate extends Object
                     $_compiler_output = xarCore::getCached( 'template',$this->source);
                 }
 
-                // Include the contents of our stream 
-                try {
-                    $res = include("var://_compiler_output");
-                } catch (Exception $e) {
-                    ob_end_clean();
-                    echo "<pre>";
-                    echo "Source file: " . $this->source;
-                    echo "<br />";
-                    echo "Compiled file: " . $this->fileName;
-                    echo "<br />";
-                    echo "Line: " . $e->getLine();
-                    echo "<br />";
-                    var_dump($e->getTrace());
-                    exit;
-                }
+                $res = include("var://_compiler_output");
             } else {
                 $res = include($this->fileName);
             }
