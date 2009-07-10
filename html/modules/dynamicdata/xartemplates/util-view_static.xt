@@ -10,16 +10,16 @@
         <xar:template type="module" file="utility-menu" />
         <xar:var name="firstline">Choose a table</xar:var>
         <form action="#xarServer::getCurrentURL()#" method="post">
-            <div style="float:left">
-                Current Table:&#160;
-                <xar:data-input type="dropdown" name="table" options="$tables" value="$table" firstline="$firstline" onchange="submit()"/>
-            </div>
-            <div style="float:right">
+            <div>
                 New Table:
                 &#160;
                 <xar:data-input type="textbox" name="newtable" />
                 &#160;
                 <input type="submit" value="Add a new table" />                    
+            </div>
+            <div>
+                Current Table:&#160;
+                <xar:data-input type="dropdown" name="table" options="$tables" value="$table" firstline="$firstline" onchange="submit()"/>
             </div>
         </form>
         <div style="clear: both">&#160;</div>
