@@ -475,7 +475,7 @@
                     <div class="xar-form-input-wrapper">
                         <label for="releasenumber"
                         title="#xarML('Number of feeds for Xaraya release to display.')#"
-                        class="xar-form-label">Release Number to display:</label>
+                        class="xar-form-label">Number of releases to display:</label>
                         <input type="text" id="releasenumber" name="releasenumber"
                         value="#$releasenumber#" maxlength="4" class="xar-form-textshort" />
                     </div>
