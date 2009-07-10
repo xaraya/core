@@ -123,7 +123,7 @@ if(!stream_wrapper_register("var", "VariableStream")) {
 }
 
 // TEST CODE: 
-if(true){
+if(!true){
     $myvar = "";
 
     // This is the crux

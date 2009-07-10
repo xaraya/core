@@ -39,19 +39,57 @@ class CompiledTemplate extends Object
         // Do we really need this?
         $bindvars['_bl_data'] =& $bindvars;
 
-        // Executing means generating output, start a buffer for it
-        ob_start();
-
         // Make the bindvars known in the scope.
         extract($bindvars,EXTR_OVERWRITE);
 
         if($this->type=='page') set_exception_handler(array('ExceptionHandlers','bone'));
 
+        // Executing means generating output, start a buffer for it
+        ob_start();
+
         try {
-            //
-            // Let's see what we cooked up in the compiler, this one line is where it all happens. :-)
-            //
-            $res = include($this->fileName);
+            // If caching is enabled then cache it for subsequent reuse
+            try {
+                $caching = xarConfigVars::get(null, 'System.Core.Caching');
+            } catch (Exception $e) {
+                $caching = 0;
+            }
+            if ($caching) {
+                // Set up a variable stream
+                sys::import('xaraya.streams.variables');
+                // This variable will hold the stream contents
+                global $_compiler_output;
+
+                // Have we already cached this template?
+                if (!xarCore::isCached( 'template',$this->source)) {
+                    // Get the compiled template from the template cache
+                    $_compiler_output = file_get_contents($this->fileName);
+                    // Stick it in the cache
+                    xarCore::setCached( 'template',$this->source, $_compiler_output);
+                } else {
+                    // Retrieve the compiled template from cache
+                    $_compiler_output = xarCore::getCached( 'template',$this->source);
+                }
+
+                // Include the contents of our stream 
+                try {
+                    $res = include("var://_compiler_output");
+                } catch (Exception $e) {
+                    ob_end_clean();
+                    echo "<pre>";
+                    echo "Source file: " . $this->source;
+                    echo "<br />";
+                    echo "Compiled file: " . $this->fileName;
+                    echo "<br />";
+                    echo "Line: " . $e->getLine();
+                    echo "<br />";
+                    var_dump($e->getTrace());
+                    exit;
+                }
+            } else {
+                $res = include($this->fileName);
+            }
+            
         } catch (Exception $e) {
             // Any exception inside the compiled template invalidates our output from it.
             // Clear its buffer, and raise exactly that exception, letting the exception handlers

@@ -38,6 +38,7 @@ function base_admin_updateconfig()
             if (!xarVarFetch('shorturl','checkbox',$enableShortURLs,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('baseshorturl','checkbox',$enableBaseShortURLs,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('htmlenitites','checkbox',$FixHTMLEntities,false,XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('caching','checkbox',$caching,true,XARVAR_NOT_REQUIRED)) return;
 
             xarModVars::set('modules', 'defaultmodule', $defaultModuleName);
             xarModVars::set('modules', 'defaultmoduletype',$defaultModuleType);
@@ -51,6 +52,7 @@ function base_admin_updateconfig()
             // enable short urls for the base module itself too
             xarModVars::set('base','SupportShortURLs', ($enableBaseShortURLs ? 1 : 0));
             xarConfigVars::set(null, 'Site.Core.FixHTMLEntities', $FixHTMLEntities);
+            xarConfigVars::set(null, 'System.Core.Caching', $caching);
             break;
         case 'security':
             if (!xarVarFetch('secureserver','checkbox',$secureServer,true,XARVAR_NOT_REQUIRED)) return;
