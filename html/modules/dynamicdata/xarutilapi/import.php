@@ -59,6 +59,10 @@ function dynamicdata_utilapi_import($args)
     $dom = dom_import_simplexml ($xmlobject);
     $roottag = $dom->tagName;
 
+    sys::import('xaraya.validations');
+    $boolean = ValueValidations::get('bool');
+    $integer = ValueValidations::get('int');
+    
     if ($roottag == 'object') {
         
         //FIXME: this unconditionally CLEARS the incoming parameter!!
@@ -82,11 +86,13 @@ function dynamicdata_utilapi_import($args)
             if (isset($xmlobject->{$property}[0])) {
                 $value = (string)$xmlobject->{$property}[0];
                 try {
-                    eval('$value = ' . (string)$xmlobject->{$property}[0] . ';');      
-                } catch (Exception $e) {die("X".(string)$xmlobject->{$property}[0]."X");
-                    eval('$value = "' . (string)$xmlobject->{$property}[0] . '";');
-   
+                    $boolean->validate($value, array());
+                } catch (Exception $e) {
+                    try {
+                        $integer->validate($value, array());
+                    } catch (Exception $e) {}
                 }
+
                 $args[$property] = $value;
             }
         }
@@ -231,6 +237,13 @@ function dynamicdata_utilapi_import($args)
                     // Run the import value through the property's validation routine
                     //$check = $property->validateValue((string)$child->$propertyname);
                     $value = (string)$child->$propertyname;
+                    try {
+                        $boolean->validate($value, array());
+                    } catch (Exception $e) {
+                        try {
+                            $integer->validate($value, array());
+                        } catch (Exception $e) {}
+                    }
                     $item[$propertyname] = $value;
                 }
             }
