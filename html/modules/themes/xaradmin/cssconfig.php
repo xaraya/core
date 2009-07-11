@@ -78,17 +78,6 @@ function themes_admin_cssconfig()
         case "themes":
             break;
         default:
-            // reset tags to defaults
-            if (!xarVarFetch('resetcsstags', 'str::', $resetcsstags, '', XARVAR_NOT_REQUIRED)) return;
-
-            $data['resettagsurl'] = xarModURL('themes', 'admin', 'cssconfig', array('resetcsstags'=> $resetcsstags));
-
-            if($resetcsstags == 'all') {
-                xarModAPIFunc('themes', 'css', 'registercsstags');
-                $data['resettagsurlstatus'] = xarML('All tags have been restored');
-            } else {
-                $data['resettagsurlstatus'] = xarML('Restore defaults');
-            }
             break;
     }
 
