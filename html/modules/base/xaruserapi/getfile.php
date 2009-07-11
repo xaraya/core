@@ -195,7 +195,7 @@ function base_userapi_getfile($args)
     } else {
         // TODO: we probably want some fancier error checking here too :-)
         // use curl instead of fopen method if we can (not supported by all hosts these days)
-        sys::import('modules.base.xarclass.xarCurl');
+        sys::import('modules.base.class.xarCurl');
         $curl = new xarCurl(array('url' => $url));
         // check that curl initialised ok
         if ($curl->errno <> 0) {

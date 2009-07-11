@@ -34,7 +34,7 @@
  */
 function themes_userapi_register($args)
 {
-    sys::import('modules.themes.xarclass.xarcss');
+    sys::import('modules.themes.class.xarcss');
     $obj = new xarCSS($args);
     return $obj->run_output();
 }
