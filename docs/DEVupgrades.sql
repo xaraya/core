@@ -696,7 +696,7 @@ ALTER TABLE `xar_block_types` CHANGE `info` `info`               text;
 
 ALTER TABLE `xar_cache_blocks` CHANGE `blockinstance_id` `blockinstance_id`  integer unsigned NOT NULL;
 ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`                    bool default '0';
-ALTER TABLE `xar_cache_blocks` CHANGE `page` `page`                          integer NOT NULL default '0';
+ALTER TABLE `xar_cache_blocks` CHANGE `page` `page`                          bool default '0';
 ALTER TABLE `xar_cache_blocks` CHANGE `user` `user`                          integer unsigned NOT NULL;
 ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`                      integer unsigned default '0';
 

@@ -148,21 +148,20 @@ function blocks_init()
         $cacheblockstable =  $prefix . '_cache_blocks';
 
         $query = xarDBCreateTable($prefix . '_cache_blocks',
-                                  array('blockinstance_id'          => array('type'        => 'integer',
-                                                                    'unsigned'    => true,
-                                                                    'null'        => false,
-                                                                    'primary_key' => true),
-                                        'nocache'    => array('type'        => 'boolean',
-                                                                  'default'     => false),
-                                        'page' => array('type'        => 'integer',
-                                                            'null'        => false,
-                                                            'default'     => '0'),
-                                        'theuser'    => array('type'        => 'integer',
-                                                               'unsigned'    => true,
-                                                               'null'        => false),
-                                        'expire'    => array('type'        => 'integer',
-                                                               'unsigned'    => true,
-                                                               'default'     => '0')));
+                                  array('blockinstance_id'  => array('type'        => 'integer',
+                                                                     'unsigned'    => true,
+                                                                     'null'        => false,
+                                                                     'primary_key' => true),
+                                        'nocache'           => array('type'        => 'boolean',
+                                                                     'default'     => false),
+                                        'page'              => array('type'        => 'boolean',
+                                                                     'default'     => false),
+                                        'theuser'           => array('type'        => 'integer',
+                                                                     'unsigned'    => true,
+                                                                     'null'        => false),
+                                        'expire'            => array('type'        => 'integer',
+                                                                     'unsigned'    => true,
+                                                                     'default'     => '0')));
         $dbconn->Execute($query);
 
         // *_userblocks
