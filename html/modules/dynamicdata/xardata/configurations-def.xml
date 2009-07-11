@@ -64,7 +64,7 @@
     <property name="ignore_empty">
       <id>28</id>
       <label>Ignore Empty Input</label>
-      <type>radio</type>
+      <type>checkbox</type>
       <defaultvalue>1</defaultvalue>
       <source>xar_dynamic_configurations.ignore_empty</source>
       <status>33</status>

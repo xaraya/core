@@ -82,12 +82,12 @@ function privileges_init()
 
         $fields = array(
                         'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-                        'name'  => array('type' => 'varchar', 'size' => 100, 'null' => false),
+                        'name'  => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'realm_id'=>array('type' => 'integer', 'unsigned' => true, 'null' => true),
                         'module_id'=>array('type' => 'integer', 'unsigned' => true, 'null' => true),
-                        'component' => array('type'  => 'varchar', 'size' => 100, 'null' => false),
-                        'instance' => array('type'   => 'varchar', 'size' => 100, 'null' => false),
-                        'level' => array('type'      => 'integer', 'null' => false,'default' => '0'),
+                        'component' => array('type'  => 'varchar', 'size' => 64, 'null' => false),
+                        'instance' => array('type'   => 'varchar', 'size' => 254, 'null' => false),
+                        'level' => array('type'      => 'integer', 'unsigned' => true, 'null' => false,'default' => '0'),
                         'description' => array('type'=> 'varchar', 'size' => 254, 'null' => false),
                         'itemtype' => array('type'=> 'integer', 'unsigned' => true, 'null' => false));
         $query = xarDBCreateTable($tables['privileges'],$fields);
@@ -205,7 +205,7 @@ function privileges_init()
                                                              'unsigned'    => true,
                                                              'null'        => true),
                                         'component' => array('type'   => 'varchar',
-                                                                 'size'        => 100,
+                                                                 'size'        => 254,
                                                                  'null'        => false),
                                         'header' => array('type'   => 'varchar',
                                                               'size'        => 254,

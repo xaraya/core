@@ -39,9 +39,9 @@ function roles_init()
                         'users' => array('type' => 'integer', 'null' => false, 'default' => '0'),
                         'uname' => array('type' => 'varchar', 'size' => 254, 'null' => false),
                         'email' => array('type' => 'varchar', 'size' => 254,'null' => true),
-                        'pass' => array('type' => 'varchar',  'size' => 100, 'null' => true),
+                        'pass' => array('type' => 'varchar',  'size' => 254, 'null' => true),
                         'date_reg' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
-                        'valcode' => array('type' => 'varchar', 'size' => 35, 'null' => false),
+                        'valcode' => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'state' => array('type' => 'integer', 'unsigned' => true, 'size' => 'tiny', 'null' => false,'default' => '3'),
                         'auth_module_id' => array('type' => 'integer', 'unsigned' => true, 'unsigned' => true, 'null' => false));
         $query = xarDBCreateTable($tables['roles'],$fields);
