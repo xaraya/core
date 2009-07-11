@@ -115,7 +115,7 @@ deal with the css tasks at hand:
 <import-theme-stylesheet />
 <embed-theme-styles />
 
-<additional-styles />
+<place-css />
 
 The last one can be used INSTEAD of old #$tpl:additionalStyles# in themes.
 

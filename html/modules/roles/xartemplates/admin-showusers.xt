@@ -7,7 +7,7 @@
     <xar:javascript module="roles" filename="xarTree.js" position="head" />
     <xar:javascript module="roles" filename="tree.js" position="head" />
     <xar:style scope="module" module="base" file="tree" />
-    <xar:additional-styles />
+    <xar:place-css />
 
     <xar:set name="icon_password">xarTplGetImage('icons/user-password.png','base')</xar:set>
     <xar:set name="icon_info">xarTplGetImage('icons/info.png','base')</xar:set>

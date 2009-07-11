@@ -11,8 +11,8 @@
  */
 
 /**
- * Format : <xar:additional-styles /> without params
- * Typical use in the head section is: <xar:additional-styles />
+ * Format : <xar:place-css /> without params
+ * Typical use in the head section is: <xar:place-css />
  *
  * @author Andy Varganov
  * @param none

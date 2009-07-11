@@ -86,8 +86,8 @@
 
     @todo: should we use import or include here?
   -->
-  <!-- xar:additional-styles -->
-  <xsl:include href="tags/additional-styles.xsl"/>
+  <!-- xar:place-css -->
+  <xsl:include href="tags/place-css.xsl"/>
   <!-- xar:javascript -->
   <xsl:include href="tags/javascript.xsl"/>
   <!-- xar:place-javascript -->

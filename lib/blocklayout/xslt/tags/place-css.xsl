@@ -8,7 +8,7 @@
     xmlns:php="http://php.net/xsl" 
     exclude-result-prefixes="php xar">
 
-<xsl:template match="xar:additional-styles">
+<xsl:template match="xar:place-css">
   <xsl:processing-instruction name="php">
     <xsl:text>echo xarModAPIFunc('themes','user','deliver',array('method' =&gt; 'render','base' =&gt; 'theme'));</xsl:text>
   </xsl:processing-instruction>
