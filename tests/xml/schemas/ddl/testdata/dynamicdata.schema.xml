@@ -41,9 +41,6 @@
     <column id="dynamic_objects.object_itemtype" name="object_itemtype" required="true">
       <number size="10" default="0"/>
     </column>
-    <column id="dynamic_objects.object_parent" name="object_parent" required="true">
-      <number size="10" default="0"/>
-    </column>
     <column id="dynamic_objects.object_class" name="object_class" required="true">
       <text size="255"/>
     </column>

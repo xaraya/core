@@ -1,7 +1,6 @@
 <object name="dynamicdata_tablefields">
   <objectid>133</objectid>
   <label>Table Fields</label>
-  <parent>objects</parent>
   <module_id>182</module_id>
   <itemtype>25</itemtype>
   <class>DataObject</class>

@@ -83,7 +83,7 @@ function dynamicdata_utilapi_import($args)
                 $value = (string)$xmlobject->{$property}[0];
                 try {
                     eval('$value = ' . (string)$xmlobject->{$property}[0] . ';');      
-                } catch (Exception $e) {
+                } catch (Exception $e) {die("X".(string)$xmlobject->{$property}[0]."X");
                     eval('$value = "' . (string)$xmlobject->{$property}[0] . '";');
    
                 }

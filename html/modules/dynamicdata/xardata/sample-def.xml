@@ -1,7 +1,6 @@
 <object name="sample">
   <objectid>5</objectid>
   <label>Sample Object</label>
-  <parent>objects</parent>
   <module_id>182</module_id>
   <itemtype>3</itemtype>
   <class>DataObject</class>

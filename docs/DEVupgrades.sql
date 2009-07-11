@@ -664,6 +664,8 @@ INSERT INTO `xar_privileges` (id, name, realm_id, module_id, component, instance
 
 DROP TABLE IF EXISTS xar_template_tags;
 
+ALTER TABLE `xar_dynamic_objects` DROP `property_id`;
+
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
 */
@@ -708,7 +710,6 @@ ALTER TABLE `xar_dynamic_objects` CHANGE `name` `name`            varchar(64) NO
 ALTER TABLE `xar_dynamic_objects` CHANGE `label` `label`          varchar(254) NOT NULL;
 ALTER TABLE `xar_dynamic_objects` CHANGE `module_id` `module_id`  integer unsigned NOT NULL;
 ALTER TABLE `xar_dynamic_objects` CHANGE `itemtype` `itemtype`    integer unsigned NOT NULL default '0';
-ALTER TABLE `xar_dynamic_objects` CHANGE `parent_id` `parent_id`  integer unsigned NOT NULL default '0';
 ALTER TABLE `xar_dynamic_objects` CHANGE `class` `class`          varchar(254) NOT NULL default 'DataObject';
 ALTER TABLE `xar_dynamic_objects` CHANGE `filepath` `filepath`    varchar(254) NOT NULL default 'modules/dynamicdata/class/objects/base.php';
 ALTER TABLE `xar_dynamic_objects` CHANGE `urlparam` `urlparam`    varchar(30) NOT NULL default 'itemid';

@@ -1,7 +1,6 @@
 <object name="configurations">
   <objectid>4</objectid>
   <label>Dynamic Configurations</label>
-  <parent>objects</parent>
   <module_id>182</module_id>
   <itemtype>2</itemtype>
   <class>DataObject</class>
