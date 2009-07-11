@@ -3,6 +3,8 @@
   <label>Base Privileges</label>
   <module_id>1098</module_id>
   <itemtype>1</itemtype>
+  <class>DataObject</class>
+  <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <config></config>

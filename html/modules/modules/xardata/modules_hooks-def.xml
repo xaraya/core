@@ -3,6 +3,8 @@
   <label>Hooks</label>
   <module_id>182</module_id>
   <itemtype>12</itemtype>
+  <class>DataObject</class>
+  <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <config></config>
