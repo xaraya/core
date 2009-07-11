@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:base-include-javascript position="head" module="dynamicdata" filename="subform.js" />
+    <xar:javascript position="head" module="dynamicdata" filename="subform.js" />
     <input type="hidden" id="fieldprefix" value="#$fieldprefix#" />
     <xar:if condition="empty($style) or $style eq 'serialized'">
         <xar:if condition="!empty($object)">

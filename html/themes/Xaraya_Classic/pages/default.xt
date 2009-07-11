@@ -46,7 +46,7 @@ dtd="xhtml1-strict">
             <!--
         Body JavaScript - required for all html themes
     -->
-            <xar:base-render-javascript position="body" />
+            <xar:place-javascript position="body" />
         </body>
     </html>
 </xar:blocklayout>

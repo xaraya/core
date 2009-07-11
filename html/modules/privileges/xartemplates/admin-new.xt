@@ -1,6 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:base-include-javascript module="privileges" filename="xarTree.js" />
+    <xar:javascript module="privileges" filename="xarTree.js" />
     <script type="javascript">
     <!--
         var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");

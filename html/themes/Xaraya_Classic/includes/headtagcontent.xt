@@ -44,5 +44,5 @@
         &#160;</script>
     </xar:if>
     <!-- Head JavaScript - required for all themes -->
-    <xar:base-render-javascript position="head" />
+    <xar:place-javascript position="head" />
 </xar:template>

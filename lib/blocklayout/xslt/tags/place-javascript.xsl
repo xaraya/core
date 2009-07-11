@@ -8,7 +8,7 @@
     xmlns:php="http://php.net/xsl" 
     exclude-result-prefixes="php xar">
 
-<xsl:template match="xar:base-render-javascript">
+<xsl:template match="xar:place-javascript">
   <xsl:processing-instruction name="php">
     <xsl:text>echo trim(xarTplModule('base','javascript','render',array('javascript'=&gt;xarTplGetJavaScript('</xsl:text>
     <xsl:value-of select="@position"/>

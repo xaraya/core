@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- TODO: split this file up in parts -->
-    <xar:base-include-javascript module="base" filename="formcheck.js" />
+    <xar:javascript module="base" filename="formcheck.js" />
     <script type="text/javascript">
     <xar:comment>
         // Enter name of mandatory fields
@@ -227,7 +227,7 @@
                 <xar:var scope="config" name="Site.User.AuthenticationModules" />
             </xar:set>
             <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
-                <xar:base-include-javascript module="base" filename="orderitem.js" position="head" />
+                <xar:javascript module="base" filename="orderitem.js" position="head" />
                 <script type="text/javascript">
                     xar_base_reorder_warn = '#xarML('You must select the authentication module you want to move.')#';
                 </script>

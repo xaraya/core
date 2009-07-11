@@ -88,10 +88,10 @@
   -->
   <!-- xar:additional-styles -->
   <xsl:include href="tags/additional-styles.xsl"/>
-  <!-- xar:base-include-javascript -->
-  <xsl:include href="tags/base-include-javascript.xsl"/>
-  <!-- xar:base-render-javascript -->
-  <xsl:include href="tags/base-render-javascript.xsl"/>
+  <!-- xar:javascript -->
+  <xsl:include href="tags/javascript.xsl"/>
+  <!-- xar:place-javascript -->
+  <xsl:include href="tags/place-javascript.xsl"/>
   <!-- xar:block -->
   <xsl:include href="tags/block.xsl"/>
   <!-- xar:blockgroup -->

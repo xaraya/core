@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:base-include-javascript module="base" filename="toggle.js" />
+    <xar:javascript module="base" filename="toggle.js" />
     <div class="xar-mod-head">
         <span class="xar-mod-title">Modules Administration</span>
     </div>

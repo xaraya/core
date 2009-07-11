@@ -13,7 +13,7 @@
             <xar:style scope="common" />
             <xar:style scope="theme" file="style" title="Xaraya Default Stylesheet" />
             <xar:additional-styles />
-            <xar:base-render-javascript position="head" />
+            <xar:place-javascript position="head" />
         </head>
         <body>
             <div id="wrapper">
@@ -37,7 +37,7 @@
                 </div>
                 <xar:blockgroup name="topnav" id="topnav" />
                 <xar:blockgroup name="center" id="center" />
-                <xar:base-render-javascript position="body" />
+                <xar:place-javascript position="body" />
             </div>
         </body>
     </html>
