@@ -24,7 +24,7 @@ function base_adminmenublock_init()
     return array('nocache' => 1,
                  'showlogout' => 1,
                  'menustyle' => 'bycat',
-                 'showhelp' => 1);
+                 'showhelp' => 0);
 }
 
 /**
