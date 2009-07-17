@@ -12,6 +12,7 @@
  /**
  * Load the Xaraya bootstrap so we can get started
  */
+$GLOBALS["Xaraya_PageTime"] = microtime(true);
 set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 include 'lib/bootstrap.php';
 

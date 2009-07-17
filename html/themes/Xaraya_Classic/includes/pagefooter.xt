@@ -35,6 +35,7 @@
         <p id="footermsg">
             <xar:var name="sitecopyright" />
             <xar:var name="sitefooter" />
+            &#160;Page loaded in #xarServer::getPageTime()# seconds
         </p>
     </div>
 </xar:template>
