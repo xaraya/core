@@ -92,7 +92,7 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args )
         ,'private'
         ,'common'
         ,array(
-            'title' => xarML( 'Global Settings' )
+            'title' => xarML( 'System Settings' )
             ,'type' => 'admin'
             ));
 
@@ -139,7 +139,7 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args )
          */
         xarSessionSetVar(
             '<xsl:value-of select="$module_prefix" />_statusmsg'
-            ,xarML( 'Updated the global module settings!' ) );
+            ,xarML( 'Updated the system module settings!' ) );
 
         /*
          * Finished. Back to the sender!

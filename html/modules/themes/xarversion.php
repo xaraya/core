@@ -35,5 +35,5 @@ $modversion['admin']          = true;
 $modversion['user']           = false;
 $modversion['securityschema'] = array('Themes::' => '::');
 $modversion['class']          = 'Core Admin';
-$modversion['category']       = 'Global';
+$modversion['category']       = 'System';
 ?>
