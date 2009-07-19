@@ -35,6 +35,6 @@ $modversion['admin']          = true;
 $modversion['user']           = false;
 $modversion['securityschema'] = array('mail::' => '::');
 $modversion['class']          = 'Core Complete';
-$modversion['category']       = 'Global';
+$modversion['category']       = 'System';
 
 ?>

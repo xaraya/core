@@ -35,5 +35,5 @@ $modversion['user'] = false;
 $modversion['securityschema'] = array('Blocks::Group'    => 'Group name::Group ID',
                                       'Blocks::Instance' => 'Block type:Block title:Block ID');
 $modversion['class'] = 'Core Admin';
-$modversion['category'] = 'Global';
+$modversion['category'] = 'System';
 ?>

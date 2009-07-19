@@ -34,5 +34,5 @@ $modversion['contact']      = 'johnny@xaraya.com';
 $modversion['admin']        = true;
 $modversion['user']         = true;
 $modversion['class']        = 'Core Admin';
-$modversion['category']     = 'Global';
+$modversion['category']     = 'System';
 ?>

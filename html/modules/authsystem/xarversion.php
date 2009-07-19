@@ -34,5 +34,5 @@ $modversion['contact'] = 'marco.canini@xaraya.com, jojodee@xaraya.com';
 $modversion['admin'] = true;
 $modversion['user'] = false;
 $modversion['class'] = 'Authentication';
-$modversion['category'] = 'Global';
+$modversion['category'] = 'System';
 ?>
