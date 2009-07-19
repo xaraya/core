@@ -33,5 +33,5 @@ $modversion['admin'] = false;
 $modversion['user'] = false;
 $modversion['securityschema'] = array('Installer::' => '::');
 $modversion['class'] = 'Core Admin';
-$modversion['category'] = 'System';
+$modversion['category'] = 'Global';
 ?>

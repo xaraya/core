@@ -84,7 +84,7 @@ function modules_init()
         if (!isset($modInfo)) return; // throw back
         // Use version, since that's the only info likely to change
         $modVersion = $modInfo['version'];
-        $bindvars = array('modules',1,'modules',(string) $modVersion,'Core Admin','System',true,false,3);
+        $bindvars = array('modules',1,'modules',(string) $modVersion,'Core Admin','Global',true,false,3);
         $dbconn->Execute($query,$bindvars);
 
         $modInfo = xarMod_getFileInfo('base');
@@ -92,7 +92,7 @@ function modules_init()
         // Use version, since that's the only info likely to change
         $modVersion = $modInfo['version'];
 
-        $bindvars = array('base',68,'base',(string) $modVersion,'Core Admin','System',true,true,3);
+        $bindvars = array('base',68,'base',(string) $modVersion,'Core Admin','Global',true,true,3);
         $dbconn->Execute($query,$bindvars);
 
         /** Module vars table is created earlier now (base mod, where config_vars table was created */

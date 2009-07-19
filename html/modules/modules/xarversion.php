@@ -32,5 +32,5 @@ $modversion['contact']            = '';
 $modversion['admin']              = true;
 $modversion['user']               = false;
 $modversion['class']              = 'Core Admin';
-$modversion['category']           = 'System';
+$modversion['category']           = 'Global';
 ?>

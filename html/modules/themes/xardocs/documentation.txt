@@ -45,7 +45,7 @@ Files: variable number of files with .class.php suffix + this docfile
 
 1a. Each object is available throughout and can be accessed via helpers.
 
-1b. Current implementation stores objects in a global array, but it may change
+1b. Current implementation stores objects in global array, but it may change
     even before this document is published. Final version may use objects
     stored in static vars.
 
