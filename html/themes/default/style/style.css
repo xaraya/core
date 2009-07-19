@@ -31,8 +31,8 @@ input, textarea {
 }
 #logo {
     padding: 1.5em;
-    /*	we have something to chose from */
-    /*	background: #8BADA4 url(../images/header4b2.jpg) repeat-x left bottom;*/
+    /*  we have something to chose from */
+    /*  background: #8BADA4 url(../images/header4b2.jpg) repeat-x left bottom;*/
     background: #D77043 url(../images/header2b.jpg) no-repeat left top;
     height: 90px;
     position: relative;
@@ -251,7 +251,7 @@ fieldset fieldset {
     border-right: 0;
     border-left: 0;
     padding-bottom: 0;
-    /*	background-color: rgba(255,255,255,.33);*/
+    /*  background-color: rgba(255,255,255,.33);*/
     clear: left;
 }
 fieldset fieldset legend {
@@ -330,6 +330,11 @@ thead, th {
 }
 tfoot {
     border-top: 1px solid #D77043;
+}
+
+pre {
+    font-size: 95%;
+    font-family: monaco, courier, monospace;
 }
 
 /* specific blocks */
