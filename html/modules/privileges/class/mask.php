@@ -44,7 +44,7 @@ class xarMask extends Object
      * @throws  none
      * @todo    none
     */
-    function __construct($pargs)
+    function __construct($pargs=array())
     {
         extract($pargs);
 
@@ -57,16 +57,16 @@ class xarMask extends Object
         $this->realmstable = $xartable['security_realms'];
         $this->modulestable = $xartable['modules'];
 
-        $this->id          = isset($id) ? (int) $id : 0;
-        $this->name         = $name;
-        $this->realm        = $realm;
-        $this->module       = $module;
-        $this->component    = $component;
-        $this->instance     = $instance;
-        $this->level        = (int) $level;
-        if (isset($description)) $this->description  = $description;
+        $this->id           = isset($id) ? (int) $id : 0;
+        $this->name         = isset($name) ? $name : 'EmptyMask';
+        $this->realm        = isset($realm) ? $realm : null;
+        $this->module       = isset($module) ? $module : null;
+        $this->component    = isset($component) ? $component : '';
+        $this->instance     = isset($instance) ? $instance : '';
+        $this->level        = isset($level) ? (int) $level : 0;
+        $this->description  = isset($description) ? $description : '';
         if (!isset($module_id) || (in_array(strtolower($module), array('all','empty')))) {
-            $this->setModuleID($module);
+            $this->setModuleID($this->module);
         } else {
             $this->module_id    = $module_id;
         }
@@ -132,7 +132,8 @@ class xarMask extends Object
     /**
      * create an array representing a mask instance
     */
-    private function getInstanceArray($instancestring=array()) {
+    private function getInstanceArray($instancestring=array()) 
+    {
         if (empty($instancestring)) return array();
         try {
             // the new way
