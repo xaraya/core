@@ -274,7 +274,7 @@ class xarMasks extends Object
      * @param   component string
      * @return  boolean
     */
-    public static function xarSecurityCheck($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$pnrealm=0,$pnlevel=0)
+    public static function xarSecurityCheck($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$realm=0,$level=0)
     {
         self::initialize();
         $userID = xarSession::getVar('role_id');
@@ -282,7 +282,8 @@ class xarMasks extends Object
         if ($userID == XARUSER_LAST_RESORT) return true;
 
         $maskname = $mask;
-        $mask =  self::getMask($mask);
+        if (empty($maskname)) $mask = new xarMask();
+        else $mask =  self::getMask($mask);
         if (!$mask) {
             // <mikespub> moved this whole $module thing where it's actually used, i.e. for
             // error reporting only. If you want to override masks with this someday, move
@@ -309,15 +310,16 @@ class xarMasks extends Object
             return false;
         }
 
-        // insert any component overrides
-        if ($component != '') $mask->setComponent($component);
-        // insert any instance overrides
-        if ($instance != '') $mask->setInstance($instance);
+        // Insert any overrides
+        if (!empty($component)) $mask->setComponent($component);
+        if (!empty($instance)) $mask->setInstance($instance);
+        if (!empty($module)) {
+            $mask->setModule($module);
+            $mask->setModuleID($module);
+        }
+        if (!empty($realm)) $mask->setRealm($realm);
+        if (!empty($level)) $mask->setLevel($level);
 
-        // insert any overrides of realm and level
-        // this is for PostNuke backward compatibility
-        if ($pnrealm != '') $mask->setRealm($pnrealm);
-        if ($pnlevel != '') $mask->setLevel($pnlevel);
         $realmvalue = xarModVars::get('privileges', 'realmvalue');
         if (strpos($realmvalue,'string:') === 0) {
             $textvalue = substr($realmvalue,7);
@@ -376,7 +378,6 @@ class xarMasks extends Object
         // normalize the mask now - its properties won't change below
         $mask->normalize();
 
-
         // get the Roles class
         sys::import('modules.roles.class.roles');
 
@@ -394,7 +395,7 @@ class xarMasks extends Object
         }
         
         // check if we already have the irreducible set of privileges for the current user
-        if ($rolename == '') {
+        if (($rolename == '') || ($rolename == xarUserGetVar('uname'))) {
             // We are checking the privileges of the current user
             // See if we have something cached
             if (!xarVarIsCached('Security.Variables','privilegeset')) {
@@ -419,11 +420,11 @@ class xarMasks extends Object
             }
         } else {
             // This is a different user, force recalculation
+            // ChECKME: is this working?
             $privileges = self::irreducibleset(array('roles' => array($role)),$mask->module);
         }
 
         $pass = self::testprivileges($mask->normalform,$privileges,false,$role);
-//if ($mask->getName() == 'EditPrivilege' && $mask->getComponent() == 'Privileges') {echo "<pre>";var_dump($privileges);}
 
         //$pass = self::testprivileges($mask,self::getprivset($role),false);
 
