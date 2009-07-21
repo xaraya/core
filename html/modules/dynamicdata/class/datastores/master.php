@@ -36,7 +36,7 @@ class DDObject extends Object implements IDDObject
         $type = isset($type) ? $type : '';
         $func = isset($func) ? $func : '';
         if (!empty($module)) {
-            $file = sys::code() . 'modules/' . $module . '/xar' . $type . '/' . $func . '.xml';
+            $file = 'modules/' . $module . '/xar' . $type . '/' . $func . '.xml';
         }
         try {
             return simplexml_load_file($file);

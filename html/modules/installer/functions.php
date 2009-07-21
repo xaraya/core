@@ -42,7 +42,7 @@ function xarInstallFunc($funcName = 'main', $args = array())
     }
 
     // Load the translations file
-    $file = sys::code() . 'modules/'.$modName.'/xar'.$modType.'/'.strtolower($funcName).'.php';
+    $file = 'modules/'.$modName.'/xar'.$modType.'/'.strtolower($funcName).'.php';
     if (!xarMLSLoadTranslations($file)) return;
 
     $tplData = $modFunc($args);
@@ -74,7 +74,7 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
     }
 
     // Load the translations file
-    $file = sys::code() . 'modules/'.$modName.'/xar'.$modType.'api/'.strtolower($funcName).'.php';
+    $file = 'modules/'.$modName.'/xar'.$modType.'api/'.strtolower($funcName).'.php';
     if (!xarMLSLoadTranslations($file)) return;
 
     return $modAPIFunc($args);

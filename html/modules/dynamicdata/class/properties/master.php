@@ -204,7 +204,7 @@ class DataPropertyMaster extends Object
             else
                 xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
 
-            if(!file_exists(sys::code() . $propertyInfo['filepath']))
+            if(!file_exists($propertyInfo['filepath']))
                 throw new FileNotFoundException($propertyInfo['filepath']);
 
             $dp = str_replace('/','.',substr($propertyInfo['filepath'],0,-4)); // minus .php

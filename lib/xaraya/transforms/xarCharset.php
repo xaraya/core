@@ -11,7 +11,7 @@
  * @author Vladimirs Metenchuks <voll@xaraya.com>
 **/
 
-define ("CONVERT_TABLES_DIR", sys::lib() . 'transforms/convtables/');
+define ("CONVERT_TABLES_DIR", sys::root() . '/lib/transforms/convtables/');
 
 /**
  * Main FEATURES of this class:

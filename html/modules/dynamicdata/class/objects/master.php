@@ -638,7 +638,7 @@ class DataObjectMaster extends Object
         if ($info != null) $args = array_merge($args,$info);
         else return $info;
 
-        if(!empty($args['filepath']) && ($args['filepath'] != 'auto')) include_once(sys::code() . $args['filepath']);
+        if(!empty($args['filepath']) && ($args['filepath'] != 'auto')) include_once($args['filepath']);
         if (!empty($args['class'])) {
             if(!class_exists($args['class'])) {
                 throw new ClassNotFoundException($args['class']);

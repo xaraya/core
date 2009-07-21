@@ -42,8 +42,8 @@ function modules_admin_modinfo()
     // check for proper icon, if not found display default
     // also displaying a generic icon now, if it was provided
     // additionally showing a short message if the icon is missing..
-    $modicon = sys::code() . 'modules/'.$modinfo['directory'].'/xarimages/admin.gif';
-    $modicongeneric = sys::code() . 'modules/'.$modinfo['directory'].'/xarimages/admin_generic.gif';
+    $modicon = 'modules/'.$modinfo['directory'].'/xarimages/admin.gif';
+    $modicongeneric = 'modules/'.$modinfo['directory'].'/xarimages/admin_generic.gif';
     if(file_exists($modicon)){
         $data['modiconurl']     = xarVarPrepForDisplay($modicon);
         $data['modiconmsg'] = xarVarPrepForDisplay(xarML('as provided by the author'));

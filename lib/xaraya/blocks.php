@@ -69,7 +69,7 @@ function xarBlock_render($blockinfo)
 
     // Get the block display function name.
     $displayFuncName = "{$modName}_{$blockType}block_display";
-    $classpath = sys::code() . 'modules/' . $modName . '/xarblocks/' . $blockType . '.php';
+    $classpath = 'modules/' . $modName . '/xarblocks/' . $blockType . '.php';
 
     // Fetch complete blockinfo array.
     if (function_exists($displayFuncName)) {

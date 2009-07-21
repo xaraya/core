@@ -93,7 +93,7 @@ function modules_adminapi_getfilemodules($args)
                     }
 
                     //FIXME: <johnny> remove this when xarversion.php contains the user setting
-                    if (file_exists(sys::code() . 'modules/' . $modOsDir .'/xaruser.php')) {
+                    if (file_exists('modules/' . $modOsDir .'/xaruser.php')) {
                         $userCapable = true;
                     }
 

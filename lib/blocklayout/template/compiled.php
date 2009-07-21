@@ -24,7 +24,7 @@ class CompiledTemplate extends Object
     public function __construct($fileName,$source=null,$type='module')
     {
         // @todo keep here?
-        if (!file_exists(sys::code() . $fileName))  throw new FileNotFoundException($fileName); // we only do files atm
+        if (!file_exists($fileName))  throw new FileNotFoundException($fileName); // we only do files atm
         $this->fileName = $fileName;
         $this->source   = $source;
         $this->type     = $type;

@@ -91,7 +91,7 @@ function blocks_admin_update_instance()
     // Do block-specific update
     $usname = preg_replace('/ /', '_', $blockinfo['module']);
     $updatefunc = $usname . '_' . $blockinfo['type'] . 'block_update';
-    $classpath = sys::code() . 'modules/' . $blockinfo['module'] . '/xarblocks/' . $blockinfo['type'] . '.php';
+    $classpath = 'modules/' . $blockinfo['module'] . '/xarblocks/' . $blockinfo['type'] . '.php';
 
     if (function_exists($updatefunc)) {
         $blockinfo = $updatefunc($blockinfo);

@@ -30,7 +30,7 @@ function modules_adminapi_executeinitfunction ($args)
 
     if (!isset($modInfo['osdirectory']) ||
         empty($modInfo['osdirectory']) ||
-        !is_dir(sys::code() . 'modules/'. $modInfo['osdirectory'])) {
+        !is_dir('modules/'. $modInfo['osdirectory'])) {
 
         $msg = 'Module (regid: #(1) - directory: #(2) does not exist.';
         $vars = array($args['regid'], $modInfo['osdirectory']);
@@ -41,8 +41,8 @@ function modules_adminapi_executeinitfunction ($args)
     xarMod__loadDbInfo($modInfo['name'], $modInfo['osdirectory']);
 
     $xarinitfile = '';
-    if (file_exists(sys::code() . 'modules/'. $modInfo['osdirectory'] .'/xarinit.php')) {
-        $xarinitfile = sys::code() . 'modules/'. $modInfo['osdirectory'] .'/xarinit.php';
+    if (file_exists('modules/'. $modInfo['osdirectory'] .'/xarinit.php')) {
+        $xarinitfile = 'modules/'. $modInfo['osdirectory'] .'/xarinit.php';
     }
     // If there is no xarinit file, there is apparently nothing to init.
     // TODO: we migh consider making it required.

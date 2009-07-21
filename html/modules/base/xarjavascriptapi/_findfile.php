@@ -70,7 +70,7 @@ function base_javascriptapi__findfile($args)
     if (isset($modOsDir)) {
         $searchPath[] = $themedir . '/modules/' . $modOsDir . '/includes/' . $filename;
         $searchPath[] = $themedir . '/modules/' . $modOsDir . '/xarincludes/' . $filename;
-        $searchPath[] = sys::code() . 'modules/' . $modOsDir . '/xartemplates/includes/' . $filename;
+        $searchPath[] = 'modules/' . $modOsDir . '/xartemplates/includes/' . $filename;
     }
 
     foreach($searchPath as $filePath) {
