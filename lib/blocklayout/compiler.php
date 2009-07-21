@@ -18,6 +18,15 @@
 
 /* This one exception depends on BL being inside Xaraya, try to correct this later */
 sys::import('xaraya.exceptions');
+/**
+ * Exceptions raised by this subsystem
+ *
+ * @package compiler
+ */
+class BLCompilerException extends xarExceptions
+{
+    protected $message = "Cannot open template file '#(1)'";
+}
 
 /**
  *  Interface definition for the blocklayout compiler, these are the things
@@ -74,7 +83,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         $this->lastFile = $fileName;
         // The @ makes the code better to handle, leave it.
         if (!($fp = @fopen($fileName, 'r'))) {
-            throw new BLCompilerException($fileName,"Cannot open template file '#(1)'");
+            throw new BLCompilerException($fileName);
         }
 
         if ($fsize = filesize($fileName)) {
