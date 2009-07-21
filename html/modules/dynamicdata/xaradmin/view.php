@@ -71,8 +71,8 @@ function dynamicdata_admin_view($args)
                                            array('itemid' => $data['objectid']));
         }
     }
-    if (file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-view.xt') ||
-        file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-view-' . $data['template'] . '.xt')) {
+    if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-view.xt') ||
+        file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-view-' . $data['template'] . '.xt')) {
         return xarTplModule($data['tplmodule'],'admin','view',$data,$data['template']);
     } else {
         return xarTplModule('dynamicdata','admin','view',$data);

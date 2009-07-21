@@ -34,7 +34,7 @@ function blocks_admin_new_type()
         // Get a list of block types from the module files.
         if (!empty($modinfo)) {
             // TODO: should 'modules' be hard-coded here?
-            $blocks_path = 'modules/' . $modinfo['directory'] . '/xarblocks';
+            $blocks_path = sys::code() . 'modules/' . $modinfo['directory'] . '/xarblocks';
 
             // Open the directory and read all the files.
             $dir_handle = @opendir($blocks_path);

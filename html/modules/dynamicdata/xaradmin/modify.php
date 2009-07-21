@@ -88,8 +88,8 @@ function dynamicdata_admin_modify($args)
     $hooks = xarModCallHooks('item', 'modify', $args['itemid'], $item, $modinfo['name']);
     $data['hooks'] = $hooks;
 
-    if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xt') ||
-        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xt')) {
+    if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xt') ||
+        file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xt')) {
         return xarTplModule($args['tplmodule'],'admin','modify',$data,$args['template']);
     } else {
         return xarTplModule('dynamicdata','admin','modify',$data,$args['template']);

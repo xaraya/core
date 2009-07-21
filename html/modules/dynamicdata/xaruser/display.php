@@ -87,8 +87,8 @@ function dynamicdata_user_display($args)
     $data['hooks'] = $hooks;
 
     // Return the template variables defined in this function
-    if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/user-display.xt') ||
-        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/user-display-' . $args['template'] . '.xt')) {
+    if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/user-display.xt') ||
+        file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/user-display-' . $args['template'] . '.xt')) {
         return xarTplModule($args['tplmodule'],'user','display',$data,$args['template']);
     } else {
         return xarTplModule('dynamicdata','user','display',$data,$args['template']);

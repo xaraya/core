@@ -512,7 +512,7 @@ function xarTplGetImage($modImage, $modName = NULL)
     }
 
     // relative url to the current module's image
-    $moduleImage = 'modules/'.$modOsDir.'/xarimages/'.$modImage;
+    $moduleImage = sys::code() . 'modules/'.$modOsDir.'/xarimages/'.$modImage;
 
     // obtain current theme directory
     $themedir = xarTplGetThemeDir();
@@ -944,6 +944,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
 
     xarLogMessage("Using template : $sourceFileName");
     $templateCode = null;
+//    $sourceFileName = sys::code() . $sourceFileName;
     // Determine if we need to compile this template
     if (xarTemplateCache::isDirty($sourceFileName)) {
         // Get an instance of SourceTemplate

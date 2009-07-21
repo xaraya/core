@@ -67,8 +67,8 @@ function dynamicdata_admin_new($args)
     $hooks = xarModCallHooks('item', 'new', $myobject->itemid, $item, $modinfo['name']);
     $data['hooks'] = $hooks;
 
-    if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-new.xt') ||
-        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-new-' . $args['template'] . '.xt')) {
+    if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-new.xt') ||
+        file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-new-' . $args['template'] . '.xt')) {
         return xarTplModule($args['tplmodule'],'admin','new',$data,$args['template']);
     } else {
         return xarTplModule('dynamicdata','admin','new',$data,$args['template']);

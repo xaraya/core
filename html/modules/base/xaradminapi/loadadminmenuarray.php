@@ -25,7 +25,7 @@ function base_adminapi_loadadminmenuarray($args)
     }
     $menuarray = array();
     try {
-        $menufile = 'modules/' . $args['module'] . '/xardata/adminmenu-dat.xml';
+        $menufile = sys::code() . 'modules/' . $args['module'] . '/xardata/adminmenu-dat.xml';
         $xmlobject = simplexml_load_file($menufile);
         $menuarray = array();
         if(isset($xmlobject->menutitle)) {
