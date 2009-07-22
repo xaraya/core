@@ -177,15 +177,11 @@
                </fieldset>
                 <fieldset>
                     <legend>
-                        <xar:mlstring>
-                            Caching
-                        </xar:mlstring>
+                        Caching
                     </legend>
                     <div class="xar-form-input-wrapper">
                         <label for="defaultdatapath" title="#xarML('Enable memory caching for templates.')#" class="xar-form-label">
-                            <xar:mlstring>
-                                Enable caching:
-                            </xar:mlstring>
+                            Enable caching:
                         </label>
                         <xar:set name="value"><xar:var scope="config" name="System.Core.Caching"/></xar:set>
                         <xar:data-input type="checkbox" name="caching" checked="$value" />
