@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="themes/installer/style/style.css" />
+        <link rel="stylesheet" type="text/css" href="modules/base/xarstyles/xarcore-xhtml1-strict.css" />
+        <link rel="stylesheet" type="text/css" href="modules/base/xarstyles/tabs.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="header_logo">
+                <div id="head_link">Xaraya</div>
+                <div id="header_content_wrap">
+                    <div id="header_content">
+                        <div id="header_tlcorner"><div id="header_trcorner">&#160;</div></div>
+
+                        <div id="header_contentcore">
+                            <h1>Xaraya Readme - Welcome to the Xaraya Web Applications Framework</h1>
+                            <p>
+
+                            </p>
+                        </div>
+                        <div id="header_blcorner"><div id="header_brcorner">&#160;</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="navbar">
+            <div id="navbar_inner">
+                <ul id="navbar_core">
+                    <li class="navbar-item">
+                        <a href="http://www.xaraya.com/index.php/xarpages/support" target="_blank">Support at www.xaraya.com</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="contentouter">
+            <div id="contentwrap">
+                <div id="contentmain">
+                    <div id="contentmain_inner"><div id="contentmain_tlcorner"><div id="contentmain_trcorner">&#160;</div></div>
+                        <div id="contentmain_core">
+                            <div id="main_right">
+                              <div id="status">
+                                  <div id="status_body">
+                                    <div class="xar-align-center">
+                                      <img src="./modules/installer/xarimages/installer.png" alt="Installer icon"/>
+                                    </div>
+                                    <ul>
+                                        <li class="active"><a href="#dirs">Required Directories</a></li>
+                                        <li class="active"><a href="#solo">Installing in a Solo Environment</a></li>
+                                        <li class="active"><a href="#shared">Installing in a Shared Environment</a></li>
+                                        <li class="active"><a href="#custom">Custom Installations</a></li>
+                                        <li class="active"><a href="#multi">Installing Multiple Sites</a></li>
+                                        <li class="active"><a href="#trouble">Troubleshooting</a></li>
+                                    </ul>
+                                  </div>
+                                  <div id="status_foot">
+                                    <!--Empty tag workaround for div tag-->
+                                  </div>
+                                </div>
+                            </div>
+                            <div id="main_left">
+                              <h1>How to Configure and Install Xaraya 2.0.0</h1>
+                                <p class="center">
+                                    This page is here to guide you through the steps of configuring the Xaraya web applications framework for a NEW installation. If you are upgrading an EXISTING Xaraya 2.0.0 installation, please read the page upgrade.html.
+                                </p>
+                                <p class="center">
+                                    For more support resources click on the link in the header above. Once you have completed the simple steps outlined below, you should run the installer script by pointing your web browser at http://www.mydomain.com/install.php.
+                                </p>
+                              <h2>What is Xaraya 2.0.0</h2>
+                                <p class="center">
+                                    Xaraya is an Open Source web applications framework. It provides a stable and secure core, with a function rich API and powerful templating engine in place for third-party
+                                    developers. Xaraya 2.0.0 is a major rewrite that offers enhanced performance with a smaller foorprint, more versatile functionality, easier usability and strict adherence to XHTML standards.
+
+                                    If you would like to help develop this software, please visit our homepage at  http://www.xaraya.com, or send email to info@xaraya.com.
+                                </p>
+                              <a name="dirs" style="text-decoration: none;"><h2>Required Directories</h2></a> <a href="#top">top</a>
+                                <p class="center">
+                                    Xaraya consists of three main components, each in its own folder:
+                                    <ul>
+                                        <li>
+                                            <b>html</b> folder: contains all the elements that will be accessible by the web server.
+                                        </li>
+                                        <li>
+                                            <b>lib</b> folder: contains Xaraya and third party libraries. These include the Xaraya core code, the Blocklayout templating engine, and the Creole database middleware.
+                                        </li>
+                                        <li>
+                                            <b>code</b> folder: contains code elements, notably the modules your Xaraya installation will run.
+                                        </li>
+                                    </ul>
+                                    The top level of your installation (the xaraya-2.0.0 folder) is called the <em>root directory</em>. For special situations the root directory can be redefined to as different directory on your server (see Custom Installations below).
+                                </p>
+                                <p class="center">
+                                    <b>To run properly your installation requires only the three folders listed above and their contents. All other contents of your unpacked installation file are for information only, or additional functionality for special situations, and can be safely removed.</b>
+                                </p>
+                              <a name="solo" style="text-decoration: none;"><h2>Installing in a Solo Environment</h2></a> <a href="#top">top</a>
+                                <p class="center">
+                                    Follow this installation procedure if you are running Xaraya on your own server and can configure your web host.
+                                    <ol>
+                                        <li>
+                                            Unpack the distribution file you downloaded (since you are reading this you have already done that).
+                                        </li>
+                                        <li>
+                                            Place the folder xaraya-2.0.0 containing the distribution on your web server.
+                                        </li>
+                                        <li>
+                                            Configure your web server (www.mydomain.com) to make the html directory in your installation its root directory.
+                                        </li>
+                                        <li>
+                                            Make a copy of the file var/config.system.php.dist, place it in the var folder and name it config.system.php. Be sure this file is writable by the web server.
+                                        </li>
+                                        <li>
+                                            Point your web browser to www.mydomain.com/install.php and run the installation routine. The installation process takes 5-10 minutes, and you will be asked to make a number of decisions concerning your Xaraya site's configuration. Apart from defining the database your site will work with, <b>all other configuration settings can be changed later</b>. If you are unsure about a specific configuration, choose the defaults the installer provides.
+                                        </li>
+                                        <li>
+                                            Once the installation is successful, be sure to remove the file install.php in the html directory to avoid malicious use.
+                                        </li>
+                                    </ol>
+                                </p>
+                              <a name="shared" style="text-decoration: none;"><h2>Installing in a Shared Environment</h2></a> <a href="#top">top</a>
+                                <p class="center">
+                                    Follow this installation procedure if you are running Xaraya in a shared hosting environment and cannot configure your web document root directory.
+                                    <ol>
+                                        <li>
+                                            Unpack the distribution file you downloaded (since you are reading this you have already done that).
+                                        </li>
+                                        <li>
+                                            Move the contents of the html directory one level up (at the same level as the lib and code directories). You can delete the html directory, which is now empty. If you want to create several instances of Xaraya (for different sites), copy the contents of the html folder to the top level rather than moving them. You can then take create another instance using the contents of the html folder as described further down.
+                                        </li>
+                                        <li>
+                                            Open the file var/layout.system.php. Uncomment (remove the initial double slashes) the lines
+                                            <pre>
+    //$systemConfiguration['rootDir'] = "";
+    //$systemConfiguration['webDir']  = "";
+    //$systemConfiguration['libDir']  = "lib/";
+    //$systemConfiguration['codeDir'] = "code/";
+                                            </pre>
+                                            Save the file modified var/layout.system.php.
+                                        </li>
+                                        <li>
+                                            Make a copy of the file var/config.system.php.dist, place it in the var folder and name it config.system.php. Be sure this file is writable by the web server.
+                                        </li>
+                                        <li>
+                                            Point your web browser to www.mydomain.com/install.php and run the installation routine. The installation process takes 5-10 minutes, and you will be asked to make a number of decisions concerning your Xaraya site's configuration. Apart from defining the database your site will work with, <b>all other configuration settings can be changed later</b>. If you are unsure about a specific configuration, choose the defaults the installer provides.
+                                        </li>
+                                        <li>
+                                            Once the installation is successful, be sure to remove the file install.php in the html directory to avoid malicious use.
+                                        </li>
+                                    </ol>
+                                </p>
+                              <a name="custom" style="text-decoration: none;"><h2>Custom Installation</h2></a> <a href="#top">top</a>
+                                <p class="center">
+                                    Xaraya lets you move the html, lib and code folders to different locations on your server. By moving the last two When creating such a custom layout you need to adjust the values in the var/layout.system.php appropriately. The following rules apply:
+                                    <ul>
+                                        <li>
+                                            The value of $systemConfiguration['rootDir'] is the location of the root directory as an absolute location or relative to the file index.php. The root directory is notional and serves only as a reference point for the Xaraya components. It does not need to have any specific name or even be associated with Xaraya. Examples on a Linux server:
+                                            <pre>
+    $systemConfiguration['rootDir'] = '/usr/local/';    absolute location on the server
+    $systemConfiguration['rootDir'] = '../';        location relative to index.php
+                                            </pre>
+                                        </li>
+                                        <li>
+                                            The values of $systemConfiguration['webDir'], $systemConfiguration['libDir'] and $systemConfiguration['codeDir'] must correspond to the locations of the html, lib and code directories respectively <b>relative to the root directory</b>.
+                                        </li>
+                                    </ul>
+                                </p>
+                              <a name="multi" style="text-decoration: none;"><h2>Installing Multiple Sites</h2></a> <a href="#top">top</a>
+                                <p class="center">
+                                    Xaraya easily lets you run multiple sites sharing the resources in the code and lib directories. If you have created a single instance installation on a server as described above, you can add another instance by doing the following:
+                                    <ul>
+                                        <li>
+                                            Make a copy of the html folder and its contents and place it in a location accessible by the webserver, renaming it if required to avoid name conflicts with existing folders (the name of is not important).
+                                        </li>
+                                        <li>
+                                            In the new copy of the html folder, make a copy of the file var/config.system.php.dist, place it in the var folder and name it config.system.php. Be sure this file is writable by the web server. If you already have a config.system.php file there from your previous instance, replace it with the new copy.
+                                        </li>
+                                        <li>
+                                            In the var/layout.system.php file of your new instance, adjust the relative paths  to the root directory, as well as to the lib, code and html (did you give this a new name?) folders, as described in the Custom Installations chapter above.
+                                        </li>
+                                        <li>
+                                            Point your web browser to the file install.php of the new instance and run the installer. Your new instance will run off a different database but share the same module and library code.
+                                        </li>
+                                    </ul>
+                                </p>
+                              <a name="trouble" style="text-decoration: none;"><h2>Troubleshooting and Caveats</h2></a> <a href="#top">top</a>
+                                    <ul>
+                                        <li>
+                                            Unless you know what you're doing, never separate the contents of the lib, core or html folders
+                                        </li>
+                                        <li>
+                                            Make sure the appropriate files in the var directory are writable by the web server. The installer will complain if it finds that is not the case. If you are translating, be sure that your locales (files and subdirectories under var/locales) are writable.
+                                        </li>
+                                        <li>
+                                            <b>code</b> folder: contains code elements, notably the modules your Xaraya installation will run.
+                                        </li>
+                                        <li>
+                                            Linux installations: if you are using symbolic links, make sure they are used <b>both</b> for the code and lib directories. Otherwise you may get loading exceptions in some situations.
+                                        </li>
+                                    </ul>
+                            </div>
+                        </div>
+                        <div id="contentmain_blcorner"><div id="contentmain_brcorner">&#160;</div></div>
+                    </div>
+                </div>
+            </div>
+            <br class="xar-clearboth" />
+        </div>
+    </body>
+</html>
