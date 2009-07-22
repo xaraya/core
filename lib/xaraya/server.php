@@ -168,6 +168,17 @@ class xarServer extends Object
     }
 
     /**
+     * get the elapsed time since this page started
+     *
+     * @access public
+     * @return seconds and microseconds elapsed since the page started
+     */
+    static function getPageTime()
+    {
+        return microtime(true) - $GLOBALS["Xaraya_PageTime"];
+    }
+
+    /**
      * Get current URL (and optionally add/replace some parameters)
      *
      * @access public

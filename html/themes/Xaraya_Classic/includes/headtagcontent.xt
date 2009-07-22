@@ -37,12 +37,12 @@
     OLD WAY: #$tpl:additionalStyles#
     NEW WAY: (starting from core RC3+) with the following attribute-less tag
 -->
-    <xar:additional-styles />
+    <xar:place-css />
     <xar:if condition="$styleswitchertype eq 'javascript'">
         <!-- Styleswitcher JavaScript -->
         <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js">
         &#160;</script>
     </xar:if>
     <!-- Head JavaScript - required for all themes -->
-    <xar:base-render-javascript position="head" />
+    <xar:place-javascript position="head" />
 </xar:template>

@@ -10,6 +10,7 @@
             <xar:var name="title">Select a utility function</xar:var>
             <xar:var name="label">Utility</xar:var>
             <li class="xar-tabs-label" title="#$title#">#$label#</li>
+            <!--
             <xar:sec mask="EditDynamicData" catch="false">
                 <xar:set name="tabclass">$activetab=='query'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='query'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
@@ -17,6 +18,7 @@
                     <a href="#xarModURL('dynamicdata','admin','query')#" class="#$linkclass#">Query</a>
                 </li>
             </xar:sec>
+            -->
             <xar:sec mask="EditDynamicData" catch="false">
                 <xar:set name="tabclass">$activetab=='import'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='import'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
@@ -35,7 +37,7 @@
                 <xar:set name="tabclass">$activetab=='static'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='static'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','util','view_static')#" class="#$linkclass#">Table Definition</a>
+                    <a href="#xarModURL('dynamicdata','util','view_static')#" class="#$linkclass#">Table Definitions</a>
                 </li>
             </xar:sec>
             <!--
@@ -48,7 +50,6 @@
                   </a>
                 </li>
             </xar:sec>
-            -->
             <xar:sec mask="EditDynamicData" catch="false">
                 <xar:set name="tabclass">$activetab=='meta'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='meta'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
@@ -63,6 +64,7 @@
                     <a href="#xarModURL('dynamicdata','util','migrate')#" class="#$linkclass#">Migrate Items</a>
                 </li>
             </xar:sec>
+            -->
         </ul>
     </div>
 </xar:template>

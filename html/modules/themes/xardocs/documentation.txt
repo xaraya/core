@@ -36,7 +36,7 @@ GOALS AND OBJECTIVES OF THIS SUBPROJECT:
 (users will probably not want to know fine details)
 
 General Purpose: comprehensive support for all CSS aspects of Xaraya
-Location: modules/themes/xarclass/
+Location: modules/themes/class/
 Files: variable number of files with .class.php suffix + this docfile
 
 // CSS CLASS LIB - DEVELOPER
@@ -115,7 +115,7 @@ deal with the css tasks at hand:
 <import-theme-stylesheet />
 <embed-theme-styles />
 
-<additional-styles />
+<place-css />
 
 The last one can be used INSTEAD of old #$tpl:additionalStyles# in themes.
 

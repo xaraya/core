@@ -19,7 +19,7 @@
  */
 function themes_userapi_deliver($args)
 {
-    sys::import('modules.themes.xarclass.xarcss');
+    sys::import('modules.themes.class.xarcss');
     $obj = new xarCSS($args);
     $styles = $obj->run_output();
     return xarTplModule('themes','user','additionalstyles',$styles);

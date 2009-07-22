@@ -13,10 +13,10 @@
 /**
  * Handle render javascript form field tags
  * Handle <xar:base-trigger-javascript ...> form field tags
- * Format : <xar:base-render-javascript definition="$definition" /> with $definition an array
- *       or <xar:base-render-javascript position="head|body|whatever|" type="code|src|whatever|"/>
+ * Format : <xar:place-javascript definition="$definition" /> with $definition an array
+ *       or <xar:place-javascript position="head|body|whatever|" type="code|src|whatever|"/>
  * Default position is ''; default type is ''.
- * Typical use in the head section is: <xar:base-render-javascript position="head"/>
+ * Typical use in the head section is: <xar:place-javascript position="head"/>
  *
  * @author Jason Judge
  * @param $args array containing the form field definition or the type, position, ...

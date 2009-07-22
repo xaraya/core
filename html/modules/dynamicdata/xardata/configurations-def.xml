@@ -1,7 +1,6 @@
 <object name="configurations">
   <objectid>4</objectid>
   <label>Dynamic Configurations</label>
-  <parent>objects</parent>
   <module_id>182</module_id>
   <itemtype>2</itemtype>
   <class>DataObject</class>
@@ -64,7 +63,7 @@
     <property name="ignore_empty">
       <id>28</id>
       <label>Ignore Empty Input</label>
-      <type>radio</type>
+      <type>checkbox</type>
       <defaultvalue>1</defaultvalue>
       <source>xar_dynamic_configurations.ignore_empty</source>
       <status>33</status>

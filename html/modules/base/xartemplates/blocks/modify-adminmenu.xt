@@ -1,27 +1,20 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-form-input-wrapper-after">
-        <xar:if condition="$showlogout eq 1">
-            <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1" checked="checked" />
-        <xar:else />
-            <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1" />
-        </xar:if>
-        <label for="showlogout#$blockid#"
-        title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
-        Show A Logout Link In This Admin Menu</label>
+    <div class="xar-form-input-wrapper">
+        <label class="xar-form-label" for="showlogout#$blockid#" title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
+            Show A Logout Link
+        </label>
+        <xar:data-input type="checkbox" name="showlogout" checked="$showlogout" />
     </div>
-    <div class="xar-form-input-wrapper-after">
-        <xar:if condition="$showhelp eq 1">
-            <input type="checkbox" name="showhelp" id="showhelp#$blockid#" value="1"
-            checked="checked" />
-        <xar:else />
-            <input type="checkbox" name="showhelp" id="showhelp#$blockid#" value="1" />
-        </xar:if>
-        <label for="showhelp#$blockid#"
-        title="#xarML('By checking this box a Help link will be shown in the panel instance.')#">
-        Show A Help Link In This Admin Menu</label>
+    <!--
+    <div class="xar-form-input-wrapper">
+        <label class="xar-form-label" for="showhelp#$blockid#" title="#xarML('By checking this box a help link will be shown in the panel instance.')#">
+            Show A Help Link
+        </label>
+        <xar:data-input type="checkbox" name="showhelp" checked="$showhelp" />
     </div>
+    -->
     <div class="xar-form-input-wrapper">
         <label for="menustyle" title="#xarML('How should the menu items be ordered?')#"
         class="xar-form-label">Sort Admin Menu Items:</label>

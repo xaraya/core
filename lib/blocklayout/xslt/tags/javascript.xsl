@@ -8,7 +8,7 @@
     xmlns:php="http://php.net/xsl" 
     exclude-result-prefixes="php xar">
 
-<xsl:template match="xar:base-include-javascript">
+<xsl:template match="xar:javascript">
   <!-- Make sure we have sensible values -->
   <xsl:variable name="module">
     <xsl:choose>

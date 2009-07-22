@@ -43,8 +43,9 @@
         <h3>Highlights of this release</h3>
         <ul>
             <li>Rewritten core: faster and lighter</li>
-            <li>Rewritten Blocklayout templating system based on XSLT </li>
+            <li>Rewritten Blocklayout templating system based on XSL </li>
             <li>Enhanced dynamicdata functionality: more consistent and flexible objects and properties for more power and better performance</li>
+            <li>New Installer and Default themes</li>
         </ul>
                 
         <h3>Support</h3>
@@ -58,12 +59,13 @@
         <p>If you enjoy Xaraya and want to show your support, you can contact us by any of the above mentioned methods.</p>
         
         <h3>Additional Resources</h3>
+        <!--
         <p>Modules and themes can be downloaded from the Xaraya Monotone repository.</p>
         <ul>
             <li>Modules - <a href="http://mt.xaraya.com/download/nightly/modules">http://mt.xaraya.com/download/nightly/modules</a></li>
             <li>Themes - <a href="http://mt.xaraya.com/download/nightly/themes">http://mt.xaraya.com/download/nightly/themes</a></li>
         </ul>
-                
+         -->       
         <p>Bugs can be reported to <a href="http://bugs.xaraya.com/">http://bugs.xaraya.com/</a></p>
         </div>
         

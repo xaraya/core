@@ -146,24 +146,24 @@
                     Tags on properties:show their input or output displays, or their labels: 
                 </p>
                 <pre>
-            &lt;xar:data-input ... /&gt;
-            &lt;xar:data-output ... /&gt;
-            &lt;xar:data-label ... /&gt;
+    &lt;xar:data-input ... /&gt;
+    &lt;xar:data-output ... /&gt;
+    &lt;xar:data-label ... /&gt;
                 </pre>
                 <p>
                     Tags on objects:show their forms, or item displays (one item) or item lists (many items): 
                 </p>
                 <pre>
-            &lt;xar:data-form ... /&gt;
-            &lt;xar:data-display ... /&gt;
-            &lt;xar:data-view ... /&gt;
+    &lt;xar:data-form ... /&gt;
+    &lt;xar:data-display ... /&gt;
+    &lt;xar:data-view ... /&gt;
                 </pre>
                 <p>
                     Special tags can be used to retrieve properties and values related to one or more items 
                 </p>
                 <pre>
-            &lt;xar:data-getitem ... /&gt;
-            &lt;xar:data-getitems ... /&gt;
+    &lt;xar:data-getitem ... /&gt;
+    &lt;xar:data-getitems ... /&gt;
                 </pre>
 
 
@@ -172,39 +172,40 @@
                     The data-getitems tag retrieves a list of properties and item values from a dataobject:
                 </p>
                 <pre>
-            &lt;xar:data-getitems name="&#36;properties" value="&#36;values" object="$myobject" /&gt;
+    &lt;xar:data-getitems name="&#36;properties" value="&#36;values" object="$myobject" /&gt;
                 </pre>
                 <p>
                     The properties and values (from the name and value attributes) can be used to display the list of items (see below). The list can be restricted by passing the tag an array of itemids::
                 </p>
                 <pre>
-            &lt;xar:data-getitems name="&#36;properties" value="&#36;values"  object="$myobject"
-                itemids="&#36;idlist" /&gt;
+    &lt;xar:data-getitems name="&#36;properties" value="&#36;values"  object="$myobject"
+        itemids="&#36;idlist" /&gt;
             </pre>
                 <p>
                     We can build headers for the list using the data-label tag:
                 </p>
                 <pre>
-            &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
-                &lt;th width="10%"&gt;
-                    &lt;xar:data-label property="&#36;properties[&#36;name]" /&gt;
-                &lt;/th&gt;
-            &lt;/xar:foreach&gt;
+    &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
+        &lt;th width="10%"&gt;
+            &lt;xar:data-label property="&#36;properties[&#36;name]" /&gt;
+        &lt;/th&gt;
+    &lt;/xar:foreach&gt;
                 </pre>
                 <p>
                     When looping over the individual items, the value for item &#36;id) can be added dynamically:
                 </p>
 
                 <pre>
-            &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
-                &lt;td class="xar-norm"&gt;
-                &lt;xar:if condition="isset(&#36;values[&#36;id][&#36;name])"&gt;
-                    &lt;xar:data-output property="&#36;properties[&#36;name]" value="&#36;values[&#36;id][&#36;name]" /&gt;
-                &lt;xar:else /&gt;
-                    &amp;nbsp;
-                &lt;/xar:if&gt;
-                &lt;/td&gt;
-            &lt;/xar:foreach&gt;
+    &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
+        &lt;td class="xar-norm"&gt;
+        &lt;xar:if condition="isset(&#36;values[&#36;id][&#36;name])"&gt;
+            &lt;xar:data-output property="&#36;properties[&#36;name]" 
+                value="&#36;values[&#36;id][&#36;name]" /&gt;
+        &lt;xar:else /&gt;
+            &amp;nbsp;
+        &lt;/xar:if&gt;
+        &lt;/td&gt;
+    &lt;/xar:foreach&gt;
                 </pre>
             
                 <h4>Working with lists of items (II)</h4>
@@ -212,30 +213,30 @@
                     The basic data-view tag shows all the items of an object 
                 </p>
                 <pre>
-            &lt;xar:data-view object="$myobject" /&gt;
+    &lt;xar:data-view object="$myobject" /&gt;
                 </pre>
                 <p>
                     The display of hte data can be adapted by using a custom template  or layout
                 </p>
                     <pre>
-            &lt;xar:data-view object="$myobject" layout="list" /&gt;
-            &lt;xar:data-view object="$myobject" template="mylist" /&gt;
+    &lt;xar:data-view object="$myobject" layout="list" /&gt;
+    &lt;xar:data-view object="$myobject" template="mylist" /&gt;
                 </pre>
 
                 <p>
                     We can specify that only certain fields (properties) be shown. They will be displayed in the order entered (left to right, top to bottom). We can also select to display only certain items, given by their ids.
                 </p>
                 <pre>
-            &lt;xar:data-view object="$myobject" fieldlist="exid,name" /&gt;
-            &lt;xar:data-view object="$myobject" itemids="1,20,273" /&gt;
+    &lt;xar:data-view object="$myobject" fieldlist="exid,name" /&gt;
+    &lt;xar:data-view object="$myobject" itemids="1,20,273" /&gt;
                 </pre>
 
                 <p>
                     We can specify sorts, number of items to be displayed, and specify filters (given by the where attribute):
                 </p>
                 <pre>
-            &lt;xar:data-view object="$myobject" sort="hitcount,title"
-             where="authorid eq 2" numitems="20" /&gt;
+    &lt;xar:data-view object="$myobject" sort="hitcount,title"
+         where="authorid eq 2" numitems="20" /&gt;
                 </pre>
 
                 
@@ -244,39 +245,39 @@
                     We can display a form for entering an item, or simply display an object item's data:
                 </p>
                 <pre>
-            &lt;xar:data-form object="&#36;object" /&gt;
-            &lt;xar:data-display object="&#36;object" /&gt;
+    &lt;xar:data-form object="&#36;object" /&gt;
+    &lt;xar:data-display object="&#36;object" /&gt;
                 </pre>
                 <p>
                     The tags can accept attributes, for instance to customize their display:
                 </p>
                 <pre>
-            &lt;xar:data-form object="&#36;object" template="mytemplate" layout="mylayout" /&gt;
+    &lt;xar:data-form object="&#36;object" template="mytemplate" layout="mylayout" /&gt;
                 </pre>
                 <p>
                     In the above example the object $object already contains the item we are interested in. We can load a specific item by specifying an itemid attribute:
                 <pre>
-            &lt;xar:data-form object="&#36;object" itemid="666" /&gt;
+    &lt;xar:data-form object="&#36;object" itemid="666" /&gt;
                 </pre>                    
                     We can also assemble an object item by getting the item first via a getitem tag:
                 </p>
                 <pre>
-            &lt;xar:data-getitem name="&#36;properties" object="$myobject" itemid="&#36;id" /&gt;
+    &lt;xar:data-getitem name="&#36;properties" object="$myobject" itemid="&#36;id" /&gt;
                 </pre>
                 <p>
                     Note that in this example the attribute object can refer to an onject or its name. The itemid attribute defines which item's data to retrieve, and the output is an array of fields with that data, called $properties. We can then use the $properties array to define a custom display, such as givne below (a custom form for input would simply use data-input, rather than data-output, tags):
                 </p>
                 <pre>
-            &lt;xar:foreach in="&#36;properties" key="&#36;field"&gt;
-                &lt;tr class="xar-norm xar-valign-top"&gt;
-                    &lt;td&gt;
-                        &lt;xar:data-label property="&#36;properties[&#36;field]" /&gt;:
-                    &lt;/td&gt;
-                    &lt;td&gt;
-                        &lt;xar:data-output property="&#36;properties[&#36;field]" /&gt;
-                    &lt;/td&gt;
-                &lt;/tr&gt;
-            &lt;/xar:foreach&gt;
+    &lt;xar:foreach in="&#36;properties" key="&#36;field"&gt;
+        &lt;tr class="xar-norm xar-valign-top"&gt;
+            &lt;td&gt;
+                &lt;xar:data-label property="&#36;properties[&#36;field]" /&gt;:
+            &lt;/td&gt;
+            &lt;td&gt;
+                &lt;xar:data-output property="&#36;properties[&#36;field]" /&gt;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/xar:foreach&gt;
                 </pre>
 
                 <h4>Working with a single item fields</h4>
@@ -284,21 +285,21 @@
                     We can assemble the field from scratch by stipulating its attributes in a tag:
                 </p>
                 <pre>
-            &lt;xar:set name="myval"&gt;'hello'&lt;/xar:set&gt; 
-            &lt;xar:data-input name="greeting" type="textbox" value="&#36;myval" /&gt;
+    &lt;xar:set name="myval"&gt;'hello'&lt;/xar:set&gt; 
+    &lt;xar:data-input name="greeting" type="textbox" value="&#36;myval" /&gt;
                 </pre>
                 <p>
                     By passing the tag a dataproperty object, it will take on the properties of that object (type, value etc.)
                 </p>
                 <pre>
-            &lt;xar:data-input property="&#36;myproperty" /&gt;
+    &lt;xar:data-input property="&#36;myproperty" /&gt;
                 </pre>
                 <p>
                     We can also override properties by explicitly adding other values as attributes:
                 </p>
                 <pre>
-            &lt;xar:set name="myval"&gt;'hello'&lt;/xar:set&gt; 
-            &lt;xar:data-input property="&#36;myproperty" value="&#36;myval" /&gt;
+    &lt;xar:set name="myval"&gt;'hello'&lt;/xar:set&gt; 
+    &lt;xar:data-input property="&#36;myproperty" value="&#36;myval" /&gt;
                 </pre>
         </div>
         
@@ -334,12 +335,15 @@
     <pre>
     &lt;xar:set name="options">
         array(
-            array('id' => 'red', 'name' => 'Dark red'),
-            array('id' => 'green', 'name' => 'Light green'),
+            array('id' => 'red', 
+                'name' => 'Dark red'),
+            array('id' => 'green', 
+                'name' => 'Light green'),
         )
     &lt;/xar:set>
     &lt;xar:data-input type="radio" 
-        options="$options" value="green" layout="vertical"/>
+        options="$options" value="green" 
+        layout="vertical"/>
     </pre>
                     </td>
                 </tr>
@@ -358,12 +362,15 @@
     <pre>
     &lt;xar:set name="options">
         array(
-            array('id' => 'red', 'name' => 'Dark red'),
-            array('id' => 'green', 'name' => 'Light green'),
+            array('id' => 'red', 
+                'name' => 'Dark red'),
+            array('id' => 'green', 
+                'name' => 'Light green'),
         )
     &lt;/xar:set>
-    &lt;xar:data-input type="checkboxlist" options="$options"
-        value="green" layout="vertical" />
+    &lt;xar:data-input type="checkboxlist" 
+        options="$options" value="green" 
+        layout="vertical" />
     </pre>
                     </td>
                 </tr>
@@ -374,7 +381,8 @@
                     <td valign="middle">
                         Displays the user name of the current user:
     <pre>
-    &lt;xar:data-output type="username" user="myself"/>
+    &lt;xar:data-output type="username" 
+        user="myself"/>
     </pre>
                     </td>
                 </tr>
@@ -385,7 +393,8 @@
                     <td valign="middle">
                         Displays a link to a url in an icon:
     <pre>
-    &lt;xar:data-output type="urlicon" link="http://www.xaraya.com" />
+    &lt;xar:data-output type="urlicon" 
+        link="http://www.xaraya.com" />
     </pre>
                     </td>
                 </tr>

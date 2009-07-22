@@ -73,7 +73,6 @@ function modules_adminapi_standarddeinstall($args)
     $dbconn->Execute($query);
 
     // Remove custom tags, modvars, masks and privilege instances
-    xarTemplateTag::unregisterall($module);
     xarRemoveMasks($module);
     xarRemoveInstances($module);
     xarModVars::delete_all($module);

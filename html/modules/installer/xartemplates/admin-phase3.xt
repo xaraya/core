@@ -154,6 +154,12 @@
                     require this extension if you plan to use the Xaraya Translations
                     module.</li>
                 </xar:if>
+                <xar:if condition="$xslextension">
+                    <li class="success">SUCCESS: The XSL Extension is loaded.</li>
+                <xar:else />
+                    <li class="warning">WARNING: The XSL Extension is not loaded. You will
+                    require this extension for the BlockLayout templating system.</li>
+                </xar:if>
             </ul>
             
             <h2>You will need at least one available database type</h2>

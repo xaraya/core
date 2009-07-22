@@ -28,7 +28,7 @@ if(!class_exists('PEAR')) {
 // Include the main 3rd party functionaliy for
 // parsing the mails, that file has only one modification
 // namely NOT including PEAR.php
-sys::import('modules.mail.xarclass.mimeDecode');
+sys::import('modules.mail.class.mimeDecode');
 
 /**
  * Mail parser class

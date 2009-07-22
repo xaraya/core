@@ -13,7 +13,7 @@
 */
 
 /**
- * Wraper functions to support Xaraya 1 API
+ * Wrapper functions to support Xaraya 1 API
  *
 **/
 sys::import('xaraya.variables.theme');

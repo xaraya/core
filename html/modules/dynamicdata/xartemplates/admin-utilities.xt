@@ -20,7 +20,7 @@
                         <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=query" class="xar-accent xar-accent-outline">Query</a>
                     </li>
                 <xar:else />
-                    <li class="xar-tab>
+                    <li class="xar-tab">
                         <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=query" class="xar-norm xar-norm-outline">Query</a>
                     </li>
                 </xar:if>
@@ -29,7 +29,7 @@
                         <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=import" class="xar-accent xar-accent-outline">Import</a>
                     </li>
                 <xar:else />
-                    <li class="xar-tab>
+                    <li class="xar-tab">
                         <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=import" class="xar-norm xar-norm-outline">Import</a>
                     </li>
                 </xar:if>
@@ -38,7 +38,7 @@
                         <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=export" class="xar-accent xar-accent-outline">Export</a>
                     </li>
                 <xar:else />
-                    <li class="xar-tab>
+                    <li class="xar-tab">
                         <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=export" class="xar-norm xar-norm-outline">Export</a>
                     </li>
                 </xar:if>
@@ -48,7 +48,7 @@
                         Definition</a>
                     </li>
                 <xar:else />
-                    <li class="xar-tab>
+                    <li class="xar-tab">
                         <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=static" class="xar-norm xar-norm-outline">Table
                         Definition</a>
                     </li>
@@ -59,7 +59,7 @@
                         Relationships</a>
                     </li>
                 <xar:else />
-                    <li class="xar-tab>
+                    <li class="xar-tab">
                         <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=relations" class="xar-norm xar-norm-outline">
                         Relationships</a>
                     </li>
@@ -70,7 +70,7 @@
                         Definitions</a>
                     </li>
                 <xar:else />
-                    <li class="xar-tab>
+                    <li class="xar-tab">
                         <a href="&xar-modurl-dynamicdata-admin-utilities;&amp;q=meta" class="xar-norm xar-norm-outline">Meta
                         Definitions</a>
                     </li>
@@ -86,7 +86,7 @@
                         Items</a>
                     </li>
                 </xar:if>
-            </dl>
+            </ul>
         </div>
     </div>
     <xar:if condition="empty($option) or $option eq 'query'">

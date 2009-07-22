@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:base-include-javascript module="base" filename="confirmlink.js" position="head" />
+    <xar:javascript module="base" filename="confirmlink.js" position="head" />
     <xar:style scope="common" />
     <div class="xar-mod-head">
         <span class="xar-mod-title">Blocks Administration</span>

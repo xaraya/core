@@ -12,6 +12,7 @@
  /**
  * Load the Xaraya bootstrap so we can get started
  */
+$GLOBALS["Xaraya_PageTime"] = microtime(true);
 set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 include 'lib/bootstrap.php';
 
@@ -37,7 +38,7 @@ sys::import('xaraya.core');
  * @access public
  * @return bool
  */
-function xarMain()
+function xarMain() 
 {
     // Load the core with all optional systems loaded
     xarCoreInit(XARCORE_SYSTEM_ALL);

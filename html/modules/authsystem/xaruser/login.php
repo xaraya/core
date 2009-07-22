@@ -42,13 +42,14 @@ function authsystem_user_login()
         return xarTplModule('authsystem','user','errors',array('layout' => 'locked_out', 'lockouttime' => $lockouttime));
     }
 
-    if (!xarVarFetch('uname','str:1:100',$uname)) {
-        throw new EmptyParameterException('username');
-    }
-    if (!xarVarFetch('pass','str:1:100',$pass)) {
-        throw new EmptyParameterException('password');
-    }
-    $redirect=xarServer::getBaseURL();
+    if (!xarVarFetch('uname','str:0:64',$uname,'',XARVAR_NOT_REQUIRED)) return;
+    if (empty($uname))
+        return xarTplModule('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
+    if (!xarVarFetch('pass','str:0:254',$pass,'',XARVAR_NOT_REQUIRED)) return;
+    if (empty($pass))
+    return xarTplModule('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
+
+    $redirect = xarServer::getBaseURL();
     if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('redirecturl','str:1:254',$redirecturl,$redirect,XARVAR_NOT_REQUIRED)) return;
 

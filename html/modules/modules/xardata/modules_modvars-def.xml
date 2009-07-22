@@ -1,7 +1,6 @@
 <object name="modules_modvars">
   <objectid>11</objectid>
   <label>Module Vars</label>
-  <parent>objects</parent>
   <module_id>182</module_id>
   <itemtype>4</itemtype>
   <urlparam>itemid</urlparam>

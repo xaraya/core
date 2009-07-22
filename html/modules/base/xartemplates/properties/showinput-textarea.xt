@@ -21,7 +21,7 @@
         (as in bug http://bugs.xaraya.com/show_bug.cgi?id=4765)
 
         The fix works in themes which comply with post-RC3 styleguide and support
-        core (common) css + embedded styles on their page templates via xar:additional-styles tag
+        core (common) css + embedded styles on their page templates via xar:place-css tag
 
         NOTE 1: a row (height) is measured as 1.6em (a usual line height in typography)
         but a column (width) is 1 em - roughly 1 charachter m wide

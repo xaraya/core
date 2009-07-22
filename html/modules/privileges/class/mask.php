@@ -132,7 +132,8 @@ class xarMask extends Object
     /**
      * create an array representing a mask instance
     */
-    private function getInstanceArray($instancestring=array()) {
+    private function getInstanceArray($instancestring=array()) 
+    {
         if (empty($instancestring)) return array();
         try {
             // the new way

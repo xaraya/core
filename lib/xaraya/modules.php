@@ -1320,10 +1320,11 @@ class xarMod extends Object implements IxarMod
         if (isset($loadedDbInfoCache[$modName])) return true;
 
         // Load the database definition if required
-        $osxartablefile = "modules/$modDir/xartables.php";
-        if (!file_exists($osxartablefile)) return false;
-        // CHECKME: do we need to track this one?
-        sys::import('modules.'.$modDir.'.xartables');
+        try {
+            sys::import('modules.'.$modDir.'.xartables');
+        } catch (Exception $e) {
+            return false;
+        }
 
         $tablefunc = $modName . '_' . 'xartables';
         if (function_exists($tablefunc)) xarDB::importTables($tablefunc());

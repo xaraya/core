@@ -1,11 +1,10 @@
 <object name="modules">
   <objectid>9</objectid>
   <label>Modules</label>
-  <parent>objects</parent>
   <module_id>182</module_id>
   <itemtype>4</itemtype>
   <class>DataObject</class>
-  <filepath></filepath>
+  <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <config></config>

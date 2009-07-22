@@ -69,12 +69,14 @@ function dynamicdata_init()
             /* the optional item type within this module */
             'itemtype' => array(
                 'type'        => 'integer',
+                'unsigned'     => true,
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the item type of the parent of this object */
             'parent_id' => array(
                 'type'        => 'integer',
+                'unsigned'     => true,
                 'null'        => false,
                 'default'     => '0'
             ),
@@ -205,6 +207,7 @@ function dynamicdata_init()
             /* the property type of this property */
             'type'       => array(
                 'type'        => 'integer',
+                'unsigned'    => true,
                 'null'        => false,
                 'default'     => null
             ),
@@ -275,7 +278,6 @@ function dynamicdata_init()
             array('objectid'  ,'Id'                 ,$objectid[1],21,''            ,$dynamic_objects.'.id'         ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,1 ,''),
             array('name'      ,'Name'               ,$objectid[1],2 ,''            ,$dynamic_objects.'.name'       ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,''),
             array('label'     ,'Label'              ,$objectid[1],2 ,''            ,$dynamic_objects.'.label'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,''),
-            array('parent'    ,'Parent',             $objectid[1],24,'0'           ,$dynamic_objects.'.parent_id'  ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,4 ,'a:11:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:19:"validation_override";s:1:"1";s:25:"initialization_store_prop";s:8:"itemtype";s:24:"initialization_refobject";s:7:"objects";s:27:"initialization_display_prop";s:4:"name";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}'),
             array('module_id' ,'Module'             ,$objectid[1],19,'182'         ,$dynamic_objects.'.module_id'  ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,5 ,'a:4:{s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:7:"modules";s:25:"initialization_store_prop";s:2:"id";s:27:"initialization_display_prop";s:4:"name";}'), // FIXME: change this validation when we move from regid to systemid
             array('itemtype'  ,'Item Type'          ,$objectid[1],20,"xarModAPIFunc('dynamicdata','admin','getnextitemtype')"           ,$dynamic_objects.'.itemtype'   ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,6 ,'a:10:{s:18:"display_combo_mode";s:1:"2";s:14:"display_layout";s:7:"default";s:19:"validation_override";s:1:"1";s:21:"initialization_module";s:1:"3";s:23:"initialization_itemtype";s:1:"0";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}'),
             array('class'     ,'Class'              ,$objectid[1],2 ,'DataObject'  ,$dynamic_objects.'.class'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,''),
@@ -367,6 +369,7 @@ function dynamicdata_init()
         $configfields = array(
             'id'   => array(
                 'type'        => 'integer',
+                'unsigned'     => true,
                 'null'        => false,
                 'default'     => '0',
                 'increment'   => true,
@@ -386,6 +389,7 @@ function dynamicdata_init()
             ),
             'property_id'     => array(
                 'type'        => 'integer',
+                'unsigned'     => true,
                 'null'        => false,
                 'default'     => '0'
             ),
@@ -396,9 +400,8 @@ function dynamicdata_init()
                 'default'     => ''
             ),
             'ignore_empty'     => array(
-                'type'        => 'integer',
-                'null'        => false,
-                'default'     => '1'
+                'type'        => 'boolean',
+                'default'     => false
             ),
             'configuration'   => array(
                 'type'        => 'text',

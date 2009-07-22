@@ -18,7 +18,7 @@
  * 
  * Examples:
  * Add an 'onload' trigger to the page (both examples do the same thing):
- *   <xar:base-include-javascript position="body" type="onload" code="alert('hello, world')" />
+ *   <xar:javascript position="body" type="onload" code="alert('hello, world')" />
  *   xarTplAddJavaScript('body', 'onload', "alert('hello, world')");
  *
  * Get all the JavaScript for the 'onload' trigger (this can be fetched in a page template):

@@ -1,9 +1,10 @@
 <object name="modules_hooks">
   <objectid>19</objectid>
   <label>Hooks</label>
-  <parent>objects</parent>
   <module_id>182</module_id>
   <itemtype>12</itemtype>
+  <class>DataObject</class>
+  <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <config></config>

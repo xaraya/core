@@ -7,10 +7,12 @@
     <div class="xar-mod-body">
         <h2>Query Dynamic Objects or Database Tables</h2>
         <ul>
+        <!--
             <li>
                 <a href="&xar-modurl-dynamicdata-admin-query;">Query DataObjects or Database
                 Tables</a>
             </li>
+        -->
             <li>
                 <a href="&xar-modurl-dynamicdata-util-import;">Import Object Definitions and
                 Data</a>
@@ -19,14 +21,16 @@
             <a href="&xar-modurl-dynamicdata-util-export;">Export Object Definitions and Data</a>:
             for a particular object, go via View Objects - Edit</li>
             <li>
-            <a href="&xar-modurl-dynamicdata-util-static;">Static Table Definition</a>: for a
+            <a href="&xar-modurl-dynamicdata-util-static;">Static Table Definitions</a>: for a
             particular object, go via View Objects - Edit</li>
+            <!--
             <li>
             <a href="&xar-modurl-dynamicdata-util-relations;">Relations between Objects</a>( TODO
             )</li>
             <li>
                 <a href="&xar-modurl-dynamicdata-util-meta;">Meta Table Definitions</a>
             </li>
+            -->
         </ul>
     </div>
 </xar:template>
