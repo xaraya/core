@@ -17,7 +17,7 @@ $systemConfiguration['codeDir'] = "code/";
 //$systemConfiguration['rootDir'] = "";
 //$systemConfiguration['webDir']  = "";
 //$systemConfiguration['libDir']  = "lib/";
-//$systemConfiguration['codeDir'] = "";
+//$systemConfiguration['codeDir'] = "code/";
 
 /*
  * This value is used to change the default behavior of the
