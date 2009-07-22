@@ -19,8 +19,8 @@ function modules_adminapi_standardinstall($args)
     // @todo dont hardcode our naming convention here, nor the path 
     foreach($objects as $dd_object) {
         $name = is_array($dd_object) ? $dd_object['name'] : $dd_object;
-        $def_file = 'modules/' . $module . '/xardata/'.$name.'-def.xml';
-        $dat_file = 'modules/' . $module . '/xardata/'.$name.'-dat.xml';
+        $def_file = sys::code() . 'modules/' . $module . '/xardata/'.$name.'-def.xml';
+        $dat_file = sys::code() . 'modules/' . $module . '/xardata/'.$name.'-dat.xml';
 
         $data = array('file' => $def_file, 'keepitemid' => false);
         if (is_array($dd_object)) {

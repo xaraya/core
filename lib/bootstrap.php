@@ -17,7 +17,7 @@
  * of what you want to do here.
  *
  * @package core
- * @copyright (C) 2002-2007 The Digital Development Foundation
+ * @copyright (C) copyright-placeholder
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marcel van der Boom <mrb@hsdev.com>
@@ -236,6 +236,8 @@ final class sys extends Object
     private static $has  = array();         // Keep a list of what we already have
     private static $var  = null;            // Save the var location
     private static $root = null;            // Save our root location
+    private static $lib  = null;            // Save our lib location
+    private static $code = null;            // Save our code location
 
     private function __construct()
     {} // no objects can be made out of this.
@@ -281,7 +283,7 @@ final class sys extends Object
             self::$has[$dp] = true;
             // tiny bit faster would be to use include, but this is quite a bit safer
             // and it will be executed only once anyway. (i.e. if everything uses this class)
-            return include_once(self::root() . '/' . str_replace('.','/',$dp).'.php');
+            return include_once(self::root() . str_replace('.','/',$dp).'.php');
         }
         return true;
     }
@@ -303,22 +305,50 @@ final class sys extends Object
     **/
     public static function import($dp)
     {
-        if((0===strpos($dp,'modules.'))) return self::once('html.' . $dp);
-        return self::once('lib.'.$dp);
+        if((0===strpos($dp,'modules.'))) return self::once($GLOBALS['systemConfiguration']['codeDir'] . $dp);
+        return self::once($GLOBALS['systemConfiguration']['libDir'] . $dp);
     }
 
     /**
      * Returns the absolute path of the xaraya system root, NOT the web root
-     * Note that there will be NO slash at the end of the returne path.
+     * Note that there WILL ba a slash at the end of the return path.
      *
      * @return string
     **/
     public static function root()
     {
-        // We are in <root>/lib/bootstrap.php and we want <root>
+        // We are in bootstrap.php and we want <root>
         if(!isset(self::$root))
-            self::$root = dirname(dirname(realpath(__FILE__)));
+            self::$root = $GLOBALS['systemConfiguration']['rootDir'];
         return self::$root;
+    }
+
+    /**
+     * Returns the absolute path of the lib directory.
+     * Note that there WILL ba a slash at the end of the return path.
+     *
+     * @return string
+    **/
+    public static function lib()
+    {
+        // We are in bootstrap.php and we want <lib>
+        if(!isset(self::$lib))
+            self::$lib = $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['libDir'];
+        return self::$lib;
+    }
+
+    /**
+     * Returns the absolute path of the code directory.
+     * Note that there WILL ba a slash at the end of the return path.
+     *
+     * @return string
+    **/
+    public static function code()
+    {
+        // We are in bootstrap.php and we want <lib>
+        if(!isset(self::$code))
+            self::$code = $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['codeDir'];
+        return self::$code;
     }
 
     /**

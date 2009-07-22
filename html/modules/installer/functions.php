@@ -42,7 +42,7 @@ function xarInstallFunc($funcName = 'main', $args = array())
     }
 
     // Load the translations file
-    $file = 'modules/'.$modName.'/xar'.$modType.'/'.strtolower($funcName).'.php';
+    $file = sys::code() . 'modules/'.$modName.'/xar'.$modType.'/'.strtolower($funcName).'.php';
     if (!xarMLSLoadTranslations($file)) return;
 
     $tplData = $modFunc($args);
@@ -74,7 +74,7 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
     }
 
     // Load the translations file
-    $file = 'modules/'.$modName.'/xar'.$modType.'api/'.strtolower($funcName).'.php';
+    $file = sys::code() . 'modules/'.$modName.'/xar'.$modType.'api/'.strtolower($funcName).'.php';
     if (!xarMLSLoadTranslations($file)) return;
 
     return $modAPIFunc($args);
@@ -105,7 +105,7 @@ function xarInstallAPILoad()
 
     $modOsType = xarVarPrepForOS($modType);
 
-    $osfile = "modules/$modOsDir/xar{$modOsType}api.php";
+    $osfile = sys::code() . "modules/$modOsDir/xar{$modOsType}api.php";
     if (!file_exists($osfile)) throw new FileNotFoundException($osfile);
 
 
@@ -142,7 +142,7 @@ function xarInstallLoad()
     $modOsType = xarVarPrepForOS($modType);
     $modOsDir = 'installer';
 
-    $osfile = "modules/$modOsDir/xar$modOsType.php";
+    $osfile = sys::code() . "modules/$modOsDir/xar$modOsType.php";
     if (!file_exists($osfile)) throw new FileNotFoundException($osfile);
 
     // Load file

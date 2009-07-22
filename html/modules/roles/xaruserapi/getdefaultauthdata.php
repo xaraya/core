@@ -31,13 +31,13 @@ function roles_userapi_getdefaultauthdata()
 
     if (isset($defaultauthmodulename)) {
         //check for default logout function provided
-        if (file_exists('modules/'.$defaultauthmodulename.'/xaruser/logout.php')) {
+        if (file_exists(sys::code() . 'modules/'.$defaultauthmodulename.'/xaruser/logout.php')) {
             $defaultauthmodlogout=$defaultauthmodulename;
         } else{
            $defaultauthmodlogout='authsystem';
         }
         //check for default login function provided
-        if (file_exists('modules/'.$defaultauthmodulename.'/xaruser/login.php')) {
+        if (file_exists(sys::code() . 'modules/'.$defaultauthmodulename.'/xaruser/login.php')) {
             $defaultauthmodlogin=$defaultauthmodulename;
         } else{
             $defaultauthmodlogin='authsystem';

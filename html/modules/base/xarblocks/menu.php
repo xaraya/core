@@ -272,7 +272,7 @@ function base_menublock_display($blockinfo)
                     // in order to do it right.
                     xarModAPILoad($mod['name'], 'user');
                     if (function_exists($label.'_userapi_getmenulinks') ||
-                        file_exists("modules/$mod[osdirectory]/xaruserapi/getmenulinks.php")){
+                        file_exists(sys::code() . "modules/$mod[osdirectory]/xaruserapi/getmenulinks.php")){
                         // The user API function is called.
                         $menulinks = xarModAPIFunc($mod['name'],  'user', 'getmenulinks');
                     } else {

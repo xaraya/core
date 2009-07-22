@@ -35,7 +35,7 @@ function modules_adminapi_getfilemodules($args)
     }
 
     $fileModules = array();
-    $dh = opendir('modules');
+    $dh = opendir(sys::code() . 'modules');
 
     while ($modOsDir = readdir($dh)) {
         switch ($modOsDir) {
@@ -48,7 +48,7 @@ function modules_adminapi_getfilemodules($args)
             case 'notinstalled':
                 break;
             default:
-                if (is_dir("modules/$modOsDir")) {
+                if (is_dir(sys::code() . "modules/$modOsDir")) {
 
                     // no xarversion.php, no module
                     $modFileInfo = xarMod_getFileInfo($modOsDir);
@@ -93,7 +93,7 @@ function modules_adminapi_getfilemodules($args)
                     }
 
                     //FIXME: <johnny> remove this when xarversion.php contains the user setting
-                    if (file_exists('modules/' . $modOsDir .'/xaruser.php')) {
+                    if (file_exists(sys::code() . 'modules/' . $modOsDir .'/xaruser.php')) {
                         $userCapable = true;
                     }
 

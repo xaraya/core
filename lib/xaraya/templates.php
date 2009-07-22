@@ -512,7 +512,7 @@ function xarTplGetImage($modImage, $modName = NULL)
     }
 
     // relative url to the current module's image
-    $moduleImage = 'modules/'.$modOsDir.'/xarimages/'.$modImage;
+    $moduleImage = sys::code() . 'modules/'.$modOsDir.'/xarimages/'.$modImage;
 
     // obtain current theme directory
     $themedir = xarTplGetThemeDir();
@@ -914,7 +914,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
         $thismodule = trim($module);
         $sourceFileName = xarTplGetThemeDir() . "/modules/$thismodule/includes/$templateName.xt";
     if (!file_exists($sourceFileName)) {
-            $sourceFileName = "modules/$thismodule/xartemplates/includes/$templateName.xt";
+            $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xt";
     }
         if (file_exists($sourceFileName)) break;
     }
@@ -944,6 +944,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
 
     xarLogMessage("Using template : $sourceFileName");
     $templateCode = null;
+//    $sourceFileName = sys::code() . $sourceFileName;
     // Determine if we need to compile this template
     if (xarTemplateCache::isDirty($sourceFileName)) {
         // Get an instance of SourceTemplate
@@ -1009,7 +1010,7 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     // 7. complain (later on)
 
     $tplThemesDir = xarTplGetThemeDir();
-    $tplBaseDir   = "modules/$modOsDir";
+    $tplBaseDir   = sys::code() . "modules/$modOsDir";
     $use_internal = false;
     unset($sourceFileName);
 

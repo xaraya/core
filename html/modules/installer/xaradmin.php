@@ -427,7 +427,7 @@ function installer_admin_phase5()
             // Insert module
             $modversion=array();$bindvars = array();
             // NOTE: We can not use the sys::import here, since the variable scope is important.
-            include_once "modules/$modName/xarversion.php";
+            include_once sys::code() . "modules/$modName/xarversion.php";
             $bindvars = array($modName,
                               $modversion['id'],       // regid, from xarversion
                               $modName,
@@ -776,7 +776,7 @@ function installer_admin_choose_configuration()
     // Make sure all the core modules are here
     // Remove them from the list if name and regid coincide
     $awol = array();
-    include 'modules/installer/xarconfigurations/coremoduleslist.php';
+    include sys::code() . 'modules/installer/xarconfigurations/coremoduleslist.php';
     foreach ($coremodules as $coremodule) {
         if (in_array($coremodule['name'],array_keys($fileModules))) {
             if ($coremodule['regid'] == $fileModules[$coremodule['name']]['regid'])
@@ -790,7 +790,7 @@ function installer_admin_choose_configuration()
         throw new Exception($msg);
     }
 
-    $basedir = realpath('modules/installer/xarconfigurations');
+    $basedir = realpath(sys::code() . 'modules/installer/xarconfigurations');
 
     $files = array();
     if ($handle = opendir($basedir)) {
@@ -809,7 +809,7 @@ function installer_admin_choose_configuration()
     if (count($fileModules) == 0){
     // No non-core modules present. Show only the minimal configuration
         $names = array();
-        include 'modules/installer/xarconfigurations/core.conf.php';
+        include sys::code() . 'modules/installer/xarconfigurations/core.conf.php';
         $names[] = array('value' => 'modules/installer/xarconfigurations/core.conf.php',
                          'display'  => 'Core Xaraya install (aka minimal)',
                          'selected' => true);

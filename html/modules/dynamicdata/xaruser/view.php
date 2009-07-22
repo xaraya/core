@@ -64,8 +64,8 @@ function dynamicdata_user_view($args)
     // TODO: another stray
     $data['catid'] = $catid;
 
-    if (file_exists('modules/' . $data['tplmodule'] . '/xartemplates/user-view.xt') ||
-        file_exists('modules/' . $data['tplmodule'] . '/xartemplates/user-view-' . $data['template'] . '.xt')) {
+    if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view.xt') ||
+        file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view-' . $data['template'] . '.xt')) {
         return xarTplModule($data['tplmodule'],'user','view',$data,$data['template']);
     } else {
         return xarTplModule('dynamicdata','user','view',$data,$args['template']);

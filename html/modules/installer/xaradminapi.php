@@ -69,7 +69,7 @@ function installer_adminapi_initialise($args)
     }
 
     $osDirectory = xarVarPrepForOS($directory);
-    $modInitFile = 'modules/'. $osDirectory. '/xarinit.php';
+    $modInitFile = sys::code() . 'modules/'. $osDirectory. '/xarinit.php';
 
 
     if(!file_exists($modInitFile)) throw new FileNotFoundException($modInitFile);

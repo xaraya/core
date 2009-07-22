@@ -187,7 +187,7 @@ class xarCSS extends Object
             return $themestylesheet;
         } elseif ($this->scope == 'module' || $this->scope == 'block') {            
             
-            $original = "modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
+            $original = sys::code() . "modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
             // we do not want to supply path for a non-existent original css file or override a bogus file
             // so lets check starting from original then fallback if there arent overriden versions
             // how about the overridden one?

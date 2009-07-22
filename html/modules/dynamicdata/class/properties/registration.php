@@ -193,9 +193,8 @@ class PropertyRegistration extends DataContainer
                 $proptypes[$id] = $property;
             }
         }
-
+        $result->close();
         xarCore::setCached('DynamicData','PropertyTypes',$proptypes);
-
         return $proptypes;
     }
 
@@ -233,7 +232,7 @@ class PropertyRegistration extends DataContainer
                 foreach($activeMods as $modInfo) {
                     // FIXME: the modinfo directory does NOT end with a /
                     $dir = 'modules/' .$modInfo['osdirectory'] . '/xarproperties';
-                    if(file_exists($dir)){
+                    if(file_exists(sys::code() . $dir)){
                         $propDirs[] = $dir;
                     }
                 }
@@ -243,9 +242,10 @@ class PropertyRegistration extends DataContainer
             static $loaded = array();
             $proptypes = array(); $numLoaded = 0;
             foreach($propDirs as $PropertiesDir) {
-                if (!file_exists($PropertiesDir)) continue;
+                $propertiesdir = sys::code() . $PropertiesDir;
+                if (!file_exists($propertiesdir)) continue;
 
-                $dir = new RelativeDirectoryIterator($PropertiesDir);
+                $dir = new RelativeDirectoryIterator($propertiesdir);
                 // Loop through properties directory
                 for ($dir->rewind();$dir->valid();$dir->next()) {
                     if ($dir->isDir()) continue; // no dirs
