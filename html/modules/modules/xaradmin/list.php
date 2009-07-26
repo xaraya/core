@@ -194,7 +194,7 @@ function modules_admin_list()
             $listrows[$i]['actionimg2']         = $img_none;
 
 
-        }elseif($mod['state'] == XARMOD_STATE_INACTIVE){
+        } elseif($mod['state'] == XARMOD_STATE_INACTIVE){
             // this module is 'Inactive'        - set labels and links
             $statelabel = xarML('Inactive');
             $listrows[$i]['state'] = XARMOD_STATE_INACTIVE;
@@ -208,7 +208,7 @@ function modules_admin_list()
 
             $listrows[$i]['actionimg1']         = $img_activate;
             $listrows[$i]['actionimg2']         = $img_remove;
-        }elseif($mod['state'] == XARMOD_STATE_ACTIVE){
+        } elseif($mod['state'] == XARMOD_STATE_ACTIVE) {
             // this module is 'Active'          - set labels and links
             $statelabel = xarML('Active');
             $listrows[$i]['state'] = XARMOD_STATE_ACTIVE;
@@ -229,10 +229,10 @@ function modules_admin_list()
                 $listrows[$i]['actionimg1']     = $img_disabled;
                 $listrows[$i]['actionimg2']     = $img_disabled;
             }
-        }elseif($mod['state'] == XARMOD_STATE_MISSING_FROM_UNINITIALISED ||
+        } elseif($mod['state'] == XARMOD_STATE_MISSING_FROM_UNINITIALISED ||
                 $mod['state'] == XARMOD_STATE_MISSING_FROM_INACTIVE ||
                 $mod['state'] == XARMOD_STATE_MISSING_FROM_ACTIVE ||
-                $mod['state'] == XARMOD_STATE_MISSING_FROM_UPGRADED){
+                $mod['state'] == XARMOD_STATE_MISSING_FROM_UPGRADED) {
             // this module is 'Missing'         - set labels and links
             $statelabel = xarML('Missing');
             $listrows[$i]['state'] = XARMOD_STATE_MISSING_FROM_UNINITIALISED;
@@ -244,22 +244,21 @@ function modules_admin_list()
 
             $listrows[$i]['actionimg1']         = $img_none;
             $listrows[$i]['actionimg2']         = $img_remove;
-        }elseif($mod['state'] == XARMOD_STATE_ERROR_UNINITIALISED ||
+        } elseif($mod['state'] == XARMOD_STATE_ERROR_UNINITIALISED ||
                 $mod['state'] == XARMOD_STATE_ERROR_INACTIVE ||
                 $mod['state'] == XARMOD_STATE_ERROR_ACTIVE ||
-                $mod['state'] == XARMOD_STATE_ERROR_UPGRADED){
-            // Bug 1664 - this module db version is greater than file version
-            // 'Error' - set labels and links
+                $mod['state'] == XARMOD_STATE_ERROR_UPGRADED) {
+            // This module db version is greater than file version
             $statelabel = xarML('Error');
             $listrows[$i]['state'] = XARMOD_STATE_ERROR_UNINITIALISED;
 
-            $listrows[$i]['actionlabel']        = xarML('View Error');
+            $listrows[$i]['actionlabel']        = xarML('Old version greater than new');
             $listrows[$i]['actionurl']          = $errorurl;
             $listrows[$i]['removeurl']          = '';
 
             $listrows[$i]['actionimg1']         = $img_disabled;
             $listrows[$i]['actionimg2']         = $img_disabled;
-        }elseif($mod['state'] == XARMOD_STATE_UPGRADED){
+        } elseif($mod['state'] == XARMOD_STATE_UPGRADED) {
             // this module is 'Upgraded'        - set labels and links
             $statelabel = xarML('New version');
             $listrows[$i]['state'] = XARMOD_STATE_UPGRADED;

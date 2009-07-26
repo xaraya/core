@@ -127,7 +127,7 @@ function themes_init()
     xarModVars::set('themes', 'useicons', false);
 
     // Installation complete; check for upgrades
-    return themes_upgrade('2.0');
+    return themes_upgrade('2.0.0');
 }
 
 /**
@@ -140,8 +140,7 @@ function themes_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0':
-        case '2.1':
+        case '2.0.0':
       break;
     }
     return true;

@@ -39,7 +39,7 @@ function mail_init()
     xarRegisterMask('AdminMail','All','mail','All','All','ACCESS_ADMIN');
 
     // Installation complete; check for upgrades
-    return mail_upgrade('2.0');
+    return mail_upgrade('2.0.0');
 }
 
 /**
@@ -66,8 +66,7 @@ function mail_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0':
-        case '2.1':
+        case '2.0.0':
       break;
     }
     return true;

@@ -204,7 +204,7 @@ function base_init()
     xarMod::init($systemArgs);
 
     // Installation complete; check for upgrades
-    return base_upgrade('2.0');
+    return base_upgrade('2.0.0');
 }
 
 /**
@@ -217,8 +217,7 @@ function base_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0':
-        case '2.1':
+        case '2.0.0':
       break;
     }
     return true;
