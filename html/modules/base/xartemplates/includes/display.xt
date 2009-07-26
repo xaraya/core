@@ -6,7 +6,7 @@
             </legend>
             <div class="xar-form-input-wrapper">
                 <label for="itemsperpage" title="#xarML('The number of items to show on each page.')#" class="xar-form-label">                    
-                    Items Per Page:                    
+                    List items per page:                    
                 </label>
                 <xar:set name="value">
                     <xar:var scope="module" module="$modulename" name="itemsperpage" />

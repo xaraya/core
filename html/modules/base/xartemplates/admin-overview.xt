@@ -53,7 +53,7 @@
         <p>
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Base &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules:.
             <ul>
-                <li><strong>Items per page:</strong>&#160; how many items are displayed in this module's list views</li>
+                <li><strong>List items per page:</strong>&#160; how many items are displayed in this module's list views</li>
                 <li><strong>Short URLs:</strong>&#160; whether this module supports short URLs. If the module includes code for a short URL scheme, checking this checkbox will activate it.</li>
                 <li><strong>Module alias:</strong>&#160; whether this module should display an alias name in its displays, rather than the standard name (i.e. "base"). The alias can be defined in the text box below. If the alias checkbox is checked and the textbox is empty, the standard module name is used.</li>
             </ul>

@@ -3,7 +3,7 @@
     function dynamicdata_dataapi_adminmenu()
     {
         return array(
-                array('includes' => array('main','overview'), 'target' => 'main', 'label' => xarML('DynamicData Overview')),
+                array('includes' => array('main','overview'), 'target' => 'main', 'label' => xarML('Overview')),
                 array('mask' => 'EditDynamicData', 'includes' => array('view','new','modify','modifyprop'), 'target' => 'view', 'title' => xarML('View dataobjects using dynamic data'), 'label' => xarML('DataObjects')),
                 array('mask' => 'AdminDynamicData', 'includes' => 'modifyconfig', 'target' => 'modifyconfig', 'title' => xarML('Configure the default dataproperty types'), 'label' => xarML('DataProperty Types')),
 //                array('mask' => 'AdminDynamicData', 'includes' => 'relations', 'target' => 'relations', 'title' => xarML('Configure relationships'), 'label' => xarML('Relationships')),
