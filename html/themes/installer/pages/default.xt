@@ -30,12 +30,12 @@
                         <xar:if condition="$script eq 'install.php' OR $modulename eq 'installer'">
                             <h1>Xaraya Installer</h1>
                             <p>
-                                <xar:mlstring>This script will install the Xaraya database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the <a href="http://www.xaraya.com/index.php/xarbb">support forums</a> or live IRC support for help.</xar:mlstring>
+                                This script will install the Xaraya database and configure the settings you need to get started. This process will take approximately ten (10) minutes. If you need assistance at any point, visit the <a href="http://www.xaraya.com/index.php/xarbb">support forums</a> or live IRC support for help.
                             </p>
                         <xar:else />
                             <h1>Xaraya Upgrade</h1>
                             <p>
-                                <xar:mlstring>This script will upgrade the Xaraya database and adjust the settings for your new version of Xaraya. This process will take approximately five (5) minutes.   If you need assistance at any point, visit the <a href="http://www.xaraya.com/index.php/xarbb">support forums</a> or live IRC support for help.</xar:mlstring>
+                                This script will upgrade the Xaraya database and adjust the settings for your new version of Xaraya. This process will take approximately five (5) minutes.   If you need assistance at any point, visit the <a href="http://www.xaraya.com/index.php/xarbb">support forums</a> or live IRC support for help.
                             </p>
                         </xar:if>
                     </div>
@@ -50,29 +50,29 @@
             <ul id="navbar_core">
                 <!--
                 <li class="navbar-item">
-                    <a href="http://www.xaraya.com/index.php/xarbb"><xar:mlstring>Support Forums</xar:mlstring></a>
+                    <a href="http://www.xaraya.com/index.php/xarbb">Support Forums</a>
                 </li>
                 <li class="navbar-item">
-                    <a href="news://news.xaraya.com"><xar:mlstring>Newsgroups</xar:mlstring></a>
+                    <a href="news://news.xaraya.com">Newsgroups</a>
                 </li>
                 <li class="navbar-item">
-                    <a href="irc://irc.xaraya.com"><xar:mlstring>IRC Support</xar:mlstring></a>
+                    <a href="irc://irc.xaraya.com">IRC Support</a>
                 </li>
                 -->
                 <li class="navbar-item">
-                    <a href="http://www.xaraya.com/index.php/xarpages/support" target="_blank"><xar:mlstring>Support</xar:mlstring></a>
+                    <a href="http://www.xaraya.com/index.php/xarpages/support" target="_blank">Support</a>
                 </li>
                 <xar:if condition="$isupgrade eq '1'">
                     <li class="navbar-item">
-                        <a href="http://www.xaraya.com/index.php/documentation/586"><xar:mlstring>Upgrade Guide</xar:mlstring></a>
+                        <a href="http://www.xaraya.com/index.php/documentation/586">Upgrade Guide</a>
                     </li>
                 <xar:else />
                 <!--
                     <li class="navbar-item">
-                        <a href="http://www.xaraya.com/index.php/documentation/96"><xar:mlstring>Prepare for Install</xar:mlstring></a>
+                        <a href="http://www.xaraya.com/index.php/documentation/96">Prepare for Install</a>
                     </li>
                     <li class="navbar-item">
-                        <a href="http://www.xaraya.com/index.php/documentation/97"><xar:mlstring>Install Guide</xar:mlstring></a>
+                        <a href="http://www.xaraya.com/index.php/documentation/97">Install Guide</a>
                     </li>
                     -->
                 </xar:if>

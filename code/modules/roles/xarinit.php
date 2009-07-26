@@ -235,7 +235,7 @@ function roles_activate()
     $user->createItem($rolefields);
 
     // Installation complete; check for upgrades
-    return roles_upgrade('2.0');
+    return roles_upgrade('2.0.0');
 }
 
 /**
@@ -248,8 +248,7 @@ function roles_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0':
-        case '2.1':
+        case '2.0.0':
       break;
     }
     return true;

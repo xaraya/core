@@ -495,7 +495,7 @@ function dynamicdata_init()
     xarDefineInstance('dynamicdata','Field',$instances);
 
     // Installation complete; check for upgrades
-    return dynamicdata_upgrade('2.0');
+    return dynamicdata_upgrade('2.0.0');
 }
 
     /**
@@ -506,8 +506,7 @@ function dynamicdata_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0':
-        case '2.1':
+        case '2.0.0':
       break;
     }
     return true;

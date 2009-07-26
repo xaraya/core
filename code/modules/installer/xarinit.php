@@ -27,12 +27,11 @@ function installer_init()
  * @param oldVersion
  * @returns bool
  */
-function installer_upgrade($oldVersion)
+function installer_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0':
-        case '2.1':
+        case '2.0.0':
       break;
     }
     return true;

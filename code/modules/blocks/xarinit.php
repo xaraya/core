@@ -292,7 +292,7 @@ function blocks_init()
     xarRegisterMask('AdminBlock',   'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_ADMIN');
 
     // Installation complete; check for upgrades
-    return blocks_upgrade('2.0');
+    return blocks_upgrade('2.0.0');
 }
 
 /**
@@ -305,8 +305,7 @@ function blocks_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0':
-        case '2.1':
+        case '2.0.0':
       break;
     }
     return true;

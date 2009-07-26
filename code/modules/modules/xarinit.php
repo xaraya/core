@@ -199,7 +199,7 @@ function modules_init()
     }
 
     // Installation complete; check for upgrades
-    return modules_upgrade('2.0');}
+    return modules_upgrade('2.0.0');}
 
 /**
  * Activates the modules module
@@ -237,8 +237,7 @@ function modules_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0':
-        case '2.1':
+        case '2.0.0':
       break;
     }
     return true;

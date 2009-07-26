@@ -235,7 +235,7 @@ function privileges_init()
     }
 
     // Installation complete; check for upgrades
-    return privileges_upgrade('2.0');
+    return privileges_upgrade('2.0.0');
 }
 
 function privileges_activate()
@@ -262,8 +262,7 @@ function privileges_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0':
-        case '2.1':
+        case '2.0.0':
       break;
     }
     return true;
