@@ -413,7 +413,7 @@ class xarRequest extends Object
                 if (isset($params[1]) && $params[1] == 'admin') $modType = 'admin';
 
                 // Check if this is an alias for some other module
-                $modName = self::resolveModuleAlias($modName);
+                $modName = xarModAlias::resolve($modName);
                 // Call the appropriate decode_shorturl function
                 if (xarMod::isAvailable($modName) && xarModVars::get($modName, 'SupportShortURLs') && xarMod::apiLoad($modName, $modType)) {
                     $loopHole = array($modName,$modType,$funcName);
@@ -444,7 +444,7 @@ class xarRequest extends Object
 
         if (!empty($modName)) {
             // Check if this is an alias for some other module
-            $modName = self::resolveModuleAlias($modName);
+            $modName = xarModAlias::resolve($modName);
             // Cache values into info static var
             $requestInfo = array($modName, $modType, $funcName);
         } else {
@@ -476,24 +476,6 @@ class xarRequest extends Object
             return true;
         } else {
             return false;
-        }
-    }
-
-    /**
-     * Checks if a module name is an alias for some other module
-     *
-     * @access private
-     * @param var string name of the module
-     * @return string containing the module name
-     * @throws BAD_PARAM
-     */
-    private static function resolveModuleAlias($var)
-    {
-        try {
-          $aliasesMap = xarConfigVars::get(null, 'System.ModuleAliases');
-          return $aliasesMap[$var];
-        } catch (VariableNotFoundException $e) {
-          return $var;
         }
     }
 }
