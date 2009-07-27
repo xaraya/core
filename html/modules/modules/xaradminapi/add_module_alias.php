@@ -38,9 +38,6 @@ function modules_adminapi_add_module_alias($args)
 
     // Get the list of current aliases
     $aliases = xarConfigVars::get(null, 'System.ModuleAliases');
-    if (!isset($aliases)) {
-        $aliases = array();
-    }
     if (!empty($aliases[$aliasModName]) && $aliases[$aliasModName] != $modName) {
         throw new DuplicateException(array($aliasModName,$aliases[$aliasModName]),'Module alias #(1) is already used by module #(2)');
     }
