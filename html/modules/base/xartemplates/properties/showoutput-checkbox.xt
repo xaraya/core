@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:set name="yes">Yes</xar:set>
-    <xar:set name="no">No</xar:set>
+    <xar:var name="yes">Yes</xar:var>
+    <xar:var name="no">No</xar:var>
     <xar:if condition="!empty($value)">#$yes# 
     <xar:else />#$no#</xar:if>
 </xar:template>
