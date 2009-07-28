@@ -219,15 +219,6 @@
             </form>
             <!-- Begin Security Options -->
             <xar:elseif condition="$tab eq 'security'" />
-            <xar:set name="authmodules">
-                <xar:var scope="config" name="Site.User.AuthenticationModules" />
-            </xar:set>
-            <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
-                <xar:javascript module="base" filename="orderitem.js" position="head" />
-                <script type="text/javascript">
-                    xar_base_reorder_warn = '#xarML('You must select the authentication module you want to move.')#';
-                </script>
-            </xar:if>
             <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Sessions and Security</legend>
@@ -278,31 +269,16 @@
                         value="#$value#" maxlength="3" class="xar-form-textshort" />
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="authmodules"
-                        title="#xarML('Change the order of authentication')#"
-                        class="xar-form-label">Authentication Modules:</label>
+                        <xar:set name="authmodules">
+                            <xar:var scope="config" name="Site.User.AuthenticationModules" />
+                        </xar:set>
+                        <label for="authmodules" title="#xarML('Change the order of authentication')#" class="xar-form-label">Authentication Modules:</label>
                         <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
-                            <div class="xar-floatleft">
-                                <div class="xar-floatleft">
-                                    <button onclick="return xar_base_reorder('authmodules', true, 'authmodule_order');" title="#xarML('Move Up')#" class="xar-displayblock xar-margin-thickbottom">
-                                        <img src="#xarTplGetImage('up.gif','base')#" alt="#xarML('Up Arrow')#" />
-                                    </button>
-                                    <button onclick="return xar_base_reorder('authmodules', false, 'authmodule_order');" title="#xarML('Move Down')#" class="xar-displayblock xar-margin-thicktop">
-                                        <img src="#xarTplGetImage('down.gif','base')#" alt="#xarML('Down Arrow')#" />
-                                    </button>
-                                </div>
-                                <div class="xar-floatleft xar-margin-thickleft">
-                                <xar:set name="size">count($authmodules)</xar:set>
-                                    <select name="authmodules" id="authmodules" size="#$size#">
-                                        <xar:foreach in="$authmodules" value="$authmodule">
-                                        <option value="#$authmodule#">#$authmodule#</option>
-                                        </xar:foreach>
-                                    </select>
-                                <input type="hidden" name="authmodule_order" id="authmodule_order"
-                                value="" />
-                                </div>
-                            </div>
-                        <xar:else />#$authmodules[0]#</xar:if>
+                            <xar:set name="size">count($authmodules)</xar:set>
+                            <xar:data-input type="orderselect" name="authmodules" order="$authmodules" size="$size" />
+                        <xar:else />
+                            #$authmodules[0]#
+                        </xar:if>
                     </div>
                     <div class="xar-form-input-wrapper">
                         <label for="cookiename" title="#xarML('Override the default cookie name')#" class="xar-form-label">

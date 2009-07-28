@@ -65,10 +65,13 @@ function base_admin_updateconfig()
             if (!xarVarFetch('cookiedomain','str:1:',$cookieDomain,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('referercheck','str:1:',$refererCheck,'',XARVAR_NOT_REQUIRED)) return;
 
-            xarConfigVars::set(null, 'Site.Core.EnableSecureServer', $secureServer);
+            sys::import('modules.dynamicdata.class.properties.master');
+            $orderselect = DataPropertyMaster::getProperty(array('name' => 'orderselect'));
+            $orderselect->checkInput('authmodules');
 
             //Filtering Options
             // Security Levels
+            xarConfigVars::set(null, 'Site.Core.EnableSecureServer', $secureServer);
             xarConfigVars::set(null, 'Site.Session.SecurityLevel', $securityLevel);
             xarConfigVars::set(null, 'Site.Session.Duration', $sessionDuration);
             xarConfigVars::set(null, 'Site.Session.InactivityTimeout', $sessionTimeout);
@@ -78,9 +81,8 @@ function base_admin_updateconfig()
             xarConfigVars::set(null, 'Site.Session.RefererCheck', $refererCheck);
 
             // Authentication modules
-            if (!empty($authmodule_order)) {
-                $authmodules = explode(';', $authmodule_order);
-                xarConfigVars::set(null, 'Site.User.AuthenticationModules', $authmodules);
+            if (!empty($orderselect->order)) {
+                xarConfigVars::set(null, 'Site.User.AuthenticationModules', $orderselect->order);
             }
             break;
         case 'locales':

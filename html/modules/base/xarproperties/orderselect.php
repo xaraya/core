@@ -70,7 +70,8 @@ class OrderSelectProperty extends MultiSelectProperty
         if (empty($data['order']) || strstr($data['order'], ';') === false) {
             $data['order'] = '';
             foreach ($data['options'] as $option) {
-                $data['order'] .= $option['id'] . ';';
+                if (is_array($option) && isset($option['id'])) $data['order'] .= $option['id'] . ';';
+                else $data['order'] .= $option . ';';
             }
         } else {
             $tmpval = explode(';', $data['order']);
@@ -96,7 +97,8 @@ class OrderSelectProperty extends MultiSelectProperty
         if (empty($data['order']) || strstr($data['order'], ';') === false) {
             $data['order'] = '';
             foreach ($data['options'] as $option) {
-                $data['order'] .= $option['id'] . ';';
+                if (is_array($option) && isset($option['id'])) $data['order'] .= $option['id'] . ';';
+                else $data['order'] .= $option . ';';
             }
         } else {
             $tmpval = explode(';', $data['order']);
