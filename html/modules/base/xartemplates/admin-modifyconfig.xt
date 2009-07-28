@@ -285,10 +285,10 @@
                             <div class="xar-floatleft">
                                 <div class="xar-floatleft">
                                     <button onclick="return xar_base_reorder('authmodules', true, 'authmodule_order');" title="#xarML('Move Up')#" class="xar-displayblock xar-margin-thickbottom">
-                                        <img src="#xarTplGetImage('up.gif','blocks')#" alt="#xarML('Up Arrow')#" />
+                                        <img src="#xarTplGetImage('up.gif','base')#" alt="#xarML('Up Arrow')#" />
                                     </button>
                                     <button onclick="return xar_base_reorder('authmodules', false, 'authmodule_order');" title="#xarML('Move Down')#" class="xar-displayblock xar-margin-thicktop">
-                                        <img src="#xarTplGetImage('down.gif','blocks')#" alt="#xarML('Down Arrow')#" />
+                                        <img src="#xarTplGetImage('down.gif','base')#" alt="#xarML('Down Arrow')#" />
                                     </button>
                                 </div>
                                 <div class="xar-floatleft xar-margin-thickleft">

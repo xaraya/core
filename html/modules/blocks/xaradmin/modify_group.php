@@ -26,11 +26,16 @@ function blocks_admin_modify_group()
         array('id' => $id)
     );
 
-    $up_arrow_src   = xarTplGetImage('up.gif');
-    $down_arrow_src = xarTplGetImage('down.gif');
+    $up_arrow_src   = xarTplGetImage('up.gif', 'base');
+    $down_arrow_src = xarTplGetImage('down.gif', 'base');
+    
+    $instances = array();
+    foreach ($group['instances'] as $instance) 
+        $instances[] = array('id' => $instance['id'], 'name' =>$instance['name'] . " (" . $instance['title'] . ")");
 
     return array(
         'group'            => $group,
+        'instances'        => $instances,
         'instance_count'   => count($group['instances']),
         'up_arrow_src'     => $up_arrow_src,
         'down_arrow_src'   => $down_arrow_src,

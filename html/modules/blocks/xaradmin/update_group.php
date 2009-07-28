@@ -17,9 +17,12 @@ function blocks_admin_update_group()
     // Get parameters
     if (!xarVarFetch('id', 'int:1:', $id)) {return;}
     if (!xarVarFetch('authid', 'str:1:', $authid)) {return;}
-    if (!xarVarFetch('group_instance_order', 'strlist:;:id', $group_instance_order, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('group_name', 'pre:lower:ftoken:field:Group Name:passthru:str:1:', $name)) {return;}
     if (!xarVarFetch('group_template', 'pre:trim:lower:ftoken', $template, null, XARVAR_NOT_REQUIRED)) {return;}
+
+    sys::import('modules.dynamicdata.class.properties.master');
+    $orderselect = DataPropertyMaster::getProperty(array('name' => 'orderselect'));
+    $orderselect->checkInput('group_instance_order');
 
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) {return;}
@@ -28,6 +31,7 @@ function blocks_admin_update_group()
     if(!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
 
     // Explode the instance order from id1;id2;etc to an array
+    $group_instance_order = $orderselect->order;
     if (!empty($group_instance_order)) {
         $group_instance_order = explode(';', $group_instance_order);
     } else {
