@@ -173,6 +173,7 @@ function roles_admin_showusers()
     $filter['search']   = $data['search'];
     $filter['order']    = $data['order'];
 
+    sys::import('xaraya.pager');
     $data['pager']      = xarTplGetPager($startnum,
                                          $data['totalselect'],
                                          xarModURL('roles', 'admin', 'showusers',$filter),

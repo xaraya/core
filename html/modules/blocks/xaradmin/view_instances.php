@@ -61,6 +61,7 @@ function blocks_admin_view_instances()
     $data['authid'] = $authid;
     // Item filter and pager
     $data['filter'] = $filter;
+    sys::import('xaraya.pager');
     $data['pager'] = xarTplGetPager($startat,
                             $total,
                             xarModURL('blocks', 'admin', 'view_instances',array('startat' => '%%')),

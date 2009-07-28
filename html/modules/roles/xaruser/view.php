@@ -59,6 +59,7 @@ function roles_user_view($args)
     $pagerfilter['search'] = $data['search'];
     $pagerfilter['startnum'] = '%%';
 
+    sys::import('xaraya.pager');
     $data['pager'] = xarTplGetPager(
         $data['startnum'],
         $data['total'],

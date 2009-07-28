@@ -77,6 +77,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
     $data['objects_props']  =&amp; $objects->getProperties();
     $data['objects_values'] =&amp; $objects->items;
     $data['itemtype'] = <xsl:value-of select="@itemtype" />;
+    sys::import('xaraya.pager');
     $data['pager'] = xarTplGetPager(
         $startnum
         ,xarModAPIFunc(

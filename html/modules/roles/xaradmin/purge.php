@@ -139,6 +139,7 @@ function roles_admin_purge($args)
         $recallfilter['recallsearch']   = $data['recallsearch'];
         $data['submitRecall']    = xarML('Recall');
         $data['recallroles']     = $recallroles;
+        sys::import('xaraya.pager');
         $data['recallpager']     = xarTplGetPager($recallstartnum,
                                                   $data['totalselect'],
                                                   xarModURL('roles', 'admin', 'purge', $recallfilter),
@@ -300,6 +301,7 @@ function roles_admin_purge($args)
 
         $data['submitPurge'] = xarML('Purge');
         $data['purgeusers']  = $purgeusers;
+        sys::import('xaraya.pager');
         $data['purgepager']  = xarTplGetPager($purgestartnum,
                                               $data['totalselect'],
                                               xarModURL('roles', 'admin', 'purge', $purgefilter),
