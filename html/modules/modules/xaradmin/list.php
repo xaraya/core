@@ -310,12 +310,6 @@ function modules_admin_list()
         }
     }
 
-    // Include 'smoothscroll' JavaScript.
-    // TODO: move this to a template widget when available.
-    xarModAPIfunc('base', 'javascript', 'modulefile',
-        array('module'=>'modules', 'filename'=>'smoothscroll.js')
-    );
-
     // Send to BL.
     return $data;
 }

@@ -99,11 +99,6 @@ class CalendarProperty extends DataProperty
             }
         }
 
-        // include calendar javascript
-        xarModAPIFunc('base','javascript','modulefile',
-                      array('module' => 'base',
-                            'filename' => 'calendar.js'));
-
         // $timeval = xarLocaleFormatDate($dateformat, $value);
         $data['baseuri']    = xarServer::getBaseURI();
         $data['dateformat'] = $dateformat;

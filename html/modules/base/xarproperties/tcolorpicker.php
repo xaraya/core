@@ -62,12 +62,6 @@ class TColorPickerProperty extends DataProperty
             array('module' => 'base', 'filename' => 'tcolorpickeroptions.js')
         );
 
-        // Include color picker javascript.
-        xarModAPIFunc(
-            'base','javascript','modulefile',
-            array('module' => 'base', 'filename' => 'tcolorpicker.js')
-        );
-
         $data['baseuri']  = xarServer::getBaseURI();
         $data['size']     = $this->size;
         $data['maxlength']= $this->maxlength;

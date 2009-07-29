@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <!-- <xar:javascript module="base" filename="calendar.js" />-->
+    <xar:javascript module="base" filename="calendar.js" />
     <xar:var name="alttext">Click Here to Pick up the date</xar:var>
     <xar:if condition="empty($tabindex)">
         <input class="xar-form-textlong" type="text" name="#$name#" id="#$id#_input" value="#xarLocaleFormatDate($dateformat,$value)#" size="20" maxlength="19" />
