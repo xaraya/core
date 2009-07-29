@@ -10,7 +10,7 @@ dtd="rss">
     xmlns:content="http://purl.org/rss/1.0/modules/content/">
         <channel>
             <title>#$tpl:pageTitle#</title>
-            <link>#xarVarPrepForDisplay(xarServerGetBaseURL())#</link>
+            <link>#xarVarPrepForDisplay(xarServer::getBaseURL())#</link>
             <description>
                 <xar:var scope="module" module="themes" name="SiteSlogan" />
             </description>
