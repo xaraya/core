@@ -21,7 +21,7 @@
             <ul class="navlist">
                 <xar:foreach in="$common_menu" value="$value">
                     <xar:if condition="empty($value['url'])">
-                        <li class="active"><a href="#xarServerGetCurrentURL()#" title="#$value['title']#"> #$value['title']# </a></li>
+                        <li class="active"><a href="#xarServer::getCurrentURL()#" title="#$value['title']#"> #$value['title']# </a></li>
                         <xar:else />
                         <li><a href="#$value['url']#" title="#$value['title']#"> #$value['title']# </a></li>
                     </xar:if>
