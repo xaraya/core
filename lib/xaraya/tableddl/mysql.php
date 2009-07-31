@@ -42,6 +42,7 @@ function xarDB__mysqlCreateTable($tableName, $fields)
 
         $sql_fields[] = $field_name .' '
                       . $this_field['type'] .' '
+                      . $this_field['charset'] .' '
                       . $this_field['unsigned'] .' '
                       . $this_field['null'] .' '
                       . $this_field['default'] .' '
@@ -77,7 +78,6 @@ function xarDB__mysqlCreateTable($tableName, $fields)
     if ($increment_start) {
         $sql .= ' AUTO_INCREMENT=' . $increment_start;
     }
-
     return $sql;
 }
 
@@ -431,11 +431,14 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
         $this_field['default'] = '';
     }
 
+    // Set character set
+    if(isset($parameters['charset'])) $this_field['charset'] = "CHARACTER SET " . $parameters['charset'];
+    else $this_field['charset'] = "";
+    
     // Test for PRIMARY KEY
     $this_field['primary_key'] = (isset($parameters['primary_key']) && $parameters['primary_key'] == true)
                                ? true
                                : false;
-
     return $this_field;
 }
 

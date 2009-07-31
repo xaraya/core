@@ -218,6 +218,7 @@ function installer_admin_phase4()
     $data['database_name']       = xarSystemVars::get(sys::CONFIG, 'DB.Name');
     $data['database_prefix']     = xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
     $data['database_type']       = xarSystemVars::get(sys::CONFIG, 'DB.Type');
+    $data['database_charset']    = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
     // Supported  Databases:
     $data['database_types']      = array('mysql'       => array('name' => 'MySQL'   , 'available' => extension_loaded('mysql')),
                                          'postgres'    => array('name' => 'Postgres', 'available' => extension_loaded('pgsql')),
@@ -259,6 +260,7 @@ function installer_admin_phase5()
     if (!xarVarFetch('install_database_username','pre:trim:passthru:str',$dbUname,'',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_password','pre:trim:passthru:str',$dbPass,'',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_prefix','pre:trim:passthru:str',$dbPrefix,'xar',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_database_charset','pre:trim:passthru:str',$dbCharset,'utf8',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_database_type','str:1:',$dbType)) return;
     if (!xarVarFetch('install_create_database','checkbox',$createDB,false,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('confirmDB','bool',$confirmDB,false,XARVAR_NOT_REQUIRED)) return;
@@ -280,7 +282,8 @@ function installer_admin_phase5()
                          'dbUname'   => $dbUname,
                          'dbPass'    => $dbPass,
                          'dbPrefix'  => $dbPrefix,
-                         'dbType'    => $dbType);
+                         'dbType'    => $dbType,
+                         'dbCharset' => $dbCharset);
     //  Write the config
     xarInstallAPIFunc('modifyconfig', $config_args);
 
@@ -329,6 +332,7 @@ function installer_admin_phase5()
         $data['dbPass']     = $dbPass;
         $data['dbPrefix']   = $dbPrefix;
         $data['dbType']     = $dbType;
+        $data['dbCharset']  = $dbCharset;
         $data['install_create_database']      = $createDB;
         $data['language']    = $install_language;
         // Gots to ask confirmation
@@ -347,13 +351,12 @@ function installer_admin_phase5()
         if ($dbExists) {
             if (!$dbconn->Execute('DROP DATABASE ' . $dbName)) return;
         }
-        if(!$dbconn->Execute(xarDBCreateDatabase($dbName,$dbType))) {
+        if(!$dbconn->Execute(xarDBCreateDatabase($dbName,$dbType,$dbCharset))) {
           //if (!xarInstallAPIFunc('createdb', $config_args)) {
           $msg = xarML('Could not create database (#(1)). Check if you already have a database by that name and remove it.', $dbName);
           throw new Exception($msg);
         }
-    }
-    else {
+    } else {
         $removetables = true;
     }
 
@@ -398,7 +401,6 @@ function installer_admin_phase5()
             throw $e;
         }
     }
-
     // install the security stuff here, but disable the registerMask and
     // and xarSecurityCheck functions until we've finished the installation process
     sys::import('xaraya.security');

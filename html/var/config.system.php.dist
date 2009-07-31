@@ -11,6 +11,8 @@ $systemConfiguration['DB.Host'] = 'localhost';
 $systemConfiguration['DB.Name'] = 'Xaraya';
 // Database Type: the type of the database server.
 $systemConfiguration['DB.Type'] = 'mysql';
+// Database Charset: the charset of the database.
+$systemConfiguration['DB.Charset'] = 'utf8';
 // Database TablePrefix: a string that will be prefixed to every database tables that are part of the core.
 //                       Those tables are shared across multi-sites.
 $systemConfiguration['DB.TablePrefix'] = 'xar';

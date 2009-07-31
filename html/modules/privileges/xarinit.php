@@ -35,6 +35,7 @@ function privileges_init()
 
     // All or nothing
     try {
+        $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         $dbconn->begin();
 
         // Create tables
@@ -60,7 +61,8 @@ function privileges_init()
                                             'unsigned'     => true,      'increment'   => true,
                                             'primary_key' => true),
                         'name' => array('type'        => 'varchar','size'        => 254,
-                                            'null'        => false,));
+                                            'null'        => false,
+                                            'charset' => $charset));
         $query = xarDBCreateTable($tables['security_realms'],$fields);
         $dbconn->Execute($query);
 
@@ -82,13 +84,13 @@ function privileges_init()
 
         $fields = array(
                         'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-                        'name'  => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                        'name'  => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
                         'realm_id'=>array('type' => 'integer', 'unsigned' => true, 'null' => true),
                         'module_id'=>array('type' => 'integer', 'unsigned' => true, 'null' => true),
-                        'component' => array('type'  => 'varchar', 'size' => 64, 'null' => false),
-                        'instance' => array('type'   => 'varchar', 'size' => 254, 'null' => false),
+                        'component' => array('type'  => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+                        'instance' => array('type'   => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset),
                         'level' => array('type'      => 'integer', 'unsigned' => true, 'null' => false,'default' => '0'),
-                        'description' => array('type'=> 'varchar', 'size' => 254, 'null' => false),
+                        'description' => array('type'=> 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset),
                         'itemtype' => array('type'=> 'integer', 'unsigned' => true, 'null' => false));
         $query = xarDBCreateTable($tables['privileges'],$fields);
         $dbconn->Execute($query);
@@ -206,20 +208,24 @@ function privileges_init()
                                                              'null'        => true),
                                         'component' => array('type'   => 'varchar',
                                                                  'size'        => 254,
-                                                                 'null'        => false),
+                                                                 'null'        => false,
+                                                                 'charset' => $charset),
                                         'header' => array('type'   => 'varchar',
                                                               'size'        => 254,
-                                                              'null'        => false),
+                                                              'null'        => false,
+                                                              'charset' => $charset),
                                         'query' => array('type'   => 'varchar',
                                                              'size'        => 254,
-                                                             'null'        => false),
+                                                             'null'        => false,
+                                                             'charset' => $charset),
                                         'ddlimit' => array('type'  => 'integer',
                                                              'unsigned'    => true,
                                                              'null'        => false,
                                                              'default'     => '0'),
                                         'description' => array('type'=> 'varchar',
                                                                    'size'        => 254,
-                                                                   'null'        => false)));
+                                                                   'null'        => false,
+                                                                   'charset' => $charset)));
 
         $dbconn->Execute($query);
 

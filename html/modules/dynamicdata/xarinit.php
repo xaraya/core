@@ -36,6 +36,7 @@ function dynamicdata_init()
 
     // Create tables inside a transaction
     try {
+        $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         $dbconn->begin();
         /**
          * DataObjects table
@@ -53,12 +54,14 @@ function dynamicdata_init()
                 'type'        => 'varchar',
                 'size'        => 64,
                 'null'        => false,
+                'charset'     => $charset,
             ),
             /* the label used for display */
             'label'    => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
+                'charset'     => $charset,
             ),
             /* the module this object relates to */
             'module_id' => array(
@@ -85,21 +88,24 @@ function dynamicdata_init()
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
-                'default'     => 'DataObject'
+                'default'     => 'DataObject',
+                'charset'     => $charset,
             ),
             /* the location where the class file lives*/
             'filepath'     => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
-                'default'     => 'modules/dynamicdata/class/objects/base.php'
+                'default'     => 'modules/dynamicdata/class/objects/base.php',
+                'charset'     => $charset,
             ),
             /* the URL parameter used to pass on the item id to the original module */
             'urlparam' => array(
                 'type'        => 'varchar',
                 'size'        => 30,
                 'null'        => false,
-                'default'     => 'itemid'
+                'default'     => 'itemid',
+                'charset'     => $charset,
             ),
             /* the highest item id for this object (used if the object has a dynamic item id field) */
             'maxid'    => array(
@@ -110,7 +116,8 @@ function dynamicdata_init()
             ),
             /* any configuration settings for this object */
             'config'   => array(
-                'type'=>'text'
+                'type'=>'text',
+                'charset'     => $charset,
             ),
             /* use the name of this object as alias for short URLs */
             'isalias'  => array(
@@ -190,13 +197,15 @@ function dynamicdata_init()
             'name'       => array(
                 'type'        => 'varchar',
                 'size'        => 64,
-                'null'        => false
+                'null'        => false,
+                'charset'     => $charset,
             ),
             /* the label used for display */
             'label'      => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
+                'charset'     => $charset,
             ),
             /* the object this property belong to */
             'object_id'   => array(
@@ -215,14 +224,16 @@ function dynamicdata_init()
             'defaultvalue'    => array(
                 'type'        => 'varchar',
                 'size'        => 254,
-                'default'     => null
+                'default'     => null,
+                'charset'     => $charset,
             ),
             /* the data source for this property (dynamic data, static table, hook, user function, LDAP (?), file, ... */
             'source'     => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
-                'default'     => 'dynamic_data'
+                'default'     => 'dynamic_data',
+                'charset'     => $charset,
             ),
             /* is this property active ? (unused at the moment) */
             'status'     => array(
@@ -241,7 +252,8 @@ function dynamicdata_init()
             ),
             /* specific configuration rules for this property (e.g. basedir, size, ...) */
             'configuration' => array(
-                'type'        => 'text'
+                'type'        => 'text',
+                'charset'     => $charset,
             )
         );
 
@@ -335,7 +347,8 @@ function dynamicdata_init()
             'value'    => array(
                 'type'        => 'text', // or blob when storing binary data (but not for PostgreSQL - see bug 1324)
                 'size'        => 'medium',
-                'null'        => 'false'
+                'null'        => 'false',
+                'charset'     => $charset,
             )
         );
 
@@ -379,13 +392,15 @@ function dynamicdata_init()
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
-                'default'     => ''
+                'default'     => '',
+                'charset'     => $charset,
             ),
             'description'     => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
-                'default'     => ''
+                'default'     => '',
+                'charset'     => $charset,
             ),
             'property_id'     => array(
                 'type'        => 'integer',
@@ -397,7 +412,8 @@ function dynamicdata_init()
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
-                'default'     => ''
+                'default'     => '',
+                'charset'     => $charset,
             ),
             'ignore_empty'     => array(
                 'type'        => 'boolean',
@@ -406,7 +422,8 @@ function dynamicdata_init()
             'configuration'   => array(
                 'type'        => 'text',
                 'size'        => 'medium',
-                'null'        => 'false'
+                'null'        => 'false',
+                'charset'     => $charset,
             )
         );
         $query = xarDBCreateTable($dynamic_configurations,$configfields);
@@ -535,6 +552,7 @@ function dynamicdata_createPropDefTable()
     $xartable = xarDB::getTables();
     $prefix = xarDB::getPrefix();
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
+    $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
 
     $propdefs = array(
         'id'     => array(
@@ -548,43 +566,50 @@ function dynamicdata_createPropDefTable()
         'name'   => array(
             'type'        => 'varchar',
             'size'        => 64,
-            'default'     => null
+            'default'     => null,
+            'charset'     => $charset,
         ),
         /* the label of this property */
         'label'  => array(
             'type'        => 'varchar',
             'size'        => 254,
-            'default'     => null
+            'default'     => null,
+            'charset'     => $charset,
         ),
         /* path to the file defining this property */
         'filepath' => array(
             'type'          => 'varchar',
             'size'          => 254,
-            'default'       => null
+            'default'       => null,
+            'charset'     => $charset,
         ),
         /* name of the Class to be instantiated for this property */
         'class'  => array(
             'type'        => 'varchar',
             'size'        => 254,
-            'default'     => null
+            'default'     => null,
+            'charset'     => $charset,
         ),
         /* the default configuration string for this property - no need to use text here... */
         'configuration'   => array(
             'type'              => 'varchar',
             'size'              => 254,
-            'default'           => null
+            'default'           => null,
+            'charset'     => $charset,
         ),
         /* the source of this property */
         'source'   => array(
             'type'        => 'varchar',
             'size'        => 254,
-            'default'     => null
+            'default'     => null,
+            'charset'     => $charset,
         ),
         /* the semi-colon seperated list of file required to be present before this property is active */
         'reqfiles'   => array(
             'type'        => 'varchar',
             'size'        => 254,
-            'default'     => null
+            'default'     => null,
+            'charset'     => $charset,
         ),
         /* the ID of the module owning this property */
         'modid'  => array(
@@ -596,13 +621,15 @@ function dynamicdata_createPropDefTable()
         'args'    => array(
             'type'        => 'text',
             'size'        => 'medium',
-            'null'        => false
+            'null'        => false,
+            'charset'     => $charset,
         ),
         /* the aliases for this property -- serialized array */
         'aliases'   => array(
             'type'        => 'varchar',
             'size'        => 254,
-            'default'     => null
+            'default'     => null,
+            'charset'     => $charset,
         ),
         /*  */
         'format'   => array(
