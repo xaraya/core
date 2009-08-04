@@ -43,7 +43,7 @@
     <urlparam>itemid</urlparam>
     <maxid>0</maxid>
     <config></config>
-    <isalias>1</isalias>
+    <isalias>true</isalias>
     <properties>
         <xsl:apply-templates mode="xarobject" select="structure/field" />
     </properties>
