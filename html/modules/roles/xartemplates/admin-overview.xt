@@ -59,9 +59,6 @@
             <li>
                 <strong>Users:</strong>&#160;a group that normally holds registered users of the site. N.B.: this role does not come preconfigured with any privileges. <em>Its members will not have access to the site until you assign some privileges.</em>
             </li>
-            <li>
-                <strong>Myself:</strong>&#160;a special role that enables you to create privileges that will apply to the current user's content. For example if you create an "Edit" privilege with the Myself role as the author/creator, then users who have that privilege will be able to edit only their own content.
-            </li>
         </ul>
         <p>
             To reduce the risk of inadvertent damage Xaraya places constraints on how preconfigured roles can be changed or removed. However, you can define as many more roles in the tree as you wish in whatever configuration you choose.

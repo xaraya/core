@@ -229,12 +229,6 @@ function roles_activate()
     $adminid = $user->createItem($rolefields);
     xarModVars::set('roles', 'admin', $adminid);
 
-    // The Myself user
-    $rolefields['name'] = 'Myself';
-    $rolefields['uname'] = 'myself';
-    $rolefields['parentid'] = $topid;
-    $user->createItem($rolefields);
-
     // Installation complete; check for upgrades
     return roles_upgrade('2.0.0');
 }

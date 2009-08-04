@@ -54,12 +54,6 @@ function roles_userapi_countall($args)
         $query .= " AND id != ?";
         $bindvars[] =  (int) $thisrole['id'];
     }
-    if (isset($include_myself) && !$include_myself) {
-
-        $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'myself'));
-        $query .= " AND id != ?";
-        $bindvars[] = (int) $thisrole['id'];
-    }
 
     $query .= " AND itemtype = ?";
     $bindvars[] = ROLES_USERTYPE;

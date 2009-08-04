@@ -914,7 +914,6 @@ function installer_admin_confirm_configuration()
 
         xarRegisterPrivilege('Administration','All','All','All','All','ACCESS_ADMIN',xarML('Admin access to all modules'));
         xarRegisterPrivilege('GeneralLock','All',null,'All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
-        xarRegisterPrivilege('LockMyself','All','roles','Roles','Myself','ACCESS_NONE',xarML('Deny access to Myself role'));
         xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody','ACCESS_NONE',xarML('Deny access to Everybody role'));
         xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous','ACCESS_NONE',xarML('Deny access to Anonymous role'));
         xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators','ACCESS_NONE',xarML('Deny access to Administrators role'));
@@ -927,7 +926,6 @@ function installer_admin_confirm_configuration()
         * xarMakePrivilegeMember(Child,Parent)
         *********************************************************************/
 
-        xarMakePrivilegeMember('LockMyself','GeneralLock');
         xarMakePrivilegeMember('LockEverybody','GeneralLock');
         xarMakePrivilegeMember('LockAnonymous','GeneralLock');
         xarMakePrivilegeMember('LockAdministrators','GeneralLock');
