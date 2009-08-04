@@ -214,11 +214,12 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // Optionals dealt with, do the rest inline
         $systemArgs = array('userName' => $userName,
                             'password' => $password,
-                            'databaseHost' => xarSystemVars::get(sys::CONFIG, 'DB.Host'),
-                            'databaseType' => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
-                            'databaseName' => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
-                            'persistent' => $persistent,
-                            'prefix' => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
+                            'databaseHost'    => xarSystemVars::get(sys::CONFIG, 'DB.Host'),
+                            'databaseType'    => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
+                            'databaseName'    => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
+                            'databaseCharset' => xarSystemVars::get(sys::CONFIG, 'DB.Charset'),
+                            'persistent'      => $persistent,
+                            'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
         // Connect to database
         xarDB_init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_DATABASE;

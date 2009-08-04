@@ -287,13 +287,14 @@ function installer_admin_phase5()
     //  Write the config
     xarInstallAPIFunc('modifyconfig', $config_args);
 
-    $init_args =  array('userName'     => $dbUname,
-                        'password'     => $dbPass,
-                        'databaseHost' => $dbHost,
-                        'databaseType' => $dbType,
-                        'databaseName' => $dbName,
-                        'prefix'       => $dbPrefix,
-                        'doConnect'    => false);
+    $init_args =  array('userName'           => $dbUname,
+                        'password'           => $dbPass,
+                        'databaseHost'       => $dbHost,
+                        'databaseType'       => $dbType,
+                        'databaseName'       => $dbName,
+                        'databaseCharset'    => $dbCharset,
+                        'prefix'             => $dbPrefix,
+                        'doConnect'          => false);
 
     sys::import('xaraya.database');
     xarDB_Init($init_args);
@@ -361,12 +362,13 @@ function installer_admin_phase5()
     }
 
     // Re-init with the new values and connect
-    $systemArgs = array('userName' => $dbUname,
-                        'password' => $dbPass,
-                        'databaseHost' => $dbHost,
-                        'databaseType' => $dbType,
-                        'databaseName' => $dbName,
-                        'prefix' => $dbPrefix);
+    $systemArgs = array('userName'           => $dbUname,
+                        'password'           => $dbPass,
+                        'databaseHost'       => $dbHost,
+                        'databaseType'       => $dbType,
+                        'databaseName'       => $dbName,
+                        'databaseCharset'    => $dbCharset,
+                        'prefix'             => $dbPrefix);
     // Connect to database
     xarDB_init($systemArgs);
 
