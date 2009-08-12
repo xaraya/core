@@ -26,7 +26,7 @@ class CheckboxProperty extends DataProperty
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'checkbox';
-        $this->filepath  = 'modules/base/xarproperties';
+        $this->filepath   = 'modules/base/xarproperties';
     }
 
     public function checkInput($name = '', $value = null)
@@ -42,10 +42,11 @@ class CheckboxProperty extends DataProperty
 
     public function validateValue($value = null)
     {
+    // TODO: allow different values here, and verify $checked ?
         if (!empty($value)) {
-            $this->value = true;
+            $this->value = 1;
         } else {
-            $this->value = false;
+            $this->value = 0;
         }
         return true;
     }
@@ -57,11 +58,6 @@ class CheckboxProperty extends DataProperty
         $data['checked']  = ((isset($data['value']) && $data['value']) || (isset($data['checked']) && $data['checked'])) ? true : false;
         if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
         return parent::showInput($data);
-    }
-
-    public function castType($value=null)
-    {
-        return ord($value) ? true : false;
     }
 }
 ?>
