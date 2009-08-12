@@ -85,11 +85,11 @@ function modules_adminapi_getlist($args)
     $whereClauses = array(); $bindvars = array();
     if (isset($filter['UserCapable'])) {
         $whereClauses[] = 'mods.user_capable = ?';
-        $bindvars[] = $filter['UserCapable'];
+        $bindvars[] = (bool)$filter['UserCapable'];
     }
     if (isset($filter['AdminCapable'])) {
         $whereClauses[] = 'mods.admin_capable = ?';
-        $bindvars[] = $filter['AdminCapable'];
+        $bindvars[] = (bool)$filter['AdminCapable'];
     }
     if (isset($filter['Class'])) {
         $whereClauses[] = 'mods.class = ?';
