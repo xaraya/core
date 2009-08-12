@@ -47,10 +47,6 @@ function dynamicdata_utilapi_export($args)
         return;
     }
 
-    // get the boolean validation object for validations below
-    sys::import('xaraya.validations');
-    $boolean = ValueValidations::get('bool');
-
     // get the list of properties for a Dynamic Object
     $object_properties = DataPropertyMaster::getProperties(array('objectid' => 1));
 
