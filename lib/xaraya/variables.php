@@ -412,11 +412,15 @@ function xarVarPrepForDisplay()
     // stopgap for now. we need to agree on a naming convention for the charsets that won't confuse the hell out of everyone
     $charset = $charset == 'utf8' ? 'utf-8' : $charset;
     foreach (func_get_args() as $var) {
-        // Prepare var
-        try {
-            $var = htmlspecialchars($var, ENT_COMPAT, $charset);
-        } catch (Exception $e) {
-            $var = htmlspecialchars($var);
+        if (is_bool($var)) {
+            $var = $var ? 'true' : 'false';
+        } else {
+            // Prepare var
+            try {
+                $var = htmlspecialchars($var, ENT_COMPAT, $charset);
+            } catch (Exception $e) {
+                $var = htmlspecialchars($var);
+            }
         }
         // Add to array
         array_push($resarray, $var);

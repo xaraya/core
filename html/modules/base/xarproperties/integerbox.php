@@ -83,9 +83,10 @@ class NumberBoxProperty extends TextBoxProperty
         return true;
     }
 
-    public function castType($value = null)
+    public function castType($value=null)
     {
-        if (!is_null($value)) return (int) $value;
+        if (!is_null($value)) return (int)$value;
+        return 0;
     }
 }
 ?>
