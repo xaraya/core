@@ -189,23 +189,23 @@
                </fieldset>
                <fieldset>
                     <legend>General Display Options</legend>
-                    <div class="xar-form-input-wrapper-after">
+                    <div class="xar-form-input-wrapper">
+                        <label for="shorturl" title="#xarML('Enable short url support throughout Xaraya.')#" class="xar-form-label">
+                            Enable Short URL Support
+                        </label>
                         <xar:set name="checked">
                             <xar:var scope="config" name="Site.Core.EnableShortURLsSupport" />
                         </xar:set>
                         <xar:data-input type="checkbox" name="shorturl" id="shorturl" checked="$checked" />
-                        <label for="shorturl" title="#xarML('Enable short url support throughout Xaraya.')#">
-                            Enable Short URL Support
-                        </label>
                     </div>
-                    <div class="xar-form-input-wrapper-after">
+                    <div class="xar-form-input-wrapper">
+                        <label for="htmlenitites" title="#xarML('Change HTML Entities to readible entities.')#" class="xar-form-label">
+                            Fix HTML Entities
+                        </label>
                         <xar:set name="checked">
                             <xar:var scope="config" name="Site.Core.FixHTMLEntities" />
                         </xar:set>
                         <xar:data-input type="checkbox" name="htmlenitites" id="htmlenitites" checked="$checked" />
-                        <label for="htmlenitites" title="#xarML('Change HTML Entities to readible entities.')#">
-                            Fix HTML Entities
-                        </label>
                     </div>
                 </fieldset>
                 <xar:template file="display" module="base" subdata="array('modulename' => 'base')" />
