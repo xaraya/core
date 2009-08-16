@@ -20,7 +20,7 @@
                 <div class="xar-form-input-wrapper">
                     <label for="ptype" title="#xarML('Type of Role')#" class="xar-form-label">
                     Type:</label>
-                    <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() ."';this.form.submit();"</xar:set>
+                    <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"</xar:set>
                     <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1" />
                 </div>
                 <xar:data-form object="$object" />
