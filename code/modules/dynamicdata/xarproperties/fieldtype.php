@@ -28,7 +28,6 @@ class FieldTypeProperty extends ObjectRefProperty
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
-//        $this->initialization_refobject    = 'properties';
         $this->initialization_store_prop   = 'id';
         $this->initialization_display_prop = 'label';
     }

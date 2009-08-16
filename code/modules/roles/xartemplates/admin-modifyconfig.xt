@@ -103,11 +103,15 @@
                 <fieldset>
                     <legend>Default Authentication &amp; Registration Modules</legend>
                     <div class="xar-form-input-wrapper">
-                        <label for="defaultauthmodule" title="#xarML('Select the module that manages authentication of users')#" class="xar-form-label">Authentication:</label>
+                        <label for="defaultauthmodule" title="#xarML('Select the module that manages authentication of users')#" class="xar-form-label">
+                            Authentication:
+                        </label>
                         <xar:data-input type="module" name="defaultauthmodule" class="Authentication" value="$defaultauthmod" validation="name" firstline="Choose a module" />
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="defaultregmodule" title="#xarML('Select the module that manages registration of users')#" class="xar-form-label">Registration:</label>
+                        <label for="defaultregmodule" title="#xarML('Select the module that manages registration of users')#" class="xar-form-label">
+                            Registration:
+                        </label>
                         <xar:data-input type="module" name="defaultregmodule" class="Registration" value="$defaultregmod" validation="name" firstline="Choose a module" />
                     </div>
                 </fieldset>
@@ -280,58 +284,57 @@
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Member Options</legend>
-                    <div class="xar-form-input-wrapper-after">
+                    <div class="xar-form-input-wrapper">
+                        <label for="searchbyemail" title="#xarML('Allow user search by email address')#" class="xar-form-label">
+                            <strong>Allow Searching By Email</strong>
+                        </label>
                         <xar:set name="checked">
                             <xar:var scope="module" module="roles" name="searchbyemail" />
                         </xar:set>
                         <xar:data-input type="checkbox" name="searchbyemail" checked="$checked" />
-                        <label for="searchbyemail"
-                        title="#xarML('Allow user search by email address')#">
-                            <strong>Allow Searching By Email</strong>
-                        </label>
                     </div>
                     <p class="xar-form-container-after">CAUTION: this may reveal enough information
                     to compromise a user's login.</p>
-                    <div class="xar-form-input-wrapper-after">
+                    <div class="xar-form-input-wrapper">
+                        <label for="allowemail" title="#xarML('Allow users to send emails?')#" class="xar-form-label">
+                            <strong>Allow User Email Page?</strong>
+                        </label>
                         <xar:set name="checked">
                             <xar:var scope="module" module="roles" name="allowemail" />
                         </xar:set>
                         <xar:data-input type="checkbox" name="allowemail" id="allowemail" checked="$checked" />
-                        <label for="allowemail" title="#xarML('Allow users to send emails?')#">
-                            <strong>Allow User Email Page?</strong>
-                        </label>
                     </div>
                     <p class="xar-form-container-after">Allows members to send an email via a form
                     to other users. Users must switch this option on in their own account.</p>
-                    <div class="xar-form-input-wrapper-after xar-padding-thicktop">
+                    <div class="xar-form-input-wrapper xar-padding-thicktop">
+                        <label for="usereditaccount" title="#xarML('Allow users to edit their account details')#" class="xar-form-label">
+                            <strong>Allow users to edit their member account details</strong>
+                        </label>
                         <xar:set name="checked">
                             <xar:var scope="module" module="roles" name="usereditaccount" />
                         </xar:set>
                         <xar:data-input type="checkbox" name="usereditaccount" id="usereditaccount" checked="$checked" />
-                        <label for="usereditaccount" title="#xarML('Allow users to edit their account details')#">
-                            <strong>Allow users to edit their member account details</strong>
-                        </label>
                     </div>
                     <p class="xar-form-input-wrapper-after">This toggles the Roles hook to the
                     Roles module.</p>
-                    <div class="xar-form-input-wrapper-after xar-padding-thicktop">
+                    <div class="xar-form-input-wrapper xar-padding-thicktop">
+                        <label for="requirevalidation" title="#xarML('Require users to revalidate when they change email address?')#" class="xar-form-label">
+                            <strong>Members must validate if they change their email
+                            account?</strong>
+                        </label>
                         <xar:set name="checked">
                             <xar:var scope="module" module="roles" name="requirevalidation" />
                         </xar:set>
                         <xar:data-input type="checkbox" name="requirevalidation" id="requirevalidation" checked="$checked" />
-                        <label for="requirevalidation" title="#xarML('Require users to revalidate when they change email address?')#">
-                            <strong>Members must validate if they change their email
-                            account?</strong>
-                        </label>
                     </div>
-                    <div class="xar-form-input-wrapper-after xar-padding-thicktop">
+                    <div class="xar-form-input-wrapper xar-padding-thicktop" style="clear: both">
+                        <label for="displayrolelist" title="#xarML('Display roles (memberlist) in user menu?')#" class="xar-form-label">
+                            <strong>Display member list as Roles menu option?</strong>
+                        </label>
                         <xar:set name="checked">
                             <xar:var scope="module" module="roles" name="displayrolelist" />
                         </xar:set>
                         <xar:data-input type="checkbox" name="displayrolelist" id="displayrolelist" checked="$checked" />
-                        <label for="displayrolelist" title="#xarML('Display roles (memberlist) in user menu?')#">
-                            <strong>Display member list as Roles menu option?</strong>
-                        </label>
                     </div>
                     <p class="xar-form-container-after xar-padding-bottomthick">NOTE: This is a
                     convenience option. The members list is available regardless of its inclusion

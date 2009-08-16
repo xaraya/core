@@ -33,6 +33,7 @@ function modules_init()
     // Create tables
     // This should either go, or fail competely
     try {
+        $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         $dbconn->begin();
         /**
          * Here we create all the tables for the module system
@@ -59,12 +60,12 @@ function modules_init()
          */
         $fields = array(
                         'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-                        'name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                        'name' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
                         'regid' => array('type' => 'integer', 'unsigned'=>true, 'null' => false),
-                        'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
-                        'class' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'category' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                        'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+                        'version' => array('type' => 'varchar', 'size' => 10, 'null' => false, 'charset' => $charset),
+                        'class' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+                        'category' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
                         'admin_capable' => array('type' => 'boolean', 'default' => false),
                         'user_capable' => array('type' => 'boolean', 'default' => false),
                         'state' => array('type' => 'integer', 'size' => 'tiny','unsigned'=>true, 'null' => false, 'default' => '1')
@@ -108,7 +109,7 @@ function modules_init()
         $fields = array(
                         'module_var_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'primary_key' => true),
                         'item_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'unsigned' => true, 'primary_key' => true),
-                        'value' => array('type' => 'text', 'size' => 'long')
+                        'value' => array('type' => 'text', 'size' => 'long', 'charset' => $charset)
                         );
 
         // Create the module itemvars table
@@ -132,15 +133,15 @@ function modules_init()
          */
         $fields = array(
                         'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-                        'object'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'action'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                        'object'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+                        'action'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
                         's_module_id' => array('type' => 'integer', 'unsigned' => true, 'null' => true, 'default' => null),
                         // TODO: switch to integer for itemtype (see also xarMod.php)
-                        's_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        't_area'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                        's_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+                        't_area'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
                         't_module_id'  => array('type' => 'integer','unsigned' => true, 'null' => false),
-                        't_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        't_func'      => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                        't_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+                        't_func'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
                         'priority'       => array('type' => 'integer', 'size' => 'tiny', 'unsigned' => true, 'null' => false, 'default' => '0')
                     );
         // TODO: no indexes?

@@ -127,8 +127,7 @@ function roles_user_search()
 
     $data['total'] = xarModAPIFunc('roles', 'user', 'countall',
                              array('selection'         => $selection,
-                                   'include_anonymous' => false,
-                                   'include_myself'    => false));
+                                   'include_anonymous' => false));
 
     if (!$data['total']){
         if (count($data['users']) == 0){
@@ -144,7 +143,6 @@ function roles_user_search()
                             array('startnum'          => $startnum,
                                   'selection'         => $selection,
                                   'include_anonymous' => false,
-                                  'include_myself'    => false,
                                   'numitems'          => xarModVars::get('roles', 'itemsperpage')));
 
     // combine search results with DD

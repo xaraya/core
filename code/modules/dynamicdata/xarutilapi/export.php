@@ -70,13 +70,7 @@ function dynamicdata_utilapi_export($args)
                 }
                 $xml .= "  </$name>\n";
             } else {
-                // Treat parent fields where module is DD differently
-                if (($name == 'parent') && ($myobject->moduleid == 182)) {
-                    $info = DataObjectMaster::getObjectInfo(array('module_id' => 182, 'itemtype' => $myobject->properties[$name]->value));
-                    $value = $info['name'];
-                } else {
-                    $value = $myobject->properties[$name]->value;
-                }
+                $value = $myobject->properties[$name]->value;
                 $xml .= "  <$name>" . xarVarPrepForDisplay($value) . "</$name>\n";
             }
         }

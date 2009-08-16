@@ -91,14 +91,14 @@ function blocks_adminapi_create_instance($args)
     // Insert defaults for block caching (based on block init array)
     if (!empty($initresult) && is_array($initresult) && !empty($xartable['cache_blocks'])) {
         if (!empty($initresult['nocache'])) {
-            $nocache = 1;
+            $nocache = true;
         } else {
-            $nocache = 0;
+            $nocache = false;
         }
         if (!empty($initresult['pageshared']) && is_numeric($initresult['pageshared'])) {
-            $pageshared = (int) $initresult['pageshared'];
+            $pageshared = (bool) $initresult['pageshared'];
         } else {
-            $pageshared = 0;
+            $pageshared = false;
         }
         if (!empty($initresult['usershared']) && is_numeric($initresult['usershared'])) {
             $usershared = (int) $initresult['usershared'];

@@ -46,12 +46,13 @@ function themes_init()
      *   PRIMARY KEY  (id)
      * )
      */
+    $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
     $fields = array(
         'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-        'name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+        'name' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
         'regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
-        'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
+        'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+        'version' => array('type' => 'varchar', 'size' => 10, 'null' => false, 'charset' => $charset),
         'state' => array('type' => 'integer', 'size' => 'tiny', 'unsigned'=> true, 'null' => false, 'default' => '1')
         );
 

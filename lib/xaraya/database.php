@@ -63,7 +63,8 @@ function &xarDBNewConn(array $args = null)
                  'hostspec'  => $args['databaseHost'],
                  'username'  => $args['userName'],
                  'password'  => $args['password'],
-                 'database'  => $args['databaseName']);
+                 'database'  => $args['databaseName'],
+                 'encoding'  => $args['databaseCharset']);
     // Set flags
     $flags = 0;
     $persistent = !empty($args['persistent']) ? true : false;

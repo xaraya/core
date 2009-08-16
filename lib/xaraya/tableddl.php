@@ -41,7 +41,7 @@
  * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
-function xarDBCreateDatabase($databaseName, $databaseType = NULL)
+function xarDBCreateDatabase($databaseName, $databaseType=NULL, $databaseCharset='utf-8')
 {
     // perform validations on input arguments
     if (empty($databaseName)) throw new EmptyParameterException('databaseName');
@@ -53,10 +53,10 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
         case 'mysql':
         case 'oci8':
         case 'oci8po':
-            $sql = 'CREATE DATABASE '.$databaseName;
+            $sql = 'CREATE DATABASE '. $databaseName . ' DEFAULT CHARACTER SET ' . $databaseCharset;
             break;
         case 'postgres':
-            $sql = 'CREATE DATABASE "'.$databaseName .'"';
+            $sql = 'CREATE DATABASE "'.$databaseName .'" ENCODING "' . $databaseCharset . '"';
             break;
         case 'sqlite':
         case 'pdosqlite':
@@ -95,7 +95,7 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
  * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
-function xarDBCreateTable($tableName, $fields, $databaseType="")
+function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
 {
     // perform validations on input arguments
     if (empty($tableName)) throw new EmptyParameterException('tableName');
@@ -103,31 +103,32 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
     if (empty($databaseType)) {
         $databaseType = xarDB::getType();
     }
+    if (empty($charset)) $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
 
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
             sys::import('xaraya.tableddl.mysql');
-            $sql = xarDB__mysqlCreateTable($tableName, $fields);
+            $sql = xarDB__mysqlCreateTable($tableName, $fields, $charset);
             break;
         case 'postgres':
             sys::import('xaraya.tableddl.postgres');
-            $sql = xarDB__postgresqlCreateTable($tableName, $fields);
+            $sql = xarDB__postgresqlCreateTable($tableName, $fields, $charset);
             break;
         case 'oci8':
         case 'oci8po':
             sys::import('xaraya.tableddl.oracle');
-            $sql = xarDB__oracleCreateTable($tableName, $fields);
+            $sql = xarDB__oracleCreateTable($tableName, $fields, $charset);
             break;
         case 'sqlite':
         case 'pdosqlite':
             sys::import('xaraya.tableddl.sqlite');
-            $sql = xarDB__sqliteCreateTable($tableName, $fields);
+            $sql = xarDB__sqliteCreateTable($tableName, $fields, $charset);
             break;
         case 'mssql':
         case 'datadict':
             sys::import('xaraya.tableddl.datadict');
-            $sql = xarDB__datadictCreateTable($tableName, $fields);
+            $sql = xarDB__datadictCreateTable($tableName, $fields, $charset);
             break;
         // Other DBs go here
         default:

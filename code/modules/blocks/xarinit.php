@@ -24,19 +24,21 @@ function blocks_init()
 
     // Create tables inside a transaction
     try {
+        $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         $dbconn->begin();
         
         // prototypes
         $id_type       = array('type'=>'integer', 'unsigned'=>true, 'null'=>false, 'increment'=>true, 'primary_key'=>true);
         $idref_type    = array('type'=>'integer', 'unsigned'=>true, 'null'=>false);
-        $template_type = array('type'=>'varchar', 'size'=>254, 'null'=>true, 'default'=>null);
+        $template_type = array('type'=>'varchar', 'size'=>254, 'null'=>true, 'default'=>null, 'charset' => $charset);
         
         // *_block_groups
         $query = xarDBCreateTable($prefix . '_block_groups',
                                   array('id'          => $id_type,
                                         'name'        => array('type'        => 'varchar',
                                                                    'size'        => 64,
-                                                                   'null'        => false),
+                                                                   'null'        => false,
+                                                                   'charset' => $charset),
                                         'template'    => $template_type));
         $dbconn->Execute($query);
 
@@ -53,13 +55,16 @@ function blocks_init()
                                         'name'       => array('type'        => 'varchar',
                                                                   'size'        => 64,
                                                                   'null'        => false,
-                                                                  'default'     => NULL),
+                                                                  'default'     => NULL,
+                                                                  'charset' => $charset),
                                         'title'       => array('type'        => 'varchar',
                                                                    'size'        => 254,
                                                                    'null'        => true,
-                                                                   'default'     => NULL),
+                                                                   'default'     => NULL,
+                                                                   'charset' => $charset),
                                         'content'     => array('type'        => 'text',
-                                                                   'null'        => false),
+                                                                   'null'        => false,
+                                                                   'charset' => $charset),
                                         'template'    => $template_type,
                                         'state'       => array('type'        => 'integer',
                                                                    'size'        => 'tiny',
@@ -95,11 +100,12 @@ function blocks_init()
                                                             'type'          => 'varchar',
                                                             'size'          => 64,
                                                             'null'          => false,
-                                                            ),
+                                                            'charset'       => $charset),
                                         'module_id' => $idref_type,
                                         'info' => array(
                                                             'type'          => 'text',
-                                                            'null'          => true
+                                                            'null'          => true,
+                                                            'charset'       => $charset
                                                             )
                                         )
                                   );

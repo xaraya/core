@@ -51,10 +51,10 @@
         <h3>Support</h3>
         <p>In addition to the support is available on the xaraya website, further help can be found at:</p>
         <ul>
-            <li>Forums - <a href="http://xaraya.com/index.php/xarbb">http://xaraya.com/index.php/xarbb</a></li>
-            <li>IRC - irc.xaraya.com, in the #support channel. Also accessible through <a href="http://xaraya.com/index.php/chat">http://xaraya.com/index.php/chat</a></li>
+            <li>Forums - <a href="http://xaraya.com/index.php/xarbb" target="_blank">http://xaraya.com/index.php/xarbb</a></li>
+            <li>IRC - irc.xaraya.com, in the #support channel. Also accessible through <a href="http://xaraya.com/index.php/chat" target="_blank">http://xaraya.com/index.php/chat</a></li>
             <li>Newsgroup - news.xaraya.com</li>
-            <li>Email - <a href="http://xaraya.com/index.php/sitecontact">http://xaraya.com/index.php/sitecontact</a></li>
+            <li>Email - <a href="http://xaraya.com/index.php/sitecontact" target="_blank">http://xaraya.com/index.php/sitecontact</a></li>
         </ul>
         <p>If you enjoy Xaraya and want to show your support, you can contact us by any of the above mentioned methods.</p>
         
@@ -62,11 +62,11 @@
         <!--
         <p>Modules and themes can be downloaded from the Xaraya Monotone repository.</p>
         <ul>
-            <li>Modules - <a href="http://mt.xaraya.com/download/nightly/modules">http://mt.xaraya.com/download/nightly/modules</a></li>
-            <li>Themes - <a href="http://mt.xaraya.com/download/nightly/themes">http://mt.xaraya.com/download/nightly/themes</a></li>
+            <li>Modules - <a href="http://mt.xaraya.com/download/nightly/modules" target="_blank">http://mt.xaraya.com/download/nightly/modules</a></li>
+            <li>Themes - <a href="http://mt.xaraya.com/download/nightly/themes" target="_blank">http://mt.xaraya.com/download/nightly/themes</a></li>
         </ul>
          -->       
-        <p>Bugs can be reported to <a href="http://bugs.xaraya.com/">http://bugs.xaraya.com/</a></p>
+        <p>Bugs can be reported to <a href="http://bugs.xaraya.com/" target="_blank">http://bugs.xaraya.com/</a></p>
         </div>
         
         <div id="page-2" style="display: none">

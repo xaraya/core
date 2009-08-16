@@ -41,6 +41,7 @@ function installer_adminapi_modifyconfig($args)
     $config_php = preg_replace('/\[\'DB.Password\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Password'] = '$dbPass';", $config_php);
     $config_php = preg_replace('/\[\'DB.Name\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Name'] = '$dbName';", $config_php);
     $config_php = preg_replace('/\[\'DB.TablePrefix\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.TablePrefix'] = '$dbPrefix';", $config_php);
+    $config_php = preg_replace('/\[\'DB.Charset\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Charset'] = '$dbCharset';", $config_php);
     //$config_php = preg_replace('/\[\'DB.Encoded\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Encoded'] = '1';", $config_php);
 
     $fp = fopen ($systemConfigFile, 'wb');
@@ -119,7 +120,8 @@ function installer_adminapi_createdb($args)
                        'siteTablePrefix' => $dbPrefix);
    $dbconn =& xarDBNewConn($createArgs);
 
-   $query = xarDBCreateDatabase($dbName,$dbType);
+   $dbCharset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+   $query = xarDBCreateDatabase($dbName,$dbType,$dbCharset);
    $result =& $dbconn->Execute($query);
    return true;
 }

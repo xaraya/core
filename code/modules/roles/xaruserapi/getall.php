@@ -126,15 +126,8 @@ function roles_userapi_getall($args)
     // If we aren't including anonymous in the query,
     // then find the anonymous user's id and add
     // a where clause to the query.
-    // By default, include both 'myself' and 'anonymous'.
     if (isset($include_anonymous) && !$include_anonymous) {
         $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'anonymous'));
-        $where_clause[] = 'roletab.id <> ?';
-        $bindvars[] = (int) $thisrole['id'];
-    }
-    if (isset($include_myself) && !$include_myself) {
-
-        $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'myself'));
         $where_clause[] = 'roletab.id <> ?';
         $bindvars[] = (int) $thisrole['id'];
     }

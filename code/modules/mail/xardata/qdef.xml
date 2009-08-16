@@ -8,7 +8,7 @@
   <urlparam>itemid</urlparam>
   <maxid>2</maxid>
   <config></config>
-  <isalias>0</isalias>
+  <isalias>false</isalias>
   <properties>
     <property name="id">
       <id>489</id>

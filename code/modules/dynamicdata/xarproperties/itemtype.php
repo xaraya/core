@@ -120,54 +120,6 @@ class ItemTypeProperty extends ComboProperty
 
         return $options;
     }
-
-    /**
-     * Retrieve or check an individual option on demand
-     */
-    /* Use the parent method for now
-    function getOption($check = false)
-    {
-        if (!isset($this->value)) {
-             if ($check) return true;
-             return null;
-        }
-        // we don't want to check empty values for items
-        if (empty($this->value)) {
-             if ($check) return true;
-             return $this->value;
-        }
-
-        if (empty($this->initialization_module)) {
-            if ($check) return true;
-            return $this->value;
-        }
-        if (!isset($this->itemtype)) {
-            // we're interested in one of the module itemtypes (= default behaviour)
-            $options = $this->getOptions();
-            foreach ($options as $option) {
-                if ($option['id'] == $this->value) {
-                    if ($check) return true;
-                    return $option['name'];
-                }
-            }
-            if ($check) return false;
-            return $this->value;
-        }
-
-        // we're interested in one of the items for module+itemtype
-        try {
-            $itemlinks = xarModAPIFunc($this->module,'user','getitemlinks',
-                                       array('itemtype' => $this->itemtype,
-                                             'itemids' => array($this->value)));
-            if (!empty($itemlinks) && !empty($itemlinks[$this->value])) {
-                if ($check) return true;
-                return $itemlinks[$this->value]['label'];
-            }
-        } catch (Exception $e) {}
-        if ($check) return false;
-        return $this->value;
-    }
-    */
 }
 
 ?>

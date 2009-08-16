@@ -20,7 +20,7 @@ function dynamicdata_admin_utilities($args)
     if(!xarVarFetch('q','str', $data['option'], 'query', XARVAR_NOT_REQUIRED)) {return;}
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML($data['option'])));
     if (empty($data['option']) || $data['option'] == 'query') {
-        xarResponse::Redirect(xarModURL('dynamicdata', 'admin', 'query'));
+        xarResponse::Redirect(xarModURL('dynamicdata', 'util', 'import'));
     } else {
         xarResponse::Redirect(xarModURL('dynamicdata', 'util', $data['option']));
     }

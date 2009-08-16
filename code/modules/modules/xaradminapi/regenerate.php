@@ -80,8 +80,8 @@ function modules_adminapi_regenerate()
                 $modinfo['version'],
                 $modinfo['class'],
                 $modinfo['category'],
-                $modinfo['admin_capable'],
-                $modinfo['user_capable']
+                (bool)$modinfo['admin_capable'],
+                (bool)$modinfo['user_capable']
             );
             $result =& $dbconn->Execute($sql, $params);
 

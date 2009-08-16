@@ -734,5 +734,10 @@ class DataProperty extends Object implements iDataProperty
     {
         return array();
     }    
+
+    public function castType($value=null)
+    {
+        return $value;
+    }
 }
 ?>

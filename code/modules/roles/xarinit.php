@@ -30,18 +30,19 @@ function roles_init()
 
     // Create tables inside a transaction
     try {
+        $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         $dbconn->begin();
 
         $fields = array(
                         'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-                        'name' => array('type' => 'varchar','size' => 254,'null' => false),
+                        'name' => array('type' => 'varchar','size' => 254,'null' => false, 'charset' => $charset),
                         'itemtype' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
                         'users' => array('type' => 'integer', 'null' => false, 'default' => '0'),
-                        'uname' => array('type' => 'varchar', 'size' => 254, 'null' => false),
-                        'email' => array('type' => 'varchar', 'size' => 254,'null' => true),
-                        'pass' => array('type' => 'varchar',  'size' => 254, 'null' => true),
+                        'uname' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset),
+                        'email' => array('type' => 'varchar', 'size' => 254,'null' => true, 'charset' => $charset),
+                        'pass' => array('type' => 'varchar',  'size' => 254, 'null' => true, 'charset' => $charset),
                         'date_reg' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
-                        'valcode' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                        'valcode' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
                         'state' => array('type' => 'integer', 'unsigned' => true, 'size' => 'tiny', 'null' => false,'default' => '3'),
                         'auth_module_id' => array('type' => 'integer', 'unsigned' => true, 'unsigned' => true, 'null' => false));
         $query = xarDBCreateTable($tables['roles'],$fields);
@@ -227,12 +228,6 @@ function roles_activate()
     $rolefields['parentid'] = $admingroup;
     $adminid = $user->createItem($rolefields);
     xarModVars::set('roles', 'admin', $adminid);
-
-    // The Myself user
-    $rolefields['name'] = 'Myself';
-    $rolefields['uname'] = 'myself';
-    $rolefields['parentid'] = $topid;
-    $user->createItem($rolefields);
 
     // Installation complete; check for upgrades
     return roles_upgrade('2.0.0');

@@ -110,7 +110,6 @@ function roles_user_viewlist($args)
                     'filter'   => $filter,
                     'selection'   => $selection,
                     'include_anonymous' => false,
-                    'include_myself' => false
                 )
             );
             xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Active Members')));
@@ -130,7 +129,6 @@ function roles_user_viewlist($args)
                     'order'   => $order,
                     'selection'   => $selection,
                     'include_anonymous' => false,
-                    'include_myself' => false,
                     'numitems' => xarModVars::get('roles', 'itemsperpage')
                 )
             );
@@ -145,7 +143,6 @@ function roles_user_viewlist($args)
                 array(
                     'selection' => $selection,
                     'include_anonymous' => false,
-                    'include_myself' => false
                 )
             );
 
@@ -165,7 +162,6 @@ function roles_user_viewlist($args)
                     'order' => $order,
                     'selection' => $selection,
                     'include_anonymous' => false,
-                    'include_myself' => false,
                     'numitems' => xarModVars::get('roles', 'itemsperpage')
                 )
             );

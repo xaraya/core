@@ -74,7 +74,6 @@
                     'order' => 'name',
                     'startnum' => 0,
                     'include_anonymous' => false,
-                    'include_myself' => false
                 )
             );
 

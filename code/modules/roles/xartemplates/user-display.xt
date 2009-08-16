@@ -7,7 +7,7 @@
         </span>
     </div>
     <div class="xar-mod-body">
-        <xar:if condition="strtolower($uname) ne 'anonymous' and strtolower($uname) ne 'myself'">
+        <xar:if condition="strtolower($uname) ne 'anonymous'">
             <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
           <xar:set name="fields">array('name','uname','state','regdate')</xar:set>
           <xar:data-display module="roles" itemtype="$itemtype" fieldlist="$fields" itemid="$id" />
