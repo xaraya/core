@@ -12,8 +12,8 @@
 
         public $name                = 'BlockName';
         public $module              = 'BlockModule';
-        public $text_type           = null;
-        public $text_type_long      = 'base';
+        public $text_type           = 'Basic Block';
+        public $text_type_long      = 'Block parent of all blocks';
         public $func_update         = null;
         public $allow_multiple      = false;
         public $form_content        = false;    // display textarea for content in the admin UI
@@ -50,7 +50,8 @@
             // Get current content
             if (!is_array($data['content'])) {
                 $exploded = @unserialize($data['content']);
-                if (is_array($exploded)) $data = array_merge($data,$exploded);
+                if (is_array($exploded)) 
+                    $data = array_merge($data,$exploded);
             } else {
                 $data = array_merge($data,$data['content']);
             }
