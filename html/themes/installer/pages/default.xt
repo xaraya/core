@@ -60,7 +60,13 @@
                 </li>
                 -->
                 <li class="navbar-item">
-                    <a href="http://www.xaraya.com/index.php/xarpages/support" target="_blank">Support</a>
+                    <a href="http://www.xaraya.com/index.php/xarpages/support" target="_blank">Support at www.xaraya.com</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="docs/license.html" target="_blank">GNU General Public License</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="docs/credits.html" target="_blank">Xaraya Credits</a>
                 </li>
                 <xar:if condition="$isupgrade eq '1'">
                     <li class="navbar-item">
