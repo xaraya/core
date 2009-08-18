@@ -19,12 +19,7 @@ function dynamicdata_admin_utilities($args)
     extract($args);
     if(!xarVarFetch('q','str', $data['option'], 'query', XARVAR_NOT_REQUIRED)) {return;}
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML($data['option'])));
-    if (empty($data['option']) || $data['option'] == 'query') {
-        xarResponse::Redirect(xarModURL('dynamicdata', 'admin', 'query'));
-    } else {
-        xarResponse::Redirect(xarModURL('dynamicdata', 'util', $data['option']));
-    }
-
-    //return $data;
+    xarResponse::Redirect(xarModURL('dynamicdata', 'util', 'import'));
+    return true;
 }
 ?>
