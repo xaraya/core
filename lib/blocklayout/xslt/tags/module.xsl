@@ -44,13 +44,11 @@
           </xsl:otherwise>
         </xsl:choose>
         <!-- Add all other attributes -->
-        <xsl:text>",array(</xsl:text>
-        <xsl:for-each select="@*[name()!='module' and name()!='func' and name()!='type']">
-          <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>'</xsl:text>
-          <xsl:text disable-output-escaping="yes">=&gt;'</xsl:text>
-          <xsl:value-of select="."/><xsl:text>',</xsl:text>
-        </xsl:for-each>
-        <xsl:text>));</xsl:text>
+        <xsl:text>",</xsl:text>
+        <xsl:call-template name="atts2args">
+          <xsl:with-param name="nodeset" select="@*[name()!='module' and name()!='func' and name()!='type']"/>
+        </xsl:call-template>
+        <xsl:text>);</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:processing-instruction>
