@@ -60,11 +60,6 @@ function roles_userapi_getallactive($args)
         $query .= " AND a.id != ?";
         $bindvars[] = (int) $anon['id'];
     }
-    if (!$include_myself) {
-        $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'myself'));
-        $query .= " AND a.id != ?";
-        $bindvars[] = (int) $thisrole['id'];
-    }
 
     $query .= " AND itemtype = ? ORDER BY " . $order;
     $bindvars[] = 2;

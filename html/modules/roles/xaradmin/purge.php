@@ -78,7 +78,7 @@ function roles_admin_purge($args)
             $q->qor($c);
         }
         $q->eq('state',ROLES_STATE_DELETED);
-        $q->ne('date_reg','');
+        $q->ne('date_reg',0);
         $q->setrowstodo($numitems);
         $q->setstartat($recallstartnum);
 //        $q->qecho();

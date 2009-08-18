@@ -10,8 +10,8 @@
  */
 
 sys::import('xaraya.structures.descriptor');
-sys::import('modules.dynamicdata.class.datastores');
-sys::import('modules.dynamicdata.class.properties');
+sys::import('modules.dynamicdata.class.datastores.master');
+sys::import('modules.dynamicdata.class.properties.master');
 
 /*
  * generate the variables necessary to instantiate a DataObject or DataProperty class

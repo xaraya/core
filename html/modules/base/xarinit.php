@@ -31,6 +31,7 @@ function base_init()
 
     // Creating the first part inside a transaction
     try {
+        $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         $dbconn->begin();
 
         /*********************************************************************
@@ -52,15 +53,14 @@ function base_init()
          *  PRIMARY KEY  (id)
          * )
          *********************************************************************/
-        $fields = array('id'        => array('type'=>'varchar','size'=>32   ,'null'=>false,'primary_key'=>true),
-                        'ip_addr'   => array('type'=>'varchar','size'=>20   ,'null'=>false),
+        $fields = array('id'        => array('type'=>'varchar','size'=>32   ,'null'=>false, 'charset' => $charset, 'primary_key'=>true),
+                        'ip_addr'   => array('type'=>'varchar','size'=>20   ,'null'=>false, 'charset' => $charset),
                         'first_use' => array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
                         'last_use'  => array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
                         'role_id'   => array('type'=>'integer','unsigned'=>true, 'null'=>false),
                         'vars'      => array('type'=>'blob'   ,'null'=>true),
                         'remember'  => array('type'=>'boolean', 'default'=>  false)
                         );
-
         $query = xarDBCreateTable($sessionInfoTable,$fields);
         $dbconn->Execute($query);
 
@@ -97,8 +97,8 @@ function base_init()
         $fields = array(
                         'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                         'module_id' => array('type'=>'integer','unsigned'=>true,'null'=>true),
-                        'name'      => array('type'=>'varchar','size'=>64,'null'=>false),
-                        'value'     => array('type'=>'text','size'=>'long')
+                        'name'      => array('type'=>'varchar','size'=>64,'null'=>false, 'charset' => $charset),
+                        'value'     => array('type'=>'text','size'=>'long', 'charset' => $charset)
                         );
 
         $query = xarDBCreateTable($modVarsTable,$fields);

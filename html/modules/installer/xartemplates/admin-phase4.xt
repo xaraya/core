@@ -81,6 +81,12 @@
                 <input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#" />
                 &#160;(for Table Sharing)
             </div>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label" for="install_database_charset">
+                    Character Set
+                </label>
+                <input type="text" name="install_database_charset" id="install_database_charset" maxlength="10" value="#$database_charset#" />
+            </div>
             <div class="xar-form-input-wrappe">
                 <label class="xar-form-label" for="install_create_database">
                     Create the database

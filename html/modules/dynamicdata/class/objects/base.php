@@ -10,7 +10,7 @@
  */
 
 sys::import('xaraya.structures.descriptor');
-sys::import('modules.dynamicdata.class.properties');
+sys::import('modules.dynamicdata.class.properties.master');
 sys::import('modules.dynamicdata.class.objects.interfaces');
 sys::import('modules.dynamicdata.class.objects.master');
 
@@ -88,10 +88,18 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         foreach($this->datastores as $name => $datastore) {
             $itemid = $datastore->getItem($this->toArray());
+            
             // only worry about finding something in primary datastore (if any)
             if(empty($itemid) && !empty($primarystore) && $primarystore == $name) {
                 return;
             }
+        }
+
+        // Turn the values retrieved into proper PHP values
+        foreach($this->properties as $property) {
+            try {
+                $property->value = $property->castType($property->value);
+            } catch(Exception $e) {}
         }
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code

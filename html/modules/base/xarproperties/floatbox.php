@@ -32,9 +32,10 @@ class FloatBoxProperty extends NumberBoxProperty
         if (!is_numeric($this->value) && !empty($this->value)) throw new Exception(xarML('The default value of a #(1) must be numeric',$this->name));
     }
 
-    public function castType($value = null)
+    public function castType($value=null)
     {
-        if (!is_null($value)) return (float) $value;
+        if (!is_null($value)) return (float)$value;
+        return 0;
     }
 }
 
