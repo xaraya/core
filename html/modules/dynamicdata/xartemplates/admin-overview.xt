@@ -139,7 +139,7 @@
         </div>
         
         <div id="page-2" style="display: none">
-                <h3>Using the &lt;xar:data-* ...&gt; tags in your templates</h3>
+                <h3>Using the xar:data-* ... tags in your templates</h3>
                 
                 <h4>Available tags</h4>
                 <p>
