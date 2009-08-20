@@ -35,6 +35,13 @@
             <xsl:text>=DataObjectMaster::getObjectList(array('name'=>'</xsl:text>
             <xsl:value-of select="@object"/>
             <xsl:text>'));</xsl:text>
+            <xsl:text>$__</xsl:text>
+            <xsl:value-of select="@object"/>
+            <xsl:text>-&gt;getItems(</xsl:text>
+            <xsl:call-template name="atts2args">
+              <xsl:with-param name="nodeset" select="@*[name() != 'object']"/>
+            </xsl:call-template>
+            <xsl:text>);</xsl:text>
             <xsl:text>echo </xsl:text>
             <xsl:text>$__</xsl:text>
             <xsl:value-of select="@object"/>
