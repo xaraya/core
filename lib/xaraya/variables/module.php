@@ -131,9 +131,6 @@ class xarModVars extends xarVars implements IxarModVars
         unset($modvarid);
         $modvarid = self::getId($scope, $name);
 
-        if($value === false) $value = 0;
-        if($value === true)  $value = 1;
-
         if(!$modvarid) {
             // Not there yet
             $query = "INSERT INTO $module_varstable
