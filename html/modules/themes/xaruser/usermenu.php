@@ -49,7 +49,7 @@ function themes_user_usermenu($args)
                     'id' => $id,
                     'defaulttheme' => $defaulttheme,
                     'themes' => $data['themes']);
-            return serialize($data);
+                                  return serialize($data);
             break;
 
         case 'update':

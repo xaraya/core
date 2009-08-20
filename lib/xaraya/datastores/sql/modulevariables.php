@@ -27,13 +27,13 @@ class ModuleVariablesDataStore extends FlatTableDataStore
     private function setModvarName($name="")
     {
         if (empty($name)) throw new Exception('Bad modvar name');
-        $namepart = explode('__',$name);
+        $namepart = explode('_',$name);
         if (empty($namepart[1])) {
             $this->modulename = 'dynamicdata';
             $this->variablename = $namepart[0];
         } else {
-            $this->modulename = $namepart[0];
-            $this->variablename = $namepart[1];
+            $this->modulename = array_pop($namepart);
+            $this->variablename = implode('_',$namepart);
         }
     }
 
@@ -53,7 +53,6 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             $value = xarModItemVars::get($this->modulename,$this->variablename,$itemid);
             // set the value for this property
             $this->fields[$field]->value = $value;
-            echo $value ." ";
         }
         return $itemid;
     }
