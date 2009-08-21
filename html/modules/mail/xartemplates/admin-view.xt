@@ -17,11 +17,9 @@
         <fieldset>
             <xar:if condition="$itemid gt 0">
                 <legend>Change queue definition</legend>
-                <xar:comment>Normal edit form</xar:comment>
-                <form style="display: inline;" method="post"
-                action="&xar-modurl-mail-admin-update;">
-                    <xar:data-form module="$qdef['moduleid']" itemid="$itemid"
-                    itemtype="$qdef['itemtype']" linkfield="name" />
+                <!--Normal edit form -->
+                <form style="display: inline;" method="post" action="&xar-modurl-mail-admin-update;">
+                    <xar:data-form module="$qdef['moduleid']" itemid="$itemid" itemtype="$qdef['itemtype']" linkfield="name" />
                     <input type="hidden" name="authid" value="#xarSecGenAuthKey()#" />
                     <input type="hidden" name="itemid" value="#$itemid#" />
                     <input type="hidden" name="objectid" value="#$qdef.objectid#" />
@@ -30,9 +28,8 @@
                     <input type="hidden" name="itemtype" value="#$qdef.itemtype#" />
                     <input type="submit" value="#xarML('Save')#" />
                 </form>
-                <xar:comment>When editting, offer delete option</xar:comment>
-                <form style="display: inline;" method="post"
-                action="&xar-modurl-mail-admin-delete;">
+                <!-- When editting, offer delete option -->
+                <form style="display: inline;" method="post" action="&xar-modurl-mail-admin-delete;">
                     <input type="hidden" name="authid" value="#xarSecGenAuthKey()#" />
                     <input type="hidden" name="itemid" value="#$itemid#" />
                     <input type="hidden" name="objectid" value="#$qdef.objectid#" />
@@ -41,10 +38,8 @@
                 <xar:else />
                 <legend>Create new queue definition</legend>
           <!-- Create form -->
-                <form style="display: inline;" method="post"
-                action="&xar-modurl-dynamicdata-admin-create;">
-                    <xar:data-form module="$qdef['moduleid']" itemid="$itemid"
-                    itemtype="$qdef['itemtype']" linkfield="name" />
+                <form style="display: inline;" method="post" action="&xar-modurl-dynamicdata-admin-create;">
+                    <xar:data-form module="$qdef['moduleid']" itemid="$itemid" itemtype="$qdef['itemtype']" linkfield="name" />
                     <input type="hidden" name="authid" value="#xarSecGenAuthKey('dynamicdata')#" />
                     <input type="hidden" name="objectid" value="#$qdef.objectid#" />
                     <input type="hidden" name="modid" value="#$qdef.moduleid#" />
