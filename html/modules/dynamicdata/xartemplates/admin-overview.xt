@@ -110,10 +110,10 @@
                     <strong>Itemtype</strong>:&#160;a Combobox property used for input and display of dataobject itemtypes.
                 </li>
                 <li>
-                    <strong>Object</strong>:&#160;an ObjectRef property used to display the items of the Objects dataobject (i.e. the available dataobjects).
+                    <strong>Object</strong>:&#160;an ObjectRef property used to display the items of the Objects dataobject (i.e. the available dataobjects). This is a special case of the ObjectRef property.
                 </li>
                 <li>
-                    <strong>Object</strong>:&#160;a Select property used to display the items of a dataobject.
+                    <strong>ObjectRef</strong>:&#160;a Select property used to display the items of a dataobject.
                 </li>
                 <li>
                     <strong>Subform</strong>:&#160;a property used to model subitems of a dataobject.
