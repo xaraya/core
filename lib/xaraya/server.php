@@ -367,19 +367,18 @@ class xarRequest extends Object
      * @todo <mikespub> you mean for upper-case Admin, or to support other funcs than user and admin someday ?
      * @todo <marco> Investigate this aliases thing before to integrate and promote it!
      */
-    public static function getInfo($url=array())
+    public static function getInfo($url='')
     {
-        static $requestInfo = NULL;
+        static $currentRequestInfo = NULL;
         static $loopHole = NULL;
-        if (is_array($requestInfo)) {
-            return $requestInfo;
+        if (is_array($currentRequestInfo) && empty($url)) {
+            return $currentRequestInfo;
         } elseif (is_array($loopHole)) {
             // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
             //        because they request the current module too at the moment - unnecessary ?
             xarLogMessage('Avoiding loop in xarRequest::getInfo()');
             return $loopHole;
         }
-
         // Get variables
         if (empty($url)) {
             xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
@@ -394,21 +393,23 @@ class xarRequest extends Object
                 list($key, $value) = explode('=', $pair);
                 $params[$key] = urldecode($value);
             }
-            if (isset($pair['module'])) {
-                $matches = preg_match('/^[a-z][a-z_0-9]*$/',$pair['module']);
-                $modName = !empty($matches[0]) ? $matches[0] : null;
+            sys::import('xaraya.validations');
+            $regex = ValueValidations::get('regexp');
+                                ;
+            $isvalid =  $regex->validate($params['module'], array('/^[a-z][a-z_0-9]*$/'));
+            if (isset($params['module']) && $isvalid) {
+                $modName = $params['module'];
             } else {
                 $modName = null;
             }
-            if (isset($pair['type'])) {
-                $matches = preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/',$pair['type']);
-                $modType = !empty($matches[0]) ? $matches[0] : 'user';
+            $isvalid =  $regex->validate($params['module'], array('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/'));
+            if (isset($params['type']) && $isvalid) {
+                $modType = $params['type'];
             } else {
                 $modType = 'user';
             }
-            if (isset($pair['func'])) {
-                $matches = preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/',$pair['func']);
-                $funcName = !empty($matches[0]) ? $matches[0] : 'main';
+            if (isset($params['func']) && $isvalid) {
+                $funcName = $params['func'];
             } else {
                 $funcName = 'main';
             }
@@ -485,7 +486,8 @@ class xarRequest extends Object
             }
             $requestInfo = self::$defaultRequestInfo;
         }
-
+        // Save the current info in case we call this function again
+        if (empty($url)) $currentRequestInfo = $requestInfo;
         return $requestInfo;
     }
 
