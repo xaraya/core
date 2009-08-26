@@ -387,29 +387,32 @@ class xarRequest extends Object
         } else {
             $decomposed = parse_url($url);
             $params = array();
-            $pairs = explode('&', $decomposed['query']);
-            foreach($pairs as $pair) {
-                if (trim($pair) == '') continue;
-                list($key, $value) = explode('=', $pair);
-                $params[$key] = urldecode($value);
+            if (isset($decomposed['query'])) {
+                $pairs = explode('&', $decomposed['query']);
+                foreach($pairs as $pair) {
+                    if (trim($pair) == '') continue;
+                    list($key, $value) = explode('=', $pair);
+                    $params[$key] = urldecode($value);
+                }
+                sys::import('xaraya.validations');
+                $regex = ValueValidations::get('regexp');
             }
-            sys::import('xaraya.validations');
-            $regex = ValueValidations::get('regexp');
                                 ;
-            $isvalid =  $regex->validate($params['module'], array('/^[a-z][a-z_0-9]*$/'));
-            if (isset($params['module']) && $isvalid) {
-                $modName = $params['module'];
+            if (isset($params['module'])) {
+                $isvalid =  $regex->validate($params['module'], array('/^[a-z][a-z_0-9]*$/'));
+                $modName = $isvalid ? $params['module'] : null;
             } else {
                 $modName = null;
             }
-            $isvalid =  $regex->validate($params['module'], array('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/'));
-            if (isset($params['type']) && $isvalid) {
-                $modType = $params['type'];
+            if (isset($params['type'])) {
+                $isvalid =  $regex->validate($params['type'], array('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/'));
+                $modType = $isvalid ? $params['type'] : 'user';
             } else {
                 $modType = 'user';
             }
-            if (isset($params['func']) && $isvalid) {
-                $funcName = $params['func'];
+            if (isset($params['func'])) {
+                $isvalid =  $regex->validate($params['func'], array('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/'));
+                $funcName = $isvalid ? $params['func'] : 'main';
             } else {
                 $funcName = 'main';
             }
