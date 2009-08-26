@@ -425,22 +425,23 @@
                         value="$timezone" />
                     </div>
                     <div class="xar-form-input-wrapper">
-                    <label for="defaulttimezone"
-                    title="#xarML('The current server time based on the timezone selected.')#"
-                    class="xar-form-label">The server time is:</label>#$hostnow#&#160;in&#160; 
-                    <xar:data-output type="timezone" value="$timezone" /></div>
+                        <label for="defaulttimezone" title="#xarML('The current server time based on the timezone selected.')#" class="xar-form-label">
+                        The server time is:</label>#$hostnow#&#160;in&#160; 
+                        <xar:data-output type="timezone" value="$timezone" />
+                    </div>
                     <div class="xar-form-input-wrapper">
-                    <label for="defaulttimezone" title="#xarML('The current time of this user.')#"
-                    class="xar-form-label">Your local time is:</label>#$localnow#</div>
+                        <label for="defaulttimezone" title="#xarML('The current time of this user.')#" class="xar-form-label">      
+                            Your local time is:
+                        </label>#$localnow#
+                    </div>
                 </fieldset>
                 <fieldset>
                     <legend>Extension Release Feeds</legend>
                     <div class="xar-form-input-wrapper">
-                        <label for="releasenumber"
-                        title="#xarML('Number of feeds for Xaraya release to display.')#"
-                        class="xar-form-label">Number of releases to display:</label>
-                        <input type="text" id="releasenumber" name="releasenumber"
-                        value="#$releasenumber#" maxlength="4" class="xar-form-textshort" />
+                        <label for="releasenumber" title="#xarML('Number of feeds for Xaraya release to display.')#" class="xar-form-label">
+                            Number of releases to display:
+                        </label>
+                        <input type="text" id="releasenumber" name="releasenumber" value="#$releasenumber#" maxlength="4" class="xar-form-textshort" />
                     </div>
                 </fieldset>
                 <fieldset>

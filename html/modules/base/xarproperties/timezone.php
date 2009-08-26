@@ -83,106 +83,26 @@ class TimeZoneProperty extends SelectProperty
         return true;
     }
 
-    public function showInput(Array $data = array())
+    public function showOutput(Array $data = array())
     {
-        if (!isset($data['value'])) {
-            $value = $this->value;
-        } else {
-            $value = $data['value'];
-        }
-
-        if (!isset($data['options']) || count($data['options']) == 0) {
-            $data['options'] = $this->options;
-        }
-
-        if (!empty($value) && is_numeric($value)) {
-            $data['style'] = 'offset';
-            if (empty($data['options'])) {
-                $data['options'] = $this->getOldOptions();
-            }
-        } else {
-            $data['style'] = 'timezone';
-            if (empty($data['options'])) {
-                $data['options'] = $this->getNewOptions();
-            }
-            if (empty($value)) {
-                $data['timezone'] = '';
-            } elseif (is_array($value)) {
-                if (!empty($value['timezone'])) {
-                    $data['timezone'] = $value['timezone'];
-                }
-            } elseif (is_string($value)) {
-                // check what kind of string we have here
-                $out = @unserialize($value);
-                if ($out !== false) {
-                    // we have a serialized value
-                    if (!empty($out['timezone'])) {
-                        $data['timezone'] = $out['timezone'];
-                    }
-                } else {
-                    // we have a text value
-                    $data['timezone'] = $value;
-                }
-            }
-        }
-
-        $data['value']   = $value;
-        $data['now']     = time();
-
-        return parent::showInput($data);
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        $zone = new DateTimeZone($data['value']);
+        $datetime = new DateTime('now',$zone);
+        $data['offset'] = $zone->getOffset($datetime);
+        return parent::showOutput($data);
     }
 
-    function getOldOptions()
-    {
-        if (count($this->options) > 0) {
-            return $this->options;
-        }
-        $options = array(
-                         array('id' => -12, 'name' => xarML('GMT #(1)','-12:00')),
-                         array('id' => -11, 'name' => xarML('GMT #(1)','-11:00')),
-                         array('id' => -10, 'name' => xarML('GMT #(1)','-10:00')),
-                         array('id' => -9, 'name' => xarML('GMT #(1)','-09:00')),
-                         array('id' => -8, 'name' => xarML('GMT #(1)','-08:00')),
-                         array('id' => -7, 'name' => xarML('GMT #(1)','-07:00')),
-                         array('id' => -6, 'name' => xarML('GMT #(1)','-06:00')),
-                         array('id' => -5, 'name' => xarML('GMT #(1)','-05:00')),
-                         array('id' => -4, 'name' => xarML('GMT #(1)','-04:00')),
-                         array('id' => -3.5, 'name' => xarML('GMT #(1)','-03:30')),
-                         array('id' => -3, 'name' => xarML('GMT #(1)','-03:00')),
-                         array('id' => -2, 'name' => xarML('GMT #(1)','-02:00')),
-                         array('id' => -1, 'name' => xarML('GMT #(1)','-01:00')),
-                         array('id' => '0', 'name' => xarML('GMT')),
-                         array('id' => 1, 'name' => xarML('GMT #(1)','+01:00')),
-                         array('id' => 2, 'name' => xarML('GMT #(1)','+02:00')),
-                         array('id' => 3, 'name' => xarML('GMT #(1)','+03:00')),
-                         array('id' => 3.5, 'name' => xarML('GMT #(1)','+03:30')),
-                         array('id' => 4, 'name' => xarML('GMT #(1)','+04:00')),
-                         array('id' => 4.5, 'name' => xarML('GMT #(1)','+04:30')),
-                         array('id' => 5, 'name' => xarML('GMT #(1)','+05:00')),
-                         array('id' => 5.5, 'name' => xarML('GMT #(1)','+05:30')),
-                         array('id' => 6, 'name' => xarML('GMT #(1)','+06:00')),
-                         array('id' => 6.5, 'name' => xarML('GMT #(1)','+06:30')),
-                         array('id' => 7, 'name' => xarML('GMT #(1)','+07:00')),
-                         array('id' => 8, 'name' => xarML('GMT #(1)','+08:00')),
-                         array('id' => 9, 'name' => xarML('GMT #(1)','+09:00')),
-                         array('id' => 9.5, 'name' => xarML('GMT #(1)','+09:30')),
-                         array('id' => 10, 'name' => xarML('GMT #(1)','+10:00')),
-                         array('id' => 11, 'name' => xarML('GMT #(1)','+11:00')),
-                         array('id' => 12, 'name' => xarML('GMT #(1)','+12:00')),
-                         array('id' => 13, 'name' => xarML('GMT #(1)','+13:00')),
-                        );
-        return $options;
-    }
-
-    function getNewOptions()
+    function getOptions()
     {
         if (count($this->options) > 0) {
             return $this->options;
         }
         $zones = DateTimeZone::listIdentifiers();
         $options = array();
-        foreach ($zones as $zone) {
-            $options[] = array('id' => $zone, 'name' => $zone);
+        foreach ($zones as $name) {
+            $zone = new DateTimeZone($name);
+            $datetime = new DateTime('now',$zone);
+            $options[] = array('id' => $name, 'name' => $name, 'offset' => $zone->getOffset($datetime));
         }
         return $options;
     }
