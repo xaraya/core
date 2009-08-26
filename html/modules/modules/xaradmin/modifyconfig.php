@@ -24,16 +24,21 @@
 */
 function modules_admin_modifyconfig()
 {
-    // Security Check
     if(!xarSecurityCheck('AdminModules')) return;
+    if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if(!xarVarFetch('disableoverview','int', $data['disableoverview'], xarModVars::get('modules', 'disableoverview'), XARVAR_NOT_REQUIRED)) return;
 
-    // Disable the overview pages?
-    $data['disableoverview'] = xarModVars::get('modules', 'disableoverview');
+    switch (strtolower($phase)) {
+        case 'modify':
+        default:
+        break;
 
-    // Generate a one-time authorisation code for this operation
+        case 'update':
+        if (!xarSecConfirmAuthKey()) return;
+        xarModVars::set('modules', 'disableoverview', $data['disableoverview']);
+        break;
+    }
     $data['authid'] = xarSecGenAuthKey();
-
-    // everything else happens in Template for now
     return $data;
 }
 ?>

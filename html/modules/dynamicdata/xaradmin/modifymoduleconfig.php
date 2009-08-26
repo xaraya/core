@@ -48,11 +48,7 @@ function dynamicdata_admin_modifymoduleconfig()
                 if(!empty($user)) $newusers[$user['uname']] = array('id' => $user['id']);
             }
             xarModVars::set('dynamicdata', 'debugusers', serialize($newusers));
-
-            xarResponse::Redirect(xarModURL('dynamicdata', 'admin', 'modifymoduleconfig'));
-            return true;
             break;
-
     }
     $data['authid'] = xarSecGenAuthKey();
     return $data;
