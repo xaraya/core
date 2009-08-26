@@ -20,7 +20,7 @@
                     <xar:else />
                     <xar:set name="label">$option['name']</xar:set>
                 </xar:if>
-                <xar:if condition="isset($timezone) and $option['id'] eq $timezone">
+                <xar:if condition="isset($value) and $option['id'] eq $value">
                     <option value="#$option['id']#" selected="selected">#$label#</option>
                     <xar:else />
                     <option value="#$option['id']#">#$label#</option>
