@@ -18,7 +18,11 @@ function blocks_admin_main()
 {
     if(!xarSecurityCheck('EditBlock')) return;
 
-    if (xarModVars::get('modules', 'disableoverview') == 0){
+    $refererinfo = xarRequest::getInfo(xarServer::getVar('HTTP_REFERER'));
+    $info = xarRequest::getInfo();
+    $samemodule = $info[0] == $refererinfo[0];
+    
+    if ((xarModVars::get('modules', 'disableoverview') == 0) || $samemodule){
         return xarTplModule('blocks','admin','overview');
     } else {
         xarResponse::Redirect(xarModURL('blocks', 'admin', 'view_instances'));

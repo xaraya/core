@@ -22,7 +22,11 @@ function base_admin_main()
 {
     if(!xarSecurityCheck('EditBase')) return;
 
-    if (xarModVars::get('modules', 'disableoverview') == 0){
+    $refererinfo = xarRequest::getInfo(xarServer::getVar('HTTP_REFERER'));
+    $info = xarRequest::getInfo();
+    $samemodule = $info[0] == $refererinfo[0];
+    
+    if ((xarModVars::get('modules', 'disableoverview') == 0) || $samemodule){
         return xarTplModule('base','admin','overview');
     } else {
         xarResponse::Redirect(xarModURL('base', 'admin', 'modifyconfig'));

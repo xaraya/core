@@ -19,7 +19,11 @@ function dynamicdata_admin_main()
 {
     if(!xarSecurityCheck('EditDynamicData')) return;
 
-    if (xarModVars::get('modules', 'disableoverview') == 0){
+    $refererinfo = xarRequest::getInfo(xarServer::getVar('HTTP_REFERER'));
+    $info = xarRequest::getInfo();
+    $samemodule = $info[0] == $refererinfo[0];
+    
+    if ((xarModVars::get('modules', 'disableoverview') == 0) || $samemodule){
         return xarTplModule('dynamicdata','admin','overview');
     } else {
         xarResponse::Redirect(xarModURL('dynamicdata', 'admin', 'view'));
