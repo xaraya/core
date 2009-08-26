@@ -29,7 +29,7 @@ function themes_admin_cssconfig()
 
     $data['component'] = $component;
     // is configurable enabled?
-    if (!xarVarFetch('configurable', 'bool', $configurable, false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('configurable', 'checkbox', $configurable, false, XARVAR_NOT_REQUIRED)) return;
     $data['configurable'] = $configurable;
 
     // labels and defaults

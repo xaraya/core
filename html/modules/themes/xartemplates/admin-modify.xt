@@ -51,15 +51,14 @@
                     class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="newvardescription"
-                    title="#xarML('Description of the new variable')#" class="xar-form-label">
-                    Description:</label>
-                    <input type="text" name="newvardescription" id="newvardescription" value=""
-                    maxlength="64" class="xar-form-textxlong" />
+                    <label for="newvardescription" title="#xarML('Description of the new variable')#" class="xar-form-label">
+                        Description:
+                    </label>
+                    <input type="text" name="newvardescription" id="newvardescription" value="" maxlength="64" class="xar-form-textxlong" />
                 </div>
             </fieldset>
             <div class="xar-form-input-wrapper-after">
-                <input type="checkbox" name="return" id="return" value="1" />
+                <input type="checkbox" name="return" id="return" checked="1" />
                 <label for="return" title="#xarML('TITLE')#">Update and return to this
                 screen</label>
             </div>

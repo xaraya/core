@@ -91,7 +91,7 @@ function themes_admin_update()
         } 
     } 
 
-    if (!xarVarFetch('return', 'bool', $return,  false, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('return', 'checkbox', $return,  false, XARVAR_NOT_REQUIRED)) {return;}
 
     if ($return) {
         xarResponse::Redirect(xarModURL('themes', 'admin', 'modify', array('id' => $regId)));

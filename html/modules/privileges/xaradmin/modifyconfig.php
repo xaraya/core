@@ -109,7 +109,7 @@ function privileges_admin_modifyconfig()
                     xarModVars::set('privileges', 'exceptionredirect', $data['exceptionredirect']);
                     break;
                 case 'realms':
-                    if (!xarVarFetch('enablerealms', 'bool', $data['enablerealms'], false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('enablerealms', 'checkbox', $data['enablerealms'], false, XARVAR_NOT_REQUIRED)) return;
                     xarModVars::set('privileges', 'showrealms', $data['enablerealms']);
                     if (!xarVarFetch('realmvalue', 'str', $realmvalue, 'none', XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('realmcomparison', 'str', $realmcomparison, 'exact', XARVAR_NOT_REQUIRED)) return;
