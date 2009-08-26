@@ -168,7 +168,7 @@
                 <strong>Search Hook</strong>:&#160;allows user to search the content of the Roles module. This hook is known to be used by the Search module (a non-core module).
             </li>
             <li>
-                <strong>Usermenu Hook</strong>:&#160;lets other modules display content in the current user's account page. This hook is used by e.g. the Themes module, allowing the user to define the theme for the site to display in.
+                <strong>Usermenu Hook</strong>:&#160;lets other modules that hook into the Roles module display content in the current user's account page. This hook is used by e.g. the Themes module, allowing the user to define the theme for the site to display in. When the Roles module is hooked into itself, it lets the user edit his/her profile.
             </li>
         </ul>
 
