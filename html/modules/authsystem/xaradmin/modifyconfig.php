@@ -26,12 +26,11 @@ function authsystem_admin_modifyconfig()
     switch (strtolower($phase)) {
         case 'modify':
         default:
-            $data['authid']           = xarSecGenAuthKey();
             $data['shorturlschecked'] = xarModVars::get('authsystem',  'SupportShortURLs') ? true : false;
             $data['uselockoutchecked']= xarModVars::get('authsystem', 'uselockout') ? true : false;
             $data['lockouttime']      = xarModVars::get('authsystem', 'lockouttime')? xarModVars::get('authsystem', 'lockouttime'): 15; //minutes
             $data['lockouttries']     = xarModVars::get('authsystem', 'lockouttries') ? xarModVars::get('authsystem', 'lockouttries'): 3;
-						break;
+                        break;
 
         case 'update':
             // Confirm authorisation code
@@ -40,11 +39,9 @@ function authsystem_admin_modifyconfig()
             xarModVars::set('authsystem', 'uselockout', $uselockout);
             xarModVars::set('authsystem', 'lockouttime', $lockouttime);
             xarModVars::set('authsystem', 'lockouttries', $lockouttries);
-            xarResponse::Redirect(xarModURL('authsystem', 'admin', 'modifyconfig'));
-            // Return
-            return true;
             break;
     }
+    $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
 ?>

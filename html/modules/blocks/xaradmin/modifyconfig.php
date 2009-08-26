@@ -21,13 +21,19 @@ function blocks_admin_modifyconfig()
 {
     // Security Check
     if(!xarSecurityCheck('AdminBlock')) return;
-    if (!xarVarFetch('update', 'isset', $update, false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemsperpage', 'int', $data['itemsperpage'], xarModVars::get('blocks', 'itemsperpage'), XARVAR_NOT_REQUIRED)) return;
 
-    if($update) {
+    switch (strtolower($phase)) {
+        case 'modify':
+        default:
+        break;
+
+        case 'update':
         if (!xarSecConfirmAuthKey()) return;
         xarModVars::set('blocks', 'itemsperpage',$data['itemsperpage']);
+        break;
     }
     $data['authid'] = xarSecGenAuthKey();
     return $data;
