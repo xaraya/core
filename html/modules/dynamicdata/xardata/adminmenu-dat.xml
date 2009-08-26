@@ -1,6 +1,7 @@
 <adminmenu>
     <menuitems>
         <menuitem>
+            <type>admin</type>
             <includes>
                 <includeitem>main</includeitem>
             </includes>
@@ -9,6 +10,7 @@
         </menuitem>
         <menuitem>
             <mask>AdminDynamicData</mask>
+            <type>admin</type>
             <includes>
                 <includeitem>view</includeitem>
             </includes>
@@ -18,6 +20,7 @@
         </menuitem>
         <menuitem>
             <mask>AdminDynamicData</mask>
+            <type>admin</type>
             <includes>
                 <includeitem>modifyconfig</includeitem>
             </includes>
@@ -27,6 +30,7 @@
         </menuitem>
         <menuitem>
             <mask>AdminDynamicData</mask>
+            <type>admin</type>
             <includes>
                 <includeitem>utilities</includeitem>
             </includes>
@@ -36,6 +40,7 @@
         </menuitem>
         <menuitem>
             <mask>AdminDynamicData</mask>
+            <type>admin</type>
             <includes>
                 <includeitem>modifymoduleconfig</includeitem>
             </includes>

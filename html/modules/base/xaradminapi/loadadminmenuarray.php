@@ -36,12 +36,14 @@ function base_adminapi_loadadminmenuarray($args)
 
         }
         foreach ($xmlobject->menuitems->children() as $menuitem) {
+            $type = isset($menuitem->type) ? trim((string)$menuitem->type) : null;
             $target = isset($menuitem->target) ? trim((string)$menuitem->target) : null;
             $label = isset($menuitem->label) ? trim((string)$menuitem->label) : xarML('Missing label');
             $title = isset($menuitem->title) ? trim((string)$menuitem->title) : $label;
             $mask = isset($menuitem->mask) ? trim((string)$menuitem->mask) : null;
             $includes = isset($menuitem->includes) ? trim((string)$menuitem->includes->children()) : array();
             $menuarray['items'][] = array(
+                        'type' => $type,
                         'target' => $target,
                         'title' => $title,
                         'label' => $label,

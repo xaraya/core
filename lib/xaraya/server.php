@@ -397,7 +397,7 @@ class xarRequest extends Object
                 sys::import('xaraya.validations');
                 $regex = ValueValidations::get('regexp');
             }
-                                ;
+            
             if (isset($params['module'])) {
                 $isvalid =  $regex->validate($params['module'], array('/^[a-z][a-z_0-9]*$/'));
                 $modName = $isvalid ? $params['module'] : null;

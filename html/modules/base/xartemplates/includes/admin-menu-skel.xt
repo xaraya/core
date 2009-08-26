@@ -23,6 +23,9 @@
                         <xar:set name="functions">
                             isset($tab['includes']) ? $tab['includes'] : array()
                         </xar:set>
+                        <xar:set name="type">
+                            isset($tab['type']) ? $tab['type'] : $urlinfo[1]
+                        </xar:set>
                         <xar:if condition="is_array($functions)">
                             <xar:set name="condition">false</xar:set>
                             <xar:foreach in="$tab['includes']" value="$function">
@@ -44,7 +47,7 @@
                                     <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
                                 </xar:if>
                                 <li class="#$tabclass#">
-                                    <a href="#xarModURL($urlinfo[0],$urlinfo[1],$tab['target'])#" class="#$linkclass#">
+                                    <a href="#xarModURL($urlinfo[0],$type,$tab['target'])#" class="#$linkclass#">
                                     #$tab['label']#</a>
                                 </li>
                             </xar:sec>
@@ -57,7 +60,7 @@
                                 <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
                             </xar:if>
                             <li class="#$tabclass#">
-                                <a href="#xarModURL($urlinfo[0],$urlinfo[1],$tab['target'])#" class="#$linkclass#">
+                                <a href="#xarModURL($urlinfo[0],$type,$tab['target'])#" class="#$linkclass#">
                                     #$tab['label']#
                                 </a>
                             </li>
