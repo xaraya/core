@@ -3,9 +3,8 @@
         <menuitem>
             <includes>
                 <includeitem>main</includeitem>
-                <includeitem>overview</includeitem>
             </includes>
-            <target>overview</target>
+            <target>main</target>
             <label>Overview</label>
         </menuitem>
         <menuitem>
