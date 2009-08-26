@@ -80,6 +80,8 @@ function dynamicdata_user_display($args)
 
     // *Now* we can set the data stuff
     $data['object'] =& $myobject;
+    $data['objectid'] = $args['objectid'];
+    $data['itemid'] = $args['itemid'];
 
     // Display hooks
     $hooks = array();

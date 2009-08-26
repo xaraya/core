@@ -69,7 +69,6 @@
                     </td>
                     <td>
                         <xar:data-input property="$fieldtypeprop" name="format[0]" id="format_0" value="" />
-                        value="" />
                     </td>
                     <td>
                         <input type="text" name="validation[0]" id="validation_0" value="" class="xar-form-textmedium" />

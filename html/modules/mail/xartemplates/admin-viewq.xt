@@ -33,16 +33,19 @@
                             <td>To</td>
                             <td>
                                 <xar:if condition="!empty($mail['recipients'])">
-                                <xar:foreach in="$mail['recipients']" key="$k" value="$v">
-                                    <xar:if condition="!is_numeric($k)">
-                                    #xarVarPrepForDisplay($k)#</xar:if>
-                                    <xar:if condition="!is_numeric($v)">
-                                    #xarVarPrepForDisplay($v)#</xar:if>
-                                    <br />
-                                </xar:foreach>
+                                    <xar:foreach in="$mail['recipients']" key="$k" value="$v">
+                                        <xar:if condition="!is_numeric($k)">
+                                        #xarVarPrepForDisplay($k)#</xar:if>
+                                        <xar:if condition="!is_numeric($v)">
+                                        #xarVarPrepForDisplay($v)#</xar:if>
+                                        <br />
+                                    </xar:foreach>
                                 <xar:elseif condition="!empty($mail['info'])" />
-                                <xar:if condition="!empty($mail['name'])">
-                                #xarVarPrepForDisplay($mail['name'])#</xar:if>&lt;#xarVarPrepForDisplay($mail['info'])#&gt;</xar:if>
+                                    <xar:if condition="!empty($mail['name'])">
+                                        #xarVarPrepForDisplay($mail['name'])#
+                                    </xar:if>
+                                    &lt;#xarVarPrepForDisplay($mail['info'])#&gt;
+                                </xar:if>
                             </td>
                         </tr>
                         <tr>

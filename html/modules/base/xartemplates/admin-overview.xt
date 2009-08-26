@@ -150,7 +150,7 @@
                 <strong>Floatbox</strong>:&#160;used for input and display of floating numbers.
             </li>
             <li>
-                <strong>Hidden</strong>:&#160;used for input and display of floating numbers.
+                <strong>Hidden</strong>:&#160;used for adding a hidden value to a page.
             </li>
             <li>
                 <strong>Image</strong>:&#160;used for input and display of images.
