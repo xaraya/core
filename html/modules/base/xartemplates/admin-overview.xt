@@ -135,7 +135,7 @@
                 <strong>Dateformat</strong>:&#160;displays a dropdown of data formats.
             </li>
             <li>
-                <strong>Select</strong>:&#160;displays a genereic dropdown.
+                <strong>Select</strong>:&#160;displays a generic dropdown.
             </li>
             <li>
                 <strong>Extendeddate</strong>:&#160;a Calendar property that translates its values.to a universal YYYY-MM-DD format, rather than a UNIX timestamp.
