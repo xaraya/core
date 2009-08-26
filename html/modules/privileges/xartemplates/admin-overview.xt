@@ -101,7 +101,7 @@
             In addition, this module also supports the following configuration options:
             <ul>
                 <li>
-                    <strong>Exception redirect:</strong>&#160;insufficient access rights usually result in an error message. If this option is checked users that are logged in will be redirected to the login page instead..
+                    <strong>Exception redirect:</strong>&#160;insufficient access rights usually result in an error message. If this option is checked users that are not logged in will be redirected to the login page instead..
                 </li>
                 <li>
                     <strong>Last resort admin:</strong>&#160;lets you create an emergency user that can be useful in recovering a site if normal users are shut out because privileges have been misconfigured or corrupted. Checking this option will display a link to the page where the last resort admin is created.
