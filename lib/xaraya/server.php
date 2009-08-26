@@ -344,7 +344,7 @@ class xarRequest extends Object
 
 
     /**
-     * Gets request info for current page.
+     * Gets request info for current page or a given url.
      *
      * Example of short URL support :
      *
@@ -363,12 +363,11 @@ class xarRequest extends Object
      * + check security impact of people combining PATH_INFO with func/type param
      *
      * @return array requested module, type and func
-     * @todo <mikespub> Allow user select start page
      * @todo <marco> Do we need to do a preg_match on $params[1] here?
      * @todo <mikespub> you mean for upper-case Admin, or to support other funcs than user and admin someday ?
      * @todo <marco> Investigate this aliases thing before to integrate and promote it!
      */
-    public static function getInfo()
+    public static function getInfo($url=array())
     {
         static $requestInfo = NULL;
         static $loopHole = NULL;
@@ -382,9 +381,38 @@ class xarRequest extends Object
         }
 
         // Get variables
-        xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
-        xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $modType, 'user');
-        xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
+        if (empty($url)) {
+            xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
+            xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $modType, 'user');
+            xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
+        } else {
+            $decomposed = parse_url($url);
+            $params = array();
+            $pairs = explode('&', $decomposed['query']);
+            foreach($pairs as $pair) {
+                if (trim($pair) == '') continue;
+                list($key, $value) = explode('=', $pair);
+                $params[$key] = urldecode($value);
+            }
+            if (isset($pair['module'])) {
+                $matches = preg_match('/^[a-z][a-z_0-9]*$/',$pair['module']);
+                $modName = !empty($matches[0]) ? $matches[0] : null;
+            } else {
+                $modName = null;
+            }
+            if (isset($pair['type'])) {
+                $matches = preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/',$pair['type']);
+                $modType = !empty($matches[0]) ? $matches[0] : 'user';
+            } else {
+                $modType = 'user';
+            }
+            if (isset($pair['func'])) {
+                $matches = preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/',$pair['func']);
+                $funcName = !empty($matches[0]) ? $matches[0] : 'main';
+            } else {
+                $funcName = 'main';
+            }
+        }
 
         if (self::$allowShortURLs && empty($modName) && ($path = xarServer::getVar('PATH_INFO')) != ''
             // IIS fix
