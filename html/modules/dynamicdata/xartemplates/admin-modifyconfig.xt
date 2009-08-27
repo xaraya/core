@@ -79,7 +79,8 @@
                 <p>Note: any changes you make here will be lost whenever the property cache gets
                 flushed.</p>
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="submit" value="#xarML('Update Property Types')#" />
+                <xar:var name="label">Update Property Types</xar:var>
+                <xar:button type="submit" label="$label" />
             </div>
         </form>
     </div>
