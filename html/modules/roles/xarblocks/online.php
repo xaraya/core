@@ -38,10 +38,10 @@
             } else {
                 $args = $data['content'];
             }
-            if (!isset($args['showusers']))     $args['showusers'] = 0;
-            if (!isset($args['showusertotal'])) $args['showusertotal'] = 0;
-            if (!isset($args['showanontotal'])) $args['showanontotal'] = 0;
-            if (!isset($args['showlastuser']))  $args['showlastuser'] = 0;
+            if (!isset($args['showusers']))     $args['showusers'] = false;
+            if (!isset($args['showusertotal'])) $args['showusertotal'] = false;
+            if (!isset($args['showanontotal'])) $args['showanontotal'] = false;
+            if (!isset($args['showlastuser']))  $args['showlastuser'] = false;
 
             // Database setup
             // TODO: do we need this query? I'd have thought userapi/getallactive gives
@@ -170,10 +170,10 @@
         function modify(Array $data=array())
         {
             $data = parent::modify($data);
-            if (!isset($data['showusers']))     $data['showusers'] = 0;
-            if (!isset($data['showusertotal'])) $data['showusertotal'] = 0;
-            if (!isset($data['showanontotal'])) $data['showanontotal'] = 0;
-            if (!isset($data['showlastuser']))  $data['showlastuser'] = 0;
+            if (!isset($data['showusers']))     $data['showusers'] = false;
+            if (!isset($data['showusertotal'])) $data['showusertotal'] = false;
+            if (!isset($data['showanontotal'])) $data['showanontotal'] = false;
+            if (!isset($data['showlastuser']))  $data['showlastuser'] = false;
             return $data;
         }
 

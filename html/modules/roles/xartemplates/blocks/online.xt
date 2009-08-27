@@ -14,7 +14,8 @@
                 <td class="xar-threequarterswidth">Users</td>
                 <td>&#160;</td>
                 <td colspan="2">
-                    <xar:if condition="xarModIsAvailable('messages')">Messages 
+                    <xar:if condition="xarModIsAvailable('messages')">
+                        Messages 
                     <xar:else />&#160;</xar:if>
                 </td>
             </tr>
@@ -23,12 +24,10 @@
                     <td>&#160;</td>
                     <td>&#160;</td>
                     <td class="xar-align-center">
-                         <img src="#xarTplGetImage('ob_mail_unreaded.gif','roles')#" alt="#xarML('Unread messages')#" />
-                        alt="#xarML('Unread messages')#" />
+                        <img src="#xarTplGetImage('ob_mail_unreaded.gif','roles')#" alt="#xarML('Unread messages')#" />
                     </td>
                     <td class="xar-align-center">
-                         <img src="#xarTplGetImage('ob_mail_total.gif','roles')#" alt="#xarML('Total messages')#" />
-                        alt="#xarML('Total messages')#" />
+                        <img src="#xarTplGetImage('ob_mail_total.gif','roles')#" alt="#xarML('Total messages')#" />
                     </td>
                 </tr>
             </xar:if>
@@ -36,11 +35,9 @@
                 <tr>
                     <td>
                         <xar:if condition="!empty($dd['userurl'])">
-                             <img src="#xarTplGetImage('ob_user.gif','roles')#" alt="" class="xar-valign-middle" />
-                            class="xar-valign-middle" />
-                            <xar:else />
-                             <img src="#xarTplGetImage('ob_user_other.gif','roles')#" alt="" class="xar-valign-middle" />
-                            class="xar-valign-middle" />
+                            <img src="#xarTplGetImage('ob_user.gif','roles')#" alt="" class="xar-valign-middle" />
+                        <xar:else />
+                            <img src="#xarTplGetImage('ob_user_other.gif','roles')#" alt="" class="xar-valign-middle" />
                         </xar:if>
                         <a href="#$dd['userurl']#">#xarVarPrepForDisplay($dd['name'])#</a>
                     </td>
@@ -55,13 +52,14 @@
             </xar:foreach>
         </table>
     </xar:if>
-    <xar:if condition="$showanontotal AND $showanontotal">
+    <xar:if condition="$showanontotal">
         <table class="xar-fullwidth xar-roles-nicetable">
             <xar:if condition="$showusertotal">
                 <tr>
                     <td>
-                    <img src="#xarTplGetImage('ob_users.gif','roles')#" alt=""
-                    class="xar-valign-middle" />Total users</td>
+                        <img src="#xarTplGetImage('ob_users.gif','roles')#" alt="" class="xar-valign-middle" />
+                        Total users
+                    </td>
                     <td></td>
                     <td class="xar-align-center" colspan="2">#$numusers#</td>
                 </tr>
@@ -69,15 +67,16 @@
             <xar:if condition="$showanontotal">
                 <tr>
                     <td>
-                    <img src="#xarTplGetImage('ob_users_an.gif','roles')#" alt=""
-                    class="xar-valign-middle" />Total guests</td>
+                        <img src="#xarTplGetImage('ob_users_an.gif','roles')#" alt="" class="xar-valign-middle" />
+                        Total guests
+                    </td>
                     <td></td>
                     <td class="xar-align-center" colspan="2">#$numguests#</td>
                 </tr>
             </xar:if>
         </table>
     </xar:if>
-    <xar:if condition="isset($lastuser)">
+    <xar:if condition="isset($lastuser) AND $showlastuser">
          <p>
              Welcome to our latest member,
              <a href="&xar-modurl-roles-user-display;&amp;id=#$lastuser['id']#">
