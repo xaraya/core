@@ -22,6 +22,68 @@ function privileges_admin_modifyconfig()
     if (!xarVarFetch('testergroup', 'int', $testergroup, xarModVars::get('privileges', 'testergroup'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('tester', 'int', $tester, xarModVars::get('privileges', 'tester'), XARVAR_NOT_REQUIRED)) return;
 
+    switch ($data['tab']) {
+        case 'lastresort':
+            //Check for existence of a last resort admin for feedback to user
+            $lastresort  = xarModVars::get('privileges', 'lastresort');
+            if (($lastresort) && strlen(trim($lastresort))>1) {
+              //could just be true, we want to know if the name is set
+              $islastresort=unserialize($lastresort);
+              if (isset($islastresort['name'])){
+                 $data['lastresortname']=$islastresort['name'];
+              } else{
+                  $data['lastresortname']='';
+              }
+            }
+            break;
+        case 'realms':
+            $data['showrealms'] = xarModVars::get('privileges', 'showrealms');
+            $realmvalue = xarModVars::get('privileges', 'realmvalue');
+            if (strpos($realmvalue,'string:') === 0) {
+               $textvalue = substr($realmvalue,7);
+               $realmvalue = 'string';
+            } else {
+                $textvalue = '';
+            }
+            $data['realmvalue'] = $realmvalue;
+            $data['textvalue'] = $textvalue;
+        break;
+
+        case 'testing':
+             $testmask=trim(xarModVars::get('privileges', 'testmask'));
+             if (!isset($testmask) || empty($testmask)) {
+                 $testmask='All';
+             }
+             $data['testmask'] = $testmask;
+             $settestergroup=xarModVars::get('privileges','testergroup');
+             if (!isset($settestergroupp) || empty($settestergroup)) {
+                 $settestergrouprole = xarFindRole('Administrators');
+                 $settestergroup = $settestergrouprole->getID();
+             }
+             if (!isset($testergroup) || empty($testergroup)) {
+                 $testergroup = $settestergroup;
+             }
+             $data['testergroup'] = $testergroup;
+
+             $grouplist=xarGetGroups();
+             $data['grouplist']=$grouplist;
+
+             $testusers=xarModAPIFunc('roles','user','getUsers',array('id'=>$testergroup));
+             $defaultadminid = xarModVars::get('roles','admin');
+
+             $data['testusers']=$testusers; //array
+
+             $settester=xarModVars::get('privileges','tester'); //id
+             if (!isset($settester) || empty($settester)) {
+                 $settester=$defaultadminid; //bug 5832 set it to the default admin, cannot assume it is Administrator
+             }
+             if (!isset($tester) || empty($tester)) {
+                 $tester=$settester;
+             }
+             $data['tester']=$tester;
+        break;
+    }
+
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -29,68 +91,6 @@ function privileges_admin_modifyconfig()
                 xarSession::setVar('statusmsg', '');
             }
             $data['inheritdeny'] = xarModVars::get('privileges', 'inheritdeny');
-            $data['authid'] = xarSecGenAuthKey();
-            switch ($data['tab']) {
-                case 'lastresort':
-                    //Check for existence of a last resort admin for feedback to user
-                    $lastresort  = xarModVars::get('privileges', 'lastresort');
-                    if (($lastresort) && strlen(trim($lastresort))>1) {
-                      //could just be true, we want to know if the name is set
-                      $islastresort=unserialize($lastresort);
-                      if (isset($islastresort['name'])){
-                         $data['lastresortname']=$islastresort['name'];
-                      } else{
-                          $data['lastresortname']='';
-                      }
-                    }
-                    break;
-                case 'realms':
-                    $data['showrealms'] = xarModVars::get('privileges', 'showrealms');
-                    $realmvalue = xarModVars::get('privileges', 'realmvalue');
-                    if (strpos($realmvalue,'string:') === 0) {
-                       $textvalue = substr($realmvalue,7);
-                       $realmvalue = 'string';
-                    } else {
-                        $textvalue = '';
-                    }
-                    $data['realmvalue'] = $realmvalue;
-                    $data['textvalue'] = $textvalue;
-                break;
-
-                case 'testing':
-                     $testmask=trim(xarModVars::get('privileges', 'testmask'));
-                     if (!isset($testmask) || empty($testmask)) {
-                         $testmask='All';
-                     }
-                     $data['testmask'] = $testmask;
-                     $settestergroup=xarModVars::get('privileges','testergroup');
-                     if (!isset($settestergroupp) || empty($settestergroup)) {
-                         $settestergrouprole = xarFindRole('Administrators');
-                         $settestergroup = $settestergrouprole->getID();
-                     }
-                     if (!isset($testergroup) || empty($testergroup)) {
-                         $testergroup = $settestergroup;
-                     }
-                     $data['testergroup'] = $testergroup;
-
-                     $grouplist=xarGetGroups();
-                     $data['grouplist']=$grouplist;
-
-                     $testusers=xarModAPIFunc('roles','user','getUsers',array('id'=>$testergroup));
-                     $defaultadminid = xarModVars::get('roles','admin');
-
-                     $data['testusers']=$testusers; //array
-
-                     $settester=xarModVars::get('privileges','tester'); //id
-                     if (!isset($settester) || empty($settester)) {
-                         $settester=$defaultadminid; //bug 5832 set it to the default admin, cannot assume it is Administrator
-                     }
-                     if (!isset($tester) || empty($tester)) {
-                         $tester=$settester;
-                     }
-                     $data['tester']=$tester;
-                break;
-            }
             break;
 
         case 'update':
@@ -150,12 +150,9 @@ function privileges_admin_modifyconfig()
                     xarModVars::set('privileges', 'testergroup', $testergroup);
                     break;
             }
-
-            xarResponse::Redirect(xarModURL('privileges', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
-            // Return
-            return true;
             break;
     }
+    $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
 ?>
