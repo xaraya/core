@@ -114,6 +114,11 @@ class DataProperty extends Object implements iDataProperty
      */
     function getDataStore()
     {
+        // Get the module name if we are looking at modvar storage
+        if (substr($this->source,0,15) == 'module variable') {
+            $modvarmodule = substr($this->source,17);
+            $this->source = 'module variable';
+        }
         switch($this->source) {
             case 'dynamic_data':
                 // Variable table storage method, aka 'usual dd'
@@ -130,18 +135,11 @@ class DataProperty extends Object implements iDataProperty
                 $storename = '_functions_';
                 $storetype = 'function';
                 break;
-            case 'user settings':
-                // data available in user variables
-                // we'll keep a separate data store per module/itemtype here for now
-                // TODO: (don't) integrate user variable handling with DD
-                $storename = 'uservars_'.$this->_objectid.'_'.$this->type;
-                $storetype = 'uservars';
-                break;
-            case 'module variables':
+            case 'module variable':
                 // data available in module variables
                 // we'll keep a separate data store per module/itemtype here for now
                 // TODO: (don't) integrate module variable handling with DD
-                $storename = 'module variables_'.$this->name;
+                $storename = $modvarmodule . '__' . $this->name;
                 $storetype = 'modulevars';
                 break;
             case 'dummy':

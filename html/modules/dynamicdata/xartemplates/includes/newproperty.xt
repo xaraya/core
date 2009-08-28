@@ -4,7 +4,8 @@
         <legend>New Property</legend>
         <div class="xar-form-input-wrapper">
             <label for="dd_source_0" class="xar-form-label">
-            #$propertyfields['source']['label']#:</label>
+                #$propertyfields['source']['label']#:
+            </label>
             <select class="dd-norm" name="dd_source[0]" id="dd_source_0">
                 <xar:foreach in="$sources" value="$mysource">
                     <option>#$mysource#</option>

@@ -168,11 +168,12 @@ class DataStoreFactory extends Object
         // default data source is dynamic data
         $sources[] = 'dynamic_data';
 
+        // TODO: re-evaluate this once we're further along
         // module variables
-        $sources[] = 'module variables';
-
-        // user settings (= user variables per module)
-        $sources[] = 'user settings';
+        $modules = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+        foreach ($modules as $module) {
+            $sources[] = 'module variable: ' . $module['name'];
+        }
 
         // session variables // TODO: perhaps someday, if this makes sense
         //$sources[] = 'session variables';
