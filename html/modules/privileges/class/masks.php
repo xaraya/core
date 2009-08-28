@@ -282,7 +282,10 @@ class xarMasks extends Object
         if ($userID == XARUSER_LAST_RESORT) return true;
 
         $maskname = $mask;
-        if (empty($maskname)) $mask = new xarMask();
+        if (empty($maskname)) {
+            sys::import('modules.privileges.class.mask');
+            $mask = new xarMask();
+        }
         else $mask =  self::getMask($mask);
         if (!$mask) {
             // <mikespub> moved this whole $module thing where it's actually used, i.e. for
