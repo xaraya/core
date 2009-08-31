@@ -10,9 +10,12 @@
                     <th>Sort by</th>
                     <th colspan="2">
                         <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
-                            <xar:if condition="!empty($option['olink'])">#$option['ojoin']# 
-                            <a href="#$option['olink']#">#$option['otitle']#</a>
-                            <xar:else />#$option['ojoin']# #$option['otitle']#</xar:if>
+                            <xar:if condition="!empty($option['olink'])">
+                                #$option['ojoin']# 
+                                <a href="#$option['olink']#">#$option['otitle']#</a>
+                            <xar:else />
+                                #$option['ojoin']# #$option['otitle']#
+                            </xar:if>
                         </xar:foreach>
                     </th>
                 </tr>
@@ -25,7 +28,6 @@
                         </th>
                         <td>
                             <xar:data-output property="$properties[$name]" _itemid="$itemid" value="$fields[$name]" />
-                            value="$fields[$name]" />
                         </td>
                     </tr>
                 </xar:foreach>
