@@ -550,37 +550,39 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // TODO: do we need the concept of tplmodule at all?
         $info = DataObjectMaster::getObjectInfo($args);
         $urlargs['name'] = $info['name'];
-        $args['tplmodule'] = 'dynamicdata';
-
 
         $options = array();
 
         if (xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
-             $options['view'] = array('otitle' => xarML('Display'),
-                                     'olink'  => xarModURL($args['tplmodule'],$linktype,$linkfunc,$urlargs),
-                                     'ojoin'  => '');
-              if ($this->itemtype == 0) {
-                    $options['viewitems'] = array('otitle' => xarML('Items'),
-                                                  'olink'  => xarModURL('dynamicdata','admin','view',
-                                                                  array('itemid' => $itemid)),
-                                                  'ojoin'  => '|'
-                                                 );
-              }
+            $tplmodule = file_exists('modules/' . $args['tplmodule'] . '/xar_' . $linktype . '/' . $linkfunc . '.php') ? $args['tplmodule'] : 'dynamicdata';
+            $options['view'] = array('otitle' => xarML('Display'),
+                                 'olink'  => xarModURL($tplmodule,$linktype,$linkfunc,$urlargs),
+                                 'ojoin'  => '');
+            if ($this->itemtype == 0) {
+                $options['viewitems'] = array('otitle' => xarML('Items'),
+                                              'olink'  => xarModURL('dynamicdata','admin','view',
+                                                              array('itemid' => $itemid)),
+                                              'ojoin'  => '|'
+                                             );
+            }
         }
         if (xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
-             $options['modify'] = array('otitle' => xarML('Edit'),
-                                        'olink'  => xarModURL($args['tplmodule'],'admin','modify', $urlargs),
-                                        'ojoin'  => '|');
-             if ($this->objectid == 1) {
+            $tplmodule = file_exists('modules/' . $args['tplmodule'] . '/xaradmin/modify.php') ? $args['tplmodule'] : 'dynamicdata';
+            $options['modify'] = array('otitle' => xarML('Edit'),
+                                    'olink'  => xarModURL($tplmodule,'admin','modify', $urlargs),
+                                    'ojoin'  => '|');
+            if ($this->objectid == 1) {
+                $tplmodule = file_exists('modules/' . $args['tplmodule'] . '/xaradmin/modifyprop.php') ? $args['tplmodule'] : 'dynamicdata';
                 $options['modifyprops'] = array('otitle' => xarML('Properties'),
-                                     'olink'  => xarModURL($args['tplmodule'],'admin','modifyprop',$urlargs),
+                                     'olink'  => xarModURL($tplmodule,'admin','modifyprop',$urlargs),
                                      'ojoin'  => '|');
-             }
+            }
         }
         if (xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid))  {
             if($this->objectid == 1){
+                $tplmodule = file_exists('modules/' . $args['tplmodule'] . '/xaradmin/modifyprop.php') ? $args['tplmodule'] : 'dynamicdata';
                 $options['modifyprops'] = array('otitle' => xarML('Properties'),
-                                     'olink'  => xarModURL($args['tplmodule'],'admin','modifyprop',
+                                     'olink'  => xarModURL($tplmodule,'admin','modifyprop',
                                                    $urlargs),
                                        'ojoin'  => '|');
                 $options['viewitems'] = array('otitle' => xarML('Items'),
@@ -589,8 +591,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                                               'ojoin'  => '|'
                                              );
             }
+            $tplmodule = file_exists('modules/' . $args['tplmodule'] . '/xaradmin/delete.php') ? $args['tplmodule'] : 'dynamicdata';
             $options['delete'] = array('otitle' => xarML('Delete'),
-                                   'olink'  => xarModURL($args['tplmodule'],'admin','delete',
+                                   'olink'  => xarModURL($tplmodule,'admin','delete',
                                                $urlargs),
                                    'ojoin'  => '|');
         }
