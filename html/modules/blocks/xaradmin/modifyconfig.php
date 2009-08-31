@@ -25,6 +25,8 @@ function blocks_admin_modifyconfig()
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemsperpage', 'int', $data['itemsperpage'], xarModVars::get('blocks', 'itemsperpage'), XARVAR_NOT_REQUIRED)) return;
 
+    $data['authid'] = xarSecGenAuthKey();
+
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -35,7 +37,6 @@ function blocks_admin_modifyconfig()
         xarModVars::set('blocks', 'itemsperpage',$data['itemsperpage']);
         break;
     }
-    $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
 ?>

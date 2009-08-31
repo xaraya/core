@@ -28,6 +28,8 @@ function modules_admin_modifyconfig()
     if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if(!xarVarFetch('disableoverview','int', $data['disableoverview'], xarModVars::get('modules', 'disableoverview'), XARVAR_NOT_REQUIRED)) return;
 
+    $data['authid'] = xarSecGenAuthKey();
+
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -38,7 +40,6 @@ function modules_admin_modifyconfig()
         xarModVars::set('modules', 'disableoverview', $data['disableoverview']);
         break;
     }
-    $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
 ?>

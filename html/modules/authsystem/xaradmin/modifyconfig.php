@@ -18,11 +18,12 @@ function authsystem_admin_modifyconfig()
     // Security Check
     if (!xarSecurityCheck('AdminAuthsystem')) return;
     if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('shorturls',    'checkbox',  $data['shorturls'],   xarModVars::get('authsystem',  'SupportShortURLs'),    XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('uselockout',   'checkbox',  $data['uselockout'],  xarModVars::get('authsystem', 'uselockout'),     XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('lockouttime',  'int:1:',    $data['lockouttime'], xarModVars::get('authsystem', 'lockouttime'),       XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('lockouttries', 'int:1:',    $data['lockouttries'], xarModVars::get('authsystem', 'lockouttries'),       XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
+    $data['authid'] = xarSecGenAuthKey();
+    $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'authsystem'));
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -31,13 +32,18 @@ function authsystem_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) return;
-            xarModVars::set('authsystem', 'SupportShortURLs', $data['shorturls']);
+            $isvalid = $data['module_settings']->checkInput();
+            if (!$isvalid) {
+                return xarTplModule('authsystem','admin','modifyconfig', $data);        
+            } else {
+                $item = $data['module_settings']->updateItem();
+            }
+
             xarModVars::set('authsystem', 'uselockout', $data['uselockout']);
             xarModVars::set('authsystem', 'lockouttime', $data['lockouttime']);
             xarModVars::set('authsystem', 'lockouttries', $data['lockouttries']);
             break;
     }
-    $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
 ?>

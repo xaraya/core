@@ -107,6 +107,8 @@ function roles_admin_modifyconfig()
         xarModVars::set('roles','usereditaccount',false);
     }
 
+    $data['authid'] = xarSecGenAuthKey();
+
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -194,7 +196,6 @@ function roles_admin_modifyconfig()
             break;
     }
 
-    $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
 ?>

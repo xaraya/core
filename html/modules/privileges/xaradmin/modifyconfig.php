@@ -84,6 +84,8 @@ function privileges_admin_modifyconfig()
         break;
     }
 
+    $data['authid'] = xarSecGenAuthKey();
+
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -152,7 +154,6 @@ function privileges_admin_modifyconfig()
             }
             break;
     }
-    $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
 ?>
