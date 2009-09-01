@@ -11,6 +11,10 @@
                     <br />
                     Please contact the system administrator.
                 </div>                    
+            <xar:elseif condition="$layout eq 'bad_author'" />
+                <div style="margin-top: 20px; margin-left: 20px">
+                    The operation you are attempting is not allowed in the current situation
+                </div>
             <xar:elseif condition="$layout eq 'no_privileges'" />
                 <div style="margin-top: 20px; margin-left: 20px">
                     You don't have the correct privileges for this operation
