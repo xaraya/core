@@ -26,6 +26,8 @@ class DummyDataStore extends BasicDataStore
 {
     function getItem(Array $args = array())
     {
+        if (empty($args['itemid']))
+            throw new BadParameterException(xarML('Cannot get itemid 0'));
         $itemid = $args['itemid'];
         foreach (array_keys($this->fields) as $field) {
             $this->fields[$field]->setValue($itemid);
@@ -61,6 +63,8 @@ class DummyDataStore extends BasicDataStore
 
     function updateItem(Array $args = array())
     {
+        if (empty($args['itemid']))
+            throw new BadParameterException(xarML('Cannot update itemid 0'));
         $itemid = $args['itemid'];
         foreach (array_keys($this->fields) as $field) {
             if (method_exists($this->fields[$field],'updatevalue')) {

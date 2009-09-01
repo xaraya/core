@@ -35,6 +35,8 @@ class FlatTableDataStore extends SQLDataStore
 
     function getItem(Array $args = array())
     {
+        if (empty($args['itemid']))
+            throw new BadParameterException(xarML('Cannot get itemid 0'));
         $itemid = $args['itemid'];
         $table = $this->name;
         $itemidfield = $this->primary;
@@ -195,6 +197,8 @@ class FlatTableDataStore extends SQLDataStore
 
     function updateItem(Array $args = array())
     {
+        if (empty($args['itemid']))
+            throw new BadParameterException(xarML('Cannot update itemid 0'));
         $itemid = $args['itemid'];
         if (count($this->fields) < 1) return $itemid;
         $table = $this->name;
