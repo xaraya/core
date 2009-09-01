@@ -49,7 +49,6 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         if (count($fieldlist) < 1) return;
         foreach ($fieldlist as $field) {
             $value = xarModItemVars::get($this->modulename,$field,$itemid);
-
             // set the value for this property
             $this->fields[$field]->value = $value;
         }
@@ -58,7 +57,6 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 
     function createItem(Array $args = array())
     {
-        // There's no difference with updateItem() here, because xarModItemVars:set() handles that
         return $this->updateItem($args);
     }
 
@@ -69,13 +67,16 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         if (count($fieldlist) < 1) {
             return 0;
         }
-
         foreach ($fieldlist as $field) {
             // get the value from the corresponding property
             $value = $this->fields[$field]->value;
             // skip fields where values aren't set
             if (!isset($value)) continue;
-            xarModItemVars::set($this->modulename,$field,$value,$itemid);
+            if (empty($itemid)) {
+                xarModVars::set($this->modulename,$field,$value);
+            } else {
+                xarModItemVars::set($this->modulename,$field,$value,$itemid);
+            }
         }
         return $itemid;
     }

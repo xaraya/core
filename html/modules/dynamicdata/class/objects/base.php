@@ -75,12 +75,6 @@ class DataObject extends DataObjectMaster implements iDataObject
 
             $this->itemid = $args['itemid'];
         }
-        if(empty($this->itemid))
-        {
-            $msg = 'Invalid item id in method #(1)() for dynamic object [#(2)] #(3)';
-            $vars = array('getItem',$this->objectid,$this->name);
-            throw new BadParameterException($vars,$msg);
-        }
 
         if (!empty($this->primary) && !empty($this->properties[$this->primary])) {
             $primarystore = $this->properties[$this->primary]->datastore;
@@ -431,17 +425,24 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function createItem(Array $args = array())
     {
+        // The id of the item^to be created is
+        //  1. An itemid arg passed
+        //  2. An id arg passed ot the primary index
+        //  3. 0
+        
+        $this->properties[$this->primary]->setValue(0);
         if(count($args) > 0) {
-            if(isset($args['itemid'])) {
-                $this->itemid = $args['itemid'];
-            }
             foreach($args as $name => $value) {
                 if(isset($this->properties[$name])) {
                     $this->properties[$name]->setValue($value);
                 }
             }
+            if(isset($args['itemid'])) {
+                $this->itemid = $args['itemid'];
+            } else {
+                $this->itemid = $this->properties[$this->primary]->getValue();
+            }
         }
-
         // special case when we try to create a new object handled by dynamicdata
         if(
             $this->objectid == 1 &&
@@ -555,11 +556,6 @@ class DataObject extends DataObjectMaster implements iDataObject
             foreach($this->properties as $property)
                 if ($property->type == 21) $this->itemid = $property->value;
         }
-        if(empty($this->itemid)) {
-            $msg = 'Invalid item id in method #(1)() for dynamic object [#(2)] #(3)';
-            $vars = array('updateItem',$this->objectid,$this->name);
-            throw new BadParameterException($vars,$msg);
-        }
 
         $args = $this->getFieldValues();
         $args['itemid'] = $this->itemid;
@@ -576,8 +572,6 @@ class DataObject extends DataObjectMaster implements iDataObject
 
             // Now run the update routine of the this datastore
             $itemid = $this->datastores[$store]->updateItem($args);
-            if(empty($itemid))
-                return;
         }
 
         // call update hooks for this item

@@ -518,10 +518,10 @@ function installer_admin_bootstrap()
                    'configurations',
                    'sample',
                    'dynamicdata_tablefields',
+                   'module_settings',
                      );
 
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'dynamicdata', 'objects' => $objects))) return;
-
 # --------------------------------------------------------
 # Create wrapper DD overlay objects for the modules and roles modules
 #
@@ -541,6 +541,19 @@ function installer_admin_bootstrap()
 
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'roles', 'objects' => $objects))) return;
 
+# --------------------------------------------------------
+# Set up the standard module variables for the core modules
+# Never use createItem with modvar storage. Instead, you update itemid == 0
+#
+    $modules = array(
+                        'authsystem',
+                    );
+    
+    foreach ($modules as $module) {
+        $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => $module));
+        $data['module_settings']->updateItem();
+    }
+    
     // create the default roles and privileges setup
     sys::import('modules.privileges.xarsetup');
     initializeSetup();
@@ -644,7 +657,7 @@ function installer_admin_create_administrator()
         return $data;
     }
     
-    // Set up some custom validation checks and messges
+    // Set up some custom validation checks and messages
     $data['admin']->properties['name']->validation_min_length = 4;
     $data['admin']->properties['name']->validation_min_length_invalid = xarML('The display name must be at least 4 characters long');
     $data['admin']->properties['uname']->validation_min_length = 4;

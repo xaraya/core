@@ -22,7 +22,6 @@ function authsystem_admin_modifyconfig()
     if (!xarVarFetch('lockouttime',  'int:1:',    $data['lockouttime'], xarModVars::get('authsystem', 'lockouttime'),       XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('lockouttries', 'int:1:',    $data['lockouttries'], xarModVars::get('authsystem', 'lockouttries'),       XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
-    $data['authid'] = xarSecGenAuthKey();
     $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'authsystem'));
     switch (strtolower($phase)) {
         case 'modify':
@@ -31,14 +30,14 @@ function authsystem_admin_modifyconfig()
 
         case 'update':
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) return;
+            if (!xarSecConfirmAuthKey()) 
+                    return xarTplModule('privileges','user','errors', array('layout' => 'bad_author'));        
             $isvalid = $data['module_settings']->checkInput();
-            if (!$isvalid) {
+            if ($isvalid) {
                 return xarTplModule('authsystem','admin','modifyconfig', $data);        
             } else {
                 $item = $data['module_settings']->updateItem();
             }
-
             xarModVars::set('authsystem', 'uselockout', $data['uselockout']);
             xarModVars::set('authsystem', 'lockouttime', $data['lockouttime']);
             xarModVars::set('authsystem', 'lockouttries', $data['lockouttries']);
