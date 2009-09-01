@@ -53,8 +53,8 @@ class CheckboxProperty extends DataProperty
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
-
-        $data['checked']  = ((isset($data['value']) && $data['value']) || (isset($data['checked']) && $data['checked'])) ? true : false;
+        $data['value'] = ($data['value'] == true) ? 1 : 0;
+        $data['checked']  = $data['value'];
         if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
         return parent::showInput($data);
     }
