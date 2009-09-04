@@ -38,7 +38,7 @@ function blocks_admin_modifyconfig()
             if (!$isvalid) {
                 return xarTplModule('blocks','admin','modifyconfig', $data);        
             } else {
-                $item = $data['module_settings']->updateItem();
+                $itemid = $data['module_settings']->updateItem();
             }
         break;
     }

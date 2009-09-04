@@ -7,8 +7,8 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
         <h2>Modify Configuration</h2>
-        <form action="&xar-modurl-themes-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded">
-            <xar:template file="display" module="base" subdata="array('modulename' => 'themes')" />
+        <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+            <xar:data-form object="$module_settings" />
             <fieldset>
                 <legend>Configuration Options</legend>
                 <div class="xar-form-input-wrapper">
@@ -25,7 +25,7 @@
                     <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#" class="xar-form-label">
                         Enable the Admin Dashboard.
                     </label>
-                    <xar:data-input type="checkbox" name="dashboard" checked="$dashboard" />
+                    <xar:data-input type="checkbox" name="usedashboard" checked="$usedashboard" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="dashtemplate" title="#xarML('Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'')#" class="xar-form-label">
@@ -43,8 +43,7 @@
                     <label for="adminpagemenu" title="#xarML('Use submenus in the page for admin functions.')#" class="xar-form-label">
                         Enable InPage Admin SubMenus
                     </label>
-                    <xar:set name="checked">$adminpagemenu</xar:set>
-                    <xar:data-input type="checkbox" name="adminpagemenu" value="$checked" />
+                    <xar:data-input type="checkbox" name="adminpagemenu" checked="$adminpagemenu" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="usermenu" title="#xarML('Allow users to select themes from their Account Details page.')#" class="xar-form-label">
@@ -56,7 +55,6 @@
             </fieldset>
             <fieldset>
             <legend>Site Display Options</legend>
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <div class="xar-form-input-wrapper">
                     <label for="sitename" class="xar-form-label">
                         Site Name
@@ -142,21 +140,21 @@
                         Show template filenames                        
                     </label>
                     <xar:set name="checked"><xar:var scope="module" module="themes" name="ShowTemplates"/></xar:set>
-                    <xar:data-input type="checkbox" name="showtemplates" id="showtemplates" checked="$checked" />&#160;(filenames are shown as HTML comments)
+                    <xar:data-input type="checkbox" name="showtemplates" checked="$checked" />&#160;(filenames are shown as HTML comments)
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="cachetemplates" class="xar-form-label">                        
                         Cache templates                        
                     </label>
                     <xar:set name="checked"><xar:var scope="config" name="Site.BL.CacheTemplates"/></xar:set>
-                    <xar:data-input type="checkbox" name="cachetemplates" id="cachetemplates" checked="$checked" />
+                    <xar:data-input type="checkbox" name="cachetemplates" checked="$checked" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="var_dump" class="xar-form-label">                        
                         Debug Templates by Showing Variables Available                        
                     </label>
-                    <xar:set name="checked"><xar:var scope="module" module="themes" name="var_dump"/></xar:set>
-                    <xar:data-input type="checkbox" name="var_dump" id="var_dump" checked="$checked" />
+                    <xar:set name="checked"><xar:var scope="module" module="themes" name="variable_dump"/></xar:set>
+                    <xar:data-input type="checkbox" name="variable_dump" checked="$checked" />
                 </div>
                 <xar:if condition="xarThemeIsAvailable('atom')">
                     <!-- This should be moved if we ever fully support the atom spec -->
@@ -171,6 +169,8 @@
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
+                    <xar:data-input type="hidden" name="phase" id="phase" value="update" />
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                     <xar:var name="label">Update</xar:var>
                     <xar:button type="submit" label="$label" />
                 </div>

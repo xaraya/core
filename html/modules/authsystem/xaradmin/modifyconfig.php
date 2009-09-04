@@ -36,7 +36,7 @@ function authsystem_admin_modifyconfig()
             if (!$isvalid) {
                 return xarTplModule('authsystem','admin','modifyconfig', $data);        
             } else {
-                $item = $data['module_settings']->updateItem();
+                $itemid = $data['module_settings']->updateItem();
             }
             xarModVars::set('authsystem', 'uselockout', $data['uselockout']);
             xarModVars::set('authsystem', 'lockouttime', $data['lockouttime']);

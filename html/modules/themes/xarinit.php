@@ -81,35 +81,19 @@ function themes_init()
     xarModVars::set('themes', 'SiteTitleSeparator', ' :: ');
     xarModVars::set('themes', 'SiteTitleOrder', 'default');
     xarModVars::set('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder" /></a>');
-    xarModVars::set('themes', 'ShowPHPCommentBlockInTemplates', 0);
-    xarModVars::set('themes', 'ShowTemplates', 0);
-    xarModVars::set('themes', 'var_dump', 0);
+    xarModVars::set('themes', 'ShowPHPCommentBlockInTemplates', false);
+    xarModVars::set('themes', 'ShowTemplates', false);
+    xarModVars::set('themes', 'variable_dump', false);
+    xarModVars::set('themes', 'AtomTag', false);
     //Moved here in 1.1.x series
-    xarModVars::set('themes', 'usedashboard', 0);
+    xarModVars::set('themes', 'usedashboard', false);
     xarModVars::set('themes', 'dashtemplate', 'dashboard');
-    xarModVars::set('themes', 'adminpagemenu', 0);
+    xarModVars::set('themes', 'adminpagemenu', false);
 
     xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditThemes','All','themes','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminTheme','All','themes','All','All','ACCESS_ADMIN');
     
-    if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
-        return false;
-    }
-
-    if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
-        array('modName' => 'themes', 'blockType' => 'meta'))) return;
-
-    // Ensure the meta blocktype is registered
-    if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))) {
-        if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
-                            array('modName' => 'themes',
-                                  'blockType' => 'meta'))) return;
-    }
-
-    xarModVars::set('themes', 'selclass', 'all');
-    xarModVars::set('themes', 'useicons', false);
-
     if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
         return false;
     }
