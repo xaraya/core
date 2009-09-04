@@ -103,7 +103,6 @@ class DataObjectMaster extends Object
     public $moduleid    = null;
     public $itemtype    = 0;
     public $parent      = 0;
-    public $baseancestor= null;
 
     public $urlparam    = 'itemid';
     public $maxid       = 0;
@@ -231,11 +230,6 @@ class DataObjectMaster extends Object
         // build the list of relevant data stores where we'll get/set our data
         if(count($this->datastores) == 0 && count($this->properties) > 0)
            $this->getDataStores();
-
-        // add ancestors' properties to this object if required
-        // the default is to add the fields
-        $this->baseancestor = $this->objectid;
-        if($this->extend) $this->addAncestors();
     }
 
     private function getFieldList($fieldlist=array(),$status=null)
@@ -261,63 +255,6 @@ class DataObjectMaster extends Object
             }
         }
         return $fields;
-    }
-
-    /**
-     * Add the ancestors to this object
-     * This is adding the properties and datastores of all the ancestors to this object
-    **/
-    private function addAncestors($object=null)
-    {
-        $ancestors = $this->getAncestors();
-
-        // If this is an extended object add the ancestor properties for display purposes
-        $this->fieldorder = array_keys($this->properties);
-        if(!empty($ancestors))
-        {
-            $this->baseancestor = $ancestors[0]['objectid'];
-            // If the ancestors are objects, add them in
-            foreach($ancestors as $ancestor)
-            {
-                if($ancestor['objectid'])
-                    $this->addObject($ancestor['objectid']);
-            }
-        }
-    }
-
-    /**
-     * Add one object to another
-     * This is basically adding the properties and datastores from one object to another
-     *
-     * @todo can we use the type hinting for the parameter?
-     * @todo pass $object by ref?
-     * @todo stricten the interface, either an object or an id, not both.
-    **/
-    private function addObject($object=null)
-    {
-        if(is_numeric($object))
-            $object = self::getObject(
-                array('objectid' => $object, 'extend' => false)
-            );
-
-        if(!is_object($object))
-            throw new EmptyParameterException(array(),'Not a valid object');
-
-        $properties = $object->getProperties();
-        foreach($properties as $newproperty)
-        {
-            // ignore if this property already belongs to the object
-            if(isset($this->properties[$newproperty->name])) continue;
-            $props = $newproperty->getPublicProperties();
-            $this->addProperty($props);
-            if (!isset($this->datastores[$newproperty->datastore])) {
-                $newstore = $newproperty->getDataStore();
-                $this->addDatastore($newstore[0],$newstore[1]);
-            }
-            $this->datastores[$newproperty->datastore]->addField($this->properties[$props['name']]);
-            $this->fieldlist[] = $newproperty->name;
-        }
-        $this->fieldorder = array_merge(array_keys($properties), $this->fieldorder);
     }
 
     /**

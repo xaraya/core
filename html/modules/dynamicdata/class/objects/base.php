@@ -455,45 +455,36 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         // check that we have a valid item id, or that we can create one if it's set to 0
         if(empty($this->itemid)) {
-            if ($this->baseancestor == 0) {
-                $this->baseancestor = 1;
-            }
-            $primaryobject = DataObjectMaster::getObject(array('objectid' => $this->baseancestor));
             // no primary key identified for this object, so we're stuck
-            if(!isset($primaryobject->primary)) {
+            if(!isset($this->primary)) {
                 $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
                 $vars = array('primary key', 'DataObject', 'createItem', 'dynamicdata');
                 throw new BadParameterException($vars,$msg);
-            } else {
-                if ($this->objectid == 1) {
-                    $value = 0;
-                } else {
-                    $value = $primaryobject->properties[$primaryobject->primary]->getValue();
-                }
+            }
+            $value = $this->properties[$this->primary]->getValue();
 
-                // we already have an itemid value in the properties
-                if(!empty($value)) {
-                    $this->itemid = $value;
-                } elseif(!empty($primaryobject->properties[$primaryobject->primary]->datastore)) {
-                    // we'll let the primary datastore create an itemid for us
-                    $primarystore = $primaryobject->properties[$primaryobject->primary]->datastore;
-                    // add the primary to the data store fields if necessary
-                    if(!empty($this->fieldlist) && !in_array($primaryobject->primary,$this->fieldlist))
-                        $this->datastores[$primarystore]->addField($this->properties[$this->primary]); // use reference to original property
+            // we already have an itemid value in the properties
+            if(!empty($value)) {
+                $this->itemid = $value;
+            } elseif(!empty($this->properties[$this->primary]->datastore)) {
+                // we'll let the primary datastore create an itemid for us
+                $primarystore = $this->properties[$this->primary]->datastore;
+                // add the primary to the data store fields if necessary
+                if(!empty($this->fieldlist) && !in_array($this->primary,$this->fieldlist))
+                    $this->datastores[$primarystore]->addField($this->properties[$this->primary]); // use reference to original property
 
-                    // Execute any property-specific code first
-                    foreach ($this->datastores[$primarystore]->fields as $property) {
-                        if (method_exists($property,'createvalue')) {
-                            $property->createValue($this->itemid);
-                        }
+                // Execute any property-specific code first
+                foreach ($this->datastores[$primarystore]->fields as $property) {
+                    if (method_exists($property,'createvalue')) {
+                        $property->createValue($this->itemid);
                     }
-
-                    $this->itemid = $this->datastores[$primarystore]->createItem($this->toArray());
-                } else {
-                    $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-                    $vars = array('primary key datastore', 'Dynamic Object', 'createItem', 'DynamicData');
-                    throw new BadParameterException($vars,$msg);
                 }
+
+                $this->itemid = $this->datastores[$primarystore]->createItem($this->toArray());
+            } else {
+                $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+                $vars = array('primary key datastore', 'Dynamic Object', 'createItem', 'DynamicData');
+                throw new BadParameterException($vars,$msg);
             }
         }
         if(empty($this->itemid)) return;
