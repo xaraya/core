@@ -116,10 +116,12 @@ class DataProperty extends Object implements iDataProperty
     {
         // Get the module name if we are looking at modvar storage
         if (substr($this->source,0,15) == 'module variable') {
-            $modvarmodule = substr($this->source,17);
-            $this->source = 'module variable';
+            $modvarmodule = substr($this->source,18);
+            $source = 'module variable';
+        } else {
+            $source = $this->source;
         }
-        switch($this->source) {
+        switch($source) {
             case 'dynamic_data':
                 // Variable table storage method, aka 'usual dd'
                 $storename = '_dynamic_data_';
@@ -149,7 +151,7 @@ class DataProperty extends Object implements iDataProperty
                 break;
             default:
                 // Nothing specific, perhaps a table?
-                if(preg_match('/^(.+)\.(\w+)$/', $this->source, $matches))
+                if(preg_match('/^(.+)\.(\w+)$/', $source, $matches))
                 {
                     // data field coming from some static table : [database.]table.field
                     $table = $matches[1];

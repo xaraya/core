@@ -1,0 +1,31 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <fieldset>
+        <legend>                
+            Display Options                
+        </legend>
+        <div class="xar-form-input-wrapper">
+            <label for="itemsperpage" title="#xarML('The number of items to show on each page.')#" class="xar-form-label">                    
+                List items per page:                    
+            </label>
+            <xar:data-input property="$properties['items_per_page']" />
+        </div>
+        <div class="xar-form-input-wrapper">
+            <label for="shorturls" class="xar-form-label"  title="#xarML('Enable short URLs for this module')#">                    
+                Enable Short URLs                    
+            </label>
+            <xar:data-input property="$properties['enable_short_urls']" />
+        </div>
+        <div class="xar-form-input-wrapper">
+            <label for = "modulealias" class="xar-form-label" title="#xarML('Use an alias instead of the module name')#">                    
+                Use a module alias                    
+            </label>
+            <xar:data-input property="$properties['use_module_alias']" />
+        </div>
+        <div class="xar-form-input-wrapper">
+            <label for="aliasname" class="xar-form-label" title="#xarML('The name of the module alias to be used.')#">                        
+                    Module Alias Name                        
+            </label>
+            <xar:data-input property="$properties['module_alias_name']" />
+        </div>
+    </fieldset>
+</xar:template>

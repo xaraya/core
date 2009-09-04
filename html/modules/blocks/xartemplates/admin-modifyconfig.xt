@@ -27,12 +27,11 @@
         -->
         <xar:if condition="$tab eq 'general'">
             <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
-            <xar:template file="display" module="base" subdata="array('modulename' => 'blocks')" />
+                <xar:data-form object="$module_settings" />
                 <fieldset>
-                       <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                   <div class="xar-form-input-wrapper-after">
                         <xar:data-input type="hidden" name="phase" id="phase" value="update" />
-                        <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                         <xar:var name="label">Update</xar:var>
                         <xar:button type="submit" label="$label" />
                     </div>

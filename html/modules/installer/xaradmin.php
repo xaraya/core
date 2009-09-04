@@ -547,13 +547,14 @@ function installer_admin_bootstrap()
 #
     $modules = array(
                         'authsystem',
+                        'blocks',
                     );
     
     foreach ($modules as $module) {
         $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => $module));
-        $data['module_settings']->updateItem();
+        $data['module_settings']->initialize();
     }
-    
+
     // create the default roles and privileges setup
     sys::import('modules.privileges.xarsetup');
     initializeSetup();

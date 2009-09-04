@@ -23,6 +23,7 @@ function authsystem_admin_modifyconfig()
     if (!xarVarFetch('lockouttries', 'int:1:',    $data['lockouttries'], xarModVars::get('authsystem', 'lockouttries'),       XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
     $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'authsystem'));
+    $data['module_settings']->getItem();
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -30,10 +31,9 @@ function authsystem_admin_modifyconfig()
 
         case 'update':
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) 
-                    return xarTplModule('privileges','user','errors', array('layout' => 'bad_author'));        
+            if (!xarSecConfirmAuthKey()) return;        
             $isvalid = $data['module_settings']->checkInput();
-            if ($isvalid) {
+            if (!$isvalid) {
                 return xarTplModule('authsystem','admin','modifyconfig', $data);        
             } else {
                 $item = $data['module_settings']->updateItem();

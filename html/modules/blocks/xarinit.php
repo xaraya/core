@@ -220,7 +220,6 @@ function blocks_init()
 
     // Initialisation successful
     xarModVars::set('blocks', 'selstyle', 'plain');
-    xarModVars::set('blocks', 'itemsperpage', 20);
 
     /* There are old block instances defined previously in privs xarsetup.php file and used in the Block module.
        From this version we are adding management of security for blocks to Blocks module

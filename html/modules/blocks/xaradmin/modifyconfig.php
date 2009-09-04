@@ -23,18 +23,23 @@ function blocks_admin_modifyconfig()
     if(!xarSecurityCheck('AdminBlock')) return;
     if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemsperpage', 'int', $data['itemsperpage'], xarModVars::get('blocks', 'itemsperpage'), XARVAR_NOT_REQUIRED)) return;
 
-    $data['authid'] = xarSecGenAuthKey();
-
+    $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'blocks'));
+    $data['module_settings']->getItem();
     switch (strtolower($phase)) {
         case 'modify':
         default:
         break;
 
         case 'update':
-        if (!xarSecConfirmAuthKey()) return;
-        xarModVars::set('blocks', 'itemsperpage',$data['itemsperpage']);
+            // Confirm authorisation code
+            if (!xarSecConfirmAuthKey()) return;        
+            $isvalid = $data['module_settings']->checkInput();
+            if (!$isvalid) {
+                return xarTplModule('blocks','admin','modifyconfig', $data);        
+            } else {
+                $item = $data['module_settings']->updateItem();
+            }
         break;
     }
     return $data;

@@ -44,6 +44,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 
     function getItem(Array $args = array())
     {
+        $this->setModvarName($this->name);
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
         $fieldlist = array_keys($this->fields);
         if (count($fieldlist) < 1) return;
