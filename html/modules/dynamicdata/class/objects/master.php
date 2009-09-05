@@ -232,20 +232,58 @@ class DataObjectMaster extends Object
            $this->getDataStores();
     }
 
-    private function getFieldList($fieldlist=array(),$status=null)
+    public function setFieldList($fieldlist=array(),$status=array())
     {
-        $properties = $this->properties;
+        if (empty($fieldlist)) $fieldlist = $this->setupFieldList();
+        if (!is_array($fieldlist)) {
+            try {
+                $fieldlist = explode(',',$fieldlist);
+            } catch (Exception $e) {
+                throw new Exception('Badly formed fieldlist attribute');
+            }
+        }
+        $this->fieldlist = array();
+        if (!empty($status)) {
+            // Make sure we have an array
+            if (!is_array($status)) $status = array($status);
+            foreach($fieldlist as $field) {
+                $field = trim($field);
+                // Ignore those disabled AND those that don't exist
+                if(isset($this->properties[$field]) && in_array($this->properties[$field]->getDisplayStatus(),$status))
+                    $this->fieldlist[$this->properties[$field]->id] = $this->properties[$field]->name;
+            }
+        } else {
+            foreach($fieldlist as $field) {
+                $field = trim($field);
+                // Ignore those disabled AND those that don't exist
+                if(isset($this->properties[$field]) && ($this->properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED))
+                    $this->fieldlist[$this->properties[$field]->id] = $this->properties[$field]->name;
+                }
+        }
+        return true;
+    }
+
+    public function getFieldList()
+    {
+        if (empty($this->fieldlist)) $this->fieldlist = $this->setupFieldList();
+        return $this->fieldlist;
+    }
+
+    private function setupFieldList($fieldlist=array(),$status=array())
+    {
         $fields = array();
-        if(count($fieldlist) != 0) {
+        if(!empty($fieldlist)) {
             foreach($fieldlist as $field)
                 // Ignore those disabled AND those that don't exist
-                if(isset($properties[$field]) && ($properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED))
-                    $fields[$properties[$field]->id] = $properties[$field]->name;
+                if(isset($this->properties[$field]) && ($this->properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED))
+                    $fields[$this->properties[$field]->id] = $this->properties[$field]->name;
         } else {
-            if ($status) {
+            if (!empty($status)) {
+                // Make sure we have an array
+                if (!is_array($status)) $status = array($status);
                 // we have a status: filter on it
-                foreach($properties as $property)
-                    if($property->status && $this->status)
+                foreach($this->properties as $property)
+                    if(in_array($property->getDisplayStatus(),$status))
                         $fields[$property->id] = $property->name;
             } else {
                 // no status filter: return those that are not disabled

@@ -1,17 +1,17 @@
 <object name="module_settings">
-  <objectid>32</objectid>
+  <objectid>6</objectid>
   <label>Module Settings</label>
   <module_id>182</module_id>
-  <itemtype>20</itemtype>
+  <itemtype>5</itemtype>
   <class>ModVarObject</class>
   <filepath>modules/dynamicdata/class/modvarobject.php</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <config>a:0:{}</config>
-  <isalias>true</isalias>
+  <isalias>false</isalias>
   <properties>
     <property name="items_per_page">
-      <id>259</id>
+      <id>39</id>
       <label>Items Per Page</label>
       <type>integerbox</type>
       <defaultvalue>20</defaultvalue>
@@ -21,7 +21,7 @@
       <configuration></configuration>
     </property>
     <property name="enable_short_urls">
-      <id>260</id>
+      <id>40</id>
       <label>Enable Short URLs</label>
       <type>checkbox</type>
       <defaultvalue>false</defaultvalue>
@@ -31,23 +31,33 @@
       <configuration></configuration>
     </property>
     <property name="use_module_alias">
-      <id>261</id>
+      <id>41</id>
       <label>Use Module Alias</label>
       <type>checkbox</type>
-      <defaultvalue>true</defaultvalue>
+      <defaultvalue>false</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
       <seq>3</seq>
       <configuration></configuration>
     </property>
     <property name="module_alias_name">
-      <id>262</id>
+      <id>42</id>
       <label>Module Alias Name</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
       <seq>4</seq>
+      <configuration></configuration>
+    </property>
+    <property name="enable_user_menu">
+      <id>109</id>
+      <label>Enable User Menu</label>
+      <type>checkbox</type>
+      <defaultvalue>false</defaultvalue>
+      <source>module variable: base</source>
+      <status>33</status>
+      <seq>5</seq>
       <configuration></configuration>
     </property>
   </properties>

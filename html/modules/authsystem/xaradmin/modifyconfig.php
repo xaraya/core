@@ -23,6 +23,7 @@ function authsystem_admin_modifyconfig()
     if (!xarVarFetch('lockouttries', 'int:1:',    $data['lockouttries'], xarModVars::get('authsystem', 'lockouttries'),       XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
     $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'authsystem'));
+    $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls');
     $data['module_settings']->getItem();
     switch (strtolower($phase)) {
         case 'modify':
