@@ -7,11 +7,11 @@
         function initialize(Array $args = array())
         {
             foreach ($this->properties as $name => $property) {
-                $modulename = substr($this->properties[$name]->source,18);
-                if (empty($modulename)) throw new Exception(xarML('Incorrect module name: #(1)',$modulename));
-                $test = xarModVars::get($modulename,$this->properties[$name]->name);
+                $nameparts = explode(': ', $this->properties[$name]->source);
+                if (empty($nameparts[1])) throw new Exception(xarML('Incorrect module name: #(1)',$modulename));
+                $test = xarModVars::get($nameparts[1],$this->properties[$name]->name);
                 if ($test === null)
-                    xarModVars::set($modulename,$this->properties[$name]->name,$this->properties[$name]->defaultvalue);
+                    xarModVars::set($nameparts[1],$this->properties[$name]->name,$this->properties[$name]->defaultvalue);
             }
         }
     }

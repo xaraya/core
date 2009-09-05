@@ -115,8 +115,9 @@ class DataProperty extends Object implements iDataProperty
     function getDataStore()
     {
         // Get the module name if we are looking at modvar storage
-        if (substr($this->source,0,15) == 'module variable') {
-            $modvarmodule = substr($this->source,18);
+        $nameparts = explode(': ', $this->source);
+        if (isset($nameparts[1])) {
+            $modvarmodule = $nameparts[1];
             $source = 'module variable';
         } else {
             $source = $this->source;
