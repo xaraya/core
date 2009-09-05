@@ -82,9 +82,13 @@ function privileges_admin_modifyconfig()
              }
              $data['tester']=$tester;
         break;
+        
+        default:
+            $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'privileges'));
+            $data['module_settings']->getItem();
+        break;
+        
     }
-
-    $data['authid'] = xarSecGenAuthKey();
 
     switch (strtolower($phase)) {
         case 'modify':
@@ -101,14 +105,23 @@ function privileges_admin_modifyconfig()
             switch ($data['tab']) {
                 case 'general':
                     if (!xarVarFetch('inheritdeny', 'checkbox', $inheritdeny, false, XARVAR_NOT_REQUIRED)) return;
-                    xarModVars::set('privileges', 'inheritdeny', $inheritdeny);
                     if (!xarVarFetch('lastresort', 'checkbox', $lastresort, false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('exceptionredirect', 'checkbox', $data['exceptionredirect'], false, XARVAR_NOT_REQUIRED)) return;
+
+                    $isvalid = $data['module_settings']->checkInput();
+                    if (!$isvalid) {
+                        return xarTplModule('privileges','admin','modifyconfig', $data);        
+                    } else {
+                        $itemid = $data['module_settings']->updateItem();
+                    }
+
+                    xarModVars::set('privileges', 'inheritdeny', $inheritdeny);
                     xarModVars::set('privileges', 'lastresort', $lastresort);
                     if (!$lastresort) {
                         xarModVars::delete('privileges', 'lastresort',$lastresort);
                     }
-                    if (!xarVarFetch('exceptionredirect', 'checkbox', $data['exceptionredirect'], false, XARVAR_NOT_REQUIRED)) return;
                     xarModVars::set('privileges', 'exceptionredirect', $data['exceptionredirect']);
+
                     break;
                 case 'realms':
                     if (!xarVarFetch('enablerealms', 'checkbox', $data['enablerealms'], false, XARVAR_NOT_REQUIRED)) return;
