@@ -208,18 +208,20 @@
                         <xar:data-input type="checkbox" name="htmlenitites" id="htmlenitites" checked="$checked" />
                     </div>
                 </fieldset>
-                <xar:template file="display" module="base" subdata="array('modulename' => 'base')" />
+                <xar:data-form object="$module_settings" />
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                         <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                        <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
+                        <input type="hidden" name="phase" id="phase" value="update" />
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label" />
                     </div>
                 </fieldset>
             </form>
             <!-- Begin Security Options -->
             <xar:elseif condition="$tab eq 'security'" />
-            <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
+            <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Sessions and Security</legend>
                     <div class="xar-form-input-wrapper">
@@ -327,29 +329,31 @@
                 </fieldset>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+                        <input type="hidden" name="phase" id="phase" value="update" />
                         <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                        <input type="submit" value="#xarML('Update')#"
-                        class="xar-margin-thickright" />
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label" />
                     </div>
                 </fieldset>
             </form>
             <!-- Begin Locale Options -->
             <xar:elseif condition="$tab eq 'locales'" />
-            <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
+            <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                 <xar:template file="modifyconfig-locales" module="base" type="module" />
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+                        <input type="hidden" name="phase" id="phase" value="update" />
                         <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                        <input type="submit" value="#xarML('Update')#"
-                        class="xar-margin-thickright" />
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label" />
                     </div>
                 </fieldset>
             </form>
             <!-- Begin Other Options -->
             <xar:elseif condition="$tab eq 'other'" />
-            <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
+            <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>General Options</legend>
                     <div class="xar-form-input-wrapper">
@@ -446,7 +450,7 @@
                 </fieldset>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                         <input type="hidden" name="phase" id="phase" value="update" />
                         <input type="hidden" name="tab" id="tab" value="#$tab#" />
                         <xar:var name="label">Update</xar:var>

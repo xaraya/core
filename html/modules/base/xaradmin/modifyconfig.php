@@ -67,6 +67,8 @@ function base_admin_modifyconfig()
     $data['XARCORE_VERSION_ID'] =  xarCore::VERSION_ID;
     $data['XARCORE_VERSION_SUB'] = xarCore::VERSION_SUB;
 
+    $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'base'));
+    $data['module_settings']->getItem();
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -89,6 +91,13 @@ function base_admin_modifyconfig()
                     if (!xarVarFetch('baseshorturl','checkbox',$enableBaseShortURLs,false,XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('htmlenitites','checkbox',$FixHTMLEntities,false,XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('caching','checkbox',$caching,true,XARVAR_NOT_REQUIRED)) return;
+
+                    $isvalid = $data['module_settings']->checkInput();
+                    if (!$isvalid) {
+                        return xarTplModule('base','admin','modifyconfig', $data);        
+                    } else {
+                        $itemid = $data['module_settings']->updateItem();
+                    }
 
                     xarModVars::set('modules', 'defaultmodule', $defaultModuleName);
                     xarModVars::set('modules', 'defaultmoduletype',$defaultModuleType);
@@ -137,8 +146,8 @@ function base_admin_modifyconfig()
                     break;
                 case 'locales':
                     if (!xarVarFetch('defaultlocale','str:1:',$defaultLocale)) return;
-                    if (!xarVarFetch('active','isset',$active)) return;
-                    if (!xarVarFetch('mlsmode','str:1:',$MLSMode,'SINGLE',XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('active','array',$active, array(), XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('mlsmode','str:1:',$MLSMode,'SINGLE', XARVAR_NOT_REQUIRED)) return;
 
                     $localesList = array();
                     foreach($active as $activelocale) $localesList[] = $activelocale;
