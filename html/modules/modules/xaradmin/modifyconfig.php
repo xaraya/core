@@ -40,7 +40,7 @@ function modules_admin_modifyconfig()
             if (!xarSecConfirmAuthKey()) return;        
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
-                return xarTplModule('themes','admin','modifyconfig', $data);        
+                return xarTplModule('modules','admin','modifyconfig', $data);        
             } else {
                 $itemid = $data['module_settings']->updateItem();
             }

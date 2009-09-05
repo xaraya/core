@@ -75,7 +75,7 @@
         </div>
         <!--  Begin General Options -->
         <xar:if condition="$tab eq 'general'">
-            <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
+            <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded" >
                 <xar:data-form object="$module_settings" />
                 <fieldset>
                     <legend>Sitewide Settings</legend>
@@ -128,7 +128,7 @@
         </xar:if>
         <!-- Begin Realms Options -->
         <xar:if condition="$tab eq 'realms'">
-            <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+            <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Working With Realms</legend>
                     <div class="xar-form-input-wrapper">
@@ -201,8 +201,7 @@
         </xar:if>
         <!-- Begin Last Resort -->
         <xar:if condition="$tab eq 'lastresort' AND xarModVars::get('privileges','lastresort')">
-            <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;"
-            enctype="application/x-www-form-urlencoded">
+            <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Manage Last Resort Admin</legend>
                     <div class="xar-form-input-wrapper-before">
@@ -255,10 +254,9 @@
         <xar:if condition="$tab eq 'masks'">
             <fieldset>
                 <legend>Registered Masks</legend>
-                <p class="xar-form-input-wrapper">This option is provided for Web Developer
-                convenience. In general most Site Administrators should not need to access the
-                Masks list provided below. Editing of the masks without an understanding of how
-                they function can result in access problems to content on your site.</p>
+                <p class="xar-form-input-wrapper">
+                    This option is provided for Web Developer convenience. In general most Site Administrators should not need to access the Masks list provided below. Editing of the masks without an understanding of how they function can result in access problems to content on your site.
+                </p>
                 <xar:set name="where">'priv_type eq 3'</xar:set>
                 <xar:data-view name="privileges_privileges" where="$where" />
             </fieldset>
@@ -273,9 +271,7 @@
         </xar:if>
         <!-- Begin Testing -->
         <xar:if condition="$tab eq 'testing'">
-            <form method="post" id="testerform" name="testerform"
-            action="&xar-modurl-privileges-admin-modifyconfig;"
-            enctype="application/x-www-form-urlencoded">
+            <form method="post" id="testerform" name="testerform" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Testing Settings</legend>
                     <div>These settings let a designated tester see security check messages on a
