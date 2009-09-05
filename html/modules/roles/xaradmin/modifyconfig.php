@@ -118,10 +118,8 @@ function roles_admin_modifyconfig()
             if (!xarSecConfirmAuthKey()) return;
             switch ($data['tab']) {
                 case 'general':
-                    if (!xarVarFetch('itemsperpage',      'str:1:4:', $itemsperpage,     '20', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                     if (!xarVarFetch('defaultauthmodule', 'str:1:',   $defaultauthmodule, xarMod::getRegID('authsystem'), XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                     if (!xarVarFetch('defaultregmodule',  'str:1:',   $defaultregmodule, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('shorturls',         'checkbox', $shorturls,        false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('siteadmin',         'int:1',    $siteadmin,        xarModVars::get('roles','admin'), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('defaultgroup',      'str:1',    $defaultgroup,     'Users', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
@@ -132,11 +130,9 @@ function roles_admin_modifyconfig()
                         $itemid = $data['module_settings']->updateItem();
                     }
 
-                    xarModVars::set('roles', 'itemsperpage', $itemsperpage);
                     xarModVars::set('roles', 'defaultauthmodule', $defaultauthmodule);
                     xarModVars::set('roles', 'defaultregmodule', $defaultregmodule);
                     xarModVars::set('roles', 'defaultgroup', $defaultgroup);
-                    xarModVars::set('roles', 'SupportShortURLs', $shorturls);
                     xarModVars::set('roles', 'admin', $siteadmin);
 
                 case 'hooks':

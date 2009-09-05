@@ -88,7 +88,6 @@ function base_admin_modifyconfig()
                     if (!xarVarFetch('defaultfunction','str:1:', $defaultModuleFunction,xarModVars::get('modules', 'defaultmodulefunction'),XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('defaultdatapath','str:1:', $defaultDataPath, xarModVars::get('modules', 'defaultdatapath'),XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('shorturl','checkbox',$enableShortURLs,false,XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('baseshorturl','checkbox',$enableBaseShortURLs,false,XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('htmlenitites','checkbox',$FixHTMLEntities,false,XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('caching','checkbox',$caching,true,XARVAR_NOT_REQUIRED)) return;
 
@@ -109,7 +108,6 @@ function base_admin_modifyconfig()
                     xarModUserVars::set('roles','userhome', xarModURL($defaultModuleName, $defaultModuleType, $defaultModuleFunction),1);
                     xarConfigVars::set(null, 'Site.Core.EnableShortURLsSupport', $enableShortURLs);
                     // enable short urls for the base module itself too
-                    xarModVars::set('base','SupportShortURLs', ($enableBaseShortURLs ? 1 : 0));
                     xarConfigVars::set(null, 'Site.Core.FixHTMLEntities', $FixHTMLEntities);
                     xarConfigVars::set(null, 'System.Core.Caching', $caching);
                     break;
