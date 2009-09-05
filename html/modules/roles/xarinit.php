@@ -132,7 +132,6 @@ function roles_activate()
     //TODO: improve on this hardwiring
     xarModVars::set('roles', 'defaultauthmodule', 'authsystem'); 
     xarModVars::set('roles', 'defaultregmodule', '');
-    if (xarModVars::get('roles','itemsperpage')) return true;
     xarModVars::set('roles', 'rolesdisplay', 'tabbed');
     xarModVars::set('roles', 'locale', '');
     xarModVars::set('roles', 'duvsettings', serialize(array()));
@@ -148,7 +147,6 @@ function roles_activate()
     xarModVars::set('roles', 'allowexternalurl', false);
     xarModVars::set('roles', 'allowemail', false);
     xarModVars::set('roles', 'requirevalidation', true);
-    xarModVars::set('roles', 'itemsperpage', 20);
 
     /*
     // set the current session information to the right anonymous id
