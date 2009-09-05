@@ -36,7 +36,6 @@ function themes_admin_modifyconfig()
 
     if (!xarVarFetch('usedashboard', 'checkbox', $data['usedashboard'], xarModVars::get('themes', 'usedashboard'), XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('adminpagemenu', 'checkbox', $data['adminpagemenu'], xarModVars::get('themes', 'adminpagemenu'), XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('usermenu', 'checkbox', $data['usermenu'], false, XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('dashtemplate', 'str:1:', $data['dashtemplate'], trim(xarModVars::get('themes', 'dashtemplate')), XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('themedir','str:1:',$data['defaultThemeDir'],'themes',XARVAR_NOT_REQUIRED)) return;
 
@@ -86,6 +85,16 @@ function themes_admin_modifyconfig()
             xarModVars::set('themes', 'selstyle', $data['selstyle']);
             xarModVars::set('themes', 'selfilter', $data['selfilter']);
             xarModVars::set('themes', 'selsort', $data['selsort']);
+
+            // Adjust the usermenu hook according to the setting
+            sys::import('xaraya.structures.hooks.observer');
+            $observer = new BasicObserver('themes','user','usermenu');
+            $subject = new HookSubject('roles');
+            if (xarModVars::get('themes','enable_user_menu')) {
+                $subject->attach($observer);
+            } else {
+                $subject->detach($observer);
+            }
             break;
     }
     return $data;

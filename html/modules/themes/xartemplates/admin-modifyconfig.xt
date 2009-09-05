@@ -45,13 +45,6 @@
                     </label>
                     <xar:data-input type="checkbox" name="adminpagemenu" checked="$adminpagemenu" />
                 </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="usermenu" title="#xarML('Allow users to select themes from their Account Details page.')#" class="xar-form-label">
-                        Allow users to set their theme in User Account page
-                    </label>
-                    <xar:set name="checked">xarModIsHooked('themes', 'roles')</xar:set>
-                    <xar:data-input type="checkbox" name="usermenu" checked="$checked" />
-                </div>
             </fieldset>
             <fieldset>
             <legend>Site Display Options</legend>
