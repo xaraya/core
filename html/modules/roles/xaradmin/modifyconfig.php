@@ -74,7 +74,6 @@ function roles_admin_modifyconfig()
     $data['siteadmins']   = $siteadmins;
     $data['defaultgroup'] = xarModVars::get('roles', 'defaultgroup');
 
-    $data['authid']       = xarSecGenAuthKey();
     $hooks = array();
 
     switch ($data['tab']) {
@@ -92,6 +91,8 @@ function roles_admin_modifyconfig()
                                            'itemtype' => ROLES_GROUPTYPE));
             break;
         default:
+            $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'roles'));
+            $data['module_settings']->getItem();
             break;
     }
 
@@ -106,8 +107,6 @@ function roles_admin_modifyconfig()
     } else {
         xarModVars::set('roles','usereditaccount',false);
     }
-
-    $data['authid'] = xarSecGenAuthKey();
 
     switch (strtolower($phase)) {
         case 'modify':
@@ -132,6 +131,16 @@ function roles_admin_modifyconfig()
                     xarModVars::set('roles', 'defaultgroup', $defaultgroup);
                     xarModVars::set('roles', 'SupportShortURLs', $shorturls);
                     xarModVars::set('roles', 'admin', $siteadmin);
+
+                    $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'roles'));
+                    $data['module_settings']->getItem();
+                    $isvalid = $data['module_settings']->checkInput();
+                    if (!$isvalid) {
+                        return xarTplModule('roles','admin','modifyconfig', $data);        
+                    } else {
+                        $itemid = $data['module_settings']->updateItem();
+                    }
+
                 case 'hooks':
                     // Role type 'user' (itemtype 1).
                     xarModCallHooks('module', 'updateconfig', 'roles',

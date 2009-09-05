@@ -73,8 +73,8 @@
             - - - - - - - - - - - - - - - - - - - Begin General Options - - - - - - - - - - - - - - - - - - - - -
         -->
         <xar:if condition="$tab eq 'general'">
-            <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-                <xar:template file="display" module="base" subdata="array('modulename' => 'roles')" />
+            <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
+                <xar:data-form object="$module_settings" />
                 <fieldset>
                     <legend>Default Group and Site Administrator</legend>
                     <div class="xar-form-input-wrapper">
@@ -117,7 +117,7 @@
                 </fieldset>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                         <input type="hidden" name="phase" id="phase" value="update" />
                         <input type="hidden" name="tab" id="tab" value="#$tab#" />
                         <input type="submit" value="#xarML('Update Roles Configuration')#" />
@@ -221,7 +221,7 @@
                     </fieldset>
                     <fieldset>
                         <div class="xar-form-input-wrapper-after">
-                            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                             <input type="hidden" name="phase" id="phase" value="update" />
                             <input type="hidden" name="tab" id="tab" value="#$tab#" />
                             <input type="submit" value="#xarML('Update Roles Configuration')#" />
@@ -243,7 +243,7 @@
                   </fieldset>
                   <fieldset>
                     <div class="xar-form-input-wrapper-after">
-                      <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                      <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                       <input type="hidden" name="phase" id="phase" value="update" />
                       <input type="hidden" name="tab" id="tab" value="#$tab#" />
                       <input type="submit" value="#xarML('Update Roles Configuration')#" />
@@ -267,7 +267,7 @@
                     </fieldset>
                     <fieldset>
                         <div class="xar-form-input-wrapper-after">
-                            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                             <input type="hidden" name="phase" id="phase" value="update" />
                             <input type="hidden" name="tab" id="tab" value="#$tab#" />
                             <input type="submit" value="#xarML('Update Roles Configuration')#" />
@@ -385,7 +385,7 @@
                 </fieldset>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                         <input type="hidden" name="phase" id="phase" value="update" />
                         <input type="hidden" name="tab" id="tab" value="#$tab#" />
                         <xar:var name="label">Update</xar:var>
