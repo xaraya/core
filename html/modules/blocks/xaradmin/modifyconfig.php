@@ -25,6 +25,7 @@ function blocks_admin_modifyconfig()
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
 
     $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'blocks'));
+    $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls');
     $data['module_settings']->getItem();
     switch (strtolower($phase)) {
         case 'modify':

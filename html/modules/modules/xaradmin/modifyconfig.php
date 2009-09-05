@@ -29,6 +29,7 @@ function modules_admin_modifyconfig()
     if(!xarVarFetch('disableoverview','int', $data['disableoverview'], xarModVars::get('modules', 'disableoverview'), XARVAR_NOT_REQUIRED)) return;
 
     $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'modules'));
+    $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls');
     $data['module_settings']->getItem();
     switch (strtolower($phase)) {
         case 'modify':

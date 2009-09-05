@@ -85,6 +85,7 @@ function privileges_admin_modifyconfig()
         
         default:
             $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'privileges'));
+            $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls');
             $data['module_settings']->getItem();
         break;
         
