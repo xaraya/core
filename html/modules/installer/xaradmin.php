@@ -548,6 +548,7 @@ function installer_admin_bootstrap()
     $modules = array(
                         'authsystem',
                         'blocks',
+                        'modules',
                         'privileges',
                         'roles',
                         'themes',

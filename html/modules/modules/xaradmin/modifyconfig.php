@@ -28,16 +28,23 @@ function modules_admin_modifyconfig()
     if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if(!xarVarFetch('disableoverview','int', $data['disableoverview'], xarModVars::get('modules', 'disableoverview'), XARVAR_NOT_REQUIRED)) return;
 
-    $data['authid'] = xarSecGenAuthKey();
-
+    $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'modules'));
+    $data['module_settings']->getItem();
     switch (strtolower($phase)) {
         case 'modify':
         default:
         break;
 
         case 'update':
-        if (!xarSecConfirmAuthKey()) return;
-        xarModVars::set('modules', 'disableoverview', $data['disableoverview']);
+            // Confirm authorisation code
+            if (!xarSecConfirmAuthKey()) return;        
+            $isvalid = $data['module_settings']->checkInput();
+            if (!$isvalid) {
+                return xarTplModule('themes','admin','modifyconfig', $data);        
+            } else {
+                $itemid = $data['module_settings']->updateItem();
+            }
+            xarModVars::set('modules', 'disableoverview', $data['disableoverview']);
         break;
     }
     return $data;

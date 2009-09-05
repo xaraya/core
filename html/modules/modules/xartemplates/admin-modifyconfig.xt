@@ -8,7 +8,7 @@
         <xar:template type="module" file="admin-menu" />
         <h2>Modify Configuration</h2>
         <form method="post" action="#xarServer::getCurrentURL()#">
-            <xar:template file="display" module="base" subdata="array('modulename' => 'modules')" />
+            <xar:data-form object="$module_settings" />
             <fieldset>
                 <legend>Configuration settings</legend>
                 <div class="xar-form-input-wrapper">
@@ -20,7 +20,7 @@
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                     <xar:data-input type="hidden" name="phase" id="phase" value="update" />
                     <xar:var name="label">Update</xar:var>
                     <xar:button type="submit" label="$label" />
