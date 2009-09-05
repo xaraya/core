@@ -36,7 +36,7 @@ function blocks_userapi_getall($args)
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];
     $block_types_table  = $xartable['block_types'];
-    $block_groups_table = $xartable['block_groups'];
+    $block_groups_table = $xartable['block_instances'];
     $modules_table      = $xartable['modules'];
     // Fetch instance details.
     $query = "SELECT binst.id, binst.name,
