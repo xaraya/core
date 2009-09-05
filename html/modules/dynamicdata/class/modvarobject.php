@@ -9,7 +9,9 @@
             foreach ($this->properties as $name => $property) {
                 $modulename = substr($this->properties[$name]->source,18);
                 if (empty($modulename)) throw new Exception(xarML('Incorrect module name: #(1)',$modulename));
-                xarModVars::set($modulename,$this->properties[$name]->name,$this->properties[$name]->defaultvalue);
+                $test = xarModVars::get($modulename,$this->properties[$name]->name);
+                if ($test === null)
+                    xarModVars::set($modulename,$this->properties[$name]->name,$this->properties[$name]->defaultvalue);
             }
         }
     }
