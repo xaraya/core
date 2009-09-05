@@ -21,6 +21,12 @@
                     <br />
                     Contact the system administrator if you think this is an error.
                 </div>
+            <xar:elseif condition="$layout eq 'no_block_privileges'" />
+                <div style="margin-top: 20px; margin-left: 20px">
+                    You don't have the correct privileges to view this block
+                    <br />
+                    Contact the system administrator if you think this is an error.
+                </div>
             <xar:else />
                 <div style="margin-top: 20px; margin-left: 20px">
                     No error message is available.
