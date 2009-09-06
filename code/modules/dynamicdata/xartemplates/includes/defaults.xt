@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <div class="xar-form-input-wrapper">
         <label for="bar" title="#xarML('An example of a module-specific configuration variable')#" class="xar-form-label">            
