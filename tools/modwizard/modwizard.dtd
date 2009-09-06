@@ -102,8 +102,8 @@
 -->
 <!ELEMENT configuration ( dependency?, capabilities, modvars, hooks, security )>
 
-<!ELEMENT capabilities ( supportshorturls, setpagetitle, gui+, item_hooks, module_hooks, search_hook, transform_hooks, user_menu_hook, waiting_content_hook )* >
-<!ELEMENT supportshorturls ( #PCDATA )>
+<!ELEMENT capabilities ( enable_short_urls, setpagetitle, gui+, item_hooks, module_hooks, search_hook, transform_hooks, user_menu_hook, waiting_content_hook )* >
+<!ELEMENT enable_short_urls ( #PCDATA )>
 <!ELEMENT dependency ( #PCDATA )>
 <!ELEMENT setpagetitle ( #PCDATA )>
 <!ELEMENT item_hooks ( #PCDATA )>

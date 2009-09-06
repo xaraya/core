@@ -222,9 +222,9 @@ function xarBlock_renderGroup($groupname, $template = NULL)
 
             // Get the overriding template name.
             // Levels, in order (most significant first): group instance, instance, group
-            $group_inst_bl_template = split(';', $blockinfo['group_inst_bl_template'], 3);
-            $inst_bl_template = split(';', $blockinfo['inst_bl_template'], 3);
-            $group_bl_template = split(';', $blockinfo['group_bl_template'], 3);
+            $group_inst_bl_template = explode(';', $blockinfo['group_inst_bl_template'], 3);
+            $inst_bl_template = explode(';', $blockinfo['inst_bl_template'], 3);
+            $group_bl_template = explode(';', $blockinfo['group_bl_template'], 3);
 
             if (empty($group_bl_template[0])) {
                 // Default the box template to the group name.

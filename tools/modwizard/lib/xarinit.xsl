@@ -64,7 +64,7 @@
     MATCH: xaraya_module                    MODE: xarinit_init_modvars
 
     Register the module variables configured by the user. Additional the ones
-    required by some other functions. In example SupportShortURLs.
+    required by some other functions. In example enable_short_urls.
 
 -->
 <xsl:template mode="xarinit_init_modvars" match="xaraya_module">
@@ -386,7 +386,7 @@
     // MODULE WARIABLES FOR THIS TABLE
     xarModVars::set(
         '<xsl:value-of select="$module_prefix" />'
-        ,'itemsperpage.<xsl:value-of select="@itemtype" />'
+        ,'items_per_page.<xsl:value-of select="@itemtype" />'
         ,10 );
 
     </xsl:for-each>
@@ -434,14 +434,14 @@ function <xsl:value-of select="$module_prefix" />_init()
          support
 
     -->
-    <xsl:if test="not( boolean( configuration/capabilities/supportshorturls ) )
-                  or configuration/capabilities/supportshorturls/text() = 'yes'">
+    <xsl:if test="not( boolean( configuration/capabilities/enable_short_urls ) )
+                  or configuration/capabilities/enable_short_urls/text() = 'yes'">
     /*
      * Module Variable for ShortURLSupport!
      */
     xarModVars::set(
         '<xsl:value-of select="$module_prefix" />'
-        ,'SupportShortURLs'
+        ,'enable_short_urls'
         ,0 );
     </xsl:if>
 

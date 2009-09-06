@@ -443,10 +443,10 @@ function dynamicdata_init()
 #
 # Set up modvars
 #
-    xarModVars::set('dynamicdata', 'itemsperpage', 20);
+    xarModVars::set('dynamicdata', 'items_per_page', 20);
     xarModVars::set('dynamicdata', 'shorturla', 0);
-    xarModVars::set('dynamicdata', 'useModuleAlias',0);
-    xarModVars::set('dynamicdata', 'aliasname','Query');
+    xarModVars::set('dynamicdata', 'use_module_alias',0);
+    xarModVars::set('dynamicdata', 'module_alias_name','Query');
     xarModVars::set('dynamicdata', 'debugmode', 0);
     xarModVars::set('dynamicdata', 'debugusers', serialize(array()));
     xarModVars::set('dynamicdata', 'administrators', serialize(array()));

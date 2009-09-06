@@ -54,9 +54,9 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,'type' => $type
             ));
 
-    $itemsperpage = xarModVars::Get(
+    $items_per_page = xarModVars::Get(
             '<xsl:value-of select="$module_prefix" />'
-            ,'itemsperpage.' . <xsl:value-of select="@itemtype" /> );
+            ,'items_per_page.' . <xsl:value-of select="@itemtype" /> );
 
     $objects =&amp; xarModAPIFunc(
         '<xsl:value-of select="$module_prefix" />'
@@ -64,7 +64,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,'getall'
         ,array(
              'itemtype'  => <xsl:value-of select="@itemtype" />
-            ,'numitems'  => $itemsperpage
+            ,'numitems'  => $items_per_page
             ,'startnum'  => $startnum
             ,'sort'      => array(
                 <xsl:for-each select="order/field">'<xsl:value-of select="@name" />'<xsl:if test="position() != last()">,</xsl:if>
@@ -92,7 +92,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,array(
                 'startnum'  => '%%'
                 ,'itemtype' => <xsl:value-of select="@itemtype" /> ))
-        ,$itemsperpage );
+        ,$items_per_page );
 
     return $data;
 }

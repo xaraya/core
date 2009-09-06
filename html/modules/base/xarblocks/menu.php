@@ -231,7 +231,7 @@ function base_menublock_display($blockinfo)
     if ($vars['displaymodules'] != 'None') {
         if (xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
            $useAliasName=0;
-           $aliasname='';
+           $module_alias_name='';
             if ($vars['displaymodules'] == 'List' && !empty($vars['modulelist'])) {
                 $modlist = explode(',',$vars['modulelist']);
                 $list = array();
@@ -248,11 +248,11 @@ function base_menublock_display($blockinfo)
                 if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$blockinfo['name']. ":" . $mod['name'])) continue;
                 /* Check for active module alias */
                 /* jojodee -  We need to review the module alias functions and, thereafter it's use here */
-                $useAliasName = xarModVars::get($mod['name'], 'useModuleAlias');
-                $aliasname = xarModVars::get($mod['name'],'aliasname');
+                $useAliasName = xarModVars::get($mod['name'], 'use_module_alias');
+                $module_alias_name = xarModVars::get($mod['name'],'module_alias_name');
                 /* use the alias name if it exists for the label */
-                if (isset($useAliasName) && $useAliasName==1 && isset($aliasname) && !empty($aliasname)) {
-                    $label = $aliasname;
+                if (isset($useAliasName) && $useAliasName==1 && isset($module_alias_name) && !empty($module_alias_name)) {
+                    $label = $module_alias_name;
                 } else {
                     $label = xarModGetDisplayableName($mod['name']);
                 }
