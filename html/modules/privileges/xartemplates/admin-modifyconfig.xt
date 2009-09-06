@@ -274,30 +274,32 @@
             <form method="post" id="testerform" name="testerform" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Testing Settings</legend>
-                    <div>These settings let a designated tester see security check messages on a
-                    live site.</div>
+                    <div>
+                        These settings let a designated tester see security check messages on a live site.
+                    </div>
                     <br />
                     <div class="xar-form-input-wrapper">
-                    <label for="testergroup" title="#xarML('Group containing the tester')#"
-                    class="xar-form-label">Tester Group:</label>
-                    <select name="testergroup" id="testergroup" size="1"
-                    onchange="this.form.submit(testerform.phase.value='modify');">
-                        <xar:foreach in="$grouplist" key="$k" value="$testers">
-                            <xar:if condition="$grouplist[$k]['id'] eq $testergroup">
-                                <option value="#$grouplist[$k]['id']#" selected="selected">
-                                #$grouplist[$k]['name']#</option>
-                            <xar:else />
-                                <option name="testgroup.#$grouplist[$k]#"
-                                value="#$grouplist[$k]['id']#">#$grouplist[$k]['name']#</option>
-                            </xar:if>
-                        </xar:foreach>
+                        <label for="testergroup" title="#xarML('Group containing the tester')#" class="xar-form-label">
+                            Tester Group:
+                        </label>
+                        <select name="testergroup" id="testergroup" size="1" onchange="this.form.submit(testerform.phase.value='modify');">
+                            <xar:foreach in="$grouplist" key="$k" value="$testers">
+                                <xar:if condition="$grouplist[$k]['id'] eq $testergroup">
+                                    <option value="#$grouplist[$k]['id']#" selected="selected">
+                                    #$grouplist[$k]['name']#</option>
+                                <xar:else />
+                                    <option name="testgroup.#$grouplist[$k]#"
+                                    value="#$grouplist[$k]['id']#">#$grouplist[$k]['name']#</option>
+                                </xar:if>
+                            </xar:foreach>
                         </select>
                         <!--<xar:data-input type="grouplist" name="testergroup" is="testergroup" value="$testergroup" onchange="this.form.action=this.form.submit();"/>-->
-                    Group to select tester from</div>
+                        Group to select tester from
+                    </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="tester"
-                        title="#xarML('Name of the administator that will see the messages')#"
-                        class="xar-form-label">Tester:</label>
+                        <label for="tester" title="#xarML('Name of the administator that will see the messages')#" class="xar-form-label">
+                            Tester:
+                        </label>
                         <select name="tester" id="tester" size="1">
                             <xar:foreach in="$testusers" key="$k" value="$testers">
                                 <xar:if condition="$testusers[$k]['id'] eq $tester">
