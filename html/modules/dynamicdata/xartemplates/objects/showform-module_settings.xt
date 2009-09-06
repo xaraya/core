@@ -29,7 +29,7 @@
         </xar:if>
         <xar:if condition="isset($properties['module_alias_name'])">
             <div class="xar-form-input-wrapper">
-                <label for="aliasname" class="xar-form-label" title="#xarML('The name of the module alias to be used.')#">                        
+                <label for="module_alias_name" class="xar-form-label" title="#xarML('The name of the module alias to be used.')#">                        
                         Module Alias Name                        
                 </label>
                 <xar:data-input property="$properties['module_alias_name']" />
