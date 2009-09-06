@@ -5,7 +5,7 @@
         </legend>
         <xar:if condition="isset($properties['items_per_page'])">
             <div class="xar-form-input-wrapper">
-                <label for="itemsperpage" title="#xarML('The number of items to show on each page.')#" class="xar-form-label">                    
+                <label for="items_per_page" title="#xarML('The number of items to show on each page.')#" class="xar-form-label">                    
                     List items per page:                    
                 </label>
                 <xar:data-input property="$properties['items_per_page']" />
@@ -29,7 +29,7 @@
         </xar:if>
         <xar:if condition="isset($properties['module_alias_name'])">
             <div class="xar-form-input-wrapper">
-                <label for="aliasname" class="xar-form-label" title="#xarML('The name of the module alias to be used.')#">                        
+                <label for="module_alias_name" class="xar-form-label" title="#xarML('The name of the module alias to be used.')#">                        
                         Module Alias Name                        
                 </label>
                 <xar:data-input property="$properties['module_alias_name']" />

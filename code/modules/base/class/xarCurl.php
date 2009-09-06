@@ -315,7 +315,7 @@ class xarCurl extends Object
         $this->getinfo();
 
         // Remove the 100 header.
-        if (ereg('^HTTP/1.1 100', $result)) {
+        if (mb_ereg('^HTTP/1.1 100', $result)) {
             $pos = strpos($result, "\r\n\r\n");
             if (!$pos) {
                 $pos = strpos($result, "\n\n");
@@ -345,7 +345,7 @@ class xarCurl extends Object
 
         // Split each header line into a name/value pair.
         foreach ($header as $header_line) {
-            $arr = split(':', $header_line, 2);
+            $arr = explode(':', $header_line, 2);
             if (count($arr) == 2) {
                 // Put the header name/value pairs into a property array for reference.
                 $this->header[trim($arr[0])] = trim($arr[1]);

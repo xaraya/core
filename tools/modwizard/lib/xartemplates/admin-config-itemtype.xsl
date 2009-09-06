@@ -27,15 +27,15 @@
         </colgroup>
 
         <tr>
-            <td><label for="itemsperpage">Item's per page</label></td>
+            <td><label for="items_per_page">Item's per page</label></td>
             <td>
                 <xsl:element name="xar:data-input" xml:space="default">
                     <xsl:attribute name="size">3</xsl:attribute>
                     <xsl:attribute name="maxlength">3</xsl:attribute>
                     <xsl:attribute name="type">integerbox</xsl:attribute>
-                    <xsl:attribute name="id">itemsperpage</xsl:attribute>
-                    <xsl:attribute name="name">itemsperpage</xsl:attribute>
-                    <xsl:attribute name="value">$itemsperpage</xsl:attribute>
+                    <xsl:attribute name="id">items_per_page</xsl:attribute>
+                    <xsl:attribute name="name">items_per_page</xsl:attribute>
+                    <xsl:attribute name="value">$items_per_page</xsl:attribute>
                 </xsl:element>
             </td>
         </tr>

@@ -278,12 +278,12 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         // The encode_shorturl will be in userapi.
         // Note: if a module declares itself as supporting short URLs, then the encoding
         // API subsequently fails to load, then we want those errors to be raised.
-        if ($modType == 'user' && xarModVars::get($modName, 'SupportShortURLs') && xarMod::apiLoad($modName, $modType)) {
+        if ($modType == 'user' && xarModVars::get($modName, 'enable_short_urls') && xarMod::apiLoad($modName, $modType)) {
             $encoderArgs = $args;
             $encoderArgs['func'] = $funcName;
 
             // Execute the short URL function.
-            // It must exist if the SupportShortURLs variable is set for the module.
+            // It must exist if the enable_short_urls variable is set for the module.
             // FIXME: if the function does not exist, then errors are not handled well, often hidden.
             // Ensure a missing short URL encoding function gets written to the log file.
             $short = xarMod::apiFunc($modName, $modType, 'encode_shorturl', $encoderArgs);
@@ -461,7 +461,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo = NULL, $
 //          if we don't get that information from at least one enabled hook. But this is silly, really,
 //          because there are *no* cases where you can have the same hookObject + hookAction in 2 different
 //          hookAreas (GUI or API).
-    if ($isGUI || eregi('^(display|new|modify|search|usermenu|modifyconfig)$',$hookAction)) {
+    if ($isGUI || mb_eregi('^(display|new|modify|search|usermenu|modifyconfig)$',$hookAction)) {
         return $output;
     } else {
         return $extraInfo;

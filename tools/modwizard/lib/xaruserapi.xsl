@@ -36,7 +36,7 @@
              support. Short URL are only supported for user gui, So skip this
              when no user gui.
         -->
-        <xsl:if test="not( boolean( configuration/capabilities/supportshorturls ) ) or configuration/capabilities/supportshorturls/text() = 'yes'">
+        <xsl:if test="not( boolean( configuration/capabilities/enable_short_urls ) ) or configuration/capabilities/enable_short_urls/text() = 'yes'">
 
                 <xsl:apply-templates select="." mode="xaruserapi_encode_shorturl" />
                 <xsl:apply-templates select="." mode="xaruserapi_decode_shorturl" />

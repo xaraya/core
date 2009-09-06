@@ -57,7 +57,7 @@ class URLTitleProperty extends TextBoxProperty
                 } else {
                     // If we have a scheme but nothing following it,
                     // then consider the link empty :-)
-                    if (eregi('^[a-z]+\:\/\/$', trim($link))) {
+                    if (mb_eregi('^[a-z]+\:\/\/$', trim($link))) {
                         $link = '';
                     } else {
 

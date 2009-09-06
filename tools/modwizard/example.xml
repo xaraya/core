@@ -64,7 +64,7 @@
         <capabilities>
 
             <!-- Add code for short url-support? -->
-            <supportshorturls>yes</supportshorturls>
+            <enable_short_urls>yes</enable_short_urls>
 
             <!-- Add code to change <head> -> <title> tag for each page? -->
             <setpagetitle>yes</setpagetitle>
