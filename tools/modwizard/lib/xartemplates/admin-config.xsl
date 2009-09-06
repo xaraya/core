@@ -24,17 +24,17 @@
             <col />
         </colgroup>
 
-    <xsl:if test="not( boolean( configuration/capabilities/supportshorturls ) )
-                  or configuration/capabilities/supportshorturls/text() = 'yes'">
+    <xsl:if test="not( boolean( configuration/capabilities/enable_short_urls ) )
+                  or configuration/capabilities/enable_short_urls/text() = 'yes'">
 
         <tr>
-            <td><label for="supportshorturls">Short URL Support</label></td>
+            <td><label for="enable_short_urls">Short URL Support</label></td>
             <td>
                 <xsl:element name="xar:data-input" xml:space="default">
-                    <xsl:attribute name="id">supportshorturls</xsl:attribute>
+                    <xsl:attribute name="id">enable_short_urls</xsl:attribute>
                     <xsl:attribute name="type">checkbox</xsl:attribute>
-                    <xsl:attribute name="name">supportshorturls</xsl:attribute>
-                    <xsl:attribute name="value">$supportshorturls</xsl:attribute>
+                    <xsl:attribute name="name">enable_short_urls</xsl:attribute>
+                    <xsl:attribute name="value">$enable_short_urls</xsl:attribute>
                 </xsl:element>
             </td>
         </tr>
