@@ -23,7 +23,7 @@ function authsystem_admin_main()
     $info = xarRequest::getInfo();
     $samemodule = $info[0] == $refererinfo[0];
     
-    if ((xarModVars::get('modules', 'disableoverview') == 0) || $samemodule){
+    if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTplModule('authsystem','admin','overview');
     } else {
         xarResponse::Redirect(xarModURL('authsystem', 'admin', 'modifyconfig'));

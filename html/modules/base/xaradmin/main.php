@@ -26,7 +26,7 @@ function base_admin_main()
     $info = xarRequest::getInfo();
     $samemodule = $info[0] == $refererinfo[0];
     
-    if ((xarModVars::get('modules', 'disableoverview') == 0) || $samemodule){
+    if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTplModule('base','admin','overview');
     } else {
         xarResponse::Redirect(xarModURL('base', 'admin', 'modifyconfig'));

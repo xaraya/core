@@ -179,7 +179,7 @@ function modules_init()
                          // default start page
                          array($modulesmodid,'startpage','overview'),
                          // disable overviews
-                         array($modulesmodid,'disableoverview',0),
+                         array($modulesmodid,'disableoverview',false),
                          // expertlist
                          array($modulesmodid,'expertlist','0'),
                          // the configuration settings pertaining to modules for the base module
