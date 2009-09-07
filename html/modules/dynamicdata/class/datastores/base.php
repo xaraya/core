@@ -25,9 +25,6 @@ class BasicDataStore extends DDObject implements IBasicDataStore
     function addField(DataProperty &$property)
     {
         $name = $this->getFieldName($property);
-        if(!isset($name))
-            return;
-
         $this->fields[$name] = &$property; // use reference to original property
     }
 
@@ -124,9 +121,6 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
     function setPrimary(DataProperty &$property)
     {
         $name = $this->getFieldName($property);
-        if(!isset($name))
-            return;
-
         $this->primary = $name;
     }
 
@@ -136,9 +130,6 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
     function addSort(DataProperty &$property, $sortorder = 'ASC')
     {
         $name = $this->getFieldName($property);
-        if(!isset($name))
-            return;
-
         $this->sort[] = array('field'     => $name,
                               'sortorder' => $sortorder);
     }
