@@ -85,7 +85,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         if (!is_array($this->groupby)) $this->groupby = explode(',',$this->groupby);
 
-        $this->getDataStores(true);
+        // If a fieldlist was passed, only get the appropriate datastores
+        if (isset($args['fieldlist'])) $this->getDataStores(true);
         
         // REMOVEME: secondary is now always false
         // add where clause if itemtype is one of the properties (e.g. articles)
@@ -408,6 +409,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function showView(Array $args = array())
     {
+        $this->getItems($args); 
+
         $args = $this->toArray($args);
 
         if(!empty($this->status)) {

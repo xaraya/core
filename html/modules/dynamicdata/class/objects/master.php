@@ -319,6 +319,7 @@ class DataObjectMaster extends Object
 
         // check the fieldlist for valid property names and for operations like COUNT, SUM etc.
         if (!empty($this->fieldlist) && count($this->fieldlist) > 0) {
+            if (!is_array($this->fieldlist)) $this->setFieldList($this->fieldlist);
             $cleanlist = array();
             foreach($this->fieldlist as $name) {
                 if (!strstr($name,'(')) {
