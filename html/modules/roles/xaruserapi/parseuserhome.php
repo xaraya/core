@@ -34,7 +34,7 @@ function roles_userapi_parseuserhome($args)
         {
             case '[': // module link
             {
-                // Credit to Elek M�ton for further expansion
+                // Credit to Elek M?ton for further expansion
                 $sections = explode(']',substr($url,1));
                 $url = explode(':', $sections[0]);
                 // if the current module is active, then we are here
@@ -100,8 +100,8 @@ function roles_userapi_parseuserhome($args)
                 $url = xarModUrl('articles', 'user', 'view', array('catid' => $url[0]));
                         break;
             }
-            default : // standard URL
-                $allowexternalurl=xarModVars::get('roles','allowexternalurl');
+            default : // standard U RL
+                $allowexternalurl =xarModVars::get('roles','allowexternalurl');
                 $url_parts = parse_url($url);
                 if (isset($url_parts['host'])) { //if not we don't have to worry
                     if (($url_parts['host'] != $_SERVER["SERVER_NAME"]) &&

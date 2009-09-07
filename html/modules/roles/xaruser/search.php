@@ -143,7 +143,7 @@ function roles_user_search()
                             array('startnum'          => $startnum,
                                   'selection'         => $selection,
                                   'include_anonymous' => false,
-                                  'numitems'          => xarModVars::get('roles', 'items_per_page')));
+                                  'numitems'          => (int)xarModVars::get('roles', 'items_per_page')));
 
     // combine search results with DD
     if (!empty($users) && count($data['users']) > 0) {

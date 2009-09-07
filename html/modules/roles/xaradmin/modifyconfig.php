@@ -72,7 +72,7 @@ function roles_admin_modifyconfig()
         xarModVars::set('roles', 'disallowedips', $ip);
     }
     $data['siteadmins']   = $siteadmins;
-    $data['defaultgroup'] = xarModVars::get('roles', 'defaultgroup');
+    $data['defaultgroup'] = (int)xarModVars::get('roles', 'defaultgroup');
 
     $hooks = array();
 
@@ -121,7 +121,7 @@ function roles_admin_modifyconfig()
                 case 'general':
                     if (!xarVarFetch('defaultauthmodule', 'str:1:',   $defaultauthmodule, xarMod::getRegID('authsystem'), XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                     if (!xarVarFetch('defaultregmodule',  'str:1:',   $defaultregmodule, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('siteadmin',         'int:1',    $siteadmin,        xarModVars::get('roles','admin'), XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('siteadmin',         'int:1',    $siteadmin,        (int)xarModVars::get('roles','admin'), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('defaultgroup',      'str:1',    $defaultgroup,     'Users', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
                     $isvalid = $data['module_settings']->checkInput();

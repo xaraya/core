@@ -69,7 +69,7 @@ function privileges_admin_modifyconfig()
              $data['grouplist']=$grouplist;
 
              $testusers=xarModAPIFunc('roles','user','getUsers',array('id'=>$testergroup));
-             $defaultadminid = xarModVars::get('roles','admin');
+             $defaultadminid = (int)xarModVars::get('roles','admin');
 
              $data['testusers']=$testusers; //array
 

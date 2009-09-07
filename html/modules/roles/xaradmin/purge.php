@@ -33,7 +33,7 @@ function roles_admin_purge($args)
     $rolestable = $xartable['roles'];
 
     $deleted = '[' . xarML('deleted') . ']';
-    $numitems = xarModVars::get('roles', 'items_per_page');
+    $numitems = (int)xarModVars::get('roles', 'items_per_page');
     // Make sure a value was retrieved for items_per_page
     if (empty($numitems)) $numitems = -1;
 

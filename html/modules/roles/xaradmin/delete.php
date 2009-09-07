@@ -48,10 +48,10 @@ function roles_admin_delete()
         return xarTplModule('roles','user','errors',array('layout' => 'remove_nonempty_group', 'user' => $role->getName()));
     }
     // Prohibit removal of any groups or users the system needs
-    if($id == xarModVars::get('roles','admin')) {
+    if($id == (int)xarModVars::get('roles','admin')) {
         return xarTplModule('roles','user','errors',array('layout' => 'remove_siteadmin', 'user' => $role->getName()));
     }
-    if($id == xarModVars::get('roles','defaultgroup')) {
+    if($id == (int)xarModVars::get('roles','defaultgroup')) {
         return xarTplModule('roles','user','errors',array('layout' => 'default_usergroup', 'group' => $role->getName()));
     }
 
