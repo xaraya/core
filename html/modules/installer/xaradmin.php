@@ -16,7 +16,6 @@
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
-if (!file_exists('install.php')) { throw new Exception('Already installed');}
 
 /**
  * Dead
@@ -40,6 +39,7 @@ function installer_admin_main()
  */
 function installer_admin_phase1()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     // Get the installed locales
@@ -78,6 +78,7 @@ function installer_admin_phase1()
  */
 function installer_admin_phase2()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarVarFetch('retry','int:1',$data['retry'],NULL, XARVAR_NOT_REQUIRED);
 
@@ -97,6 +98,7 @@ function installer_admin_phase2()
  */
 function check_dir($dirname)
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     if (@touch($dirname . '/.check_dir')) {
         $fd = @fopen($dirname . '/.check_dir', 'r');
         if ($fd) {
@@ -122,6 +124,7 @@ function check_dir($dirname)
  */
 function installer_admin_phase3()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     if (!xarVarFetch('agree','regexp:(agree|disagree)',$agree)) return;
 
@@ -209,6 +212,7 @@ function installer_admin_phase3()
  */
 function installer_admin_phase4()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     // Get default values from config files
@@ -251,6 +255,7 @@ function installer_admin_phase4()
  */
 function installer_admin_phase5()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarVarSetCached('installer','installing', true);
 
@@ -490,6 +495,7 @@ function installer_admin_phase5()
  */
 function installer_admin_bootstrap()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarVarSetCached('installer','installing', true);
 
@@ -647,6 +653,7 @@ function installer_admin_bootstrap()
  */
 function installer_admin_create_administrator()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     xarVarSetCached('installer','installing', true);
@@ -788,6 +795,7 @@ function installer_admin_create_administrator()
  */
 function installer_admin_choose_configuration()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     $data['language'] = $install_language;
@@ -868,6 +876,7 @@ function installer_admin_choose_configuration()
  */
 function installer_admin_confirm_configuration()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     xarVarSetCached('installer','installing', true);
@@ -1044,6 +1053,7 @@ function installer_admin_confirm_configuration()
 
 function installer_admin_security()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarTplSetThemeName('installer');
     $data['language']    = $install_language;
@@ -1055,6 +1065,7 @@ function installer_admin_security()
 
 function installer_admin_cleanup()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarTplSetThemeName('installer');
 
