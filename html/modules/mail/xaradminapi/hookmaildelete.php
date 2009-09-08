@@ -113,7 +113,7 @@ function mail_adminapi_hookmaildelete($args)
                       'from' => $from,
                       'fromname' => $fromname);
 // Check if HTML mail has been configured by the admin
-    if (xarModVars::get('mail', 'html')) {
+    if ((bool)xarModVars::get('mail', 'html')) {
         xarModAPIFunc('mail', 'admin', 'sendhtmlmail', $mailargs);
     } else {
         xarModAPIFunc('mail', 'admin', 'sendmail', $mailargs);

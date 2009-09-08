@@ -50,7 +50,7 @@ function mail_adminapi_sendmail($args)
 
     // Check if HTML mail has been configured by the admin
     // and send to sendhtmlmail()
-    if (xarModVars::get('mail', 'html')) {
+    if ((bool)xarModVars::get('mail', 'html')) {
         return xarModAPIFunc('mail', 'admin', 'sendhtmlmail', $args);
     } else {
         // Check info
