@@ -70,7 +70,7 @@ function dynamicdata_util_view_static($args)
     $data['itemtype'] = $itemtype;
     $data['authid'] = xarSecGenAuthKey();
 
-    if (xarModVars::get('themes','usedashboard')) {
+    if ((bool)xarModVars::get('themes','usedashboard')) {
         $admin_tpl = xarModVars::get('themes','dashtemplate');
     } else {
        $admin_tpl='default';

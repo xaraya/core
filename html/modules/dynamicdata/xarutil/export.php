@@ -150,7 +150,7 @@ function dynamicdata_util_export($args)
 
     $data['xml'] = xarVarPrepForDisplay($xml);
 
-    if (xarModVars::get('themes','usedashboard')) {
+    if ((bool)xarModVars::get('themes','usedashboard')) {
         $admin_tpl = xarModVars::get('themes','dashtemplate');
     }else {
        $admin_tpl='default';

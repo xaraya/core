@@ -23,8 +23,8 @@ function themes_admin_settings()
     if (!xarVarFetch('selstyle',  'str:1:', $selstyle,  'plain',              XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('selfilter', 'str:1:', $selfilter, 'XARTHEME_STATE_ANY', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('selclass',  'str:1:', $selclass,  'all',                XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('regen',     'str:1:', $regen,     false,                XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('useicons',  'checkbox', $useicons, 'XARTHEME_STATE_ANY', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('regen',     'str:1:', $regen,      false,               XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('useicons',  'checkbox', $useicons, false,               XARVAR_NOT_REQUIRED)) return;
 
     if (!xarModUserVars::set('themes', 'hidecore', $hidecore)) return;
     if (!xarModUserVars::set('themes', 'selstyle', $selstyle)) return;
