@@ -25,7 +25,7 @@
                 </div>
           </xar:if>
 
-        <xar:if condition="xarModVars::get('roles', 'allowemail') AND xarModItemVars::get('roles','allowemail',$id)">
+        <xar:if condition="(bool)xarModVars::get('roles', 'allowemail') AND (bool)xarModItemVars::get('roles','allowemail',$id)">
             <div class="xar-form-input-wrapper">
                 <label class="xar-form-label">
                     Email

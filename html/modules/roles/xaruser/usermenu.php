@@ -37,7 +37,7 @@ function roles_user_usermenu($args)
             $object->getItem(array('itemid' => $id));
             $role = xarRoles::getRole($id);
             $home = xarModUserVars::get('roles','userhome');
-            $allowemail = xarModUserVars::get('roles','allowemail',$id); //allow someone to send an email to the user via a form
+            $allowemail = (bool)xarModUserVars::get('roles','allowemail',$id); //allow someone to send an email to the user via a form
             if (xarModVars::get('roles','setuserlastlogin')) {
             //only display it for current user or admin
                 if (xarUserIsLoggedIn() && xarUserGetVar('id')==$id) { //they should be but ..
@@ -122,7 +122,7 @@ function roles_user_usermenu($args)
             }
             if (xarModVars::get('roles','userhome') && (isset($home))) {
                 /* Check if external urls are allowed in home page */
-                $allowexternalurl=xarModVars::get('roles','allowexternalurl');
+                $allowexternalurl = (bool)xarModVars::get('roles','allowexternalurl');
                 $url_parts = parse_url($home);
                 if (!$allowexternalurl) {
                     if ((preg_match("%^http://%", $home, $matches)) &&
@@ -181,8 +181,8 @@ function roles_user_usermenu($args)
                 }
 
                 // Step 2 Check for validation required or not
-                $requireValidation = xarModVars::get('roles', 'requirevalidation');
-                if (xarModVars::get('roles', 'requirevalidation') || (xarUserGetVar('uname') != 'admin')) {
+                $requireValidation = (bool)xarModVars::get('roles', 'requirevalidation');
+                if ($requirevalidation || (xarUserGetVar('uname') != 'admin')) {
                     // Step 2
                     // Create confirmation code and time registered
                     $confcode = xarModAPIFunc('roles','user','makepass');

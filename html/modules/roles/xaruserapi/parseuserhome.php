@@ -100,8 +100,8 @@ function roles_userapi_parseuserhome($args)
                 $url = xarModUrl('articles', 'user', 'view', array('catid' => $url[0]));
                         break;
             }
-            default : // standard U RL
-                $allowexternalurl =xarModVars::get('roles','allowexternalurl');
+            default : // standard URL
+                $allowexternalurl = (bool)xarModVars::get('roles','allowexternalurl');
                 $url_parts = parse_url($url);
                 if (isset($url_parts['host'])) { //if not we don't have to worry
                     if (($url_parts['host'] != $_SERVER["SERVER_NAME"]) &&

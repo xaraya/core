@@ -174,7 +174,7 @@ function roles_user_getvalidation()
                     return; // TODO ...something here if the email is not sent..
                 }
 
-            } elseif  (xarModVars::get('roles', 'requirevalidation') && !$newuser && xarModVars::get('roles','askwelcomeemail')) {
+            } elseif  ((bool)xarModVars::get('roles', 'requirevalidation') && !$newuser && xarModVars::get('roles','askwelcomeemail')) {
              //send this email if we know for sure email validation only is required, not validation for new users - a roles function
 
                 $adminname = xarModVars::get('mail', 'adminname');

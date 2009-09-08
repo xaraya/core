@@ -100,8 +100,8 @@ function roles_admin_modifyconfig()
     $data['hooks'] = $hooks;
     $data['defaultauthmod']    = xarModVars::get('roles', 'defaultauthmodule');
     $data['defaultregmod']     = xarModVars::get('roles', 'defaultregmodule');
-    $data['allowuserhomeedit'] = xarModVars::get('roles', 'allowuserhomeedit');
-    $data['requirevalidation'] = xarModVars::get('roles', 'requirevalidation');
+    $data['allowuserhomeedit'] = (bool)xarModVars::get('roles', 'allowuserhomeedit');
+    $data['requirevalidation'] = (bool)xarModVars::get('roles', 'requirevalidation');
     //check for roles hook in case it's set independently elsewhere
     if (xarModIsHooked('roles', 'roles')) {
         xarModVars::set('roles','usereditaccount',true);
