@@ -1163,8 +1163,8 @@ function installer_admin_cleanup()
     xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true));
 
     $data['language']    = $install_language;
-    $data['phase'] = 6;
-    $data['phase_label'] = xarML('Step Six');
+    $data['phase'] = 10;
+    $data['phase_label'] = xarML('Step Ten');
     $data['finalurl'] = xarModURL('installer', 'admin', 'finish');
 
     return $data;
