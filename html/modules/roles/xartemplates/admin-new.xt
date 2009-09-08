@@ -19,14 +19,14 @@
                 </legend>
                 <div class="xar-form-input-wrapper">
                     <label for="ptype" title="#xarML('Type of Role')#" class="xar-form-label">
-                    Type:</label>
+                        Type:
+                    </label>
                     <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() ."';this.form.submit();"</xar:set>
                     <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1" />
                 </div>
                 <xar:data-form object="$object" />
                 <div class="xar-form-input-wrapper">
-                    <label for="parentid" title="#xarML('Initial Group membership')#"
-                    class="xar-form-label">Member Of:</label>
+                    <label for="parentid" title="#xarML('Initial Group membership')#" class="xar-form-label">Member Of:</label>
                     <xar:data-input type="grouplist" name="parentid" value="$parentid" />
                 </div>
                 <xar:set name="settings">
@@ -34,34 +34,35 @@
                 <xar:if condition="ROLES_USERTYPE eq $basetype">
                     <xar:if condition="in_array('useremailformat',$settings)">
                         <div class="xar-form-input-wrapper">
-                            <label for="duvs_useremailformat" title="#xarML('Email Format')#"
-                            class="xar-form-label">Email Format:</label>
+                            <label for="duvs_useremailformat" title="#xarML('Email Format')#" class="xar-form-label">Email Format:</label>
                             <xar:set name="value">
-                            xarModUserVars::get('roles','useremailformat',$id)</xar:set>
-                            <xar:set name="options">array( array('id' =&gt; 'text', 'name' =&gt;
-                            'text'), array('id' =&gt; 'html', 'name' =&gt; 'html'), )</xar:set>
-                            <xar:data-input type="dropdown" name="duvs[useremailformat]"
-                            id="duvs_useremailformat" value="$value" options="$options" />
+                                xarModUserVars::get('roles','useremailformat',$id)
+                            </xar:set>
+                            <xar:set name="options">
+                                array( array('id' =&gt; 'text', 'name' =&gt;
+                                'text'), array('id' =&gt; 'html', 'name' =&gt; 'html'), )
+                            </xar:set>
+                            <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options" />
                         </div>
                     </xar:if>
                     <xar:if condition="in_array('usertimezone',$settings)">
                         <div class="xar-form-input-wrapper">
-                            <label for="duvs_usertimezone" class="xar-form-label">User
-                            Timezone:</label>
+                            <label for="duvs_usertimezone" class="xar-form-label">
+                                User Timezone:
+                            </label>
                             <xar:set name="value">
-                            xarModUserVars::get('roles','usertimezone',$id)</xar:set>
-                            <xar:data-input type="timezone" name="duvs[usertimezone]"
-                            id="duvs_usertimezone" value="$value" />
+                                xarModUserVars::get('roles','usertimezone',$id)
+                            </xar:set>
+                            <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
                         </div>
                     </xar:if>
                 </xar:if>
                 <xar:if condition="in_array('userhome',$settings)">
                     <div class="xar-form-input-wrapper">
-                        <label for="duvs_userhome" title="#xarML('Home URL')#"
-                        class="xar-form-label">Home:</label>
-                        <input type="text" name="duvs[userhome]" id="duvs_userhome"
-                        value="#xarModUserVars::get('roles','userhome',$id)#" size="40"
-                        maxlength="100" tabindex="7" />
+                        <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
+                            Home:
+                        </label>
+                        <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModUserVars::get('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7" />
                     </div>
                 </xar:if>
                 <xar:foreach in="$hooks" key="$hookmodule">#$hooks[$hookmodule]#</xar:foreach>
