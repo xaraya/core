@@ -1036,16 +1036,41 @@ function installer_admin_confirm_configuration()
      //TODO: Check why this var is being reset to null in sqlite install - reset here for now to be sure
      //xarModVars::set('roles', 'defaultauthmodule', xarMod::getRegID('authsystem'));
 
-        xarResponse::Redirect(xarModURL('installer', 'admin', 'cleanup'));
+        xarResponse::Redirect(xarModURL('installer', 'admin', 'security'));
+        return true;
     }
 
 }
 
+function installer_admin_security()
+{
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
+    xarTplSetThemeName('installer');
+    $data['language']    = $install_language;
+    $data['phase'] = 9;
+    $data['phase_label'] = xarML('Security Considerations');
+
+    return $data;
+}
 
 function installer_admin_cleanup()
 {
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarTplSetThemeName('installer');
+
+    xarVarFetch('remove', 'checkbox', $remove, false, XARVAR_NOT_REQUIRED);
+    xarVarFetch('rename', 'checkbox', $rename, false, XARVAR_NOT_REQUIRED);
+    xarVarFetch('newname', 'str', $newname, '', XARVAR_NOT_REQUIRED);
+    
+    if ($remove) {
+        unlink('install.php');
+    } elseif ($rename) {
+        if (empty($newname)) {
+            unlink('install.php');
+        } else {
+            rename('install.php',$newname . '.php');
+        }
+    }
 
     xarUserLogOut();
     // log in admin user
@@ -1144,7 +1169,6 @@ function installer_admin_cleanup()
 
     return $data;
 }
-
 
 function installer_admin_finish()
 {
