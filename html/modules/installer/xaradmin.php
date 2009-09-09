@@ -759,30 +759,6 @@ function installer_admin_create_administrator()
             return;
         }
     }
-
-    $now = time();
-
-    $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot .';
-    $varshtml['expire'] = $now + 24000;
-    $msg = serialize($varshtml);
-
-    $htmlBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                 array('module'  => 'base',
-                                       'type'    => 'html'));
-
-    $htmlBlockTypeId = $htmlBlockType['tid'];
-
-    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'reminder'))) {
-        if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
-                           array('title'    => 'Reminder',
-                                 'name'     => 'reminder',
-                                 'content'  => $msg,
-                                 'type'     => $htmlBlockTypeId,
-                                 'groups'   => array(array('id'      => $leftBlockGroup,)),
-                                 'state'    => 2))) {
-            return;
-        }
-    }
     xarResponse::Redirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
 
@@ -1080,6 +1056,52 @@ function installer_admin_cleanup()
             unlink('install.php');
         } else {
             rename('install.php',$newname . '.php');
+        }
+    }
+
+    // Install script is still there. Create a reminder block
+    if (!file_exists('install.php')) {
+        // Load up database
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
+
+        $blockGroupsTable = $tables['block_groups'];
+
+        $query = "SELECT    id as id
+                  FROM      $blockGroupsTable
+                  WHERE     name = ?";
+
+        $result =& $dbconn->Execute($query,array('left'));
+
+        // Freak if we don't get one and only one result
+        if ($result->getRecordCount() != 1) {
+            $msg = xarML("Group 'left' not found.");
+            throw new Exception($msg);
+        }
+
+        list ($leftBlockGroup) = $result->fields;
+        $now = time();
+
+        $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot.';
+        $varshtml['expire'] = $now + 24000;
+        $msg = serialize($varshtml);
+
+        $htmlBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+                                     array('module'  => 'base',
+                                           'type'    => 'html'));
+
+        $htmlBlockTypeId = $htmlBlockType['tid'];
+
+        if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'reminder'))) {
+            if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
+                               array('title'    => 'Reminder',
+                                     'name'     => 'reminder',
+                                     'content'  => $msg,
+                                     'type'     => $htmlBlockTypeId,
+                                     'groups'   => array(array('id'      => $leftBlockGroup,)),
+                                     'state'    => 2))) {
+                return;
+            }
         }
     }
 
