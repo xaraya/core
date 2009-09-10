@@ -30,10 +30,10 @@
                     Rename the install script
                 </label>
                 <xar:data-input type="checkbox" name="rename" />
-                <br />
-                <label class="xar-form-label" for="install_admin_username">
+                &#160;&#160;
+                <label for="install_admin_username">
                     New name for the script
-                </label>
+                </label>&#160;
                 <xar:data-input type="textbox" name="newname" size="30"/>.php                
             </div>
             <div class="xar-align-center" style="margin: 2em 0;">
