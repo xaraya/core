@@ -19,7 +19,6 @@
                 </xar:if>
                 <xar:data-form object="$object" fieldlist="name,uname,email,password,regdate"/>
                 <xar:data-input property="$object->properties['id']" hidden="hidden" />
-                <xar:data-input property="$object->properties['name']" hidden="hidden" />
                 <xar:data-input property="$object->properties['state']" hidden="hidden" />
                 <xar:data-input property="$object->properties['valcode']" hidden="hidden" />
                 <xar:data-input property="$object->properties['authmodule']" hidden="hidden" />
