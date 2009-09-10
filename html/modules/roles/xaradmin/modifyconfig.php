@@ -92,7 +92,7 @@ function roles_admin_modifyconfig()
             break;
         default:
             $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'roles'));
-            $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls');
+            $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, enable_user_menu');
             $data['module_settings']->getItem();
             break;
     }
@@ -135,6 +135,17 @@ function roles_admin_modifyconfig()
                     xarModVars::set('roles', 'defaultregmodule', $defaultregmodule);
                     xarModVars::set('roles', 'defaultgroup', $defaultgroup);
                     xarModVars::set('roles', 'admin', $siteadmin);
+
+                    // Adjust the usermenu hook according to the setting
+                    sys::import('xaraya.structures.hooks.observer');
+                    $observer = new BasicObserver('roles','user','usermenu');
+                    $subject = new HookSubject('roles');
+                    if (xarModVars::get('themes','enable_user_menu')) {
+                        $subject->attach($observer);
+                    } else {
+                        $subject->detach($observer);
+                    }
+                    break;
 
                 case 'hooks':
                     // Role type 'user' (itemtype 1).
