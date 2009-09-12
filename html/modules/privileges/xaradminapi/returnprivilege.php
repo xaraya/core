@@ -6,18 +6,20 @@
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   strings with id, name, realm, module, component, instances and level
+     * @param   strings with pid, name, realm, module, component, instance and level
      * @return  mixed id if OK, void if not
     */
 
     function privileges_adminapi_returnprivilege($args)
     {
         extract($args);
-        
-        $instance = implode(':',$instances);
-        $instance = !empty($instance) ? $instabce : "All";
 
-        if($id==0) {
+        if (!empty($instance) && is_array($instance)) {
+            $instance = implode(':',$instance);
+        }
+        $instance = !empty($instance) ? $instance : "All";
+
+        if(empty($pid)) {
             $pargs = array('name' => $name,
                            'realm' => $realm,
                            'module' => $module,
@@ -32,7 +34,7 @@
             if ($priv->add()) return $priv->getID();
         } else {
             sys::import('modules.privileges.class.privileges');
-            $priv = xarPrivileges::getPrivilege($id);
+            $priv = xarPrivileges::getPrivilege($pid);
             $priv->setName($name);
             $priv->setRealm($realm);
             $priv->setModule($module);

@@ -27,15 +27,19 @@ function privileges_admin_updateprivilege()
     if(!xarVarFetch('pcomponent', 'isset', $component,  'All', XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('ptype',      'isset', $type,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('plevel',     'isset', $level,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pinstance',  'array', $pinstance, array(), XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pinstance',  'isset', $pinstance,  NULL, XARVAR_NOT_REQUIRED)) {return;}
 
     $instance = "";
-    foreach($pinstance as $part) $instance .= $part . ":";
+    if (!empty($pinstance)) {
+        if (is_array($pinstance)) {
+            $instance = implode(':', $pinstance);
+        } else {
+            // for wizard-based privileges
+            $instance = $pinstance;
+        }
+    }
     if ($instance =="") {
         $instance = "All";
-    }
-    else {
-        $instance = substr($instance,0,strlen($instance)-1);
     }
 
 // Security Check
