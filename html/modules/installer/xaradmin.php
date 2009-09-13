@@ -1060,7 +1060,7 @@ function installer_admin_cleanup()
     }
 
     // Install script is still there. Create a reminder block
-    if (!file_exists('install.php')) {
+    if (file_exists('install.php')) {
         // Load up database
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
