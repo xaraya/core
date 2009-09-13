@@ -78,9 +78,9 @@ function modules_adminapi_verifydependency($args)
                 throw new ModuleNotFoundException($module_id,'Required module missing (ID #(1))');
 
             if (xarModAPIFunc('base','versions','compare',array(
-                'ver1'      => $conditions['minversion'],
-                'ver2'      => $dbMods[$module_id]['version'],
-                'normalize' => 'numeric')) < 0) {
+                'version1'      => $conditions['minversion'],
+                'version2'      => $dbMods[$module_id]['version'],
+                )) < 0) {
                 //Need to add some info for the user
                 return false; // 1st version is bigger
             }
@@ -88,9 +88,9 @@ function modules_adminapi_verifydependency($args)
            //Not to be checked, at least not for now
            /*
             if (xarModAPIFunc('base','versions','compare',array(
-                'ver1'       => $conditions['maxversion'],
-                'ver2'       => $dbMods[$module_id]['version'],
-                'normalize'  => 'numeric')) > 0) {
+                'version1'       => $conditions['maxversion'],
+                'version2'       => $dbMods[$module_id]['version'],
+                )) > 0) {
                 //Need to add some info for the user
                 return false; // 1st version is smaller
             }

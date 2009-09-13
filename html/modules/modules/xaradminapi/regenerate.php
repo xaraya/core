@@ -104,8 +104,8 @@ function modules_adminapi_regenerate()
                 $vercompare = xarModAPIfunc(
                     'base', 'versions', 'compare',
                     array(
-                        'ver1'=>$dbModules[$name]['version'],
-                        'ver2'=>$modinfo['version'],
+                        'version1'=>$dbModules[$name]['version'],
+                        'version2'=>$modinfo['version'],
                         'levels' => 2
                     )
                 );
