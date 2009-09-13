@@ -134,7 +134,7 @@
                             title="#xarML('Module which holds the target component')#"
                             class="xar-form-label">Module:</label>
                             <xar:data-input type="module" name="pmodule" value="$pmodule"
-                            firstline="all,All" onchange="$onclick" validation="name" />
+                            firstline="all,All" onchange="$onclick" store_prop="name" />
                         </div>
                         <div class="xar-form-input-wrapper">
                             <label for="pcomponent" title="#xarML('Component to which this privilege applies')#" class="xar-form-label">Component:</label>
