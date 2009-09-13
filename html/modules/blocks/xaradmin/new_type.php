@@ -56,7 +56,9 @@ function blocks_admin_new_type()
         // Submit button was pressed
 
         // Confirm Auth Key
-        if (!xarSecConfirmAuthKey()) {return;}
+        if (!xarSecConfirmAuthKey()) {
+            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        }        
 
         // Create the block type.
         $modulename = $modinfo['name'];

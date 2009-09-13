@@ -84,7 +84,9 @@ function <xsl:value-of select="$module_prefix" />_admin_new( $args )
     if ( isset( $authid ) ) {
 
         // Confirm the authorization key
-        if (!xarSecConfirmAuthKey()) return;
+        if (!xarSecConfirmAuthKey()) {
+            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        }        
 
         if ( empty($preview) ) {
 

@@ -29,7 +29,9 @@ function dynamicdata_util_importprops()
     // authorisation code attached to it.  If it did not then the function will
     // proceed no further as it is possible that this is an attempt at sending
     // in false data to the system
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     if (!xarModAPIFunc('dynamicdata','util','importproperties',
                        array('module_id' => $module_id,

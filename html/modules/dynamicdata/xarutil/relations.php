@@ -80,7 +80,9 @@ function dynamicdata_util_relations($args)
             }
         }
         if (!empty($confirm)) {
-            if (!xarSecConfirmAuthKey()) return;
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }        
             if (!empty($value)) {
                 $field = $value;
             }

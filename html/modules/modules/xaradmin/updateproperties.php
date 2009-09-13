@@ -21,7 +21,9 @@
  */
 function modules_admin_updateproperties()
 {
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     // Get parameters
     xarVarFetch('id','id',$regid);

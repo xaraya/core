@@ -59,7 +59,9 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
          * The user confirmed the form. So save the results.
          */
 
-        if (!xarSecConfirmAuthKey()) return;
+        if (!xarSecConfirmAuthKey()) {
+            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        }        
 
         $items_per_page = xarVarCleanFromInput( 'items_per_page' );
 

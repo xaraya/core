@@ -132,8 +132,9 @@ class DataObjectInterface extends Object
 
         if(!empty($args['preview']) || !empty($args['confirm'])) 
         {
-            if(!xarSecConfirmAuthKey()) 
-                return;
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }        
 
             $isvalid = $this->object->checkInput();
 
@@ -222,8 +223,9 @@ class DataObjectInterface extends Object
 
         if(!empty($args['preview']) || !empty($args['confirm'])) 
         {
-            if(!xarSecConfirmAuthKey()) 
-                return;
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }        
 
             $isvalid = $this->object->checkInput();
 
@@ -328,8 +330,9 @@ class DataObjectInterface extends Object
 
         if(!empty($args['confirm'])) 
         {
-            if(!xarSecConfirmAuthKey()) 
-                return;
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }        
 
             $itemid = $this->object->deleteItem();
 

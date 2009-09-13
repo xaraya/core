@@ -24,7 +24,9 @@ function modules_admin_update()
     xarVarFetch('id','id',$regId);
     xarVarFetch('newdisplayname','str::',$newDisplayName);
 
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     // Pass to API
     $updated = xarModAPIFunc('modules',

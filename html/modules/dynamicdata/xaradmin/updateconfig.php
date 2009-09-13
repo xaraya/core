@@ -25,7 +25,9 @@ function dynamicdata_admin_updateconfig($args)
 
     if (!xarSecurityCheck('AdminDynamicData')) return;
 
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     if ( isset($flushPropertyCache) && ($flushPropertyCache == true) ) {
         $args['flush'] = 'true';

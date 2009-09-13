@@ -37,7 +37,9 @@ function privileges_admin_addprivilege()
     }
 
 // Check for authorization code
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     if ($type =="empty") {
 

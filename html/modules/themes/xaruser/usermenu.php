@@ -56,7 +56,9 @@ function themes_user_usermenu($args)
             if (!xarVarFetch('id', 'int:1:', $id)) return;
             if (!xarVarFetch('defaulttheme', 'str:1:100', $defaulttheme, '', XARVAR_NOT_REQUIRED)) return;
             // Confirm authorisation code.
-            if (!xarSecConfirmAuthKey()) return;
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }        
             $themeInfo = xarThemeGetInfo($defaulttheme);
 
             xarModUserVars::set('themes', 'default', $themeInfo['name'], $id);

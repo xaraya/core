@@ -105,7 +105,9 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args )
          * The user confirmed the form. So save the results.
          */
 
-        if (!xarSecConfirmAuthKey()) return;
+        if (!xarSecConfirmAuthKey()) {
+            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        }        
 
         $enable_short_urls = xarVarCleanFromInput( 'enable_short_urls' );
 

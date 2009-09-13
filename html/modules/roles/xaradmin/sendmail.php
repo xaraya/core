@@ -21,7 +21,9 @@ function roles_admin_sendmail()
     if (!xarVarFetch('includesubgroups','int:0:',$includesubgroups,0,XARVAR_NOT_REQUIRED));
 
     // Confirm authorisation code.
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
     // Security check
     if (!xarSecurityCheck('MailRoles')) return;
     // Get user information

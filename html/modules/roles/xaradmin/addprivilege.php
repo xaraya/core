@@ -23,7 +23,9 @@ function roles_admin_addprivilege()
     if (!xarVarFetch('roleid', 'int:1:', $roleid)) return;
 
     // Check for authorization code
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     // Call the Roles class and get the role
     $role = xarRoles::get($roleid);

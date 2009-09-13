@@ -20,7 +20,9 @@ function modules_admin_updatehooks()
 // Security Check
     if(!xarSecurityCheck('AdminModules')) {return;}
 
-    if (!xarSecConfirmAuthKey()) {return;}
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
     // Curhook contains module name
     if (!xarVarFetch('curhook', 'str:1:', $curhook)) {return;}
 

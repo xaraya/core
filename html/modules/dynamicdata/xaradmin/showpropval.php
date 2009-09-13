@@ -73,7 +73,9 @@ function dynamicdata_admin_showpropval($args)
         if ($isvalid) {
             // store the updated configuration rule back in the value
             $myobject->properties['configuration']->value = $property->configuration;
-            if (!xarSecConfirmAuthKey()) return;
+        if (!xarSecConfirmAuthKey()) {
+            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        }        
 
             $newid = $myobject->updateItem();
             if (empty($newid)) return;

@@ -26,7 +26,9 @@ function privileges_admin_newrealm()
     if(!xarSecurityCheck('AddPrivilege',0,'Realm')) return;
 
     if ($confirmed) {
-        if (!xarSecConfirmAuthKey()) return;
+        if (!xarSecConfirmAuthKey()) {
+            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        }        
 
         $xartable = xarDB::getTables();
         sys::import('modules.roles.class.xarQuery');

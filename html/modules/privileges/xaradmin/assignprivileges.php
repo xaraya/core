@@ -37,7 +37,9 @@
 
             case 'update':
                 // Confirm authorisation code
-                if (!xarSecConfirmAuthKey()) return;
+                if (!xarSecConfirmAuthKey()) {
+                    return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                }        
                 if (!xarVarFetch('role', 'int', $role_id, 0, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                 if (!xarVarFetch('rolename', 'str', $rolename, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                 if (!xarVarFetch('privilege', 'int', $privilege_id, 0, XARVAR_NOT_REQUIRED)) return;

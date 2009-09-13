@@ -24,7 +24,9 @@
 function modules_admin_regenerate()
 {
     // Security check
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     // Regenerate modules
     $regenerated = xarModAPIFunc('modules', 'admin', 'regenerate');
