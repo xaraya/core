@@ -148,7 +148,7 @@ function roles_user_usermenu($args)
                 // invalid, we need to show the form data again
                 $data = array();
                 $object->tplmodule = 'roles';
-                $object->template = 'usermenu';
+                $object->template = 'account';
 
                 if (xarModVars::get('roles','setuserlastlogin')) {
                     //only display it for current user or admin
@@ -191,10 +191,11 @@ function roles_user_usermenu($args)
                     'utimezone'    => $utimezone,
                 );
 
-                $object->layout = 'basic';
                 $data['formdata'] = $formdata;
                 $data['object'] = $object;
                 $data['formaction'] = xarModURL('roles', 'user', 'usermenu');
+                $data['tplmodule'] = 'roles';
+                $data['template'] = 'account';
                 $menutabs = array();
                 $menutabs[] = array(
                     'label' => xarML('Display Profile'),
