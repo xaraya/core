@@ -46,7 +46,7 @@
         </xar:if>
         <xar:if condition="isset($properties['user_menu_link'])">
             <div class="xar-form-input-wrapper">
-                <label for="user_menu_link" class="xar-form-label" title="#xarML('Show the link to this module\'s user functions in the Base module User Menu Block.')#">
+                <label for="user_menu_link" class="xar-form-label" title="#xarML('Hide the link to this module\'s user functions in the Base module User Menu Block.')#">
                         Hide link in User Menu
                 </label>
                 <xar:data-input property="$properties['user_menu_link']" />
