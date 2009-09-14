@@ -2,8 +2,8 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
-        <span class="xar-mod-title">            
-                Account Information            
+        <span class="xar-mod-title">
+                Account Information
         </span>
     </div>
     <div class="xar-mod-body">
@@ -12,45 +12,12 @@
             <xar:else />
             <div>
                 <ul class="xar-tabs xar-alt xar-norm-outline">
-                    <xar:var name="title">Your Profile</xar:var>
-                    <xar:var name="label">Your Profile</xar:var>
-                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
-                    <xar:if condition="$compare eq $account">
-                        <li class="xar-tab-active">
-                            <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">                                
-                                Display your profile                                
-                            </a>
+                    <xar:foreach in="$menutabs" value="$menutab">
+                        <xar:set name="tabclass">$menutab['active'] ? 'xar-tab-active' : 'xar-tab'</xar:set>
+                        <li class="#$tabclass#">
+                            <a href="#$menutab['url']#" title="#$menutab['title']#">#$menutab['label']#</a>
                         </li>
-                    <xar:else />
-                        <li class="xar-tab">
-                            <a href="&xar-modurl-roles-user-account;" class="xar-norm xar-norm-outline">                                
-                                Display your profile                                
-                            </a>
-                        </li>
-                    </xar:if>
-                    <xar:if condition="!empty($output)">
-                        <xar:foreach in="$output" key="$module" value="$value">
-                            <xar:set name="data">unserialize($value)</xar:set>
-                            <xar:if condition="$compare eq $data['link']">
-                                <xar:set name="tabclass">'xar-tab-active'</xar:set>
-                                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
-                            <xar:else />
-                                <xar:set name="tabclass">'xar-tab'</xar:set>
-                                <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
-                            </xar:if>
-                            <li class="#$tabclass#">
-                                <a href="#$data['link']#" class="#$linkclass#">#$data['label']#</a>
-                            </li>
-                        </xar:foreach>
-                    </xar:if>
-                    <xar:set name="defaultauthdata">xarModAPIFunc('roles','user','getdefaultauthdata')</xar:set>
-                    <xar:if condition="!empty($defaultauthdata['defaultlogoutmodname'])">
-                        <li class="xar-tab">
-                            <a href="#xarModURL($defaultauthdata['defaultlogoutmodname'],'user','logout')#" class="xar-norm xar-norm-outline">                                
-                                Logout                                
-                            </a>
-                        </li>
-                    </xar:if>
+                    </xar:foreach>
                 </ul>
             </div>
         </xar:if>
