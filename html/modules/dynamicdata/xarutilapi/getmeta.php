@@ -49,6 +49,13 @@ function dynamicdata_utilapi_getmeta($args)
     }
     if (!isset($tables)) return;
 
+    // Get the default property types
+    $proptypes = DataPropertyMaster::getPropertyTypes();
+    $proptypeid = array();
+    foreach ($proptypes as $proptype) {
+        $proptypeid[$proptype['name']] = $proptype['id'];
+    }
+
     // Based on this, loop over the table info object and fill the metadata
     $metadata = array();
     foreach ($tables as $tblInfo) {
@@ -70,6 +77,8 @@ function dynamicdata_utilapi_getmeta($args)
             $default = $field->getDefaultValue();
 
             $label = strtr($name,'_',' ');
+            // cosmetic for 1.x style xar_* field names
+            $label = preg_replace('/^xar /','', $label);
             $label = ucwords($label);
             if (isset($columns[$name])) {
                 $i = 1;
@@ -93,7 +102,7 @@ function dynamicdata_utilapi_getmeta($args)
             switch ($dtype) {
                 case 'char':
                 case 'varchar':
-                    $proptype = 2; // Text Box
+                    $proptype = $proptypeid['textbox']; // Text Box
                     if (!empty($size) && $size > 0) {
                         $validation = "0:$size";
                     }
@@ -104,42 +113,48 @@ function dynamicdata_utilapi_getmeta($args)
                 case 'smallint':
                 case 'mediumint':
                     if ($size == 1) {
-                        $proptype = 14; // Checkbox
+                        $proptype = $proptypeid['checkbox']; // Checkbox
+                        $validation = '';
                     } else {
-                        $proptype = 15; // Number Box
+                        $proptype = $proptypeid['integerbox']; // Number Box
                     }
                     break;
                 case 'float':
                 case 'decimal':
                 case 'double':
-                    $proptype = 17; // Number Box (float)
+                    $proptype = $proptypeid['floatbox']; // Number Box (float)
+                    $validation = '';
                     break;
                 case 'boolean':
-                    $proptype = 14; // Checkbox
+                case 'bit':
+                    $proptype = $proptypeid['checkbox']; // Checkbox
+                    $validation = '';
                     break;
                 case 'date':
                 case 'datetime':
                 case 'timestamp':
-                    $proptype = 8; // Calendar
+                    $proptype = $proptypeid['calendar']; // Calendar
                     break;
                 case 'text':
-                    $proptype = 4; // Medium Text Area
+                    $proptype = $proptypeid['textarea_medium']; // Medium Text Area
                     $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
+                    $validation = '';
                     break;
                 case 'longtext':
-                    $proptype = 5; // Large Text Area
+                    $proptype = $proptypeid['textarea_large']; // Large Text Area
                     $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
+                    $validation = '';
                     break;
                 case 'blob':       // caution, could be binary too !
-                    $proptype = 4; // Medium Text Area
+                    $proptype = $proptypeid['textarea_medium']; // Medium Text Area
                     $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
                     break;
                 case 'enum':
-                    $proptype = 6; // Dropdown
+                    $proptype = $proptypeid['dropdown']; // Dropdown
                     $validation = strtr($validation,array('enum(' => '', ')' => '', "'" => '', ',' => ';'));
                     break;
                 default:
-                    $proptype = 1; // Static Text
+                    $proptype = $proptypeid['static']; // Static Text
                     break;
             }
 
@@ -149,7 +164,8 @@ function dynamicdata_utilapi_getmeta($args)
             if(is_object($keyInfo) && $name == $keyInfo->getName()) {
                 // CHECKME: how are multiple tuples handled here?
                 // not allowed to modify primary key !
-                $proptype = 21; // Item ID
+                $proptype = $proptypeid['itemid']; // Item ID
+                $validation = '';
             }
 
             // JDJ: added 'primary' and 'autoincrement' fields.
@@ -165,7 +181,8 @@ function dynamicdata_utilapi_getmeta($args)
                                    'source' => $curtable . '.' . $name,
                                    'status' => $status,
                                    'seq' => $id,
-                                   'validation' => $validation
+                                   'validation' => $validation,
+                                   'configuration' => $validation,
                                    //'primary' => isset($field->primary_key)?$field->primary_key : '',
                                    //'autoincrement' => isset($field->auto_increment))? $field->auto_increment : ''
                                    );
