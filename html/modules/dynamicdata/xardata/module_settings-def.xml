@@ -52,7 +52,7 @@
     </property>
     <property name="enable_user_menu">
       <id>109</id>
-      <label>Enable User Menu</label>
+      <label>Enable User Settings</label>
       <type>checkbox</type>
       <defaultvalue>0</defaultvalue>
       <source>module variable: base</source>
