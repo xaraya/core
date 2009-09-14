@@ -246,6 +246,7 @@ function base_menublock_display($blockinfo)
 
             foreach($mods as $mod){
                 if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$blockinfo['name']. ":" . $mod['name'])) continue;
+                if ((bool)xarModVars::get($mod['name'], 'user_menu_link')) continue;
                 /* Check for active module alias */
                 /* jojodee -  We need to review the module alias functions and, thereafter it's use here */
                 $useAliasName = xarModVars::get($mod['name'], 'use_module_alias');

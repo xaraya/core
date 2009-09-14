@@ -97,7 +97,7 @@ function roles_admin_modifyconfig()
         break;
         default:
             $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'roles'));
-            $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, enable_user_menu');
+            $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, enable_user_menu, user_menu_link');
             $data['module_settings']->getItem();
             $data['user_settings'] = xarModAPIFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => 0));
             $settings = explode(',',xarModVars::get('roles', 'duvsettings'));

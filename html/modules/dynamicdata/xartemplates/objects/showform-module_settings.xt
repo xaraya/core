@@ -1,47 +1,63 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <fieldset>
-        <legend>                
-            System Options                
+        <legend>
+            System Options
         </legend>
         <xar:if condition="isset($properties['items_per_page'])">
             <div class="xar-form-input-wrapper">
-                <label for="items_per_page" title="#xarML('The number of items to show on each page.')#" class="xar-form-label">                    
-                    List items per page:                    
+                <label for="items_per_page" title="#xarML('The number of items to show on each page.')#" class="xar-form-label">
+                    List items per page:
                 </label>
                 <xar:data-input property="$properties['items_per_page']" />
             </div>
         </xar:if>
         <xar:if condition="isset($properties['enable_short_urls'])">
             <div class="xar-form-input-wrapper">
-                <label for="shorturls" class="xar-form-label"  title="#xarML('Enable short URLs for this module')#">                    
-                    Enable Short URLs                    
+                <label for="shorturls" class="xar-form-label"  title="#xarML('Enable short URLs for this module')#">
+                    Enable Short URLs
                 </label>
                 <xar:data-input property="$properties['enable_short_urls']" />
             </div>
         </xar:if>
         <xar:if condition="isset($properties['use_module_alias'])">
             <div class="xar-form-input-wrapper">
-                <label for = "modulealias" class="xar-form-label" title="#xarML('Use an alias instead of the module name')#">                    
-                    Use a module alias                    
+                <label for = "modulealias" class="xar-form-label" title="#xarML('Use an alias instead of the module name')#">
+                    Use a module alias
                 </label>
                 <xar:data-input property="$properties['use_module_alias']" />
             </div>
         </xar:if>
         <xar:if condition="isset($properties['module_alias_name'])">
             <div class="xar-form-input-wrapper">
-                <label for="module_alias_name" class="xar-form-label" title="#xarML('The name of the module alias to be used.')#">                        
-                        Module Alias Name                        
+                <label for="module_alias_name" class="xar-form-label" title="#xarML('The name of the module alias to be used.')#">
+                        Module Alias Name
                 </label>
                 <xar:data-input property="$properties['module_alias_name']" />
             </div>
         </xar:if>
         <xar:if condition="isset($properties['enable_user_menu'])">
             <div class="xar-form-input-wrapper">
-                <label for="enable_user_menu" class="xar-form-label" title="#xarML('Add the functionality of this module to the Roles usermeu.')#">                        
-                        Enable User Menu                        
+                <label for="enable_user_menu" class="xar-form-label" title="#xarML('Add the functionality of this module to the Roles usermeu.')#">
+                        Enable User Menu
                 </label>
                 <xar:data-input property="$properties['enable_user_menu']" />
+            </div>
+        </xar:if>
+        <xar:if condition="isset($properties['user_menu_link'])">
+            <div class="xar-form-input-wrapper">
+                <label for="user_menu_link" class="xar-form-label" title="#xarML('Show the link to this module\'s user functions in the Base module User Menu Block.')#">
+                        Hide link in User Menu
+                </label>
+                <xar:data-input property="$properties['user_menu_link']" />
+            </div>
+        </xar:if>
+        <xar:if condition="isset($properties['admin_menu_link'])">
+            <div class="xar-form-input-wrapper">
+                <label for="admin_menu_link" class="xar-form-label" title="#xarML('Hide the link to this module\'s admin functions in the Base module Admin Menu Block.')#">
+                        Hide link in Admin Menu
+                </label>
+                <xar:data-input property="$properties['admin_menu_link']" />
             </div>
         </xar:if>
     </fieldset>

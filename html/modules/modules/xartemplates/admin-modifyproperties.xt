@@ -7,36 +7,9 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
         <h2>Modify Properties for Module: #$displayname#</h2>
-        <form action="&xar-modurl-modules-admin-updateproperties;" method="post" enctype="application/x-www-form-urlencoded">
-            <fieldset>
-                <legend>Properties</legend>
-                <div class="xar-form-input-wrapper">
-                <label for="displayname"
-                title="#xarML('The name which will be shown to identify this module.')#"
-                class="xar-form-label">Display Name:</label>#$displayname# 
-                <input type="hidden" name="displayname" id="displayname"
-                value="#$displayname#" /></div>
-                <xar:if condition="$adminallowed">
-                    <div class="xar-form-input-wrapper-after">
-                        <xar:set name="checked">$admincapable</xar:set>
-                        <xar:data-input type="checkbox" name="admincapable" id="admincapable"
-                        checked="$checked" />
-                        <label for="admincapable"
-                        title="#xarML('Set whether to display admin menu entries provided by this module.')#">
-                        Enable Admin Menu</label>
-                    </div>
-                </xar:if>
-                <xar:if condition="$userallowed">
-                    <div class="xar-form-input-wrapper-after">
-                        <xar:set name="checked">$usercapable</xar:set>
-                        <xar:data-input type="checkbox" name="usercapable" id="usercapable"
-                        checked="$checked" />
-                        <label for="usercapable"
-                        title="#xarML('Set whether to display user menu entries provided by this module.')#">
-                        Enable User Menu</label>
-                    </div>
-                </xar:if>
-            </fieldset>
+        <xar:if condition="!empty($object)">
+        <form action="&xar-modurl-modules-admin-modifyproperties;" method="post" enctype="application/x-www-form-urlencoded">
+            <xar:data-form object="$object" />
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <xar:if condition="!empty($return_url)">
@@ -45,12 +18,14 @@
                     </xar:if>
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="id" id="id" value="#$id#" />
-                    <input type="hidden" name="olddisplayname" id="olddisplayname"
-                    value="#$displayname#" />
+                    <input type="hidden" name="phase" id="phase" value="update" />
                     <input type="submit" value="#xarML('Save Changes')#"
                     class="xar-margin-thick" />
                 </div>
             </fieldset>
         </form>
+        <xar:else />
+            No Properties Available For #$displayname#
+        </xar:if>
     </div>
 </xar:template>

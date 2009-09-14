@@ -60,5 +60,25 @@
       <seq>5</seq>
       <configuration></configuration>
     </property>
+    <property name="user_menu_link">
+      <id>99</id>
+      <label>Show link in user menu</label>
+      <type>checkbox</type>
+      <defaultvalue>false</defaultvalue>
+      <source>module variable: base</source>
+      <status>33</status>
+      <seq>6</seq>
+      <configuration></configuration>
+    </property>
+    <property name="admin_menu_link">
+      <id>100</id>
+      <label>Show link in admin menu</label>
+      <type>checkbox</type>
+      <defaultvalue>false</defaultvalue>
+      <source>module variable: base</source>
+      <status>33</status>
+      <seq>7</seq>
+      <configuration></configuration>
+    </property>
   </properties>
 </object>
