@@ -25,16 +25,22 @@ function roles_user_display($args)
     if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('itemtype', 'int', $itemtype, 1, XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('tplmodule', 'str', $args['tplmodule'], 'roles', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('template', 'str', $args['template'], '', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('template', 'str', $args['template'], 'account', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('layout', 'str', $args['layout'], '', XARVAR_NOT_REQUIRED)) {return;}
 
     $id = isset($itemid) ? $itemid : $id;
+
 
     if ($id) {
         // Get role information
         $role = xarRoles::get($id);
 
         if (!$role) return;
+
+        $currentid = xarUserGetVar('id');
+        if ($currentid == $id) {
+            xarResponse::Redirect(xarModURL('roles', 'user', 'account'));
+        }
 
         $name = $role->getName();
     // Security Check
@@ -47,14 +53,20 @@ function roles_user_display($args)
         //get the data for a user
         $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
         if ($data['basetype'] == ROLES_USERTYPE) {
-            $data['uname'] = $role->getUser();
-            $data['email'] = xarVarPrepForDisplay($role->getEmail());
-            $data['state'] = $role->getState();
-            $data['valcode'] = $role->getValCode();
+            sys::import('modules.dynamicdata.class.objects.master');
+            $object = DataObjectMaster::getObject(array('name' => 'roles_users'));
+            $object->tplmodule = $args['tplmodule'];   // roles/xartemplates/objects/
+            $object->template = $args['template'];  // showdisplay-account.xt
+            $object->layout = $args['layout'];
+            $fieldlist = 'name,uname,state,regdate';
+            $object->setFieldList($fieldlist);
+            $object->getItem(array('itemid' => $id));
+            $data['object'] = $object;
+            $data['uname'] = $object->properties['uname']->getValue();
         } else {
             //get the data for a group
+            $data['uname'] = '';
         }
-
         $item = $data;
         $item['module'] = 'roles';
         $item['itemtype'] = $data['itemtype'];
@@ -66,6 +78,7 @@ function roles_user_display($args)
         xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
     } else {
         $data['id'] = $id;
+        $data['uname'] = '';
     }
 
     $types = xarModAPIFunc('roles','user','getitemtypes');

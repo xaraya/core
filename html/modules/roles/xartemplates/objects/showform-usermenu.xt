@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- This is the generic form for any modules dd user_settings object. -->
+    <xar:if condition="empty($layout)">
+        <xar:set name="layout">'default'</xar:set>
+    </xar:if>
+    <xar:if condition="$layout eq 'default'">
+        <!--
+            This is the default layout, used when a module doesn't provide it's own showform-usermenu template
+        -->
+        <fieldset>
+            <legend>#$object->label#</legend>
+            <xar:foreach in="$properties" key="$name" value="$property">
+                <div class="xar-form-input-wrapper">
+                    <xar:data-label property="$properties[$name]" for="id" />
+                    <xar:data-input property="$properties[$name]" />
+                </div>
+            </xar:foreach>
+        </fieldset>
+    <xar:elseif condition="$layout eq 'nolabels'" />
+        <xar:foreach in="$properties" key="$name" value="$property">
+            <div class="xar-form-input-wrapper">
+                <xar:data-input property="$properties[$name]" />
+            </div>
+        </xar:foreach>
+    <xar:elseif condition="$layout eq 'roles_user_settings'" />
+        <!--
+            This is the layout used to display the form that users see for the roles_user_settings object
+        -->
+        <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
+        <xar:set name="id">xarUserGetVar('id')</xar:set>
+        <fieldset>
+            <legend>#$object->label#</legend>
+            <xar:if condition="in_array('userhome',$settings) and (bool)xarModVars::get('roles','allowuserhomeedit') eq true">
+                <div class="xar-form-input-wrapper">
+                    <xar:data-label property="$properties['userhome']" for="id" />
+                    <xar:data-input property="$properties['userhome']" />
+                </div>
+                <xar:if condition="(bool)xarModVars::get('roles', 'loginredirect')">
+                <p class="xar-form-container-after">You will be redirected to your homepage whenever you log in</p>
+                </xar:if>
+            </xar:if>
+            <!-- revisit in php5.3.0
+            <xar:if condition="in_array('usertimezone',$settings)">
+                <div class="xar-form-input-wrapper">
+                    <xar:data-label property="$properties['usertimezone']" for="id" />
+                    <xar:data-input property="$properties['usertimezone']" />
+                </div>
+            </xar:if>
+            -->
+            <xar:if condition="(bool)xarModVars::get('roles', 'allowemail') == true">
+            <div class="xar-form-input-wrapper-after">
+                <xar:data-input property="$properties['allowemail']" />
+                <label for="#$properties['allowemail']->id#" title="#xarML('Allow users to send you emails?')#">
+                    Allow other users to send you an email via a form?
+                </label>
+            </div>
+            <p class="xar-form-input-wrapper-after">
+                Note your email address is never disclosed or displayed in this process.
+            </p>
+            </xar:if>
+            <xar:if condition="in_array('passwordupdate',$settings)">
+                <div class="xar-form-input-wrapper">
+                    <label class="xar-form-label">
+                        Password last updated:
+                    </label>
+                    #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))#
+                    #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
+                </div>
+            </xar:if>
+            <xar:if condition="in_array('userlastlogin',$settings)">
+                <div class="xar-form-input-wrapper">
+                    <label class="xar-form-label">
+                        Last login time:
+                    </label>
+                    #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#
+                    #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
+                </div>
+            </xar:if>
+        </fieldset>
+    <xar:elseif condition="$layout eq 'admin'" />
+        <!--
+            This is the layout used to display the form to admins for the roles_user_settings object
+        -->
+        <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
+        <h4>Member Options</h4>
+        <fieldset>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label property="$properties['usereditaccount']" for="id" />
+                <xar:data-input property="$properties['usereditaccount']" />
+            </div>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label property="$properties['allowemail']" for="id" />
+                <xar:data-input property="$properties['allowemail']" />
+            </div>
+            <p class="xar-form-container-after">Allows members to send an email via a form
+            to other users. Users must switch this option on in their own account.</p>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label property="$properties['requirevalidation']" for="id" />
+                <xar:data-input property="$properties['requirevalidation']" />
+            </div>
+
+        </fieldset>
+        <h4>Members List Options</h4>
+        <fieldset>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label property="$properties['displayrolelist']" for="id" />
+                <xar:data-input property="$properties['displayrolelist']" />
+                <p class="xar-form-container-after">Note: This enables access to the members list for everyone. Roles administrators can always access this list.</p>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label property="$properties['searchbyemail']" for="id" />
+                <xar:data-input property="$properties['searchbyemail']" />
+                <p class="xar-form-container-after">CAUTION: this may reveal enough information to compromise a user's login.</p>
+            </div>
+        </fieldset>
+        <h4>Homepage Options</h4>
+        <fieldset>
+        <xar:if condition="in_array('userhome', $settings)">
+            <div class="xar-form-input-wrapper">
+                <xar:data-label property="$properties['allowuserhomeedit']" for="id" />
+                <xar:data-input property="$properties['allowuserhomeedit']" />
+                <p class="xar-form-container-after">Allow users to set their homepage in their user settings.</p>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label property="$properties['allowexternalurl']" for="id" />
+                <xar:data-input property="$properties['allowexternalurl']" />
+                <p class="xar-form-container-after">Allow users to set their homepage to an external url.</p>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <xar:data-label property="$properties['loginredirect']" for="id" />
+                <xar:data-input property="$properties['loginredirect']" />
+                <p class="xar-form-container-after">Automatically redirect users to their home page when they log in.</p>
+            </div>
+        <xar:else />
+            <p class="xar-form-container-after">
+            Allow users to set Home Page in their user settings.
+            <br />(options for Home Page are only available if the dynamic roles user
+            variable 'userhome' is activated)</p>
+        </xar:if>
+        </fieldset>
+
+    <xar:else />
+        <!-- You can also specify your own layout here or in a separate template, e.g. if you want to handle individual fields differently for a particular module usermenu -->
+        <xar:template module="$tplmodule" file="form-$layout" />
+    </xar:if>
+</xar:template>

@@ -543,9 +543,14 @@ function installer_admin_bootstrap()
                    'roles_roles',
                    'roles_users',
                    'roles_groups',
+                   'roles_user_settings',
                      );
 
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'roles', 'objects' => $objects))) return;
+
+    $objects = array('themes_user_settings');
+
+    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'themes', 'objects' => $objects))) return;
 
 # --------------------------------------------------------
 # Set up the standard module variables for the core modules
@@ -562,7 +567,7 @@ function installer_admin_bootstrap()
                         'roles',
                         'themes',
                     );
-    
+
     foreach ($modules as $module) {
         $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => $module));
         $data['module_settings']->initialize();
@@ -671,7 +676,7 @@ function installer_admin_create_administrator()
     if (!$create) {
         return $data;
     }
-    
+
     // Set up some custom validation checks and messages
     $data['admin']->properties['name']->validation_min_length = 4;
     $data['admin']->properties['name']->validation_min_length_invalid = xarML('The display name must be at least 4 characters long');
@@ -682,12 +687,12 @@ function installer_admin_create_administrator()
     $data['admin']->properties['password']->validation_password_confirm = 1;
     $data['admin']->properties['email']->validation_min_length = 1;
     $data['admin']->properties['email']->validation_min_length_invalid = xarML('An email address must be entered');
-    
+
     $isvalid = $data['admin']->checkInput();
     if (!$isvalid) {
         return xarTplModule('installer','admin','create_administrator',$data);
     }
-    
+
     xarModVars::set('mail', 'adminname', $data['admin']->properties['name']->value);
     xarModVars::set('mail', 'adminmail', $data['admin']->properties['email']->value);
     xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright ' . date("Y") . ' ' . $data['admin']->properties['name']->value);
@@ -1048,7 +1053,7 @@ function installer_admin_cleanup()
     xarVarFetch('remove', 'checkbox', $remove, false, XARVAR_NOT_REQUIRED);
     xarVarFetch('rename', 'checkbox', $rename, false, XARVAR_NOT_REQUIRED);
     xarVarFetch('newname', 'str', $newname, '', XARVAR_NOT_REQUIRED);
-    
+
     if ($remove) {
         unlink('install.php');
     } elseif ($rename) {
