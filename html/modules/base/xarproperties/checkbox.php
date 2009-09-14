@@ -42,10 +42,10 @@ class CheckboxProperty extends DataProperty
 
     public function validateValue($value = null)
     {
-        if (!empty($value)) {
-            $this->value = true;
-        } else {
+        if (empty($value) || $value == 'false') {
             $this->value = false;
+        } else {
+            $this->value = true;
         }
         return true;
     }
