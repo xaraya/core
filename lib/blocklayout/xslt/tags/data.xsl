@@ -245,7 +245,7 @@
                 <xsl:text>sys::import('modules.dynamicdata.class.objects.master');</xsl:text>
                 <xsl:text>$__</xsl:text>
                 <xsl:value-of select="@object"/>
-                <xsl:text> = DataObjectMaster::getObjectList(array('name' => '</xsl:text>
+                <xsl:text>=DataObjectMaster::getObjectList(array('name'=>'</xsl:text>
                 <xsl:value-of select="@object"/>
                 <xsl:text>'));</xsl:text>
                 <xsl:value-of select="@value"/><xsl:text>=</xsl:text>
@@ -266,7 +266,6 @@
       </xsl:choose>
     </xsl:processing-instruction>
 </xsl:template>
-
 
 <xsl:template match="xar:data-input">
   <xsl:processing-instruction name="php">
@@ -304,6 +303,9 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- We do have a property in the attribute -->
+        <xsl:text>if (isset(</xsl:text>
+        <xsl:value-of select="@property"/>
+        <xsl:text>)){</xsl:text>
         <xsl:text>echo </xsl:text>
         <xsl:value-of select="@property"/><xsl:text>-&gt;</xsl:text>
         <xsl:choose>
@@ -327,6 +329,7 @@
           </xsl:otherwise>
         </xsl:choose>
         <xsl:text>);</xsl:text>
+        <xsl:text>}</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:processing-instruction>
@@ -359,6 +362,9 @@
         </xsl:when>
         <xsl:otherwise>
           <!-- We already had a property object, run its output method -->
+          <xsl:text>if (isset(</xsl:text>
+          <xsl:value-of select="@property"/>
+          <xsl:text>)){</xsl:text>
           <xsl:text>echo </xsl:text>
           <xsl:value-of select="@property"/>
           <xsl:text>-&gt;showOutput(</xsl:text>
@@ -374,6 +380,7 @@
             </xsl:otherwise>
           </xsl:choose>
           <xsl:text>);</xsl:text>
+          <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
   </xsl:processing-instruction>
@@ -420,12 +427,16 @@
           </xsl:when>
           <xsl:otherwise>
             <!-- We have a property -->
+            <xsl:text>if (isset(</xsl:text>
+            <xsl:value-of select="@property"/>
+            <xsl:text>)){</xsl:text>
             <xsl:text>echo </xsl:text><xsl:value-of select="@property"/>
             <xsl:text>-&gt;showLabel(</xsl:text>
             <xsl:call-template name="atts2args">
               <xsl:with-param name="nodeset" select="@*"/>
             </xsl:call-template>
             <xsl:text>);</xsl:text>
+            <xsl:text>}</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
