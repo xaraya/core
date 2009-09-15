@@ -34,14 +34,8 @@
             $output = array();
             $output = xarModCallHooks('item', 'waitingcontent', '', array('module' => 'base'));
 
-            if (empty($output)) {
-                $message = xarML('Waiting Content has not been configured');
-            }
-            if (empty($message)) $message = '';
-
             $data['content'] = array(
                 'output'   => $output,
-                'message'  => $message
             );
 
             return $data;
