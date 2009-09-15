@@ -51,6 +51,12 @@
                 </label>
                 <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVarPrepForDisplay($field['defaultvalue'])#" class="xar-form-textmedium" />
             </div>
+            <div class="xar-form-input-wrapper">
+                <label for="dd_seq_#$field.id#" class="xar-form-label">
+                    #$propertyfields['seq']['label']#:
+                </label>
+                <input type="text" name="dd_seq[#$field['id']#]" id="dd_seq_#$field['id']#" value="#xarVarPrepForDisplay($field['seq'])#" class="xar-form-textmedium" />
+            </div>
 <!-- Uncomment this to show the configuration
             <div class="xar-form-input-wrapper">
                 <label for="dd_configuration_#$field.id#" class="xar-form-label">
