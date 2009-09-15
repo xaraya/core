@@ -738,7 +738,7 @@ function installer_admin_create_administrator()
     $query = "SELECT    id as id
               FROM      $blockGroupsTable
               WHERE     name = ?";
-    $result = $dbconn->Execute($query,array('left'));
+    $result = $dbconn->Execute($query,array('admin'));
 
     // Freak if we don't get one and only one result
     if ($result->getRecordCount() != 1) {
