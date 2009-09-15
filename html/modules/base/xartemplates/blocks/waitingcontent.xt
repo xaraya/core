@@ -5,12 +5,7 @@
         Waiting Content has not been configured
     <xar:else />
         <xar:foreach in="$output" key="$module" value="$hookoutput">
-        #$hookoutput#</xar:foreach>
+            #$hookoutput#
+        </xar:foreach>
     </xar:if>
-    <xar:var name="title">User Interface</xar:var>
-    <div>
-        <a href="index.php" title="$title">
-            Return to User Interface
-        </a>
-    </div>
 </xar:template>

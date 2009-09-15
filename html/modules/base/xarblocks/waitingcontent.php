@@ -27,12 +27,9 @@
         {
             $data = parent::display($data);
 
-            // Get waiting content
-            $waitingcontent = xarModAPIFunc('base', 'admin', 'waitingcontent');
-            
             // Hooks (we specify that we want the ones for adminpanels here)
             $output = array();
-            $output = xarModCallHooks('item', 'waitingcontent', '', array('module' => 'base'));
+            $output = xarModCallHooks('item', 'waitingcontent', '');
 
             $data['content'] = array(
                 'output'   => $output,
