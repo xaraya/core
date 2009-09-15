@@ -6,7 +6,7 @@
     </div>
     <div class="xar-mod-body">
       <xar:template type="module" file="admin-menu" />
-        <h2>Modify Configuration</h2>
+        <h2>Modify Roles Configuration</h2>
         <div>
             <ul class="xar-tabs xar-alt xar-norm-outline">
                 <xar:var name="title">Configure</xar:var>
