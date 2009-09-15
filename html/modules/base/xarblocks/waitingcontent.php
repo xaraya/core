@@ -37,7 +37,7 @@
             if (empty($output)) {
                 $message = xarML('Waiting Content has not been configured');
             }
-            if (empty($message)) $message = '';var_dump($output);
+            if (empty($message)) $message = '';
 
             $data['content'] = array(
                 'output'   => $output,
