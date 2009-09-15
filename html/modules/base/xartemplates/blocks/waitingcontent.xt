@@ -1,8 +1,16 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:if condition="!empty($message)">#$message# 
+    <xar:if condition="!empty($message)">
+        #$message# 
     <xar:else />
-    <xar:foreach in="$output" key="$module" value="$hookoutput">
-    #$hookoutput#</xar:foreach></xar:if>
+        <xar:foreach in="$output" key="$module" value="$hookoutput">
+        #$hookoutput#</xar:foreach>
+    </xar:if>
+    <xar:var name="title">User Interface</xar:var>
+    <div>
+        <a href="index.php" title="$title">
+            Return to User Interface
+        </a>
+    </div>
 </xar:template>
