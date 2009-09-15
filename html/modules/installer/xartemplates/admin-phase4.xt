@@ -18,12 +18,14 @@
                 proceed.</li>
                 <li>If you plan to use a SQLite or PostgreSQL database please ensure your database
                 already exists before your proceed.</li>
+                <!--
                 <li>If you plan on 
                 <strong>upgrading</strong>an existing Xaraya then please run the 
                 <strong>upgrade.php</strong>script, not this install script.</li>
                 <li>If you plan to convert from another Weblog/CMS to Xaraya, first install Xaraya
                 as normal and then run the appropriate import script to import your prior
                 Weblog/CMS data.</li>
+                -->
                 <li>Make sure you only use valid characters in the username and password for the
                 database (eg no spaces, '$' or others which not supported by your database
                 type.</li>
