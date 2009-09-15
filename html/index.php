@@ -120,13 +120,7 @@ function xarMain()
         }
 
         // Set page template
-        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default' && xarModVars::Get('themes', 'usedashboard')) {
-            $dashtemplate=xarModVars::Get('themes','dashtemplate');
-            //if dashboard is enabled, use the dashboard template else fallback on the normal template override system for admin templates
-              if (!xarTplSetPageTemplateName($dashtemplate.'-'.$modName)) {
-                xarTplSetPageTemplateName($dashtemplate);
-            }
-        }elseif ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
+        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
              // Use the admin-$modName.xt page if available when $modType is admin
             // falling back on admin.xt if the former isn't available
             if (!xarTplSetPageTemplateName('admin-'.$modName)) {
