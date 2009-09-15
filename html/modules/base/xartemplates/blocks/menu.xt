@@ -2,6 +2,13 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- FIXME: use proper nesting in the data, not the elseif constructs -->
+    
+    <!-- Convenience link to admin theme if this is an admin -->
+    <xar:if condition="xarIsParent('Administrators',xarUserGetVar('uname'))">
+        <p> 
+            [<a href="#xarModURL('base','admin','main')#" title="Go to Backend Interface">Go to Backend Interface</a>]
+        </p>
+    </xar:if>
     <xar:if condition="!empty($usercontent)">
         <ul class="xar-menu-section">
             <li class="xar-menu-section">
@@ -104,12 +111,6 @@
     <xar:if condition="(xarThemeIsAvailable('print')) and !empty($displayprint)">
         <p>[ 
         <a href="#$printurl#" title="Print View">Print View</a>]</p>
-    </xar:if>
-    <!-- Convenience link to admin theme if this is an admin -->
-    <xar:if condition="xarIsParent('Administrators',xarUserGetVar('uname'))">
-        <p> 
-            [<a href="#xarModURL('base','admin','main')#" title="Go to Backend Interface">Go to Backend Interface</a>]
-        </p>
     </xar:if>
     <xar:if condition="(xarThemeIsAvailable('rss')) and !empty($displayrss)">
         <!-- TODO check whether a modules supports syndication, do not hardcode in here -->
