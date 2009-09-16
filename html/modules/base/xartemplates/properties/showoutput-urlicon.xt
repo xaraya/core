@@ -2,7 +2,13 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:var name="iconalt">Icon</xar:var>
-    <a href="#$link#">
-        <img src="#$icon#" alt="#$iconalt#" width="16" height="16" />
-    </a>
+    <xar:if condition="!empty($title)">
+        <a href="#$link#" title="#$title#">
+            <img src="#$icon#" alt="#$iconalt#" width="16" height="16" />
+        </a>
+    <xar:else />
+        <a href="#$link#">
+            <img src="#$icon#" alt="#$iconalt#" width="16" height="16" />
+        </a>
+    </xar:if>
 </xar:template>
