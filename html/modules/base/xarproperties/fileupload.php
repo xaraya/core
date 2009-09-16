@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -311,7 +311,7 @@ class FileUploadProperty extends DataProperty
         // Allow overriding by specific parameters
             if (isset($data['size']))   $this->display_size = $data['size'];
             if (isset($data['maxsize']))   $this->validation_max_file_size = $data['maxsize'];
-            if (isset($data['extensions']))   $this->validation_file_extensions = $data['extensions'];
+            if (isset($data['extensions']))   $this->setExtensions($data['extensions']);
 
         // inform anyone that we're showing a file upload field, and that they need to use
         // <form ... enctype="multipart/form-data" ... > in their input form
@@ -388,11 +388,59 @@ class FileUploadProperty extends DataProperty
         }
     }
 
-    public function validateExtension($filename='')
+    /**
+     * Set the list/regex of allowed file extensions, depending on the syntax used (cfr. image, webpage, ...)
+     */
+    public function setExtensions($file_extensions = null)
     {
+        if (isset($file_extensions)) {
+            $this->validation_file_extensions = $file_extensions;
+        }
+        $this->file_extension_list = null;
+        $this->file_extension_regex = null;
+        if (!empty($this->validation_file_extensions)) {
+            // example: array('gif', 'jpg', 'jpeg', ...)
+            if (is_array($this->validation_file_extensions)) {
+                $this->file_extension_list = $this->validation_file_extensions;
+
+            // example: gif,jpg,jpeg,png,bmp,txt,htm,html
+            } elseif (strpos($this->validation_file_extensions, ',') !== false) {
+                $this->file_extension_list = explode(',', $this->validation_file_extensions);
+
+            // example: gif|jpe?g|png|bmp|txt|html?
+            } else {
+                $this->file_extension_regex = $this->validation_file_extensions;
+            }
+        }
+    }
+
+    /**
+     * Validate the given filename against the list/regex of allowed file extensions
+     */
+    public function validateExtension($filename = '')
+    {
+/*
         $filetype = $this->validation_file_extensions;
         $filename = xarVarPrepForOS(basename(strval($filename)));
         return (!empty($filetype) && preg_match("/\.$filetype$/",$filename));
+*/
+        $pos = strrpos($filename, '.');
+        if ($pos !== false) {
+            $extension = substr($filename, $pos + 1);
+        } else {
+            // in case we already got the extension from $dir->getExtension()
+            $extension = $filename;
+        }
+
+        if (!empty($this->file_extension_list) &&
+            !in_array($extension, $this->file_extension_list)) {
+            return false;
+        }
+        if (!empty($this->file_extension_regex) &&
+            !preg_match('/^' . $this->file_extension_regex . '$/', $extension)) {
+            return false;
+        }
+        return true;
     }
 }
 
