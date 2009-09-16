@@ -1087,7 +1087,8 @@ function installer_admin_cleanup()
         list ($leftBlockGroup) = $result->fields;
         $now = time();
 
-        $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot.';
+//        $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot.';
+        $varshtml['html_content'] = 'Please delete install.php from your webroot.';
         $varshtml['expire'] = $now + 259200;
         $msg = serialize($varshtml);
 
