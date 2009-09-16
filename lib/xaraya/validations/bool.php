@@ -19,7 +19,7 @@ class BoolValidation extends ValueValidations
         if ($subject === true || $subject === 'true') {
             $subject = true;
         //Added '' because that is what false gets translated for...
-        } elseif ($subject === false || $subject === 'false' || $subject === '') {
+        } elseif ($subject === false || $subject === 'false') {
             $subject = false;
         } else {
             $msg = 'Not a boolean';
