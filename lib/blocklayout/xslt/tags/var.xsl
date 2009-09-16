@@ -36,21 +36,19 @@
 </xsl:template>
 
 <xsl:template name="xar-var" match="xar:var">
+  <xsl:processing-instruction name="php">
   <xsl:choose>
-    <xsl:when test="not(node())">
-      <!-- Empty form, getting a value -->
-      <xsl:if test="@name != ''">
-        <xsl:processing-instruction name="php">
+      <xsl:when test="not(node())">
+        <!-- Empty form, getting a value -->
+        <xsl:if test="@name != ''">
           <xsl:text>echo </xsl:text>
           <xsl:call-template name="xarvar_getcode"/>
           <xsl:text>;</xsl:text>
-        </xsl:processing-instruction>
-      </xsl:if>
-    </xsl:when>
-    <xsl:otherwise>
-      <!-- Open form, setting a value -->
-      <xsl:if test="@scope = 'local' or not(@scope)">
-        <xsl:processing-instruction name="php">
+        </xsl:if>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- Open form, setting a value -->
+        <xsl:if test="@scope = 'local' or not(@scope)">
           <xsl:choose>
             <xsl:when test="not(@name) or @name = ''">
               <!-- No name specified, generate one -->
@@ -66,10 +64,15 @@
           <xsl:text>=</xsl:text>
           <xsl:call-template name="xarvar_setcode"/>
           <xsl:text>;</xsl:text>
-        </xsl:processing-instruction>
-      </xsl:if>
-    </xsl:otherwise>
-  </xsl:choose>
+        </xsl:if>
+        <xsl:text>$_bl_data['</xsl:text>
+        <xsl:value-of select="@name"/>
+        <xsl:text>']=$</xsl:text>
+        <xsl:value-of select="@name"/>
+        <xsl:text>;&nl;</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:processing-instruction>
 </xsl:template>
 
 <!--
