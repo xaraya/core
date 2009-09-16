@@ -25,7 +25,10 @@
                     <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#" class="xar-form-label">
                         Enable the Admin Dashboard.
                     </label>
-                    <xar:data-input type="checkbox" name="usedashboard" checked="$usedashboard" />
+                    <xar:set name="checked">
+                        <xar:var scope="module" module="themes" name="usedashboard" />
+                    </xar:set>
+                    <xar:data-input type="checkbox" name="usedashboard" checked="$checked" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="dashtemplate" title="#xarML('Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'')#" class="xar-form-label">
@@ -43,7 +46,10 @@
                     <label for="adminpagemenu" title="#xarML('Use submenus in the page for admin functions.')#" class="xar-form-label">
                         Enable InPage Admin SubMenus
                     </label>
-                    <xar:data-input type="checkbox" name="adminpagemenu" checked="$adminpagemenu" />
+                    <xar:set name="checked">
+                        <xar:var scope="module" module="themes" name="adminpagemenu" />
+                    </xar:set>
+                    <xar:data-input type="checkbox" name="adminpagemenu" checked="$checked" />
                 </div>
             </fieldset>
             <fieldset>
