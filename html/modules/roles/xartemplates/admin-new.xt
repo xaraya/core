@@ -30,7 +30,7 @@
                     <xar:data-input type="grouplist" name="parentid" value="$parentid" />
                 </div>
                 <xar:set name="settings">
-                unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
+                explode(',',xarModVars::get('roles','duvsettings'))</xar:set>
                 <xar:if condition="ROLES_USERTYPE eq $basetype">
                     <xar:if condition="in_array('useremailformat',$settings)">
                         <div class="xar-form-input-wrapper">

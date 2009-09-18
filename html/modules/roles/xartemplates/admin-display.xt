@@ -35,7 +35,7 @@
             <xar:data-display object="$object" fieldlist="$fields" />
             <xar:if condition="$basetype eq ROLES_USERTYPE">
                 <xar:set name="settings">
-                unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
+                explode(',',xarModVars::get('roles','duvsettings'))</xar:set>
                 <xar:if condition="in_array('userhome',$settings)">
                     <div class="xar-form-input-wrapper">
                     <label class="xar-form-label">
