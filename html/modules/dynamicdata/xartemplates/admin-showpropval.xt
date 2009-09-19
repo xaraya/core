@@ -5,6 +5,7 @@
         <span class="xar-mod-title">Dynamic Data Administration</span>
     </div>
     <div class="xar-mod-body">
+    <xar:if condition="!empty($itemid)">
         <h2>Configuration for DataProperty #$itemid#</h2>
         <xar:if condition="!empty($isupload)">
             <xar:set name="enc_type">'multipart/form-data'</xar:set>
@@ -28,5 +29,60 @@
                 </div>
             </fieldset>
         </form>
+
+    <xar:elseif condition="!empty($proptype)"/>
+        <h2>Sample Configuration for DataProperty Type #$proptype#</h2>
+        <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
+            <fieldset>
+                <legend>Select Property Type</legend>
+                <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="$proptype" />
+                <input type="submit" value="#xarML('Select')#" />
+            </fieldset>
+        </form>
+        <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
+            <fieldset>
+                <legend>Property Type Summary</legend>
+                <table class="xar-fullwidth">
+                    <tr>
+                        <td>
+                            <div class="xar-form-input-wrapper">
+                                <label class="xar-form-label" for="#$proptype#_desc" title="" style="">
+                                    Property Type
+                                </label>
+                                [#$propinfo:type#] #$propinfo:desc#
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="xar-form-input-wrapper">
+                                <label class="xar-form-label" for="#$proptype#_config" title="" style="">
+                                    Configuration
+                                </label>
+                                <textarea name="#$proptype#_config" id="#$proptype#_config" rows="4" cols="50" readonly="readonly">#$propinfo:configuration#</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+            <input type="hidden" name="proptype" value="#$proptype#" />
+            #$showval#
+            <fieldset>
+                <div class="xar-align-center">
+                    <input type="submit" name="preview" value="#xarML('Preview')#" />
+                </div>
+            </fieldset>
+        </form>
+
+    <xar:else/>
+        <h2>Sample Configuration for DataProperty Types</h2>
+        <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
+            <fieldset>
+                <legend>Select Property Type</legend>
+                <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="textbox" />
+                <input type="submit" value="#xarML('Select')#" />
+            </fieldset>
+        </form>
+    </xar:if>
     </div>
 </xar:template>

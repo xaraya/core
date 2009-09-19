@@ -88,6 +88,8 @@ function dynamicdata_user_display($args)
     $hooks = xarModCallHooks('item', 'display', $args['itemid'], $item, $modinfo['name']);
     $data['hooks'] = $hooks;
 
+    xarTplSetPageTitle($myobject->label);
+
     // Return the template variables defined in this function
     if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/user-display.xt') ||
         file_exists('modules/' . $args['tplmodule'] . '/xartemplates/user-display-' . $args['template'] . '.xt')) {
