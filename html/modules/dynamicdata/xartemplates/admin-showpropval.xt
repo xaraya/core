@@ -70,6 +70,10 @@
             <fieldset>
                 <div class="xar-align-center">
                     <input type="submit" name="preview" value="#xarML('Preview')#" />
+<!-- See CHECKME in showpropval
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+                    <input type="submit" name="confirm" value="#xarML('Update')#" disabled="disabled" />
+-->
                 </div>
             </fieldset>
         </form>

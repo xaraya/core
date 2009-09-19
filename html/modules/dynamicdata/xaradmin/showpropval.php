@@ -154,7 +154,8 @@ function dynamicdata_config_propval($proptype)
     }
 
     if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
-    if (!empty($preview)) {
+    if (!xarVarFetch('confirm', 'isset', $confirm, NULL, XARVAR_DONT_SET)) {return;}
+    if (!empty($preview) || !empty($confirm)) {
         if (!xarVarFetch($data['name'],'isset',$configuration,NULL,XARVAR_NOT_REQUIRED)) return;
 
         // pass the current value as configuration rule
@@ -164,6 +165,18 @@ function dynamicdata_config_propval($proptype)
 
         if ($isvalid) {
             $data['configuration'] = $property->configuration;
+/*
+// CHECKME: allow updating the default configuration for a property type someday ? See
+//          also CHECKME in class/properties/master.php DataPropertyMaster::getProperty()
+            if (!empty($confirm)) {
+                if (!xarSecConfirmAuthKey()) {
+                    return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                }
+// TODO: we need some method in PropertyRegistration to update a property type ;-)
+
+// TODO: we need some way to avoid overwriting this whenever we flush property types
+            }
+*/
         } else {
             $data['invalid'] = $property->invalid;
         }
