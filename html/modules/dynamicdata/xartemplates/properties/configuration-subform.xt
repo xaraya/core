@@ -169,13 +169,6 @@
             </tr>
         </xar:if>
         <tr>
-            <td>Other rule</td>
-            <td colspan="2">
-                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#"
-                size="#$size#" tabindex="#$tabindex#" />
-            </td>
-        </tr>
-        <tr>
             <td>Number of repetitions</td>
             <td>
                 <input type="text" name="#$name#[repeat]" id="#$id#_repeat" value="#$repeat#" size="#$size#" tabindex="#$tabindex#" class="xar-form-textshort" />
@@ -186,6 +179,24 @@
                     repetitions are added dynamically, i.e. one appears initially on the form and
                     more are added or removed with buttons.</li>
                 </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>Edit keys</td>
+            <td>
+                <xar:if condition="!empty($editkeys)">
+                    <input type="checkbox" name="#$name#[editkeys]" id="#$id#_editkeys" value="1" tabindex="#$tabindex#" checked="checked" />
+                <xar:else/>
+                    <input type="checkbox" name="#$name#[editkeys]" id="#$id#_editkeys" value="1" tabindex="#$tabindex#" />
+                </xar:if>
+            </td>
+            <td>Allow editing of the keys in repititions<br/>(= associative array of sub-forms)</td>
+        </tr>
+        <tr>
+            <td>Other rule</td>
+            <td colspan="2">
+                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#"
+                size="#$size#" tabindex="#$tabindex#" />
             </td>
         </tr>
     </table>

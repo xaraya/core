@@ -292,7 +292,9 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
         case 'boolean':
             // mrb: Mysql has no native boolean, BOOL evaluates to TinyInt(1), which 
             //      i dont really understand, they could have used BIT(1)
-            $this_field['type'] = "BIT(1)";
+            // this returns as a binary string for MySQL 5.0.3+, which messes up true/false comparisons in PHP !
+            //$this_field['type'] = "BIT(1)";
+            $this_field['type'] = "BOOLEAN";
             if (isset($parameters['default'])) {
                 // default values are numbers, not strings
                 $parameters['default'] = $parameters['default'] ? 1 : 0;

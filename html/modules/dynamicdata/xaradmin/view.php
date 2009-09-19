@@ -71,6 +71,9 @@ function dynamicdata_admin_view($args)
                                            array('itemid' => $data['objectid']));
         }
     }
+
+    xarTplSetPageTitle(xarML('Manage - View #(1)', $data['label']));
+
     if (file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-view.xt') ||
         file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-view-' . $data['template'] . '.xt')) {
         return xarTplModule($data['tplmodule'],'admin','view',$data,$data['template']);

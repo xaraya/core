@@ -23,13 +23,15 @@ class FieldTypeProperty extends ObjectRefProperty
     public $id         = 22;
     public $name       = 'fieldtype';
     public $desc       = 'Field Type';
+    public $initialization_store_prop   = 'id';
+    public $initialization_display_prop = 'label';
 
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
-        $this->initialization_store_prop   = 'id';
-        $this->initialization_display_prop = 'label';
+        // CHECKME: can we somehow get rid of $this->initialization_refobject here, or
+        //          switch back to SelectProperty and use initialization_store_type ?
     }
     function getOptions()
     {
