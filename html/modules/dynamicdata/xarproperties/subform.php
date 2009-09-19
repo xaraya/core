@@ -27,13 +27,24 @@ class SubFormProperty extends DataProperty
     public $link      = '';
     public $where     = ''; // TODO
     public $input     = 1;
-    public $display   = 1; // TODO
+    public $display   = 0; // TODO
     public $repeat    = 1;
+    public $editkeys  = 0;
     public $fieldlist = null;
     public $objectref = null;
     public $oldvalue  = null;
-    public $arguments = array('objectname','style','title','link','where','input','display','fieldlist','repeat');
+    public $arguments = array('objectname','style','title','link','where','input','display','fieldlist','repeat','editkeys');
     public $warnings  = '';
+
+/* TODO: replace custom configuration handling with default one ?
+    public $initialization_linktype = 'serialized';
+    public $initialization_parentselect = 0;
+    public $initialization_fieldlist = null;
+    public $initialization_minimumitems = 1;
+    public $initialization_subiteminput = 1;
+    //allow editing keys on input
+    public $initialization_fixed_keys = 1;
+*/
 
     public function checkInput($name = '', $value = null)
     {
@@ -101,6 +112,10 @@ class SubFormProperty extends DataProperty
             $values = array();
             $prefix = empty($this->fieldprefix) ? $name : $this->fieldprefix;
 
+// TODO: support single serialized array for a single object again (with repeat = 1),
+//       e.g. for module variables or config fields
+
+// TODO: see array property for cleaner implementation of repeats
             // We need to figure out how many items we need to process
             // FIXME: is there a better way to do this?
             $postarray = array_keys($_POST);
@@ -115,7 +130,6 @@ class SubFormProperty extends DataProperty
 
             foreach ($items as $i) {
                 // check user input for the object item - using the current name as field prefix if non is given
-
                 $isvalid = $object->checkInput(array('fieldprefix' => "Item_" . $i . "_" . $prefix));
 
                 $keylist = array_keys($object->properties);
@@ -146,7 +160,15 @@ class SubFormProperty extends DataProperty
                         $value[$key] = $object->properties[$key]->value;
                     }
                 }
-                $values[] = $value;
+
+                // Preserve the index in case it has meaning
+                $idx = null;
+                xarVarFetch("Key_" . $i . "_" . $prefix, 'str', $idx, NULL, XARVAR_NOT_REQUIRED);
+                if (!empty($idx) && !isset($values[$idx])) {
+                    $values[$idx] = $value;
+                } else {
+                    $values[$i] = $value;
+                }
             }
             $this->value = serialize($values);
         } elseif ($this->style == 'itemid' && (empty($value) || $value == $oldvalue) && !empty($this->input)) {
@@ -482,7 +504,6 @@ class SubFormProperty extends DataProperty
                 $data['dropdown'] = array();
             }
         }
-
         return parent::showInput($data);
     }
 
@@ -511,7 +532,6 @@ class SubFormProperty extends DataProperty
         if (!empty($this->objectid) && !empty($value)) {
             $data['object'] =& $this->getObject($value);
         }
-
         $module    = empty($module)   ? $this->getModule()   : $module;
         $template  = empty($template) ? $this->getTemplate() : $template;
 
@@ -524,7 +544,9 @@ class SubFormProperty extends DataProperty
             $myobject =& $this->objectref;
             // Note: be careful that serialized values have the same type here (cfr. childlist)
             if ($value == $this->oldvalue) {
-                return $myobject;
+                if (!empty($this->style) && $this->style != 'serialized') {
+                    return $myobject;
+                }
             }
         } else {
             $myobject = null;
@@ -546,6 +568,7 @@ class SubFormProperty extends DataProperty
                     $myobject->itemids = array();
                 }
 
+// FIXME: $objects is never used in this case
                 $repeats = $this->repeat ? $this->repeat : 1;
                 for ($i=0;$i<$repeats;$i++) {
                     $objects[] = $myobject;
@@ -631,6 +654,9 @@ class SubFormProperty extends DataProperty
                         $value = array(); // can't do anything with this
                     }
                 }
+
+// TODO: support single serialized array for a single object again (with repeat = 1),
+//       e.g. for module variables or config fields
                 $objects = array();
                 if (empty($value)) {
                     if (!isset($myobject)) {
@@ -647,7 +673,8 @@ class SubFormProperty extends DataProperty
                         $objects[] = $myobject;
                     }
                 } else {
-                    foreach ($value as $vals) {
+                    // Preserve the index in case it has meaning
+                    foreach ($value as $idx => $vals) {
                         $myobject = DataObjectMaster::getObject(array('objectid'  => $this->objectid,
                                                                         'fieldlist' => $this->fieldlist));
                         foreach ($vals as $key => $val) {
@@ -655,7 +682,7 @@ class SubFormProperty extends DataProperty
                                 $myobject->properties[$key]->setValue($val);
                             }
                         }
-                        $objects[] = $myobject;
+                        $objects[$idx] = $myobject;
                     }
                 }
                 return $objects;
@@ -666,6 +693,8 @@ class SubFormProperty extends DataProperty
         }
         return $myobject;
     }
+
+// TODO: replace custom configuration handling with default one ?
 
     public function parseConfiguration($configuration = '')
     {
@@ -718,10 +747,17 @@ class SubFormProperty extends DataProperty
             $data[$item] = $this->$item;
         }
         if (!empty($this->objectname)) {
-            $object = DataObjectMaster::getObject(array('name' => $this->objectname));
+            if (is_numeric($this->objectname)) {
+                $object = DataObjectMaster::getObject(array('objectid' => $this->objectname));
+            } else {
+                $object = DataObjectMaster::getObject(array('name' => $this->objectname));
+            }
+        }
+        if (!empty($object)) {
             $data['objectid'] = $object->objectid;
             $data['properties'] = $object->getProperties();
         } else {
+            $this->objectname = '';
             $this->objectid = 0;
             $data['objectid'] = 0;
             $data['properties'] = array();
