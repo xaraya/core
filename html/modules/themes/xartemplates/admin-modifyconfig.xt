@@ -21,6 +21,7 @@
                     </xar:set>
                     <input type="text" id="themedir" name="themedir" value="#$value#" maxlength="100" class="xar-form-textlong" />
                 </div>
+                <!--
                 <div class="xar-form-input-wrapper">
                     <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#" class="xar-form-label">
                         Enable the Admin Dashboard.
@@ -42,6 +43,7 @@
                         A page template called  <strong>admin.xt</strong>will be used automatically without this switch and can be customised on a module by module basis (eg admin-articles.xt).
                     </div>
                 </div>
+                -->
                 <div class="xar-form-input-wrapper">
                     <label for="adminpagemenu" title="#xarML('Use submenus in the page for admin functions.')#" class="xar-form-label">
                         Enable InPage Admin SubMenus

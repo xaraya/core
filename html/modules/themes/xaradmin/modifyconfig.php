@@ -34,10 +34,10 @@ function themes_admin_modifyconfig()
     if (!xarVarFetch('copyright', 'str:1:', $data['copyright'], xarModVars::get('themes', 'SiteCopyRight'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('AtomTag', 'str:1:', $data['atomtag'], (bool)xarModVars::get('themes', 'AtomTag'), XARVAR_NOT_REQUIRED)) return;
 
-    if (!xarVarFetch('usedashboard', 'checkbox', $data['usedashboard'], (bool)xarModVars::get('themes', 'usedashboard'), XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('adminpagemenu', 'checkbox', $data['adminpagemenu'], (bool)xarModVars::get('themes', 'adminpagemenu'), XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('dashtemplate', 'str:1:', $data['dashtemplate'], trim(xarModVars::get('themes', 'dashtemplate')), XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('themedir','str:1:',$data['defaultThemeDir'],'themes',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('adminpagemenu', 'checkbox', $data['adminpagemenu'], (bool)xarModVars::get('themes', 'adminpagemenu'), XARVAR_NOT_REQUIRED)) {return;}
+//    if (!xarVarFetch('usedashboard', 'checkbox', $data['usedashboard'], (bool)xarModVars::get('themes', 'usedashboard'), XARVAR_NOT_REQUIRED)) {return;}
+//    if (!xarVarFetch('dashtemplate', 'str:1:', $data['dashtemplate'], trim(xarModVars::get('themes', 'dashtemplate')), XARVAR_NOT_REQUIRED)) {return;}
 
     if (!xarVarFetch('selsort','str:1:',$data['selsort'],'plain',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('selfilter','int',$data['selfilter'],XARMOD_STATE_ANY,XARVAR_NOT_REQUIRED)) return;
@@ -45,9 +45,9 @@ function themes_admin_modifyconfig()
     if (!xarVarFetch('selstyle','str:1:',$data['selstyle'],'plain',XARVAR_NOT_REQUIRED)) return;
 
     // Dashboard
-    if (!isset($data['dashtemplate']) || trim($data['dashtemplate']=='')) {
-        $data['dashtemplate']='dashboard';
-    }
+//    if (!isset($data['dashtemplate']) || trim($data['dashtemplate']=='')) {
+//        $data['dashtemplate']='dashboard';
+//    }
 
     $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'themes'));
     $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, enable_user_menu');
@@ -78,9 +78,9 @@ function themes_admin_modifyconfig()
             xarModVars::set('themes', 'ShowTemplates', $data['showtemplates']);
             xarModVars::set('themes', 'AtomTag', $data['atomtag']);
             xarModVars::set('themes', 'variable_dump', $data['variable_dump']);
-            xarModVars::set('themes', 'usedashboard', $data['usedashboard']);
             xarModVars::set('themes', 'adminpagemenu', $data['adminpagemenu']);
-            xarModVars::set('themes', 'dashtemplate', $data['dashtemplate']);
+//            xarModVars::set('themes', 'usedashboard', $data['usedashboard']);
+//            xarModVars::set('themes', 'dashtemplate', $data['dashtemplate']);
             xarConfigVars::set(null,'Site.BL.ThemesDirectory', $data['defaultThemeDir']);
             xarConfigVars::set(null, 'Site.BL.CacheTemplates',$data['cachetemplates']);
             xarModVars::set('themes', 'hidecore', $data['hidecore']);
