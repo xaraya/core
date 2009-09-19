@@ -27,7 +27,7 @@ function roles_user_main()
     /*
     if(xarSecurityCheck('EditRole',0)) {
 
-        if (xarModVars::get('modules', 'disableoverview') == 0){
+        if ((bool)xarModVars::get('modules', 'disableoverview') == false){
             return xarTplModule('roles','admin', 'main',array());
         } else {
             xarResponse::Redirect(xarModURL('roles', 'admin', 'viewroles'));

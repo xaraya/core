@@ -100,7 +100,7 @@
                             Display Name</a>
                         </th>
                     </xar:if>
-                    <xar:if condition="xarModVars::get('roles', 'allowemail')">
+                    <xar:if condition="(bool)xarModVars::get('roles', 'allowemail')">
                         <th>Email</th>
                     </xar:if>
                     <xar:if condition="isset($properties) and count($properties) gt 0">
@@ -136,7 +136,7 @@
                                 <xar:else />#xarVarPrepForDisplay($loop:item['name'])#</xar:if>
                             </td>
                         </xar:if>
-                        <xar:if condition="xarModVars::get('roles', 'allowemail')">
+                        <xar:if condition="(bool)xarModVars::get('roles', 'allowemail')">
                             <td class="xar-align-center">
                                 <xar:if condition="empty($loop:item['emailurl']) || !xarUserIsLoggedIn()">
 

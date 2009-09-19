@@ -26,7 +26,9 @@
 function roles_admin_addmember()
 {
     // Check for authorization code
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
     // get parameters
     if (!xarVarFetch('id',    'int:1:', $id)) return;
     if (!xarVarFetch('roleid', 'int:1:', $roleid)) return;

@@ -3,16 +3,17 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="$image_source eq 'upload'">
         <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" />&#160; 
-        <xar:data-input type="fileupload" name="$name" validation="var/uploads|(gif|(jpg|jpeg|png|bmp)" />
+        <xar:data-input type="fileupload" name="$name" extensions="$extensions" />
     <xar:elseif condition="$image_source eq 'url'" />
         <xar:data-input type="url" name="$name" value="$value" />
     <xar:else />
-        <xar:data-input type="filepicker" name="$name" value="$value" basedir="$basedir" extensions="gif,jpg,jpeg,png,bmp" />
+        <xar:set name="firstline">array('id' => '', 'name' => xarML('Select Image'))</xar:set>
+        <xar:data-input type="filepicker" name="$name" value="$value" basedir="$basedirectory" extensions="$extensions" firstline="$firstline" />
         <xar:var name="showlabel">check</xar:var>
         <xar:if condition="!empty($value)"> 
-            [<a href="#$value#" target="preview">#$showlabel#</a>]
+            [<a href="#$basedirectory#/#$value#" target="preview">#$showlabel#</a>]
         </xar:if>
     </xar:if>
-    <input type="hidden" name="image_source" value="#$image_source#" />
+    <input type="hidden" name="#$name#_source" value="#$image_source#" />
     <xar:template file="dataproperty_additions" module="base" />
 </xar:template>

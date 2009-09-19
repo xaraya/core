@@ -45,7 +45,7 @@ class URLProperty extends TextBoxProperty
             } else {
               // If we have a scheme but nothing following it,
                 // then consider the link empty :-)
-                if (eregi('^[a-z]+\:\/\/$', $value)) {
+                if (mb_eregi('^[a-z]+\:\/\/$', $value)) {
                     $this->value = '';
                 } else {
                     // Do some URL validation below. Separate for better understanding

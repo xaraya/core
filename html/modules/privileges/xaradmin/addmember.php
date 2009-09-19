@@ -28,7 +28,9 @@ function privileges_admin_addmember()
 {
 
 // Check for authorization code
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     if(!xarVarFetch('ppid',   'isset', $id   , NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('privid', 'isset', $privid, NULL, XARVAR_DONT_SET)) {return;}

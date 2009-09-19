@@ -17,6 +17,10 @@ function roles_user_view($args)
 {
     if (!xarSecurityCheck('ViewRoles')) return;
 
+    // members list disabled? only show to roles admins
+    if ((bool)xarModVars::get('roles', 'displayrolelist') == false && !xarSecurityCheck('AdminRoles', 0)) {
+        xarResponse::Redirect(xarModURL('roles', 'user', 'main'));
+    }
 //    extract($args);
 
     if(!xarVarFetch('startnum', 'int:1', $args['startnum'], NULL, XARVAR_NOT_REQUIRED)) {return;}
@@ -52,9 +56,9 @@ function roles_user_view($args)
     if (!isset($order)) $data['order'] = 'name';
     if (!isset($search)) $data['search'] = '';
     if (!isset($startnum)) $data['startnum'] = 1;
-    if (!isset($numitems)) $numitems = xarModVars::get('roles', 'itemsperpage');
+    if (!isset($numitems)) $numitems = (int)xarModVars::get('roles', 'items_per_page');
 
-    $numitems = xarModVars::get('roles', 'itemsperpage');
+    $numitems = (int)xarModVars::get('roles', 'items_per_page');
     $pagerfilter['order'] = $data['order'];
     $pagerfilter['search'] = $data['search'];
     $pagerfilter['startnum'] = '%%';

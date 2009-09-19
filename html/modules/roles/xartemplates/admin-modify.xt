@@ -43,7 +43,7 @@
                     <xar:if condition="$basetype eq ROLES_GROUPTYPE AND $object:countChildren()">
                         <div class="xar-form-input-wrapper">
                             <label title="#xarML('Type of Role')#" class="xar-form-label">
-                        Type:</label>#$object:label# 
+                        Type:</label>#$object:label#
                             <!--
                                 value should still be there in the form, otherwise validation will fail,
                                 do it with a hidden input now, but this should really be done with readonly attribute
@@ -60,11 +60,14 @@
                     </xar:if>
                     <xar:data-form object="$object" />
                     <xar:set name="settings">
-                    unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
+                        explode(',',xarModVars::get('roles','duvsettings'))
+                    </xar:set>
                     <xar:if condition="in_array('primaryparent',$settings)">
                         <div class="xar-form-input-wrapper">
                             <label for="duvs_primaryparent" title="#xarML('Primary parent group')#"
-                            class="xar-form-label">Primary Parent Group:</label>
+                            class="xar-form-label">
+                                Primary Parent Group:
+                            </label>
                             <xar:set name="value">
                                 xarModAPIFunc('roles','user','getprimaryparent',array('itemid' => $id))
                             </xar:set>
@@ -90,53 +93,60 @@
                     <xar:if condition="$basetype eq ROLES_USERTYPE">
                         <xar:if condition="in_array('useremailformat',$settings)">
                             <div class="xar-form-input-wrapper">
-                                <label for="duvs_useremailformat" title="#xarML('Email Format')#"
-                                class="xar-form-label">Email Format:</label>
+                                <label for="duvs_useremailformat" title="#xarML('Email Format')#" class="xar-form-label">
+                                    Email Format:
+                                </label>
                                 <xar:set name="value">
-                                xarModUserVars::get('roles','useremailformat',$id)</xar:set>
-                                <xar:set name="options">array( array('id' =&gt; 'text', 'name'
-                                =&gt; 'text'), array('id' =&gt; 'html', 'name' =&gt; 'html'),
-                                )</xar:set>
-                                <xar:data-input type="dropdown" name="duvs[useremailformat]"
-                                id="duvs_useremailformat" value="$value" options="$options" />
+                                    xarModUserVars::get('roles','useremailformat',$id)
+                                </xar:set>
+                                <xar:set name="options">
+                                    array( array('id' =&gt; 'text',
+                                                 'name' =&gt; 'text'),
+                                                 array('id' =&gt; 'html', 'name' =&gt; 'html'),
+                                )
+                                </xar:set>
+                                <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options" />
                             </div>
                         </xar:if>
+                        <!-- revisit in php5.3.0
                         <xar:if condition="in_array('usertimezone',$settings)">
                             <div class="xar-form-input-wrapper">
-                                <label for="duvs_usertimezone" class="xar-form-label">User
-                                Timezone:</label>
+                                <label for="duvs_usertimezone" class="xar-form-label">
+                                    User Timezone:
+                                </label>
                                 <xar:set name="value">
-                                xarModUserVars::get('roles','usertimezone',$id)</xar:set>
-                                <xar:data-input type="timezone" name="duvs[usertimezone]"
-                                id="duvs_usertimezone" value="$value" />
+                                    xarModUserVars::get('roles','usertimezone',$id)
+                                </xar:set>
+                                <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
                             </div>
                         </xar:if>
-                        <xar:if condition="in_array('allowemail',$settings)">
+                        -->
+                        <xar:if condition="(bool)xarModVars::get('roles', 'allowemail')">
                             <div class="xar-form-input-wrapper-after">
-                                <xar:set name="checked">xarModUserVars::get('roles',
-                                'allowemail',$id)</xar:set>
-                                <xar:data-input type="checkbox" name="duvs[allowemail]"
-                                id="duvs_allowemail" checked="$checked" />
-                                <label for="allowemail"
-                                title="#xarML('Allow users to send emails?')#">User has allowed
-                                other users to send them an email?</label>
+                                <xar:set name="checked">(bool)xarModUserVars::get('roles', 'allowemail',$id)</xar:set>
+                                <xar:data-input type="checkbox" name="duvs[allowemail]" id="duvs_allowemail" checked="$checked" />
+                                <label for="allowemail" title="#xarML('Allow users to send emails?')#">
+                                    User has allowed other users to send them an email?
+                                </label>
                             </div>
                         </xar:if>
                         <xar:if condition="in_array('passwordupdate',$settings)">
                             <div class="xar-form-input-wrapper">
-                            <label class="xar-form-label">Password last
-                            updated:</label>#xarLocaleGetFormattedDate('medium',
-                            xarModUserVars::get('roles','passwordupdate',$id))#
-                            #xarLocaleGetFormattedTime('medium',
-                            xarModUserVars::get('roles','passwordupdate',$id))#</div>
+                                <label class="xar-form-label">
+                                    Password last updated:
+                                </label>
+                                #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))#
+                                #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
+                            </div>
                         </xar:if>
                         <xar:if condition="in_array('userlastlogin',$settings)">
                             <div class="xar-form-input-wrapper">
-                            <label class="xar-form-label">Last login
-                            time:</label>#xarLocaleGetFormattedDate('medium',
-                            xarModUserVars::get('roles','userlastlogin',$id))#
-                            #xarLocaleGetFormattedTime('medium',
-                            xarModUserVars::get('roles','userlastlogin',$id))#</div>
+                                <label class="xar-form-label">
+                                    Last login time:
+                                </label>
+                                #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#
+                                #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
+                            </div>
                         </xar:if>
                     </xar:if>
                     <p class="xar-clear"></p>
@@ -146,15 +156,12 @@
                     </xar:if>
                     <div class="xar-align-center xar-clearboth">
                         <input type="hidden" name="parents" id="parents" value="#$parents#" />
-                        <input type="hidden" name="objectid" id="objectid"
-                        value="#$object:objectid#" />
+                        <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#" />
                         <input type="hidden" name="itemid" id="itemid" value="#$id#" />
                         <input type="hidden" name="tplmodule" id="tplmodule" value="roles" />
-                        <input type="hidden" name="authid" id="authid"
-                        value="#xarSecGenAuthKey('dynamicdata')#" />
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#" />
                         <input type="submit" value="#xarML('Update')#" />
-                        <input type="hidden" name="return_url"
-                        value="#xarModURL('roles','admin','modify',array('name' =&gt; $object-&gt;name))#" />
+                        <input type="hidden" name="return_url" value="#xarModURL('roles','admin','modify',array('name' =&gt; $object-&gt;name))#" />
                     </div>
                 </xar:if>
             </form>
@@ -201,8 +208,7 @@
                             </xar:loop>
                         </select>
                         <input type="hidden" name="id" id="addid" value="#$id#" />
-                        <input type="hidden" name="authid" id="authid"
-                        value="#xarSecGenAuthKey()#" />
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                         <input type="submit" value="#xarML('Add')#" />
                     </div>
                 </form>

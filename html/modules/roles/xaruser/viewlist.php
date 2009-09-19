@@ -129,7 +129,7 @@ function roles_user_viewlist($args)
                     'order'   => $order,
                     'selection'   => $selection,
                     'include_anonymous' => false,
-                    'numitems' => xarModVars::get('roles', 'itemsperpage')
+                    'numitems' => (int)xarModVars::get('roles', 'items_per_page')
                 )
             );
             break;
@@ -162,7 +162,7 @@ function roles_user_viewlist($args)
                     'order' => $order,
                     'selection' => $selection,
                     'include_anonymous' => false,
-                    'numitems' => xarModVars::get('roles', 'itemsperpage')
+                    'numitems' => (int)xarModVars::get('roles', 'items_per_page')
                 )
             );
             break;
@@ -202,7 +202,7 @@ function roles_user_viewlist($args)
     // Add the array of items to the template variables
     $data['items'] = $items;
 
-    $numitems = xarModVars::get('roles', 'itemsperpage');
+    $numitems = (int)xarModVars::get('roles', 'items_per_page');
     $pagerfilter['phase'] = $phase;
     $pagerfilter['order'] = $order;
     $pagerfilter['letter'] = $letter;

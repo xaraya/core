@@ -6,7 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <h2>Modify Configuration</h2>
+        <h2>Modify Modules Configuration</h2>
         <form method="post" action="#xarServer::getCurrentURL()#">
             <xar:data-form object="$module_settings" />
             <fieldset>
@@ -15,7 +15,8 @@
                     <label for="disableoverview" title="#xarML('Disable the display by default of all module overview pages.')#" class="xar-form-label">
                         Disable overviews
                     </label>
-                    <xar:data-input type="checkbox" name="disableoverview" id="disableoverview" checked="$disableoverview" />&#160;(disable the display by default of the module overview pages)
+                    <xar:set name="checked">xarModVars::get('modules', 'disableoverview')</xar:set>
+                    <xar:data-input type="checkbox" name="disableoverview" checked="$checked" />&#160;(disable the display by default of the module overview pages)
                 </div>
             </fieldset>
             <fieldset>

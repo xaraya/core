@@ -6,7 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <h2>Modify Configuration</h2>
+        <h2>Modify Authsystem Configuration</h2>
         <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
             <xar:data-form object="$module_settings" />
             <fieldset>
@@ -15,7 +15,8 @@
                     <label for="uselockout" class="xar-form-label" title="Lock a user out after a number of failed logins">
                         Enable lockout option?
                     </label>
-                    <xar:data-input type="checkbox" name="uselockout" id="uselockout" checked="$uselockout" />
+                    <xar:set name="checked">xarModVars::get('authsystem', 'uselockout')</xar:set>
+                    <xar:data-input type="checkbox" name="uselockout" id="uselockout" checked="$checked" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="lockouttries" class="xar-form-label" title="The number of attempts allowed before lockout">

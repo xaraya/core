@@ -72,6 +72,10 @@ function dynamicdata_adminapi_updateprop($args)
         $sql .= ", defaultvalue = ?";
         $bindvars[] = $defaultvalue;
     }
+    if (isset($seq) && is_numeric($seq)) {
+        $sql .= ", seq = ?";
+        $bindvars[] = $seq;
+    }
     // TODO: verify that the data source exists
     if (isset($source) && is_string($source)) {
         $sql .= ", source = ?";

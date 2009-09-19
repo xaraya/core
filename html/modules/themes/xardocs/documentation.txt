@@ -126,8 +126,6 @@ the css class lib to create and configure css tags for individual needs.
 
 Examples have been included in the default theme and in some core modules.
 
-Note: you may need to run upgrade.php for tags to start working
-
 // THEMES MODULE - DEVELOPER
 
 New module functions:

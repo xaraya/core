@@ -25,7 +25,9 @@ function blocks_admin_update_group()
     $orderselect->checkInput('group_instance_order');
 
     // Confirm Auth Key
-    if (!xarSecConfirmAuthKey()) {return;}
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     // Security Check
     if(!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}

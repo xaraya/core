@@ -79,7 +79,9 @@ function roles_user_email($args)
             //if (!xarVarFetch('name', 'str:1:100', $name)) return;
 
             // Confirm authorisation code.
-            if (!xarSecConfirmAuthKey()) return;
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }        
 
             // Security Check
             if (!xarSecurityCheck('ReadRole')) return;

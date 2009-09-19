@@ -36,7 +36,10 @@ function dynamicdata_admin_update($args)
     if(!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('preview',    'isset', $preview,     0, XARVAR_NOT_REQUIRED)) {return;}
 
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
+
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'join'     => $join,
                                          'table'    => $table,

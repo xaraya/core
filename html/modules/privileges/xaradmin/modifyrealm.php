@@ -36,7 +36,9 @@ function privileges_admin_modifyrealm()
         $name = $result['name'];
     } else {
         if (!xarVarFetch('newname',   'str:1.20',$newname, '',XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarSecConfirmAuthKey()) return;
+        if (!xarSecConfirmAuthKey()) {
+            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        }        
 
         $q = new xarQuery('SELECT',$xartable['security_realms'],'name');
         $q->eq('name', $newname);

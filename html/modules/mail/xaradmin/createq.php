@@ -4,7 +4,9 @@ function mail_admin_createq($args)
 {
     // Are we allowed to be here?
     if (!xarSecurityCheck('AdminMail')) return;
-    if(!xarSecConfirmAuthKey()) return; 
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     // What do we need to do
     if(!xarVarFetch('name','str:1:12',$qName)) return;

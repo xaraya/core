@@ -8,6 +8,7 @@
     <xar:set name="steptext[6]">'Creating an Administrator'</xar:set>
     <xar:set name="steptext[7]">'Choosing a Configuration'</xar:set>
     <xar:set name="steptext[8]">'Choosing Privileges'</xar:set>
+    <xar:set name="steptext[9]">'Security Considerations'</xar:set>
     <div id="status">
         <div id="status_body">
             <div class="xar-align-center">

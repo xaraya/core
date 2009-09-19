@@ -447,7 +447,7 @@ class xarRequest extends Object
                 // Check if this is an alias for some other module
                 $modName = xarModAlias::resolve($modName);
                 // Call the appropriate decode_shorturl function
-                if (xarMod::isAvailable($modName) && xarModVars::get($modName, 'SupportShortURLs') && xarMod::apiLoad($modName, $modType)) {
+                if (xarMod::isAvailable($modName) && xarModVars::get($modName, 'enable_short_urls') && xarMod::apiLoad($modName, $modType)) {
                     $loopHole = array($modName,$modType,$funcName);
                     // don't throw exception on missing file or function anymore
                     try {

@@ -33,7 +33,9 @@ function mail_admin_sendtest()
     if (!xarVarFetch('namebcc', 'str:1', $namebcc, '')) return;
 
     // Confirm authorisation code.
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
     // Security check
     if (!xarSecurityCheck('AdminMail')) return;
 

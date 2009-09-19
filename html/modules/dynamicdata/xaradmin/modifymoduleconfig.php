@@ -16,7 +16,9 @@ function dynamicdata_admin_modifymoduleconfig()
 
         case 'update':
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) return;
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }        
             if (!xarVarFetch('debugmode',    'checkbox', $debugmode, xarModVars::get('dynamicdata', 'debugmode'), XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('administrators', 'str', $administrators, '', XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('debugusers', 'str', $candidates, '', XARVAR_NOT_REQUIRED)) return;

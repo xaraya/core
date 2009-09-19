@@ -1,9 +1,10 @@
+<?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">
-            <xar:if condition="xarModVars::get('dynamicdata','useModuleAlias')">
-                <xar:var scope="module" module="dynamicdata" name="aliasname" />
+            <xar:if condition="xarModVars::get('dynamicdata','use_module_alias')">
+                <xar:var scope="module" module="dynamicdata" name="module_alias_name" />
             <xar:else />
                  Dynamic Data Administration
             </xar:if>

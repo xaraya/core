@@ -59,18 +59,20 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
          * The user confirmed the form. So save the results.
          */
 
-        if (!xarSecConfirmAuthKey()) return;
+        if (!xarSecConfirmAuthKey()) {
+            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        }        
 
-        $itemsperpage = xarVarCleanFromInput( 'itemsperpage' );
+        $items_per_page = xarVarCleanFromInput( 'items_per_page' );
 
-        if ( empty( $itemsperpage ) or !is_numeric( $itemsperpage ) ) {
-            $itemsperpage = 10;
+        if ( empty( $items_per_page ) or !is_numeric( $items_per_page ) ) {
+            $items_per_page = 10;
         }
 
         xarModVars::set(
             '<xsl:value-of select="$module_prefix" />'
-            ,'itemsperpage.' . '<xsl:value-of select="@itemtype" />'
-            ,$itemsperpage );
+            ,'items_per_page.' . '<xsl:value-of select="@itemtype" />'
+            ,$items_per_page );
 
         /*
          * call the hook 'module:updateconfig:GUI'
@@ -120,9 +122,9 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
     $data['itemtype']       = <xsl:value-of select="@itemtype" />;
     $data['itemtype_label'] = <xsl:value-of select="@itemtype" />;
-    $data['itemsperpage']   = xarModVars::Get(
+    $data['items_per_page']   = xarModVars::Get(
         '<xsl:value-of select="$module_prefix" />'
-        ,'itemsperpage.' . '<xsl:value-of select="@itemtype" />' );
+        ,'items_per_page.' . '<xsl:value-of select="@itemtype" />' );
 
 
     /*

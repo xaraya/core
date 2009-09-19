@@ -106,6 +106,7 @@ function base_adminmenublock_display($blockinfo)
         case 'byname': // display by name
             foreach($mods as $mod) {
                 $modname = $mod['name'];
+                if ((bool)xarModVars::get($modname, 'admin_menu_link')) continue;
                 $labelDisplay = $mod['displayname'];
                 // get URL to module's main function
                 $link = xarModURL($modname, 'admin', 'main', array());
@@ -162,6 +163,7 @@ function base_adminmenublock_display($blockinfo)
             foreach ($mods as $mod) {
                 // get URL to module's main function
                 $modname=$mod['name'];
+                if ((bool)xarModVars::get($modname, 'admin_menu_link')) continue;
                 $link = xarModURL($modname, 'admin', 'main', array());
                 $labelDisplay = $mod['displayname'];
                 if(!isset($mod['category']) or $mod['category'] == '0') {

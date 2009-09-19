@@ -16,13 +16,10 @@ class BoolValidation extends ValueValidations
 {
     function validate(&$subject, Array $parameters)
     {
-        // @todo can't we use $subject = (boolean) $subject; ?
-
-        //Added the '1' because that is what true is translated for afaik
         if ($subject === true || $subject === 'true') {
             $subject = true;
         //Added '' because that is what false gets translated for...
-        } elseif ($subject === false || $subject === 'false' || $subject === '') {
+        } elseif ($subject === false || $subject === 'false') {
             $subject = false;
         } else {
             $msg = 'Not a boolean';

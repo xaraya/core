@@ -68,7 +68,7 @@ function base_admin_modifyconfig()
     $data['XARCORE_VERSION_SUB'] = xarCore::VERSION_SUB;
 
     $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'base'));
-    $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls');
+    $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, user_menu_link');
     $data['module_settings']->getItem();
     switch (strtolower($phase)) {
         case 'modify':
@@ -94,7 +94,7 @@ function base_admin_modifyconfig()
 
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
-                        return xarTplModule('base','admin','modifyconfig', $data);        
+                        return xarTplModule('base','admin','modifyconfig', $data);
                     } else {
                         $itemid = $data['module_settings']->updateItem();
                     }

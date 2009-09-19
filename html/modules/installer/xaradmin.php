@@ -16,7 +16,6 @@
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
-if (!file_exists('install.php')) { throw new Exception('Already installed');}
 
 /**
  * Dead
@@ -40,6 +39,7 @@ function installer_admin_main()
  */
 function installer_admin_phase1()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     // Get the installed locales
@@ -78,6 +78,7 @@ function installer_admin_phase1()
  */
 function installer_admin_phase2()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarVarFetch('retry','int:1',$data['retry'],NULL, XARVAR_NOT_REQUIRED);
 
@@ -97,6 +98,7 @@ function installer_admin_phase2()
  */
 function check_dir($dirname)
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     if (@touch($dirname . '/.check_dir')) {
         $fd = @fopen($dirname . '/.check_dir', 'r');
         if ($fd) {
@@ -122,6 +124,7 @@ function check_dir($dirname)
  */
 function installer_admin_phase3()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     if (!xarVarFetch('agree','regexp:(agree|disagree)',$agree)) return;
 
@@ -209,6 +212,7 @@ function installer_admin_phase3()
  */
 function installer_admin_phase4()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     // Get default values from config files
@@ -251,6 +255,7 @@ function installer_admin_phase4()
  */
 function installer_admin_phase5()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarVarSetCached('installer','installing', true);
 
@@ -490,6 +495,7 @@ function installer_admin_phase5()
  */
 function installer_admin_bootstrap()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarVarSetCached('installer','installing', true);
 
@@ -537,9 +543,14 @@ function installer_admin_bootstrap()
                    'roles_roles',
                    'roles_users',
                    'roles_groups',
+                   'roles_user_settings',
                      );
 
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'roles', 'objects' => $objects))) return;
+
+    $objects = array('themes_user_settings');
+
+    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'themes', 'objects' => $objects))) return;
 
 # --------------------------------------------------------
 # Set up the standard module variables for the core modules
@@ -556,7 +567,7 @@ function installer_admin_bootstrap()
                         'roles',
                         'themes',
                     );
-    
+
     foreach ($modules as $module) {
         $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => $module));
         $data['module_settings']->initialize();
@@ -647,6 +658,7 @@ function installer_admin_bootstrap()
  */
 function installer_admin_create_administrator()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     xarVarSetCached('installer','installing', true);
@@ -657,14 +669,14 @@ function installer_admin_create_administrator()
     $data['phase_label'] = xarML('Create Administrator');
 
     sys::import('modules.roles.class.roles');
-    $data['admin'] = xarRoles::getRole(xarModVars::get('roles','admin'));
+    $data['admin'] = xarRoles::getRole((int)xarModVars::get('roles','admin'));
     $data['properties'] = $data['admin']->getProperties();
 
     if (!xarVarFetch('create', 'isset', $create, FALSE, XARVAR_NOT_REQUIRED)) return;
     if (!$create) {
         return $data;
     }
-    
+
     // Set up some custom validation checks and messages
     $data['admin']->properties['name']->validation_min_length = 4;
     $data['admin']->properties['name']->validation_min_length_invalid = xarML('The display name must be at least 4 characters long');
@@ -675,12 +687,12 @@ function installer_admin_create_administrator()
     $data['admin']->properties['password']->validation_password_confirm = 1;
     $data['admin']->properties['email']->validation_min_length = 1;
     $data['admin']->properties['email']->validation_min_length_invalid = xarML('An email address must be entered');
-    
+
     $isvalid = $data['admin']->checkInput();
     if (!$isvalid) {
         return xarTplModule('installer','admin','create_administrator',$data);
     }
-    
+
     xarModVars::set('mail', 'adminname', $data['admin']->properties['name']->value);
     xarModVars::set('mail', 'adminmail', $data['admin']->properties['email']->value);
     xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright ' . date("Y") . ' ' . $data['admin']->properties['name']->value);
@@ -726,7 +738,7 @@ function installer_admin_create_administrator()
     $query = "SELECT    id as id
               FROM      $blockGroupsTable
               WHERE     name = ?";
-    $result = $dbconn->Execute($query,array('left'));
+    $result = $dbconn->Execute($query,array('admin'));
 
     // Freak if we don't get one and only one result
     if ($result->getRecordCount() != 1) {
@@ -752,30 +764,6 @@ function installer_admin_create_administrator()
             return;
         }
     }
-
-    $now = time();
-
-    $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot .';
-    $varshtml['expire'] = $now + 24000;
-    $msg = serialize($varshtml);
-
-    $htmlBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                 array('module'  => 'base',
-                                       'type'    => 'html'));
-
-    $htmlBlockTypeId = $htmlBlockType['tid'];
-
-    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'reminder'))) {
-        if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
-                           array('title'    => 'Reminder',
-                                 'name'     => 'reminder',
-                                 'content'  => $msg,
-                                 'type'     => $htmlBlockTypeId,
-                                 'groups'   => array(array('id'      => $leftBlockGroup,)),
-                                 'state'    => 2))) {
-            return;
-        }
-    }
     xarResponse::Redirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
 
@@ -788,6 +776,7 @@ function installer_admin_create_administrator()
  */
 function installer_admin_choose_configuration()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     $data['language'] = $install_language;
@@ -868,6 +857,7 @@ function installer_admin_choose_configuration()
  */
 function installer_admin_confirm_configuration()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     xarVarSetCached('installer','installing', true);
@@ -1036,16 +1026,90 @@ function installer_admin_confirm_configuration()
      //TODO: Check why this var is being reset to null in sqlite install - reset here for now to be sure
      //xarModVars::set('roles', 'defaultauthmodule', xarMod::getRegID('authsystem'));
 
-        xarResponse::Redirect(xarModURL('installer', 'admin', 'cleanup'));
+        xarResponse::Redirect(xarModURL('installer', 'admin', 'security'));
+        return true;
     }
 
 }
 
+function installer_admin_security()
+{
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
+    xarTplSetThemeName('installer');
+    $data['language']    = $install_language;
+    $data['phase'] = 9;
+    $data['phase_label'] = xarML('Security Considerations');
+
+    return $data;
+}
 
 function installer_admin_cleanup()
 {
+    if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarTplSetThemeName('installer');
+
+    xarVarFetch('remove', 'checkbox', $remove, false, XARVAR_NOT_REQUIRED);
+    xarVarFetch('rename', 'checkbox', $rename, false, XARVAR_NOT_REQUIRED);
+    xarVarFetch('newname', 'str', $newname, '', XARVAR_NOT_REQUIRED);
+
+    if ($remove) {
+        unlink('install.php');
+    } elseif ($rename) {
+        if (empty($newname)) {
+            unlink('install.php');
+        } else {
+            rename('install.php',$newname . '.php');
+        }
+    }
+
+    // Install script is still there. Create a reminder block
+    if (file_exists('install.php')) {
+        // Load up database
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
+
+        $blockGroupsTable = $tables['block_groups'];
+
+        $query = "SELECT    id as id
+                  FROM      $blockGroupsTable
+                  WHERE     name = ?";
+
+        $result =& $dbconn->Execute($query,array('left'));
+
+        // Freak if we don't get one and only one result
+        if ($result->getRecordCount() != 1) {
+            $msg = xarML("Group 'left' not found.");
+            throw new Exception($msg);
+        }
+
+        list ($leftBlockGroup) = $result->fields;
+        $now = time();
+
+//        $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot.';
+        $varshtml['html_content'] = 'Please delete install.php from your webroot.';
+        $varshtml['expire'] = $now + 259200;
+        $msg = serialize($varshtml);
+
+        $htmlBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+                                     array('module'  => 'base',
+                                           'type'    => 'html'));
+
+        $htmlBlockTypeId = $htmlBlockType['tid'];
+
+        if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'reminder'))) {
+            if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
+                               array('title'    => 'Reminder',
+                                     'name'     => 'reminder',
+                                     'content'  => $msg,
+                                     'type'     => $htmlBlockTypeId,
+                                     'groups'   => array(array('id'      => $leftBlockGroup,)),
+                                     'state'    => 2))) {
+                return;
+            }
+        }
+    }
 
     xarUserLogOut();
     // log in admin user
@@ -1138,13 +1202,12 @@ function installer_admin_cleanup()
     xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true));
 
     $data['language']    = $install_language;
-    $data['phase'] = 6;
-    $data['phase_label'] = xarML('Step Six');
+    $data['phase'] = 10;
+    $data['phase_label'] = xarML('Step Ten');
     $data['finalurl'] = xarModURL('installer', 'admin', 'finish');
 
     return $data;
 }
-
 
 function installer_admin_finish()
 {

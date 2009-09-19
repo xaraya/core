@@ -20,7 +20,9 @@
 function themes_admin_corecssupdate()
 {
     // Confirm authorisation code
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
     // Security Check
     if (!xarSecurityCheck('AdminTheme')) return;
 

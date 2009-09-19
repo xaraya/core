@@ -71,6 +71,13 @@ function dynamicdata_utilapi_getstatic($args)
         $dbTables = array();
     }
 
+    // Get the default property types
+    $proptypes = DataPropertyMaster::getPropertyTypes();
+    $proptypeid = array();
+    foreach ($proptypes as $proptype) {
+        $proptypeid[$proptype['name']] = $proptype['id'];
+    }
+
     // TODO: we lost the linkage with modules here
     $static = array(); $order = 1; $seq=1;
     foreach($dbTables as $tblInfo) {
@@ -82,6 +89,8 @@ function dynamicdata_utilapi_getstatic($args)
             $default = $colInfo->getDefaultValue();
             // Construct name and label from the columnname
             $label = strtr($name,'_',' ');
+            // cosmetic for 1.x style xar_* field names
+            $label = preg_replace('/^xar /','', $label);
             $label = ucwords($label);
             if(isset($static[$name])) {
                 $i = 1;
@@ -108,7 +117,7 @@ function dynamicdata_utilapi_getstatic($args)
             switch ($datatype) {
             case 'char':
             case 'varchar':
-                $proptype = 2; // Text Box
+                $proptype = $proptypeid['textbox']; // Text Box
                 if (!empty($size)) {
                     $configuration = "0:$size";
                 }
@@ -118,26 +127,26 @@ function dynamicdata_utilapi_getstatic($args)
             case 'bigint':
             case 'integer':
             case 'year':
-                $proptype = 15; // Number Box
+                $proptype = $proptypeid['integerbox']; // Number Box
                 break;
             case 'numeric':
             case 'decimal':
             case 'double':
             case 'float':
-                $proptype = 17; // Number Box (float)
+                $proptype = $proptypeid['floatbox']; // Number Box (float)
                 break;
             case 'boolean':
-                $proptype = 14; // Checkbox
+                $proptype = $proptypeid['checkbox']; // Checkbox
                 break;
             case 'date':
             case 'time':
             case 'timestamp':
-                $proptype = 8; // Calendar
+                $proptype = $proptypeid['calendar']; // Calendar
                 break;
             case 'longvarchar':
             case 'text':
             case 'clob':
-                $proptype = 4; // Medium Text Area
+                $proptype = $proptypeid['textarea_medium']; // Medium Text Area
                 $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
                 $configuration ='';
                 break;
@@ -145,11 +154,17 @@ function dynamicdata_utilapi_getstatic($args)
             case 'varbinary':
             case 'binary':
             case 'blob':       // caution, could be binary too !
-                $proptype = 4; // Medium Text Area
+                $proptype = $proptypeid['textarea_medium']; // Medium Text Area
                 $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
                 break;
+            case 'other':
             default:
-                $proptype = 1; // Static Text
+                if (!empty($size) && $size == 1) {
+                    $proptype = $proptypeid['checkbox']; // Checkbox
+                    $configuration = '';
+                } else {
+                    $proptype = $proptypeid['static']; // Static Text
+                }
                 break;
             }
 
@@ -158,7 +173,7 @@ function dynamicdata_utilapi_getstatic($args)
             //debug($colInfo);
             if ($colInfo->isAutoIncrement()) {
                 // not allowed to modify primary key !
-                $proptype = 21; // Item ID
+                $proptype = $proptypeid['itemid']; // Item ID
                 $configuration ='';
             }
 

@@ -27,12 +27,15 @@ function dynamicdata_admin_updateprop()
     if(!xarVarFetch('dd_label',          'isset', $dd_label,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_type',           'isset', $dd_type,           NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_default',        'isset', $dd_defaultvalue,   NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_seq',            'isset', $dd_seq,            NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_source',         'isset', $dd_source,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('display_dd_status', 'isset', $display_dd_status, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('input_dd_status',   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_configuration',  'isset', $dd_configuration,  NULL, XARVAR_DONT_SET)) {return;}
 
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     $objectinfo = DataObjectMaster::getObjectInfo(
                                     array(
@@ -40,7 +43,6 @@ function dynamicdata_admin_updateprop()
                                     'moduleid' => $module_id,
                                     'itemtype' => $itemtype,
                                     ));
-
     if (isset($objectinfo)) {
         $objectid = $objectinfo['objectid'];
         $module_id = $objectinfo['moduleid'];
@@ -112,6 +114,7 @@ function dynamicdata_admin_updateprop()
                                     'label' => $dd_label[$id],
                                     'type' => $dd_type[$id],
                                     'defaultvalue' => $dd_defaultvalue[$id],
+                                    'seq' => $dd_seq[$id],
                               //      'source' => $dd_source[$id],
                                     'status' => $dd_status[$id],
                                     'configuration' => $dd_configuration[$id]))) {

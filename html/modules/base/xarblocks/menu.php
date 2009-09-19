@@ -212,7 +212,7 @@
             if ($args['displaymodules'] != 'None') {
                 if (xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$data[title]:$data[bid]")) {
                    $useAliasName=0;
-                   $aliasname='';
+           $module_alias_name='';
                     if ($args['displaymodules'] == 'List' && !empty($args['modulelist'])) {
                         $modlist = explode(',',$args['modulelist']);
                         $list = array();
@@ -228,7 +228,7 @@
                     $access = isset($args['view_access']) ? $args['view_access'] : array();
                     foreach($mods as $mod){
                         if (isset($access[$mod['name']])) {
-                            // Decide whether this block is modifiable to the current user
+                if ((bool)xarModVars::get($mod['name'], 'user_menu_link')) continue;
                             $args = array(
                                 'module' => 'base',
                                 'component' => 'Block',
@@ -243,11 +243,11 @@
                         if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$data['name']. ":" . $mod['name'])) continue;
                         /* Check for active module alias */
                         /* jojodee -  We need to review the module alias functions and, thereafter it's use here */
-                        $useAliasName = xarModVars::get($mod['name'], 'useModuleAlias');
-                        $aliasname = xarModVars::get($mod['name'],'aliasname');
+                $useAliasName = xarModVars::get($mod['name'], 'use_module_alias');
+                $module_alias_name = xarModVars::get($mod['name'],'module_alias_name');
                         /* use the alias name if it exists for the label */
-                        if (isset($useAliasName) && $useAliasName==1 && isset($aliasname) && !empty($aliasname)) {
-                            $label = $aliasname;
+                if (isset($useAliasName) && $useAliasName==1 && isset($module_alias_name) && !empty($module_alias_name)) {
+                    $label = $module_alias_name;
                         } else {
                             $label = xarModGetDisplayableName($mod['name']);
                         }

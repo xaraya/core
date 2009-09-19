@@ -32,7 +32,9 @@ function blocks_admin_update_instance()
     if (!xarVarFetch('block_refresh', 'int:0:1', $refresh, 0, XARVAR_NOT_REQUIRED)) {return;}
 
     // Confirm Auth Key
-    if (!xarSecConfirmAuthKey()) {return;}
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     // Security Check.
     if (!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}

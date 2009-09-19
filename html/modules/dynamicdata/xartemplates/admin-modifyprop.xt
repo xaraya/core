@@ -16,14 +16,18 @@
                     <li class="xar-tabs-label" title="#$title#">#$label#</li>
                     <li class="xar-tab">
                         <a href="&xar-modurl-dynamicdata-admin-modify;&amp;itemid=#$objectid#" class="xar-norm xar-norm-outline">
-                        Modify Object Definition</a>
+                            Modify Object Definition
+                        </a>
                     </li>
                     <li class="xar-tab-active">
-                        <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Modify DataProperties</a>
+                        <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">
+                            Modify DataProperties
+                        </a>
                     </li>
                     <li class="xar-tab">
                         <a href="&xar-modurl-dynamicdata-util-export;&amp;module_id=#$module_id#&amp;itemtype=#$itemtype#" class="xar-norm xar-norm-outline">
-                        Export to XML</a>
+                            Export to XML
+                        </a>
                     </li>
                     <xar:if condition="!empty($fields)">
                         <li class="xar-tab">
@@ -46,8 +50,7 @@
             </div>
             <fieldset>
                 <legend>Object summary</legend>
-                <xar:data-display layout="$layout" module="dynamicdata" itemtype="0"
-                itemid="$objectid" fieldlist="name,label,moduleid,itemtype" />
+                <xar:data-display layout="$layout" itemid="$objectid" fieldlist="objectid,name,label,class," />
             </fieldset>
         </xar:if>
         <!-- This is where the list of properties shown starts -->
@@ -98,8 +101,7 @@
                             <div class="xar-align-center">
                                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                                 <input type="hidden" name="module_id" id="module_id" value="#$module_id#" />
-                            <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
-                                value="#$itemtype#" />
+                                <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
                                 <input type="hidden" name="table" id="table" value="#$table#" />
                                 <input type="submit" value="#xarML('Import table')# #$table#" />
                             </div>

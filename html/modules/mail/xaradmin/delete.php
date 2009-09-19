@@ -3,7 +3,9 @@
 function mail_admin_delete($args = array())
 {
     // Are we legitimally here?
-    if(!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
     // Security check
     if (!xarSecurityCheck('AdminMail')) return; 
     // Required parameters

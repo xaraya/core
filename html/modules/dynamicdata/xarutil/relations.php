@@ -80,7 +80,9 @@ function dynamicdata_util_relations($args)
             }
         }
         if (!empty($confirm)) {
-            if (!xarSecConfirmAuthKey()) return;
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }        
             if (!empty($value)) {
                 $field = $value;
             }
@@ -141,13 +143,7 @@ function dynamicdata_util_relations($args)
         $data['relations'] = array();
     }
 
-    if (xarModVars::get('themes','usedashboard')) {
-        $admin_tpl = xarModVars::get('themes','dashtemplate');
-    }else {
-       $admin_tpl='default';
-    }
-    xarTplSetPageTemplateName($admin_tpl);
-
+    xarTplSetPageTemplateName('admin');
 
     return $data;
 }

@@ -20,7 +20,9 @@
         if ($data['confirm']) {
         
             // Check for a valid confirmation key
-            if(!xarSecConfirmAuthKey()) return;
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }        
 
             // Get the data from the form
             $isvalid = $data['object']->checkInput();

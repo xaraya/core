@@ -21,11 +21,6 @@
  */
 function themes_admin_themesinfo()
 {
-    
-    // Security check - not needed here, imo 
-    // we just show some info here, not changing anything
-    /* if (!xarSecConfirmAuthKey()) return; */
-
     $data = array();
     
     if (!xarVarFetch('id', 'int:1:', $id)) return; 

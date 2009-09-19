@@ -33,7 +33,9 @@
                 </div>
                 <div id="sideInfo2" class="sideInfo">
                     <xar:blockgroup name="right" id="right" />
+                    <!--
                     <xar:blockgroup name="admin" id="admin" />
+                    -->
                 </div>
                 <xar:blockgroup name="topnav" id="topnav" />
                 <xar:blockgroup name="center" id="center" />

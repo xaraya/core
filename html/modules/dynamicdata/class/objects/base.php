@@ -139,11 +139,13 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->getItem($args);
         }
 
-        // Allow 0 as a fieldprefix
-        if(empty($args['fieldprefix']) || (isset($args['fieldprefix']) && $args['fieldprefix'] !== '0')) {
-            $args['fieldprefix'] = $this->fieldprefix; 
-        } else {
+        if(!empty($args['fieldprefix'])) {
             $this->fieldprefix = $args['fieldprefix'];
+        // Allow 0 as a fieldprefix
+        } elseif (isset($args['fieldprefix']) && $args['fieldprefix'] === '0') {
+            $this->fieldprefix = $args['fieldprefix'];
+        } else {
+            $args['fieldprefix'] = $this->fieldprefix; 
         }
 
         $isvalid = true;

@@ -171,7 +171,7 @@ function blocks_userapi_getinfo($args)
         $blockinfo['_bl_box_template'] = $template;
         $blockinfo['_bl_block_template'] = '';
     } else {
-        $template = split(';', $template, 3);
+        $template = explode(';', $template, 3);
         $blockinfo['_bl_box_template'] = $template[0];
         $blockinfo['_bl_block_template'] = $template[1];
     }

@@ -95,7 +95,7 @@ function base_userapi_getfile($args)
             if (!is_dir($path)) {
                 mkdir($path);
             }
-            $fileparts = split('/',$info['path']);
+            $fileparts = explode('/',$info['path']);
             if (count($fileparts) > 0) {
                 array_shift($fileparts);
             }

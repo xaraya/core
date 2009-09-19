@@ -22,16 +22,17 @@ function dynamicdata_admin_showpropval($args)
     if (!xarVarFetch('itemid',  'id',    $itemid)) {return;}
     if (!xarVarFetch('exit', 'isset', $exit, NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('confirm', 'isset', $confirm, NULL, XARVAR_DONT_SET)) {return;}
-
-    // check security
-    $module_id = xarMod::getRegID('dynamicdata');
-    $itemtype = 1; // dynamic properties
-    if (!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$module_id:$itemtype:$itemid")) return;
+    if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
 
     // get the object corresponding to this dynamic property
-    $myobject = & DataObjectMaster::getObject(array('objectid' => 2,
-                                                         'itemid'   => $itemid));
+    $myobject = & DataObjectMaster::getObject(array('name'   => 'properties',
+                                                    'itemid' => $itemid));
     if (empty($myobject)) return;
+
+    // check security
+    $module_id = $myobject->moduleid;
+    $itemtype = $myobject->itemtype;
+    if (!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$module_id:$itemtype:$itemid")) return;
 
     $newid = $myobject->getItem();
 
@@ -61,8 +62,8 @@ function dynamicdata_admin_showpropval($args)
     $data['invalid']    = !empty($invalid) ? $invalid :'';
     $property =& DataPropertyMaster::getProperty($data);
     if (empty($property)) return;
-    
-    if (!empty($confirm) || !empty($exit)) {
+
+    if (!empty($preview) || !empty($confirm) || !empty($exit)) {
         if (!xarVarFetch($data['name'],'isset',$configuration,NULL,XARVAR_NOT_REQUIRED)) return;
 
         // pass the current value as configuration rule
@@ -71,13 +72,17 @@ function dynamicdata_admin_showpropval($args)
         $isvalid = $property->updateConfiguration($data);
 
         if ($isvalid) {
-            // store the updated configuration rule back in the value
-            $myobject->properties['configuration']->value = $property->configuration;
-            if (!xarSecConfirmAuthKey()) return;
+            if (!empty($confirm) || !empty($exit)) {
+                // store the updated configuration rule back in the value
+                $myobject->properties['configuration']->value = $property->configuration;
+                if (!xarSecConfirmAuthKey()) {
+                    return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                }
 
-            $newid = $myobject->updateItem();
-            if (empty($newid)) return;
+                $newid = $myobject->updateItem();
+                if (empty($newid)) return;
 
+            }
             if (!empty($exit)) {
                 if (!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
                 if (empty($return_url)) {
@@ -88,9 +93,18 @@ function dynamicdata_admin_showpropval($args)
                 xarResponse::Redirect($return_url);
                 return true;
             }
+            // show preview/updated values
+
         } else {
             $myobject->properties['configuration']->invalid = $property->invalid;
         }        
+
+    // pass the current value as configuration rule
+    } elseif (!empty($myobject->properties['configuration'])) {
+        $data['configuration'] = $myobject->properties['configuration']->value;
+
+    } else {
+        $data['configuration'] = null;
     }
 
     // pass the id for the input field here
@@ -98,13 +112,6 @@ function dynamicdata_admin_showpropval($args)
     $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
     $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
     $data['size']       = !empty($size) ? $size : 50;
-    // pass the current value as configuration rule
-    if (!empty($myobject->properties['configuration'])) {
-        $value = $myobject->properties['configuration']->value;
-    } else {
-        $value = null;
-    }
-    $data['configuration'] = $value;
 
     // call its showConfiguration() method and return
     $data['showval'] = $property->showConfiguration($data);

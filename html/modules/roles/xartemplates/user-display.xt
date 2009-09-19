@@ -7,54 +7,8 @@
         </span>
     </div>
     <div class="xar-mod-body">
-        <xar:if condition="strtolower($uname) ne 'anonymous'">
-            <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
-          <xar:set name="fields">array('name','uname','state','regdate')</xar:set>
-          <xar:data-display module="roles" itemtype="$itemtype" fieldlist="$fields" itemid="$id" />
-
-          <xar:if condition="in_array('userlastlogin',$settings)">
-                <strong>Email</strong>: 
-                <a href="&xar-modurl-roles-user-email;&amp;id=#$id#">
-                            Send an Email to #xarVarPrepForDisplay($name)#
-                </a>
-                <div class="xar-form-input-wrapper">
-                    <label class="xar-form-label">
-                        Last Login
-                    </label>
-                    #xarLocaleGetFormattedDate('medium', xarModItemVars::get('roles','userlastlogin',$id))#  #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
-                </div>
-          </xar:if>
-
-        <xar:if condition="xarModVars::get('roles', 'allowemail') AND xarModItemVars::get('roles','allowemail',$id)">
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label">
-                    Email
-                </label>
-                <a href="&xar-modurl-roles-user-email;&amp;id=#$id#">
-                            Send an Email to #xarVarPrepForDisplay($name)#
-                </a>
-            </div>
-        </xar:if>
-        <xar:if condition="in_array('userhome',$settings)">
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label">
-                    Home Page
-                </label>
-                <!-- <a href="#$homelink#" title="#xarML('Home Page')#">#$homelink#</a> -->
-            </div>
-        </xar:if>
-          <xar:if condition="in_array('usertimezone',$settings)">
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label">
-                    User Timezone:
-                </label>
-                <xar:set name="value">
-                    xarModUserVars::get('roles','usertimezone',$id)
-                </xar:set>
-                <xar:data-output type="timezone" value="$value" />
-            </div>
-          </xar:if>
-
+        <xar:if condition="strtolower($uname) ne 'anonymous' and isset($object)">
+            <xar:data-display object="$object" />
         </xar:if>
         <xar:if condition="!empty($hooks)">
             <xar:foreach in="$hooks" key="$module" value="$output">

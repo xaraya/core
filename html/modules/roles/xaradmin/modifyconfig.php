@@ -72,7 +72,7 @@ function roles_admin_modifyconfig()
         xarModVars::set('roles', 'disallowedips', $ip);
     }
     $data['siteadmins']   = $siteadmins;
-    $data['defaultgroup'] = xarModVars::get('roles', 'defaultgroup');
+    $data['defaultgroup'] = (int)xarModVars::get('roles', 'defaultgroup');
 
     $hooks = array();
 
@@ -90,24 +90,46 @@ function roles_admin_modifyconfig()
                                      array('module' => 'roles',
                                            'itemtype' => ROLES_GROUPTYPE));
             break;
+        case 'duvs':
+            $data['user_settings'] = xarModAPIFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => 0));
+            $data['user_settings']->setFieldList('duvsettings');
+            $data['user_settings']->getItem();
+        break;
         default:
             $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'roles'));
-            $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls');
+            $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, enable_user_menu, user_menu_link');
             $data['module_settings']->getItem();
-            break;
+            $data['user_settings'] = xarModAPIFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => 0));
+            $settings = explode(',',xarModVars::get('roles', 'duvsettings'));
+            $required = array('usereditaccount', 'allowemail', 'requirevalidation', 'displayrolelist', 'searchbyemail');
+            $skiplist = array('userhome', 'primaryparent', 'passwordupdate', 'duvsettings', 'userlastlogin', 'emailformat');
+            $homelist = array('allowuserhomeedit', 'allowexternalurl', 'loginredirect');
+            if (!in_array('userhome', $settings)) {
+                $skiplist = array_merge($skiplist, $homelist);
+            } else {
+                $required = array_merge($required, $homelist);
+            }
+            $fieldlist = array();
+            $extrafields = array();
+            foreach ($data['user_settings']->properties as $fieldname => $propval) {
+                if (in_array($fieldname, $skiplist)) continue;
+                if (!in_array($fieldname, $required)) {
+                    $extrafields[] = $fieldname;
+                }
+                $fieldlist[] = $fieldname;
+            }
+            $data['user_settings']->setFieldList(join(',',$fieldlist));
+            $data['user_settings']->getItem();
+            $data['fieldlist'] = $fieldlist;
+            $data['extrafields'] = $extrafields;
+        break;
     }
 
     $data['hooks'] = $hooks;
     $data['defaultauthmod']    = xarModVars::get('roles', 'defaultauthmodule');
     $data['defaultregmod']     = xarModVars::get('roles', 'defaultregmodule');
-    $data['allowuserhomeedit'] = xarModVars::get('roles', 'allowuserhomeedit');
-    $data['requirevalidation'] = xarModVars::get('roles', 'requirevalidation');
-    //check for roles hook in case it's set independently elsewhere
-    if (xarModIsHooked('roles', 'roles')) {
-        xarModVars::set('roles','usereditaccount',true);
-    } else {
-        xarModVars::set('roles','usereditaccount',false);
-    }
+    $data['allowuserhomeedit'] = (bool)xarModVars::get('roles', 'allowuserhomeedit');
+    $data['requirevalidation'] = (bool)xarModVars::get('roles', 'requirevalidation');
 
     switch (strtolower($phase)) {
         case 'modify':
@@ -116,17 +138,19 @@ function roles_admin_modifyconfig()
 
         case 'update':
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) return;
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }
             switch ($data['tab']) {
                 case 'general':
                     if (!xarVarFetch('defaultauthmodule', 'str:1:',   $defaultauthmodule, xarMod::getRegID('authsystem'), XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                     if (!xarVarFetch('defaultregmodule',  'str:1:',   $defaultregmodule, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('siteadmin',         'int:1',    $siteadmin,        xarModVars::get('roles','admin'), XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('siteadmin',         'int:1',    $siteadmin,        (int)xarModVars::get('roles','admin'), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('defaultgroup',      'str:1',    $defaultgroup,     'Users', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
-                        return xarTplModule('roles','admin','modifyconfig', $data);        
+                        return xarTplModule('roles','admin','modifyconfig', $data);
                     } else {
                         $itemid = $data['module_settings']->updateItem();
                     }
@@ -149,49 +173,13 @@ function roles_admin_modifyconfig()
                                           'itemtype' => ROLES_GROUPTYPE));
                     break;
                 case 'memberlist':
-                    if (!xarVarFetch('searchbyemail',    'checkbox', $searchbyemail,     false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('displayrolelist',  'checkbox', $displayrolelist,   false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('allowemail',       'checkbox', $allowemail,        false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('usereditaccount',  'checkbox', $usereditaccount,   true,  XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('userhomeedit',     'checkbox', $userhomeedit,      false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('allowexternalurl', 'checkbox', $allowexternalurl,  false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('loginredirect',    'checkbox', $loginredirect,     true,  XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('requirevalidation','checkbox', $requirevalidation, true,  XARVAR_NOT_REQUIRED)) return;
-
-                    xarModVars::set('roles', 'searchbyemail', $searchbyemail); //search by email
-                    xarModVars::set('roles', 'allowemail', $allowemail);
-                    xarModVars::set('roles', 'displayrolelist', $displayrolelist); //display member list in Roles menu links
-                    xarModVars::set('roles', 'usereditaccount', $usereditaccount); //allow users to edit account
-                    xarModVars::set('roles', 'allowexternalurl', $allowexternalurl); //allow users to set external urls for home page
-                    xarModVars::set('roles', 'loginredirect', $loginredirect); //search by email
-                    xarModVars::set('roles', 'requirevalidation', $requirevalidation); //require revalidation if email changed
-                    if (xarModVars::get('roles', 'setuserhome')==true) { //we only want to allow option of users editing home page if we are using homepages
-                       $allowuserhomeedit = $userhomeedit ==true ? true:false;
-                    }else {
-                        $allowuserhomeedit=false;
-                    }
-                    xarModVars::set('roles', 'allowuserhomeedit', $allowuserhomeedit); //allow users to set their own homepage
-                    if ($usereditaccount) {
-                        //check and hook Roles to roles if not already hooked
-                         if (!xarModIsHooked('roles', 'roles')) {
-                         xarModAPIFunc('modules','admin','enablehooks',
-                                 array('callerModName' => 'roles',
-                                       'hookModName'   => 'roles'));
-                         }
-                    } else {
-                         //unhook roles from roles
-                         if (xarModIsHooked('roles', 'roles')) {
-                         xarModAPIFunc('modules','admin','disablehooks',
-                                 array('callerModName' => 'roles',
-                                       'hookModName'   => 'roles'));
-                         }
-                   }
-                    break;
                 case 'duvs':
-                    if (!xarVarFetch('duvsettings', 'array', $duvs, array(), XARVAR_DONT_SET)) return;
-                    $settings = array();
-                    foreach ($duvs as $duv) $settings[] = $duv;
-                    xarModVars::set('roles','duvsettings', serialize($settings));
+                    $isvalid = $data['user_settings']->checkInput();
+                    if (!$isvalid) {
+                        return xarTplModule('roles','admin','modifyconfig', $data);
+                    } else {
+                        $itemid = $data['user_settings']->updateItem();
+                    }
                     break;
             }
 //            if (!xarVarFetch('allowinvisible', 'checkbox', $allowinvisible, false, XARVAR_NOT_REQUIRED)) return;
@@ -199,7 +187,6 @@ function roles_admin_modifyconfig()
 //            xarModVars::set('roles', 'allowinvisible', $allowinvisible);
             break;
     }
-
     return $data;
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -26,11 +26,18 @@ class FileUploadProperty extends DataProperty
     public $initialization_importdirectory  = null;
     public $validation_file_extensions      = 'gif|jpg|jpeg|png|bmp|pdf|doc|txt';
     public $initialization_basepath         = null;
+    // TODO: support the different options in code below
     public $initialization_multiple         = TRUE;
     public $methods = array('trusted'  => false,
                             'external' => false,
                             'upload'   => false,
                             'stored'   => false);
+    public $validation_allow_duplicates     = 2; // Overwrite the old instance
+    public $obfuscate_filename              = false;
+    // Note: if you use this, make sure you unlink($this->value) yourself once you're done with it
+    public $use_temporary_file              = false;
+    // Remove leftover values (numeric or ;...) when the uploads module is unhooked
+    public $remove_leftover_values          = true;
 
     // this is used by DataPropertyMaster::addProperty() to set the $object->upload flag
     public $upload = true;
@@ -187,26 +194,89 @@ class FileUploadProperty extends DataProperty
         }
 
         if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->validation_max_file_size) {
-            // if the uploads module is hooked (to be verified and set by the calling module)
             if (!empty($_FILES[$name]['name'])) {
                 if (!$this->validateExtension($file['name'])) {
                     $this->invalid = xarML('The file type is not allowed');
                     $this->value = null;
                     return false;
-                } elseif (!move_uploaded_file($file['tmp_name'], $this->initialization_basepath . '/' . $this->initialization_basedirectory . '/'. $file['name'])) {
-                    $this->invalid = xarML('The file upload failed');
+                }
+                $filename = $file['name'];
+            } else {
+            // TODO: assign random name + figure out mime type to add the right extension ?
+                $filename = uniqid(md5(mt_rand()), true);
+            }
+
+            // use a temporary file if we process the file directly after validation (read & delete, move, save to db, ...)
+            if ($this->use_temporary_file) {
+                $filepath = tempnam(realpath($this->initialization_basepath . '/' . $this->initialization_basedirectory), 'tempdd');
+
+            //} elseif ($this->obfuscate_filename) {
+            // TODO: obfuscate filename + return hash & original filename + handle that combined value in the other methods
+            //    // cfr. file_obfuscate_name() function in uploads module
+            //    $filehash = crypt($filename, substr(md5(time() . $filename . getmypid()), 0, 2));
+            //    $filehash = substr(md5($filehash), 0, 8) . time() . getmypid();
+            //    $fileparts = explode('.', $filename);
+            //    if (count($fileparts) > 1) {
+            //        $filehash .= '.' . array_pop($fileparts);
+            //    }
+            //    $filepath = $this->initialization_basepath . '/' . $this->initialization_basedirectory . '/'. $filehash;
+
+            } else {
+                $filename = $file['name'];
+                $filepath = $this->initialization_basepath . '/' . $this->initialization_basedirectory . '/'. $filename;
+                if ($this->validation_allow_duplicates == 2) {
+                    // overwrite existing file if necessary
+                } elseif ($this->validation_allow_duplicates == 1 && file_exists($filepath)) {
+                    // create new instance of the file
+                    $fileparts = explode('.', $filename);
+                    if (count($fileparts) > 1) {
+                        $fileext = '.' . array_pop($fileparts);
+                        $filebase = implode('.', $fileparts);
+                    } else {
+                        $fileext = '';
+                        $filebase = $filename;
+                    }
+                    $i = 1;
+                    $filename = $filebase . '_' . $i . $fileext;
+                    $filepath = $this->initialization_basepath . '/' . $this->initialization_basedirectory . '/'. $filename;
+                    while (file_exists($filepath)) {
+                        $i++;
+                        $filename = $filebase . '_' . $i . $fileext;
+                        $filepath = $this->initialization_basepath . '/' . $this->initialization_basedirectory . '/'. $filename;
+                    }
+                } elseif ($this->validation_allow_duplicates == 0 && file_exists($filepath)) {
+                    // duplicate files are not allowed
+                    $this->invalid = xarML('This file already exists');
                     $this->value = null;
                     return false;
                 }
-                $this->value = $file['name'];
-                // save new value for preview + new/modify combinations
-                xarVarSetCached('DynamicData.FileUpload',$name,$file['name']);
-            } else {
-            // TODO: assign random name + figure out mime type to add the right extension ?
-                $this->invalid = xarML('The file name for upload is empty');
+            }
+
+            if (!move_uploaded_file($file['tmp_name'], $filepath)) {
+                $this->invalid = xarML('The file upload failed');
                 $this->value = null;
                 return false;
             }
+
+            if ($this->use_temporary_file) {
+                // We pass the whole path to the temporary file here, since we're not 100% sure where it'll be created
+                // Note: if you use this, make sure you unlink($this->value) yourself once you're done with it
+                $this->value = $filepath;
+                // save new value for preview + new/modify combinations
+                xarVarSetCached('DynamicData.FileUpload',$name,$this->value);
+
+            //} elseif ($this->obfuscate_filename) {
+            // TODO: obfuscate filename + return hash & original filename + handle that combined value in the other methods
+            //    $this->value = $filehash . ',' . $filename;
+            //    // save new value for preview + new/modify combinations
+            //    xarVarSetCached('DynamicData.FileUpload',$name,$this->value);
+
+            } else {
+                $this->value = $filename;
+                // save new value for preview + new/modify combinations
+                xarVarSetCached('DynamicData.FileUpload',$name,$this->value);
+            }
+
         // retrieve new value for preview + new/modify combinations
         } elseif (xarVarIsCached('DynamicData.FileUpload',$name)) {
             $this->value = xarVarGetCached('DynamicData.FileUpload',$name);
@@ -241,7 +311,7 @@ class FileUploadProperty extends DataProperty
         // Allow overriding by specific parameters
             if (isset($data['size']))   $this->display_size = $data['size'];
             if (isset($data['maxsize']))   $this->validation_max_file_size = $data['maxsize'];
-            if (isset($data['extensions']))   $this->validation_file_extensions = $data['extensions'];
+            if (isset($data['extensions']))   $this->setExtensions($data['extensions']);
 
         // inform anyone that we're showing a file upload field, and that they need to use
         // <form ... enctype="multipart/form-data" ... > in their input form
@@ -278,7 +348,7 @@ class FileUploadProperty extends DataProperty
 
         // user must have unhooked the uploads module
         // remove any left over values
-        if (!empty($data['value']) && (is_numeric($data['value']) || stristr($data['value'], ';'))) $data['value'] = '';
+        if ($this->remove_leftover_values && !empty($data['value']) && (is_numeric($data['value']) || stristr($data['value'], ';'))) $data['value'] = '';
 
         return parent::showInput($data);
     }
@@ -299,16 +369,18 @@ class FileUploadProperty extends DataProperty
 
         // Note: you can't access files directly in the document root here
         if (!empty($value)) {
-            if (is_numeric($value) || stristr($value, ';')) {
-                // user must have unhooked the uploads module
-                // remove any left over values
-                return '';
-            }
-            // if the uploads module is hooked (to be verified and set by the calling module)
-            if (!empty($this->initialization_basedirectory) && file_exists($this->initialization_basedirectory . '/'. $value) && is_file($this->initialization_basedirectory . '/'. $value)) {
-                $data['basedir'] = $this->initialization_basedirectory;
-            } else {
-                $data['basedir'] = null; // something went wrong here
+            if ($this->remove_leftover_values) {
+                if (is_numeric($value) || stristr($value, ';')) {
+                    // user must have unhooked the uploads module
+                    // remove any left over values
+                    return '';
+                }
+                // if the uploads module is hooked (to be verified and set by the calling module)
+                if (!empty($this->initialization_basedirectory) && file_exists($this->initialization_basedirectory . '/'. $value) && is_file($this->initialization_basedirectory . '/'. $value)) {
+                    $data['basedir'] = $this->initialization_basedirectory;
+                } else {
+                    $data['basedir'] = null; // something went wrong here
+                }
             }
             return parent::showOutput($data);
         } else {
@@ -316,11 +388,59 @@ class FileUploadProperty extends DataProperty
         }
     }
 
-    public function validateExtension($filename='')
+    /**
+     * Set the list/regex of allowed file extensions, depending on the syntax used (cfr. image, webpage, ...)
+     */
+    public function setExtensions($file_extensions = null)
     {
+        if (isset($file_extensions)) {
+            $this->validation_file_extensions = $file_extensions;
+        }
+        $this->file_extension_list = null;
+        $this->file_extension_regex = null;
+        if (!empty($this->validation_file_extensions)) {
+            // example: array('gif', 'jpg', 'jpeg', ...)
+            if (is_array($this->validation_file_extensions)) {
+                $this->file_extension_list = $this->validation_file_extensions;
+
+            // example: gif,jpg,jpeg,png,bmp,txt,htm,html
+            } elseif (strpos($this->validation_file_extensions, ',') !== false) {
+                $this->file_extension_list = explode(',', $this->validation_file_extensions);
+
+            // example: gif|jpe?g|png|bmp|txt|html?
+            } else {
+                $this->file_extension_regex = $this->validation_file_extensions;
+            }
+        }
+    }
+
+    /**
+     * Validate the given filename against the list/regex of allowed file extensions
+     */
+    public function validateExtension($filename = '')
+    {
+/*
         $filetype = $this->validation_file_extensions;
         $filename = xarVarPrepForOS(basename(strval($filename)));
         return (!empty($filetype) && preg_match("/\.$filetype$/",$filename));
+*/
+        $pos = strrpos($filename, '.');
+        if ($pos !== false) {
+            $extension = substr($filename, $pos + 1);
+        } else {
+            // in case we already got the extension from $dir->getExtension()
+            $extension = $filename;
+        }
+
+        if (!empty($this->file_extension_list) &&
+            !in_array($extension, $this->file_extension_list)) {
+            return false;
+        }
+        if (!empty($this->file_extension_regex) &&
+            !preg_match('/^' . $this->file_extension_regex . '$/', $extension)) {
+            return false;
+        }
+        return true;
     }
 }
 

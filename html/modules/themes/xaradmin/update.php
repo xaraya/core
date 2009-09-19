@@ -23,7 +23,9 @@ function themes_admin_update()
     // Get parameters
     if (!xarVarFetch('id', 'id', $regId)) return;
 
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     $themeInfo = xarThemeGetInfo($regId);
 

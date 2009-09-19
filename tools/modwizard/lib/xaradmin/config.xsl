@@ -105,18 +105,20 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args )
          * The user confirmed the form. So save the results.
          */
 
-        if (!xarSecConfirmAuthKey()) return;
+        if (!xarSecConfirmAuthKey()) {
+            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        }        
 
-        $supportshorturls = xarVarCleanFromInput( 'supportshorturls' );
+        $enable_short_urls = xarVarCleanFromInput( 'enable_short_urls' );
 
-        if ( empty( $supportshorturls ) or !is_numeric( $supportshorturls ) ) {
-            $supportshorturls = 0;
+        if ( empty( $enable_short_urls ) or !is_numeric( $enable_short_urls ) ) {
+            $enable_short_urls = 0;
         }
 
         xarModVars::Set(
             '<xsl:value-of select="$module_prefix" />'
-            ,'SupportShortURLs'
-            ,$supportshorturls );
+            ,'enable_short_urls'
+            ,$enable_short_urls );
 
         <xsl:if test="configuration/hooks/@enable = 'true'">
         /*
@@ -186,9 +188,9 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args )
         ,'admin'
         ,'config' );
     $data['authid']     = xarSecGenAuthKey();
-    $data['supportshorturls']   = xarModVars::Get(
+    $data['enable_short_urls']   = xarModVars::Get(
         '<xsl:value-of select="$module_prefix" />'
-        ,'SupportShortURLs' );
+        ,'enable_short_urls' );
     return $data;
 
 }

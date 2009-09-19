@@ -41,7 +41,9 @@ function mail_admin_template($args)
             if (!xarVarFetch('message', 'str:1:', $message)) return;
             if (!xarVarFetch('subject', 'str:1:', $subject)) return;
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) return;
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }        
 
             if (!xarModAPIFunc('mail','admin','updatemessagestrings',
                                array('module' => 'mail',

@@ -339,7 +339,9 @@ function dynamicdata_util_migrate($args)
 
     // migrate item(s)
     if ((!empty($test) || !empty($confirm)) && !empty($data['check'])) {
-        if (!xarSecConfirmAuthKey()) return;
+        if (!xarSecConfirmAuthKey()) {
+            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        }        
 
         if (!empty($test)) {
             $data['debug'] = xarML('Test Results') . "\n";

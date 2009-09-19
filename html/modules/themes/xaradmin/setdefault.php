@@ -22,7 +22,9 @@
 function themes_admin_setdefault()
 {
     // Security and sanity checks
-    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
     if (!xarSecurityCheck('AdminTheme')) return;
     if (!xarVarFetch('id', 'int:1:', $defaulttheme)) return;
 

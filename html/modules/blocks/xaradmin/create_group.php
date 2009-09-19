@@ -21,7 +21,9 @@ function blocks_admin_create_group()
     if (!xarVarFetch('group_template', 'str:1:', $template, null, XARVAR_NOT_REQUIRED)) {return;}
 
     // Confirm Auth Key
-    if (!xarSecConfirmAuthKey()) {return;}
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     // Security Check
     if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}

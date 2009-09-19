@@ -49,7 +49,9 @@ function roles_user_lostpassword()
             if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED)) return;
 
             // Confirm authorisation code.
-            if (!xarSecConfirmAuthKey()) return;
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }        
 
             if ((empty($uname)) && (empty($email))) {
                 throw new EmptyParameterException('$uname or $email');

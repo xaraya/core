@@ -24,7 +24,7 @@ function roles_userapi_getuserhome($args)
     }
 
     // the last resort admin always goes to the base main page
-    $lastresortvalue=xarModVars::get('privileges','lastresort');
+    $lastresortvalue = xarModVars::get('privileges','lastresort');
     $userhome = !empty($lastresort) ? '[base]' : xarModUserVars::get('roles','userhome',$itemid);
 
     // otherwise look for the role's userhome

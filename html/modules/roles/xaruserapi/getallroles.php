@@ -26,7 +26,7 @@ function roles_userapi_getallroles($args)
 
     // Optional arguments.
     if (!isset($startnum)) $startnum = 1;
-    if (!isset($numitems)) $numitems = xarModVars::get('roles', 'itemsperpage');
+    if (!isset($numitems)) $numitems = (int)xarModVars::get('roles', 'items_per_page');
 
     sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery();

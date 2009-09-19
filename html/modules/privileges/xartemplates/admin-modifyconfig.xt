@@ -6,7 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <h2>Modify Configuration</h2>
+        <h2>Modify Privileges Configuration</h2>
         <div>
             <ul class="xar-tabs xar-alt xar-norm-outline">
                 <xar:var name="title">Options</xar:var>
@@ -274,30 +274,32 @@
             <form method="post" id="testerform" name="testerform" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Testing Settings</legend>
-                    <div>These settings let a designated tester see security check messages on a
-                    live site.</div>
+                    <div>
+                        These settings let a designated tester see security check messages on a live site.
+                    </div>
                     <br />
                     <div class="xar-form-input-wrapper">
-                    <label for="testergroup" title="#xarML('Group containing the tester')#"
-                    class="xar-form-label">Tester Group:</label>
-                    <select name="testergroup" id="testergroup" size="1"
-                    onchange="this.form.submit(testerform.phase.value='modify');">
-                        <xar:foreach in="$grouplist" key="$k" value="$testers">
-                            <xar:if condition="$grouplist[$k]['id'] eq $testergroup">
-                                <option value="#$grouplist[$k]['id']#" selected="selected">
-                                #$grouplist[$k]['name']#</option>
-                            <xar:else />
-                                <option name="testgroup.#$grouplist[$k]#"
-                                value="#$grouplist[$k]['id']#">#$grouplist[$k]['name']#</option>
-                            </xar:if>
-                        </xar:foreach>
+                        <label for="testergroup" title="#xarML('Group containing the tester')#" class="xar-form-label">
+                            Tester Group:
+                        </label>
+                        <select name="testergroup" id="testergroup" size="1" onchange="this.form.submit(testerform.phase.value='modify');">
+                            <xar:foreach in="$grouplist" key="$k" value="$testers">
+                                <xar:if condition="$grouplist[$k]['id'] eq $testergroup">
+                                    <option value="#$grouplist[$k]['id']#" selected="selected">
+                                    #$grouplist[$k]['name']#</option>
+                                <xar:else />
+                                    <option name="testgroup.#$grouplist[$k]#"
+                                    value="#$grouplist[$k]['id']#">#$grouplist[$k]['name']#</option>
+                                </xar:if>
+                            </xar:foreach>
                         </select>
                         <!--<xar:data-input type="grouplist" name="testergroup" is="testergroup" value="$testergroup" onchange="this.form.action=this.form.submit();"/>-->
-                    Group to select tester from</div>
+                        Group to select tester from
+                    </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="tester"
-                        title="#xarML('Name of the administator that will see the messages')#"
-                        class="xar-form-label">Tester:</label>
+                        <label for="tester" title="#xarML('Name of the administator that will see the messages')#" class="xar-form-label">
+                            Tester:
+                        </label>
                         <select name="tester" id="tester" size="1">
                             <xar:foreach in="$testusers" key="$k" value="$testers">
                                 <xar:if condition="$testusers[$k]['id'] eq $tester">
@@ -314,31 +316,37 @@
                         <span class="xar-error">The current tester is 
                         <strong>#xarUserGetVar('uname',$tester)#</strong>.</span>
                     </div>
-                    <p class="xar-form-input-wrapper-after">They will see the security check
-                    messages.</p>
+                    <p class="xar-form-input-wrapper-after">
+                        They will see the security check messages.
+                    </p>
                     <div class="xar-form-input-wrapper">
-                    <label for="test"
-                    title="#xarML('Non Deny checks only shows checks that do not involve DENYs')#"
-                    class="xar-form-label">Non-DENY checks</label>
-                    <xar:set name="checked">
-                        <xar:var scope="module" module="privileges" name="test" />
-                    </xar:set>
-                    <xar:data-input type="checkbox" name="test" id="test" checked="$checked" />Show
-                    checks not involving DENYs</div>
+                        <label for="test" title="#xarML('Non Deny checks only shows checks that do not involve DENYs')#" class="xar-form-label">
+                        Non-DENY checks
+                        </label>
+                        <xar:set name="checked">
+                            <xar:var scope="module" module="privileges" name="test" />
+                        </xar:set>
+                        <xar:data-input type="checkbox" name="test" id="test" checked="$checked" />
+                        &#160;Show checks not involving DENYs
+                    </div>
                     <div class="xar-form-input-wrapper">
                         <label for="testdeny" title="#xarML('Deny checks')#" class="xar-form-label">
-                    DENY checks</label>
-                    <xar:set name="checked">
-                        <xar:var scope="module" module="privileges" name="testdeny" />
-                    </xar:set>
-                    <xar:data-input type="checkbox" name="testdeny" id="testdeny"
-                    checked="$checked" />Show checks involving DENYs</div>
+                            DENY checks
+                        </label>
+                        <xar:set name="checked">
+                            <xar:var scope="module" module="privileges" name="testdeny" />
+                        </xar:set>
+                        <xar:data-input type="checkbox" name="testdeny" id="testdeny" checked="$checked" /> 
+                        &#160;Show checks involving DENYs
+                    </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="testmask" title="#xarML('Mask to test against')#"
-                        class="xar-form-label">Mask to test</label>
+                        <label for="testmask" title="#xarML('Mask to test against')#" class="xar-form-label">
+                            Mask to test
+                        </label>
                         <input type="text" name="testmask" id="testmask" value="#$testmask#" />
-                        <p class="xar-form-input-wrapper-after">Adding a mask name here will show
-                        only the checks involving that mask</p>
+                        <p class="xar-form-input-wrapper-after">
+                            Adding a mask name here will show only the checks involving that mask
+                        </p>
                     </div>
                 </fieldset>
                     <div class="xar-form-input-wrapper-after">

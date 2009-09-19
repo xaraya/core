@@ -90,7 +90,9 @@ function mail_admin_modifyconfig()
 
         case 'update':
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) return;
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }        
             switch ($data['tab']) {
                 case 'general':
                     // new modvar in 2.0.0, only store the id of the designated admin

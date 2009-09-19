@@ -96,7 +96,7 @@ function dynamicdata_utilapi_import($args)
                 $args[$property] = $value;
             }
         }
-        // Backwards Compatibility with old defintions
+        // Backwards Compatibility with old definitions
         $args['moduleid'] = (string)$xmlobject->module_id;
         $args['module_id'] = (string)$xmlobject->module_id;
 
@@ -146,8 +146,17 @@ function dynamicdata_utilapi_import($args)
             $propertyname = (string)($property->attributes()->name);
             $propertyargs['name'] = $propertyname;
             foreach($propertyproperties as $prop) {
-                if (isset($property->{$prop}[0]))
-                    $propertyargs[$prop] = (string)$property->{$prop}[0];
+                if (isset($property->{$prop}[0])) {
+                    $value = (string)$property->{$prop}[0];
+                    try {
+                        $boolean->validate($value, array());
+                    } catch (Exception $e) {
+                        try {
+                            $integer->validate($value, array());
+                        } catch (Exception $e) {}
+                    }
+                    $propertyargs[$prop] = $value;
+                }
             }
 
             // Add some args needed to define the property
