@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="$image_source eq 'upload'">
         <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" />&#160; 
-        <xar:data-input type="fileupload" name="$name" extensions="$file_extensions" />
+        <xar:data-input type="fileupload" name="$name" extensions="$extensions" />
     <xar:elseif condition="$image_source eq 'url'" />
         <xar:data-input type="url" name="$name" value="$value" />
     <xar:else />

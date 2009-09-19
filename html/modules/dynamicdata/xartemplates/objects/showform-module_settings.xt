@@ -38,8 +38,8 @@
         </xar:if>
         <xar:if condition="isset($properties['enable_user_menu'])">
             <div class="xar-form-input-wrapper">
-                <label for="enable_user_menu" class="xar-form-label" title="#xarML('Add the functionality of this module to the Roles usermeu.')#">
-                        Enable User Menu
+                <label for="enable_user_menu" class="xar-form-label" title="#xarML('Enable the user settings for this module in Roles User Account.')#">
+                        Enable User Settings
                 </label>
                 <xar:data-input property="$properties['enable_user_menu']" />
             </div>

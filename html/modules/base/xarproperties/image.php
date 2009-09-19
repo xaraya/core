@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -23,8 +23,8 @@ class ImageProperty extends TextBoxProperty
     public $imagealt   = 'Image';
 
     public $initialization_image_source  = 'url';
-    public $initialization_basedirectory  = 'var/uploads';
-    public $validation_file_extensions  = 'gif,jpg,jpeg,png,bmp';
+    public $initialization_basedirectory = 'var/uploads';
+    public $validation_file_extensions   = 'gif,jpg,jpeg,png,bmp';
     public $validation_file_extensions_invalid;    // TODO: not yet implemented
 
     // this is used by DataPropertyMaster::addProperty() to set the $object->upload flag
@@ -39,6 +39,7 @@ class ImageProperty extends TextBoxProperty
         if (!empty($this->initialization_basedirectory) && preg_match('/\{theme\}/',$this->initialization_basedirectory)) {
             $curtheme = xarTplGetThemeDir();
             $this->initialization_basedirectory = preg_replace('/\{theme\}/',$curtheme,$this->initialization_basedirectory);
+            // FIXME: baseurl is no longer initialized - could be different from basedir !
         }
         if ($this->initialization_image_source == 'upload') $this->upload = true;
     }
@@ -61,7 +62,7 @@ class ImageProperty extends TextBoxProperty
         } elseif ($this->initialization_image_source == 'upload') {
             $prop = DataPropertyMaster::getProperty(array('type' => 'fileupload'));
             $prop->initialization_basedirectory = $this->initialization_basedirectory;
-            $prop->filetype= str_replace (',','|',$this->validation_file_extensions);
+            $prop->setExtensions($this->validation_file_extensions);
             $prop->fieldname = $this->fieldname;
             $prop->validateValue($value);
             $this->value = $prop->value;
@@ -76,8 +77,6 @@ class ImageProperty extends TextBoxProperty
         if ($data['image_source'] == 'upload') $this->upload = true;
         $data['basedirectory'] = isset($data['basedir']) ? $data['basedir'] : $this->initialization_basedirectory;
         $data['extensions'] = isset($data['extensions']) ? $data['extensions'] : $this->validation_file_extensions;
-        // different syntax for extensions in fileupload
-        $data['file_extensions'] = str_replace (',','|',$data['extensions']);
         $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
 
         return parent::showInput($data);
@@ -89,6 +88,7 @@ class ImageProperty extends TextBoxProperty
         if(!empty($data['basedir'])) $this->initialization_basedirectory = $data['basedir'];
         if (empty($data['value'])) $data['value'] = $this->value;
         if (!empty($data['value'])) {
+            // FIXME: baseurl is no longer initialized - could be different from basedir !
             if (($this->initialization_image_source == 'local') || ($this->initialization_image_source == 'upload')) {
                 $data['value'] = $this->initialization_basedirectory . "/" . $data['value'];
             }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -30,14 +30,16 @@ class FilePickerProperty extends SelectProperty
     {
         parent::__construct($descriptor);
         $this->filepath = 'modules/base/xarproperties';
-        if (empty($this->initialization_basedirectory)) $this->initialization_basedirectory = realpath('var');
+        // keep things relative here if possible (cfr. basedir vs. baseurl issue for images et al.)
+        if (empty($this->initialization_basedirectory)) $this->initialization_basedirectory = 'var';
+        $this->setExtensions();
     }
 
     public function showInput(Array $data = array())
     {
         if (isset($data['basedir'])) $this->initialization_basedirectory = $data['basedir'];
         if (isset($data['matches'])) $this->validation_matches = $data['matches'];
-        if (isset($data['extensions'])) $this->validation_file_extensions = $data['extensions'];
+        if (isset($data['extensions'])) $this->setExtensions($data['extensions']);
         if (isset($data['display_fullname'])) $this->display_fullname = $data['display_fullname'];
         if (isset($data['firstline']))  $this->initialization_firstline = $data['firstline'];
         return parent::showInput($data);
@@ -47,16 +49,14 @@ class FilePickerProperty extends SelectProperty
     {
         if (!parent::validateValue($value)) return false;
 
-        $basedir = $this->initialization_basedirectory;
-        $filetypes = $this->validation_file_extensions;
-        $pos = strrpos($value, '.');
-        $extension = substr($value,$pos+1);
+        // use the real path here for file checking
+        $filepath = realpath($this->initialization_basedirectory.'/'.$value);
         if (!empty($value) &&
             //slight change to allow spaces
             preg_match('/^[a-zA-Z0-9_\/.\-\040]+$/',$value) &&
-            preg_match("/^$extension/",$filetypes) &&
-            file_exists($basedir.'/'.$value) &&
-            is_file($basedir.'/'.$value)) {
+            $this->validateExtension($value) &&
+            file_exists($filepath) &&
+            is_file($filepath)) {
             return true;
         } elseif (empty($value)) {
             return true;
@@ -75,14 +75,12 @@ class FilePickerProperty extends SelectProperty
         }
         
         if (empty($this->initialization_basedirectory)) return array();
+        // this works with relative directories
         $dir = new RelativeDirectoryIterator($this->initialization_basedirectory);
 
-        if (!is_array($this->validation_file_extensions)) $extensions = explode(',',$this->validation_file_extensions);
-        else $extensions = $this->validation_file_extensions;
-        
         for($dir->rewind();$dir->valid();$dir->next()) {
             if($dir->isDir()) continue; // no dirs
-            if(!empty($this->validation_file_extensions) && !in_array($dir->getExtension(),$extensions)) continue;
+            if(!$this->validateExtension($dir->getExtension())) continue;
             if($dir->isDot()) continue; // temp for emacs insanity and skip hidden files while we're at it
             $name = $dir->getFileName();
             $id = $name;
@@ -91,6 +89,56 @@ class FilePickerProperty extends SelectProperty
             $options[] = array('id' => $id, 'name' => $name);
         }
         return $options;
+    }
+
+    /**
+     * Set the list/regex of allowed file extensions, depending on the syntax used (cfr. image, webpage, ...)
+     */
+    public function setExtensions($file_extensions = null)
+    {
+        if (isset($file_extensions)) {
+            $this->validation_file_extensions = $file_extensions;
+        }
+        $this->file_extension_list = null;
+        $this->file_extension_regex = null;
+        if (!empty($this->validation_file_extensions)) {
+            // example: array('gif', 'jpg', 'jpeg', ...)
+            if (is_array($this->validation_file_extensions)) {
+                $this->file_extension_list = $this->validation_file_extensions;
+
+            // example: gif,jpg,jpeg,png,bmp,txt,htm,html
+            } elseif (strpos($this->validation_file_extensions, ',') !== false) {
+                $this->file_extension_list = explode(',', $this->validation_file_extensions);
+
+            // example: gif|jpe?g|png|bmp|txt|html?
+            } else {
+                $this->file_extension_regex = $this->validation_file_extensions;
+            }
+        }
+    }
+
+    /**
+     * Validate the given filename against the list/regex of allowed file extensions
+     */
+    public function validateExtension($filename = '')
+    {
+        $pos = strrpos($filename, '.');
+        if ($pos !== false) {
+            $extension = substr($filename, $pos + 1);
+        } else {
+            // in case we already got the extension from $dir->getExtension()
+            $extension = $filename;
+        }
+
+        if (!empty($this->file_extension_list) &&
+            !in_array($extension, $this->file_extension_list)) {
+            return false;
+        }
+        if (!empty($this->file_extension_regex) &&
+            !preg_match('/^' . $this->file_extension_regex . '$/', $extension)) {
+            return false;
+        }
+        return true;
     }
 }
 ?>
