@@ -1221,7 +1221,7 @@ class xarMod extends Object implements IxarMod
         switch($type) {
         case 'module':
             // Spliffster, additional mod info from modules/$modDir/xarversion.php
-            $fileName = 'modules/' . $modOsDir . '/xarversion.php';
+            $fileName = sys::code() . 'modules/' . $modOsDir . '/xarversion.php';
             $part = 'xarversion';
             // If the locale is already present, it means we can make the translations available
             if(!empty($GLOBALS['xarMLS_currentLocale']))
@@ -1413,7 +1413,7 @@ class xarMod extends Object implements IxarMod
             // let's check for that function again to be sure
             if (!function_exists($modFunc)) {
                 // Q: who are we kidding with this? osdirectory == modName always, no?
-                $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.$funcType.'/'.strtolower($funcName).'.php';
+                $funcFile = sys::code() . 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.$funcType.'/'.strtolower($funcName).'.php';
                 if (!file_exists($funcFile)) {
                     $found = false;
                 } else {
@@ -1509,7 +1509,7 @@ class xarMod extends Object implements IxarMod
 
         // Load the module files
         $modDir = $modBaseInfo['directory'];
-        $fileName = 'modules/'.$modDir.'/xar'.$modType.'.php';
+        $fileName = sys::code() . 'modules/'.$modDir.'/xar'.$modType.'.php';
 
         // Removed the exception.  Causing some wierd results with modules without an api.
         // <nuncanada> But now we wont know if something was loaded or not!
@@ -1518,7 +1518,7 @@ class xarMod extends Object implements IxarMod
         if (file_exists($fileName)) {
             sys::import('modules.'.$modDir.'.xar'.$modType);
             $loadedModuleCache[$cacheKey] = true;
-        } elseif (is_dir('modules/'.$modDir.'/xar'.$modType)) {
+        } elseif (is_dir(sys::code() . 'modules/'.$modDir.'/xar'.$modType)) {
             // this is OK too - do nothing
             $loadedModuleCache[$cacheKey] = true;
         }

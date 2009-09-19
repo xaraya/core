@@ -109,7 +109,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
     private function compile(&$templateSource)
     {
         sys::import('blocklayout.xsltransformer');
-        $xslFile = sys::root() . '/lib/blocklayout/xslt/xar2php.xsl';
+        $xslFile = sys::lib() . 'blocklayout/xslt/xar2php.xsl';
         $xslProc = new BlockLayoutXSLTProcessor($xslFile);
 
         // This is confusing, dont do this here.
