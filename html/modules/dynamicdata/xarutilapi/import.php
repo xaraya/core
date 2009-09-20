@@ -53,6 +53,8 @@ function dynamicdata_utilapi_import($args)
         xarLogMessage('DD: import file ' . $file);
         
     } elseif (!empty($xml)) {
+        // remove garbage from the end
+        $xml = preg_replace('/>[^<]+$/s','>', $xml);
         $xmlobject = new SimpleXMLElement($xml);
     }
     // No better way of doing this?
