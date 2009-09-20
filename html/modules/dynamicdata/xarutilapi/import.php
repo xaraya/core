@@ -82,7 +82,7 @@ function dynamicdata_utilapi_import($args)
             throw new DuplicateException($vars,$msg);
         }
 
-        $object = DataObjectMaster::getObject(array('objectid' => 1));
+        $object = DataObjectMaster::getObject(array('name' => 'objects'));
         $objectproperties = array_keys($object->properties);
         foreach($objectproperties as $property) {
             if (isset($xmlobject->{$property}[0])) {
@@ -99,8 +99,13 @@ function dynamicdata_utilapi_import($args)
             }
         }
         // Backwards Compatibility with old definitions
-        $args['moduleid'] = (string)$xmlobject->module_id;
-        $args['module_id'] = (string)$xmlobject->module_id;
+        if (empty($args['moduleid']) && !empty($args['module_id'])) {
+            $args['moduleid'] = $args['module_id'];
+        }
+        if (empty($args['moduleid']) && isset($xmlobject->{'moduleid'}[0])) {
+            $args['moduleid'] = (int)$xmlobject->{'moduleid'}[0];
+            $args['module_id'] = $args['moduleid'];
+        }
 
         // Treat parents where the module is DD differently. Put in numeric itemtype
 //        if ($args['moduleid'] == 182) {
@@ -123,7 +128,7 @@ function dynamicdata_utilapi_import($args)
 //        }
 
         // Create the DataProperty object we will use to create items of
-        $dataproperty = DataObjectMaster::getObject(array('objectid' => 2));
+        $dataproperty = DataObjectMaster::getObject(array('name' => 'properties'));
         if (empty($dataproperty)) return;
 
         if ($dupexists && $overwrite) {
@@ -145,6 +150,7 @@ function dynamicdata_utilapi_import($args)
         $propertyproperties = array_keys($dataproperty->properties);
         $propertieshead = $xmlobject->properties;
         foreach($propertieshead->children() as $property) {
+            $propertyargs = array();
             $propertyname = (string)($property->attributes()->name);
             $propertyargs['name'] = $propertyname;
             foreach($propertyproperties as $prop) {
@@ -159,6 +165,17 @@ function dynamicdata_utilapi_import($args)
                     }
                     $propertyargs[$prop] = $value;
                 }
+            }
+
+            // Backwards Compatibility with old definitions
+            if (!isset($propertyargs['defaultvalue']) && isset($property->{'default'}[0])) {
+                $propertyargs['defaultvalue'] = (string)$property->{'default'}[0];
+            }
+            if (!isset($propertyargs['seq']) && isset($property->{'order'}[0])) {
+                $propertyargs['seq'] = (int)$property->{'order'}[0];
+            }
+            if (!isset($propertyargs['configuration']) && isset($property->{'validation'}[0])) {
+                $propertyargs['configuration'] = (string)$property->{'validation'}[0];
             }
 
             // Add some args needed to define the property
