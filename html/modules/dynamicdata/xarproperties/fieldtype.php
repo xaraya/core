@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -50,6 +50,11 @@ class FieldTypeProperty extends ObjectRefProperty
         }
         // sort by name
         ksort($options);
+
+        // Save options only when we're dealing with an object list
+        if (!empty($this->_items)) {
+            $this->options = $options;
+        }
         return $options;
     }
 }
