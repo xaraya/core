@@ -576,9 +576,10 @@ class xarResponse extends Object
      *
      * @access public
      * @param msg string the message
+     * @param ... string template overrides, cfr. xarTplModule (optional)
      * @return string the template message-notfound.xt from the base module filled in
      */
-    static function NotFound($msg = '')
+    static function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = NULL)
     {
         if (!headers_sent()) {
             header('HTTP/1.0 404 Not Found');
@@ -586,7 +587,7 @@ class xarResponse extends Object
 
         xarTplSetPageTitle('404 Not Found');
 
-        return xarTplModule('base','message','notfound',array('msg' => $msg));
+        return xarTplModule($modName, $modType, $funcName, array('msg' => $msg), $templateName);
     }
 
     /**
@@ -602,9 +603,10 @@ class xarResponse extends Object
      *
      * @access public
      * @param msg string the message
+     * @param ... string template overrides, cfr. xarTplModule (optional)
      * @return string the template message-forbidden.xt from the base module filled in
      */
-    static function Forbidden($msg = '')
+    static function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = NULL)
     {
         if (!headers_sent()) {
             header('HTTP/1.0 403 Forbidden');
@@ -612,7 +614,7 @@ class xarResponse extends Object
 
         xarTplSetPageTitle('403 Forbidden');
 
-        return xarTplModule('base','message','forbidden',array('msg' => $msg));
+        return xarTplModule($modName, $modType, $funcName, array('msg' => $msg), $templateName);
     }
 }
 ?>
