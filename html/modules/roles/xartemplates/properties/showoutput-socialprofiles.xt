@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:foreach in="$links" value="$link">
+        <a href="#$link['profile']#" title="#$link['site']#"><img src="#xarTplGetImage('social/'.$link['icon'],'roles')#" alt="#$link['site']#" width="16" height="16" border="0"/></a>
+    </xar:foreach>
+</xar:template>
