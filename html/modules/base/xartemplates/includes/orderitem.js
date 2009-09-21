@@ -103,3 +103,43 @@ function xar_base_reorder(id, dir, dest) {
     }
     return false;
 }
+
+/**
+ * See http://forgottoattach.com/javascript-dom/how-to-move-element-up-down-to-set-order-of-form-fields-in-a-table/
+ */
+
+/**
+ * Moves element after next sibling of same node type. Module will wrap element around if current position is bottom.
+ *
+ * Use with button or image onClick="xar_base_moveElementDown(this.parentNode);" to move the enclosing div down.
+ */
+function xar_base_moveElementDown(element){
+    var elements = element.parentNode.getElementsByTagName(element.nodeName);
+    for(i=0;i<elements.length;i++){
+        if(elements[i]==element){
+            //swap
+            var x = (i+1) % (elements.length);
+            element.parentNode.insertBefore(element.cloneNode(true), 
+                (x>0?elements[x].nextSibling:elements[x]));
+            element.parentNode.removeChild(element);
+        }
+    }
+}
+
+/**
+ * Moves element before previous sibling of same node type. Module will wrap element around if current position is top.
+ *
+ * Use with button or image onClick="xar_base_moveElementUp(this.parentNode);" to move the parent div up.
+ */
+function xar_base_moveElementUp(element){
+    var elements = element.parentNode.getElementsByTagName(element.nodeName);
+    for(i=0;i<elements.length;i++){
+        if(elements[i]==element){
+            //swap
+            element.parentNode.insertBefore(element.cloneNode(true), 
+                    (i-1>=0?elements[i-1]:elements[elements.length-1].nextSibling));
+            element.parentNode.removeChild(element);
+        }
+    }
+}
+

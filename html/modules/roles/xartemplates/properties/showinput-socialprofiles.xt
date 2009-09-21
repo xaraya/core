@@ -2,11 +2,15 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- TODO: give this some "modern" look and make it configurable -->
+    <xar:javascript module="base" filename="orderitem.js" position="head" />
+    <div class="xar-form-input-wrapper">
     <legend>Social Profiles</legend>
     <xar:foreach in="$profiles" value="$profile">
+        <xar:if condition="!empty($profile[5])">
         <div class="xar-form-input-wrapper">
-            <label class="xar-form-label" for="#$name#_#$profile[0]#">
-                <img src="#xarTplGetImage('social/'.$profile[5],'roles')#" alt="#$profile[0]#" width="16" height="16" border="0"/>
+            <label class="xar-form-label" for="#$name#_#$profile[0]#_#$profile[3][0]#">
+                <img src="#xarTplGetImage($profile[4],'roles')#" alt="#$profile[0]#" title="#$profile[0]#" width="16" height="16" border="0"/>
+                <img src="#xarTplGetImage('icons/go-up.png','base')#" alt="Up" title="Move Up" onClick="xar_base_moveElementUp(this.parentNode.parentNode);"/>
                 <a href="#$profile[1]#" title="#$profile[0]#"> #$profile[0]# </a>
             </label>
             <xar:foreach in="$profile[3]" value="$var">
@@ -18,6 +22,8 @@
             </xar:foreach>
             #$profile[2]#
         </div>
+        </xar:if>
     </xar:foreach>
     <xar:template file="dataproperty_additions" module="base" />        
+    </div>
 </xar:template>
