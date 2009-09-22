@@ -17,75 +17,95 @@
  * @author Jim McDonald
  * @return array
  */
-function authsystem_loginblock_init()
-{
-    return array(
-        'showlogout' => 0,
-        'logouttitle' => '',
-        'nocache' => 1, // don't cache by default
-        'pageshared' => 1, // if you do, share across pages
-        'usershared' => 0, // but don't share for different users
-        'cacheexpire' => null
-    );
-}
+sys::import('xaraya.structures.containers.blocks.basicblock');
 
-/**
- * get information on block
- */
-function authsystem_loginblock_info()
+class LoginBlock extends BasicBlock implements iBlock
 {
-    return array(
-        'text_type' => 'Login',
-        'module' => 'authsystem',
-        'text_type_long' => 'User login'
-    );
-}
+    public $no_cache            = 1;
+
+    public $name                = 'LoginBlock';
+    public $module              = 'authsystem';
+    public $text_type           = 'Login';
+    public $text_type_long      = 'User Login';
+    public $pageshared          = 1;
+
+    public $showlogout          = 0;
+    public $logouttitle         = '';
 
 /**
  * Display func.
- * @param $blockinfo array containing title,content
+ * @param $data array containing title,content
  */
-function authsystem_loginblock_display($blockinfo)
-{
-    // Security Check
-    if(!xarSecurityCheck('ViewLogin',0,'Block',"Login:" . $blockinfo['title'] . ":" . $blockinfo['bid'],'All')) return;
+    function display(Array $data=array())
+    {
+        $data = parent::display($data);
+        // Security Check
+        if(!xarSecurityCheck('ViewLogin',0,'Block',"Login:" . $data['title'] . ":" . $data['bid'],'All')) return;
 
-    // Get variables from content block
-    if (!is_array($blockinfo['content'])) {
-        $vars = unserialize($blockinfo['content']);
-    } else {
-        $vars = $blockinfo['content'];
-    }
+        $vars = isset($data['content']) ? $data['content'] : array();
+        if (!isset($vars['showlogout'])) $vars['showlogout'] = $this->showlogout;
+        if (!isset($vars['logouttitle'])) $vars['logouttitle'] = $this->logouttitle;
 
-    // Display logout block if user is already logged in
-    // e.g. when the login/logout block also contains a search box
-    if (xarUserIsLoggedIn()) {
-        if (!empty($vars['showlogout'])) {
-            $args['name'] = xarUserGetVar('name');
+        // Display logout block if user is already logged in
+        // e.g. when the login/logout block also contains a search box
+        if (xarUserIsLoggedIn()) {
+            if (!empty($vars['showlogout'])) {
+                $args['name'] = xarUserGetVar('name');
 
-            // Since we are logged in, set the template base to 'logout'.
-            // FIXME: not allowed to set BL variables directly
-            $blockinfo['_bl_template_base'] = 'logout';
+                // Since we are logged in, set the template base to 'logout'.
+                // FIXME: not allowed to set BL variables directly
+                $data['_bl_template_base'] = 'logout';
 
-            if (!empty($vars['logouttitle'])) {
-                $blockinfo['title'] = $vars['logouttitle'];
+                if (!empty($vars['logouttitle'])) {
+                    $data['title'] = $vars['logouttitle'];
+                }
+            } else {
+                return;
             }
+        } elseif (xarServer::getVar('REQUEST_METHOD') == 'GET') {
+            // URL of this page
+            $args['return_url'] = xarServer::getCurrentURL();
         } else {
-            return;
+            // Base URL of the site
+            $args['return_url'] = xarServer::getBaseURL();
         }
-    } elseif (xarServer::getVar('REQUEST_METHOD') == 'GET') {
-        // URL of this page
-        $args['return_url'] = xarServer::getCurrentURL();
-    } else {
-        // Base URL of the site
-        $args['return_url'] = xarServer::getBaseURL();
+
+        // Used in the templates.
+        $args['blockid'] = $data['bid'];
+
+        $data['content'] = $args;
+        return $data;
     }
 
-    // Used in the templates.
-    $args['blockid'] = $blockinfo['bid'];
+/**
+ * Modify Function to the Blocks Admin
+ * @param $data array containing title,content
+ */
+    public function modify(Array $data=array())
+    {
+        $data = parent::modify($data);
 
-    $blockinfo['content'] = $args;
-    return $blockinfo;
+        if (!isset($data['showlogout'])) $data['showlogout'] = $this->showlogout;
+        if (!isset($data['logouttitle'])) $data['logouttitle'] = $this->logouttitle;
+
+        $data['blockid'] = $data['bid'];
+        return $data;
+
+    }
+
+/**
+ * Updates the Block config from the Blocks Admin
+ * @param $data array containing title,content
+ */
+    public function update(Array $data=array())
+    {
+        $data = parent::update($data);
+        if (!xarVarFetch('showlogout', 'checkbox', $vars['showlogout'], $this->showlogout, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('logouttitle', 'str', $vars['logouttitle'], $this->logouttitle, XARVAR_NOT_REQUIRED)) return;
+
+        $data['content'] = $vars;
+
+        return $data;
+    }
 }
-
 ?>
