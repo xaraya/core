@@ -109,24 +109,24 @@ class xarBLCompiler extends Object implements IxarBLCompiler
     private function boot()
     {
         sys::import('blocklayout.xsltransformer');
-        $xslFile = sys::lib() . 'blocklayout/xslt/xar2php.xsl';
+        $xslFile = sys::lib() . 'blocklayout/xslt/booter.xsl';
         $xslProc = new BlockLayoutXSLTProcessor($xslFile);
-        $xmlFile = sys::root() . '/lib/blocklayout/xslt/xar2php.xsl';
+        $xmlFile = sys::lib() . 'blocklayout/xslt/xar2php.xsl';
         $doc = new DOMDocument;
         $doc->load($xmlFile);
 
         // Pass the default tags
-        $baseDir = sys::root() . '/lib/blocklayout/xslt/defaults';
+        $baseDir = sys::lib() . 'blocklayout/xslt/defaults';
         $xslFiles = $this->getXSLFilesString($baseDir, 'defaults');
         $xslProc->setParameter('', 'defaults', $xslFiles);
 
         // Pass the Blocklayout tags
-        $baseDir = sys::root() . '/lib/blocklayout/xslt/tags/bl';
+        $baseDir = sys::lib() . 'blocklayout/xslt/tags/bl';
         $xslFiles = $this->getXSLFilesString($baseDir, 'tags/bl');
         $xslProc->setParameter('', 'bltags', $xslFiles);
         
         // Pass the Xaraya tags
-        $baseDir = sys::root() . '/lib/blocklayout/xslt/tags/xaraya';
+        $baseDir = sys::lib() . 'blocklayout/xslt/tags/xaraya';
         $xslFiles = $this->getXSLFilesString($baseDir, 'tags/xaraya');
         $xslProc->setParameter('', 'xarayatags', $xslFiles);
         

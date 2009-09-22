@@ -47,7 +47,9 @@ include 'var/layout.system.php';
 if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
 if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
 if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
+if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
 $GLOBALS['systemConfiguration'] = $systemConfiguration;
+set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
 include 'bootstrap.php';
 sys::import('xaraya.core');
 

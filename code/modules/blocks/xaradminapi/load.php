@@ -67,10 +67,10 @@ function blocks_adminapi_load($args)
         $blockFile = $type . '.php';
         $filePath = $blockDir . '/' . xarVarPrepForOS($blockFile);
 
-        if (!file_exists(sys::code() . $filePath)) {
+        if (!file_exists($filePath)) {
             throw new FileNotFoundException($filePath);
         }
-        include_once(sys::code() . $filePath);
+        include_once($filePath);
         $loaded[$module . ':' . $type] = 1;
 
         // Load the block language files
@@ -86,8 +86,8 @@ function blocks_adminapi_load($args)
         $blockFile = $func . '-' . $type . '.php';
         $filePath = $blockDir . '/' . xarVarPrepForOS($blockFile);
 
-        if (file_exists(sys::code() . $filePath)) {
-            include_once(sys::code() . $filePath);
+        if (file_exists($filePath)) {
+            include_once($filePath);
         }
 
         // Flag the script as loaded.

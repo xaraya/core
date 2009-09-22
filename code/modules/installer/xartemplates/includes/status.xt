@@ -12,7 +12,7 @@
     <div id="status">
         <div id="status_body">
             <div class="xar-align-center">
-                <img src="./modules/installer/xarimages/installer.png" alt="#xarML('Installer icon')#" />
+                <img src="#sys::code()#modules/installer/xarimages/installer.png" alt="#xarML('Installer icon')#" />
             </div>
             <ul>
                 <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">
