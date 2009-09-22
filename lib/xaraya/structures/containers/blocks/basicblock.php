@@ -12,8 +12,8 @@
 
         public $name                = 'BlockName';
         public $module              = 'BlockModule';
-        public $text_type           = null;
-        public $text_type_long      = 'base';
+        public $text_type           = 'Basic Block';
+        public $text_type_long      = 'Parent class for blocks';
         public $func_update         = null;
         public $allow_multiple      = false;
         public $form_content        = false;    // display textarea for content in the admin UI
