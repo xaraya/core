@@ -85,6 +85,7 @@
             <xar:foreach in="$items" value="$item">
                 <li>
                     <xar:foreach in="$item['fields']" value="$field">
+                    <!-- CHECKME: where does $field['flink'] come from ? -->
                         <xar:if condition="!empty($field['flink'])">
                             <a href="#$field['flink']#">
                                 <xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" />
