@@ -309,16 +309,16 @@ div#status li {
 }
 
 .complete {
-    background-image: url(../../../modules/base/xarimages/icons/activate.png);
+    background-image: url(../../../../code/modules/base/xarimages/icons/activate.png);
     color: #80ab1b;
 }
 
 .active {
-    background-image: url(../../../modules/base/xarimages/icons/initialize.png);
+    background-image: url(../../../../code/modules/base/xarimages/icons/initialize.png);
 }
 
 .greyed {
-    background-image: url(../../../modules/base/xarimages/icons/none.png);
+    background-image: url(../../../../code/modules/base/xarimages/icons/none.png);
     color: #999;
 }
 
@@ -342,13 +342,13 @@ ul li.success, ul li.failure, ul li.warning {
 }
 
 ul li.success {
-    list-style-image:  url(../../../modules/base/xarimages/icons/activate.png) !important;
+    list-style-image:  url(../../../../code/modules/base/xarimages/icons/activate.png) !important;
 }
 ul li.failure {
-    list-style-image:  url(../../../modules/base/xarimages/icons/dialog-error.png) !important;
+    list-style-image:  url(../../../../code/modules/base/xarimages/icons/dialog-error.png) !important;
 }
 ul li.warning {
-    list-style-image:  url(../../../modules/base/xarimages/icons/dialog-warning.png) !important;
+    list-style-image:  url(../../../../code/modules/base/xarimages/icons/dialog-warning.png) !important;
 }
 
 p.warning {

@@ -41,10 +41,18 @@ define ('XARINSTALL_PHASE_SYSTEM_CHECK',        '4');
 define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
 define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
-set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 // Include the core
-include 'lib/bootstrap.php';
+$systemConfiguration = array();
+include 'var/layout.system.php';
+if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
+if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
+if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
+if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
+$GLOBALS['systemConfiguration'] = $systemConfiguration;
+set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
+include 'bootstrap.php';
 sys::import('xaraya.core');
+
 // Besides what we explicitly load, we dont want to load
 // anything extra for maximum control
 $whatToLoad = XARCORE_SYSTEM_NONE;
