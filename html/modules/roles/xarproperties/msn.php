@@ -10,17 +10,20 @@
  */
 
 /* Include the base class */
-sys::import('modules.base.xarproperties.urlicon');
+sys::import('modules.base.xarproperties.textbox');
+
 /**
  * Handle MSN property
  * @author mikespub <mikespub@xaraya.com>
  */
-class MSNProperty extends URLIconProperty
+class MSNProperty extends TextBoxProperty
 {
     public $id         = 30;
     public $name       = 'msn';
     public $desc       = 'MSN Messenger';
     public $reqmodules = array('roles');
+
+    public $initialization_icon_url;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -28,6 +31,9 @@ class MSNProperty extends URLIconProperty
         $this->tplmodule = 'roles';
         $this->template = 'msn';
         $this->filepath   = 'modules/roles/xarproperties';
+        if (empty($this->initialization_icon_url)) {
+            $this->initialization_icon_url = xarTplGetImage('contact/msnm.png','roles');
+        }
     }
 
     public function validateValue($value = null)
@@ -54,18 +60,23 @@ class MSNProperty extends URLIconProperty
 
         $data['link'] ='';
         if(!empty($data['value'])) {
-            $data['link'] = xarVarPrepForDisplay("TODO: what's the link for MSN ?" .$data['value']);
+            $data['link'] = 'msnim:chat?contact='.xarVarPrepForDisplay($data['value']);
         }
+        // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
+        $data['value'] = xarVarPrepForDisplay($data['value']);
 
         $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = "TODO: what's the link for MSN ?".$data['value'];
+            $data['link'] = 'msnim:chat?contact='.$data['value'];
+        }
+        if (empty($data['image'])) {
+            $data['image'] = $this->initialization_icon_url;
         }
         return parent::showOutput($data);
     }

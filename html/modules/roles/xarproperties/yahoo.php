@@ -9,17 +9,20 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 /* Include the base class */
-sys::import('modules.base.xarproperties.urlicon');
+sys::import('modules.base.xarproperties.textbox');
+
 /**
  * Handle Yahoo property
  * @author mikespub <mikespub@xaraya.com>
  */
-class YahooProperty extends URLIconProperty
+class YahooProperty extends TextBoxProperty
 {
     public $id         = 31;
     public $name       = 'yahoo';
     public $desc       = 'Yahoo Messenger';
     public $reqmodules = array('roles');
+
+    public $initialization_icon_url;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -27,6 +30,9 @@ class YahooProperty extends URLIconProperty
         $this->tplmodule = 'roles';
         $this->template = 'yahoo';
         $this->filepath   = 'modules/roles/xarproperties';
+        if (empty($this->initialization_icon_url)) {
+            $this->initialization_icon_url = xarTplGetImage('contact/yahoo.png','roles');
+        }
     }
 
     public function validateValue($value = null)
@@ -49,26 +55,27 @@ class YahooProperty extends URLIconProperty
 
     public function showInput(Array $data = array())
     {
-        extract($data);
-        if (!isset($value)) $value = $this->value;
+        if(!isset($data['value'])) $data['value'] = $this->value;
 
-        $link = '';
-        if (!empty($value)) {
-            $link = 'http://edit.yahoo.com/config/send_webmesg?.target='.$value.'&.src=pg';
+        $data['link'] = '';
+        if (!empty($data['value'])) {
+            $data['link'] = 'http://edit.yahoo.com/config/send_webmesg?.target='.xarVarPrepForDisplay($data['value']).'&.src=pg';
         }
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['link']     = xarVarPrepForDisplay($link);
-
+        // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
+        $data['value'] = xarVarPrepForDisplay($data['value']);
 
+        $data['link'] = '';
         if (!empty($data['value'])) {
             $data['link'] = 'http://edit.yahoo.com/config/send_webmesg?.target='.$data['value'].'&.src=pg';
-            $data['link']=xarVarPrepForDisplay($data['link']);
+        }
+        if (empty($data['image'])) {
+            $data['image'] = $this->initialization_icon_url;
         }
         return parent::showOutput($data);
     }

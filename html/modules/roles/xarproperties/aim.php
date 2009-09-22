@@ -11,17 +11,19 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.urlicon');
+sys::import('modules.base.xarproperties.textbox');
 
 /**
  * Handle AIM property
  */
-class AIMProperty extends URLIconProperty
+class AIMProperty extends TextBoxProperty
 {
     public $id         = 29;
     public $name       = 'aim';
     public $desc       = 'AIM Screen Name';
     public $reqmodules = array('roles');
+
+    public $initialization_icon_url;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -29,6 +31,9 @@ class AIMProperty extends URLIconProperty
         $this->tplmodule = 'roles';
         $this->template = 'aim';
         $this->filepath   = 'modules/roles/xarproperties';
+        if (empty($this->initialization_icon_url)) {
+            $this->initialization_icon_url = xarTplGetImage('contact/aim.png','roles');
+        }
     }
 
     public function validateValue($value = null)
@@ -53,19 +58,23 @@ class AIMProperty extends URLIconProperty
 
         $data['link'] ='';
         if(!empty($data['value'])) {
-            $data['link'] = 'aim:goim?screenname='.$data['value'].'&message='.xarML('Hello+Are+you+there?');
+            $data['link'] = 'aim:goim?screenname='.xarVarPrepForDisplay($data['value']).'&message='.xarML('Hello+Are+you+there?');
         }
+        // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
+        $data['value'] = xarVarPrepForDisplay($data['value']);
 
         $data['link'] = '';
         if (!empty($data['value'])) {
             $data['link'] = 'aim:goim?screenname='.$data['value'].'&message='.xarML('Hello+Are+you+there?');
-
+        }
+        if (empty($data['image'])) {
+            $data['image'] = $this->initialization_icon_url;
         }
         return parent::showOutput($data);
     }
