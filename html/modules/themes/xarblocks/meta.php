@@ -19,234 +19,168 @@
  * @throws  no exceptions
  * @todo    nothing
 */
-function themes_metablock_init()
+sys::import('xaraya.structures.containers.blocks.basicblock');
+
+class MetaBlock extends BasicBlock implements iBlock
 {
-    return array(
-        'metakeywords' => '',
-        'metadescription' => '',
-        'usedk' => '',
-        'usegeo' => '',
-        'longitude' => '',
-        'latitude' => '',
-        'copyrightpage' => '',
-        'helppage' => '',
-        'glossary' => '',
-        'nocache' => 1, // don't cache by default
-        'pageshared' => 0, // if you do, don't share across pages
-        'usershared' => 1, // but share for group members
-        'cacheexpire' => null);
-}
+    public $no_cache            = 1;
+
+    public $name                = 'MetaBlock';
+    public $module              = 'themes';
+    public $text_type           = 'Meta';
+    public $text_type_long      = 'Meta';
+    public $allow_multiple      = false;
+    public $show_preview        = true;
+    public $usershared          = true;
+
+    public $metakeywords        = '';
+    public $metadescription     = '';
+    public $usedk               = '';
+    public $usegeo              = '';
+    public $longitude           = '';
+    public $latitude            = '';
+    public $copyrightpage       = '';
+    public $helppage            = '';
+    public $glossary            = '';
 
 /**
- * get information on block
- *
- * @author  John Cox
- * @access  public
- * @param   none
- * @return  data array
- * @throws  no exceptions
- * @todo    nothing
-*/
-function themes_metablock_info()
-{
-    return array(
-        'text_type' => 'Meta',
-        'text_type_long' => 'Meta',
-        'module' => 'themes',
-        'func_update' => 'themes_metablock_update',
-        'allow_multiple' => false,
-        'form_content' => false,
-        'form_refresh' => false,
-        'show_preview' => true
-    );
-}
+ * Display func.
+ * @param $data array containing title,content
+ */
+    function display(Array $data=array())
+    {
+        $data = parent::display($data);
+        // Security Check
+        if (!xarSecurityCheck('ViewBaseBlocks', 0, 'Block', 'meta:'.$data['title'].':All')) return;
+
+        $vars = isset($data['content']) ? $data['content'] : array();
+
+        if (!isset($vars['usedk'])) $vars['usedk'] = $this->usedk;
+
+        $meta = array();
+
+        // Description
+        $incomingdesc = xarVarGetCached('Blocks.articles', 'summary');
+
+        if (!empty($incomingdesc) and $vars['usedk'] >= 1) {
+            // Strip -all- html
+            $htmlless = strip_tags($incomingdesc);
+            $meta['description'] = $htmlless;
+        } else {
+            $meta['description'] = $vars['metadescription'];
+        }
+
+        // Dynamic Keywords
+        $incomingkey = xarVarGetCached('Blocks.articles', 'body');
+        $incomingkeys = xarVarGetCached('Blocks.keywords', 'keys');
+
+        if (!empty($incomingkey) and $vars['usedk'] == 1) {
+            // Keywords generated from articles module
+            $meta['keywords'] = $incomingkey;
+        } elseif ((!empty($incomingkeys)) and ($vars['usedk'] == 2)){
+            // Keywords generated from keywords module
+            $meta['keywords'] = $incomingkeys;
+        } elseif ((!empty($incomingkeys)) and ($vars['usedk'] == 3)){
+            $meta['keywords'] = $incomingkeys.','.$incomingkey;
+        } else {
+            $meta['keywords'] = $vars['metakeywords'];
+        }
+
+        // Character Set
+        $meta['charset'] = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
+        $meta['generator'] = xarConfigVars::get(null, 'System.Core.VersionId');
+        $meta['generator'] .= ' :: ';
+        $meta['generator'] .= xarConfigVars::get(null, 'System.Core.VersionNum');
+
+        // Geo Url
+        $meta['longitude'] = $vars['longitude'];
+        $meta['latitude'] = $vars['latitude'];
+
+        // Active Page
+        $meta['activepagerss'] = xarServer::getCurrentURL(array('theme' => 'rss'));
+        $meta['activepageatom'] = xarServer::getCurrentURL(array('theme' => 'atom'));
+        $meta['activepageprint'] = xarServer::getCurrentURL(array('theme' => 'print'));
+
+        $meta['baseurl'] = xarServer::getBaseURL();
+        if (isset($vars['copyrightpage'])){
+            $meta['copyrightpage'] = $vars['copyrightpage'];
+        } else {
+            $meta['copyrightpage'] = '';
+        }
+
+        if (isset($vars['helppage'])){
+            $meta['helppage'] = $vars['helppage'];
+        } else {
+            $meta['helppage'] = '';
+        }
+
+        if (isset($vars['glossary'])){
+            $meta['glossary'] = $vars['glossary'];
+        } else {
+            $meta['glossary'] = '';
+        }
+
+        //Pager Buttons
+        $meta['refreshurl']     = xarVarGetCached('Meta.refresh','url');
+        $meta['refreshtime']    = xarVarGetCached('Meta.refresh','time');
+        $meta['first']          = xarVarGetCached('Pager.first','leftarrow');
+        $meta['last']           = xarVarGetCached('Pager.last','rightarrow');
+
+        $data['content'] = $meta;
+
+        return $data;
+
+    }
 
 /**
- * display adminmenu block
- *
- * @author  Carl Corliss, John Cox
- * @access  public
- * @param   $blockinfo array containing usegeo, metakeywords, metadescription, longitude, latitude, usedk.
- * @return  data array on success or void on failure
- * @throws  no exceptions
- * @todo    complete
-*/
-function themes_metablock_display($blockinfo)
-{
-    // Security Check
-    if (!xarSecurityCheck('ViewBaseBlocks', 0, 'Block', 'meta:'.$blockinfo['title'].':All')) return;
+ * Modify Function to the Blocks Admin
+ * @param $data array containing title,content
+ */
+    public function modify(Array $data=array())
+    {
+        $data = parent::modify($data);
 
-    // Get current content
-    if (!is_array($blockinfo['content'])) {
-        $vars = unserialize($blockinfo['content']);
-    } else {
-        $vars = $blockinfo['content'];
+        if (!isset($data['metakeywords'])) $data['metakeywords'] = $this->metakeywords;
+        if (!isset($data['metadescription'])) $data['metadescription'] = $this->metadescription;
+        if (!isset($data['usegeo'])) $data['usegeo'] = $this->usegeo;
+        if (!isset($data['usedk'])) $data['usedk'] = $this->usedk;
+        if (!isset($data['longitude'])) $data['longitude'] = $this->longitude;
+        if (!isset($data['latitude'])) $data['latitude'] = $this->latitude;
+        if (!isset($data['copyrightpage'])) $data['copyrightpage'] = $this->copyrightpage;
+        if (!isset($data['helppage'])) $data['helppage'] = $this->helppage;
+        if (!isset($data['glossary'])) $data['glossary'] = $this->glossary;
+
+        $data['blockid'] = $data['bid'];
+        $content = xarTplBlock('themes', 'metaAdmin', $data);
+
+        return $content;
     }
-    $meta = array();
-
-    // Description
-    $incomingdesc = xarVarGetCached('Blocks.articles', 'summary');
-
-    if (!empty($incomingdesc) and $vars['usedk'] >= 1) {
-        // Strip -all- html
-        $htmlless = strip_tags($incomingdesc);
-        $meta['description'] = $htmlless;
-    } else {
-        $meta['description'] = $vars['metadescription'];
-    }
-
-    // Dynamic Keywords
-    $incomingkey = xarVarGetCached('Blocks.articles', 'body');
-    $incomingkeys = xarVarGetCached('Blocks.keywords', 'keys');
-
-    if (!empty($incomingkey) and $vars['usedk'] == 1) {
-        // Keywords generated from articles module
-        $meta['keywords'] = $incomingkey;
-    } elseif ((!empty($incomingkeys)) and ($vars['usedk'] == 2)){
-        // Keywords generated from keywords module
-        $meta['keywords'] = $incomingkeys;
-    } elseif ((!empty($incomingkeys)) and ($vars['usedk'] == 3)){
-        $meta['keywords'] = $incomingkeys.','.$incomingkey;
-    } else {
-        $meta['keywords'] = $vars['metakeywords'];
-    }
-
-    // Character Set
-    $meta['charset'] = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
-    $meta['generator'] = xarConfigVars::get(null, 'System.Core.VersionId');
-    $meta['generator'] .= ' :: ';
-    $meta['generator'] .= xarConfigVars::get(null, 'System.Core.VersionNum');
-
-    // Geo Url
-    $meta['longitude'] = $vars['longitude'];
-    $meta['latitude'] = $vars['latitude'];
-
-    // Active Page
-    $meta['activepagerss'] = xarServer::getCurrentURL(array('theme' => 'rss'));
-    $meta['activepageatom'] = xarServer::getCurrentURL(array('theme' => 'atom'));
-    $meta['activepageprint'] = xarServer::getCurrentURL(array('theme' => 'print'));
-
-    $meta['baseurl'] = xarServer::getBaseURL();
-    if (isset($vars['copyrightpage'])){
-        $meta['copyrightpage'] = $vars['copyrightpage'];
-    } else {
-        $meta['copyrightpage'] = '';
-    }
-
-    if (isset($vars['helppage'])){
-        $meta['helppage'] = $vars['helppage'];
-    } else {
-        $meta['helppage'] = '';
-    }
-
-    if (isset($vars['glossary'])){
-        $meta['glossary'] = $vars['glossary'];
-    } else {
-        $meta['glossary'] = '';
-    }
-
-    //Pager Buttons
-    $meta['refreshurl']     = xarVarGetCached('Meta.refresh','url');
-    $meta['refreshtime']    = xarVarGetCached('Meta.refresh','time');
-    $meta['first']          = xarVarGetCached('Pager.first','leftarrow');
-    $meta['last']           = xarVarGetCached('Pager.last','rightarrow');
-
-    $blockinfo['content'] = $meta;
-    return $blockinfo;
-
-}
 
 /**
- * modify block settings
- *
- * @author  John Cox
- * @access  public
- * @param   $blockinfo
- * @return  $blockinfo data array
- * @throws  no exceptions
- * @todo    nothing
-*/
-function themes_metablock_modify($blockinfo)
-{
-    // Get current content
-    $vars = @unserialize($blockinfo['content']);
+ * Updates the Block config from the Blocks Admin
+ * @param $data array containing title,content
+ */
+    public function update(Array $data=array())
+    {
+        $data = parent::update($data);
 
-    // Defaults
-    if (empty($vars['metakeywords'])) {
-        $vars['metakeywords'] = '';
-    }
-    // Defaults
-    if (empty($vars['metadescription'])) {
-        $vars['metadescription'] = '';
-    }
-    // Defaults
-    if (empty($vars['usegeo'])) {
-        $vars['usegeo'] = '';
-    }
-    // Defaults
-    if (empty($vars['usedk'])) {
-        $vars['usedk'] = '';
-    }
-    // Defaults
-    if (empty($vars['longitude'])) {
-        $vars['longitude'] = '';
-    }
-    // Defaults
-    if (empty($vars['latitude'])) {
-        $vars['latitude'] = '';
-    }
-    // Defaults
-    if (empty($vars['copyrightpage'])) {
-        $vars['copyrightpage'] = '';
-    }
-    // Defaults
-    if (empty($vars['helppage'])) {
-        $vars['helppage'] = '';
-    }
-    // Defaults
-    if (empty($vars['glossary'])) {
-        $vars['glossary'] = '';
+        // FIXME: use better validation on these parameters.
+        $vars = array();
+        if (!xarVarFetch('metakeywords',    'notempty', $vars['metakeywords'],    $this->metakeywords, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('metadescription', 'notempty', $vars['metadescription'], $this->metadescription, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('usegeo',          'int:0:1',  $vars['usegeo'],          $this->usegeo,  XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('longitude',       'notempty', $vars['longitude'],       $this->longitude, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('latitude',        'notempty', $vars['latitude'],        $this->latitude, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('usedk',           'notempty', $vars['usedk'],           $this->usedk, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('copyrightpage',   'notempty', $vars['copyrightpage'],   $this->copyrightpage, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('helppage',        'notempty', $vars['helppage'],        $this->helppage, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('glossary',        'notempty', $vars['glossary'],        $this->glossary, XARVAR_NOT_REQUIRED)) return;
+
+        // Merge the submitted block info content into the existing block info.
+        $data['content'] = $vars; //array_merge($blockinfo['content'], $vars);
+
+        return $data;
     }
 
-    $vars['blockid'] = $blockinfo['bid'];
-    $content = xarTplBlock('themes', 'metaAdmin', $vars);
-
-    return $content;
 }
-
-/**
- * update block settings
- *
- * @author  John Cox
- * @access  public
- * @param   $blockinfo
- * @return  $blockinfo data array
- * @throws  no exceptions
- * @todo    nothing
-*/
-function themes_metablock_update($blockinfo)
-{
-    // TODO: remove this once all blocks can accept content arrays.
-    if (!is_array($blockinfo['content'])) {
-        $blockinfo['content'] = unserialize($blockinfo['content']);
-    }
-
-    // FIXME: use better validation on these parameters.
-    $vars = array();
-    if (!xarVarFetch('metakeywords',    'notempty', $vars['metakeywords'],    '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('metadescription', 'notempty', $vars['metadescription'], '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('usegeo',          'int:0:1',  $vars['usegeo'],          0,  XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('longitude',       'notempty', $vars['longitude'],       '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('latitude',        'notempty', $vars['latitude'],        '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('usedk',           'notempty', $vars['usedk'],           '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('copyrightpage',   'notempty', $vars['copyrightpage'],   '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('helppage',        'notempty', $vars['helppage'],        '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('glossary',        'notempty', $vars['glossary'],        '', XARVAR_NOT_REQUIRED)) return;
-
-    // Merge the submitted block info content into the existing block info.
-    $blockinfo['content'] = $vars; //array_merge($blockinfo['content'], $vars);
-
-    return $blockinfo;
-}
-
 ?>
