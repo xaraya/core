@@ -593,9 +593,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         if ($allow_read) {
             $tplmodule = file_exists('modules/' . $args['tplmodule'] . '/xar_' . $linktype . '/' . $linkfunc . '.php') ? $args['tplmodule'] : 'dynamicdata';
-            $options['view'] = array('otitle' => xarML('Display'),
-                                 'olink'  => xarModURL($tplmodule,$linktype,$linkfunc,$urlargs),
-                                 'ojoin'  => '');
+// CHECKME: who was using 'view' instead of 'display' for links directly in templates (besides DD itself) ?
+            $options['display'] = array('otitle' => xarML('Display'),
+                                        'olink'  => xarModURL($tplmodule,$linktype,$linkfunc,$urlargs),
+                                        'ojoin'  => '');
             if ($this->itemtype == 0) {
                 $options['viewitems'] = array('otitle' => xarML('Items'),
                                               'olink'  => xarModURL('dynamicdata','admin','view',
