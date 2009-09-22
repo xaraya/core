@@ -65,7 +65,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <xar:set name="search">Search</xar:set>
+                                        <xar:set name="search">'Search'</xar:set>
                                         <input type="submit" value="#$search#" />
                                     </td>
                                 </tr>

@@ -13,14 +13,26 @@
                 Use a field prefix for all input fields of the object, so that
                 you can have several identical objects in the same input form
             -->
-                <xar:set name="i">0</xar:set>
-                <xar:foreach in="$object" value="$item">
-                    <xar:set name="i">$i+1</xar:set>
-                    <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
-                    <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix"
-                    fieldlist="$fieldlist" />
-                </xar:foreach>
-                <xar:else />
+                <xar:if condition="is_array($object)">
+                    <xar:set name="i">0</xar:set>
+                    <xar:foreach in="$object" key="$key" value="$item">
+                        <xar:set name="i">$i+1</xar:set>
+                        <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
+                        <xar:if condition="!empty($key) and !is_numeric($key)">
+                            <xar:if condition="!empty($editkeys)">
+                                <input type="text" name="Key_#$i#_#$fieldprefix#" value="#$key#" size="10" />
+                            <xar:else/>
+                                #$key#:<input type="hidden" name="Key_#$i#_#$fieldprefix#" value="#$key#" />
+                            </xar:if>
+                        </xar:if>
+                        <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
+                    </xar:foreach>
+                <xar:elseif condition="is_object($object)"/>
+                    <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" fieldlist="$fieldlist" />
+                <xar:else/>
+                    <xar:var name="object" prep="true"/>
+                </xar:if>
+            <xar:else />
                 <!--
             Use a field prefix for all input fields of the object, so that
             you can have several identical objects in the same input form

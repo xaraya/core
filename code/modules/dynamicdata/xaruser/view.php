@@ -64,6 +64,8 @@ function dynamicdata_user_view($args)
     // TODO: another stray
     $data['catid'] = $catid;
 
+    xarTplSetPageTitle(xarML('View #(1)', $object->label));
+
     if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view.xt') ||
         file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view-' . $data['template'] . '.xt')) {
         return xarTplModule($data['tplmodule'],'user','view',$data,$data['template']);

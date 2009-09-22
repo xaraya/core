@@ -82,6 +82,8 @@ function dynamicdata_admin_delete($args)
         }
         $data['authid'] = xarSecGenAuthKey();
 
+        xarTplSetPageTitle(xarML('Delete Item #(1) in #(2)', $data['itemid'], $myobject->label));
+
         if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-delete.xt') ||
             file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-delete-' . $data['template'] . '.xt')) {
             return xarTplModule($data['tplmodule'],'admin','delete',$data,$data['template']);

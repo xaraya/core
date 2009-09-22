@@ -216,6 +216,14 @@ class DataPropertyMaster extends Object
         }
         // Add the alias information to the class
         $args['args'] = $propertyInfo['args'];
+/*
+        // Add default configuration to the class (if any)
+// CHECKME: we need to switch the xar_dynamic_properties_def.configuration field to TEXT in
+//          the database if we want to use this someday - otherwise it might be truncated !
+        if (!empty($propertyInfo['configuration'])) {
+            $args['configuration'] = $propertyInfo['configuration'];
+        }
+*/
         // DataProperty or the determined one
         $descriptor = new ObjectDescriptor($args);
         $property = new $clazz($descriptor);

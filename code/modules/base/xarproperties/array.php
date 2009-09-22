@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -28,11 +28,18 @@ class ArrayProperty extends DataProperty
     //default value of Key label
     public $display_key_label = "Key";
     //default value of value label
-    public $display_value_label = "Label";
+    public $display_value_label = "Value";
     //to store the value as associative array
     public $initialization_associative_array = 0;
     //suffix for the Add/Remove Button
-    public $default_suffixlabel = "Row";       
+    public $default_suffixlabel = "Row";
+    //property type and config for the array values
+    public $initialization_prop_type = 'textbox';
+// TODO: the config is displayed/stored as serialized text for now, to
+//       avoid nested configs (e.g. see the objects 'config' property)
+    public $initialization_prop_config = '';
+    //allow editing keys on input
+    public $initialization_fixed_keys = 0;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -54,21 +61,42 @@ class ArrayProperty extends DataProperty
             
             //Psspl: Added code for getting value of associative_array.
             if (!xarVarFetch($name . '_associative_array',   'int', $associative_array, null, XARVAR_NOT_REQUIRED)) return;
-            //Psspl : Set value to the initialization_associative_array  
+            //Psspl : Set value to the initialization_associative_array
             $this->initialization_associative_array = $associative_array;
-            
-            $hasvalues = false;
-            while (count($keys)) {
-                try {
-                    $thiskey = array_shift($keys);
-                    $thisvalue = array_shift($values);
-                    if (empty($thiskey) && empty($thisvalue)) continue;
-                    if ($this->initialization_associative_array && empty($thiskey)) continue;
-                    $value[$thiskey] = $thisvalue;
-                    $hasvalues = true;
-                } catch (Exception $e) {}
+
+            // check if we have a specific property for the values
+            if (!xarVarFetch($name . '_has_property', 'isset', $has_property, null, XARVAR_NOT_REQUIRED)) return;
+            if (!empty($has_property)) {
+                // Note: this relies on the initialized configuration
+                $property = $this->getValueProperty();
             }
-            if (!$hasvalues) $value = array();
+
+            if (!empty($property)) {
+                $value = array();
+                foreach ($keys as $idx => $key) {
+                    if (empty($key)) continue;
+                    $fieldname = $name . '_value_' . $idx;
+                    $isvalid = $property->checkInput($fieldname);
+                    if ($isvalid) {
+                        $value[$key] = $property->getValue();
+                    } else {
+                        $this->invalid .= $key . ': ' . $property->invalid;
+                    }
+                }
+            } else {
+                $hasvalues = false;
+                while (count($keys)) {
+                    try {
+                        $thiskey = array_shift($keys);
+                        $thisvalue = array_shift($values);
+                        if (empty($thiskey) && empty($thisvalue)) continue;
+                        if ($this->initialization_associative_array && empty($thiskey)) continue;
+                        $value[$thiskey] = $thisvalue;
+                        $hasvalues = true;
+                    } catch (Exception $e) {}
+                }
+                if (!$hasvalues) $value = array();
+            }
         }
         return $this->validateValue($value);;
     }
@@ -92,14 +120,14 @@ class ArrayProperty extends DataProperty
         } else {
             if (empty($value)) $value = array();
             //this code is added to store the values as value1,value2 in the DB for non-associative storage
-        	if(!$this->initialization_associative_array) {
-            	$elements = "";
+            if(!$this->initialization_associative_array) {
+                $elements = "";
                 foreach ($value as $element) {
                     $elements .= $element.";";
                 }
                 $this->value = $elements;
             } else {
-            	$this->value = serialize($value);
+                $this->value = serialize($value);
             }
         }
     }
@@ -107,11 +135,11 @@ class ArrayProperty extends DataProperty
     public function getValue()
     {
         try {
-        	if(!$this->initialization_associative_array) {
-        		$value = $this->value;
-        	} else {
-        		$value = unserialize($this->value);
-        	}            
+            if(!$this->initialization_associative_array) {
+                $value = $this->value;
+            } else {
+                $value = unserialize($this->value);
+            }
         } catch(Exception $e) {
             $value = null;
         }
@@ -123,7 +151,7 @@ class ArrayProperty extends DataProperty
         if (!isset($data['value'])) $value = $this->value;
         else $value = $data['value'];
         
-        if (!isset($data['suffixlabel'])) $data['suffixlabel'] = $this->default_suffixlabel;                
+        if (!isset($data['suffixlabel'])) $data['suffixlabel'] = $this->default_suffixlabel;
         if (!is_array($value)) {
             try {
                 $value = unserialize($value);
@@ -147,7 +175,7 @@ class ArrayProperty extends DataProperty
                         $element = trim(strtr($element,array('\,' => ',')));
                         array_push($elements, $element);
                     }
-                }        
+                }
                 $value = $elements;
             }
         }
@@ -160,15 +188,24 @@ class ArrayProperty extends DataProperty
             $fieldlist = array_keys($value);
         }
 
+        // check if we have a specific property for the values
+        if (!isset($data['valuetype'])) $data['valuetype'] = $this->initialization_prop_type;
+        if (!isset($data['valueconfig'])) $data['valueconfig'] = $this->initialization_prop_config;
+        $data['property'] = $this->getValueProperty($data['valuetype'], $data['valueconfig']);
+
+        // use a different default template when dealing with properties
+        if (empty($data['template']) && !empty($data['property'])) {
+            $data['template'] = 'array_of_props';
+        }
+
         $data['value'] = array();
         foreach ($fieldlist as $field) {
             if (!isset($value[$field])) {
                 $data['value'][$field] = '';
             } else {
-                $data['value'][$field] = xarVarPrepForDisplay($value[$field]);
+                $data['value'][$field] = $value[$field];
             }
         }
-
         if (!isset($data['rows'])) $data['rows'] = $this->display_rows;
         if (!isset($data['size'])) $data['size'] = $this->display_columns;
         
@@ -177,23 +214,24 @@ class ArrayProperty extends DataProperty
         if (!isset($data['valuelabel'])) $data['valuelabel'] = $this->display_value_label;
         if (!isset($data['allowinput'])) $data['allowinput'] = $this->initialization_rows;
         if (!isset($data['associative_array'])) $data['associative_array'] = $this->initialization_associative_array;
-		$data['numberofrows'] = count($data['value']);
+        if (!isset($data['fixedkeys'])) $data['fixedkeys'] = $this->initialization_fixed_keys;
+        $data['numberofrows'] = count($data['value']);
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
         $value = isset($data['value']) ? $data['value'] : $this->getValue();
-		$data['associative_array'] = !empty($associative_array) ? $associative_array : $this->initialization_associative_array;		
+        $data['associative_array'] = !empty($associative_array) ? $associative_array : $this->initialization_associative_array;
         if (!is_array($value)) {
-        	//this is added to show the value with new line when storage is non-associative        	        	
-        	if(!$this->initialization_associative_array) {        		
+            //this is added to show the value with new line when storage is non-associative
+            if(!$this->initialization_associative_array) {
                 $data['value'] = explode(';',$value);
-	            // remove the last (empty) element
+                // remove the last (empty) element
                  array_pop($data['value']);
-        	} else {
-        		 $data['value'] = $value;
-        	}        	
+            } else {
+                 $data['value'] = $value;
+            }
         } else {
             if (empty($value)) $value = array();
 
@@ -208,11 +246,47 @@ class ArrayProperty extends DataProperty
                 if (!isset($value[$field])) {
                     $data['value'][$field] = '';
                 } else {
-                    $data['value'][$field] = xarVarPrepForDisplay($value[$field]);
+                    $data['value'][$field] = $value[$field];
                 }
             }
         }
+
+        // check if we have a specific property for the values
+        if (!isset($data['valuetype'])) $data['valuetype'] = $this->initialization_prop_type;
+        if (!isset($data['valueconfig'])) $data['valueconfig'] = $this->initialization_prop_config;
+        $data['property'] = $this->getValueProperty($data['valuetype'], $data['valueconfig']);
+
+        // use a different default template when dealing with properties
+        if (empty($data['template']) && !empty($data['property'])) {
+            $data['template'] = 'array_of_props';
+        }
+
         return parent::showOutput($data);
+    }
+
+    function &getValueProperty($valuetype = '', $valueconfig = '')
+    {
+        if (empty($valuetype)) {
+            $valuetype = $this->initialization_prop_type;
+        } else {
+            $this->initialization_prop_type = $valuetype;
+        }
+        if (empty($valueconfig)) {
+            $valueconfig = $this->initialization_prop_config;
+        } else {
+            $this->initialization_prop_config = $valueconfig;
+        }
+        if (empty($this->initialization_prop_type)) {
+            $property = null;
+        } elseif ($this->initialization_prop_type == 'textbox' && empty($this->initialization_prop_config)) {
+            $property = null;
+        } else {
+            $property = DataPropertyMaster::getProperty(array('type' => $this->initialization_prop_type));
+            if (!empty($this->initialization_prop_config)) {
+                $property->parseConfiguration($this->initialization_prop_config);
+            }
+        }
+        return $property;
     }
 }
 ?>

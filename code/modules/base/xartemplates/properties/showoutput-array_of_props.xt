@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="!empty($value)">
+        <xar:if condition="is_array($value)">
+        <div class="xar-form-container-after">
+            <xar:foreach in="$value" key="$key" value="$val">
+                <div class="xar-form-input-wrapper" >
+                <xar:if condition = "$associative_array eq 1">
+                    <label for="#$key#_value" title="" style="">#$key#:</label>&#160;
+                </xar:if>
+                <xar:if condition="empty($property)">
+                    <xar:var name="val" prep="true"/>
+                <xar:else/>
+                    <xar:data-output property="$property" value="$val" />
+                </xar:if>
+                </div>
+            </xar:foreach>
+        </div>
+        <xar:else/>
+            <xar:var name="value" prep="true"/>
+        </xar:if>
+    </xar:if>
+</xar:template>

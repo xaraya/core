@@ -106,11 +106,42 @@ class xarBLCompiler extends Object implements IxarBLCompiler
     /**
      * Private methods
      */
-    private function compile(&$templateSource)
+    private function boot()
     {
         sys::import('blocklayout.xsltransformer');
         $xslFile = sys::lib() . 'blocklayout/xslt/xar2php.xsl';
         $xslProc = new BlockLayoutXSLTProcessor($xslFile);
+        $xmlFile = sys::root() . '/lib/blocklayout/xslt/xar2php.xsl';
+        $doc = new DOMDocument;
+        $doc->load($xmlFile);
+
+        // Pass the default tags
+        $baseDir = sys::root() . '/lib/blocklayout/xslt/defaults';
+        $xslFiles = $this->getXSLFilesString($baseDir, 'defaults');
+        $xslProc->setParameter('', 'defaults', $xslFiles);
+
+        // Pass the Blocklayout tags
+        $baseDir = sys::root() . '/lib/blocklayout/xslt/tags/bl';
+        $xslFiles = $this->getXSLFilesString($baseDir, 'tags/bl');
+        $xslProc->setParameter('', 'bltags', $xslFiles);
+        
+        // Pass the Xaraya tags
+        $baseDir = sys::root() . '/lib/blocklayout/xslt/tags/xaraya';
+        $xslFiles = $this->getXSLFilesString($baseDir, 'tags/xaraya');
+        $xslProc->setParameter('', 'xarayatags', $xslFiles);
+        
+        // Compile the compiler
+        $outDoc = $xslProc->transformToXML($doc);
+        return $outDoc;
+    }
+
+    private function compile(&$templateSource)
+    {
+        sys::import('blocklayout.xsltransformer');
+        $xslProc = new BlockLayoutXSLTProcessor();
+        $xslDoc = new DOMDocument;
+        $xslDoc->loadXML($this->boot());
+        $xslProc->importStyleSheet($xslDoc);
 
         // This is confusing, dont do this here.
         $xslProc->xmlFile = $this->lastFile;
@@ -118,6 +149,19 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         // This generates php code, the documentree is not visible here anymore
         $outDoc = $xslProc->transform($templateSource);
         return $outDoc;
+    }
+
+    private function getXSLFilesString($filepath, $prefix)
+    {
+        $files = array();
+        foreach (new DirectoryIterator($filepath) as $fileInfo) {
+            if($fileInfo->isDot()) continue;
+            $pathinfo = pathinfo($fileInfo->getPathName());
+            if(isset($pathinfo['extension']) && $pathinfo['extension'] != 'xsl') continue;
+            $files[] = $prefix . "/" . $fileInfo->getFileName();
+        }
+        $filesstring =  implode(',',$files);
+        return $filesstring;
     }
 }
 

@@ -245,7 +245,7 @@ function authsystem_user_login()
 
             $externalurl=false; //used as a flag for userhome external url
             if ((bool)xarModVars::get('roles', 'loginredirect')) { //only redirect to home page if this option is set
-                $settings = unserialize(xarModVars::get('roles', 'duvsettings'));
+                $settings = explode(',',xarModVars::get('roles', 'duvsettings'));
                 if (in_array('userhome', $settings)) {
                     $truecurrenturl = xarServer::getCurrentURL(array(), false);
                     $url = xarModAPIFunc('roles','user','getuserhome',array('itemid' => $user['id']));

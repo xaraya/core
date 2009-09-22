@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -22,6 +22,7 @@ class SelectProperty extends DataProperty
     public $reqmodules = array('base');
 
     public $options;
+    public $old_config = array();
     public $itemfunc;   // CHECKME: how is this best implemented?
 
     public $initialization_firstline        = null;
@@ -206,6 +207,12 @@ class SelectProperty extends DataProperty
             unset($items);
         }
 
+        /* Sample optimization when dealing with heavy getOptions() functions
+        // Save options only when we're dealing with an object list
+        if (!empty($this->_items)) {
+            $this->options = $options;
+        }
+        */
         return $options;
     }
 
@@ -277,6 +284,47 @@ class SelectProperty extends DataProperty
         if ($check) return false;
         return $this->value;
         */
+    }
+
+// CHECKME: should we move this to properties/base.php, in case other "basic" property types want this ?
+
+    /**
+     * Check if the configuration is the same as last time, e.g. to return saved options in getOptions()
+     * when we're dealing with an object list.
+     *
+     * Note: we typically only care about initialization here, since validation and display
+     * configurations don't (or shouldn't) impact the result of the getOptions() function...
+     *
+     * @param $type string the type of configuration you want to check (typically only initialization)
+     * @return bool true if the configuration is the same as last time we checked, false otherwise
+     */
+    function isSameConfiguration($type = 'initialization')
+    {
+        if (empty($this->old_config)) {
+            $this->old_config = array();
+            // save the current configuration properties in the old_config
+            $properties = $this->getPublicProperties();
+            foreach ($this->configurationtypes as $configtype) {
+                $this->old_config[$configtype] = array();
+                $match = '/^' . $configtype . '_/';
+                foreach ($properties as $key => $value) {
+                    if (preg_match($match, $key)) {
+                        $this->old_config[$configtype][$key] = $value;
+                    }
+                }
+            }
+            return false;
+        }
+        // compare the current initialization properties with the old_config
+        $same = true;
+        foreach (array_keys($this->old_config[$type]) as $key) {
+            if ($this->$key != $this->old_config[$type][$key]) {
+                $this->old_config[$type][$key] = $this->$key;
+                $same = false;
+            }
+        }
+        //echo "$type $same";
+        return $same;
     }
 }
 

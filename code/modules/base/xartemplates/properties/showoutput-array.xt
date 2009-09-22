@@ -5,12 +5,12 @@
         <xar:if condition="is_array($value)">
             <xar:if condition = "$associative_array eq 1">
                 <xar:foreach in="$value" key="$key" value="$val">
-                    #$key#,&#160;#$val#
+                    #$key#,&#160;<xar:var name="val" prep="true"/>
                     <br/>
                 </xar:foreach>
             <xar:else/>
                 <xar:foreach in="$value" key="$key" value="$val">
-                    #$val#
+                    <xar:var name="val" prep="true"/>
                     <br/>
                 </xar:foreach>
             </xar:if>

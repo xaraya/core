@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -56,6 +56,10 @@ class ObjectRefProperty extends SelectProperty
     // Return a list of array(id => value) for the possible options
     function getOptions()
     {
+        // Check configuration and return saved options (e.g. when we're dealing with an object list)
+        if (!empty($this->_items) && $this->isSameConfiguration() && !empty($this->options)) {
+            return $this->options;
+        }
         $options = $this->getFirstline();
         // The object we need to query is in $this->initialization_refobject, we display the value of
         // the property in $this->display_prop and the id comes from $this->store_prop
@@ -107,6 +111,11 @@ class ObjectRefProperty extends SelectProperty
             
         foreach($items as $item) {
             $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
+        }
+
+        // Save options only when we're dealing with an object list
+        if (!empty($this->_items)) {
+            $this->options = $options;
         }
         return $options;
     }
