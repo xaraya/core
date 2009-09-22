@@ -25,6 +25,9 @@ class DataObject extends DataObjectMaster implements iDataObject
     public $itemid         = 0;
     public $missingfields  = array();      // reference to fields not found by checkInput
 
+// CHECKME: should exclude VIEWONLY here, as well as DISABLED (and IGNORED ?)
+//    public $status      = 65;           // inital status is active and can add/modify
+
     /**
      * Inherits from DataObjectMaster and sets the requested item id
      *

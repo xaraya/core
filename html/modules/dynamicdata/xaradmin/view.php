@@ -15,10 +15,8 @@
  */
 function dynamicdata_admin_view($args)
 {
-    extract($args);
-
     if(!xarVarFetch('itemid',   'int',   $itemid,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('name',     'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('startnum', 'int',   $startnum,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('numitems', 'int',   $numitems,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('sort',     'isset', $sort,      NULL, XARVAR_DONT_SET)) {return;}
@@ -29,11 +27,29 @@ function dynamicdata_admin_view($args)
     if(!xarVarFetch('tplmodule','isset', $tplmodule, 'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
 
-    $object = xarModAPIFunc('dynamicdata','user','getobjectlist',
+    // Override if needed from argument array
+    extract($args);
+
+    if(!xarSecurityCheck('EditDynamicData')) return;
+
+/* CHECKME: do we want default pagination in admin view too ?
+    // Default number of items per page in user view
+    if (empty($numitems)) {
+        $numitems = xarModVars::get('dynamicdata', 'items_per_page');
+    }
+*/
+
+    // Note: we need to pass all relevant arguments ourselves here
+    $object = DataObjectMaster::getObjectList(
                             array('objectid'  => $itemid,
-                                  'name'       => $name,
+                                  'name'      => $name,
+                                  'startnum'  => $startnum,
+                                  'numitems'  => $numitems,
+                                  'sort'      => $sort,
                                   'join'      => $join,
                                   'table'     => $table,
+                                  'catid'     => $catid,
+                                  'layout'    => $layout,
                                   'tplmodule' => $tplmodule,
                                   'template'  => $template,
                                   ));
@@ -41,22 +57,19 @@ function dynamicdata_admin_view($args)
     if (!isset($object)) {
         return;
     }
-    // CHECKME: is this line needed?
+    // Pass back the relevant variables to the template if necessary
     $data = $object->toArray();
 
+    // Get the selected items using the preset arguments
     $object->getItems();
+
+    // Pass the object list to the template
     $data['object'] = $object;
+
     // TODO: another stray
     $data['catid'] = $catid;
     // TODO: is this needed?
     $data = array_merge($data,xarModAPIFunc('dynamicdata','admin','menu'));
-
-    if(!xarSecurityCheck('EditDynamicData')) return;
-
-    if ($data['objectid'] == 1 && empty($table)) {
-        $objects = xarModAPIFunc('dynamicdata','user','getobjects');
-        xarLogMessage('AFTER getobjects');
-    }
 
     if (xarSecurityCheck('AdminDynamicData',0)) {
         if (!empty($data['table'])) {

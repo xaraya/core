@@ -120,6 +120,7 @@ class DataObjectMaster extends Object
     public $fieldlist   = array();      // array of properties to be displayed
     public $fieldorder  = array();      // displayorder for the properties
     public $fieldprefix = '';           // prefix to use in field names etc.
+// CHECKME: should be overridden by DataObjectList and DataObject to exclude DISPLAYONLY resp. VIEWONLY !?
     public $status      = 65;           // inital status is active and can add/modify
     public $anonymous   = 0;            // if true forces display of names of properties instead of dd_xx designations
 
@@ -305,6 +306,7 @@ class DataObjectMaster extends Object
             return $this->datastores;
         }
 
+// CHECKME: we have a default status that is not empty status now !
         // if we're filtering on property status and there are no properties matching this status
         if (!$reset && !empty($this->status) && count($this->fieldlist) == 0) {
             return $this->datastores;
@@ -344,6 +346,7 @@ class DataObjectMaster extends Object
                 !empty($this->fieldlist) and          // if there is a fieldlist
                 !in_array($name,$this->fieldlist) and // but the field is not in it,
                 $property->type != 21 or                // and we're not on an Item ID property
+// CHECKME: filter based on the default status list for DataObjectList or DataObject ?
                 ($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)  // or the property is disabled
             )
             {

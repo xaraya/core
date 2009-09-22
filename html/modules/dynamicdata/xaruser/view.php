@@ -18,11 +18,18 @@
  */
 function dynamicdata_user_view($args)
 {
+    // Old-style arguments
     if(!xarVarFetch('objectid', 'int',   $objectid,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id',    'int',   $module_id,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id','int',   $module_id, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('moduleid', 'int',   $moduleid,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'int',   $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
+    // New-style arguments
+    if(!xarVarFetch('itemid',   'int',   $itemid,    NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
+
     if(!xarVarFetch('startnum', 'int',   $startnum,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('numitems', 'int',   $numitems,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('sort',     'isset', $sort,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('catid',    'isset', $catid,     NULL, XARVAR_DONT_SET)) {return;}
@@ -38,6 +45,13 @@ function dynamicdata_user_view($args)
         if(!xarSecurityCheck('AdminDynamicData')) return;
     }
 
+    // Support old-style arguments
+    if (empty($itemid) && !empty($objectid)) {
+        $itemid = $objectid;
+    }
+    if (empty($module_id) && !empty($moduleid)) {
+        $module_id = $moduleid;
+    }
     if (empty($module_id)) {
         $module_id = xarMod::getRegID('dynamicdata');
     }
@@ -45,17 +59,38 @@ function dynamicdata_user_view($args)
         $itemtype = 0;
     }
 
+    // Default number of items per page in user view
+    if (empty($numitems)) {
+        $numitems = xarModVars::get('dynamicdata', 'items_per_page');
+    }
+
+    // Note: we need to pass all relevant arguments ourselves here
     $object = DataObjectMaster::getObjectList(
-                            array('objectid'  => $objectid,
+                            array('objectid'  => $itemid,
                                   'moduleid'  => $module_id,
                                   'itemtype'  => $itemtype,
+                                  'name'      => $name,
+                                  'startnum'  => $startnum,
+                                  'numitems'  => $numitems,
+                                  'sort'      => $sort,
                                   'join'      => $join,
                                   'table'     => $table,
+                                  'catid'     => $catid,
+                                  'layout'    => $layout,
                                   'tplmodule' => $tplmodule,
                                   'template'  => $template,
                                   ));
+
+    // Pass back the relevant variables to the template if necessary
     $data = $object->toArray();
-    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$module_id:$itemtype:All")) return;
+
+    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$data[moduleid]:$data[itemtype]:All")) return;
+
+    // Get the selected items using the preset arguments
+    $object->getItems();
+
+    // Pass the object list to the template
+    $data['object'] = $object;
 
     // TODO: is this needed?
     $data = array_merge($data,xarModAPIFunc('dynamicdata','admin','menu'));

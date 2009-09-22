@@ -30,6 +30,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     // optional display function for use in xarModURL() (defaults to 'display')
     public $linkfunc = 'display';
 
+// CHECKME: should exclude DISPLAYONLY here, as well as DISABLED (and IGNORED ?)
+//    public $status      = 65;           // inital status is active and can add/modify
+
     /**
      * Inherits from DataObjectMaster and sets the requested item ids, sort, where, ...
      *
@@ -85,6 +88,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         if (!is_array($this->groupby)) $this->groupby = explode(',',$this->groupby);
 
+// CHECKME: this should filter the fieldlist based on the status as well - cfr. master.php
         // If a fieldlist was passed, only get the appropriate datastores
         if (isset($args['fieldlist'])) $this->getDataStores(true);
         
@@ -346,6 +350,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
 
+// CHECKME: this should filter the fieldlist based on the status as well - cfr. master.php
+        //echo var_dump($this->fieldlist);
+
         if(empty($args['numitems'])) {
             $args['numitems'] = $this->numitems;
         }
@@ -409,9 +416,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function showView(Array $args = array())
     {
-        $this->getItems($args); 
-
         $args = $this->toArray($args);
+
+        // Note: we do NOT retrieve the items again here
+        //$this->getItems($args);
 
         if(!empty($this->status)) {
             $state = $this->status;
@@ -556,7 +564,34 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         $options = array();
 
-        if (xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+        $is_user = 1;
+/*
+// CHECKME: further optimise for anonymous access by assuming they can't delete (or edit) ?
+        if (xarUserIsLoggedIn()) {
+            $is_user = 1;
+        } else {
+            $is_user = 0;
+        }
+*/
+
+        // Assume normal rules for access control, i.e. Delete > Edit > Read
+        if ($is_user && xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid))  {
+            $allow_delete = 1;
+            $allow_edit = 1;
+            $allow_read = 1;
+        } elseif ($is_user && xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+            $allow_delete = 0;
+            $allow_edit = 1;
+            $allow_read = 1;
+        } elseif (xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+            $allow_delete = 0;
+            $allow_edit = 0;
+            $allow_read = 1;
+        } else {
+            return $options;
+        }
+
+        if ($allow_read) {
             $tplmodule = file_exists('modules/' . $args['tplmodule'] . '/xar_' . $linktype . '/' . $linkfunc . '.php') ? $args['tplmodule'] : 'dynamicdata';
             $options['view'] = array('otitle' => xarML('Display'),
                                  'olink'  => xarModURL($tplmodule,$linktype,$linkfunc,$urlargs),
@@ -569,7 +604,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                                              );
             }
         }
-        if (xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+        if ($allow_edit) {
             $tplmodule = file_exists('modules/' . $args['tplmodule'] . '/xaradmin/modify.php') ? $args['tplmodule'] : 'dynamicdata';
             $options['modify'] = array('otitle' => xarML('Edit'),
                                     'olink'  => xarModURL($tplmodule,'admin','modify', $urlargs),
@@ -581,7 +616,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                                      'ojoin'  => '|');
             }
         }
-        if (xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid))  {
+        if ($allow_delete)  {
             if($this->objectid == 1){
                 $tplmodule = file_exists('modules/' . $args['tplmodule'] . '/xaradmin/modifyprop.php') ? $args['tplmodule'] : 'dynamicdata';
                 $options['modifyprops'] = array('otitle' => xarML('Properties'),
@@ -600,6 +635,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                                                $urlargs),
                                    'ojoin'  => '|');
         }
+
         return $options;
     }
 

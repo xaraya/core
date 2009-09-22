@@ -39,6 +39,9 @@ function dynamicdata_userapi_showview($args)
     // TODO: what kind of security checks do we want/need here ?
     if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$args ['moduleid']:$args ['itemtype']:All")) return;
 
+// Note: fetching input variables doesn't normally belong in APIs, but this is
+//       used by the xar:data-view tag when no object or items are specified !
+
     if (!isset($itemids)) {
         if (!xarVarFetch('itemids', 'isset', $itemids,  NULL, XARVAR_DONT_SET)) {return;}
     }
@@ -102,6 +105,8 @@ function dynamicdata_userapi_showview($args)
     if($args['count']) {
         $numthings = $object->countItems();
     }
+
+    // Get the selected items
     $object->getItems();
 
     // label to use for the display link (if you don't use linkfield)
