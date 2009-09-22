@@ -63,6 +63,7 @@ function dynamicdata_user_search($args)
         $numitems = 20;
     }
 
+    $label = xarML('Dynamic Data');
     if (empty($data['ishooked']) && !empty($data['gotobject'])) {
         // get the selected object
         $objects = array();
@@ -71,10 +72,15 @@ function dynamicdata_user_search($args)
                                       'itemtype' => $itemtype));
         if (!empty($object)) {
             $objects[$object['objectid']] = $object;
+            $label = $object['label'];
         }
     } else {
         // get items from the objects table
         $objects = xarModAPIFunc('dynamicdata','user','getobjects');
+    }
+
+    if (empty($data['ishooked'])) {
+        xarTplSetPageTitle(xarML('Search #(1)', $label));
     }
 
     $data['items'] = array();

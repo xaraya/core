@@ -238,7 +238,7 @@ function xarUserGetNavigationThemeName()
 {
     $themeName = xarTplGetThemeName();
 
-    if (xarUserIsLoggedIn()){
+    if (xarUserIsLoggedIn() && (bool)xarModVars::get('themes', 'enable_user_menu')){
         $id = xarUserGetVar('id');
         $userThemeName = xarModUserVars::get('themes', 'default', $id);
         if ($userThemeName) $themeName=$userThemeName;

@@ -122,8 +122,15 @@ function dynamicdata_utilapi_getstatic($args)
                     $configuration = "0:$size";
                 }
                 break;
-            case 'smallint':
             case 'tinyint':
+                if (!empty($size) && $size == 1) {
+                    $proptype = $proptypeid['checkbox']; // Checkbox
+                    $configuration = '';
+                } else {
+                    $proptype = $proptypeid['integerbox']; // Number Box
+                }
+                break;
+            case 'smallint':
             case 'bigint':
             case 'integer':
             case 'year':
@@ -159,6 +166,7 @@ function dynamicdata_utilapi_getstatic($args)
                 break;
             case 'other':
             default:
+                // in case we have some leftover bit(1) columns instead of tinyint(1) for boolean in MySQL
                 if (!empty($size) && $size == 1) {
                     $proptype = $proptypeid['checkbox']; // Checkbox
                     $configuration = '';

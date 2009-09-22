@@ -88,6 +88,11 @@ class FilePickerProperty extends SelectProperty
             if(!empty($this->validation_matches) && (strpos($this->validation_matches,$name) === false)) continue;
             $options[] = array('id' => $id, 'name' => $name);
         }
+
+        // Save options only when we're dealing with an object list
+        if (!empty($this->_items)) {
+            $this->options = $options;
+        }
         return $options;
     }
 

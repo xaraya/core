@@ -13,7 +13,7 @@
                     <xar:set name="configuration">''</xar:set>
                 </xar:if>
                 <div class="xar-form-input-wrapper">
-                    <label for="#$fieldname#" title="#$init['description']#" class="xar-form-label">
+                    <label for="#$fieldid#" title="#$init['description']#" class="xar-form-label">
                         #$init['label']#
                     </label>
                     <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']" />
@@ -43,14 +43,14 @@
                         <xar:set name="configuration">''</xar:set>
                     </xar:if>
                     <div class="xar-form-input-wrapper">
-                        <label for="#$fieldname#" title="#$init['description']#" class="xar-form-label">
+                        <label for="#$fieldid#" title="#$init['description']#" class="xar-form-label">
                             #$init['label']#
                         </label>
                         <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']" />
                     </div>
                     <!-- #$key# -->
                     <div class="xar-form-input-wrapper">
-                        <label for="#$invalidname#" title="An optional error message for #$init['label']#" class="xar-form-label">
+                        <label for="#$invalidid#" title="An optional error message for #$init['label']#" class="xar-form-label">
                             #$init['label']#&#160;Message
                         </label>
                         <xar:data-input type="textarea" name="$invalidname" id="$invalidid" value="$invalidvalue" />
@@ -58,10 +58,11 @@
                 </xar:foreach>
             <xar:else />
                 <div class="xar-form-input-wrapper">
-                    <label for="#$fieldname#" title="#$init['description']#" class="xar-form-label">
+                    <label for="#$id#" title="#$init['description']#" class="xar-form-label">
                         #$init['label']#
                     </label>
-                    <xar:data-input type="textbox" name="" id="" value="$validation" />
+                    <!-- CHECKME: what name should we use here as fallback ? -->
+                    <xar:data-input type="textbox" name="" id="$id" value="$validation" />
                 </div>
             </xar:if>
         </fieldset>
@@ -78,7 +79,7 @@
                     <xar:set name="configuration">''</xar:set>
                 </xar:if>
                 <div class="xar-form-input-wrapper">
-                    <label for="#$fieldname#" title="#$init['description']#" class="xar-form-label">
+                    <label for="#$fieldid#" title="#$init['description']#" class="xar-form-label">
                         #$init['label']#
                     </label>
                     <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']" />

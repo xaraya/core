@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-form-container-after">
+    <!--div class="xar-form-container-after"-->
+    <fieldset>
         <xar:if condition="$allowinput eq 0">       
             <xar:if condition="is_array($value)">
                 <xar:set name="index">0</xar:set>
@@ -15,7 +16,7 @@
                                 <label for="#$id#_key_#$index#">#$keylabel#:</label>&#160;
                             </xar:if>
                             <xar:if condition="!empty($fixedkeys)">
-                                #$key#:<input type="hidden" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$key#" />
+                                #$key#<input type="hidden" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$key#" />
                             <xar:else/>
                                 <input class="xar-form-textmedium" type="text" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$key#" size="#$size#" />
                             </xar:if>
@@ -24,7 +25,10 @@
                         <xar:if condition="!empty($valuelabel)">
                             <label for="#$id#_value_#$index#">#$valuelabel#:</label>&#160;
                         </xar:if>
-                        <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#]" id="#$id#_value_#$index#" value="#$val#" size="#$size#" />
+                        <!-- we don't use an array here, because other property types may add their own suffix -->
+                        <xar:set name="propname">$name.'_value_'.$index</xar:set>
+                        <xar:set name="propid">$id.'_value_'.$index</xar:set>
+                        <xar:data-input property="$property" name="$propname" id="$propid" value="$val" size="$size" />
                     </div>
                     <xar:set name="index">$index+1</xar:set>
                 </xar:foreach>
@@ -43,7 +47,10 @@
                         <xar:if condition="!empty($valuelabel)">
                             <label for="#$id#_value_#$i#">#$valuelabel#:</label>&#160;
                         </xar:if>
-                        <input class="xar-form-textlong" type="text" name="#$name#_value[#$i#]" id="#$id#_value_#$i#" value="" size="#$size#" />
+                        <!-- we don't use an array here, because other property types may add their own suffix -->
+                        <xar:set name="propname">$name.'_value_'.$i</xar:set>
+                        <xar:set name="propid">$id.'_value_'.$i</xar:set>
+                        <xar:data-input property="$property" name="$propname" id="$propid" value="" size="$size" />
                     </div>
                 </xar:for>
             <xar:else />
@@ -67,15 +74,11 @@
                                 <xar:if condition="!empty($keylabel)">
                                     <label for="#$id#_key_#$index#">#$keylabel#:</label>&#160;
                                 </xar:if>
-                                <xar:if condition="!empty($fixedkeys)">
-                                    #$key#:<input type="hidden" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$key#" />
-                                <xar:else/>
-                                    <input class="xar-form-textmedium" type="text" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$key#" size="#$size#" />
-                                </xar:if>
+                                <input class="xar-form-textmedium" type="text" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$key#" size="#$size#" />
                             </xar:if>
                             &#160;
                             <xar:if condition="!empty($valuelabel)">
-                                <label for="#$id#_value_#$index#">#$valuelabel#:</label>&#160;
+                                <label for="#$id#_value_#$index#">#$valuelabel#:</label>&#160;                      
                             </xar:if>
                             <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#]" id="#$id#_value_#$index#" value="#$val#" size="#$size#" />
                             <xar:if condition = "$rows le $index AND $allowinput eq 2">
@@ -147,7 +150,11 @@
         </div>
         <!--PSspl:Added hidden field for associative array configuration value. -->
         <input type="hidden" name="#$name#_associative_array" id="#$name#_associative_array" value="#$associative_array#" />        
+<xar:if condition="!empty($property)">
+        <input type="hidden" name="#$name#_has_property" id="#$name#_has_property" value="1" />        
+</xar:if>
         <br class="xar-clearall" />
         <xar:template file="dataproperty_additions" module="base" />        
-    </div>
+    <!--/div-->
+    </fieldset>
 </xar:template>

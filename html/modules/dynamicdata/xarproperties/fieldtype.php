@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -23,13 +23,15 @@ class FieldTypeProperty extends ObjectRefProperty
     public $id         = 22;
     public $name       = 'fieldtype';
     public $desc       = 'Field Type';
+    public $initialization_store_prop   = 'id';
+    public $initialization_display_prop = 'label';
 
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
-        $this->initialization_store_prop   = 'id';
-        $this->initialization_display_prop = 'label';
+        // CHECKME: can we somehow get rid of $this->initialization_refobject here, or
+        //          switch back to SelectProperty and use initialization_store_type ?
     }
     function getOptions()
     {
@@ -48,6 +50,11 @@ class FieldTypeProperty extends ObjectRefProperty
         }
         // sort by name
         ksort($options);
+
+        // Save options only when we're dealing with an object list
+        if (!empty($this->_items)) {
+            $this->options = $options;
+        }
         return $options;
     }
 }

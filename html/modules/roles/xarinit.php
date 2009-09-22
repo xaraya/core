@@ -134,7 +134,7 @@ function roles_activate()
     xarModVars::set('roles', 'defaultregmodule', '');
     xarModVars::set('roles', 'rolesdisplay', 'tabbed');
     xarModVars::set('roles', 'locale', '');
-    xarModVars::set('roles', 'duvsettings', serialize(array()));
+    xarModVars::set('roles', 'duvsettings', '');
     xarModVars::set('roles', 'userhome', 'undefined');
     xarModVars::set('roles', 'userlastlogin', 0);
     xarModVars::set('roles', 'passwordupdate', 0);

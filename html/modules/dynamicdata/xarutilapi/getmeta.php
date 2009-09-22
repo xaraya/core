@@ -107,11 +107,7 @@ function dynamicdata_utilapi_getmeta($args)
                         $validation = "0:$size";
                     }
                     break;
-                case 'int':
-                case 'integer':
                 case 'tinyint':
-                case 'smallint':
-                case 'mediumint':
                     if ($size == 1) {
                         $proptype = $proptypeid['checkbox']; // Checkbox
                         $validation = '';
@@ -119,14 +115,21 @@ function dynamicdata_utilapi_getmeta($args)
                         $proptype = $proptypeid['integerbox']; // Number Box
                     }
                     break;
+                case 'int':
+                case 'integer':
+                case 'smallint':
+                case 'mediumint':
+                    $proptype = $proptypeid['integerbox']; // Number Box
+                    break;
                 case 'float':
                 case 'decimal':
                 case 'double':
                     $proptype = $proptypeid['floatbox']; // Number Box (float)
                     $validation = '';
                     break;
-                case 'boolean':
+                // in case we have some leftover bit(1) columns instead of tinyint(1) for boolean in MySQL
                 case 'bit':
+                case 'boolean':
                     $proptype = $proptypeid['checkbox']; // Checkbox
                     $validation = '';
                     break;
