@@ -7,22 +7,25 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
-        <h2>Utilities - Meta Table Definitions</h2>
+        <h2>Utilities - Data Browser</h2>
         <xar:template type="module" file="utility-menu" />
         <xar:if condition="empty($export)">
             <xar:if condition="!empty($databases)">
-                <h3>Select A Database:</h3>
-                <ul>
-                    <xar:foreach in="$databases" value="$database">
-                        <li>
-                            <a href="&xar-modurl-dynamicdata-util-meta;&amp;db=#$database#">
-                            #$database#</a>
-                            <xar:if condition="!empty($db) and $database eq $db">(*)</xar:if>
-                        </li>
-                    </xar:foreach>
-                </ul>
+                <form method="post" action="&xar-modurl-dynamicdata-util-meta;">
+                    <fieldset>
+                        <legend>Select Database</legend>
+                        <div class="xar-form-input-wrapper">
+                            <label for="xml" class="xar-form-label">Database :</label>
+                            <div class="xar-form-container-after">
+                                <xar:data-input type="dropdown" name="db" value="$db" options="$databases" onchange="submit()"/>
+                                <input type="submit" value="Refresh"/>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
             </xar:if>
-            <xar:if condition="empty($table)">
+            <xar:if condition="empty($tables)">
+            <xar:elseif condition="empty($table)"/>
                 <table>
                     <tr>
                         <th>Name</th>
@@ -42,23 +45,29 @@
                                 <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$curtable#&amp;export=object">
                             Export Object</a>| 
                                 <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$curtable#&amp;export=ddl">
-                            Export DDL</a>| 
-                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$curtable#">
-                            Add Relation</a></td>
+                            Export DDL</a>
+                            <!--
+                                | <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$curtable#">
+                            Add Relation</a>
+                            -->
+                           </td>
                         </tr>
                     </xar:foreach>
                 </table>
                 <xar:else />
-                <h3>#$table#</h3>
+                <h3>Table: #$table#</h3>
                 <p>
                 <a href="&xar-modurl-dynamicdata-admin-view;&amp;table=#$table#">View</a>| 
                 <a href="&xar-modurl-dynamicdata-admin-query;&amp;table=#$table#">Query</a>| 
                     <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$table#&amp;export=object">
                 Export Object</a>| 
                     <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$table#&amp;export=ddl">
-                Export DDL</a>| 
-                <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$table#">Add
-                Relation</a></p>
+                Export DDL</a>
+                <!--
+                | <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$table#">Add
+                Relation</a>
+                -->
+                </p>
                 <table>
                     <tr>
                         <th>Name</th>
@@ -95,7 +104,11 @@
         <xar:else />
             <form method="post" action="&xar-modurl-dynamicdata-util-import;">
                 <fieldset>
-                    <legend>Metatable definition for #$table#</legend>
+                    <xar:if condition="$export eq 'ddl'">
+                        <legend>Data definition for #$table#</legend>
+                    <xar:else/>
+                        <legend>Object definition for #$table#</legend>
+                    </xar:if>
                     <div class="xar-form-input-wrapper">
                         <label for="xml" class="xar-form-label">Definition:</label>
                         <div class="xar-form-container-after">
@@ -125,14 +138,13 @@
                         </div>
                     </div>
                 </fieldset>
-                <div class="xar-align-center">
-                    <input type="hidden" name="authid" value="#xarSecGenAuthKey()#" />
-                    <input type="submit" value="#xarML('Import Table Definition')#" />
-                </div>
+                <xar:if condition="$export ne 'ddl'">
+                    <div class="xar-align-center">
+                        <input type="hidden" name="authid" value="#xarSecGenAuthKey()#" />
+                        <input type="submit" value="#xarML('Import Object Definition')#" />
+                    </div>
+                </xar:if>
             </form>
-            <p class="xar-align-center">
-                <a href="&xar-modurl-dynamicdata-util-meta;">Show Table Definitions</a>
-            </p>
         </xar:if>
     </div>
 </xar:template>
