@@ -825,7 +825,7 @@ function installer_admin_choose_configuration()
     // No non-core modules present. Show only the minimal configuration
         $names = array();
         include sys::code() . 'modules/installer/xarconfigurations/core.conf.php';
-        $names[] = array('value' => 'modules/installer/xarconfigurations/core.conf.php',
+        $names[] = array('value' => sys::code() . 'modules/installer/xarconfigurations/core.conf.php',
                          'display'  => 'Core Xaraya install (aka minimal)',
                          'selected' => true);
     }
