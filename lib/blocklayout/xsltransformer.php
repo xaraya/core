@@ -11,7 +11,7 @@
 **/
 
 sys::import('blocklayout.compiler'); // expression transformer
-class BlocklayoutXSLTProcessor extends Object
+class BlockLayoutXSLTProcessor extends Object
 {
     private $xslProc = null;    // Object representing the processor.
     private $xslDoc  = null;    // Object representing the stylesheet.
@@ -47,7 +47,6 @@ class BlocklayoutXSLTProcessor extends Object
         $this->xslDoc = new DOMDocument();
         $this->xslDoc->load($xslFile);
         $this->xslProc->importStyleSheet($this->xslDoc);
-
     }
 
     private function setSourceDocument(&$xml)

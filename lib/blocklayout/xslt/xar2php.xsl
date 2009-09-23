@@ -45,7 +45,7 @@
     each document to a (hopefully valid) php script ultimately. We leave out
     the xml declaration, as PHP interprets that as the start of a PHP block.
   -->
-  <xsl:output  method="xml" omit-xml-declaration="yes" indent="yes" encoding="UTF-8"/>
+  <xsl:output  method="xml" omit-xml-declaration="yes" indent="no" encoding="UTF-8"/>
 
   <!--
     Parameters, we'd like as few as possible

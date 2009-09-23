@@ -19,9 +19,10 @@
  * @throws  no exceptions
  * @todo    nothing
 */
+
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class MetaBlock extends BasicBlock implements iBlock
+class MetaBlock extends BasicBlock
 {
     public $no_cache            = 1;
 
@@ -50,40 +51,35 @@ class MetaBlock extends BasicBlock implements iBlock
     function display(Array $data=array())
     {
         $data = parent::display($data);
-        // Security Check
-        if (!xarSecurityCheck('ViewBaseBlocks', 0, 'Block', 'meta:'.$data['title'].':All')) return;
-
-        $vars = isset($data['content']) ? $data['content'] : array();
-
-        if (!isset($vars['usedk'])) $vars['usedk'] = $this->usedk;
 
         $meta = array();
 
         // Description
         $incomingdesc = xarVarGetCached('Blocks.articles', 'summary');
 
-        if (!empty($incomingdesc) and $vars['usedk'] >= 1) {
+        $data['usedk'] = isset($data['usedk']) ? $data['usedk'] : $this->usedk;
+        if (!empty($incomingdesc) and $data['usedk'] >= 1) {
             // Strip -all- html
             $htmlless = strip_tags($incomingdesc);
             $meta['description'] = $htmlless;
         } else {
-            $meta['description'] = $vars['metadescription'];
+            $meta['description'] = isset($data['metadescription']) ? $data['metadescription'] : $this->metadescription;
         }
 
         // Dynamic Keywords
         $incomingkey = xarVarGetCached('Blocks.articles', 'body');
         $incomingkeys = xarVarGetCached('Blocks.keywords', 'keys');
 
-        if (!empty($incomingkey) and $vars['usedk'] == 1) {
+        if (!empty($incomingkey) and $data['usedk'] == 1) {
             // Keywords generated from articles module
             $meta['keywords'] = $incomingkey;
-        } elseif ((!empty($incomingkeys)) and ($vars['usedk'] == 2)){
+        } elseif ((!empty($incomingkeys)) and ($data['usedk'] == 2)){
             // Keywords generated from keywords module
             $meta['keywords'] = $incomingkeys;
-        } elseif ((!empty($incomingkeys)) and ($vars['usedk'] == 3)){
+        } elseif ((!empty($incomingkeys)) and ($data['usedk'] == 3)){
             $meta['keywords'] = $incomingkeys.','.$incomingkey;
         } else {
-            $meta['keywords'] = $vars['metakeywords'];
+            $meta['keywords'] = isset($data['metakeywords']) ? $data['metakeywords'] : $this->metakeywords;
         }
 
         // Character Set
@@ -93,8 +89,8 @@ class MetaBlock extends BasicBlock implements iBlock
         $meta['generator'] .= xarConfigVars::get(null, 'System.Core.VersionNum');
 
         // Geo Url
-        $meta['longitude'] = $vars['longitude'];
-        $meta['latitude'] = $vars['latitude'];
+        $meta['longitude'] = isset($data['longitude']) ? $data['longitude'] : $this->longitude;
+        $meta['latitude'] = isset($data['latitude']) ? $data['latitude'] : $this->latitude;
 
         // Active Page
         $meta['activepagerss'] = xarServer::getCurrentURL(array('theme' => 'rss'));
@@ -108,14 +104,14 @@ class MetaBlock extends BasicBlock implements iBlock
             $meta['copyrightpage'] = '';
         }
 
-        if (isset($vars['helppage'])){
-            $meta['helppage'] = $vars['helppage'];
+        if (isset($data['helppage'])){
+            $meta['helppage'] = $data['helppage'];
         } else {
             $meta['helppage'] = '';
         }
 
-        if (isset($vars['glossary'])){
-            $meta['glossary'] = $vars['glossary'];
+        if (isset($data['glossary'])){
+            $meta['glossary'] = $data['glossary'];
         } else {
             $meta['glossary'] = '';
         }
@@ -127,7 +123,6 @@ class MetaBlock extends BasicBlock implements iBlock
         $meta['last']           = xarVarGetCached('Pager.last','rightarrow');
 
         $data['content'] = $meta;
-
         return $data;
 
     }
