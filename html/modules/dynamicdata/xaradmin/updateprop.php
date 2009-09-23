@@ -73,6 +73,17 @@ function dynamicdata_admin_updateprop()
                            array('moduleid' => $module_id,
                                  'itemtype' => $itemtype,
                                  'allprops' => true));
+
+    // get possible data sources (with optional extra table)
+    $params = array();
+    if (!empty($table)) {
+        $params['table'] = $table;
+    }
+    $sources = DataStoreFactory::getDataSources($params);
+    if (empty($sources)) {
+        $sources = array();
+    }
+
     $isprimary = 0;
 
     $i = 0;
@@ -106,6 +117,11 @@ function dynamicdata_admin_updateprop()
                 $input_dd_status[$id] = DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
             }
             $dd_status[$id] = $display_dd_status[$id] + $input_dd_status[$id];
+            // check if we have a valid source
+            if (empty($dd_source[$id]) || !in_array($dd_source[$id], $sources) || $dd_source[$id] == $field['source']) {
+                // don't update the source
+                $dd_source[$id] = null;
+            }
             if (!xarModAPIFunc('dynamicdata','admin','updateprop',
                               array('id' => $id,
                               //      'module_id' => $module_id,
@@ -114,7 +130,7 @@ function dynamicdata_admin_updateprop()
                                     'type' => $dd_type[$id],
                                     'defaultvalue' => $dd_defaultvalue[$id],
                                     'seq' => $dd_seq[$id],
-                              //      'source' => $dd_source[$id],
+                                    'source' => $dd_source[$id],
                                     'status' => $dd_status[$id],
                                     'configuration' => $dd_configuration[$id]))) {
                 return;

@@ -32,12 +32,10 @@ function dynamicdata_admin_view($args)
 
     if(!xarSecurityCheck('EditDynamicData')) return;
 
-/* CHECKME: do we want default pagination in admin view too ?
     // Default number of items per page in user view
     if (empty($numitems)) {
         $numitems = xarModVars::get('dynamicdata', 'items_per_page');
     }
-*/
 
     // Note: we need to pass all relevant arguments ourselves here
     $object = DataObjectMaster::getObjectList(

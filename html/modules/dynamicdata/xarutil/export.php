@@ -42,6 +42,7 @@ function dynamicdata_util_export($args)
         $data['xml'] = '';
         return $data;
     }
+    $data['objectid'] = $myobject->objectid;
 
     $proptypes = DataPropertyMaster::getPropertyTypes();
 

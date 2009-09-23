@@ -27,21 +27,39 @@ function dynamicdata_util_meta($args)
     $data = array();
 
     $dbconn = xarDB::getConn();
+    $dbtype = xarDB::getType();
+    $dbname = xarDB::getName();
 
-    if (!empty($showdb)) {
-        $data['tables'] = array();
-
-        // Note: this only works if we use the same database connection
-        $data['databases'] = $dbconn->MetaDatabases();
-
+    if ($db != $dbname) {
         $data['db'] = $db;
-        if (empty($data['databases'])) {
-            $data['databases'] = array($db);
-        }
+    } elseif (!empty($table) && strpos($table,'.') !== false) {
+        list($data['db'],$other) = explode('.', $table);
     } else {
-        $data['tables'] = xarModAPIFunc('dynamicdata','util','getmeta',
-                                  array('db' => $db, 'table' => $table));
+        $data['db'] = $dbname;
     }
+
+    $data['databases'] = array();
+
+    if (!empty($showdb) || $data['db'] != $dbname) {
+        // Note: not supported for other database types
+        if ($dbtype == 'mysql') {
+            try {
+                // Note: this only works if we use the same database connection
+                $db_list = mysql_list_dbs($dbconn->getResource());
+                while ($row = mysql_fetch_object($db_list)) {
+                    $database = $row->Database;
+                    $data['databases'][$database] = $database;
+                }
+            } catch (Exception $e) {
+            }
+        }
+
+        if (empty($data['databases'])) {
+            $data['databases'] = array($db => $db);
+        }
+    }
+    $data['tables'] = xarModAPIFunc('dynamicdata','util','getmeta',
+                                  array('db' => $db, 'table' => $table));
 
     if ($export == 'ddl') {
         $dbInfo = $dbconn->getDatabaseInfo();

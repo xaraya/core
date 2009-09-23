@@ -597,7 +597,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $options['display'] = array('otitle' => xarML('Display'),
                                         'olink'  => xarModURL($tplmodule,$linktype,$linkfunc,$urlargs),
                                         'ojoin'  => '');
-            if ($this->itemtype == 0) {
+            if ($this->itemtype == 0 && empty($this->table)) {
                 $options['viewitems'] = array('otitle' => xarML('Items'),
                                               'olink'  => xarModURL('dynamicdata','admin','view',
                                                               array('itemid' => $itemid)),

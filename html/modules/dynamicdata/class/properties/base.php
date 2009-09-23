@@ -523,8 +523,15 @@ class DataProperty extends Object implements iDataProperty
             try {
                 $fields = unserialize($configuration);
             } catch (Exception $e) {
-                // if the configuration is malformed just return an empty configuration
-                $fields = array();
+                // fall back to the old N:M validation for text boxes et al. (cfr. utilapi_getstatic/getmeta)
+                if (preg_match('/^(\d+):(\d+)$/', $configuration, $matches)) {
+                    $fields = array('validation_min_length' => $matches[1],
+                                    'validation_max_length' => $matches[2],
+                                    'display_maxlength'     => $matches[2]);
+                } else {
+                    // if the configuration is malformed just return an empty configuration
+                    $fields = array();
+                }
             }
         }
         if (!empty($fields) && is_array($fields)) {

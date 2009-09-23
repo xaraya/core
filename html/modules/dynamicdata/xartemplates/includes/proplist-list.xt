@@ -81,9 +81,18 @@
                 <td colspan="5" class="#$displayclass#">
                     Source:&#160;
                     <select class="dd-norm" name="dd_source[#$field['id']]" id="dd_source_#$field['id']">
+                        <xar:set name="found_source">0</xar:set>
                         <xar:foreach in="$sources" value="$mysource">
-                            <option>#$mysource#</option>
+                            <xar:if condition="$mysource eq $field['source']">
+                                <option selected="selected">#$mysource#</option>
+                                <xar:set name="found_source">1</xar:set>
+                            <xar:else/>
+                                <option>#$mysource#</option>
+                            </xar:if>
                         </xar:foreach>
+                        <xar:if condition="empty($found_source) and !empty($field['source'])">
+                            <option selected="selected">#$field['source']#</option>
+                        </xar:if>
                     </select>                    
                     &#160;&#160;Status:&#160;
                     <xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" id="dd_status_'.$field['id'].'" size="15" value="$field['status']" />

@@ -13,6 +13,7 @@
  * (try to) get the "meta" properties of tables via db abstraction layer
  *
  * @param $args['table']  optional table you're looking for
+ * @param $args['db']  optional database you're looking in (mysql only)
  * @return array of field definitions, or null on failure
  * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  * @todo split off the common parts which are also in getstatic.php
@@ -33,9 +34,20 @@ function dynamicdata_utilapi_getmeta($args)
     // dbInfo holds the meta information about the database
     $dbInfo = $dbconn->getDatabaseInfo();
 
+    $dbtype = xarDB::getType();
+    $dbname = xarDB::getName();
+    if (empty($db)) {
+        $db = $dbname;
+    }
+
+    // Note: not supported for other database types
+    if ($dbtype == 'mysql' && $db == $dbname && !empty($table) && strpos($table,'.') !== false) {
+        list($db, $table) = explode('.', $table);
+    }
+
     // Note: this only works if we use the same database connection
-    if (!empty($db) && $db != xarDB::getName()) {
-        $dbconn->SelectDB($db);
+    if (!empty($db) && $db != $dbname) {
+        $dbInfo->selectDb($db);
         $prefix = $db . '.';
     } else {
         $prefix = '';
@@ -120,6 +132,12 @@ function dynamicdata_utilapi_getmeta($args)
                 case 'smallint':
                 case 'mediumint':
                     $proptype = $proptypeid['integerbox']; // Number Box
+                    if (!empty($size) && $size > 6) {
+                        $validation = '';
+                    }
+                    break;
+                case 'bigint':
+                    $proptype = $proptypeid['integerbox']; // Number Box
                     break;
                 case 'float':
                 case 'decimal':
@@ -139,6 +157,7 @@ function dynamicdata_utilapi_getmeta($args)
                     $proptype = $proptypeid['calendar']; // Calendar
                     break;
                 case 'text':
+                case 'mediumtext':
                     $proptype = $proptypeid['textarea_medium']; // Medium Text Area
                     $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
                     $validation = '';
@@ -205,8 +224,8 @@ function dynamicdata_utilapi_getmeta($args)
     }
 
     // Note: this only works if we use the same database connection
-    if (!empty($db) && $db != xarDB::getName()) {
-        $dbconn->SelectDB(xarDB::getName());
+    if (!empty($db) && $db != $dbname) {
+        $dbInfo->selectDb($dbname);
     }
 
     return $metadata;
