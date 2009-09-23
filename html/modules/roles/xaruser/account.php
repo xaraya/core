@@ -120,7 +120,7 @@ function roles_user_account()
             }
         // no settings, we're dealing with the roles_user object
         } else {
-            sys::import('modules.dynamicdata.class.objects.master');
+            sys::import('modules.dynamicdata.class.objects');
             $object = DataObjectMaster::getObject(array('name' => 'roles_users'));
             $object->tplmodule = 'roles';   // roles/xartemplates/objects/
             $object->template = 'account';  // showdisplay- || showform- account.xt
