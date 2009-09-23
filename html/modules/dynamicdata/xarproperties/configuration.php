@@ -26,6 +26,7 @@ class ConfigurationProperty extends TextBoxProperty
     public $reqmodules = array('dynamicdata');
 
     public $proptype = null;
+    //public $initialization_prop_type = null;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -42,13 +43,10 @@ class ConfigurationProperty extends TextBoxProperty
             $data['type'] = $this->proptype;
         }
 
-// TODO: clean up old stuff + support nested configurations (e.g. for array of properties)
-        // get a new property of the right type
-        if (!empty($newtype)) {
-            $data['type'] = $newtype;
-        } elseif (!empty($proptype->value)) {
-            $data['type'] = $proptype->value;
-        } else {
+// TODO: support nested configurations (e.g. for array of properties) ?
+//       Problem is setting the proptype of the child config in the parent config
+
+        if (empty($data['type'])) {
             $data['type'] = 1; // default DataProperty class
         }
 
@@ -66,6 +64,7 @@ class ConfigurationProperty extends TextBoxProperty
 
     public function showInput(Array $data = array())
     {
+        //$data['type'] = $data['value']['initialization_prop_type']; only shows once
         // set property type from input
         if (!empty($data['type'])) {
             $this->proptype = $data['type'];
