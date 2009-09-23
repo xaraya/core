@@ -30,7 +30,7 @@ function dynamicdata_util_import($args)
     $data['options'] = array();
 
     if (empty($basedir)) {
-        $basedir = 'modules/dynamicdata';
+        $basedir = sys::code() . 'modules/dynamicdata';
     }
     $data['basedir'] = $basedir;
     $data['authid'] = xarSecGenAuthKey();
