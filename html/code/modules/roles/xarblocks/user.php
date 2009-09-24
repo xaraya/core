@@ -11,7 +11,7 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-/* 
+/*
  * User Info via block
  * @author Marco Canini
  */
@@ -32,6 +32,7 @@ class UserBlock extends BasicBlock
     function display(Array $data=array())
     {
         $data = parent::display($data);
+        if (empty($data)) return;
         if (xarUserIsLoggedIn()) return $data;
     }
 }

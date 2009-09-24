@@ -30,7 +30,7 @@
         function display(Array $data=array())
         {
             $data = parent::display($data);
-            if (!xarSecurityCheck('ViewRoles',0,'Block',"online:$data[title]:$data[bid]")) {return;}
+            if (empty($data)) return;
 
             // Get variables from content block
             if (!is_array($data['content'])) {
@@ -45,7 +45,7 @@
 
             // Bail if there is nothing to show
             if (!$args['showusers'] && !$args['showusertotal'] && !$args['showanontotal'] && !$args['showlastuser']) return array('content' => '');
-            
+
             // Database setup
             // TODO: do we need this query? I'd have thought userapi/getallactive gives
             // us everything we need.
@@ -187,7 +187,7 @@
             if (!xarVarFetch('showusertotal', 'checkbox', $args['showusertotal'], false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('showanontotal', 'checkbox', $args['showanontotal'], false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('showlastuser',  'checkbox', $args['showlastuser'], false, XARVAR_NOT_REQUIRED)) return;
-            $data['content'] = $args;            
+            $data['content'] = $args;
             return $data;
         }
     }

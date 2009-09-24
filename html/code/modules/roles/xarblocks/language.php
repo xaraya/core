@@ -30,8 +30,8 @@ class LanguageBlock extends BasicBlock
 
     function display(Array $data=array())
     {
-        // Security check
-        if (!xarSecurityCheck('ReadRole', 0, 'Block', "All:" . $data['title'] . ":" . $data['bid'])) {return;}
+        $data = parent::display($data);
+        if (empty($data)) return;
 
         // if (xarMLSGetMode() != XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
         if (xarMLSGetMode() == XARMLS_SINGLE_LANGUAGE_MODE) return;

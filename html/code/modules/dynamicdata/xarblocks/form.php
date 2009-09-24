@@ -35,8 +35,7 @@ class FormBlock extends BasicBlock implements iBlock
     function display(Array $data=array())
     {
         $data = parent::display($data);
-        // Security check
-        if(!xarSecurityCheck('ReadDynamicDataBlock',0,'Block',"$data[title]:All:All")) return;
+        if (empty($data)) return;
 
         $vars = isset($data['content']) ? $data['content'] : array();
 

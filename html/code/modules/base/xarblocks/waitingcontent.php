@@ -26,6 +26,7 @@
         function display(Array $data=array())
         {
             $data = parent::display($data);
+            if (empty($data)) return;
 
             // Hooks (we specify that we want the ones for adminpanels here)
             $output = array();
