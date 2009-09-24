@@ -9,7 +9,7 @@
 $systemConfiguration['rootDir'] = "../";
 $systemConfiguration['webDir']  = "html/";
 $systemConfiguration['libDir']  = "lib/";
-$systemConfiguration['codeDir'] = "code/";
+$systemConfiguration['codeDir'] = "html/code/";
 /*
  * For a shared hosting environment ("flat install")
  * uncomment these values

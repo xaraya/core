@@ -238,6 +238,7 @@ final class sys extends Object
     private static $root = null;            // Save our root location
     private static $lib  = null;            // Save our lib location
     private static $code = null;            // Save our code location
+    private static $shortpath = null;            // Save our code location relative to the doc root
 
     private function __construct()
     {} // no objects can be made out of this.
@@ -273,8 +274,9 @@ final class sys extends Object
      *
      * @return mixed if file is actually included the return value determined by the included file, otherwise true
      * @param  string $dp 'dot path' a dot separated string describing which component to include
+     * @param  bool $root whether to prepend the relative root directory
     **/
-    private static function once($dp)
+    private static function once($dp, $root=true)
     {
         // If we already have it get out of here asap
         if(!isset(self::$has[$dp]))
@@ -283,7 +285,8 @@ final class sys extends Object
             self::$has[$dp] = true;
             // tiny bit faster would be to use include, but this is quite a bit safer
             // and it will be executed only once anyway. (i.e. if everything uses this class)
-            return include_once(self::root() . str_replace('.','/',$dp).'.php');
+            if ($root) return include_once(self::root() . str_replace('.','/',$dp).'.php');
+            return include_once(str_replace('.','/',$dp).'.php');
         }
         return true;
     }
@@ -293,7 +296,7 @@ final class sys extends Object
      *
      * Syntax examples:
      *    sys::import('blocklayout.compiler')              -> lib/blocklayout/compiler.php
-     *    sys::import('modules.mymodule.xarincludes.test') -> html/modules/mymodule/xarincludes/test.php
+     *    sys::import('modules.mymodule.xarincludes.test') -> html/code/modules/mymodule/xarincludes/test.php
      *
      * The beginning of the dot path is scanned for 'modules.'
      * if found it assumes a module import
@@ -305,7 +308,9 @@ final class sys extends Object
     **/
     public static function import($dp)
     {
-        if((0===strpos($dp,'modules.'))) return self::once($GLOBALS['systemConfiguration']['codeDir'] . $dp);
+        if((0===strpos($dp,'modules.'))) {
+            return self::once(self::shortpath($GLOBALS['systemConfiguration']['codeDir'] . $dp), false);
+        }
         return self::once($GLOBALS['systemConfiguration']['libDir'] . $dp);
     }
 
@@ -345,10 +350,25 @@ final class sys extends Object
     **/
     public static function code()
     {
-        // We are in bootstrap.php and we want <lib>
+        // We are in bootstrap.php and we want <code>
         if(!isset(self::$code))
-            self::$code = $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['codeDir'];
+            self::$code = self::shortpath($GLOBALS['systemConfiguration']['codeDir']);
         return self::$code;
+    }
+
+    /**
+     * Returns the a path relative to the doc root directory if the path is below that directory
+     * Note that there WILL ba a slash at the end of the return path.
+     *
+     * @return string
+    **/
+    private static function shortpath($path)
+    {
+        // We are in bootstrap.php and we want <code>
+            if (strpos($path, $GLOBALS['systemConfiguration']['webDir']) === 0) 
+                self::$shortpath = substr($path,strlen($GLOBALS['systemConfiguration']['webDir']));
+            else self::$shortpath = $path;
+        return self::$shortpath;
     }
 
     /**
