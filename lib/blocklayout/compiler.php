@@ -52,6 +52,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
 {
     private static $instance = null;
     private $lastFile        = null;
+    private $processor       = null;
     
 
     /**
@@ -130,6 +131,10 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         $xslFiles = $this->getXSLFilesString($baseDir, 'tags/xaraya');
         $xslProc->setParameter('', 'xarayatags', $xslFiles);
         
+        // Pass the module tags
+        $xslFiles = $this->getXSLModuleFilesString();
+        $xslProc->setParameter('', 'moduletags', $xslFiles);
+        
         // Compile the compiler
         $outDoc = $xslProc->transformToXML($doc);
         return $outDoc;
@@ -137,17 +142,20 @@ class xarBLCompiler extends Object implements IxarBLCompiler
 
     private function compile(&$templateSource)
     {
-        sys::import('blocklayout.xsltransformer');
-        $xslProc = new BlockLayoutXSLTProcessor();
-        $xslDoc = new DOMDocument;
-        $xslDoc->loadXML($this->boot());
-        $xslProc->importStyleSheet($xslDoc);
+
+        if (!isset($this->processor)) {
+            sys::import('blocklayout.xsltransformer');
+            $this->processor = new BlockLayoutXSLTProcessor();
+            $xslDoc = new DOMDocument;
+            $xslDoc->loadXML($this->boot());
+            $this->processor->importStyleSheet($xslDoc);
+        }
 
         // This is confusing, dont do this here.
-        $xslProc->xmlFile = $this->lastFile;
-
+        $this->processor->xmlFile = $this->lastFile;
+        
         // This generates php code, the documentree is not visible here anymore
-        $outDoc = $xslProc->transform($templateSource);
+        $outDoc = $this->processor->transform($templateSource);
         return $outDoc;
     }
 
@@ -160,6 +168,26 @@ class xarBLCompiler extends Object implements IxarBLCompiler
             if(isset($pathinfo['extension']) && $pathinfo['extension'] != 'xsl') continue;
             $files[] = $prefix . "/" . $fileInfo->getFileName();
         }
+        $filesstring =  implode(',',$files);
+        return $filesstring;
+    }
+    
+    private function getXSLModuleFilesString()
+    {
+        $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+        assert('!empty($activeMods)'); // this should never happen
+
+        $files = array();
+        foreach($activeMods as $modInfo) {
+            $filepath = 'modules/' .$modInfo['osdirectory'] . '/tags';
+            if (!file_exists($filepath)) continue;
+            foreach (new DirectoryIterator($filepath) as $fileInfo) {
+                if($fileInfo->isDot()) continue;
+                $pathinfo = pathinfo($fileInfo->getPathName());
+                if(isset($pathinfo['extension']) && $pathinfo['extension'] != 'xsl') continue;
+                $files[] = $prefix . "/" . $fileInfo->getFileName();
+            }
+        }            
         $filesstring =  implode(',',$files);
         return $filesstring;
     }
