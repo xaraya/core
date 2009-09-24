@@ -174,7 +174,11 @@ class xarBLCompiler extends Object implements IxarBLCompiler
     
     private function getXSLModuleFilesString()
     {
-        $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+        if (function_exists('xarModAPIFunc')) {
+            $activeMods = xarModAPIFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+        } else {
+            return '';
+        }
         assert('!empty($activeMods)'); // this should never happen
 
         $files = array();
