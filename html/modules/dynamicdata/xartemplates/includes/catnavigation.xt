@@ -7,15 +7,21 @@
     </xar:if>
     <xar:if condition="!empty($tmpreq) and $tmpreq[1] eq 'admin' and $tmpreq[2] eq 'view'">
         <!-- from admin-objectlist.xd -->
-        <xar:categories-navigation layout="trails" showchildren="1" module="$modname" type="admin"
-        func="$viewfunc" itemtype="$itemtype" itemid="0" catid="$catid" showcatcount="1" />
-        <xar:elseif condition="isset($itemid)" />
+<!-- TODO: fix category selection in DD
+        <xar:data-output type="categorynavigation" layout="trails" showchildren="1" module="$modname" urltype="admin"
+        urlfunc="$viewfunc" name="$name" itemid="0" catid="$catid" showcatcount="1" />
+-->
+    <xar:elseif condition="isset($itemid)" />
         <!-- from user-objectdisplay.xd -->
-        <xar:categories-navigation layout="trails" showchildren="1" module="$modname"
-        func="$viewfunc" itemtype="$itemtype" itemid="$itemid" catid="$catid" showcatcount="1" />
-        <xar:else />
+<!-- TODO: fix category selection in DD
+        <xar:data-output type="categorynavigation" layout="trails" showchildren="1" module="$modname"
+        urlfunc="$viewfunc" name="$name" itemid="$itemid" catid="$catid" showcatcount="1" />
+-->
+    <xar:else />
         <!-- from user-objectview.xd -->
-        <xar:categories-navigation layout="trails" showchildren="1" module="$modname"
-        func="$viewfunc" itemtype="$itemtype" catid="$catid" showcatcount="1" />
+<!-- TODO: fix category selection in DD
+        <xar:data-output type="categorynavigation" layout="trails" showchildren="1" module="$modname"
+        urlfunc="$viewfunc" name="$name" catid="$catid" showcatcount="1" />
+-->
     </xar:if>
 </xar:template>
