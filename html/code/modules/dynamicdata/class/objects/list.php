@@ -27,7 +27,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
     // optional URL style for use in xarModURL() (defaults to itemtype=...&...)
     public $urlstyle = 'itemtype'; // TODO: table or object, or wrapper for all, or all in template, or...
-    // optional display function for use in xarModURL() (defaults to 'display')
+    // optional link type for use in xarModURL() (defaults to 'user', could be 'object')
+    public $linktype = 'user';
+    // optional link function for use in xarModURL() (defaults to 'display', could be 'main')
     public $linkfunc = 'display';
 
 // CHECKME: should exclude DISPLAYONLY here, as well as DISABLED (and IGNORED ?)
@@ -466,6 +468,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $args['items'] =& $this->items;
 
         // add link to display the item
+        if(empty($args['linktype']))  $args['linktype'] = $this->linktype;
         if(empty($args['linkfunc']))  $args['linkfunc'] = $this->linkfunc;
         if(empty($args['linklabel'])) $args['linklabel'] = xarML('Display');
         if(empty($args['param']))     $args['param'] = $this->urlparam;
@@ -482,12 +485,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if($modname == 'dynamicdata' && $this->itemtype == 0 && empty($this->table)) {
             $linktype = 'user';
             $linkfunc = 'view';
+            $args['linktype'] = $linktype;
+            $args['linkfunc'] = $linkfunc;
             // Don't show link to view items that don't belong to the DD module
         } else {
-            $linktype = 'user';
+            $linktype = $args['linktype'];
             $linkfunc = $args['linkfunc'];
         }
-        $args['linktype'] = $linktype;
 
         if(empty($itemtype)) $itemtype = 0; // don't add to URL
         $args['table'] = !empty($this->table) ? $this->table : null;
@@ -558,9 +562,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $urlargs[$args['param']] = $itemid;
         $urlargs['tplmodule'] = $args['tplmodule'];
         // The next 3 lines make the DD modify/display routines work for overlay objects
-        // TODO: do we need the concept of tplmodule at all?
+        // TODO: do we need the concept of tplmodule at all? Good question :-)
+/* passed by showView() $args above
         $info = DataObjectMaster::getObjectInfo($args);
         $urlargs['name'] = $info['name'];
+*/
+        $urlargs['name'] = $args['objectname'];
 
         $options = array();
 
@@ -592,52 +599,80 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 
         if ($allow_read) {
-            $tplmodule = file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xar' . $linktype . '/' . $linkfunc . '.php') ? $args['tplmodule'] : 'dynamicdata';
+            $tplmodule = $this->checkModuleFunction($args['tplmodule'], $linktype, $linkfunc);
 // CHECKME: who was using 'view' instead of 'display' for links directly in templates (besides DD itself) ?
             $options['display'] = array('otitle' => xarML('Display'),
                                         'olink'  => xarModURL($tplmodule,$linktype,$linkfunc,$urlargs),
                                         'ojoin'  => '');
-            if ($this->itemtype == 0 && empty($this->table)) {
-                $options['viewitems'] = array('otitle' => xarML('Items'),
-                                              'olink'  => xarModURL('dynamicdata','admin','view',
-                                                              array('itemid' => $itemid)),
-                                              'ojoin'  => '|'
-                                             );
-            }
         }
         if ($allow_edit) {
-            $tplmodule = file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xaradmin/modify.php') ? $args['tplmodule'] : 'dynamicdata';
-            $options['modify'] = array('otitle' => xarML('Edit'),
-                                    'olink'  => xarModURL($tplmodule,'admin','modify', $urlargs),
-                                    'ojoin'  => '|');
+            // if $linktype == 'object' use function 'main' everywhere and set $urlargs['method']
+            if ($args['tplmodule'] == 'dynamicdata' && $linktype == 'object' && $linkfunc == 'main') {
+                // prepend method to urlargs
+                $urlargs2 = array('method' => 'update') + $urlargs;
+                unset($urlargs2['tplmodule']);
+                $options['modify'] = array('otitle' => xarML('Edit'),
+                                           'olink'  => xarModURL($tplmodule,$linktype,$linkfunc,$urlargs2),
+                                           'ojoin'  => '|');
+            } else {
+                $tplmodule = $this->checkModuleFunction($args['tplmodule'], 'admin', 'modify');
+                $options['modify'] = array('otitle' => xarML('Edit'),
+                                           'olink'  => xarModURL($tplmodule,'admin','modify',$urlargs),
+                                           'ojoin'  => '|');
+            }
+            // extra options when showing the dynamic objects themselves
             if ($this->objectid == 1) {
-                $tplmodule = file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xaradmin/modifyprop.php') ? $args['tplmodule'] : 'dynamicdata';
+                $options['viewitems'] = array('otitle' => xarML('Items'),
+                                              'olink'  => xarModURL('dynamicdata','admin','view',
+                                                                    array('itemid' => $itemid)),
+                                              'ojoin'  => '|'
+                                             );
+                $tplmodule = $this->checkModuleFunction($args['tplmodule'], 'admin', 'modifyprop');
                 $options['modifyprops'] = array('otitle' => xarML('Properties'),
                                      'olink'  => xarModURL($tplmodule,'admin','modifyprop',$urlargs),
                                      'ojoin'  => '|');
             }
         }
         if ($allow_delete)  {
-            if($this->objectid == 1){
-                $tplmodule = file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xaradmin/modifyprop.php') ? $args['tplmodule'] : 'dynamicdata';
-                $options['modifyprops'] = array('otitle' => xarML('Properties'),
-                                     'olink'  => xarModURL($tplmodule,'admin','modifyprop',
-                                                   $urlargs),
-                                       'ojoin'  => '|');
-                $options['viewitems'] = array('otitle' => xarML('Items'),
-                                              'olink'  => xarModURL('dynamicdata','admin','view',
-                                                              array('itemid' => $itemid)),
-                                              'ojoin'  => '|'
-                                             );
+            // if $linktype == 'object' use function 'main' everywhere and set $urlargs['method']
+            if ($args['tplmodule'] == 'dynamicdata' && $linktype == 'object' && $linkfunc == 'main') {
+                // prepend method to urlargs
+                $urlargs2 = array('method' => 'delete') + $urlargs;
+                unset($urlargs2['tplmodule']);
+                $options['delete'] = array('otitle' => xarML('Delete'),
+                                           'olink'  => xarModURL($tplmodule,$linktype,$linkfunc,$urlargs2),
+                                           'ojoin'  => '|');
+            } else {
+                $tplmodule = $this->checkModuleFunction($args['tplmodule'], 'admin', 'delete');
+                $options['delete'] = array('otitle' => xarML('Delete'),
+                                           'olink'  => xarModURL($tplmodule,'admin','delete', $urlargs),
+                                           'ojoin'  => '|');
             }
-            $tplmodule = file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xaradmin/delete.php') ? $args['tplmodule'] : 'dynamicdata';
-            $options['delete'] = array('otitle' => xarML('Delete'),
-                                   'olink'  => xarModURL($tplmodule,'admin','delete',
-                                               $urlargs),
-                                   'ojoin'  => '|');
         }
 
         return $options;
+    }
+
+    /**
+     * Check if a particular module function exists, or default back to 'dynamicdata'
+     *
+     * @todo use some core function to verify that a module function exists ?
+     * @return string tplmodule or 'dynamicdata'
+     */
+    private function checkModuleFunction($tplmodule = 'dynamicdata', $type = 'user', $func = 'display')
+    {
+        static $tplmodule_cache = array();
+
+        $key = "$tplmodule:$type:$func";
+        if (!isset($tplmodule_cache[$key])) {
+            $file = sys::code() . 'modules/' . $tplmodule . '/xar' . $type . '/' . $func . '.php';
+            if (file_exists($file)) {
+                $tplmodule_cache[$key] = $tplmodule;
+            } else {
+                $tplmodule_cache[$key] = 'dynamicdata';
+            }
+        }
+        return $tplmodule_cache[$key];
     }
 
     /**

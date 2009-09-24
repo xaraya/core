@@ -1,44 +1,140 @@
 <?php
 /**
- * Dynamic Object Interface 
+ * Dynamic Object User Interface 
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
- * @todo <mikespub> move all object_* methods to other object classes ... or not ?
  * @todo try to replace xarTplModule with xarTplObject
  */
 
- sys::import('modules.dynamicdata.class.objects');
 /**
- * Dynamic Object Interface (experimental - cfr. 'object' module)
+ * Dynamic Object User Interface (work in progress)
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata
  */
-class DataObjectInterface extends Object
+class DataObjectUserInterface extends Object
 {
+    // application framework we're working with
+    public $framework = 'xaraya';
+
+    // current arguments for the handler
     public $args = array();
-    public $object = null;
-    public $list = null;
+
+    /**
+     * Set up any initial parameters
+     */
+    function __construct(array $args = array())
+    {
+        // set a specific framework
+        if (!empty($args['framework'])) {
+            $this->framework = $args['framework'];
+        }
+        if ($this->framework != 'xaraya') {
+            // TODO: import something minimal ? :-)
+        }
+
+        // save the arguments for the handler
+        $this->args = $args;
+    }
+
+    /**
+     * Determine which handler to run based on input parameters 'method' and 'itemid'
+     */
+    function handle(array $args = array())
+    {
+        if(!xarVarFetch('method', 'isset', $args['method'], NULL, XARVAR_DONT_SET)) 
+            return;
+        if(!xarVarFetch('itemid', 'isset', $args['itemid'], NULL, XARVAR_DONT_SET)) 
+            return;
+
+        if(empty($args['method'])) 
+        {
+            if(empty($args['itemid'])) 
+                $args['method'] = 'view';
+            else 
+                $args['method'] = 'display';
+        }
+
+        switch ($args['method']) 
+        {
+            case 'new':
+            case 'create':
+                $handlerclazz = 'DataObjectCreateHandler';
+                sys::import('modules.dynamicdata.class.ui_handlers.create');
+                break;
+            case 'modify':
+            case 'update':
+                $handlerclazz = 'DataObjectUpdateHandler';
+                sys::import('modules.dynamicdata.class.ui_handlers.update');
+                break;
+            case 'delete':
+                $handlerclazz = 'DataObjectDeleteHandler';
+                sys::import('modules.dynamicdata.class.ui_handlers.delete');
+                break;
+            case 'display':
+                $handlerclazz = 'DataObjectDisplayHandler';
+                sys::import('modules.dynamicdata.class.ui_handlers.display');
+                break;
+            case 'view':
+            default:
+                $handlerclazz = 'DataObjectViewHandler';
+                sys::import('modules.dynamicdata.class.ui_handlers.view');
+                break;
+        }
+        $handler = new $handlerclazz($this->args);
+
+        // run the handler and return the output
+        return $handler->run($args);
+    }
+}
+
+/**
+ * Dynamic Object User Interface Handler
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata
+ */
+class DataObjectDefaultHandler extends Object
+{
+    public $method = 'overridden in child classes';
 
     // module where the main templates for the GUI reside (defaults to the object module)
     public $tplmodule = null;
+    // main type of function handling all object method calls (= 'user' [+ 'admin'] or 'object' GUI)
+    public $type = 'user';
     // main function handling all object method calls (to be handled by the core someday ?)
     public $func = 'main';
 
+    // current arguments for the handler
+    public $args = array();
+
+    public $object = null;
+    public $list   = null;
+
+    /**
+     * Get common input arguments for objects
+     */
     function __construct(array $args = array())
     {
         // set a specific GUI module for now
         if (!empty($args['tplmodule'])) {
             $this->tplmodule = $args['tplmodule'];
         }
+        if (!empty($args['type'])) {
+            $this->type = $args['type'];
+        }
+        if (!empty($args['func'])) {
+            $this->func = $args['func'];
+        }
 
         // get some common URL parameters
+        if (!xarVarFetch('name',     'isset', $args['name'],     NULL, XARVAR_DONT_SET)) {return;}
         if (!xarVarFetch('object',   'isset', $args['object'],   NULL, XARVAR_DONT_SET)) {return;}
         if (!xarVarFetch('module',   'isset', $args['module'],   NULL, XARVAR_DONT_SET)) {return;}
         if (!xarVarFetch('itemtype', 'isset', $args['itemtype'], NULL, XARVAR_DONT_SET)) {return;}
@@ -54,6 +150,13 @@ class DataObjectInterface extends Object
             $args['fieldlist'] = explode(',',$fieldlist);
         }
 
+        // support new-style name=... parameter for DD (replacing object=...)
+        if (empty($args['object']) && !empty($args['name'])) {
+            $args['object'] = $args['name'];
+        }
+
+        sys::import('modules.dynamicdata.class.objects');
+
         // retrieve the object information for this object
         if(!empty($args['object']))  {
             $info = DataObjectMaster::getObjectInfo(
@@ -64,446 +167,40 @@ class DataObjectInterface extends Object
             $args['moduleid'] = xarMod::getRegID($args['module']);
         }
 
-        // fill in the default object variables
+        if (empty($args['layout'])) $args['layout'] = 'default';
+
+        // save the arguments for the handler
         $this->args = $args;
     }
 
+    /**
+     * Do your thing
+     */
+    function run(array $args = array())
+    {
+        return "This method is overridden in a child class for each method";
+    }
+}
+
+/**
+ * Dynamic Object Interface (deprecated)
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata
+ */
+class DataObjectInterface extends DataObjectDefaultHandler
+{
+    // Provide the old __construct for SimpleObjectInterface (for now)
+    function __construct(array $args = array())
+    {
+        parent::__construct($args);
+        sys::import('modules.dynamicdata.class.objects');
+    }
 
     function handle(array $args = array())
     {
-        if(!xarVarFetch('method', 'isset', $args['method'], NULL, XARVAR_DONT_SET)) 
-            return;
-        if(!xarVarFetch('itemid', 'isset', $args['itemid'], NULL, XARVAR_DONT_SET)) 
-            return;
-            
-        if(empty($args['method'])) 
-        {
-            if(empty($args['itemid'])) 
-                $args['method'] = 'view';
-            else 
-                $args['method'] = 'display';
-        }
-        // TODO: check for the presence of existing module functions to handle this if necessary
-        switch ($args['method']) 
-        {
-            case 'new':
-            case 'create':
-                return $this->object_create($args);
-            case 'modify':
-            case 'update':
-                return $this->object_update($args);
-            case 'delete':
-                return $this->object_delete($args);
-            case 'display':
-                return $this->object_display($args);
-            case 'view':
-            default:
-                return $this->object_view($args);
-        }
+        return "You're in the wrong class - try DataObjectUserInterface() instead";
     }
-
-    function object_create(array $args = array())
-    {
-        if(!xarVarFetch('preview', 'isset', $args['preview'], NULL, XARVAR_DONT_SET)) 
-            return;
-        if(!xarVarFetch('confirm', 'isset', $args['confirm'], NULL, XARVAR_DONT_SET)) 
-            return;
-
-        if(!empty($args) && is_array($args) && count($args) > 0) 
-            $this->args = array_merge($this->args, $args);
-
-        if(!isset($this->object)) 
-        {
-            $this->object =& DataObjectMaster::getObject($this->args);
-            if(empty($this->object)) 
-                return;
-            if(empty($this->tplmodule)) 
-            {
-                $modinfo = xarModGetInfo($this->object->moduleid);
-                $this->tplmodule = $modinfo['name'];
-            }
-        }
-        if(!xarSecurityCheck(
-            'AddDynamicDataItem',1,'Item',
-            $this->object->moduleid.':'.$this->object->itemtype.':All')
-        )   return;
-
-        //$this->object->getItem();
-
-        if(!empty($args['preview']) || !empty($args['confirm'])) 
-        {
-            if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-            }        
-
-            $isvalid = $this->object->checkInput();
-
-            if($isvalid && !empty($args['confirm'])) 
-            {
-                $itemid = $this->object->createItem();
-
-                if(empty($itemid)) 
-                    return; // throw back
-
-                if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
-                    return;
-                if(!empty($args['return_url'])) 
-                {
-                    xarResponse::Redirect($args['return_url']);
-                } 
-                else 
-                {
-                    xarResponse::Redirect(xarModURL(
-                        $this->tplmodule, 'user', $this->func,
-                        array('object' => $this->object->name))
-                    );
-                }
-                // Return
-                return true;
-            }
-        }
-
-        $title = xarML('New #(1)', $this->object->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
-
-        // call item new hooks for this item
-        $item = array();
-        foreach(array_keys($this->object->properties) as $name) 
-            $item[$name] = $this->object->properties[$name]->value;
-
-        if(!isset($modinfo)) 
-            $modinfo = xarModGetInfo($this->object->moduleid);
-
-        $item['module'] = $modinfo['name'];
-        $item['itemtype'] = $this->object->itemtype;
-        $item['itemid'] = $this->object->itemid;
-        $hooks = xarModCallHooks('item', 'new', $this->object->itemid, $item, $modinfo['name']);
-
-        $this->object->viewfunc = $this->func;
-        return xarTplModule(
-            $this->tplmodule,'admin','new',
-            array(
-                'object' => $this->object,
-                'preview' => $args['preview'],
-                'hookoutput' => $hooks
-            ),
-            $this->object->template
-        );
-    }
-
-    function object_update(array $args = array())
-    {
-        if(!xarVarFetch('preview', 'isset', $args['preview'], NULL, XARVAR_DONT_SET)) 
-            return;
-        if(!xarVarFetch('confirm', 'isset', $args['confirm'], NULL, XARVAR_DONT_SET)) 
-            return;
-
-        if(!empty($args) && is_array($args) && count($args) > 0) 
-            $this->args = array_merge($this->args, $args);
-
-        if(!isset($this->object)) 
-        {
-            $this->object =& DataObjectMaster::getObject($this->args);
-            if(empty($this->object)) 
-                return;
-            if(empty($this->tplmodule)) 
-            {
-                $modinfo = xarModGetInfo($this->object->moduleid);
-                $this->tplmodule = $modinfo['name'];
-            }
-        }
-        if(!xarSecurityCheck(
-            'EditDynamicDataItem',1,'Item',
-            $this->object->moduleid.':'.$this->object->itemtype.':'.$this->object->itemid)
-        ) return;
-
-        $itemid = $this->object->getItem();
-        if(empty($itemid) || $itemid != $this->object->itemid) 
-            throw new BadParameterException(null,'The itemid updating the object was found to be invalid');
-
-        if(!empty($args['preview']) || !empty($args['confirm'])) 
-        {
-            if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-            }        
-
-            $isvalid = $this->object->checkInput();
-
-            if($isvalid && !empty($args['confirm'])) 
-            {
-                $itemid = $this->object->updateItem();
-
-                if(empty($itemid)) 
-                    return; // throw back
-
-                if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
-                    return;
-                    
-                if(!empty($args['return_url'])) 
-                    xarResponse::Redirect($args['return_url']);
-                else 
-                    xarResponse::Redirect(xarModURL(
-                        $this->tplmodule, 'user', $this->func,
-                        array('object' => $this->object->name))
-                    );
-                // Return
-                return true;
-            }
-        }
-
-        $title = xarML('Modify #(1)', $this->object->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
-
-        // call item new hooks for this item
-        $item = array();
-        foreach(array_keys($this->object->properties) as $name) 
-            $item[$name] = $this->object->properties[$name]->value;
-
-        if(!isset($modinfo)) 
-            $modinfo = xarModGetInfo($this->object->moduleid);
-
-        $item['module'] = $modinfo['name'];
-        $item['itemtype'] = $this->object->itemtype;
-        $item['itemid'] = $this->object->itemid;
-        $hooks = xarModCallHooks(
-            'item', 'modify', $this->object->itemid, 
-            $item, $modinfo['name']
-        );
-
-        $this->object->viewfunc = $this->func;
-        return xarTplModule(
-            $this->tplmodule,'admin','modify',
-            array(
-                'object' => $this->object,
-                'hookoutput' => $hooks
-            ),
-            $this->object->template
-        );
-    }
-
-    function object_delete(array $args = array())
-    {
-        if(!xarVarFetch('cancel',  'isset', $args['cancel'],  NULL, XARVAR_DONT_SET)) 
-            return;
-        if(!xarVarFetch('confirm', 'isset', $args['confirm'], NULL, XARVAR_DONT_SET)) 
-            return;
-
-        if(!empty($args) && is_array($args) && count($args) > 0) 
-            $this->args = array_merge($this->args, $args);
-
-        if(!isset($this->object)) 
-        {
-            $this->object =& DataObjectMaster::getObject($this->args);
-            if(empty($this->object)) 
-                return;
-
-            if(empty($this->tplmodule)) 
-            {
-                $modinfo = xarModGetInfo($this->object->moduleid);
-                $this->tplmodule = $modinfo['name'];
-            }
-        }
-        if(!empty($args['cancel'])) 
-        {
-            if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
-                return;
-                
-            if(!empty($args['return_url'])) 
-                xarResponse::Redirect($args['return_url']);
-            else 
-                xarResponse::Redirect(xarModURL(
-                    $this->tplmodule, 'user', $this->func,
-                    array('object' => $this->object->name))
-                );
-            // Return
-            return true;
-        }
-        
-        if(!xarSecurityCheck(
-            'DeleteDynamicDataItem',1,'Item',
-            $this->object->moduleid.':'.$this->object->itemtype.':'.$this->object->itemid)
-        ) return;
-
-        $itemid = $this->object->getItem();
-        if(empty($itemid) || $itemid != $this->object->itemid) 
-            throw new BadParameterException(null,'The itemid when deleting the object was found to be invalid');
-
-        if(!empty($args['confirm'])) 
-        {
-            if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-            }        
-
-            $itemid = $this->object->deleteItem();
-
-            if(empty($itemid)) 
-                return; // throw back
-
-            if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
-                return;
-                
-            if(!empty($args['return_url'])) 
-                xarResponse::Redirect($args['return_url']);
-            else 
-                xarResponse::Redirect(xarModURL(
-                    $this->tplmodule, 'user', $this->func,
-                    array('object' => $this->object->name))
-                );
-            // Return
-            return true;
-        }
-
-        $title = xarML('Delete #(1)', $this->object->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
-
-        $this->object->viewfunc = $this->func;
-        return xarTplModule(
-            $this->tplmodule,'admin','delete',
-            array('object' => $this->object),
-            $this->object->template
-        );
-    }
-
-    function object_display(array $args = array())
-    {
-        if(!xarVarFetch('preview', 'isset', $args['preview'], NULL, XARVAR_DONT_SET)) 
-            return;
-
-        if(!empty($args) && is_array($args) && count($args) > 0) 
-            $this->args = array_merge($this->args, $args);
-
-        if(!isset($this->object)) 
-        {
-            $this->object =& DataObjectMaster::getObject($this->args);
-            if(empty($this->object)) 
-                return;
-
-            if(empty($this->tplmodule)) 
-            {
-                $modinfo = xarModGetInfo($this->object->moduleid);
-                $this->tplmodule = $modinfo['name'];
-            }
-        }
-        $title = xarML('Display #(1)', $this->object->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
-
-        $itemid = $this->object->getItem();
-        if(empty($itemid) || $itemid != $this->object->itemid) 
-            throw new BadParameterException(
-                null,
-                'The itemid when displaying the object was found to be invalid'
-            );
-
-        // call item display hooks for this item
-        $item = array();
-        foreach(array_keys($this->object->properties) as $name) 
-            $item[$name] = $this->object->properties[$name]->value;
-
-        if(!isset($modinfo)) 
-            $modinfo = xarModGetInfo($this->object->moduleid);
-
-        $item['module'] = $modinfo['name'];
-        $item['itemtype'] = $this->object->itemtype;
-        $item['itemid'] = $this->object->itemid;
-        $item['returnurl'] = xarModURL(
-            $this->tplmodule,'user',$this->func,
-            array(
-                'object' => $this->object->name,
-                'itemid'   => $this->object->itemid
-            )
-        );
-        $hooks = xarModCallHooks(
-            'item', 'display', $this->object->itemid, $item, $modinfo['name']
-        );
-
-        $this->object->viewfunc = $this->func;
-        return xarTplModule(
-            $this->tplmodule,'user','display',
-            array(
-                'object' => $this->object,
-                'hookoutput' => $hooks
-            ),
-            $this->object->template
-        );
-    }
-
-    // no longer needed
-    function object_list(array $args = array())
-    {
-        if(!xarVarFetch('catid',    'isset', $args['catid'],    NULL, XARVAR_DONT_SET)) 
-            return;
-        if(!xarVarFetch('sort',     'isset', $args['sort'],     NULL, XARVAR_DONT_SET)) 
-            return;
-        if(!xarVarFetch('startnum', 'isset', $args['startnum'], NULL, XARVAR_DONT_SET)) 
-            return;
-
-        if(!empty($args) && is_array($args) && count($args) > 0) 
-            $this->args = array_merge($this->args, $args);
-
-        if(!isset($this->list)) 
-        {
-            $this->list =& DataObjectMaster::getObjectList($this->args);
-            if(empty($this->list)) 
-                return;
-            
-            if(empty($this->tplmodule)) 
-            {
-                $modinfo = xarModGetInfo($this->list->moduleid);
-                $this->tplmodule = $modinfo['name'];
-            }
-        }
-        $title = xarML('List #(1)', $this->list->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
-
-        $this->list->getItems();
-
-        $this->list->viewfunc = $this->func;
-        $this->list->linkfunc = $this->func;
-        return xarTplModule(
-            $this->tplmodule,'admin','view',
-            array('object' => $this->list),
-            $this->list->template
-        );
-    }
-
-    function object_view(array $args = array())
-    {
-        if(!xarVarFetch('catid',    'isset', $args['catid'],    NULL, XARVAR_DONT_SET)) 
-            return;
-        if(!xarVarFetch('sort',     'isset', $args['sort'],     NULL, XARVAR_DONT_SET)) 
-            return;
-        if(!xarVarFetch('startnum', 'isset', $args['startnum'], NULL, XARVAR_DONT_SET)) 
-            return;
-
-        if(!empty($args) && is_array($args) && count($args) > 0) 
-            $this->args = array_merge($this->args, $args);
-
-        if(!isset($this->list)) 
-        {
-            $this->list =& DataObjectMaster::getObjectList($this->args);
-            if(empty($this->list)) 
-                return;
-
-            if(empty($this->tplmodule)) 
-            {
-                $modinfo = xarModGetInfo($this->list->moduleid);
-                $this->tplmodule = $modinfo['name'];
-            }
-        }
-        $title = xarML('View #(1)', $this->list->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
-
-        $this->list->getItems();
-
-        $this->list->viewfunc = $this->func;
-        $this->list->linkfunc = $this->func;
-        return xarTplModule(
-            $this->tplmodule,'user','view',
-            array('object' => $this->list),
-            $this->list->template
-        );
-    }
-
 }
 
 ?>
