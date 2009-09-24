@@ -31,7 +31,7 @@ function roles_userapi_getuserhome($args)
     $notdone = true;
     if (!isset($userhome) || empty($userhome) || ($userhome == 'undefined')) {
         $userhome = "";
-        $settings = unserialize(xarModVars::get('roles', 'duvsettings'));
+        $settings = explode(',',xarModVars::get('roles', 'duvsettings'));
         if (in_array('primaryparent', $settings)) {
             // go for the primary parent's userhome
             $parentid = xarModItemVars::get('roles','primaryparent',$itemid);

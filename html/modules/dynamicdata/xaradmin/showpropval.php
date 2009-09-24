@@ -19,10 +19,18 @@ function dynamicdata_admin_showpropval($args)
     extract($args);
 
     // get the property id
-    if (!xarVarFetch('itemid',  'id',    $itemid)) {return;}
+    if (!xarVarFetch('itemid',  'id',    $itemid, NULL, XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('exit', 'isset', $exit, NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('confirm', 'isset', $confirm, NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
+
+    if (empty($itemid)) {
+        // get the property type for sample configuration
+        if (!xarVarFetch('proptype', 'isset', $proptype, NULL, XARVAR_NOT_REQUIRED)) {return;}
+
+        // show sample configuration for some property type
+        return dynamicdata_config_propval($proptype);
+    }
 
     // get the object corresponding to this dynamic property
     $myobject = & DataObjectMaster::getObject(array('name'   => 'properties',
@@ -118,7 +126,82 @@ function dynamicdata_admin_showpropval($args)
     $data['itemid'] = $itemid;
     $data['object'] =& $myobject;
 
+    xarTplSetPageTitle(xarML('Configuration for DataProperty #(1)', $itemid));
+
     // Return the template variables defined in this function
+    return $data;
+}
+
+/**
+ * Show sample configuration for some property type
+ * @return array
+ */
+function dynamicdata_config_propval($proptype)
+{
+    $data = array();
+    if (empty($proptype)) {
+        xarTplSetPageTitle(xarML('Sample Configuration for DataProperty Types'));
+        return $data;
+    }
+
+    // get a new property of the right type
+    $data['type'] = $proptype;
+    $data['name'] = 'dd_' . $proptype;
+    $property =& DataPropertyMaster::getProperty($data);
+    if (empty($property)) {
+        xarTplSetPageTitle(xarML('Sample Configuration for DataProperty Types'));
+        return $data;
+    }
+
+    if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('confirm', 'isset', $confirm, NULL, XARVAR_DONT_SET)) {return;}
+    if (!empty($preview) || !empty($confirm)) {
+        if (!xarVarFetch($data['name'],'isset',$configuration,NULL,XARVAR_NOT_REQUIRED)) return;
+
+        // pass the current value as configuration rule
+        $data['configuration'] = isset($configuration) ? $configuration : '';
+
+        $isvalid = $property->updateConfiguration($data);
+
+        if ($isvalid) {
+            $data['configuration'] = $property->configuration;
+/*
+// CHECKME: allow updating the default configuration for a property type someday ? See
+//          also CHECKME in class/properties/master.php DataPropertyMaster::getProperty()
+            if (!empty($confirm)) {
+                if (!xarSecConfirmAuthKey()) {
+                    return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                }
+// TODO: we need some method in PropertyRegistration to update a property type ;-)
+
+// TODO: we need some way to avoid overwriting this whenever we flush property types
+            }
+*/
+        } else {
+            $data['invalid'] = $property->invalid;
+        }
+
+    // pass the current value as configuration rule
+    } elseif (!empty($property->configuration)) {
+        $data['configuration'] = $property->configuration;
+
+    } else {
+        $data['configuration'] = null;
+    }
+
+    // pass the id for the input field here
+    $data['id']         = 'dd_'.$proptype;
+    $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
+    $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
+    $data['size']       = !empty($size) ? $size : 50;
+
+    // call its showConfiguration() method and return
+    $data['showval'] = $property->showConfiguration($data);
+    $data['proptype'] = $proptype;
+    $data['propinfo'] =& $property;
+
+    xarTplSetPageTitle(xarML('Sample Configuration for DataProperty Type #(1)', $proptype));
+
     return $data;
 }
 

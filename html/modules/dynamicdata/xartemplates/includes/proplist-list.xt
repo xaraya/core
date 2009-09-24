@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <p>Hint: empty the Label to delete a property for all items</p>
-    <p>Click on a Property Name to edit it.</p>
+    <p>Hint: empty the Label field to delete a property for all items.</p>
     <xar:if condition="!empty($objectid) and $objectid lt 3">
         <h3>Warning! This is a system object used internally by the Dynamic Data module. Trying to
         modify the properties of this object may break the Dynamic Data module. Proceed with
@@ -11,11 +10,90 @@
                                        array('objectid' => 2,
                                              'allprops' => true))
     </xar:set>                                         
-    <xar:foreach in="$fields" value="$item">
-        <!-- Include the edit-part for a property -->
-        <xar:set name="field">$item</xar:set>
-        <xar:template file="editproperty" module="dynamicdata" />
-    </xar:foreach>
+    <table class="xar-fullwidth">
+        <tr>
+            <th>
+                #$propertyfields.id.label#
+            </th>
+            <th>
+                #$propertyfields.seq.label#
+            </th>
+            <th>
+                #$propertyfields.name.label#
+            </th>
+            <th>
+                #$propertyfields.label.label#
+            </th>
+            <th>
+                #$propertyfields.type.label#
+            </th>
+            <th>
+                #$propertyfields.defaultvalue.label#
+            </th>
+            <th>
+                Configuration
+            </th>
+        </tr>
+        <xar:set name="index">0</xar:set>
+        <xar:foreach in="$fields" value="$item">
+            <!-- Include the edit-part for a property -->
+            <xar:set name="field">$item</xar:set>
+            <xar:set name="index">$index+1</xar:set>
+            <xar:if condition="(($index + 1) % 2)">
+                <xar:set name="displayclass">'xar-alt'</xar:set>
+            <xar:else/>
+                <xar:set name="displayclass">'xar-norm'</xar:set>
+            </xar:if>
+            <tr>
+                <td class="#$displayclass#">
+                    #$field.id#
+                </td>
+                <td class="#$displayclass#">
+                    <input type="text" name="dd_seq[#$field['id']#]" id="dd_seq_#$field['id']#" value="#$field['seq']#" class="xar-form-textshort" />
+                </td>
+                <td class="#$displayclass#">
+                    <input type="text" name="dd_name[#$field['id']#]" id="dd_name_#$field['id']#" value="#$field['name']#" class="xar-form-textmedium" />
+                </td>
+                <td class="#$displayclass#">
+                    <input type="text" name="dd_label[#$field['id']#]" id="dd_label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium" />
+                </td>
+                <td class="#$displayclass#">
+                    <xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="old_dd_type_'.$field['id'].'" value="$field['type']" />
+                </td>
+                <td class="#$displayclass#">
+                    <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVarPrepForDisplay($field['defaultvalue'])#" class="xar-form-textmedium" />
+                </td>
+                <td class="#$displayclass#">
+                    <xar:set name="title">xarML('Edit configuration for property "#(1)"',$field['name'])</xar:set>
+                    <xar:set name="link">
+                        xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $field['id']))
+                    </xar:set>
+                    <xar:set name="icon">
+                        xarTplGetImage('icons/modify.png', 'base')
+                    </xar:set>
+                    <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="#$displayclass#">
+                    &#160;
+                </td>
+                <td colspan="5" class="#$displayclass#">
+                    Source:&#160;
+                    <select class="dd-norm" name="dd_source[#$field['id']]" id="dd_source_#$field['id']">
+                        <xar:foreach in="$sources" value="$mysource">
+                            <option>#$mysource#</option>
+                        </xar:foreach>
+                    </select>                    
+                    &#160;&#160;Status:&#160;
+                    <xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" id="dd_status_'.$field['id'].'" size="15" value="$field['status']" />
+                </td>
+                <td class="#$displayclass#">
+                    &#160;
+                </td>
+            </tr>
+        </xar:foreach>
+    </table>
     <!-- Include the part for creating a new property -->
     <xar:template file="newproperty" module="dynamicdata" />
     <xar:if condition="!empty($hooks)">

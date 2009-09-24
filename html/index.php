@@ -108,25 +108,8 @@ function xarMain()
         // We're all done, one ServerRequest made
         xarEvents::trigger('ServerRequest');
 
-        // Note : the page template may be set to something else in the module function
-        if (xarTplGetPageTemplateName() == 'default' && $modType != 'admin') {
-            // NOTE: we should fallback to the way we were handling this before
-            // (ie: use pages/$modName.xt if pages/user-$modName is not found)
-            // instead of just switching to the new way without a deprecation period
-            // so as to prevent breaking anyone's sites. <rabbitt>
-            if (!xarTplSetPageTemplateName('user-'.$modName)) {
-                xarTplSetPageTemplateName($modName);
-            }
-        }
-
         // Set page template
-        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default' && xarModVars::Get('themes', 'usedashboard')) {
-            $dashtemplate=xarModVars::Get('themes','dashtemplate');
-            //if dashboard is enabled, use the dashboard template else fallback on the normal template override system for admin templates
-              if (!xarTplSetPageTemplateName($dashtemplate.'-'.$modName)) {
-                xarTplSetPageTemplateName($dashtemplate);
-            }
-        }elseif ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
+        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
              // Use the admin-$modName.xt page if available when $modType is admin
             // falling back on admin.xt if the former isn't available
             if (!xarTplSetPageTemplateName('admin-'.$modName)) {

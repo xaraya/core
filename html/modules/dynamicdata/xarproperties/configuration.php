@@ -36,10 +36,13 @@ class ConfigurationProperty extends TextBoxProperty
 
     public function checkInput($name = '', $value = null)
     {
-        if (!isset($newtype)) {
-            $newtype = $this->objectref->properties['property_id']->value;
+        // set property type from object reference (= dynamic configuration) if possible
+        if (empty($this->proptype) && !empty($this->objectref) && !empty($this->objectref->properties['property_id'])) {
+            $this->proptype = $this->objectref->properties['property_id']->value;
+            $data['type'] = $this->proptype;
         }
 
+// TODO: clean up old stuff + support nested configurations (e.g. for array of properties)
         // get a new property of the right type
         if (!empty($newtype)) {
             $data['type'] = $newtype;
@@ -63,7 +66,17 @@ class ConfigurationProperty extends TextBoxProperty
 
     public function showInput(Array $data = array())
     {
-        $data['type'] = $this->objectref->properties['property_id']->value;
+        // set property type from input
+        if (!empty($data['type'])) {
+            $this->proptype = $data['type'];
+        } else {
+            $data['type'] = $this->proptype;
+        }
+        // set property type from object reference (= dynamic configuration) if possible
+        if (empty($this->proptype) && !empty($this->objectref) && !empty($this->objectref->properties['property_id'])) {
+            $this->proptype = $this->objectref->properties['property_id']->value;
+            $data['type'] = $this->proptype;
+        }
 
         $property =& DataPropertyMaster::getProperty($data);
         $property->id = $this->id;

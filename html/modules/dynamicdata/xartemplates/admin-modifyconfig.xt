@@ -45,7 +45,8 @@
                             <xar:data-output property="$fieldtypeprop" value="$field['format']" />
                         </td>
                         <td>
-                            <input type="text" name="configuration[#$field['id']#]" id="configuration_#$field['id']#" value="#$field['configuration']#" class="xar-form-textmedium" />
+                            <xar:var name="field.configuration" prep="true" />
+                            <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype'=>$field['name']))#">Preview</a>
                         </td>
                     </tr>
                 </xar:foreach>
@@ -57,7 +58,9 @@
                     <th>Name</th>
                     <th>Display Name</th>
                     <th>Input Format</th>
+<!--
                     <th>#$labels['configuration']#</th>
+-->
                 </tr>
                 <tr>
                     <td>#$labels['new']#</td>
@@ -70,9 +73,11 @@
                     <td>
                         <xar:data-input property="$fieldtypeprop" name="format[0]" id="format_0" value="" />
                     </td>
+<!--
                     <td>
                         <input type="text" name="validation[0]" id="validation_0" value="" class="xar-form-textmedium" />
                     </td>
+-->
                 </tr>
             </table>
             <div class="xar-align-center">

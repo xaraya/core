@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- TODO: give this some "modern" look and make it configurable -->
+    <legend>Social Profiles</legend>
+    <xar:foreach in="$profiles" value="$profile">
+        <div class="xar-form-input-wrapper">
+            <label class="xar-form-label" for="#$name#_#$profile[0]#">
+                <img src="#xarTplGetImage('social/'.$profile[5],'roles')#" alt="#$profile[0]#" width="16" height="16" border="0"/>
+                <a href="#$profile[1]#" title="#$profile[0]#"> #$profile[0]# </a>
+            </label>
+            <xar:foreach in="$profile[3]" value="$var">
+                <xar:if condition="!empty($value[$profile[0]][$var])">
+                    <input type="text" name="#$name#[#$profile[0]#][#$var#]" id="#$name#_#$profile[0]#_#$var#" value="#$value[$profile[0]][$var]#" size="15" />
+                <xar:else/>
+                    <input type="text" name="#$name#[#$profile[0]#][#$var#]" id="#$name#_#$profile[0]#_#$var#" value="" size="15" />
+                </xar:if>
+            </xar:foreach>
+            #$profile[2]#
+        </div>
+    </xar:foreach>
+    <xar:template file="dataproperty_additions" module="base" />        
+</xar:template>

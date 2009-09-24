@@ -60,12 +60,15 @@ function dynamicdata_util_meta($args)
     $data['export'] = $export;
     $data['prop'] = xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'));
 
-    if ((bool)xarModVars::get('themes','usedashboard')) {
-        $admin_tpl = xarModVars::get('themes','dashtemplate');
-    }else {
-       $admin_tpl = 'default';
+    // Get the default property types
+    $proptypes = DataPropertyMaster::getPropertyTypes();
+    $proptypenames = array();
+    foreach ($proptypes as $proptype) {
+        $proptypenames[$proptype['id']] = $proptype['name'];
     }
-    xarTplSetPageTemplateName($admin_tpl);
+    $data['proptypes'] = $proptypenames;
+
+    xarTplSetPageTemplateName('admin');
 
     return $data;
 }

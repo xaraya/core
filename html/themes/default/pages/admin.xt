@@ -16,29 +16,20 @@
             <xar:place-javascript position="head" />
         </head>
         <body>
-            <div id="wrapper">
-                <div id="main">
-                    <div id="logo">
-                        <a href="index.php" title="home">
-                            <img src="#xarTplGetThemeDir()#/images/xarLogo2.png" width="90" height="90" alt="Xaraya Logo" title="home" />
-                        </a>
-                        <p>
-                            <xar:var name="SiteSlogan" scope="module" module="themes" />
-                        </p>
+            <div id="admin-wrapper">
+                <div id="admin-main">
+                    <div style="text-align: right">
+                        <xar:var name="SiteName" scope="module" module="themes" />
                     </div>
                     <xar:module id="modulespace" />
                 </div>
-                <div id="sideInfo1" class="sideInfo">
-                    <xar:blockgroup name="left" id="left" />
-                </div>
-                <div id="sideInfo2" class="sideInfo">
-                    <xar:blockgroup name="right" id="right" />
-                    <!--
+                <div id="sideInfo1" class="admin-sideInfo">
+                    <xar:var name="title">Frontend Interface</xar:var>
+                    <a href="index.php" title="$title">
+                        [ Front end ]
+                    </a>
                     <xar:blockgroup name="admin" id="admin" />
-                    -->
                 </div>
-                <xar:blockgroup name="topnav" id="topnav" />
-                <xar:blockgroup name="center" id="center" />
                 <xar:place-javascript position="body" />
             </div>
         </body>
