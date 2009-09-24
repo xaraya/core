@@ -35,6 +35,7 @@
         function display(Array $data=array())
         {
             $data = parent::display($data);
+            if (empty($data)) return;
             $now = time();
 
             if (isset($data['expire']) && $now > $data['expire']){

@@ -39,10 +39,8 @@ class AdminMenuBlock extends BasicBlock implements iBlock
  */
     function display(Array $data=array())
     {
-        // Security Check
-        if (!xarSecurityCheck('AdminBaseBlock',0,'Block',"adminmenu:$data[title]:$data[bid]")) {return;}
         $data = parent::display($data);
-
+        if (empty($data)) return;
         $vars = isset($data['content']) ? $data['content'] : array();
         if (!isset($vars['showlogout'])) $vars['showlogout'] = $this->showlogout;
         if (!isset($vars['menustyle'])) $vars['menustyle'] = $this->menustyle;

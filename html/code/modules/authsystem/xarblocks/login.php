@@ -39,8 +39,7 @@ class LoginBlock extends BasicBlock implements iBlock
     function display(Array $data=array())
     {
         $data = parent::display($data);
-        // Security Check
-        if(!xarSecurityCheck('ViewLogin',0,'Block',"Login:" . $data['title'] . ":" . $data['bid'],'All')) return;
+        if (empty($data)) return;
 
         $vars = isset($data['content']) ? $data['content'] : array();
         if (!isset($vars['showlogout'])) $vars['showlogout'] = $this->showlogout;

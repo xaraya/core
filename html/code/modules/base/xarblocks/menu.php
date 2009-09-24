@@ -49,8 +49,7 @@ class MenuBlock extends BasicBlock implements iBlock
     function display(Array $data=array())
     {
         $data = parent::display($data);
-        // Security Check
-        if (!xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$data[title]:$data[bid]")) {return;}
+        if (empty($data)) return;
 
         $vars = isset($data['content']) ? $data['content'] : array();
 
