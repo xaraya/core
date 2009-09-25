@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+    <?xml version="1.0" encoding="utf-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <link rel="stylesheet" type="text/css" href="themes/installer/style/style.css" />
@@ -47,6 +47,7 @@
                                         <li class="active"><a href="#solo" style="text-decoration: none;">Installing in a Solo Environment</a></li>
                                         <li class="active"><a href="#shared" style="text-decoration: none;">Installing in a Shared Environment</a></li>
                                         <li class="active"><a href="#custom" style="text-decoration: none;">Custom Installations</a></li>
+                                        <li class="active"><a href="#rename" style="text-decoration: none;">Renaming the Document Root</a></li>
                                         <li class="active"><a href="#multi" style="text-decoration: none;">Installing Multiple Sites</a></li>
                                         <li class="active"><a href="#trouble" style="text-decoration: none;">Troubleshooting</a></li>
                                     </ul>
@@ -160,6 +161,37 @@
                                             The values of $systemConfiguration['webDir'], $systemConfiguration['libDir'] and $systemConfiguration['codeDir'] must correspond to the locations of the html, lib and code directories respectively <b>relative to the root directory</b>.
                                         </li>
                                     </ul>
+                                </p>
+                              <a name="rename" style="text-decoration: none;"><h2>Renaming the Document Root</h2></a> <a href="#top">top</a>
+                                <p class="center">
+                                    The document root directory (the directory containing the file index.php) in Xaraya's default install is named 'html'. In many shared hosting environments the document root directory has a different name, such as 'public_html'. To change the name of the Xaraya document root:
+                                    <ul>
+                                        <li>
+                                            In the var/layout.system.php file, change all references to 'html' to whatever the directory's new name is to be, e.g..
+                                            <pre>
+$systemConfiguration['rootDir'] = "../";
+$systemConfiguration['webDir']  = "html/";
+$systemConfiguration['libDir']  = "lib/";
+$systemConfiguration['codeDir'] = "html/code/";
+                                            </pre>
+
+                                            to
+
+                                            <pre>
+$systemConfiguration['rootDir'] = "../";
+$systemConfiguration['webDir']  = "public_html/";
+$systemConfiguration['libDir']  = "lib/";
+$systemConfiguration['codeDir'] = "public_html/code/";
+                                            </pre>
+                                        </li>
+                                        <li>
+                                            Rename the document root directory in your Xaraya install, or move the contents of the document root directory to the directory provided by the hosting environment.
+                                        </li>
+                                        <li>
+                                            Restart the web server.
+                                        </li>
+                                    </ul>
+                                    Note that in the "flat install" configuration in var/layout.system.php, the document root directory is given as "". In such cases where the directory is not explicitly named, no changes to the layout file need to be made.
                                 </p>
                               <a name="multi" style="text-decoration: none;"><h2>Installing Multiple Sites</h2></a> <a href="#top">top</a>
                                 <p class="center">
