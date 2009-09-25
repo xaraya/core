@@ -407,3 +407,22 @@ pre {
 #authsystemBlocksLogin .textInputContainer input, #authsystemBlocksLogin .passInputContainer input {
     width: 96%; /* wanted to do this with display: block, but that does not work correctly, this seems to work best... */
 }
+
+/*
+icon related styling
+-------------------------------------------------------------------------[comment] */
+
+a.xar-icon {
+    text-decoration: none;
+}
+a.xar-icon img{
+    vertical-align: text-top;
+}
+img.xar-icon {
+    vertical-align: text-top;
+}
+img.xar-icon-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    vertical-align: text-top;
+}
