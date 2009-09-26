@@ -111,7 +111,12 @@ class AdminMenuBlock extends BasicBlock implements iBlock
                         // call the api function to obtain function links, but don't raise an exception if it's not there
                         try {
                             $menulinks = xarMod::apiFunc($modname, 'admin', 'getmenulinks', array());
-
+                        } catch (FunctionNotFoundException $e) {
+                            // try for presence of an adminmenu-dat file for this module
+                            // the menuarray function returns an empty array or menulinks for the module
+                            $menulinks = xarMod::apiFunc('base','admin','menuarray',array('module' => $modname));
+                        }
+                        if (!empty($menulinks) && is_array($menulinks)) {
                             foreach($menulinks as $menulink) {
                                 $adminmods[$modname]['indlinks'][] = array(
                                     'adminlink'     => $menulink['url'],
@@ -120,8 +125,7 @@ class AdminMenuBlock extends BasicBlock implements iBlock
                                     'funcactive'    => ($menulink['url'] == $currenturl) ? 1 : 0
                                 );
                             }
-                        } catch (FunctionNotFoundException $e) {
-                            $menulinks = array();
+                            unset($menulinks);
                         }
                     } // if
                 } // foreach
@@ -171,6 +175,12 @@ class AdminMenuBlock extends BasicBlock implements iBlock
                         // call the api function to obtain function links, but don't raise an exception if it's not there
                         try {
                             $menulinks = xarMod::apiFunc($modname, 'admin', 'getmenulinks', array());
+                        } catch (FunctionNotFoundException $e) {
+                            // try for presence of an adminmenu-dat file for this module
+                            // the menuarray function returns an empty array or menulinks for the module
+                            $menulinks = xarMod::apiFunc('base','admin','menuarray',array('module' => $modname));
+                        }
+                        if (!empty($menulinks) && is_array($menulinks)) {
                             foreach($menulinks as $menulink) {
                                 $catmods[$cat][$modname]['indlinks'][] = array(
                                     'adminlink'     => $menulink['url'],
@@ -179,8 +189,7 @@ class AdminMenuBlock extends BasicBlock implements iBlock
                                     'funcactive'    => ($menulink['url'] == $currenturl) ? 1 : 0
                                 );
                             }
-                        } catch (FunctionNotFoundException $e) {
-                            $menulinks = array();
+                            unset($menulinks);
                         }
                     } else {
                        // Why is this needed?
