@@ -12,7 +12,7 @@
 
 /**
  * This is a standard function that is called with the results of the
- * form supplied by xarModFunc('dynamicdata','admin','new') to create a new item
+ * form supplied by xarMod::guiFunc('dynamicdata','admin','new') to create a new item
  * @param int    objectid
  * @param int    itemid
  * @param string preview

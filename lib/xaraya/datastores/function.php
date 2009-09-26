@@ -61,14 +61,14 @@ class Dynamic_Function_DataStore extends BasicDataStore
                     $this->fields[$function]->value = $value;
                 }
             } else {
-            // TODO: don't we want auto-loading for xarModFunc too ???
+            // TODO: don't we want auto-loading for xarMod::guiFunc too ???
                 // try to load the module GUI
                 if (!xarMod::load($fmod,$ftype)) {
                     continue;
                 }
                 // try to invoke the function with some common parameters
             // TODO: standardize this, or allow the admin to specify the arguments
-                $value = xarModFunc($fmod,$ftype,$ffunc,
+                $value = xarMod::guiFunc($fmod,$ftype,$ffunc,
                                     array('modname' => $modname,
                                           'modid' => $modid,
                                           'itemtype' => $itemtype,
