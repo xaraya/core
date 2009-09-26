@@ -9,7 +9,7 @@
     <xar:set name="propertyfields">xarModAPIFunc('dynamicdata','user','getprop',
                                        array('objectid' => 2,
                                              'allprops' => true))
-    </xar:set>                                         
+    </xar:set>
     <table class="xar-fullwidth">
         <tr>
             <th>
@@ -35,6 +35,7 @@
             </th>
         </tr>
         <xar:set name="index">0</xar:set>
+        <xar:set name="numprops">count($fields)</xar:set>
         <xar:foreach in="$fields" value="$item">
             <!-- Include the edit-part for a property -->
             <xar:set name="field">$item</xar:set>
@@ -64,7 +65,7 @@
                     <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVarPrepForDisplay($field['defaultvalue'])#" class="xar-form-textmedium" />
                 </td>
                 <td class="#$displayclass#">
-                    <xar:set name="title">xarML('Edit configuration for property "#(1)"',$field['name'])</xar:set>
+                    <xar:set name="title">xarML('Edit configuration for property \"#(1)\"',$field['name'])</xar:set>
                     <xar:set name="link">
                         xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $field['id']))
                     </xar:set>
@@ -72,6 +73,32 @@
                         xarTplGetImage('icons/modify.png', 'base')
                     </xar:set>
                     <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
+
+                    <xar:set name="title">xarML('Move property up')</xar:set>
+                    <xar:set name="icon">
+                        xarTplGetImage('icons/go-up.png', 'base')
+                    </xar:set>
+                    <xar:if condition="$index gt 1 and $numprops gt 1">
+                    <xar:set name="link">
+                        xarModURL('dynamicdata', 'admin', 'orderprops', array('module_id' => $module_id, 'itemtype' => $itemtype, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid))
+                    </xar:set>
+                    <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
+                    <xar:else />
+                    <img class="xar-icon-disabled" src="#$icon#" alt="up" title="#$title#" />
+                    </xar:if>
+
+                    <xar:set name="title">xarML('Move property down')</xar:set>
+                    <xar:set name="icon">
+                        xarTplGetImage('icons/go-down.png', 'base')
+                    </xar:set>
+                    <xar:if condition="$index lt $numprops and $numprops ne 1">
+                    <xar:set name="link">
+                        xarModURL('dynamicdata', 'admin', 'orderprops', array('module_id' => $module_id, 'itemtype' => $itemtype, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
+                    </xar:set>
+                    <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
+                    <xar:else />
+                    <img class="xar-icon-disabled" src="#$icon#" alt="down" title="#$title#" />
+                    </xar:if>
                 </td>
             </tr>
             <tr>
@@ -93,7 +120,7 @@
                         <xar:if condition="empty($found_source) and !empty($field['source'])">
                             <option selected="selected">#$field['source']#</option>
                         </xar:if>
-                    </select>                    
+                    </select>
                     &#160;&#160;Status:&#160;
                     <xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" id="dd_status_'.$field['id'].'" size="15" value="$field['status']" />
                 </td>
