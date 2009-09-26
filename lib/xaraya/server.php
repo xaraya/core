@@ -389,11 +389,13 @@ class xarRequest extends Object
             $params = array();
             if (isset($decomposed['query'])) {
                 $pairs = explode('&', $decomposed['query']);
-                foreach($pairs as $pair) {
-                    if (trim($pair) == '') continue;
-                    list($key, $value) = explode('=', $pair);
-                    $params[$key] = urldecode($value);
-                }
+                try {
+                    foreach($pairs as $pair) {
+                        if (trim($pair) == '') continue;
+                        list($key, $value) = explode('=', $pair);
+                        $params[$key] = urldecode($value);
+                    }
+                } catch(Exception $e) {}
                 sys::import('xaraya.validations');
                 $regex = ValueValidations::get('regexp');
             }
