@@ -25,7 +25,7 @@ function blocks_adminapi_groupgetinfo($args)
 
     if ($blockGroupId < 1) throw new BadParameterException('blockGroupId');
 
-    return xarModAPIFunc(
+    return xarMod::apiFunc(
         'blocks', 'user', 'groupgetinfo',
         array('id' => $blockGroupId)
     );

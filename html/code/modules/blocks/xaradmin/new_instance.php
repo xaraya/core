@@ -21,13 +21,13 @@ function blocks_admin_new_instance()
     xarVarFetch('formodule', 'str:1', $module, NULL, XARVAR_NOT_REQUIRED);
 
     // Fetch block type list.
-    $block_types = xarModAPIfunc(
+    $block_types = xarMod::apiFunc(
         'blocks', 'user', 'getallblocktypes',
         array('order' => 'module,type', 'module' => $module)
     );
 
     // Fetch available block groups.
-    $block_groups = xarModAPIfunc(
+    $block_groups = xarMod::apiFunc(
         'blocks', 'user', 'getallgroups', array('order' => 'name')
     );
 

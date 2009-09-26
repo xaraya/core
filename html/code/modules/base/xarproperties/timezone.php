@@ -66,7 +66,7 @@ class TimeZoneProperty extends SelectProperty
         }
 
         // check if the timezone exists
-        $info = xarModAPIFunc('base','user','timezones',
+        $info = xarMod::apiFunc('base','user','timezones',
                               array('timezone' => $timezone));
         if (empty($info)) {
             $this->invalid = xarML('timezone');

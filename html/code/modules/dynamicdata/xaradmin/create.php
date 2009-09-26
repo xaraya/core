@@ -50,11 +50,11 @@ function dynamicdata_admin_create($args)
     $isvalid = $myobject->checkInput();
 
     // recover any session var information
-    $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
+    $data = xarMod::apiFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
     extract($data);
 
     if (!empty($preview) || !$isvalid) {
-        $data = array_merge($data, xarModAPIFunc('dynamicdata','admin','menu'));
+        $data = array_merge($data, xarMod::apiFunc('dynamicdata','admin','menu'));
 
         $data['object'] = $myobject;
 

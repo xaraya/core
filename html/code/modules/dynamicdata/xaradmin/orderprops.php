@@ -70,7 +70,7 @@ function dynamicdata_admin_orderprops()
         throw new BadParameterException($vars,$msg);
     }
 
-    $fields = xarModAPIFunc('dynamicdata','user','getprop',
+    $fields = xarMod::apiFunc('dynamicdata','user','getprop',
                                    array('objectid' => $objectid,
                                             'module_id' => $module_id,
                                             'itemtype' => $itemtype,
@@ -100,7 +100,7 @@ function dynamicdata_admin_orderprops()
     }
 
     if (isset($swappos)) {
-        if (!xarModAPIFunc('dynamicdata','admin','updateprop',
+        if (!xarMod::apiFunc('dynamicdata','admin','updateprop',
                           array('id' => $itemid,
                                 'label' => $fields[$move_prop]['label'],
                                 'type' => $fields[$move_prop]['type'],
@@ -108,7 +108,7 @@ function dynamicdata_admin_orderprops()
             return;
         }
 
-        if (!xarModAPIFunc('dynamicdata','admin','updateprop',
+        if (!xarMod::apiFunc('dynamicdata','admin','updateprop',
                           array('id' => $fields[$swapwith]['id'],
                                 'label' => $fields[$swapwith]['label'],
                                 'type' => $fields[$swapwith]['type'],

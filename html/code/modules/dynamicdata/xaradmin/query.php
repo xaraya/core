@@ -146,7 +146,7 @@ function dynamicdata_admin_query($args)
 
     $data['itemid'] = $itemid;
     $data['olditemid'] = $itemid;
-    $data['objects'] = xarModAPIFunc('dynamicdata','user','getobjects');
+    $data['objects'] = xarMod::apiFunc('dynamicdata','user','getobjects');
 
     $dbconn = xarDB::getConn();
     $data['table'] = $table;
@@ -166,7 +166,7 @@ function dynamicdata_admin_query($args)
             if (!empty($join) || empty($data['object']->primary)) {
             // (try to) show the "static" properties, corresponding to fields in dedicated
             // tables for this module
-                $static = xarModAPIFunc('dynamicdata','util','getstatic',
+                $static = xarMod::apiFunc('dynamicdata','util','getstatic',
                                         array('module_id' => $data['object']->moduleid,
                                               'itemtype' => $data['object']->itemtype));
                 $data['jointables'] = array();

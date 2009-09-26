@@ -7,13 +7,13 @@ function mail_userapi_getqueues($args)
     // itemtypes of mail yet. In short, the items of the qDef object
 
     // Do we have the master ?
-    if(!$qdefInfo = xarModApiFunc('mail','admin','getqdef')) {
+    if(!$qdefInfo = xarMod::apiFunc('mail','admin','getqdef')) {
         // Redirect to the view page, which offers to create one
         xarResponse::Redirect(xarModUrl('mail','admin','view'));
         return true;
     }
     $params = array('modid' => $qdefInfo['moduleid'],'itemtype' => $qdefInfo['itemtype']);
-    $queues = xarModApiFunc('dynamicdata','user','getitems',$params);
+    $queues = xarMod::apiFunc('dynamicdata','user','getitems',$params);
 
     return $queues;
 }

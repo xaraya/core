@@ -36,7 +36,7 @@ function roles_userapi_getuserhome($args)
             // go for the primary parent's userhome
             $parentid = xarModItemVars::get('roles','primaryparent',$itemid);
             if (!empty($parentid)) {
-               return xarModAPIFunc('roles','user','getuserhome',array('itemid' => $parentid));
+               return xarMod::apiFunc('roles','user','getuserhome',array('itemid' => $parentid));
             }
     }
     if ($notdone) {
@@ -44,7 +44,7 @@ function roles_userapi_getuserhome($args)
            // TODO: what would be a more logical choice?
             $role = xarRoles::get($itemid);
             foreach ($role->getParents() as $parent) {
-                return xarModAPIFunc('roles','user','getuserhome',array('itemid' => $parent->getID()));
+                return xarMod::apiFunc('roles','user','getuserhome',array('itemid' => $parent->getID()));
                 break;
             }
         }

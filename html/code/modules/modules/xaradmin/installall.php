@@ -32,18 +32,18 @@ function modules_admin_installall()
    @set_time_limit(600);
 
     // Get all modules in DB
-    $dbModules = xarModAPIFunc('modules','admin','getdbmodules');
+    $dbModules = xarMod::apiFunc('modules','admin','getdbmodules');
     if (!isset($dbModules)) return;
 
     foreach ($dbModules as $name => $info) {
         //Jump if already installed
         if ($info['state'] == XARMOD_STATE_INSTALLED) continue;
-        $dependencies = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$info['regid']));
+        $dependencies = xarMod::apiFunc('modules','admin','getalldependencies',array('regid'=>$info['regid']));
         //If this cannot be installed, jump it
         if (count($dependencies['unsatisfiable']) > 0) {
             continue;
         } else {
-               if (xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$info['regid']))) {
+               if (xarMod::apiFunc('modules','admin','installwithdependencies',array('regid'=>$info['regid']))) {
                 foreach ($dependencies['satisfiable'] as $key => $modInfo) {
                     $dbModules[$modInfo['name']]['state'] = XARMOD_STATE_INSTALLED;
                 }

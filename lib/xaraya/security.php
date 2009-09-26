@@ -324,7 +324,7 @@ function xarTree()
  */
 function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$level)
 {
-    return xarModAPIFunc('privileges','admin','returnprivilege',array(
+    return xarMod::apiFunc('privileges','admin','returnprivilege',array(
         'pid' => $pid,
         'name' => $name,
         'realm' => $realm,

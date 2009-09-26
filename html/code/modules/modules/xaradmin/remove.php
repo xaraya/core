@@ -46,10 +46,10 @@ function modules_admin_remove ()
         // FIXME: double check this line and the line with removeewithdependents below,
         // they can NOT be called in the same request due to the statics used in there, the logic
         // needs to be reviewed, it's not solid enough.
-        $dependents = xarModAPIFunc('modules','admin','getalldependents',array('regid'=>$id));
+        $dependents = xarMod::apiFunc('modules','admin','getalldependents',array('regid'=>$id));
         if (!(count($dependents['active']) > 0 || count($dependents['initialised']) > 1 )) {
             //No dependents, just remove the module
-            if(!xarModAPIFunc('modules','admin','remove',array('regid' => $id)))  return;
+            if(!xarMod::apiFunc('modules','admin','remove',array('regid' => $id)))  return;
             // Clear the property cache
             PropertyRegistration::importPropertyTypes(true);
             xarResponse::Redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
@@ -65,7 +65,7 @@ function modules_admin_remove ()
 
     // User has seen the GUI
     // Removes with dependents, first remove the necessary dependents then the module itself
-    if (!xarModAPIFunc('modules','admin','removewithdependents',array('regid'=>$id))) {
+    if (!xarMod::apiFunc('modules','admin','removewithdependents',array('regid'=>$id))) {
         //Call exception
         xarLogMessage('Missing module since last generation!');
         return;

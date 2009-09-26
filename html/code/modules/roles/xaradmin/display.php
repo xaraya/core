@@ -23,9 +23,9 @@ function roles_admin_display()
     $role = xarRoles::get($id);
 
     $data['itemtype'] = $role->getType();
-    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+    $data['basetype'] = xarMod::apiFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
 
-    $object = xarModAPIFunc('dynamicdata','user','getobject',array('module'   => 'roles',
+    $object = xarMod::apiFunc('dynamicdata','user','getobject',array('module'   => 'roles',
                                                 'itemtype' => $data['basetype']));
 
     $itemid = $object->getItem(array('itemid' => $id));
@@ -47,7 +47,7 @@ function roles_admin_display()
 
     $data['id'] = $id;
 
-    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $types = xarMod::apiFunc('roles','user','getitemtypes');
 
     $data['name'] = $name;
 

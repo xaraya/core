@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:set name="statelist">xarModAPIFunc('roles','user','getstates')</xar:set>
+    <xar:set name="statelist">xarMod::apiFunc('roles','user','getstates')</xar:set>
     <xar:set name="modstatus">xarSession::getVar('statusmsg')</xar:set>
     <xar:javascript module="base" filename="checkall.js" position="head" />
     <xar:javascript module="roles" filename="xarTree.js" position="head" />

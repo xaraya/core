@@ -31,7 +31,7 @@ function modules_adminapi_deactivatewithdependents ($args)
     if (!isset($mainId)) throw new EmptyParameterException('regid');
 
     // See if we have lost any modules since last generation
-    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
+    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {
         return;
     }
 
@@ -53,10 +53,10 @@ function modules_adminapi_deactivatewithdependents ($args)
         throw new Exception($msg);
     }
 
-    $dependents = xarModAPIFunc('modules','admin','getalldependents',array('regid'=>$mainId));
+    $dependents = xarMod::apiFunc('modules','admin','getalldependents',array('regid'=>$mainId));
 
     foreach ($dependents['active'] as $active_dependent) {
-        if (!xarModAPIFunc('modules', 'admin', 'deactivate', array('regid' => $active_dependent['regid']))) {
+        if (!xarMod::apiFunc('modules', 'admin', 'deactivate', array('regid' => $active_dependent['regid']))) {
             $msg = xarML('Unable to deactivate module "#(1)".', $active_dependent['displayname']);
             throw new Exception($msg);
         }

@@ -70,7 +70,7 @@ class HTMLPageProperty extends SelectProperty
             $data['options'] = $this->getOptions();
         }
         if (count($data['options']) == 0 && !empty($this->basedir)) {
-            $files = xarModAPIFunc('dynamicdata','admin','browse',
+            $files = xarMod::apiFunc('dynamicdata','admin','browse',
                                    array('basedir' => $this->basedir,
                                          'filetype' => $this->filetype));
             if (!isset($files)) {
@@ -115,7 +115,7 @@ class HTMLPageProperty extends SelectProperty
     {
         $options = parent::getOptions();
         if (count($options) == 0 && !empty($this->basedir)) {
-            $files = xarModAPIFunc('dynamicdata','admin','browse',
+            $files = xarMod::apiFunc('dynamicdata','admin','browse',
                                    array('basedir' => $this->basedir,
                                          'filetype' => $this->filetype));
             if (!isset($files)) {

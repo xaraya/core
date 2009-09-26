@@ -14,7 +14,7 @@ function blocks_user_display($args)
 
     // Get all the available blocks
     $benum = 'enum';  $data = array();
-    foreach(xarModAPIfunc('blocks', 'user', 'getall') as $bid => $binfo)
+    foreach(xarMod::apiFunc('blocks', 'user', 'getall') as $bid => $binfo)
     {
         $benum .= ':'.$binfo['name'];
     }

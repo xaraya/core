@@ -74,8 +74,8 @@ function modules_admin_list()
 
     // obtain list of modules based on filtering criteria
     // think we need to always check the filesystem
-    if(!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
-    $modlist = xarModAPIFunc('modules','admin','getlist',array('filter' => array('State' => $data['selfilter'], 'numitems' =>20)));
+    if(!xarMod::apiFunc('modules', 'admin', 'regenerate')) return;
+    $modlist = xarMod::apiFunc('modules','admin','getlist',array('filter' => array('State' => $data['selfilter'], 'numitems' =>20)));
 
     // get action icons/images
     $img_disabled       = xarTplGetImage('icons/disabled.png', 'base');

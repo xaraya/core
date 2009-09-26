@@ -86,7 +86,7 @@ function roles_userapi_parseuserhome($args)
                     $cids = array();
                 }
                 $catid = str_replace('_', '', $catid);
-                $ancestors = xarModAPIFunc('categories','user','getancestors',
+                $ancestors = xarMod::apiFunc('categories','user','getancestors',
                                          array('cid' => $catid,
                                                'cids' => $cids,
                                                'return_itself' => true));

@@ -96,7 +96,7 @@ function roles_admin_sendmail()
         $mailsubject = xarTplString($subject, $data);
         $mailmessage = xarTplString($message, $data);
 
-        if (!xarModAPIFunc('mail', 'admin', 'sendmail',
+        if (!xarMod::apiFunc('mail', 'admin', 'sendmail',
             array('info'    => $user['email'],
                   'name'    => $user['name'],
                   'subject' => $mailsubject,

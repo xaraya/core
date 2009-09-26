@@ -114,7 +114,7 @@
     <property_id>6</property_id>
     <label>Display Property</label>
     <ignore_empty>true</ignore_empty>
-    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:73:"xarModAPIFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:73:"xarMod::apiFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="14">
     <id>14</id>
@@ -123,7 +123,7 @@
     <property_id>6</property_id>
     <label>Storage Prioperty</label>
     <ignore_empty>true</ignore_empty>
-    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:73:"xarModAPIFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:73:"xarMod::apiFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="15">
     <id>15</id>
@@ -348,7 +348,7 @@
     <property_id>39</property_id>
     <label>Field List</label>
     <ignore_empty>true</ignore_empty>
-    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:73:"xarModAPIFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:73:"xarMod::apiFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="40">
     <id>40</id>
@@ -402,7 +402,7 @@
     <property_id>6</property_id>
     <label>Link Field</label>
     <ignore_empty>true</ignore_empty>
-    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:73:"xarModAPIFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+    <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:73:"xarMod::apiFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="46">
     <id>46</id>

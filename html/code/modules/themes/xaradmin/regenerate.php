@@ -30,7 +30,7 @@ function themes_admin_regenerate()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
     // Regenerate themes
-    $regenerated = xarModAPIFunc('themes', 'admin', 'regenerate');
+    $regenerated = xarMod::apiFunc('themes', 'admin', 'regenerate');
 
     if (!isset($regenerated)) return;
     // Redirect

@@ -26,14 +26,14 @@ function blocks_admin_view_types()
     $detail = array();
     if (!empty($tid)) {
         // Get details for a specific block type.
-        $detail = xarModAPIfunc(
+        $detail = xarMod::apiFunc(
             'blocks', 'user', 'getblocktype', array('tid' => $tid)
         );
         if (!empty($detail)) {
             // The block type exists.
 
             // Get info data.
-            $info = xarModAPIfunc(
+            $info = xarMod::apiFunc(
                 'blocks', 'user', 'read_type_info',
                 array(
                     'module' => $detail['module'],
@@ -42,7 +42,7 @@ function blocks_admin_view_types()
             );
 
             // Get initialisation data.
-            $init = xarModAPIfunc(
+            $init = xarMod::apiFunc(
                 'blocks', 'user', 'read_type_init',
                 array(
                     'module' => $detail['module'],
@@ -81,7 +81,7 @@ function blocks_admin_view_types()
         }
     }
 
-    $block_types = xarModAPIfunc(
+    $block_types = xarMod::apiFunc(
         'blocks', 'user', 'getallblocktypes', array('order' => 'modid,type')
     );
 

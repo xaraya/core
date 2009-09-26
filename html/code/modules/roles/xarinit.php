@@ -156,9 +156,9 @@ function roles_activate()
 
     // --------------------------------------------------------
     // Register block types
-    xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'online'));
-    xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'user'));
-    xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'language'));
+    xarMod::apiFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'online'));
+    xarMod::apiFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'user'));
+    xarMod::apiFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'language'));
 
     // Register hooks here, init is too soon
     xarModRegisterHook('item', 'search', 'GUI','roles', 'user', 'search');

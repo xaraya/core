@@ -40,7 +40,7 @@ function base_javascriptapi_modulecode($args)
 
     foreach ($files as $file) {
         $args['filename'] = $file;
-        $filePath = xarModAPIfunc('base', 'javascript', '_findfile', $args);
+        $filePath = xarMod::apiFunc('base', 'javascript', '_findfile', $args);
 
         if (empty($filePath)) {
             $result = false;

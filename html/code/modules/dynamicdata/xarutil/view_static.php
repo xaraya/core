@@ -38,13 +38,13 @@ function dynamicdata_util_view_static($args)
     $data = array();
     $data['menutitle'] = xarML('Dynamic Data Utilities');
 
-    $static = xarModAPIFunc('dynamicdata','util','getstatic',
+    $static = xarMod::apiFunc('dynamicdata','util','getstatic',
                             array('module'   => $module,
                                   'module_id'    => $module_id,
                                   'itemtype' => $itemtype,
                                   'table'    => $table));
 
-    $metas = xarModAPIFunc('dynamicdata','util','getmeta');
+    $metas = xarMod::apiFunc('dynamicdata','util','getmeta');
     $data['tables'] = array();
     foreach ($metas as $name => $value) $data['tables'][] = array('id' => $name, 'name' => $name);
     $data['table'] = $table;

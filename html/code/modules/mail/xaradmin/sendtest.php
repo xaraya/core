@@ -57,7 +57,7 @@ function mail_admin_sendtest()
 
     $htmlmessage = $message;
 
-    if (!xarModAPIFunc('mail',
+    if (!xarMod::apiFunc('mail',
             'admin',
             'sendmail',
             array('info' => $email,

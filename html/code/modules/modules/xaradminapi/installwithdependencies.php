@@ -52,7 +52,7 @@ function modules_adminapi_installwithdependencies ($args)
             if (!isset($mainId)) throw new EmptyParameterException('regid');
 
             // See if we have lost any modules since last generation
-            if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) return;
+            if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) return;
 
             // Make xarModGetInfo not cache anything...
             //We should make a funcion to handle this or maybe whenever we
@@ -93,7 +93,7 @@ function modules_adminapi_installwithdependencies ($args)
                 }
 
                 if (!xarMod::isAvailable(xarMod::getName($modId))) {
-                    if (!xarModAPIFunc('modules', 'admin', 'installwithdependencies', array('regid'=>$modId, 'phase' => 0))) {
+                    if (!xarMod::apiFunc('modules', 'admin', 'installwithdependencies', array('regid'=>$modId, 'phase' => 0))) {
                         $msg = xarML('Unable to initialize dependency module with ID (#(1)).', $modId);
                         throw new Exception($msg);
                     }
@@ -117,14 +117,14 @@ function modules_adminapi_installwithdependencies ($args)
             //Checks if the module is already initialised
             if (!$initialised) {
                 // Finally, now that dependencies are dealt with, initialize the module
-                if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $mainId))) {
+                if (!xarMod::apiFunc('modules', 'admin', 'initialise', array('regid' => $mainId))) {
                     $msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
                     throw new Exception($msg);
                 }
             }
 
             // And activate it!
-            if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $mainId))) {
+            if (!xarMod::apiFunc('modules', 'admin', 'activate', array('regid' => $mainId))) {
                 $msg = xarML('Unable to activate module "#(1)".', $modInfo['displayname']);
                 throw new Exception($msg);
             }
@@ -145,7 +145,7 @@ function modules_adminapi_installwithdependencies ($args)
                 xarResponse::Redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
             } else {
                 // Do the next module
-                if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid' => array_pop($modstack), 'phase' => 0))) return;
+                if (!xarMod::apiFunc('modules','admin','installwithdependencies',array('regid' => array_pop($modstack), 'phase' => 0))) return;
             }
             return true;
 

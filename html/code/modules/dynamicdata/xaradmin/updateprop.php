@@ -54,7 +54,7 @@ function dynamicdata_admin_updateprop()
             if (!empty($itemtype)) {
                 $name .= '_' . $itemtype;
             }
-            $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
+            $objectid = xarMod::apiFunc('dynamicdata','admin','createobject',
                                       array('moduleid' => $module_id,
                                             'itemtype' => $itemtype,
                                             'name' => $name,
@@ -69,7 +69,7 @@ function dynamicdata_admin_updateprop()
         throw new BadParameterException($vars,$msg);
     }
 
-    $fields = xarModAPIFunc('dynamicdata','user','getprop',
+    $fields = xarMod::apiFunc('dynamicdata','user','getprop',
                            array('moduleid' => $module_id,
                                  'itemtype' => $itemtype,
                                  'allprops' => true));
@@ -93,7 +93,7 @@ function dynamicdata_admin_updateprop()
         $i++;
         if (empty($dd_label[$id])) {
             // delete property (and corresponding data) in xaradminapi.php
-            if (!xarModAPIFunc('dynamicdata','admin','deleteprop',
+            if (!xarMod::apiFunc('dynamicdata','admin','deleteprop',
                               array('id' => $id))) {
                 return;
             }
@@ -122,7 +122,7 @@ function dynamicdata_admin_updateprop()
                 // don't update the source
                 $dd_source[$id] = null;
             }
-            if (!xarModAPIFunc('dynamicdata','admin','updateprop',
+            if (!xarMod::apiFunc('dynamicdata','admin','updateprop',
                               array('id' => $id,
                               //      'module_id' => $module_id,
                               //      'itemtype' => $itemtype,
@@ -154,7 +154,7 @@ function dynamicdata_admin_updateprop()
             $input_dd_status[0] = DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
         }
         $dd_status[0] = $display_dd_status[0] + $input_dd_status[0];
-        $id = xarModAPIFunc('dynamicdata','admin','createproperty',
+        $id = xarMod::apiFunc('dynamicdata','admin','createproperty',
                                 array('name' => $name,
                                       'label' => $dd_label[0],
                                       'objectid' => $objectid,

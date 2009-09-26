@@ -38,7 +38,7 @@
       <source>dynamic_data</source>
       <status>33</status>
       <seq>3</seq>
-      <configuration>xarModApiFunc('mail','user','getqueuetypes')</configuration>
+      <configuration>xarMod::apiFunc('mail','user','getqueuetypes')</configuration>
     </property>
     <property name="description">
       <id>492</id>

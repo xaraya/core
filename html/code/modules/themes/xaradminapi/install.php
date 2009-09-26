@@ -29,7 +29,7 @@ function themes_adminapi_install($args)
     // Argument check
     if (!isset($mainId)) throw new EmptyParameterException('regid');
     // See if we have lost any modules since last generation
-    if (!xarModAPIFunc('themes', 'admin', 'checkmissing')) return;
+    if (!xarMod::apiFunc('themes', 'admin', 'checkmissing')) return;
 
     // Make xarModGetInfo not cache anything...
     //We should make a funcion to handle this or maybe whenever we
@@ -57,14 +57,14 @@ function themes_adminapi_install($args)
 
     //Checks if the theme is already initialised
     if (!$initialised) {
-        if (!xarModAPIFunc('themes', 'admin', 'initialise', array('regid' => $mainId))) {
+        if (!xarMod::apiFunc('themes', 'admin', 'initialise', array('regid' => $mainId))) {
             $msg = xarML('Unable to initialize theme "#(1)".', $modInfo['displayname']);
             throw new Exception($msg);
         }
     }
 
     // And activate it!
-    if (!xarModAPIFunc('themes', 'admin', 'activate', array('regid' => $mainId))) {
+    if (!xarMod::apiFunc('themes', 'admin', 'activate', array('regid' => $mainId))) {
         $msg = xarML('Unable to activate theme "#(1)".', $modInfo['displayname']);
         throw new Exception($msg);
     }

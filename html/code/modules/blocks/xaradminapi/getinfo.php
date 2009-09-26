@@ -21,7 +21,7 @@
  */
 function blocks_adminapi_getinfo($args)
 {
-    return xarModAPIfunc('blocks', 'user', 'getinfo', $args);
+    return xarMod::apiFunc('blocks', 'user', 'getinfo', $args);
 }
 
 ?>

@@ -4,7 +4,7 @@
  */
 function mail_adminapi_getsourcestring($args)
 {   
-    $sourceFileName = xarModAPIFunc('mail', 'admin', 'getsourcefilename', $args);      
+    $sourceFileName = xarMod::apiFunc('mail', 'admin', 'getsourcefilename', $args);      
     if (!file_exists($sourceFileName)) throw new FileNotFoundException($sourceFileName);
     $string = '';
     $fd = fopen($sourceFileName, 'r');

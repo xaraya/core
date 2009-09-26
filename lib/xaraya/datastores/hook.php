@@ -41,7 +41,7 @@ class HookDataStore extends BasicDataStore
         foreach (array_keys($this->fields) as $hook) {
             if (xarMod::isAvailable($hook)) {
             // TODO: find some more consistent way to do this !
-                $value = xarModAPIFunc($hook,'user','get',
+                $value = xarMod::apiFunc($hook,'user','get',
                                        array('modname' => $modname,
                                              'modid' => $modid,
                                              'itemtype' => $itemtype,
@@ -49,7 +49,7 @@ class HookDataStore extends BasicDataStore
                                              'objectid' => $itemid));
                 // see if we got something interesting in return
                 if (isset($value)) {
-		            $this->fields[$hook]->value = $value;
+                    $this->fields[$hook]->value = $value;
                 }
             }
         }

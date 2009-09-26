@@ -51,7 +51,7 @@ function roles_user_display($args)
         $data['itemtype'] = $itemtype;
         $data['name'] = $name;
         //get the data for a user
-        $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+        $data['basetype'] = xarMod::apiFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
         if ($data['basetype'] == ROLES_USERTYPE) {
             sys::import('modules.dynamicdata.class.objects.master');
             $object = DataObjectMaster::getObject(array('name' => 'roles_users'));
@@ -81,7 +81,7 @@ function roles_user_display($args)
         $data['uname'] = '';
     }
 
-    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $types = xarMod::apiFunc('roles','user','getitemtypes');
     $data['itemtypename'] = $types[$itemtype]['label'];
     $data['layout'] = $args['layout'];
 

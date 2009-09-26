@@ -146,7 +146,7 @@ function mail_adminapi_sendhtmlmail($args)
         $attachPath = '';
     }
     // Call private sendmail
-    return xarModAPIFunc('mail', 'admin', '_sendmail',
+    return xarMod::apiFunc('mail', 'admin', '_sendmail',
         array('info'          => $info,
               'name'          => $name,
               'recipients'    => $recipients,

@@ -24,7 +24,7 @@ function roles_schedulerapi_expire($args)
     // ...
 // TODO: we need some API function here (not a GUI function)
 //       It may return true (or some logging text) if it succeeds, and null if it fails
-    // return xarModAPIFunc('roles','admin','...',
+    // return xarMod::apiFunc('roles','admin','...',
     //                      array('whatever' => $whatever));
 
     return true;

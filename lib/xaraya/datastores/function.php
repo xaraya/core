@@ -50,7 +50,7 @@ class Dynamic_Function_DataStore extends BasicDataStore
                 $ftype = preg_replace('/api$/','',$ftype);
                 // try to invoke the function with some common parameters
             // TODO: standardize this, or allow the admin to specify the arguments
-                $value = xarModAPIFunc($fmod,$ftype,$ffunc,
+                $value = xarMod::apiFunc($fmod,$ftype,$ffunc,
                                        array('modname' => $modname,
                                              'modid' => $modid,
                                              'itemtype' => $itemtype,

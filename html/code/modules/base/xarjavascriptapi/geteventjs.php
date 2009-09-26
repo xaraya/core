@@ -22,7 +22,7 @@
  *   xarTplAddJavaScript('body', 'onload', "alert('hello, world')");
  *
  * Get all the JavaScript for the 'onload' trigger (this can be fetched in a page template):
- *   xarModAPIfunc('base', 'javascript', 'geteventjs', array('position'=>'body', 'type'=>'onload'));
+ *   xarMod::apiFunc('base', 'javascript', 'geteventjs', array('position'=>'body', 'type'=>'onload'));
  *
  * TODO: investigate whether it is worthwhile putting all these JS functions into a
  * dedicated xarJS.php script. Going through the APIs is cumbersome, and on the whole

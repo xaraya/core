@@ -91,15 +91,15 @@ function roles_admin_modifyconfig()
                                            'itemtype' => ROLES_GROUPTYPE));
             break;
         case 'duvs':
-            $data['user_settings'] = xarModAPIFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => 0));
+            $data['user_settings'] = xarMod::apiFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => 0));
             $data['user_settings']->setFieldList('duvsettings');
             $data['user_settings']->getItem();
         break;
         default:
-            $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'roles'));
+            $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'roles'));
             $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, enable_user_menu, user_menu_link');
             $data['module_settings']->getItem();
-            $data['user_settings'] = xarModAPIFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => 0));
+            $data['user_settings'] = xarMod::apiFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => 0));
             $settings = explode(',',xarModVars::get('roles', 'duvsettings'));
             $required = array('usereditaccount', 'allowemail', 'requirevalidation', 'displayrolelist', 'searchbyemail');
             $skiplist = array('userhome', 'primaryparent', 'passwordupdate', 'duvsettings', 'userlastlogin', 'emailformat');

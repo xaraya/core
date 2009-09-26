@@ -123,7 +123,7 @@ function dynamicdata_utilapi_import($args)
 
         // Add an item to the object
 //        if ($args['moduleid'] == 182 || $args['moduleid'] == 27) {
-            $args['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
+            $args['itemtype'] = xarMod::apiFunc('dynamicdata','admin','getnextitemtype',
                                            array('module_id' => $args['moduleid']));
 //        }
 

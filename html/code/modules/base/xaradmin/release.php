@@ -44,7 +44,7 @@ function base_admin_release()
     $feedfile = "http://www.xaraya.com/index.php?module=release&func=rssviewnotes&theme=rss&releaseno=$releasenumber";
 
     // Get the feed file (from cache or from the remote site)
-    $feeddata = xarModAPIFunc('base', 'user', 'getfile',
+    $feeddata = xarMod::apiFunc('base', 'user', 'getfile',
                               array('url' => $feedfile,
                                     'cached' => true,
                                     'cachedir' => 'cache/rss',

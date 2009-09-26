@@ -170,7 +170,7 @@ class DataStoreFactory extends Object
 
         // TODO: re-evaluate this once we're further along
         // module variables
-        $modules = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+        $modules = xarMod::apiFunc('modules', 'admin', 'getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
         foreach ($modules as $module) {
             $sources[] = 'module variable: ' . $module['name'];
         }
@@ -193,7 +193,7 @@ class DataStoreFactory extends Object
         {
             try
             {
-                $meta = xarModAPIFunc('dynamicdata','util','getmeta',$args);
+                $meta = xarMod::apiFunc('dynamicdata','util','getmeta',$args);
             }
             catch ( NotFoundExceptions $e )
             {

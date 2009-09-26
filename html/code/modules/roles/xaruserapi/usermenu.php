@@ -50,7 +50,7 @@ function roles_userapi_usermenu($args)
         $id = xarUserGetVar('id');
 
     if (!isset($object)) {
-        $object = xarModAPIFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => $id));
+        $object = xarMod::apiFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => $id));
     }
     // only get the fields we need
     $fieldlist = array();

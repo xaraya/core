@@ -33,10 +33,10 @@ function blocks_admin_view_instances()
     // CHECKME: & removed below for php 4.4.
     $rowstodo = (int)xarModVars::get('blocks','items_per_page');
     // Need to find a better way to do this without breaking the API
-    $instances = xarModAPIfunc('blocks', 'user', 'getall', array('filter' => $filter,
+    $instances = xarMod::apiFunc('blocks', 'user', 'getall', array('filter' => $filter,
                                                                  'order' => 'name'));
     $total = count($instances);
-    $instances = xarModAPIfunc('blocks', 'user', 'getall', array('filter' => $filter,
+    $instances = xarMod::apiFunc('blocks', 'user', 'getall', array('filter' => $filter,
                                                                  'order' => 'name',
                                                                  'rowstodo' => $rowstodo,
                                                                  'startat' => $startat));
@@ -68,7 +68,7 @@ function blocks_admin_view_instances()
                             $rowstodo);
 
     if ($data['selstyle'] == 'bytype') {
-        $tabs = xarModAPIfunc('blocks', 'user', 'getallblocktypes');
+        $tabs = xarMod::apiFunc('blocks', 'user', 'getallblocktypes');
         $data['tabs'] = array();
         foreach ($tabs as $tab) {
             $tab['name'] = $tab['info']['text_type'];
@@ -77,7 +77,7 @@ function blocks_admin_view_instances()
         if (empty($data['currenttab'])) $data['currenttab'] = 'Login';
     } 
     elseif ($data['selstyle'] == 'bygroup') {
-        $data['tabs'] = xarModAPIfunc('blocks', 'user', 'getallgroups');
+        $data['tabs'] = xarMod::apiFunc('blocks', 'user', 'getallgroups');
         if (empty($data['currenttab'])) $data['currenttab'] = 'left';
     }
 

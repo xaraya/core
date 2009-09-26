@@ -34,7 +34,7 @@ function modules_adminapi_deactivate ($args)
     // Module activate function
     // only run if the module is actually there. It may have been removed
     if ($modInfo['state'] != XARMOD_STATE_MISSING_FROM_ACTIVE) {
-        if (!xarModAPIFunc('modules','admin','executeinitfunction',
+        if (!xarMod::apiFunc('modules','admin','executeinitfunction',
                            array('regid'    => $regid,
                                  'function' => 'deactivate'))) {
             //Raise an Exception
@@ -42,7 +42,7 @@ function modules_adminapi_deactivate ($args)
         }
     }
     // Update state of module
-    $res = xarModAPIFunc('modules','admin','setstate',
+    $res = xarMod::apiFunc('modules','admin','setstate',
                         array('regid' => $regid,
                               'state' => XARMOD_STATE_INACTIVE));
 

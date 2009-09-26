@@ -30,7 +30,7 @@ function themes_admin_remove()
 
     if (!xarVarFetch('id', 'int:1:', $id)) return; 
     // Remove theme
-    $removed = xarModAPIFunc('themes',
+    $removed = xarMod::apiFunc('themes',
         'admin',
         'remove',
         array('regid' => $id)); 

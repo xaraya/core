@@ -43,7 +43,7 @@ function privileges_admin_displayprivilege()
     $data['pcomponent'] = $priv->getComponent();
     $data['plevel'] = $priv->getLevel();
 
-    $instances = xarModAPIFunc('privileges','admin','getinstances',array('module' => $data['pmodule'],'component' => $data['pcomponent']));
+    $instances = xarMod::apiFunc('privileges','admin','getinstances',array('module' => $data['pmodule'],'component' => $data['pcomponent']));
     $numInstances = count($instances); // count the instances to use in later loops
 
     $default = array();

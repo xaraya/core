@@ -66,7 +66,7 @@ function dynamicdata_utilapi_importproperties($args)
         }
     }
 
-    $fields = xarModAPIFunc('dynamicdata','util','getstatic',
+    $fields = xarMod::apiFunc('dynamicdata','util','getstatic',
                             array('module_id' => $module_id,
                                   'itemtype' => $itemtype,
                                   'table' => $table));
@@ -74,7 +74,7 @@ function dynamicdata_utilapi_importproperties($args)
 
     // create new properties
     foreach ($fields as $name => $field) {
-        $id = xarModAPIFunc('dynamicdata','admin','createproperty',
+        $id = xarMod::apiFunc('dynamicdata','admin','createproperty',
                                 array('name'       => $name,
                                       'label'      => $field['label'],
                                       'objectid'   => $objectid,

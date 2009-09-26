@@ -134,7 +134,7 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
             if (!isset($themeFileInfo)) {
                 // There was an entry in the database which was not in the file system,
                 // remove the entry from the database
-                xarModAPIFunc('themes','admin','remove',array('regid' => $themeInfo['regid']));
+                xarMod::apiFunc('themes','admin','remove',array('regid' => $themeInfo['regid']));
             } else {
                 $themeInfo = array_merge($themeInfo, $themeFileInfo);
                 xarVarSetCached('Theme.Infos', $themeInfo['regid'], $themeInfo);

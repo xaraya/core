@@ -40,7 +40,7 @@ function dynamicdata_admin_form($args)
     // potential security holes or just too much wasted processing
     if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$module_id:$itemtype:All")) return;
 
-    $data = xarModAPIFunc('dynamicdata','admin','menu');
+    $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'moduleid' => $module_id,

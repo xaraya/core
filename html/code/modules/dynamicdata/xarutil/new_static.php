@@ -32,7 +32,7 @@
                 if (empty($data['table'])) throw new Exception(xarML('Table name missing'));
                 
                 // Good data: create the field
-                $options = xarModAPIFunc('dynamicdata','data','getdatatypeoptions');
+                $options = xarMod::apiFunc('dynamicdata','data','getdatatypeoptions');
                 $query = 'ALTER TABLE ' .$data['table'] . ' ADD ';
                 $query .= $data['object']->properties['name']->value . ' ';
                 $query .= $options['datatypes'][$data['object']->properties['type']->value] . ' ';

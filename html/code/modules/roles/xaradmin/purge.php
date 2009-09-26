@@ -54,7 +54,7 @@ function roles_admin_purge($args)
             foreach ($recallids as $id => $val) {
                 $role = xarRoles::get($id);
                 $state = $role->getType() ? ROLES_STATE_ACTIVE : $data['recallstate'];
-                $recalled = xarModAPIFunc('roles','admin','recall',
+                $recalled = xarMod::apiFunc('roles','admin','recall',
                     array('id' => $id,
                           'state' => $state));
                 $parentgroup->addmember($role);
@@ -105,7 +105,7 @@ function roles_admin_purge($args)
                 $unique = 1;
                 $thisrole = xarRoles::get($role['id']);
                 $baseancestor = $thisrole->getBaseAncestor();
-                $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $role['uname'], 'state' => ROLES_STATE_CURRENT));
+                $existinguser = xarMod::apiFunc('roles','user','get',array('uname' => $role['uname'], 'state' => ROLES_STATE_CURRENT));
                 if ($baseancestor['itemtype'] != ROLES_USERTYPE) {
                     if (is_array($existinguser)) $unique = 0;
                     $role['uname'] = "";
@@ -120,12 +120,12 @@ function roles_admin_purge($args)
                     $role['uname'] = $uname1[0];
 // now check that email is unique if this has to be checked (fix for nonexisting Bug)
                     if (xarModVars::get('roles', 'uniqueemail')) {
-                        $existinguser = xarModAPIFunc('roles','user','get',array('email' => $email[0], 'state' => ROLES_STATE_CURRENT));
+                        $existinguser = xarMod::apiFunc('roles','user','get',array('email' => $email[0], 'state' => ROLES_STATE_CURRENT));
                         if (is_array($existinguser)) $unique = 0;
                     }
                }
                 if (!$skip) {
-                    $types = xarModAPIFunc('roles','user','getitemtypes');
+                    $types = xarMod::apiFunc('roles','user','getitemtypes');
                     $role['itemtype'] = $types[$role['itemtype']]['label'];
                     $role['unique'] = $unique;
                     $recallroles[] = $role;
@@ -133,7 +133,7 @@ function roles_admin_purge($args)
             }
         }
 // --- send to template
-        $data['groups'] = xarModAPIFunc('roles', 'user', 'getallgroups');
+        $data['groups'] = xarMod::apiFunc('roles', 'user', 'getallgroups');
         $recallfilter['recallstartnum'] = '%%';
         $filter['state']         = $data['recallstate'];
         $recallfilter['recallsearch']   = $data['recallsearch'];

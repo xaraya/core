@@ -62,7 +62,7 @@ function blocks_admin_new_type()
 
         // Create the block type.
         $modulename = $modinfo['name'];
-        if (!xarModAPIFunc(
+        if (!xarMod::apiFunc(
             'blocks', 'admin', 'create_type',
             array('module' => $modulename, 'type' => $blockname))
         ) {return;}

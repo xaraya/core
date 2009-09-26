@@ -12,7 +12,7 @@ function mail_admin_view($args)
     if (!xarSecurityCheck('AdminMail')) return;
      
     // Retrieve the object which holds our queue definition
-    if(!$qdefInfo = xarModApiFunc('mail','admin','getqdef')) {
+    if(!$qdefInfo = xarMod::apiFunc('mail','admin','getqdef')) {
         return OfferCreate();
     } else {
         $data['qdef'] = $qdefInfo;

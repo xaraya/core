@@ -81,7 +81,7 @@ function dynamicdata_utilapi_maketable($args)
     $table = $prefix . 'dd_' . $myobject->name;
 
     // check if this table already exists
-    $meta = xarModAPIFunc('dynamicdata','util','getmeta');
+    $meta = xarMod::apiFunc('dynamicdata','util','getmeta');
     if (!empty($meta[$table])) {
         return true;
     }

@@ -18,7 +18,7 @@ function mail_admin_createqdef($args)
         $qdefNew = false;
         if(!xarVarFetch('qdef_name_choose','id',$qdefObjectId)) return;
         // Get the name of the object from dd
-        $qdefObject = xarModApiFunc('dynamicdata','user','getobject',array('objectid' => $qdefObjectId));
+        $qdefObject = xarMod::apiFunc('dynamicdata','user','getobject',array('objectid' => $qdefObjectId));
         if(!isset($qdefObject)) return;
         $qdefName = $qdefObject->name;
         break;
@@ -29,14 +29,14 @@ function mail_admin_createqdef($args)
     if($qdefNew) {
         $xmlDef = @file_get_contents('modules/mail/xardata/qdef.xml'); // if it fails, sane check will catch it.
         // Take the xml and the objectname and try to create the object
-        $qdefObjectId = xarModApiFunc('dynamicdata','util','import',array('objectname' => $qdefName, 'xml' => $xmlDef));
+        $qdefObjectId = xarMod::apiFunc('dynamicdata','util','import',array('objectname' => $qdefName, 'xml' => $xmlDef));
         if(!isset($qdefObjectId)) return;
 
         // The file contained itemtype -1 which needs to be corrected now.
         // We created the object successfully, register it as soon as possible (getitemtypes depends on it, for one)
         xarModVars::set('mail','queue-definition',$qdefName);
         // Get the itemtypes of the mail module
-        $itemtypes = xarModApiFunc('mail','user','getitemtypes');
+        $itemtypes = xarMod::apiFunc('mail','user','getitemtypes');
         // Get the max value from the keys and add one
         ksort($itemtypes); end($itemtypes);
         $newItemtype = key($itemtypes) +1;

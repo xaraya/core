@@ -41,9 +41,9 @@ function blocks_adminapi_create_instance($args)
     //if (!xarSecurityCheck('AddBlock', 1, 'Block', "All:$title:All")) {return;}
 
     // Make sure type exists.
-    $blocktype = xarModAPIfunc('blocks', 'user', 'getblocktype', array('tid' => $type));
+    $blocktype = xarMod::apiFunc('blocks', 'user', 'getblocktype', array('tid' => $type));
 
-    $initresult = xarModAPIfunc('blocks', 'user', 'read_type_init', $blocktype);
+    $initresult = xarMod::apiFunc('blocks', 'user', 'read_type_init', $blocktype);
 
     // If the content is not set, attempt to get initial content from
     // the block initialization function.
@@ -83,7 +83,7 @@ function blocks_adminapi_create_instance($args)
     if (isset($groups) && is_array($groups)) {
         // Pass the group updated to the API if required.
         // TODO: error handling.
-        $result = xarModAPIfunc('blocks', 'admin', 'update_instance_groups',
+        $result = xarMod::apiFunc('blocks', 'admin', 'update_instance_groups',
                                 array('bid' => $bid, 'groups' => $groups)
         );
     }
@@ -112,10 +112,10 @@ function blocks_adminapi_create_instance($args)
             $cacheexpire = NULL;
         }
         //check and see if there is an entry already before trying to add one - bug # 5815
-        $checkbid = xarModAPIFunc('blocks','user','getcacheblock',array('bid'=>$bid));
+        $checkbid = xarMod::apiFunc('blocks','user','getcacheblock',array('bid'=>$bid));
         //we assume for now that it's left here due to bug # 5815 so delete it
         if (is_array($checkbid)) {
-           $deletecacheblock = xarModAPIFunc('blocks','admin','delete_cacheinstance', array('bid' => $bid));
+           $deletecacheblock = xarMod::apiFunc('blocks','admin','delete_cacheinstance', array('bid' => $bid));
         }
         //now create the new block
         $cacheblocks = $xartable['cache_blocks'];
@@ -130,7 +130,7 @@ function blocks_adminapi_create_instance($args)
     }
 
     // Resequence the blocks.
-    xarModAPIFunc('blocks', 'admin', 'resequence');
+    xarMod::apiFunc('blocks', 'admin', 'resequence');
 
     $args['module'] = 'blocks';
     $args['itemtype'] = 3; // block instance

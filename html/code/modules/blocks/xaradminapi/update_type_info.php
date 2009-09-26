@@ -28,7 +28,7 @@ function blocks_adminapi_update_type_info($args)
     extract($args);
 
     // Get the type details from the database.
-    $type = xarModAPIFunc('blocks', 'user', 'getblocktype', $args);
+    $type = xarMod::apiFunc('blocks', 'user', 'getblocktype', $args);
 
     if (empty($type)) {
         // No type registered in the database.
@@ -36,7 +36,7 @@ function blocks_adminapi_update_type_info($args)
     }
 
     // Load and execute the info function of the block.
-    $block_info = xarModAPIfunc('blocks', 'user', 'read_type_info',
+    $block_info = xarMod::apiFunc('blocks', 'user', 'read_type_info',
                                 array('module' => $type['module'],
                                       'type' => $type['type']));
     if (empty($block_info)) {return;}

@@ -23,7 +23,7 @@ function blocks_admin_update_type_info()
     if (!xarVarFetch('modulename', 'str:1:', $modulename, 'base', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('blocktype', 'str:1:', $blocktype, '', XARVAR_NOT_REQUIRED)) {return;}
 
-    xarModAPIfunc(
+    xarMod::apiFunc(
         'blocks', 'admin', 'update_type_info',
         array('module' => $modulename, 'type' => $blocktype)
     );

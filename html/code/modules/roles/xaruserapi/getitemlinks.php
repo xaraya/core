@@ -27,7 +27,7 @@ function roles_userapi_getitemlinks($args)
     }
 
     foreach ($args['itemids'] as $itemid) {
-        $item = xarModAPIFunc('roles', 'user', 'get',
+        $item = xarMod::apiFunc('roles', 'user', 'get',
             array('id' => $itemid));
         if (!isset($item)) return;
         $itemlinks[$itemid] = array('url' => xarModURL('roles', 'user', 'display',

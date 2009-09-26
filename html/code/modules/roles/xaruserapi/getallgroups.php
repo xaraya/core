@@ -45,7 +45,7 @@ function roles_userapi_getallgroups($args)
     if (isset($parent)) {
         $groups = explode(',', $parent);
         foreach ($groups as $group) {
-            $group = xarModAPIFunc(
+            $group = xarMod::apiFunc(
                 'roles', 'user', 'get',
                 array(
                     (is_numeric($group) ? 'id' : 'name') => trim($group),

@@ -22,7 +22,7 @@ function themes_adminapi_list()
     if(!xarSecurityCheck('AdminTheme')) return;
 
     // Obtain information
-    $themeList = xarModAPIFunc('themes', 
+    $themeList = xarMod::apiFunc('themes', 
                           'admin', 
                           'GetThemeList', 
                           array('filter'     => array('State' => XARTHEME_STATE_ANY)));

@@ -45,7 +45,7 @@ function themes_admin_setdefault()
     }
 
     //update the database - activate the theme
-    if (!xarModAPIFunc('themes','admin','install',array('regid'=>$defaulttheme))) {
+    if (!xarMod::apiFunc('themes','admin','install',array('regid'=>$defaulttheme))) {
         xarResponse::Redirect(xarModURL('themes', 'admin', 'modifyconfig'));
     }
 

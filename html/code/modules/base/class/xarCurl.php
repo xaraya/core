@@ -13,7 +13,7 @@
  * Simple curl class.
  *
  * Example use:
- * $curl = new xarCurl(); // or $curl = xarModAPIfunc('base', 'user', 'newcurl');
+ * $curl = new xarCurl(); // or $curl = xarMod::apiFunc('base', 'user', 'newcurl');
  * $curl->seturl('http://www.xaraya.com/');
  * $curl->get('module' => 'articles'); // could use post()
  * $curl->get('aid' => '123');

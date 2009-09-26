@@ -35,7 +35,7 @@ function modules_admin_install()
     //First check the modules dependencies
     // TODO: investigate try/catch clause here, it's not trivial
     try {
-        xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$id));
+        xarMod::apiFunc('modules','admin','verifydependency',array('regid'=>$id));
 
         //Checking if the user has already passed thru the GUI:
         xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
@@ -43,7 +43,7 @@ function modules_admin_install()
         $command = false;
     }
 
-    $data['dependencies'] = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$id));
+    $data['dependencies'] = xarMod::apiFunc('modules','admin','getalldependencies',array('regid'=>$id));
 
     //Only show the status screen if there are dependencies that cannot be satisfied
     if (!$command && !empty($data['dependencies']['unsatisfiable'])) {
@@ -69,7 +69,7 @@ function modules_admin_install()
     }
 
     // See if we have lost any modules since last generation
-    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) return;
+    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) return;
 
     xarSession::setVar('installing',true);
 
@@ -80,7 +80,7 @@ function modules_admin_install()
         //Installs with dependencies, first initialise the necessary dependencies
         //then the module itself
         xarSession::setVar('modulestoinstall',serialize(array()));
-        if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$id, 'phase' => 0))) {
+        if (!xarMod::apiFunc('modules','admin','installwithdependencies',array('regid'=>$id, 'phase' => 0))) {
             // Don't return yet - the stack is rendered here.
             //return;
         }

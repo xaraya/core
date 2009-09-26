@@ -29,11 +29,11 @@ function modules_adminapi_checkmissing()
     if(!xarSecurityCheck('AdminModules',1,'All','All','modules')) return;
 
     //Get all modules in the filesystem
-    $fileModules = xarModAPIFunc('modules','admin','getfilemodules');
+    $fileModules = xarMod::apiFunc('modules','admin','getfilemodules');
     if (!isset($fileModules)) return;
 
     // Get all modules in DB
-    $dbModules = xarModAPIFunc('modules','admin','getdbmodules');
+    $dbModules = xarMod::apiFunc('modules','admin','getdbmodules');
     if (!isset($dbModules)) return;
 
     // See if we have lost any modules since last generation
@@ -64,7 +64,7 @@ function modules_adminapi_checkmissing()
                     break;
             }
             if (isset($newstate)) {
-                $set = xarModAPIFunc('modules',
+                $set = xarMod::apiFunc('modules',
                                     'admin',
                                     'setstate',
                                     array('regid'=> $regId,

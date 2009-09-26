@@ -34,7 +34,7 @@ function blocks_userapi_read_type_info($args)
         return $infofunc();
     } else {
         // Load and execute the info function of the block.
-        if (!xarModAPIFunc(
+        if (!xarMod::apiFunc(
             'blocks', 'admin', 'load',
             array(
                 'modName' => $module,

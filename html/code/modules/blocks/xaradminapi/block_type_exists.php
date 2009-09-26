@@ -27,7 +27,7 @@ function blocks_adminapi_block_type_exists($args)
     if (empty($modName))   throw new EmptyParameterException('modName');
     if (empty($blockType)) throw new EmptyParameterException('blockType');
 
-    $count = xarModAPIfunc('blocks', 'user', 'countblocktypes', array('module'=>$modName, 'type'=>$blockType));
+    $count = xarMod::apiFunc('blocks', 'user', 'countblocktypes', array('module'=>$modName, 'type'=>$blockType));
 
     return ($count > 0) ? true : false;
 }

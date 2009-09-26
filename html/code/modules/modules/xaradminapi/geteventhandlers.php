@@ -23,7 +23,7 @@ function modules_adminapi_geteventhandlers()
     //Let's check if it already return ok and stop the processing here
     if ($check) {return true;}
 
-    $modlist = xarModAPIFunc('modules','admin','getlist',
+    $modlist = xarMod::apiFunc('modules','admin','getlist',
                              array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
 
     $todo = array();

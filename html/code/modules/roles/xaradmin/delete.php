@@ -55,13 +55,13 @@ function roles_admin_delete()
         return xarTplModule('roles','user','errors',array('layout' => 'default_usergroup', 'group' => $role->getName()));
     }
 
-    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $types = xarMod::apiFunc('roles','user','getitemtypes');
     $data['itemtypename'] = $types[$itemtype]['label'];
 
     if (empty($confirmation)) {
         // Load Template
-        $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
-        $types = xarModAPIFunc('roles','user','getitemtypes');
+        $data['basetype'] = xarMod::apiFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+        $types = xarMod::apiFunc('roles','user','getitemtypes');
         $data['itemtypename'] = $types[$itemtype]['label'];
         $data['authid'] = xarSecGenAuthKey();
         $data['id'] = $id;
@@ -75,7 +75,7 @@ function roles_admin_delete()
             return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
         }        
         // Check to make sure the user is not active on the site.
-        $check = xarModAPIFunc('roles',
+        $check = xarMod::apiFunc('roles',
                               'user',
                               'getactive',
                               array('id' => $id));

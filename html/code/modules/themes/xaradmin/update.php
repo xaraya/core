@@ -75,7 +75,7 @@ function themes_admin_update()
     } 
 
     if (count($updatevars > 0)) {
-        $updated = xarModAPIFunc('themes',
+        $updated = xarMod::apiFunc('themes',
             'admin',
             'update',
             array('regid' => $regId,

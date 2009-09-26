@@ -49,7 +49,7 @@ function privileges_admin_new()
         }
     }
     //Load Template
-    $instances = xarModAPIFunc('privileges','admin','getinstances',array('module' => $data['pmodule'],'component' => $data['pcomponent']));
+    $instances = xarMod::apiFunc('privileges','admin','getinstances',array('module' => $data['pmodule'],'component' => $data['pcomponent']));
 // send to external wizard if necessary
     if (!empty($instances['external']) && $instances['external'] == "yes") {
         $data['target'] = $instances['target'] . '&amp;extpid=0&amp;extname='.$data['pname'].'&amp;extrealm='.$data['prealm'].'&amp;extmodule='.$data['pmodule'].'&amp;extcomponent='.$data['pcomponent'].'&amp;extlevel='.$data['plevel'];
@@ -66,7 +66,7 @@ function privileges_admin_new()
     $data['authid'] = xarSecGenAuthKey();
     $data['realms'] = xarPrivileges::getrealms();
     $data['privileges'] = $privileges;
-    $data['components'] = xarModAPIFunc('privileges','admin','getcomponents',array('modid' => xarMod::getRegID($data['pmodule'])));
+    $data['components'] = xarMod::apiFunc('privileges','admin','getcomponents',array('modid' => xarMod::getRegID($data['pmodule'])));
     return $data;
 }
 

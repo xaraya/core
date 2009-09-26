@@ -24,7 +24,7 @@ function blocks_userapi_getblocktype($args)
         throw new BadParameterException(array('id','module','type'),'The parameters #(1) or #(2)/#(3) have not been set');
     }
 
-    $types = xarModAPIfunc('blocks', 'user', 'getallblocktypes', $args);
+    $types = xarMod::apiFunc('blocks', 'user', 'getallblocktypes', $args);
 
     // We should have exactly one block type: throw back if not.
     // @todo: Is this an error? If so, throw exception, if not return array()

@@ -124,7 +124,7 @@ function roles_admin_sitelock($args)
             // Clear the active sessions
                 $spared = array();
                 for($i=0; $i < $rolesCount; $i++) $spared[] = $roles[$i]['id'];
-                if(!xarModAPIFunc('roles','admin','clearsessions', $spared)) {
+                if(!xarMod::apiFunc('roles','admin','clearsessions', $spared)) {
                     $msg = xarML('Could not clear sessions table');
                     throw new Exception($msg);
                 }
@@ -140,7 +140,7 @@ function roles_admin_sitelock($args)
             // Send the mails
             foreach($notify as $recipient) {
                 $mailinfo['info'] = $recipient->getEmail();
-                xarModAPIFunc('mail','admin','sendmail', $mailinfo);
+                xarMod::apiFunc('mail','admin','sendmail', $mailinfo);
             }
 
             // Write the configuration to disk

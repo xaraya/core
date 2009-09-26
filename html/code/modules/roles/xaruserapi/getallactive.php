@@ -56,7 +56,7 @@ function roles_userapi_getallactive($args)
     // then find the anonymous user's id and add
     // a where clause to the query
     if (!$include_anonymous) {
-        $anon = xarModAPIFunc('roles','user','get',array('uname'=>'anonymous'));
+        $anon = xarMod::apiFunc('roles','user','get',array('uname'=>'anonymous'));
         $query .= " AND a.id != ?";
         $bindvars[] = (int) $anon['id'];
     }

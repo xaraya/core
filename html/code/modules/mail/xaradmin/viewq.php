@@ -37,7 +37,7 @@ function mail_admin_viewq($args)
         switch ($action)
         {
             case 'process':
-                $data['log'] = xarModAPIFunc('mail','scheduler','sendmail');
+                $data['log'] = xarMod::apiFunc('mail','scheduler','sendmail');
                 if (!isset($data['log'])) return;
                 break;
 

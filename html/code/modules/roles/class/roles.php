@@ -223,10 +223,10 @@ class xarRoles extends Object
      */
     private static function _getgroupsquery()
     {
-        $types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
+        $types = xarMod::apiFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
         $basetypes = array();
         foreach ($types as $key => $value) {
-            $basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
+            $basetype = xarMod::apiFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
             if ($basetype['itemtype'] == ROLES_GROUPTYPE) $basetypes[] = $key;
         }
         // set up the query and get the groups

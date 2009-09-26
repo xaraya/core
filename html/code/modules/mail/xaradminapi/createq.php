@@ -10,11 +10,11 @@ function mail_adminapi_createq($args)
 
     // Create a new queue storage object from the xml definition
     $xmlDef = file_get_contents('modules/mail/xardata/qdatadef.xml');
-    $qdataObjectId = xarModApiFunc('dynamicdata','util','import',array('objectname' => 'q_'.$name, 'xml' => $xmlDef));
+    $qdataObjectId = xarMod::apiFunc('dynamicdata','util','import',array('objectname' => 'q_'.$name, 'xml' => $xmlDef));
     if(!isset($qdataObjectId)) return;
 
     // Get the itemtypes of the mail module
-    $itemtypes = xarModApiFunc('mail','user','getitemtypes');
+    $itemtypes = xarMod::apiFunc('mail','user','getitemtypes');
     // Get the max value from the keys and add one
     ksort($itemtypes); end($itemtypes);
     $newItemtype = key($itemtypes) +1;

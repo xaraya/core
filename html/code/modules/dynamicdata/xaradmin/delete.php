@@ -45,7 +45,7 @@ function dynamicdata_admin_delete($args)
     if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',$data['moduleid'].":".$data['itemtype'].":".$data['itemid'])) return;
 
     // recover any session var information and remove it from the var
-    $data = array_merge($data,xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule)));
+    $data = array_merge($data,xarMod::apiFunc('dynamicdata','user','getcontext',array('module' => $tplmodule)));
     xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
     extract($data);
 
@@ -72,7 +72,7 @@ function dynamicdata_admin_delete($args)
 
     if (empty($confirm)) {
         // TODO: is this needed?
-        $data = array_merge($data,xarModAPIFunc('dynamicdata','admin','menu'));
+        $data = array_merge($data,xarMod::apiFunc('dynamicdata','admin','menu'));
         $data['object'] = & $myobject;
         if ($data['objectid'] == 1) {
             $mylist = & DataObjectMaster::getObjectList(array('objectid' => $data['itemid'], 'extend' => false));

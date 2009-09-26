@@ -48,7 +48,7 @@ class AdminMenuBlock extends BasicBlock implements iBlock
 
         // are there any admin modules, then get the whole list sorted by names
         // checking this as early as possible
-        $mods = xarModAPIFunc('modules', 'admin', 'getlist',
+        $mods = xarMod::apiFunc('modules', 'admin', 'getlist',
             array('filter' => array('AdminCapable' => true)));
 
         // which module is loaded atm?
@@ -110,7 +110,7 @@ class AdminMenuBlock extends BasicBlock implements iBlock
                         // For active module we need to display the mod functions links
                         // call the api function to obtain function links, but don't raise an exception if it's not there
                         try {
-                            $menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array());
+                            $menulinks = xarMod::apiFunc($modname, 'admin', 'getmenulinks', array());
 
                             foreach($menulinks as $menulink) {
                                 $adminmods[$modname]['indlinks'][] = array(
@@ -170,7 +170,7 @@ class AdminMenuBlock extends BasicBlock implements iBlock
                         // For active module we need to display the mod functions links
                         // call the api function to obtain function links, but don't raise an exception if it's not there
                         try {
-                            $menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array());
+                            $menulinks = xarMod::apiFunc($modname, 'admin', 'getmenulinks', array());
                             foreach($menulinks as $menulink) {
                                 $catmods[$cat][$modname]['indlinks'][] = array(
                                     'adminlink'     => $menulink['url'],

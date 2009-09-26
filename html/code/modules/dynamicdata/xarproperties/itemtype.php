@@ -21,10 +21,10 @@
      *       show the list of items for that module+itemtype via getitemlinks()
      *       E.g. "articles.1" = the list of articles in publication type 1 News Articles
      *
-     *   TOCHECK: module.itemtype:xarModAPIFunc(...)
-     *       show some list of "item types" for that module via xarModAPIFunc(...)
+     *   TOCHECK: module.itemtype:xarMod::apiFunc(...)
+     *       show some list of "item types" for that module via xarMod::apiFunc(...)
      *       and use itemtype to retrieve individual items via getitemlinks()
-     *       E.g. "articles.1:xarModAPIFunc('articles','user','dropdownlist',array('ptid' => 1, 'where' => ...))"
+     *       E.g. "articles.1:xarMod::apiFunc('articles','user','dropdownlist',array('ptid' => 1, 'where' => ...))"
      *       = some filtered list of articles in publication type 1 News Articles
      *
      *   TODO: support 2nd API call to retrieve the item in case getitemlinks() isn't supported
@@ -79,7 +79,7 @@ class ItemTypeProperty extends ComboProperty
         if (empty($this->initialization_itemtype)) {
             // we're interested in the module itemtypes (= default behaviour)
             try {
-                $itemtypes = xarModAPIFunc($this->initialization_module,'user','getitemtypes');
+                $itemtypes = xarMod::apiFunc($this->initialization_module,'user','getitemtypes');
                 if (!empty($itemtypes)) {
                     foreach ($itemtypes as $typeid => $typeinfo) {
                         if (isset($typeid) && isset($typeinfo['label'])) {
@@ -92,7 +92,7 @@ class ItemTypeProperty extends ComboProperty
         } elseif (empty($this->initialization_func)) {
             // we're interested in the items for module+itemtype
             try {
-                $itemlinks = xarModAPIFunc($this->initialization_module,'user','getitemlinks',
+                $itemlinks = xarMod::apiFunc($this->initialization_module,'user','getitemlinks',
                                            array('itemtype' => $this->itemtype,
                                                  'itemids'  => null));
                 if (!empty($itemlinks)) {

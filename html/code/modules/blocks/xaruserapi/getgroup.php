@@ -28,9 +28,9 @@ function blocks_userapi_getgroup($args)
 
     // The getall function does the main work.
     if (!empty($id)) {
-        $group = xarModAPIfunc('blocks', 'user', 'getallgroups', array('id' => $id));
+        $group = xarMod::apiFunc('blocks', 'user', 'getallgroups', array('id' => $id));
     } else {
-        $group = xarModAPIfunc('blocks', 'user', 'getallgroups', array('name' => $name));
+        $group = xarMod::apiFunc('blocks', 'user', 'getallgroups', array('name' => $name));
     }
 
     // If exactly one row was found then return it.

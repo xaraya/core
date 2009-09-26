@@ -24,7 +24,7 @@ function base_adminapi_menuarray($args)
         $args['module'] = $urlinfo[0];
     }
     $menulinks = array();
-    $menuarray = xarModAPIFunc('base','admin','loadadminmenuarray',array('module' => $args['module']));
+    $menuarray = xarMod::apiFunc('base','admin','loadadminmenuarray',array('module' => $args['module']));
     if (!empty($menuarray['items'])) {
         foreach ($menuarray['items'] as $menuitem) {
             $url = isset($menuitem['target']) ? xarModURL($args['module'],'admin',$menuitem['target']) : xarServer::getBaseURL();
@@ -40,8 +40,8 @@ function base_adminapi_menuarray($args)
                 $menulinks[] = $link;
             }
         }
-    } elseif (xarModAPIFunc($args['module'],'data','adminmenu',0)) {
-        $tabs = xarModAPIFunc($args['module'],'data','adminmenu');
+    } elseif (xarMod::apiFunc($args['module'],'data','adminmenu',0)) {
+        $tabs = xarMod::apiFunc($args['module'],'data','adminmenu');
         foreach($tabs as $tab) {
             $url = isset($tab['target']) ? xarModURL($args['module'],'admin',$tab['target']) : xarServer::getBaseURL();
             $label = isset($tab['label']) ? $tab['label'] : xarML('Missing label');

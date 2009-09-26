@@ -37,7 +37,7 @@ function modules_admin_updateproperties()
     if (empty($displayname)) $displayname = olddisplayname;;
 
     // Pass to API
-    $updated = xarModAPIFunc('modules',
+    $updated = xarMod::apiFunc('modules',
                              'admin',
                              'updateproperties',
                               array('regid' => $regid,

@@ -32,7 +32,7 @@ function modules_adminapi_updateversion($args)
     $modules_table = $xartable['modules'];
 
     // Get module information from the filesystem
-    $fileModule = xarModAPIFunc('modules',
+    $fileModule = xarMod::apiFunc('modules',
                                 'admin',
                                 'getfilemodules',
                                 array('regId' => $regId));

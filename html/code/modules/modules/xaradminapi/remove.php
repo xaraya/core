@@ -52,7 +52,7 @@ function modules_adminapi_remove($args)
             $dbconn->Execute($query,array($modinfo['regid']));
         } else {
             // Module deletion function
-            xarModAPIFunc('modules', 'admin', 'executeinitfunction',
+            xarMod::apiFunc('modules', 'admin', 'executeinitfunction',
                           array('regid' => $regid, 'function' => 'delete'));
 
             // Delete any module variables that the module cleanup function might have missed.
@@ -61,7 +61,7 @@ function modules_adminapi_remove($args)
             xarModVars::delete_all($modinfo['name']);
 
             // Update state of module
-            xarModAPIFunc('modules', 'admin', 'setstate',
+            xarMod::apiFunc('modules', 'admin', 'setstate',
                           array('regid' => $regid,'state' => XARMOD_STATE_UNINITIALISED));
         }
 
@@ -82,13 +82,13 @@ function modules_adminapi_remove($args)
         // Delete block details for this module.
         //
         // Get block types.
-        $blocktypes = xarModAPIfunc('blocks', 'user', 'getallblocktypes',
+        $blocktypes = xarMod::apiFunc('blocks', 'user', 'getallblocktypes',
                                     array('module' => $modinfo['name']));
 
         // Delete block types.
         if (is_array($blocktypes) && !empty($blocktypes)) {
             foreach($blocktypes as $blocktype) {
-                xarModAPIfunc('blocks', 'admin', 'delete_type', $blocktype);
+                xarMod::apiFunc('blocks', 'admin', 'delete_type', $blocktype);
             }
         }
 

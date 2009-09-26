@@ -32,7 +32,7 @@ function modules_adminapi_upgrade($args)
     }
 
     // Module deletion function
-    if (!xarModAPIFunc('modules',
+    if (!xarMod::apiFunc('modules',
                        'admin',
                        'executeinitfunction',
                        array('regid'    => $regid,
@@ -42,7 +42,7 @@ function modules_adminapi_upgrade($args)
     }
 
     // Update state of module
-    $res = xarModAPIFunc('modules',
+    $res = xarMod::apiFunc('modules',
                         'admin',
                         'setstate',
                         array('regid' => $regid,

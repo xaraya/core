@@ -23,14 +23,14 @@ function themes_adminapi_regenerate()
     if(!xarSecurityCheck('AdminTheme')) return;
 
     //Finds and updates missing modules
-    if (!xarModAPIFunc('themes','admin','checkmissing')) {return;}
+    if (!xarMod::apiFunc('themes','admin','checkmissing')) {return;}
 
     //Get all themes in the filesystem
-    $fileThemes = xarModAPIFunc('themes','admin','getfilethemes');
+    $fileThemes = xarMod::apiFunc('themes','admin','getfilethemes');
     if (!isset($fileThemes)) return;
 
     // Get all themes in DB
-    $dbThemes = xarModAPIFunc('themes','admin','getdbthemes');
+    $dbThemes = xarMod::apiFunc('themes','admin','getdbthemes');
     if (!isset($dbThemes)) return;
 
     // See if we have lost any themes since last generation
@@ -40,7 +40,7 @@ function themes_adminapi_regenerate()
 /*             // Get theme ID */
 /*             $regId = $themeInfo['regid']; */
 /*             // Set state of theme to 'missing' */
-/*             $set = xarModAPIFunc('themes', */
+/*             $set = xarMod::apiFunc('themes', */
 /*                                 'admin', */
 /*                                 'setstate', */
 /*                                 array('regid'=> $regId, */
@@ -86,7 +86,7 @@ function themes_adminapi_regenerate()
                               $themeInfo['directory'], $themeInfo['version']);
             $result = $dbconn->Execute($sql,$bindvars);
 
-            $set = xarModAPIFunc('themes',
+            $set = xarMod::apiFunc('themes',
                                 'admin',
                                 'setstate',
                                 array('regid' => $themeInfo['regid'],
@@ -95,7 +95,7 @@ function themes_adminapi_regenerate()
         } else {
           // BEGIN bugfix (561802) - cmgrote
             if ($dbThemes[$name]['version'] != $themeInfo['version'] && $dbThemes[$name]['state'] != XARTHEME_STATE_UNINITIALISED) {
-                    $set = xarModAPIFunc('themes','admin','setstate',
+                    $set = xarMod::apiFunc('themes','admin','setstate',
                                         array('regid' => $dbThemes[$name]['regid'], 'state' => XARTHEME_STATE_UPGRADED));
                     assert('isset($set); /* Setting the state of theme failed */');
                 }

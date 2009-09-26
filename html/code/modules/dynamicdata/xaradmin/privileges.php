@@ -111,7 +111,7 @@ function dynamicdata_admin_privileges($args)
     }
 
     // Get objects
-    $objects = xarModAPIFunc('dynamicdata','user','getobjects');
+    $objects = xarMod::apiFunc('dynamicdata','user','getobjects');
 
     // TODO: use object list instead of (or in addition to) module + itemtype
 
@@ -119,7 +119,7 @@ function dynamicdata_admin_privileges($args)
     $objectlist = array();
     $modlist = array();
     // Get a list of all modules - we just want their IDs
-    $all_modules = xarModAPIfunc('modules', 'admin', 'getlist');
+    $all_modules = xarMod::apiFunc('modules', 'admin', 'getlist');
     $all_module_ids = array();
     foreach($all_modules as $this_module) {
         $all_module_ids[] = $this_module['regid'];
@@ -138,7 +138,7 @@ function dynamicdata_admin_privileges($args)
     $proptypes = DataPropertyMaster::getPropertyTypes();
 
     // Get properties
-    $properties = xarModAPIFunc('dynamicdata','user','getitems',
+    $properties = xarMod::apiFunc('dynamicdata','user','getitems',
                                 array('module' => 'dynamicdata',
                                       'itemtype' => 1));
     $propnames = array();
@@ -158,7 +158,7 @@ function dynamicdata_admin_privileges($args)
         if (!empty($itemid)) {
             $numitems = xarML('probably');
         } elseif (!empty($objectid) || !empty($moduleid)) {
-            $numitems = xarModAPIFunc('dynamicdata','user','countitems',
+            $numitems = xarMod::apiFunc('dynamicdata','user','countitems',
                                       array('objectid' => $objectid,
                                             'moduleid' => $moduleid,
                                             'itemtype' => $itemtype));

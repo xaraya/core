@@ -22,7 +22,7 @@ function dynamicdata_userapi_decode_shorturl($params)
     static $objectcache = array();
 
     if (count($objectcache) == 0) {
-        $objects = xarModAPIFunc('dynamicdata','user','getobjects');
+        $objects = xarMod::apiFunc('dynamicdata','user','getobjects');
         foreach ($objects as $object) {
             $objectcache[$object['name']] = array('module_id'    => $object['moduleid'],
                                                   'itemtype' => $object['itemtype']);

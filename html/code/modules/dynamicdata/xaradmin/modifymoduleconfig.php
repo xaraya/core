@@ -5,7 +5,7 @@ function dynamicdata_admin_modifymoduleconfig()
     if (!xarSecurityCheck('AdminDynamicData')) return;
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
-    $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'dynamicdata'));
+    $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'dynamicdata'));
     $data['module_settings']->setFieldList('items_per_page,');
     $data['module_settings']->getItem();
     switch (strtolower($phase)) {
@@ -34,7 +34,7 @@ function dynamicdata_admin_modifymoduleconfig()
             $validadmins = array();
             foreach ($admins as $admin) {
                 if (empty($admin)) continue;
-                $user = xarModAPIFunc('roles','user','get',array('uname' => trim($admin)));
+                $user = xarMod::apiFunc('roles','user','get',array('uname' => trim($admin)));
                 if(!empty($user)) $validadmins[$user['uname']] = $user['uname'];
             }
             xarModVars::set('dynamicdata', 'administrators', serialize($validadmins));
@@ -48,7 +48,7 @@ function dynamicdata_admin_modifymoduleconfig()
             }
             $newusers = array();
             foreach ($candidates as $candidate) {
-                $user = xarModAPIFunc('roles','user','get',array('uname' => trim($candidate)));
+                $user = xarMod::apiFunc('roles','user','get',array('uname' => trim($candidate)));
                 if(!empty($user)) $newusers[$user['uname']] = array('id' => $user['id']);
             }
             xarModVars::set('dynamicdata', 'debugusers', serialize($newusers));

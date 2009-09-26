@@ -29,7 +29,7 @@ function modules_adminapi_activate ($args)
         throw new Exception("Calling activate function while module is uninitialised");
     }
     // Module activate function
-    if (!xarModAPIFunc('modules','admin', 'executeinitfunction',
+    if (!xarMod::apiFunc('modules','admin', 'executeinitfunction',
                            array('regid'    => $regid,
                                  'function' => 'activate'))) {
         $msg = xarML('Unable to execute "activate" function in the xarinit.php file of module (#(1))', $modInfo['displayname']);
@@ -37,7 +37,7 @@ function modules_adminapi_activate ($args)
     }
 
     // Update state of module
-    $res = xarModAPIFunc('modules','admin','setstate',
+    $res = xarMod::apiFunc('modules','admin','setstate',
                         array('regid' => $regid,
                               'state' => XARMOD_STATE_ACTIVE));
 

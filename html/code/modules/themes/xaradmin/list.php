@@ -66,7 +66,7 @@ function themes_admin_list()
     // obtain list of modules based on filtering criteria
 /*     if($regen){ */
         // lets regenerate the list on each reload, for now
-        if(!xarModAPIFunc('themes', 'admin', 'regenerate')) return;
+        if(!xarMod::apiFunc('themes', 'admin', 'regenerate')) return;
 
         // assemble filter for theme list
         $filter = array('State' => $data['selfilter']);
@@ -77,11 +77,11 @@ function themes_admin_list()
             );
         }
         // get themes
-        $themelist = xarModAPIFunc('themes','admin','getthemelist',  array('filter'=> $filter));
+        $themelist = xarMod::apiFunc('themes','admin','getthemelist',  array('filter'=> $filter));
 /*         , array('filter'=> array('State' => $data['selfilter'][0]))); */
 /*     }else{ */
 /*         // or just fetch the quicker old list */
-/*         $themelist = xarModAPIFunc('themes','admin','GetThemeList', array('filter'=> array('State' => $data['selfilter']))); */
+/*         $themelist = xarMod::apiFunc('themes','admin','GetThemeList', array('filter'=> array('State' => $data['selfilter']))); */
 /*     } */
 
     // set sorting vars

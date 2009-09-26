@@ -56,7 +56,7 @@ function roles_user_email($args)
         case 'modify':
         default:
             // Get user information
-            $data = xarModAPIFunc(
+            $data = xarMod::apiFunc(
                 'roles', 'user', 'get',
                 array('id' => $id)
             );
@@ -97,11 +97,11 @@ function roles_user_email($args)
             list($message) = xarModCallHooks('item', 'transform', $id, array($message));
 
             // Get user information
-            $data = xarModAPIFunc('roles', 'user', 'get', array('id' => $id));
+            $data = xarMod::apiFunc('roles', 'user', 'get', array('id' => $id));
 
             if ($data == false) return;
 
-            if (!xarModAPIFunc(
+            if (!xarMod::apiFunc(
                 'mail', 'admin', 'sendmail',
                 array(
                     'info'     => $data['email'],

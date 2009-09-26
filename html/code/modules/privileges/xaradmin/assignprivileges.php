@@ -6,7 +6,7 @@
         if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'all', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('tabmodule', 'str:1:100', $tabmodule, 'All Modules', XARVAR_NOT_REQUIRED)) return;
 
-        $installed = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('State' => XARMOD_STATE_INSTALLED)));
+        $installed = xarMod::apiFunc('modules', 'admin', 'getlist', array('filter' => array('State' => XARMOD_STATE_INSTALLED)));
         foreach ($installed as $module) {
             $moduletabs[$module['name']] = $module;
         }
@@ -45,7 +45,7 @@
                 if (!xarVarFetch('privilege', 'int', $privilege_id, 0, XARVAR_NOT_REQUIRED)) return;
 
                 if (empty($role_id) && !empty($rolename)) {
-                    $user = xarModAPIFunc('roles','user','get',array('uname' => $rolename));
+                    $user = xarMod::apiFunc('roles','user','get',array('uname' => $rolename));
                     $role_id = $user['id'];
                 }
                 if (!(empty($role_id) || empty($privilege_id))) {

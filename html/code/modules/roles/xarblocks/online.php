@@ -71,7 +71,7 @@
             }
 
             // FIXME: there could be many active users, but we only want a handful of them.
-            $activeusers = xarModAPIFunc(
+            $activeusers = xarMod::apiFunc(
                 'roles', 'user', 'getallactive',
                 array(
                     'order' => 'name',
@@ -94,12 +94,12 @@
 
                 if ($thisuser['name'] == xarUserGetVar('name')) {
                     if (xarModIsAvailable('messages')) {
-                        $args['activeusers'][$key]['total'] = xarModAPIFunc(
+                        $args['activeusers'][$key]['total'] = xarMod::apiFunc(
                             'messages', 'user', 'count_total',
                             array('id'=>$thisuser['id'])
                         );
 
-                        $args['activeusers'][$key]['unread'] = xarModAPIFunc(
+                        $args['activeusers'][$key]['unread'] = xarMod::apiFunc(
                             'messages', 'user', 'count_unread',
                             array('id'=>$thisuser['id'])
                         );
@@ -149,13 +149,13 @@
             if (!empty($id)) {
                 if(!is_numeric($id)) {
                 //Remove this further down the line
-                    $status = xarModAPIFunc(
+                    $status = xarMod::apiFunc(
                     'roles', 'user', 'get',
                     array('uname' => $id)
                     );
 
                 } else {
-                    $status = xarModAPIFunc(
+                    $status = xarMod::apiFunc(
                     'roles', 'user', 'get',
                     array('id' => $id)
                     );

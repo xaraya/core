@@ -33,7 +33,7 @@ function modules_admin_activate()
     if (!xarVarFetch('id', 'int:1:', $id)) return; 
 
     // Activate
-    $activated = xarModAPIFunc('modules',
+    $activated = xarMod::apiFunc('modules',
                               'admin',
                               'activate',
                               array('regid' => $id));

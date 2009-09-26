@@ -453,7 +453,7 @@ class xarRequest extends Object
                     $loopHole = array($modName,$modType,$funcName);
                     // don't throw exception on missing file or function anymore
                     try {
-                        $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params);
+                        $res = xarMod::apiFunc($modName, $modType, 'decode_shorturl', $params);
                     } catch ( NotFoundExceptions $e) {
                         // No worry
                     }

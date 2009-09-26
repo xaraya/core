@@ -44,7 +44,7 @@ function modules_admin_deactivate ()
         // FIXME: double check this line and the line with deactivatewithdependents below,
         // they can NOT be called in the same request due to the statics used in there, the logic
         // needs to be reviewed, it's not solid enough.
-        $dependents = xarModAPIFunc('modules','admin','getalldependents',array('regid'=>$id));
+        $dependents = xarMod::apiFunc('modules','admin','getalldependents',array('regid'=>$id));
         if(count($dependents['active']) > 1) {
             //Let's make a nice GUI to show the user the options
             $data = array();
@@ -56,13 +56,13 @@ function modules_admin_deactivate ()
             return $data;
         } else {
             // No dependents, we can deactivate the module
-            if(!xarModAPIFunc('modules','admin','deactivate',array('regid' => $id)))  return;
+            if(!xarMod::apiFunc('modules','admin','deactivate',array('regid' => $id)))  return;
             xarResponse::Redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));               
         }
     }
 
     // See if we have lost any modules since last generation
-    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
+    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {
         return;
     }
 
@@ -70,7 +70,7 @@ function modules_admin_deactivate ()
     if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_ACTIVE) {
         //Deactivate with dependents, first dependents
         //then the module itself
-        if (!xarModAPIFunc('modules','admin','deactivatewithdependents',array('regid'=>$id))) {
+        if (!xarMod::apiFunc('modules','admin','deactivatewithdependents',array('regid'=>$id))) {
             //Call exception
             return;
         } // Else

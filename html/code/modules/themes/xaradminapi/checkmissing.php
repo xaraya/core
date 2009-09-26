@@ -28,11 +28,11 @@ function themes_adminapi_checkmissing()
     if(!xarSecurityCheck('AdminTheme',1,'All','All','themes')) return;
 
     //Get all modules in the filesystem
-    $fileThemes = xarModAPIFunc('themes','admin','getfilethemes');
+    $fileThemes = xarMod::apiFunc('themes','admin','getfilethemes');
     if (!isset($fileThemes)) return;
 
     // Get all modules in DB
-    $dbThemes = xarModAPIFunc('themes','admin','getdbthemes');
+    $dbThemes = xarMod::apiFunc('themes','admin','getdbthemes');
     if (!isset($dbThemes)) return;
 
     // See if we have lost any modules since last generation
@@ -63,7 +63,7 @@ function themes_adminapi_checkmissing()
                     break;
             }
             if (isset($newstate)) {
-                $set = xarModAPIFunc('themes',
+                $set = xarMod::apiFunc('themes',
                                     'admin',
                                     'setstate',
                                     array('regid'=> $regId,

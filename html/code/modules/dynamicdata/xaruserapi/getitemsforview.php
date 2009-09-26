@@ -23,7 +23,7 @@ function dynamicdata_userapi_getitemsforview($args)
         $args['status'] = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     }
     $args['getobject'] = 1;
-    $object =  xarModAPIFunc('dynamicdata','user','getitems',$args);
+    $object =  xarMod::apiFunc('dynamicdata','user','getitems',$args);
     if (!isset($object)) {
         return array(array(), array());
     }

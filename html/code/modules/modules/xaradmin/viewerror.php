@@ -25,14 +25,14 @@ function modules_admin_viewerror()
     //if (!xarSecConfirmAuthKey()) return;
 
     // Get module information from the database
-    $dbModule = xarModAPIFunc('modules',
+    $dbModule = xarMod::apiFunc('modules',
                               'admin',
                               'getdbmodules',
                               array('regId' => $regId));
     if (!isset($dbModule)) return;
 
     // Get module information from the filesystem
-    $fileModule = xarModAPIFunc('modules',
+    $fileModule = xarMod::apiFunc('modules',
                                 'admin',
                                 'getfilemodules',
                                 array('regId' => $regId));

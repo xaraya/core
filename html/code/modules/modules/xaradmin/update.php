@@ -29,7 +29,7 @@ function modules_admin_update()
     }        
 
     // Pass to API
-    $updated = xarModAPIFunc('modules',
+    $updated = xarMod::apiFunc('modules',
                              'admin',
                              'update',
                               array('regid' => $regId,

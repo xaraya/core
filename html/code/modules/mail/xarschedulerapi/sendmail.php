@@ -45,7 +45,7 @@ function mail_schedulerapi_sendmail($args)
         $args = unserialize($data);
         unset($args['when']);
         // send it with the internal _sendmail API function
-        if (xarModAPIFunc('mail','admin','_sendmail',$args)) {
+        if (xarMod::apiFunc('mail','admin','_sendmail',$args)) {
             $log .= xarML('succeeded');
             xarModVars::delete('mail',$id);
             $sent[] = $id;

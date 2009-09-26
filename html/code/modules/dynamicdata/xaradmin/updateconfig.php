@@ -31,7 +31,7 @@ function dynamicdata_admin_updateconfig($args)
 
     if ( isset($flushPropertyCache) && ($flushPropertyCache == true) ) {
         $args['flush'] = 'true';
-        if(xarModAPIFunc('dynamicdata','admin','importpropertytypes', $args)) {
+        if(xarMod::apiFunc('dynamicdata','admin','importpropertytypes', $args)) {
             xarResponse::Redirect(xarModURL('dynamicdata','admin','modifyconfig'));
             return true;
         } else {
