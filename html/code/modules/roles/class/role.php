@@ -62,8 +62,7 @@ class Role extends DataObject
         $this->modulestable = $xartable['modules'];
 
         $this->parentlevel = 0;
-        $ancestor = $this->getBaseAncestor();
-        $this->basetype = $ancestor['itemtype'];
+        $this->basetype = $this->getType();
     }
 
     /**
@@ -709,8 +708,7 @@ class Role extends DataObject
      */
     public function isUser()
     {
-        $base = xarMod::apiFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $this->getType(), 'moduleid' => 27));
-        return $base['itemtype'] == ROLES_USERTYPE;
+        return $this->getType() == ROLES_USERTYPE;
     }
 
     /**
