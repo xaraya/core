@@ -24,7 +24,7 @@ function roles_admin_new()
     if (!xarVarFetch('duvs',        'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
     $data['object'] = DataObjectMaster::getObject(array('module'   => 'roles', 'itemtype' => $itemtype));
-    $data['basetype'] = xarMod::apiFunc('dynamicdata','user','getbaseitemtype',array('objectid' => $data['object']->objectid));
+    $data['basetype'] = $itemtype;
 
     xarSession::setVar('ddcontext.roles', array(
                                             'return_url' => xarServer::getCurrentURL(),

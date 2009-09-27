@@ -67,8 +67,7 @@ function roles_admin_showusers()
         $basetypes = array();
         // Show only roles based on the user itemtype
         foreach ($types as $key => $value) {
-            $basetype = xarMod::apiFunc('dynamicdata','user','getbaseitemtype',array('itemtype' => $key, 'moduleid' => 27));
-            if ($basetype == ROLES_USERTYPE) $basetypes[] = $basetype;
+            if ($key == ROLES_USERTYPE) $basetypes[] = $key;
         }
         $xartable = xarDB::getTables();
         $q = new xarQuery('SELECT');

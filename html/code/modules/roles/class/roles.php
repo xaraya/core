@@ -226,8 +226,7 @@ class xarRoles extends Object
         $types = xarMod::apiFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
         $basetypes = array();
         foreach ($types as $key => $value) {
-            $basetype = xarMod::apiFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
-            if ($basetype['itemtype'] == ROLES_GROUPTYPE) $basetypes[] = $key;
+            if ($key == ROLES_GROUPTYPE) $basetypes[] = $key;
         }
         // set up the query and get the groups
         self::initialize();
