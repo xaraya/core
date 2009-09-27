@@ -32,7 +32,7 @@ class SourceTemplate extends CompiledTemplate implements ISourceTemplate
      *
      * @return string the compiled template code.
     **/
-    public function &compile() 
+    public function &compile($add_comments = 0) 
     {
         assert('isset($this->fileName); /* No source to compile from */');
         sys::import('blocklayout.compiler');
@@ -40,7 +40,7 @@ class SourceTemplate extends CompiledTemplate implements ISourceTemplate
         $templateCode = $blCompiler->compileFile($this->fileName);
 
         $out = '';
-        if(xarTpl_outputPHPCommentBlockInTemplates()) {
+        if($add_comments) {
             // FIXME: this is weird stuff:
             // theme is irrelevant, date is seen in the filesystem, sourcefile in CACHEKEYS, why? it complicates the system a lot.
             $commentBlock = "<?php\n/*"
