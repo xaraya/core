@@ -104,9 +104,8 @@ function roles_admin_purge($args)
                 $skip = 0;
                 $unique = 1;
                 $thisrole = xarRoles::get($role['id']);
-                $baseancestor = $thisrole->getBaseAncestor();
                 $existinguser = xarMod::apiFunc('roles','user','get',array('uname' => $role['uname'], 'state' => ROLES_STATE_CURRENT));
-                if ($baseancestor['itemtype'] != ROLES_USERTYPE) {
+                if ($thisrole->getType() != ROLES_USERTYPE) {
                     if (is_array($existinguser)) $unique = 0;
                     $role['uname'] = "";
                 } else {

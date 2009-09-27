@@ -102,7 +102,6 @@ class DataObjectMaster extends Object
 
     public $moduleid    = null;
     public $itemtype    = 0;
-    public $parent      = 0;
 
     public $urlparam    = 'itemid';
     public $maxid       = 0;
@@ -484,7 +483,6 @@ class DataObjectMaster extends Object
                          label,
                          module_id,
                          itemtype,
-                         parent_id,
                          urlparam,
                          maxid,
                          config,
@@ -505,7 +503,7 @@ class DataObjectMaster extends Object
             // @todo this depends on fetchmode being numeric
             list(
                 $info['objectid'], $info['name'],     $info['label'],
-                $info['moduleid'], $info['itemtype'], $info['parent'],
+                $info['moduleid'], $info['itemtype'],
                 $info['urlparam'], $info['maxid'],    $info['config'],
                 $info['isalias']
             ) = $result->fields;
@@ -540,7 +538,6 @@ class DataObjectMaster extends Object
             $info['label'] = xarML('Table #(1)',$args['table']);
             $info['moduleid'] = 182;
             $info['itemtype'] = 0;
-            $info['parent'] = 1;
             $info['filepath'] = 'auto';
             $info['urlparam'] = 'itemid';
             $info['maxid'] = 0;
@@ -567,7 +564,6 @@ class DataObjectMaster extends Object
                          label,
                          module_id,
                          itemtype,
-                         parent_id,
                          class,
                          filepath,
                          urlparam,
@@ -583,7 +579,7 @@ class DataObjectMaster extends Object
         $info = array();
         list(
             $info['objectid'], $info['name'],     $info['label'],
-            $info['moduleid'], $info['itemtype'], $info['parent'],
+            $info['moduleid'], $info['itemtype'],
             $info['class'], $info['filepath'],
             $info['urlparam'], $info['maxid'],    $info['config'],
             $info['isalias']
@@ -906,80 +902,6 @@ class DataObjectMaster extends Object
     }
 
     /**
-      * Get Object's Ancestors
-      *
-      * @param int    args[moduleid]
-      * @param int    args[itemtype]
-      * @param int    args[objectid]
-      * @param bool args[top]
-      * @param bool  args[base]
-    **/
-    function getAncestors()
-    {
-        $top = isset($top) ? $top : false;
-        $base = isset($base) ? $base : true;
-        $ancestors = array();
-
-
-        $xartable = xarDB::getTables();
-        $topobject = self::getObjectInfo(array('objectid' => $this->objectid));
-
-        // Include the last descendant (this object) or not
-        if ($top) {
-            $ancestors[] = self::getObjectInfo(array('objectid' => $this->objectid));
-        }
-
-        // Get all the dynamic objects at once
-        sys::import('modules.roles.class.xarQuery');
-        $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-        $q->addfields(array('id AS objectid','name AS objectname','module_id AS moduleid','itemtype AS itemtype','parent_id AS parent'));
-        $q->eq('module_id',$this->moduleid);
-        if (!$q->run()) return;
-
-        // Put in itemtype as key for easier manipulation
-        foreach($q->output() as $row)
-            $objects[$row['itemtype']] = array('objectid' => $row['objectid'],'objectname' => $row['objectname'], 'moduleid' => $row['moduleid'], 'itemtype' => $row['itemtype'], 'parent' => $row['parent']);
-
-        // Cycle through each ancestor
-        $parentitemtype = $topobject['parent'];
-        if (!$parentitemtype) return array();
-
-        for(;;) {
-            $thisobject     = $objects[$parentitemtype];
-
-            // This is a DD descendent object. add it to the ancestor array
-            $moduleid       = $thisobject['moduleid'];
-            $objectid       = $thisobject['objectid'];
-            $itemtype       = $thisobject['itemtype'];
-            $name           = $thisobject['objectname'];
-            $parentitemtype = $thisobject['parent'];
-            $this->baseancestor = $objectid;
-            $ancestors[] = $thisobject;
-            if (!$thisobject['parent']) break;
-        }
-        $ancestors = array_reverse($ancestors, true);
-        return $ancestors;
-
-    }
-
-    /**
-     * Get the base ancestor for the object
-     *
-     * see getAncestors for parameters
-     * @see self::getAncestors
-     */
-    function &getBaseAncestor()
-    {
-        $ancestors = $this->getAncestors();
-        if (empty($ancestors)) {
-            $ancestor = $this->toArray(); // FIXME: this is a bit sloppy, too many elements
-        } else {
-            $ancestor = array_shift($ancestors);
-        }
-        return $ancestor;
-    }
-
-    /**
      * Get a module's itemtypes
      *
      * @param int     args[moduleid]
@@ -1020,7 +942,7 @@ class DataObjectMaster extends Object
             $xartable = xarDB::getTables();
             sys::import('modules.roles.class.xarQuery');
             $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-            $q->addfields(array('id AS objectid','label AS objectlabel','module_id AS moduleid','itemtype AS itemtype','parent_id AS parent'));
+            $q->addfields(array('id AS objectid','label AS objectlabel','module_id AS moduleid','itemtype AS itemtype'));
             $q->eq('module_id',$moduleid);
             if (!$q->run()) return;
 

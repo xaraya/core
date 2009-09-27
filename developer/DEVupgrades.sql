@@ -665,6 +665,7 @@ INSERT INTO `xar_privileges` (id, name, realm_id, module_id, component, instance
 DROP TABLE IF EXISTS xar_template_tags;
 
 ALTER TABLE `xar_dynamic_objects` DROP `property_id`;
+ALTER TABLE `xar_dynamic_objects` DROP `parent_id`;
 
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here

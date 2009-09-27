@@ -76,13 +76,6 @@ function dynamicdata_init()
                 'null'        => false,
                 'default'     => '0'
             ),
-            /* the item type of the parent of this object */
-            'parent_id' => array(
-                'type'        => 'integer',
-                'unsigned'     => true,
-                'null'        => false,
-                'default'     => '0'
-            ),
             /* the class this object belongs to*/
             'class'     => array(
                 'type'        => 'varchar',
