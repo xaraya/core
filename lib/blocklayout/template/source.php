@@ -15,8 +15,7 @@ sys::import('blocklayout.template.compiled');
 **/
 interface ISourceTemplate
 {
-    function &compile();
-    function &execute(&$args,$caching);
+    function &compile($add_comments=0);
 }
 
 /**
@@ -32,7 +31,7 @@ class SourceTemplate extends CompiledTemplate implements ISourceTemplate
      *
      * @return string the compiled template code.
     **/
-    public function &compile($add_comments = 0) 
+    public function &compile($add_comments=0) 
     {
         assert('isset($this->fileName); /* No source to compile from */');
         sys::import('blocklayout.compiler');
@@ -58,11 +57,6 @@ class SourceTemplate extends CompiledTemplate implements ISourceTemplate
         
         $out .= $templateCode;
         return $out;
-    }
-    
-    public function &execute(&$bindvars, $caching = 0)
-    {
-        // not yet
     }
 }
 ?>
