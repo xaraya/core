@@ -18,9 +18,9 @@
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="xsl:includexarayatags">
+  <xsl:template match="xsl:includeclienttags">
     <xsl:call-template name="includefile">
-       <xsl:with-param name="string" select="$xarayatags" />
+       <xsl:with-param name="string" select="$clienttags" />
     </xsl:call-template>
   </xsl:template>
 
