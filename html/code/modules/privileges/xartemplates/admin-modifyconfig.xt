@@ -60,6 +60,19 @@
                     </li>
                 </xar:if>
                 -->
+                <!--
+                <xar:if condition="$tab eq 'maskbased'">
+                    <li class="xar-tab-active">
+                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=maskbased" class="xar-accent xar-accent-outline">
+                        Basic Access</a>
+                    </li>
+                <xar:else />
+                    <li class="xar-tab">
+                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=maskbased" class="xar-norm xar-norm-outline">
+                        Basic Access</a>
+                    </li>
+                </xar:if>
+                -->
                 <xar:if condition="$tab eq 'testing'">
                     <li class="xar-tab-active">
                         <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=testing" class="xar-accent xar-accent-outline">
@@ -268,6 +281,10 @@
                     <input type="submit" value="#xarML('Update Privileges Configuration')#" />
                 </div>
             </fieldset>
+        </xar:if>
+        <!-- Begin Mask-Based Security Checks by Group -->
+        <xar:if condition="$tab eq 'maskbased'">
+            <xar:template type="module" file="maskbased" />
         </xar:if>
         <!-- Begin Testing -->
         <xar:if condition="$tab eq 'testing'">
