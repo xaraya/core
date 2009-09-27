@@ -40,8 +40,8 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
                 return;
             if(empty($this->tplmodule)) 
             {
-                $modinfo = xarModGetInfo($this->object->moduleid);
-                $this->tplmodule = $modinfo['name'];
+                $modname = xarMod::getName($this->object->moduleid);
+                $this->tplmodule = $modname;
             }
         }
         if(!xarSecurityCheck(
@@ -93,13 +93,13 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
         foreach(array_keys($this->object->properties) as $name) 
             $item[$name] = $this->object->properties[$name]->value;
 
-        if(!isset($modinfo)) 
-            $modinfo = xarModGetInfo($this->object->moduleid);
+        if(!isset($modname)) 
+            $modname = xarMod::getName($this->object->moduleid);
 
-        $item['module'] = $modinfo['name'];
+        $item['module'] = $modname;
         $item['itemtype'] = $this->object->itemtype;
         $item['itemid'] = $this->object->itemid;
-        $hooks = xarModCallHooks('item', 'new', $this->object->itemid, $item, $modinfo['name']);
+        $hooks = xarModCallHooks('item', 'new', $this->object->itemid, $item, $modname);
 
         $this->object->viewfunc = $this->func;
         // TODO: have dedicated template for 'object' type

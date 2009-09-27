@@ -43,8 +43,8 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
 
             if(empty($this->tplmodule)) 
             {
-                $modinfo = xarModGetInfo($this->list->moduleid);
-                $this->tplmodule = $modinfo['name'];
+                $modname = xarMod::getName($this->list->moduleid);
+                $this->tplmodule = $modname;
             }
         }
         $title = xarML('View #(1)', $this->list->label);

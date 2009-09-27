@@ -110,6 +110,8 @@ function dynamicdata_utilapi_import($args)
         // Treat parents where the module is DD differently. Put in numeric itemtype
 //        if ($args['moduleid'] == 182) {
             $args['parent'] = empty($args['parent']) ? 0 : $args['parent'];
+// FIXME: don't you mean checking if the parent exists here ?
+//        Then use 'objectid' or 'name' as argument, and set 'parent' to 'objectid' as a result
             $infobaseobject = DataObjectMaster::getObjectInfo(array('id' => $args['parent']));
             $args['parent'] = $infobaseobject['itemtype'];
 //        }

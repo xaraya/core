@@ -41,8 +41,8 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
 
             if(empty($this->tplmodule)) 
             {
-                $modinfo = xarModGetInfo($this->object->moduleid);
-                $this->tplmodule = $modinfo['name'];
+                $modname = xarMod::getName($this->object->moduleid);
+                $this->tplmodule = $modname;
             }
         }
         if(!empty($args['cancel'])) 

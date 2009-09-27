@@ -665,39 +665,51 @@ class DataProperty extends Object implements iDataProperty
         static $allconfigproperties;
 
         if (empty($allconfigproperties)) {
+            // removed dependency on roles xarQuery
             $xartable = xarDB::getTables();
-            $q = new xarQuery('SELECT',$xartable['dynamic_configurations']);
-            if (!$q->run()) return;
-            $allconfigproperties = $q->output();
+            $configurations = $xartable['dynamic_configurations'];
 
-            // Use this if we have DD storage
-//            sys::import('modules.query.class.ddquery');
-//            $q = new DDQuery('configurations');
-//            if (!$q->run()) return;
-//            $allconfigproperties = $q->output();
+            $bindvars = array();
+            $query = "SELECT id,
+                             name,
+                             description,
+                             property_id,
+                             label,
+                             ignore_empty,
+                             configuration
+                      FROM $configurations ";
+
+            $dbconn = xarDB::getConn();
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+
+            $allconfigproperties = array();
+            while ($result->next())
+            {
+                $item = $result->fields;
+                $allconfigproperties[$item['name']] = $item;
+            }
 
             // Can't use DD methods here as we go into a recursion loop
 //            $object = DataObjectMaster::getObjectList(array('name' => 'configurations'));
 //            $allconfigproperties = $object->getItems();
         }
-        $config = array();
-        foreach ($allconfigproperties as $item) $config[$item['name']] = $item;
         // if no items found, bail
-        if (empty($config)) return $config;
+        if (empty($allconfigproperties)) return $allconfigproperties;
 
         $configproperties = array();
         $properties = $this->getPublicProperties();
         foreach ($properties as $name => $arg) {
-            if (!isset($config[$name])) continue;
+            if (!isset($allconfigproperties[$name])) continue;
             $pos = strpos($name, "_");
             if (!$pos || (substr($name,0,$pos) != $type)) continue;
             if ($fullname) {
-                $configproperties[$name] = $config[$name];
+                $configproperties[$name] = $allconfigproperties[$name];
                 $configproperties[$name]['value'] = $arg;
                 $configproperties[$name]['shortname'] = substr($name,$pos+1);
                 $configproperties[$name]['fullname'] = $name;
             } else {
-                $configproperties[substr($name,$pos+1)] = $config[$name];
+                $configproperties[substr($name,$pos+1)] = $allconfigproperties[$name];
                 $configproperties[substr($name,$pos+1)]['value'] = $arg;
                 $configproperties[substr($name,$pos+1)]['shortname'] = substr($name,$pos+1);
                 $configproperties[substr($name,$pos+1)]['fullname'] = $name;

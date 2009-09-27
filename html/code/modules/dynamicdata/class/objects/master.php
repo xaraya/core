@@ -32,7 +32,7 @@ class DataObjectDescriptor extends ObjectDescriptor
                 if (is_numeric($value) || is_integer($value)) {
                     $args['moduleid'] = $value;
                 } else {
-                    $info = xarMod::getInfo(xarMod::getRegID($value));
+                    //$info = xarMod::getInfo(xarMod::getRegID($value));
                     $args['moduleid'] = xarMod::getRegID($value); //$info['systemid']; FIXME
                 }
                 break;
@@ -45,7 +45,7 @@ class DataObjectDescriptor extends ObjectDescriptor
             } else {
                 $args['fallbackmodule'] = 'dynamicdata';
             }
-            $info = xarMod::getInfo(xarMod::getRegID($args['fallbackmodule']));
+            //$info = xarMod::getInfo(xarMod::getRegID($args['fallbackmodule']));
             $args['moduleid'] = xarMod::getRegID($args['fallbackmodule']); // $info['systemid'];  FIXME change id
         }
         if (!isset($args['itemtype'])) $args['itemtype'] = 0;
@@ -59,22 +59,40 @@ class DataObjectDescriptor extends ObjectDescriptor
      */
     static function getObjectID(Array $args=array())
     {
+        // removed dependency on roles xarQuery
         $xartable = xarDB::getTables();
+        $dynamicobjects = $xartable['dynamic_objects'];
 
-        $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-        $q->open();
+        $query = "SELECT id,
+                         name,
+                         module_id,
+                         itemtype
+                  FROM $dynamicobjects ";
+
+        $bindvars = array();
         if (isset($args['name'])) {
-            $q->eq('name',$args['name']);
+            $query .= " WHERE name = ? ";
+            $bindvars[] = $args['name'];
         } elseif (!empty($args['objectid'])) {
-            $q->eq('id',(int)$args['objectid']);
+            $query .= " WHERE id = ? ";
+            $bindvars[] = (int) $args['objectid'];
         } else {
             $args = self::getModID($args);
-            $q->eq('module_id', $args['moduleid']);
-            $q->eq('itemtype', $args['itemtype']);
+            $query .= " WHERE module_id = ?
+                          AND itemtype = ? ";
+            $bindvars[] = (int) $args['moduleid'];
+            $bindvars[] = (int) $args['itemtype'];
         }
-        if (!$q->run()) return;
-        $row = $q->row();
-        if ($row == array()) {
+
+        $dbconn = xarDB::getConn();
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        if(!$result->first()) return;
+
+        $row = $result->getRow();
+        $result->close();
+
+        if (empty($row) || count($row) < 1) {
             $args['moduleid'] = isset($args['moduleid']) ? $args['moduleid'] : null;
             $args['itemtype'] = isset($args['itemtype']) ? $args['itemtype'] : null;
             $args['objectid'] = isset($args['objectid']) ? $args['objectid'] : null;
@@ -88,7 +106,6 @@ class DataObjectDescriptor extends ObjectDescriptor
         if (empty($args['tplmodule'])) $args['tplmodule'] = xarMod::getName($args['moduleid']); //FIXME: go to systemid
         if (empty($args['template'])) $args['template'] = $args['name'];
         return $args;
-
     }
 }
 
@@ -155,7 +172,7 @@ class DataObjectMaster extends Object
         $properties = $this->getPublicProperties();
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
         //FIXME where do we need to define the modname best?
-        if (!empty($args['moduleid'])) $args['modname'] = xarModGetNameFromID($args['moduleid']); //FIXME change to systemid
+        if (!empty($args['moduleid'])) $args['modname'] = xarMod::getName($args['moduleid']); //FIXME change to systemid
         return $args;
     }
 
@@ -526,12 +543,9 @@ class DataObjectMaster extends Object
      * @todo when we had a constructor which was more passive, this could be non-static. (cheap construction is a good rule of thumb)
      * @todo no ref return?
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
-     * @todo THE PARAM INFORMATION ABOVE ARE LIES SO FAR, SEE IMPLEMENTATION
     **/
     static function getObjectInfo(Array $args=array())
     {
-        if (!isset($args['objectid']) || (is_null($args['objectid'])))
-            $args = DataObjectDescriptor::getObjectID($args);
         if(!empty($args['table']))
         {
             $info = array();
@@ -550,7 +564,21 @@ class DataObjectMaster extends Object
         }
 
         $cacheKey = 'DynamicData.ObjectInfo';
-        $infoid = (int)$args['objectid'];
+        if (!empty($args['name'])) {
+            $infoid = $args['name'];
+        } elseif (!empty($args['objectid'])) {
+            $infoid = (int)$args['objectid'];
+        } else {
+            if (empty($args['moduleid'])) {
+                // try to get the current module from elsewhere
+                $args = DataObjectDescriptor::getModID($args);
+            }
+            if (empty($args['itemtype'])) {
+                // set default itemtype
+                $args['itemtype'] = 0;
+            }
+            $infoid = $args['moduleid'].':'.$args['itemtype'];
+        }
         if(xarCore::isCached($cacheKey,$infoid)) {
             return xarCore::getCached($cacheKey,$infoid);
         }
@@ -575,8 +603,19 @@ class DataObjectMaster extends Object
                          config,
                          isalias
                   FROM $dynamicobjects ";
-        $query .= " WHERE id = ? ";
-        $bindvars[] = (int) $args['objectid'];
+        if (!empty($args['name'])) {
+            $query .= " WHERE name = ? ";
+            $bindvars[] = $args['name'];
+        } elseif (!empty($args['objectid'])) {
+            $query .= " WHERE id = ? ";
+            $bindvars[] = (int) $args['objectid'];
+        } else {
+            $query .= " WHERE module_id = ?
+                          AND itemtype = ? ";
+            $bindvars[] = (int) $args['moduleid'];
+            $bindvars[] = (int) $args['itemtype'];
+        }
+
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
         if(!$result->first()) return;
@@ -602,6 +641,7 @@ class DataObjectMaster extends Object
      * (= the same as creating a new Dynamic Object with itemid = null)
      *
      * @param $args['objectid'] id of the object you're looking for, or
+     * @param $args['name'] name of the object you're looking for, or
      * @param $args['moduleid'] module id of the object to retrieve + $args['itemtype'] item type of the object to retrieve
      * @param $args['class'] optional classname (e.g. <module>_DataObject)
      * @return object the requested object definition
@@ -611,6 +651,7 @@ class DataObjectMaster extends Object
     {
         if(!isset($args['itemid'])) $args['itemid'] = null;
 
+// FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
         // Complete the info if this is a known object
         $info = self::getObjectInfo($args);
 
@@ -644,6 +685,7 @@ class DataObjectMaster extends Object
      * (= the same as creating a new Dynamic Object List)
      *
      * @param $args['objectid'] id of the object you're looking for, or
+     * @param $args['name'] name of the object you're looking for, or
      * @param $args['moduleid'] module id of the object to retrieve +
      * @param $args['itemtype'] item type of the object to retrieve
      * @param $args['class'] optional classname (e.g. <module>_DataObject[_List])
@@ -653,6 +695,7 @@ class DataObjectMaster extends Object
     **/
     static function &getObjectList(Array $args=array())
     {
+// FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
         // Complete the info if this is a known object
         $info = self::getObjectInfo($args);
         if ($info != null) $args = array_merge($args,$info);
@@ -664,12 +707,12 @@ class DataObjectMaster extends Object
             if(class_exists($args['class'] . 'List'))
             {
                 // this is a generic classname for the object, list and interface
-                $classname = $args['class'] . 'List';
+                $class = $args['class'] . 'List';
             }
             elseif(class_exists($args['class']))
             {
                 // this is a specific classname for the list
-                $classname = $args['class'];
+                $class = $args['class'];
             }
         }
         $descriptor = new DataObjectDescriptor($args);
@@ -916,6 +959,7 @@ class DataObjectMaster extends Object
     **/
     function getAncestors()
     {
+// CHECKME: arguments are never passed ?
         $top = isset($top) ? $top : false;
         $base = isset($base) ? $base : true;
         $ancestors = array();
@@ -930,15 +974,31 @@ class DataObjectMaster extends Object
         }
 
         // Get all the dynamic objects at once
-        sys::import('modules.roles.class.xarQuery');
-        $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-        $q->addfields(array('id AS objectid','name AS objectname','module_id AS moduleid','itemtype AS itemtype','parent_id AS parent'));
-        $q->eq('module_id',$this->moduleid);
-        if (!$q->run()) return;
+        // removed dependency on roles xarQuery
+        $dynamicobjects = $xartable['dynamic_objects'];
 
+        $bindvars = array();
+        $query = "SELECT id AS objectid,
+                         name AS objectname,
+                         module_id AS moduleid,
+                         itemtype AS itemtype,
+                         parent_id AS parent
+                  FROM $dynamicobjects ";
+
+        $query .= " WHERE module_id = ? ";
+        $bindvars[] = (int) $this->moduleid;
+
+        $dbconn = xarDB::getConn();
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+
+        $objects = array();
         // Put in itemtype as key for easier manipulation
-        foreach($q->output() as $row)
+        while ($result->next())
+        {
+            $row = $result->fields;
             $objects[$row['itemtype']] = array('objectid' => $row['objectid'],'objectname' => $row['objectname'], 'moduleid' => $row['moduleid'], 'itemtype' => $row['itemtype'], 'parent' => $row['parent']);
+        }
 
         // Cycle through each ancestor
         $parentitemtype = $topobject['parent'];
@@ -998,8 +1058,7 @@ class DataObjectMaster extends Object
             throw new BadParameterException('moduleid or module');
         }
         if (empty($module)) {
-            $info = xarModGetInfo($moduleid);
-            $module = $info['name'];
+            $module = xarMod::getName($moduleid);
         }
 
         $native = isset($native) ? $native : true;
@@ -1017,19 +1076,35 @@ class DataObjectMaster extends Object
         }
         if ($extensions) {
             // Get all the objects at once
+            // removed dependency on roles xarQuery
             $xartable = xarDB::getTables();
-            sys::import('modules.roles.class.xarQuery');
-            $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-            $q->addfields(array('id AS objectid','label AS objectlabel','module_id AS moduleid','itemtype AS itemtype','parent_id AS parent'));
-            $q->eq('module_id',$moduleid);
-            if (!$q->run()) return;
+            $dynamicobjects = $xartable['dynamic_objects'];
+
+            $bindvars = array();
+            $query = "SELECT id AS objectid,
+                             name AS objectname,
+                             label AS objectlabel,
+                             module_id AS moduleid,
+                             itemtype AS itemtype,
+                             parent_id AS parent
+                      FROM $dynamicobjects ";
+
+            $query .= " WHERE module_id = ? ";
+            $bindvars[] = (int) $moduleid;
+
+            $dbconn = xarDB::getConn();
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
 
             // put in itemtype as key for easier manipulation
-            foreach($q->output() as $row)
+            while ($result->next())
+            {
+                $row = $result->fields;
                 $types [$row['itemtype']] = array(
                                             'label' => $row['objectlabel'],
                                             'title' => xarML('View #(1)',$row['objectlabel']),
                                             'url' => xarModURL('dynamicdata','user','view',array('itemtype' => $row['itemtype'])));
+            }
         }
 
         return $types;

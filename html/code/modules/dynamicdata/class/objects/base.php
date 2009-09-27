@@ -519,20 +519,20 @@ class DataObject extends DataObjectMaster implements iDataObject
         // call create hooks for this item
         // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
         // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
-        $modinfo = xarModGetInfo($this->moduleid);
+        $modname = xarMod::getName($this->moduleid);
         if(
             !empty($this->primary) &&
-            ($modinfo['name'] != 'articles') && ($modinfo['name'] != 'roles')
+            ($modname != 'articles') && ($modname != 'roles')
         )
         {
             $item = array();
             foreach(array_keys($this->properties) as $name)
                 $item[$name] = $this->properties[$name]->value;
 
-            $item['module'] = $modinfo['name'];
+            $item['module'] = $modname;
             $item['itemtype'] = $this->itemtype;
             $item['itemid'] = $this->itemid;
-            xarModCallHooks('item', 'create', $this->itemid, $item, $modinfo['name']);
+            xarModCallHooks('item', 'create', $this->itemid, $item, $modname);
         }
         return $this->itemid;
     }
@@ -573,20 +573,20 @@ class DataObject extends DataObjectMaster implements iDataObject
         // call update hooks for this item
         // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
         // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
-        $modinfo = xarModGetInfo($this->moduleid);
+        $modname = xarMod::getName($this->moduleid);
         if(
             !empty($this->primary) &&
-            ($modinfo['name'] != 'articles') && ($modinfo['name'] != 'roles')
+            ($modname != 'articles') && ($modname != 'roles')
         )
         {
             $item = array();
             foreach(array_keys($this->properties) as $name)
                 $item[$name] = $this->properties[$name]->value;
 
-            $item['module'] = $modinfo['name'];
+            $item['module'] = $modname;
             $item['itemtype'] = $this->itemtype;
             $item['itemid'] = $this->itemid;
-            xarModCallHooks('item', 'update', $this->itemid, $item, $modinfo['name']);
+            xarModCallHooks('item', 'update', $this->itemid, $item, $modname);
         }
         return $this->itemid;
     }
@@ -623,20 +623,20 @@ class DataObject extends DataObjectMaster implements iDataObject
         // call delete hooks for this item
         // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
         // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
-        $modinfo = xarModGetInfo($this->moduleid);
+        $modname = xarMod::getName($this->moduleid);
         if(
             !empty($this->primary) &&
-            ($modinfo['name'] != 'articles') && ($modinfo['name'] != 'roles')
+            ($modname != 'articles') && ($modname != 'roles')
         )
         {
             $item = array();
             foreach(array_keys($this->properties) as $name)
                 $item[$name] = $this->properties[$name]->value;
 
-            $item['module'] = $modinfo['name'];
+            $item['module'] = $modname;
             $item['itemtype'] = $this->itemtype;
             $item['itemid'] = $this->itemid;
-            xarModCallHooks('item', 'delete', $this->itemid, $item, $modinfo['name']);
+            xarModCallHooks('item', 'delete', $this->itemid, $item, $modname);
         }
         return $this->itemid;
     }

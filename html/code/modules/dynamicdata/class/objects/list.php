@@ -477,8 +477,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // pass some extra template variables for use in BL tags, API calls etc.
         $args['moduleid'] = $this->moduleid;
 
-        $modinfo = xarModGetInfo($this->moduleid);
-        $modname = $modinfo['name'];
+        $modname = xarMod::getName($this->moduleid);
         $itemtype = $this->itemtype;
 
         // override for viewing dynamic objects

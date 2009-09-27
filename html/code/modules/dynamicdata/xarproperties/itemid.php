@@ -28,7 +28,7 @@ class ItemIDProperty extends NumberBoxProperty
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $this->tplmodule = 'dynamic_data';
+        $this->tplmodule = 'dynamicdata';
         $this->template = 'itemid';
         $this->filepath   = 'modules/dynamicdata/xarproperties';
     }
