@@ -943,28 +943,7 @@ class DataObjectMaster extends Object
              $this->datastores[$name]->addJoin($table, $key, $fields, $where, $andor);
     }
 
-    /**
-// CHECKME: arguments are never passed ?
-        $bindvars = array();
-        $query = "SELECT id AS objectid,
-                         name AS objectname,
-                         module_id AS moduleid,
-                         itemtype AS itemtype,
-                         parent_id AS parent
-                  FROM $dynamicobjects ";
-
-        $query .= " WHERE module_id = ? ";
-        $bindvars[] = (int) $this->moduleid;
-
-        $dbconn = xarDB::getConn();
-        $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-
-        $objects = array();
-        {
-            $row = $result->fields;
-        }
-     * Get a module's itemtypes
+    /* Get a module's itemtypes
      *
      * @param int     args[moduleid]
      * @param string args[module]
@@ -1009,8 +988,7 @@ class DataObjectMaster extends Object
                              name AS objectname,
                              label AS objectlabel,
                              module_id AS moduleid,
-                             itemtype AS itemtype,
-                             parent_id AS parent
+                             itemtype AS itemtype
                       FROM $dynamicobjects ";
 
             $query .= " WHERE module_id = ? ";
