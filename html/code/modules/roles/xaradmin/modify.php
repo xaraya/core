@@ -26,7 +26,7 @@ function roles_admin_modify()
 
 
     $object = xarRoles::get($id);
-    $data['basetype'] = xarMod::apiFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $object->getType()));
+    $data['basetype'] = $object->getType();
 
 //    $itemid = $object->getItem(array('itemid' => $id));
 //    $values = $object->getFieldValues();

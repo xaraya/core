@@ -30,8 +30,7 @@ function roles_admin_createmail()
         $type = 'selection';
     } else {
         $role  = xarRoles::get($id);
-        $baseitemtype = xarMod::apiFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $role->getType()));
-        $type  = ($baseitemtype == xarRoles::ROLES_GROUPTYPE) ? 'selection' : 'single';
+        $type  = ($role->getType() == xarRoles::ROLES_GROUPTYPE) ? 'selection' : 'single';
     }
 
     $xartable = xarDB::getTables();
@@ -96,7 +95,7 @@ function roles_admin_createmail()
         }
 
         if ($id != -1) {
-            if ($baseitemtype == xarRoles::ROLES_GROUPTYPE) {
+            if ($role->getType() == xarRoles::ROLES_GROUPTYPE) {
                 // If a group was chosen, get only the users of that group
                 $q->addtable($xartable['rolemembers'],'rm');
                 $q->join('r.id','rm.role_id');
