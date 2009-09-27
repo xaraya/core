@@ -16,7 +16,7 @@ sys::import('blocklayout.template.compiled');
 interface ISourceTemplate
 {
     function &compile();
-    function &execute(&$args);
+    function &execute(&$args,$caching);
 }
 
 /**
@@ -60,7 +60,7 @@ class SourceTemplate extends CompiledTemplate implements ISourceTemplate
         return $out;
     }
     
-    public function &execute(&$bindvars)
+    public function &execute(&$bindvars, $caching = 0)
     {
         // not yet
     }
