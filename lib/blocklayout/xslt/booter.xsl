@@ -4,7 +4,7 @@
 
   <xsl:param name="defaults"/> 
   <xsl:param name="bltags"/> 
-  <xsl:param name="xarayatags"/> 
+  <xsl:param name="clienttags"/> 
 
   <xsl:template match="xsl:includedefaults">
     <xsl:call-template name="includefile">
@@ -19,6 +19,7 @@
   </xsl:template>
 
   <xsl:template match="xsl:includeclienttags">
+  <xsl:text select="$clienttags" />
     <xsl:call-template name="includefile">
        <xsl:with-param name="string" select="$clienttags" />
     </xsl:call-template>

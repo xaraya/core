@@ -723,13 +723,12 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     // Determine if we need to compile this template
     if (xarTemplateCache::isDirty($sourceFileName)) {
         // Get an instance of SourceTemplate
-        sys::import('xaraya.source');
+        sys::import('xaraya.templating.source');
         $srcTemplate = new XarayaSourceTemplate($sourceFileName);
 
         // Compile it
         // @todo return a CompiledTemplate object here?
-        $add_comments = xarTpl_outputPHPCommentBlockInTemplates();
-        $templateCode = $srcTemplate->compile($add_comments);
+        $templateCode = $srcTemplate->compile();
 
         // Save the entry in templatecache (if active)
         xarTemplateCache::saveEntry($sourceFileName,$templateCode);

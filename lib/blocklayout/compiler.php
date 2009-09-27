@@ -61,9 +61,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
     /**
      * Private constructor, since this is a Singleton
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * Implementation of the interface
@@ -109,7 +107,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         return $res;
     }
 
-    public function getXSLFilesString($filepath, $prefix)
+    public function getTagPaths($filepath, $prefix)
     {
         $files = array();
         foreach (new DirectoryIterator($filepath) as $fileInfo) {
@@ -140,15 +138,15 @@ class xarBLCompiler extends Object implements IxarBLCompiler
 
         // Pass the default tags
         $baseDir = sys::lib() . 'blocklayout/xslt/defaults';
-        $xslFiles = $this->getXSLFilesString($baseDir, 'defaults');
+        $xslFiles = $this->getTagPaths($baseDir, 'defaults');
         $xslProc->setParameter('', 'defaults', implode(',', $xslFiles));
 
         // Pass the Blocklayout tags
-        $baseDir = sys::lib() . 'blocklayout/xslt/tags/bl';
-        $xslFiles = $this->getXSLFilesString($baseDir, 'tags/bl');
+        $baseDir = sys::lib() . 'blocklayout/xslt/tags';
+        $xslFiles = $this->getTagPaths($baseDir, 'tags');
         $xslProc->setParameter('', 'bltags', implode(',', $xslFiles));
         
-        // Pass the Xaraya tags
+        // Pass the custom tags of the client using Blocklayout
         $clienttags = $this->configure();
         $xslProc->setParameter('', 'clienttags', implode(',', $clienttags));
         
@@ -159,7 +157,6 @@ class xarBLCompiler extends Object implements IxarBLCompiler
 
     private function compile(&$templateSource)
     {
-
         if (!isset($this->processor)) {
             sys::import('blocklayout.xsltransformer');
             $this->processor = new BlockLayoutXSLTProcessor();

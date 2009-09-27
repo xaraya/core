@@ -1,14 +1,14 @@
 <?php
 /**
- * Representing blocklayout source templates
+ * Representing blocklayout source templates in Xaraya
  *
- * @package blocklayout
+ * @package xaraya
  * @copyright The Digital Development Foundation, 2006-07-26
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
 
-sys::import('blocklayout.template.compiled');
+sys::import('blocklayout.template.source');
 
 /**
  * Class to model the source template
@@ -16,7 +16,7 @@ sys::import('blocklayout.template.compiled');
  * @package blocklayout
  * @todo    decorate this with a Stream object so we can compile anything that is a stream.
 **/
-class XarayaSourceTemplate extends CompiledTemplate
+class XarayaSourceTemplate extends SourceTemplate
 {
     /**
      * compile a source template into templatecode
@@ -26,7 +26,7 @@ class XarayaSourceTemplate extends CompiledTemplate
     public function &compile() 
     {
         assert('isset($this->fileName); /* No source to compile from */');
-        sys::import('xaraya.compiler');
+        sys::import('xaraya.templating.compiler');
         $compiler = XarayaCompiler::instance();
         $templateCode = $compiler->compileFile($this->fileName);
 
