@@ -9,7 +9,7 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-sys::import('modules.dynamicdata.class.objects.base');
+sys::import('modules.dynamicdata.class.objects');
 sys::import('modules.roles.class.xarQuery');
 /**
  * Role: class for the role object
@@ -812,5 +812,15 @@ class Role extends DataObject
     {
         $this->parentlevel = $var;
     }
+}
+
+/**
+ * RoleList: generic list class to handle getItems() etc. for roles
+ *
+ * Represents a list of roles (user or group)
+ */
+class RoleList extends DataObjectList
+{
+    // CHECKME: do we want anything special in here ?
 }
 ?>
