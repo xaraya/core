@@ -85,7 +85,7 @@
   <!--
     Include Xaraya tag defintions
   -->
-  <xsl:includexarayatags />
+  <xsl:includeclienttags />
   
 <!--
     Utility template for resolving text nodes. It recursively resolves

@@ -585,13 +585,12 @@ function xarTplFile($fileName, &$tplData)
  * @access public
  * @param  string $templateSource template source
  * @return string compiled template
- * @todo    subclass xarBLCompiler, it has this method
  */
 function xarTplCompileString($templateSource)
 {
-    sys::import('blocklayout.compiler');
-    $blCompiler = xarBLCompiler::instance();
-    return $blCompiler->compileString($templateSource);
+    sys::import('xaraya.compiler');
+    $compiler = XarayaCompiler::instance();
+    return $compiler->compileString($templateSource);
 }
 
 /**
@@ -704,7 +703,6 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
  * @return string generated output from the file
  * @todo  insert log warning when double entry in cachekeys occurs? (race condition)
  * @todo  make the checking whether templatecode is set more robust (related to templated exception handling)
- * @todo  subclass xarBLCompiler?
  */
 function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
 {
@@ -719,8 +717,8 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     // Determine if we need to compile this template
     if (xarTemplateCache::isDirty($sourceFileName)) {
         // Get an instance of SourceTemplate
-        sys::import('blocklayout.template.source');
-        $srcTemplate = new SourceTemplate($sourceFileName);
+        sys::import('xaraya.source');
+        $srcTemplate = new XarayaSourceTemplate($sourceFileName);
 
         // Compile it
         // @todo return a CompiledTemplate object here?
