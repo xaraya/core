@@ -38,7 +38,7 @@ function roles_admin_testprivileges()
     // Call the Roles class and get the role
     $role = xarRoles::get($id);
 
-    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $types = xarMod::apiFunc('roles','user','getitemtypes');
     $data['itemtypename'] = $types[$role->getType()]['label'];
     // get the array of parents of this role
     // need to display this in the template
@@ -94,8 +94,8 @@ function roles_admin_testprivileges()
     $data['test'] = $test;
     $data['pname'] = $role->getName();
     $data['itemtype'] = $role->getType();
-    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
-    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $data['basetype'] = xarMod::apiFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+    $types = xarMod::apiFunc('roles','user','getitemtypes');
     $data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['pmodule'] = $module;
     $data['id'] = $id;

@@ -318,7 +318,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     {
         if(!xarModIsAvailable('categories')) return;
 
-        $categoriesdef = xarModAPIFunc(
+        $categoriesdef = xarMod::apiFunc(
             'categories','user','leftjoin',
             array(
                 'modid' => $this->moduleid,

@@ -172,7 +172,7 @@ function base_userapi_getfile($args)
                     $location = $matches[1];
                 // TODO: handle relative redirects and endless loops (for messy servers)
                     if ($location != $url && strstr($location,'://')) {
-                        return xarModAPIFunc('base', 'user', 'getfile',
+                        return xarMod::apiFunc('base', 'user', 'getfile',
                                              array('url' => $location,
                                                    'cached' => $cached,
                                                    'cachedir' => $cachedir,

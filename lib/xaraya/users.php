@@ -117,7 +117,7 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
 
         // CHECKME: Does this raise an exception??? If so:
         // TODO: test with multiple auth modules and wrap in try/catch clause
-        $userId = xarModAPIFunc($authModName, 'user', 'authenticate_user', $args);
+        $userId = xarMod::apiFunc($authModName, 'user', 'authenticate_user', $args);
         if (!isset($userId)) {
             return; // throw back
         } elseif ($userId != XARUSER_AUTH_FAILED) {
@@ -362,7 +362,7 @@ function xarUserGetVar($name, $userId = NULL)
                 return xarML('No Information'); // better return null here
             }
             // retrieve the item from the roles module
-            $userRole = xarModAPIFunc('roles',  'user',  'get',
+            $userRole = xarMod::apiFunc('roles',  'user',  'get',
                                        array('id' => $userId));
 
             if (empty($userRole) || $userRole['id'] != $userId) {
@@ -582,7 +582,7 @@ function xarUser__isVarDefined($name)
 {
     // Retrieve the dynamic user object if necessary
     if (!isset($GLOBALS['xarUser_objectRef']) && xarModIsHooked('dynamicdata','roles')) {
-        $GLOBALS['xarUser_objectRef'] = xarModAPIFunc('dynamicdata', 'user', 'getobject',
+        $GLOBALS['xarUser_objectRef'] = xarMod::apiFunc('dynamicdata', 'user', 'getobject',
                                                        array('module' => 'roles'));
         if (empty($GLOBALS['xarUser_objectRef']) || empty($GLOBALS['xarUser_objectRef']->objectid)) {
             $GLOBALS['xarUser_objectRef'] = false;

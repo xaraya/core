@@ -108,7 +108,7 @@ function authsystem_user_login()
                     }
                 }
                 // check for user and grab id if exists
-                $user = xarModAPIFunc('roles','user','get', array('uname' => $uname));
+                $user = xarMod::apiFunc('roles','user','get', array('uname' => $uname));
 
                 // Make sure we haven't already found authldap module
                 if (empty($user) && ($extAuthentication == false))
@@ -117,7 +117,7 @@ function authsystem_user_login()
                 } elseif (empty($user)) {
                     // Check if user has been deleted.
                     try {
-                        $user = xarModAPIFunc('roles','user','getdeleteduser',
+                        $user = xarMod::apiFunc('roles','user','getdeleteduser',
                                                 array('uname' => $uname));
                     } catch (xarExceptions $e) {
                         //getdeleteduser raised an exception
@@ -214,7 +214,7 @@ function authsystem_user_login()
             }
 
             // Get the default authentication data - we need to check again as authsystem is always installed and users could get here direct
-            $res = xarModAPIFunc('authsystem','user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
+            $res = xarMod::apiFunc('authsystem','user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
 
             if ($res === NULL) return;
             elseif ($res == false) {
@@ -248,13 +248,13 @@ function authsystem_user_login()
                 $settings = explode(',',xarModVars::get('roles', 'duvsettings'));
                 if (in_array('userhome', $settings)) {
                     $truecurrenturl = xarServer::getCurrentURL(array(), false);
-                    $url = xarModAPIFunc('roles','user','getuserhome',array('itemid' => $user['id']));
+                    $url = xarMod::apiFunc('roles','user','getuserhome',array('itemid' => $user['id']));
                     if (empty($url)) {
                         $urldata['redirecturl'] = xarModURL(xarModVars::get('modules','defaultmodule'),xarModVars::get('modules','defaulttypename'),xarModVars::get('modules','defaultfuncname'));
                         $urldata['externalurl'] = false;
                     } else {
                         /* move the half page of code out to a Roles function. No need to repeat everytime it's used*/
-                        $urldata = xarModAPIFunc('roles','user','parseuserhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
+                        $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
                     }
                     $data = array();
                     if (!is_array($urldata) || !$urldata) {

@@ -42,10 +42,10 @@ function blocks_adminapi_delete_instance($args)
 
     //let's make sure the cache blocks instance as well is deleted, if it exists bug #5815
     if (!empty($xartable['cache_blocks'])) {
-        $deletecacheblock = xarModAPIFunc('blocks','admin','delete_cacheinstance', array('bid' => $bid));
+        $deletecacheblock = xarMod::apiFunc('blocks','admin','delete_cacheinstance', array('bid' => $bid));
     }
 
-    xarModAPIFunc('blocks', 'admin', 'resequence');
+    xarMod::apiFunc('blocks', 'admin', 'resequence');
 
     $args['module'] = 'blocks';
     $args['itemtype'] = 3; // block instance

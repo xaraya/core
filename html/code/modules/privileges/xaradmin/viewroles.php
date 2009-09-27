@@ -55,7 +55,7 @@ function privileges_admin_viewroles()
                              array('id'=>$id));
 
     $data['parents'] = $parents;
-    $data['groups'] = xarModAPIFunc('roles','user','getallgroups');
+    $data['groups'] = xarMod::apiFunc('roles','user','getallgroups');
     return $data;
 }
 

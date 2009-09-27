@@ -42,7 +42,7 @@ function modules_admin_modify($args)
     $data['savechangeslabel'] = xarML('Save Changes');
 
     // Get the list of all hook modules, and the current hooks enabled for this module
-    $hooklist = xarModAPIFunc('modules','admin','gethooklist',
+    $hooklist = xarMod::apiFunc('modules','admin','gethooklist',
                               array('modName' => $modName));
 
             if (isset($itemtypes)) $modList[$i]['itemtypes'] = $itemtypes;
@@ -50,7 +50,7 @@ function modules_admin_modify($args)
 
     // Get the list of all item types for this module (if any)
     try {
-        $itemtypes = xarModAPIFunc($modName,'user','getitemtypes',array());
+        $itemtypes = xarMod::apiFunc($modName,'user','getitemtypes',array());
     } catch ( FunctionNotFoundException $e) {
         // No worries
     }

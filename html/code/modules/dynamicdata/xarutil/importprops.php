@@ -33,7 +33,7 @@ function dynamicdata_util_importprops()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    if (!xarModAPIFunc('dynamicdata','util','importproperties',
+    if (!xarMod::apiFunc('dynamicdata','util','importproperties',
                        array('module_id' => $module_id,
                              'itemtype' => $itemtype,
                              'table' => $table,

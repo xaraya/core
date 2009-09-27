@@ -30,7 +30,7 @@ function roles_admin_createmail()
         $type = 'selection';
     } else {
         $role  = xarRoles::get($id);
-        $baseitemtype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $role->getType()));
+        $baseitemtype = xarMod::apiFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $role->getType()));
         $type  = ($baseitemtype == xarRoles::ROLES_GROUPTYPE) ? 'selection' : 'single';
     }
 
@@ -169,7 +169,7 @@ function roles_admin_createmail()
     $data['id']       = $id;
     $data['state']     = $state;
     $data['authid']    = xarSecGenAuthKey();
-    $data['groups']    = xarModAPIFunc('roles', 'user', 'getallgroups');
+    $data['groups']    = xarMod::apiFunc('roles', 'user', 'getallgroups');
     //selstyle
     $data['style'] = array('1' => xarML('No'),
                            '2' => xarML('Yes')
@@ -180,7 +180,7 @@ function roles_admin_createmail()
         $data['subject'] = '';
         $data['message'] = '';
     } else {
-        $strings = xarModAPIFunc('roles','admin','getmessagestrings', array('template' => $data['mailtype']));
+        $strings = xarMod::apiFunc('roles','admin','getmessagestrings', array('template' => $data['mailtype']));
         if (!isset($strings)) return;
 
         $data['subject'] = $strings['subject'];

@@ -8,7 +8,7 @@
 function mail_admin_mapping($args)
 {
     // Construct the list of queues.
-    $queues = xarModApiFunc('mail','user','getitemtypes');
+    $queues = xarMod::apiFunc('mail','user','getitemtypes');
     $data = array(); 
     foreach($queues as $id => $props) {
         $data['qlist'][] = array('id' => $id, 'name' => $props['label']);

@@ -59,7 +59,7 @@ function roles_userapi_getall($args)
         $groups = explode(',', $group);
         $group_list = array();
         foreach ($groups as $group) {
-            $group = xarModAPIFunc(
+            $group = xarMod::apiFunc(
                 'roles', 'user', 'get',
                 array(
                     (is_numeric($group) ? 'id' : 'name') => $group,
@@ -127,7 +127,7 @@ function roles_userapi_getall($args)
     // then find the anonymous user's id and add
     // a where clause to the query.
     if (isset($include_anonymous) && !$include_anonymous) {
-        $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'anonymous'));
+        $thisrole = xarMod::apiFunc('roles', 'user', 'get', array('uname'=>'anonymous'));
         $where_clause[] = 'roletab.id <> ?';
         $bindvars[] = (int) $thisrole['id'];
     }

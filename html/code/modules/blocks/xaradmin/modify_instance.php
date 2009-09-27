@@ -23,10 +23,10 @@ function blocks_admin_modify_instance()
     if (!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
 
     // Get the instance details.
-    $instance = xarModAPIfunc('blocks', 'user', 'get', array('bid' => $bid));
+    $instance = xarMod::apiFunc('blocks', 'user', 'get', array('bid' => $bid));
 
     // Load block
-    if (!xarModAPIFunc(
+    if (!xarMod::apiFunc(
         'blocks', 'admin', 'load',
         array(
             'modName' => $instance['module'],
@@ -72,7 +72,7 @@ function blocks_admin_modify_instance()
     }
 
     // Get the block info flags.
-    $block_info = xarModAPIfunc(
+    $block_info = xarMod::apiFunc(
         'blocks', 'user', 'read_type_info',
         array(
             'module' => $instance['module'],
@@ -98,7 +98,7 @@ function blocks_admin_modify_instance()
     );
 
     // Fetch complete block group list.
-    $block_groups = xarModAPIfunc('blocks', 'user', 'getallgroups');
+    $block_groups = xarMod::apiFunc('blocks', 'user', 'getallgroups');
 
     // In the modify form, we want to provide an array of checkboxes: one for each group.
     // Also a field for the overriding template name for each group instance.

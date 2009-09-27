@@ -22,7 +22,7 @@
  */
 function blocks_adminapi_unregister_block_type($args)
 {
-    $res = xarModAPIFunc('blocks','admin','block_type_exists',$args);
+    $res = xarMod::apiFunc('blocks','admin','block_type_exists',$args);
     if (!isset($res)) return; // throw back
     if (!$res) return true; // Already unregistered
 
@@ -53,7 +53,7 @@ function blocks_adminapi_unregister_block_type($args)
 
         while ($result->next()) {
             // Pass ids to API
-            xarModAPIFunc('blocks','admin','delete_instance', array('bid' => $result->getInt(1)));
+            xarMod::apiFunc('blocks','admin','delete_instance', array('bid' => $result->getInt(1)));
         }
         // Delete the block type itself
         $query = "DELETE FROM $block_types_table WHERE module_id = ? AND name = ?";

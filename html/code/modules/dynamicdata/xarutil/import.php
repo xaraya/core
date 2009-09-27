@@ -36,7 +36,7 @@ function dynamicdata_util_import($args)
     $data['authid'] = xarSecGenAuthKey();
 
     $filetype = 'xml';
-    $files = xarModAPIFunc('dynamicdata','admin','browse',
+    $files = xarMod::apiFunc('dynamicdata','admin','browse',
                            array('basedir' => $basedir,
                                  'filetype' => $filetype));
     if (!isset($files) || count($files) < 1) {
@@ -63,14 +63,14 @@ function dynamicdata_util_import($args)
             if (empty($found) || !file_exists($basedir . '/' . $file)) {
                 throw new FileNotFoundException($basedir,'No files were found to import in directory "#(1)"');
             }
-            $objectid = xarModAPIFunc('dynamicdata','util','import',
+            $objectid = xarMod::apiFunc('dynamicdata','util','import',
                                       array('file' => $basedir . '/' . $file,
                                             'keepitemid' => $keepitemid,
                                             'overwrite' =>  $overwrite,
                                             'prefix' => $data['prefix'],
                                             ));
         } else {
-            $objectid = xarModAPIFunc('dynamicdata','util','import',
+            $objectid = xarMod::apiFunc('dynamicdata','util','import',
                                       array('xml' => $xml,
                                             'keepitemid' => $keepitemid,
                                             'overwrite' =>  $overwrite,

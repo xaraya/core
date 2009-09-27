@@ -41,19 +41,19 @@ function blocks_admin_update_group()
     }
 
     // Get the current group.
-    $currentgroup = xarModAPIfunc('blocks', 'user', 'groupgetinfo', array('id' => $id));
+    $currentgroup = xarMod::apiFunc('blocks', 'user', 'groupgetinfo', array('id' => $id));
     if (empty($currentgroup)) {return;}
 
     // If the name is being changed, then check the new name has not already been used.
     if ($currentgroup['name'] != $name) {
-        $checkname = xarModAPIfunc('blocks', 'user', 'groupgetinfo', array('name' => $name));
+        $checkname = xarMod::apiFunc('blocks', 'user', 'groupgetinfo', array('name' => $name));
         if (!empty($checkname)) {
             throw new DuplicateException(array('block group',$name));
         }
     }
 
     // Pass to API
-    if (!xarModAPIFunc(
+    if (!xarMod::apiFunc(
         'blocks', 'admin', 'update_group',
         array(
             'id' => $id,

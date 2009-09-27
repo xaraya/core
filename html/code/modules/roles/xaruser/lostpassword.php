@@ -58,7 +58,7 @@ function roles_user_lostpassword()
             }
 
             // check for user and grab id if exists
-            $user = xarModAPIFunc('roles','user','get',
+            $user = xarMod::apiFunc('roles','user','get',
                                    array('uname' => $uname,
                                          'email' => $email));
 
@@ -67,7 +67,7 @@ function roles_user_lostpassword()
                 throw new DataNotFoundException($vars,"The username '#(1)' or the email address '#(2)' is not registered");
             }
             // Make new password
-            $user['pass'] = xarModAPIFunc('roles','user','makepass');
+            $user['pass'] = xarMod::apiFunc('roles','user','makepass');
 
             if (empty($user['pass'])) {
                 throw new DataNotFoundException(array(),'Problem generating new password');
@@ -84,7 +84,7 @@ function roles_user_lostpassword()
             if (!$role->updateItem()) return;
 
               // Send Reminder Email
-            if (!xarModAPIFunc('roles', 'admin','senduseremail', array('id' => array($user['id'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;
+            if (!xarMod::apiFunc('roles', 'admin','senduseremail', array('id' => array($user['id'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;
 
             // Let user know that they have an email on the way.
             $data = xarTplModule('roles','user','requestpwconfirm');

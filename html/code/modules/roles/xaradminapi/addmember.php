@@ -19,7 +19,7 @@
  */
 function roles_adminapi_addmember($args)
 {
-    return xarModAPIFunc('roles','user','addmember',$args);
+    return xarMod::apiFunc('roles','user','addmember',$args);
 }
 
 ?>

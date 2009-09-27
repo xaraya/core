@@ -31,7 +31,7 @@ function themes_admin_activate()
     if (!xarVarFetch('id', 'int:1:', $id)) return; 
 
     // Activate
-    $activated = xarModAPIFunc('themes',
+    $activated = xarMod::apiFunc('themes',
                                'admin',
                                'activate',
                                array('regid' => $id));

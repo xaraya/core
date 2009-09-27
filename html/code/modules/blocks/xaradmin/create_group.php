@@ -29,13 +29,13 @@ function blocks_admin_create_group()
     if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
     // Check the group name has not already been used.
-    $checkname = xarModAPIfunc('blocks', 'user', 'groupgetinfo', array('name' => $name));
+    $checkname = xarMod::apiFunc('blocks', 'user', 'groupgetinfo', array('name' => $name));
     if (!empty($checkname)) {
         throw new DuplicateException(array('block group',$name));
     }
 
     // Pass to API
-    if (!xarModAPIFunc(
+    if (!xarMod::apiFunc(
         'blocks', 'admin', 'create_group',
         array('name' => $name, 'template' => $template))
     ) {return;}

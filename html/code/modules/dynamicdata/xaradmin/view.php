@@ -67,7 +67,7 @@ function dynamicdata_admin_view($args)
     // TODO: another stray
     $data['catid'] = $catid;
     // TODO: is this needed?
-    $data = array_merge($data,xarModAPIFunc('dynamicdata','admin','menu'));
+    $data = array_merge($data,xarMod::apiFunc('dynamicdata','admin','menu'));
 
     if (xarSecurityCheck('AdminDynamicData',0)) {
         if (!empty($data['table'])) {

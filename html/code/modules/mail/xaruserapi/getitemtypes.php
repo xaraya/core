@@ -30,7 +30,7 @@ function mail_userapi_getitemtypes($args)
     // (we should takes this as a baseline/augmentation for getitemtypes for all mods really)
 
     // Get objects
-    $objects = xarModAPIFunc('dynamicdata','user','getobjects');
+    $objects = xarMod::apiFunc('dynamicdata','user','getobjects');
     $modid = xarMod::getRegID('mail');
     foreach ($objects as $id => $object) {
         // skip any object that doesn't belong to mail itself

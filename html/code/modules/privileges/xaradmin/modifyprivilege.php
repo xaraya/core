@@ -79,7 +79,7 @@ function privileges_admin_modifyprivilege()
     if(isset($level)) {$data['plevel'] = $level;}
     else {$data['plevel'] = $priv->getLevel();}
 
-    $instances = xarModAPIFunc('privileges','admin','getinstances',array('module' => $data['pmodule'],'component' => $data['pcomponent']));
+    $instances = xarMod::apiFunc('privileges','admin','getinstances',array('module' => $data['pmodule'],'component' => $data['pcomponent']));
     $numInstances = count($instances); // count the instances to use in later loops
 
     if(count($instance) > 0) {$default = $instance;}
@@ -121,7 +121,7 @@ function privileges_admin_modifyprivilege()
     $data['parents'] = $parents;
     $data['privileges'] = $privileges;
     $data['realms'] = xarPrivileges::getrealms();;
-    $data['components'] = xarModAPIFunc('privileges','admin','getcomponents',array('modid' => xarMod::getRegID($data['pmodule'])));
+    $data['components'] = xarMod::apiFunc('privileges','admin','getcomponents',array('modid' => xarMod::getRegID($data['pmodule'])));
     $data['refreshlabel'] = xarML('Refresh');
     return $data;
 }

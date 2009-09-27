@@ -150,7 +150,7 @@ class FileUploadProperty extends DataProperty
                 $override = null;
             }
 
-            $return = xarModAPIFunc('uploads','admin','validatevalue',
+            $return = xarMod::apiFunc('uploads','admin','validatevalue',
                                     array('id' => $name, // not $this->id
                                           'value' => $value,
                                           // pass the module id, item type and item id (if available) for associations
@@ -336,7 +336,7 @@ class FileUploadProperty extends DataProperty
                 $override = null;
             }
             // @todo try to get rid of this
-            return xarModAPIFunc('uploads','admin','showinput',
+            return xarMod::apiFunc('uploads','admin','showinput',
                                  array('id' => $name, // not $this->id
                                        'value' => $value,
                                        'multiple' => $this->initialization_multiple,
@@ -361,7 +361,7 @@ class FileUploadProperty extends DataProperty
 
         if ($this->UploadsModule_isHooked) {
             // @todo get rid of this one too
-            return xarModAPIFunc('uploads','user','showoutput',
+            return xarMod::apiFunc('uploads','user','showoutput',
                                  array('value' => $value,
                                        'format' => 'fileupload',
                                        'multiple' => $this->initialization_multiple));

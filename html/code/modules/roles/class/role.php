@@ -709,7 +709,7 @@ class Role extends DataObject
      */
     public function isUser()
     {
-        $base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $this->getType(), 'moduleid' => 27));
+        $base = xarMod::apiFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $this->getType(), 'moduleid' => 27));
         return $base['itemtype'] == ROLES_USERTYPE;
     }
 

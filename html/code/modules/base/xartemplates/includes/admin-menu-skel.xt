@@ -5,7 +5,7 @@
     <xar:if condition="xarModVars::get('themes','adminpagemenu')">
         <xar:set name="urlinfo">xarRequest::getInfo()</xar:set>
         <!-- TODO: replace this with a call to a function that gets the array from XML data -->
-        <xar:set name="tabs">xarModAPIFunc('base','admin','loadadminmenuarray',array('module' =&gt;
+        <xar:set name="tabs">xarMod::apiFunc('base','admin','loadadminmenuarray',array('module' =&gt;
             $urlinfo[0]))
         </xar:set>
         <xar:set name="activetab">$urlinfo[2]</xar:set>

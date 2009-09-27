@@ -76,7 +76,7 @@ function dynamicdata_user_search($args)
         }
     } else {
         // get items from the objects table
-        $objects = xarModAPIFunc('dynamicdata','user','getobjects');
+        $objects = xarMod::apiFunc('dynamicdata','user','getobjects');
     }
 
     if (empty($data['ishooked'])) {
@@ -100,7 +100,7 @@ function dynamicdata_user_search($args)
         }
         $label = $object['label'];
         $itemtype = $object['itemtype'];
-        $fields = xarModAPIFunc('dynamicdata','user','getprop',
+        $fields = xarMod::apiFunc('dynamicdata','user','getprop',
                                 array('module_id' => $module_id,
                                       'itemtype' => $itemtype));
         $wherelist = array();
@@ -120,7 +120,7 @@ function dynamicdata_user_search($args)
                                         'itemtype' => empty($itemtype) ? null : $itemtype,
                                         'q' => $q,
                                         'dd_check' => $dd_check));
-            $result = xarModAPIFunc('dynamicdata','user','showview',
+            $result = xarMod::apiFunc('dynamicdata','user','showview',
                                     array('module_id' => $module_id,
                                           'itemtype' => $itemtype,
                                           'where' => $where,

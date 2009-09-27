@@ -23,7 +23,7 @@ function roles_user_account()
     if (!xarVarFetch('tab', 'pre:trim:str:1', $tab, '', XARVAR_NOT_REQUIRED)) return;
 
     //let's make sure other modules that refer here get to a default and existing login or logout form
-    $defaultauthdata      = xarModAPIFunc('roles','user','getdefaultauthdata');
+    $defaultauthdata      = xarMod::apiFunc('roles','user','getdefaultauthdata');
     $defaultauthmodname   = $defaultauthdata['defaultauthmodname'];
     $defaultloginmodname  = $defaultauthdata['defaultloginmodname'];
     $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
@@ -52,7 +52,7 @@ function roles_user_account()
         // only display edit tabs if edit account is enabled
         if ((bool)xarModVars::get('roles', 'usereditaccount')) {
             // get a list of modules with user menu enabled
-            $allmods = xarModAPIFunc('modules', 'admin', 'getlist');
+            $allmods = xarMod::apiFunc('modules', 'admin', 'getlist');
             foreach ($allmods as $modinfo) {
                 if (xarModVars::get($modinfo['name'], 'enable_user_menu') != 1) continue;
                 $menumods[] = $modinfo['name'];
@@ -68,7 +68,7 @@ function roles_user_account()
 
         if (!empty($menumods)) {
             foreach ($menumods as $modname) {
-                $user_settings = xarModAPIFunc('base', 'admin', 'getusersettings', array('module' => $modname, 'itemid' => $id));
+                $user_settings = xarMod::apiFunc('base', 'admin', 'getusersettings', array('module' => $modname, 'itemid' => $id));
                 if (isset($user_settings)) {
                     $isactive = $moduleload == $modname ? true : false;
                     $menutabs[] = array(
@@ -96,7 +96,7 @@ function roles_user_account()
             // see if the current module has any form data for us
             try {
                 // if function exists, use it to populate the data array
-                $data = xarModAPIFunc($moduleload, 'user', 'usermenu', array('phase' => 'showform', 'object' => $object));
+                $data = xarMod::apiFunc($moduleload, 'user', 'usermenu', array('phase' => 'showform', 'object' => $object));
             } catch (Exception $e) {
                 // no function, build the data as we go along
                 $data = array();

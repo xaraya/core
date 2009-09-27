@@ -17,7 +17,7 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- module attribute has a value -->
-        <xsl:text>echo xarModFunc("</xsl:text>
+        <xsl:text>echo xarMod::guiFunc("</xsl:text>
         <xsl:call-template name="resolvePHP">
           <xsl:with-param name="expr" select="@module"/>
         </xsl:call-template>

@@ -36,9 +36,9 @@ function roles_admin_showusers()
     xarSession::setVar('rolesdisplay', $data['selstyle']);
 
     // Get information on the group we're at
-    $data['groups']     = xarModAPIFunc('roles', 'user', 'getallgroups');
+    $data['groups']     = xarMod::apiFunc('roles', 'user', 'getallgroups');
     $data['groupid']   = $id;
-    $data['totalusers'] = xarModAPIFunc('roles','user','countall');
+    $data['totalusers'] = xarMod::apiFunc('roles','user','countall');
 
     if ($id != 0) {
         // Call the Roles class and get the role
@@ -63,11 +63,11 @@ function roles_admin_showusers()
     $q = '';
 
     if (empty($q) || isset($reload)) {
-        $types = xarModAPIFunc('roles','user','getitemtypes');
+        $types = xarMod::apiFunc('roles','user','getitemtypes');
         $basetypes = array();
         // Show only roles based on the user itemtype
         foreach ($types as $key => $value) {
-            $basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('itemtype' => $key, 'moduleid' => 27));
+            $basetype = xarMod::apiFunc('dynamicdata','user','getbaseitemtype',array('itemtype' => $key, 'moduleid' => 27));
             if ($basetype == ROLES_USERTYPE) $basetypes[] = $basetype;
         }
         $xartable = xarDB::getTables();
@@ -158,7 +158,7 @@ function roles_admin_showusers()
                            '2' => xarML('Tabbed')
                            );
 
-    $object = xarModAPIFunc('dynamicdata','user','getobjectlist',array('name' => 'roles_users'));
+    $object = xarMod::apiFunc('dynamicdata','user','getobjectlist',array('name' => 'roles_users'));
     $object->getItems(array('itemids' => array_keys($users)));
 
     // Load Template

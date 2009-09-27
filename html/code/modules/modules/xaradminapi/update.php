@@ -48,7 +48,7 @@ function modules_adminapi_update($args)
         $stmt = $dbconn->prepareStatement($sql);
         $result = $stmt->executeQuery();
 
-        $modList = xarModAPIFunc('modules', 'admin', 'getlist');
+        $modList = xarMod::apiFunc('modules', 'admin', 'getlist');
         $todo = array();
         foreach ($modList as $mod) $todo[$mod['systemid']] = $mod['name'];
 

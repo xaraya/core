@@ -186,7 +186,7 @@ class DataObjectMaster extends Object
         // meaning the object is based on a db table.
         if(!empty($this->table))
         {
-            $meta = xarModAPIFunc(
+            $meta = xarMod::apiFunc(
                 'dynamicdata','util','getmeta',
                 array('table' => $this->table)
             );
@@ -219,7 +219,7 @@ class DataObjectMaster extends Object
         // Do we have a join?
         if(!empty($this->join))
         {
-            $meta = xarModAPIFunc(
+            $meta = xarMod::apiFunc(
                 'dynamicdata','util','getmeta',
                 array('table' => $this->join)
             );
@@ -860,7 +860,7 @@ class DataObjectMaster extends Object
         if(empty($args['table']))
             return;
 
-        $meta = xarModAPIFunc(
+        $meta = xarMod::apiFunc(
             'dynamicdata','util','getmeta',
             array('table' => $args['table'])
         );
@@ -1069,7 +1069,7 @@ class DataObjectMaster extends Object
             // Try to get the itemtypes
             try {
                 // @todo create an adaptor class for procedural getitemtypes in modules
-                $types = xarModAPIFunc($module,'user','getitemtypes',array());
+                $types = xarMod::apiFunc($module,'user','getitemtypes',array());
             } catch ( FunctionNotFoundException $e) {
                 // No worries
             }

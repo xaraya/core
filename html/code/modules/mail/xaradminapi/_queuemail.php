@@ -20,7 +20,7 @@
 function mail_adminapi__queuemail($args)
 {
     // see if we have a scheduler job running to send queued mail
-    $job = xarModAPIFunc('scheduler','user','get',
+    $job = xarMod::apiFunc('scheduler','user','get',
                          array('module' => 'mail',
                                'type' => 'scheduler',
                                'func' => 'sendmail'));

@@ -13,7 +13,7 @@
     <xsl:choose>
       <!-- No object? Generate ourselves then -->
       <xsl:when test="not(@object)">
-        <xsl:text>echo xarModAPIFunc('dynamicdata','user','showview',</xsl:text>
+        <xsl:text>echo xarMod::apiFunc('dynamicdata','user','showview',</xsl:text>
         <!-- Dump the attributes in an array for the function call -->
         <xsl:call-template name="atts2args">
           <xsl:with-param name="nodeset" select="@*"/>
@@ -63,7 +63,7 @@
       <xsl:choose>
         <xsl:when test="not(@object)">
           <!-- No object passed in -->
-          <xsl:text>echo xarModAPIFunc('dynamicdata','admin','showform',</xsl:text>
+          <xsl:text>echo xarMod::apiFunc('dynamicdata','admin','showform',</xsl:text>
           <xsl:choose>
             <xsl:when test="not(@definition)">
               <!-- No direct definition, use the attributes -->
@@ -95,7 +95,7 @@
       <xsl:choose>
         <xsl:when test="not(@object)">
           <!-- No object passed in -->
-          <xsl:text>echo xarModAPIFunc('dynamicdata','user','showdisplay',</xsl:text>
+          <xsl:text>echo xarMod::apiFunc('dynamicdata','user','showdisplay',</xsl:text>
           <xsl:choose>
             <xsl:when test="not(@definition)">
               <!-- No direct definition, use the attributes -->
@@ -144,7 +144,7 @@
     <xsl:choose>
       <xsl:when test="not(@object)">
         <!-- No object, gotta make one -->
-        <xsl:text>$object = xarModAPIFunc('dynamicdata','user','getitem',</xsl:text>
+        <xsl:text>$object = xarMod::apiFunc('dynamicdata','user','getitem',</xsl:text>
         <xsl:text>array_merge(array('getobject'=&gt;1),</xsl:text>
         <xsl:call-template name="atts2args">
           <xsl:with-param name="nodeset" select="@*[name() != 'name']"/>
@@ -220,7 +220,7 @@
             <xsl:value-of select="@name"/>
             <xsl:text>,$</xsl:text>
             <xsl:value-of select="@value"/>
-            <xsl:text>) = xarModApiFunc('dynamicdata','user','getitemsforview',</xsl:text>
+            <xsl:text>) = xarMod::apiFunc('dynamicdata','user','getitemsforview',</xsl:text>
             <xsl:call-template name="atts2args">
               <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='value']"/>
             </xsl:call-template>

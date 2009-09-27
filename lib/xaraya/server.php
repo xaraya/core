@@ -389,11 +389,13 @@ class xarRequest extends Object
             $params = array();
             if (isset($decomposed['query'])) {
                 $pairs = explode('&', $decomposed['query']);
-                foreach($pairs as $pair) {
-                    if (trim($pair) == '') continue;
-                    list($key, $value) = explode('=', $pair);
-                    $params[$key] = urldecode($value);
-                }
+                try {
+                    foreach($pairs as $pair) {
+                        if (trim($pair) == '') continue;
+                        list($key, $value) = explode('=', $pair);
+                        $params[$key] = urldecode($value);
+                    }
+                } catch(Exception $e) {}
                 sys::import('xaraya.validations');
                 $regex = ValueValidations::get('regexp');
             }
@@ -451,7 +453,7 @@ class xarRequest extends Object
                     $loopHole = array($modName,$modType,$funcName);
                     // don't throw exception on missing file or function anymore
                     try {
-                        $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params);
+                        $res = xarMod::apiFunc($modName, $modType, 'decode_shorturl', $params);
                     } catch ( NotFoundExceptions $e) {
                         // No worry
                     }

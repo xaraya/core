@@ -28,7 +28,7 @@ function modules_admin_updateversion()
     if(!xarSecurityCheck('AdminModules')) return;
 
     // Pass to API
-    $updated = xarModAPIFunc('modules',
+    $updated = xarMod::apiFunc('modules',
                              'admin',
                              'updateversion',
                               array('regId' => $regId));

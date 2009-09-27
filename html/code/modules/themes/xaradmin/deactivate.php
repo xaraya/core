@@ -38,12 +38,12 @@ function themes_admin_deactivate()
     $target=$minfo['name'];
 
     // See if we have lost any modules since last generation
-    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
+    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {
         return;
     }
 
     // deactivate
-    $deactivated = xarModAPIFunc('themes','admin','setstate',array('regid' => $id,'state' => XARTHEME_STATE_INACTIVE)); 
+    $deactivated = xarMod::apiFunc('themes','admin','setstate',array('regid' => $id,'state' => XARTHEME_STATE_INACTIVE)); 
 
     // Hmmm, I wonder if the target adding is considered a hack
     // it certainly depends on the implementation of xarModUrl

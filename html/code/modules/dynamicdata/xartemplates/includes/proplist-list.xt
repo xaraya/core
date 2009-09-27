@@ -6,7 +6,7 @@
         modify the properties of this object may break the Dynamic Data module. Proceed with
         caution.</h3>
     </xar:if>
-    <xar:set name="propertyfields">xarModAPIFunc('dynamicdata','user','getprop',
+    <xar:set name="propertyfields">xarMod::apiFunc('dynamicdata','user','getprop',
                                        array('objectid' => 2,
                                              'allprops' => true))
     </xar:set>

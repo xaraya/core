@@ -12,14 +12,14 @@ function mail_admin_createq($args)
     if(!xarVarFetch('name','str:1:12',$qName)) return;
 
     // Do we have the master ?
-    if(!$qdefInfo = xarModApiFunc('mail','admin','getqdef')) {
+    if(!$qdefInfo = xarMod::apiFunc('mail','admin','getqdef')) {
         // Redirect to the view page, which offers to create one
         xarResponse::Redirect(xarModUrl('mail','admin','view'));
         return true;
     }
 
     // Seems ok, call the create function
-    $qData = xarModApiFunc('mail','admin','createq',array('name' => $qName));
+    $qData = xarMod::apiFunc('mail','admin','createq',array('name' => $qName));
     if(!$qData) return; // exception
     
     // Show the status screen again, 

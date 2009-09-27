@@ -34,14 +34,14 @@ function modules_adminapi_verifydependency($args)
     if (!isset($modInfo)) throw new ModuleBaseInfoNotFoundException("with regid $regid");
 
     // See if we have lost any modules since last generation
-    if (!xarModAPIFunc('modules','admin','checkmissing')) {
+    if (!xarMod::apiFunc('modules','admin','checkmissing')) {
         throw new ModuleNotFoundException();
     }
 
     // Get all modules in DB
     // A module is able to fullfil a dependency if it is not missing.
     // So db modules should be a safe start to go looking for them
-    $dbModules = xarModAPIFunc('modules','admin','getdbmodules');
+    $dbModules = xarMod::apiFunc('modules','admin','getdbmodules');
     if (!isset($dbModules)) throw new ModuleNotFoundException();
 
     $dbMods = array();
@@ -77,7 +77,7 @@ function modules_adminapi_verifydependency($args)
             if (!isset($dbMods[$module_id]))
                 throw new ModuleNotFoundException($module_id,'Required module missing (ID #(1))');
 
-            if (xarModAPIFunc('base','versions','compare',array(
+            if (xarMod::apiFunc('base','versions','compare',array(
                 'version1'      => $conditions['minversion'],
                 'version2'      => $dbMods[$module_id]['version'],
                 )) < 0) {
@@ -87,7 +87,7 @@ function modules_adminapi_verifydependency($args)
 
            //Not to be checked, at least not for now
            /*
-            if (xarModAPIFunc('base','versions','compare',array(
+            if (xarMod::apiFunc('base','versions','compare',array(
                 'version1'       => $conditions['maxversion'],
                 'version2'       => $dbMods[$module_id]['version'],
                 )) > 0) {

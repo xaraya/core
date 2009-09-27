@@ -19,7 +19,7 @@
  */
 function themes_adminapi_themedir2name($args)
 {
-    $allthemes = xarModAPIFunc('themes', 'admin', 'getfilethemes');
+    $allthemes = xarMod::apiFunc('themes', 'admin', 'getfilethemes');
     foreach ($allthemes as $theme) {
         if ($theme['directory'] == $args['directory']) {
             return $theme['name'];

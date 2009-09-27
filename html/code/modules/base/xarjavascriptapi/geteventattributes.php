@@ -23,7 +23,7 @@
  *   xarTplAddJavaScript('body', 'onload', "alert('hello, world')");
  *
  * Get all the event attributes for all body tag events (this can be fetched in a page template):
- *   xarModAPIfunc('base', 'javascript', 'geteventjs', array('position'=>'body', 'type'=>'onload,onunload'));
+ *   xarMod::apiFunc('base', 'javascript', 'geteventjs', array('position'=>'body', 'type'=>'onload,onunload'));
  *
  * TODO: investigate whether it is worthwhile putting all these JS functions into a
  * dedicated xarJS.php script. Going through the APIs is cumbersome, and on the whole
@@ -58,7 +58,7 @@ function base_javascriptapi_geteventattributes($args)
     }
 
     foreach($types as $type) {
-        $js = xarModAPIfunc(
+        $js = xarMod::apiFunc(
             'base', 'javascript', 'geteventjs',
             array('position' => $position, 'type' => $type)
         );

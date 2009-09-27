@@ -17,6 +17,6 @@
  */
 function roles_userapi_getitemtypes($args)
 {
-    return xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27, 'native' =>false));
+    return xarMod::apiFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27, 'native' =>false));
 }
 ?>

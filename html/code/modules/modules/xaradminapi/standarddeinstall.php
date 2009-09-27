@@ -59,7 +59,7 @@ function modules_adminapi_standarddeinstall($args)
 
     // Remove the categories created by this module
     try {
-        xarModAPIFunc('categories', 'admin', 'deletecat',
+        xarMod::apiFunc('categories', 'admin', 'deletecat',
                              array('cid' => xarModVars::get($module, 'basecategory'))
                             );
     } catch (Exception $e) {}

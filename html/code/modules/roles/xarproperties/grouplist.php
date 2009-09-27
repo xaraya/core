@@ -66,7 +66,7 @@ class GroupListProperty extends SelectProperty
         if (!parent::validateValue($value)) return false;
         if (!empty($value)) {
             // check if this is a valid group id
-            $group = xarModAPIFunc('roles','user','get',
+            $group = xarMod::apiFunc('roles','user','get',
                                    array('id' => $value,
                                          'itemtype' => 3)); // we're looking for a group here
             if (!empty($group)) {
@@ -186,7 +186,7 @@ class GroupListProperty extends SelectProperty
             $select_options['group'] = $this->validation_group_list;
         }
         // TODO: handle large # of groups too (optional - less urgent than for users)
-        $groups = xarModAPIFunc('roles', 'user', 'getallgroups', $select_options);
+        $groups = xarMod::apiFunc('roles', 'user', 'getallgroups', $select_options);
         return $groups;
     }
 

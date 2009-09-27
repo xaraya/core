@@ -47,7 +47,7 @@
         <xsl:text>");&nl;</xsl:text>
       </xsl:when>
       <xsl:when test="string-length(@filename) &gt; 0">
-        <xsl:text>xarModApiFunc('base','javascript','modulefile',array('module'=&gt;</xsl:text>
+        <xsl:text>xarMod::apiFunc('base','javascript','modulefile',array('module'=&gt;</xsl:text>
         <xsl:value-of select="$module"/>
         <xsl:text>,'filename'=&gt;'</xsl:text>
         <xsl:value-of select="@filename"/>

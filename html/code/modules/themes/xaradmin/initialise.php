@@ -29,7 +29,7 @@ function themes_admin_initialise()
 
     if (!xarVarFetch('id', 'int:1:', $id)) return; 
     // Initialise theme
-    $initialised = xarModAPIFunc('themes',
+    $initialised = xarMod::apiFunc('themes',
         'admin',
         'initialise',
         array('regid' => $id));

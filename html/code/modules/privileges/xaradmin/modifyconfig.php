@@ -68,7 +68,7 @@ function privileges_admin_modifyconfig()
              $grouplist=xarGetGroups();
              $data['grouplist']=$grouplist;
 
-             $testusers=xarModAPIFunc('roles','user','getUsers',array('id'=>$testergroup));
+             $testusers=xarMod::apiFunc('roles','user','getUsers',array('id'=>$testergroup));
              $defaultadminid = (int)xarModVars::get('roles','admin');
 
              $data['testusers']=$testusers; //array
@@ -84,7 +84,7 @@ function privileges_admin_modifyconfig()
         break;
         
         default:
-            $data['module_settings'] = xarModAPIFunc('base','admin','getmodulesettings',array('module' => 'privileges'));
+            $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'privileges'));
             $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls');
             $data['module_settings']->getItem();
         break;

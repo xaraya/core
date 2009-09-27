@@ -15,7 +15,7 @@
  *
  * E.g. to specify the parent of an item for parent-child relationships,
  * add a dynamic data field of type Dropdown List with the configuration rule
- * xarModAPIFunc('dynamicdata','user','dropdownlist',array('field' => 'name','module' => 'dynamicdata','itemtype' => 2))
+ * xarMod::apiFunc('dynamicdata','user','dropdownlist',array('field' => 'name','module' => 'dynamicdata','itemtype' => 2))
  *
  * Note : for additional optional parameters, see the getitems() function
  *
@@ -41,7 +41,7 @@ function dynamicdata_userapi_dropdownlist($args)
     // get back the object
     $args['getobject'] = 1;
 
-    $object = xarModAPIFunc('dynamicdata','user','getitems',$args);
+    $object = xarMod::apiFunc('dynamicdata','user','getitems',$args);
     if (!isset($object)) return;
 
     $field = $args['field'];

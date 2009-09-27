@@ -46,17 +46,17 @@ function dynamicdata_util_relations($args)
                   'withfield' => $withfield,
                   'withvalue' => $withvalue);
 
-    $data['prop'] = xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'));
+    $data['prop'] = xarMod::apiFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'));
 
     $dbconn = xarDB::getConn();
     $dbInfo = $dbconn->getDatabaseInfo();
     // Pass the full info object to the template, let them figure out how and what
     $data['tables'] = $dbInfo->getTables();
 
-    $data['objects'] = xarModAPIFunc('dynamicdata','user','getobjects');
+    $data['objects'] = xarMod::apiFunc('dynamicdata','user','getobjects');
 
     if (!empty($table) || !empty($objectid)) {
-        $object = xarModAPIFunc('dynamicdata','user','getobject',
+        $object = xarMod::apiFunc('dynamicdata','user','getobject',
                                 array('objectid' => $objectid,
                                       'table' => $table));
         $data['fields'] = $object->properties;
@@ -71,7 +71,7 @@ function dynamicdata_util_relations($args)
         }
         //echo '<pre>',var_dump($data['relations']),'</pre>';
         if (!empty($withtable) || !empty($withobjectid)) {
-            $withobject = xarModAPIFunc('dynamicdata','user','getobject',
+            $withobject = xarMod::apiFunc('dynamicdata','user','getobject',
                                         array('objectid' => $withobjectid,
                                               'table' => $withtable));
             $data['withfields'] = $withobject->properties;
@@ -135,7 +135,7 @@ function dynamicdata_util_relations($args)
         }
     } elseif (!empty($module_id)) {
         // (try to) get the relationships between this module and others
-        $data['relations'] = xarModAPIFunc('dynamicdata','util','getrelations',
+        $data['relations'] = xarMod::apiFunc('dynamicdata','util','getrelations',
                                            array('module_id' => $module_id,
                                                  'itemtype' => $itemtype));
     }

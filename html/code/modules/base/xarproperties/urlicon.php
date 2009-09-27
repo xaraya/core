@@ -42,7 +42,7 @@ class URLIconProperty extends URLProperty
         if (empty($data['icon'])) {
             /* We don't have a validated icon to display, use favicon */
             /* FIXME: getfavicon needs to send back nothing if the favicon doens't exist. */
-            $data['icon'] = xarModAPIFunc('base',
+            $data['icon'] = xarMod::apiFunc('base',
                                           'user',
                                           'getfavicon',
                                           array('url' => $data['value']));

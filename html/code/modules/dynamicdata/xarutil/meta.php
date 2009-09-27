@@ -58,7 +58,7 @@ function dynamicdata_util_meta($args)
             $data['databases'] = array($db => $db);
         }
     }
-    $data['tables'] = xarModAPIFunc('dynamicdata','util','getmeta',
+    $data['tables'] = xarMod::apiFunc('dynamicdata','util','getmeta',
                                   array('db' => $db, 'table' => $table));
 
     if ($export == 'ddl') {
@@ -76,7 +76,7 @@ function dynamicdata_util_meta($args)
 
     $data['table'] = $table;
     $data['export'] = $export;
-    $data['prop'] = xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'));
+    $data['prop'] = xarMod::apiFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'));
 
     // Get the default property types
     $proptypes = DataPropertyMaster::getPropertyTypes();

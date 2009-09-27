@@ -33,7 +33,7 @@ function dynamicdata_admin_new($args)
 
     if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$module_id:$itemtype:All")) return;
 
-    $data = xarModAPIFunc('dynamicdata','admin','menu');
+    $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
     $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name'      => $name,

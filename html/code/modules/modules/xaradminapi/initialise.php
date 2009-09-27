@@ -29,14 +29,14 @@ function modules_adminapi_initialise($args)
     if (!isset($modInfo)) throw new ModuleNotFoundException($regid,'Module (regid: $regid) does not exist.');
 
     //Checks module dependency
-    if (!xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$regid))) {
+    if (!xarMod::apiFunc('modules','admin','verifydependency',array('regid'=>$regid))) {
         //TODO: Add description of the dependencies
         $msg = xarML('The dependencies to initialize the module "#(1)" were not met.', $modInfo['displayname']);
         throw new Exception($msg);
     }
 
     // Module deletion function
-    if (!xarModAPIFunc('modules',
+    if (!xarMod::apiFunc('modules',
                        'admin',
                        'executeinitfunction',
                        array('regid'    => $regid,
@@ -46,7 +46,7 @@ function modules_adminapi_initialise($args)
     }
 
     // Update state of module
-    $set = xarModAPIFunc('modules',
+    $set = xarMod::apiFunc('modules',
                         'admin',
                         'setstate',
                         array('regid' => $regid,

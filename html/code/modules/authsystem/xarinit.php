@@ -40,7 +40,7 @@ function authsystem_init()
     // Create the login block
     if (!$result) return;
     //create the blocktype
-    $bid = xarModAPIFunc('blocks','admin','register_block_type',
+    $bid = xarMod::apiFunc('blocks','admin','register_block_type',
            array('modName' => 'authsystem',
                  'blockType' => 'login'));
     if (!$bid) return;

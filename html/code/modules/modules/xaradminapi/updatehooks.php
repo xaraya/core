@@ -47,7 +47,7 @@ function modules_adminapi_updatehooks($args)
         $dbconn->Execute($sql,array($modinfo['systemid'],0));
 
         // get the list of all (active) modules
-        $modList = xarModAPIFunc('modules', 'admin', 'getlist');
+        $modList = xarMod::apiFunc('modules', 'admin', 'getlist');
 
         // see for which one(s) we need to enable this hook
         $todo = array();

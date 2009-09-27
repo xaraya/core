@@ -33,7 +33,7 @@ function modules_adminapi_getalldependencies($args)
     if (!isset($mainId)) throw new EmptyParameterException('regid');
 
     // See if we have lost any modules since last generation
-    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
+    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {
         return;
     }
 
@@ -86,7 +86,7 @@ function modules_adminapi_getalldependencies($args)
         }
 
         // RECURSIVE CALL
-        $output = xarModAPIFunc('modules', 'admin', 'getalldependencies', array('regid'=>$modId));
+        $output = xarMod::apiFunc('modules', 'admin', 'getalldependencies', array('regid'=>$modId));
         if (!$output) {
             $msg = xarML('Unable to get dependencies for module with ID (#(1)).', $modId);
             throw new Exception($msg);

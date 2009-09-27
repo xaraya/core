@@ -11,15 +11,15 @@ function mail_admin_qstatus($args)
     $data = array();
 
     // Do we have the master ?
-    if(!$qdefInfo = xarModApiFunc('mail','admin','getqdef')) {
+    if(!$qdefInfo = xarMod::apiFunc('mail','admin','getqdef')) {
         // Redirect to the view page, which offers to create one
         xarResponse::Redirect(xarModUrl('mail','admin','view'));
         return true;
     }
     // Retrieve the queues
-    $queues = xarModApiFunc('mail','user','getqueues');
+    $queues = xarMod::apiFunc('mail','user','getqueues');
     $measures = array();
-    $data['qtypes'] = xarModApiFunc('mail','user','getqueuetypes');
+    $data['qtypes'] = xarMod::apiFunc('mail','user','getqueuetypes');
     foreach($queues as $index => $qInfo) {
         // Get some info on the Q
         $qName = 'q_'.$qInfo['name'];
@@ -37,7 +37,7 @@ function mail_admin_qstatus($args)
             $q = new Queue('dd',array('name'=>$qName));
             $queues[$index]['count'] = $q->size;
             // Determine status
-            if(!xarModApiFunc('mail','user','qisactive',$qInfo)) {
+            if(!xarMod::apiFunc('mail','user','qisactive',$qInfo)) {
                 // Queue is inactive
                 $queues[$index]['status'] = 'inactive';
                 $queues[$index]['msg'] = xarML('Queue is not activated');

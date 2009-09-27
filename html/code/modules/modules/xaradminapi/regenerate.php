@@ -23,14 +23,14 @@ function modules_adminapi_regenerate()
     if(!xarSecurityCheck('AdminModules', 1, 'All', 'All', 'modules')) {return;}
 
     //Finds and updates missing modules
-    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {return;}
+    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {return;}
 
     //Get all modules in the filesystem
-    $fileModules = xarModAPIFunc('modules', 'admin', 'getfilemodules');
+    $fileModules = xarMod::apiFunc('modules', 'admin', 'getfilemodules');
     if (!isset($fileModules)) {return;}
 
     // Get all modules in DB
-    $dbModules = xarModAPIFunc('modules', 'admin', 'getdbmodules');
+    $dbModules = xarMod::apiFunc('modules', 'admin', 'getdbmodules');
     if (!isset($dbModules)) {return;}
 
     //Setup database object for module insertion
@@ -85,7 +85,7 @@ function modules_adminapi_regenerate()
             );
             $result =& $dbconn->Execute($sql, $params);
 
-            $set = xarModAPIFunc('modules', 'admin', 'setstate',
+            $set = xarMod::apiFunc('modules', 'admin', 'setstate',
                                  array(
                                        'regid' => $modinfo['regid'],
                                        'state' => XARMOD_STATE_UNINITIALISED
@@ -101,7 +101,7 @@ function modules_adminapi_regenerate()
                 // Compare the versions, only going down to two levels. Only the first two
                 // levels are significant for upgrades. A module writer could use the third level
                 // from 1.0.3 to 1.0.4
-                $vercompare = xarModAPIfunc(
+                $vercompare = xarMod::apiFunc(
                     'base', 'versions', 'compare',
                     array(
                         'version1'=>$dbModules[$name]['version'],
@@ -117,7 +117,7 @@ function modules_adminapi_regenerate()
 
                     if ($is_core && $vercompare > 0) {
                         // Bug 2879: Attempt to run the core module upgrade and activate functions.
-                        xarModAPIFunc(
+                        xarMod::apiFunc(
                             'modules', 'admin', 'upgrade',
                             array(
                                 'regid' => $modinfo['regid'],
@@ -125,7 +125,7 @@ function modules_adminapi_regenerate()
                             )
                         );
 
-                        xarModAPIFunc(
+                        xarMod::apiFunc(
                             'modules', 'admin', 'activate',
                             array(
                                 'regid' => $modinfo['regid'],
@@ -155,12 +155,12 @@ function modules_adminapi_regenerate()
                             $regId = $modinfo['regid'];
 
                             $newstate = XARMOD_STATE_INACTIVE;
-                            xarModAPIFunc('modules','admin','upgrade',
+                            xarMod::apiFunc('modules','admin','upgrade',
                                             array(    'regid'    => $regId,
                                                     'state'    => $newstate));
 
                             $newstate = XARMOD_STATE_ACTIVE;
-                            xarModAPIFunc('modules','admin','activate',
+                            xarMod::apiFunc('modules','admin','activate',
                                             array(    'regid'    => $regId,
                                                     'state'    => $newstate));
                         }
@@ -170,7 +170,7 @@ function modules_adminapi_regenerate()
                         $dbconn->Execute($sql, array($modinfo['version'], $modinfo['regid']));
                     } else {
                         // Else set the module state to upgraded
-                        $set = xarModAPIFunc(
+                        $set = xarMod::apiFunc(
                             'modules', 'admin', 'setstate',
                             array(
                                 'regid' => $modinfo['regid'],
@@ -219,7 +219,7 @@ function modules_adminapi_regenerate()
                             break;
                     }
                     if ($modstate != XARMOD_STATE_ANY) {
-                        $set = xarModAPIFunc(
+                        $set = xarMod::apiFunc(
                             'modules', 'admin', 'setstate',
                             array(
                                 'regid' => $dbModules[$name]['regid'],
@@ -255,7 +255,7 @@ function modules_adminapi_regenerate()
                     break;
             }
             if ($newstate != XARMOD_STATE_ANY) {
-                $set = xarModAPIFunc(
+                $set = xarMod::apiFunc(
                     'modules', 'admin', 'setstate',
                     array(
                         'regid' => $dbModules[$name]['regid'],
@@ -267,7 +267,7 @@ function modules_adminapi_regenerate()
     }
 
     // Finds and updates event handlers
-    if (!xarModAPIFunc('modules', 'admin', 'geteventhandlers')) {return;}
+    if (!xarMod::apiFunc('modules', 'admin', 'geteventhandlers')) {return;}
 
     return true;
 }

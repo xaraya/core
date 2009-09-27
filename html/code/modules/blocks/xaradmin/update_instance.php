@@ -40,11 +40,11 @@ function blocks_admin_update_instance()
     if (!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
 
     // Get and update block info.
-    $blockinfo = xarModAPIFunc('blocks', 'user', 'get', array('bid' => $bid));
+    $blockinfo = xarMod::apiFunc('blocks', 'user', 'get', array('bid' => $bid));
 
     // If the name is being changed, then check the new name has not already been used.
     if ($blockinfo['name'] != $name) {
-        $checkname = xarModAPIFunc('blocks', 'user', 'get', array('name' => $name));
+        $checkname = xarMod::apiFunc('blocks', 'user', 'get', array('name' => $name));
         if (!empty($checkname)) {
             throw new DuplicateException(array('block',$name));
         }
@@ -80,7 +80,7 @@ function blocks_admin_update_instance()
     $blockinfo['groups'] = $groups;
 
     // Load block
-    if (!xarModAPIFunc(
+    if (!xarMod::apiFunc(
             'blocks', 'admin', 'load',
             array(
                 'module' => $blockinfo['module'],
@@ -127,10 +127,10 @@ function blocks_admin_update_instance()
     }
 
     // Pass to API - do generic updates.
-    if (!xarModAPIFunc('blocks', 'admin', 'update_instance', $blockinfo)) {return;}
+    if (!xarMod::apiFunc('blocks', 'admin', 'update_instance', $blockinfo)) {return;}
 
     // Resequence blocks within groups.
-    if (!xarModAPIFunc('blocks', 'admin', 'resequence')) {return;}
+    if (!xarMod::apiFunc('blocks', 'admin', 'resequence')) {return;}
 
     xarResponse::Redirect(xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $bid)));
 

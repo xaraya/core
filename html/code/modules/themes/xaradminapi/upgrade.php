@@ -32,7 +32,7 @@ function themes_adminapi_upgrade($args)
     }
 
     // Update state of theme
-    $res = xarModAPIFunc('themes', 'admin', 'setstate',
+    $res = xarMod::apiFunc('themes', 'admin', 'setstate',
                         array('regid' => $regid, 'state' => XARTHEME_STATE_INACTIVE));
 
     if (!isset($res)) return;

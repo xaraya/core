@@ -15,7 +15,7 @@
 
 function blocks_userapi_handleStateIconTag($args)
 {
-    return "echo xarModAPIFunc('blocks', 'user', 'drawStateIcon', array('bid' => \$bid)); ";
+    return "echo xarMod::apiFunc('blocks', 'user', 'drawStateIcon', array('bid' => \$bid)); ";
 }
 
 ?>

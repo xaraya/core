@@ -24,7 +24,7 @@ function authsystem_admin_createpassword()
         throw new BadParameterException(array('parameters','admin','createpassword','roles'), xarML('Invalid #(1) for #(2) function #(3)() in module #(4)'));
     }
 
-    $pass = xarModAPIFunc('roles',
+    $pass = xarMod::apiFunc('roles',
                           'user',
                           'makepass');
      if (empty($pass)) {

@@ -31,7 +31,7 @@ function themes_admin_upgrade()
     if (!xarVarFetch('id', 'int:1:', $id)) return; 
     
     // Upgrade theme
-    $upgraded = xarModAPIFunc('themes', 'admin', 'upgrade', array('regid' => $id));
+    $upgraded = xarMod::apiFunc('themes', 'admin', 'upgrade', array('regid' => $id));
     
     //throw back
     if(!isset($upgraded)) return;

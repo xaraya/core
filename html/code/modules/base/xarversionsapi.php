@@ -87,8 +87,8 @@ function base_versionsapi_compare($args)
     if (!isset($args['version1'])) throw new Exception(xarML('Missing a version1 parameter'));
     if (!isset($args['version2'])) throw new Exception(xarML('Missing a version2 parameter'));
 
-    $version1 = xarModAPIFunc('base', 'versions', 'parse', array('version' => $args['version1']));
-    $version2 = xarModAPIFunc('base', 'versions', 'parse', array('version' => $args['version2']));
+    $version1 = xarMod::apiFunc('base', 'versions', 'parse', array('version' => $args['version1']));
+    $version2 = xarMod::apiFunc('base', 'versions', 'parse', array('version' => $args['version2']));
     if (!$version1) throw new Exception(xarML('Could not parse the version1 parameter'));
     if (!$version2) throw new Exception(xarML('Could not parse the version2 parameter'));
     
@@ -112,7 +112,7 @@ function base_versionsapi_compare($args)
 function base_versionsapi_assert_application($args)
 {
     if (!isset($args['version'])) throw new Exception(xarML('Missing a version1 parameter'));
-    $result = xarModAPIfunc('base', 'versions', 'compare',
+    $result = xarMod::apiFunc('base', 'versions', 'compare',
         array(
             'version1' => $args['version'],
             'version2' => xarConfigVars::get(null, 'System.Core.VersionNum'),

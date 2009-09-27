@@ -62,7 +62,7 @@ function xarBlock_render($blockinfo)
     xarCore::setCached('Security.Variables', 'currentmodule', $modName);
 
     // Load the block.
-    if (!xarModAPIFunc(
+    if (!xarMod::apiFunc(
         'blocks', 'admin', 'load',
         array('modName' => $modName, 'blockType' => $blockType, 'blockFunc' => 'display') )
     ) {return;}
@@ -291,7 +291,7 @@ function xarBlock_renderBlock($args)
 {
     // All the hard work is done in this function.
     // It keeps the core code lighter when standalone blocks are not used.
-    $blockinfo = xarModAPIFunc('blocks', 'user', 'getinfo', $args);
+    $blockinfo = xarMod::apiFunc('blocks', 'user', 'getinfo', $args);
     $blockCaching = xarCore::getCached('xarcache', 'blockCaching');
 
     if (!empty($blockinfo) && $blockinfo['state'] !== 0) {

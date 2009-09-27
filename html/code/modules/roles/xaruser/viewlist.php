@@ -104,7 +104,7 @@ function roles_user_viewlist($args)
             $filter = time() - (xarConfigVars::get(null, 'Site.Session.Duration') * 60);
             $data['title'] = xarML('Online Members');
 
-            $data['total'] = xarModAPIFunc(
+            $data['total'] = xarMod::apiFunc(
                 'roles', 'user', 'countallactive',
                 array(
                     'filter'   => $filter,
@@ -121,7 +121,7 @@ function roles_user_viewlist($args)
             }
 
             // Now get the actual records to be displayed
-            $items = xarModAPIFunc(
+            $items = xarMod::apiFunc(
                 'roles', 'user', 'getallactive',
                 array(
                     'startnum' => $startnum,
@@ -138,7 +138,7 @@ function roles_user_viewlist($args)
             $data['phase'] = 'viewall';
             $data['title'] = xarML('All Members');
 
-            $data['total'] = xarModAPIFunc(
+            $data['total'] = xarMod::apiFunc(
                 'roles', 'user', 'countall',
                 array(
                     'selection' => $selection,
@@ -155,7 +155,7 @@ function roles_user_viewlist($args)
             }
 
             // Now get the actual records to be displayed
-            $items = xarModAPIFunc(
+            $items = xarMod::apiFunc(
                 'roles', 'user', 'getall',
                 array(
                     'startnum' => $startnum,
@@ -177,7 +177,7 @@ function roles_user_viewlist($args)
         $data['idlist'][] = $item['id'];
 
         // Grab the list of groups this role belongs to
-        $groups = xarModAPIFunc('roles', 'user', 'getancestors', array('id' => $item['id']));
+        $groups = xarMod::apiFunc('roles', 'user', 'getancestors', array('id' => $item['id']));
         foreach ($groups as $group) {
             $items[$i]['groups'][$group['id']] = $group['name'];
         }

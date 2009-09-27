@@ -21,7 +21,7 @@ function blocks_admin_modify_group()
     if(!xarSecurityCheck('EditBlock', 0, 'Group')) {return;}
 
     // Get details on current group
-    $group = xarModAPIFunc(
+    $group = xarMod::apiFunc(
         'blocks', 'user', 'groupgetinfo',
         array('id' => $id)
     );

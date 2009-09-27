@@ -55,7 +55,7 @@ function dynamicdata_util_export($args)
     if (empty($itemid)) {
         $data['label'] = xarML('Export Object Definition for #(1)', $myobject->label);
 
-        $xml = xarModAPIFunc('dynamicdata','util','export',
+        $xml = xarMod::apiFunc('dynamicdata','util','export',
                              array('objectref' => &$myobject));
 
         $data['formlink'] = xarModURL('dynamicdata','util','export',
@@ -71,7 +71,7 @@ function dynamicdata_util_export($args)
                                              array('objectid' => $myobject->objectid,
                                                    'convert'  => 1));
             if (!empty($convert)) {
-                if (!xarModAPIFunc('dynamicdata','util','maketable',
+                if (!xarMod::apiFunc('dynamicdata','util','maketable',
                                    array('objectref' => &$myobject))) return;
 
             }

@@ -24,7 +24,7 @@
  */
 function blocks_adminapi_register_block_type($args)
 {
-    return xarModAPIfunc('blocks', 'admin', 'create_type', $args);
+    return xarMod::apiFunc('blocks', 'admin', 'create_type', $args);
 }
 
 ?>

@@ -40,7 +40,7 @@
 function themes_adminapi_dropdownlist($args)
 {
 
-    $themelist = xarModAPIFunc('themes', 'admin', 'getlist', $args);
+    $themelist = xarMod::apiFunc('themes', 'admin', 'getlist', $args);
     $options = array();
     if (!empty($themelist)) {
         foreach ($themelist as $theme) {

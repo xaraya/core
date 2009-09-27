@@ -226,7 +226,7 @@ class PropertyRegistration extends DataContainer
                 // Clear the cache
                 PropertyRegistration::ClearCache();
 
-                $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+                $activeMods = xarMod::apiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
                 assert('!empty($activeMods)'); // this should never happen
 
                 foreach($activeMods as $modInfo) {

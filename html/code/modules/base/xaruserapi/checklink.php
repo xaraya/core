@@ -120,7 +120,7 @@ function base_userapi_checklink($args)
         case 501: // Not Implemented
             if ($method == 'HEAD') {
                 // try again using GET method
-                return xarModAPIFunc('base', 'user', 'checklink',
+                return xarMod::apiFunc('base', 'user', 'checklink',
                                      array('url' => $url,
                                            'method' => 'GET',
                                            'skiplocal' => $skiplocal,
@@ -136,7 +136,7 @@ function base_userapi_checklink($args)
                 $location = $matches[1];
             // TODO: handle relative redirects and endless loops (for messy servers)
                 if ($location != $url && strstr($location,'://')) {
-                    return xarModAPIFunc('base', 'user', 'checklink',
+                    return xarMod::apiFunc('base', 'user', 'checklink',
                                          array('url' => $location,
                                                'method' => $method,
                                                'skiplocal' => $skiplocal,

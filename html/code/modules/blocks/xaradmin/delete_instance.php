@@ -27,7 +27,7 @@ function blocks_admin_delete_instance()
         // No confirmation yet - get one
 
         // Get details on current block
-        $blockinfo = xarModAPIFunc(
+        $blockinfo = xarMod::apiFunc(
             'blocks', 'user', 'get', array('bid' => $bid)
         );
 
@@ -44,7 +44,7 @@ function blocks_admin_delete_instance()
     }        
 
     // Pass to API
-    xarModAPIFunc(
+    xarMod::apiFunc(
         'blocks', 'admin', 'delete_instance',
         array('bid' => $bid)
     );

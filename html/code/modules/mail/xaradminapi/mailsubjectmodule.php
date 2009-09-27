@@ -19,11 +19,8 @@ function mail_adminapi_mailsubjectmodule($args)
                     'templateName' => $templateName, 
                     'mailType' => $mailType,
                     'messagepart' => 'subject');
-    $sourceFileName = xarModAPIFunc('mail', 'admin', 'getsourcefilename', $params);     
+    $sourceFileName = xarMod::apiFunc('mail', 'admin', 'getsourcefilename', $params);     
     return xarTpl__executeFromFile($sourceFileName, $tplData);  
 }
 
 ?>
-
-
-

@@ -23,7 +23,7 @@
  */
 function dynamicdata_admin_modifyprop()
 {
-    $data = xarModAPIFunc('dynamicdata','admin','menu');
+    $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
@@ -77,7 +77,7 @@ function dynamicdata_admin_modifyprop()
     }
     xarTplSetPageTitle(xarML('Modify DataProperties #(1)', $data['label']));
 
-    $data['fields'] = xarModAPIFunc('dynamicdata','user','getprop',
+    $data['fields'] = xarMod::apiFunc('dynamicdata','user','getprop',
                                    array('objectid' => $objectid,
                                             'module_id' => $module_id,
                                             'itemtype' => $itemtype,
@@ -148,7 +148,7 @@ function dynamicdata_admin_modifyprop()
 // TODO: allow modules to specify their own properties
     // (try to) show the "static" properties, corresponding to fields in dedicated
     // tables for this module
-    $data['static'] = xarModAPIFunc('dynamicdata','util','getstatic',
+    $data['static'] = xarMod::apiFunc('dynamicdata','util','getstatic',
                                    array('module_id' => $module_id,
                                          'itemtype' => $itemtype));
     if (!isset($data['static']) || $data['static'] == false) {
@@ -168,7 +168,7 @@ function dynamicdata_admin_modifyprop()
 
 // TODO: allow other kinds of relationships than hooks
     // (try to) get the relationships between this module and others
-    $data['relations'] = xarModAPIFunc('dynamicdata','util','getrelations',
+    $data['relations'] = xarMod::apiFunc('dynamicdata','util','getrelations',
                                        array('module_id' => $module_id,
                                              'itemtype' => $itemtype));
     if (!isset($data['relations']) || $data['relations'] == false) {

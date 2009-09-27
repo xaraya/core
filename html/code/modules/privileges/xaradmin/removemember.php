@@ -34,7 +34,7 @@ function privileges_admin_removemember()
    if (!xarVarFetch('parentid', 'int', $parentid, NULL, XARVAR_NOT_REQUIRED)) {return;}
 
 // call the API function
-   if(!xarModAPIFunc('privileges','admin','removemember', array('parentid' => $parentid, 'childid' => $childid))) {
+   if(!xarMod::apiFunc('privileges','admin','removemember', array('parentid' => $parentid, 'childid' => $childid))) {
    }
 
 // redirect to the next page

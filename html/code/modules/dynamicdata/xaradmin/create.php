@@ -12,7 +12,7 @@
 
 /**
  * This is a standard function that is called with the results of the
- * form supplied by xarModFunc('dynamicdata','admin','new') to create a new item
+ * form supplied by xarMod::guiFunc('dynamicdata','admin','new') to create a new item
  * @param int    objectid
  * @param int    itemid
  * @param string preview
@@ -50,11 +50,11 @@ function dynamicdata_admin_create($args)
     $isvalid = $myobject->checkInput();
 
     // recover any session var information
-    $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
+    $data = xarMod::apiFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
     extract($data);
 
     if (!empty($preview) || !$isvalid) {
-        $data = array_merge($data, xarModAPIFunc('dynamicdata','admin','menu'));
+        $data = array_merge($data, xarMod::apiFunc('dynamicdata','admin','menu'));
 
         $data['object'] = $myobject;
 

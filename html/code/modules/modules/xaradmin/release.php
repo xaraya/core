@@ -33,7 +33,7 @@ function modules_admin_release()
     // Need to change the url once release module is moved to 
     $feedfile = "http://www.xaraya.com/index.php/articles/rnid/?theme=rss";
     // Get the feed file (from cache or from the remote site)
-    $feeddata = xarModAPIFunc('base', 'user', 'getfile',
+    $feeddata = xarMod::apiFunc('base', 'user', 'getfile',
                               array('url' => $feedfile,
                                     'cached' => true,
                                     'cachedir' => 'cache/rss',

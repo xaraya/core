@@ -93,7 +93,7 @@ function dynamicdata_user_view($args)
     $data['object'] = $object;
 
     // TODO: is this needed?
-    $data = array_merge($data,xarModAPIFunc('dynamicdata','admin','menu'));
+    $data = array_merge($data,xarMod::apiFunc('dynamicdata','admin','menu'));
     // TODO: remove this when we turn all the moduleid into module_id
     $data['module_id'] = $data['moduleid'];
     // TODO: another stray

@@ -29,7 +29,7 @@ function blocks_adminapi_delete_type($args)
     if (!empty($modName)) {$module = $modName;}
     if (!empty($blockType)) {$type = $blockType;}
 
-    $count = xarModAPIFunc('blocks', 'user', 'countblocktypes',
+    $count = xarMod::apiFunc('blocks', 'user', 'countblocktypes',
                            array('module' => $module, 'type' => $type)
     );
 
@@ -60,7 +60,7 @@ function blocks_adminapi_delete_type($args)
 
     while ($result->next()) {
         // Pass ids to API
-        xarModAPIFunc('blocks', 'admin', 'delete_instance', array('bid' => $result->getInt(1)));
+        xarMod::apiFunc('blocks', 'admin', 'delete_instance', array('bid' => $result->getInt(1)));
     }
     $result->close();
 

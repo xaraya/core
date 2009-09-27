@@ -40,7 +40,7 @@ function dynamicdata_admin_modify($args)
     if(!xarVarFetch('preview',  'isset', $preview,     NULL, XARVAR_DONT_SET)) {return;}
 
 
-    $data = xarModAPIFunc('dynamicdata','admin','menu');
+    $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,

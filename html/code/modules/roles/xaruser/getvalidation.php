@@ -47,7 +47,7 @@ function roles_user_getvalidation()
         if we need it. Tis should make it easier to move the User registration validation out of
         email revalidation soon, once we have all the registration default module instances captured in the new function.
 
-    //$defaultauthdata=xarModAPIFunc('roles','user','getdefaultregdata');
+    //$defaultauthdata=xarMod::apiFunc('roles','user','getdefaultregdata');
 
     */
 
@@ -63,7 +63,7 @@ function roles_user_getvalidation()
         throw new ModuleNotFoundException($regmodule);
     }
 
-    $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
+    $defaultauthdata=xarMod::apiFunc('roles','user','getdefaultauthdata');
     $defaultloginmodname=$defaultauthdata['defaultloginmodname'];
     $authmodule=$defaultauthdata['defaultauthmodname'];
 
@@ -91,7 +91,7 @@ function roles_user_getvalidation()
         case 'getvalidate':
 
             // check for user and grab id if exists
-            $status = xarModAPIFunc('roles', 'user', 'get', array('uname' => $uname));
+            $status = xarMod::apiFunc('roles', 'user', 'get', array('uname' => $uname));
 
             // Trick the system when a user has double validated.
             if (empty($status['valcode'])){
@@ -106,12 +106,12 @@ function roles_user_getvalidation()
 
             if ($pending == 1 && ($status['id'] != xarModVars::get('roles','admin')))  {
                 // Update the user status table to reflect a pending account.
-                if (!xarModAPIFunc('roles', 'user', 'updatestatus',
+                if (!xarMod::apiFunc('roles', 'user', 'updatestatus',
                                     array('uname' => $uname,
                                           'state' => ROLES_STATE_PENDING)));
 
                 /*Send Pending Email toggable ?   User email
-                if (!xarModAPIFunc( 'authentication',
+                if (!xarMod::apiFunc( 'authentication',
                                 'admin',
                                 'sendpendingemail',
                                 array('id'     => $status["id"],
@@ -123,12 +123,12 @@ function roles_user_getvalidation()
 
             } else {
                 // Update the user status table to reflect a validated account.
-                if (!xarModAPIFunc('roles', 'user', 'updatestatus',
+                if (!xarMod::apiFunc('roles', 'user', 'updatestatus',
                                     array('uname' => $uname,
                                           'state' => ROLES_STATE_ACTIVE))) return;
                 //send welcome email (option)
                 if (xarModVars::get($regmodule, 'sendwelcomeemail')) {
-                    if (!xarModAPIFunc('roles','admin','senduseremail',
+                    if (!xarMod::apiFunc('roles','admin','senduseremail',
                                     array('id' => array($status['id'] => '1'),
                                           'mailtype' => 'welcome'))) {
                         throw new GeneralException(null, 'Problem sending welcome email');
@@ -159,7 +159,7 @@ function roles_user_getvalidation()
                         $terms = xarML('This user has agreed to the site terms and conditions.');
                 }
 
-                $status = xarModAPIFunc('roles','user','get',array('uname' => $uname)); //check status as it may have changed
+                $status = xarMod::apiFunc('roles','user','get',array('uname' => $uname)); //check status as it may have changed
 
                 $emailargs =  array('adminname'    => xarModVars::get('mail', 'adminname'),
                                     'adminemail'   => xarModVars::get('registration', 'notifyemail'),
@@ -170,7 +170,7 @@ function roles_user_getvalidation()
                                     'id'          => $status['id'],
                                     'userstatus'   => $status['state']
                                     );
-                if (!xarModAPIFunc('registration', 'user', 'notifyadmin', $emailargs)) {
+                if (!xarMod::apiFunc('registration', 'user', 'notifyadmin', $emailargs)) {
                     return; // TODO ...something here if the email is not sent..
                 }
 
@@ -185,7 +185,7 @@ function roles_user_getvalidation()
 
                 $messagetitle = "".xarML('A user has updated information')."";
 
-                if (!xarModAPIFunc('mail', 'admin', 'sendmail',
+                if (!xarMod::apiFunc('mail', 'admin', 'sendmail',
                                    array('info' => $adminemail,
                                          'name' => $adminname,
                                          'subject' => $messagetitle,
@@ -200,9 +200,9 @@ function roles_user_getvalidation()
 
         case 'resend':
             // check for user and grab id if exists
-            $status = xarModAPIFunc('roles', 'user', 'get', array('uname' => $uname));
+            $status = xarMod::apiFunc('roles', 'user', 'get', array('uname' => $uname));
 
-            if (!xarModAPIFunc( 'roles','admin','senduseremail',
+            if (!xarMod::apiFunc( 'roles','admin','senduseremail',
                                 array('id' => array($status['id'] => '1'),
                                       'mailtype' => 'confirmation',
                                       'ip' => xarML('Cannot resend IP'),

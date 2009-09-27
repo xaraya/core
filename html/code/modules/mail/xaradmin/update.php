@@ -6,6 +6,6 @@ function mail_admin_update($args = array())
     if(!xarVarFetch('objectid',   'isset', $args['objectid'],    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',     'isset', $args['itemid'],      NULL, XARVAR_DONT_SET)) {return;}
 
-    return xarModFunc('dynamicdata','admin','update',$args);
+    return xarMod::guiFunc('dynamicdata','admin','update',$args);
 }
 ?>

@@ -33,18 +33,18 @@ function modules_admin_upgrade()
     if (!xarVarFetch('id', 'int:1:', $id)) {return;}
 
     // See if we have lost any modules since last generation
-    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
+    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {
         return;
     }
 
     // TODO: give the user the opportunity to upgrade the dependancies automatically.
     try {
-        xarModAPIFunc('modules', 'admin', 'verifydependency', array('regid'=>$id));
+        xarMod::apiFunc('modules', 'admin', 'verifydependency', array('regid'=>$id));
         $minfo=xarModGetInfo($id);
         //Bail if we've lost our module
         if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_UPGRADED) {
             // Upgrade module
-            $upgraded = xarModAPIFunc('modules', 'admin', 'upgrade',array('regid' => $id));
+            $upgraded = xarMod::apiFunc('modules', 'admin', 'upgrade',array('regid' => $id));
         }
     } catch (Exception $e) {
         // TODO: gradually build up the handling here, for now, bail early.

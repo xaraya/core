@@ -45,12 +45,12 @@ function roles_admin_modifyemail($args)
     switch (strtolower($phase)) {
         case 'modify':
         default:
-            $strings = xarModAPIFunc('roles','admin','getmessagestrings', array('template' => $data['mailtype']));
+            $strings = xarMod::apiFunc('roles','admin','getmessagestrings', array('template' => $data['mailtype']));
             $data['subject'] = $strings['subject'];
             $data['message'] = $strings['message'];
             $data['authid'] = xarSecGenAuthKey();
 
-            $object = xarModAPIFunc('dynamicdata', 'user', 'getobject',
+            $object = xarMod::apiFunc('dynamicdata', 'user', 'getobject',
                               array('name' => 'roles_users'));
                 if (isset($object) && !empty($object->objectid)) {
                     // get the Dynamic Properties of this object

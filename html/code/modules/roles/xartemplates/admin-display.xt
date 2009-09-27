@@ -54,10 +54,10 @@
                         <label for="duvs_primaryparent" title="#xarML('Primary parent group')#"
                         class="xar-form-label">Primary Parent Group:</label>
                         <xar:set name="value">
-                        xarModAPIFunc('roles','user','getprimaryparent',array('itemid' =&gt;
+                        xarMod::apiFunc('roles','user','getprimaryparent',array('itemid' =&gt;
                         $id))</xar:set>
                         <xar:set name="options">
-                        xarModAPIFunc('roles','user','getancestors',array('id' =&gt; $id, 'parents'
+                        xarMod::apiFunc('roles','user','getancestors',array('id' =&gt; $id, 'parents'
                         =&gt; 1))</xar:set>
                         <xar:data-output type="dropdown" name="duvs[primaryparent]"
                         id="duvs_primaryparent" options="$options" value="$value" tabindex="8" />

@@ -36,7 +36,7 @@ function blocks_adminapi_create_type($args)
         $info = serialize($info);
     }
 
-    $origtype = xarModAPIFunc('blocks', 'user', 'getblocktype',
+    $origtype = xarMod::apiFunc('blocks', 'user', 'getblocktype',
                               array('module'=>$module, 'type'=>$type));
 
     if (!empty($origtype)) {
@@ -62,7 +62,7 @@ function blocks_adminapi_create_type($args)
         $nextID = $dbconn->getLastId($block_types_table);
         assert('$nextID >0');
         // Update the block info details.
-        xarModAPIfunc('blocks', 'admin', 'update_type_info', array('tid' => $nextID));
+        xarMod::apiFunc('blocks', 'admin', 'update_type_info', array('tid' => $nextID));
         $dbconn->commit();
     } catch (Exception $e) {
         $dbconn->rollback();

@@ -54,7 +54,7 @@
                 throw new Exception($msg);
             }
 
-            if (preg_match('/^xarModAPIFunc/i',$selection)) {
+            if (preg_match('/^xarMod::apiFunc/i',$selection)) {
                 eval('$dropdown = ' . $this->func .';');
                 if (!isset($dropdown)) $dropdown = array();
             } else {

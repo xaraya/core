@@ -42,7 +42,7 @@ function mail_cliapi_process($args)
     // 3. Based on parse results determine the queue
     // This would typically be something we want to postpone, that is, put it in a default queue quickly
     // and revisit this later on.
-    $destination = xarModApiFunc('mail','admin','maptoqueue',array('msg_structure' => $structure));
+    $destination = xarMod::apiFunc('mail','admin','maptoqueue',array('msg_structure' => $structure));
     if(!isset($destination)) return _fatal("Could not map input to a queue.");
 
     // 4. Put the message ($raw) into the queues

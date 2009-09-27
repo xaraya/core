@@ -32,7 +32,7 @@ function modules_adminapi_getalldependents ($args)
     if (!isset($mainId)) throw new EmptyParameterException('regid');
 
     // See if we have lost any modules since last generation
-    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
+    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {
         return;
     }
 
@@ -50,11 +50,11 @@ function modules_adminapi_getalldependents ($args)
     $dependent_ids[] = $mainId;
 
     //Get all modules in the filesystem
-    $fileModules = xarModAPIFunc('modules','admin','getfilemodules');
+    $fileModules = xarMod::apiFunc('modules','admin','getfilemodules');
     if (!isset($fileModules)) return;
 
     // Get all modules in DB
-    $dbModules = xarModAPIFunc('modules','admin','getdbmodules');
+    $dbModules = xarMod::apiFunc('modules','admin','getdbmodules');
     if (!isset($dbModules)) return;
 
     foreach ($fileModules as $name => $modinfo) {
@@ -89,7 +89,7 @@ function modules_adminapi_getalldependents ($args)
 
             //If we are here, then it is dependent
             // RECURSIVE CALL
-            $output = xarModAPIFunc('modules', 'admin', 'getalldependents', array('regid' => $modinfo['regid']));
+            $output = xarMod::apiFunc('modules', 'admin', 'getalldependents', array('regid' => $modinfo['regid']));
             if (!$output) {
                 $msg = xarML('Unable to get dependencies for module with ID (#(1)).', $modinfo['regid']);
                 throw new Exception($msg);

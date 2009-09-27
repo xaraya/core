@@ -31,7 +31,7 @@ function roles_adminapi_stateupdate($args)
     if (!isset($id))   throw new EmptyParameterException('id');
     if (!isset($state)) throw new EmptyParameterException('state');
 
-    $item = xarModAPIFunc('roles',
+    $item = xarMod::apiFunc('roles',
                           'user',
                           'get',
                           array('id' => $id));

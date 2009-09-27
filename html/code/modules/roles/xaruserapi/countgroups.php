@@ -20,7 +20,7 @@
  */
 function roles_userapi_countgroups()
 {
-    return count(xarModAPIFunc('roles','user','getallgroups'));
+    return count(xarMod::apiFunc('roles','user','getallgroups'));
 }
 
 ?>

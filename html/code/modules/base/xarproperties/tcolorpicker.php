@@ -57,7 +57,7 @@ class TColorPickerProperty extends DataProperty
 
         // Include color picker javascript options.
         // Allows the options to be over-ridden in a theme.
-        xarModAPIFunc(
+        xarMod::apiFunc(
             'base', 'javascript', 'modulecode',
             array('module' => 'base', 'filename' => 'tcolorpickeroptions.js')
         );

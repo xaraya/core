@@ -16,7 +16,7 @@
  */
 function dynamicdata_admin_modifyconfig()
 {
-    $data = xarModAPIFunc('dynamicdata','admin','menu');
+    $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
     if(!xarSecurityCheck('AdminDynamicData')) return;
 

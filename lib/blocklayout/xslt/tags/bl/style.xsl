@@ -10,7 +10,7 @@
 
 <xsl:template match="xar:style">
   <xsl:processing-instruction name="php">
-    <xsl:text>xarModAPIFunc('themes','user','register',array(</xsl:text>
+    <xsl:text>xarMod::apiFunc('themes','user','register',array(</xsl:text>
     <xsl:if test="@file != ''">
       <xsl:text>'file' =&gt;'</xsl:text><xsl:value-of select="@file"/><xsl:text>',</xsl:text>
     </xsl:if>

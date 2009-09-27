@@ -27,10 +27,10 @@ function blocks_userapi_get($args)
     // The getall function does the main work.
     if (!empty($bid)) {
       // CHECKME: & removed below
-        $instances = xarModAPIfunc('blocks', 'user', 'getall', array('bid' => $bid));
+        $instances = xarMod::apiFunc('blocks', 'user', 'getall', array('bid' => $bid));
     } else {
         // CHECKME: & removed below 
-        $instances = xarModAPIfunc('blocks', 'user', 'getall', array('name' => $name));
+        $instances = xarMod::apiFunc('blocks', 'user', 'getall', array('name' => $name));
     }
 
     // If exactly one row was found then return it.

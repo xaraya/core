@@ -32,32 +32,32 @@ function modules_adminapi_removewithdependents ($args)
     if (!isset($mainId)) throw new EmptyParameterException('regid');
 
     // See if we have lost any modules since last generation
-    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
+    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {
         xarLogMessage('Missing module since last generation');
         return;
     }
 
     //Get the dependents list
-    $dependents = xarModAPIFunc('modules','admin','getalldependents',array('regid'=>$mainId));
+    $dependents = xarMod::apiFunc('modules','admin','getalldependents',array('regid'=>$mainId));
     xarLogVariable('dependents',$dependents);
 
     //Deactivate Actives
     foreach ($dependents['active'] as $active_dependent) {
-        if (!xarModAPIFunc('modules', 'admin', 'deactivate', array('regid' => $active_dependent['regid']))) {
+        if (!xarMod::apiFunc('modules', 'admin', 'deactivate', array('regid' => $active_dependent['regid']))) {
             throw new BadParameterException($active_dependent['displayname'],'Unable to deactivate module "#(1)".');
         }
     }
     
     //Remove the previously active
     foreach ($dependents['active'] as $active_dependent) {
-        if (!xarModAPIFunc('modules', 'admin', 'remove', array('regid' => $active_dependent['regid']))) {
+        if (!xarMod::apiFunc('modules', 'admin', 'remove', array('regid' => $active_dependent['regid']))) {
             throw new BadParameterException($active_dependent['displayname'], 'Unable to remove module "#(1)".');
         }
     }
     
     //Remove the initialised
     foreach ($dependents['initialised'] as $active_dependent) {
-        if (!xarModAPIFunc('modules', 'admin', 'remove', array('regid' => $active_dependent['regid']))) {
+        if (!xarMod::apiFunc('modules', 'admin', 'remove', array('regid' => $active_dependent['regid']))) {
             throw new BadParameterException($active_dependent['displayname'], 'Unable to remove module "#(1)".');
         }
     }

@@ -98,12 +98,12 @@ function themes_init()
         return false;
     }
 
-    if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
+    if (!xarMod::apiFunc('blocks', 'admin', 'register_block_type',
         array('modName' => 'themes', 'blockType' => 'meta'))) return;
 
     // Ensure the meta blocktype is registered
-    if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))) {
-        if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
+    if(!xarMod::apiFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))) {
+        if (!xarMod::apiFunc('blocks', 'admin', 'register_block_type',
                             array('modName' => 'themes',
                                   'blockType' => 'meta'))) return;
     }

@@ -50,7 +50,7 @@ function roles_admin_addmember()
         return xarTplModule('roles','user','errors',array('layout' => 'circular_assignment'));
 
     // assign the child to the parent and bail if an error was thrown
-    if (!xarModAPIFUnc('roles','user','addmember', array('id' => $id, 'gid' => $roleid))) return;
+    if (!xarMod::apiFunc('roles','user','addmember', array('id' => $id, 'gid' => $roleid))) return;
 
     // redirect to the next page
     xarResponse::Redirect(xarModURL('roles', 'admin', 'modify',

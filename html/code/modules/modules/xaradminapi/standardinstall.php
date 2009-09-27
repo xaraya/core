@@ -29,14 +29,14 @@ function modules_adminapi_standardinstall($args)
             $data = array_merge($data,$dd_object);
         }
 
-        $objectid = xarModAPIFunc('dynamicdata','util','import', $data);
+        $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
         if (!$objectid) return;
         else $dd_objects[$name] = $objectid;
         // Let data import be allowed to be empty
         if(file_exists($dat_file)) {
             $data['file'] = $dat_file;
             // And allow it to fail for now
-            $objectid = xarModAPIFunc('dynamicdata','util','import', $data);
+            $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
         }
     }
 

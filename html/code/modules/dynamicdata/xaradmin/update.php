@@ -13,7 +13,7 @@
  * Update current item
  *
  * This is a standard function that is called with the results of the
- * form supplied by xarModFunc('dynamicdata','admin','modify') to update a current item
+ * form supplied by xarMod::guiFunc('dynamicdata','admin','modify') to update a current item
  *
  * @param int    objectid
  * @param int    module_id
@@ -54,11 +54,11 @@ function dynamicdata_admin_update($args)
     $isvalid = $myobject->checkInput(array(), 0, 'dd');
 
     // recover any session var information
-    $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
+    $data = xarMod::apiFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
     extract($data);
 
     if (!empty($preview) || !$isvalid) {
-        $data = array_merge($data, xarModAPIFunc('dynamicdata','admin','menu'));
+        $data = array_merge($data, xarMod::apiFunc('dynamicdata','admin','menu'));
         $data['object'] = & $myobject;
 
         $data['objectid'] = $myobject->objectid;
@@ -105,13 +105,13 @@ function dynamicdata_admin_update($args)
             // no alias defined yet, so we create one
             if ($alias == $name) {
                 $args = array('modName'=>'dynamicdata', 'aliasModName'=> $name);
-                xarModAPIFunc('modules', 'admin', 'add_module_alias', $args);
+                xarMod::apiFunc('modules', 'admin', 'add_module_alias', $args);
             }
         } else {
             // this was a defined alias, so we remove it
             if ($alias == 'dynamicdata') {
                 $args = array('modName'=>'dynamicdata', 'aliasModName'=> $name);
-                xarModAPIFunc('modules', 'admin', 'delete_module_alias', $args);
+                xarMod::apiFunc('modules', 'admin', 'delete_module_alias', $args);
             }
         }
 
