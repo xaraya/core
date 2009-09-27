@@ -11,35 +11,27 @@
 sys::import('blocklayout.template.compiled');
 
 /**
- * Define an interface for the SourceTemplate class so we obey our own stuff.
-**/
-interface ISourceTemplate
-{
-    function &compile($add_comments=0);
-}
-
-/**
  * Class to model the source template
  *
  * @package blocklayout
  * @todo    decorate this with a Stream object so we can compile anything that is a stream.
 **/
-class SourceTemplate extends CompiledTemplate implements ISourceTemplate
+class XarayaSourceTemplate extends CompiledTemplate
 {
     /**
      * compile a source template into templatecode
      *
      * @return string the compiled template code.
     **/
-    public function &compile($add_comments=0) 
+    public function &compile() 
     {
         assert('isset($this->fileName); /* No source to compile from */');
-        sys::import('blocklayout.compiler');
-        $blCompiler = xarBLCompiler::instance();
-        $templateCode = $blCompiler->compileFile($this->fileName);
+        sys::import('xaraya.compiler');
+        $compiler = XarayaCompiler::instance();
+        $templateCode = $compiler->compileFile($this->fileName);
 
         $out = '';
-        if($add_comments) {
+        if(xarTpl_outputPHPCommentBlockInTemplates()) {
             // FIXME: this is weird stuff:
             // theme is irrelevant, date is seen in the filesystem, sourcefile in CACHEKEYS, why? it complicates the system a lot.
             $commentBlock = "<?php\n/*"
