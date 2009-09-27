@@ -77,7 +77,7 @@ function &xarDBNewConn(array $args = null)
     $flags |= xarDB::COMPAT_ASSOC_LOWER;
 
     $conn = xarDB::getConnection($dsn,$flags); // cached on dsn hash, so no worries
-    xarLogMessage("New connection created, now serving " . count(xarDB::$count) . " connections");
+    xarLogMessage("New connection created, now serving " . xarDB::$count . " connections");
     return $conn;
 }
 ?>
