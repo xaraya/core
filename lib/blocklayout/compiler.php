@@ -17,7 +17,9 @@
  */
 
 /* This one exception depends on BL being inside Xaraya, try to correct this later */
-sys::import('xaraya.exceptions');
+if (!class_exists('xarExceptions')) {
+    sys::import('xaraya.exceptions');
+}
 /**
  * Exceptions raised by this subsystem
  *
@@ -97,7 +99,9 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         }
 
         fclose($fp);
-        sys::import('xaraya.log');
+        if (!function_exists('xarLogMessage')) {
+            sys::import('xaraya.log');
+        }
         xarLogMessage("BL: compiling $fileName");
 
         $res = $this->compile($templateSource);

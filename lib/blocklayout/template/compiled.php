@@ -30,7 +30,7 @@ class CompiledTemplate extends Object
         $this->type     = $type;
     }
 
-    public function &execute(&$bindvars)
+    public function &execute(&$bindvars, $caching = 0)
     {
         assert('isset($this->fileName); /* No source to execute from */');
         assert('file_exists($this->fileName); /* Compiled templated disappeared in mid air, race condition? */');
@@ -49,11 +49,6 @@ class CompiledTemplate extends Object
 
         try {
             // If caching is enabled then cache it for subsequent reuse
-            try {
-                $caching = xarConfigVars::get(null, 'System.Core.Caching');
-            } catch (Exception $e) {
-                $caching = 0;
-            }
             if ($caching) {
                 // Set up a variable stream
                 sys::import('xaraya.streams.variables');

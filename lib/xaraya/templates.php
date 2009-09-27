@@ -559,7 +559,13 @@ function xarTplString($templateCode, &$tplData)
     // Execute the cache file
     sys::import('blocklayout.template.compiled');
     $compiled = new CompiledTemplate(xarTemplateCache::cacheFile('memory'));
-    $out = $compiled->execute($tplData);
+    try {
+// TODO: rename to Site.BL.VarCacheTemplates or whatever, and move config to themes like the other BL options
+        $caching = xarConfigVars::get(null, 'System.Core.Caching');
+    } catch (Exception $e) {
+        $caching = 0;
+    }
+    $out = $compiled->execute($tplData, $caching);
     return $out;
 }
 
@@ -724,7 +730,8 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
 
         // Compile it
         // @todo return a CompiledTemplate object here?
-        $templateCode = $srcTemplate->compile();
+        $add_comments = xarTpl_outputPHPCommentBlockInTemplates();
+        $templateCode = $srcTemplate->compile($add_comments);
 
         // Save the entry in templatecache (if active)
         xarTemplateCache::saveEntry($sourceFileName,$templateCode);
@@ -738,7 +745,13 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     // @todo the tplType should be irrelevant
     sys::import('blocklayout.template.compiled');
     $compiled = new CompiledTemplate($cachedFileName,$sourceFileName,$tplType);
-    $output = $compiled->execute($tplData);
+    try {
+// TODO: rename to Site.BL.VarCacheTemplates or whatever, and move config to themes like the other BL options
+        $caching = xarConfigVars::get(null, 'System.Core.Caching');
+    } catch (Exception $e) {
+        $caching = 0;
+    }
+    $output = $compiled->execute($tplData, $caching);
     return $output;
 }
 
