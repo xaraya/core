@@ -35,7 +35,7 @@ function modules_admin_deactivate ()
     xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
 
     // set the target location (anchor) to go to within the page
-    $minfo=xarModGetInfo($id);
+    $minfo=xarMod::getInfo($id);
     $target=$minfo['name'];
 
     // If we haven't been to the deps GUI, check that first

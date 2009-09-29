@@ -735,7 +735,7 @@ function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
 function xarModGetIDFromName($modName, $type = 'module')
 {   return xarMod::getRegID($modName, $type); }
 
-function xarModgetInfo($modRegId, $type = 'module')
+function xarModGetInfo($modRegId, $type = 'module')
 {   return xarMod::getInfo($modRegId, $type); }
 
 function xarMod_getBaseInfo($modName, $type = 'module')

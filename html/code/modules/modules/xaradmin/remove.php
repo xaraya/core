@@ -36,7 +36,7 @@ function modules_admin_remove ()
     //Checking if the user has already passed thru the GUI:
     xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
 
-    $minfo=xarModGetInfo($id);
+    $minfo=xarMod::getInfo($id);
 
     // set the target location (anchor) to go to within the page
     $target=$minfo['name'];

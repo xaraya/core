@@ -23,7 +23,7 @@ function modules_adminapi_activate ($args)
     // Argument check
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
-    $modInfo = xarModGetInfo($regid);
+    $modInfo = xarMod::getInfo($regid);
 
     if($modInfo['state'] == XARMOD_STATE_UNINITIALISED) {
         throw new Exception("Calling activate function while module is uninitialised");

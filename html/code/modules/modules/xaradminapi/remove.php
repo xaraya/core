@@ -29,7 +29,7 @@ function modules_adminapi_remove($args)
     $tables = xarDB::getTables();
 
     // Get module information
-    $modinfo = xarModGetInfo($regid);
+    $modinfo = xarMod::getInfo($regid);
 
     //TODO: Add check if there is any dependents
     // Make the whole thing atomic

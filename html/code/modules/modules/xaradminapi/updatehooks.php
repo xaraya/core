@@ -32,7 +32,7 @@ function modules_adminapi_updatehooks($args)
     $xartable = xarDB::getTables();
 
     // Get module name
-    $modinfo = xarModGetInfo($regid);
+    $modinfo = xarMod::getInfo($regid);
     if (empty($modinfo['name'])) {
         throw new ModuleNotFoundException($regid,'Invalid module name found while updating hooks for module with regid #(1)');
     }

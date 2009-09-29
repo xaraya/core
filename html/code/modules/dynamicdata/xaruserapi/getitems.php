@@ -49,7 +49,7 @@ function &dynamicdata_userapi_getitems($args)
             $module_id = xarMod::getRegID($modname);
         }
     }
-    $modinfo = xarModGetInfo($module_id);
+    $modinfo = xarMod::getInfo($module_id);
 
     if (empty($itemtype)) {
         $itemtype = 0;

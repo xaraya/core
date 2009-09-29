@@ -26,7 +26,7 @@ function modules_adminapi_executeinitfunction ($args)
     if (!isset($args['regid'])) throw new EmptyParameterException('regid');
 
     // Get module information
-    $modInfo = xarModGetInfo($args['regid']);
+    $modInfo = xarMod::getInfo($args['regid']);
 
     if (!isset($modInfo['osdirectory']) ||
         empty($modInfo['osdirectory']) ||

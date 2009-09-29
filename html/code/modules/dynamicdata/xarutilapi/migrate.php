@@ -70,7 +70,7 @@ function dynamicdata_utilapi_migrate($args)
         $itemids = explode(',',$from['itemid']);
     }
 
-    $modinfo = xarModGetInfo($from['module']);
+    $modinfo = xarMod::getInfo($from['module']);
     if (empty($modinfo)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('from module', 'admin', 'migrate', 'DynamicData');
@@ -78,7 +78,7 @@ function dynamicdata_utilapi_migrate($args)
     }
     $modulefrom = $modinfo['name'];
 
-    $modinfo = xarModGetInfo($to['module']);
+    $modinfo = xarMod::getInfo($to['module']);
     if (empty($modinfo)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('to module', 'admin', 'migrate', 'DynamicData');

@@ -51,7 +51,7 @@ function modules_adminapi_getalldependencies($args)
 
     // Get module information
     try {
-        $modInfo = xarModGetInfo($mainId);
+        $modInfo = xarMod::getInfo($mainId);
     } catch (NotFoundExceptions $e) {
         //Add this module to the unsatisfiable list
         $dependency_array['unsatisfiable'][] = $mainId;

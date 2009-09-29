@@ -25,7 +25,7 @@ function modules_adminapi_initialise($args)
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Get module information
-    $modInfo = xarModGetInfo($regid);
+    $modInfo = xarMod::getInfo($regid);
     if (!isset($modInfo)) throw new ModuleNotFoundException($regid,'Module (regid: $regid) does not exist.');
 
     //Checks module dependency

@@ -49,7 +49,7 @@ function dynamicdata_utilapi_importproperties($args)
                                 array('module_id' => $module_id,
                                       'itemtype' => $itemtype));
         if (!isset($object)) {
-            $modinfo = xarModGetInfo($module_id);
+            $modinfo = xarMod::getInfo($module_id);
             $name = $modinfo['name'];
             if (!empty($itemtype)) {
                 $name .= '_' . $itemtype;

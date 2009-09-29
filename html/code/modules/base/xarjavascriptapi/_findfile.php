@@ -51,7 +51,7 @@ function base_javascriptapi__findfile($args)
 
     // Get details for the module if we have a valid module id.
     if (!empty($modid)) {
-        $modInfo = xarModGetInfo($modid);
+        $modInfo = xarMod::getInfo($modid);
 
         // Get module directory if we have a valid module.
         if (!empty($modInfo)) {

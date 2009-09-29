@@ -106,7 +106,7 @@ function modules_admin_list()
         $listrows[$i]['modid'] = $thismodid;
         // if this module has been classified as 'Core'
         // we will disable certain actions
-        $modinfo = xarModGetInfo($thismodid);
+        $modinfo = xarMod::getInfo($thismodid);
         $coremod = in_array(strtolower($modinfo['name']),$coreMods);
 
         // lets omit core modules if a user chosen to hide them from the list

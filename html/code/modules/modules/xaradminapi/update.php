@@ -31,7 +31,7 @@ function modules_adminapi_update($args)
     $xartable = xarDB::getTables();
 
     // Get module name
-    $modinfo = xarModGetInfo($regid);
+    $modinfo = xarMod::getInfo($regid);
 
     // Make it atomic
     try {

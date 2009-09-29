@@ -110,7 +110,7 @@ function dynamicdata_util_migrate($args)
         } elseif (!empty($from['module'])) {
             // we have a from module
             $data['from']['module'] = $from['module'];
-            $modinfo = xarModGetInfo($from['module']);
+            $modinfo = xarMod::getInfo($from['module']);
 
             // get the list of itemtypes for this module
             $itemtypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
@@ -219,7 +219,7 @@ function dynamicdata_util_migrate($args)
         } elseif (!empty($to['module'])) {
             // we have a to module
             $data['to']['module'] = $to['module'];
-            $modinfo = xarModGetInfo($to['module']);
+            $modinfo = xarMod::getInfo($to['module']);
 
             // get the list of itemtypes for this module
             $itemtypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',

@@ -59,7 +59,7 @@ function dynamicdata_admin_modifyprop()
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
 
-    $modinfo = xarModGetInfo($module_id);
+    $modinfo = xarMod::getInfo($module_id);
     if (!isset($objectinfo)) {
         $data['objectid'] = null;
         if (!empty($itemtype)) {

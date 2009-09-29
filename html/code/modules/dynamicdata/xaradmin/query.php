@@ -368,7 +368,7 @@ function dynamicdata_admin_query($args)
         if (!empty($table)) {
             $data['sample'] = '&lt;xar:data-view table="' . $table . '" ';
         } else {
-            $modinfo = xarModGetInfo($data['object']->moduleid);
+            $modinfo = xarMod::getInfo($data['object']->moduleid);
             $modname = $modinfo['name'];
             $data['sample'] = '&lt;xar:data-view module="' . $modname . '" itemtype="' . $data['object']->itemtype . '" ';
             if (!empty($join)) {

@@ -49,7 +49,7 @@ function dynamicdata_user_display($args)
 
     $data = array();
 
-    $modinfo = xarModGetInfo($args['moduleid']);
+    $modinfo = xarMod::getInfo($args['moduleid']);
     $item = array();
     $item['module'] = $modinfo['name'];
     $item['itemtype'] = $args['itemtype'];
