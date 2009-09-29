@@ -24,6 +24,13 @@
 **/
 
 /**
+ * Get the public properties of an object (this must be done outside the class)
+**/
+function xarBoot_getPublicObjectProperties($obj) {
+    return get_object_vars($obj);
+}
+
+/**
  * The Object class from which all other classes should be derived.
  *
  * This is basically a placeholder extending from stdClass so we have a
@@ -106,6 +113,10 @@ class Object extends stdClass
     **/
     public function getPublicProperties()
     {
+        // this is about as fast as it gets - unless you don't even need the values,
+        // in which case you could cache the list of public properties (in private)
+        return xarBoot_getPublicObjectProperties($this);
+/* too much self-reflection is bad for the soul ... or at least for performance ;-)
         $properties = array();
         $cl = $this->getClass();
         foreach($cl->getProperties() as $ix => $p) {
@@ -113,6 +124,7 @@ class Object extends stdClass
                 $properties[$p->getName()] = $p->getValue($this);
         }
         return $properties;
+*/
     }
 }
 
@@ -132,7 +144,7 @@ abstract class Reflectable extends Object
 }
 
 /**
- * A class to model a class in PHP
+ * A class to model a class in PHP (no longer used above)
  *
  * The purpose of this class is mainly to support the getClass() method
  * of the Object class above, but i can see it grow a bit further later on.
