@@ -29,6 +29,7 @@ class xarPrivileges extends xarMasks
      */
     public static function defineInstance($module,$type,$instances,$propagate=0,$table2='',$childID='',$parentID='',$description='')
     {
+        parent::initialize();
         foreach($instances as $instance) {
             // make privilege wizard URLs relative, for easier migration of sites
             if (!empty($instance['header']) && $instance['header'] == 'external' && !empty($instance['query'])) {

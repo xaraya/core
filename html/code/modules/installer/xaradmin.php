@@ -413,10 +413,13 @@ function installer_admin_phase5()
     sys::import('xaraya.security');
     sys::import('xaraya.modules');
 
-    $modules = array('base','modules','roles','privileges');
-    foreach ($modules as $module)
-        if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;;
-
+    // 1. Load base and modules module
+    $modules = array('base','modules');
+    foreach ($modules as $module) {
+        if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;
+    }
+        
+    // 2. Load the definitions of all the modules in the modules table
     $prefix = xarDB::getPrefix();
     $modulesTable = $prefix .'_modules';
     $tables =& xarDB::getTables();
@@ -427,8 +430,7 @@ function installer_admin_phase5()
                     VALUES (?,?,?,?,?,?,?,?,?)";
     $newStmt     = $dbconn->prepareStatement($newModSql);
 
-
-    $modules = array('authsystem','roles','privileges','installer','blocks','themes');
+    $modules = array('authsystem','roles','privileges','installer','blocks','themes','dynamicdata','mail');
     // Series of updates, begin transaction
     try {
         $dbconn->begin();
@@ -454,12 +456,19 @@ function installer_admin_phase5()
         $dbconn->rollback();
         throw $e;
     }
+    
+    // 3. Initialize all the modules we haven't yet
+    $modules = array('privileges','roles','blocks','authsystem','themes','dynamicdata','mail');
+    foreach ($modules as $module) {
+        try {
+            sys::import('modules.' . $module . '.xartables');
+            $tablefunc = $module . '_xartables';
+            if (function_exists($tablefunc)) xarDB::importTables($tablefunc());
+        } catch (Exception $e) {}
+        if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;
+    }
 
-    $modules = array('blocks','authsystem','themes');
-    foreach ($modules as $module)
-        if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;;
-
-    if (!xarInstallAPIFunc('initialise', array('directory'=>'authsystem', 'initfunc'=>'activate'))) return;;
+    if (!xarInstallAPIFunc('initialise', array('directory'=>'authsystem', 'initfunc'=>'activate'))) return;
 
     // TODO: is this is correct place for a default value for a modvar?
     xarModVars::set('base', 'AlternatePageTemplate', 'homepage');
@@ -500,22 +509,8 @@ function installer_admin_bootstrap()
     xarVarSetCached('installer','installing', true);
 
     // load modules into *_modules table
-    if (!xarMod::apiFunc('modules', 'admin', 'regenerate'))
-        throw new Exception("regenerating module list failed");
-
-     // Initialise and activate dynamic data
-    $modlist = array('dynamicdata');
-    foreach ($modlist as $mod) {
-        // Initialise the module
-        $regid = xarMod::getRegID($mod);
-        if (isset($regid)) {
-            if (!xarMod::apiFunc('modules', 'admin', 'initialise', array('regid' => $regid)))
-                 throw new Exception("Initalising module with regid : $regid failed");
-            // Activate the module
-            if (!xarMod::apiFunc('modules', 'admin', 'activate', array('regid' => $regid)))
-                throw new Exception("Activating module with regid: $regid failed");
-        }
-    }
+//    if (!xarMod::apiFunc('modules', 'admin', 'regenerate'))
+//        throw new Exception("regenerating module list failed");
 
 # --------------------------------------------------------
 # Create DD configuration and sample objects
@@ -536,7 +531,6 @@ function installer_admin_bootstrap()
 //                   'modules_hooks',
 //                   'modules_modvars',
                      );
-
     if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'modules', 'objects' => $objects))) return;
 
     $objects = array(
