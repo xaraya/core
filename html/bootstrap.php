@@ -242,7 +242,7 @@ final class sys extends Object
     private static $root = null;            // Save our root location
     private static $lib  = null;            // Save our lib location
     private static $code = null;            // Save our code location
-    private static $shortpath = null;            // Save our code location relative to the doc root
+    private static $shortpath = null;       // Save our code location relative to the doc root
 
     private function __construct()
     {} // no objects can be made out of this.

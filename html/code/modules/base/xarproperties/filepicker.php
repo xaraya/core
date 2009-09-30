@@ -84,7 +84,8 @@ class FilePickerProperty extends SelectProperty
         if (empty($this->initialization_basedirectory)) return array();
         // this works with relative directories
         $dir = new RelativeDirectoryIterator($this->initialization_basedirectory);
-
+        if ($dir == false) return array();
+        
         for($dir->rewind();$dir->valid();$dir->next()) {
             if($dir->isDir()) continue; // no dirs
             if(!$this->validateExtension($dir->getExtension())) continue;
