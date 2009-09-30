@@ -282,7 +282,7 @@ class MenuBlock extends BasicBlock implements iBlock
                 if (empty($usermods)) $usermods = '';
             } else {
                 $modid = xarMod::getRegID('roles');
-                $modinfo = xarModGetInfo($modid);
+                $modinfo = xarMod::getInfo($modid);
                 if ($modinfo){
                     $title = $modinfo['displaydescription'];
                 } else {

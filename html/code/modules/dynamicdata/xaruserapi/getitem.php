@@ -44,7 +44,7 @@ function &dynamicdata_userapi_getitem($args)
     } elseif (empty($module_id)) {
         $module_id = $moduleid;
     }
-    $modinfo = xarModGetInfo($module_id);
+    $modinfo = xarMod::getInfo($module_id);
 
     if (empty($itemtype)) $itemtype = 0;
 

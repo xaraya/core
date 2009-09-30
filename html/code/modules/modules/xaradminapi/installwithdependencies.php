@@ -21,7 +21,7 @@ function modules_adminapi_installwithdependencies ($args)
 {
     // Get module information
     $mainId = $args['regid'];
-    $modInfo = xarModGetInfo($mainId);
+    $modInfo = xarMod::getInfo($mainId);
     if (!isset($modInfo)) {
         throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
     }
@@ -54,7 +54,7 @@ function modules_adminapi_installwithdependencies ($args)
             // See if we have lost any modules since last generation
             if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) return;
 
-            // Make xarModGetInfo not cache anything...
+            // Make xarMod::getInfo not cache anything...
             //We should make a funcion to handle this or maybe whenever we
             //have a central caching solution...
             $GLOBALS['xarMod_noCacheState'] = true;

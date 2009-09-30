@@ -35,13 +35,13 @@ function modules_adminapi_deactivatewithdependents ($args)
         return;
     }
 
-    // Make xarModGetInfo not cache anything...
+    // Make xarMod::getInfo not cache anything...
     //We should make a funcion to handle this instead of seeting a global var
     //or maybe whenever we have a central caching solution...
     $GLOBALS['xarMod_noCacheState'] = true;
 
     // Get module information
-    $modInfo = xarModGetInfo($mainId);
+    $modInfo = xarMod::getInfo($mainId);
     if (!isset($modInfo)) throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
 
 

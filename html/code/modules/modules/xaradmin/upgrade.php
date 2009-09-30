@@ -40,7 +40,7 @@ function modules_admin_upgrade()
     // TODO: give the user the opportunity to upgrade the dependancies automatically.
     try {
         xarMod::apiFunc('modules', 'admin', 'verifydependency', array('regid'=>$id));
-        $minfo=xarModGetInfo($id);
+        $minfo=xarMod::getInfo($id);
         //Bail if we've lost our module
         if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_UPGRADED) {
             // Upgrade module

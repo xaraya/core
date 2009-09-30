@@ -25,7 +25,7 @@ function modules_adminapi_deactivate ($args)
     // Argument check
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
-    $modInfo = xarModGetInfo($regid);
+    $modInfo = xarMod::getInfo($regid);
 
     //Shouldnt we check first if the module is alredy ACTIVATED????
     //What should we do with UPGRADED STATE? What is it meant to?

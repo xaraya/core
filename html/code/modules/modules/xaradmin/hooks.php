@@ -101,7 +101,7 @@ function modules_admin_hooks($args)
 
         // Get module display name
         $regid = xarMod::getRegID($hookmodname);
-        $modinfo = xarModGetInfo($regid);
+        $modinfo = xarMod::getInfo($regid);
         $data['hookmodules'][] = array('modid' => $regid,
                                        'modname' => $hookmodname,
                                        'modtitle' => $modinfo['description'],

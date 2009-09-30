@@ -32,7 +32,7 @@ function modules_admin_modinfo()
     
     if (!xarVarFetch('id', 'int:1:', $id)) return; 
     // obtain maximum information about module
-    $modinfo = xarModGetInfo($id);
+    $modinfo = xarMod::getInfo($id);
     
     // data vars for template
     $data['modid']              = xarVarPrepForDisplay($id);

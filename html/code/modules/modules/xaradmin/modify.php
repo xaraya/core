@@ -30,7 +30,7 @@ function modules_admin_modify($args)
     xarVarFetch('id','id',$id);
     xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET);
 
-    $modInfo = xarModGetInfo($id);
+    $modInfo = xarMod::getInfo($id);
     if (!isset($modInfo)) return;
 
     $modName     = $modInfo['name'];

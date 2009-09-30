@@ -28,11 +28,11 @@ function modules_adminapi_removemissing($args)
 
     //    if (!xarVarFetch('remove', 'str', $remove, NULL, XARVAR_NOT_REQUIRED)) return;
     // Get module information
-    //    $modinfo = xarModGetInfo($regid);
+    //    $modinfo = xarMod::getInfo($regid);
     $dbconn = xarDB::getConn();
     $tables = xarDB::getTables();
 
-    $modInfo = xarModGetInfo($regid);
+    $modInfo = xarMod::getInfo($regid);
     $modId = $modInfo['systemid'];
     // Make what we do at least atomic
     try {

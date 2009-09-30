@@ -54,7 +54,7 @@ function modules_admin_install()
         //3rd has only 'regid' key with the ID of the module
 
         // get any dependency info on this module for a better message if something is missing
-            $thisinfo = xarModGetInfo($id);
+            $thisinfo = xarMod::getInfo($id);
             $data['displayname'] = $thisinfo['displayname'];
         if (!empty($thisinfo['dependencyinfo'])) {
             $data['dependencyinfo'] = $thisinfo['dependencyinfo'];
@@ -73,7 +73,7 @@ function modules_admin_install()
 
     xarSession::setVar('installing',true);
 
-    $minfo = xarModGetInfo($id);
+    $minfo = xarMod::getInfo($id);
 
     //Bail if we've lost our module
     if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_INACTIVE) {

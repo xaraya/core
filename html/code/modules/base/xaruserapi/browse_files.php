@@ -84,7 +84,7 @@ function base_userapi_browse_files($args)
     // If the module is set, then find its home.
     if (!empty($module)) {
         // Assume for now that we are looking only in the module home directory.
-        $modinfo = xarModGetInfo(xarMod::getRegID($module));
+        $modinfo = xarMod::getInfo(xarMod::getRegID($module));
         if (!empty($modinfo)) {
             $rootdir = './modules/' . $modinfo['directory'];
         }

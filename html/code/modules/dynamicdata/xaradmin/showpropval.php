@@ -52,7 +52,7 @@ function dynamicdata_admin_showpropval($args)
     /* FIXME: can we do without this hardwiring? Comment out for now
     $module_id = $myobject->properties['module_id']->value;
     $itemtype = $myobject->properties['itemtype']->value;
-    $modinfo = xarModGetInfo($module_id);
+    $modinfo = xarMod::getInfo($module_id);
     if (xarModIsHooked('uploads', $modinfo['name'], $itemtype)) {
         xarVarSetCached('Hooks.uploads','ishooked',1);
     }

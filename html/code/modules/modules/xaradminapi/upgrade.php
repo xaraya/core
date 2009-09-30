@@ -25,7 +25,7 @@ function modules_adminapi_upgrade($args)
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Get module information
-    $modInfo = xarModGetInfo($regid);
+    $modInfo = xarMod::getInfo($regid);
     if (empty($modInfo)) {
         xarSession::setVar('errormsg', xarML('No such module'));
         return false;

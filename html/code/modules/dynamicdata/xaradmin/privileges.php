@@ -129,7 +129,7 @@ function dynamicdata_admin_privileges($args)
         $module_id = $object['moduleid'];
         // Check whether the module exists before trying to fetch the details.
         if (in_array($module_id, $all_module_ids)) {
-            $modinfo = xarModGetInfo($module_id);
+            $modinfo = xarMod::getInfo($module_id);
             $modlist[$module_id] = $modinfo['displayname'];
         }
     }

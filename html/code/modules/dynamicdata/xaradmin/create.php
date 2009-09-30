@@ -65,8 +65,8 @@ function dynamicdata_admin_create($args)
         }
 
         // Makes this hooks call explictly from DD
-        //$modinfo = xarModGetInfo($myobject->moduleid);
-        $modinfo = xarModGetInfo(182);
+        //$modinfo = xarMod::getInfo($myobject->moduleid);
+        $modinfo = xarMod::getInfo(182);
         $item = array();
         foreach (array_keys($myobject->properties) as $name) {
             $item[$name] = $myobject->properties[$name]->value;

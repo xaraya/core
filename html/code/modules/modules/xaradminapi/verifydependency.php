@@ -30,7 +30,7 @@ function modules_adminapi_verifydependency($args)
     if (!isset($mainId)) throw new EmptyParameterException('mainId');
 
     // Get module information
-    $modInfo = xarModGetInfo($mainId);
+    $modInfo = xarMod::getInfo($mainId);
     if (!isset($modInfo)) throw new ModuleBaseInfoNotFoundException("with regid $regid");
 
     // See if we have lost any modules since last generation

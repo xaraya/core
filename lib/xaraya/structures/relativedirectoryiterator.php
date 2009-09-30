@@ -4,7 +4,9 @@
     {
         public function __construct($file)
         {
-            parent::__construct(realpath($file));
+            $realpath = realpath($file);
+            if (!$realpath) return false;
+            parent::__construct($realpath);
         }
 
         public function getExtension()

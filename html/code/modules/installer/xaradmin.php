@@ -880,7 +880,7 @@ function installer_admin_confirm_configuration()
     foreach ($modules as $module) {
         if (in_array($module['name'],array_keys($fileModules))) {
             if ($module['regid'] == $fileModules[$module['name']]['regid']) {
-                $modInfo = xarModGetInfo($module['regid']);
+                $modInfo = xarMod::getInfo($module['regid']);
                 if ($modInfo['state'] == XARMOD_STATE_ACTIVE ||
                     $modInfo['state'] == XARMOD_STATE_INACTIVE) {
                     $installedmodules[] = ucfirst($module['name']);

@@ -36,7 +36,7 @@ function modules_adminapi_setstate($args)
     }
 
     //Get module info
-    $modInfo = xarModGetInfo($regid);
+    $modInfo = xarMod::getInfo($regid);
 
     //Set up database object
     $dbconn = xarDB::getConn();

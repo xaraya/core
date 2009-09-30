@@ -48,7 +48,7 @@ function dynamicdata_admin_updateprop()
         $module_id = $objectinfo['moduleid'];
         $itemtype = $objectinfo['itemtype'];
     } elseif (!empty($module_id)) {
-        $modinfo = xarModGetInfo($module_id);
+        $modinfo = xarMod::getInfo($module_id);
         if (!empty($modinfo['name'])) {
             $name = $modinfo['name'];
             if (!empty($itemtype)) {
@@ -173,7 +173,7 @@ function dynamicdata_admin_updateprop()
     }
 
     if ($isprimary) {
-        $modinfo = xarModGetInfo($module_id);
+        $modinfo = xarMod::getInfo($module_id);
         xarModCallHooks('module','updateconfig',$modinfo['name'],
                         array('module' => $modinfo['name'],
                               'itemtype' => $itemtype));

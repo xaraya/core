@@ -33,7 +33,7 @@ function dynamicdata_utilapi_getstatic($args)
     if (empty($module_id)) {
         $module_id = xarMod::getRegID(xarModGetName());
     }
-    $modinfo = xarModGetInfo($module_id);
+    $modinfo = xarMod::getInfo($module_id);
     if (empty($itemtype)) {
         $itemtype = 0;
     }

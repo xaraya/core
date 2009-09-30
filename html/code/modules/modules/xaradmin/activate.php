@@ -40,7 +40,7 @@ function modules_admin_activate()
 
     //throw back
     if (!isset($activated)) return;
-    $minfo=xarModGetInfo($id);
+    $minfo=xarMod::getInfo($id);
     // set the target location (anchor) to go to within the page
     $target=$minfo['name'];
 

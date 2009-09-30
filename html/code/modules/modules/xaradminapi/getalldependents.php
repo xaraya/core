@@ -108,7 +108,7 @@ function modules_adminapi_getalldependents ($args)
     }
 
     // Get module information
-    $modInfo = xarModGetInfo($mainId);
+    $modInfo = xarMod::getInfo($mainId);
 
     //TODO: Add version checks later on
     switch ($modInfo['state']) {

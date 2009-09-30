@@ -27,7 +27,7 @@ function blocks_admin_new_type()
 
     // Initialise the list.
     $type_list = array();
-    $modinfo = xarModGetInfo($module_id);
+    $modinfo = xarMod::getInfo($module_id);
     if (!empty($scan)) {
         // 'Scan' button pressed.
     

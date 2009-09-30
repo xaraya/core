@@ -74,9 +74,9 @@ function dynamicdata_admin_modify($args)
     $data['preview'] = $preview;
     $data['tplmodule'] = $args['tplmodule'];   //TODO: is this needed
 
-    // $modinfo = xarModGetInfo($args['moduleid']);
+    // $modinfo = xarMod::getInfo($args['moduleid']);
     // Makes this hooks call explictly from DD
-    $modinfo = xarModGetInfo(182);
+    $modinfo = xarMod::getInfo(182);
     $item = array();
     foreach (array_keys($myobject->properties) as $name) {
         $item[$name] = $myobject->properties[$name]->value;
