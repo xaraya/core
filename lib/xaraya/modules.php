@@ -1060,7 +1060,9 @@ class xarMod extends Object implements IxarMod
         $modInfo['regid'] = (int) $modRegId;
         $modInfo['displayname'] = self::getDisplayName($modInfo['name'], $type);
         $modInfo['displaydescription'] = self::getDisplayDescription($modInfo['name'], $type);
-
+        $modInfo['systemid'] = (int)$modInfo['systemid'];
+        $modInfo['state'] = (int)$modInfo['state'];
+        
         // Shortcut for os prepared directory
         $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
 
@@ -1081,28 +1083,29 @@ class xarMod extends Object implements IxarMod
         if (!isset($modFileInfo)) {
             // We couldn't get file info, fill in unknowns.
             // The exception for this is logged in getFileInfo
-            $modFileInfo['class'] = xarML('Unknown');
+            $unknown = xarML('Unknown');
+            $modFileInfo['class'] = $unknown;
             $modFileInfo['description'] = xarML('This module is not installed properly. Not all info could be retrieved');
-            $modFileInfo['category'] = xarML('Unknown');
-            $modFileInfo['displayname'] = xarML('Unknown');
-            $modFileInfo['displaydescription'] = xarML('Unknown');
-            $modFileInfo['author'] = xarML('Unknown');
-            $modFileInfo['contact'] = xarML('Unknown');
-            $modFileInfo['admin'] = xarML('Unknown');
-            $modFileInfo['user'] = xarML('Unknown');
+            $modFileInfo['category'] = $unknown;
+            $modFileInfo['displayname'] = $unknown;
+            $modFileInfo['displaydescription'] = $unknown;
+            $modFileInfo['author'] = $unknown;
+            $modFileInfo['contact'] = $unknown;
+            $modFileInfo['admin'] = $unknown;
+            $modFileInfo['user'] = $unknown;
             $modFileInfo['dependency'] = array();
             $modFileInfo['extensions'] = array();
 
-            $modFileInfo['xar_version'] = xarML('Unknown');
-            $modFileInfo['bl_version'] = xarML('Unknown');
-            $modFileInfo['class'] = xarML('Unknown');
-            $modFileInfo['author'] = xarML('Unknown');
-            $modFileInfo['homepage'] = xarML('Unknown');
-            $modFileInfo['email'] = xarML('Unknown');
-            $modFileInfo['description'] = xarML('Unknown');
-            $modFileInfo['contactinfo'] = xarML('Unknown');
-            $modFileInfo['publishdate'] = xarML('Unknown');
-            $modFileInfo['license'] = xarML('Unknown');
+            $modFileInfo['xar_version'] = $unknown;
+            $modFileInfo['bl_version'] = $unknown;
+            $modFileInfo['class'] = $unknown;
+            $modFileInfo['author'] = $unknown;
+            $modFileInfo['homepage'] = $unknown;
+            $modFileInfo['email'] = $unknown;
+            $modFileInfo['description'] = $unknown;
+            $modFileInfo['contactinfo'] = $unknown;
+            $modFileInfo['publishdate'] = $unknown;
+            $modFileInfo['license'] = $unknown;
         }
 
         $modInfo = array_merge($modFileInfo, $modInfo);
