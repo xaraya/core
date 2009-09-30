@@ -465,10 +465,12 @@ function installer_admin_phase5()
             $tablefunc = $module . '_xartables';
             if (function_exists($tablefunc)) xarDB::importTables($tablefunc());
         } catch (Exception $e) {}
-        if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;
+        if (!xarInstallAPIFunc('initialise', array('directory' => $module, 'initfunc'  => 'init'))) return;
     }
 
     if (!xarInstallAPIFunc('initialise', array('directory'=>'authsystem', 'initfunc'=>'activate'))) return;
+    if (!xarInstallAPIFunc('initialise', array('directory'=>'privileges', 'initfunc'=>'activate'))) return;
+    if (!xarInstallAPIFunc('initialise', array('directory'=>'mail', 'initfunc'=>'activate'))) return;
 
     // TODO: is this is correct place for a default value for a modvar?
     xarModVars::set('base', 'AlternatePageTemplate', 'homepage');
@@ -567,6 +569,14 @@ function installer_admin_bootstrap()
         $data['module_settings']->initialize();
     }
 
+   $modlist = array('roles');
+    foreach ($modlist as $mod) {
+        $regid=xarMod::getRegID($mod);
+        if (!xarMod::apiFunc('modules','admin','activate',
+                           array('regid'=> $regid)))
+            throw new Exception("activation of $regid failed");//return;
+    }
+    
     // create the default roles and privileges setup
     sys::import('modules.privileges.xarsetup');
     initializeSetup();
@@ -580,17 +590,6 @@ function installer_admin_bootstrap()
     $regid = xarMod::getRegID('authsystem');
     if (empty($regid)) {
         die(xarML('I cannot load the Authsystem module. Please make it available and reinstall'));
-    }
-
-    // Set the state and activate the following modules
-    // jojodee - Modules, authsystem, base, installer, blocks and themes are already activated in base init
-    // We run them through roles and privileges as special cases that need an 'activate' phase. Others don't.
-   $modlist = array('roles','privileges','mail');
-    foreach ($modlist as $mod) {
-        $regid=xarMod::getRegID($mod);
-        if (!xarMod::apiFunc('modules','admin','activate',
-                           array('regid'=> $regid)))
-            throw new Exception("activation of $regid failed");//return;
     }
 
     // load themes into *_themes table
