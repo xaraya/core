@@ -301,6 +301,16 @@ function xarCache_getStorage($args)
             }
             break;
 
+        case 'xcache':
+            if (extension_loaded('xcache')) {
+                sys::import('xaraya.caching.storage.xcache');
+                $classname = 'xarCache_XCache_Storage';
+            } else {
+                sys::import('xaraya.caching.storage.filesystem');
+                $classname = 'xarCache_FileSystem_Storage';
+            }
+            break;
+
         case 'filesystem':
         default:
             sys::import('xaraya.caching.storage.filesystem');

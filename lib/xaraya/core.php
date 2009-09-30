@@ -286,6 +286,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
 
+/* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ?
+    sys::import('xaraya.autoload');
+    xarAutoload::initialize();
+*/
+
     /*
      * Bring HTTP Protocol Server/Request/Response utilities into the story
      *
