@@ -26,7 +26,8 @@
 /**
  * Get the public properties of an object (this must be done outside the class)
 **/
-function xarBoot_getPublicObjectProperties($obj) {
+function xarBoot_getPublicObjectProperties($obj) 
+{
     return get_object_vars($obj);
 }
 
@@ -116,15 +117,6 @@ class Object extends stdClass
         // this is about as fast as it gets - unless you don't even need the values,
         // in which case you could cache the list of public properties (in private)
         return xarBoot_getPublicObjectProperties($this);
-/* too much self-reflection is bad for the soul ... or at least for performance ;-)
-        $properties = array();
-        $cl = $this->getClass();
-        foreach($cl->getProperties() as $ix => $p) {
-            if ($p->isPublic())
-                $properties[$p->getName()] = $p->getValue($this);
-        }
-        return $properties;
-*/
     }
 }
 
