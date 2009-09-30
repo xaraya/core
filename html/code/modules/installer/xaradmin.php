@@ -581,16 +581,8 @@ function installer_admin_bootstrap()
     sys::import('modules.privileges.xarsetup');
     initializeSetup();
 
-    // Set up default user properties, etc.
-
     // load modules into *_modules table
     if (!xarMod::apiFunc('modules', 'admin', 'regenerate')) return;
-
-
-    $regid = xarMod::getRegID('authsystem');
-    if (empty($regid)) {
-        die(xarML('I cannot load the Authsystem module. Please make it available and reinstall'));
-    }
 
     // load themes into *_themes table
     if (!xarMod::apiFunc('themes', 'admin', 'regenerate')) {
