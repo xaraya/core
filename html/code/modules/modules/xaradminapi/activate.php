@@ -17,7 +17,6 @@
  */
 function modules_adminapi_activate ($args)
 {
-    //Shoudlnt we check first if the module is alredy INITIALISED????
     extract($args);
 
     // Argument check
