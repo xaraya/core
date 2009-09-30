@@ -1210,7 +1210,7 @@ class xarMod extends Object implements IxarMod
     {
         if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
 
-        if (empty($GLOBALS['xarMod_noCacheState']) && xarCore::isCached('Mod.getFileInfos', $modOsDir)) {
+        if (empty($GLOBALS['xarMod_noCacheState']) && xarCore::isCached('Mod.getFileInfos', $modOsDir ." / " . $type)) {
             return xarCore::getCached('Mod.getFileInfos', $modOsDir ." / " . $type);
         }
         // Log it when it didnt came from cache
