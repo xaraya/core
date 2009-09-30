@@ -43,8 +43,9 @@ function modules_adminapi_setstate($args)
     $xartable = xarDB::getTables();
 
     $oldState = $modInfo['state'];
-    if ($state == $oldState) return true;
+    $state = (int)$state;
 
+    if ($state == $oldState) return true;
     // Check valid state transition
     switch ($state) {
         case XARMOD_STATE_UNINITIALISED:

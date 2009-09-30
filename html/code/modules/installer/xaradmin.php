@@ -585,15 +585,9 @@ function installer_admin_bootstrap()
     // Set the state and activate the following modules
     // jojodee - Modules, authsystem, base, installer, blocks and themes are already activated in base init
     // We run them through roles and privileges as special cases that need an 'activate' phase. Others don't.
-   $modlist = array('roles','privileges');
+   $modlist = array('roles','privileges','mail');
     foreach ($modlist as $mod) {
-        // Set state to inactive first
         $regid=xarMod::getRegID($mod);
-        if (!xarMod::apiFunc('modules','admin','setstate',
-                           array('regid'=> $regid, 'state'=> XARMOD_STATE_INACTIVE)))
-            throw new Exception("setting state of $regid failed");//return;
-
-        // Activate the module
         if (!xarMod::apiFunc('modules','admin','activate',
                            array('regid'=> $regid)))
             throw new Exception("activation of $regid failed");//return;
@@ -620,22 +614,6 @@ function installer_admin_bootstrap()
             }
         }
     }
-
-    // Initialise and activate mail
-    $regid = xarMod::getRegID('mail');
-    if (!xarMod::apiFunc('modules', 'admin', 'initialise', array('regid' => $regid)))
-        throw new Exception("Initalising module with regid : $regid failed");
-    // Activate the module
-    if (!xarMod::apiFunc('modules', 'admin', 'activate', array('regid' => $regid)))
-        throw new Exception("Activating module with regid: $regid failed");
-
-    //initialise and activate base module by setting the states
-    $baseId = xarMod::getRegID('base');
-    if (!xarMod::apiFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_INACTIVE)))
-        throw new Exception("Setting state for module with regid: $baseId failed");
-    // Set module state to active
-    if (!xarMod::apiFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE)))
-        throw new Exception("Activating base $baseId module failed");
 
     xarResponse::Redirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
