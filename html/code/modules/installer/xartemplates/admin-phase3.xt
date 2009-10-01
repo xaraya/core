@@ -1,6 +1,17 @@
 <?xml version="1.0"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <style>
+        ul li.success {
+            list-style-image:  url(#sys::code()#modules/base/xarimages/icons/activate.png) !important;
+        }
+        ul li.failure {
+            list-style-image:  url(#sys::code()#modules/base/xarimages/icons/dialog-error.png) !important;
+        }
+        ul li.warning {
+            list-style-image:  url(#sys::code()#modules/base/xarimages/icons/dialog-warning.png) !important;
+        }
+    </style>
     <xar:set name="active_step">3</xar:set>
     <xar:set name="successtitle">'SUCCESS'</xar:set>
     <xar:set name="failuretitle">'FAILURE'</xar:set>

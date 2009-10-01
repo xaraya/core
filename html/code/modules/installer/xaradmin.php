@@ -472,6 +472,10 @@ function installer_admin_phase5()
     if (!xarInstallAPIFunc('initialise', array('directory'=>'privileges', 'initfunc'=>'activate'))) return;
     if (!xarInstallAPIFunc('initialise', array('directory'=>'mail', 'initfunc'=>'activate'))) return;
 
+    // create the default masks and privilege instances
+    sys::import('modules.privileges.xarsetup');
+    initializeSetup();
+
     // TODO: is this is correct place for a default value for a modvar?
     xarModVars::set('base', 'AlternatePageTemplate', 'homepage');
 
@@ -577,10 +581,6 @@ function installer_admin_bootstrap()
             throw new Exception("activation of $regid failed");//return;
     }
     
-    // create the default roles and privileges setup
-    sys::import('modules.privileges.xarsetup');
-    initializeSetup();
-
     // load modules into *_modules table
     if (!xarMod::apiFunc('modules', 'admin', 'regenerate')) return;
 

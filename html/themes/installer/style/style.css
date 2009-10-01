@@ -58,7 +58,7 @@ div#header_content h1 {
     color: #568A00;
 }
 div#header_contentcore {
-	border: 1px solid #0080C4;
+    border: 1px solid #0080C4;
     border-width: 0 1px;
     _zoom: 1;
 }
@@ -110,11 +110,11 @@ div#contentwrap {
     margin: 0 22px 0 20px;
 }
 div#contentmain {
-	color: #544E41;
-	background-color: #FFFFFF;
+    color: #544E41;
+    background-color: #FFFFFF;
     float: left;
     margin-bottom: 20px;
-	border: 1px solid #0080C4;
+    border: 1px solid #0080C4;
     width: 100%;
 }
 * html #contentmain, * html div#contentleft {
@@ -186,12 +186,6 @@ div#navbar_inner {
     background: transparent url(../images/navbar-bg.png) no-repeat scroll center right;
     height: 60px;
 }
-
-
-
-
-
-
 
 div#contentmain_inner {
 }
@@ -308,20 +302,6 @@ div#status li {
     list-style: none !important;
 }
 
-.complete {
-    background-image: url(../../../modules/base/xarimages/icons/activate.png);
-	color: #568A00;
-}
-
-.active {
-    background-image: url(../../../modules/base/xarimages/icons/initialize.png);
-}
-
-.greyed {
-    background-image: url(../../../modules/base/xarimages/icons/none.png);
-	color: #999999;
-}
-
 div#scroller {
     border: 1px solid;
     height: 20em;
@@ -341,19 +321,9 @@ ul li.success, ul li.failure, ul li.warning {
     line-height: 2em;
 }
 
-ul li.success {
-	list-style-image:  url(../../../modules/base/xarimages/icons/activate.png) !important;
-}
-ul li.failure {
-	list-style-image:  url(../../../modules/base/xarimages/icons/dialog-error.png) !important;
-}
-ul li.warning {
-	list-style-image:  url(../../../modules/base/xarimages/icons/dialog-warning.png) !important;
-}
-
 p.warning {
-	color: #FFFFFF;
-	background-color: #FF0000;
+    color: #FFFFFF;
+    background-color: #FF0000;
     padding: 1em;
     font-weight: bold;
 }
