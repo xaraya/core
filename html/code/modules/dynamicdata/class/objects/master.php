@@ -9,104 +9,10 @@
  * @link http://xaraya.com/index.php/release/182.html
  */
 
-sys::import('xaraya.structures.descriptor');
-sys::import('modules.dynamicdata.class.datastores.master');
-sys::import('modules.dynamicdata.class.properties.master');
+sys::import('modules.dynamicdata.class.objects.descriptor');
 
-/*
- * generate the variables necessary to instantiate a DataObject or DataProperty class
-*/
-class DataObjectDescriptor extends ObjectDescriptor
-{
-    function __construct(Array $args=array())
-    {
-        $args = self::getObjectID($args);
-        parent::__construct($args);
-    }
-
-    static function getModID(Array $args=array())
-    {
-        foreach ($args as $key => &$value) {
-            if (in_array($key, array('module','modid','module','moduleid'))) {
-                if (empty($value)) $value = xarMod::getRegID(xarMod::getName());
-                if (is_numeric($value) || is_integer($value)) {
-                    $args['moduleid'] = $value;
-                } else {
-                    //$info = xarMod::getInfo(xarMod::getRegID($value));
-                    $args['moduleid'] = xarMod::getRegID($value); //$info['systemid']; FIXME
-                }
-                break;
-            }
-        }
-        // Still not found?
-        if (!isset($args['moduleid'])) {
-            if (isset($args['fallbackmodule']) && ($args['fallbackmodule'] == 'current')) {
-                $args['fallbackmodule'] = xarMod::getName();
-            } else {
-                $args['fallbackmodule'] = 'dynamicdata';
-            }
-            //$info = xarMod::getInfo(xarMod::getRegID($args['fallbackmodule']));
-            $args['moduleid'] = xarMod::getRegID($args['fallbackmodule']); // $info['systemid'];  FIXME change id
-        }
-        if (!isset($args['itemtype'])) $args['itemtype'] = 0;
-        return $args;
-    }
-
-    /**
-     * Get Object ID
-     *
-     * @return array all parts necessary to describe a DataObject
-     */
-    static function getObjectID(Array $args=array())
-    {
-        // removed dependency on roles xarQuery
-        $xartable = xarDB::getTables();
-        $dynamicobjects = $xartable['dynamic_objects'];
-
-        $query = "SELECT id,
-                         name,
-                         module_id,
-                         itemtype
-                  FROM $dynamicobjects ";
-
-        $bindvars = array();
-        if (isset($args['name'])) {
-            $query .= " WHERE name = ? ";
-            $bindvars[] = $args['name'];
-        } elseif (!empty($args['objectid'])) {
-            $query .= " WHERE id = ? ";
-            $bindvars[] = (int) $args['objectid'];
-        } else {
-            $args = self::getModID($args);
-            $query .= " WHERE module_id = ?
-                          AND itemtype = ? ";
-            $bindvars[] = (int) $args['moduleid'];
-            $bindvars[] = (int) $args['itemtype'];
-        }
-
-        $dbconn = xarDB::getConn();
-        $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-
-        $row = $result->getRow();
-        $result->close();
-
-        if (empty($row) || count($row) < 1) {
-            $args['moduleid'] = isset($args['moduleid']) ? $args['moduleid'] : null;
-            $args['itemtype'] = isset($args['itemtype']) ? $args['itemtype'] : null;
-            $args['objectid'] = isset($args['objectid']) ? $args['objectid'] : null;
-            $args['name'] = isset($args['name']) ? $args['name'] : null;
-        } else {
-            $args['moduleid'] = $row['module_id'];
-            $args['itemtype'] = $row['itemtype'];
-            $args['objectid'] = $row['id'];
-            $args['name'] = $row['name'];
-        }
-        if (empty($args['tplmodule'])) $args['tplmodule'] = xarMod::getName($args['moduleid']); //FIXME: go to systemid
-        if (empty($args['template'])) $args['template'] = $args['name'];
-        return $args;
-    }
-}
+// FIXME: only needed for the DataPropertyMaster::DD_* constants (or explicit import) - handle differently ?
+//sys::import('modules.dynamicdata.class.properties.master');
 
 class DataObjectMaster extends Object
 {
@@ -211,6 +117,7 @@ class DataObjectMaster extends Object
             if(!isset($args['allprops']))   //FIXME is this needed??
                 $args['allprops'] = null;
 
+            sys::import('modules.dynamicdata.class.properties.master');
             DataPropertyMaster::getProperties($args); // we pass this object along
         }
 
@@ -403,6 +310,7 @@ class DataObjectMaster extends Object
     **/
     function addDataStore($name = '_dynamic_data_', $type='data')
     {
+        sys::import('modules.dynamicdata.class.datastores.master');
         // get a new data store
         $datastore = DataStoreFactory::getDataStore($name, $type);
 
@@ -476,6 +384,7 @@ class DataObjectMaster extends Object
         // TODO: find some way to have unique IDs across all objects if necessary
         if(!isset($args['id']))
             $args['id'] = count($this->properties) + 1;
+        sys::import('modules.dynamicdata.class.properties.master');
         DataPropertyMaster::addProperty($args,$this);
     }
 
@@ -488,6 +397,7 @@ class DataObjectMaster extends Object
     {
         extract($args);
         $dbconn = xarDB::getConn();
+        xarMod::loadDbInfo('dynamicdata','dynamicdata');
         $xartable = xarDB::getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
@@ -580,6 +490,7 @@ class DataObjectMaster extends Object
         }
 
         $dbconn = xarDB::getConn();
+        xarMod::loadDbInfo('dynamicdata','dynamicdata');
         $xartable = xarDB::getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
@@ -653,6 +564,7 @@ class DataObjectMaster extends Object
         if ($info != null) $args = array_merge($args,$info);
         else return $info;
 
+        sys::import('modules.dynamicdata.class.objects.base');
         if(!empty($args['filepath']) && ($args['filepath'] != 'auto')) include_once(sys::code() . $args['filepath']);
         if (!empty($args['class'])) {
             if(!class_exists($args['class'])) {
@@ -719,9 +631,10 @@ class DataObjectMaster extends Object
 
     /**
      * Class method to retrieve a particular object interface definition, with sub-classing
-     * (= the same as creating a new Dynamic Object Interface)
+     * (= the same as creating a new Dynamic Object User Interface)
      *
      * @param $args['objectid'] id of the object you're looking for, or
+     * @param $args['name'] name of the object you're looking for, or
      * @param $args['moduleid'] module id of the object to retrieve +
      * @param $args['itemtype'] item type of the object to retrieve
      * @param $args['class'] optional classname (e.g. <module>_DataObject[_Interface])
@@ -731,12 +644,17 @@ class DataObjectMaster extends Object
     **/
     static function &getObjectInterface($args)
     {
-        sys::import('modules.dynamicdata.class.interface');
+        sys::import('modules.dynamicdata.class.userinterface');
 
-        $class = 'DataObjectInterface';
+        $class = 'DataObjectUserInterface';
         if(!empty($args['class']))
         {
-            if(class_exists($args['class'] . 'Interface'))
+            if(class_exists($args['class'] . 'UserInterface'))
+            {
+                // this is a generic classname for the object, list and interface
+                $class = $args['class'] . 'UserInterface';
+            }
+            elseif(class_exists($args['class'] . 'Interface')) // deprecated
             {
                 // this is a generic classname for the object, list and interface
                 $class = $args['class'] . 'Interface';
@@ -815,6 +733,7 @@ class DataObjectMaster extends Object
         if(empty($mylist))
             return;
 
+        sys::import('modules.dynamicdata.class.properties.master');
         // TODO: delete all the (dynamic ?) data for this object
 
         // delete all the properties for this object
@@ -980,7 +899,9 @@ class DataObjectMaster extends Object
         if ($extensions) {
             // Get all the objects at once
             // removed dependency on roles xarQuery
+            xarMod::loadDbInfo('dynamicdata','dynamicdata');
             $xartable = xarDB::getTables();
+
             $dynamicobjects = $xartable['dynamic_objects'];
 
             $bindvars = array();

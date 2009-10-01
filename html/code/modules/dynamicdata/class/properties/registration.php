@@ -9,7 +9,7 @@
  * @link http://xaraya.com/index.php/release/182.html
  * @author mrb <marcel@xaraya.com>
  */
-xarMod::loadDbInfo('dynamicdata','dynamicdata');
+
 /**
  * Class to model registration information for a property
  *
@@ -49,6 +49,7 @@ class PropertyRegistration extends DataContainer
     static function clearCache()
     {
         $dbconn = xarDB::getConn();
+        xarMod::loadDbInfo('dynamicdata','dynamicdata');
         $tables = xarDB::getTables();
         $sql = "DELETE FROM $tables[dynamic_properties_def]";
         $res = $dbconn->ExecuteUpdate($sql);
@@ -86,6 +87,7 @@ class PropertyRegistration extends DataContainer
                 return false;
 */
         $dbconn = xarDB::getConn();
+        xarMod::loadDbInfo('dynamicdata','dynamicdata');
         $tables = xarDB::getTables();
         $propdefTable = $tables['dynamic_properties_def'];
 
@@ -150,6 +152,8 @@ class PropertyRegistration extends DataContainer
             return xarCore::getCached('DynamicData','PropertyTypes');
         }
         $dbconn = xarDB::getConn();
+        xarMod::loadDbInfo('dynamicdata','dynamicdata');
+        // CHECKME: $tables[modules] is defined in xarMod::init()
         $tables = xarDB::getTables();
         // Sort by required module(s) and then by name
         $query = "SELECT  p.id, p.name, p.label,
