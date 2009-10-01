@@ -1,6 +1,6 @@
 <?php
 /**
- * Base factory for the cache storage types
+ * Base class and factory for the cache storage types
  *
  * @package core
  * @subpackage caching
@@ -22,6 +22,80 @@ class xarCache_Storage extends Object
     public $logfile    = null;
     public $logsize    = 2000000;   // for each logfile
     public $modtime    = 0;         // last modification time
+
+    /**
+     * Factory class method for cache storage (only 'storage' is semi-required)
+     * 
+     * @param string  $storage the storage you want (filesystem, database or memcached)
+     * @param string  $type the type of cached data (page, block, template, ...)
+     * @param string  $cachedir the path to the cache directory (for filesystem)
+     * @param string  $code the cache code (for URL factors et al.) if it's fixed
+     * @param integer $expire the expiration time for this data
+     * @param integer $sizelimit the maximum size for the cache storage
+     * @param string  $logfile the path to the logfile for HITs and MISSes
+     * @param integer $logsize the maximum size of the logfile
+     * @return object the specified cache storage
+     */
+    public static function getCacheStorage(array $args = array())
+    {
+        if (empty($args['storage'])) {
+            $args['storage'] = 'filesystem';
+        }
+        switch ($args['storage'])
+        {
+            case 'database':
+                sys::import('xaraya.caching.storage.database');
+                $classname = 'xarCache_Database_Storage';
+                break;
+
+            case 'memcached':
+                if (extension_loaded('memcache')) {
+                    sys::import('xaraya.caching.storage.memcached');
+                    $classname = 'xarCache_MemCached_Storage';
+                } else {
+                    sys::import('xaraya.caching.storage.filesystem');
+                    $classname = 'xarCache_FileSystem_Storage';
+                }
+                break;
+
+            case 'mmcache':
+                if (function_exists('mmcache')) {
+                    sys::import('xaraya.caching.storage.mmcache');
+                    $classname = 'xarCache_MMCache_Storage';
+                } else {
+                    sys::import('xaraya.caching.storage.filesystem');
+                    $classname = 'xarCache_FileSystem_Storage';
+                }
+                break;
+
+            case 'eaccelerator':
+                if (function_exists('eaccelerator')) {
+                    sys::import('xaraya.caching.storage.eaccelarator');
+                    $classname = 'xarCache_eAccelerator_Storage';
+                } else {
+                    sys::import('xaraya.caching.storage.filesystem');
+                    $classname = 'xarCache_FileSystem_Storage';
+                }
+                break;
+
+            case 'xcache':
+                if (extension_loaded('xcache')) {
+                    sys::import('xaraya.caching.storage.xcache');
+                    $classname = 'xarCache_XCache_Storage';
+                } else {
+                    sys::import('xaraya.caching.storage.filesystem');
+                    $classname = 'xarCache_FileSystem_Storage';
+                }
+                break;
+
+            case 'filesystem':
+            default:
+                sys::import('xaraya.caching.storage.filesystem');
+                $classname = 'xarCache_FileSystem_Storage';
+                break;
+        }
+        return new $classname($args);
+    }
 
     /**
      * Constructor
