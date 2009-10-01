@@ -667,7 +667,7 @@ function installer_admin_create_administrator()
     if (!$itemid) {return;}
 
     // Register Block types from modules installed before block apis (base)
-    $blocks = array('adminmenu','waitingcontent','finclude','html','menu','php','text','content');
+    $blocks = array('wrapper', 'adminmenu','waitingcontent','finclude','html','menu','php','text','content');
 
     foreach ($blocks as $block) {
         if (!xarMod::apiFunc('blocks', 'admin', 'register_block_type', array('modName'  => 'base', 'blockType'=> $block))) return;
@@ -685,10 +685,19 @@ function installer_admin_create_administrator()
                                   'topnav' => 'topnav'
                                   );
 
+    $wrapperBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+                                    array('module'  => 'base',
+                                          'type'    => 'wrapper'));
+
+    $wrapperBlockTypeID = $wrapperBlockType['tid'];
+    assert('is_numeric($wrapperBlockTypeID);');
+
     foreach ($default_blockgroups as $name => $template) {
         if(!xarMod::apiFunc('blocks','user','groupgetinfo', array('name' => $name))) {
             // Not there yet
-            if(!xarMod::apiFunc('blocks','admin','create_group', array('name' => $name, 'template' => $template))) return;
+            if(!xarMod::apiFunc('blocks','admin','create_instance', array('name' => $name, 'template' => $template,
+                'type' => $wrapperBlockTypeID, 'state' => 2
+            ))) return;
         }
     }
 
@@ -696,7 +705,7 @@ function installer_admin_create_administrator()
     $dbconn = xarDB::getConn();
     $tables = xarDB::getTables();
 
-    $blockGroupsTable = $tables['block_groups'];
+    $blockGroupsTable = $tables['block_instances'];
 
     $query = "SELECT    id as id
               FROM      $blockGroupsTable
@@ -952,7 +961,7 @@ function installer_admin_confirm_configuration()
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
 
-        $blockGroupsTable = $tables['block_groups'];
+        $blockGroupsTable = $tables['block_instances'];
 
         $query = "SELECT    id as id
                   FROM      $blockGroupsTable
@@ -1092,7 +1101,7 @@ function installer_admin_cleanup()
     $dbconn = xarDB::getConn();
     $tables = xarDB::getTables();
 
-    $blockGroupsTable = $tables['block_groups'];
+    $blockGroupsTable = $tables['block_instances'];
 
     // Prepare getting one blockgroup
     $query = "SELECT    id as id

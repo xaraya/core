@@ -29,20 +29,19 @@ function blocks_userapi_read_type_info($args)
 
     // Function to execute, to get the block info.
     $infofunc = $module . '_' . $type . 'block_info';
-
     if (function_exists($infofunc)) {
         return $infofunc();
-    } else {
-        // Load and execute the info function of the block.
-        if (!xarMod::apiFunc(
-            'blocks', 'admin', 'load',
-            array(
-                'modName' => $module,
-                'blockName' => $type,
-                'blockFunc' => 'info'
-            )
-        )) {return false;}
     }
+
+    // Load and execute the info function of the block.
+        if (!xarMod::apiFunc(
+        'blocks', 'admin', 'load',
+        array(
+            'modName' => $module,
+            'blockName' => $type,
+            'blockFunc' => 'info'
+        )
+    )) {return;}
 
     $classpath = sys::code() . 'modules/' . $module . '/xarblocks/' . $type . '.php';
     if (function_exists($infofunc)) {
