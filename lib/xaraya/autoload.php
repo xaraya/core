@@ -23,6 +23,7 @@
 class xarAutoload extends Object
 {
     private static $registerlist = array();
+    private static $classpathlist = array();
 
     /**
      * Initialize the list of autoload functions
@@ -57,6 +58,9 @@ class xarAutoload extends Object
                 }
             }
         }
+
+        // TODO: work with manual specification until we get something better
+        sys::import('modules.dynamicdata.class.autoload');
 
         // TODO: work with temporary autoload function until we get something better
         self::registerClassMethod('xarAutoload', 'autoload_todo');
@@ -137,18 +141,16 @@ class xarAutoload extends Object
      */
     public static function autoload_todo($class)
     {
-        switch (strtolower($class))
+        $class = strtolower($class);
+
+        // Some predefined classes
+        switch ($class)
         {
             case 'categories':
                 sys::import('modules.categories.class.categories');
                 return;
 
-            case 'dataobject':
-                sys::import('modules.dynamicdata.class.objects.base');
-                return;
-            case 'dataobjectlist':
-                sys::import('modules.dynamicdata.class.objects.list');
-                return;
+            // DD has been moved to its own autoload because it has lots :-)
 
             case 'xarmasks':
                 sys::import('modules.privileges.class.masks');
@@ -167,6 +169,20 @@ class xarAutoload extends Object
                 sys::import('modules.roles.class.roles');
                 return;
         }
+
+        if (empty(self::$classpathlist)) {
+            // add some more typical classes we might be looking for
+            // ...
+            // add sys::code() here to get the full path for module classes
+            // self::$classpathlist[$name] = sys::code() . $filepath;
+            // ...
+        }
+
+        if (isset(self::$classpathlist[$class]) && file_exists(self::$classpathlist[$class])) {
+            include_once(self::$classpathlist[$class]);
+            return;
+        }
+
         return false;
     }
 }
