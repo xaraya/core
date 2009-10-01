@@ -6,12 +6,12 @@
  * @author Marc Lutolf
  * @author Johnny Robeson <johnny@localmomentum.net>
  */
-sys::import('modules.dynamicdata.class.interface');
 
+sys::import('modules.dynamicdata.class.ui_handlers.default');
 /**
   * Simple Object Interface
   */
-class SimpleObjectInterface extends DataObjectInterface
+class SimpleObjectInterface extends DataObjectDefaultHandler
 {
     function __construct(array $args = array())
     {

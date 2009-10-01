@@ -8,9 +8,9 @@
  * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  */
-sys::import('modules.dynamicdata.class.properties.base');
-sys::import('modules.dynamicdata.class.objects.base');
-sys::import('modules.dynamicdata.class.properties.registration');
+
+// this is used in most methods below, so we import it here
+sys::import('modules.dynamicdata.class.objects.descriptor');
 
 /**
  * Utility Class to manage Dynamic Properties
@@ -46,6 +46,7 @@ class DataPropertyMaster extends Object
         // we can't use our own classes here, because we'd have an endless loop :-)
 
         $dbconn = xarDB::getConn();
+        xarMod::loadDbInfo('dynamicdata','dynamicdata');
         $xartable = xarDB::getTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
@@ -186,29 +187,34 @@ class DataPropertyMaster extends Object
         } else {
             $proptypes = self::getPropertyTypes();
         }
+        if (!class_exists('DataProperty')) {
+            sys::import('modules.dynamicdata.class.properties.base');
+        }
         $clazz = 'DataProperty';
         if( isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']]) )
         {
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['class'];
-            // Filepath is complete real path to the php file, and decoupled from the class name
-            // We should load the MLS translations for the right context here, in case the property
-            // PHP file contains xarML() statements
-            // See bug 5097
-            if(preg_match('/modules\/(.*)\/xarproperties/',$propertyInfo['filepath'],$matches) == 1)
-            {
-                // @todo: The preg determines the module name (in a sloppy way, FIX this)
-                // @todo: do we still do properties from includes/properties?
-                xarMLSLoadTranslations($propertyInfo['filepath']);
+            if (!class_exists($propertyClass)) {
+                // Filepath is complete real path to the php file, and decoupled from the class name
+                // We should load the MLS translations for the right context here, in case the property
+                // PHP file contains xarML() statements
+                // See bug 5097
+                if(preg_match('/modules\/(.*)\/xarproperties/',$propertyInfo['filepath'],$matches) == 1)
+                {
+                    // @todo: The preg determines the module name (in a sloppy way, FIX this)
+                    // @todo: do we still do properties from includes/properties?
+                    xarMLSLoadTranslations($propertyInfo['filepath']);
+                }
+                else
+                    xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
+
+                if(!file_exists(sys::code() . $propertyInfo['filepath']))
+                    throw new FileNotFoundException($propertyInfo['filepath']);
+
+                $dp = str_replace('/','.',substr($propertyInfo['filepath'],0,-4)); // minus .php
+                sys::import($dp);
             }
-            else
-                xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
-
-            if(!file_exists(sys::code() . $propertyInfo['filepath']))
-                throw new FileNotFoundException($propertyInfo['filepath']);
-
-            $dp = str_replace('/','.',substr($propertyInfo['filepath'],0,-4)); // minus .php
-            sys::import($dp);
 
             $clazz = $propertyClass;
         } else {
@@ -233,7 +239,10 @@ class DataPropertyMaster extends Object
 
     static function createProperty(Array $args)
     {
-        $descriptor = new DataObjectDescriptor(array('objectid' => 2)); // the Dynamic Properties = 2
+        $descriptor = new DataObjectDescriptor(array('name' => 'properties')); // the Dynamic Properties = 2
+        if (!class_exists('DataObject')) {
+            sys::import('modules.dynamicdata.class.objects.base');
+        }
         $object = new DataObject($descriptor);
         $objectid = $object->createItem($args);
         unset($object);
@@ -253,10 +262,13 @@ class DataPropertyMaster extends Object
         // TODO: delete all the (dynamic ?) data for this property as well
         $descriptor = new DataObjectDescriptor(
             array(
-                'objectid' => 2, // the Dynamic Properties = 2
-                'itemid'   => $args['itemid']
+                'name'   => 'properties', // the Dynamic Properties = 2
+                'itemid' => $args['itemid']
             )
         );
+        if (!class_exists('DataObject')) {
+            sys::import('modules.dynamicdata.class.objects.base');
+        }
         $object = new DataObject($descriptor);
         if (empty($object)) return;
 
@@ -273,6 +285,9 @@ class DataPropertyMaster extends Object
      */
     static function getPropertyTypes()
     {
+        if (!class_exists('PropertyRegistration')) {
+            sys::import('modules.dynamicdata.class.properties.registration');
+        }
         return PropertyRegistration::Retrieve();
     }
 }

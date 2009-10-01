@@ -32,31 +32,40 @@ define('XARCORE_VERSION_REV', $rev);
 /*
  * System dependencies for (optional) systems
  * FIXME: This diagram isn't correct (or at least not detailed enough)
- * ----------------------------------------------
- * | Name           | Depends on                |
- * ----------------------------------------------
- * | DATABASE       | nothing                   |
- * | SESSION        | DATABASE                  |
- * | CONFIGURATION  | DATABASE                  |
- * | USER           | SESSION, DATABASE         |
- * | BLOCKS         | CONFIGURATION, DATABASE   |
- * | MODULES        | CONFIGURATION, DATABASE   |
- * | EVENTS         | MODULES                   |
- * ----------------------------------------------
+ * -------------------------------------------------------
+ * | Name           | Depends on                | Define |
+ * -------------------------------------------------------
+ * | EXCEPTIONS     | nothing (really ?)        |        |
+ * | LOG            | nothing                   |        |
+ * | SYSTEMVARS     | nothing                   |        |
+ * | DATABASE       | SYSTEMVARS                |    1   |
+ * | EVENTS         | nothing ?                 |        |
+ * | CONFIGURATION  | DATABASE                  |    8   |
+ * | LEGACY         | CONFIGURATION             |        |
+ * | SERVER         | CONFIGURATION (?)         |        |
+ * | MLS            | CONFIGURATION             |        |
+ * | SESSION        | CONFIGURATION (?), SERVER |    2   |
+ * | BLOCKS         | CONFIGURATION             |   16   |
+ * | MODULES        | CONFIGURATION             |   32   |
+ * | TEMPLATE       | MODULES, MLS (?)          |   64   |
+ * | USER           | SESSION, MODULES          |    4   |
+ * -------------------------------------------------------
  *
+ * TODO: update dependencies and order
  *
  *   DATABASE           (00000001)
  *   |
- *   |- SESSION         (00000011)
- *   |  |
- *   |  |- USER         (00000111)
- *   |
  *   |- CONFIGURATION   (00001001)
+ *      |
+ *      |- SESSION      (00001011)
  *      |
  *      |- BLOCKS       (00011001)
  *      |
  *      |- MODULES      (00101001)
+ *         |
+ *         |- USER      (00101111)
  *
+ *   ALL                (01111111)
  */
 
 /**#@+
@@ -71,11 +80,11 @@ define('XARCORE_VERSION_REV', $rev);
 **/
 define('XARCORE_SYSTEM_NONE'         , 0);
 define('XARCORE_SYSTEM_DATABASE'     , 1);
-define('XARCORE_SYSTEM_SESSION'      , 2 | XARCORE_SYSTEM_DATABASE);
-define('XARCORE_SYSTEM_USER'         , 4 | XARCORE_SYSTEM_SESSION);
 define('XARCORE_SYSTEM_CONFIGURATION', 8 | XARCORE_SYSTEM_DATABASE);
+define('XARCORE_SYSTEM_SESSION'      , 2 | XARCORE_SYSTEM_CONFIGURATION);
 define('XARCORE_SYSTEM_BLOCKS'       , 16 | XARCORE_SYSTEM_CONFIGURATION);
 define('XARCORE_SYSTEM_MODULES'      , 32 | XARCORE_SYSTEM_CONFIGURATION);
+define('XARCORE_SYSTEM_USER'         , 4 | XARCORE_SYSTEM_SESSION | XARCORE_SYSTEM_MODULES);
 define('XARCORE_SYSTEM_ALL'          , 127); // bit OR of all optional systems (includes templates now)
 /**#@-*/
 
@@ -171,7 +180,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      * Flags can be OR-ed together
      */
+// CHECKME: make this configurable too !?
     xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );
+//    xarCoreActivateDebugger(XARDBG_INACTIVE);
 
     /*
      * If there happens something we want to be able to log it
@@ -190,7 +201,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if ($whatToLoad & XARCORE_SYSTEM_DATABASE) { // yeah right, as if this is optional
-        sys::import('xaraya.database');
+        sys::import('xaraya.variables.system');
 
         // Decode encoded DB parameters
         // These need to be there
@@ -220,6 +231,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'databaseCharset' => xarSystemVars::get(sys::CONFIG, 'DB.Charset'),
                             'persistent'      => $persistent,
                             'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
+
+        sys::import('xaraya.database');
+
         // Connect to database
         xarDB_init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_DATABASE;
@@ -248,6 +262,12 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         sys::import('xaraya.variables');
         xarVar_init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
+
+    // we're about done here - everything else requires configuration, at least to initialize them !?
+    } else {
+        // Make the current load level == the new load level
+        $current_load_level = $new_load_level;
+        return true;
     }
 
     /**
@@ -266,6 +286,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
 
+/* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ?
+    sys::import('xaraya.autoload');
+    xarAutoload::initialize();
+*/
+
     /*
      * Bring HTTP Protocol Server/Request/Response utilities into the story
      *
@@ -273,7 +298,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     sys::import('xaraya.server');
     $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
                         'generateXMLURLs' => true);
-
     xarServer::init($systemArgs);
     xarRequest::init($systemArgs);
     xarResponse::init($systemArgs);
@@ -352,6 +376,12 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'generateXMLURLs' => true);
         xarMod::init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_MODULES;
+
+    // we're about done here - everything else requires modules !?
+    } else {
+        // Make the current load level == the new load level
+        $current_load_level = $new_load_level;
+        return true;
     }
 
     /*
@@ -369,7 +399,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     xarTpl_init($systemArgs);
     $whatToLoad ^= XARCORE_BIT_TEMPLATE;
-
 
     /**
      * At last, we can give people access to the system.

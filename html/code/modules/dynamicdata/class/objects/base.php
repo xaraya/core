@@ -9,10 +9,11 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-sys::import('xaraya.structures.descriptor');
-sys::import('modules.dynamicdata.class.properties.master');
-sys::import('modules.dynamicdata.class.objects.interfaces');
 sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.interfaces');
+
+// FIXME: only needed for the DataPropertyMaster::DD_* constants - handle differently ?
+//sys::import('modules.dynamicdata.class.properties.master');
 
 /**
  * DataObject Base class

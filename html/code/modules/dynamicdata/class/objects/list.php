@@ -8,9 +8,12 @@
  * @subpackage dynamicdata
  *
  **/
-sys::import('modules.dynamicdata.class.properties');
+
 sys::import('modules.dynamicdata.class.objects.master');
 sys::import('modules.dynamicdata.class.objects.interfaces');
+
+// FIXME: only needed for the DataPropertyMaster::DD_* constants - handle differently ?
+//sys::import('modules.dynamicdata.class.properties.master');
 
 class DataObjectList extends DataObjectMaster implements iDataObjectList
 {

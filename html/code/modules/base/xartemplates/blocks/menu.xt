@@ -4,11 +4,11 @@
     <!-- FIXME: use proper nesting in the data, not the elseif constructs -->
     
     <!-- Convenience link to admin theme if this is an admin -->
-    <xar:if condition="xarIsParent('Administrators',xarUserGetVar('uname'))">
+    <xar:sec mask="AdminBase" catch="false">
         <p> 
             [<a href="#xarModURL('base','admin','main')#" title="Go to back end Interface">Back end</a>]
         </p>
-    </xar:if>
+    </xar:sec>
     <xar:if condition="!empty($usercontent)">
         <ul class="xar-menu-section">
             <li class="xar-menu-section">
