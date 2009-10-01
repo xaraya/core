@@ -9,7 +9,7 @@
  * @link http://xaraya.com/index.php/release/68.html
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.dynamicdata.class.properties');
+sys::import('modules.dynamicdata.class.properties.base');
 /**
  * Handle text area property
  */

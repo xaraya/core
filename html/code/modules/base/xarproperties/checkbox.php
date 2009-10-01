@@ -10,7 +10,7 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /* Include the parent class  */
-sys::import('modules.dynamicdata.class.properties');
+sys::import('modules.dynamicdata.class.properties.base');
 /**
  * Handle check box property
  */

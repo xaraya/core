@@ -12,7 +12,7 @@
 /**
  * Handle select property
  */
-sys::import('modules.dynamicdata.class.objects.base');
+sys::import('modules.dynamicdata.class.properties.base');
 
 class SelectProperty extends DataProperty
 {

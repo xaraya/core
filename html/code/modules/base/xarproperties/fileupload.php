@@ -9,7 +9,7 @@
  * @link http://xaraya.com/index.php/release/68.html
  */
 /* Include parent class */
-sys::import('modules.dynamicdata.class.properties.master');
+sys::import('modules.dynamicdata.class.properties.base');
 /**
  * Class to handle file upload properties
  */
