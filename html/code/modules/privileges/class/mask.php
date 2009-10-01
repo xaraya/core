@@ -135,8 +135,13 @@ class xarMask extends Object
     private function getInstanceArray($instancestring=array()) 
     {
         if (empty($instancestring)) return array();
+        // avoid phperrors exception handling if possible
+        if (strpos($instancestring,'{') === false) {
+            // the old way
+            return explode(':', $instancestring);
+        }
         try {
-            // the new way
+            // the new way - CHECKME: where is this used ?
             return unserialize($instancestring);
         } catch(Exception $e) {
             // the old way
