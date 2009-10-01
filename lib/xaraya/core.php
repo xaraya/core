@@ -248,6 +248,18 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     sys::import('xaraya.events');
 
+/* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ?
+    sys::import('xaraya.autoload');
+    xarAutoload::initialize();
+
+// Testing of autoload + second-level cache storage - please do not use on live sites
+    sys::import('xaraya.caching.storage');
+    $cache = xarCache_Storage::getCacheStorage(array('storage' => 'xcache'));
+    xarCore::setCacheStorage($cache);
+    // For bulk load, we might have to do this after loading the modules, otherwise
+    // unserialize + autoload might trigger a function that complains about xarMod:: etc.
+    //xarCore::setCacheStorage($cache,0,1);
+*/
 
     /*
      * Start Configuration System
@@ -285,11 +297,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * except that we use a database as storage container.
      *
      */
-
-/* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ?
-    sys::import('xaraya.autoload');
-    xarAutoload::initialize();
-*/
 
     /*
      * Bring HTTP Protocol Server/Request/Response utilities into the story
@@ -543,6 +550,8 @@ class xarCore extends Object
     const VERSION_SUB = 'post rabiem risus';
 
     private static $cacheCollection = array();
+    private static $cacheStorage = null;
+    private static $isBulkStorage = 0;
 
     /**
      * Check if a variable value is cached
@@ -555,10 +564,19 @@ class xarCore extends Object
     public static function isCached($cacheKey, $name)
     {
         if (!isset(self::$cacheCollection[$cacheKey])) {
+            // initialize the cache if necessary
             self::$cacheCollection[$cacheKey] = array();
-            return false;
         }
-        return isset(self::$cacheCollection[$cacheKey][$name]);
+        if (isset(self::$cacheCollection[$cacheKey][$name])) {
+            return true;
+
+        // cache storage typically only works with a single cache namespace, so we add our own prefix here
+        } elseif (isset(self::$cacheStorage) && empty(self::$isBulkStorage) && self::$cacheStorage->isCached('CORE:'.$cacheKey.':'.$name)) {
+            // pre-fetch the value from second-level cache here (if we don't load from bulk storage)
+            self::$cacheCollection[$cacheKey][$name] = self::$cacheStorage->getCached('CORE:'.$cacheKey.':'.$name);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -572,6 +590,7 @@ class xarCore extends Object
     public static function getCached($cacheKey, $name)
     {
         if (!isset(self::$cacheCollection[$cacheKey][$name])) {
+            // don't fetch the value from second-level cache here
             return;
         }
         return self::$cacheCollection[$cacheKey][$name];
@@ -589,9 +608,14 @@ class xarCore extends Object
     public static function setCached($cacheKey, $name, $value)
     {
         if (!isset(self::$cacheCollection[$cacheKey])) {
+            // initialize cache if necessary
             self::$cacheCollection[$cacheKey] = array();
         }
         self::$cacheCollection[$cacheKey][$name] = $value;
+        if (isset(self::$cacheStorage) && empty(self::$isBulkStorage)) {
+            // save the value to second-level cache here
+            self::$cacheStorage->setCached('CORE:'.$cacheKey.':'.$name, $value);
+        }
     }
 
     /**
@@ -608,12 +632,9 @@ class xarCore extends Object
         if (isset(self::$cacheCollection[$cacheKey][$name])) {
             unset(self::$cacheCollection[$cacheKey][$name]);
         }
-        //This unsets the key that said that collection had already been retrieved
-
-        //Seems to have caused a problem because of the expected behaviour of the old code
-        //FIXME: Change how this works for a mainstream function, stop the hacks
-        if (isset(self::$cacheCollection[$cacheKey][0])) {
-            unset(self::$cacheCollection[$cacheKey][0]);
+        if (isset(self::$cacheStorage) && empty(self::$isBulkStorage)) {
+            // delete the value from second-level cache here
+            self::$cacheStorage->delCached('CORE:'.$cacheKey.':'.$name);
         }
     }
 
@@ -628,6 +649,68 @@ class xarCore extends Object
     {
         if(isset(self::$cacheCollection[$cacheKey])) {
             unset(self::$cacheCollection[$cacheKey]);
+        }
+        if (isset(self::$cacheStorage) && empty(self::$isBulkStorage)) {
+            // CHECKME: not all cache storage supports this in the same way !
+            self::$cacheStorage->flushCached('CORE:'.$cacheKey.':');
+        }
+    }
+
+    /**
+     * Set second-level cache storage if you want to keep values for longer than the current HTTP request
+     *
+     * @param  cacheStorage the cache storage instance you want to use (typically in-memory like apc, memcached, xcache, ...)
+     * @param  cacheExpire how long do you want to keep values in second-level cache storage (if the storage supports it)
+     * @param  isBulkStorage do we load/save all variables in bulk by cachekey or not ?
+     * @return null
+    **/
+    public static function setCacheStorage($cacheStorage, $cacheExpire = 0, $isBulkStorage = 0)
+    {
+        self::$cacheStorage = $cacheStorage;
+        self::$cacheStorage->setExpire($cacheExpire);
+        // CHECKME: do we want to set this here by default ? It doesn't affect most in-memory cache storage...
+        self::$cacheStorage->type = 'core';
+        // see what's going on in the cache storage ;-)
+        //self::$cacheStorage->logfile = sys::varpath() . '/logs/core_cache.txt';
+        // FIXME: some in-memory cache storage requires explicit garbage collection !?
+
+        self::$isBulkStorage = $isBulkStorage;
+        if ($isBulkStorage) {
+            // load from second-level cache storage here
+            self::loadBulkStorage();
+            // save to second-level cache storage at shutdown
+            register_shutdown_function(array('xarCore','saveBulkStorage'));
+        }
+    }
+
+// CHECKME: work with bulk load / bulk save per cachekey instead of individual gets per cachekey:name ?
+//          But what about concurrent updates in bulk then (+ unserialize & autoload too early) ?
+//          There doesn't seem to be a big difference in performance using bulk or not, at least with xcache
+    public static function loadBulkStorage()
+    {
+        if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) return;
+        // get the list of cachekeys
+        if (!self::$cacheStorage->isCached('CORE:__cachekeys__')) return;
+        $cacheKeys = self::$cacheStorage->getCached('CORE:__cachekeys__');
+        if (empty($cacheKeys)) return;
+        // load each cachekey from second-level cache
+        foreach ($cacheKeys as $cacheKey) {
+            $value = self::$cacheStorage->getCached('CORE:'.$cacheKey);
+            if (!empty($value)) {
+                self::$cacheCollection[$cacheKey] = unserialize($value);
+            }
+        }
+    }
+    public static function saveBulkStorage()
+    {
+        if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) return;
+        // get the list of cachekeys
+        $cacheKeys = array_keys(self::$cacheCollection);
+        self::$cacheStorage->setCached('CORE:__cachekeys__', $cacheKeys);
+        // save each cachekey to second-level cache
+        foreach ($cacheKeys as $cacheKey) {
+            $value = serialize(self::$cacheCollection[$cacheKey]);
+            self::$cacheStorage->setCached('CORE:'.$cacheKey, $value);
         }
     }
 }
