@@ -12,7 +12,7 @@
  * @todo try to replace xarTplModule with xarTplObject
  */
 
-sys::import('modules.dynamicdata.class.interface');
+sys::import('modules.dynamicdata.class.ui_handlers.default');
 /**
  * Dynamic Object User Interface Handler
  *

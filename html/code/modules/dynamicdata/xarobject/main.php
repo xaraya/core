@@ -13,7 +13,7 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.dynamicdata.class.interface');
+sys::import('modules.dynamicdata.class.userinterface');
 
 function dynamicdata_object_main($args = array())
 {
