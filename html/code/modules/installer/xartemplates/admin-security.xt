@@ -17,24 +17,24 @@
                 <p>
                     Removing the install script will make a reinstalltion impossible unless you manually add a copy of the script to your site's root directory.
                 </p>
-                <label class="xar-form-label" for="install_admin_name">
+                <label class="xar-form-label" for="remove">
                     Remove the install script
                 </label>
-                <xar:data-input type="checkbox" name="remove" />
+                <xar:data-input type="checkbox" id="remove" name="remove" />
             </div>
             <div class="xar-form-input-wrapper">
                 <p>
                     Renaming the install script will let you run it under its new name. This is les secure,
                 </p>
-                <label class="xar-form-label" for="install_admin_username">
+                <label class="xar-form-label" for="rename">
                     Rename the install script
                 </label>
-                <xar:data-input type="checkbox" name="rename" />
+                <xar:data-input type="checkbox" name="rename" id="rename" />
                 &#160;&#160;
-                <label for="install_admin_username">
+                <label for="newname">
                     New name for the script
                 </label>&#160;
-                <xar:data-input type="textbox" name="newname" size="30"/>.php                
+                <xar:data-input type="textbox" name="newname" id="newname" size="30"/>.php                
             </div>
             <div class="xar-align-center" style="margin: 2em 0;">
                 <input type="submit" name="create" id="create" value="Continue" />
