@@ -55,6 +55,8 @@ class DataObjectMaster extends Object
     public $filter = false;             // set this true to automatically filter by current itemtype on secondary key
     public $upload = false;             // flag indicating if this object has some property that provides file upload
 
+// TODO: relink objects, properties and datastores in __wakeup() methods after unserialize()
+
     /**
      * Default constructor to set the object variables, retrieve the dynamic properties
      * and get the corresponding data stores for those properties
@@ -564,6 +566,12 @@ class DataObjectMaster extends Object
         if ($info != null) $args = array_merge($args,$info);
         else return $info;
 
+        // TODO: Try to get the object from the cache ?
+//        if (!empty($args['objectid']) && xarCore::isCached('DDObject', $args['objectid'])) {
+//            $object = clone xarCore::getCached('DDObject', $args['objectid']);
+//            return $object;
+//        }
+
         sys::import('modules.dynamicdata.class.objects.base');
         if(!empty($args['filepath']) && ($args['filepath'] != 'auto')) include_once(sys::code() . $args['filepath']);
         if (!empty($args['class'])) {
@@ -577,13 +585,9 @@ class DataObjectMaster extends Object
         // here we can use our own classes to retrieve this
         $descriptor = new DataObjectDescriptor($args);
 
-        // Try to get the object from the cache
-        if (xarCore::isCached('DDObject', MD5(serialize($args)))) {
-            $object = clone xarCore::getCached('DDObject', MD5(serialize($args)));
-        } else {
-            $object = new $args['class']($descriptor);
-//            xarCore::setCached('DDObject', MD5(serialize($args)), clone $object);
-        }
+        $object = new $args['class']($descriptor);
+//        xarCore::setCached('DDObject', $args['objectid'], clone $object);
+
         return $object;
     }
 
