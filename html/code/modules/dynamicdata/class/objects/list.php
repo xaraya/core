@@ -52,15 +52,15 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // get the object type information from our parent class
         $this->loader($descriptor);
 
-        // see if we can access these objects, at least in overview
-//        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':All')) return;
-
         // Set the configuration parameters
         $args = $descriptor->getArgs();
-        try {
-            $configargs = unserialize($args['config']);
-            foreach ($configargs as $key => $value) $this->{$key} = $value;
-        } catch (Exception $e) {}
+        if (!empty($args['config'])) {
+            try {
+                $configargs = unserialize($args['config']);
+                foreach ($configargs as $key => $value) $this->{$key} = $value;
+                $this->configuration = $configargs;
+            } catch (Exception $e) {}
+        }
 
         // Set the arguments passed via the constructor. These override the configurations settings
         $this->setArguments($args);

@@ -33,7 +33,6 @@ class DataObjectDefaultHandler extends Object
     public $args = array();
 
     public $object = null;
-    public $list   = null;
 
     /**
      * Get common input arguments for objects
@@ -80,7 +79,8 @@ class DataObjectDefaultHandler extends Object
             $info = DataObjectMaster::getObjectInfo(
                 array('name' => $args['object'])
             );
-            $args = array_merge($args, $info);
+            if (!empty($info)) $args = array_merge($args,$info);
+
         } elseif (!empty($args['module']) && empty($args['moduleid'])) { 
             $args['moduleid'] = xarMod::getRegID($args['module']);
         }
@@ -96,7 +96,38 @@ class DataObjectDefaultHandler extends Object
      */
     function run(array $args = array())
     {
-        return "This method is overridden in a child class for each method";
+        // This method is overridden in a child class for standard GUI methods
+
+        if(!empty($args) && is_array($args) && count($args) > 0) 
+            $this->args = array_merge($this->args, $args);
+
+        $this->method = $this->args['method'];
+
+        if (!isset($this->object)) {
+            if (!empty($this->args['itemid'])) {
+                $this->object =& DataObjectMaster::getObject($this->args);
+            } else {
+                $this->object =& DataObjectMaster::getObjectList($this->args);
+            }
+        }
+
+        if (empty($this->object)) 
+            return xarML('Unknown object #(1)', $this->args['object']);
+
+        if (!method_exists($this->object, $this->method)) {
+            return xarML('Unknown method #(1) for #(2)', xarVarPrepForDisplay($this->method), $this->object->label);
+        }
+
+        // Pre-fetch item(s) for some standard dataobject methods
+        if (empty($args['itemid']) && $this->method == 'showview') {
+            $this->object->getItems();
+
+        } elseif (!empty($args['itemid']) && ($this->method == 'showdisplay' || $this->method == 'showform')) {
+            $this->object->getItem();
+        }
+
+        // Here we try to run the requested method directly
+        return $this->object->{$this->method}($this->args);
     }
 }
 

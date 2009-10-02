@@ -26,6 +26,9 @@ class DataObjectUserInterface extends Object
     // current arguments for the handler
     public $args = array();
 
+    // current handler
+    private $handler = null;
+
     /**
      * Set up any initial parameters
      */
@@ -82,15 +85,37 @@ class DataObjectUserInterface extends Object
                 sys::import('modules.dynamicdata.class.ui_handlers.display');
                 break;
             case 'view':
-            default:
                 $handlerclazz = 'DataObjectViewHandler';
                 sys::import('modules.dynamicdata.class.ui_handlers.view');
                 break;
+            // run any unknown gui method via the default handler
+            default:
+                $handlerclazz = 'DataObjectDefaultHandler';
+                sys::import('modules.dynamicdata.class.ui_handlers.default');
+                break;
         }
-        $handler = new $handlerclazz($this->args);
+        $this->handler = new $handlerclazz($this->args);
 
         // run the handler and return the output
-        return $handler->run($args);
+        return $this->handler->run($args);
+    }
+
+    /**
+     * Return the current handler, e.g. in case you want to access the object afterwards
+     */
+    function &getHandler()
+    {
+        return $this->handler;
+    }
+
+    /**
+     * Return the current object in the handler, e.g. in case you want to access it afterwards
+     */
+    function &getObject()
+    {
+        if (isset($this->handler)) {
+            return $this->handler->object;
+        }
     }
 }
 

@@ -41,22 +41,17 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         // Set the configuration parameters
         $args = $descriptor->getArgs();
-        try {
-            $configargs = unserialize($args['config']);
-            foreach ($configargs as $key => $value) $this->{$key} = $value;
-            $this->configuration = $configargs;
-        } catch (Exception $e) {}
+        if (!empty($args['config'])) {
+            try {
+                $configargs = unserialize($args['config']);
+                foreach ($configargs as $key => $value) $this->{$key} = $value;
+                $this->configuration = $configargs;
+            } catch (Exception $e) {}
+        }
 
         // set the specific item id (or 0)
         if(isset($args['itemid'])) $this->itemid = $args['itemid'];
 
-        // see if we can access this object, at least in overview
-/*        if(!xarSecurityCheck(
-            'ViewDynamicDataItems',1,'Item',
-            $this->moduleid.':'.$this->itemtype.':'.$this->itemid)
-        ) return;
-        */
-        
         // Get a reference to each property's value
         foreach ($this->properties as $property) {
             $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);

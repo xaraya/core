@@ -35,33 +35,33 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
         if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
 
-        if(!isset($this->list)) 
+        if(!isset($this->object)) 
         {
-            $this->list =& DataObjectMaster::getObjectList($this->args);
-            if(empty($this->list)) 
+            $this->object =& DataObjectMaster::getObjectList($this->args);
+            if(empty($this->object)) 
                 return;
 
             if(empty($this->tplmodule)) 
             {
-                $modname = xarMod::getName($this->list->moduleid);
+                $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
         }
-        $title = xarML('View #(1)', $this->list->label);
+        $title = xarML('View #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
-        $this->list->getItems();
+        $this->object->getItems();
 
-        $this->list->viewfunc = $this->func;
+        $this->object->viewfunc = $this->func;
         // Specify link type here as well
-        $this->list->linktype = $this->type;
-        $this->list->linkfunc = $this->func;
+        $this->object->linktype = $this->type;
+        $this->object->linkfunc = $this->func;
         // TODO: have dedicated template for 'object' type
         return xarTplModule(
             $this->tplmodule,'user','view',
-            array('object' => $this->list,
-                  'layout' => $this->list->layout),
-            $this->list->template
+            array('object' => $this->object,
+                  'layout' => $this->object->layout),
+            $this->object->template
         );
     }
 }
