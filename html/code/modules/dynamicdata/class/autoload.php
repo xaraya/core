@@ -35,6 +35,15 @@ function dynamicdata_autoload($class)
         case 'dataobjectmaster':
             sys::import('modules.dynamicdata.class.objects.master');
             return;
+        case 'dataobjectdescriptor':
+            sys::import('modules.dynamicdata.class.objects.descriptor');
+            return;
+/* if we remove all sys::import from the classes someday ? :-)
+        case 'idataobject':
+        case 'idataobjectlist':
+            sys::import('modules.dynamicdata.class.objects.interfaces');
+            return;
+*/
 
         case 'dataproperty':
             sys::import('modules.dynamicdata.class.properties.base');
@@ -42,6 +51,11 @@ function dynamicdata_autoload($class)
         case 'datapropertymaster':
             sys::import('modules.dynamicdata.class.properties.master');
             return;
+/* if we remove all sys::import from the classes someday ? :-)
+        case 'idataproperty':
+            sys::import('modules.dynamicdata.class.properties.interfaces');
+            return;
+*/
 
         case 'flattabledatastore':
             sys::import('xaraya.datastores.sql.flattable');
@@ -49,8 +63,30 @@ function dynamicdata_autoload($class)
         case 'variabletabledatastore':
             sys::import('xaraya.datastores.sql.variabletable');
             return;
+        case 'modulevariablesdatastore':
+            sys::import('xaraya.datastores.sql.modulevariables');
+            return;
         case 'dummydatastore':
             sys::import('xaraya.datastores.dummy');
+            return;
+        case 'hookdatastore':
+            sys::import('xaraya.datastores.hook');
+            return;
+/* if we remove all sys::import from the classes someday ? :-)
+        case 'iddobject':
+        case 'ibasicdatastore':
+        case 'iordereddatastore':
+        case 'isqldatastore':
+            sys::import('xaraya.datastores.interface');
+            return;
+*/
+
+        case 'dproperty':
+            sys::import('modules.dynamicdata.class.dproperty');
+            return;
+
+        case 'modvarobject':
+            sys::import('modules.dynamicdata.class.modvarobject');
             return;
 
         default:

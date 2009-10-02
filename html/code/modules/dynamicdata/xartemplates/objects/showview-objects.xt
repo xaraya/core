@@ -26,9 +26,13 @@
                     <th class="xar-form-textlong">&#160;</th>
                 </xar:if>
             </tr>
-            <xar:set name="issuperadmin">               
-                in_array(xarUserGetVar('uname'),array_merge(unserialize(xarModVars::get('dynamicdata','administrators')),array(xarUserGetVar('uname',xarModVars::get('roles','admin')))))
-            </xar:set>
+            <xar:set name="adminlistserial">xarModVars::get('dynamicdata','administrators')</xar:set>
+            <xar:if condition="!empty($adminlistserial)">
+                <xar:set name="adminlist">array_merge(unserialize($adminlistserial),array(xarUserGetVar('uname',xarModVars::get('roles','admin'))))</xar:set>
+            <xar:else/>
+                <xar:set name="adminlist">array(xarUserGetVar('uname',xarModVars::get('roles','admin')))</xar:set>
+            </xar:if>
+            <xar:set name="issuperadmin">in_array(xarUserGetVar('uname'),$adminlist)</xar:set>
             <xar:set name="item_no">0</xar:set>
             <xar:foreach in="$items" key="$itemid" value="$fields">
                 <xar:if condition="!$issuperadmin AND ($itemid lt 3)">
