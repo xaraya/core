@@ -18,6 +18,7 @@
 **/
 class xarServer extends Object
 {
+    public static $allowShortURLs = true;
     public static $generateXMLURLs = true;
 
     /**
@@ -26,6 +27,7 @@ class xarServer extends Object
      */
     static function init($args)
     {
+        self::$allowShortURLs = $args['enableShortURLsSupport'];
         self::$generateXMLURLs = $args['generateXMLURLs'];
         xarEvents::register('ServerRequest');
     }
@@ -258,6 +260,41 @@ class xarServer extends Object
         if (isset($target)) $request .= '#' . urlencode($target);
         if ($generateXMLURL) $request = htmlspecialchars($request);
         return $baseurl . $request;
+    }
+
+    /**
+     * Generates an URL that reference to a module function.
+     *
+     * Cfr. xarModURL() in modules
+     */
+    static function getModuleURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array())
+    {
+        // CHECKME: move xarModURL() and xarMod__URL* stuff here, and leave stub in modules ?
+        return xarModURL($modName, $modType, $funcName, $args, $generateXMLURL, $fragment, $entrypoint);
+    }
+
+    /**
+     * Generates an URL that reference to an object user interface method (TODO).
+     */
+    static function getObjectURL($objectName = NULL, $methodName = 'view', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array())
+    {
+        // 1. override any existing 'method' in args, and place before the rest
+        if (!empty($methodName)) {
+            $args = array('method' => $methodName) + $args;
+        }
+        // 2. override any existing 'name' in args, and place before the rest
+        if (!empty($objectName)) {
+            $args = array('name' => $objectName) + $args;
+        }
+        // 3. remove default method 'view' from URLs
+        if ($args['method'] == 'view') {
+            unset($args['method']);
+        // and remove default method 'display' from URLs with an itemid
+        } elseif (!empty($args['itemid']) && $args['method'] == 'display') {
+            unset($args['method']);
+        }
+        // TODO: this is just a temporary fix (until xarRequest supports URLs with ?object=...&method=..., and index.php can call ... ?)
+        return xarServer::getModuleURL('dynamicdata', 'object', 'main', $args, $generateXMLURL, $fragment, $entrypoint);
     }
 }
 
