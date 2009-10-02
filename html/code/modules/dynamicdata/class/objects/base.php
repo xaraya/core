@@ -656,6 +656,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             $args['moduleid'] = $this->moduleid;
 
         $dbconn = xarDB::getConn();
+        xarMod::loadDbInfo('dynamicdata','dynamicdata');
         $xartable = xarDB::getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
