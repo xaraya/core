@@ -384,6 +384,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         xarMod::init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_MODULES;
 
+        // Module hooks are currently linked with modules - see also xaraya.structures.hooks.* ?
+        sys::import('xaraya.hooks');
+
     // we're about done here - everything else requires modules !?
     } else {
         // Make the current load level == the new load level
