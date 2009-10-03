@@ -155,8 +155,13 @@ class DataObjectMaster extends Object
         // always mark the internal DD objects as 'private' (= items 1-3 in xar_dynamic_objects, see xarinit.php)
         if (!empty($this->objectid) && $this->objectid == 1 && !empty($this->itemid) && $this->itemid <= 3) {
             $this->visibility = 'private';
+/* CHECKME: issue warning for static table as well ?
+        } elseif (empty($this->objectid) && !empty($this->table)) {
+            $this->visibility = 'static table';
+*/
         }
 
+// CHECKME: get or set here ? get doesn't use any arguments, and set expects a different format for status
         // create the list of fields, filtering where necessary
         $this->fieldlist = $this->getFieldList($this->fieldlist,$this->status);
 
@@ -220,8 +225,15 @@ class DataObjectMaster extends Object
                         $fields[$property->id] = $property->name;
             } else {
                 // no status filter: return those that are not disabled
+                // CHECKME: filter out DISPLAYONLY or VIEWONLY depending on the class we're in !
+                if (method_exists($this, 'getItems')) {
+                    $filterstate = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
+                } else {
+                    $filterstate = DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY;
+                }
                 foreach($this->properties as $property)
-                    if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                    if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED &&
+                       $property->getDisplayStatus() != $filterstate)
                         $fields[$property->id] = $property->name;
             }
         }
@@ -273,13 +285,13 @@ class DataObjectMaster extends Object
             $this->fieldlist = $cleanlist;
         }
 
+        // CHECKME: filter out DISPLAYONLY or VIEWONLY depending on the class we're in here too ?
         foreach($this->properties as $name => $property) {
             if(
-                !empty($this->fieldlist) and          // if there is a fieldlist
+                (!empty($this->fieldlist) and         // if there is a fieldlist
                 !in_array($name,$this->fieldlist) and // but the field is not in it,
-                $property->type != 21 or                // and we're not on an Item ID property
-// CHECKME: filter based on the default status list for DataObjectList or DataObject ?
-                ($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)  // or the property is disabled
+                $property->type != 21) or             // and we're not on an Item ID property
+                ($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) // or the property is disabled
             )
             {
                 // Skip it.

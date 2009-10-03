@@ -173,7 +173,8 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                 $itemidlist = array();
                 while ($result->next()) {
                     list($field,$itemid,$value) = $result->getRow();
-                    if ($key != 'dynamic_data') $field .= '_' . $key;
+// CHECKME: no longer valid / needed !?
+                    //if ($key != 'dynamic_data') $field .= '_' . $key;
                     $itemidlist[$itemid] = 1;
                     if (isset($value)) {
                         if ($dosort) {

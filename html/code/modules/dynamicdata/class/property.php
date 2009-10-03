@@ -6,6 +6,8 @@ class DProperty extends DataObject
 {
     public $visibility = 'private';
 
+// CHECKME: no longer valid / needed !? See modulevariables datastore
+/*
     function createItem(Array $args = array())
     {
         // If this is a modvar storage, create the modvar first
@@ -39,6 +41,7 @@ class DProperty extends DataObject
         }
         return $id;
     }
+*/
 }
 
 sys::import('modules.dynamicdata.class.objects.list');
