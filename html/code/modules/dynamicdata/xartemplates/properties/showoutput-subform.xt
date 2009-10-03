@@ -5,12 +5,41 @@
         <xar:if condition="!empty($object)">
             <div style="clear:both">&#160;</div>
             <xar:if condition="is_array($object)">
-                <xar:foreach in="$object" key="$key" value="$item">
-                    <xar:if condition="!empty($key) and !is_numeric($key)">
-                        <label>#$key#:</label>
-                    </xar:if>
-                    <xar:data-display object="$item" />
-                </xar:foreach>
+                <xar:if condition="!empty($layout) and $layout eq 'table'">
+                    <table class="xar-fullwidth">
+                    <xar:set name="i">0</xar:set>
+                    <xar:foreach in="$object" key="$key" value="$item">
+                        <xar:if condition="empty($i)">
+                            <tr>
+                                <td></td>
+                                <xar:foreach in="$item:fieldlist" value="$name">
+                                    <!-- CHECKME: syntax for property doesn't work with : and . ? -->
+                                    <td><xar:data-label property="$item->properties[$name]" /></td>
+                                </xar:foreach>
+                            </tr>
+                        </xar:if>
+                        <xar:set name="i">$i+1</xar:set>
+                        <tr>
+                            <xar:if condition="!empty($key) and !is_numeric($key)">
+                                <td>#$key#</td>
+                            <xar:else/>
+                                <td></td>
+                            </xar:if>
+                            <xar:foreach in="$item:fieldlist" value="$name">
+                                <!-- CHECKME: syntax for property doesn't work with : and . ? -->
+                                <td><xar:data-output property="$item->properties[$name]" /></td>
+                            </xar:foreach>
+                        </tr>
+                    </xar:foreach>
+                    </table>
+                <xar:else/>
+                    <xar:foreach in="$object" key="$key" value="$item">
+                        <xar:if condition="!empty($key) and !is_numeric($key)">
+                            <label>#$key#:</label>
+                        </xar:if>
+                        <xar:data-display object="$item" />
+                    </xar:foreach>
+                </xar:if>
             <xar:elseif condition="is_object($object)"/>
                 <xar:data-display object="$object" />
             <xar:else/>

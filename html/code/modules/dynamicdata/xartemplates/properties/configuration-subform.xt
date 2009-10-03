@@ -193,6 +193,13 @@
             <td>Allow editing of the keys in repititions<br/>(= associative array of sub-forms)</td>
         </tr>
         <tr>
+            <td>Template layout</td>
+            <td colspan="2">
+                <input type="text" name="#$name#[layout]" id="#$id#_layout" value="#$layout#"
+                size="#$size#" tabindex="#$tabindex#" />
+            </td>
+        </tr>
+        <tr>
             <td>Other rule</td>
             <td colspan="2">
                 <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#"
