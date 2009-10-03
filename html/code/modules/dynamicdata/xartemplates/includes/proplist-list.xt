@@ -107,7 +107,7 @@
                 </td>
                 <td colspan="5" class="#$displayclass#">
                     Source:&#160;
-                    <select class="dd-norm" name="dd_source[#$field['id']]" id="dd_source_#$field['id']">
+                    <select class="dd-norm" name="dd_source[#$field['id']#]" id="dd_source_#$field['id']#">
                         <xar:set name="found_source">0</xar:set>
                         <xar:foreach in="$sources" value="$mysource">
                             <xar:if condition="$mysource eq $field['source']">
