@@ -9,8 +9,8 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-sys::import('modules.dynamicdata.class.objects');
-sys::import('modules.roles.class.xarQuery');
+sys::import('modules.dynamicdata.class.objects.base');
+
 /**
  * Role: class for the role object
  *
@@ -33,6 +33,8 @@ class Role extends DataObject
     public $modulestable;
 
     public $allprivileges;
+
+    public $visibility = 'private';
 
     /**
      * Role: constructor for the role object
@@ -63,6 +65,8 @@ class Role extends DataObject
 
         $this->parentlevel = 0;
         $this->basetype = $this->getType();
+
+        sys::import('modules.roles.class.xarQuery');
     }
 
     /**
@@ -100,6 +104,7 @@ class Role extends DataObject
         if (empty($data['parentid'])) xarVarFetch('parentid',  'int', $data['parentid'],  NULL, XARVAR_DONT_SET);
         if (empty($data['parentid'])) $data['parentid'] = (int)xarModVars::get('roles', 'defaultgroup');
         if (!empty($data['parentid'])) {
+            sys::import('modules.roles.class.roles');
             $parent = xarRoles::get($data['parentid']);
             if (!$parent->addMember($this))
                 throw new Exception('Unable to create a roles relation');
@@ -252,6 +257,7 @@ class Role extends DataObject
         if(count($result->fields) == 1)
             return xarTplModule('roles','user','errors',array('layout' => 'remove_sole_parent'));
 
+        sys::import('modules.roles.class.roles');
         // go through the list, retrieving the roles and detaching each one
         // we need to do it this way because the method removeMember is more than just
         // a simple SQL DELETE
@@ -662,6 +668,7 @@ class Role extends DataObject
     {
         $users = $this->getUsers($state);
 
+        sys::import('modules.roles.class.roles');
         $groups = xarRoles::getSubGroups($this->getID());
         $ua = array();
         foreach($users as $user){
@@ -814,6 +821,8 @@ class Role extends DataObject
     }
 }
 
+sys::import('modules.dynamicdata.class.objects.list');
+
 /**
  * RoleList: generic list class to handle getItems() etc. for roles
  *
@@ -821,6 +830,9 @@ class Role extends DataObject
  */
 class RoleList extends DataObjectList
 {
+    public $visibility = 'private';
+
     // CHECKME: do we want anything special in here ?
 }
+
 ?>

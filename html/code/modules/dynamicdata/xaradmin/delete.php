@@ -81,6 +81,16 @@ function dynamicdata_admin_delete($args)
         }
         $data['authid'] = xarSecGenAuthKey();
 
+        // if we're editing a dynamic object, check its own visibility
+        if ($myobject->objectid == 1 && $myobject->itemid > 3) {
+            // CHECKME: do we always need to load the object class to get its visibility ?
+            $tmpobject = DataObjectMaster::getObject(array('objectid' => $myobject->itemid));
+            // override the default visibility and moduleid
+            $myobject->visibility = $tmpobject->visibility;
+            $myobject->moduleid = $tmpobject->moduleid;
+            unset($tmpobject);
+        }
+
         xarTplSetPageTitle(xarML('Delete Item #(1) in #(2)', $data['itemid'], $myobject->label));
 
         if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-delete.xt') ||

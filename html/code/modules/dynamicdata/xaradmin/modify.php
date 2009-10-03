@@ -68,6 +68,16 @@ function dynamicdata_admin_modify($args)
         xarVarSetCached('dynamicdata','currentproptype', $myobject->properties['type']);
     }
 
+    // if we're editing a dynamic object, check its own visibility
+    if ($myobject->objectid == 1 && $myobject->itemid > 3) {
+        // CHECKME: do we always need to load the object class to get its visibility ?
+        $tmpobject = DataObjectMaster::getObject(array('objectid' => $myobject->itemid));
+        // override the default visibility and moduleid
+        $myobject->visibility = $tmpobject->visibility;
+        $myobject->moduleid = $tmpobject->moduleid;
+        unset($tmpobject);
+    }
+
     $data['objectid'] = $args['objectid'];
     $data['itemid'] = $args['itemid'];
     $data['authid'] = xarSecGenAuthKey();

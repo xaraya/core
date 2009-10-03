@@ -11,7 +11,6 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-sys::import('modules.roles.class.xarQuery');
 /**
  * xarRoles: class for the role repository
  *
@@ -44,10 +43,11 @@ class xarRoles extends Object
     public static function initialize()
     {
         self::$dbconn = xarDB::getConn();
-        xarModAPILoad('roles');
+        xarMod::loadDbInfo('roles','roles');
         $xartable = xarDB::getTables();
         self::$rolestable = $xartable['roles'];
         self::$rolememberstable = $xartable['rolemembers'];
+        sys::import('modules.roles.class.xarQuery');
     }
 
     /**

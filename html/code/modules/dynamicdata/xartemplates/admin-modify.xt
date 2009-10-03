@@ -28,12 +28,12 @@
         <form method="post" action="&xar-modurl-dynamicdata-admin-update;" enctype="#$enc_type#">
             <fieldset>
                 <legend>Modify Object Definition</legend>
-                <xar:if condition="!empty($objectid) and $objectid eq 1 and $itemid lt 3">
-                    <h3 class="xar-align-center">Warning! This is a system object used internally
-                    by the Dynamic Data module.</h3>
-                    <p>Trying to modify this object may break the Dynamic Data module. Proceed with
-                    caution.</p>
+                <xar:if condition="$object:visibility ne 'public'">
+                    <h3 class="xar-align-center">Warning! This is a <i>#$object:visibility#</i> object used
+                    internally by the #xarMod::getName($object:moduleid)# module.<br/>
+                    Trying to modify this item here may break the module. Please proceed with caution.</h3>
                 </xar:if>
+                <!-- TODO: distinguish between 'protected' and 'private' ? -->
                 <!-- this does most of the hard work :) -->
                 <xar:template file="showinvalids" module="dynamicdata" />
                 <xar:data-form object="$object" />

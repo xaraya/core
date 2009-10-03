@@ -54,6 +54,12 @@
             </fieldset>
         </xar:if>
         <!-- This is where the list of properties shown starts -->
+        <xar:if condition="$visibility ne 'public'">
+            <h3 class="xar-align-center">Warning! This is a <i>#$visibility#</i> object used
+            internally by the #xarMod::getName($module_id)# module.<br/>
+            Trying to modify the properties of this object here may break the module. Please proceed with caution.</h3>
+        </xar:if>
+        <!-- TODO: distinguish between 'protected' and 'private' ? -->
         <xar:if condition="!isset($layout)">
             <xar:set name="layout">'default'</xar:set>
         </xar:if>

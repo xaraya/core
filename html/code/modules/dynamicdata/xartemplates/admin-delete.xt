@@ -9,12 +9,12 @@
         <h2>
           Delete Item #$object:itemid# in #$object:label#
         </h2>
-        <xar:if condition="!empty($object:objectid) and $object:objectid eq 1 and $object:itemid lt 3">
-
-            <h3 class="xar-align-center">Warning! This is a system object used internally by the
-            Dynamic Data module.</h3>
-            <p class="xar-align-center">Deleting this object may break the Dynamic Data module.</p>
-            </xar:if>
+        <xar:if condition="$object:visibility ne 'public'">
+            <h3 class="xar-align-center">Warning! This is a <i>#$object:visibility#</i> object used
+            internally by the #xarMod::getName($object:moduleid)# module.<br/>
+            Trying to delete this item here may break the module. Please proceed with caution.</h3>
+        </xar:if>
+        <!-- TODO: distinguish between 'protected' and 'private' ? -->
         <h3 class="xar-align-center">Confirm Deleting This Item?</h3>
         <xar:data-display object="$object" />
         <div style="clear:both">&#160;</div>

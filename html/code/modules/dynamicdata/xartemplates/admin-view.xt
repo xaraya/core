@@ -15,6 +15,12 @@
             <xar:set name="numitems">30</xar:set>
         </xar:if>
         <xar:if condition="isset($object)">
+            <xar:if condition="$object:visibility ne 'public'">
+                <h3 class="xar-align-center">Warning! This is a <i>#$object:visibility#</i> object used
+                internally by the #xarMod::getName($object:moduleid)# module.<br/>
+                Trying to modify items here may break the module. Please proceed with caution.</h3>
+            </xar:if>
+            <!-- TODO: distinguish between 'protected' and 'private' ? -->
             <xar:data-view layout="$layout" object="$object" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid" sort="$sort" />
         <xar:else />
             <xar:data-view layout="$layout" module="$module_id" itemtype="$itemtype" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid" sort="$sort" />

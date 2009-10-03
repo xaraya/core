@@ -55,6 +55,9 @@ class DataObjectMaster extends Object
     public $filter = false;             // set this true to automatically filter by current itemtype on secondary key
     public $upload = false;             // flag indicating if this object has some property that provides file upload
 
+    public $visibility = 'public';      // hint to DD whether this is a private object for a particular module, a protected object
+                                        // which preferably shouldn't be messed with, or a public object that any admin can modify
+
 // TODO: relink objects, properties and datastores in __wakeup() methods after unserialize()
 
     /**
@@ -147,6 +150,11 @@ class DataObjectMaster extends Object
                 $joinprops = array_splice($this->properties,$count);
                 $this->properties = array_merge($joinprops,$this->properties);
             }
+        }
+
+        // always mark the internal DD objects as 'private' (= items 1-3 in xar_dynamic_objects, see xarinit.php)
+        if (!empty($this->objectid) && $this->objectid == 1 && !empty($this->itemid) && $this->itemid <= 3) {
+            $this->visibility = 'private';
         }
 
         // create the list of fields, filtering where necessary

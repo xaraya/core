@@ -486,7 +486,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // override for viewing dynamic objects
         if($modname == 'dynamicdata' && $this->itemtype == 0 && empty($this->table)) {
             $linktype = 'user';
-            $linkfunc = 'view';
+// CHECKME: who was using 'view' instead of 'display' for links directly in templates (besides DD itself) ?
+            $linkfunc = 'display';
             $args['linktype'] = $linktype;
             $args['linkfunc'] = $linkfunc;
             // Don't show link to view items that don't belong to the DD module

@@ -18,6 +18,12 @@
         <xar:else/>
             <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
         </xar:if>
+        <xar:if condition="$object:visibility ne 'public'">
+            <h3 class="xar-align-center">Warning! This is a <i>#$object:visibility#</i> object used
+            internally by the #xarMod::getName($object:moduleid)# module.<br/>
+            Trying to create this item here may break the module. Please proceed with caution.</h3>
+        </xar:if>
+        <!-- TODO: distinguish between 'protected' and 'private' ? -->
         <form method="post" action="&xar-modurl-dynamicdata-admin-create;" enctype="#$enc_type#">
             <fieldset>
                 <legend>Item details</legend>

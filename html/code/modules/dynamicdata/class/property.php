@@ -4,6 +4,8 @@ sys::import('modules.dynamicdata.class.objects.base');
 
 class DProperty extends DataObject
 {
+    public $visibility = 'private';
+
     function createItem(Array $args = array())
     {
         // If this is a modvar storage, create the modvar first
@@ -43,6 +45,8 @@ sys::import('modules.dynamicdata.class.objects.list');
 
 class DPropertyList extends DataObjectList
 {
+    public $visibility = 'private';
+
     // CHECKME: do we want anything special in here ?
 }
 ?>

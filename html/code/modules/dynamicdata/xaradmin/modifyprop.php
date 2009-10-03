@@ -50,8 +50,18 @@ function dynamicdata_admin_modifyprop()
         $module_id = $objectinfo['moduleid'];
         $itemtype = $objectinfo['itemtype'];
         $label =  $objectinfo['label'];
+        if ($objectid <= 3) {
+            // always mark the internal DD objects as 'private' (= items 1-3 in xar_dynamic_objects, see xarinit.php)
+            $data['visibility'] = 'private';
+        } else {
+            // CHECKME: do we always need to load the object class to get its visibility ?
+            $tmpobject = DataObjectMaster::getObject($objectinfo);
+            $data['visibility'] = $tmpobject->visibility;
+            unset($tmpobject);
+        }
     } else {
         $objectid = null;
+        $data['visibility'] = 'public';
     }
     $data['module_id'] = $module_id;
     $data['itemtype'] = $itemtype;

@@ -4,6 +4,8 @@ sys::import('modules.dynamicdata.class.objects.base');
 
 class ModVarObject extends DataObject
 {
+    public $visibility = 'protected';
+
     function initialize(Array $args = array())
     {
         foreach ($this->properties as $name => $property) {
@@ -20,6 +22,8 @@ sys::import('modules.dynamicdata.class.objects.list');
 
 class ModVarObjectList extends DataObjectList
 {
+    public $visibility = 'protected';
+
     // CHECKME: do we want anything special in here ?
 }
 ?>
