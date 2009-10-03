@@ -613,6 +613,7 @@ class DataObjectMaster extends Object
 
         sys::import('modules.dynamicdata.class.objects.list');
         $class = 'DataObjectList';
+        if(!empty($args['filepath']) && ($args['filepath'] != 'auto')) include_once(sys::code() . $args['filepath']);
         if(!empty($args['class']))
         {
             if(class_exists($args['class'] . 'List'))
