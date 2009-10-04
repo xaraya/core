@@ -22,7 +22,14 @@ class XarayaCompiler extends xarBLCompiler
     {
         // Get the Xaraya tags
         $baseDir = sys::lib() . 'xaraya/templating/tags';
-        $xslFiles = $this->getTagPaths($baseDir, 'file://' . str_replace('\\','/',realpath($baseDir)));
+        $baseDir = realpath($baseDir);
+        if (strpos($baseDir, '\\') != false) {
+            // On Windows, drive letters are preceeded by an extra / [file:///C:/...]
+            $baseURI = 'file:///' . str_replace('\\','/',$baseDir);
+        } else {
+            $baseURI = 'file://' . $baseDir;
+        }
+        $xslFiles = $this->getTagPaths($baseDir, $baseURI);
         // Add the custom tags from modules
         $xslFiles = array_merge($xslFiles,$this->getModuleTagPaths());
         return $xslFiles;
@@ -43,17 +50,19 @@ class XarayaCompiler extends xarBLCompiler
         $files = array();
         foreach($activeMods as $modInfo) {
             $filepath = sys::code() . 'modules/' .$modInfo['osdirectory'] . '/tags';
+            if (!is_dir($filepath)) continue;
+            $filepath = realpath($filepath);
             if (strpos($filepath, '\\') != false) {
-                $fileURL = 'file:///' . str_replace('\\','/',realpath($filepath));
+                // On Windows, drive letters are preceeded by an extra / [file:///C:/...]
+                $fileURI = 'file:///' . str_replace('\\','/',$filepath);
             } else {
-                $fileURL = 'file://' . realpath($filepath);
+                $fileURI = 'file://' . $filepath;
             }
-            if (!file_exists($filepath)) continue;
             foreach (new DirectoryIterator($filepath) as $fileInfo) {
                 if($fileInfo->isDot()) continue;
                 $pathinfo = pathinfo($fileInfo->getPathName());
                 if(isset($pathinfo['extension']) && $pathinfo['extension'] != 'xsl') continue;
-                $files[] = $fileURL . "/" . $fileInfo->getFileName();
+                $files[] = $fileURI . "/" . $fileInfo->getFileName();
             }
         }            
         return $files;
