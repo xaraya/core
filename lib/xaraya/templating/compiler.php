@@ -43,7 +43,11 @@ class XarayaCompiler extends xarBLCompiler
         $files = array();
         foreach($activeMods as $modInfo) {
             $filepath = sys::code() . 'modules/' .$modInfo['osdirectory'] . '/tags';
-            $fileURL = 'file://' . str_replace('\\','/',realpath($filepath));
+            if (strpos($filepath, '\\') != false) {
+                $fileURL = 'file:///' . str_replace('\\','/',realpath($filepath));
+            } else {
+                $fileURL = 'file://' . realpath($filepath);
+            }
             if (!file_exists($filepath)) continue;
             foreach (new DirectoryIterator($filepath) as $fileInfo) {
                 if($fileInfo->isDot()) continue;
