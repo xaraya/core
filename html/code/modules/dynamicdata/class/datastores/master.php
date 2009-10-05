@@ -212,9 +212,10 @@ class DataStoreFactory extends Object
         $dbTables = $dbInfo->getTables();
         foreach($dbTables as $tblInfo)
         {
+            $tblName = $tblInfo->getName();
             $tblColumns = $tblInfo->getColumns();
             foreach($tblColumns as $colInfo)
-                $sources[] = $tblInfo->getName().".".$colInfo->getName();
+                $sources[] = $tblName.".".$colInfo->getName();
         }
         return $sources;
     }

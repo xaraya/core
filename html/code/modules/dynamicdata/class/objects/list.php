@@ -487,15 +487,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // override for viewing dynamic objects
         if($modname == 'dynamicdata' && $this->itemtype == 0 && empty($this->table)) {
-            $linktype = 'user';
+            $args['linktype'] = 'user';
 // CHECKME: who was using 'view' instead of 'display' for links directly in templates (besides DD itself) ?
-            $linkfunc = 'display';
-            $args['linktype'] = $linktype;
-            $args['linkfunc'] = $linkfunc;
+            $args['linkfunc'] = 'display';
             // Don't show link to view items that don't belong to the DD module
-        } else {
-            $linktype = $args['linktype'];
-            $linkfunc = $args['linkfunc'];
         }
 
         if(empty($itemtype)) $itemtype = 0; // don't add to URL
@@ -519,6 +514,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         // get view options for each item
         $this->cachedlinks = array();
+        $this->linktype = $args['linktype'];
         foreach(array_keys($this->items) as $itemid) {
             // TODO: improve this + SECURITY !!!
             $options = array();
@@ -536,6 +532,19 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
             }
             $args['linkfield'] = 'N/A';
+        }
+        // if $linktype == 'object' use getObjectURL()
+        if ($this->linktype == 'object') {
+            $urlargs = array();
+            $urlargs['table'] = $args['table'];
+            $args['newlink'] = xarServer::getObjectURL($args['objectname'], 'create', $urlargs);
+        } else {
+            $urlargs = array();
+            $urlargs['table'] = $args['table'];
+            $urlargs['name'] = $args['objectname'];
+            $urlargs['tplmodule'] = $args['tplmodule'];
+            $tplmodule = $this->checkModuleFunction($args['tplmodule'], 'admin', 'new');
+            $args['newlink'] = xarServer::getModuleURL($tplmodule,'admin','new',$urlargs);
         }
 
         $args['isprimary'] = !empty($this->primary);
@@ -566,13 +575,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $urlargs['table'] = $args['table'];
         // The next 3 lines make the DD modify/display routines work for overlay objects
         // TODO: do we need the concept of tplmodule at all? Good question :-)
-/* passed by showView() $args above
-        $info = DataObjectMaster::getObjectInfo($args);
-        $urlargs['name'] = $info['name'];
-*/
-        $urlargs['name'] = $args['objectname'];
-        $urlargs[$args['param']] = $args['itemid'];
-        $urlargs['tplmodule'] = $args['tplmodule'];
+        if ($this->linktype != 'object') {
+            $urlargs['name'] = $args['objectname'];
+            $urlargs[$args['param']] = $args['itemid'];
+            $urlargs['tplmodule'] = $args['tplmodule'];
+        } else {
+            $urlargs[$args['param']] = $args['itemid'];
+        }
 
         $options = array();
 
@@ -609,8 +618,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $link = str_replace('=<itemid>','='.$args['itemid'],$this->cachedlinks['display']);
 
             } else {
-                $tplmodule = $this->checkModuleFunction($args['tplmodule'], $args['linktype'], $args['linkfunc']);
-                $link = xarModURL($tplmodule,$args['linktype'],$args['linkfunc'],$urlargs);
+                // if $linktype == 'object' use getObjectURL()
+                if ($this->linktype == 'object') {
+                    $link = xarServer::getObjectURL($args['objectname'], 'display', $urlargs);
+                } else {
+                    $tplmodule = $this->checkModuleFunction($args['tplmodule'], $args['linktype'], $args['linkfunc']);
+                    $link = xarServer::getModuleURL($tplmodule,$args['linktype'],$args['linkfunc'],$urlargs);
+                }
                 // check if we're using short URLs here, before trying to cache the display link
                 if (!xarMod::$genShortUrls && strpos($link, $args['param'].'='.$args['itemid']) !== false) {
                     $this->cachedlinks['display'] = str_replace($args['param'].'='.$args['itemid'], $args['param'].'=<itemid>', $link);
@@ -626,19 +640,14 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             if (!empty($this->cachedlinks['modify'])) {
                 $link = str_replace('=<itemid>','='.$args['itemid'],$this->cachedlinks['modify']);
 
-            // if $linktype == 'object' use function 'main' everywhere and set $urlargs['method']
-            } elseif ($args['tplmodule'] == 'dynamicdata' && $args['linktype'] == 'object' && $args['linkfunc'] == 'main') {
-                // prepend method to urlargs
-                $urlargs2 = array('method' => 'update') + $urlargs;
-                unset($urlargs2['tplmodule']);
-                $link = xarModURL($args['tplmodule'],$args['linktype'],$args['linkfunc'],$urlargs2);
-                if (strpos($link, $args['param'].'='.$args['itemid']) !== false) {
-                    $this->cachedlinks['modify'] = str_replace($args['param'].'='.$args['itemid'], $args['param'].'=<itemid>', $link);
-                }
-
             } else {
-                $tplmodule = $this->checkModuleFunction($args['tplmodule'], 'admin', 'modify');
-                $link = xarModURL($tplmodule,'admin','modify',$urlargs);
+                // if $linktype == 'object' use getObjectURL()
+                if ($this->linktype == 'object') {
+                    $link = xarServer::getObjectURL($args['objectname'], 'update', $urlargs);
+                } else {
+                    $tplmodule = $this->checkModuleFunction($args['tplmodule'], 'admin', 'modify');
+                    $link = xarServer::getModuleURL($tplmodule,'admin','modify',$urlargs);
+                }
                 if (strpos($link, $args['param'].'='.$args['itemid']) !== false) {
                     $this->cachedlinks['modify'] = str_replace($args['param'].'='.$args['itemid'], $args['param'].'=<itemid>', $link);
                 }
@@ -650,13 +659,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // extra options when showing the dynamic objects themselves
             if ($this->objectid == 1) {
                 $options['viewitems'] = array('otitle' => xarML('Items'),
-                                              'olink'  => xarModURL('dynamicdata','admin','view',
+                                              'olink'  => xarServer::getModuleURL('dynamicdata','admin','view',
                                                                     array('itemid' => $args['itemid'])),
                                               'ojoin'  => '|'
                                              );
                 $tplmodule = $this->checkModuleFunction($args['tplmodule'], 'admin', 'modifyprop');
                 $options['modifyprops'] = array('otitle' => xarML('Properties'),
-                                     'olink'  => xarModURL($tplmodule,'admin','modifyprop',$urlargs),
+                                     'olink'  => xarServer::getModuleURL($tplmodule,'admin','modifyprop',$urlargs),
                                      'ojoin'  => '|');
             }
         }
@@ -665,19 +674,14 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             if (!empty($this->cachedlinks['delete'])) {
                 $link = str_replace('=<itemid>','='.$args['itemid'],$this->cachedlinks['delete']);
 
-            // if $linktype == 'object' use function 'main' everywhere and set $urlargs['method']
-            } elseif ($args['tplmodule'] == 'dynamicdata' && $args['linktype'] == 'object' && $args['linkfunc'] == 'main') {
-                // prepend method to urlargs
-                $urlargs2 = array('method' => 'delete') + $urlargs;
-                unset($urlargs2['tplmodule']);
-                $link = xarModURL($args['tplmodule'],$args['linktype'],$args['linkfunc'],$urlargs2);
-                if (strpos($link, $args['param'].'='.$args['itemid']) !== false) {
-                    $this->cachedlinks['delete'] = str_replace($args['param'].'='.$args['itemid'], $args['param'].'=<itemid>', $link);
-                }
-
             } else {
-                $tplmodule = $this->checkModuleFunction($args['tplmodule'], 'admin', 'delete');
-                $link = xarModURL($tplmodule,'admin','delete', $urlargs);
+                // if $linktype == 'object' use getObjectURL()
+                if ($this->linktype == 'object') {
+                    $link = xarServer::getObjectURL($args['objectname'], 'delete', $urlargs);
+                } else {
+                    $tplmodule = $this->checkModuleFunction($args['tplmodule'], 'admin', 'delete');
+                    $link = xarServer::getModuleURL($tplmodule,'admin','delete', $urlargs);
+                }
                 if (strpos($link, $args['param'].'='.$args['itemid']) !== false) {
                     $this->cachedlinks['delete'] = str_replace($args['param'].'='.$args['itemid'], $args['param'].'=<itemid>', $link);
                 }
