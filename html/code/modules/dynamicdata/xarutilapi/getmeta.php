@@ -62,6 +62,7 @@ function dynamicdata_utilapi_getmeta($args)
     if (!isset($tables)) return;
 
     // Get the default property types
+    sys::import('modules.dynamicdata.class.properties.master');
     $proptypes = DataPropertyMaster::getPropertyTypes();
     $proptypeid = array();
     foreach ($proptypes as $proptype) {
