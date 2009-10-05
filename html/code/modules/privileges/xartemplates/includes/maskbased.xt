@@ -2,10 +2,26 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<fieldset>
-<legend>Simple Mask-Based Security Checks by Group <a href="#xarServer::getCurrentURL(array('refresh'=> 1))#" title="Refresh based on currently assigned privileges (this might take a while)"><img src="#xarTplGetImage('icons/view-refresh.png','base')#" width="16" height="16" border="0" /></a></legend>
+<xar:set name="isenabled">xarModVars::get('privileges','maskbasedsecurity')</xar:set>
+<xar:sec mask="AdminPrivilege" catch="false">
+    <xar:if condition="!empty($_REQUEST['enable'])">
+        <xar:if condition="$_REQUEST['enable'] lt 0">
+            <xar:set name="dummy">xarModVars::set('privileges','maskbasedsecurity',false)</xar:set>
+            <xar:set name="isenabled">0</xar:set>
+        <xar:else/>
+            <xar:set name="dummy">xarModVars::set('privileges','maskbasedsecurity',true)</xar:set>
+            <xar:set name="isenabled">1</xar:set>
+        </xar:if>
+        #xarResponse::Redirect(xarServer::getCurrentURL(array('enable'=> null)))#
+    </xar:if>
+</xar:sec>
 
-// CHECKME: support this option in xarSecurityCheck() code or not ?
+<fieldset>
+<xar:if condition="!empty($isenabled)">
+    <legend><a href="#xarServer::getCurrentURL(array('enable'=> -1))#" title="Turn OFF mask-based security checks">DISABLE</a> Simple Mask-Based Security Checks by Group <a href="#xarServer::getCurrentURL(array('refresh'=> 1))#" title="Refresh based on currently assigned privileges (this might take a while)"><img src="#xarTplGetImage('icons/view-refresh.png','base')#" width="16" height="16" border="0" /></a></legend>
+<xar:else/>
+    <legend><a href="#xarServer::getCurrentURL(array('enable'=> 1))#" title="Turn ON mask-based security checks">ACTIVATE</a> Simple Mask-Based Security Checks by Group <a href="#xarServer::getCurrentURL(array('refresh'=> 1))#" title="Refresh based on currently assigned privileges (this might take a while)"><img src="#xarTplGetImage('icons/view-refresh.png','base')#" width="16" height="16" border="0" /></a></legend>
+</xar:if>
 
 <xar:sec mask="AdminPrivilege" catch="false">
     <xar:if condition="!empty($_REQUEST['flip'])">
@@ -80,9 +96,8 @@ uasort($groups,'by_name')</xar:set>
 </table>
 <p>
     Note to site developers: if you don't want to differentiate privileges by instance, you could use this view for simplified security checks on your site.<br/>
-    Howto:  in [xarMasks::]xarSecurityCheck(), get all groups the user belongs to (or perhaps just the primary parent), and check xarModVars::get('privileges','SC:'.[maskname].':'.[roleid]) for each group.
-    Fall back to normal behaviour if it's not defined, and save the result for next time if you want.<br/>
-    Otherwise, flipping any of the security settings above won't do anything for your security :-)
+    If mask-based security checks are activated, you can flip security settings for individual masks and groups here. Please note that the underlying privilege
+    assignments are not modified, so if you disable mask-based security checks later on, the original privileges come back into effect.
 </p>
 </fieldset>
 </xar:template>

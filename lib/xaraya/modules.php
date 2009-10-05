@@ -128,13 +128,7 @@ function xarMod__URLencode($data, $type = 'getname')
     // The aim is to encode as little as possible, so that URLs
     // remain as human-readable as we can allow.
 
-    // We will encode everything first, then restore a select few
-    // characters.
-    // TODO: tackle it the other way around, i.e. have rules for
-    // what to encode, rather than undoing some ecoded characters.
-    $data = rawurlencode($data);
-
-    $decode = array(
+    static $decode = array(
         'path' => array(
             array('%2C', '%24', '%21', '%2A', '%28', '%29', '%3D'),
             array(',', '$', '!', '*', '(', ')', '=')
@@ -148,6 +142,12 @@ function xarMod__URLencode($data, $type = 'getname')
             array(',', '$', '!', '*', '(', ')', '=', '\'', '[', ']', ':', '/', '?', '=')
         )
     );
+
+    // We will encode everything first, then restore a select few
+    // characters.
+    // TODO: tackle it the other way around, i.e. have rules for
+    // what to encode, rather than undoing some ecoded characters.
+    $data = rawurlencode($data);
 
     // TODO: check what automatic ML settings have on this.
     // I suspect none, as all multi-byte characters have ASCII values
@@ -1190,6 +1190,9 @@ class xarMod extends Object implements IxarMod
         } elseif (is_dir(sys::code() . 'modules/'.$modDir.'/xar'.$modType)) {
             // this is OK too - do nothing
             $loadedModuleCache[$cacheKey] = true;
+        } else {
+            // this is (not really) OK too - do nothing
+            $loadedModuleCache[$cacheKey] = false;
         }
 
         // Load the module translations files (common functions, uncut functions etc.)

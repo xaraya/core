@@ -24,7 +24,7 @@ class CompiledTemplate extends Object
     public function __construct($fileName,$source=null,$type='module')
     {
         // @todo keep here?
-        if (!file_exists($fileName))  throw new FileNotFoundException($fileName); // we only do files atm
+        //if (!file_exists($fileName))  throw new FileNotFoundException($fileName); // we only do files atm
         $this->fileName = $fileName;
         $this->source   = $source;
         $this->type     = $type;
@@ -33,7 +33,6 @@ class CompiledTemplate extends Object
     public function &execute(&$bindvars, $caching = 0)
     {
         assert('isset($this->fileName); /* No source to execute from */');
-        assert('file_exists($this->fileName); /* Compiled templated disappeared in mid air, race condition? */');
         assert('is_array($bindvars); /* Template data needs to be passed in as an array */');
 
         // Do we really need this?
@@ -67,6 +66,7 @@ class CompiledTemplate extends Object
                 }
 
                 $res = include("var://_compiler_output");
+                // or simply eval('?[remove]>'.$_compiler_output); without streams
             } else {
                 $res = include($this->fileName);
             }

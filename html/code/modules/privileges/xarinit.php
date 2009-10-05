@@ -255,6 +255,8 @@ function privileges_activate()
     xarModVars::set('privileges', 'testmask', 'All');
     xarModVars::set('privileges', 'realmvalue', 'none');
     xarModVars::set('privileges', 'realmcomparison','exact');
+    xarModVars::set('privileges', 'exceptionredirect', false);
+    xarModVars::set('privileges', 'maskbasedsecurity', false);
     return true;
 }
 

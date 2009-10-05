@@ -353,6 +353,8 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     // Get the right source filename
     $sourceFileName = xarTpl__GetSourceFileName($modName, $tplBase, $templateName);
 
+    //assert('!empty($sourceFileName); /* The source file for the template is empty in xarTplModule */');
+
     // Common data for BL
     $tplData['_bl_module_name'] = $modName;
     $tplData['_bl_module_type'] = $modType;
@@ -422,27 +424,37 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, 
  */
 function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elements)
 {
-    $tplType = xarVarPrepForOS($tplType);
+    $cachename = "$modName:$ddName:$tplType:$tplBase:$elements";
 
-    // Template type for the property can be overridden too (currently unused)
-    $templateBase   = xarVarPrepForOS(empty($tplBase) ? $tplType : $tplBase);
+    // cache frequently-used sourcefilenames for DD elements
+    if (xarCore::isCached('Templates.DDElement', $cachename)) {
+        $sourceFileName = xarCore::getCached('Templates.DDElement', $cachename);
 
-    // Get the right source filename
-    $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $ddName, $elements);
+    } else {
+        $tplType = xarVarPrepForOS($tplType);
 
-    // Property fall-back to default template in the module the property belongs to
-    if ((empty($sourceFileName) || !file_exists($sourceFileName)) &&
-        $elements == 'properties') {
-        $fallbackmodule = DataPropertyMaster::getProperty(array('type' => $ddName))->tplmodule;
-        if ($fallbackmodule != $modName) {
-            $sourceFileName = xarTpl__GetSourceFileName($fallbackmodule, $templateBase, $ddName, $elements);
+        // Template type for the property can be overridden too (currently unused)
+        $templateBase   = xarVarPrepForOS(empty($tplBase) ? $tplType : $tplBase);
+
+        // Get the right source filename
+        $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $ddName, $elements);
+
+        // Property fall-back to default template in the module the property belongs to
+        if (empty($sourceFileName) &&
+            $elements == 'properties') {
+            $fallbackmodule = DataPropertyMaster::getProperty(array('type' => $ddName))->tplmodule;
+            if ($fallbackmodule != $modName) {
+                $sourceFileName = xarTpl__GetSourceFileName($fallbackmodule, $templateBase, $ddName, $elements);
+            }
         }
-    }
 
-    // Final fall-back to default template in dynamicdata for both objects and properties
-    if ((empty($sourceFileName) || !file_exists($sourceFileName)) &&
-        $modName != 'dynamicdata') {
-        $sourceFileName = xarTpl__GetSourceFileName('dynamicdata', $templateBase, $ddName, $elements);
+        // Final fall-back to default template in dynamicdata for both objects and properties
+        if (empty($sourceFileName) &&
+            $modName != 'dynamicdata') {
+            $sourceFileName = xarTpl__GetSourceFileName('dynamicdata', $templateBase, $ddName, $elements);
+        }
+
+        xarCore::setCached('Templates.DDElement', $cachename, $sourceFileName);
     }
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
@@ -703,7 +715,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
  * Execute template from file
  *
  * @access private
- * @param  string $sourceFileName       From which file do we want to execute?
+ * @param  string $sourceFileName       From which file do we want to execute? Assume it exists by now ;-)
  * @param  array  $tplData              Template variables
  * @param  string $tplType              'module' or 'page'
  * @return string generated output from the file
@@ -712,31 +724,40 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
  */
 function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
 {
+    assert('!empty($sourceFileName); /* The source file for the template is empty in xarTpl__executeFromFile */');
     assert('is_array($tplData); /* Template data should always be passed in as array */');
 
-    // Load translations for the template
-    xarMLSLoadTranslations($sourceFileName);
+    // cache frequently-used cachedfilenames
+    if (xarCore::isCached('Templates.ExecuteFromFile', $sourceFileName)) {
+        $cachedFileName = xarCore::getCached('Templates.ExecuteFromFile', $sourceFileName);
 
-    xarLogMessage("Using template : $sourceFileName");
-    $templateCode = null;
-//    $sourceFileName = sys::code() . $sourceFileName;
-    // Determine if we need to compile this template
-    if (xarTemplateCache::isDirty($sourceFileName)) {
-        // Get an instance of SourceTemplate
-        sys::import('xaraya.templating.source');
-        $srcTemplate = new XarayaSourceTemplate($sourceFileName);
+    } else {
+        // Load translations for the template
+        xarMLSLoadTranslations($sourceFileName);
 
-        // Compile it
-        // @todo return a CompiledTemplate object here?
-        $templateCode = $srcTemplate->compile();
+        xarLogMessage("Using template : $sourceFileName");
+        $templateCode = null;
 
-        // Save the entry in templatecache (if active)
-        xarTemplateCache::saveEntry($sourceFileName,$templateCode);
+        // Determine if we need to compile this template
+        if (xarTemplateCache::isDirty($sourceFileName)) {
+            // Get an instance of SourceTemplate
+            sys::import('xaraya.templating.source');
+            $srcTemplate = new XarayaSourceTemplate($sourceFileName);
+
+            // Compile it
+            // @todo return a CompiledTemplate object here?
+            $templateCode = $srcTemplate->compile();
+
+            // Save the entry in templatecache (if active)
+            xarTemplateCache::saveEntry($sourceFileName,$templateCode);
+        }
+
+        // Execute either the compiled template, or the code determined
+        // @todo get rid of the cachedFileName usage
+        $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
+
+        xarCore::setCached('Templates.ExecuteFromFile', $sourceFileName, $cachedFileName);
     }
-
-    // Execute either the compiled template, or the code determined
-    // @todo get rid of the cachedFileName usage
-    $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
 
     // Execute the compiled template from the cache file
     // @todo the tplType should be irrelevant
@@ -764,7 +785,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
  * @param  string $tplBase      The base name for the template
  * @param  string $templateName The name for the template to use if any
  * @param  string $tplSubPart   A subpart ('' or 'blocks' or 'properties')
- * @return string
+ * @return string the path [including sys::code()] to an existing template sourcefile, or empty
  *
  * @todo do we need to load the translations here or a bit later? (here:easy, later: better abstraction)
  */
@@ -792,8 +813,6 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
 
     $tplThemesDir = xarTplGetThemeDir();
     $tplBaseDir   = sys::code() . "modules/$modOsDir";
-    $use_internal = false;
-    unset($sourceFileName);
 
     xarLogMessage("TPL: 1. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt");
     xarLogMessage("TPL: 2. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt");
@@ -805,41 +824,23 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
 
     if(!empty($templateName) &&
         file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")) {
-        $tplBase .= "-$templateName";
     } elseif(!empty($templateName) &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt")) {
-        $use_internal = true;
-        $tplBase .= "-$templateName";
     } elseif(
         file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt")) {
         ;
     } elseif(
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xt")) {
-        $use_internal = true;
     } elseif($canonical &&
         file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$canTemplateName.xt")) {
     } elseif($canonical &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$canTemplateName.xt")) {
-        $use_internal = true;
     } else {
-        // CHECKME: should we do something here ? At the moment, translations still get loaded,
-        //          the (invalid) $sourceFileName gets passed back to xarTpl*, and we'll get
-        //          an exception when it's passed to xarTpl__executeFromFile().
-        //          We probably don't want to throw an exception here, but we might return
-        //          now, or have some final fall-back template in base (resp. DD for properties)
+        // let functions higher up worry about what to do, e.g. DD object of property fallback template
+        $sourceFileName = '';
     }
     // Subpart may have been empty,
     $sourceFileName = str_replace('//','/',$sourceFileName);
-    // assert('isset($sourceFileName); /* The source file for the template has no value in xarTplModule */');
-
-    // Load the appropriate translations
-    if($use_internal) {
-        $domain  = XARMLS_DNTYPE_MODULE; $instance= $modName;
-        $context = rtrim("modules:templates/$tplSubPart",'/');
-    } else {
-        $domain = XARMLS_DNTYPE_THEME; $instance = $GLOBALS['xarTpl_themeName'];
-        $context = rtrim("themes:modules/$modName/$tplSubPart",'/');
-    }
 
     return $sourceFileName;
 }

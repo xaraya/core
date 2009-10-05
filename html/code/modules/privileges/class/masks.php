@@ -42,6 +42,18 @@ class xarMasks extends Object
 
     protected static $privilegeset;
 
+    // copy frequently-called module vars to static vars
+    protected static $realmcomparison;
+    protected static $tester;
+    protected static $test;
+    protected static $testdeny;
+    protected static $testmask;
+    protected static $inheritdeny;
+    protected static $realmvalue;
+    protected static $exceptionredirect;
+    protected static $maskbasedsecurity;
+    protected static $maskbasedgrouplist;
+
     /**
      * xarMasks: constructor for the class
      *
@@ -56,8 +68,10 @@ class xarMasks extends Object
     */
     public static function initialize()
     {
+        if (!empty(self::$dbconn)) return;
+
         self::$dbconn = xarDB::getConn();
-        xarModAPILoad('privileges');
+        xarMod::loadDbInfo('privileges','privileges');
         $xartable = xarDB::getTables();
         self::$privilegestable = $xartable['privileges'];
         self::$privmemberstable = $xartable['privmembers'];
@@ -67,6 +81,19 @@ class xarMasks extends Object
         self::$instancestable = $xartable['security_instances'];
         self::$modulestable = $xartable['modules'];
         self::$rolestable = $xartable['roles'];
+
+        // CHECKME: do we need to be careful during installation here or not ?
+        if (class_exists('xarModVars')) {
+            self::$realmcomparison = xarModVars::get('privileges', 'realmcomparison');
+            self::$tester = xarModVars::get('privileges','tester');
+            self::$test = xarModVars::get('privileges','test');
+            self::$testdeny = xarModVars::get('privileges','testdeny');
+            self::$testmask = xarModVars::get('privileges','testmask');
+            self::$inheritdeny = xarModVars::get('privileges','inheritdeny');
+            self::$realmvalue = xarModVars::get('privileges', 'realmvalue');
+            self::$exceptionredirect = xarModVars::get('privileges','exceptionredirect');
+            self::$maskbasedsecurity = xarModVars::get('privileges','maskbasedsecurity');
+        }
 
         // @todo refactor callers to do this directly
         sys::import('modules.privileges.class.securitylevel');
@@ -281,6 +308,35 @@ class xarMasks extends Object
         xarLogMessage("PRIVS: id in security check: $userID");
         if ($userID == XARUSER_LAST_RESORT) return true;
 
+        // mask-based security check for the group(s) of the current user (optional)
+        if (self::$maskbasedsecurity && !empty($mask) && empty($rolename)) { // $rolename must be empty
+            $savedmask = $mask;
+            if (empty(self::$maskbasedgrouplist)) {
+                sys::import('modules.roles.class.roles');
+                $role = xarRoles::get($userID);
+                $grouplist = array();
+                foreach ($role->getParents() as $parent) {
+                    $grouplist[$parent->getID()] = 1;
+                }
+                self::$maskbasedgrouplist = array_keys($grouplist);
+            }
+            $found = 0;
+            foreach (self::$maskbasedgrouplist as $groupid) {
+                $val = xarModVars::get('privileges','SC:'.$savedmask.':'.$groupid);
+                if (!empty($val)) {
+                    // access for this group - stop checking and return true
+                    return true;
+                } elseif (isset($val)) {
+                    // no access for this group - continue checking
+                    $found = 1;
+                }
+            }
+            if ($found == 1) {
+                // no access for any groups - return false
+                return false;
+            }
+        }
+
         $maskname = $mask;
         if (empty($maskname)) {
             sys::import('modules.privileges.class.mask');
@@ -323,7 +379,7 @@ class xarMasks extends Object
         if (!empty($realm)) $mask->setRealm($realm);
         if (!empty($level)) $mask->setLevel($level);
 
-        $realmvalue = xarModVars::get('privileges', 'realmvalue');
+        $realmvalue = self::$realmvalue;
         if (strpos($realmvalue,'string:') === 0) {
             $textvalue = substr($realmvalue,7);
             $realmvalue = 'string';
@@ -431,10 +487,20 @@ class xarMasks extends Object
 
         //$pass = self::testprivileges($mask,self::getprivset($role),false);
 
+        // mask-based security check for the groups of the current user (optional)
+        if (self::$maskbasedsecurity && !empty($savedmask) && count(self::$maskbasedgrouplist) == 1) {
+            $groupid = self::$maskbasedgrouplist[0];
+            if (!empty($pass)) {
+                xarModVars::set('privileges','SC:'.$savedmask.':'.$groupid, true);
+            } else {
+                xarModVars::set('privileges','SC:'.$savedmask.':'.$groupid, false);
+            }
+        }
+
         // check if the exception needs to be caught here or not
 
         if ($catch && !$pass) {
-            if (xarModVars::get('privileges','exceptionredirect') && !xarUserIsLoggedIn()) {
+            if (self::$exceptionredirect && !xarUserIsLoggedIn()) {
                 // The current authentication module will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login
                 $requrl = xarServer::getCurrentURL(array(),false);
@@ -443,8 +509,8 @@ class xarMasks extends Object
 //                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
                 xarResponse::Redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
                 $msg = xarML("You don't have the correct privileges for this operation");
-                $candebug = (xarSession::getVar('role_id') == xarModVars::get('privileges','tester'));
-                $test = xarModVars::get('privileges','test') && $candebug;
+                $candebug = (xarSession::getVar('role_id') == self::$tester);
+                $test = self::$test && $candebug;
                 if ($test) $msg .= ": " . $maskname;
                 throw new Exception($msg);
             }
@@ -587,10 +653,10 @@ class xarMasks extends Object
     */
     public static function testprivileges($mask,$privilegeset,$pass,$role='')
     {
-        $candebug = (xarSession::getVar('role_id') == xarModVars::get('privileges','tester'));
-        $test = xarModVars::get('privileges','test') && $candebug;
-        $testdeny = xarModVars::get('privileges','testdeny') && $candebug;
-        $testmask = xarModVars::get('privileges','testmask');
+        $candebug = (xarSession::getVar('role_id') == self::$tester);
+        $test = self::$test && $candebug;
+        $testdeny = self::$testdeny && $candebug;
+        $testmask = self::$testmask;
         $matched = false;
         $pass = false;
         // Note : DENY rules override all others here...
@@ -612,7 +678,7 @@ class xarMasks extends Object
                 xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
             }
             if ($privilege['level'] == 0 && self::includes($privilege,$mask)) {
-                if (!xarModVars::get('privileges','inheritdeny') && is_object($role)) {
+                if (!self::$inheritdeny && is_object($role)) {
                     if($thistest) {
                         echo "We don't inherit <strong>denys</strong>, ";
                     }
@@ -723,7 +789,7 @@ class xarMasks extends Object
         $p2 = $mask;
 
         // match realm. bail if no match.
-        switch(xarModVars::get('privileges', 'realmcomparison')) {
+        switch(self::$realmcomparison) {
             case "contains":
                 $fails = $p1['realm']!=$p2['realm'];
             case "exact":
