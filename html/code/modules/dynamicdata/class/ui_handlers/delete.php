@@ -49,14 +49,18 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
         {
             if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
                 return;
-                
-            if(!empty($args['return_url'])) 
-                xarResponse::Redirect($args['return_url']);
-            else 
-                xarResponse::Redirect(xarModURL(
-                    $this->tplmodule, $this->type, $this->func,
-                    array('object' => $this->object->name))
-                );
+
+            if(empty($args['return_url'])) 
+            {
+                if ($this->type == 'object') {
+                    $args['return_url'] = xarServer::getObjectURL($this->object->name, 'view');
+                } else {
+                    $args['return_url'] = xarServer::getModuleURL(
+                        $this->tplmodule, $this->type, $this->func,
+                        array('name' => $this->object->name));
+                }
+            } 
+            xarResponse::Redirect($args['return_url']);
             // Return
             return true;
         }
@@ -84,13 +88,17 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
             if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
                 return;
                 
-            if(!empty($args['return_url'])) 
-                xarResponse::Redirect($args['return_url']);
-            else 
-                xarResponse::Redirect(xarModURL(
-                    $this->tplmodule, $this->type, $this->func,
-                    array('object' => $this->object->name))
-                );
+            if(empty($args['return_url'])) 
+            {
+                if ($this->type == 'object') {
+                    $args['return_url'] = xarServer::getObjectURL($this->object->name, 'view');
+                } else {
+                    $args['return_url'] = xarServer::getModuleURL(
+                        $this->tplmodule, $this->type, $this->func,
+                        array('name' => $this->object->name));
+                }
+            } 
+            xarResponse::Redirect($args['return_url']);
             // Return
             return true;
         }
@@ -99,15 +107,10 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
         $this->object->viewfunc = $this->func;
-        // TODO: have dedicated template for 'object' type
-        return xarTplModule(
-            $this->tplmodule,'admin','delete',
-            array(
-                  'object' => $this->object,
-                  'authid' => xarSecGenAuthKey(),
-                  'tplmodule' => $this->tplmodule,
-            ),
-            $this->object->template
+        return xarTplObject(
+            $this->tplmodule, $this->object->template, 'ui_delete',
+            array('object' => $this->object,
+                  'authid' => xarSecGenAuthKey())
         );
     }
 }

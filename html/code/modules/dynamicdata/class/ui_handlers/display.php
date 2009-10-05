@@ -76,14 +76,10 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
         );
 
         $this->object->viewfunc = $this->func;
-        // TODO: have dedicated template for 'object' type
-        return xarTplModule(
-            $this->tplmodule,'user','display',
-            array(
-                'object' => $this->object,
-                'hookoutput' => $hooks
-            ),
-            $this->object->template
+        return xarTplObject(
+            $this->tplmodule, $this->object->template, 'ui_display',
+            array('object' => $this->object,
+                  'hookoutput' => $hooks)
         );
     }
 }

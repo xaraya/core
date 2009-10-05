@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Object Interface</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:if condition="!empty($object)">
+            <h2>#$object:label#</h2>
+            #$output#
+            <xar:set name="viewlink">xarServer::getObjectURL($object->name,'view')</xar:set>
+            <p><a href="#$viewlink#">View <xar:data-label object="$object" /></a></p>
+        </xar:if>
+    </div>
+</xar:template>

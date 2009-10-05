@@ -69,20 +69,21 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
                 if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
                     return;
 
-                if(!empty($args['return_url'])) 
+                if(empty($args['return_url'])) 
                 {
-                    xarResponse::Redirect($args['return_url']);
+                    if ($this->type == 'object') {
+                        $args['return_url'] = xarServer::getObjectURL($this->object->name, 'view');
+                    } else {
+                        $args['return_url'] = xarServer::getModuleURL(
+                            $this->tplmodule, $this->type, $this->func,
+                            array('name' => $this->object->name));
+                    }
                 } 
-                else 
-                {
-                    xarResponse::Redirect(xarModURL(
-                        $this->tplmodule, $this->type, $this->func,
-                        array('object' => $this->object->name))
-                    );
-                }
+                xarResponse::Redirect($args['return_url']);
                 // Return
                 return true;
             }
+            $args['preview'] = true;
         }
 
         $title = xarML('New #(1)', $this->object->label);
@@ -102,17 +103,12 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
         $hooks = xarModCallHooks('item', 'new', $this->object->itemid, $item, $modname);
 
         $this->object->viewfunc = $this->func;
-        // TODO: have dedicated template for 'object' type
-        return xarTplModule(
-            $this->tplmodule,'admin','new',
-            array(
-                'object' => $this->object,
-                'preview' => $args['preview'],
-                'authid' => xarSecGenAuthKey(),
-                'tplmodule' => $this->tplmodule,
-                'hookoutput' => $hooks
-            ),
-            $this->object->template
+        return xarTplObject(
+            $this->tplmodule, $this->object->template, 'ui_create',
+            array('object' => $this->object,
+                  'preview' => $args['preview'],
+                  'authid' => xarSecGenAuthKey(),
+                  'hookoutput' => $hooks)
         );
     }
 }

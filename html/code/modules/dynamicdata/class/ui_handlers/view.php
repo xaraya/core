@@ -56,12 +56,9 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
         // Specify link type here as well
         $this->object->linktype = $this->type;
         $this->object->linkfunc = $this->func;
-        // TODO: have dedicated template for 'object' type
-        return xarTplModule(
-            $this->tplmodule,'user','view',
-            array('object' => $this->object,
-                  'layout' => $this->object->layout),
-            $this->object->template
+        return xarTplObject(
+            $this->tplmodule, $this->object->template, 'ui_view',
+            array('object' => $this->object)
         );
     }
 }

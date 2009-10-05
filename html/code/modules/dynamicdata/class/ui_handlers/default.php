@@ -24,8 +24,8 @@ class DataObjectDefaultHandler extends Object
 
     // module where the main templates for the GUI reside (defaults to the object module)
     public $tplmodule = null;
-    // main type of function handling all object method calls (= 'user' [+ 'admin'] or 'object' GUI)
-    public $type = 'user';
+    // main type of function handling all object method calls (= 'object' or 'user' [+ 'admin'] GUI)
+    public $type = 'object';
     // main function handling all object method calls (to be handled by the core someday ?)
     public $func = 'main';
 
@@ -110,6 +110,11 @@ class DataObjectDefaultHandler extends Object
             } else {
                 $this->object =& DataObjectMaster::getObjectList($this->args);
             }
+            if(empty($this->tplmodule)) 
+            {
+                $modname = xarMod::getName($this->object->moduleid);
+                $this->tplmodule = $modname;
+            }
         }
 
         if (empty($this->object)) 
@@ -127,8 +132,18 @@ class DataObjectDefaultHandler extends Object
             $this->object->getItem();
         }
 
+        $title = $this->object->label;
+        xarTplSetPageTitle(xarVarPrepForDisplay($title));
+
         // Here we try to run the requested method directly
-        return $this->object->{$this->method}($this->args);
+        $output = $this->object->{$this->method}($this->args);
+
+        return xarTplObject(
+            $this->tplmodule, $this->object->template, 'ui_default',
+            array('object' => $this->object,
+                  'output' => $output)
+        );
+
     }
 }
 
