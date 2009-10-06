@@ -23,11 +23,24 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
 {
     public $method = 'update';
 
+    /**
+     * Run the ui 'update' method
+     *
+     * @param $args['method'] the ui method we are handling is 'update' here
+     * @param $args['itemid'] item id of the object to update (required here), and
+     * @param $args['preview'] true if you want dd to call checkInput() = standard dd preview using GET/POST params, or
+     * @param $args['values'] array of predefined field values to use = ui-specific preview using arguments in your call
+     * @param $args['confirm'] true if the user confirms
+     * @param $args['return_url'] the url to return to when finished (defaults to the object view / module)
+     * @return string output of xarTplObject() using 'ui_update'
+     */
     function run(array $args = array())
     {
         if(!xarVarFetch('preview', 'isset', $args['preview'], NULL, XARVAR_DONT_SET)) 
             return;
         if(!xarVarFetch('confirm', 'isset', $args['confirm'], NULL, XARVAR_DONT_SET)) 
+            return;
+        if(!xarVarFetch('values', 'isset', $args['values'], NULL, XARVAR_DONT_SET)) 
             return;
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
@@ -53,11 +66,18 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
         if(empty($itemid) || $itemid != $this->object->itemid) 
             throw new BadParameterException(null,'The itemid updating the object was found to be invalid');
 
+        if (!empty($this->args['values'])) {
+            // always set the properties based on the given values !?
+            //$this->object->setFieldValues($this->args['values']);
+            // check any given input values but suppress errors for now
+            $this->object->checkInput($this->args['values'], 1);
+        }
+
         if(!empty($args['preview']) || !empty($args['confirm'])) 
         {
-            if (!xarSecConfirmAuthKey()) {
+            if (!empty($args['confirm']) && !xarSecConfirmAuthKey()) {
                 return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-            }        
+            }
 
             $isvalid = $this->object->checkInput();
 
@@ -72,15 +92,8 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
                     return;
 
                 if(empty($args['return_url'])) 
-                {
-                    if ($this->type == 'object') {
-                        $args['return_url'] = xarServer::getObjectURL($this->object->name, 'view');
-                    } else {
-                        $args['return_url'] = xarServer::getModuleURL(
-                            $this->tplmodule, $this->type, $this->func,
-                            array('name' => $this->object->name));
-                    }
-                } 
+                    $args['return_url'] = $this->getReturnURL();
+
                 xarResponse::Redirect($args['return_url']);
                 // Return
                 return true;

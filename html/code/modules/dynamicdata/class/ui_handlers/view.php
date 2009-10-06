@@ -23,6 +23,15 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
 {
     public $method = 'view';
 
+    /**
+     * Run the ui 'view' method
+     *
+     * @param $args['method'] the ui method we are handling is 'view' here
+     * @param $args['catid'] optional category for the view
+     * @param $args['sort'] optional sort for the view
+     * @param $args['startnum'] optional start number for the view
+     * @return string output of xarTplObject() using 'ui_view'
+     */
     function run(array $args = array())
     {
         if(!xarVarFetch('catid',    'isset', $args['catid'],    NULL, XARVAR_DONT_SET)) 

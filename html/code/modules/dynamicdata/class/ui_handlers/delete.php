@@ -23,6 +23,16 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
 {
     public $method = 'delete';
 
+    /**
+     * Run the ui 'delete' method
+     *
+     * @param $args['method'] the ui method we are handling is 'delete' here
+     * @param $args['itemid'] item id of the object to delete (required here)
+     * @param $args['cancel'] true if the user cancels
+     * @param $args['confirm'] true if the user confirms
+     * @param $args['return_url'] the url to return to when finished (defaults to the object view / module)
+     * @return string output of xarTplObject() using 'ui_delete'
+     */
     function run(array $args = array())
     {
         if(!xarVarFetch('cancel',  'isset', $args['cancel'],  NULL, XARVAR_DONT_SET)) 
@@ -51,15 +61,8 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
                 return;
 
             if(empty($args['return_url'])) 
-            {
-                if ($this->type == 'object') {
-                    $args['return_url'] = xarServer::getObjectURL($this->object->name, 'view');
-                } else {
-                    $args['return_url'] = xarServer::getModuleURL(
-                        $this->tplmodule, $this->type, $this->func,
-                        array('name' => $this->object->name));
-                }
-            } 
+                $args['return_url'] = $this->getReturnURL();
+
             xarResponse::Redirect($args['return_url']);
             // Return
             return true;
@@ -89,15 +92,8 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
                 return;
                 
             if(empty($args['return_url'])) 
-            {
-                if ($this->type == 'object') {
-                    $args['return_url'] = xarServer::getObjectURL($this->object->name, 'view');
-                } else {
-                    $args['return_url'] = xarServer::getModuleURL(
-                        $this->tplmodule, $this->type, $this->func,
-                        array('name' => $this->object->name));
-                }
-            } 
+                $args['return_url'] = $this->getReturnURL();
+
             xarResponse::Redirect($args['return_url']);
             // Return
             return true;

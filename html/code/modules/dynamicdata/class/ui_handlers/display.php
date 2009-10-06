@@ -23,9 +23,21 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
 {
     public $method = 'display';
 
+    /**
+     * Run the ui 'display' method
+     *
+     * @param $args['method'] the ui method we are handling is 'display' here
+     * @param $args['itemid'] item id of the object to display, and/or
+     * @param $args['preview'] true if you want dd to call checkInput() = standard dd preview using GET/POST params, or
+     * @param $args['values'] array of predefined field values to use = ui-specific preview using arguments in your call
+     * @return string output of xarTplObject() using 'ui_display'
+     */
     function run(array $args = array())
     {
         if(!xarVarFetch('preview', 'isset', $args['preview'], NULL, XARVAR_DONT_SET)) 
+            return;
+
+        if(!xarVarFetch('values', 'isset', $args['values'], NULL, XARVAR_DONT_SET)) 
             return;
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
@@ -46,34 +58,49 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
         $title = xarML('Display #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
-        $itemid = $this->object->getItem();
-        if(empty($itemid) || $itemid != $this->object->itemid) 
-            throw new BadParameterException(
-                null,
-                'The itemid when displaying the object was found to be invalid'
+        if (!empty($this->args['itemid'])) {
+            // get the requested item
+            $itemid = $this->object->getItem();
+            if(empty($itemid) || $itemid != $this->object->itemid) 
+                throw new BadParameterException(
+                    null,
+                    'The itemid when displaying the object was found to be invalid'
+                );
+
+            // call item display hooks for this item
+            $item = array();
+            foreach(array_keys($this->object->properties) as $name) 
+                $item[$name] = $this->object->properties[$name]->value;
+
+            if(!isset($modname)) 
+                $modname = xarMod::getName($this->object->moduleid);
+
+            $item['module'] = $modname;
+            $item['itemtype'] = $this->object->itemtype;
+            $item['itemid'] = $this->object->itemid;
+            $item['returnurl'] = xarModURL(
+                $this->tplmodule,$this->type,$this->func,
+                array(
+                    'object' => $this->object->name,
+                    'itemid'   => $this->object->itemid
+                )
+            );
+            $hooks = xarModCallHooks(
+                'item', 'display', $this->object->itemid, $item, $modname
             );
 
-        // call item display hooks for this item
-        $item = array();
-        foreach(array_keys($this->object->properties) as $name) 
-            $item[$name] = $this->object->properties[$name]->value;
+        } elseif (!empty($this->args['values'])) {
+            // always set the properties based on the given values !?
+            //$this->object->setFieldValues($this->args['values']);
+            // check any given input values but suppress errors for now
+            $this->object->checkInput($this->args['values'], 1);
 
-        if(!isset($modname)) 
-            $modname = xarMod::getName($this->object->moduleid);
+            $hooks = array();
 
-        $item['module'] = $modname;
-        $item['itemtype'] = $this->object->itemtype;
-        $item['itemid'] = $this->object->itemid;
-        $item['returnurl'] = xarModURL(
-            $this->tplmodule,$this->type,$this->func,
-            array(
-                'object' => $this->object->name,
-                'itemid'   => $this->object->itemid
-            )
-        );
-        $hooks = xarModCallHooks(
-            'item', 'display', $this->object->itemid, $item, $modname
-        );
+        } else {
+            // show a blank object
+            $hooks = array();
+        }
 
         $this->object->viewfunc = $this->func;
         return xarTplObject(

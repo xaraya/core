@@ -28,6 +28,8 @@ class DataObjectDefaultHandler extends Object
     public $type = 'object';
     // main function handling all object method calls (to be handled by the core someday ?)
     public $func = 'main';
+    // default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
+    public $nextmethod = 'view';
 
     // current arguments for the handler
     public $args = array();
@@ -35,7 +37,13 @@ class DataObjectDefaultHandler extends Object
     public $object = null;
 
     /**
-     * Get common input arguments for objects
+     * Default constructor for all handlers - get common input arguments for objects
+     *
+     * @param $args['tplmodule'] module where the main templates for the GUI reside (defaults to the object module)
+     * @param $args['type'] main type of function handling all object method calls (= 'object' or 'user' [+ 'admin'] GUI)
+     * @param $args['func'] main function handling all object method calls (to be handled by the core someday ?)
+     * @param $args['nextmethod'] default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
+     * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
      */
     function __construct(array $args = array())
     {
@@ -49,10 +57,13 @@ class DataObjectDefaultHandler extends Object
         if (!empty($args['func'])) {
             $this->func = $args['func'];
         }
+        if (!empty($args['nextmethod'])) {
+            $this->nextmethod = $args['nextmethod'];
+        }
 
         // get some common URL parameters
-        if (!xarVarFetch('name',     'isset', $args['name'],     NULL, XARVAR_DONT_SET)) {return;}
         if (!xarVarFetch('object',   'isset', $args['object'],   NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVarFetch('name',     'isset', $args['name'],     NULL, XARVAR_DONT_SET)) {return;}
         if (!xarVarFetch('module',   'isset', $args['module'],   NULL, XARVAR_DONT_SET)) {return;}
         if (!xarVarFetch('itemtype', 'isset', $args['itemtype'], NULL, XARVAR_DONT_SET)) {return;}
         if (!xarVarFetch('table',    'isset', $args['table'],    NULL, XARVAR_DONT_SET)) {return;}
@@ -68,7 +79,7 @@ class DataObjectDefaultHandler extends Object
             $args['fieldlist'] = explode(',',$fieldlist);
         }
 
-        // support new-style name=... parameter for DD (replacing object=...)
+        // support name=... parameter for DD if no object=... is found
         if (empty($args['object']) && !empty($args['name'])) {
             $args['object'] = $args['name'];
         }
@@ -93,7 +104,12 @@ class DataObjectDefaultHandler extends Object
     }
 
     /**
-     * Do your thing
+     * Run some other unknown ui method, or call some object/objectlist method directly
+     *
+     * @param $args['method'] the ui method we are handling here
+     * @param $args['itemid'] item id of the object to call the method for, if the method needs it
+     * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList()
+     * @return string output of xarTplObject() using 'ui_default'
      */
     function run(array $args = array())
     {
@@ -138,12 +154,48 @@ class DataObjectDefaultHandler extends Object
         // Here we try to run the requested method directly
         $output = $this->object->{$this->method}($this->args);
 
+       // CHECKME: do we redirect to return_url or nextmethod in some cases here too ?
+
         return xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_default',
             array('object' => $this->object,
                   'output' => $output)
         );
 
+    }
+
+    /**
+     * Get the return URL (based on argument or handler settings)
+     *
+     * @param $url any $args['return_url'] given by the method
+     * @return string the return url
+     */
+    function getReturnURL($return_url = '')
+    {
+        // if we already have a return_url, use that
+        if (!empty($return_url)) {
+            return $return_url;
+        }
+
+        // if we're working with object URLs, use $this->nextmethod (and pass along the itemid if any)
+        if ($this->type == 'object') {
+            if (empty($this->nextmethod) || $this->nextmethod == 'view') {
+                // Note: we skip the itemid in this case
+                $return_url = xarServer::getObjectURL($this->object->name, 'view');
+            } elseif (isset($this->object->itemid)) {
+                $return_url = xarServer::getObjectURL($this->object->name, $this->nextmethod, array('itemid' => $this->object->itemid));
+            } else {
+                $return_url = xarServer::getObjectURL($this->object->name, $this->nextmethod);
+            }
+
+        // if we're working with module URLs, use $this->type and $this->func
+        } else {
+            $return_url = xarServer::getModuleURL(
+                $this->tplmodule, $this->type, $this->func,
+                array('name' => $this->object->name));
+        }
+
+        return $return_url;
     }
 }
 
