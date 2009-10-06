@@ -282,9 +282,11 @@ class xarServer extends Object
         if (!empty($methodName)) {
             $args = array('method' => $methodName) + $args;
         }
-        // 2. override any existing 'name' in args, and place before the rest
+        // 2. override any existing 'object' or 'name' in args, and place before the rest
         if (!empty($objectName)) {
-            $args = array('name' => $objectName) + $args;
+            unset($args['name']);
+            // use 'object' here to distinguish from module URLs
+            $args = array('object' => $objectName) + $args;
         }
         // 3. remove default method 'view' from URLs
         if ($args['method'] == 'view') {
