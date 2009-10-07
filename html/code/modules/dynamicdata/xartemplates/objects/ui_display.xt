@@ -15,8 +15,8 @@
                     #$output#
                 </xar:foreach>
             </xar:if>
-        <xar:set name="viewlink">xarServer::getObjectURL($object->name,'view')</xar:set>
-        <a href="#$viewlink#">View <xar:data-label object="$object" /></a>
+            <xar:set name="viewlink">xarServer::getObjectURL($object->name,'view')</xar:set>
+            <p><a href="#$viewlink#">View <xar:data-label object="$object" /></a></p>
         </xar:if>
     </div>
 </xar:template>

@@ -106,7 +106,7 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
         return xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_display',
             array('object' => $this->object,
-                  'hookoutput' => $hooks)
+                  'hooks'  => $hooks)
         );
     }
 }

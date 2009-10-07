@@ -118,10 +118,10 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
         $this->object->viewfunc = $this->func;
         return xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_create',
-            array('object' => $this->object,
+            array('object'  => $this->object,
                   'preview' => $args['preview'],
-                  'authid' => xarSecGenAuthKey(),
-                  'hookoutput' => $hooks)
+                  'authid'  => xarSecGenAuthKey(),
+                  'hooks'   => $hooks)
         );
     }
 }
