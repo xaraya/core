@@ -29,6 +29,8 @@ class DataObject extends DataObjectMaster implements iDataObject
 // CHECKME: should exclude VIEWONLY here, as well as DISABLED (and IGNORED ?)
 //    public $status      = 65;           // inital status is active and can add/modify
 
+    public $hookoutput = array();       // output from hook modules for GUI actions like new, modify, display etc.
+
     /**
      * Inherits from DataObjectMaster and sets the requested item id
      *
@@ -289,6 +291,10 @@ class DataObject extends DataObjectMaster implements iDataObject
             }
         } else {
             $args['properties'] =& $this->properties;
+
+            // TODO: call transform hooks for this item
+            //$this->callHooks('transform');
+
             // TODO: this is exactly the same as in the display function, consolidate it.
             $totransform = array(); $totransform['transform'] = array();
             foreach($this->properties as $pname => $pobj) {
@@ -513,23 +519,8 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
 
         // call create hooks for this item
-        // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
-        // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
-        $modname = xarMod::getName($this->moduleid);
-        if(
-            !empty($this->primary) &&
-            ($modname != 'articles') && ($modname != 'roles')
-        )
-        {
-            $item = array();
-            foreach(array_keys($this->properties) as $name)
-                $item[$name] = $this->properties[$name]->value;
+        $this->callHooks('create');
 
-            $item['module'] = $modname;
-            $item['itemtype'] = $this->itemtype;
-            $item['itemid'] = $this->itemid;
-            xarModCallHooks('item', 'create', $this->itemid, $item, $modname);
-        }
         return $this->itemid;
     }
 
@@ -567,23 +558,8 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
 
         // call update hooks for this item
-        // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
-        // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
-        $modname = xarMod::getName($this->moduleid);
-        if(
-            !empty($this->primary) &&
-            ($modname != 'articles') && ($modname != 'roles')
-        )
-        {
-            $item = array();
-            foreach(array_keys($this->properties) as $name)
-                $item[$name] = $this->properties[$name]->value;
+        $this->callHooks('update');
 
-            $item['module'] = $modname;
-            $item['itemtype'] = $this->itemtype;
-            $item['itemid'] = $this->itemid;
-            xarModCallHooks('item', 'update', $this->itemid, $item, $modname);
-        }
         return $this->itemid;
     }
 
@@ -617,23 +593,8 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
 
         // call delete hooks for this item
-        // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
-        // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
-        $modname = xarMod::getName($this->moduleid);
-        if(
-            !empty($this->primary) &&
-            ($modname != 'articles') && ($modname != 'roles')
-        )
-        {
-            $item = array();
-            foreach(array_keys($this->properties) as $name)
-                $item[$name] = $this->properties[$name]->value;
+        $this->callHooks('delete');
 
-            $item['module'] = $modname;
-            $item['itemtype'] = $this->itemtype;
-            $item['itemid'] = $this->itemid;
-            xarModCallHooks('item', 'delete', $this->itemid, $item, $modname);
-        }
         return $this->itemid;
     }
 
@@ -665,6 +626,57 @@ class DataObject extends DataObjectMaster implements iDataObject
         // Note: this is *not* reliable in "multi-creator" environments
         $nexttype++;
         return $nexttype;
+    }
+
+    /**
+     * Call $action hooks for this item
+     *
+     * @param $action the hook action
+     */
+    public function callHooks($action = '')
+    {
+        if (empty($action)) {
+            return;
+        }
+
+// TODO: handle API transform etc. hooks
+
+        // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
+        // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
+        $modname = xarMod::getName($this->moduleid);
+        if(empty($this->primary) || $modname == 'articles' || $modname == 'roles') {
+            return;
+        }
+
+        $item = array();
+        foreach(array_keys($this->properties) as $name)
+            $item[$name] = $this->properties[$name]->value;
+
+        $item['module'] = $modname;
+        $item['itemtype'] = $this->itemtype;
+        $item['itemid'] = $this->itemid;
+        // CHECKME: is this sufficient in most cases, or do we need an explicit xarModURL() ?
+        $item['returnurl'] = xarServer::getCurrentURL();
+
+        $hookoutput = xarModCallHooks('item', $action, $this->itemid, $item, $modname);
+
+        // CHECKME: see also note in xaraya.hooks about GUI vs. API hooks
+        if ($action == 'new' || $action == 'modify' || $action == 'display') {
+            $this->hookoutput = $hookoutput;
+
+        } elseif ($action == 'create' || $action == 'update' || $action == 'delete') {
+            // we don't really care about the output here ?
+
+        } elseif ($action == 'transform') {
+            // TODO: see code above ...
+
+/*
+        } elseif ($action == 'modifyconfig') { // when showForm'ing an item with objectid = 1 ???
+            // ...
+        } elseif ($action == 'updateconfig') { // when updating an item with objectid = 1 ???
+            // ...
+*/
+        }
     }
 }
 ?>

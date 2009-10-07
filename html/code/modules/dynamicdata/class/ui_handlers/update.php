@@ -104,21 +104,8 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
         $title = xarML('Modify #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
-        // call item new hooks for this item
-        $item = array();
-        foreach(array_keys($this->object->properties) as $name) 
-            $item[$name] = $this->object->properties[$name]->value;
-
-        if(!isset($modname)) 
-            $modname = xarMod::getName($this->object->moduleid);
-
-        $item['module'] = $modname;
-        $item['itemtype'] = $this->object->itemtype;
-        $item['itemid'] = $this->object->itemid;
-        $hooks = xarModCallHooks(
-            'item', 'modify', $this->object->itemid, 
-            $item, $modname
-        );
+        // call item modify hooks for this item
+        $this->object->callHooks('modify');
 
         $this->object->viewfunc = $this->func;
         return xarTplObject(
@@ -126,7 +113,7 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
             array('object'  => $this->object,
                   'preview' => $args['preview'],
                   'authid'  => xarSecGenAuthKey(),
-                  'hooks'   => $hooks)
+                  'hooks'   => $this->object->hookoutput)
         );
     }
 }

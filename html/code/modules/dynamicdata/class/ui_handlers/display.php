@@ -68,26 +68,7 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
                 );
 
             // call item display hooks for this item
-            $item = array();
-            foreach(array_keys($this->object->properties) as $name) 
-                $item[$name] = $this->object->properties[$name]->value;
-
-            if(!isset($modname)) 
-                $modname = xarMod::getName($this->object->moduleid);
-
-            $item['module'] = $modname;
-            $item['itemtype'] = $this->object->itemtype;
-            $item['itemid'] = $this->object->itemid;
-            $item['returnurl'] = xarModURL(
-                $this->tplmodule,$this->type,$this->func,
-                array(
-                    'object' => $this->object->name,
-                    'itemid'   => $this->object->itemid
-                )
-            );
-            $hooks = xarModCallHooks(
-                'item', 'display', $this->object->itemid, $item, $modname
-            );
+            $this->object->callHooks('display');
 
         } elseif (!empty($this->args['values'])) {
             // always set the properties based on the given values !?
@@ -95,18 +76,15 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
             // check any given input values but suppress errors for now
             $this->object->checkInput($this->args['values'], 1);
 
-            $hooks = array();
-
         } else {
             // show a blank object
-            $hooks = array();
         }
 
         $this->object->viewfunc = $this->func;
         return xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_display',
             array('object' => $this->object,
-                  'hooks'  => $hooks)
+                  'hooks'  => $this->object->hookoutput)
         );
     }
 }
