@@ -243,7 +243,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     // it can be used to configure Xaraya for mod_rewrite by
     // setting BaseModURL = '' in config.system.php
     try {
-        $BaseModURL = xarSystemVars::get(sys::CONFIG, 'BaseModURL');
+        $BaseModURL = xarSystemVars::get(sys::LAYOUT, 'BaseModURL');
     } catch(Exception $e) {
         $BaseModURL = 'index.php';
     }
@@ -718,7 +718,7 @@ class xarMod extends Object implements IxarMod
         $modInfo['displaydescription'] = self::getDisplayDescription($modInfo['name'], $type);
         $modInfo['systemid'] = (int)$modInfo['systemid'];
         $modInfo['state'] = (int)$modInfo['state'];
-        
+
         // Shortcut for os prepared directory
         $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
 

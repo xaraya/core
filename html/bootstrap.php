@@ -26,7 +26,7 @@
 /**
  * Get the public properties of an object (this must be done outside the class)
 **/
-function xarBoot_getPublicObjectProperties($obj) 
+function xarBoot_getPublicObjectProperties($obj)
 {
     return get_object_vars($obj);
 }
@@ -236,6 +236,7 @@ final class Property extends Reflectable
 final class sys extends Object
 {
     const CONFIG = 'config.system.php';     // Default system configuration file
+    const LAYOUT = 'layout.system.php';     // Default layout configuration file
 
     private static $has  = array();         // Keep a list of what we already have
     private static $var  = null;            // Save the var location
@@ -369,7 +370,7 @@ final class sys extends Object
     private static function shortpath($path)
     {
         // We are in bootstrap.php and we want <code>
-            if (strpos($path, $GLOBALS['systemConfiguration']['webDir']) === 0) 
+            if (strpos($path, $GLOBALS['systemConfiguration']['webDir']) === 0)
                 self::$shortpath = substr($path,strlen($GLOBALS['systemConfiguration']['webDir']));
             else self::$shortpath = $path;
         return self::$shortpath;

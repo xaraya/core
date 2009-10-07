@@ -67,7 +67,7 @@ class xarServer extends Object
         // it can be used to configure Xaraya for mod_rewrite by
         // setting BaseURI = '' in config.php
         try {
-            $BaseURI =  xarSystemVars::get(sys::CONFIG, 'BaseURI');
+            $BaseURI =  xarSystemVars::get(sys::LAYOUT, 'BaseURI');
             return $BaseURI;
         } catch(Exception $e) {
             // We need to build it
@@ -438,7 +438,7 @@ class xarRequest extends Object
                 sys::import('xaraya.validations');
                 $regex = ValueValidations::get('regexp');
             }
-            
+
             if (isset($params['module'])) {
                 $isvalid =  $regex->validate($params['module'], array('/^[a-z][a-z_0-9]*$/'));
                 $modName = $isvalid ? $params['module'] : null;
