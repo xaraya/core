@@ -412,13 +412,14 @@ function installer_admin_phase5()
     // and xarSecurityCheck functions until we've finished the installation process
     sys::import('xaraya.security');
     sys::import('xaraya.modules');
+    sys::import('xaraya.hooks');
 
     // 1. Load base and modules module
     $modules = array('base','modules');
     foreach ($modules as $module) {
         if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;
     }
-        
+
     // 2. Load the definitions of all the modules in the modules table
     $prefix = xarDB::getPrefix();
     $modulesTable = $prefix .'_modules';
@@ -456,7 +457,7 @@ function installer_admin_phase5()
         $dbconn->rollback();
         throw $e;
     }
-    
+
     // 3. Initialize all the modules we haven't yet
     $modules = array('privileges','roles','blocks','authsystem','themes','dynamicdata','mail');
     foreach ($modules as $module) {
@@ -580,7 +581,7 @@ function installer_admin_bootstrap()
                            array('regid'=> $regid)))
             throw new Exception("activation of $regid failed");//return;
     }
-    
+
     // load modules into *_modules table
     if (!xarMod::apiFunc('modules', 'admin', 'regenerate')) return;
 
