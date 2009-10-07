@@ -53,14 +53,14 @@ class NumberBoxProperty extends TextBoxProperty
         } elseif (is_numeric($value)) {
             $value = $this->castType($value);
             if (isset($this->validation_min_value) && isset($this->validation_max_value) && ($this->validation_min_value > $value || $this->validation_max_value < $value)) {
-                $this->invalid = xarML('numnber: allowed range is between #(1) and #(2)',$this->validation_min_value,$this->validation_max_value);
+                $this->invalid = xarML('number: allowed range is between #(1) and #(2)',$this->validation_min_value,$this->validation_max_value);
                 $this->setValue();
                 return false;
             } elseif (isset($this->validation_min_value) && $this->validation_min_value > $value) {
                 if (!empty($this->validation_min_value_invalid)) {
                     $this->invalid = xarML($this->validation_min_value_invalid);
                 } else {
-                    $this->invalid = xarML('numnber: must be #(1) or more',$this->validation_min_value);
+                    $this->invalid = xarML('number: must be #(1) or more',$this->validation_min_value);
                 }
                 $this->setValue();
                 return false;
@@ -69,13 +69,13 @@ class NumberBoxProperty extends TextBoxProperty
                 if (!empty($this->validation_max_value_invalid)) {
                     $this->invalid = xarML($this->validation_max_value_invalid);
                 } else {
-                    $this->invalid = xarML('numnber: must be #(1) or less',$this->validation_max_value);
+                    $this->invalid = xarML('number: must be #(1) or less',$this->validation_max_value);
                 }
                 $this->setValue();
                 return false;
             }
         } else {
-            $this->invalid = xarML('numnber: #(1)', $this->name);
+            $this->invalid = xarML('number: #(1)', $this->name);
             $this->setValue();
             return false;
         }
