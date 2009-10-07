@@ -94,14 +94,14 @@ class DataObjectDescriptor extends ObjectDescriptor
         $result->close();
 
         if (empty($row) || count($row) < 1) {
-            $args['moduleid'] = isset($args['moduleid']) ? $args['moduleid'] : null;
-            $args['itemtype'] = isset($args['itemtype']) ? $args['itemtype'] : null;
-            $args['objectid'] = isset($args['objectid']) ? $args['objectid'] : null;
+            $args['moduleid'] = isset($args['moduleid']) ? (int)$args['moduleid'] : null;
+            $args['itemtype'] = isset($args['itemtype']) ? (int)$args['itemtype'] : null;
+            $args['objectid'] = isset($args['objectid']) ? (int)$args['objectid'] : null;
             $args['name'] = isset($args['name']) ? $args['name'] : null;
         } else {
-            $args['moduleid'] = $row['module_id'];
-            $args['itemtype'] = $row['itemtype'];
-            $args['objectid'] = $row['id'];
+            $args['moduleid'] = (int)$row['module_id'];
+            $args['itemtype'] = (int)$row['itemtype'];
+            $args['objectid'] = (int)$row['id'];
             $args['name'] = $row['name'];
         }
         if (empty($args['tplmodule'])) $args['tplmodule'] = xarMod::getName($args['moduleid']); //FIXME: go to systemid
