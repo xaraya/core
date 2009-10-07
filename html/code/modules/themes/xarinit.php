@@ -93,10 +93,6 @@ function themes_init()
     xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditThemes','All','themes','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminTheme','All','themes','All','All','ACCESS_ADMIN');
-    
-    if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
-        return false;
-    }
 
     if (!xarMod::apiFunc('blocks', 'admin', 'register_block_type',
         array('modName' => 'themes', 'blockType' => 'meta'))) return;
