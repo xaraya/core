@@ -6,7 +6,7 @@
     <!-- Convenience link to admin theme if this is an admin -->
     <xar:sec mask="AdminBase" catch="false">
         <p> 
-            [<a href="#xarModURL('base','admin','main')#" title="Go to back end Interface">Back end</a>]
+            [<a href="#xarModURL($module,'admin','main')#" title="Go to back end interface">Back end</a>]
         </p>
     </xar:sec>
     <xar:if condition="!empty($usercontent)">
@@ -87,15 +87,15 @@
                                 </xar:if>
                             </li>
                             <xar:elseif condition="$mod['modactive'] and !$mod['link']" />
-                            <li class="xar-menu-section">
-                                #$mod['label']# 
-                            </li>
-                            <xar:else />
-                            <li class="xar-menu-item">
-                                <a href="#$mod['link']#" title="#$mod['desc']#">
+                                <li class="xar-menu-section">
                                     #$mod['label']# 
-                                </a>
-                            </li>
+                                </li>
+                            <xar:else />
+                                <li class="xar-menu-item">
+                                    <a href="#$mod['link']#" title="#$mod['desc']#">
+                                        #$mod['label']# 
+                                    </a>
+                                </li>
                         </xar:if>
                     </xar:foreach>
                 </ul>
