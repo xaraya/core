@@ -42,7 +42,7 @@ function modules_adminapi_update($args)
 
         $sql = "SELECT DISTINCT id, s_module_id, s_type, object,
                             action, t_area, t_module_id, t_type,
-                            t_func
+                            t_func, t_file
                 FROM $xartable[hooks]
                 WHERE s_module_id IS NULL";
         $stmt = $dbconn->prepareStatement($sql);
@@ -54,7 +54,7 @@ function modules_adminapi_update($args)
 
         while($result->next()) {
             list($hookid,$hooksmodid,$hookstype,$hookobject,
-                 $hookaction,$hooktarea,$hooktmodid,$hookttype,$hooktfunc) = $result->fields;
+                 $hookaction,$hooktarea,$hooktmodid,$hookttype,$hooktfunc,$hooktfile) = $result->fields;
 
             // Get selected value of hook
             unset($hookvalue);
@@ -66,15 +66,15 @@ function modules_adminapi_update($args)
                 // Insert hook if required
                 // Prepare statement outside the loop
                 $sql = "INSERT INTO $xartable[hooks]
-                    (object,action,s_module_id,s_type,t_area,t_module_id,t_type,t_func)
-                    VALUES (?,?,?,?,?,?,?,?)";
+                    (object,action,s_module_id,s_type,t_area,t_module_id,t_type,t_func,t_file)
+                    VALUES (?,?,?,?,?,?,?,?,?)";
                 $stmt2 = $dbconn->prepareStatement($sql);
 
                 foreach (array_keys($hookvalue) as $itemtype) {
                     if ($itemtype == 0) $itemtype = '';
                     $bindvars = array($hookobject,$hookaction,$modinfo['systemid'],
                                       $itemtype,$hooktarea,$hooktmodid,
-                                      $hookttype,$hooktfunc);
+                                      $hookttype,$hooktfunc,$hooktfile);
                     $stmt2->executeUpdate($bindvars);
                 }
             }

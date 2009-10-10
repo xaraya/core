@@ -28,12 +28,11 @@
             <fieldset>
                 <legend>Item details</legend>
                 <xar:data-form object="$object" />
-            <!-- Remove hooks from DD for now
+            <!-- Remove hooks from DD for now - why ??? -->
                 <xar:if condition="!empty($hooks)">
                     <xar:foreach in="$hooks" key="$module" value="$output">#$output#</xar:foreach>
                 </xar:if>
-            -->
-
+            <!-- -->
             </fieldset>
             <fieldset>
                 <div class="xar-align-center">
