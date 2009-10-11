@@ -7,7 +7,7 @@
             <xar:set name="dummy">xarVarSetCached('XML','itemname',$objname)</xar:set>
             <xar:data-view object="$object" />
         <xar:elseif condition="!empty($modid)" />
-            <xar:set name="modinfo">xarModGetInfo($modid)</xar:set>
+            <xar:set name="modinfo">xarMod::getInfo($modid)</xar:set>
             <xar:set name="dummy">
                 xarVarSetCached('XML','itemname',$modinfo['name'].'_'.$itemtype)
             </xar:set>

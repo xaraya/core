@@ -23,7 +23,6 @@
       <xsl:otherwise>
         <xsl:choose>
           <xsl:when test="@object != ''">
-            <!-- This a variable. we assume it's an object -->
             <!-- Use the object attribute -->
             <xsl:text>echo </xsl:text><xsl:value-of select="@object"/>
           </xsl:when>
