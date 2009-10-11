@@ -127,6 +127,7 @@ function modules_init()
          *   t_module_id integer unsigned not null,
          *   t_type      varchar(64) NOT NULL,
          *   t_func      varchar(64) NOT NULL,
+         *   t_file      varchar(254) NOT NULL,
          *   priority    integer default 0
          *   PRIMARY KEY (id)
          * )
@@ -142,6 +143,7 @@ function modules_init()
                         't_module_id'  => array('type' => 'integer','unsigned' => true, 'null' => false),
                         't_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
                         't_func'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+                        't_file'      => array('type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset),
                         'priority'       => array('type' => 'integer', 'size' => 'tiny', 'unsigned' => true, 'null' => false, 'default' => '0')
                     );
         // TODO: no indexes?
@@ -200,7 +202,8 @@ function modules_init()
     }
 
     // Installation complete; check for upgrades
-    return modules_upgrade('2.0.0');}
+    return modules_upgrade('2.0.1');
+}
 
 /**
  * Activates the modules module
@@ -239,7 +242,23 @@ function modules_upgrade($oldversion)
     // Upgrade dependent on old version number
     switch ($oldversion) {
         case '2.0.0':
-      break;
+            // Get database information
+            $dbconn = xarDB::getConn();
+            $xartable = xarDB::getTables();
+
+            //Load Table Maintainance API
+            sys::import('xaraya.tableddl');
+
+            $hookstable = $xartable['hooks'];
+            $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+
+            $fieldargs = array('command' => 'add', 'field' => 't_file', 'type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset);
+            $query = xarDBAlterTable($hookstable,$fieldargs);
+            $result =& $dbconn->Execute($query);
+            if (!$result) return;
+
+        case '2.0.1':
+            break;
     }
     return true;
 }

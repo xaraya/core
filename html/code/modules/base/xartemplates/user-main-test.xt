@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Base Module Test Template</span>
+    </div>
+    <div class="xar-mod-body">
+        <p>
+            This template <strong>modules/base/xartemplates/user-main<em>-test</em>.xt</strong> can be reached by adding <strong><a href="#xarServer::getModuleURL('base','user','main',array('page' => 'test'))#">page=<em>test</em></a></strong> to the base module URL.
+            You can experiment with various blocklayout features and template tags here if you want...
+        </p>
+<!--
+        <p>
+            <xar:comment>Get the sort parameter from the URL request</xar:comment>
+            <xar:set name="sort"><xar:var name="sort" scope="request"/></xar:set>
+            <xar:comment>Show a sorted list of sample items</xar:comment>
+            <xar:data-view object="sample" sort="$sort" />
+        </p>
+-->
+    </div>
+</xar:template>

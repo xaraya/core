@@ -23,10 +23,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     public $groupby  = array();
     public $numitems = null;
     public $startnum = null;
+    public $count    = 0;           // specify if you want DD to count items before getting them (e.g. for the pager)
 
     public $startstore = null;      // the data store we should start with (for sort)
 
     public $items = array();       // the result array of itemid => (property name => value)
+    public $itemcount = null;       // the number of items given by countItems()
 
     // optional URL style for use in xarModURL() (defaults to itemtype=...&...)
     public $urlstyle = 'itemtype'; // TODO: table or object, or wrapper for all, or all in template, or...
@@ -48,6 +50,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      * @param $args['where'] WHERE clause to be used as part of the selection
      * @param $args['numitems'] number of items to retrieve
      * @param $args['startnum'] start number
+     * @param $args['count'] count items first before you get them (on demand only)
      */
     public function __construct(DataObjectDescriptor $descriptor)
     {
@@ -370,6 +373,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if(empty($this->startstore) && !empty($this->primary)) {
             $this->startstore = $this->properties[$this->primary]->datastore;
         }
+
+        // count the items first if we haven't done so yet, but only on demand (args['count'] = 1)
+        if (!empty($this->count) && !isset($this->itemcount)) {
+            $this->countItems();
+        }
+
        // first get the items from the start store (if any)
         if(!empty($this->startstore)) {
             $this->datastores[$this->startstore]->getItems($args);
@@ -398,20 +407,25 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
 
+        // initialize the itemcount
+        $this->itemcount = null;
+
         // if we don't have a start store yet, but we do have a primary datastore, we'll count there
         if(empty($this->startstore) && !empty($this->primary)) {
             $this->startstore = $this->properties[$this->primary]->datastore;
         }
         // try to count the items in the start store (if any)
         if(!empty($this->startstore)) {
-            return $this->datastores[$this->startstore]->countItems($args);
+            $this->itemcount = $this->datastores[$this->startstore]->countItems($args);
+            return $this->itemcount;
         } else {
             // If we don't have a start store, we're probably stuck,
             // but we'll try the first one anyway :)
             // TODO: find some better way to determine which data store to count in
             foreach(array_keys($this->datastores) as $name) {
                 // this looks like a loop but it isnt :-) (yet)
-                return $this->datastores[$name]->countItems($args);
+                $this->itemcount = $this->datastores[$name]->countItems($args);
+                return $this->itemcount;
             }
         }
     }
@@ -550,13 +564,20 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
 
+        // see if we received an itemcount we can use for the pager
+        if (!empty($args['itemcount'])) {
+            // the item count was passed to showView() e.g. by dynamicdata_userapi_showview() when setting count="1" in xar:data-view
+            $this->itemcount = $args['itemcount'];
+        }
+
         if(empty($args['pagerurl'])) {
             $args['pagerurl'] = '';
         }
         list(
             $args['prevurl'],
             $args['nexturl'],
-            $args['sorturl']) = $this->getPager($args['pagerurl']);
+            $args['sorturl'],
+            $args['pager']) = $this->getPager($args['pagerurl']);
 
         $args['object'] = $this;
         return xarTplObject($args['tplmodule'],$args['template'],'showview',$args);
@@ -660,7 +681,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             if ($this->objectid == 1) {
                 $options['viewitems'] = array('otitle' => xarML('Items'),
                                               'olink'  => xarServer::getModuleURL('dynamicdata','admin','view',
-                                                                    array('itemid' => $args['itemid'])),
+                                                                                  array('itemid' => $args['itemid'])),
                                               'ojoin'  => '|'
                                              );
                 $tplmodule = $this->checkModuleFunction($args['tplmodule'], 'admin', 'modifyprop');
@@ -753,10 +774,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $prevurl = '';
         $nexturl = '';
         $sorturl = '';
+        $pager   = '';
 
         if(empty($this->startnum)) $this->startnum = 1;
-
-        // TODO: count items before calling getItems() if we want some better pager
 
         // Get current URL (this uses &amp; by default now)
         if(empty($currenturl)) $currenturl = xarServer::getCurrentURL();
@@ -778,7 +798,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $sorturl = $sorturl . '?sort';
         }
         if(empty($this->numitems) || ( (count($this->items) < $this->numitems) && $this->startnum == 1 )) {
-            return array($prevurl,$nexturl,$sorturl);
+            return array($prevurl,$nexturl,$sorturl,$pager);
         }
 
         if(preg_match('/startnum=\d+/',$currenturl)) {
@@ -790,6 +810,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $prev = $this->startnum - $this->numitems;
                 $prevurl = preg_replace('/startnum=\d+/',"startnum=$prev",$currenturl);
             }
+            $pagerurl = preg_replace('/startnum=\d+/','startnum=%%',$currenturl);
         }
         elseif(preg_match('/\?/',$currenturl)) {
             if(count($this->items) == $this->numitems) {
@@ -800,6 +821,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $prev = $this->startnum - $this->numitems;
                 $prevurl = $currenturl . '&amp;startnum=' . $prev;
             }
+            $pagerurl = $currenturl . '&amp;startnum=%%';
         } else {
             if(count($this->items) == $this->numitems) {
                 $next = $this->startnum + $this->numitems;
@@ -809,8 +831,19 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $prev = $this->startnum - $this->numitems;
                 $prevurl = $currenturl . '?startnum=' . $prev;
             }
+            $pagerurl = $currenturl . '?startnum=%%';
         }
-        return array($prevurl,$nexturl,$sorturl);
+
+        // we already counted items earlier, or received the itemcount in showView()
+        if (!empty($this->itemcount)) {
+            sys::import('xaraya.pager');
+            $pager = xarTplGetPager($this->startnum,
+                                    $this->itemcount,
+                                    $pagerurl,
+                                    $this->numitems);
+        }
+
+        return array($prevurl,$nexturl,$sorturl,$pager);
     }
 
     /**

@@ -84,19 +84,11 @@ function dynamicdata_admin_modify($args)
     $data['preview'] = $preview;
     $data['tplmodule'] = $args['tplmodule'];   //TODO: is this needed
 
-    // $modinfo = xarMod::getInfo($args['moduleid']);
-    // Makes this hooks call explictly from DD
-    $modinfo = xarMod::getInfo(182);
-    $item = array();
-    foreach (array_keys($myobject->properties) as $name) {
-        $item[$name] = $myobject->properties[$name]->value;
-    }
-    $item['module'] = $modinfo['name'];
-    $item['itemtype'] = $args['itemtype'];
-    $item['itemid'] = $args['itemid'];
-    $hooks = array();
-    $hooks = xarModCallHooks('item', 'modify', $args['itemid'], $item, $modinfo['name']);
-    $data['hooks'] = $hooks;
+    // Makes this hooks call explictly from DD - why ???
+    ////$modinfo = xarMod::getInfo($args['moduleid']);
+    //$modinfo = xarMod::getInfo(182);
+    $myobject->callHooks('modify');
+    $data['hooks'] = $myobject->hookoutput;
 
     xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $myobject->label));
 

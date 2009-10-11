@@ -53,7 +53,7 @@ function modules_adminapi_enablehooks($args)
 
         $sql = "SELECT DISTINCT id, s_module_id, s_type, object,
                                 action, t_area, t_module_id, t_type,
-                                t_func
+                                t_func, t_file
                 FROM $xartable[hooks]
                 WHERE t_module_id = ?";
 //                WHERE s_module_id = ? AND t_module_id = ?";
@@ -63,17 +63,17 @@ function modules_adminapi_enablehooks($args)
 
         // Prepare the statement outside the loop
         $sql = "INSERT INTO $xartable[hooks]
-                (object,action,s_module_id,s_type,t_area,t_module_id,t_type,t_func)
-                VALUES (?,?,?,?,?,?,?,?)";
+                (object,action,s_module_id,s_type,t_area,t_module_id,t_type,t_func,t_file)
+                VALUES (?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         while($result->next()) {
             list($hookid,$hooksmodId,$hookstype,$hookobject,$hookaction,
-                 $hooktarea,$tmodId,$hookttype,$hooktfunc) = $result->fields;
+                 $hooktarea,$tmodId,$hookttype,$hooktfunc,$hooktfile) = $result->fields;
 
             $bindvars = array($hookobject, $hookaction, $smodId,
                               $callerItemType, $hooktarea, $tmodId,
-                              $hookttype, $hooktfunc);
+                              $hookttype, $hooktfunc,$hooktfile);
             $stmt->executeUpdate($bindvars);
         }
         $dbconn->commit();

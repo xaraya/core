@@ -30,6 +30,16 @@
       <seq>2</seq>
       <configuration></configuration>
     </property>
+    <property name="area">
+      <id>147</id>
+      <label>Area</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_hooks.t_area</source>
+      <status>65</status>
+      <seq>3</seq>
+      <configuration></configuration>
+    </property>
     <property name="action">
       <id>144</id>
       <label>Action</label>
@@ -37,7 +47,7 @@
       <defaultvalue></defaultvalue>
       <source>xar_hooks.action</source>
       <status>65</status>
-      <seq>3</seq>
+      <seq>4</seq>
       <configuration></configuration>
     </property>
     <property name="subject_module">
@@ -47,7 +57,7 @@
       <defaultvalue></defaultvalue>
       <source>xar_hooks.s_module_id</source>
       <status>65</status>
-      <seq>4</seq>
+      <seq>5</seq>
       <configuration></configuration>
     </property>
     <property name="subject_type">
@@ -56,16 +66,6 @@
       <type>integerbox</type>
       <defaultvalue></defaultvalue>
       <source>xar_hooks.s_type</source>
-      <status>65</status>
-      <seq>5</seq>
-      <configuration></configuration>
-    </property>
-    <property name="area">
-      <id>147</id>
-      <label>Area</label>
-      <type>textbox</type>
-      <defaultvalue></defaultvalue>
-      <source>xar_hooks.t_area</source>
       <status>65</status>
       <seq>6</seq>
       <configuration></configuration>
@@ -98,6 +98,16 @@
       <source>xar_hooks.t_func</source>
       <status>65</status>
       <seq>9</seq>
+      <configuration></configuration>
+    </property>
+    <property name="observer_file">
+      <id>151</id>
+      <label>Observer File</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_hooks.t_file</source>
+      <status>65</status>
+      <seq>10</seq>
       <configuration></configuration>
     </property>
   </properties>

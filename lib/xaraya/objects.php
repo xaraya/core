@@ -51,7 +51,7 @@ class xarObject extends Object implements IxarObject
         if (empty($objectName)) throw new EmptyParameterException('objectName');
 
         // Pass the object name and method to the userinterface class
-        $args['name'] = $objectName;
+        $args['object'] = $objectName;
         $args['method'] = $methodName;
     // FIXME: we'll use the 'object' GUI function type here, instead of the default 'user' (+ 'admin')
         $args['type'] = 'object';

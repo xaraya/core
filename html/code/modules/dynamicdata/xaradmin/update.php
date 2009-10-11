@@ -70,19 +70,11 @@ function dynamicdata_admin_update($args)
             $data['return_url'] = $return_url;
         }
 
-        // Makes this hooks call explictly from DD
-        // $modinfo = xarMod::getInfo($myobject->moduleid);
-        $modinfo = xarMod::getInfo(182);
-        $item = array();
-        foreach (array_keys($myobject->properties) as $name) {
-            $item[$name] = $myobject->properties[$name]->value;
-        }
-        $item['module'] = $modinfo['name'];
-        $item['itemtype'] = $myobject->itemtype;
-        $item['itemid'] = $myobject->itemid;
-        $hooks = array();
-        $hooks = xarModCallHooks('item', 'modify', $myobject->itemid, $item, $modinfo['name']);
-        $data['hooks'] = $hooks;
+        // Makes this hooks call explictly from DD - why ???
+        ////$modinfo = xarMod::getInfo($myobject->moduleid);
+        //$modinfo = xarMod::getInfo(182);
+        $myobject->callHooks('modify');
+        $data['hooks'] = $myobject->hookoutput;
 
         return xarTplModule($tplmodule,'admin','modify', $data);
     }

@@ -142,7 +142,7 @@ function dynamicdata_userapi_showview($args)
                                    'param'     => $param,
                                    'pagerurl'  => $pagerurl,
                                    'linkfield' => $linkfield,
-                                   'count'     => $numthings));
+                                   'itemcount' => $numthings));
 }
 
 ?>

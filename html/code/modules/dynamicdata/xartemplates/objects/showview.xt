@@ -25,7 +25,11 @@
         <xar:set name="layout">'default'</xar:set>
     </xar:if>
     <xar:template module="$tplmodule" file="view-$layout" />
-    <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+    <xar:if condition="!empty($pager)">
+        <div class="xar-align-center">
+            #$pager#
+        </div>
+    <xar:elseif condition="!empty($prevurl) or !empty($nexturl)"/>
         <div class="xar-align-center">
             <xar:if condition="!empty($prevurl)">
         <a href="#$prevurl#">&lt;&lt; Prev</a>

@@ -70,7 +70,7 @@ function modules_adminapi_updatehooks($args)
         // get the list of individual hooks offered by this module
         $sql = "SELECT DISTINCT id, s_module_id, s_type, object,
                             action, t_area, t_module_id, t_type,
-                            t_func
+                            t_func, t_file
                 FROM $xartable[hooks]
                 WHERE t_module_id = ?";
         $stmt = $dbconn->prepareStatement($sql);
@@ -78,12 +78,12 @@ function modules_adminapi_updatehooks($args)
 
         // Prepare the insert statement outside the loops
         $sql = "INSERT INTO $xartable[hooks]
-            (object,action,s_module_id,s_type,t_area,t_module_id,t_type,t_func)
-            VALUES (?,?,?,?,?,?,?,?)";
+            (object,action,s_module_id,s_type,t_area,t_module_id,t_type,t_func,t_file)
+            VALUES (?,?,?,?,?,?,?,?,?)";
         $stmt2 = $dbconn->prepareStatement($sql);
         while($result->next()) {
             list($hookid, $hooksmodid, $hookstype, $hookobject, $hookaction,
-                 $hooktarea, $hooktmodid, $hookttype, $hooktfunc) = $result->fields;
+                 $hooktarea, $hooktmodid, $hookttype, $hooktfunc, $hooktfile) = $result->fields;
 
             // See if this is checked and isn't in the database
             if (empty($hooksmodid)) {
@@ -96,7 +96,7 @@ function modules_adminapi_updatehooks($args)
                         $itemtype = ''; // Make this 0 later on
                         $bindvars = array($hookobject, $hookaction, $modId,
                                           $itemtype, $hooktarea, $hooktmodid,
-                                          $hookttype,$hooktfunc);
+                                          $hookttype,$hooktfunc,$hooktfile);
                         $stmt2->executeUpdate($bindvars);
                         // we're done for this module
                         continue;
@@ -108,7 +108,7 @@ function modules_adminapi_updatehooks($args)
 
                         $bindvars = array($hookobject, $hookaction, $modId,
                                           $itemtype, $hooktarea, $hooktmodid,
-                                          $hookttype,$hooktfunc);
+                                          $hookttype,$hooktfunc,$hooktfile);
                         $stmt2->executeUpdate($bindvars);
                     }
                 }
