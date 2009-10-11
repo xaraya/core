@@ -6,7 +6,7 @@
     <!-- Convenience link to admin theme if this is an admin -->
     <xar:sec mask="AdminBase" catch="false">
         <p> 
-            [<a href="#xarModURL($module,'admin','main')#" title="Go to back end interface">Back end</a>]
+            [<a href="#xarModURL($module,'admin','main')#" title="Go to the back end interface">Back end</a>]
         </p>
     </xar:sec>
     <xar:if condition="!empty($usercontent)">
