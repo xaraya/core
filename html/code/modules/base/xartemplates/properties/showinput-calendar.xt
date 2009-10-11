@@ -8,6 +8,6 @@
     <xar:else />
         <input class="xar-form-textlong" type="text" name="#$name#" id="#$id#_input" value="xarLocaleFormatDate($dateformat,$value)#" size="20" maxlength="19" tabindex="#$tabindex#" />
     </xar:if>
-    <a href="javascript:xar_base_calendar_init('#$id#','#$baseuri#')"><img src="modules/base/xarimages/calendar.gif" width="16" height="16" border="0" alt="#$alttext#" /></a>
+    &#160;<a href="javascript:xar_base_calendar_init('#$id#','#$baseuri#/#sys::code()#')"><img src="#xarTplGetImage('calendar.gif','base')#" width="16" height="16" border="0" alt="#$alttext#" /></a>
     <xar:template file="dataproperty_additions" module="base" />
 </xar:template>
