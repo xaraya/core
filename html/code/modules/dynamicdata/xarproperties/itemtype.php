@@ -76,6 +76,10 @@ class ItemTypeProperty extends ComboProperty
         
         if (empty($this->initialization_module)) return array();
 
+        if (is_numeric($this->initialization_module)) {
+            // we should have a regid here, if we don't get the module name
+            $this->initialization_module = xarMod::getName($this->initialization_module);
+        }
         if (empty($this->initialization_itemtype)) {
             // we're interested in the module itemtypes (= default behaviour)
             try {
