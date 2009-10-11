@@ -86,6 +86,9 @@ function dynamicdata_user_view($args)
 
     if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$data[moduleid]:$data[itemtype]:All")) return;
 
+    // Count the number of items matching the preset arguments - do this before getItems()
+    $object->countItems();
+
     // Get the selected items using the preset arguments
     $object->getItems();
 

@@ -59,6 +59,8 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
         $title = xarML('View #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
+        $this->object->countItems();
+
         $this->object->getItems();
 
         $this->object->viewfunc = $this->func;
