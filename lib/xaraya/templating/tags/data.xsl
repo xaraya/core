@@ -11,8 +11,8 @@
 <xsl:template match="xar:data-view">
   <xsl:processing-instruction name="php">
     <xsl:choose>
-      <!-- No object? Generate ourselves then -->
-      <xsl:when test="not(@object)">
+      <!-- No object or objectname? Generate ourselves then -->
+      <xsl:when test="not(@object) and not(@objectname)">
         <xsl:text>echo xarMod::apiFunc('dynamicdata','user','showview',</xsl:text>
         <!-- Dump the attributes in an array for the function call -->
         <xsl:call-template name="atts2args">
@@ -22,35 +22,35 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:choose>
-          <xsl:when test="substring(@object,1,1) = '$'">
+          <xsl:when test="@object != ''">
             <!-- This a variable. we assume it's an object -->
             <!-- Use the object attribute -->
             <xsl:text>echo </xsl:text><xsl:value-of select="@object"/>
           </xsl:when>
-          <xsl:otherwise>
+          <xsl:when test="@objectname != ''">
             <!-- This a string. we assume it's an object name -->
             <xsl:text>sys::import('modules.dynamicdata.class.objects.master');</xsl:text>
             <xsl:text>$__</xsl:text>
-            <xsl:value-of select="@object"/>
+            <xsl:value-of select="@objectname"/>
             <xsl:text>=DataObjectMaster::getObjectList(array('name'=>'</xsl:text>
-            <xsl:value-of select="@object"/>
+            <xsl:value-of select="@objectname"/>
             <xsl:text>'));</xsl:text>
             <xsl:text>$__</xsl:text>
-            <xsl:value-of select="@object"/>
+            <xsl:value-of select="@objectname"/>
             <xsl:text>-&gt;getItems(</xsl:text>
             <xsl:call-template name="atts2args">
-              <xsl:with-param name="nodeset" select="@*[name() != 'object']"/>
+              <xsl:with-param name="nodeset" select="@*[name() != 'objectname']"/>
             </xsl:call-template>
             <xsl:text>);</xsl:text>
             <xsl:text>echo </xsl:text>
             <xsl:text>$__</xsl:text>
-            <xsl:value-of select="@object"/>
-          </xsl:otherwise>
+            <xsl:value-of select="@objectname"/>
+          </xsl:when>
         </xsl:choose>
         <xsl:text>-&gt;showView(</xsl:text>
-        <!-- Dump the attributes in an array for the function call, but skip the object attribute -->
+        <!-- Dump the attributes in an array for the function call, but skip the object and objectname attributes -->
         <xsl:call-template name="atts2args">
-          <xsl:with-param name="nodeset" select="@*[name() != 'object']"/>
+          <xsl:with-param name="nodeset" select="@*[name() != 'object'] and @*[name() != 'objectname']"/>
         </xsl:call-template>
         <xsl:text>);</xsl:text>
       </xsl:otherwise>
