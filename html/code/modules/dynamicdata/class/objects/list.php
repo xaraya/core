@@ -23,11 +23,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     public $groupby  = array();
     public $numitems = null;
     public $startnum = null;
-    public $itemcount = null;       // the number of items given by countItems()
+    public $count    = 0;           // specify if you want DD to count items before getting them (e.g. for the pager)
 
     public $startstore = null;      // the data store we should start with (for sort)
 
     public $items = array();       // the result array of itemid => (property name => value)
+    public $itemcount = null;       // the number of items given by countItems()
 
     // optional URL style for use in xarModURL() (defaults to itemtype=...&...)
     public $urlstyle = 'itemtype'; // TODO: table or object, or wrapper for all, or all in template, or...
@@ -49,6 +50,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      * @param $args['where'] WHERE clause to be used as part of the selection
      * @param $args['numitems'] number of items to retrieve
      * @param $args['startnum'] start number
+     * @param $args['count'] count items first before you get them (on demand only)
      */
     public function __construct(DataObjectDescriptor $descriptor)
     {
@@ -371,6 +373,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if(empty($this->startstore) && !empty($this->primary)) {
             $this->startstore = $this->properties[$this->primary]->datastore;
         }
+
+        // count the items first if we haven't done so yet, but only on demand (args['count'] = 1)
+        if (!empty($this->count) && !isset($this->itemcount)) {
+            $this->countItems();
+        }
+
        // first get the items from the start store (if any)
         if(!empty($this->startstore)) {
             $this->datastores[$this->startstore]->getItems($args);
@@ -556,7 +564,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
 
-// FIXME: the xsl tag does not support this when specifying object[name]="...", only for table, module+itemtype etc.
         // see if we received an itemcount we can use for the pager
         if (!empty($args['itemcount'])) {
             // the item count was passed to showView() e.g. by dynamicdata_userapi_showview() when setting count="1" in xar:data-view
