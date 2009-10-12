@@ -25,7 +25,7 @@
                 </div>
                 <div id="sideInfo1" class="admin-sideInfo">
                     <xar:var name="title">Go to the front end interface</xar:var>
-                    <a href="index.php" title="$title">
+                    <a href="index.php" title="#$title#">
                         [ Front end ]
                     </a>
                     <xar:blockgroup name="admin" id="admin" />
