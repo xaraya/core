@@ -30,8 +30,8 @@ class DataObject extends DataObjectMaster implements iDataObject
 //    public $status      = 65;       // inital status is active and can add/modify
 
 // TODO: validate this way of working in trickier situations
-    public $hookinput     = array();  // equivalent of extrainfo used by hook modules
-    public $hookoutput    = array();  // updated hookinput for API actions, or output from each hook module for GUI actions
+    public $hookvalues    = array();  // updated hookvalues for API actions
+    public $hookoutput    = array();  // output from each hook module for GUI actions
     public $hooktransform = array();  // list of names for the properties to be transformed by the transform hook
 
 // CHECKME: this is no longer needed
@@ -305,15 +305,17 @@ class DataObject extends DataObjectMaster implements iDataObject
             || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
             || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)) continue;
 
-            if ($this->properties[$name]->type == 21 || !isset($this->hookoutput[$name])) {
+            if ($this->properties[$name]->type == 21 || !isset($this->hookvalues[$name])) {
                 $args['properties'][$name] = $this->properties[$name];
             } else {
                 // sigh, 5 letters, but so many hours to discover them
                 // anyways, clone the property, so we can safely change it, PHP 5 specific!!
                 $args['properties'][$name] = clone $this->properties[$name];
-                $args['properties'][$name]->value = $this->hookoutput[$name];
+                $args['properties'][$name]->value = $this->hookvalues[$name];
             }
         }
+        // clean up hookvalues
+        $this->hookvalues = array();
 
         // Order the fields if this is an extended object
         if (!empty($this->fieldorder)) {
@@ -645,7 +647,8 @@ class DataObject extends DataObjectMaster implements iDataObject
         // let xarObjectHooks worry about calling the different hooks
         xarObjectHooks::callHooks($this, $action);
 
-        // the result (API or GUI) will be in $this->hookoutput
+        // the result of API actions will be in $this->hookvalues
+        // the result of GUI actions will be in $this->hookoutput
 
         // CHECKME: prevent recursive hook calls in general
         xarCore::delCached('DynamicData','HookAction');

@@ -565,7 +565,7 @@ class xarModuleHooks
 
         } else {
             // return the extraInfo array updated by the API method
-            return $hookSubject->hookinput;
+            return $hookSubject->hookvalues;
         }
     }
 
@@ -772,8 +772,7 @@ class xarObjectHooks
                     xarObjectHooks::runApiHookFunc($hookInfo, $hookSubject->itemid, $hookSubject);
                 }
             }
-            // put the final updated values in $hookSubject->hookoutput
-            $hookSubject->hookoutput = $hookSubject->hookinput;
+            // the final updated values are in $hookSubject->hookvalues
         }
     }
 
@@ -782,19 +781,19 @@ class xarObjectHooks
      */
     public static function initHookSubject($hookSubject, $hookAction)
     {
-        // initialize hookinput
-        $hookSubject->hookinput = array();
+        // initialize hookvalues
+        $hookSubject->hookvalues = array();
 
         // Note: you can preset the list of properties to be transformed via $hookSubject->hooktransform
 
-        // add property values to hookinput
+        // add property values to hookvalues
         if ($hookAction == 'transform') {
             if (!empty($hookSubject->hooktransform)) {
                 $fields = $hookSubject->hooktransform;
             } else {
                 $fields = array_keys($hookSubject->properties);
             }
-            $hookSubject->hookinput['transform'] = array();
+            $hookSubject->hookvalues['transform'] = array();
 
             sys::import('modules.dynamicdata.class.properties.master');
 
@@ -809,26 +808,30 @@ class xarObjectHooks
                 // *never* transform an ID
                 // TODO: there is probably lots more to skip here.
                 if ($hookSubject->properties[$name]->type != 21) {
-                    $hookSubject->hookinput['transform'][] = $name;
+                    $hookSubject->hookvalues['transform'][] = $name;
                 }
-                $hookSubject->hookinput[$name] = $hookSubject->properties[$name]->value;
+                $hookSubject->hookvalues[$name] = $hookSubject->properties[$name]->value;
             }
-            $hookSubject->hooktransform = $hookSubject->hookinput['transform'];
+            $hookSubject->hooktransform = $hookSubject->hookvalues['transform'];
         } else {
             foreach(array_keys($hookSubject->properties) as $name)
-                $hookSubject->hookinput[$name] = $hookSubject->properties[$name]->value;
+                $hookSubject->hookvalues[$name] = $hookSubject->properties[$name]->value;
             $hookSubject->hooktransform = array();
         }
 
         // add extra info for traditional hook modules
-        $hookSubject->hookinput['module'] = xarMod::getName($hookSubject->moduleid);
-        $hookSubject->hookinput['itemtype'] = $hookSubject->itemtype;
-        $hookSubject->hookinput['itemid'] = $hookSubject->itemid;
+        $hookSubject->hookvalues['module'] = xarMod::getName($hookSubject->moduleid);
+        $hookSubject->hookvalues['itemtype'] = $hookSubject->itemtype;
+        $hookSubject->hookvalues['itemid'] = $hookSubject->itemid;
         // CHECKME: is this sufficient in most cases, or do we need an explicit xarModURL() ?
-        $hookSubject->hookinput['returnurl'] = xarServer::getCurrentURL();
+        $hookSubject->hookvalues['returnurl'] = xarServer::getCurrentURL();
 
-        // initialize hookoutput
-        $hookSubject->hookoutput = array();
+        $hookArea = xarHooks::getActionArea($hookAction);
+    // CHECKME: only one GUI action per object per HTTP request, and/or save results if necessary, and/or use hookoutput[action] ?
+        if ($hookArea == 'GUI') {
+            // initialize hookoutput
+            $hookSubject->hookoutput = array();
+        }
     }
 
     /**
@@ -844,10 +847,10 @@ class xarObjectHooks
         if (!xarMod::apiLoad($hookInfo['module'], $hookInfo['type'])) return;
         $result = xarMod::apiFunc($hookInfo['module'], $hookInfo['type'], $hookInfo['func'],
                                   array('objectid'  => $hookSubject->itemid,
-                                        'extrainfo' => $hookSubject->hookinput));
+                                        'extrainfo' => $hookSubject->hookvalues));
         if (isset($result)) {
-            // replace the current hookSubject->hookinput with the output of the API function
-            $hookSubject->hookinput = $result;
+            // replace the current hookSubject->hookvalues with the output of the API function
+            $hookSubject->hookvalues = $result;
         }
     }
 
@@ -864,7 +867,7 @@ class xarObjectHooks
         if (!xarMod::load($hookInfo['module'], $hookInfo['type'])) return;
         $result = xarMod::guiFunc($hookInfo['module'], $hookInfo['type'], $hookInfo['func'],
                                   array('objectid'  => $hookSubject->itemid,
-                                        'extrainfo' => $hookSubject->hookinput));
+                                        'extrainfo' => $hookSubject->hookvalues));
         if (isset($result)) {
             // add the output of the GUI function to the hookSubject->hookoutput array, using the hook modname as key
             $hookSubject->hookoutput[$hookInfo['module']] = $result;
@@ -1018,16 +1021,16 @@ class BasicHookCallHandler extends Object
         $fixedlist = array('module','itemtype','itemid','returnurl','transform');
 
     // TODO: validate this way of working in tricky situations
-        // do some processing with $subject->hookinput or other properties in this API method
+        // do some processing with $subject->hookvalues or other properties in this API method
         // note: for transform hooks, you can use $subject->hooktransform to know which properties to transform
-        // $hookoutput = xarMod::apiFunc(..., ..., etc.)
+        // $hookvalues = xarMod::apiFunc(..., ..., etc.)
 
-        // update the current $subject->hookinput values in the API method if needed
-        if (!empty($hookoutput) && is_array($hookoutput)) {
-            foreach (array_keys($hookoutput) as $name) {
+        // update the current $subject->hookvalues in the API method if needed
+        if (!empty($hookvalues) && is_array($hookvalues)) {
+            foreach (array_keys($hookvalues) as $name) {
                 if (in_array($name, $fixedlist)) continue;
-                $subject->hookinput[$name] = $hookoutput[$name];
-                $subject->hookinput[$name] .= 'The "api_example" action in ' . $this->modname . ' changed property ' . $name;
+                $subject->hookvalues[$name] = $hookvalues[$name];
+                $subject->hookvalues[$name] .= 'The "api_example" action in ' . $this->modname . ' changed property ' . $name;
             }
         }
         // no need to return anything here
@@ -1041,7 +1044,7 @@ class BasicHookCallHandler extends Object
     public function gui_example($subject)
     {
     // TODO: validate this way of working in tricky situations
-        // generate some GUI output with $subject->hookinput or other properties in this method
+        // generate some GUI output with $subject->hookvalues or other properties in this method
         // $hookoutput = xarMod::guiFunc(..., ..., etc.), xarTplObject(..., etc.), xarTplProperty(..., etc.), ...
 
         // add the output of the GUI method to the $subject->hookoutput array, using the hook modname as key
@@ -1145,27 +1148,58 @@ class DummyHookedObject extends Object
     public $itemid        = 0;
 
     public $properties    = array();  // just in case a hook call handler tries to access properties directly ;-)
+    public $fieldlist     = array();  // just in case a hook call handler tries to access fieldlist directly ;-)
 
 // TODO: validate this way of working in tricky situations
-    public $hookinput     = array();  // extrainfo used by hook modules
-    public $hookoutput    = array();  // updated hookinput for API actions, or output from each hook module for GUI actions
+    public $hookvalues    = array();  // updated hookvalues for API actions
+    public $hookoutput    = array();  // output from each hook module for GUI actions
     public $hooktransform = array();  // list of names for the properties to be transformed by the transform hook
 
     private $hooklist     = null;     // list of hook modules (= observers) to call
     private $hookscope    = 'item';   // the hook scope for dataobject (for now)
 
-    public function __construct(Array $extraInfo)
+    public function __construct(Array $extraInfo = array())
     {
         // assume $extraInfo was properly filled in by callHooks()
         $this->moduleid = xarMod::getRegId($extraInfo['module']);
         $this->itemtype = $extraInfo['itemtype'];
         $this->itemid   = $extraInfo['itemid'];
 
-        $this->hookinput = $extraInfo;
+        $this->hookvalues = $extraInfo;
         $this->hookoutput = array();
         if (!empty($extraInfo['transform'])) {
             $this->hooktransform = $extraInfo['transform'];
         }
+    }
+
+    function addProperty($args)
+    {
+        $this->properties[$args['name']] = new DummyHookedProperty($args);
+    }
+}
+
+/**
+ * Dummy property to support traditional modules calling hooks with extraInfo in hook call handlers (new in 2.x)
+ */
+class DummyHookedProperty extends Object
+{
+    public $value = null;  // just in case a hook call handler tries to set a property value directly ;-)
+
+    public function __construct(Array $args = array())
+    {
+        foreach ($args as $key => $value) {
+            $this->$key = $value;
+        }
+    }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public function setValue($value=null)
+    {
+        $this->value = $value;
     }
 }
 
