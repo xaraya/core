@@ -9,6 +9,13 @@
  * @link http://xaraya.com/index.php/release/182.html
  */
 
+/**
+ * @todo How far do we want to go with DD as ORM tool + Data Mapper vs. Active Record pattern
+ * http://madgeek.com/Articles/ORMapping/EN/mapping.htm
+ * http://www.agiledata.org/essays/mappingObjects.html
+ * http://www.doctrine-project.org/documentation/manual/2_0/en
+ */
+
 sys::import('modules.dynamicdata.class.objects.descriptor');
 
 // FIXME: only needed for the DataPropertyMaster::DD_* constants (or explicit import) - handle differently ?

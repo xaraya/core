@@ -319,10 +319,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     }
 
     /**
-     * Set categories for an object
+     * Set categories for an object (work in progress - do not use)
      *
+     * @param cids array of category ids
+     * @param andcids bool get items assigned to all the cids (AND = true) or any of the cids (OR = false)
      */
-    public function setCategories($cids)
+    public function setCategories($cids, $andcids = false)
     {
         if(!xarModIsAvailable('categories')) return;
 
@@ -337,7 +339,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             array(
                 'modid' => $this->moduleid,
                 'itemtype' => $this->itemtype,
-                'cids' => $cids
+                'cids' => $cids,
+                'andcids' => $andcids,
+                // unused options - do they have any benefit for dd lists ?
+                //'iids' => array(),    // only for these items - too early for dd here ?
+                //'cidtree' => array(), // match any category in the tree(s) below the cid(s)
+                //'groupcids' => null,  // group categories by 2 (typically) to show the items per combination in a category matrix
             )
         );
 
