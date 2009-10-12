@@ -101,7 +101,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 // CHECKME: this should filter the fieldlist based on the status as well - cfr. master.php
         // If a fieldlist was passed, only get the appropriate datastores
         if (isset($args['fieldlist'])) $this->getDataStores(true);
-        
+
         // REMOVEME: secondary is now always false
         // add where clause if itemtype is one of the properties (e.g. articles)
         if(isset($this->secondary) && !empty($this->itemtype) && $this->objectid > 2 && $this->filter) {
@@ -322,16 +322,22 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      * Set categories for an object
      *
      */
-    public function setCategories($catid)
+    public function setCategories($cids)
     {
         if(!xarModIsAvailable('categories')) return;
+
+        if (!empty($cids) && is_numeric($cids)) {
+            $cids = array($cids);
+        }
+
+        if (!is_array($cids) || count($cids) == 0) return;
 
         $categoriesdef = xarMod::apiFunc(
             'categories','user','leftjoin',
             array(
                 'modid' => $this->moduleid,
                 'itemtype' => $this->itemtype,
-                'catid' => $catid
+                'cids' => $cids
             )
         );
 
@@ -483,7 +489,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $args['properties'] = $tempprops;
             }
         }
-        
+
         $args['items'] =& $this->items;
 
         // add link to display the item
