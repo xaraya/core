@@ -78,7 +78,7 @@ interface ISQLDataStore
     // @note tied to properties, as used by dd
     function     addWhere(DataProperty &$property, $clause, $join, $pre = '', $post = '');
     function   addGroupBy(DataProperty &$property);
-    function      addJoin($table, $key, $fields, array $where = array(), $andor = 'and', $more = '', $sort = array());
+    function      addJoin($table, $key, $fields, $where = '', $andor = 'and', $more = '', $sort = array());
 
     // @note this looks pretty generic
     function cleanWhere();

@@ -60,7 +60,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     /**
      * Join another database table to this data store (unfinished)
      */
-    function addJoin($table, $key, $fields, array $where = array(), $andor = 'and', $more = '', $sort = array())
+    function addJoin($table, $key, $fields, $where = '', $andor = 'and', $more = '', $sort = array())
     {
         if(!isset($this->extra))
             $this->extra = array();
