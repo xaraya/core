@@ -731,6 +731,7 @@ class DataProperty extends Object implements iDataProperty
         $modulename = empty($this->tplmodule) ? $info['tplmodule'] : $this->tplmodule;
         return $modulename;
     }
+
     /**
      * Return the name this property uses in its templates
      *
@@ -741,6 +742,34 @@ class DataProperty extends Object implements iDataProperty
         // If not specified, default to the registered name of the prop
         $template = empty($this->template) ? $this->name : $this->template;
         return $template;
+    }
+
+    protected function getCanonicalName($data=null)
+    {
+        if(!isset($data['name'])) {
+            if ($this->anonymous == true) $data['name'] = $this->name;
+            else $data['name'] = 'dd_'.$this->id;
+        }
+        $data['name'] = $this->getPrefix($data) . $data['name'];
+        return $data['name'];
+    }
+
+    protected function getCanonicalID($data=null)
+    {
+        if(!isset($data['id'])) $data['id']   = $this->getCanonicalName($data);
+        $data['id'] = $this->getPrefix($data) . $data['id'];
+        return $data['id'];
+    }
+
+    private function getPrefix($data=null)
+    {
+        // Add the object's field prefix if there is one
+        $prefix = '';
+        // Allow 0 as a fieldprefix
+        if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0)  $prefix = $this->_fieldprefix . '_';
+        // A field prefix added here can override the previous one
+        if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
+        return $prefix;
     }
 
     public static function getRegistrationInfo()
