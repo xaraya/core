@@ -49,7 +49,7 @@
         <xsl:text>-&gt;showView(</xsl:text>
         <!-- Dump the attributes in an array for the function call, but skip the object and objectname attributes -->
         <xsl:call-template name="atts2args">
-          <xsl:with-param name="nodeset" select="@*[name() != 'object'] and @*[name() != 'objectname']"/>
+          <xsl:with-param name="nodeset" select="@*[name() != 'object' and name() != 'objectname']"/>
         </xsl:call-template>
         <xsl:text>);</xsl:text>
       </xsl:otherwise>
