@@ -65,6 +65,15 @@ class DataObjectMaster extends Object
     public $visibility = 'public';      // hint to DD whether this is a private object for a particular module, a protected object
                                         // which preferably shouldn't be messed with, or a public object that any admin can modify
 
+// TODO: validate this way of working in trickier situations
+    public $hookvalues    = array();    // updated hookvalues for API actions
+    public $hookoutput    = array();    // output from each hook module for GUI actions
+    public $hooktransform = array();    // list of names for the properties to be transformed by the transform hook
+
+// CHECKME: this is no longer needed
+    private $hooklist     = null;       // list of hook modules (= observers) to call
+    private $hookscope    = 'item';     // the hook scope for dataobject (for now)
+
 // TODO: relink objects, properties and datastores in __wakeup() methods after unserialize()
 
     /**
@@ -964,6 +973,43 @@ class DataObjectMaster extends Object
         }
 
         return $types;
+    }
+
+    /**
+     * Call $action hooks for this object (= notify observers in observer pattern)
+     *
+     * @param $action the hook action ('create', 'display', ...)
+     */
+    public function callHooks($action = '')
+    {
+        // if we have no action
+        if (empty($action)) {
+            return;
+        // if we have no primary key (= itemid)
+        } elseif (empty($this->primary)) {
+            return;
+        // if we already have some hook call in progress
+        } elseif (xarCore::isCached('DynamicData','HookAction')) {
+            return;
+        }
+
+        // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
+        $modname = xarMod::getName($this->moduleid);
+        if($modname == 'articles' || $modname == 'roles') {
+            return;
+        }
+
+        // CHECKME: prevent recursive hook calls in general
+        xarCore::setCached('DynamicData','HookAction',$action);
+
+        // let xarObjectHooks worry about calling the different hooks
+        xarObjectHooks::callHooks($this, $action);
+
+        // the result of API actions will be in $this->hookvalues
+        // the result of GUI actions will be in $this->hookoutput
+
+        // CHECKME: prevent recursive hook calls in general
+        xarCore::delCached('DynamicData','HookAction');
     }
 }
 ?>

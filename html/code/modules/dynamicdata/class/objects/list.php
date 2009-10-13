@@ -42,6 +42,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
     private $cachedlinks  = array();
 
+    public $fieldsummary = null;          // do we show a summary for numeric fields (sum, min, max, avg, ...) ?
+    public $fieldsummarylabel = null;     // what label should we use in the options for this summary ?
+
     /**
      * Inherits from DataObjectMaster and sets the requested item ids, sort, where, ...
      *
@@ -553,6 +556,24 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // @todo let's be a lil more explicit in handling these options
             $args['links'][$itemid] = $this->getViewOptions($args);
         }
+
+        // calculate field summary for items
+        if (!empty($this->fieldsummary)) {
+            $summary = $this->getFieldSummary();
+            if (!empty($summary)) {
+                // add a dummy item to hold the summary information
+                $itemid = 0;
+                if (!in_array($itemid, $this->itemids)) {
+                    $this->itemids[] = $itemid;
+                }
+                $this->items[$itemid] = $summary;
+                // add view options for the dummy item - last label wins :-)
+                $args['links'][$itemid] = array('display' => array('otitle' => $this->fieldsummarylabel,
+                                                                   'olink'  => '',
+                                                                   'ojoin'  => ''));
+            }
+        }
+
         if(!empty($this->groupby)) {
             foreach(array_keys($args['properties']) as $name) {
                 if(!empty($this->properties[$name]->operation))
@@ -779,6 +800,98 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
         }
         return $viewvalues;
+    }
+
+    /**
+     * Get field summary based on requested operation per field (sum, min, max, avg, ...)
+     *
+     * @return array
+     */
+    public function getFieldSummary(Array $fieldsummary = array())
+    {
+        if (!empty($fieldsummary)) {
+            $this->fieldsummary = $fieldsummary;
+        }
+        if (empty($this->fieldsummary)) {
+            return array();
+        }
+
+        // standardize operations to upper-case
+        foreach (array_keys($this->fieldsummary) as $field) {
+            $this->fieldsummary[$field] = strtoupper($this->fieldsummary[$field]);
+        }
+
+        // calculate the field summary
+        $fieldvalues = array();
+        $fieldcount  = array();
+        foreach(array_keys($this->items) as $itemid) {
+            foreach ($this->fieldsummary as $field => $operation) {
+                if (!isset($this->items[$itemid][$field])) continue;
+                if (!isset($fieldvalues[$field])) {
+                    $fieldvalues[$field] = $this->items[$itemid][$field];
+                    $fieldcount[$field] = 1;
+                    continue;
+                }
+                switch ($operation)
+                {
+                    case 'AVG':
+                        $fieldcount[$field] += 1;
+                        $fieldvalues[$field] += $this->items[$itemid][$field];
+                        break;
+                    case 'SUM':
+                        $fieldvalues[$field] += $this->items[$itemid][$field];
+                        break;
+                    case 'MAX':
+                        if ($fieldvalues[$field] < $this->items[$itemid][$field]) {
+                            $fieldvalues[$field] = $this->items[$itemid][$field];
+                        }
+                        break;
+                    case 'MIN':
+                        if ($fieldvalues[$field] > $this->items[$itemid][$field]) {
+                            $fieldvalues[$field] = $this->items[$itemid][$field];
+                        }
+                        break;
+                }
+            }
+        }
+
+        // fill in the summary item
+        $item = array();
+        $label = xarML('Summary');
+        foreach ($this->fieldsummary as $field => $operation) {
+            switch ($operation)
+            {
+                case 'AVG':
+                    if (isset($fieldvalues[$field]) && !empty($fieldcount[$field])) {
+                        $item[$field] = $fieldvalues[$field] / $fieldcount[$field];
+                    }
+                    $label = xarML('Current Average');
+                    break;
+                case 'SUM':
+                    if (isset($fieldvalues[$field])) {
+                        $item[$field] = $fieldvalues[$field];
+                    }
+                    $label = xarML('Current Total');
+                    break;
+                case 'MAX':
+                    if (isset($fieldvalues[$field])) {
+                        $item[$field] = $fieldvalues[$field];
+                    }
+                    $label = xarML('Current Maximum');
+                    break;
+                case 'MIN':
+                    if (isset($fieldvalues[$field])) {
+                        $item[$field] = $fieldvalues[$field];
+                    }
+                    $label = xarML('Current Minimum');
+                    break;
+            }
+        }
+        // set label for the view options of the field summary item - last label wins :-)
+        if (!isset($this->fieldsummarylabel)) {
+            $this->fieldsummarylabel = $label;
+        }
+        return $item;
     }
 
     public function getPager($currenturl=null)

@@ -63,6 +63,8 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
 
         $this->object->getItems();
 
+$this->object->callHooks('view');
+
         $this->object->viewfunc = $this->func;
         // Specify link type here as well
         $this->object->linktype = $this->type;

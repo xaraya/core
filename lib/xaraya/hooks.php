@@ -398,9 +398,15 @@ class xarModuleHooks
         $callerItemType = $extraInfo['itemtype'];
         $hookId = $extraInfo['itemid'];
 
-        // get the hook list for this module, itemtype, scope and hook action
-        xarLogMessage("xarModuleHooks: getting $hookScope $hookAction hooks for $modName.$callerItemType");
-        $hookList = xarModuleHooks::getHookList($modName, $hookScope, $hookAction, $callerItemType);
+        // CHECKME: the 'view' hook action is not supported for traditional modules calling hooks with extraInfo
+        if ($hookAction == 'view') {
+            $hookList = array();
+
+        } else {
+            // get the hook list for this module, itemtype, scope and hook action
+            xarLogMessage("xarModuleHooks: getting $hookScope $hookAction hooks for $modName.$callerItemType");
+            $hookList = xarModuleHooks::getHookList($modName, $hookScope, $hookAction, $callerItemType);
+        }
 
         // try to determine 'API' or 'GUI' from the standard hook actions
         $hookArea = xarHooks::getActionArea($hookAction);
