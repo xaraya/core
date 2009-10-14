@@ -172,13 +172,13 @@
                     The data-getitems tag retrieves a list of properties and item values from a dataobject:
                 </p>
                 <pre>
-    &lt;xar:data-getitems name="&#36;properties" value="&#36;values" object="$myobject" /&gt;
+    &lt;xar:data-getitems properties="&#36;properties" values="&#36;values" object="$myobject" /&gt;
                 </pre>
                 <p>
                     The properties and values (from the name and value attributes) can be used to display the list of items (see below). The list can be restricted by passing the tag an array of itemids::
                 </p>
                 <pre>
-    &lt;xar:data-getitems name="&#36;properties" value="&#36;values"  object="$myobject"
+    &lt;xar:data-getitems properties="&#36;properties" values="&#36;values"  object="$myobject"
         itemids="&#36;idlist" /&gt;
             </pre>
                 <p>
