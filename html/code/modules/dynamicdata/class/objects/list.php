@@ -454,7 +454,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     public function showView(Array $args = array())
     {
         $args = $this->toArray($args);
-
         // Note: we do NOT retrieve the items again here
         //$this->getItems($args);
 
