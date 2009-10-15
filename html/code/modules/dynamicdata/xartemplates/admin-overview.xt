@@ -262,7 +262,7 @@
                     We can also assemble an object item by getting the item first via a getitem tag:
                 </p>
                 <pre>
-    &lt;xar:data-getitem name="&#36;properties" object="$myobject" itemid="&#36;id" /&gt;
+    &lt;xar:data-getitem properties="&#36;properties" object="$myobject" itemid="&#36;id" /&gt;
                 </pre>
                 <p>
                     Note that in this example the attribute object can refer to an onject or its name. The itemid attribute defines which item's data to retrieve, and the output is an array of fields with that data, called $properties. We can then use the $properties array to define a custom display, such as givne below (a custom form for input would simply use data-input, rather than data-output, tags):
