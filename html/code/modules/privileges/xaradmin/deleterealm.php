@@ -20,14 +20,20 @@ function privileges_admin_deleterealm()
     if (!xarVarFetch('id',          'isset', $id,          NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('confirmed', 'isset', $confirmed, NULL, XARVAR_DONT_SET)) return;
 
+    $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
-    sys::import('modules.roles.class.xarQuery');
-    $q = new xarQuery('SELECT',$xartable['security_realms']);
-    $q->addfields(array('id','name'));
-    $q->eq('id', $id);
-    if(!$q->run()) return;
-    $result = $q->row();
-    $name = $result['name'];
+
+    $bindvars = array();
+    $tbl = $xartable['security_realms'];
+    $query = "SELECT id, name FROM $tbl WHERE id = ?";
+    $bindvars[] = $id;
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+    if(!$result) return;
+    while($result->next())
+    {
+        list($result_id, $name) = $result->fields; 
+    }
 
 // Security Check
     if(!xarSecurityCheck('DeletePrivilege',0,'Realm',$name)) return;
@@ -44,9 +50,11 @@ function privileges_admin_deleterealm()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    $q = new xarQuery('DELETE',$xartable['security_realms']);
-    $q->eq('id', $result['id']);
-    if(!$q->run()) return;
+    $bindvars = array();
+    $query = "DELETE FROM $tbl WHERE id = ?";
+    $stmt = $dbconn->prepareStatement($query);
+    $bindvars[] = $result_id;
+    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
 
 // Hmm... what do we do about hooks?
 //xarModCallHooks('item', 'delete', $id, '');
