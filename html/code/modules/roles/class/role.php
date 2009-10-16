@@ -162,11 +162,7 @@ class Role extends DataObject
         // bail if the purported parent is not a group
         if ($this->isUser()) return false;
         
-        xarMod::loadDbInfo('dynamicdata','dynamicdata');
-        $xartable = xarDB::getTables();
-        $rolemembers = $xartable['rolemembers'];
-
-        $query = "SELECT * FROM $rolemembers
+        $query = "SELECT * FROM $this->rolememberstable
                  WHERE role_id = ? AND parent_id = ?";
         
         $bindvars[] = $member->getID();
@@ -178,18 +174,16 @@ class Role extends DataObject
         
          if ($member->isUser()) {
             // get the current count
-            $users = $xartable['users'];
-            $query = "SELECT * FROM $users
-                      WHERE role_id = ?";
+            $query = "SELECT users FROM $this->rolestable
+                      WHERE id = ?";
             $bindvars[] = $this->getID();
                 
             $stmt = $dbconn->prepareStatement($query);
             if (!$stmt) return;
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-    
-            $roles = $xartable['roles'];
-            $query = "UPDATE $roles SET users =". $result['users']+1 ."
-                      WHERE id = ?";
+            while($result->next() > 0) $row = $result->fields;
+            $users = $row['users'] + 1;
+            $query = "UPDATE $this->rolestable SET users =" . $users . " WHERE id = ?";
             $bindvars[] = $this->getID();
 
             // add 1 and update.
@@ -198,7 +192,7 @@ class Role extends DataObject
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
          }
     
-        $query = "INSERT INTO $dynamicobjects (role_id, parent_id) 
+        $query = "INSERT INTO $this->rolememberstable (role_id, parent_id) 
                     values (".$member->getID().", ". $this->getID().")";                
       
         $dbconn = xarDB::getConn();
@@ -218,15 +212,12 @@ class Role extends DataObject
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
             if (!$result) return;
-            while($result->next() > 0)
-            {
-                $row = $result->fields;
-            }
+            while($result->next() > 0) $row = $result->fields;
+
             // add 1 and update.
             $bindvars = array();
-            $dynamicobjects = $this->rolestable;
             $value = $row['users']+1;
-            $query = "UPDATE  " . $dynamicobjects . " SET users = " . $value . " WHERE id = ?";
+            $query = "UPDATE  " . $this->rolestable . " SET users = " . $value . " WHERE id = ?";
             $bindvars[] =  $this->getID();
             $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
@@ -382,9 +373,8 @@ class Role extends DataObject
 
         xarMod::loadDbInfo('roles','roles');
         $xartable = xarDB::getTables();
-        $dynamicobjects = $this->rolestable;
         $bindvars = array();
-        $query = "UPDATE $dynamicobjects 
+        $query = "UPDATE $this->rolestable 
                   SET name = $name,
                       uname = $uname,
                       pass = $pass,
