@@ -11,6 +11,7 @@
 
 /**
  * @todo How far do we want to go with DD as ORM tool + Data Mapper vs. Active Record pattern
+ * http://www.terrenceryan.com/blog/post.cfm/coldfusion-9-orm-data-mapper-versus-active-record
  * http://madgeek.com/Articles/ORMapping/EN/mapping.htm
  * http://www.agiledata.org/essays/mappingObjects.html
  * http://www.doctrine-project.org/documentation/manual/2_0/en

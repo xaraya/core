@@ -76,7 +76,7 @@ function dynamicdata_utilapi_maketable($args)
     $dbconn = xarDB::getConn();
 
     //Load Table Maintenance API
-    sys::import('lib.xarTableDDL');
+    sys::import('xaraya.tableddl');
 
     $table = $prefix . 'dd_' . $myobject->name;
 
@@ -134,6 +134,7 @@ function dynamicdata_utilapi_maketable($args)
                                     'default'     => $default);
                 break;
 
+            case 'textarea':
             case 'textarea_small':
             case 'textarea_medium':
             case 'textarea_large':
