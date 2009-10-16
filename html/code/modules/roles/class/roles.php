@@ -47,7 +47,6 @@ class xarRoles extends Object
         $xartable = xarDB::getTables();
         self::$rolestable = $xartable['roles'];
         self::$rolememberstable = $xartable['rolemembers'];
-        sys::import('modules.roles.class.xarQuery');
     }
 
     /**
@@ -230,7 +229,8 @@ class xarRoles extends Object
         }
         // set up the query and get the groups
         self::initialize();
-        $q = new xarQuery('SELECT');
+        sys::import('xaraya.structures.query');
+        $q = new Query('SELECT');
         $q->addtable(self::$rolestable,'r');
         $q->addtable(self::$rolememberstable,'rm');
         $q->leftjoin('r.id','rm.role_id');
@@ -261,7 +261,8 @@ class xarRoles extends Object
         // retrieve the object's data from the repository
         // set up and execute the query
         self::initialize();
-        $q = new xarQuery('SELECT',self::$rolestable);
+        sys::import('xaraya.structures.query');
+        $q = new Query('SELECT',self::$rolestable);
         $q->eq($field,$value);
         if ($state == ROLES_STATE_CURRENT) {
             $q->ne('state',ROLES_STATE_DELETED);

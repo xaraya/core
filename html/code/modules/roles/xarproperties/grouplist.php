@@ -85,13 +85,14 @@ class GroupListProperty extends SelectProperty
     {
         $xartable = xarDB::getTables();
         
+        sys::import('xaraya.structures.query');
         if ($this->initialization_update_behavior == 'replace' && $this->previous_groupid) {
             if (!$itemid) {
-                $q = new xarQuery('DELETE',$xartable['rolemembers']);
+                $q = new Query('DELETE',$xartable['rolemembers']);
                 $q->eq('parent_id',$this->previous_groupid);
                 if (!$q->run()) return;
             } else {
-                $q = new xarQuery('UPDATE',$xartable['rolemembers']);
+                $q = new Query('UPDATE',$xartable['rolemembers']);
                 $q->addfield('parent_id',$this->current_groupid);
                 $q->eq('role_id',$itemid);
                 $q->eq('parent_id',$this->previous_groupid);
@@ -99,7 +100,7 @@ class GroupListProperty extends SelectProperty
             }
         } else {
             if (!$itemid) return true;
-            $q = new xarQuery('INSERT',$xartable['rolemembers']);
+            $q = new Query('INSERT',$xartable['rolemembers']);
             $q->addfield('role_id',$itemid);
             $q->addfield('parent_id',$this->current_groupid);
             if (!$q->run()) return;
@@ -124,7 +125,7 @@ class GroupListProperty extends SelectProperty
         $basegroup = xarRoles::get($this->initialization_basegroup);
         if (!empty($basegroup)) {
             $xartable = xarDB::getTables();
-            $q = new xarQuery('SELECT',$xartable['rolemembers']);
+            $q = new Query('SELECT',$xartable['rolemembers']);
             $q->addfield('parent_id');
             $q->eq('role_id',$itemid);
             if (!$q->run()) return;

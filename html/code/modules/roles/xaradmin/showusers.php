@@ -57,8 +57,8 @@ function roles_admin_showusers()
     }
 
     // Check if we already have a selection
-    sys::import('modules.roles.class.xarQuery');
-    $q = new xarQuery();
+    sys::import('xaraya.structures.query');
+    $q = new Query();
     $q = $q->sessiongetvar('rolesquery');
     $q = '';
 
@@ -70,7 +70,7 @@ function roles_admin_showusers()
             if ($key == ROLES_USERTYPE) $basetypes[] = $key;
         }
         $xartable = xarDB::getTables();
-        $q = new xarQuery('SELECT');
+        $q = new Query('SELECT');
         $q->addtable($xartable['roles'],'r');
         $q->addfields(array('r.id AS id','r.name AS name'));
 

@@ -62,8 +62,8 @@ function roles_admin_purge($args)
         }
 // --- display roles that can be recalled
         //Create the selection
-        sys::import('modules.roles.class.xarQuery');
-        $q = new xarQuery('SELECT',$rolestable);
+        sys::import('xaraya.structures.query');
+        $q = new Query('SELECT',$rolestable);
         $q->addfields(array('id',
                     'uname',
                     'name',
@@ -173,7 +173,7 @@ function roles_admin_purge($args)
                 $pass = '';
                 $email = '';
                 $date_reg = 0;
-                $q = new xarQuery('UPDATE',$rolestable);
+                $q = new Query('UPDATE',$rolestable);
                 $q->addfield('name',$name);
                 $q->addfield('uname',$uname);
                 $q->addfield('pass',$pass);

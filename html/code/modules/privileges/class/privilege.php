@@ -534,7 +534,6 @@ class xarPrivilege extends xarMask
     */
     function isRootPrivilege()
     {
-        // removed dependency on roles xarQuery
         $xartable = xarDB::getTables();
         $previlegeobjects = $this->privilegestable;
         $privilegmemobjects = $this->privmemberstable;
