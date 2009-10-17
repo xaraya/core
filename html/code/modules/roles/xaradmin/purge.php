@@ -62,29 +62,21 @@ function roles_admin_purge($args)
         }
 // --- display roles that can be recalled
         //Create the selection
-        sys::import('xaraya.structures.query');
-        $q = new Query('SELECT',$rolestable);
-        $q->addfields(array('id',
-                    'uname',
-                    'name',
-                    'email',
-                    'itemtype',
-                    'date_reg'));
-        $q->setorder('name');
-        if (!empty($data['recallsearch'])) {
-            $c[1] = $q->like('name','%' . $data['recallsearch'] . '%');
-            $c[2] = $q->like('uname','%' . $data['recallsearch'] . '%');
-            $c[3] = $q->like('email','%' . $data['recallsearch'] . '%');
-            $q->qor($c);
-        }
-        $q->eq('state',ROLES_STATE_DELETED);
-        $q->ne('date_reg',0);
-        $q->setrowstodo($numitems);
-        $q->setstartat($recallstartnum);
-//        $q->qecho();
-        if(!$q->run()) return;
+        $query = "SELECT id, uname, name, email, itemtype, date_reg FROM $rolestable WHERE state = ? AND date_reg != ?" ;
+        $bindvars[] = ROLES_STATE_DELETED;
+        $bindvars[] = 0; 
 
-        $data['totalselect'] = $q->getrows();
+        if (!empty($data['recallsearch'])) {
+            $query .= " AND (name LIKE %" . $data['recallsearch'] . "%";
+            $query .= " OR uname LIKE %" . $data['recallsearch'] . "%";
+            $query .= " OR email LIKE %" . $data['recallsearch'] . "%)";
+        }
+        $query .= " ORDER BY name";
+        $result = $dbconn->SelectLimit($query, $numitems, $recallstartnum, $bindvars);
+        $roles = array();
+        while($result->next()) $roles[] = $result->fields;
+
+        $data['totalselect'] = count($roles);
 
         if ($data['totalselect'] == 0) {
             $data['recallmessage'] = xarML('There are no deleted groups/users ');
@@ -94,7 +86,7 @@ function roles_admin_purge($args)
         }
 
         $recallroles = array();
-        foreach ($q->output() as $role) {
+        foreach ($roles as $role) {
 // check each role's user name
             if (empty($role['uname'])) {
                 $msg = xarML('Execution halted: the role with id #(1) has an empty name. This needs to be corrected manually in the database.', $role['id']);
@@ -167,21 +159,17 @@ function roles_admin_purge($args)
                 $role = xarRoles::get($id);
                 $role->deleteItem();
 // --- now actually remove the data from the role's entry
-                $state = ROLES_STATE_DELETED;
-                $uname = $deleted . microtime(TRUE) .'.'. $id;
-                $name = '';
-                $pass = '';
-                $email = '';
-                $date_reg = 0;
-                $q = new Query('UPDATE',$rolestable);
-                $q->addfield('name',$name);
-                $q->addfield('uname',$uname);
-                $q->addfield('pass',$pass);
-                $q->addfield('email',$email);
-                $q->addfield('date_reg',$date_reg);
-                $q->addfield('state',$state);
-                $q->eq('id',$id);
-                $q->run();
+                $query = "UPDATE $rolestable SET name = ?, uname = ?, pass = ?, email = ?, date_reg = ?, state = ? WHERE id = ?" ;
+                $bindvars = array();
+                $bindvars[] = '';
+                $bindvars[] = $deleted . microtime(TRUE) .'.'. $id;
+                $bindvars[] = '';
+                $bindvars[] = '';
+                $bindvars[] = 0;
+                $bindvars[] = ROLES_STATE_DELETED;
+                $bindvars[] = $id;
+                $dbconn = xarDB::getConn();
+                $result = $dbconn->Execute($query,$bindvars);
 // --- Let any hooks know that we have purged this user.
                 $item['module'] = 'roles';
                 $item['itemid'] = $id;
