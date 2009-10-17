@@ -120,8 +120,9 @@ function roles_userapi_get($args)
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
     // Check for no rows found, and if so return
+    $result->next();
     $user = $result->getRow();
-    if ($user == array()) return false;
+    if (empty($user)) return false;
     // id is a reserved/key words in Oracle et al.
     $user['id'] = $user['id'];
     $user['itemtype'] = $user['itemtype'];
