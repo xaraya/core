@@ -74,7 +74,7 @@ class xarRoles extends Object
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
             if(!$result) return;            
-            while($result->next() > 0) $allgroups[] = $result->fields;
+            while($result->next()) $allgroups[] = $result->fields;
         }
         return $allgroups;
     }
@@ -102,7 +102,7 @@ class xarRoles extends Object
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
         if(!$result) return;            
-        while($result->next() > 0) $group[] = $result->fields;
+        while($result->next()) $group[] = $result->fields;
         if (!empty($group)) return $group;
         return false;
     }
@@ -245,20 +245,16 @@ class xarRoles extends Object
         // retrieve the object's data from the repository
         // set up and execute the query
         self::initialize();
-        sys::import('xaraya.structures.query');
-        $q = new Query('SELECT',self::$rolestable);
-        $q->eq($field,$value);
+        $query = "SELECT * FROM " . self::$rolestable . " WHERE $field = $value" ;
         if ($state == ROLES_STATE_CURRENT) {
-            $q->ne('state',ROLES_STATE_DELETED);
+            $query .= " state != " . ROLES_STATE_DELETED;
         } elseif ($state != ROLES_STATE_ALL) {
-            $q->eq('state',$state);
+            $query .= " state = " . $state;
         }
-
-        // Execute the query, bail if an exception was thrown
-        if (!$q->run()) return;
-
-        // set the data in an array
-        $row = $q->row();
+        $stmt = self::$dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array(), ResultSet::FETCHMODE_ASSOC);
+        if(!$result) return;            
+        if($result->next()) $row = $result->fields;
         if (empty($row)) return;
 
         $duvarray = array('userhome','primaryparent','passwordupdate','userlastlogin','usertimezone');

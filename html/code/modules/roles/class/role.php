@@ -181,7 +181,7 @@ class Role extends DataObject
             $stmt = $dbconn->prepareStatement($query);
             if (!$stmt) return;
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-            while($result->next() > 0) $row = $result->fields;
+            while($result->next()) $row = $result->fields;
             $users = $row['users'] + 1;
             $query = "UPDATE $this->rolestable SET users =" . $users . " WHERE id = ?";
             $bindvars[] = $this->getID();
@@ -212,7 +212,7 @@ class Role extends DataObject
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
             if (!$result) return;
-            while($result->next() > 0) $row = $result->fields;
+            while($result->next()) $row = $result->fields;
 
             // add 1 and update.
             $bindvars = array();
@@ -265,10 +265,8 @@ class Role extends DataObject
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
             if (!$result) return;
-            while($result->next() > 0)
-            {
-                $row = $result->fields;
-            }
+            while($result->next()) $row = $result->fields;
+
             // subtract 1 and update.
             $dynamicobjects = $this->rolestable;
             $value = $row['users']-1;
@@ -627,10 +625,7 @@ class Role extends DataObject
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
         }
         if($result) return;
-        while ($result->next() > 0)
-        {
-            $row = $result->fields;
-        }
+        while ($result->next()) $row = $result->fields;
         
         return $row['children'];
     }

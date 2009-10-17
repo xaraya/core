@@ -54,7 +54,6 @@ function privileges_admin_modifyrealm()
             list($name) = $result->fields; 
         }
 
-        //if ($q->getrows() > 0) throw new DuplicateException(array('realm',$newname));
         if ($name != '') throw new DuplicateException(array('realm',$newname));
 
         $bindvars = array();
