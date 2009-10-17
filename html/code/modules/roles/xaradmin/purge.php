@@ -91,8 +91,7 @@ function roles_admin_purge($args)
 
         if ($data['totalselect'] == 0) {
             $data['recallmessage'] = xarML('There are no deleted groups/users ');
-        }
-        else {
+        } else {
             $data['recallmessage']         = '';
         }
 
@@ -214,8 +213,7 @@ function roles_admin_purge($args)
                     $data['purgestatetext'] = 'pending';
                     break ;
             endswitch ;
-        }
-        else {
+        } else {
             $data['purgestatetext'] = '';
         }
         if (!empty($data['purgesearch'])) {
@@ -254,8 +252,7 @@ function roles_admin_purge($args)
 
         if ($data['totalselect'] == 0) {
             $data['purgemessage'] = xarML('There are no users selected');
-        }
-        else {
+        } else {
             $data['purgemessage']         = '';
         }
 
@@ -307,7 +304,7 @@ function roles_admin_purge($args)
     } // end elseif
 
     // --- finish up
-    $data['authid']         = xarSecGenAuthKey();
+    $data['authid'] = xarSecGenAuthKey();
     // Return
     return $data;
 }
