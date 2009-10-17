@@ -63,12 +63,6 @@ function roles_admin_showusers()
     $q = '';
 
     if (empty($q) || isset($reload)) {
-        $types = xarMod::apiFunc('roles','user','getitemtypes');
-        $basetypes = array();
-        // Show only roles based on the user itemtype
-        foreach ($types as $key => $value) {
-            if ($key == ROLES_USERTYPE) $basetypes[] = $key;
-        }
         $xartable = xarDB::getTables();
         $q = new Query('SELECT');
         $q->addtable($xartable['roles'],'r');
@@ -83,11 +77,7 @@ function roles_admin_showusers()
             $q->qor($c);
         }
 
-          $c = array();
-          foreach ($basetypes as $itemtype) {
-              $c[] = $q->eq('r.itemtype',$itemtype);
-          }
-          $q->qor($c);
+        $q->eq('r.itemtype', ROLES_USERTYPE);
 
         // Add state
         if ($data['state'] == ROLES_STATE_CURRENT) $q->ne('state',ROLES_STATE_DELETED);
