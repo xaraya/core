@@ -62,11 +62,19 @@ class xarRoles extends Object
      */
     public static function getgroups()
     {
+        self::initialize();
         static $allgroups = array();
         if (empty($allgroups)) {
-            $q = self::_getgroupsquery();
-            if (!$q->run()) return;
-            $allgroups = $q->output();
+            $query = "SELECT r.id AS id, r.name AS name, r.users AS users, rm.parent_id AS parentid 
+                      FROM " . self::$rolestable . " r LEFT JOIN " . self::$rolememberstable . " rm ON r.id = rm.role_id 
+                      WHERE r.itemtype = ? AND r.state = ? ORDER BY r.name";
+            $bindvars[] = ROLES_GROUPTYPE;
+            $bindvars[] = ROLES_STATE_ACTIVE;
+            $dbconn = xarDB::getConn();
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            if(!$result) return;            
+            while($result->next() > 0) $allgroups[] = $result->fields;
         }
         return $allgroups;
     }
@@ -83,10 +91,19 @@ class xarRoles extends Object
      */
     public static function getgroup($id)
     {
-        $q = self::_getgroupsquery();
-        $q->eq('r.id',$id);
-        if (!$q->run()) return;
-        if ($q->row() != array()) return $q->row();
+        self::initialize();
+        $query = "SELECT r.id AS id, r.name AS name, r.users AS users, rm.parent_id AS parentid 
+                  FROM " . self::$rolestable . " r LEFT JOIN " . self::$rolememberstable . " rm ON r.id = rm.role_id 
+                  WHERE role_id = ? AND r.itemtype = ? AND r.state = ? ORDER BY r.name";
+        $bindvars[] = $id;
+        $bindvars[] = ROLES_GROUPTYPE;
+        $bindvars[] = ROLES_STATE_ACTIVE;
+        $dbconn = xarDB::getConn();
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        if(!$result) return;            
+        while($result->next() > 0) $group[] = $result->fields;
+        if (!empty($group)) return $group;
         return false;
     }
 
@@ -213,39 +230,6 @@ class xarRoles extends Object
 
        // done
         return $parent->addMember($child);
-    }
-
-    /**
-     * _getgroupsquery: query for getting groups
-     *
-     * @author Marc Lutolf <marcinmilan@xaraya.com>
-     */
-    private static function _getgroupsquery()
-    {
-        $types = xarMod::apiFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
-        $basetypes = array();
-        foreach ($types as $key => $value) {
-            if ($key == ROLES_GROUPTYPE) $basetypes[] = $key;
-        }
-        // set up the query and get the groups
-        self::initialize();
-        sys::import('xaraya.structures.query');
-        $q = new Query('SELECT');
-        $q->addtable(self::$rolestable,'r');
-        $q->addtable(self::$rolememberstable,'rm');
-        $q->leftjoin('r.id','rm.role_id');
-        $q->addfield('r.id AS id');
-        $q->addfield('r.name AS name');
-        $q->addfield('r.users AS users');
-        $q->addfield('rm.parent_id AS parentid');
-        $c = array();
-        foreach ($basetypes as $itemtype) {
-            $c[] = $q->peq('r.itemtype',$itemtype);
-        }
-        $q->qor($c);
-        $q->eq('r.state',ROLES_STATE_ACTIVE);
-        $q->setorder('r.name');
-        return $q;
     }
 
     /**
