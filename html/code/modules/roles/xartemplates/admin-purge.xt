@@ -42,19 +42,19 @@
                 <table class="xar-fullwidth">
                     <tr>
                         <th>
-                            <label for="recallsearch"
-                            title="#xarML('Search for users with either their real name, login name or email matching the string')#">
-                            Search</label>
+                            <label for="recallsearch" title="#xarML('Search for users with either their real name, login name or email matching the string')#">
+                                Search
+                            </label>
                         </th>
                         <th class="xar-nowrap">
-                            <label for="groupid"
-                            title="#xarML('Assign recalled users to this group')#">Attach Recalled
-                            Groups/Users To</label>
+                            <label for="groupid" title="#xarML('Assign recalled users to this group')#">
+                                Attach Recalled Groups/Users To
+                            </label>
                         </th>
                         <th class="xar-nowrap">
-                            <label for="groupid"
-                            title="#xarML('Assign recalled users to this status')#">Set Recalled
-                            Users To</label>
+                            <label for="groupid" title="#xarML('Assign recalled users to this status')#">
+                                Set Recalled Users To
+                            </label>
                         </th>
                     </tr>
                     <tr>
@@ -76,13 +76,14 @@
                                 </select>
                         </td>
                         <td class="xar-align-center">
-                            <xar:set name="options">array( array('id' =&gt; ROLES_STATE_ACTIVE,
-                            'name' =&gt; 'Active'), array('id' =&gt; ROLES_STATE_INACTIVE, 'name'
-                            =&gt; 'Inactive'), array('id' =&gt; ROLES_STATE_NOTVALIDATED, 'name'
-                            =&gt; 'Not Validated'), array('id' =&gt; ROLES_STATE_PENDING, 'name'
-                            =&gt; 'Pending'), )</xar:set>
-                            <xar:data-input type="dropdown" name="recallstate" options="$options"
-                            value="$recallstate" />
+                            <xar:set name="options">
+                                array( array('id' =&gt; ROLES_STATE_ACTIVE,
+                                'name' =&gt; 'Active'), array('id' =&gt; ROLES_STATE_INACTIVE, 'name'
+                                =&gt; 'Inactive'), array('id' =&gt; ROLES_STATE_NOTVALIDATED, 'name'
+                                =&gt; 'Not Validated'), array('id' =&gt; ROLES_STATE_PENDING, 'name'
+                                =&gt; 'Pending'), )
+                            </xar:set>
+                            <xar:data-input type="dropdown" name="recallstate" options="$options" value="$recallstate" />
                             </td>
                         </tr>
                     </table>
@@ -92,12 +93,12 @@
                     <xar:else />
                         <table class="xar-fullwidth">
                             <tr>
-                            <th>Real name</th>
-                            <th>User Name</th>
-                            <th>Email</th>
-                            <th>Date Registered</th>
-                            <th>Type</th>
-                            <th>Recall</th>
+                                <th>Real name</th>
+                                <th>User Name</th>
+                                <th>Email</th>
+                                <th>Date Registered</th>
+                                <th>Type</th>
+                                <th>Recall</th>
                             </tr>
                             <xar:loop name="$recallroles">
                                 <xar:if condition="$loop:item['unique'] eq 1">
@@ -115,7 +116,6 @@
                                     <td class="xar-align-center">
                                         <xar:if condition="$loop:item['unique'] eq 1">
                                              <input type="checkbox" name="recallids[#$loop:item['id']#]" id="recallids_#$loop:item['id']#" />
-                                        id="recallids_#$loop:item['id']#" />
                                         </xar:if>
                                     </td>
                                 </tr>
@@ -138,8 +138,7 @@
             unique).</p>
         <xar:else />
             <h3>Purge Users</h3>
-            <p>Note: Purged users cannot be recalled. Groups and some special users cannot be
-            purged.</p>
+            <p>Note: Purged users cannot be recalled. Groups and some special users cannot be purged.</p>
             <form method="post" action="&xar-modurl-roles-admin-purge;"
             enctype="application/x-www-form-urlencoded" name="purge">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -148,23 +147,20 @@
                 <table class="xar-fullwidth">
                     <tr>
                         <th>
-                            <label for="purgesearch"
-                            title="#xarML('Search for users with either their real name, login name or email matching the string')#">
-                            Search Users</label>
+                            <label for="purgesearch" title="#xarML('Search for users with either their real name, login name or email matching the string')#">
+                                Search Users
+                            </label>
                         </th>
                         <th>
-                            <label for="purgestate"
-                            title="#xarML('Search for all users of a given status')#">Select users
-                            based on their status</label>
+                            <label for="purgestate" title="#xarML('Search for all users of a given status')#">
+                            Select users based on their status
+                            </label>
                         </th>
                     </tr>
                     <tr>
                         <td class="xar-align-center">
-                            <input type="text" name="purgesearch" id="purgesearch"
-                            value="#$purgesearch#" maxlength="255"
-                            class="xar-form-textmedium xar-margin-thickright" />
-                            <input type="submit" name="search" id="search_user"
-                            value="#xarML('Search')#" class="xar-margin-thickleft" />
+                            <input type="text" name="purgesearch" id="purgesearch" value="#$purgesearch#" maxlength="255" class="xar-form-textmedium xar-margin-thickright" />
+                            <input type="submit" name="search" id="search_user" value="#xarML('Search')#" class="xar-margin-thickleft" />
                         </td>
                         <td class="xar-align-center">
                             <xar:set name="options">
@@ -203,23 +199,24 @@
                                 <td>#$loop:item['uname']#</td>
                                 <td>#$loop:item['email']#</td>
                                 <td class="xar-align-center">
-                                #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#</td>
+                                    #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#
+                                </td>
                                 <td>#$loop:item['state']#</td>
                                 <td class="xar-align-center">
-                                    <input type="checkbox" name="purgeids[#$loop:item['id']#]"
-                                    id="purgeids_#$loop:item['id']#" value="1" />
+                                    <input type="checkbox" name="purgeids[#$loop:item['id']#]" id="purgeids_#$loop:item['id']#" value="1" />
                                 </td>
                             </tr>
                         </xar:loop>
                         <!-- end loop over users -->
                     </table>
                     <div class="xar-align-right">
-                    <a href="javascript:void(0);"
-                    onclick="xar_base_checkall(document.forms['purge'],true);return false;">Check
-                    All</a>| 
-                    <a href="javascript:void(0);"
-                    onclick="xar_base_checkall(document.forms['purge'],false);return false;">
-                    Uncheck All</a></div>
+                        <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['purge'],true);return false;">
+                            Check All
+                        </a>| 
+                        <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['purge'],false);return false;">
+                            Uncheck All
+                        </a>
+                    </div>
                     <div class="xar-align-center">
                         <input name="confirmation" type="submit" value="#xarML('Purge')#" />
                     </div>

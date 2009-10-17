@@ -57,20 +57,14 @@ function roles_admin_showusers()
     }
 
     // Check if we already have a selection
-    sys::import('modules.roles.class.xarQuery');
-    $q = new xarQuery();
+    sys::import('xaraya.structures.query');
+    $q = new Query();
     $q = $q->sessiongetvar('rolesquery');
     $q = '';
 
     if (empty($q) || isset($reload)) {
-        $types = xarMod::apiFunc('roles','user','getitemtypes');
-        $basetypes = array();
-        // Show only roles based on the user itemtype
-        foreach ($types as $key => $value) {
-            if ($key == ROLES_USERTYPE) $basetypes[] = $key;
-        }
         $xartable = xarDB::getTables();
-        $q = new xarQuery('SELECT');
+        $q = new Query('SELECT');
         $q->addtable($xartable['roles'],'r');
         $q->addfields(array('r.id AS id','r.name AS name'));
 
@@ -83,11 +77,7 @@ function roles_admin_showusers()
             $q->qor($c);
         }
 
-          $c = array();
-          foreach ($basetypes as $itemtype) {
-              $c[] = $q->eq('r.itemtype',$itemtype);
-          }
-          $q->qor($c);
+        $q->eq('r.itemtype', ROLES_USERTYPE);
 
         // Add state
         if ($data['state'] == ROLES_STATE_CURRENT) $q->ne('state',ROLES_STATE_DELETED);

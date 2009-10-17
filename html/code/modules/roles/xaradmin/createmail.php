@@ -47,8 +47,8 @@ function roles_admin_createmail()
 
         if ($selstyle == 0) $selstyle =2;
         // Create a query to send to sendmail
-        sys::import('modules.roles.class.xarQuery');
-        $q = new xarQuery('SELECT');
+        sys::import('xaraya.structures.query');
+        $q = new Query('SELECT');
         $q->addtable($xartable['roles'],'r');
         $q->addfields(array('r.id AS id',
                             'r.name AS name',
@@ -63,11 +63,11 @@ function roles_admin_createmail()
 
         // Get the current query or create a new one if need be
         if ($id == -1) {
-            $q = new xarQuery();
+            $q = new Query();
             $q = unserialize(xarSession::getVar('rolesquery'));
         }
         if(empty($q->tables)) {
-            $q = new xarQuery('SELECT');
+            $q = new Query('SELECT');
             $q->addtable($xartable['roles'],'r');
         }
             $q->addfields(array('r.id AS id',

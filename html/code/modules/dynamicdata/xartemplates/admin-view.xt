@@ -21,7 +21,7 @@
                 Trying to modify items here may break the module. Please proceed with caution.</h3>
             </xar:if>
             <!-- TODO: distinguish between 'protected' and 'private' ? -->
-            <xar:data-view layout="$layout" object="$object" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid" sort="$sort" />
+            <xar:data-view layout="$layout" object="$object" param="$urlparam" />
         <xar:else />
             <xar:data-view layout="$layout" module="$module_id" itemtype="$itemtype" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid" sort="$sort" />
         </xar:if>

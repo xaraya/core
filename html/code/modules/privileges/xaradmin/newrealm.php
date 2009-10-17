@@ -30,19 +30,28 @@ function privileges_admin_newrealm()
             return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
         }        
 
+        $dbconn = xarDB::getConn();
         $xartable = xarDB::getTables();
-        sys::import('modules.roles.class.xarQuery');
-        $q = new xarQuery('SELECT',$xartable['security_realms'],'name');
-        $q->eq('name', $name);
-        if(!$q->run()) return;
+        $bindvars = array();
+        $tbl = $xartable['security_realms'];
+        $query = "SELECT name FROM $tbl WHERE name = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $bindvars[] = $name;
+        $result = $stmt->executeQuery($bindvars);
+        while($result->next()){
+            list($name) = $result->fields; 
+        }
 
-        if ($q->getrows() > 0) {
+        if ($name != '') {
             throw new DuplicateException(array('realm',$name));
         }
 
-        $q = new xarQuery('INSERT',$xartable['security_realms']);
-        $q->addfield('name', $name);
-        if(!$q->run()) return;
+        $bindvars = array();
+        $tbl = $xartable['security_realms'];
+        $query = "INSERT into $tbl (name) values(?)";
+        $stmt = $dbconn->prepareStatement($query);
+        $bindvars[] = $name;
+        $result = $stmt->executeQuery($bindvars);
 
         //Redirect to view page
         xarResponse::Redirect(xarModURL('privileges', 'admin', 'viewrealms'));
