@@ -72,10 +72,21 @@ function roles_admin_purge($args)
             $query .= " OR email LIKE %" . $data['recallsearch'] . "%)";
         }
         $query .= " ORDER BY name";
-        $result = $dbconn->SelectLimit($query, $numitems, $recallstartnum, $bindvars);
+        $result = $dbconn->SelectLimit($query, $numitems, $recallstartnum-1, $bindvars);
         $roles = array();
-        while($result->next()) $roles[] = $result->fields;
-
+        
+        while(!$result->EOF) {
+            list($id,$uname,$name,$email,$itemtype,$date_reg) = $result->fields; 
+            $roles[] = array(
+                'id' => $id,
+                'uname' => $uname,
+                'name' => $name,
+                'email' => $email,
+                'itemtype' => $itemtype,
+                'date_reg' => $date_reg,
+            );
+            $result->next();
+        }
         $data['totalselect'] = count($roles);
 
         if ($data['totalselect'] == 0) {
