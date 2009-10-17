@@ -669,8 +669,6 @@ class DataProperty extends Object implements iDataProperty
         if (xarCore::isCached('DynamicData','Configurations')) {
              $allconfigproperties = xarCore::getCached('DynamicData','Configurations');
         } else {
-            xarMod::loadDbInfo('dynamicdata','dynamicdata');
-            // removed dependency on roles xarQuery
             $xartable = xarDB::getTables();
             $configurations = $xartable['dynamic_configurations'];
 

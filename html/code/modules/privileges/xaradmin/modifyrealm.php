@@ -23,33 +23,47 @@ function privileges_admin_modifyrealm()
     if (!xarVarFetch('id',       'int', $id,      '',      XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('confirmed', 'bool', $confirmed, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('name',      'str:1.20', $name,      '',      XARVAR_NOT_REQUIRED)) {return;}
+    
+    $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
 
-    sys::import('modules.roles.class.xarQuery');
     if (empty($confirmed)) {
-        $q = new xarQuery('SELECT',$xartable['security_realms']);
-        $q->addfields(array('id','name'));
-        $q->eq('id', $id);
-        if(!$q->run()) return;
-        $result = $q->row();
-        if ($result)
-        $name = $result['name'];
+        $bindvars = array();
+        $tbl = $xartable['security_realms'];
+        $query = "SELECT id, name FROM $tbl WHERE id = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $bindvars[] = $id;
+        $result = $stmt->executeQuery($bindvars);
+        while($result->next()){
+            list($result_id, $name) = $result->fields; 
+        }
     } else {
         if (!xarVarFetch('newname',   'str:1.20',$newname, '',XARVAR_NOT_REQUIRED)) {return;}
         if (!xarSecConfirmAuthKey()) {
             return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
         }        
 
-        $q = new xarQuery('SELECT',$xartable['security_realms'],'name');
-        $q->eq('name', $newname);
-        if(!$q->run()) return;
+        $bindvars = array();
+        $name = '';
+        $tbl = $xartable['security_realms'];
+        $query = "SELECT name FROM $tbl WHERE name = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $bindvars[] = $newname;
+        $result = $stmt->executeQuery($bindvars);
+        while($result->next()){
+            list($name) = $result->fields; 
+        }
 
-        if ($q->getrows() > 0) throw new DuplicateException(array('realm',$newname));
+        if ($name != '') throw new DuplicateException(array('realm',$newname));
 
-        $q = new xarQuery('UPDATE',$xartable['security_realms']);
-        $q->addfield('name', $newname);
-        $q->eq('id', $id);
-        if(!$q->run()) return;
+        $bindvars = array();
+        $tbl = $xartable['security_realms'];
+        $query = "UPDATE $tbl SET name =? WHERE id = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $bindvars[] = $newname;
+        $bindvars[] = $id;
+        $result = $stmt->executeQuery($bindvars);
+
         xarResponse::Redirect(xarModURL('privileges', 'admin', 'viewrealms'));
     }
 

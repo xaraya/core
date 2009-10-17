@@ -28,8 +28,8 @@ function roles_userapi_getallroles($args)
     if (!isset($startnum)) $startnum = 1;
     if (!isset($numitems)) $numitems = (int)xarModVars::get('roles', 'items_per_page');
 
-    sys::import('modules.roles.class.xarQuery');
-    $q = new xarQuery();
+    sys::import('xaraya.structures.query');
+    $q = new Query();
     $xartable = xarDB::getTables();
     $q->addtable($xartable['roles'],'r');
 

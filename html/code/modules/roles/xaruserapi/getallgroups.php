@@ -26,8 +26,8 @@ function roles_userapi_getallgroups($args)
 // Security Check
     if(!xarSecurityCheck('ViewRoles')) return;
 
-    sys::import('modules.roles.class.xarQuery');
-    $q = new xarQuery('SELECT');
+    sys::import('xaraya.structures.query');
+    $q = new Query('SELECT');
     $q->addtable($xartable['roles'],'r');
     $q->addtable($xartable['rolemembers'], 'rm');
     $q->leftjoin('r.id','rm.role_id');
@@ -60,7 +60,7 @@ function roles_userapi_getallgroups($args)
 // Restriction by ancestor group.
     // FIXME: this is really broken
     if (isset($ancestor) && 0 == 1) {
-        $q1 = new xarQuery('SELECT',$xartable['roles']);
+        $q1 = new Query('SELECT',$xartable['roles']);
         $q1->addfields(array('id','name'));
         $q1->eq('itemtype',ROLES_GROUPTYPE);
         $q1->run();

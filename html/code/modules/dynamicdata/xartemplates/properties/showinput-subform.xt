@@ -238,14 +238,10 @@
                     <tr>
                         <td colspan="2">
                             <xar:if condition="!empty($input)">
-                                <xar:data-view object="$object" layout="subform"
-                                fieldprefix="$fieldprefix" fieldlist="$fieldlist"
-                                tplmodule="$tplmodule" />
+                                <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" fieldlist="$fieldlist" tplmodule="$tplmodule" />
                                 <strong>TODO: allow removal/deleting of child items</strong>
-                                <xar:else />
-                                <xar:data-view object="$object" layout="subform"
-                                fieldprefix="$fieldprefix" fieldlist="$fieldlist"
-                                tplmodule="$tplmodule" />
+                            <xar:else />
+                                <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" fieldlist="$fieldlist" tplmodule="$tplmodule" />
                             </xar:if>
                         </td>
                     </tr>

@@ -28,8 +28,8 @@ function roles_admin_sendmail()
     if (!xarSecurityCheck('MailRoles')) return;
     // Get user information
     // Get the current query
-    sys::import('modules.roles.class.xarQuery');
-    $q = new xarQuery();
+    sys::import('xaraya.structures.query');
+    $q = new Query();
     $q = unserialize(xarSession::getVar('rolesquery'));
 
     // only need the id, name and email fields

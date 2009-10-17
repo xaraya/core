@@ -940,7 +940,6 @@ class DataObjectMaster extends Object
         }
         if ($extensions) {
             // Get all the objects at once
-            // removed dependency on roles xarQuery
             xarMod::loadDbInfo('dynamicdata','dynamicdata');
             $xartable = xarDB::getTables();
 

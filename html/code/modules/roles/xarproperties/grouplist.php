@@ -84,25 +84,38 @@ class GroupListProperty extends SelectProperty
     public function createValue($itemid=0)
     {
         $xartable = xarDB::getTables();
+        $rolemembers = $xartable['rolemembers'];
         
         if ($this->initialization_update_behavior == 'replace' && $this->previous_groupid) {
             if (!$itemid) {
-                $q = new xarQuery('DELETE',$xartable['rolemembers']);
-                $q->eq('parent_id',$this->previous_groupid);
-                if (!$q->run()) return;
+                $bindvars = array();
+                $query = "DELETE FROM $rolemembers WHERE parent_id = ?";
+                $bindvars[] = $this->previous_groupid;
+                $dbconn = xarDB::getConn();
+                $stmt = $dbconn->prepareStatement($query);
+                $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+                if(!$result) return;
             } else {
-                $q = new xarQuery('UPDATE',$xartable['rolemembers']);
-                $q->addfield('parent_id',$this->current_groupid);
-                $q->eq('role_id',$itemid);
-                $q->eq('parent_id',$this->previous_groupid);
-                if (!$q->run()) return;
+                $bindvars = array();
+                $query = "UPDATE FROM $rolemembers SET parent_id = ? WHERE role_id = ? AND parent_id = ?";
+                $bindvars[] = $this->current_groupid;
+                $bindvars[] = $itemid;
+                $bindvars[] = $this->previous_groupid;
+                $dbconn = xarDB::getConn();
+                $stmt = $dbconn->prepareStatement($query);
+                $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+                if(!$result) return;
             }
         } else {
             if (!$itemid) return true;
-            $q = new xarQuery('INSERT',$xartable['rolemembers']);
-            $q->addfield('role_id',$itemid);
-            $q->addfield('parent_id',$this->current_groupid);
-            if (!$q->run()) return;
+            $bindvars = array();
+            $query = "INSERT INTO $rolemembers (role_id, parent_id) VALUES (?, ?)";
+            $bindvars[] = $itemid;
+            $bindvars[] = $this->current_groupid;
+            $dbconn = xarDB::getConn();
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            if(!$result) return;
         }        
         return true;
     }
@@ -124,11 +137,15 @@ class GroupListProperty extends SelectProperty
         $basegroup = xarRoles::get($this->initialization_basegroup);
         if (!empty($basegroup)) {
             $xartable = xarDB::getTables();
-            $q = new xarQuery('SELECT',$xartable['rolemembers']);
-            $q->addfield('parent_id');
-            $q->eq('role_id',$itemid);
-            if (!$q->run()) return;
-            foreach ($q->output() as $row) {
+            $rolemembers = $xartable['rolemembers'];
+            $bindvars = array();
+            $query = "SELECT parent_id FROM $rolemembers WHERE role_id = ?";
+            $bindvars[] = $itemid;
+            $dbconn = xarDB::getConn();
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            if(!$result) return;            
+            foreach ($result->next() as $row) {
                 $candidate = xarRoles::get($row['parent_id']);
                 if ($candidate->isAncestor($basegroup) || ($candidate->getId() == $basegroup->getId())) {
                     $value = $row['parent_id'];

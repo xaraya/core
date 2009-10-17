@@ -98,7 +98,7 @@
       <source>xar_roles.state</source>
       <status>33</status>
       <seq>9</seq>
-      <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:41:"xarModAPIFunc('roles','user','getstates')";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+      <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:43:"xarMod::apiFunc('roles','user','getstates')";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
     <property name="authmodule">
       <id>44</id>
