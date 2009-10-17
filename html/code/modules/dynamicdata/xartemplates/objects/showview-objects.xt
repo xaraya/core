@@ -30,7 +30,7 @@
             <xar:if condition="!empty($adminlistserial)">
                 <xar:set name="adminlist">array_merge(unserialize($adminlistserial),array(xarUserGetVar('uname',xarModVars::get('roles','admin'))))</xar:set>
             <xar:else/>
-                <xar:set name="adminlist">array(xarUserGetVar('uname',xarModVars::get('roles','admin')))</xar:set>
+                <xar:set name="adminlist">array(xarUserGetVar('uname',(int)xarModVars::get('roles','admin')))</xar:set>
             </xar:if>
             <xar:set name="issuperadmin">in_array(xarUserGetVar('uname'),$adminlist)</xar:set>
             <xar:set name="item_no">0</xar:set>
