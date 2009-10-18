@@ -75,6 +75,8 @@ class DataObjectMaster extends Object
     private $hooklist     = null;       // list of hook modules (= observers) to call
     private $hookscope    = 'item';     // the hook scope for dataobject (for now)
 
+    public $links         = null;       // links between objects
+
 // TODO: relink objects, properties and datastores in __wakeup() methods after unserialize()
 
     /**
@@ -606,7 +608,8 @@ class DataObjectMaster extends Object
 
         // TODO: Try to get the object from the cache ?
 //        if (!empty($args['objectid']) && xarCore::isCached('DDObject', $args['objectid'])) {
-//            $object = clone xarCore::getCached('DDObject', $args['objectid']);
+//            // serialize is better here - shallow cloning is not enough for array of properties, datastores etc. and with deep cloning internal references are lost
+//            $object = unserialize(xarCore::getCached('DDObject', $args['objectid']));
 //            return $object;
 //        }
 
@@ -624,7 +627,8 @@ class DataObjectMaster extends Object
         $descriptor = new DataObjectDescriptor($args);
 
         $object = new $args['class']($descriptor);
-//        xarCore::setCached('DDObject', $args['objectid'], clone $object);
+        // serialize is better here - shallow cloning is not enough for array of properties, datastores etc. and with deep cloning internal references are lost
+//        xarCore::setCached('DDObject', $args['objectid'], serialize($object));
 
         return $object;
     }
@@ -1011,6 +1015,19 @@ class DataObjectMaster extends Object
 
         // CHECKME: prevent recursive hook calls in general
         xarCore::delCached('DynamicData','HookAction');
+    }
+
+    /**
+     * Get linked objects (see DataObjectLinks)
+     *
+     * @param $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
+     * @param $itemid (optional) for a particular itemid in ObjectList ?
+     */
+    public function getLinkedObjects($linktype = '', $itemid = null)
+    {
+        sys::import('modules.dynamicdata.class.objects.links');
+        // we'll skip the 'info' here, unless explicitly asked for 'all'
+        return DataObjectLinks::getLinkedObjects($this, $linktype, $itemid);
     }
 }
 ?>

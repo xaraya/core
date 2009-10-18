@@ -66,7 +66,7 @@
                     <xar:if condition="$style eq 'itemid'">
                         <!-- the property of type 'itemid' is the link -->
                         <xar:foreach in="$properties" key="$propname" value="$propinfo">
-                            <xar:if condition="!empty($propinfo['type']) and $propinfo['type'] eq 21">
+                            <xar:if condition="!empty($propinfo:type) and $propinfo:type eq 21">
                             #$propinfo:label# 
                             <xar:break /></xar:if>
                         </xar:foreach>

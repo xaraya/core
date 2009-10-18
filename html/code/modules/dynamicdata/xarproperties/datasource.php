@@ -23,6 +23,7 @@ class DataSourceProperty extends SelectProperty
     public $id         = 23;
     public $name       = 'datasource';
     public $desc       = 'Data Source';
+    public $reqmodules = array('dynamicdata');
 
     public $validation_override = true;
 

@@ -1,0 +1,94 @@
+<object name="dynamic_object_links">
+  <objectid>34</objectid>
+  <label>Dynamic Object Links</label>
+  <module_id>182</module_id>
+  <itemtype>18</itemtype>
+  <class>DataObject</class>
+  <filepath>auto</filepath>
+  <urlparam>itemid</urlparam>
+  <maxid>23</maxid>
+  <config>a:1:{s:10:"visibility";s:9:"protected";}</config>
+  <isalias>false</isalias>
+  <properties>
+    <property name="id">
+      <id>247</id>
+      <label>Id</label>
+      <type>itemid</type>
+      <defaultvalue></defaultvalue>
+      <source>dynamic_data</source>
+      <status>33</status>
+      <seq>1</seq>
+      <configuration></configuration>
+    </property>
+    <property name="source">
+      <id>248</id>
+      <label>Source</label>
+      <type>objectref</type>
+      <defaultvalue></defaultvalue>
+      <source>dynamic_data</source>
+      <status>33</status>
+      <seq>2</seq>
+      <configuration>a:4:{s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:7:"objects";s:25:"initialization_store_prop";s:4:"name";s:27:"initialization_display_prop";s:5:"label";}</configuration>
+    </property>
+    <property name="from_prop">
+      <id>249</id>
+      <label>From Property</label>
+      <type>propertyref</type>
+      <defaultvalue></defaultvalue>
+      <source>dynamic_data</source>
+      <status>33</status>
+      <seq>3</seq>
+      <configuration>a:4:{s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:7:"objects";s:25:"initialization_other_rule";s:6:"source";s:24:"initialization_firstline";s:16:",Source Property";}</configuration>
+    </property>
+    <property name="target">
+      <id>250</id>
+      <label>Target</label>
+      <type>objectref</type>
+      <defaultvalue></defaultvalue>
+      <source>dynamic_data</source>
+      <status>33</status>
+      <seq>4</seq>
+      <configuration>a:4:{s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:7:"objects";s:25:"initialization_store_prop";s:4:"name";s:27:"initialization_display_prop";s:5:"label";}</configuration>
+    </property>
+    <property name="to_prop">
+      <id>251</id>
+      <label>To Property</label>
+      <type>propertyref</type>
+      <defaultvalue></defaultvalue>
+      <source>dynamic_data</source>
+      <status>33</status>
+      <seq>5</seq>
+      <configuration>a:4:{s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:7:"objects";s:25:"initialization_other_rule";s:6:"target";s:24:"initialization_firstline";s:16:",Target Property";}</configuration>
+    </property>
+    <property name="link_type">
+      <id>252</id>
+      <label>Link Type</label>
+      <type>dropdown</type>
+      <defaultvalue></defaultvalue>
+      <source>dynamic_data</source>
+      <status>33</status>
+      <seq>6</seq>
+      <configuration>a:2:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:76:"xarMod::apiFunc('dynamicdata','util','getinfo',array('type' => 'linktypes'))";}</configuration>
+    </property>
+    <property name="direction">
+      <id>253</id>
+      <label>Direction</label>
+      <type>dropdown</type>
+      <defaultvalue></defaultvalue>
+      <source>dynamic_data</source>
+      <status>33</status>
+      <seq>7</seq>
+      <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:38:"bi,two-way;uni,one-way;info,info only;";}</configuration>
+    </property>
+    <property name="extra">
+      <id>254</id>
+      <label>Extra</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>dynamic_data</source>
+      <status>34</status>
+      <seq>8</seq>
+      <configuration></configuration>
+    </property>
+  </properties>
+</object>

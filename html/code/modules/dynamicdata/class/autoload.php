@@ -38,6 +38,9 @@ function dynamicdata_autoload($class)
         case 'dataobjectdescriptor':
             sys::import('modules.dynamicdata.class.objects.descriptor');
             return;
+        case 'dataobjectlinks':
+            sys::import('modules.dynamicdata.class.objects.links');
+            return;
 /* if we remove all sys::import from the classes someday ? :-)
         case 'idataobject':
         case 'idataobjectlist':
@@ -71,6 +74,9 @@ function dynamicdata_autoload($class)
             return;
         case 'hookdatastore':
             sys::import('xaraya.datastores.hook');
+            return;
+        case 'datastorelinks':
+            sys::import('modules.dynamicdata.class.datastores.links');
             return;
 /* if we remove all sys::import from the classes someday ? :-)
         case 'iddobject':
