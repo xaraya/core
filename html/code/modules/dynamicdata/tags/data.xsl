@@ -212,16 +212,16 @@
 <xsl:template match="xar:data-getitems">
     <xsl:processing-instruction name="php">
       <xsl:choose>
-          <xsl:when test="not(@object)">
+        <xsl:when test="not(@object) and not(@objectname)">
             <!-- No object gotta make one -->
             <xsl:text>list(</xsl:text>
             <xsl:text>$</xsl:text>
-            <xsl:value-of select="@name"/>
+            <xsl:value-of select="@properties"/>
             <xsl:text>,$</xsl:text>
-            <xsl:value-of select="@value"/>
+            <xsl:value-of select="@values"/>
             <xsl:text>) = xarMod::apiFunc('dynamicdata','user','getitemsforview',</xsl:text>
             <xsl:call-template name="atts2args">
-              <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='value']"/>
+              <xsl:with-param name="nodeset" select="@*[name() != 'properties' and name()!='values']"/>
             </xsl:call-template>
             <xsl:text>);</xsl:text>
           </xsl:when>
