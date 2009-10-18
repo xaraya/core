@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <fieldset>
+        <legend>Mapping Objects to Datastores</legend>
+        <table>
+            <tr>
+                <th>Objects</th>
+                <th>Datastores</th>
+                <th>Properties</th>
+            </tr>
+            <xar:foreach in="$objects" key="$id" value="$objectinfo">
+                <xar:if condition="!empty($mapping[$id])">
+                    <xar:foreach in="$mapping[$id]" key="$source" value="$numprops">
+                        <tr>
+                            <td><a href="&xar-modurl-dynamicdata-util-relations;&amp;objectid=#$id#">#$objectinfo['label']#</a></td>
+                            <td><a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$source#">#$source#</a></td>
+                            <td class="xar-align-center">#$numprops#</td>
+                        </tr>
+                    </xar:foreach>
+                </xar:if>
+            </xar:foreach>
+        </table>
+    </fieldset>
+</xar:template>

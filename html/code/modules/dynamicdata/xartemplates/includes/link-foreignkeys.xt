@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <fieldset>
+        <legend>Foreign Key Definitions in Tables</legend>
+        <table>
+            <tr>
+                <th>From Table</th>
+                <th>From Field</th>
+                <th>Reference To Table</th>
+                <th>To Field</th>
+                <th>On Update</th>
+                <th>On Delete</th>
+            </tr>
+            <xar:foreach in="$foreignkeys" value="$fromto">
+                <tr>
+                    <td>#$fromto.source#</td>
+                    <td>#$fromto.from#</td>
+                    <td>#$fromto.target#</td>
+                    <td>#$fromto.to#</td>
+                    <td>#$fromto.onupdate#</td>
+                    <td>#$fromto.ondelete#</td>
+                </tr>
+            </xar:foreach>
+        </table>
+    </fieldset>
+</xar:template>

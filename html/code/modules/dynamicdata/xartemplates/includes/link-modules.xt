@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="count($relations) gt 0">
+         <table class="xar-clearboth">
+            <tr>
+                <th>Module</th>
+                <th>Link Type</th>
+                <th>From</th>
+                <th>To</th>
+            </tr>
+            <xar:foreach in="$relations" value="$relation">
+                <xar:if condition="count($relation['links']) gt 0">
+                    <xar:foreach in="$relation['links']" value="$link">
+                        <tr>
+                            <td>#$relation['module']#</td>
+                            <td>#$link['type']#</td>
+                            <td>#$link['from']#</td>
+                            <td>#$link['to']#</td>
+                        </tr>
+                    </xar:foreach>
+                    <xar:else />
+                    <tr>
+                        <td>#$relation['module']#</td>
+                        <td>( not found )</td>
+                        <td>-</td>
+                        <td>( not found )</td>
+                    </tr>
+                </xar:if>
+            </xar:foreach>
+        </table>
+    <xar:else />
+        <p>No links for this module.</p>
+    </xar:if>
+</xar:template>
