@@ -41,7 +41,7 @@ function privileges_admin_new()
     $names = array();
     $privileges[] = array('id' => 0,
                             'name' => '');
-    foreach(Privileges_Privileges::getprivileges() as $temp){
+    foreach(xarPrivileges::getprivileges() as $temp){
         $nam = $temp['name'];
         if (!in_array($nam,$names)){
             $names[] = $nam;
@@ -64,7 +64,7 @@ function privileges_admin_new()
     foreach ($accesslevels as $key => $value) $data['levels'][] = array('id' => $key, 'name' => $value);
     
     $data['authid'] = xarSecGenAuthKey();
-    $data['realms'] = Privileges_Privileges::getrealms();
+    $data['realms'] = xarPrivileges::getrealms();
     $data['privileges'] = $privileges;
     $data['components'] = xarMod::apiFunc('privileges','admin','getcomponents',array('modid' => xarMod::getRegID($data['pmodule'])));
     return $data;

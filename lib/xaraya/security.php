@@ -39,6 +39,10 @@ if (file_exists(sys::varpath() . '/security/on.touch')) {
     sys::import('xaraya.xarCacheSecurity');
 }
 
+// FIXME: Can we reverse this? (i.e. the module loading the files from here?)
+//        said another way, can we move the two files to /includes (partially preferably)
+sys::import('modules.privileges.class.privileges');
+
 /**
  * xarMakeGroup: create an entry in the database for a group
  *
@@ -151,9 +155,9 @@ function xarRemoveRoleMemberByID($childId, $parentId)
 function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='')
 {
     // Check if the privilege already exists
-    $privilege = Privileges_Privileges::findPrivilege($name);
+    $privilege = xarPrivileges::findPrivilege($name);
     if (!$privilege) {
-        return Privileges_Privileges::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
+        return xarPrivileges::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
     }
     return;
 }
@@ -170,7 +174,7 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
  */
 function xarMakePrivilegeMember($childName, $parentName)
 {
-    return Privileges_Privileges::makeMember($childName, $parentName);
+    return xarPrivileges::makeMember($childName, $parentName);
 }
 
 /**
@@ -185,7 +189,7 @@ function xarMakePrivilegeMember($childName, $parentName)
  */
 function xarAssignPrivilege($privilege,$role)
 {
-    return Privileges_Privileges::assign($privilege,$role);
+    return xarPrivileges::assign($privilege,$role);
 }
 
 /**
@@ -200,7 +204,7 @@ function xarAssignPrivilege($privilege,$role)
 function xarRemovePrivileges($module)
 {
     // Get the pids for the module
-    $modulePrivileges = Privileges_Privileges::findPrivilegesForModule($module);
+    $modulePrivileges = xarPrivileges::findPrivilegesForModule($module);
     foreach ($modulePrivileges as $modulePrivilege) {
         $modulePrivilege->remove();
     }
@@ -224,7 +228,7 @@ function xarRemovePrivileges($module)
  */
 function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId='',$parentId='',$description='')
 {
-    return Privileges_Privileges::defineInstance($module,$type,$query,$propagate,$table2,$childId,$parentId,$description);
+    return xarPrivileges::defineInstance($module,$type,$query,$propagate,$table2,$childId,$parentId,$description);
 }
 
 /**
@@ -238,7 +242,7 @@ function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId
  */
 function xarRemoveInstances($module)
 {
-    return Privileges_Privileges::removeInstances($module);
+    return xarPrivileges::removeInstances($module);
 }
 
 /**
@@ -340,7 +344,7 @@ function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$leve
  */
 function xarSecurityLevel($levelname)
 {
-    return Privileges_Master::xarSecLevel($levelname);
+    return xarMasks::xarSecLevel($levelname);
 }
 
 /**
@@ -353,7 +357,7 @@ function xarSecurityLevel($levelname)
  */
 function xarPrivExists($name)
 {
-    $priv = Privileges_Privileges::findPrivilege($name);
+    $priv = xarPrivileges::findPrivilege($name);
     if ($priv) return true;
     else return false;
 }
@@ -370,7 +374,7 @@ function xarPrivExists($name)
 function xarMaskExists($name,$module="All",$component="All")
 {
     if ($mask == "All") $mask = 0;
-    $mask = Privileges_Master::getMask($name,$module,$component,true);
+    $mask = xarMasks::getMask($name,$module,$component,true);
     if ($mask) return true;
     else return false;
 }
@@ -387,7 +391,7 @@ function xarMaskExists($name,$module="All",$component="All")
 function xarQueryMask($mask, $showException=1, $component='', $instance='', $module='', $role='')
 {
     if ($mask == "All") $mask = 0;
-    return Privileges_Master::querymask($mask, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+    return xarMasks::querymask($mask, $component, $instance, $module, $role,$pnrealm,$pnlevel);
 }
 
 /**
@@ -412,7 +416,8 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
        return true;
     }
     else {
-       return Privileges_Master::xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+        sys::import('modules.privileges.class.masks');
+       return xarMasks::xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
     }
 }
 
@@ -431,7 +436,7 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
  */
 function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
 {
-    return Privileges_Master::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
+    return xarMasks::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
 }
 
 /**
@@ -443,7 +448,7 @@ function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$descr
  */
 function xarUnregisterMask($name)
 {
-    return Privileges_Master::unregister($name);
+    return xarMasks::unregister($name);
 }
 
 /**
@@ -458,13 +463,13 @@ function xarUnregisterMask($name)
 function xarRemoveMasks($module)
 {
     if ($module == "All") {
-        $modid = Privileges_Master::PRIVILEGES_ALL;
+        $modid = xarMasks::PRIVILEGES_ALL;
     } elseif ($module == null) {
         $modid = null;
     } else {
         $modid = xarMod::getID($module);
     }
-    return Privileges_Master::removeMasks($modid);
+    return xarMasks::removeMasks($modid);
 }
 
 /**
