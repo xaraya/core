@@ -27,9 +27,10 @@ function privileges_adminapi_removemember($args)
     //Do nothing if the params aren't there
     if(!isset($childid) || !isset($parentid)) return true;
 
-// Get the parent and child objects
-    $priv = Privileges_Privileges::getPrivilege($parentid);
-    $member = Privileges_Privileges::getPrivilege($childid);
+// call the Privileges class and get the parent and child objects
+    sys::import('modules.privileges.class.privileges');
+    $priv = xarPrivileges::getPrivilege($parentid);
+    $member = xarPrivileges::getPrivilege($childid);
 
 // assign the child to the parent and bail if an error was thrown
     if (!$priv->removeMember($member)) return;

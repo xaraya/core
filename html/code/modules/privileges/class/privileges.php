@@ -1,6 +1,6 @@
 <?php
 /**
- * Privileges_Privileges: class for the privileges repository
+ * xarPrivileges: class for the privileges repository
  *
  * Represents the repository containing all privileges
  * The constructor is the constructor of the parent object
@@ -11,7 +11,9 @@
  * @todo    none
 */
 
-class Privileges_Privileges extends Privileges_Master
+sys::import('modules.privileges.class.masks');
+
+class xarPrivileges extends xarMasks
 {
 
     /**
@@ -198,7 +200,7 @@ class Privileges_Privileges extends Privileges_Master
         //        parent::$forgetprivsets();
 
         // Refresh the privileges cached for the current sessions
-        Privileges_Master::clearCache();
+        xarMasks::clearCache();
         return true;
     }
 

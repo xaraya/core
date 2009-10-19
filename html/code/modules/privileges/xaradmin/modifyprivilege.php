@@ -33,8 +33,9 @@ function privileges_admin_modifyprivilege()
 // Security Check
     if(!xarSecurityCheck('EditPrivilege')) return;
 
-// Get the privilege to be modified
-    $priv = Privileges_Privileges::getPrivilege($id);
+//Call the Privileges class and get the privilege to be modified
+    sys::import('modules.privileges.class.privileges');
+    $priv = xarPrivileges::getPrivilege($id);
 //Get the array of parents of this privilege
     $parents = array();
     foreach ($priv->getParents() as $parent) {
@@ -47,7 +48,7 @@ function privileges_admin_modifyprivilege()
 // need this for the dropdown display
     $privileges = array();
     $names = array();
-    foreach(Privileges_Privileges::getprivileges() as $temp){
+    foreach(xarPrivileges::getprivileges() as $temp){
         $nam = $temp['name'];
         if (!in_array($nam,$names) && $temp['id'] != $id){
             $names[] = $nam;
@@ -119,7 +120,7 @@ function privileges_admin_modifyprivilege()
     $data['authid'] = xarSecGenAuthKey();
     $data['parents'] = $parents;
     $data['privileges'] = $privileges;
-    $data['realms'] = Privileges_Privileges::getrealms();;
+    $data['realms'] = xarPrivileges::getrealms();;
     $data['components'] = xarMod::apiFunc('privileges','admin','getcomponents',array('modid' => xarMod::getRegID($data['pmodule'])));
     $data['refreshlabel'] = xarML('Refresh');
     return $data;

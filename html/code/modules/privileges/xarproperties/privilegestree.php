@@ -11,6 +11,7 @@
  */
 
 sys::import('xaraya.structures.tree');
+sys::import('modules.privileges.class.privileges');
 sys::import('modules.dynamicdata.class.properties.base');
 
 /**
@@ -30,7 +31,7 @@ class PrivilegesTreeProperty extends DataProperty
         if (!isset($allowtoggle)) $allowtoggle = 0;
         $this->tplmodule = 'privileges';
         $this->filepath   = 'modules/privileges/xarproperties';
-        $this->privs = new Privileges_Privileges();
+        $this->privs = new xarPrivileges();
     }
 
     public function showInput(Array $data = array())
@@ -52,7 +53,7 @@ class PrivilegesTree extends Tree
 {
     function createnodes(TreeNode $node)
     {
-        //FIXME this is too unwieldy and largely duplicating a similar query in Privileges_Privileges
+        //FIXME this is too unwieldy and largely duplicating a similar query in xarPrivileges
         $dbconn = xarDB::getConn();
         $xartable = xarDB::getTables();
         $query = "SELECT p.id, p.name, r.name,
@@ -61,7 +62,7 @@ class PrivilegesTree extends Tree
                   FROM " . $xartable['privileges'] . " p LEFT JOIN ". $xartable['realms'] . " r ON p.realm_id = r.id
                   LEFT JOIN ". $xartable['modules'] . " m ON p.module_id = m.id
                   LEFT JOIN ". $xartable['privmembers'] . " pm ON p.id = pm.privilege_id
-                  WHERE itemtype = " . Privileges_Privileges::PRIVILEGES_PRIVILEGETYPE .
+                  WHERE itemtype = " . xarPrivileges::PRIVILEGES_PRIVILEGETYPE .
                   " ORDER BY p.name";
         $stmt = $dbconn->prepareStatement($query);
         // The fetchmode *needed* to be here, dunno why. Exception otherwise

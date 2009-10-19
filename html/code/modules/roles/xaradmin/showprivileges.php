@@ -33,6 +33,8 @@ function roles_admin_showprivileges()
     }
     $data['parents'] = $parents;
 
+    sys::import('modules.privileges.class.privileges');
+
 // -------------------------------------------------------------------
     // Get the inherited privileges
     $ancestors = $role->getRoleAncestors();
@@ -71,7 +73,7 @@ function roles_admin_showprivileges()
                         'module' => $priv->getModule(),
                         'component' => $priv->getComponent(),
                         'instance' => $priv->getInstance(),
-                        'level' => Privileges_Privileges::$levels[$priv->getLevel()],
+                        'level' => xarPrivileges::$levels[$priv->getLevel()],
                         'groupid' => $groupid,
                         'groupname' => $groupname,
                         'relation' => $ancestor->getLevel(),
@@ -117,7 +119,7 @@ function roles_admin_showprivileges()
                 'module' => $priv->getModule(),
                 'component' => $priv->getComponent(),
                 'instance' => $priv->getInstance(),
-                'level' => Privileges_Privileges::$levels[$priv->getLevel()],
+                'level' => xarPrivileges::$levels[$priv->getLevel()],
                 'frozen' => $frozen,
                 'relation' => 0,
                 'status' => 3,
@@ -139,11 +141,11 @@ function roles_admin_showprivileges()
             if ($todo['relation'] != $i) continue;
             foreach($privilegesdone as $done) {
                 if (!($done['relation'] < $todo['relation'])) continue;
-                if (Privileges_Master::includes($done['object']->normalform,$todo['object']->normalform)) {
+                if (xarMasks::includes($done['object']->normalform,$todo['object']->normalform)) {
                     $todo['status'] = 1;
                     break;
                 }
-                elseif (Privileges_Master::includes($todo['object']->normalform,$done['object']->normalform)) {
+                elseif (xarMasks::includes($todo['object']->normalform,$done['object']->normalform)) {
                     $todo['status'] = 2;
                 }
             }
@@ -170,7 +172,7 @@ function roles_admin_showprivileges()
                         $x['status'] = 1;
                         break;
                     }
-                    elseif (Privileges_Master::includes($x['object']->normalform,$y['object']->normalform) && !$x['object']->implies($y['object'])) {
+                    elseif (xarMasks::includes($x['object']->normalform,$y['object']->normalform) && !$x['object']->implies($y['object'])) {
                         $x['status'] = 2;
                     }
                 }
