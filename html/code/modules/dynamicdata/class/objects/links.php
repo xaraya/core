@@ -256,7 +256,7 @@ class DataObjectLinks extends Object
             'info'       => array(),
         );
 
-        $linked = array();
+        //$linked = array();
         foreach ($links[$object->name] as $link) {
             // skip links from unknown properties
             if (empty($object->properties[$link['from_prop']])) continue;
@@ -293,6 +293,16 @@ class DataObjectLinks extends Object
                 if (!empty($where)) {
 //echo var_dump($where);
                     $linkedlist->getItems(array('where' => implode(' and ', $where)));
+/* CHECKME: turn linkedto, linkedfrom and parents into a single object ?
+                    if (!empty($linkedlist->itemids) && count($linkedlist->itemids) == 1) {
+                        $itemid = $linkedlist->itemids[0];
+                        $item = $linkedlist->items[$itemid];
+                        // get a single object for the target
+                        $linkedlist = DataObjectMaster::getObject(array('name' => $link['target']));
+                        $linkedlist->itemid = $itemid;
+                        $linkedlist->setFieldValues($item);
+                    }
+*/
                 }
 
             } elseif (!empty($object->itemids)) {
@@ -305,9 +315,10 @@ class DataObjectLinks extends Object
             $object->links[$link['link_type']][] = $link;
             $object->properties[$link['from_prop']]->linked[] =& $link;
 
-            $linked[] = $linkedlist;
+            //$linked[] = $link;
         }
-        return $linked;
+        //return $linked;
+        //return $object->links;
     }
 
     /**
