@@ -263,6 +263,7 @@ class Roles_Master extends Object
             if (!empty($duv)) $duvs[$key] = $duv;
         }
         // create and return the role object
+        sys::import('modules.dynamicdata.class.objects.master');
         $role = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $row['itemtype']));
         $role->getItem(array('itemid' => $row['id']));
         return $role;
