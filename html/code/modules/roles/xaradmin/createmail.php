@@ -18,7 +18,7 @@ function roles_admin_createmail()
 
     if (!xarVarFetch('id',       'int:0:', $id,        -1, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ids',      'isset',  $ids,     NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state',    'int:0:', $state,      xarRoles::ROLES_STATE_ALL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state',    'int:0:', $state,      Roles_Master::ROLES_STATE_ALL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('startnum', 'int:1:', $startnum,    1, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('order',    'str:0:', $data['order'], 'name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('includesubgroups', 'int:0:', $data['includesubgroups'],0, XARVAR_NOT_REQUIRED)) return;
@@ -29,8 +29,8 @@ function roles_admin_createmail()
     if ($id < 1) {
         $type = 'selection';
     } else {
-        $role  = xarRoles::get($id);
-        $type  = ($role->getType() == xarRoles::ROLES_GROUPTYPE) ? 'selection' : 'single';
+        $role  = Roles_Master::get($id);
+        $type  = ($role->getType() == Roles_Master::ROLES_GROUPTYPE) ? 'selection' : 'single';
     }
 
     $xartable = xarDB::getTables();
@@ -76,7 +76,7 @@ function roles_admin_createmail()
                                 'r.email AS email',
                                 'r.state AS state',
                                 'r.date_reg AS date_reg'));
-            $q->eq('r.itemtype',xarRoles::ROLES_USERTYPE);
+            $q->eq('r.itemtype',Roles_Master::ROLES_USERTYPE);
             $q->ne('r.email','');
         // Set the paging and order stuff for this particular page
         $numitems = (int)xarModVars::get('roles', 'items_per_page');
@@ -87,15 +87,15 @@ function roles_admin_createmail()
         // Add state
         if ($id != -1) {
             $q->removecondition('state');
-            if ($state == xarRoles::ROLES_STATE_CURRENT) $q->ne('state',xarRoles::ROLES_STATE_DELETED);
-            elseif ($state == xarRoles::ROLES_STATE_ALL) {}
+            if ($state == Roles_Master::ROLES_STATE_CURRENT) $q->ne('state',Roles_Master::ROLES_STATE_DELETED);
+            elseif ($state == Roles_Master::ROLES_STATE_ALL) {}
             else $q->eq('state',$state);
         } else {
-            $state = xarRoles::ROLES_STATE_ALL;
+            $state = Roles_Master::ROLES_STATE_ALL;
         }
 
         if ($id != -1) {
-            if ($role->getType() == xarRoles::ROLES_GROUPTYPE) {
+            if ($role->getType() == Roles_Master::ROLES_GROUPTYPE) {
                 // If a group was chosen, get only the users of that group
                 $q->addtable($xartable['rolemembers'],'rm');
                 $q->join('r.id','rm.role_id');
@@ -125,12 +125,12 @@ function roles_admin_createmail()
         // Check if we also want to send to subgroups
         // In this case we'll just pick out the descendants in the same state
         if ($id != 0 && ($data['includesubgroups'] == 1)) {
-            $parentgroup = xarRoles::get($id);
+            $parentgroup = Roles_Master::get($id);
             $descendants = $parentgroup->getDescendants($state);
 
             while (list($key, $user) = each($descendants)) {
                 if (xarSecurityCheck('EditRole',0,'Roles',$user->getName())) {
-                    if (in_array($state, array($user->getState(),xarRoles::ROLES_STATE_ALL))) {
+                    if (in_array($state, array($user->getState(),Roles_Master::ROLES_STATE_ALL))) {
                         $data['users'][$user->getID()] =
                             array('id'      => $user->getID(),
                                   'name'     => $user->getName(),

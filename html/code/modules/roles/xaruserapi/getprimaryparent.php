@@ -24,7 +24,7 @@ function roles_userapi_getprimaryparent($args)
     }
 
     $parentid = xarModItemVars::get('roles','primaryparent',$itemid);
-    $role = xarRoles::get($itemid);
+    $role = Roles_Master::get($itemid);
     $parents = $role->getParents();
     //CHECKME: the better way would be to have the default primary parent modvar be null, rather than Everybody
     // then this looping would be unnecessary

@@ -312,8 +312,7 @@ class xarMasks extends Object
         if (self::$maskbasedsecurity && !empty($mask) && empty($rolename)) { // $rolename must be empty
             $savedmask = $mask;
             if (empty(self::$maskbasedgrouplist)) {
-                sys::import('modules.roles.class.roles');
-                $role = xarRoles::get($userID);
+                $role = Roles_Master::get($userID);
                 $grouplist = array();
                 foreach ($role->getParents() as $parent) {
                     $grouplist[$parent->getID()] = 1;
@@ -437,9 +436,6 @@ class xarMasks extends Object
         // normalize the mask now - its properties won't change below
         $mask->normalize();
 
-        // get the Roles class
-        sys::import('modules.roles.class.roles');
-
         // get the id of the role we will check against
         // an empty role means take the current user
         if ($rolename == '') {
@@ -448,9 +444,9 @@ class xarMasks extends Object
             if (empty($userID)) {
                 $userID = _XAR_ID_UNREGISTERED;
             }
-            $role = xarRoles::get($userID);
+            $role = Roles_Master::get($userID);
         } else {
-            $role = xarRoles::findRole($rolename);
+            $role = Roles_Master::findRole($rolename);
         }
         
         // check if we already have the irreducible set of privileges for the current user

@@ -632,8 +632,7 @@ function installer_admin_create_administrator()
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Create Administrator');
 
-    sys::import('modules.roles.class.roles');
-    $data['admin'] = xarRoles::getRole((int)xarModVars::get('roles','admin'));
+    $data['admin'] = Roles_Master::getRole((int)xarModVars::get('roles','admin'));
     $data['properties'] = $data['admin']->getProperties();
 
     if (!xarVarFetch('create', 'isset', $create, FALSE, XARVAR_NOT_REQUIRED)) return;

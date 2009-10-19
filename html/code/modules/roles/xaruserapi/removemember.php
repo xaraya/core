@@ -24,9 +24,9 @@ function roles_userapi_removemember($args)
     if (!isset($gid)) throw new EmptyParameterException('gid');
     if (!isset($id)) throw new EmptyParameterException('id');
 
-    $group = xarRoles::get($gid);
+    $group = Roles_Master::get($gid);
     if($group->isUser()) throw new IDNotFoundException($gid);
-    $user = xarRoles::get($id);
+    $user = Roles_Master::get($id);
 
 // Security Check
     if(!xarSecurityCheck('RemoveRole',1,'Relation',$group->getName() . ":" . $user->getName())) return;

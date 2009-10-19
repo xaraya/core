@@ -79,7 +79,7 @@ function roles_user_lostpassword()
             xarVarSetCached('Hooks.all','noupdate',1);
 
             //Update user password
-            $role = xarRoles::get($user['id']);
+            $role = Roles_Master::get($user['id']);
             $modifiedstatus = $role->setPass($user['pass']);
             if (!$role->updateItem()) return;
 

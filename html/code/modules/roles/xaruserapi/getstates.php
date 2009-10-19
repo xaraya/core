@@ -19,12 +19,11 @@
  */
 function roles_userapi_getstates()
 {
-    sys::import('modules.roles.class.roles');
     return array(
-        array('id' => xarRoles::ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')),
-        array('id' => xarRoles::ROLES_STATE_NOTVALIDATED, 'name'  => xarML('Not Validated')),
-        array('id' => xarRoles::ROLES_STATE_ACTIVE, 'name'  => xarML('Active')),
-        array('id' => xarRoles::ROLES_STATE_PENDING, 'name'  => xarML('Pending'))
+        array('id' => Roles_Master::ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')),
+        array('id' => Roles_Master::ROLES_STATE_NOTVALIDATED, 'name'  => xarML('Not Validated')),
+        array('id' => Roles_Master::ROLES_STATE_ACTIVE, 'name'  => xarML('Active')),
+        array('id' => Roles_Master::ROLES_STATE_PENDING, 'name'  => xarML('Pending'))
         );
 }
 ?>

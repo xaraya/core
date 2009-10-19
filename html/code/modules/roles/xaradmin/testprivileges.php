@@ -36,7 +36,7 @@ function roles_admin_testprivileges()
     if (!xarSecurityCheck('EditRole')) return;
 
     // Call the Roles class and get the role
-    $role = xarRoles::get($id);
+    $role = Roles_Master::get($id);
 
     $types = xarMod::apiFunc('roles','user','getitemtypes');
     $data['itemtypename'] = $types[$role->getType()]['label'];

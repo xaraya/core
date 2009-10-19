@@ -42,7 +42,7 @@ function roles_admin_showusers()
 
     if ($id != 0) {
         // Call the Roles class and get the role
-        $role      = xarRoles::get($id);
+        $role      = Roles_Master::get($id);
         $ancestors = $role->getRoleAncestors();
         $data['groupname'] = $role->getName();
         $data['title'] = '';

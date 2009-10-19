@@ -33,7 +33,7 @@ function roles_user_display($args)
 
     if ($id) {
         // Get role information
-        $role = xarRoles::get($id);
+        $role = Roles_Master::get($id);
 
         if (!$role) return;
 

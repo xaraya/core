@@ -42,7 +42,6 @@ if (file_exists(sys::varpath() . '/security/on.touch')) {
 // FIXME: Can we reverse this? (i.e. the module loading the files from here?)
 //        said another way, can we move the two files to /includes (partially preferably)
 sys::import('modules.privileges.class.privileges');
-sys::import('modules.roles.class.roles');
 
 /**
  * xarMakeGroup: create an entry in the database for a group
@@ -53,7 +52,7 @@ sys::import('modules.roles.class.roles');
  * @param   string name
  * @return  bool
  */
-function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname); }
+function xarMakeGroup($name,$uname='') { return Roles_Master::makeGroup($name,$uname); }
 
 /**
  * xarMakeUser: create an entry in the database for a user
@@ -66,7 +65,7 @@ function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname
  */
 function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state=3,$authModule= 0)
 {
-    return xarRoles::makeUser($name,$uname,$email,$pass,$dateReg,$valCode,$state,$authModule);
+    return Roles_Master::makeUser($name,$uname,$email,$pass,$dateReg,$valCode,$state,$authModule);
 }
 
 /**
@@ -81,7 +80,7 @@ function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state
  */
 function xarMakeRoleMemberByName($childName, $parentName)
 {
-    return xarRoles::makeMemberByName($childName, $parentName);
+    return Roles_Master::makeMemberByName($childName, $parentName);
 }
 
 /**
@@ -96,8 +95,8 @@ function xarMakeRoleMemberByName($childName, $parentName)
  */
 function xarMakeRoleMemberByUname($childName, $parentName)
 {
-    $parent = xarRoles::ufindRole($parentName);
-    $child = xarRoles::ufindRole($childName);
+    $parent = Roles_Master::ufindRole($parentName);
+    $child = Roles_Master::ufindRole($childName);
 
     return $parent->addMember($child);
 }
@@ -114,8 +113,8 @@ function xarMakeRoleMemberByUname($childName, $parentName)
  */
 function xarMakeRoleMemberByID($childId, $parentId)
 {
-    $parent = xarRoles::getRole($parentId);
-    $child = xarRoles::getRole($childId);
+    $parent = Roles_Master::getRole($parentId);
+    $child = Roles_Master::getRole($childId);
 
     return $parent->addMember($child);
 }
@@ -132,8 +131,8 @@ function xarMakeRoleMemberByID($childId, $parentId)
  */
 function xarRemoveRoleMemberByID($childId, $parentId)
 {
-    $parent = xarRoles::getRole($parentId);
-    $child = xarRoles::getRole($childId);
+    $parent = Roles_Master::getRole($parentId);
+    $child = Roles_Master::getRole($childId);
 
     return $parent->removeMember($child);
 }
@@ -254,7 +253,7 @@ function xarRemoveInstances($module)
  * @access public
  * @return array of strings
  */
-function xarGetGroups() { return xarRoles::getgroups(); }
+function xarGetGroups() { return Roles_Master::getgroups(); }
 
 /**
  * xarFindRole: returns a role object by its name
@@ -265,18 +264,18 @@ function xarGetGroups() { return xarRoles::getgroups(); }
  * @param   string name
  * @return  object role
  */
-function xarFindRole($name) { return xarRoles::findRole($name);  }
-function xarUFindRole($name){ return xarRoles::ufindRole($name); }
+function xarFindRole($name) { return Roles_Master::findRole($name);  }
+function xarUFindRole($name){ return Roles_Master::ufindRole($name); }
 
 function xarCurrentRole()
 {
-    return xarRoles::getRole(xarSessionGetVar('role_id'));
+    return Roles_Master::getRole(xarSessionGetVar('role_id'));
 }
 
 function xarIsParent($name1, $name2)
 {
-    $role1 = xarRoles::findRole($name1);
-    $role2 = xarRoles::ufindRole($name2);
+    $role1 = Roles_Master::findRole($name1);
+    $role2 = Roles_Master::ufindRole($name2);
     if (is_object($role1) && is_object($role2)) {
         return $role2->isParent($role1);
     }
@@ -285,8 +284,8 @@ function xarIsParent($name1, $name2)
 
 function xarIsAncestor($name1, $name2)
 {
-    $role1 = xarRoles::findRole($name1);
-    $role2 = xarRoles::ufindRole($name2);
+    $role1 = Roles_Master::findRole($name1);
+    $role2 = Roles_Master::ufindRole($name2);
     if (is_object($role1) && is_object($role2)) {
         return $role2->isAncestor($role1);
     }
