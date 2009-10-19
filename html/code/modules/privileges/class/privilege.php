@@ -261,6 +261,7 @@ class xarPrivilege extends xarMask
         $result = $stmt->executeQuery(array($this->id));
 
         // make objects from the db entries retrieved
+        sys::import('modules.roles.class.roles');
         $roles = array();
         //      $ind = 0;
     sys::import('modules.dynamicdata.class.objects.master');

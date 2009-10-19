@@ -112,7 +112,8 @@ class Role extends DataObject
         if (empty($data['parentid'])) xarVarFetch('parentid',  'int', $data['parentid'],  NULL, XARVAR_DONT_SET);
         if (empty($data['parentid'])) $data['parentid'] = (int)xarModVars::get('roles', 'defaultgroup');
         if (!empty($data['parentid'])) {
-            $parent = Roles_Master::get($data['parentid']);
+            sys::import('modules.roles.class.roles');
+            $parent = xarRoles::get($data['parentid']);
             if (!$parent->addMember($this))
                 throw new Exception('Unable to create a roles relation');
         }
@@ -309,12 +310,13 @@ class Role extends DataObject
         if(count($result->fields) == 1)
             return xarTplModule('roles','user','errors',array('layout' => 'remove_sole_parent'));
 
+        sys::import('modules.roles.class.roles');
         // go through the list, retrieving the roles and detaching each one
         // we need to do it this way because the method removeMember is more than just
         // a simple SQL DELETE
         while ($result->next()) {
             list($parentid) = $result->fields;
-            $parent = Roles_Master::get($parentid);
+            $parent = xarRoles::get($parentid);
             // Check that a parent was returned
             if ($parent) {
                 $parent->removeMember($this);
@@ -739,7 +741,7 @@ class Role extends DataObject
         $users = $this->getUsers($state);
 
         sys::import('modules.roles.class.roles');
-        $groups = Roles_Master::getSubGroups($this->getID());
+        $groups = xarRoles::getSubGroups($this->getID());
         $ua = array();
         foreach($users as $user){
             //using the ID as the key so that if a person is in more than one sub group they only get one email (mrb: email?)
@@ -747,7 +749,7 @@ class Role extends DataObject
         }
         //Get the sub groups and go for another round
         foreach($groups as $group){
-            $role = Roles_Master::get($group['id']);
+            $role = xarRoles::get($group['id']);
             if ($grpflag) {
                 $ua[$group['id']] = $role;
             }

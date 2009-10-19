@@ -36,8 +36,8 @@ function roles_adminapi_clearsessions($spared)
         while ($result->next()) {
             list($thissession, $thisid) = $result->fields;
             foreach ($spared as $id) {
-                $thisrole = Roles_Master::get($thisid);
-                $thatrole = Roles_Master::get($id);
+                $thisrole = xarRoles::get($thisid);
+                $thatrole = xarRoles::get($id);
                 if (!$thisid == $id && !$thisrole->isParent($thatrole)) {
                     $stmt->executeUpdate(array($thisid));
                     break;

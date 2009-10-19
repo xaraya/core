@@ -29,7 +29,7 @@
                                     <b>#$node['name']#</b>see the entry above</span>
                             <xar:else />
                                     <xar:set name="numofsubgroups">
-                                    count(Roles_Master::getsubgroups($node['id']))</xar:set>
+                                    count(xarRoles::getsubgroups($node['id']))</xar:set>
                                     <xar:set name="numofsubgroups">1</xar:set>
                                     <xar:set name="subgroups">$numofsubgroups == 1 ?
                                     xarML('subgroup') : xarML('subgroups')</xar:set>
