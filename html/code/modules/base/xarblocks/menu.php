@@ -310,7 +310,7 @@ class MenuBlock extends BasicBlock implements iBlock
             !xarUserIsLoggedIn() or
             empty($vars['showlogout'])) {
             $showlogout = false;
-        }else{
+        } else {
             $showlogout = true;
         }
 
@@ -336,6 +336,7 @@ class MenuBlock extends BasicBlock implements iBlock
             'logoutlabel'      => $logoutlabel,
             'loggedin'         => $loggedin,
             'usercontent'      => $usercontent,
+            'module'           => $thismodname,
             'marker'           => $marker,
             'showlogout'       => $showlogout,
             'where'            => $thismodname,
@@ -347,7 +348,6 @@ class MenuBlock extends BasicBlock implements iBlock
         );
 
         $data['content'] = $blockcontent;
-
         return $data;
     }
 

@@ -65,8 +65,6 @@ class Role extends DataObject
 
         $this->parentlevel = 0;
         $this->basetype = $this->getType();
-
-        sys::import('modules.roles.class.xarQuery');
     }
 
     /**
@@ -80,20 +78,30 @@ class Role extends DataObject
     public function createItem(Array $data = array())
     {
         // Confirm that this group or user does not already exist
-        $q = new xarQuery('SELECT',$this->rolestable);
+        xarMod::loadDbInfo('roles','roles');
+        $xartable = xarDB::getTables();
+        $dynamicobjects = $this->rolestable;
+        $bindvars = array();
+        $query = "SELECT name, uname
+                  FROM $dynamicobjects "; 
         if ($this->basetype == ROLES_GROUPTYPE) {
             if (empty($data['name'])) $data['name'] = $this->getName();
-            $q->eq('name',$data['name']);
+            $query .= " WHERE name = ? ";
+            $bindvars[] = $data['name'];
         } else {
             if (empty($data['uname'])) $data['uname'] = $this->getUser();
-            $q->eq('uname',$data['uname']);
+            $query .= " WHERE uname = ? ";
+            $bindvars[] = $data['uname'];
         }
-        if (!$q->run()) return;
-
-        if ($q->getrows() > 0) {
-            $result = $q->row();
+        $dbconn = xarDB::getConn();
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        if ($result->getRow() > 0) {
+            $result = $query->row();
             throw new DuplicateException(array('role',($this->basetype == ROLES_GROUPTYPE) ? $result['name'] :$result['uname'] ));
         }
+        
+        $result->close();
 
         $id = parent::createItem($data);
 
@@ -151,36 +159,70 @@ class Role extends DataObject
      */
     public function addMember($member)
     {
-        // bail if the purported parent is not a group.
+        // bail if the purported parent is not a group
         if ($this->isUser()) return false;
+        
+        $query = "SELECT * FROM $this->rolememberstable
+                 WHERE role_id = ? AND parent_id = ?";
+        
+        $bindvars[] = $member->getID();
+        $bindvars[] = $this->getID();
+                 
+        $dbconn = xarDB::getConn();
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        
+         if ($member->isUser()) {
+            // get the current count
+            $query = "SELECT users FROM $this->rolestable
+                      WHERE id = ?";
+            $bindvars[] = $this->getID();
+                
+            $stmt = $dbconn->prepareStatement($query);
+            if (!$stmt) return;
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            while($result->next()) $row = $result->fields;
+            $users = $row['users'] + 1;
+            $query = "UPDATE $this->rolestable SET users =" . $users . " WHERE id = ?";
+            $bindvars[] = $this->getID();
 
-        $q = new xarQuery('SELECT',$this->rolememberstable);
-        $q->eq('role_id',$member->getID());
-        $q->eq('parent_id',$this->getID());
-        if (!$q->run()) return;
-        // This relationship already exists. Move on
-        if ($q->row() != array()) return true;
-
-        // add the necessary entry to the rolemembers table
-        $q = new xarQuery('INSERT',$this->rolememberstable);
-        $q->addfield('role_id',$member->getID());
-        $q->addfield('parent_id',$this->getID());
-        if (!$q->run()) return;
-
+            // add 1 and update.
+            $stmt = $dbconn->prepareStatement($query);
+            if (!$stmt) return;
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+         }
+    
+        $query = "INSERT INTO $this->rolememberstable (role_id, parent_id) 
+                    values (".$member->getID().", ". $this->getID().")";                
+      
+        $dbconn = xarDB::getConn();
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        
         // for children that are users
         // add 1 to the users field of the parent group. This is for display purposes.
         if ($member->isUser()) {
             // get the current count
-            $q = new xarQuery('SELECT',$this->rolestable,'users');
-            $q->eq('id',$this->getID());
-            if (!$q->run()) return;
-            $result = $q->row();
+            $bindvars = array();
+            $query = "SELECT  users
+                        FROM $this->rolestable";                
+            $query .= " WHERE id = ?";
+            $bindvars[] =  $this->getID();
+            $dbconn = xarDB::getConn();
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            if (!$result) return;
+            while($result->next()) $row = $result->fields;
 
             // add 1 and update.
-            $q = new xarQuery('UPDATE',$this->rolestable);
-            $q->eq('id',$this->getID());
-            $q->addfield('users',$result['users']+1);
-            if (!$q->run()) return;
+            $bindvars = array();
+            $value = $row['users']+1;
+            $query = "UPDATE  " . $this->rolestable . " SET users = " . $value . " WHERE id = ?";
+            $bindvars[] =  $this->getID();
+            $dbconn = xarDB::getConn();
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+                    
         }
         $item['module']   = 'roles';
         $item['itemtype'] = $this->getType();
@@ -205,23 +247,34 @@ class Role extends DataObject
     public function removeMember($member)
     {
         // delete the relevant entry from the rolemembers table
-        $query = "DELETE FROM $this->rolememberstable WHERE role_id= ? AND parent_id= ?";
+        $xartable = xarDB::getTables();
+        $rolesmemobjects = $this->rolememberstable;
+        $query = "DELETE FROM $rolesmemobjects WHERE role_id = ? AND parent_id = ?";
         $bindvars = array($member->getID(), $this->getID());
         $this->dbconn->Execute($query,$bindvars);
         // for children that are users
         // subtract 1 from the users field of the parent group. This is for display purposes.
         if ($member->isUser()) {
             // get the current count.
-            $q = new xarQuery('SELECT',$this->rolestable,'users');
-            $q->eq('id',$this->getID());
-            if (!$q->run()) return;
-            $result = $q->row();
+            $bindvars = array();
+            $query = "SELECT  users
+                        FROM $this->rolestable";                
+            $query .= " WHERE id = ?";
+            $bindvars[] =  $this->getID();
+            $dbconn = xarDB::getConn();
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            if (!$result) return;
+            while($result->next()) $row = $result->fields;
 
             // subtract 1 and update.
-            $q = new xarQuery('UPDATE',$this->rolestable);
-            $q->eq('id',$this->getID());
-            $q->addfield('users',$result['users']-1);
-            if (!$q->run()) return;
+            $dynamicobjects = $this->rolestable;
+            $value = $row['users']-1;
+            $query = "UPDATE  " . $dynamicobjects . " SET users = " . $value . " WHERE id = ?";                                     
+            $bindvars[] =  $this->getID();
+            
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
         }
         $item['module']   = 'roles';
         $item['itemtype'] = $this->getType();
@@ -315,15 +368,23 @@ class Role extends DataObject
         $pass = '';
         $email = '';
         $date_reg = '';
-        $q = new xarQuery('UPDATE',$this->rolestable);
-        $q->addfield('name',$name);
-        $q->addfield('uname',$uname);
-        $q->addfield('pass',$pass);
-        $q->addfield('email',$email);
-        $q->addfield('date_reg',time());
-        $q->addfield('state',$state);
-        $q->eq('id',$this->getID());
-        if(!$q->run()) return;
+
+        xarMod::loadDbInfo('roles','roles');
+        $xartable = xarDB::getTables();
+        $bindvars = array();
+        $query = "UPDATE $this->rolestable 
+                  SET name = $name,
+                      uname = $uname,
+                      pass = $pass,
+                      email = $email,
+                      date_reg = ".time().",
+                      state = $state";
+
+        $query .= " WHERE id = ? ";
+        $bindvars[] = $this->getID();
+        $dbconn = xarDB::getConn();
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
         $item['module'] = 'roles';
         $item['itemid'] = $this->getID();
         $item['itemtype'] = $this->getType();
@@ -535,27 +596,38 @@ class Role extends DataObject
      */
     public function countChildren($state = ROLES_STATE_CURRENT, $selection = NULL, $itemtype = NULL)
     {
-        $q = new xarQuery('SELECT');
-        $q->addfield('COUNT(r.id) AS children');
-        $q->addtable($this->rolestable,'r');
-        $q->addtable($this->rolememberstable,'rm');
-        $q->join('r.id', 'rm.role_id');
-        $q->eq('rm.parent_id', $this->properties['id']->value);
-        if ($state == ROLES_STATE_CURRENT) {
-            $q->ne('r.state', ROLES_STATE_DELETED);
-        } else {
-            $q->eq('r.state', $state);
-        }
-        if (isset($itemtype)) $q->eq('r.itemtype', $itemtype);
+        $xartable = xarDB::getTables();
+        $rolesmemobjects = $this->rolememberstable;
+        $rolesobjects = $this->rolestable;
+        $bindvars = array();
+        $query = "SELECT COUNT(r.id) AS children FROM $rolesobjects AS r
+                JOIN $rolesmemobjects AS rm ON(r.id = rm.role_id)";
 
-        if (isset($selection)) {
-            $query = $q->tostring() . $selection;
-            if(!$q->run($query)) return;
+        $query .= " WHERE rm.parent_id = ? ";
+        $bindvars[] = $this->properties['id']->value;
+        if ($state == ROLES_STATE_CURRENT) {
+            $query .= " AND r.state != ? ";
+            $bindvars[] = ROLES_STATE_DELETED;
         } else {
-            if(!$q->run()) return;
+            $query .= " AND r.state = ? ";
+            $bindvars[] = $state;
         }
-        $result = $q->row();
-        return $result['children'];
+        $dbconn = xarDB::getConn();
+        if (isset($itemtype)) 
+            $query .= " AND r.itemtype = ? ";
+            $bindvars[] = $itemtype;
+        if (isset($selection)) {
+            $query = $selection;
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        } else {
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        }
+        if($result) return;
+        while ($result->next()) $row = $result->fields;
+        
+        return $row['children'];
     }
 
     /**
@@ -759,22 +831,36 @@ class Role extends DataObject
      */
     public function adjustParentUsers($adjust)
     {
-        $q = new xarQuery('SELECT', $this->rolestable, 'users AS users');
-        $q1 = new xarQuery('UPDATE', $this->rolestable);
+        xarMod::loadDbInfo('roles','roles');
+        $xartable = xarDB::getTables();
+        $memberobject =  $this->rolestable;
+        $bindvars = array();
+        $query = "SELECT users AS users FROM $memberobject";
+        $query1 = "UPADATE $memberobject ";
+
+        $dbconn = xarDB::getConn();
         $parents = $this->getParents();
         foreach ($parents as $parent) {
-            $q->clearconditions();
-            $q->eq('id', $parent->getID());
-            $q1->clearconditions();
-            $q1->eq('id', $parent->getID());
-
+            $query .= " WHERE id = ? ";
+            $bindvars[] = $parent->getID();
+            $query1 .= " WHERE id = ? ";
+            $bindvars[] = $parent->getID();
+            
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            if (!$result) return;
             // get the current count.
-            if (!$q->run()) return;
-            $row = $q->row();
+            while ($result->next())
+            {
+                $row = $result->fields;
+            }
 
-            // adjust and update update.
-            $q1->addfield('users', $row['users'] + $adjust);
-            if (!$q1->run()) return;
+            $query1 .= " SET users = ? ";
+            $value = $row['users'] + $adjust;
+            $bindvars[] = $value;       
+            $stmt = $dbconn->prepareStatement($query1);
+            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            if (!$result) return;
         }
         return true;
     }

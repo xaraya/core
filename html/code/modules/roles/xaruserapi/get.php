@@ -34,50 +34,95 @@ function roles_userapi_get($args)
     if ((empty($itemid) && !empty($id))) {
         $itemid = $id;
     }
-
+    
+    $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
     $rolestable = $xartable['roles'];
 
     // Get user
-    sys::import('modules.roles.class.xarQuery');
-    $q = new xarQuery('SELECT',$rolestable);
-    $q->addfields(array(
-                  'id',
-                  'uname',
-                  'name',
-                  'itemtype', 
-                  'email',
-                  'pass',
-                  'date_reg',
-                  'valcode',
-                  'state'
-                ));
+    $query = "SELECT id, uname, name, itemtype, email, pass, date_reg, valcode, state FROM $rolestable";
+    $bindvars = array();
+    $cnt = 0;
+    
+    $queryWhere = " WHERE ";
+    
     if (!empty($id) && is_numeric($id)) {
-        $q->eq('id',(int)$id);
+        $cnt++;
+        $queryWhere .= " id = ? ";
+        $bindvars[] = (int)$id;
     }
-    if (!empty($name)) {
-        $q->eq('name',$name);
+    if (!empty($name)) {        
+        if($cnt == 1){
+            $queryWhere .= "  AND name = ? ";
+        }
+        else{
+            $queryWhere .= " name = ?"; 
+        }
+        $cnt++;
+        $bindvars[] = $name;
     }
-    if (!empty($uname)) {
-        $q->eq('uname',$uname);
+    if (!empty($uname)) {       
+        if($cnt >= 1){
+            $queryWhere .= " AND uname = ? ";
+        }
+        else{
+            $queryWhere .= " uname = ?";
+        }
+        $cnt++;
+        $bindvars[] = $uname;
     }
     if (!empty($email)) {
-        $q->eq('email',$email);
+        if($cnt >= 1){
+            $queryWhere .= " AND email = ? ";
+        }
+        else{
+            $queryWhere .= " email = ?";
+        }        
+        $cnt++;
+        $bindvars[] = $email;
     }
     if (!empty($state) && $state == ROLES_STATE_CURRENT) {
-        $q->ne('state',ROLES_STATE_DELETED);
+        if($cnt >= 1){
+            $queryWhere .= " AND state != ? ";
+        }
+        else{
+            $queryWhere .= " state != ?";
+        }
+        $cnt++;
+        $bindvars[] = ROLES_STATE_DELETED;
     }
     elseif (!empty($state) && $state != ROLES_STATE_ALL) {
-        $q->eq('state',(int)$state);
+        if($cnt >= 1){
+            $queryWhere .= " AND state = ? ";
+        }
+        else{
+            $queryWhere .= " state = ?";
+        }
+        $cnt++;
+        
+        $bindvars[] = (int)$state;
     }
+    
     if (!empty($itemtype)) {
-        $q->eq('itemtype',$itemtype);
+        if($cnt >= 1){
+            $queryWhere .= " AND itemtype = ? ";
+        }
+        else{
+            $queryWhere .= " itemtype = ?";
+        }
+        $cnt++;        
+        $bindvars[] = $itemtype;        
     }
-    if (!$q->run()) return;
-
+    if($cnt >= 1)
+    {
+        $query .= $queryWhere;
+    }
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
     // Check for no rows found, and if so return
-    $user = $q->row();
-    if ($user == array()) return false;
+    $result->next();
+    $user = $result->getRow();
+    if (empty($user)) return false;
     // id is a reserved/key words in Oracle et al.
     $user['id'] = $user['id'];
     $user['itemtype'] = $user['itemtype'];

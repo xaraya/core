@@ -108,12 +108,20 @@ class xarPrivilege extends xarMask
     */
     function removeMember($member)
     {
-        sys::import('modules.roles.class.xarQuery');
-        $q = new xarQuery('DELETE',$this->privmemberstable);
-        $q->eq('privilege_id', $member->getID());
-        $q->eq('parent_id', $this->getID());
-        if (!$q->run()) return;
-
+        $xartable = xarDB::getTables();
+        $rolesobjects = $this->privmemberstable;
+        $bindvars = array();
+        $query = "DELETE FROM $rolesobjects ";
+    
+        $query .= " WHERE privilege_id = ?";
+        $bindvars[] = $member->getID();
+        $query .= " AND  parent_id = ?";
+        $bindvars[] = $this->getID();
+        
+        $dbconn = xarDB::getConn();
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        if (!$result) return;
         // Refresh the privileges cached for the current sessions
         xarMasks::clearCache();
         return true;
@@ -526,14 +534,18 @@ class xarPrivilege extends xarMask
     */
     function isRootPrivilege()
     {
-        sys::import('modules.roles.class.xarQuery');
-        $q = new xarQuery('SELECT');
-        $q->addtable($this->privilegestable,'p');
-        $q->addtable($this->privmemberstable,'pm');
-        $q->join('p.id','pm.privilege_id');
-        $q->eq('pm.privilege_id',$this->getID());
-        if(!$q->run()) return;
-        return ($q->output() != array());
+        $xartable = xarDB::getTables();
+        $previlegeobjects = $this->privilegestable;
+        $privilegmemobjects = $this->privmemberstable;
+        $bindvars = array();
+        $query = "SELECT * FROM $previlegeobjects AS p 
+                 JOIN $privilegmemobjects AS pm ON (p.id = pm.privilege_id)
+                 WHERE pm.privilege_id = ?";
+        $bindvars[] =  $this->getID();
+        $dbconn = xarDB::getConn();
+        $stmt = $dbconn->prepareStatement($query); 
+        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        return ($result != array());
     }
 }
 ?>

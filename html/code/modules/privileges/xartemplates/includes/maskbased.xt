@@ -44,7 +44,7 @@ function by_name($a,$b) {
 }
 uasort($groups,'by_name')</xar:set>
 <!-- priv_type 3 means a mask -->
-<xar:data-getitems name="$properties" value="$items" object="privileges_privileges" where="priv_type eq 3" sort="module,component,level" />
+<xar:data-getitems properties="$properties" values="$items" objectname="privileges_privileges" where="priv_type eq 3" sort="module,component,level" />
 <xar:set name="fieldlist">array('name','module','component','level')</xar:set>
 
 <xar:sec mask="AdminPrivilege" catch="false">
