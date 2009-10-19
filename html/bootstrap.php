@@ -441,11 +441,4 @@ class DataContainer extends Object
     }
 }
 
-/**
- * Enable the autoload functionality for classes
-**/
-
-sys::import('xaraya.autoload');
-xarAutoload::initialize(array(),'php');
-
 ?>
