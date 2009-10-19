@@ -738,6 +738,7 @@ class Role extends DataObject
     {
         $users = $this->getUsers($state);
 
+        sys::import('modules.roles.class.roles');
         $groups = Roles_Master::getSubGroups($this->getID());
         $ua = array();
         foreach($users as $user){
