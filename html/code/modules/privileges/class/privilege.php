@@ -67,8 +67,7 @@ class xarPrivilege extends xarMask
 
         // make this privilege a child of its parent
         if(!empty($this->parentid)) {
-            sys::import('modules.privileges.class.privileges');
-            $parentperm = xarPrivileges::getprivilege($this->parentid);
+            $parentperm = Privileges_Privileges::getprivilege($this->parentid);
             $parentperm->addMember($this);
         }
         return true;
@@ -93,7 +92,7 @@ class xarPrivilege extends xarMask
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
         // Refresh the privileges cached for the current sessions
-        xarMasks::clearCache();
+        Privileges_Master::clearCache();
         return true;
     }
 
@@ -123,7 +122,7 @@ class xarPrivilege extends xarMask
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
         if (!$result) return;
         // Refresh the privileges cached for the current sessions
-        xarMasks::clearCache();
+        Privileges_Master::clearCache();
         return true;
     }
 
@@ -157,7 +156,7 @@ class xarPrivilege extends xarMask
         $this->dbconn->Execute($query,$bindvars);
 
         // Refresh the privileges cached for the current sessions
-        xarMasks::clearCache();
+        Privileges_Master::clearCache();
         return true;
     }
 
@@ -190,7 +189,7 @@ class xarPrivilege extends xarMask
         while($result->next()) {
             list($parentid) = $result->fields;
             if ($parentid != 0) {
-                $parentperm = xarPrivileges::getPrivilege($parentid);
+                $parentperm = Privileges_Privileges::getPrivilege($parentid);
                 $parentperm->removeMember($this);
             }
         }

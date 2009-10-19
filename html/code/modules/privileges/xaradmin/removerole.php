@@ -23,9 +23,8 @@ function privileges_admin_removerole()
 //Call the Roles class and get the role to be removed
     $role = Roles_Master::get($roleid);
 
-//Call the Privileges class and get the privilege to be de-assigned
-    sys::import('modules.privileges.class.privileges');
-    $priv = xarPrivileges::getPrivilege($id);
+// Get the privilege to be de-assigned
+    $priv = Privileges_Privileges::getPrivilege($id);
 
 
 // some assignments can't be changed, for your own good

@@ -13,7 +13,7 @@
  */
 
 /**
- * xarMasks: class for the mask repository
+ * Privileges_Master: class for the mask repository
  *
  * Represents the repository containing all security masks
  *
@@ -21,7 +21,7 @@
  * @access  public
  * @todo    evaluate scoping
 */
-class xarMasks extends Object
+class Privileges_Master extends Object
 {
     const PRIVILEGES_PRIVILEGETYPE = 2;
     const PRIVILEGES_MASKTYPE = 3;
@@ -55,7 +55,7 @@ class xarMasks extends Object
     protected static $maskbasedgrouplist;
 
     /**
-     * xarMasks: constructor for the class
+     * Privileges_Master: constructor for the class
      *
      * Just sets up the db connection and initializes some variables
      *

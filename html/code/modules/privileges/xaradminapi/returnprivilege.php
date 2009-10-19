@@ -33,8 +33,7 @@
             $priv = new xarPrivilege($pargs);
             if ($priv->add()) return $priv->getID();
         } else {
-            sys::import('modules.privileges.class.privileges');
-            $priv = xarPrivileges::getPrivilege($pid);
+            $priv = Privileges_Privileges::getPrivilege($pid);
             $priv->setName($name);
             $priv->setRealm($realm);
             $priv->setModule($module);

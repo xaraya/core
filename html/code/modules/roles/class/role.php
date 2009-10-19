@@ -229,7 +229,7 @@ class Roles_Role extends DataObject
         xarModCallHooks('item', 'link', $this->getID(), $item);
 
         // Refresh the privileges cached for the current sessions
-        xarMasks::clearCache();
+        Privileges_Master::clearCache();
         return true;
     }
 
@@ -281,7 +281,7 @@ class Roles_Role extends DataObject
         xarModCallHooks('item', 'unlink', $this->getID(), $item);
 
         // Refresh the privileges cached for the current sessions
-        xarMasks::clearCache();
+        Privileges_Master::clearCache();
         return true;
     }
 
@@ -496,7 +496,7 @@ class Roles_Role extends DataObject
         $this->dbconn->Execute($query,$bindvars);
 
         // Refresh the privileges cached for the current sessions
-        xarMasks::clearCache();
+        Privileges_Master::clearCache();
         return true;
     }
 
@@ -516,7 +516,7 @@ class Roles_Role extends DataObject
         $this->dbconn->Execute($query,$bindvars);
 
         // Refresh the privileges cached for the current sessions
-        xarMasks::clearCache();
+        Privileges_Master::clearCache();
         return true;
     }
 

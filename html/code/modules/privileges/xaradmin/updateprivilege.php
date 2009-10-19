@@ -49,8 +49,7 @@ function privileges_admin_updateprivilege()
 
 // call the Privileges class and update the values
 
-    sys::import('modules.privileges.class.privileges');
-    $priv = xarPrivileges::getPrivilege($id);
+    $priv = Privileges_Privileges::getPrivilege($id);
     if ($type =="empty") {
 
 // this is just a container for other privileges

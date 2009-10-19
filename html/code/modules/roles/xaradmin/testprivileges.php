@@ -28,7 +28,7 @@ function roles_admin_testprivileges()
 {
     // Get Parameters
     if (!xarVarFetch('id', 'int:1:', $id)) return;
-    if (!xarVarFetch('pmodule', 'int', $module, xarMasks::PRIVILEGES_ALL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('pmodule', 'int', $module, Privileges_Master::PRIVILEGES_ALL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('name', 'str:1', $name, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('test', 'str:1:35:', $test, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
 
@@ -52,24 +52,24 @@ function roles_admin_testprivileges()
     // we want to do test
     if (!empty($test)) {
         // get the mask to test against
-        $mask = xarMasks::getMask($name);
+        $mask = Privileges_Master::getMask($name);
         $component = $mask->getComponent();
         // test the mask against the role
-        $testresult = xarMasks::xarSecurityCheck($name, 0, $component, 'All', $mask->getModule(), $role->getName());
+        $testresult = Privileges_Master::xarSecurityCheck($name, 0, $component, 'All', $mask->getModule(), $role->getName());
         // test failed
         if (!$testresult) {
             $resultdisplay = xarML('Privilege: none found');
         }
         // test returned an object
         else {
-            $thisprivilege = xarPrivileges::getPrivilege($testresult['id']);
+            $thisprivilege = Privileges_Privileges::getPrivilege($testresult['id']);
             $resultdisplay = "";
             $data['rname'] = $thisprivilege->getName();
             $data['rrealm'] = $thisprivilege->getRealm();
             $data['rmodule'] = $thisprivilege->getModule();
             $data['rcomponent'] = $thisprivilege->getComponent();
             $data['rinstance'] = $thisprivilege->getInstance();
-            $data['rlevel'] = xarMasks::$levels[$thisprivilege->getLevel()];
+            $data['rlevel'] = Privileges_Master::$levels[$thisprivilege->getLevel()];
         }
         // rest of the data for template display
         $data['testresult'] = $testresult;
@@ -82,7 +82,7 @@ function roles_admin_testprivileges()
                 'smodule' => $testmask->getModule(),
                 'scomponent' => $testmask->getComponent(),
                 'sinstance' => $testmask->getInstance(),
-                'slevel' => xarMasks::$levels[$testmask->getLevel()]
+                'slevel' => Privileges_Master::$levels[$testmask->getLevel()]
                 );
             $testmaskarray[] = $thismask;
         }
@@ -100,7 +100,7 @@ function roles_admin_testprivileges()
     $data['pmodule'] = $module;
     $data['id'] = $id;
     $data['testlabel'] = xarML('Test');
-    $data['masks'] = xarMasks::getmasks($module);
+    $data['masks'] = Privileges_Master::getmasks($module);
     $data['authid'] = xarSecGenAuthKey();
     return $data;
     // redirect to the next page

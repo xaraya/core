@@ -18,7 +18,7 @@
                 switch ($data['tab']) {
                     case 'all':
                     default:
-                    $assignments = xarPrivileges::getAssignments(array('module' => $data['tab']));
+                    $assignments = Privileges_Privileges::getAssignments(array('module' => $data['tab']));
                     $data['anonassignments'] = array();
                     $data['groupassignments'] = array();
                     $data['userassignments'] = array();
