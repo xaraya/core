@@ -1,7 +1,7 @@
 <?php
 
 /**
- * xarMask: class for the mask object
+ * Privileges_Mask: class for the mask object
  *
  * Represents a single security mask
  *
@@ -9,7 +9,7 @@
  * @access  public
  * @throws  none
 */
-class xarMask extends Object
+class Privileges_Mask extends Object
 {
     const PRIVILEGES_PRIVILEGETYPE = 2;
     const PRIVILEGES_MASKTYPE = 3;
@@ -33,7 +33,7 @@ class xarMask extends Object
     public $modulestable;
 
     /**
-     * xarMask: constructor for the class
+     * Privileges_Mask: constructor for the class
      *
      * Creates a security mask
      *

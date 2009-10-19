@@ -29,8 +29,7 @@
                            'level' => $level,
                            'parentid' => 0
                            );
-            sys::import('modules.privileges.class.privilege');
-            $priv = new xarPrivilege($pargs);
+            $priv = new Privileges_Privilege($pargs);
             if ($priv->add()) return $priv->getID();
         } else {
             $priv = Privileges_Privileges::getPrivilege($pid);

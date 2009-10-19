@@ -500,8 +500,7 @@ class Privileges_Privileges extends Privileges_Master
                            'description'=>$description,
                            'parentid'=>0);
 
-            sys::import('modules.privileges.class.privilege');
-            $priv = new xarPrivilege($pargs);
+            $priv = new Privileges_Privilege($pargs);
             xarCore::setCached($cacheKey,$id,$priv);
             return $priv;
         } else {
@@ -547,7 +546,7 @@ class Privileges_Privileges extends Privileges_Master
                            'description'=>$description,
                            'parentid'=>0);
             sys::import('modules.privileges.class.privilege');
-            return new xarPrivilege($pargs);
+            return new Privileges_Privilege($pargs);
         }
         return;
     }
@@ -590,7 +589,7 @@ class Privileges_Privileges extends Privileges_Master
                 'description' => $description,
                 'parentid'    => 0
             );
-            $privileges[] = new xarPrivilege($pargs);
+            $privileges[] = new Privileges_Privilege($pargs);
         }
         // Close result set
         $result->Close();
