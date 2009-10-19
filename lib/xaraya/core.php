@@ -248,10 +248,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     sys::import('xaraya.events');
 
-/* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ?
-    sys::import('xaraya.autoload');
-    xarAutoload::initialize();
-
+/* 
 // Testing of autoload + second-level cache storage - please do not use on live sites
     sys::import('xaraya.caching.storage');
     $cache = xarCache_Storage::getCacheStorage(array('storage' => 'xcache'));

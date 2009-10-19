@@ -63,7 +63,9 @@ class xarAutoload extends Object
         sys::import('modules.dynamicdata.class.autoload');
 
         // TODO: work with temporary autoload function until we get something better
-        self::registerClassMethod('xarAutoload', 'autoload_todo');
+//        self::registerClassMethod('xarAutoload', 'autoload_todo');
+//        self::registerClassMethod('xarAutoload', 'loadCoreClass');
+        self::registerClassMethod('xarAutoload', 'loadModuleClass');
     }
 
     /**
@@ -133,6 +135,24 @@ class xarAutoload extends Object
     {
         spl_autoload_unregister(array($classname, $method));
         self::refreshList();
+    }
+
+    /**
+     * Autoload method for module classes
+     * Looks in the module's class directory, then tries loading a module autoload function
+     */
+    public static function loadModuleClass($classname) 
+    {
+        $nameparts = explode('_',strtolower($classname));
+        $module = array_shift($nameparts);
+        $locationname = implode('/', $nameparts);
+        $classfile = sys::code() . 'modules/' . $module . '/class/' . $locationname . '.php';
+        if (file_exists($classfile)) include($classfile);
+        else {
+            $classfile = sys::code() . $module. "/autoload.php";
+            if (file_exists($classfile)) include($classfile);
+        }
+        return true;
     }
 
     /**
