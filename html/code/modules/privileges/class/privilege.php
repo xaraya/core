@@ -271,7 +271,7 @@ class xarPrivilege extends xarMask
             $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $itemtype));
             $role->getItem(array('itemid' => $id));
             /*
-            $role = new xarRole(array('id' => $id,
+            $role = new Roles_Role(array('id' => $id,
                                       'name' => $name,
                                       'itemtype' => $itemtype,
                                       'uname' => $uname,

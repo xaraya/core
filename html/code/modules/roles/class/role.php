@@ -19,7 +19,7 @@ sys::import('modules.dynamicdata.class.objects.base');
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  */
-class Role extends DataObject
+class Roles_Role extends DataObject
 {
     public $parentlevel;  //we use this just to store transient information
     public $basetype;     //the base itemtype. we add this so it can be passed rather than calculated here

@@ -59,9 +59,6 @@ class xarAutoload extends Object
             }
         }
 
-        // TODO: work with manual specification until we get something better
-        sys::import('modules.dynamicdata.class.autoload');
-
         // TODO: work with temporary autoload function until we get something better
 //        self::registerClassMethod('xarAutoload', 'autoload_todo');
 //        self::registerClassMethod('xarAutoload', 'loadCoreClass');
