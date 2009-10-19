@@ -194,7 +194,7 @@ function authsystem_user_login()
                 $rolesarray = array();
                 $roles = $lockvars['roles'];
                 for($i=0, $max = count($roles); $i < $max; $i++)
-                        $rolesarray[] = Roles_Master::get($roles[$i]['id']);
+                        $rolesarray[] = xarRoles::get($roles[$i]['id']);
                 $letin = array();
                 foreach($rolesarray as $roletoletin) {
                     if ($roletoletin->isUser()) $letin[] = $roletoletin;

@@ -134,7 +134,7 @@ class GroupListProperty extends SelectProperty
     {
         $this->value = $itemid;
         $value = 0;
-        $basegroup = Roles_Master::get($this->initialization_basegroup);
+        $basegroup = xarRoles::get($this->initialization_basegroup);
         if (!empty($basegroup)) {
             $xartable = xarDB::getTables();
             $rolemembers = $xartable['rolemembers'];
@@ -146,7 +146,7 @@ class GroupListProperty extends SelectProperty
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
             if(!$result) return;            
             foreach ($result->next() as $row) {
-                $candidate = Roles_Master::get($row['parent_id']);
+                $candidate = xarRoles::get($row['parent_id']);
                 if ($candidate->isAncestor($basegroup) || ($candidate->getId() == $basegroup->getId())) {
                     $value = $row['parent_id'];
                     break;
@@ -181,7 +181,7 @@ class GroupListProperty extends SelectProperty
             // It's a row in an objectlist
             $data['value'] = $this->retrieveValue($data['_itemid']);
         }
-        $group = Roles_Master::get($data['value']);
+        $group = xarRoles::get($data['value']);
         if (!empty($group)) {
             $data['value'] = $group->getName();
         } else {

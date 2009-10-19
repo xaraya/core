@@ -25,9 +25,9 @@
                     foreach ($assignments as $assignment) {
                         if ($assignment['role_id'] == xarConfigVars::get(null,'Site.User.AnonymousUID'))
                             $data['anonassignments'][] = $assignment;
-                        elseif ($assignment['role_type'] == Roles_Master::ROLES_USERTYPE)
+                        elseif ($assignment['role_type'] == xarRoles::ROLES_USERTYPE)
                             $data['userassignments'][] = $assignment;
-                        elseif ($assignment['role_type'] == Roles_Master::ROLES_GROUPTYPE)
+                        elseif ($assignment['role_type'] == xarRoles::ROLES_GROUPTYPE)
                             $data['groupassignments'][] = $assignment;
                     }
                     break;

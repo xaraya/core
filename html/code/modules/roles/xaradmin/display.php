@@ -19,7 +19,8 @@ function roles_admin_display()
 
 
     $data = array();
-    $role = Roles_Master::get($id);
+    sys::import('modules.roles.class.roles');
+    $role = xarRoles::get($id);
 
     $data['itemtype'] = $role->getType();
     $data['basetype'] = $data['itemtype'];

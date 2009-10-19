@@ -33,8 +33,8 @@ function roles_admin_removemember()
     if (!xarVarFetch('parentid', 'int', $parentid, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('childid',  'int', $childid, XARVAR_NOT_REQUIRED)) return;
     // call the Roles class and get the parent and child objects
-    $role   = Roles_Master::get($parentid);
-    $member = Roles_Master::get($childid);
+    $role   = xarRoles::get($parentid);
+    $member = xarRoles::get($childid);
 
     // Security Check
     if(!xarSecurityCheck('RemoveRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;

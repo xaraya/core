@@ -25,14 +25,14 @@ function roles_admin_modify()
     if (!xarVarFetch('duvs', 'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
 
-    $object = Roles_Master::get($id);
+    $object = xarRoles::get($id);
     $data['basetype'] = $object->getType();
 
 //    $itemid = $object->getItem(array('itemid' => $id));
 //    $values = $object->getFieldValues();
 //    $name = $values['name'];
 
-//    $role = Roles_Master::get($id);
+//    $role = xarRoles::get($id);
     // get the array of parents of this role
     // need to display this in the template
     // we also use this loop to fill the names array with groups that this group shouldn't be added to
@@ -53,7 +53,7 @@ function roles_admin_modify()
     // get the array of all roles, minus the current one
     // need to display this in the template
     $groups = array();
-    foreach(Roles_Master::getgroups() as $temp) {
+    foreach(xarRoles::getgroups() as $temp) {
         $nam = $temp['name'];
         // TODO: this is very inefficient. Here we have the perfect use case for embedding security checks directly into the SQL calls
         if(!xarSecurityCheck('AttachRole',0,'Relation',$nam . ":" . $object->getName())) continue;

@@ -89,7 +89,7 @@ class AccessProperty extends DataProperty
     function getgroupoptions()
     {
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
-        $options = Roles_Master::getgroups();
+        $options = xarRoles::getgroups();
         $firstlines = array(
             array('id' => 0, 'name' => xarML('No requirement')),
             array('id' => $anonID, 'name' => xarML('Users not logged in')),
@@ -162,7 +162,7 @@ class AccessProperty extends DataProperty
         } elseif ($this->group == -$anonID) {
             if (xarUserIsLoggedIn()) $access = true;
         } elseif ($this->group) {
-            $group = Roles_Master::getRole($this->group);
+            $group = xarRoles::getRole($this->group);
             $thisuser = xarCurrentRole();
             if (is_object($group)) {
                 if ($thisuser->isAncestor($group)) $access = true;

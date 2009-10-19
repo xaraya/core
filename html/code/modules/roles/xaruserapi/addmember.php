@@ -24,10 +24,10 @@ function roles_userapi_addmember($args)
     if (!isset($gid)) throw new EmptyParameterException('gid');
     if (!isset($id)) throw new EmptyParameterException('id');
 
-    $group = Roles_Master::get($gid);
+    $group = xarRoles::get($gid);
     if($group->isUser()) throw new IDNotFoundException($gid);
 
-    $user = Roles_Master::get($id);
+    $user = xarRoles::get($id);
 
 // Security Check
     if(!xarSecurityCheck('AttachRole',1,'Relation',$group->getName() . ":" . $user->getName())) return;

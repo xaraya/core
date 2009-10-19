@@ -1,6 +1,6 @@
 <?php
 /**
- * Roles_Master class
+ * xarRoles class
  *
  * @package modules
  * @copyright (C) 2002-2007 The Digital Development Foundation
@@ -12,14 +12,14 @@
  */
 
 /**
- * Roles_Master: class for the role repository
+ * xarRoles: class for the role repository
  *
  * Represents the repository containing all roles
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  */
-class Roles_Master extends Object
+class xarRoles extends Object
 {
     const ROLES_STATE_DELETED = 0;
     const ROLES_STATE_INACTIVE = 1;
