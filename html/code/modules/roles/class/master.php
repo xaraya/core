@@ -224,7 +224,6 @@ class Roles_Master extends Object
         // create the child object
         list($id, $name, $itemtype, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
-        sys::import('modules.roles.class.role');
         $child = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $itemtype));
         $child->getItem(array('itemid' => $id));
 
@@ -264,7 +263,6 @@ class Roles_Master extends Object
             if (!empty($duv)) $duvs[$key] = $duv;
         }
         // create and return the role object
-        sys::import('modules.roles.class.role');
         $role = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $row['itemtype']));
         $role->getItem(array('itemid' => $row['id']));
         return $role;
