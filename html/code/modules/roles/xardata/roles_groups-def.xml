@@ -3,7 +3,7 @@
   <label>Group</label>
   <module_id>27</module_id>
   <itemtype>3</itemtype>
-  <class>Roles_Role</class>
+  <class>Role</class>
   <filepath>modules/roles/class/role.php</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
