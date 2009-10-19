@@ -33,7 +33,6 @@ function roles_admin_createmail()
         $type  = ($role->getType() == Roles_Master::ROLES_GROUPTYPE) ? 'selection' : 'single';
     }
 
-    sys::import('xaraya.structures.query');
     $xartable = xarDB::getTables();
     if ($type == 'single') {
         $id = $role->getID();
@@ -48,6 +47,7 @@ function roles_admin_createmail()
 
         if ($selstyle == 0) $selstyle =2;
         // Create a query to send to sendmail
+        sys::import('xaraya.structures.query');
         $q = new Query('SELECT');
         $q->addtable($xartable['roles'],'r');
         $q->addfields(array('r.id AS id',
