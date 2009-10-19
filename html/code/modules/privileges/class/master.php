@@ -167,7 +167,7 @@ class Privileges_Master extends Object
                            'instance' => $instance,
                            'level' => $level,
                            'description' => $description);
-            array_push($masks, new Privileges_Mask($pargs));
+            array_push($masks, new xarMask($pargs));
         }
         return $masks;
     }
@@ -338,7 +338,8 @@ class Privileges_Master extends Object
 
         $maskname = $mask;
         if (empty($maskname)) {
-            $mask = new Privileges_Mask();
+            sys::import('modules.privileges.class.mask');
+            $mask = new xarMask();
         }
         else $mask =  self::getMask($mask);
         if (!$mask) {
@@ -455,6 +456,7 @@ class Privileges_Master extends Object
             if (!xarVarIsCached('Security.Variables','privilegeset')) {
 
                 // No go from cache. Try and get it from the session
+                sys::import('modules.privileges.class.privilege');
                 $privileges = unserialize(xarSession::getVar('privilegeset'));
                 if (empty($privileges)) {
 
@@ -880,7 +882,7 @@ class Privileges_Master extends Object
             $pargs = xarVarGetCached('Security.Masks',$name);
         }
         sys::import('modules.privileges.class.mask');
-        return new Privileges_Mask($pargs);
+        return new xarMask($pargs);
     }
 
     /**

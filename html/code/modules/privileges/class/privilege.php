@@ -1,19 +1,20 @@
 <?php
 /**
- * Privileges_Privilege: class for the privileges object
+ * xarPrivilege: class for the privileges object
  *
  * Represents a single privileges object
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
 */
+sys::import('modules.privileges.class.mask');
 
-class Privileges_Privilege extends Privileges_Mask
+class xarPrivilege extends xarMask
 {
     public $parentid = 0;      //the id of the parent of this privilege
 
     /**
-     * Privileges_Privilege: constructor for the class
+     * xarPrivilege: constructor for the class
      *
      * Just sets up the db connection and initializes some variables
      *
@@ -337,7 +338,7 @@ class Privileges_Privilege extends Privileges_Mask
                             'level'=>$level,
                             'description'=>$description,
                             'parentid' => $id);
-            $parents[] = new Privileges_Privilege($pargs);
+            $parents[] = new xarPrivilege($pargs);
         }
         // done
         return $parents;
@@ -418,7 +419,7 @@ class Privileges_Privilege extends Privileges_Mask
                             'level'=>       $level,
                             'description'=> $description,
                             'parentid' => $parentid);
-            $children[$parentid][] = new Privileges_Privilege($pargs);
+            $children[$parentid][] = new xarPrivilege($pargs);
         }
         // done
         foreach (array_keys($children) as $parentid) {
