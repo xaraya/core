@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   XSLT to create a DDL fragment which represents the same
   information as the ddl XML

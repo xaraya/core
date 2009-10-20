@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <img src="#xarTplGetImage('el.gif')#" alt=""
     style="vertical-align: middle; width: 12px; height: 21px" />

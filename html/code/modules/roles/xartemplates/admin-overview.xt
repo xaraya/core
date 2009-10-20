@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
@@ -150,6 +150,9 @@
             </li>
             <li>
                 <strong>Rolestree</strong>:&#160;displays a tree of groups and users.
+            </li>
+            <li>
+                <strong>Social Profile</strong>:&#160;manages a user's profile on social network sites.
             </li>
             <li>
                 <strong>Userlist</strong>:&#160;displays a list of users of the site as a dropdown.

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <schema>
   <table name="themes">
     <column name="id" id="themes.id"  required="true" auto="true"><number size="10" default=""/></column>

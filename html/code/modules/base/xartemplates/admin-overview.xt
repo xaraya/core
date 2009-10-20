@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
@@ -115,6 +115,9 @@
         <ul>
             <li>
                 <strong>Array</strong>:&#160;used for input and display of array data.
+            </li>
+            <li>
+                <strong>Calculated</strong>:&#160;displays a value calculated from the values of other properties.
             </li>
             <li>
                 <strong>Calendar</strong>:&#160;displays a calendar popup for input.

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <schema>
   <table name="block_group_instances">
     <column id="block_group_instances.id" name="id" required="true" auto="true"><number size="10" /></column>
