@@ -186,6 +186,11 @@
         </fieldset>
     </form>
 
+    <p>
+        <strong>Note: see comments in template <em>modules/dynamicdata/xartemplates/objects/ui_display.xt</em>
+        on how to show linked objects automatically when using the dynamic object user interface</strong>
+    </p>
+
     <fieldset>
     <legend>Properties of #$object:label#</legend>
     <table>

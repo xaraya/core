@@ -9,7 +9,12 @@
             <h2>
                 <xar:data-label object="$object" />
             </h2>
-<!--
+    <!-- Get linked objects -->
+    <!--
+            <xar:set name="linked">#$object:getLinkedObjects()#</xar:set>
+    -->
+    <!-- Show parents and linkedfrom - template syntax may still change -->
+    <!--
             <xar:if condition="!empty($object:links.parents)">
                 <fieldset>
                 <legend>Parents</legend>
@@ -42,14 +47,19 @@
                 </xar:foreach>
                 </fieldset>
             </xar:if>
--->
+    -->
+
+            <!-- Display object -->
             <xar:data-display object="$object" />
+            <!-- Display hook output -->
             <xar:if condition="!empty($hooks)">
                 <xar:foreach in="$hooks" key="$module" value="$output">
                     #$output#
                 </xar:foreach>
             </xar:if>
-<!--
+
+    <!-- Show linkedto and children - template syntax may still change -->
+    <!--
             <xar:if condition="!empty($object:links.linkedto)">
                 <fieldset>
                 <legend>Linked To</legend>
@@ -82,7 +92,7 @@
                 </xar:foreach>
                 </fieldset>
             </xar:if>
--->
+    -->
             <xar:set name="viewlink">xarServer::getObjectURL($object->name,'view')</xar:set>
             <p><a href="#$viewlink#">View <xar:data-label object="$object" /></a></p>
         </xar:if>

@@ -44,6 +44,14 @@
                     <a href="#xarModURL('dynamicdata','util','view_static')#" class="#$linkclass#">Table Definitions</a>
                 </li>
             </xar:sec>
+            <xar:sec mask="AdminDynamicData" catch="false">
+                <xar:set name="dummy">$activetab=='meta'?xarTplSetPageTitle('Data Browser'):''</xar:set>
+                <xar:set name="tabclass">$activetab=='meta'?'xar-tab-active':'xar-tab'</xar:set>
+                <xar:set name="linkclass">$activetab=='meta'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarModURL('dynamicdata','util','meta')#" class="#$linkclass#">Data Browser</a>
+                </li>
+            </xar:sec>
             <!--
             <xar:sec mask="AdminDynamicData" catch="false">
                 <xar:set name="dummy">$activetab=='relations'?xarTplSetPageTitle('Relations'):''</xar:set>
@@ -56,14 +64,6 @@
                 </li>
             </xar:sec>
             -->
-            <xar:sec mask="AdminDynamicData" catch="false">
-                <xar:set name="dummy">$activetab=='meta'?xarTplSetPageTitle('Data Browser'):''</xar:set>
-                <xar:set name="tabclass">$activetab=='meta'?'xar-tab-active':'xar-tab'</xar:set>
-                <xar:set name="linkclass">$activetab=='meta'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
-                <li class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','util','meta')#" class="#$linkclass#">Data Browser</a>
-                </li>
-            </xar:sec>
             <!--
             <xar:sec mask="AdminDynamicData" catch="false">
                 <xar:set name="dummy">$activetab=='migrate'?xarTplSetPageTitle('Migrate'):''</xar:set>
