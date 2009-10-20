@@ -117,6 +117,9 @@
                 <strong>Array</strong>:&#160;used for input and display of array data.
             </li>
             <li>
+                <strong>Calculated</strong>:&#160;displays a value calculated from the values of other properties.
+            </li>
+            <li>
                 <strong>Calendar</strong>:&#160;displays a calendar popup for input.
             </li>
             <li>
