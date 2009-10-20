@@ -3,7 +3,7 @@
  * XSLT version of the BL compiler
  *
  * @package core
- * @copyright 2007 The Digital Development Foundation.
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @link http://www.xaraya.com
  *
  * @subpackage xsl
