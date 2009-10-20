@@ -174,7 +174,7 @@ function roles_activate()
                     'regdate' => time(),
                     'state' => ROLES_STATE_ACTIVE,
                     'valcode' => 'createdbysystem',
-                    'authmodule' => xarMod::getID('roles'),
+                    'authmodule' => (int)xarMod::getID('roles'),
     );
     $group = DataObjectMaster::getObject(array('name' => 'roles_groups'));
     $rolefields['role_type'] = ROLES_GROUPTYPE;
@@ -242,7 +242,7 @@ function roles_upgrade($oldversion)
     // Upgrade dependent on old version number
     switch ($oldversion) {
         case '2.0.0':
-      break;
+            break;
     }
     return true;
 }

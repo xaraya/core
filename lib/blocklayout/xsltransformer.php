@@ -47,6 +47,7 @@ class BlockLayoutXSLTProcessor extends Object
         $this->xslDoc = new DOMDocument();
         $this->xslDoc->load($xslFile);
         $this->xslProc->importStyleSheet($this->xslDoc);
+
     }
 
     private function setSourceDocument(&$xml)

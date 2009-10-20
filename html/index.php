@@ -50,7 +50,7 @@ sys::import('xaraya.core');
  * @access public
  * @return bool
  */
-function xarMain() 
+function xarMain()
 {
     // Load the core with all optional systems loaded
     xarCoreInit(XARCORE_SYSTEM_ALL);
