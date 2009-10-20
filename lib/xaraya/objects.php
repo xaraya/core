@@ -3,7 +3,7 @@
  * Object handling subsystem (experimental counterpart for modules on object-centric sites)
  *
  * @package objects
- * @copyright (C) 2009 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Michel Dalle <mikespub@xaraya.com>

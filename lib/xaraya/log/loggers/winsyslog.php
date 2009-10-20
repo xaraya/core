@@ -3,7 +3,7 @@
  * Windows system log
  *
  * @package logging
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * 
 */
 
