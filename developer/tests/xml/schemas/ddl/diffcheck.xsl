@@ -1,7 +1,7 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:xar="http://xaraya.com/xml2ddl"
+    xmlns:xar="http://xaraya.com/xml2ddl"
                 exclude-result-prefixes="xar">
   <!-- DDL is no XML -->
   <xsl:output method="text" />
@@ -79,7 +79,7 @@
             <xsl:with-param name="to" select="$to/constraints" />
           </xsl:call-template>
 
-	  <xsl:text>* Exists: </xsl:text> 
+    <xsl:text>* Exists: </xsl:text> 
         </xsl:otherwise>
       </xsl:choose>
       <xsl:text>Table </xsl:text>
@@ -105,7 +105,7 @@
     <xsl:for-each select="$to/column">
       <xsl:variable name="name"><xsl:value-of select="@name"/></xsl:variable>
       <xsl:choose>
-        <xsl:when test="not($from/column[@name = $name])">	
+        <xsl:when test="not($from/column[@name = $name])">  
           <xsl:text> -> Create: </xsl:text> 
         </xsl:when>
         <xsl:otherwise>

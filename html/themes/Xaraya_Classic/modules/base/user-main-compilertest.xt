@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <style type="text/css">.testcase { padding: 3pt; margin: 5pt; border: thin solid black;
     }</style>

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:set name="steptext[1]">'Prepare for Upgrade'</xar:set>
     <xar:set name="steptext[2]">'Upgrade Database'</xar:set>

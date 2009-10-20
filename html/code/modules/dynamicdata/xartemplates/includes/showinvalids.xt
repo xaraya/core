@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:set name="debugusers">array_keys(unserialize(xarModVars::get('dynamicdata', 'debugusers')))</xar:set>
     <xar:if condition="xarModVars::get('dynamicdata','debugmode') AND in_array(xarUserGetVar('uname'),$debugusers)">

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- Compose the layout structure based on the available blockgroups -->
     <xar:if condition="!empty($leftblocksgroup) and !empty($rightblocksgroup)">

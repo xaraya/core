@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- set local variables to hold the ML text that we intend to use in the titles and alt attributes -->
     <xar:set name="sitefooter">

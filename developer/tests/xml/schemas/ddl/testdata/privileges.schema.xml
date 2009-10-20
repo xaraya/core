@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <schema>
   <table name="privileges">
     <column id="privileges.id" name="id" required="true" auto="true">
