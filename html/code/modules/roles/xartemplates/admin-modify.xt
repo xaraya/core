@@ -19,9 +19,9 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#"
-                                title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
-                                #xarVarPrepForDisplay($parents[$i]['parentname'])#</a>
+                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
+                                    #xarVarPrepForDisplay($parents[$i]['parentname'])#
+                                </a>
                             </li>
                         </xar:if>
                         <xar:set name="prevgroup">
@@ -43,18 +43,23 @@
                     <xar:if condition="$basetype eq ROLES_GROUPTYPE AND $object:countChildren()">
                         <div class="xar-form-input-wrapper">
                             <label title="#xarML('Type of Role')#" class="xar-form-label">
-                        Type:</label>#$object:label#
+                                Type:
+                            </label>
+                            #$object:label#
                             <!--
                                 value should still be there in the form, otherwise validation will fail,
                                 do it with a hidden input now, but this should really be done with readonly attribute
                             -->
-                        <input type="hidden" name="itemtype" value="#$itemtype#" /></div>
+                            <input type="hidden" name="itemtype" value="#$itemtype#" />
+                        </div>
                     <xar:else />
                         <div class="xar-form-input-wrapper">
-                            <label for="itemtype" title="#xarML('Type of Role')#"
-                            class="xar-form-label">Type:</label>
-                            <xar:set name="onchange">"this.form.action='" .
-                            xarServer::getCurrentURL() . "';this.form.submit();"</xar:set>
+                            <label for="itemtype" title="#xarML('Type of Role')#" class="xar-form-label">
+                                Type:
+                            </label>
+                            <xar:set name="onchange">
+                                "this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"
+                            </xar:set>
                             <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1" />
                         </div>
                     </xar:if>
@@ -64,30 +69,25 @@
                     </xar:set>
                     <xar:if condition="in_array('primaryparent',$settings)">
                         <div class="xar-form-input-wrapper">
-                            <label for="duvs_primaryparent" title="#xarML('Primary parent group')#"
-                            class="xar-form-label">
+                            <label for="duvs_primaryparent" title="#xarML('Primary parent group')#" class="xar-form-label">
                                 Primary Parent Group:
                             </label>
                             <xar:set name="value">
                                 xarMod::apiFunc('roles','user','getprimaryparent',array('itemid' => $id))
                             </xar:set>
                             <xar:set name="options">
-                            xarMod::apiFunc('roles','user','getancestors',array('id' =&gt; $id,
-                            'parents' =&gt; 1))</xar:set>
-                            <xar:data-input type="dropdown" name="duvs[primaryparent]"
-                            id="duvs_primaryparent" options="$options" value="$value"
-                            tabindex="8" />
+                                xarMod::apiFunc('roles','user','getancestors',array('id' =&gt; $id, 'parents' =&gt; 1))
+                            </xar:set>
+                            <xar:data-input type="dropdown" name="duvs[primaryparent]" id="duvs_primaryparent" options="$options" value="$value" tabindex="8" />
                         </div>
                     </xar:if>
                     <xar:if condition="in_array('userhome',$settings)">
                         <div class="xar-form-input-wrapper">
-                            <label for="duvs_userhome" title="#xarML('Home URL')#"
-                            class="xar-form-label">Home:</label>
-                            <input type="text" name="duvs[userhome]" id="duvs_userhome"
-                            value="#xarModUserVars::get('roles','userhome',$id)#" size="40"
-                            maxlength="100" tabindex="7" />
-                            <p class="xar-form-input-wrapper-after">You can use the module shortcut
-                            syntax available in the Base user menu block.</p>
+                            <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">Home:</label>
+                            <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModUserVars::get('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7" />
+                            <p class="xar-form-input-wrapper-after">
+                                You can use the module shortcut syntax available in the Base user menu block.
+                            </p>
                         </div>
                     </xar:if>
                     <xar:if condition="$basetype eq ROLES_USERTYPE">
