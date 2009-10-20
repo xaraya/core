@@ -13,7 +13,7 @@
         <xar:elseif condition="!empty($module_id)"/>
             <h2>Utilities - Links for Module #$module#</h2>
         <xar:else/>
-            <h2>Utilities - Links</h2>
+            <h2>Utilities - Links between Objects or Tables</h2>
         </xar:if>
         <xar:template type="module" file="utility-menu" />
 
@@ -79,10 +79,10 @@
 
         <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
             <fieldset>
-                <legend>Links between Modules/Properties</legend>
+                <legend>Links between Modules</legend>
                 <div class="xar-form-input-wrapper">
                     <label for="module_id" class="xar-form-label">Module:</label>
-                    <xar:data-input type="module" name="module_id" value="$module_id" firstline=" " />
+                    <xar:data-input type="module" name="module_id" value="$module_id" firstline=" " onchange="javascript:submit();"/>
                     &#160;<input type="submit" name="select" id="select" value="#xarML('Select')#" />
                 </div>
             </fieldset>

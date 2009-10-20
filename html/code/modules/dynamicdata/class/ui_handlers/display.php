@@ -80,10 +80,6 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
             // show a blank object
         }
 
-        //$links = $this->object->getLinkedObjects();
-        //echo var_dump($links);
-        $this->object->getLinkedObjects();
-
         $this->object->viewfunc = $this->func;
         return xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_display',

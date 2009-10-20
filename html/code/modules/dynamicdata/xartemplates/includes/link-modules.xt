@@ -2,7 +2,9 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="count($relations) gt 0">
-         <table class="xar-clearboth">
+        <fieldset>
+        <legend>Links for #$module#</legend>
+        <table>
             <tr>
                 <th>Module</th>
                 <th>Link Type</th>
@@ -29,6 +31,7 @@
                 </xar:if>
             </xar:foreach>
         </table>
+        </fieldset>
     <xar:else />
         <p>No links for this module.</p>
     </xar:if>
