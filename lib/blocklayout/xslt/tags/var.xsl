@@ -31,7 +31,16 @@
 -->
 <xsl:template match="xar:set/xar:var">
     <xsl:if test="@name !=''">
-      <xsl:call-template name="xarvar_getcode"/>
+      <xsl:choose>
+        <xsl:when test="@prep = 'false' or not(@prep)">
+          <xsl:call-template name="xarvar_getcode"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>xarVarPrepForDisplay("</xsl:text>
+            <xsl:call-template name="xarvar_getcode"/>
+          <xsl:text>")</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:if>
 </xsl:template>
 
@@ -42,7 +51,16 @@
         <!-- Empty form, getting a value -->
         <xsl:if test="@name != ''">
           <xsl:text>echo </xsl:text>
-          <xsl:call-template name="xarvar_getcode"/>
+            <xsl:choose>
+              <xsl:when test="@prep = 'false' or not(@prep)">
+                <xsl:call-template name="xarvar_getcode"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text>xarVarPrepForDisplay("</xsl:text>
+                  <xsl:call-template name="xarvar_getcode"/>
+                <xsl:text>")</xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
           <xsl:text>;</xsl:text>
         </xsl:if>
       </xsl:when>
