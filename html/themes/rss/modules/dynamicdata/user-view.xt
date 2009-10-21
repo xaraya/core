@@ -11,7 +11,7 @@
             <xar:set name="dummy">
                 xarVarSetCached('XML','itemname',$modinfo['name'].'_'.$itemtype)
             </xar:set>
-            <xar:data-view module="$modid" itemtype="$itemtype" numitems="30"startnum="$startnum" />
+            <xar:data-view module="$modid" itemtype="$itemtype" numitems="30" startnum="$startnum" />
         </xar:if>
     </items>
 </xar:template>

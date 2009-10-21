@@ -814,31 +814,37 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     $tplThemesDir = xarTplGetThemeDir();
     $tplBaseDir   = sys::code() . "modules/$modOsDir";
 
-    xarLogMessage("TPL: 1. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt");
-    xarLogMessage("TPL: 2. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt");
-    xarLogMessage("TPL: 3. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt");
-    xarLogMessage("TPL: 4. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xt");
-
     $canTemplateName = strtr($templateName, "-", "/");
     $canonical = ($canTemplateName == $templateName) ? false : true;
 
+    if (!empty($templateName)) {
+        xarLogMessage("TPL: 1. $tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt");
+        xarLogMessage("TPL: 2. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt");
+    }
+    xarLogMessage("TPL: 3. $tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt");
+    xarLogMessage("TPL: 4. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xt");
+    if ($canonical) {
+        xarLogMessage("TPL: 5. $tplThemesDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt");
+        xarLogMessage("TPL: 6. $tplBaseDir/xartemplates/$tplSubPart/$canTemplateName.xt");
+    }
+
     if(!empty($templateName) &&
-        file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")) {
+        file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt")) {
     } elseif(!empty($templateName) &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt")) {
     } elseif(
-        file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt")) {
-        ;
+        file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt")) {
     } elseif(
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xt")) {
     } elseif($canonical &&
-        file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$canTemplateName.xt")) {
+        file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt")) {
     } elseif($canonical &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$canTemplateName.xt")) {
     } else {
         // let functions higher up worry about what to do, e.g. DD object of property fallback template
         $sourceFileName = '';
     }
+
     // Subpart may have been empty,
     $sourceFileName = str_replace('//','/',$sourceFileName);
 
