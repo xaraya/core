@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundatio
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @subpackage dynamicdata
  * @author Marc Lutolf
  * @author Johnny Robeson <johnny@localmomentum.net>
