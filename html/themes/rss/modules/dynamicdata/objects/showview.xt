@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- FIXME: this does not generate valid RSS feeds -->
+    <xar:set name="itemname">xarVarGetCached('XML','itemname')</xar:set>
+    <xar:foreach in="$items" key="$itemid" value="$fields">
+        <xar:element name="#$itemname#">
+            <xar:foreach in="$fields" key="$name" value="$value">
+                <xar:element name="#$properties.$name:name#">
+                #xarVarPrepForDisplay($value)#</xar:element>
+            </xar:foreach>
+        </xar:element>
+    </xar:foreach>
+</xar:template>
