@@ -517,7 +517,6 @@ class DataProperty extends Object implements iDataProperty
     {
         if (is_array($configuration)) {
             $fields = $configuration;
-
         } elseif (empty($configuration)) {
             return true;
 
