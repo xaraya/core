@@ -3,7 +3,7 @@
  * Template caching abstraction
  *
  * @package blocklayout
- * @copyright The Digital Development Foundation, 2006
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/

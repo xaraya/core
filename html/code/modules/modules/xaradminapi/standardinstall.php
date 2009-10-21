@@ -7,7 +7,7 @@ function modules_adminapi_standardinstall($args)
     if (!isset($objects)) return false;
 
     // FIXME: Data loss risk!!
-    sys::import('modules.dynamicdata.class.objects');
+    sys::import('modules.dynamicdata.class.objects.master');
     $existing_objects  = DataObjectMaster::getObjects();
     foreach($existing_objects as $objectid => $objectinfo) {
         if(in_array($objectinfo['name'], $objects)) {

@@ -1,6 +1,6 @@
 <?php
 /*
-    Copyright (C) 2004 the Digital Development Corporation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
 
     The exception detailed below is granted for the following files in this 
     directory:

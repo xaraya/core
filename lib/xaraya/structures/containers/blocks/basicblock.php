@@ -36,7 +36,7 @@
             return $this->getPublicProperties();
         }
 
-        function display(Array $data=array())
+        public function display(Array $data=array())
         {
             if (!xarSecurityCheck('View' . $data['module'], 0, 'Block', $data['type'] . ":" . $data['name'] . ":" . "$data[bid]")) {return;}
             // Get variables from content block
