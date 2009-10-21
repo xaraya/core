@@ -3,7 +3,7 @@
  * Validate a date value.
  *
  * @package validation
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright (C) 2002-2009 The Digital Development Foundation
 */
 
 /**

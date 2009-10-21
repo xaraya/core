@@ -3,7 +3,7 @@
  * Representing blocklayout source templates in Xaraya
  *
  * @package xaraya
- * @copyright The Digital Development Foundation, 2006-07-26
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/

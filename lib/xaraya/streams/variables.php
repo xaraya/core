@@ -17,7 +17,7 @@
  *
  * @package core
  * @subpackage streams
- * @copyright The Digital Develoment Foundation, 2006
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://php.net/manual/en/function.stream-wrapper-register.php
  * @author Marcel van der Boom <mrb@hsdev.com>

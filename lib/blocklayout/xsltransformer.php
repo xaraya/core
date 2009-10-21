@@ -3,7 +3,7 @@
  * XSLT version of the BL compiler
  *
  * @package core
- * @copyright 2007 The Digital Development Foundation.
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @link http://www.xaraya.com
  *
  * @subpackage xsl
@@ -47,6 +47,7 @@ class BlockLayoutXSLTProcessor extends Object
         $this->xslDoc = new DOMDocument();
         $this->xslDoc->load($xslFile);
         $this->xslProc->importStyleSheet($this->xslDoc);
+
     }
 
     private function setSourceDocument(&$xml)
