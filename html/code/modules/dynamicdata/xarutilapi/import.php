@@ -107,8 +107,6 @@ function dynamicdata_utilapi_import($args)
             $args['module_id'] = $args['moduleid'];
         }
 
-// FIXME: don't you mean checking if the parent exists here ?
-//        Then use 'objectid' or 'name' as argument, and set 'parent' to 'objectid' as a result
         if (empty($args['name']) || empty($args['moduleid'])) {
             throw new BadParameterException(null,'Missing keys in object definition');
         }
