@@ -48,18 +48,17 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
         if(!isset($this->object)) 
         {
             $this->object =& DataObjectMaster::getObject($this->args);
-            if(empty($this->object)) 
-                return;
+            if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
+                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+
             if(empty($this->tplmodule)) 
             {
                 $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
         }
-        if(!xarSecurityCheck(
-            'AddDynamicDataItem',1,'Item',
-            $this->object->moduleid.':'.$this->object->itemtype.':All')
-        )   return;
+        if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
+            return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $this->object->label));
 
         // there's no item to get here yet
         //$this->object->getItem();

@@ -38,6 +38,8 @@ class ObjectRefProperty extends SelectProperty
     public $initialization_store_prop   = 'name';       // Name of the property we want to use for storage
     public $initialization_display_prop = 'name';       // Name of the property we want to use for displaying.
 
+    public $store_prop_is_itemid        = true;        // Check if the store_prop is the itemid - assume true for now
+
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
@@ -57,7 +59,13 @@ class ObjectRefProperty extends SelectProperty
     {
         if (isset($data['value'])) $this->value = $data['value'];
         if (xarRequest::isObjectURL() && !empty($this->value) && !isset($data['link'])) {
-            $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'display', array('itemid' => $this->value));
+            // CHECKME: store_prop_is_itemid only gets checked once getOptions() is called later on !
+            if (is_numeric($this->value) && $this->store_prop_is_itemid) {
+                $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'display', array('itemid' => $this->value));
+            } elseif (is_string($this->value)) {
+                $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'view', array('where' => array($this->initialization_store_prop => $this->value)));
+            }
+            // TODO: support array values too ?
         }
         return parent::showOutput($data);
     }
@@ -116,7 +124,14 @@ class ObjectRefProperty extends SelectProperty
             throw new EmptyParameterException($object->name . '.' .$this->initialization_display_prop);
         if (!in_array($this->initialization_store_prop,$fields))
             throw new EmptyParameterException($object->name . '.' .$this->initialization_store_prop);
-            
+
+        // Check if the store_prop is the itemid
+        if ($object->properties[$this->initialization_store_prop]->type == 21) { // itemid
+            $this->store_prop_is_itemid = true;
+        } else {
+            $this->store_prop_is_itemid = false;
+        }
+
         foreach($items as $item) {
             $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
         }
