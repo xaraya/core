@@ -53,6 +53,15 @@ class ObjectRefProperty extends SelectProperty
         return parent::showInput($data);
     }
 
+    public function showOutput(Array $data = array())
+    {
+        if (isset($data['value'])) $this->value = $data['value'];
+        if (xarRequest::isObjectURL() && !empty($this->value) && !isset($data['link'])) {
+            $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'display', array('itemid' => $this->value));
+        }
+        return parent::showOutput($data);
+    }
+
     // Return a list of array(id => value) for the possible options
     function getOptions()
     {

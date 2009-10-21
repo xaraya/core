@@ -541,7 +541,7 @@ class xarRequest extends Object
      * @access public
      * @return bool true if locally referred, false if not
      */
-    static function IsLocalReferer()
+    static function isLocalReferer()
     {
         $server  = xarServer::getHost();
         $referer = xarServer::getVar('HTTP_REFERER');
@@ -550,6 +550,22 @@ class xarRequest extends Object
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Check to see if this request is an object URL
+     *
+     * @access public
+     * @return bool true if object URL, false if not
+     */
+    static function isObjectURL()
+    {
+        list($modName, $modType) = self::getInfo();
+        if (empty($modType) || $modType != 'object') {
+            return false;
+        } else {
+            return true;
         }
     }
 }
