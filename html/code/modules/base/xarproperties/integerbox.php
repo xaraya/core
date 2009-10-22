@@ -75,7 +75,7 @@ class NumberBoxProperty extends TextBoxProperty
                 return false;
             }
         } else {
-            $this->invalid = xarML('number: #(1)', $this->name);
+            $this->invalid = xarML('number: #(1) cannot have the value #(2)', $this->name, $value);
             $this->setValue();
             return false;
         }

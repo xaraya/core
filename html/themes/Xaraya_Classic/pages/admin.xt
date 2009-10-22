@@ -58,21 +58,6 @@
                 </div>
                 <xar:template file="pagefooter" type="theme" />
             </div>
-            
-            <div id="wrapper">
-                <div id="adminmenu">
-                    <xar:var name="title">Go to the front end interface</xar:var>
-                    <a href="index.php" title="#$title#">
-                        [ Front end ]
-                    </a>
-                    <xar:var name="adminnav"/>
-                </div>
-                <div id="main">
-                    <xar:module main="true" />
-                    <br class="xar-clearboth" />
-                </div>
-            </div>
-            <xar:base-render-javascript position="body" />
         </body>
     </html>
 

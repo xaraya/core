@@ -43,8 +43,8 @@
                 <xar:template file="pagefooter" type="theme" />
             </div>
             <!--
-        Body JavaScript - required for all html themes
-    -->
+                Body JavaScript - required for all html themes
+            -->
             <xar:place-javascript position="body" />
         </body>
     </html>
