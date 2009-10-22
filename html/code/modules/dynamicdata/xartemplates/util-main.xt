@@ -12,28 +12,28 @@
             <li>Import / Export
             <ul>
                 <li>
-                    <a href="&xar-modurl-dynamicdata-util-import;">Import Object Definitions and Data</a>
+                    <a href="#xarModURL('dynamicdata', 'util', 'import')#">Import Object Definitions and Data</a>
                 </li>
                 <li>
-                    <a href="&xar-modurl-dynamicdata-util-export;">Export Object Definitions and Data</a>
+                    <a href="#xarModURL('dynamicdata', 'util', 'export')#">Export Object Definitions and Data</a>
                 </li>
             </ul></li>
             <li>Database Utilites
             <ul>
                 <li>
-                    <a href="&xar-modurl-dynamicdata-util-view_static;">Static Table Definitions</a>
+                    <a href="#xarModURL('dynamicdata', 'util', 'view_static')#">Static Table Definitions</a>
                 </li>
                 <li>
-                    <a href="&xar-modurl-dynamicdata-util-meta;">Data Browser</a>
+                    <a href="#xarModURL('dynamicdata', 'util', 'meta')#">Data Browser</a>
                 </li>
                 <li>
-                    <a href="&xar-modurl-dynamicdata-admin-query;">Query Data Objects or Database Tables</a>
+                    <a href="#xarModURL('dynamicdata', 'admin', 'query')#">Query Data Objects or Database Tables</a>
                 </li>
             </ul></li>
             <li>New Dynamic Data Features
             <ul>
                 <li>
-                    <a href="&xar-modurl-dynamicdata-object-main;">Dynamic Object User Interface</a>
+                    <a href="#xarModURL('dynamicdata', 'object', 'main')#">Dynamic Object User Interface</a>
                 </li>
                 <li>
                     Object Hooks
@@ -48,13 +48,13 @@
                     </xar:if>
                 </li>
                 <li>
-                    <a href="&xar-modurl-dynamicdata-util-relations;">Links between Objects or Tables</a>
+                    <a href="#xarModURL('dynamicdata', 'util', 'relations')#">Links between Objects or Tables</a>
                 </li>
             </ul></li>
             <li>Migration
             <ul>
                 <li>
-                    <a href="&xar-modurl-dynamicdata-util-migrate;">Migrate Module Items</a> (experimental - for test sites only)
+                    <a href="#xarModURL('dynamicdata', 'util', 'migrate')#">Migrate Module Items</a> (experimental - for test sites only)
                 </li>
             </ul></li>
         </ul>
