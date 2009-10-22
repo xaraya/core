@@ -25,14 +25,15 @@ sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class MenuBlock extends BasicBlock implements iBlock
 {
-    public $no_cache            = 1;
-
     public $name                = 'MenuBlock';
     public $module              = 'base';
     public $text_type           = 'Menu';
-    public $text_type_long      = 'Displays Generic Menu';
+    public $text_type_long      = 'Generic menu';
     public $allow_multiple      = true;
     public $show_preview        = true;
+    public $no_cache            = 1;
+    public $pageshared          = 0;
+    public $usershared          = 1;
 
     public $displaymodules      = 'None';
     public $modulelist          = '';
@@ -41,6 +42,16 @@ class MenuBlock extends BasicBlock implements iBlock
     public $marker              = '[x]';
     public $content             = 'http://www.example.com/|Title|Example|';
     public $showlogout          = true;
+
+    public $rssurl;
+    public $printurl;
+
+    public function __construct(ObjectDescriptor $descriptor)
+    {
+        parent::__construct($descriptor);
+        $this->rssurl = xarServer::getCurrentURL(array('theme' => 'rss'));
+        $this->printurl = xarServer::getCurrentURL(array('theme' => 'print'));
+    }
 
 /**
  * Display func.
@@ -51,25 +62,22 @@ class MenuBlock extends BasicBlock implements iBlock
         $data = parent::display($data);
         if (empty($data)) return;
 
-        $vars = isset($data['content']) ? $data['content'] : array();
+        $args = isset($data['content']) ? $data['content'] : array();
 
         // are there any user modules, then get their names
         // checking as early as possible :)
         $mods = xarMod::apiFunc('modules',
                               'admin',
                               'getlist',
-                              array('filter'     => array('UserCapable' => true)));
+                              array('filter'     => array('UserCapable' => true, 'State' => XARMOD_STATE_ACTIVE)));
         if(empty($mods)) {
         // there aren't any user capable modules, dont display user menu
             return;
         }
 
-        if (!isset($vars['marker'])) $vars['marker'] = $this->marker;
-        if (!isset($vars['displaymodules'])) $vars['displaymodules'] = $this->displaymodules;
-        if (!isset($vars['modulelist'])) $vars['modulelist'] = $this->modulelist;
-        if (!isset($vars['displayrss'])) $vars['displayrss'] = $this->displayrss;
-        if (!isset($vars['displayprint'])) $vars['displayprint'] = $this->displayprint;
-        if (!isset($vars['content'])) $vars['content'] = $this->content;
+        if (!isset($args['displaymodules'])) $args['displaymodules'] = $this->displaymodules;
+        if (!isset($args['modulelist'])) $args['modulelist'] = $this->modulelist;
+        if (!isset($args['content'])) $args['content'] = $this->content;
 
         // which module is loaded atm?
         // we need it's name, type and function - dealing only with user type mods, aren't we?
@@ -90,9 +98,9 @@ class MenuBlock extends BasicBlock implements iBlock
         $currenturl = xarServer::getCurrentURL();
 
         // Added Content For non-modules list.
-        if (!empty($vars['content'])) {
+        if (!empty($args['content'])) {
             $usercontent = array();
-            $contentlines = explode("LINESPLIT", $vars['content']);
+            $contentlines = explode("LINESPLIT", $args['content']);
             foreach ($contentlines as $contentline) {
                 //list($url, $title, $comment, $child) = explode('|', $contentline);
                 // FIXME: make sure we don't generate content lines with missing pieces elsewhere
@@ -196,12 +204,12 @@ class MenuBlock extends BasicBlock implements iBlock
         }
 
         // Added list of modules if selected.
-        if ($vars['displaymodules'] != 'None') {
+        if ($args['displaymodules'] != 'None') {
             if (xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$data[title]:$data[bid]")) {
                $useAliasName=0;
                $module_alias_name='';
-                if ($vars['displaymodules'] == 'List' && !empty($vars['modulelist'])) {
-                    $modlist = explode(',',$vars['modulelist']);
+                if ($args['displaymodules'] == 'List' && !empty($args['modulelist'])) {
+                    $modlist = explode(',',$args['modulelist']);
                     $list = array();
                     foreach ($modlist as $mod) {
                         $temp = xarMod_getBaseInfo($mod);
@@ -308,26 +316,17 @@ class MenuBlock extends BasicBlock implements iBlock
         // Security Check
         if (xarSecurityCheck('AdminBaseBlock',0,'adminmenu',"$data[title]:All:All") or
             !xarUserIsLoggedIn() or
-            empty($vars['showlogout'])) {
+            empty($args['showlogout'])) {
             $showlogout = false;
         } else {
             $showlogout = true;
         }
 
-        $rssurl         = xarServer::getCurrentURL(array('theme' => 'rss'));
-        $printurl       = xarServer::getCurrentURL(array('theme' => 'print'));
-
-        if (isset($vars['displayprint'])) {
-            $displayprint = $vars['displayprint'];
-        } else {
-            $displayprint = false;
-        }
-        if (isset($vars['displayrss'])) {
-            $displayrss = $vars['displayrss'];
-        } else {
-            $displayrss = false;
-        }
-        $marker = $vars['marker'];
+        $marker         = isset($args['marker']) ? $args['marker'] : $this->marker;
+        $displayrss     = isset($args['displayrss']) ? $args['displayrss'] :$this->displayrss;
+        $displayprint   = isset($args['displayprint']) ? $args['displayprint'] : $this->displayprint;
+        $printurl       = isset($args['printurl']) ? $args['printurl'] : $this->printurl;
+        $rssurl         = isset($args['rssurl']) ? $args['rssurl'] : $this->rssurl;
 
         $blockcontent = array(
             'usermods'         => $usermods,
