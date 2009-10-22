@@ -29,7 +29,7 @@ class MetaBlock extends BasicBlock
     public $name                = 'MetaBlock';
     public $module              = 'themes';
     public $text_type           = 'Meta';
-    public $text_type_long      = 'Meta';
+    public $text_type_long      = 'Meta Keywords';
     public $allow_multiple      = false;
     public $show_preview        = true;
     public $usershared          = true;
@@ -99,8 +99,8 @@ class MetaBlock extends BasicBlock
         $meta['activepageprint'] = xarServer::getCurrentURL(array('theme' => 'print'));
 
         $meta['baseurl'] = xarServer::getBaseURL();
-        if (isset($vars['copyrightpage'])){
-            $meta['copyrightpage'] = $vars['copyrightpage'];
+        if (isset($data['copyrightpage'])){
+            $meta['copyrightpage'] = $data['copyrightpage'];
         } else {
             $meta['copyrightpage'] = '';
         }
