@@ -71,7 +71,6 @@ class LanguageBlock extends BasicBlock
         }
 
         $data['content'] = $args;
-
         return $data;
     }
 }
