@@ -81,6 +81,8 @@ function dynamicdata_util_relations($args)
         $data['mapping'] = DataObjectLinks::getMapping();
     }
 
+    //dynamicdata_sync_relations();
+
     if (!empty($objectid)) {
         $object = xarMod::apiFunc('dynamicdata','user','getobject',
                                 array('objectid' => $objectid));
@@ -274,6 +276,48 @@ function dynamicdata_sync_relations()
                 } else {
 
                 }
+            }
+        }
+    }
+*/
+
+/*
+    // sync object links with objectref properties
+
+    // find all properties of type ObjectRef
+    $properties = DataObjectMaster::getObjectList(array('name'  => 'properties',
+                                                        'where' => 'type eq 507', // ObjectRefProperty
+                                                        'fieldlist' => array('id','name','objectid')));
+    $properties->getItems();
+    $objectstocheck = array();
+    foreach ($properties->items as $item) {
+        $objectstocheck[$item['objectid']] = 1;
+    }
+
+    foreach (array_keys($objectstocheck) as $objectid) {
+        $object = DataObjectMaster::getObject(array('objectid' => $objectid));
+        $links = DataObjectLinks::getLinks($object,'all');
+        $source = $object->name;
+        if (empty($links[$source])) {
+            $links[$source] = array();
+        }
+        foreach (array_keys($object->properties) as $propname) {
+            if ($object->properties[$propname]->type != 507) continue;
+            $from_prop = $propname;
+            $target = $object->properties[$propname]->initialization_refobject;
+            $to_prop = $object->properties[$propname]->initialization_store_prop;
+            $found = 0;
+            // see if we already have an object link corresponding to this objectref
+            foreach ($links[$source] as $link) {
+                if ($link['from_prop'] == $from_prop && $link['target'] == $target && $link['to_prop'] == $to_prop) {
+                    $found = 1;
+                    break;
+                }
+            }
+            if (empty($found)) {
+                // CHECKME: create bi-directional parents link to the other object here ?
+                //DataObjectLinks::addLink($source, $from_prop, $target, $to_prop, 'linkedto', 'bi');
+                DataObjectLinks::addLink($source, $from_prop, $target, $to_prop, 'parents', 'bi');
             }
         }
     }

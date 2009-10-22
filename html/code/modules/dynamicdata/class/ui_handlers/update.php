@@ -49,22 +49,21 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
         if(!isset($this->object)) 
         {
             $this->object =& DataObjectMaster::getObject($this->args);
-            if(empty($this->object)) 
-                return;
+            if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
+                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+
             if(empty($this->tplmodule)) 
             {
                 $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
         }
-        if(!xarSecurityCheck(
-            'EditDynamicDataItem',1,'Item',
-            $this->object->moduleid.':'.$this->object->itemtype.':'.$this->object->itemid)
-        ) return;
+        if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
+            return xarResponse::Forbidden(xarML('Update Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
 
         $itemid = $this->object->getItem();
         if(empty($itemid) || $itemid != $this->object->itemid) 
-            throw new BadParameterException(null,'The itemid updating the object was found to be invalid');
+            return xarResponse::NotFound(xarML('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
 
         if (!empty($this->args['values'])) {
             // always set the properties based on the given values !?

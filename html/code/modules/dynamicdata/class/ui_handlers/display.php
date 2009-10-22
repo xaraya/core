@@ -46,8 +46,8 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
         if(!isset($this->object)) 
         {
             $this->object =& DataObjectMaster::getObject($this->args);
-            if(empty($this->object)) 
-                return;
+            if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
+                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
 
             if(empty($this->tplmodule)) 
             {
@@ -58,14 +58,17 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
         $title = xarML('Display #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
+        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData'))
+            return xarResponse::Forbidden(xarML('Display Table #(1) is forbidden', $this->object->table));
+
         if (!empty($this->args['itemid'])) {
+            if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
+                return xarResponse::Forbidden(xarML('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+
             // get the requested item
             $itemid = $this->object->getItem();
             if(empty($itemid) || $itemid != $this->object->itemid) 
-                throw new BadParameterException(
-                    null,
-                    'The itemid when displaying the object was found to be invalid'
-                );
+                return xarResponse::NotFound(xarML('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
 
             // call item display hooks for this item
             $this->object->callHooks('display');

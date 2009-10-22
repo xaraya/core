@@ -19,13 +19,13 @@
                 <fieldset>
                 <legend>Parents</legend>
                 <xar:foreach in="$object:links.parents" value="$link">
-                    <xar:set name="fromprop">#$link.from_prop#</xar:set>
-                    <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
-                    <xar:set name="toprop">#$link.to_prop#</xar:set>
-                    <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
-                    <xar:set name="args">array('linktype' => 'object')</xar:set>
-                    #$link.list:label# #$tolabel# => #$object:label# #$fromlabel#
                     <xar:if condition="!empty($link.list:itemids)">
+                        <xar:set name="fromprop">#$link.from_prop#</xar:set>
+                        <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
+                        <xar:set name="toprop">#$link.to_prop#</xar:set>
+                        <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
+                        <xar:set name="args">array('linktype' => 'object')</xar:set>
+                        #$fromlabel# &lt;= #$link.list:label# #$tolabel#
                         #$link.list:showView($args)#
                     </xar:if>
                 </xar:foreach>
@@ -35,13 +35,13 @@
                 <fieldset>
                 <legend>Linked From</legend>
                 <xar:foreach in="$object:links.linkedfrom" value="$link">
-                    <xar:set name="fromprop">#$link.from_prop#</xar:set>
-                    <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
-                    <xar:set name="toprop">#$link.to_prop#</xar:set>
-                    <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
-                    <xar:set name="args">array('linktype' => 'object')</xar:set>
-                    #$link.list:label# #$tolabel# => #$object:label# #$fromlabel#
                     <xar:if condition="!empty($link.list:itemids)">
+                        <xar:set name="fromprop">#$link.from_prop#</xar:set>
+                        <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
+                        <xar:set name="toprop">#$link.to_prop#</xar:set>
+                        <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
+                        <xar:set name="args">array('linktype' => 'object')</xar:set>
+                        #$fromlabel# &lt;= #$link.list:label# #$tolabel#
                         #$link.list:showView($args)#
                     </xar:if>
                 </xar:foreach>
@@ -64,13 +64,13 @@
                 <fieldset>
                 <legend>Linked To</legend>
                 <xar:foreach in="$object:links.linkedto" value="$link">
-                    <xar:set name="fromprop">#$link.from_prop#</xar:set>
-                    <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
-                    <xar:set name="toprop">#$link.to_prop#</xar:set>
-                    <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
-                    <xar:set name="args">array('linktype' => 'object')</xar:set>
-                    #$object:label# #$fromlabel# => #$link.list:label# #$tolabel#
                     <xar:if condition="!empty($link.list:itemids)">
+                        <xar:set name="fromprop">#$link.from_prop#</xar:set>
+                        <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
+                        <xar:set name="toprop">#$link.to_prop#</xar:set>
+                        <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
+                        <xar:set name="args">array('linktype' => 'object')</xar:set>
+                        #$fromlabel# =&gt; #$link.list:label# #$tolabel#
                         #$link.list:showView($args)#
                     </xar:if>
                 </xar:foreach>
@@ -80,13 +80,13 @@
                 <fieldset>
                 <legend>Children</legend>
                 <xar:foreach in="$object:links.children" value="$link">
-                    <xar:set name="fromprop">#$link.from_prop#</xar:set>
-                    <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
-                    <xar:set name="toprop">#$link.to_prop#</xar:set>
-                    <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
-                    <xar:set name="args">array('linktype' => 'object')</xar:set>
-                    #$object:label# #$fromlabel# => #$link.list:label# #$tolabel#
                     <xar:if condition="!empty($link.list:itemids)">
+                        <xar:set name="fromprop">#$link.from_prop#</xar:set>
+                        <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
+                        <xar:set name="toprop">#$link.to_prop#</xar:set>
+                        <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
+                        <xar:set name="args">array('linktype' => 'object')</xar:set>
+                        #$fromlabel# =&gt; #$link.list:label# #$tolabel#
                         #$link.list:showView($args)#
                     </xar:if>
                 </xar:foreach>

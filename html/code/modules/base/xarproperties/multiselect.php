@@ -33,8 +33,6 @@ class MultiSelectProperty extends SelectProperty
 
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
-
         $value = $this->getSerializedValue($value);
         $validlist = array();
         $options = $this->getOptions();
@@ -72,6 +70,16 @@ class MultiSelectProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
+    public function getValue()
+    {
+        return $this->getSerializedValue($this->value);
+    }
+
+    public function getItemValue($itemid)
+    {
+        return $this->getSerializedValue($this->_items[$itemid][$this->name]);
+    }
+
     public function getSerializedValue($value)
     {
         if (empty($value)) {
@@ -83,8 +91,8 @@ class MultiSelectProperty extends SelectProperty
             } else {
                 $value = $tmp;
             }
-            return $value;
         }
+        return $value;
     }
 }
 ?>
