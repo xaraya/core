@@ -20,49 +20,50 @@
                 <legend>Test Configuration</legend>
                 <div class="xar-form-input-wrapper">
                     <label for="name" title="#xarML('Recipient Name.')#" class="xar-form-label">
-                    Name:</label>
-                    <input type="text" id="name" name="name" value="#$name#" maxlength="100"
-                    class="xar-form-textlong" />
+                        Name:
+                    </label>
+                    <input type="text" id="name" name="name" value="#$name#" maxlength="100" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="email" title="#xarML('Recipient Email Address.')#"
-                    class="xar-form-label">Email:</label>
-                    <input type="text" id="email" name="email" value="#$email#" maxlength="255"
-                    class="xar-form-textlong" />
+                    <label for="email" title="#xarML('Recipient Email Address.')#" class="xar-form-label">
+                        Email:
+                    </label>
+                    <input type="text" id="email" name="email" value="#$email#" maxlength="255" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="emailcc" title="#xarML('Recipient CC.')#" class="xar-form-label">
-                    CC:</label>
-                    <input type="text" id="emailcc" name="emailcc" value="" maxlength="255"
-                    class="xar-form-textlong" />
+                        CC:
+                    </label>
+                    <input type="text" id="emailcc" name="emailcc" value="" maxlength="255" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="namecc" title="#xarML('CC Name.')#" class="xar-form-label">CC
-                    Name:</label>
-                    <input type="text" id="namecc" name="namecc" value="" maxlength="100"
-                    class="xar-form-textlong" />
+                        Name:
+                    </label>
+                    <input type="text" id="namecc" name="namecc" value="" maxlength="100" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="emailbcc" title="#xarML('Recipient BCC.')#" class="xar-form-label">
-                    BCC:</label>
-                    <input type="text" id="emailbcc" name="emailbcc" value="" maxlength="255"
-                    class="xar-form-textlong" />
+                        BCC:
+                    </label>
+                    <input type="text" id="emailbcc" name="emailbcc" value="" maxlength="255" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="namebcc" title="#xarML('BCC Name.')#" class="xar-form-label">BCC
-                    Name:</label>
-                    <input type="text" id="namebcc" name="namebcc" value="" maxlength="100"
-                    class="xar-form-textlong" />
+                        Name:
+                    </label>
+                    <input type="text" id="namebcc" name="namebcc" value="" maxlength="100" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="subject" title="#xarML('Message Subject.')#"
-                    class="xar-form-label">Subject:</label>
-                    <input type="text" id="subject" name="subject" value="" maxlength="100"
-                    class="xar-form-textlong" />
+                    <label for="subject" title="#xarML('Message Subject.')#" class="xar-form-label">
+                        Subject:
+                    </label>
+                    <input type="text" id="subject" name="subject" value="" maxlength="100" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="message" title="#xarML('Message Subject.')#"
-                    class="xar-form-label">Message:</label>
+                    <label for="message" title="#xarML('Message Subject.')#" class="xar-form-label">
+                        Message:
+                    </label>
                     <div class="xar-form-container-after">
                         <textarea name="message" id="message" class="xar-form-textarealarge">
                         &#160;</textarea>
@@ -70,8 +71,9 @@
                 </div>
                 <xar:if condition="xarModIsAvailable('scheduler')">
                     <div class="xar-form-input-wrapper">
-                        <label for="when_input" title="#xarML('Test scheduled mails.')#"
-                        class="xar-form-label">No Earlier Than:</label>
+                        <label for="when_input" title="#xarML('Test scheduled mails.')#" class="xar-form-label">
+                            No Earlier Than:
+                        </label>
                         <xar:data-input name="when" type="calendar" value="" />
                     </div>
                 </xar:if>
@@ -79,8 +81,7 @@
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="submit" value="#xarML('Send Test Message')#"
-                    class="xar-margin-thickright" />
+                    <input type="submit" value="#xarML('Send Test Message')#" class="xar-margin-thickright" />
                 </div>
             </fieldset>
         </form>

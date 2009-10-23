@@ -52,5 +52,9 @@
         <xar:if condition="$itemid ne 0">
             <a href="&xar-modurl-mail-admin-view;">Create new queue definition</a>
         </xar:if>
+      </fieldset>
+      <xar:if condition="$itemid ne 0">
+        <a href="&xar-modurl-mail-admin-view;">Create new queue definition</a>
+      </xar:if>
     </div>
 </xar:template>

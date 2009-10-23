@@ -15,11 +15,12 @@
         <h2>Configure Notification Template</h2>
         <xar:if condition="!empty($settings)">
             <p>
-            <xar:set name="hookurl">xarModURL('modules','admin','hooks', array('hook' => 'mail'))</xar:set>
-            <xar:var name="hooktitle">Configure mail hooks</xar:var>
-            <xar:var name="hooklinktext">Hook the mail module to content types</xar:var>
-            <a href="#$hookurl#" title="#$hooktitle#">#$hooklinktext#</a>to receive notifications
-            on add, edit or delete.</p>
+                <xar:set name="hookurl">xarModURL('modules','admin','hooks', array('hook' => 'mail'))</xar:set>
+                <xar:var name="hooktitle">Configure mail hooks</xar:var>
+                <xar:var name="hooklinktext">Hook the mail module to content types</xar:var>
+                <a href="#$hookurl#" title="#$hooktitle#">#$hooklinktext#</a>to receive notifications
+                on add, edit or delete.
+            </p>
             <p>The mail module is currently hooked to the following modules :</p>
             <ul>
                 <xar:foreach in="$settings" key="$modname" value="$config">
@@ -35,14 +36,13 @@
         <form method="post" action="&xar-modurl-mail-admin-template;">
             <fieldset>
                 <div class="xar-form-input-wrapper">
-                    <label for="mailtype" title="#xarML('Select the template to edit')#"
-                    class="xar-form-label">Name:</label>
+                    <label for="mailtype" title="#xarML('Select the template to edit')#" class="xar-form-label">Name:</label>
                     <select name="mailtype" id="mailtype" onchange="this.form.submit()">
                         <xar:loop name="$templates">
                             <xar:if condition="$mailtype eq $loop:item['key']">
                                 <option value="#$loop:item['key']#" selected="selected">
                                 #$loop:item['value']#</option>
-                                <xar:else />
+                            <xar:else />
                                 <option value="#$loop:item['key']#">#$loop:item['value']#</option>
                             </xar:if>
                         </xar:loop>
@@ -75,45 +75,43 @@
             <fieldset>
                 <legend>Template Details</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="subject" title="#xarML('Title of the notification')#"
-                    class="xar-form-label">Subject:</label>
-                    <input type="text" name="subject" id="subject"
-                    value="#xarVarPrepForDisplay($subject)#" maxlength="150"
-                    class="xar-form-textxlong" />
+                    <label for="subject" title="#xarML('Title of the notification')#" class="xar-form-label">Subject:</label>
+                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="message" title="#xarML('Body of the notification')#"
-                    class="xar-form-label">Message:</label>
+                    <label for="message" title="#xarML('Body of the notification')#" class="xar-form-label">Message:</label>
                     <div class="xar-form-container-after">
                         <textarea name="message" id="message" class="xar-form-textareaxlarge">
                         #xarVarPrepForDisplay($message)#</textarea>
                     </div>
                 </div>
-                <p>The following variables will be replaced in the text with specific
-                information:</p>
                 <p>
-                <span class="xar-form-label" title="#$messagetitle#">$sitename</span>Name of the
-                site</p>
+                    The following variables will be replaced in the text with specific information:
+                </p>
                 <p>
-                <span class="xar-form-label" title="#$messagetitle#">$siteslogan</span>Slogan of
-                the site</p>
+                    <span class="xar-form-label" title="#$messagetitle#">$sitename</span>Name of the site
+                </p>
                 <p>
-                <span class="xar-form-label" title="#$messagetitle#">$siteurl</span>URL of the site
-                ( #xarServer::getBaseURL()# )</p>
+                    <span class="xar-form-label" title="#$messagetitle#">$siteslogan</span>Slogan of the site
+                </p>
                 <p>
-                <span class="xar-form-label" title="#$messagetitle#">$siteadmin</span>Name of the
-                administrator</p>
+                    <span class="xar-form-label" title="#$messagetitle#">$siteurl</span>URL of the site ( #xarServer::getBaseURL()# )
+                </p>
                 <p>
-                <span class="xar-form-label" title="#$messagetitle#">$adminmail</span>Email address
-                of the administrator</p>
+                    <span class="xar-form-label" title="#$messagetitle#">$siteadmin</span>Name of the administrator
+                </p>
                 <p>
-                <span class="xar-form-label" title="#$messagetitle#">$modulename</span>Name of the
-                module</p>
+                    <span class="xar-form-label" title="#$messagetitle#">$adminmail</span>Email address of the administrator
+                </p>
                 <p>
-                <span class="xar-form-label" title="#$messagetitle#">$objectid</span>ID of the
-                created/updated/deleted item</p>
-                <p class="xar-align-center">Note: other variables may be available depending on the
-                module</p>
+                    <span class="xar-form-label" title="#$messagetitle#">$modulename</span>Name of the module
+                </p>
+                <p>
+                    <span class="xar-form-label" title="#$messagetitle#">$objectid</span>ID of the created/updated/deleted item
+                </p>
+                <p class="xar-align-center">
+                Note: other variables may be available depending on the module
+                </p>
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
