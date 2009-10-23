@@ -5,35 +5,32 @@
         <tr>
             <td>Base directory</td>
             <td>
-            <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#"
-            size="#$size#" tabindex="#$tabindex#" />
-            <br />Note : {theme} will be replaced by the current theme directory - e.g.
-            {theme}/images -&gt; themes/default/images</td>
+                <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#" size="#$size#" tabindex="#$tabindex#" />
+                <br />Note : {theme} will be replaced by the current theme directory - e.g.
+                {theme}/images -&gt; themes/default/images
+            </td>
         </tr>
         <tr>
             <td>Base URL</td>
             <td>
-            <input type="text" name="#$name#[baseurl]" id="#$id#_baseurl" value="#$baseurl#"
-            size="#$size#" tabindex="#$tabindex#" />
-            <br />Note : only needed if different from the base directory</td>
+                <input type="text" name="#$name#[baseurl]" id="#$id#_baseurl" value="#$baseurl#" size="#$size#" tabindex="#$tabindex#" />
+                <br />Note : only needed if different from the base directory
+            </td>
         </tr>
         <tr>
             <td>File extensions</td>
             <td>
                 <xar:foreach in="$filetype" value="$ext">
-            <input type="text" name="#$name#[filetype][]" value="#$ext#" size="5" tabindex="#$tabindex#" />
-                    tabindex="#$tabindex#" />
+                    <input type="text" name="#$name#[filetype][]" value="#$ext#" size="5" tabindex="#$tabindex#" />
                     <br />
                 </xar:foreach>
-                <input type="text" name="#$name#[filetype][]" value="" size="5"
-                tabindex="#$tabindex#" />
+                <input type="text" name="#$name#[filetype][]" value="" size="5" tabindex="#$tabindex#" />
             </td>
         </tr>
         <tr>
             <td>Other rule</td>
             <td>
-                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#"
-                size="#$size#" tabindex="#$tabindex#" />
+                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="#$size#" tabindex="#$tabindex#" />
             </td>
         </tr>
     </table>

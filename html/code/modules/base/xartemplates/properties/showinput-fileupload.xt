@@ -5,9 +5,7 @@
         <!-- we're using a hidden field to keep track of any previously uploaded file here -->
         <span id="#$id#_text">Uploaded file: 
         <xar:var name="value" />
-        <input type="button"
-        onClick="document.getElementById('#$id#_hidden').value='';document.getElementById('#$id#_text').innerHTML='';"
-        value="#xarML('Clear')#" />
+        <input type="button" onClick="document.getElementById('#$id#_hidden').value='';document.getElementById('#$id#_text').innerHTML='';" value="#xarML('Clear')#" />
         <br /></span>
         <input type="hidden" name="#$name#" id="#$id#_hidden" value="#$value#" />
     </xar:if>

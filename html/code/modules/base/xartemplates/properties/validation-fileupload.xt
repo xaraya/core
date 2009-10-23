@@ -6,28 +6,25 @@
             <tr>
                 <td>Base directory</td>
                 <td>
-                <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#"
-                size="#$size#" tabindex="#$tabindex#" />
-                <br />Note : {theme} will be replaced by the current theme directory - e.g.
-                {theme}/images -&gt; themes/default/images</td>
+                    <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#" size="#$size#" tabindex="#$tabindex#" />
+                    <br />Note : {theme} will be replaced by the current theme directory - e.g.
+                    {theme}/images -&gt; themes/default/images
+                </td>
             </tr>
             <tr>
                 <td>File extensions</td>
                 <td>
                     <xar:foreach in="$filetype" value="$ext">
-                        <input type="text" name="#$name#[filetype][]" value="#$ext#" size="5"
-                        tabindex="#$tabindex#" />
+                        <input type="text" name="#$name#[filetype][]" value="#$ext#" size="5" tabindex="#$tabindex#" />
                         <br />
                     </xar:foreach>
-          <input type="text" name="#$name#[filetype][]" value="" size="5" tabindex="#$tabindex#" />
-                    tabindex="#$tabindex#" />
+                    <input type="text" name="#$name#[filetype][]" value="" size="5" tabindex="#$tabindex#" />
                 </td>
             </tr>
             <tr>
                 <td>File size</td>
                 <td>
-                    <input type="text" name="#$name#[maxsize]" id="#$id#_maxsize"
-                    value="#$maxsize#" size="#$size#" tabindex="#$tabindex#" />
+                    <input type="text" name="#$name#[maxsize]" id="#$id#_maxsize" value="#$maxsize#" size="#$size#" tabindex="#$tabindex#" />
                 </td>
             </tr>
             <tr>
@@ -45,7 +42,7 @@
                         <xar:if condition="!empty($multiple)">
                             <option value="1" selected="selected">yes</option>
                             <option value="0">no</option>
-          <xar:else/>
+                        <xar:else/>
                             <option value="1">yes</option>
                             <option value="0" selected="selected">no</option>
                         </xar:if>
@@ -58,12 +55,9 @@
                     <xar:foreach in="$methods" key="$method" value="$checked">
                         <label for="#$id#_methods_#$method#">#$method#</label>
                         <xar:if condition="!empty($checked)">
-                            <input type="checkbox" name="#$name#[methods][#$method#]"
-                            id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#"
-                            checked="checked" />
-            <xar:else/>
-                            <input type="checkbox" name="#$name#[methods][#$method#]"
-                            id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#" />
+                            <input type="checkbox" name="#$name#[methods][#$method#]" id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#" checked="checked" />
+                        <xar:else/>
+                            <input type="checkbox" name="#$name#[methods][#$method#]" id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#" />
                         </xar:if>
                         <br />
                     </xar:foreach>
@@ -74,20 +68,20 @@
                     <label for="#$id#_basedir">Upload Directory</label>
                 </td>
                 <td>
-                <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#"
-                size="#$size#" tabindex="#$tabindex#" />
-                <br />Note : {user} will be replaced by the current user uploading the file - e.g.
-                var/uploads/{user} -&gt; var/uploads/myusername_123</td>
+                    <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#" size="#$size#" tabindex="#$tabindex#" />
+                    <br />Note : {user} will be replaced by the current user uploading the file - e.g.
+                    var/uploads/{user} -&gt; var/uploads/myusername_123
+                </td>
             </tr>
             <tr>
                 <td>
                     <label for="#$id#_importdir">Trusted Directory</label>
                 </td>
                 <td>
-                <input type="text" name="#$name#[importdir]" id="#$id#_importdir"
-                value="#$importdir#" size="#$size#" tabindex="#$tabindex#" />
-                <br />Note : {user} will be replaced by the current user importing the file - e.g.
-                var/imports/{user} -&gt; var/imports/myusername_123</td>
+                    <input type="text" name="#$name#[importdir]" id="#$id#_importdir" value="#$importdir#" size="#$size#" tabindex="#$tabindex#" />
+                    <br />Note : {user} will be replaced by the current user importing the file - e.g.
+                    var/imports/{user} -&gt; var/imports/myusername_123
+                </td>
             </tr>
             <tr>
                 <td colspan="2">
@@ -98,8 +92,7 @@
         <tr>
             <td>Other rule</td>
             <td>
-                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#"
-                size="#$size#" tabindex="#$tabindex#" />
+                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="#$size#" tabindex="#$tabindex#" />
             </td>
         </tr>
     </table>

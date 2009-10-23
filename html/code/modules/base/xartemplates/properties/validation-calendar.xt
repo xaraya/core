@@ -17,13 +17,14 @@
                     </xar:if>
                     <xar:if condition="!empty($dbformat) and $dbformat == 'datetime'">
                         <option value="datetime" selected="selected">datetime :
-                        #$datetime#</option>
-                        <xar:else />
+                            #$datetime#
+                        </option>
+                    <xar:else />
                         <option value="datetime">datetime : #$datetime#</option>
                     </xar:if>
                     <xar:if condition="!empty($dbformat) and $dbformat == 'date'">
                         <option value="date" selected="selected">date : #$date#</option>
-            <xar:else/>
+                    <xar:else/>
                         <option value="date">date : #$date#</option>
                     </xar:if>
                 </select>
@@ -32,8 +33,7 @@
         <tr>
             <td>Other rule</td>
             <td>
-                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#"
-                size="50" tabindex="#$tabindex#" />
+                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#"  size="50" tabindex="#$tabindex#" />
             </td>
         </tr>
     </table>
