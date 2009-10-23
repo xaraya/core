@@ -16,8 +16,9 @@
     </div>
     -->
     <div class="xar-form-input-wrapper">
-        <label for="menustyle" title="#xarML('How should the menu items be ordered?')#"
-        class="xar-form-label">Sort Admin Menu Items:</label>
+        <label for="menustyle" title="#xarML('How should the menu items be ordered?')#" class="xar-form-label">
+            Sort Admin Menu Items:
+        </label>
         <select name="menustyle" id="menustyle">
             <xar:foreach in="$sortorder" value="$v" key="$k">
                 <xar:if condition="$k eq $menustyle">

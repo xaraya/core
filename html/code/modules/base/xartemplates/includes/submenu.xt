@@ -5,13 +5,15 @@
             <xar:foreach in="$submenu" value="$sublinks" key="$sublink">
                 <xar:if condition="$sublinks['funcactive']">
                     <li class="xar-menu-subitem-current">
-                        <a name="activesubitem" title="#$sublinks['title']#">#$sublinks['label']#
-                        #$marker#</a>
+                        <a name="activesubitem" title="#$sublinks['title']#">
+                            #$sublinks['label']# #$marker#
+                        </a>
                     </li>
                 <xar:else />
                     <li class="xar-menu-subitem">
                         <a href="#$sublinks['link']#" title="#$sublinks['title']#">
-                        #$sublinks['label']#</a>
+                            #$sublinks['label']#
+                        </a>
                     </li>
                 </xar:if>
             </xar:foreach>

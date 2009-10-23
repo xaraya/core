@@ -23,7 +23,7 @@
                     </xar:foreach>
                 </ul>
             </xar:if>
-            <xar:else />
+        <xar:else />
             <p>#$warning#</p>
         </xar:if>
     </div>

@@ -30,15 +30,17 @@
                             </li>
                             <xar:elseif condition="($item['here']) and empty($item['child'])" />
                             <li class="xar-menu-item-current">
-                                <a name="activeitem" href="#$item['url']#"
-                                title="#$item['comment']#">#$item['title']#</a>
+                                <a name="activeitem" href="#$item['url']#" title="#$item['comment']#">
+                                    #$item['title']# 
+                                </a>
                             </li>
                             <xar:elseif condition="!empty($item['child'])" />
                             <li class="xar-menu-item">
                                 <ul class="xar-menu-subitem">
                                     <li class="xar-menu-subitem">
                                         <a href="#$item['url']#" title="#$item['comment']#">
-                                        #$item['title']#</a>
+                                            #$item['title']# 
+                                        </a>
                                     </li>
                                 </ul>
                             </li>
@@ -62,7 +64,9 @@
                     <xar:foreach in="$usermods" value="$mod" key="$modname">
                         <xar:if condition="$mod['modactive']">
                             <li class="xar-menu-item-current">
-                                <a name="activeitem" title="#$mod['desc']#">#$mod['label']#</a>
+                                <a name="activeitem" title="#$mod['desc']#">
+                                    #$mod['label']# 
+                                </a>
                                 <xar:if condition="$indlinks ne ''">
                                     <ul class="xar-menu-subitem">
                                         <xar:foreach in="$indlinks" value="$sublinks" key="$sublink">
