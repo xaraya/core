@@ -77,7 +77,7 @@
                             </span>
                         </span>
                     </span>
-                    <!- Now do the children -->
+                    <!-- Now do the children -->
                     <xar:if condition="!empty($childrennode)">
                         <xar:template file="tree" subdata="array('treenode'=&gt;$childrennode)" />
                     </xar:if>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:VAR name="messagetitle">
+    <xar:var name="messagetitle">
         Write this string in the message body or subject to display the corresponding information
     </xar:var>
     <div class="xar-mod-head">
