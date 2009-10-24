@@ -35,10 +35,13 @@
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <li class="xar-tab">
                     <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$id#" class="xar-norm xar-norm-outline">
-                    Display</a>
+                        Display
+                    </a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$id#" class="xar-norm xar-norm-outline">Modify</a>
+                    <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$id#" class="xar-norm xar-norm-outline">
+                        Modify
+                    </a>
                 </li>
                 <li class="xar-tab-active">
                     <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$id#" class="xar-accent xar-accent-outline">
@@ -46,7 +49,9 @@
                     </a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-privileges-admin-viewroles;&amp;id=#$id#" class="xar-norm xar-norm-outline">Groups/Users</a>
+                    <a href="&xar-modurl-privileges-admin-viewroles;&amp;id=#$id#" class="xar-norm xar-norm-outline">
+                        Groups/Users
+                    </a>
                 </li>
             </ul>
         </div>

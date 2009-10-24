@@ -125,7 +125,7 @@
                                     <input type="text" name="pinstance[]" id="pinstance#$loop:index#" value="All" class="xar-form-textmedium" />
                                     &#160;                                    
                                     This field must contain a value                                    
-                                    <xar:else />
+                                <xar:else />
                                     <select name="pinstance[]">
                                         <xar:loop name="$loop:item['dropdown']">
                                             <option value="#$loop:item['name']#">

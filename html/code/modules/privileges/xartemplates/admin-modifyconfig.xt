@@ -102,9 +102,9 @@
                         <xar:data-input type="checkbox" name="exceptionredirect" id="exceptionredirect" checked="$checked" />&#160;This redirects a non-logged in user to the login screen if
                         they don't have the proper privileges.
                     </div>
-                    <div class="xar-form-input-wrapper-after">A logged in user will see the
-                    exception error message that can be changed with a base module override
-                    template (message-NO_PRIVILEGES.xt).</div>
+                    <div class="xar-form-input-wrapper-after">
+                        A logged in user will see the exception error message that can be changed with a base module override template (message-NO_PRIVILEGES.xt).
+                    </div>
                     <!--
                     <div class="xar-form-input-wrapper">
                         <label for="inheritdeny" title="#xarML('Enable or disable inheritance of deny privileges')#" class="xar-form-label">
@@ -125,8 +125,7 @@
                         <xar:set name="checked">
                             <xar:var scope="module" module="privileges" name="lastresort" />
                         </xar:set>
-                        <xar:data-input type="checkbox" name="lastresort" id="lastresort" checked="$checked" />&#160;Warning: This setting opens a tab to enable you to create
-                        an administrator whose privileges cannot be removed.
+                        <xar:data-input type="checkbox" name="lastresort" id="lastresort" checked="$checked" />&#160;Warning: This setting opens a tab to enable you to create an administrator whose privileges cannot be removed.
                     </div>
                 </fieldset>
                 <fieldset>
@@ -145,9 +144,9 @@
                 <fieldset>
                     <legend>Working With Realms</legend>
                     <div class="xar-form-input-wrapper">
-                    <label for="enablerealms"
-                    title="#xarML('Show or hide realms in the privileges input screens')#"
-                    class="xar-form-label">Enable Realms</label>
+                    <label for="enablerealms" title="#xarML('Show or hide realms in the privileges input screens')#" class="xar-form-label">
+                        Enable Realms
+                    </label>
                     <xar:set name="checked">
                         <xar:var scope="module" module="privileges" name="showrealms" />
                     </xar:set>
@@ -165,12 +164,15 @@
                             <label for="maskvalue" title="#xarML('The following choice will be inserted into any mask')#" class="xar-form-label">
                                 Realm Value for Masks
                             </label>
-                            <xar:set name="realmoptions">array( array('id' =&gt; 'none', 'name'
-                            =&gt; xarML('No Value')), array('id' =&gt; 'domain', 'name' =&gt;
-                            xarML('Current Domain')), array('id' =&gt; 'theme', 'name' =&gt;
-                            xarML('Current Theme')), array('id' =&gt; 'group', 'name' =&gt;
-                            xarML('Primary Parent Group')), array('id' =&gt; 'string', 'name' =&gt;
-                            xarML('Text Value')) )</xar:set>
+                            <xar:set name="realmoptions">
+                                array( 
+                                    array('id' => 'none', 'name' => xarML('No Value')), 
+                                    array('id' => 'domain', 'name' => xarML('Current Domain')), 
+                                    array('id' => 'theme', 'name' => xarML('Current Theme')), 
+                                    array('id' => 'group', 'name' => xarML('Primary Parent Group')), 
+                                    array('id' => 'string', 'name' => xarML('Text Value')) 
+                                )
+                            </xar:set>
                             <div class="xar-form-container-after">
                                 <xar:data-input type="radio" name="realmvalue"
                                 options="$realmoptions" value="$realmvalue" layout="vertical" />
@@ -184,21 +186,24 @@
                             &#160;(only applies when Text Value option is chosen)
                         </div>
                         <div class="xar-form-input-wrapper">
-                            <label for="maskvalue"
-                            title="#xarML('The following choice will be inserted into any mask')#"
-                            class="xar-form-label">Realm Comparison Type</label>
-                            <xar:set name="options">array( array('id' =&gt; 'exact', 'name' =&gt;
-                            'Exact Match'), array('id' =&gt; 'contains', 'name' =&gt; 'Privilege
-                            Contains Mask Name'),)</xar:set>
+                            <label for="maskvalue" title="#xarML('The following choice will be inserted into any mask')#" class="xar-form-label">
+                                Realm Comparison Type
+                            </label>
+                            <xar:set name="options">
+                                array( 
+                                    array('id' => 'exact', 'name' => 'Exact Match'), 
+                                    array('id' => 'contains', 'name' => 'Privilege Contains Mask Name'),
+                                )
+                            </xar:set>
                             <xar:set name="realmcomparison">
                                 <xar:var scope="module" module="privileges" name="realmcomparison" />
                             </xar:set>
                             <div class="xar-form-container-after">
-                                <xar:data-input type="radio" name="realmcomparison" id="realmvalue"
-                                options="$options" value="$realmcomparison" layout="vertical" />
+                                <xar:data-input type="radio" name="realmcomparison" id="realmvalue" options="$options" value="$realmcomparison" layout="vertical" />
                             </div>
-                            <p class="xar-form-input-wrapper-after">A realm is accepted if the
-                            user's privilege contains its name</p>
+                            <p class="xar-form-input-wrapper-after">
+                                A realm is accepted if the user's privilege contains its name
+                            </p>
                         </div>
                     </fieldset>
                 </xar:if>
@@ -228,24 +233,22 @@
                         </xar:if>
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="name"
-                        title="#xarML('Name of the administator of last resort')#"
-                        class="xar-form-label">Admin name:</label>
+                        <label for="name" title="#xarML('Name of the administator of last resort')#" class="xar-form-label">
+                            Admin name:
+                        </label>
                         <input type="text" name="name" id="name" value="" />
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="password"
-                        title="#xarML('Password of the administrator of last resort')#"
-                        class="xar-form-label">Password:</label>
-                        <input type="password" name="password" id="password" value=""
-                        maxlength="40" class="xar-form-textmedium" />
+                        <label for="password" title="#xarML('Password of the administrator of last resort')#" class="xar-form-label">
+                            Password:
+                        </label>
+                        <input type="password" name="password" id="password" value="" maxlength="40" class="xar-form-textmedium" />
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="password2"
-                        title="#xarML('Confirm password for administrator of last resort')#"
-                        class="xar-form-label">Confirm Password:</label>
-                        <input type="password" name="password2" id="password2" value=""
-                        maxlength="40" class="xar-form-textmedium" />
+                        <label for="password2" title="#xarML('Confirm password for administrator of last resort')#" class="xar-form-label">
+                            Confirm Password:
+                        </label>
+                        <input type="password" name="password2" id="password2" value="" maxlength="40" class="xar-form-textmedium" />
                     </div>
                     <xar:set name="message">xarSession::getVar('statusmsg')</xar:set>
                     <xar:if condition="$message ne ''">
@@ -367,13 +370,13 @@
                         </p>
                     </div>
                 </fieldset>
-                    <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-                        <input type="hidden" name="phase" id="phase" value="update" />
-                        <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                        <xar:var name="label">Update</xar:var>
-                        <xar:button type="submit" label="$label" />
-                    </div>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+                    <input type="hidden" name="phase" id="phase" value="update" />
+                    <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                    <xar:var name="label">Update</xar:var>
+                    <xar:button type="submit" label="$label" />
+                </div>
             </form>
         </xar:if>
     </div>
