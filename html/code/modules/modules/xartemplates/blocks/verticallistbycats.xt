@@ -13,29 +13,29 @@
                     <ul class="xar-menu-item">
                         <xar:foreach in="$cats" value="$mod" key="$modname">
                             <!--
-                    here we are dealing with 3 main conditions:
-                    - if module is active and main/overview function is loaded, we display item as having *-current state
-                    - if module is active and main/overview function is not loaded, we allow user to click the item to load main/overview
-                    - if module is not active, user can activate item by clicking its link, upon which s/he loads main/overview function 
-                    (some redundancy in template allows to easily port it for drop-down lists implementations in the future)
-                -->
-                <xar:set name="menuitemclass">'xar-menu-item'</xar:set>
-                <xar:if condition="$mod['features']['modactive']">
-                  <xar:set name="menuitemclass">'xar-menu-item-current'</xar:set>
-                </xar:if>
-                <li class="#$menuitemclass#">
-                  <xar:if condition="$mod['features']['modactive'] and !$mod['features']['overview']">
-
+                                here we are dealing with 3 main conditions:
+                                - if module is active and main/overview function is loaded, we display item as having *-current state
+                                - if module is active and main/overview function is not loaded, we allow user to click the item to load main/overview
+                                - if module is not active, user can activate item by clicking its link, upon which s/he loads main/overview function 
+                                (some redundancy in template allows to easily port it for drop-down lists implementations in the future)
+                            -->
+                            <xar:set name="menuitemclass">'xar-menu-item'</xar:set>
+                            <xar:if condition="$mod['features']['modactive']">
+                                <xar:set name="menuitemclass">'xar-menu-item-current'</xar:set>
+                            </xar:if>
+                            <li class="#$menuitemclass#">
+                                <xar:if condition="$mod['features']['modactive'] and !$mod['features']['overview']">
                                     <a name="activeitem" title="#$mod['features']['label']#">
-                                    #$mod['features']['label']#</a>
-                                    <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
-                                    <a href="#$mod['features']['link']#"
-                                    title="#$mod['features']['maintitle']#">
-                                    #$mod['features']['label']#</a>
-                  <xar:else />
-                                    <a href="#$mod['features']['link']#"
-                                    title="#$mod['features']['maintitle']#">
-                                    #$mod['features']['label']#</a>
+                                        #$mod['features']['label']#
+                                    </a>
+                                <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
+                                    <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">
+                                        #$mod['features']['label']#
+                                    </a>
+                                <xar:else />
+                                    <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">
+                                        #$mod['features']['label']#
+                                    </a>
                                 </xar:if>
                                 <!-- Render the menu part -->
                                 <xar:template file="menu-part" subdata="array('mod' =&gt; $mod)" />

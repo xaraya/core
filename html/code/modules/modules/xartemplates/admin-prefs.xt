@@ -5,14 +5,14 @@
         <span class="xar-mod-title">Modules Administration</span>
     </div>
     <div class="xar-mod-body">
-    <h2>Preferences</h2>Modules List 
-    <br />Style: 
-    <br />View number of modules per page: 
-    <br />Restore Defaults 
-    <br />Most preferences for this module have default values. Changing your preferences does not
-    affect other users [admins] e.g., people who use different login name than your own. 
-    <br />Your preferences can be reset to defaults from this page, so that you can, for instance,
-    see the same startup page as a new admin.. 
+        <h2>Preferences</h2>Modules List 
+        <br />Style: 
+        <br />View number of modules per page: 
+        <br />Restore Defaults 
+        <br />Most preferences for this module have default values. Changing your preferences does not
+        affect other users [admins] e.g., people who use different login name than your own. 
+        <br />Your preferences can be reset to defaults from this page, so that you can, for instance,
+        see the same startup page as a new admin.. 
         <br />
         <form method="post" action="xar-modurl-modules-admin-pref;">
             <div>

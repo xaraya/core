@@ -8,8 +8,9 @@
         <!-- This section deals with dependancies. -->
         <xar:if condition="!empty($dependencies)">
             <h2>Module Installation: Unsatisfied Dependencies</h2>
-            <p>The module #$displayname# you are trying to install depends on additional
-            components. Please review the listing below:</p>
+            <p>
+                The module #$displayname# you are trying to install depends on additional components. Please review the listing below:
+            </p>
             <form action="&xar-modurl-modules-admin-install;" method="post" enctype="application/x-www-form-urlencoded">
                 <div>
                     <input type="hidden" name="id" id="id" value="#$id#" />
@@ -41,38 +42,37 @@
                             <xar:foreach in="$dependencies['unsatisfiable']" value="$modInfo">
                                 <li>
                                     <xar:if condition="is_array($modInfo) AND ($modInfo['displayname'] ne xarML('Unknown') AND !empty($modInfo['displayname']))">
-                                    <xar:continue />
+                                        <xar:continue />
                                     <xar:elseif condition="is_array($modInfo) AND ($modInfo['displayname'] eq xarML('Unknown') OR empty($modInfo['displayname']))" />
-                                    <xar:if condition="isset($dependencyinfo[$modInfo['regid']]) AND !is_numeric($dependencyinfo[$modInfo['regid']])">
-                                    Missing a module #$modInfo['name']# (ID #$modInfo['regid']#). 
-                                    <xar:else />
-                                        <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
-                                    Missing a module with ID #$modInfo['regid']#. Click this line
-                                    to get information on this missing module.</a></xar:if>
-                                    <br />Install this module first, then try this installation
-                                    again. 
+                                        <xar:if condition="isset($dependencyinfo[$modInfo['regid']]) AND !is_numeric($dependencyinfo[$modInfo['regid']])">
+                                            Missing a module #$modInfo['name']# (ID #$modInfo['regid']#). 
+                                        <xar:else />
+                                            <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
+                                                Missing a module with ID #$modInfo['regid']#. Click this line to get information on this missing module.
+                                            </a>
+                                        </xar:if>
+                                        <br />Install this module first, then try this installation again. 
                                     <xar:elseif condition="is_numeric($modInfo['id'])" />
-                                    <xar:if condition="isset($dependencyinfo[$modInfo['regid']])">
-                                    Missing a module #$dependencyinfo[$modInfo]# (ID #$modInfo#). 
+                                        <xar:if condition="isset($dependencyinfo[$modInfo['regid']])">
+                                        Missing a module #$dependencyinfo[$modInfo]# (ID #$modInfo#). 
+                                        <xar:else />
+                                            <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
+                                                Missing a module with name #$modInfo['displayname']#. Click this line to get information on this missing module.
+                                            </a>
+                                        </xar:if>
+                                        <br />Install this module first, then try this installation again. 
+                                    <xar:elseif condition="is_numeric($modInfo) AND isset($dependencyinfo[$modInfo])" />
+                                        Missing a module #$dependencyinfo[$modInfo]# (ID #$modInfo#). 
                                     <xar:else />
-                                        <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
-                                    Missing a module with name #$modInfo['displayname']#. Click
-                                    this line to get information on this missing
-                                    module.</a></xar:if>
-                                    <br />Install this module first, then try this installation
-                                    again. 
-                                    <xar:elseif condition="is_numeric($modInfo) AND isset($dependencyinfo[$modInfo])" />Missing
-                                    a module #$dependencyinfo[$modInfo]# (ID #$modInfo#). 
-                                <xar:else />
-                                    <a href="http://www.php.net/manual-lookup.php?pattern=#$modInfo#">
-                                    Get Information for the missing PHP extension
-                                    #$modInfo#</a></xar:if>
+                                        <a href="http://www.php.net/manual-lookup.php?pattern=#$modInfo#">
+                                            Get Information for the missing PHP extension #$modInfo#
+                                        </a>
+                                    </xar:if>
                                 </li>
                             </xar:foreach>
                         </ul>
-                        <xar:else />
-                    <input type="submit" name="command" id="command" value="#xarML('Install All')#" tabindex="9" />
-                        value="#xarML('Install All')#" tabindex="9" />
+                    <xar:else />
+                        <input type="submit" name="command" id="command" value="#xarML('Install All')#" tabindex="9" />
                     </xar:if>
                 </div>
             </form>

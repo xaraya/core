@@ -21,7 +21,7 @@
             <br />
             <xar:template file="hooks-mainpart" module="modules" />
         </div>
-        <xar:else />
+    <xar:else />
         <!--
             Just show the list
         -->

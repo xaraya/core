@@ -24,8 +24,9 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
         <h2>View Modules</h2>
-        <p>Total listed: 
-        <xar:set name="modscount">count($listrowsitems)</xar:set>#$modscount#</p>
+        <p>
+            Total listed:  <xar:set name="modscount">count($listrowsitems)</xar:set>#$modscount#
+        </p>
         <form method="post" action="&xar-modurl-modules-admin-settings;">
             <!-- Module List Sort and Filter Controls table -->
             <table class="xar-fullwidth">
@@ -82,8 +83,7 @@
                     </td>
                     <td class="xar-nowrap xar-align-center">
                         <xar:set name="checked">$hidecore</xar:set>
-                        <xar:data-input type="checkbox" name="hidecore" id="hidecore"
-                        checked="$checked" />
+                        <xar:data-input type="checkbox" name="hidecore" id="hidecore" checked="$checked" />
                         <label for="hidecore">Core Modules</label>
                     </td>
                     <td class="xar-align-center">
@@ -121,9 +121,12 @@
                                 <td name="#$modinfo['name']#" id="#$modinfo['name']#">
                                     <!-- if module is active and configurable (admin type) make its name a link to module main admin function -->
                                     <xar:if condition="$modinfo['modconfigurl'] ne ''">
-                                <a href="#$modinfo['modconfigurl']#" title="#$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#">
-                                #$modinfo['name']#</a>
-                                <xar:else />#$modinfo['name']#</xar:if>
+                                        <a href="#$modinfo['modconfigurl']#" title="#$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#">
+                                            #$modinfo['name']#
+                                        </a>
+                                    <xar:else />
+                                        #$modinfo['name']#
+                                    </xar:if>
                                 </td>
                                 <td class="xar-align-right">
                                     #$modinfo['version']#
@@ -149,7 +152,7 @@
                                         </noscript>
                                     </xar:if>
                                 </td>
-                            <td>#$modinfo['statelabel']#</td>
+                                <td>#$modinfo['statelabel']#</td>
                                 <td class="xar-nowrap">
                                     <xar:if condition="$selstyle eq 'pro'">
                                         <xar:if condition="$modinfo['coremod']">
@@ -195,16 +198,19 @@
                                         <xar:if condition="$modinfo['coremod']">
                                             <xar:if condition="$modinfo['state'] eq 5 or $modinfo['state'] eq 2">
                                                 <a href="#$modinfo['actionurl']#">
-                                                #$modinfo['actionlabel']#</a>
+                                                    #$modinfo['actionlabel']#
+                                                </a>
                                             <xar:else />
                                                 #$modinfo['actionlabel']#
                                             </xar:if>
                                         <xar:else />
                                             <a href="#$modinfo['actionurl']#">
-                                            #$modinfo['actionlabel']#</a>
+                                                #$modinfo['actionlabel']#
+                                            </a>
                                             <xar:if condition="$modinfo['state'] eq 2">| 
                                                 <a href="#$modinfo['removeurl']#">
-                                                #$modinfo['removelabel']#</a>
+                                                    #$modinfo['removelabel']#
+                                                </a>
                                             </xar:if>
                                         </xar:if>
                                     </xar:if>

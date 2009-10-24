@@ -15,15 +15,17 @@
                     </xar:if>
                     <li class="#$menuitemclass#">
                         <xar:if condition="$mod['features']['modactive'] and !$mod['features']['overview']">
-
                             <a name="activeitem" title="#$mod['features']['label']#">
-                            #$mod['features']['label']#</a>
-                            <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
-                            <a href="#$mod['features']['link']#"
-                            title="#$mod['features']['maintitle']#">#$mod['features']['label']#</a>
-              <xar:else />
-                            <a href="#$mod['features']['link']#"
-                            title="#$mod['features']['maintitle']#">#$mod['features']['label']#</a>
+                                #$mod['features']['label']#
+                            </a>
+                        <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
+                            <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">
+                                #$mod['features']['label']#
+                            </a>
+                        <xar:else />
+                            <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">
+                                #$mod['features']['label']#
+                            </a>
                         </xar:if>
                         <!-- Render the menu part -->
                         <xar:template file="menu-part" subdata="array('mod' =&gt; $mod)" />
