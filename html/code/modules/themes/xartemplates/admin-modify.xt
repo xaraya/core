@@ -15,19 +15,23 @@
                     <fieldset>
                         <legend>#$loop:item['name']#</legend>
                         <div class="xar-form-input-wrapper">
-                        <label class="xar-form-label">Name:</label>#$loop:item['name']#</div>
+                            <label class="xar-form-label">
+                                Name:
+                            </label>
+                            #$loop:item['name']#
+                        </div>
                         <div class="xar-form-input-wrapper">
                             <label for="#$loop:item['name']#" class="xar-form-label">Value:</label>
-                            <input type="text" name="#$loop:item['name']#"
-                            id="#$loop:item['name']#" value="#$loop:item['value']#"
-                            class="xar-form-textlong" />
+                            <input type="text" name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['value']#" class="xar-form-textlong" />
                         </div>
                         <p>#$loop:item['description']#</p>
                         <xar:if condition="$loop:item['prime'] ne 1">
                             <div class="xar-form-input-wrapper-after">
-                            <input type="checkbox" name="#$loop:item['name']#-del"
-                            id="#$loop:item['name']#-del" value="delete" />Delete 
-                            <label for="#$loop:item['name']#-del">Delete</label></div>
+                                <input type="checkbox" name="#$loop:item['name']#-del" id="#$loop:item['name']#-del" value="delete" />
+                                <label for="#$loop:item['name']#-del">
+                                    Delete
+                                </label>
+                            </div>
                         <xar:else />
                             <p>This is a primary theme variable.</p>
                         </xar:if>
@@ -39,16 +43,12 @@
             <fieldset>
                 <legend>Add New Theme Variable</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="newvarname" title="#xarML('Name of the new variable')#"
-                    class="xar-form-label">Name:</label>
-                    <input type="text" name="newvarname" id="newvarname" value="" maxlength="64"
-                    class="xar-form-textlong" />
+                    <label for="newvarname" title="#xarML('Name of the new variable')#" class="xar-form-label">Name:</label>
+                    <input type="text" name="newvarname" id="newvarname" value="" maxlength="64" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="newvarvalue" title="#xarML('Value of the new variable')#"
-                    class="xar-form-label">Name:</label>
-                    <input type="text" name="newvarvalue" id="newvarvalue" value="" maxlength="64"
-                    class="xar-form-textlong" />
+                    <label for="newvarvalue" title="#xarML('Value of the new variable')#" class="xar-form-label">Name:</label>
+                    <input type="text" name="newvarvalue" id="newvarvalue" value="" maxlength="64" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="newvardescription" title="#xarML('Description of the new variable')#" class="xar-form-label">
@@ -59,8 +59,9 @@
             </fieldset>
             <div class="xar-form-input-wrapper-after">
                 <input type="checkbox" name="return" id="return" checked="1" />
-                <label for="return" title="#xarML('TITLE')#">Update and return to this
-                screen</label>
+                <label for="return" title="#xarML('TITLE')#">
+                    Update and return to this screen
+                </label>
             </div>
             <div class="xar-align-center">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />

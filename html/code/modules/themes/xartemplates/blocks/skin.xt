@@ -7,8 +7,7 @@
             <select name="#$form_picker_name#">
                 <xar:loop name="$themes">
                     <xar:if condition="$loop:item['selected']">
-                        <option value="#$loop:item['id']#" selected="selected">
-                        #$loop:item['name']#</option>
+                        <option value="#$loop:item['id']#" selected="selected">#$loop:item['name']#</option>
                     <xar:else/>
                         <option value="#$loop:item['id']#">#$loop:item['name']#</option>
                     </xar:if>

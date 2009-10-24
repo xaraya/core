@@ -27,8 +27,7 @@
         <link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepagerss#" />
     </xar:if>
     <xar:if condition="xarThemeIsAvailable('atom')">
-        <link rel="service.feed" type="application/atom+xml" title="Atom-feed"
-        href="#$activepageatom#" />
+        <link rel="service.feed" type="application/atom+xml" title="Atom-feed" href="#$activepageatom#" />
     </xar:if>
     <xar:if condition="xarThemeIsAvailable('print')">
         <link rel="alternate" type="text/html" title="Print" href="#$activepageprint#" />
@@ -37,8 +36,7 @@
         The XMLRPC-server module takes case of filling the RSD information 
     -->
     <xar:if condition="xarModIsAvailable('xmlrpcserver')">
-        <link rel="EditURI" type="application/rsd+xml" title="RSD"
-        href="&xar-modurl-xmlrpcserver-user-main;" />
+        <link rel="EditURI" type="application/rsd+xml" title="RSD" href="&xar-modurl-xmlrpcserver-user-main;" />
     </xar:if>
     <link rel="pingback" href="&xar-baseurl;ws.php" />
     <link rel="Top" type="text/html" href="#$baseurl#" />
