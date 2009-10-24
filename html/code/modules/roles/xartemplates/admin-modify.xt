@@ -25,7 +25,8 @@
                             </li>
                         </xar:if>
                         <xar:set name="prevgroup">
-                        #xarVarPrepForDisplay($parents[$i]['parentname'])#</xar:set>
+                            #xarVarPrepForDisplay($parents[$i]['parentname'])#
+                        </xar:set>
                     </xar:for>
                 </ul>
             </div>
@@ -100,10 +101,10 @@
                                     xarModUserVars::get('roles','useremailformat',$id)
                                 </xar:set>
                                 <xar:set name="options">
-                                    array( array('id' =&gt; 'text',
-                                                 'name' =&gt; 'text'),
-                                                 array('id' =&gt; 'html', 'name' =&gt; 'html'),
-                                )
+                                    array( 
+                                        array('id' => 'text', 'name' => 'text'),
+                                        array('id' => 'html', 'name' => 'html'),
+                                    )
                                 </xar:set>
                                 <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options" />
                             </div>
@@ -152,7 +153,8 @@
                     <p class="xar-clear"></p>
                     <xar:if condition="!empty($hooks) and count($hooks) gt 0">
                         <xar:foreach in="$hooks" key="$hookmodule">
-                        #$hooks[$hookmodule]#</xar:foreach>
+                            #$hooks[$hookmodule]#
+                        </xar:foreach>
                     </xar:if>
                     <div class="xar-align-center xar-clearboth">
                         <input type="hidden" name="parents" id="parents" value="#$parents#" />

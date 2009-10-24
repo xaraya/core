@@ -16,8 +16,9 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#"
-                                title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">#$parents[$i]['parentname']#</a>
+                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
+                                    #$parents[$i] ['parentname']#
+                                </a>
                             </li>
                         </xar:if>
                         <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>

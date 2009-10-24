@@ -17,13 +17,13 @@
                         <td>
                         <label for="welcometitle">Welcome Email Title</label>:</td>
                         <td>
-                    <input type="text" name="welcometitle" id="welcometitle" value="#$welcometitle#" size="35" maxlength="100" />
-                            value="#$welcometitle#" size="35" maxlength="100" />
+                            <input type="text" name="welcometitle" id="welcometitle" value="#$welcometitle#" size="35" maxlength="100" />
                         </td>
                     </tr>
                 </table>
                 <textarea name="welcomeemail" id="welcomeemail" rows="20" cols="80" tabindex="1">
-                #$welcomeemail#</textarea>
+                    #$welcomeemail#
+                </textarea>
                 <br />
                 <br />
                 <input type="submit" value="#$submitlabel#" tabindex="2" />
@@ -56,7 +56,8 @@
                     <tr class="xar-align-left">
                         <td>%%#$name#%%</td>
                         <td>(dynamic property) 
-                        <xar:data-label property="$properties[$name]" /></td>
+                            <xar:data-label property="$properties[$name]" />
+                        </td>
                     </tr>
                 </xar:foreach>
             </xar:if>

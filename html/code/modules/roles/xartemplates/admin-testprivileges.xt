@@ -33,53 +33,52 @@
             <fieldset>
                 <legend>Scope</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="pmodule"
-                    title="#xarML('Choose the module to test privileges against.')#"
-                    class="xar-form-label">Registered Masks For Module:</label>
+                    <label for="pmodule" title="#xarML('Choose the module to test privileges against.')#" class="xar-form-label">
+                        Registered Masks For Module:
+                    </label>
                     <xar:set name="onchange">'this.form.submit();'</xar:set>
-                    <xar:data-input type="module" name="pmodule" id="pmodule" value="$pmodule"
-                    firstline="Choose" onchange="$onchange" />
+                    <xar:data-input type="module" name="pmodule" id="pmodule" value="$pmodule" firstline="Choose" onchange="$onchange" />
                     <input type="hidden" name="id" id="id" value="#$id#" />
-                    <input type="submit" value="#xarML('Test Privileges')#"
-                    class="xar-margin-thickleft" />
+                    <input type="submit" value="#xarML('Test Privileges')#" class="xar-margin-thickleft" />
                 </div>
             </fieldset>
         </form>
         <xar:if condition="empty($pmodule)">Choose a module from the list and click "Test
-        Privileges". 
+            Privileges". 
         <xar:elseif condition="count($masks) eq 0" />
-        <h3>No masks registered for this module.</h3>
+            <h3>No masks registered for this module.</h3>
         <xar:else />
-        <fieldset>
-            <legend>Click On The Mask You Want To Test Privileges Against:</legend>
-            <table class="xar-fullwidth">
-                <tr>
-                    <th>Mask</th>
-                    <xar:if condition="xarModVars::get('privileges','showrealms')">
-                        <th>Realm</th>
-                    </xar:if>
-                    <th>Module</th>
-                    <th>Component</th>
-                    <th>Instance</th>
-                    <th>Level</th>
-                </tr>
-                <xar:foreach in="$masks" value="$mask">
+            <fieldset>
+                <legend>Click On The Mask You Want To Test Privileges Against:</legend>
+                <table class="xar-fullwidth">
                     <tr>
-                        <td>
-                            <a href="&xar-modurl-roles-admin-testprivileges;&amp;id=&xar-var-id;&amp;name=#$mask:getName()#&amp;test=true">
-                            #$mask:getName()#</a>
-                        </td>
+                        <th>Mask</th>
                         <xar:if condition="xarModVars::get('privileges','showrealms')">
-                            <td>#$mask:getRealm()#</td>
+                            <th>Realm</th>
                         </xar:if>
-                        <td>#$mask:getModule()#</td>
-                        <td>#$mask:getComponent()#</td>
-                        <td>#$mask:getInstance()#</td>
-                        <td class="xar-nowrap">#$mask:getLevel()#</td>
+                        <th>Module</th>
+                        <th>Component</th>
+                        <th>Instance</th>
+                        <th>Level</th>
                     </tr>
-                </xar:foreach>
-            </table>
-        </fieldset></xar:if>
+                    <xar:foreach in="$masks" value="$mask">
+                        <tr>
+                            <td>
+                                <a href="&xar-modurl-roles-admin-testprivileges;&amp;id=&xar-var-id;&amp;name=#$mask:getName()#&amp;test=true">
+                                #$mask:getName()#</a>
+                            </td>
+                            <xar:if condition="xarModVars::get('privileges','showrealms')">
+                                <td>#$mask:getRealm()#</td>
+                            </xar:if>
+                            <td>#$mask:getModule()#</td>
+                            <td>#$mask:getComponent()#</td>
+                            <td>#$mask:getInstance()#</td>
+                            <td class="xar-nowrap">#$mask:getLevel()#</td>
+                        </tr>
+                    </xar:foreach>
+                </table>
+            </fieldset>
+        </xar:if>
         <xar:if condition="!empty($test)">
             <fieldset>
                 <legend>Masks:</legend>
@@ -138,10 +137,14 @@
             </fieldset>
             <fieldset>
                 <legend>Test Result</legend>
-                <h4>#$itemtypename# 
-                <a href="&xar-modurl-roles-admin-modify;&amp;id=#$id#">'#$pname#'</a>
-                <xar:if condition="$testresult eq false">Is Not Permitted 
-                <xar:else />Is Permitted</xar:if></h4>
+                <h4>
+                    #$itemtypename# <a href="&xar-modurl-roles-admin-modify;&amp;id=#$id#">'#$pname#'</a>
+                    <xar:if condition="$testresult eq false">
+                        Is Not Permitted 
+                    <xar:else />
+                        Is Permitted
+                    </xar:if>
+                </h4>
             </fieldset>
         </xar:if>
     </div>

@@ -13,17 +13,17 @@
     <xar:set name="modstatus">
         xarSession::getVar('statusmsg')
     </xar:set>
-    <xar:set name="messagetitle">
-        #xarML('Write this string in the message body or subject to display the corresponding information')#
-    </xar:set>
+    <xar:var name="messagetitle">
+        Write this string in the message body or subject to display the corresponding information
+    </xar:var>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Roles Administration</span>
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu" />
         <h2>
-        <a href="&xar-modurl-roles-admin-createmail;">Messaging System:</a>Send Mail To
-        Users/Groups</h2>
+            <a href="&xar-modurl-roles-admin-createmail;">Messaging System:</a>Send Mail To Users/Groups
+        </h2>
         <div>
             <ul class="xar-tabs xar-alt xar-norm-outline">
                 <xar:var name="label">Option</xar:var>
@@ -47,24 +47,28 @@
                 <tr>
                     <th class="xar-nowrap">
                         <label for="filter" title="#xarML('Select display type')#">Show
-                        Users</label>
+                            Users
+                        </label>
                     </th>
                     <th class="xar-nowrap">
                         <label for="filter" title="#xarML('Select a group')#">Groups</label>
                     </th>
                     <th class="xar-nowrap">
                         <label for="filter" title="#xarML('Select the state of users')#">
-                        State</label>
+                            State
+                        </label>
                     </th>
                     <xar:if condition="$id gt 0">
                         <th class="xar-nowrap">
                             <label for="filter" title="#xarML('Includes subgroups')#">Include
-                            Subgroups</label>
+                                Subgroups
+                            </label>
                         </th>
                     </xar:if>
                     <th class="xar-nowrap">
                         <label for="filter" title="#xarML('Select template for the message')#">
-                        Templates</label>
+                            Templates
+                        </label>
                     </th>
                     <th class="xar-nowrap">
                         <label for="reload">Action</label>
@@ -76,7 +80,7 @@
                             <xar:foreach in="$style" key="$key" value="$value">
                                 <xar:if condition="$key eq $selstyle">
                                     <option value="#$key#" selected="selected">#$value#</option>
-                                    <xar:else />
+                                <xar:else />
                                     <option value="#$key#">#$value#</option>
                                 </xar:if>
                             </xar:foreach>
@@ -92,7 +96,7 @@
                             </xar:if>
                             <xar:if condition="$id eq 0">
                                 <option value="0" selected="selected">All Users</option>
-                                <xar:else />
+                            <xar:else />
                                 <option value="0">All Users</option>
                             </xar:if>
                             <xar:set name="prevgroup">""</xar:set>
@@ -121,12 +125,11 @@
                     </xar:if>
                     <td class="xar-align-center">
                         <select name="mailtype" id="mailtype" size="1" tabindex="5" onchange="this.form.submit()">
-                        onchange="this.form.submit()">
                             <xar:loop name="$templates">
                                 <xar:if condition="$mailtype eq $loop:item['key']">
                                     <option value="#$loop:item['key']#" selected="selected">
                                     #$loop:item['value']#</option>
-                                    <xar:else />
+                                <xar:else />
                                     <option value="#$loop:item['key']#">
                                         #$loop:item['value']#
                                     </option>
@@ -158,11 +161,11 @@
                 the Roles Lists table-based styles (borrow from the Modules list)
             -->
                 <xar:if condition="$selstyle eq '1'">
-              <p>#$totalselected# user(s) selected.</p>
-                    <xar:elseif condition="$selstyle eq '2'" />
+                    <p>#$totalselected# user(s) selected.</p>
+                <xar:elseif condition="$selstyle eq '2'" />
                     <xar:if condition="count($users) eq 0">
                         <p>No users match</p>
-                        <xar:else />
+                    <xar:else />
                         <table class="xar-fullwidth">
                             <tr>
                                 <th>
@@ -221,16 +224,19 @@
                 <p>Choose a message template from the Templates dropdown above, or type in your
                 message directly :</p>
                 <div class="xar-form-input-wrapper">
-                    <label for="subject" title="#xarML('Subject line of the email')#"
-                    class="xar-form-label">Subject:</label>
+                    <label for="subject" title="#xarML('Subject line of the email')#" class="xar-form-label">
+                        Subject:
+                    </label>
                     <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong" />
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="message" title="#xarML('Body of the email')#"
-                    class="xar-form-label">Message:</label>
+                    <label for="message" title="#xarML('Body of the email')#" class="xar-form-label">
+                        Message:
+                    </label>
                     <div class="xar-form-container-after">
                         <textarea name="message" id="message" class="xar-form-textareaxlarge">
-                        #xarVarPrepForDisplay($message)#</textarea>
+                            #xarVarPrepForDisplay($message)#
+                        </textarea>
                     </div>
                 </div>
             </fieldset>
@@ -250,10 +256,11 @@
                 </div>
             </fieldset>
         </form>
-        <p>Look in the file var/messaging/roles/includes/message-vars.xd to see how the different
-        variables used in the templates are defined.</p>
-        <p>Note that some variables (e.g. $myusername in the confirmation template) are defined
-        dynamically during Xaraya processes, such as registration. You cannot use those variables,
-        nor can you send messages that contain them from here.</p>
+        <p>
+            Look in the file var/messaging/roles/includes/message-vars.xd to see how the different variables used in the templates are defined.
+        </p>
+        <p>
+            Note that some variables (e.g. $myusername in the confirmation template) are defined dynamically during Xaraya processes, such as registration. You cannot use those variables, nor can you send messages that contain them from here.
+        </p>
     </div>
 </xar:template>

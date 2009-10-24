@@ -27,7 +27,6 @@
                     </td>
                     <td>
                         <input type="text" name="subject" id="subject" value="#$subject#" size="35" maxlength="100" />
-                        maxlength="100" />
                     </td>
                 </tr>
                 <tr>
@@ -35,8 +34,7 @@
                         <label for="message">Email Body</label>
                     </td>
                     <td>
-                        <textarea name="message" id="message" rows="20" cols="80" tabindex="1">
-                        #$message#</textarea>
+                        <textarea name="message" id="message" rows="20" cols="80" tabindex="1">#$message#</textarea>
                     </td>
                 </tr>
                 <tr>

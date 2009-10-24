@@ -22,7 +22,8 @@
       <xar:set name="onfocus">'return true;'</xar:set>
     </xar:if>
     
-    <!--
+
+<!--
 FIXME:  The target="" needs to be replaced by something that works in xhtml.
     <xar:if condition="!empty($linkurl)">
         #$value# [ <a href="#$linkurl#" target="#$preview#">#$profile#</a> ]

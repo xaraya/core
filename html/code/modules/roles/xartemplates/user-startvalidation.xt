@@ -8,12 +8,12 @@
         <h2>Start Validation</h2>
         <xar:if condition="isset($sent) and $sent eq '1'">
             <p>
-                <strong>Your validation code has been sent again to the email address you have
-                registered.</strong>
+                <strong>Your validation code has been sent again to the email address you have registered.</strong>
             </p>
         <xar:else />
-            <p>Your account has not yet been activated. You need to finish these final steps in
-            order to complete your account activation.</p>
+            <p>
+                Your account has not yet been activated. You need to finish these final steps in order to complete your account activation.
+            </p>
         </xar:if>
         <xar:if condition="!empty($valcode)">
             <xar:set name="validationlink">xarModURL('roles','user','getvalidation',
@@ -29,15 +29,15 @@
                         <p>Please enter your username and validation code below:</p>
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="uname" class="xar-form-label"
-                        title="#xarML('Please enter your user name')#">Username</label>
-                        <input type="text" name="uname" id="uname"
-                        value="#xarVarPrepForDisplay($uname)#" />
+                        <label for="uname" class="xar-form-label" title="#xarML('Please enter your user name')#">
+                            Username
+                        </label>
+                        <input type="text" name="uname" id="uname" value="#xarVarPrepForDisplay($uname)#" />
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="valcode" class="xar-form-label"
-                        title="#xarML('Please enter your validation code')#">Validation
-                        Code:</label>
+                        <label for="valcode" class="xar-form-label" title="#xarML('Please enter your validation code')#">
+                            Validation Code:
+                        </label>
                         <input type="text" name="valcode" id="valcode" value="" />
                     </div>
                     <div class="xar-form-input-wrapper-after">
@@ -51,9 +51,12 @@
                 <fieldset>
                     <legend>Resend Validation</legend>
                     <div class="xar-form-input-wrapper">
-                    <label for="unameresend" class="xar-form-label"
-                    title="#xarML('Please enter your username')#">Username:</label>&#160; 
-                    <input type="text" name="uname" id="unameresend" value="#$uname#" /></div>
+                        <label for="unameresend" class="xar-form-label" title="#xarML('Please enter your username')#">
+                            Username:
+                        </label>
+                        &#160; 
+                        <input type="text" name="uname" id="unameresend" value="#$uname#" />
+                   </div>
                     <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="phase" id="phase" value="resend" />
                         <input type="submit" value="#$resendlabel#" />

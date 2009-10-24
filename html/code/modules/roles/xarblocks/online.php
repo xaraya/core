@@ -26,7 +26,6 @@
         public $allow_multiple      = true;
         public $show_preview        = true;
 
-
         function display(Array $data=array())
         {
             $data = parent::display($data);

@@ -52,7 +52,7 @@
             </xar:foreach>
         </table>
     </xar:if>
-    <xar:if condition="$showanontotal">
+    <xar:if condition="$showusertotal OR $showanontotal">
         <table class="xar-fullwidth xar-roles-nicetable">
             <xar:if condition="$showusertotal">
                 <tr>

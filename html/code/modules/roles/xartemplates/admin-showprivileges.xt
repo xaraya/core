@@ -42,7 +42,7 @@
           </legend>
             <xar:if condition="count($inherited) eq 0">
                 <p>No privileges inherited.</p>
-                <xar:else />
+            <xar:else />
                 <div class="xar-fullwidth xar-overflow-auto xar-area-large">
                     <table class="xar-fullwidth">
                         <tr>
@@ -93,7 +93,7 @@
             <legend>Privileges assigned to #xarVarPrepForDisplay($pname)#:</legend>
             <xar:if condition="count($privileges) eq 0">
                 <p>No privileges assigned.</p>
-                <xar:else />
+            <xar:else />
                 <p>Note: only relevant privileges are shown.</p>
                 <table class="xar-fullwidth">
                     <tr>
@@ -143,9 +143,9 @@
             </xar:if>
           <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
                 <div class="xar-form-input-wrapper">
-                    <label for="privid" title="#xarML('Select the Privilege to add')#"
-                    class="xar-form-label">Assign a Privilege to #$itemtypename#
-                    '#xarVarPrepForDisplay($pname)#'</label>
+                    <label for="privid" title="#xarML('Select the Privilege to add')#" class="xar-form-label">
+                        Assign a Privilege to #$itemtypename# '#xarVarPrepForDisplay($pname)#'
+                    </label>
                     <xar:set name="options">xarPrivileges::getprivileges()</xar:set>
                     <xar:data-input type="dropdown" name="privid" options="$options" />
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />

@@ -30,7 +30,8 @@
                     <xar:data-input type="grouplist" name="parentid" value="$parentid" />
                 </div>
                 <xar:set name="settings">
-                explode(',',xarModVars::get('roles','duvsettings'))</xar:set>
+                    explode(',',xarModVars::get('roles','duvsettings'))
+                </xar:set>
                 <xar:if condition="ROLES_USERTYPE eq $basetype">
                     <xar:if condition="in_array('useremailformat',$settings)">
                         <div class="xar-form-input-wrapper">
@@ -39,8 +40,10 @@
                                 xarModUserVars::get('roles','useremailformat',$id)
                             </xar:set>
                             <xar:set name="options">
-                                array( array('id' =&gt; 'text', 'name' =&gt;
-                                'text'), array('id' =&gt; 'html', 'name' =&gt; 'html'), )
+                                array( 
+                                    array('id' => 'text', 'name' => 'text'), 
+                                    array('id' => 'html', 'name' => 'html'), 
+                                )
                             </xar:set>
                             <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options" />
                         </div>

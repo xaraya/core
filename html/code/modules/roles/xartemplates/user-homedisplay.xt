@@ -14,7 +14,7 @@
     }
     </script>
     <xar:if condition="!isset($title)">
-        <xar:set name="title">External Page</xar:set>
+        <xar:var name="title">External Page</xar:var>
     </xar:if>
     <xar:if condition="xarUserIsLoggedIn() and xarSecurityCheck('ReadBase')">
         <div class="xar-mod-head">
@@ -28,5 +28,7 @@
         <br />
         <xar:foreach in="$hooks" key="$hookmodule">#$hooks[$hookmodule]#</xar:foreach>
     </xar:if>
-    <xar:else />You do not have permission to access this page.</xar:if>
+    <xar:else />
+        You do not have permission to access this page.
+    </xar:if>
 </xar:template>

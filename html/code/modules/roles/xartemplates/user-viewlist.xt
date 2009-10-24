@@ -13,36 +13,42 @@
             <xar:if condition="$letter eq ''">
                 <li class="xar-tab-active">
                     <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#" class="xar-accent xar-accent-outline">
-                    All</a>
+                        All
+                    </a>
                 </li>
             <xar:else />
                 <li class="xar-tab">
                     <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#" class="xar-norm xar-norm-outline">
-                    All</a>
+                        All
+                    </a>
                 </li>
             </xar:if>
                 <xar:foreach in="$alphabet" value="$ltr">
                     <xar:if condition="$letter eq $ltr">
                         <li class="xar-tab-active">
                             <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#" class="xar-accent xar-accent-outline">
-                        #$ltr#</a>
+                                #$ltr#
+                            </a>
                         </li>
                     <xar:else />
                         <li class="xar-tab">
                             <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#" class="xar-norm xar-norm-outline">
-                        #$ltr#</a>
+                                #$ltr#
+                            </a>
                         </li>
                     </xar:if>
                 </xar:foreach>
             <xar:if condition="$letter eq 'Other'">
                 <li class="xar-tab-active">
                     <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#" class="xar-accent xar-accent-outline">
-                    Other</a>
+                        Other
+                    </a>
                 </li>
             <xar:else />
                 <li class="xar-tab">
                     <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#" class="xar-norm xar-norm-outline">
-                    Other</a>
+                        Other
+                    </a>
                 </li>
             </xar:if>
             </ul>
@@ -54,23 +60,27 @@
                     <xar:if condition="$phase ne 'active'">
                         <li class="xar-tab-active">
                             <a href="&xar-modurl-roles-user-viewlist;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#" class="xar-accent xar-accent-outline">
-                        All</a>
+                                All
+                            </a>
                         </li>
                     <xar:else />
                         <li class="xar-tab">
                             <a href="&xar-modurl-roles-user-viewlist;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#" class="xar-norm xar-norm-outline">
-                        All</a>
+                                All
+                            </a>
                         </li>
                     </xar:if>
                     <xar:if condition="$phase eq 'active'">
                         <li class="xar-tab-active">
                             <a href="&xar-modurl-roles-user-viewlist;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#" class="xar-accent xar-accent-outline">
-                        Online</a>
+                                Online
+                            </a>
                         </li>
                     <xar:else />
                         <li class="xar-tab">
                             <a href="&xar-modurl-roles-user-viewlist;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#" class="xar-norm xar-norm-outline">
-                        Online</a>
+                                Online
+                            </a>
                         </li>
                     </xar:if>
                 </ul>
@@ -87,16 +97,19 @@
                     <xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
                         <th class="xar-thirdwidth">
                             <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
-                            Display Name</a>
+                                Display Name
+                            </a>
                         </th>
                         <th class="xar-thirdwidth">
                             <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=uname">
-                            IP Address</a>
+                                IP Address
+                            </a>
                         </th>
                     <xar:else />
                         <th class="xar-twothirdwidth">
                             <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
-                            Display Name</a>
+                                Display Name
+                            </a>
                         </th>
                     </xar:if>
                     <xar:if condition="(bool)xarModVars::get('roles', 'allowemail')">
@@ -119,7 +132,6 @@
                     </xar:if>
                     <tr class="#$item_class#">
                         <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
-
                             <td>
                                 <a href="&xar-modurl-roles-user-display;&amp;id=#$loop:item.id#">
                                 #xarVarPrepForDisplay($loop:item['name'])#</a>
@@ -127,12 +139,15 @@
                             <td class="xar-align-center">
                             <!-- TODO: add link to working whois service -->
                             #xarVarPrepForDisplay($loop:item['ipaddr'])#</td>
-                            <xar:else />
+                        <xar:else />
                             <td>
                                 <xar:if condition="xarUserIsLoggedIn()">
-                                <a href="&xar-modurl-roles-user-display;&amp;id=#$loop:item.id#">
-                                #xarVarPrepForDisplay($loop:item['name'])#</a>
-                                <xar:else />#xarVarPrepForDisplay($loop:item['name'])#</xar:if>
+                                    <a href="&xar-modurl-roles-user-display;&amp;id=#$loop:item.id#">
+                                        #xarVarPrepForDisplay($loop:item['name'])#
+                                    </a>
+                                <xar:else />
+                                    #xarVarPrepForDisplay($loop:item['name'])#
+                                </xar:if>
                             </td>
                         </xar:if>
                         <xar:if condition="(bool)xarModVars::get('roles', 'allowemail')">
@@ -141,7 +156,7 @@
 
                                     <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#"
                                     title="#xarML('Email')#" />
-                            <xar:else />
+                                <xar:else />
                                     <a href="#$loop:item['emailurl']#">
                                         <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#"
                                         title="#xarML('Email')#" />
@@ -154,9 +169,10 @@
                             <xar:foreach in="$properties" key="$key">
                                 <td>
                                     <xar:if condition="isset($values[$id][$key])">
-                                    <xar:data-output property="$properties[$key]"
-                                    value="$values[$id][$key]" />
-                                    <xar:else />&#160;&#160;</xar:if>
+                                        <xar:data-output property="$properties[$key]" value="$values[$id][$key]" />
+                                    <xar:else />
+                                        &#160;&#160;
+                                    </xar:if>
                                 </td>
                             </xar:foreach>
                         </xar:if>
@@ -167,13 +183,10 @@
             <div class="xar-align-center">#$pager#</div>
             <form method="post" action="&xar-modurl-roles-user-viewlist;">
                 <label for="search">Search:</label>
-                <input type="hidden" name="phase" id="phase"
-                value="#xarVarPrepForDisplay($phase)#" />
-                <input type="hidden" name="order" id="order"
-                value="#xarVarPrepForDisplay($order)#" />
+                <input type="hidden" name="phase" id="phase" value="#xarVarPrepForDisplay($phase)#" />
+                <input type="hidden" name="order" id="order" value="#xarVarPrepForDisplay($order)#" />
                 <input type="hidden" name="letter" id="letter" value="" />
-                <input type="text" name="search" id="search" value="" size="40" maxlength="255"
-                tabindex="1" />
+                <input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1" />
                 <input type="submit" value="#xarVarPrepForDisplay($searchlabel)#" />
             </form>
             <p>Search condition: 
