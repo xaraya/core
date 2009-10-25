@@ -364,11 +364,8 @@ class MenuBlock extends BasicBlock implements iBlock
         if (empty($data['content'])) $data['content'] = $this->content;
         if (empty($data['showlogout'])) $data['showlogout'] = $this->showlogout;
 
-        // Defaults
         // @CHECKME: is this used?
-        if (empty($data['style'])) {
-            $data['style'] = 1;
-        }
+        if (empty($data['style'])) $data['style'] = 1;
 
         // Prepare output array
         $c=0;
