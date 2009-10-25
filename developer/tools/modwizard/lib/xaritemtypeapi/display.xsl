@@ -10,19 +10,19 @@
 
 <xsl:template match="table" mode="xaritemtypeapi_display">
 
-    <xsl:variable name="itemtype" select="@name" />
+    <xsl:variable name="itemtype" select="@name"/>
 
-    <xsl:message>      * xar<xsl:value-of select="$itemtype" />api/display.php</xsl:message>
+    <xsl:message>      * xar<xsl:value-of select="$itemtype"/>api/display.php</xsl:message>
 
-    <xsl:document href="{$output}/xar{$itemtype}api/display.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xar{$itemtype}api/display.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
-            <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype" />api/display.php</xsl:with-param>
+            <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype"/>api/display.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaritemtypeapi_display_func" select="." />
+        <xsl:apply-templates mode="xaritemtypeapi_display_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -35,14 +35,14 @@
 
 -->
 <xsl:template mode="xaritemtypeapi_display_func" match="table">
-    <xsl:variable name="module_prefix" select="../../registry/name" />
+    <xsl:variable name="module_prefix" select="../../registry/name"/>
 /**
  * // TODO // add description
  */
-function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_display( $args ) 
+function <xsl:value-of select="$module_prefix"/>_<xsl:value-of select="@name"/>api_display( $args ) 
 {
     // Security check
-    if (!xarSecurityCheck( 'View<xsl:value-of select="$module_prefix" />')) return;
+    if (!xarSecurityCheck( 'View<xsl:value-of select="$module_prefix"/>')) return;
 
     // Get parameter from browser
     list( $itemid ) = xarVarCleanFromInput( 'itemid' );
@@ -61,38 +61,38 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         if ( empty( $itemid ) ) {
             xarResponseRedirect(
                 xarModURL(
-                    '<xsl:value-of select="$module_prefix" />'
+                    '<xsl:value-of select="$module_prefix"/>'
                     ,'user'
                     ,'view'
                     ,array(
-                        'itemtype'  =>  <xsl:value-of select="@itemtype" /> )));
+                        'itemtype'  =>  <xsl:value-of select="@itemtype"/> )));
         }
 
         // Retrieve the object
         $object =&amp; xarModAPIFunc(
-            '<xsl:value-of select="$module_prefix" />'
+            '<xsl:value-of select="$module_prefix"/>'
             ,'user'
             ,'get'
             ,array(
-                 'itemtype'  => <xsl:value-of select="@itemtype" />
+                 'itemtype'  => <xsl:value-of select="@itemtype"/>
                 ,'itemid'    => $itemid
                 ,'getobject' => 1
             ));
         if ( empty( $object ) ) return;
 
         $item_title = xarModAPIFunc(
-            '<xsl:value-of select="$module_prefix" />'
+            '<xsl:value-of select="$module_prefix"/>'
             ,'user'
             ,'gettitle'
             ,array(
                 'object'    =>  $object
-                ,'itemtype' =>  <xsl:value-of select="@itemtype" /> ));
+                ,'itemtype' =>  <xsl:value-of select="@itemtype"/> ));
         $data = xarModAPIFunc(
-            '<xsl:value-of select="$module_prefix" />'
+            '<xsl:value-of select="$module_prefix"/>'
             ,'private'
             ,'common'
             ,array(
-                'title' => xarML( '<xsl:value-of select="label" />' ) . ' ' . $item_title
+                'title' => xarML( '<xsl:value-of select="label"/>' ) . ' ' . $item_title
                 ,'type' => 'user'
                 ));
 
@@ -103,16 +103,16 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
          * want to come back afterwards.
          */
         $args = array(
-            'module'        =>  '<xsl:value-of select="$module_prefix" />'
+            'module'        =>  '<xsl:value-of select="$module_prefix"/>'
             ,'itemid'       =>  $itemid
-            ,'itemtype'     =>  <xsl:value-of select="@itemtype" />
+            ,'itemtype'     =>  <xsl:value-of select="@itemtype"/>
             ,'returnurl'    =>  xarModURL(
-                '<xsl:value-of select="$module_prefix" />'
+                '<xsl:value-of select="$module_prefix"/>'
                 ,'user'
                 ,'display'
                 ,array(
                     'itemid'       =>  $itemid
-                    ,'itemtype'    =>  <xsl:value-of select="@itemtype" />
+                    ,'itemtype'    =>  <xsl:value-of select="@itemtype"/>
                     ))
             );
         $hooks = xarModCallHooks(
@@ -120,7 +120,7 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
             ,'display'
             ,$itemid
             ,$args
-            ,'<xsl:value-of select="$module_prefix" />' );
+            ,'<xsl:value-of select="$module_prefix"/>' );
         if ( !isset( $hooks ) ) { return; }
         $data['hooks'] = $hooks;
 
@@ -131,20 +131,20 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
     /*
      * Call the hook 'item:transform:API'.
      */
-    $values['module']     =  '<xsl:value-of select="$module_prefix" />';
+    $values['module']     =  '<xsl:value-of select="$module_prefix"/>';
     $values['itemid']     =  $itemid;
-    $values['itemtype']   =  <xsl:value-of select="@itemtype" />;
-    $values['transform']  =  array( <xsl:for-each select="structure/field[@transform = 'true']">'<xsl:value-of select="@name" />'<xsl:if test="position() != last()">,</xsl:if></xsl:for-each> );
+    $values['itemtype']   =  <xsl:value-of select="@itemtype"/>;
+    $values['transform']  =  array( <xsl:for-each select="structure/field[@transform = 'true']">'<xsl:value-of select="@name"/>'<xsl:if test="position() != last()">,</xsl:if></xsl:for-each> );
     $values = xarModCallHooks(
         'item'
         ,'transform'
         ,$itemid
         ,$values
-        ,'<xsl:value-of select="$module_prefix" />' );
+        ,'<xsl:value-of select="$module_prefix"/>' );
 
     $data['object_props']   =&amp; $object->getProperties();
     $data['object_values']  =&amp; $values;
-    $data['itemtype']       = <xsl:value-of select="@itemtype" />;
+    $data['itemtype']       = <xsl:value-of select="@itemtype"/>;
     $data['itemid']         = $itemid;
     return $data;
 }

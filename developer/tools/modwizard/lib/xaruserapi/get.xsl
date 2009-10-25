@@ -12,15 +12,15 @@
 
     <xsl:message>      * xaruserapi/get.php</xsl:message>
 
-    <xsl:document href="{$output}/xaruserapi/get.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaruserapi/get.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaruserapi/get.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaruserapi_get_func" select="." />
+        <xsl:apply-templates mode="xaruserapi_get_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -32,7 +32,7 @@
         MODE: xaruserapi_get                MATCH:  table
 -->
 <xsl:template mode="xaruserapi_get_func" match="xaraya_module">
-    <xsl:variable name="module_prefix" select="registry/name" />
+    <xsl:variable name="module_prefix" select="registry/name"/>
 /**
  *
  * @param array( 'itemtype' => &lt;itemtype&gt; )
@@ -44,7 +44,7 @@
  * @param $args['fields'] array with all the fields to return
  * @param $args['fields'] array with all the fields to return
  */
-function <xsl:value-of select="$module_prefix" />_userapi_get( $args ) 
+function <xsl:value-of select="$module_prefix"/>_userapi_get( $args ) 
 {
     extract( $args );
 
@@ -58,7 +58,7 @@ function <xsl:value-of select="$module_prefix" />_userapi_get( $args )
         ,'user'
         ,'getitem'
         ,array(
-            'module'     => '<xsl:value-of select="$module_prefix" />'
+            'module'     => '<xsl:value-of select="$module_prefix"/>'
             ,'itemtype'  => $itemtype
             ,'itemid'    => $itemid
             ,'status'    => 1

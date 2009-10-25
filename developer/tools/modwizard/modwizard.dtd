@@ -91,7 +91,7 @@
     <!ELEMENT index ( comment?, field+ )>
     <!ATTLIST index
         name    CDATA #REQUIRED
-        unique  ( true |  false ) "true" >
+        unique  ( true |  false ) "true">
 
     <!ELEMENT comment ( #PCDATA ) >
 

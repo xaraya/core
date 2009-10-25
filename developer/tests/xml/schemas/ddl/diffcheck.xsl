@@ -4,7 +4,7 @@
     xmlns:xar="http://xaraya.com/xml2ddl"
                 exclude-result-prefixes="xar">
   <!-- DDL is no XML -->
-  <xsl:output method="text" />
+  <xsl:output method="text"/>
   <xsl:strip-space elements="*"/>
 
   <!--
@@ -17,10 +17,10 @@
       - etc.
   -->
   <xsl:param name="vendor"  />
-  <xsl:param name="version" />
+  <xsl:param name="version"/>
   <xsl:param name="dbcreate"/>
   <xsl:param name="drop4create"/>
-  <xsl:param name="to" />
+  <xsl:param name="to"/>
 
   <!-- Variables, xslt style -->
   <xsl:variable name="CR">
@@ -41,27 +41,27 @@
     </xsl:if>
 
     <xsl:call-template name="xar:update">
-      <xsl:with-param name="from" select="/node()" />
-      <xsl:with-param name="to" select="document($to,/*)/node()" />
+      <xsl:with-param name="from" select="/node()"/>
+      <xsl:with-param name="to" select="document($to,/*)/node()"/>
     </xsl:call-template>
   </xsl:template>
 
 
   <xsl:template name="xar:update">
-    <xsl:param name="from" />
-    <xsl:param name="to" />
+    <xsl:param name="from"/>
+    <xsl:param name="to"/>
 
     <xsl:call-template name="xar:checktable">
-      <xsl:with-param name="from" select="$from/table" />
-      <xsl:with-param name="to" select="$to/table" />
+      <xsl:with-param name="from" select="$from/table"/>
+      <xsl:with-param name="to" select="$to/table"/>
     </xsl:call-template>
 
   </xsl:template>
 
 
   <xsl:template name="xar:checktable">
-    <xsl:param name="from" />
-    <xsl:param name="to" />
+    <xsl:param name="from"/>
+    <xsl:param name="to"/>
     <xsl:for-each select="$to">
       <xsl:variable name="name"><xsl:value-of select="@name"/></xsl:variable>
       <xsl:choose>
@@ -70,13 +70,13 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="xar:updatetable">
-            <xsl:with-param name="from" select="$from[@name = $name]" />
-            <xsl:with-param name="to" select="." />
+            <xsl:with-param name="from" select="$from[@name = $name]"/>
+            <xsl:with-param name="to" select="."/>
           </xsl:call-template>          
 
           <xsl:call-template name="xar:checkconstraints">
-            <xsl:with-param name="from" select="$from/constraints" />
-            <xsl:with-param name="to" select="$to/constraints" />
+            <xsl:with-param name="from" select="$from/constraints"/>
+            <xsl:with-param name="to" select="$to/constraints"/>
           </xsl:call-template>
 
     <xsl:text>* Exists: </xsl:text> 
@@ -99,8 +99,8 @@
 
 
   <xsl:template name="xar:updatetable">
-    <xsl:param name="from" />
-    <xsl:param name="to" />
+    <xsl:param name="from"/>
+    <xsl:param name="to"/>
 
     <xsl:for-each select="$to/column">
       <xsl:variable name="name"><xsl:value-of select="@name"/></xsl:variable>
@@ -110,13 +110,13 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="xar:updatecolumn">
-            <xsl:with-param name="from" select="$from/column[@name = $name]" />
-            <xsl:with-param name="to" select="." />
+            <xsl:with-param name="from" select="$from/column[@name = $name]"/>
+            <xsl:with-param name="to" select="."/>
           </xsl:call-template>
           <xsl:variable name="differ">
             <xsl:call-template name="xar:compare-nodes">
-              <xsl:with-param name="node1" select="$from/column[@name = $name]" />
-              <xsl:with-param name="node2" select="." />
+              <xsl:with-param name="node1" select="$from/column[@name = $name]"/>
+              <xsl:with-param name="node2" select="."/>
             </xsl:call-template>
           </xsl:variable>
           <xsl:choose>
@@ -147,15 +147,15 @@
 
 
   <xsl:template name="xar:updatecolumn">
-    <xsl:param name="from" />
-    <xsl:param name="to" />
+    <xsl:param name="from"/>
+    <xsl:param name="to"/>
 
     <xsl:for-each select="$to/*">
       <xsl:variable name="name"><xsl:value-of select="name()"/></xsl:variable>
       <xsl:variable name="differ">
         <xsl:call-template name="xar:compare-trees">
-          <xsl:with-param name="node1" select="$from/*[name() = $name]" />
-          <xsl:with-param name="node2" select="." />
+          <xsl:with-param name="node1" select="$from/*[name() = $name]"/>
+          <xsl:with-param name="node2" select="."/>
         </xsl:call-template>
       </xsl:variable>
       <xsl:choose>
@@ -183,15 +183,15 @@
 
 
   <xsl:template name="xar:checkconstraints">
-    <xsl:param name="from" />
-    <xsl:param name="to" />
+    <xsl:param name="from"/>
+    <xsl:param name="to"/>
 
     <xsl:for-each select="$to/*">
       <xsl:variable name="name"><xsl:value-of select="@name"/></xsl:variable>
       <xsl:variable name="differ">
         <xsl:call-template name="xar:compare-trees">
-          <xsl:with-param name="node1" select="$from/*[@name = $name]" />
-          <xsl:with-param name="node2" select="." />
+          <xsl:with-param name="node1" select="$from/*[@name = $name]"/>
+          <xsl:with-param name="node2" select="."/>
         </xsl:call-template>
       </xsl:variable>
       <xsl:choose>
@@ -222,13 +222,13 @@
 
 
 <xsl:template name="xar:compare-trees">
-   <xsl:param name="node1" />
-   <xsl:param name="node2" />
+   <xsl:param name="node1"/>
+   <xsl:param name="node2"/>
 
    <xsl:variable name="differ-root">
      <xsl:call-template name="xar:compare-nodes">
-       <xsl:with-param name="node1" select="$node1" />
-       <xsl:with-param name="node2" select="$node2" />
+       <xsl:with-param name="node1" select="$node1"/>
+       <xsl:with-param name="node2" select="$node2"/>
      </xsl:call-template>
    </xsl:variable>
 
@@ -237,8 +237,8 @@
        <xsl:for-each select="$node2/node()">
          <xsl:variable name="position" select="position()"/>
          <xsl:call-template name="xar:compare-trees">
-           <xsl:with-param name="node1" select="$node1/node()[position() = $position]" />
-           <xsl:with-param name="node2" select="." />
+           <xsl:with-param name="node1" select="$node1/node()[position() = $position]"/>
+           <xsl:with-param name="node2" select="."/>
          </xsl:call-template>
        </xsl:for-each>
      </xsl:if>
@@ -259,13 +259,13 @@
      http://www2.informatik.hu-berlin.de/~obecker/XSLT/merge/merge.xslt.html
 -->
 <xsl:template name="xar:compare-nodes">
-   <xsl:param name="node1" />
-   <xsl:param name="node2" />
+   <xsl:param name="node1"/>
+   <xsl:param name="node2"/>
    <xsl:variable name="type1">
-      <xsl:apply-templates mode="xar:detect-type" select="$node1" />
+      <xsl:apply-templates mode="xar:detect-type" select="$node1"/>
    </xsl:variable>
    <xsl:variable name="type2">
-      <xsl:apply-templates mode="xar:detect-type" select="$node2" />
+      <xsl:apply-templates mode="xar:detect-type" select="$node2"/>
    </xsl:variable>
 
    <xsl:choose>
@@ -319,7 +319,7 @@
 <!-- Context sensitive header, reacts on name and element-name -->
 <xsl:template name="dynheader">
 /* ---------------------------------------------------------------------------
- * <xsl:value-of select="local-name()"/>: <xsl:value-of select="@name" />
+ * <xsl:value-of select="local-name()"/>: <xsl:value-of select="@name"/>
  */
 </xsl:template>
 

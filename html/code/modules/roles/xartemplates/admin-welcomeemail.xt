@@ -10,14 +10,14 @@
         <p>The welcome email is plain text</p>
         <form action="&xar-modurl-roles-admin-welcomeemail;" method="post" enctype="application/x-www-form-urlencoded">
             <div>
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="phase" id="phase" value="update" />
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="phase" id="phase" value="update"/>
                 <table>
                     <tr>
                         <td>
                         <label for="welcometitle">Welcome Email Title</label>:</td>
                         <td>
-                            <input type="text" name="welcometitle" id="welcometitle" value="#$welcometitle#" size="35" maxlength="100" />
+                            <input type="text" name="welcometitle" id="welcometitle" value="#$welcometitle#" size="35" maxlength="100"/>
                         </td>
                     </tr>
                 </table>
@@ -26,7 +26,7 @@
                 </textarea>
                 <br />
                 <br />
-                <input type="submit" value="#$submitlabel#" tabindex="2" />
+                <input type="submit" value="#$submitlabel#" tabindex="2"/>
             </div>
         </form>
         <p>The following variables will be replaced in the text with specific information:</p>
@@ -56,7 +56,7 @@
                     <tr class="xar-align-left">
                         <td>%%#$name#%%</td>
                         <td>(dynamic property) 
-                            <xar:data-label property="$properties[$name]" />
+                            <xar:data-label property="$properties[$name]"/>
                         </td>
                     </tr>
                 </xar:foreach>

@@ -3,9 +3,9 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:var name="check">check</xar:var>
     <xar:var name="preview">preview</xar:var>
-    <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" class="xar-form-textlong" />
+    <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" class="xar-form-textlong"/>
     <xar:if condition="!empty($link)">
         [<a href="#$link#" target="#$preview#">#$check#</a>]
     </xar:if>
-    <xar:template file="dataproperty_additions" module="base" />
+    <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

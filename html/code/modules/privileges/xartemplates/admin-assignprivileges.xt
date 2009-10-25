@@ -7,7 +7,7 @@
     <div class="xar-mod-head">
         <span class="xar-mod-title">
             <xar:if condition="xarModVars::get('privileges','use_module_alias')">
-                <xar:var scope="module" module="privileges" name="module_alias_name" />
+                <xar:var scope="module" module="privileges" name="module_alias_name"/>
             <xar:else />
                 Privileges Administration
             </xar:if>
@@ -17,7 +17,7 @@
         <h2>            
             Assign Privileges            
         </h2>
-        <xar:template module="privileges" file="admin-menu" />
+        <xar:template module="privileges" file="admin-menu"/>
 
         <div>
             <xar:template file="headerconfig" type="module"/>
@@ -66,7 +66,7 @@
                                     <xar:set name="displayclass">'xar-accent'</xar:set>
                                 </xar:if>
                                 <xar:set name="row">#$loop:item#</xar:set>
-                                <xar:template file="assignmentrow" />
+                                <xar:template file="assignmentrow"/>
                             </xar:loop>
                         </xar:if>
                     </table>
@@ -79,15 +79,15 @@
                     </div>
                     &#160;
                     Assign &#160;
-                    <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" style="width: 200px" /> &#160;
+                    <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" style="width: 200px"/> &#160;
                     to &#160;
-                    <xar:data-input type="grouplist" name="role" firstline="Select a group" style="width: 200px" />    
+                    <xar:data-input type="grouplist" name="role" firstline="Select a group" style="width: 200px"/>    
                     &#160;
-                    <input type="submit" value="#xarML('Update Assignments')#" />
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="phase" id="phase" value="update" />
-                    <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                    <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#" />
+                    <input type="submit" value="#xarML('Update Assignments')#"/>
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#"/>
                 </fieldset>
             </fieldset>
         </form>
@@ -131,7 +131,7 @@
                                     <xar:set name="displayclass">'xar-accent'</xar:set>
                                 </xar:if>
                                 <xar:set name="row">#$loop:item#</xar:set>
-                                <xar:template file="assignmentrow" />
+                                <xar:template file="assignmentrow"/>
                             </xar:loop>
                         </xar:if>
                     </table>
@@ -144,17 +144,17 @@
                     </div>
                     &#160;
                     Assign &#160;
-                    <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" style="width: 200px" /> &#160;
+                    <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" style="width: 200px"/> &#160;
                     to &#160;
                     the Anonymous (unregistered) user
                     <xar:set name="anon">xarConfigVars::get(null,'Site.User.AnonymousUID')</xar:set>
                     &#160;
-                    <input type="submit" value="#xarML('Update Assignments')#" />
-                    <input type="hidden" name="role" value="#$anon#" />    
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="phase" id="phase" value="update" />
-                    <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                    <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#" />
+                    <input type="submit" value="#xarML('Update Assignments')#"/>
+                    <input type="hidden" name="role" value="#$anon#"/>    
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#"/>
                 </fieldset>
             </fieldset>
         </form>
@@ -198,7 +198,7 @@
                                     <xar:set name="displayclass">'xar-accent'</xar:set>
                                 </xar:if>
                                 <xar:set name="row">#$loop:item#</xar:set>
-                                <xar:template file="assignmentrow" />
+                                <xar:template file="assignmentrow"/>
                             </xar:loop>
                         </xar:if>
                     </table>
@@ -211,15 +211,15 @@
                     </div>
                     &#160;
                     Assign &#160;
-                    <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" style="width: 200px" /> &#160;
+                    <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" style="width: 200px"/> &#160;
                     to &#160;
                     <input type="text" name="rolename" value="Enter a user name" style="width: 200px"/>    
                     &#160;
-                    <input type="submit" value="#xarML('Update Assignments')#" />
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="phase" id="phase" value="update" />
-                    <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                    <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#" />
+                    <input type="submit" value="#xarML('Update Assignments')#"/>
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#"/>
                 </fieldset>
             </fieldset>
         </form>

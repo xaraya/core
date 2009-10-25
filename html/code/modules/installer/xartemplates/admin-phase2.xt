@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:set name="active_step">2</xar:set>
     <div id="main_right">
-        <xar:template file="status" />
+        <xar:template file="status"/>
     </div>
     <div id="main_left">
         <h1>
@@ -294,13 +294,13 @@ POSSIBILITY OF SUCH DAMAGES.
     </div>
         <form action="install.php" method="post">
             <div class="xar-form-input-wrapper">
-                <input type="radio" name="agree" id="agree" value="agree" />            
+                <input type="radio" name="agree" id="agree" value="agree"/>            
                 <label for="agree">
                     I have read and agree to abide by the Terms and Conditions as stated above
                 </label>
             </div>
             <div class="xar-form-input-wrapper">
-                <input type="radio" name="agree" id="disagree" value="disagree" checked="checked" />
+                <input type="radio" name="agree" id="disagree" value="disagree" checked="checked"/>
                 <label for="disagree">
                     I have read and do NOT agree to abide by the Terms and Conditions as stated above
                 </label>
@@ -311,10 +311,10 @@ POSSIBILITY OF SUCH DAMAGES.
                 </p>
             </xar:if>
             <div class="xar-align-center" style="margin-top: 2em;">
-                <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-                <input type="hidden" name="install_phase" id="install_phase" value="3" />
+                <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
+                <input type="hidden" name="install_phase" id="install_phase" value="3"/>
 
-                <input type="submit" value="#xarML('Continue')#" />
+                <input type="submit" value="#xarML('Continue')#"/>
             </div>
         </form>
     </div>

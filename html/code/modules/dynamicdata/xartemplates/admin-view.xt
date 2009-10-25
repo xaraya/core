@@ -5,9 +5,9 @@
         <span class="xar-mod-title">Dynamic Data Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>Manage - View #$label#</h2>
-        <xar:template type="module" file="manage-menu" />
+        <xar:template type="module" file="manage-menu"/>
         <!--
             this does all the hard work
         -->
@@ -21,9 +21,9 @@
                 Trying to modify items here may break the module. Please proceed with caution.</h3>
             </xar:if>
             <!-- TODO: distinguish between 'protected' and 'private' ? -->
-            <xar:data-view layout="$layout" object="$object" param="$urlparam" />
+            <xar:data-view layout="$layout" object="$object" param="$urlparam"/>
         <xar:else />
-            <xar:data-view layout="$layout" module="$module_id" itemtype="$itemtype" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid" sort="$sort" />
+            <xar:data-view layout="$layout" module="$module_id" itemtype="$itemtype" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid" sort="$sort"/>
         </xar:if>
         <xar:if condition="!empty($querylink)">
             <p>

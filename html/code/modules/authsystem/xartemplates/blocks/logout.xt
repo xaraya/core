@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-align-center">
         <p>Welcome, 
-        <xar:var name="name" /></p>
+        <xar:var name="name"/></p>
         <p>
             <a href="&xar-modurl-authsystem-user-logout;">Logout</a>
         </p>

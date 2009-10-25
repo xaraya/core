@@ -4,11 +4,11 @@
     <xar:if condition="!empty($class)">
     <xar:elseif condition="empty($size)"/>
         <xar:set name="class">'xar-form-textlong'</xar:set>
-    <xar:elseif condition="$size gt 48" />
+    <xar:elseif condition="$size gt 48"/>
         <xar:set name="class">'xar-form-textxlong'</xar:set>
-    <xar:elseif condition="$size lt 12" />
+    <xar:elseif condition="$size lt 12"/>
         <xar:set name="class">'xar-form-textshort'</xar:set>
-    <xar:elseif condition="$size lt 30" />
+    <xar:elseif condition="$size lt 30"/>
         <xar:set name="class">'xar-form-textmedium'</xar:set>
     <xar:else />
         <xar:set name="class">'xar-form-textlong'</xar:set>
@@ -21,5 +21,5 @@
         <xar:set name="onfocus">'return true;'</xar:set>
     </xar:if>
     <input type="text" name="#$name#" value="#$value#" style="#$style#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" class="#$class#" onfocus="#$onfocus#"/>
-    <xar:template file="dataproperty_additions" module="base" />
+    <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

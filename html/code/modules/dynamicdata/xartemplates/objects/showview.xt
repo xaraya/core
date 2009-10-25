@@ -7,9 +7,9 @@
         use templates in your own [module]/xartemplates/objects directory by specifying
         the tplmodule="..." argument in the xar:data-view BL tag or showView() method call.
     -->
-    <xar:style scope="module" module="dynamicdata" file="dd" />
+    <xar:style scope="module" module="dynamicdata" file="dd"/>
     <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
-        <xar:template file="catnavigation" />
+        <xar:template file="catnavigation"/>
     </xar:if>
     <xar:sec mask="AddDynamicDataItem" catch="false" component="Item" instance="$moduleid .':' . $itemtype.':All'">
         <xar:if condition="!isset($newlink)">
@@ -24,7 +24,7 @@
     <xar:if condition="empty($layout)">
         <xar:set name="layout">'default'</xar:set>
     </xar:if>
-    <xar:template module="$tplmodule" file="view-$layout" />
+    <xar:template module="$tplmodule" file="view-$layout"/>
     <xar:if condition="!empty($pager)">
         <div class="xar-align-center">
             #$pager#

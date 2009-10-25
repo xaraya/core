@@ -14,10 +14,10 @@
 
                 <tr class="xar-align-left">
                     <td>
-                        <xar:data-label property="$properties[$name]" />
+                        <xar:data-label property="$properties[$name]"/>
                     </td>
                     <td>
-                        <xar:data-output property="$properties[$name]" />
+                        <xar:data-output property="$properties[$name]"/>
                     </td>
                 </tr>
             </xar:if>

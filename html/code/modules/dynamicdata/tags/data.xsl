@@ -293,7 +293,7 @@
           <xsl:otherwise>
             <xsl:text>showInput(</xsl:text>
             <xsl:call-template name="atts2args">
-              <xsl:with-param name="nodeset" select="@*[name() != 'hidden' and name() != 'preset']" />
+              <xsl:with-param name="nodeset" select="@*[name() != 'hidden' and name() != 'preset']"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
@@ -322,7 +322,7 @@
           <xsl:otherwise>
             <xsl:text>showInput(</xsl:text>
             <xsl:call-template name="atts2args">
-              <xsl:with-param name="nodeset" select="@*[name() != 'hidden' and name() != 'preset']" />
+              <xsl:with-param name="nodeset" select="@*[name() != 'hidden' and name() != 'preset']"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>

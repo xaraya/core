@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <title>#$tpl:pageTitle#</title>
-    <xar:blockgroup name="header" id="header" />
-    <base href="&xar-baseurl;index.php" />
+    <xar:blockgroup name="header" id="header"/>
+    <base href="&xar-baseurl;index.php"/>
     <!-- Main CSS rules (note: all default parameters in the tag can be omitted) -->
     <xar:style />
     <!-- Styleswitcher CSS files to link to -->
-    <xar:template file="styleswitchercsslinks" type="theme" />
-    <xar:style scope="common" />
+    <xar:template file="styleswitchercsslinks" type="theme"/>
+    <xar:style scope="common"/>
     <!--
     The CSS for ie-win type browsers is included via the conditional comment - other browsers ignore it completely
     This method is recommended by MS - look up the details at http://msdn.microsoft.com/workshop/author/dhtml/overview/ccomment_ovw.asp
@@ -24,13 +24,13 @@
     }
     ul { border:1px solid green }
     '</xar:set>
-    <xar:style scope="theme" method="embed" source="'.$casual_css_source.'" />
+    <xar:style scope="theme" method="embed" source="'.$casual_css_source.'"/>
 
     B) Adding external stylesheet file via import method:
 
-    <xar:style scope="theme" file="no_old_browsers" method="import" />
+    <xar:style scope="theme" file="no_old_browsers" method="import"/>
 -->
-    <xar:style scope="theme" file="ie_win" condition="lt IE 7" />
+    <xar:style scope="theme" file="ie_win" condition="lt IE 7"/>
     <!--
     Additional CSS rules from Xaraya components (and from this theme via xar:style tag)
     Now required for all css-aware themes.
@@ -44,5 +44,5 @@
         &#160;</script>
     </xar:if>
     <!-- Head JavaScript - required for all themes -->
-    <xar:place-javascript position="head" />
+    <xar:place-javascript position="head"/>
 </xar:template>

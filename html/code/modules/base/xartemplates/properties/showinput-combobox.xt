@@ -17,21 +17,21 @@
     
     <xar:set name="optionSelected">false</xar:set>
     <xar:if condition="$mode eq 1">
-        <xar:data-input type="dropdown" name="$name" id="$id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
+        <xar:data-input type="dropdown" name="$name" id="$id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline"/>
     <xar:else />
         <xar:if condition="($mode eq 2) OR ($mode eq 3)">
             <xar:set name="tbname">$name . '_tb'</xar:set>
             <xar:set name="tb_id">'tb_' . $id</xar:set>
             <xar:if condition="$optionSelected eq false">
-                <xar:data-input type="textbox" name="$tbname" id="$tb_id" value="$value" style="$style" />
+                <xar:data-input type="textbox" name="$tbname" id="$tb_id" value="$value" style="$style"/>
             <xar:else />
-                <xar:data-input type="textbox" name="$tbname" id="$tb_id" style="$style" />
+                <xar:data-input type="textbox" name="$tbname" id="$tb_id" style="$style"/>
             </xar:if>
         </xar:if>
         <xar:if condition="$mode eq 3">
             <xar:if condition="$layout eq 'horizontal'">
                 &#160;
-            <xar:elseif condition="($layout eq 'vertical') OR ($layout eq 'default')" />
+            <xar:elseif condition="($layout eq 'vertical') OR ($layout eq 'default')"/>
                 <br />
             </xar:if>
         </xar:if>
@@ -43,17 +43,17 @@
                         <xar:var name="linetext">&lt;== Text Specified</xar:var>
                         <xar:set name="firstline">array('id' => '','name' => $linetext)</xar:set>
                     </xar:if>
-                    <xar:data-input type="dropdown" name="$name" id="$dd_id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
+                    <xar:data-input type="dropdown" name="$name" id="$dd_id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline"/>
                 <xar:else />
                     <xar:if condition="empty($firstline)">
                         <xar:var name="linetext">&lt;== Choose or enter an item</xar:var>
                         <xar:set name="firstline">array('id' => '','name' => $linetext)</xar:set>
                     </xar:if>
-                    <xar:data-input type="dropdown" name="$name" id="$dd_id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline" />
+                    <xar:data-input type="dropdown" name="$name" id="$dd_id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline"/>
                 </xar:if>
             </xar:if>
         </xar:if>
 
     </xar:if>
-    <xar:template file="dataproperty_additions" module="base" />
+    <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

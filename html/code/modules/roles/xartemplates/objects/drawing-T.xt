@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <img src="#xarTplGetImage('T.gif')#" alt=""
-    style="vertical-align: middle; width: 1em; height: 21px" />
+    style="vertical-align: middle; width: 1em; height: 21px"/>
 </xar:template>

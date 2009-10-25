@@ -10,11 +10,11 @@
             <xar:else />Select Items for Privilege '#$extname#'</xar:if>
         </h2>
         <form method="post" action="&xar-modurl-dynamicdata-admin-privileges;">
-            <input type="hidden" name="extpid" id="extpid" value="#$extpid#" />
-            <input type="hidden" name="extname" id="extname" value="#$extname#" />
-            <input type="hidden" name="extrealm" id="extrealm" value="#$extrealm#" />
-            <input type="hidden" name="extmodule" id="extmodule" value="#$extmodule#" />
-            <input type="hidden" name="extcomponent" id="extcomponent" value="#$extcomponent#" />
+            <input type="hidden" name="extpid" id="extpid" value="#$extpid#"/>
+            <input type="hidden" name="extname" id="extname" value="#$extname#"/>
+            <input type="hidden" name="extrealm" id="extrealm" value="#$extrealm#"/>
+            <input type="hidden" name="extmodule" id="extmodule" value="#$extmodule#"/>
+            <input type="hidden" name="extcomponent" id="extcomponent" value="#$extcomponent#"/>
             <table border="1" cellpadding="8" cellspacing="0">
                 <xar:if condition="!empty($extcomponent) and $extcomponent eq 'Field'">
                     <tr>
@@ -88,7 +88,7 @@
                         <th class="xar-align-right xar-valign-top">Item Type</th>
                         <td>
                             <input type="text" name="itemtype" id="itemtype" value="#$itemtype#"
-                            size="10" onchange="submit()" />
+                            size="10" onchange="submit()"/>
                             <!-- TODO: show dropdown box for all relevant item types -->
                         </td>
                     </tr>
@@ -96,7 +96,7 @@
                         <th class="xar-align-right xar-valign-top">Item ID</th>
                         <td>
                             <input type="text" name="itemid" id="itemid" value="#$itemid#"
-                            size="10" onchange="submit()" />
+                            size="10" onchange="submit()"/>
                             <!-- TODO: show dropdown box for all relevant item ids (if not too many) -->
                         </td>
                     </tr>
@@ -145,13 +145,13 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="xar-align-center">
-                        <input type="submit" value="#$refreshlabel#" />
+                        <input type="submit" value="#$refreshlabel#"/>
                     </td>
                 </tr>
             </table>
             <p>There are #$numitems# entries matching these selection criteria at the moment 
             <hr />(Instance Definition #$extinstance#)</p>
-            <input type="submit" name="apply" value="#$applylabel#" />
+            <input type="submit" name="apply" value="#$applylabel#"/>
         </form>
     </div>
 </xar:template>

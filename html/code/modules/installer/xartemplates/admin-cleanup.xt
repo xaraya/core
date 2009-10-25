@@ -4,9 +4,9 @@
     <div id="install">
         <h1>Installation Complete</h1>
         <h3>Congratulations, you have successfully installed 
-        <xar:var scope="config" name="System.Core.VersionId" />
-        <xar:var scope="config" name="System.Core.VersionNum" />( 
-        <xar:var scope="config" name="System.Core.VersionSub" />)!</h3>
+        <xar:var scope="config" name="System.Core.VersionId"/>
+        <xar:var scope="config" name="System.Core.VersionNum"/>( 
+        <xar:var scope="config" name="System.Core.VersionSub"/>)!</h3>
 
         <h2>Next Steps:</h2>
         <p>
@@ -16,7 +16,7 @@
             <a href="#$finalurl#&amp;returnurl=modules" style="font-size: 14pt">I want to add modules</a>
         </div>
         <div style="float: left; width: 33%">
-            <a href="#$finalurl#&amp;returnurl=blocks" style="font-size: 14pt" >I want to manage blocks</a>
+            <a href="#$finalurl#&amp;returnurl=blocks" style="font-size: 14pt">I want to manage blocks</a>
         </div>
         <div style="float: left; width: 33%">
             <a href="#$finalurl#&amp;returnurl=site" style="font-size: 14pt">Just launch the site!</a>

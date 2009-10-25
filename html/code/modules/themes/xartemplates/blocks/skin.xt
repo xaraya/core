@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <form action="#$form_action#" method="post">
         <div>
-            <input type="hidden" name="return_url" value="#$return_url#" />
+            <input type="hidden" name="return_url" value="#$return_url#"/>
             <select name="#$form_picker_name#">
                 <xar:loop name="$themes">
                     <xar:if condition="$loop:item['selected']">
@@ -16,8 +16,8 @@
         </div>
         <br />
         <div>
-            <input type="submit" name="change_skin" value="#xarML('Set Skin')#" />
-            <input type="hidden" name="authid" value="#$authid#" />
+            <input type="submit" name="change_skin" value="#xarML('Set Skin')#"/>
+            <input type="hidden" name="authid" value="#$authid#"/>
         </div>
     </form>
 </xar:template>

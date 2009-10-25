@@ -10,19 +10,19 @@
 
 <xsl:template match="table" mode="xaritemtypeapi_new">
 
-    <xsl:variable name="itemtype" select="@name" />
+    <xsl:variable name="itemtype" select="@name"/>
 
-    <xsl:message>      * xar<xsl:value-of select="$itemtype" />api/new.php</xsl:message>
+    <xsl:message>      * xar<xsl:value-of select="$itemtype"/>api/new.php</xsl:message>
 
-    <xsl:document href="{$output}/xar{$itemtype}api/new.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xar{$itemtype}api/new.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
-            <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype" />api/new.php</xsl:with-param>
+            <xsl:with-param name="filename">xar<xsl:value-of select="$itemtype"/>api/new.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaritemtypeapi_new_func" select="." />
+        <xsl:apply-templates mode="xaritemtypeapi_new_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -34,15 +34,15 @@
 
 -->
 <xsl:template mode="xaritemtypeapi_new_func" match="table">
-    <xsl:variable name="module_prefix" select="../../registry/name" />
+    <xsl:variable name="module_prefix" select="../../registry/name"/>
 
 /**
- * Create a <xsl:value-of select="@name" /> object
+ * Create a <xsl:value-of select="@name"/> object
  *
  */
-function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />api_new( $args ) 
+function <xsl:value-of select="$module_prefix"/>_<xsl:value-of select="@name"/>api_new( $args ) 
 {
-    if (!xarSecurityCheck( 'Add<xsl:value-of select="$module_prefix" />')) return;
+    if (!xarSecurityCheck( 'Add<xsl:value-of select="$module_prefix"/>')) return;
 
     list ( $authid ) = xarVarCleanFromInput( 'authid' );
     extract( $args );
@@ -53,8 +53,8 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         ,'user'
         ,'getobject'
         ,array(
-            'module'     => '<xsl:value-of select="$module_prefix" />'
-            ,'itemtype'  => <xsl:value-of select="@itemtype" />
+            'module'     => '<xsl:value-of select="$module_prefix"/>'
+            ,'itemtype'  => <xsl:value-of select="@itemtype"/>
         ));
     if ( empty($object) ) return;
 
@@ -62,11 +62,11 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
      * Initialize the data array();
      */
     $data = xarModAPIFunc(
-        '<xsl:value-of select="$module_prefix" />'
+        '<xsl:value-of select="$module_prefix"/>'
         ,'private'
         ,'common'
         ,array(
-            'title' => xarML( 'New <xsl:value-of select="label" />' )
+            'title' => xarML( 'New <xsl:value-of select="label"/>' )
             ,'type' => 'admin'
             ));
 
@@ -80,15 +80,15 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
         $isvalid = $object->checkInput();
 
         /*
-         * We create the preview with the <xsl:value-of select="$module_prefix" />_userapi_view<xsl:value-of select="@name" />()
+         * We create the preview with the <xsl:value-of select="$module_prefix"/>_userapi_view<xsl:value-of select="@name"/>()
          * function.
          */
         $preview = xarModFunc(
-            '<xsl:value-of select="../../registry/name" />'
+            '<xsl:value-of select="../../registry/name"/>'
             ,'user'
             ,'display'
             ,array(
-                'itemtype'  =>  '<xsl:value-of select="@itemtype" />'
+                'itemtype'  =>  '<xsl:value-of select="@itemtype"/>'
                 ,'object'   => $object ));
         if ( !isset( $preview ) ) return;
         $data['preview'] = $preview;
@@ -99,15 +99,15 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
      * call the hook 'module:modifyconfig:GUI'
      */
     $args = array(
-        'module'        =>  '<xsl:value-of select="$module_prefix" />'
+        'module'        =>  '<xsl:value-of select="$module_prefix"/>'
         ,'itemid'       =>  NULL
-        ,'itemtype'     =>  '<xsl:value-of select="@itemtype" />' );
+        ,'itemtype'     =>  '<xsl:value-of select="@itemtype"/>' );
     $data['hooks'] = xarModCallHooks(
         'item'
         ,'new'
         ,NULL
         ,$args
-        ,'<xsl:value-of select="$module_prefix" />' );
+        ,'<xsl:value-of select="$module_prefix"/>' );
 
     $values = $object->getFieldValues();
 
@@ -117,11 +117,11 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
     $data['object_props'] =&amp; $object->getProperties();
     $data['object_values']  =&amp; $values;
     $data['action'] = xarModURL(
-        '<xsl:value-of select="$module_prefix" />'
+        '<xsl:value-of select="$module_prefix"/>'
         ,'admin'
         ,'new'
         ,array(
-            'itemtype'  => <xsl:value-of select="@itemtype" /> ));
+            'itemtype'  => <xsl:value-of select="@itemtype"/> ));
     $data['authid'] = xarSecGenAuthKey();
     return $data;
 }

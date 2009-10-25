@@ -5,7 +5,7 @@
         <span class="xar-mod-title">#$object:label# Information</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>Manage #$object:label# '#$name#':</h2>
         <xar:if condition="count($parents) ne 0">
             <div>
@@ -28,11 +28,11 @@
         </xar:if>
         <!-- TODO set the active tab here -->
         <!-- Show the general tab list for roles -->
-        <xar:template file="tablist" />
+        <xar:template file="tablist"/>
         <fieldset>
             <legend>Role properties</legend>
             <xar:set name="fields">array('id','name','uname','email','state','regdate')</xar:set>
-            <xar:data-display object="$object" fieldlist="$fields" />
+            <xar:data-display object="$object" fieldlist="$fields"/>
             <xar:if condition="$basetype eq ROLES_USERTYPE">
                 <xar:set name="settings">
                     explode(',',xarModVars::get('roles','duvsettings'))
@@ -54,7 +54,7 @@
                             <xar:set name="value">
                                 xarModUserVars::get('roles','primaryparent',$id)
                             </xar:set>
-                            <xar:data-output type="grouplist" value="$value" tabindex="8" />
+                            <xar:data-output type="grouplist" value="$value" tabindex="8"/>
                         </div>
                     </xar:if>
                     <div class="xar-form-input-wrapper">
@@ -67,7 +67,7 @@
                         <xar:set name="options">
                             xarMod::apiFunc('roles','user','getancestors',array('id' =&gt; $id, 'parents' =&gt; 1))
                         </xar:set>
-                        <xar:data-output type="dropdown" name="duvs[primaryparent]" id="duvs_primaryparent" options="$options" value="$value" tabindex="8" />
+                        <xar:data-output type="dropdown" name="duvs[primaryparent]" id="duvs_primaryparent" options="$options" value="$value" tabindex="8"/>
                     </div>
                 </xar:if>
                 <xar:if condition="in_array('userlastlogin',$settings)">
@@ -96,12 +96,12 @@
                         <xar:set name="value">
                             xarModUserVars::get('roles','usertimezone',$id)
                         </xar:set>
-                        <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
+                        <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value"/>
                     </div>
                 </xar:if>
             </xar:if>
             <xar:foreach in="$hooks" key="$module" value="$output">#$output#</xar:foreach>
         </fieldset>
-        <br class="xar-clearboth" />
+        <br class="xar-clearboth"/>
     </div>
 </xar:template>

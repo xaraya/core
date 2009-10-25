@@ -45,19 +45,19 @@
                     #$field.id#
                 </td>
                 <td class="#$displayclass#">
-                    <input type="text" name="dd_seq[#$field['id']#]" id="dd_seq_#$field['id']#" value="#$field['seq']#" class="xar-form-textshort" />
+                    <input type="text" name="dd_seq[#$field['id']#]" id="dd_seq_#$field['id']#" value="#$field['seq']#" class="xar-form-textshort"/>
                 </td>
                 <td class="#$displayclass#">
-                    <input type="text" name="dd_name[#$field['id']#]" id="dd_name_#$field['id']#" value="#$field['name']#" class="xar-form-textmedium" />
+                    <input type="text" name="dd_name[#$field['id']#]" id="dd_name_#$field['id']#" value="#$field['name']#" class="xar-form-textmedium"/>
                 </td>
                 <td class="#$displayclass#">
-                    <input type="text" name="dd_label[#$field['id']#]" id="dd_label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium" />
+                    <input type="text" name="dd_label[#$field['id']#]" id="dd_label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium"/>
                 </td>
                 <td class="#$displayclass#">
-                    <xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="old_dd_type_'.$field['id'].'" value="$field['type']" />
+                    <xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="old_dd_type_'.$field['id'].'" value="$field['type']"/>
                 </td>
                 <td class="#$displayclass#">
-                    <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVarPrepForDisplay($field['defaultvalue'])#" class="xar-form-textmedium" />
+                    <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVarPrepForDisplay($field['defaultvalue'])#" class="xar-form-textmedium"/>
                 </td>
                 <td class="#$displayclass#">
                     <xar:set name="title">xarML('Edit configuration for property \"#(1)\"',$field['name'])</xar:set>
@@ -79,7 +79,7 @@
                     </xar:set>
                     <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
                     <xar:else />
-                    <img class="xar-icon-disabled" src="#$icon#" alt="up" title="#$title#" />
+                    <img class="xar-icon-disabled" src="#$icon#" alt="up" title="#$title#"/>
                     </xar:if>
 
                     <xar:set name="title">xarML('Move property down')</xar:set>
@@ -92,7 +92,7 @@
                     </xar:set>
                     <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
                     <xar:else />
-                    <img class="xar-icon-disabled" src="#$icon#" alt="down" title="#$title#" />
+                    <img class="xar-icon-disabled" src="#$icon#" alt="down" title="#$title#"/>
                     </xar:if>
                 </td>
             </tr>
@@ -117,7 +117,7 @@
                         </xar:if>
                     </select>
                     &#160;&#160;Status:&#160;
-                    <xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" id="dd_status_'.$field['id'].'" size="15" value="$field['status']" />
+                    <xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" id="dd_status_'.$field['id'].'" size="15" value="$field['status']"/>
                 </td>
                 <td class="#$displayclass#">
                     &#160;
@@ -126,7 +126,7 @@
         </xar:foreach>
     </table>
     <!-- Include the part for creating a new property -->
-    <xar:template file="newproperty" module="dynamicdata" />
+    <xar:template file="newproperty" module="dynamicdata"/>
     <xar:if condition="!empty($hooks)">
         <xar:foreach in="$hooks" key="$module" value="$output">#$output#</xar:foreach>
     </xar:if>
@@ -134,16 +134,16 @@
         <div class="xar-align-center">
             <!--
             Optional extra table for data sources - use a text box if you want to make this configurable
-            <input type="text" name="table" id="table" value="#$table#" />
+            <input type="text" name="table" id="table" value="#$table#"/>
             -->
             <xar:if condition="!empty($table)">
-                <input type="hidden" name="table" id="table" value="#$table#" />
+                <input type="hidden" name="table" id="table" value="#$table#"/>
             </xar:if>
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="objectid" id="objectid" value="#$objectid#" />
-            <input type="hidden" name="module_id" id="module_id" value="#$module_id#" />
-            <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
-            <input type="submit" value="#xarML('Update Properties')#" />
+            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+            <input type="hidden" name="objectid" id="objectid" value="#$objectid#"/>
+            <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>
+            <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
+            <input type="submit" value="#xarML('Update Properties')#"/>
         </div>
     </fieldset>
 </xar:template>

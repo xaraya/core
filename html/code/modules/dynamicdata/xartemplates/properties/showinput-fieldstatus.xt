@@ -10,9 +10,9 @@
     <xar:if condition="!isset($style)">
         <xar:set name="style">''</xar:set>
     </xar:if>
-    <select name="display_#$name#" id="display_#$id#_" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#" >
+    <select name="display_#$name#" id="display_#$id#_" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
         <xar:foreach in="$options['display']" value="$row">
-            <xar:if condition="$row['id'] eq $value['display']" >
+            <xar:if condition="$row['id'] eq $value['display']">
                 <option value="#$row['id']#" selected="selected">#$row['name']#</option>
             <xar:else />
                 <option value="#$row['id']#">#$row['name']#</option>
@@ -21,9 +21,9 @@
     </select>
 
     <xar:set name="tabindex">$tabindex + 1</xar:set>
-    <select name="input_#$name#" id="input_#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#" >
+    <select name="input_#$name#" id="input_#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
         <xar:foreach in="$options['input']" value="$row">
-            <xar:if condition="$row['id'] eq $value['input']" >
+            <xar:if condition="$row['id'] eq $value['input']">
                 <option value="#$row['id']#" selected="selected">#$row['name']#</option>
             <xar:else />
                 <option value="#$row['id']#">#$row['name']#</option>
@@ -31,6 +31,6 @@
         </xar:foreach>
     </select>
 
-    <xar:template file="dataproperty_additions" module="base" />
+    <xar:template file="dataproperty_additions" module="base"/>
 
 </xar:template>

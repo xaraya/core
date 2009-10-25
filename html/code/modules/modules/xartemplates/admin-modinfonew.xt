@@ -15,10 +15,10 @@
                 </div>
             </div>
             <div class="xar-floatright xar-halfwidth xar-align-right">
-                <img alt="#xarML('icon')#" src="#$modiconurl#" />
+                <img alt="#xarML('icon')#" src="#$modiconurl#"/>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Module Name -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -30,7 +30,7 @@
                 </p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Module Display Name -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -40,7 +40,7 @@
                 <p class="xar-mod-title">#$moddispname#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Description -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -50,7 +50,7 @@
                 <p class="xar-mod-title">#$moddispdesc#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Module Directory -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -60,7 +60,7 @@
                 <p class="xar-mod-title">#$moddir#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Module ID -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -70,7 +70,7 @@
                 <p class="xar-mod-title">#$modid#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Module Class -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -80,7 +80,7 @@
                 <p class="xar-mod-title">#$modclass#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Module Category -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -90,7 +90,7 @@
                 <p class="xar-mod-title">#$modcat#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Module Version -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -100,7 +100,7 @@
                 <p class="xar-mod-title">#$modver#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Module Author -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -110,7 +110,7 @@
                 <p class="xar-mod-title">#$modauthor#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Module Contact -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -120,7 +120,7 @@
                 <p class="xar-mod-title">#$modcontact#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Module Dependency -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -130,7 +130,7 @@
                 <p class="xar-mod-title">#$moddependency#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!--
     Module Navigation
     <div class="xar-clearboth">

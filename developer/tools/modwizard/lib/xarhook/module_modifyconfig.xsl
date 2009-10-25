@@ -15,15 +15,15 @@
 
     <xsl:message>      * module_modifyconfig()</xsl:message>
 
-    <xsl:document href="{$output}/xarhook/module_modifyconfig.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xarhook/module_modifyconfig.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xarhook/module_modifyconfig.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates select="." mode="xarhook_module_modifyconfig_func" />
+        <xsl:apply-templates select="." mode="xarhook_module_modifyconfig_func"/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -34,7 +34,7 @@
 -->
 <xsl:template match="xaraya_module" mode="xarhook_module_modifyconfig_func">
 
-<xsl:variable name="module_prefix" select="registry/name" />
+<xsl:variable name="module_prefix" select="registry/name"/>
 <xsl:if test="$gCommentsLevel >= 1">
 /**
  * Utility function to pass individual menu items to the main menu.
@@ -46,7 +46,7 @@
  * @return  array containing the menulinks for the main menu items
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_hook_module_modifyconfig ( $args ) 
+function <xsl:value-of select="$module_prefix"/>_hook_module_modifyconfig ( $args ) 
 {
     extract( $args );
 
@@ -64,13 +64,13 @@ function <xsl:value-of select="$module_prefix" />_hook_module_modifyconfig ( $ar
 
     $modid = xarModGetIDFromName($modname);
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)','module name', 'admin', 'module_modifyconfig', '<xsl:value-of select="$module_prefix" />');
+        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)','module name', 'admin', 'module_modifyconfig', '<xsl:value-of select="$module_prefix"/>');
         xarExceptionSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
 
     return xarTplModule(
-        '<xsl:value-of select="$module_prefix" />'
+        '<xsl:value-of select="$module_prefix"/>'
         ,'hook'
         ,'module_modifyconfig'
         ,array()

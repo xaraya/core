@@ -11,7 +11,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://www.w3.org/TR/xhtml1/strict">
 
-<xsl:include href="xarstyles/navbar.xsl" />
+<xsl:include href="xarstyles/navbar.xsl"/>
 
 
 <!-- ENTRY POINT    print out progress and call module template -->
@@ -20,7 +20,7 @@
         <xsl:message>
 ### Generating css styles</xsl:message>
 
-        <xsl:apply-templates mode="xarstyles_navbar"    select="." />
+        <xsl:apply-templates mode="xarstyles_navbar"    select="."/>
 
 </xsl:template>
 </xsl:stylesheet>

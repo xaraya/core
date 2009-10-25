@@ -9,7 +9,7 @@
             <h2>#$object:label#</h2>
             #$output#
             <xar:set name="viewlink">xarServer::getObjectURL($object->name,'view')</xar:set>
-            <p><a href="#$viewlink#">View <xar:data-label object="$object" /></a></p>
+            <p><a href="#$viewlink#">View <xar:data-label object="$object"/></a></p>
         </xar:if>
     </div>
 </xar:template>

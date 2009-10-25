@@ -16,7 +16,7 @@
                 <xar:foreach in="$item['fields']" value="$field">
                     <td>
                         <xar:data-output type="$field['type']" name="dd_'.$field['id'].'"
-                        value="$field['value']" />
+                        value="$field['value']"/>
                     </td>
                 </xar:foreach>
                 <td>
@@ -46,7 +46,7 @@
         <a href="#$nexturl#">&gt;&gt;</a>
         <xar:else />---</xar:if></div>
         </xar:if>
-    <xar:elseif condition="$layout eq 'cells'" />
+    <xar:elseif condition="$layout eq 'cells'"/>
         <table width="100%" border="1" cellspacing="0" cellpadding="4">
         <tr>
             <xar:foreach in="$labels" value="$item">
@@ -58,7 +58,7 @@
                 <xar:foreach in="$item['fields']" value="$field">
                     <td>
                         <xar:data-input type="$field['type']" name="dd_'.$field['id'].'"
-                        value="$field['value']" size="15" />
+                        value="$field['value']" size="15"/>
                     </td>
                 </xar:foreach>
             </tr>

@@ -67,7 +67,7 @@
 <!--
   Matching the old xar:mlvar tag does nothing, but
 -->
-<xsl:template match="xar:mlvar" />
+<xsl:template match="xar:mlvar"/>
 
 <!--
   we pick up its value/expression to add to the PHP xarML function as a param by explicitly calling this template

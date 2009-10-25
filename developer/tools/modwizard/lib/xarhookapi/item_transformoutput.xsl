@@ -15,15 +15,15 @@
 
     <xsl:message>      * item_transformoutput()</xsl:message>
 
-    <xsl:document href="{$output}/xarhookapi/item_transformoutput.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xarhookapi/item_transformoutput.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xarhookapi/item_transformoutput</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates select="." mode="xarhookapi_item_transformoutput_func" />
+        <xsl:apply-templates select="." mode="xarhookapi_item_transformoutput_func"/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -34,7 +34,7 @@
 -->
 <xsl:template match="xaraya_module" mode="xarhookapi_item_transformoutput_func">
 
-<xsl:variable name="module_prefix" select="registry/name" />
+<xsl:variable name="module_prefix" select="registry/name"/>
 <xsl:if test="$gCommentsLevel >= 1">
 /**
  * Utility function to pass individual menu items to the main menu.
@@ -46,13 +46,13 @@
  * @return  array containing the menulinks for the main menu items
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_hookapi_item_transformoutput ( $args ) 
+function <xsl:value-of select="$module_prefix"/>_hookapi_item_transformoutput ( $args ) 
 {
     extract($args);
 
     // Argument check
     if (!isset($extrainfo)) {
-        $msg = xarML('Invalid Parameter Count in #(3), #(1)api_#(2)', 'hook', 'transformoutput', '<xsl:value-of select="$module_prefix" />');
+        $msg = xarML('Invalid Parameter Count in #(3), #(1)api_#(2)', 'hook', 'transformoutput', '<xsl:value-of select="$module_prefix"/>');
         xarExceptionSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
         return;
     }
@@ -62,22 +62,22 @@ function <xsl:value-of select="$module_prefix" />_hookapi_item_transformoutput (
         if (isset($extrainfo['transform']) and is_array($extrainfo['transform'])) {
             foreach ($extrainfo['transform'] as $key) {
                 if (isset($extrainfo[$key])) {
-                    $extrainfo[$key] = <xsl:value-of select="$module_prefix" />_transformoutput($extrainfo[$key]);
+                    $extrainfo[$key] = <xsl:value-of select="$module_prefix"/>_transformoutput($extrainfo[$key]);
                 }
             }
             return $extrainfo;
         }
         foreach ($extrainfo as $key => $value ) {
-            $result[$key] = <xsl:value-of select="$module_prefix" />_transformoutput($value);
+            $result[$key] = <xsl:value-of select="$module_prefix"/>_transformoutput($value);
         }
     } else {
-        $result = <xsl:value-of select="$module_prefix" />_transformoutput($text);
+        $result = <xsl:value-of select="$module_prefix"/>_transformoutput($text);
     }
 
     return $result;
 }
 
-function <xsl:value-of select="$module_prefix" />_transformoutput( $text ) 
+function <xsl:value-of select="$module_prefix"/>_transformoutput( $text ) 
 {
     return '[ My Hook: Change me in xarhookapi/item_transformoutput.xsl ] ' . $text;
 

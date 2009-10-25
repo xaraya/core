@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- @todo make this editor configurable -->
     <xar:if condition="xarModVars::get('base','editor') eq 'htmlarea'">
-        <xar:template file="htmlarea_insert" module="htmlarea" type="module" />
+        <xar:template file="htmlarea_insert" module="htmlarea" type="module"/>
     </xar:if>
     <xar:var name="messagetitle">
         Write this string in the message body or subject to display the corresponding information
@@ -12,7 +12,7 @@
         <span class="xar-mod-title">Roles Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>
             <a href="&xar-modurl-roles-admin-createmail;">Messaging System:</a>Modify Notification Template: #$mailtype#
         </h2>
@@ -52,17 +52,17 @@
                 <p>
                     <xar:if condition="$mailtype eq 'validation'">
                         This email will be sent to users when they re-validate their account (i.e. change email address). 
-                    <xar:elseif condition="$mailtype eq 'confirmation'" />
+                    <xar:elseif condition="$mailtype eq 'confirmation'"/>
                         This email will be sent to users to complete their registration by a link in the email. 
-                    <xar:elseif condition="$mailtype eq 'welcome'" />
+                    <xar:elseif condition="$mailtype eq 'welcome'"/>
                         This email will be sent to users to welcome them. 
-                    <xar:elseif condition="$mailtype eq 'reminder'" />
+                    <xar:elseif condition="$mailtype eq 'reminder'"/>
                         This email will be sent to users who use the lost password option. 
-                    <xar:elseif condition="$mailtype eq 'pending'" />
+                    <xar:elseif condition="$mailtype eq 'pending'"/>
                         This email will be sent to users when their accounts are pending approval. 
-                    <xar:elseif condition="$mailtype eq 'deactivation'" />
+                    <xar:elseif condition="$mailtype eq 'deactivation'"/>
                         This email will be sent to users when their accounts are deactivated. 
-                    <xar:elseif condition="$mailtype eq 'password'" />
+                    <xar:elseif condition="$mailtype eq 'password'"/>
                         This email will be sent to users when an administrator changes their password. 
                     <xar:else />
                         This email will be sent to users when an administrator changes their password.
@@ -77,7 +77,7 @@
                     <label for="subject" title="#xarML('Title of the notification')#" class="xar-form-label">
                         Subject:
                     </label>
-                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong" />
+                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="message" title="#xarML('Body of the notification')#" class="xar-form-label">
@@ -92,10 +92,10 @@
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="phase" id="phase" value="update" />
-                    <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />
-                    <input type="submit" value="#xarML('Update')#" />
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>
+                    <input type="submit" value="#xarML('Update')#"/>
                 </div>
             </fieldset>
             <p>The following variables will be replaced in the text with specific information:</p>
@@ -124,7 +124,7 @@
                     </span>
                     <span class="xar-padding-thickleft">IP address of the user</span>
                 </div>
-            <xar:elseif condition="$mailtype eq 'password' or $mailtype eq 'reminder'" />
+            <xar:elseif condition="$mailtype eq 'password' or $mailtype eq 'reminder'"/>
                 <div class="xar-form-input-wrapper">
                     <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
                         ##$password##
@@ -182,11 +182,11 @@
                         ##$<xar:var name="name"/>##
                     </span>
                     <span class="xar-padding-thickleft">
-                        <xar:data-label property="$properties[$name]" />
+                        <xar:data-label property="$properties[$name]"/>
                     </span>
                 </div>
             </xar:foreach>
-            <br class="xar-clearboth" />
+            <br class="xar-clearboth"/>
         </form>
     </div>
 </xar:template>

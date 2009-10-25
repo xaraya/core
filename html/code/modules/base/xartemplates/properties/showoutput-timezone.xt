@@ -6,9 +6,9 @@
         <xar:if condition="isset($offset)">
             (GMT #$offset#)
         </xar:if>
-    <xar:elseif condition="isset($offset)" />
+    <xar:elseif condition="isset($offset)"/>
         GMT #$offset#
-    <xar:elseif condition="!empty($option['name'])" />
+    <xar:elseif condition="!empty($option['name'])"/>
         #$option['name']#
     </xar:if>
 </xar:template>

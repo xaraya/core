@@ -35,9 +35,9 @@
                     <td class="xar-align-top">
                         <xar:foreach in="$fields" value="$field">
                             <xar:set name="checked">!empty($checked[$field])</xar:set>
-                            <xar:data-input type="checkbox" name="$field" id="$field" checked="$checked" />
+                            <xar:data-input type="checkbox" name="$field" id="$field" checked="$checked"/>
                             <label for="#$field#">
-                                <xar:data-label property="$properties[$field]" />
+                                <xar:data-label property="$properties[$field]"/>
                             </label>
                             <br />
                         </xar:foreach>

@@ -3,11 +3,11 @@
     <xar:set name="dummy">xarTplSetPageTemplateName('header')</xar:set>
     <xar:if condition="!empty($object)">
         <xar:element name="#$object:name#">
-            <xar:data-display object="$object" />
+            <xar:data-display object="$object"/>
         </xar:element>
         <xar:else />
         <xar:element name="#$module#_#$itemtype#">
-            <xar:data-display module="$module" itemtype="$itemtype" itemid="$itemid" />
+            <xar:data-display module="$module" itemtype="$itemtype" itemid="$itemid"/>
         </xar:element>
     </xar:if>
 </xar:template>

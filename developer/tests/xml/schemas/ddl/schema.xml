@@ -9,14 +9,14 @@
     <description>A nice table with some sort of description</description>
     <column id="first.id" name="id" auto="true" required="true">
        <description>A unique id column</description>
-       <number size="11" />
+       <number size="11"/>
     </column>
     <column id="first.ref_id" name="ref_id" required="true">
        <description>A reference to an id column</description>
-       <number size="11" />
+       <number size="11"/>
     </column>
     <column id="first.name" name="name" required="true">
-    <text size="255" />
+    <text size="255"/>
     </column>
     <constraints>
       <primary name="id">

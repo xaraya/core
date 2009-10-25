@@ -4,13 +4,13 @@
     <xar:if condition="$menustyle eq byname">
         <p>By Name 
         <br />#$data#</p>
-        <xar:elseif condition="$menustyle eq bycat" />
+        <xar:elseif condition="$menustyle eq bycat"/>
         <p>By Category 
         <br />#$data#</p>
-        <xar:elseif condition="$menustyle eq byweight" />
+        <xar:elseif condition="$menustyle eq byweight"/>
         <p>By Weight 
         <br />#$data#</p>
-        <xar:elseif condition="$menustyle eq bygroup" />
+        <xar:elseif condition="$menustyle eq bygroup"/>
         <p>By Group 
         <br />#$data#</p>
         <xar:else />

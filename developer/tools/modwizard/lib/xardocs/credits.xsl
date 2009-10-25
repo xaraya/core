@@ -15,7 +15,7 @@
 
     <xsl:message>       * xardocs/credits.txt</xsl:message>
 
-<xsl:document href="{$output}/xardocs/credits.txt" format="text" omit-xml-declaration="yes" >
+<xsl:document href="{$output}/xardocs/credits.txt" format="text" omit-xml-declaration="yes">
 
 Add your credits here
 

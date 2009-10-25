@@ -38,8 +38,8 @@
             </div>
         </xar:foreach>
         Enable
-        <input type="button" value="All" onclick="xar_base_checkall(this.form,true);return false;" />
-        <input type="button" value="None" onclick="xar_base_checkall(this.form,false);return false;" />
+        <input type="button" value="All" onclick="xar_base_checkall(this.form,true);return false;"/>
+        <input type="button" value="None" onclick="xar_base_checkall(this.form,false);return false;"/>
         <p>
             <strong>
                 Hint: leave the <i>Site Name</i> or <i>Profile Link</i> empty if you want to permanently delete it from the list.
@@ -47,5 +47,5 @@
             </strong>
         </p>
     </fieldset>
-    <xar:template file="dataproperty_additions" module="base" />
+    <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

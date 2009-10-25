@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="base" filename="toggle.js" />
+    <xar:javascript module="base" filename="toggle.js"/>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Modules Administration</span>
     </div>
@@ -26,9 +26,9 @@
                         <!-- Enable for All itemtypes checkbox -->
                         <div class="xar-clearboth">
                             <xar:if condition="!empty($hookmod['checked'][0])">
-                                <input type="checkbox" name="hooks_#$hookmod['modname']#[0]" id="hooks_#$hookmod['modname']#_0" value="1" checked="checked" />
+                                <input type="checkbox" name="hooks_#$hookmod['modname']#[0]" id="hooks_#$hookmod['modname']#_0" value="1" checked="checked"/>
                             <xar:else />
-                                <input type="checkbox" name="hooks_#$hookmod['modname']#[0]" id="hooks_#$hookmod['modname']#_0" value="1" />
+                                <input type="checkbox" name="hooks_#$hookmod['modname']#[0]" id="hooks_#$hookmod['modname']#_0" value="1"/>
                             </xar:if>
                             <label for="hooks_#$hookmod['modname']#_0">All</label>
                         </div>
@@ -36,9 +36,9 @@
                         <xar:foreach in="$itemtypes" key="$typeid" value="$itemtype">
                             <div class="xar-clearboth">
                                 <xar:if condition="!empty($hookmod['checked'][$typeid])">
-                                    <input type="checkbox" name="hooks_#$hookmod['modname']#[#$typeid#]" id="hooks_#$hookmod['modname']#_#$typeid#" value="1" checked="checked" />
+                                    <input type="checkbox" name="hooks_#$hookmod['modname']#[#$typeid#]" id="hooks_#$hookmod['modname']#_#$typeid#" value="1" checked="checked"/>
                                 <xar:else />
-                                    <input type="checkbox" name="hooks_#$hookmod['modname']#[#$typeid#]" id="hooks_#$hookmod['modname']#_#$typeid#" value="1" />
+                                    <input type="checkbox" name="hooks_#$hookmod['modname']#[#$typeid#]" id="hooks_#$hookmod['modname']#_#$typeid#" value="1"/>
                                 </xar:if>
                                 <label for="hooks_#$hookmod['modname']#_#$typeid#">
                                     #$itemtype['label']#
@@ -58,13 +58,13 @@
               <fieldset>
                 <div class="xar-form-input-wrapper-after">
                   <xar:if condition="!empty($return_url)">
-                      <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
+                      <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                   </xar:if>
-                  <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                  <input type="hidden" name="id" id="id" value="#$id#" />
-                  <input type="hidden" name="displayname" id="displayname" value="#$displayname#" />
-                  <input type="hidden" name="newdisplayname" id="newdisplayname" value="#$displayname#" />
-                  <input type="submit" value="#xarML('Save Changes')#" class="xar-margin-thick" />
+                  <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                  <input type="hidden" name="id" id="id" value="#$id#"/>
+                  <input type="hidden" name="displayname" id="displayname" value="#$displayname#"/>
+                  <input type="hidden" name="newdisplayname" id="newdisplayname" value="#$displayname#"/>
+                  <input type="submit" value="#xarML('Save Changes')#" class="xar-margin-thick"/>
                 </div>
               </fieldset>
             </form>

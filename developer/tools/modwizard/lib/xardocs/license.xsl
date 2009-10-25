@@ -15,7 +15,7 @@
 
     <xsl:message>       * xardocs/license.txt</xsl:message>
 
-<xsl:document href="{$output}/xardocs/license.txt" format="text" omit-xml-declaration="yes" >
+<xsl:document href="{$output}/xardocs/license.txt" format="text" omit-xml-declaration="yes">
 
 Add your license here
 

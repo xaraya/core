@@ -38,7 +38,7 @@
 
     This include should by default be commented out.
   -->
-  <!-- <xsl:import href="default/debug" /> -->
+  <!-- <xsl:import href="default/debug"/> -->
 
   <!--
     We produce an UTF-8 encoded XML document as output. As we compile the
@@ -61,7 +61,7 @@
     and then correct for the elements which cause us trouble. In theory
     there shouldnt be any, but alas.
   -->
-  <xsl:strip-space elements="*" />
+  <xsl:strip-space elements="*"/>
 
   <!--
     Start of the transform usually starts with matching the root, so do we
@@ -96,7 +96,7 @@
     to resolve.
     @todo leave #(1) constructs alone?
 -->
-<xsl:template name="resolveText" >
+<xsl:template name="resolveText">
   <xsl:param name="expr"/>
 
   <!-- 
@@ -169,7 +169,7 @@
 </xsl:template>
 
 <xsl:template name="translateText">
-  <xsl:param name="expr" />
+  <xsl:param name="expr"/>
   <xsl:choose>
     <xsl:when test="string(number($expr))!='NaN'">
       <xsl:value-of select="$expr"/>
@@ -213,7 +213,7 @@
   @param  string to     contains what will be the replacement.
   @return string with the replacements done.
 -->
-<xsl:template name="replace" >
+<xsl:template name="replace">
   <!-- Specifiy the parameters -->
   <xsl:param name="source"/>
   <xsl:param name="from" select="&quot;'&quot;"/>
@@ -269,11 +269,11 @@
     <xsl:param name="delimiter" select="'#'"/>
     <xsl:choose>
       <xsl:when test="contains($expr,$delimiter) = 0">
-        <xsl:value-of select="string-length($expr) + 1" />
+        <xsl:value-of select="string-length($expr) + 1"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="initial-position">
-          <xsl:value-of select="string-length(substring-before($expr,$delimiter)) + 1" />
+          <xsl:value-of select="string-length(substring-before($expr,$delimiter)) + 1"/>
         </xsl:variable>
         <xsl:choose>
           <xsl:when test="starts-with(substring-after($expr,$delimiter),$delimiter)">
@@ -282,7 +282,7 @@
                 <xsl:with-param name="expr" select="substring($expr,$initial-position + 2)"/>
               </xsl:call-template>
             </xsl:variable>
-            <xsl:value-of select="$initial-position + 1 + $add-on-position" />
+            <xsl:value-of select="$initial-position + 1 + $add-on-position"/>
           </xsl:when>
           
           <!-- Honor the #(n) construct here. Replace this with the matches function at some point -->
@@ -295,12 +295,12 @@
                 <xsl:with-param name="expr" select="substring($expr,$initial-position + 1)"/>
               </xsl:call-template>
             </xsl:variable>
-            <xsl:value-of select="$initial-position + 1 + $add-on-position" />
+            <xsl:value-of select="$initial-position + 1 + $add-on-position"/>
           </xsl:when>
           <!-- End of #(n) clause -->
 
           <xsl:otherwise>
-            <xsl:value-of select="$initial-position" />
+            <xsl:value-of select="$initial-position"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>

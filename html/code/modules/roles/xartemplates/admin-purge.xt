@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="base" filename="checkall.js" position="head" />
-    <xar:style scope="module" file="privileges" />
+    <xar:javascript module="base" filename="checkall.js" position="head"/>
+    <xar:style scope="module" file="privileges"/>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Roles Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>Recall / Purge</h2>
         <div>
             <ul class="xar-tabs xar-alt xar-norm-outline">
@@ -63,8 +63,8 @@
                     </tr>
                     <tr>
                         <td class="xar-align-center">
-                            <input type="text" name="recallsearch" id="recallsearch" value="#$recallsearch#" maxlength="255" class="xar-form-textmedium xar-margin-thickright" />
-                            <input type="submit" name="search" id="search" value="#xarML('Search')#" class="xar-margin-thickleft" />
+                            <input type="text" name="recallsearch" id="recallsearch" value="#$recallsearch#" maxlength="255" class="xar-form-textmedium xar-margin-thickright"/>
+                            <input type="submit" name="search" id="search" value="#xarML('Search')#" class="xar-margin-thickleft"/>
                         </td>
                         <td class="xar-align-center">
                             <select name="groupid" id="groupid">
@@ -86,7 +86,7 @@
                                 array('id' => ROLES_STATE_NOTVALIDATED, 'name' => 'Not Validated'), 
                                 array('id' => ROLES_STATE_PENDING, 'name' => 'Pending'), )
                             </xar:set>
-                            <xar:data-input type="dropdown" name="recallstate" options="$options" value="$recallstate" />
+                            <xar:data-input type="dropdown" name="recallstate" options="$options" value="$recallstate"/>
                             </td>
                         </tr>
                     </table>
@@ -118,7 +118,7 @@
                                 <td>#$loop:item['itemtype']#</td>
                                     <td class="xar-align-center">
                                         <xar:if condition="$loop:item['unique'] eq 1">
-                                             <input type="checkbox" name="recallids[#$loop:item['id']#]" id="recallids_#$loop:item['id']#" />
+                                             <input type="checkbox" name="recallids[#$loop:item['id']#]" id="recallids_#$loop:item['id']#"/>
                                         </xar:if>
                                     </td>
                                 </tr>
@@ -126,9 +126,9 @@
                             <!-- end loop over users -->
                         </table>
                         <div class="xar-align-center">
-                            <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                            <input type="hidden" name="operation" id="operation" value="recall" />
-                            <input name="confirmation" type="submit" value="#xarML('Recall')#" />
+                            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                            <input type="hidden" name="operation" id="operation" value="recall"/>
+                            <input name="confirmation" type="submit" value="#xarML('Recall')#"/>
                         </div>
                         <!-- if there is a pager show it in the last row -->
                         <xar:if condition="!empty($recallpager)">
@@ -143,8 +143,8 @@
             <h3>Purge Users</h3>
             <p>Note: Purged users cannot be recalled. Groups and some special users cannot be purged.</p>
             <form method="post" action="&xar-modurl-roles-admin-purge;" enctype="application/x-www-form-urlencoded" name="purge">
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="operation" id="operation" value="purge" />
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="operation" id="operation" value="purge"/>
                 <!-- Roles List Sort and Filter Controls table -->
                 <table class="xar-fullwidth">
                     <tr>
@@ -161,8 +161,8 @@
                     </tr>
                     <tr>
                         <td class="xar-align-center">
-                            <input type="text" name="purgesearch" id="purgesearch" value="#$purgesearch#" maxlength="255" class="xar-form-textmedium xar-margin-thickright" />
-                            <input type="submit" name="search" id="search_user" value="#xarML('Search')#" class="xar-margin-thickleft" />
+                            <input type="text" name="purgesearch" id="purgesearch" value="#$purgesearch#" maxlength="255" class="xar-form-textmedium xar-margin-thickright"/>
+                            <input type="submit" name="search" id="search_user" value="#xarML('Search')#" class="xar-margin-thickleft"/>
                         </td>
                         <td class="xar-align-center">
                             <xar:set name="options">
@@ -175,8 +175,8 @@
                                     array('id' => ROLES_STATE_PENDING, 'name' => 'Pending'),
                                 )
                             </xar:set>
-                            <xar:data-input type="dropdown" name="purgestate" options="$options" value="$purgestate" />
-                            <input type="submit" name="search" id="search_state" value="#xarML('Search')#" class="xar-margin-thickright" />
+                            <xar:data-input type="dropdown" name="purgestate" options="$options" value="$purgestate"/>
+                            <input type="submit" name="search" id="search_state" value="#xarML('Search')#" class="xar-margin-thickright"/>
                         </td>
                     </tr>
                 </table>
@@ -212,7 +212,7 @@
                                 </td>
                                 <td>#$loop:item['state']#</td>
                                 <td class="xar-align-center">
-                                    <input type="checkbox" name="purgeids[#$loop:item['id']#]" id="purgeids_#$loop:item['id']#" value="1" />
+                                    <input type="checkbox" name="purgeids[#$loop:item['id']#]" id="purgeids_#$loop:item['id']#" value="1"/>
                                 </td>
                             </tr>
                         </xar:loop>
@@ -227,7 +227,7 @@
                         </a>
                     </div>
                     <div class="xar-align-center">
-                        <input name="confirmation" type="submit" value="#xarML('Purge')#" />
+                        <input name="confirmation" type="submit" value="#xarML('Purge')#"/>
                     </div>
                     <xar:if condition="!empty($purgepager)">
                         <div class="xar-align-center">#$purgepager#</div>

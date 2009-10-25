@@ -5,7 +5,7 @@
         <span class="xar-mod-title">404 Not Found</span>
     </div>
     <div class="xar-mod-body">
-        <img src="#xarTplGetImage('dynamicdata.png', 'base')#" alt="#xarML('Icon')#" class="xar-module-icon" />
+        <img src="#xarTplGetImage('dynamicdata.png', 'base')#" alt="#xarML('Icon')#" class="xar-module-icon"/>
         <xar:if condition="!empty($msg)">
             <h2><xar:var name="msg"/></h2>
         </xar:if>

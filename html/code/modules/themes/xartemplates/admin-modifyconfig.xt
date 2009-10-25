@@ -5,10 +5,10 @@
         <span class="xar-mod-title">Themes Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>Modify Themes Configuration</h2>
         <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
-            <xar:data-form object="$module_settings" />
+            <xar:data-form object="$module_settings"/>
             <fieldset>
                 <legend>Configuration Options</legend>
                 <div class="xar-form-input-wrapper">
@@ -17,9 +17,9 @@
                         Default Theme Directory:
                     </label>
                     <xar:set name="value">
-                        <xar:var scope="config"  name="Site.BL.ThemesDirectory" />
+                        <xar:var scope="config"  name="Site.BL.ThemesDirectory"/>
                     </xar:set>
-                    <input type="text" id="themedir" name="themedir" value="#$value#" maxlength="100" class="xar-form-textlong" />
+                    <input type="text" id="themedir" name="themedir" value="#$value#" maxlength="100" class="xar-form-textlong"/>
                 </div>
                 <!--
                 <div class="xar-form-input-wrapper">
@@ -27,15 +27,15 @@
                         Enable the Admin Dashboard.
                     </label>
                     <xar:set name="checked">
-                        <xar:var scope="module" module="themes" name="usedashboard" />
+                        <xar:var scope="module" module="themes" name="usedashboard"/>
                     </xar:set>
-                    <xar:data-input type="checkbox" name="usedashboard" checked="$checked" />
+                    <xar:data-input type="checkbox" name="usedashboard" checked="$checked"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="dashtemplate" title="#xarML('Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'')#" class="xar-form-label">
                         Dashboard Template name
                     </label>
-                    <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100" />&#160;(without the .xt extension) 
+                    <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100"/>&#160;(without the .xt extension) 
                     <div class="xar-form-input-wrapper-after">
                         The Admin Dashboard is automatically used with all admin functions. The default page template name is  <strong>dashboard.xt</strong>.
                     </div>
@@ -49,9 +49,9 @@
                         Enable InPage Admin SubMenus
                     </label>
                     <xar:set name="checked">
-                        <xar:var scope="module" module="themes" name="adminpagemenu" />
+                        <xar:var scope="module" module="themes" name="adminpagemenu"/>
                     </xar:set>
-                    <xar:data-input type="checkbox" name="adminpagemenu" checked="$checked" />
+                    <xar:data-input type="checkbox" name="adminpagemenu" checked="$checked"/>
                 </div>
             </fieldset>
             <fieldset>
@@ -61,27 +61,27 @@
                         Site Name
                     </label>
                     <xar:set name="value">
-                        <xar:var scope="module" module="themes" name="SiteName" />
+                        <xar:var scope="module" module="themes" name="SiteName"/>
                     </xar:set>
-                    <input type="text" name="sitename" id="sitename" value="#$value#" size="30" maxlength="100" />
+                    <input type="text" name="sitename" id="sitename" value="#$value#" size="30" maxlength="100"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="slogan" class="xar-form-label">
                         Site Slogan
                     </label>
                     <xar:set name="value">
-                        <xar:var scope="module" module="themes" name="SiteSlogan" />
+                        <xar:var scope="module" module="themes" name="SiteSlogan"/>
                     </xar:set>
-                    <input type="text" name="slogan" id="slogan" value="#$value#" size="30" maxlength="100" />
+                    <input type="text" name="slogan" id="slogan" value="#$value#" size="30" maxlength="100"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="copyright" class="xar-form-label">
                         Copyright
                     </label>
                     <xar:set name="value">
-                        <xar:var scope="module" module="themes" name="SiteCopyRight" />
+                        <xar:var scope="module" module="themes" name="SiteCopyRight"/>
                     </xar:set>
-                    <input type="text" name="copyright" id="copyright" value="#$value#" size="30" maxlength="100" />
+                    <input type="text" name="copyright" id="copyright" value="#$value#" size="30" maxlength="100"/>
                 </div>
                 #xarVarDelCached('Mod.Variables.themes','SiteCopyRight')# 
                 <div class="xar-form-input-wrapper">
@@ -90,7 +90,7 @@
                     </label>
                     <div class="xar-form-container-after">
                         <xar:set name="value">
-                            <xar:var scope="module" module="themes" name="SiteFooter" />
+                            <xar:var scope="module" module="themes" name="SiteFooter"/>
                         </xar:set>
                         <textarea name="footer" id="footer" cols="60" rows="5" class="xar-form-textareamedium">#$value#</textarea>
                     </div>
@@ -101,9 +101,9 @@
                         Page Title Separator
                     </label>
                     <xar:set name="value">
-                        <xar:var scope="module" module="themes" name="SiteTitleSeparator" />
+                        <xar:var scope="module" module="themes" name="SiteTitleSeparator"/>
                     </xar:set>
-                    <input type="text" name="separator" id="separator" value="#$value#" size="10" maxlength="15" />
+                    <input type="text" name="separator" id="separator" value="#$value#" size="10" maxlength="15"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <xar:set name="options">
@@ -122,7 +122,7 @@
                     <label for="pagetitle" class="xar-form-label">
                         Page Title Order
                     </label>
-                    <xar:data-input type="dropdown" name="pagetitle" options="$options" value="$value" />
+                    <xar:data-input type="dropdown" name="pagetitle" options="$options" value="$value"/>
                 </div>
             </fieldset>
             <fieldset>
@@ -133,7 +133,7 @@
                             Show php block header                            
                         </label>
                         <xar:set name="checked"><xar:var scope="module" module="themes" name="ShowPHPCommentBlockInTemplates"/></xar:set>
-                        <xar:data-input type="checkbox" name="showphpcbit" id="showphpcbit" checked="$checked" />&#160;(block header is displayed in compiled templates)
+                        <xar:data-input type="checkbox" name="showphpcbit" id="showphpcbit" checked="$checked"/>&#160;(block header is displayed in compiled templates)
                     </div>
                 </xar:if>
                 <div class="xar-form-input-wrapper">
@@ -141,21 +141,21 @@
                         Show template filenames                        
                     </label>
                     <xar:set name="checked"><xar:var scope="module" module="themes" name="ShowTemplates"/></xar:set>
-                    <xar:data-input type="checkbox" name="showtemplates" checked="$checked" />&#160;(filenames are shown as HTML comments)
+                    <xar:data-input type="checkbox" name="showtemplates" checked="$checked"/>&#160;(filenames are shown as HTML comments)
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="cachetemplates" class="xar-form-label">                        
                         Cache templates                        
                     </label>
                     <xar:set name="checked"><xar:var scope="config" name="Site.BL.CacheTemplates"/></xar:set>
-                    <xar:data-input type="checkbox" name="cachetemplates" checked="$checked" />
+                    <xar:data-input type="checkbox" name="cachetemplates" checked="$checked"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="var_dump" class="xar-form-label">                        
                         Debug Templates by Showing Variables Available                        
                     </label>
                     <xar:set name="checked"><xar:var scope="module" module="themes" name="variable_dump"/></xar:set>
-                    <xar:data-input type="checkbox" name="variable_dump" checked="$checked" />
+                    <xar:data-input type="checkbox" name="variable_dump" checked="$checked"/>
                 </div>
                 <xar:if condition="xarThemeIsAvailable('atom')">
                     <!-- This should be moved if we ever fully support the atom spec -->
@@ -164,16 +164,16 @@
                             Atom Tag                            
                         </label>
                         <xar:set name="value"><xar:var scope="module" module="themes" name="AtomTag"/></xar:set>
-                        <input type="text" name="AtomTag" id="AtomTag" value="#$value#" size="30" maxlength="100" />
+                        <input type="text" name="AtomTag" id="AtomTag" value="#$value#" size="30" maxlength="100"/>
                     </div>
                 </xar:if>
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:data-input type="hidden" name="phase" id="phase" value="update" />
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+                    <xar:data-input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                     <xar:var name="label">Update</xar:var>
-                    <xar:button type="submit" label="$label" />
+                    <xar:button type="submit" label="$label"/>
                 </div>
             </fieldset>
         </form>

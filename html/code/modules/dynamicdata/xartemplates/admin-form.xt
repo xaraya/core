@@ -9,15 +9,15 @@
         <xar:set name="objectid">#$object:objectid#</xar:set>
         <form method="post" action="&xar-modurl-dynamicdata-admin-form;">
             <div class="xar-align-center">
-                <input type="hidden" name="objectid" value="#$objectid#" />
-                <input type="hidden" name="theme" value="print" />
-                <input type="submit" value="#xarML('Refresh')#" />
+                <input type="hidden" name="objectid" value="#$objectid#"/>
+                <input type="hidden" name="theme" value="print"/>
+                <input type="submit" value="#xarML('Refresh')#"/>
             </div>
         </form>
         <form>
             <div>
                 <table class="xar-fullwidth">
-                    <xar:data-form object="$object" />
+                    <xar:data-form object="$object"/>
                 </table>
             </div>
         </form>

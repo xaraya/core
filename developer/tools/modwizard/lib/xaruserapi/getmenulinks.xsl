@@ -12,15 +12,15 @@
 
     <xsl:message>      * xaruserapi/getmenulinks.php</xsl:message>
 
-    <xsl:document href="{$output}/xaruserapi/getmenulinks.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaruserapi/getmenulinks.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaruserapi/getmenulinks.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaruserapi_getmenulinks_func" select="." />
+        <xsl:apply-templates mode="xaruserapi_getmenulinks_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -31,7 +31,7 @@
 -->
 <xsl:template match="xaraya_module" mode="xaruserapi_getmenulinks_func">
 
-<xsl:variable name="module_prefix" select="registry/name" />
+<xsl:variable name="module_prefix" select="registry/name"/>
 <xsl:if test="$gCommentsLevel >= 1">
 /**
  * Utility function to pass individual menu items to the main menu.
@@ -43,7 +43,7 @@
  * @return  array containing the menulinks for the main menu items
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_userapi_getmenulinks ( $args ) 
+function <xsl:value-of select="$module_prefix"/>_userapi_getmenulinks ( $args ) 
 {
     <xsl:if test="$gCommentsLevel >= 2">
     // First we need to do a security check to ensure that we only return menu items
@@ -53,7 +53,7 @@ function <xsl:value-of select="$module_prefix" />_userapi_getmenulinks ( $args )
     // not that he/she doesn't.
     </xsl:if>
 
-    if (xarSecurityCheck('View<xsl:value-of select="$module_prefix" />')) {
+    if (xarSecurityCheck('View<xsl:value-of select="$module_prefix"/>')) {
         <xsl:if test="$gCommentsLevel >= 2">
         // The main menu will look for this array and return it for a tree
         // view of the module. We are just looking for three items in the
@@ -65,13 +65,13 @@ function <xsl:value-of select="$module_prefix" />_userapi_getmenulinks ( $args )
         <xsl:for-each select="database/table[@user='true']">
         $menulinks[] = array(
             'url'       => xarModURL(
-                '<xsl:value-of select="$module_prefix" />'
+                '<xsl:value-of select="$module_prefix"/>'
                 ,'user'
                 ,'view'
                 ,array(
-                    'itemtype' => <xsl:value-of select="@itemtype" /> ))
-            ,'title'    => 'Look at the <xsl:value-of select="label" />'
-            ,'label'    => 'View <xsl:value-of select="label" />' );
+                    'itemtype' => <xsl:value-of select="@itemtype"/> ))
+            ,'title'    => 'Look at the <xsl:value-of select="label"/>'
+            ,'label'    => 'View <xsl:value-of select="label"/>' );
         </xsl:for-each>
 
     }

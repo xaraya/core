@@ -7,7 +7,7 @@
     <div id="status">
         <div id="status_body">
             <div class="xar-align-center">
-                <img src="#sys::code()#modules/installer/xarimages/upgrader.png" alt="#xarML('Upgrade icon')#" />
+                <img src="#sys::code()#modules/installer/xarimages/upgrader.png" alt="#xarML('Upgrade icon')#"/>
             </div>
             <ul>
                 <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">

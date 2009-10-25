@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-    <xar:javascript module="base" filename="orderitem.js" position="head" />
+    <xar:javascript module="base" filename="orderitem.js" position="head"/>
     <script type="text/javascript">
         xar_base_reorder_warn = '#xarML('You must select an option to move.')#';
     </script>
@@ -20,14 +20,14 @@
         <div class="xar-floatleft">
             <div class="xar-floatleft">
                 <button id="#$id#_up" onclick="return xar_base_reorder('#$id#', true, '#$id#_order');" title="#xarML('Move Up')#" class="xar-displayblock xar-margin-thickbottom">
-                    <img src="#$up_arrow_src#" alt="#xarML('Up Arrow')#" />
+                    <img src="#$up_arrow_src#" alt="#xarML('Up Arrow')#"/>
                 </button>
                 <button id="#$id#_down" onclick="return xar_base_reorder('#$id#', false, '#$id#_order');" title="#xarML('Move Down')#" class="xar-displayblock xar-margin-thicktop">
-                    <img src="#$down_arrow_src#" alt="#xarML('Down Arrow')#" />
+                    <img src="#$down_arrow_src#" alt="#xarML('Down Arrow')#"/>
                 </button>
             </div>
-            <xar:data-input type="multiselect" name="$name" size="$size" options="$options" tabindex="$tabindex" class="xar-margin-thickleft" />
-            <input type="hidden" name="#$name#_order" id="#$id#_order" value="#$order#" />
+            <xar:data-input type="multiselect" name="$name" size="$size" options="$options" tabindex="$tabindex" class="xar-margin-thickleft"/>
+            <input type="hidden" name="#$name#_order" id="#$id#_order" value="#$order#"/>
         </div>
     <xar:else />
         <xar:mlstring>No options specified</xar:mlstring>

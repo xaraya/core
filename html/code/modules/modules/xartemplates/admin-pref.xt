@@ -17,7 +17,7 @@
         </p>
         <form method="post" action="&xar-modurl-modules-admin-pref;">
             <div>
-                <input type="submit" name="restore" value="Restore" />
+                <input type="submit" name="restore" value="Restore"/>
             </div>
             <p>Status: your current preferences are the same as defaults</p>
         </form>

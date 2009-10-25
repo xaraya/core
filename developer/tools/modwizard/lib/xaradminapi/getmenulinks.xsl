@@ -12,15 +12,15 @@
 
     <xsl:message>      * xaradminapi/getmenulinks.php</xsl:message>
 
-    <xsl:document href="{$output}/xaradminapi/getmenulinks.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaradminapi/getmenulinks.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaradminapi/getmenulinks.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaradminapi_getmenulinks_func" select="." />
+        <xsl:apply-templates mode="xaradminapi_getmenulinks_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -33,7 +33,7 @@
 -->
 <xsl:template match="xaraya_module" mode="xaradminapi_getmenulinks_func">
 
-<xsl:variable name="module_prefix" select="registry/name" />
+<xsl:variable name="module_prefix" select="registry/name"/>
 <xsl:if test="$gCommentsLevel >= 1">
 /**
  * Pass individual menu items to the main menu
@@ -42,20 +42,20 @@
  * @return  array containing the menulinks for the main menu items
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_adminapi_getmenulinks ( $args ) 
+function <xsl:value-of select="$module_prefix"/>_adminapi_getmenulinks ( $args ) 
 {
-    if (xarSecurityCheck('View<xsl:value-of select="$module_prefix" />')) {
+    if (xarSecurityCheck('View<xsl:value-of select="$module_prefix"/>')) {
 
         $menulinks[] = array(
             'url'       => xarModURL(
-                '<xsl:value-of select="$module_prefix" />'
+                '<xsl:value-of select="$module_prefix"/>'
                 ,'admin'
                 ,'main' )
             ,'title'    => 'Show informations'
             ,'label'    => 'Overview' );
 
         $menulinks[] = array(
-            'url'       => xarModURL( '<xsl:value-of select="$module_prefix" />', 'admin', 'view')
+            'url'       => xarModURL( '<xsl:value-of select="$module_prefix"/>', 'admin', 'view')
             ,'title'    => 'Show the main page'
             ,'label'    => 'Main Page' );
 
@@ -70,18 +70,18 @@ function <xsl:value-of select="$module_prefix" />_adminapi_getmenulinks ( $args 
         <xsl:for-each select="database/table[@admin='true']">
         $menulinks[] = array(
             'url'       => xarModURL(
-                '<xsl:value-of select="$module_prefix" />'
+                '<xsl:value-of select="$module_prefix"/>'
                 ,'admin'
                 ,'view'
                 ,array(
-                    'itemtype'  => <xsl:value-of select="@itemtype" /> ))
-            ,'title'    => 'Administration view of <xsl:value-of select="label" />'
-            ,'label'    => 'View <xsl:value-of select="label" />' );
+                    'itemtype'  => <xsl:value-of select="@itemtype"/> ))
+            ,'title'    => 'Administration view of <xsl:value-of select="label"/>'
+            ,'label'    => 'View <xsl:value-of select="label"/>' );
         </xsl:for-each>
 
         $menulinks[] = array(
             'url'       => xarModURL(
-                '<xsl:value-of select="$module_prefix" />'
+                '<xsl:value-of select="$module_prefix"/>'
                 ,'admin'
                 ,'config' )
             ,'title'    => 'Modify the configuration'

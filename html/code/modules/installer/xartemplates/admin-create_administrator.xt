@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="active_step">6</xar:set>
     <div id="main_right">
-        <xar:template file="status" />
+        <xar:template file="status"/>
     </div>
     <div id="main_left">
         <h1>Administrator Account Creation</h1>
@@ -20,26 +20,26 @@
                 <label class="xar-form-label" for="install_admin_name">
                     Display Name
                 </label>
-                <xar:data-input property="$properties['name']" />
+                <xar:data-input property="$properties['name']"/>
             </div>
             <div class="xar-form-input-wrapper">
                 <label class="xar-form-label" for="install_admin_username">
                     Username&#160;(Used for logon)
                 </label>
-                <xar:data-input property="$properties['uname']" />
+                <xar:data-input property="$properties['uname']"/>
                 
             </div>
             <div class="xar-form-input-wrapper">
                 <label class="xar-form-label" for="install_admin_password">
                     Password
                 </label>
-                <xar:data-input property="$properties['password']" />
+                <xar:data-input property="$properties['password']"/>
             </div>
             <div class="xar-form-input-wrapper">
                 <label class="xar-form-label" for="install_admin_email">
                     Email
                 </label>
-                <xar:data-input property="$properties['email']" />
+                <xar:data-input property="$properties['email']"/>
             </div>
 
             <p>
@@ -49,8 +49,8 @@
                 case letters, numbers and punctuation.
             </p>
             <div class="xar-align-center" style="margin: 2em 0;">
-                <input type="submit" name="create" id="create" value="#xarML('Continue')#" />
-                <input type="hidden" name="install_language" id="install_language" value="#$language#" />
+                <input type="submit" name="create" id="create" value="#xarML('Continue')#"/>
+                <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
                 <xar:data-input property="$properties['id']" hidden="hidden"/>
                 <xar:data-input property="$properties['role_type']" hidden="hidden"/>
                 <xar:data-input property="$properties['regdate']" hidden="hidden"/>

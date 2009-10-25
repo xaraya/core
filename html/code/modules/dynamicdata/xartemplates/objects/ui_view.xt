@@ -6,7 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object)">
-            <h2>View <xar:data-label object="$object" /></h2>
+            <h2>View <xar:data-label object="$object"/></h2>
             <xar:if condition="$object:name eq 'objects' and $object:linktype eq 'object'">
                 <!-- show a list of objects -->
                 <ul>
@@ -17,7 +17,7 @@
                     </xar:foreach>
                 </ul>
             <xar:else/>
-                <xar:data-view object="$object" />
+                <xar:data-view object="$object"/>
             </xar:if>
         <xar:else />
             <div class="xar-align-center">

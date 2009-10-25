@@ -13,14 +13,14 @@
             <xar:else />
                 <xar:set name="theID">$id.'_'.$key</xar:set>
             </xar:if>
-            <xar:if condition="$option['id'] eq $value" >
-                <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked" />
+            <xar:if condition="$option['id'] eq $value">
+                <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked"/>
             <xar:else />
-                <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" />
+                <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#"/>
             </xar:if>
             <label for="#$theID#">#$option['name']# </label>&#160;
         </xar:foreach>
-    <xar:elseif condition="$layout eq 'vertical'" />
+    <xar:elseif condition="$layout eq 'vertical'"/>
         <xar:if condition="isset($onchange)">
           <xar:set name="evt_change">$onchange</xar:set>
         <xar:else/>
@@ -33,10 +33,10 @@
                 <xar:else />
                     <xar:set name="theID">$id.'_'.$key</xar:set>
                 </xar:if>
-                <xar:if condition="$option['id'] eq $value" >
-                    <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked" />
+                <xar:if condition="$option['id'] eq $value">
+                    <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked"/>
                 <xar:else />
-                    <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" />
+                    <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#"/>
                 </xar:if>
                 <label for="#$theID#">#$option['name']# </label>
             </div>
@@ -49,5 +49,5 @@
       You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype
     </p>
     </xar:if>
-    <xar:template file="dataproperty_additions" module="base" />
+    <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

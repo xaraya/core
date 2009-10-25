@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="base" filename="confirmlink.js" position="head" />
-    <xar:style scope="common" />
+    <xar:javascript module="base" filename="confirmlink.js" position="head"/>
+    <xar:style scope="common"/>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Blocks Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>View Block Groups</h2>
         <h4>
             <a href="#xarModURL('blocks','admin','new_group')#">New Block Group</a>

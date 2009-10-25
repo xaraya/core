@@ -12,15 +12,15 @@
 
     <xsl:message>      * xaradmin/modify.php</xsl:message>
 
-    <xsl:document href="{$output}/xaradmin/modify.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaradmin/modify.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaradmin/modify.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaradmin_modify_func" select="." />
+        <xsl:apply-templates mode="xaradmin_modify_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -34,12 +34,12 @@
 
 -->
 <xsl:template match="xaraya_module" mode="xaradmin_modify_func">
-    <xsl:variable name="module_prefix" select="registry/name" />
+    <xsl:variable name="module_prefix" select="registry/name"/>
 
 /**
  * Standard interface for the modification of objects.
  *
- * We just forward to the appropiate <xsl:value-of select="$module_prefix" />_admin_modify&lt;table&gt;()
+ * We just forward to the appropiate <xsl:value-of select="$module_prefix"/>_admin_modify&lt;table&gt;()
  * function.
  * <xsl:if test="$gCommentsLevel >= 20">
  * This function has to deal with some special events.
@@ -53,7 +53,7 @@
  *      'itemid'    =>  id of the item to delete
  * </xsl:if>
  */
-function <xsl:value-of select="$module_prefix" />_admin_modify( $args ) 
+function <xsl:value-of select="$module_prefix"/>_admin_modify( $args ) 
 {
     list( $itemtype, $itemid, $cancel, $authid, $preview ) =
         xarVarCleanFromInput('itemtype', 'itemid', 'cancel', 'authid', 'preview' );
@@ -71,7 +71,7 @@ function <xsl:value-of select="$module_prefix" />_admin_modify( $args )
         // the user to an appropriate page for them to carry on their work
         return xarResponseRedirect(
             xarModURL(
-                '<xsl:value-of select="$module_prefix" />'
+                '<xsl:value-of select="$module_prefix"/>'
                 ,'admin'
                 ,'view'
                 ,array(
@@ -92,10 +92,10 @@ function <xsl:value-of select="$module_prefix" />_admin_modify( $args )
 
             switch( $itemtype ) {
             <xsl:for-each select="database/table[@admin='true']">
-                case <xsl:value-of select="@itemtype" />:
+                case <xsl:value-of select="@itemtype"/>:
                     return xarModAPIFunc(
-                        '<xsl:value-of select="$module_prefix" />'
-                        ,'<xsl:value-of select="@name" />'
+                        '<xsl:value-of select="$module_prefix"/>'
+                        ,'<xsl:value-of select="@name"/>'
                         ,'update'
                         ,$args );
             </xsl:for-each>
@@ -103,7 +103,7 @@ function <xsl:value-of select="$module_prefix" />_admin_modify( $args )
                     // TODO // Add statusmessage
                     return xarResponseRedirect(
                         xarModURL(
-                            '<xsl:value-of select="$module_prefix" />'
+                            '<xsl:value-of select="$module_prefix"/>'
                             ,'admin'
                             ,'view' ));
             }
@@ -112,26 +112,26 @@ function <xsl:value-of select="$module_prefix" />_admin_modify( $args )
 
     switch( $itemtype ) {
     <xsl:for-each select="database/table[@admin='true']">
-        case <xsl:value-of select="@itemtype" />:
+        case <xsl:value-of select="@itemtype"/>:
             $data = xarModAPIFunc(
-                '<xsl:value-of select="$module_prefix" />'
-                ,'<xsl:value-of select="@name" />'
+                '<xsl:value-of select="$module_prefix"/>'
+                ,'<xsl:value-of select="@name"/>'
                 ,'modify'
                 ,$args );
-            $itemtype_name = '<xsl:value-of select="@name" />';
+            $itemtype_name = '<xsl:value-of select="@name"/>';
             break;
     </xsl:for-each>
         default:
             // TODO // Add statusmessage
             return xarResponseRedirect(
                 xarModURL(
-                    '<xsl:value-of select="$module_prefix" />'
+                    '<xsl:value-of select="$module_prefix"/>'
                     ,'admin'
                     ,'view' ));
     }
 
     return xarTplModule(
-        '<xsl:value-of select="$module_prefix" />'
+        '<xsl:value-of select="$module_prefix"/>'
         ,'admin'
         ,'modify'
         ,$data

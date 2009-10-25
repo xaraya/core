@@ -12,15 +12,15 @@
 
     <xsl:message>      * xaruserapi/gettitle.php</xsl:message>
 
-    <xsl:document href="{$output}/xaruserapi/gettitle.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaruserapi/gettitle.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaruserapi/gettitle.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaruserapi_gettitle_func" select="." />
+        <xsl:apply-templates mode="xaruserapi_gettitle_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -32,7 +32,7 @@
         MODE: xaruserapi_gettitle           MATCH:  table
 -->
 <xsl:template mode="xaruserapi_gettitle_func" match="xaraya_module">
-    <xsl:variable name="module_prefix" select="registry/name" />
+    <xsl:variable name="module_prefix" select="registry/name"/>
 /**
  *
  * @param array( 'itemtype' => &lt;itemtype&gt; )
@@ -41,7 +41,7 @@
  * @param $args['item'] item
  * @param $args['itemtype'] itemtyp
  */
-function <xsl:value-of select="$module_prefix" />_userapi_gettitle( $args ) 
+function <xsl:value-of select="$module_prefix"/>_userapi_gettitle( $args ) 
 {
     extract( $args );
 
@@ -51,9 +51,9 @@ function <xsl:value-of select="$module_prefix" />_userapi_gettitle( $args )
         switch ( $itemtype ) {
         <xsl:for-each select="database/table">
             <xsl:if test="boolean( labelfields )">
-            case <xsl:value-of select="@itemtype" />:
-                return <xsl:for-each select="labelfields/field">$item['<xsl:value-of select="@name" />']<xsl:if test="last() != position()"> .
-                       '<xsl:value-of select="../@separator" />' . </xsl:if></xsl:for-each>;
+            case <xsl:value-of select="@itemtype"/>:
+                return <xsl:for-each select="labelfields/field">$item['<xsl:value-of select="@name"/>']<xsl:if test="last() != position()"> .
+                       '<xsl:value-of select="../@separator"/>' . </xsl:if></xsl:for-each>;
                 break;
             </xsl:if>
         </xsl:for-each>
@@ -64,9 +64,9 @@ function <xsl:value-of select="$module_prefix" />_userapi_gettitle( $args )
         switch ( $itemtype ) {
         <xsl:for-each select="database/table">
             <xsl:if test="boolean( labelfields )">
-            case <xsl:value-of select="@itemtype" />:
-                return <xsl:for-each select="labelfields/field">$object->properties['<xsl:value-of select="@name" />']->getValue()<xsl:if test="last() != position()"> .
-                       '<xsl:value-of select="../@separator" />' . </xsl:if></xsl:for-each>;
+            case <xsl:value-of select="@itemtype"/>:
+                return <xsl:for-each select="labelfields/field">$object->properties['<xsl:value-of select="@name"/>']->getValue()<xsl:if test="last() != position()"> .
+                       '<xsl:value-of select="../@separator"/>' . </xsl:if></xsl:for-each>;
                 break;
             </xsl:if>
         </xsl:for-each>

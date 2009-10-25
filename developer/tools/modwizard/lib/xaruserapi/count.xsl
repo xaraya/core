@@ -12,15 +12,15 @@
 
     <xsl:message>      * xaruserapi/count.php</xsl:message>
 
-    <xsl:document href="{$output}/xaruserapi/count.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaruserapi/count.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaruserapi/count.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaruserapi_count_func" select="." />
+        <xsl:apply-templates mode="xaruserapi_count_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -33,7 +33,7 @@
         MODE: xaruserapi_count              MATCH:  table
 -->
 <xsl:template mode="xaruserapi_count_func" match="xaraya_module">
-    <xsl:variable name="module_prefix" select="registry/name" />
+    <xsl:variable name="module_prefix" select="registry/name"/>
 /**
  * Generic function to retrieve the number of objects stored in database of
  * itemtype $itemtype;
@@ -41,7 +41,7 @@
  * @param array( 'itemtype' => &lt;itemtype&gt; )
  * @return number of items
  */
-function <xsl:value-of select="$module_prefix" />_userapi_count( $args ) 
+function <xsl:value-of select="$module_prefix"/>_userapi_count( $args ) 
 {
     extract( $args );
 
@@ -51,7 +51,7 @@ function <xsl:value-of select="$module_prefix" />_userapi_count( $args )
         ,'user'
         ,'countitems'
         ,array(
-            'module'     => '<xsl:value-of select="$module_prefix" />'
+            'module'     => '<xsl:value-of select="$module_prefix"/>'
             ,'itemtype'  => $itemtype
         ));
 

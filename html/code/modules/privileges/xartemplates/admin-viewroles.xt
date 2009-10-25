@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:style scope="module" file="privtree" />
-    <xar:javascript module="privileges" filename="xarTree.js" />
+    <xar:style scope="module" file="privtree"/>
+    <xar:javascript module="privileges" filename="xarTree.js"/>
     <script type="javascript">
         <!--
         var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
@@ -28,7 +28,7 @@
         <span class="xar-mod-title">Privileges Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>Manage Privilege: #$pname#</h2>
         <xar:if condition="count($parents) ne 0">
             <div>
@@ -100,7 +100,7 @@
                             </td>
                             <td class="xar-align-center">
                                 <a href="#$removeurl#&amp;roleid=#$role['roleid']#" title="#xarML('Remove this Privilege assignment')#">
-                                    <img src="modules/privileges/xarimages/delete.gif" class="xar-valign-middle" />
+                                    <img src="modules/privileges/xarimages/delete.gif" class="xar-valign-middle"/>
                                 </a>
                             </td>
                         </tr>
@@ -118,18 +118,18 @@
                             #$groups[$i]['users']#</option>
                         </xar:for>
                     </select>
-                    <input type="submit" value="#xarML('Assign')#" />
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('roles')#" />
-                    <input type="hidden" name="privid" id="privid" value="#$id#" />
+                    <input type="submit" value="#xarML('Assign')#"/>
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('roles')#"/>
+                    <input type="hidden" name="privid" id="privid" value="#$id#"/>
                     <input type="hidden" name="return_url" id="return_url"
-                    value="&xar-modurl-privileges-admin-viewroles;&amp;id=#$id#" />
+                    value="&xar-modurl-privileges-admin-viewroles;&amp;id=#$id#"/>
                 </div>
             </form>
         </fieldset>
         <fieldset>
             <legend>Current Privileges</legend>
             <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-viewroles;" method="post" enctype="application/x-www-form-urlencoded">
-                <input type="hidden" name="id" id="id" value="#$id#" />
+                <input type="hidden" name="id" id="id" value="#$id#"/>
                 <p>
                     <a href="&xar-modurl-privileges-admin-newprivilege;">Add Privilege</a>
                 </p>
@@ -144,7 +144,7 @@
                 </p>
                 <xar:data-input type="radio" options="$options" value="$show"  onclick="this.form.submit();"/>
             </form>
-            <xar:data-input type="privilegestree" show="$show" />
+            <xar:data-input type="privilegestree" show="$show"/>
         </fieldset>
     </div>
 </xar:template>

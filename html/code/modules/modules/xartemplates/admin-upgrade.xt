@@ -9,7 +9,7 @@
         <xar:if condition="!empty($dependencies)"></xar:if>
         <!-- This section deals with upgrade errors. -->
         <h2>Module Upgrade Failed</h2>
-        <xar:template file="install-errors" type="module" />
+        <xar:template file="install-errors" type="module"/>
         <p>
             <a href="&xar-modurl-modules-admin-list;">Go back to the modules list.</a>
         </p>

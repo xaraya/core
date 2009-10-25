@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:style scope="module" file="dd" />
+    <xar:style scope="module" file="dd"/>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Dynamic Data Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>Utilities - Data Browser</h2>
-        <xar:template type="module" file="utility-menu" />
+        <xar:template type="module" file="utility-menu"/>
         <xar:if condition="empty($export)">
             <xar:if condition="!empty($databases)">
                 <form method="post" action="&xar-modurl-dynamicdata-util-meta;">
@@ -84,7 +84,7 @@
                                     <td>#$field['name']#</td>
                                     <td>#$field['label']#</td>
                                     <td>
-                                        <xar:data-output property="$prop" value="$field['type']" />
+                                        <xar:data-output property="$prop" value="$field['type']"/>
                                     </td>
                                     <td>#$field['defaultvalue']#</td>
                                     <td>#$field['source']#</td>
@@ -114,7 +114,7 @@
                         <div class="xar-form-container-after">
                             <textarea name="xml" id="xml" class="xar-form-textarealarge">
                                 <xar:if condition="$export eq 'ddl'">
-                                <xar:template file="exportddl" />
+                                <xar:template file="exportddl"/>
                                 <xar:else />
                                 <xar:foreach in="$tables" key="$curtable" value="$fields">
                                 <xar:set name="tablename">
@@ -140,8 +140,8 @@
                 </fieldset>
                 <xar:if condition="$export ne 'ddl'">
                     <div class="xar-align-center">
-                        <input type="hidden" name="authid" value="#xarSecGenAuthKey()#" />
-                        <input type="submit" value="#xarML('Import Object Definition')#" />
+                        <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="submit" value="#xarML('Import Object Definition')#"/>
                     </div>
                 </xar:if>
             </form>

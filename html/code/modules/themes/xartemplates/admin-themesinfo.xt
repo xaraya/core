@@ -15,7 +15,7 @@
                 <p class="xar-mod-title">#$themename#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Description -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -25,7 +25,7 @@
                 <p class="xar-mod-title">#$themedescr#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Theme Directory -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -35,7 +35,7 @@
                 <p class="xar-mod-title">#$themedir#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Theme ID -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -45,7 +45,7 @@
                 <p class="xar-mod-title">#$themeid#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Theme Class -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -55,13 +55,13 @@
                 <p class="xar-mod-title">
                     #$themeclass# 
                     <xar:if condition="$themeclass eq 0">(system theme) 
-                    <xar:elseif condition="$themeclass eq 1" />(utility theme) 
-                    <xar:elseif condition="$themeclass eq 2" />(user selectable) 
+                    <xar:elseif condition="$themeclass eq 1"/>(utility theme) 
+                    <xar:elseif condition="$themeclass eq 2"/>(user selectable) 
                     <xar:else />(unknown class)</xar:if>
                 </p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Theme Version -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -71,7 +71,7 @@
                 <p class="xar-mod-title">#$themever#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Theme Author -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -81,7 +81,7 @@
                 <p class="xar-mod-title">#$themeauthor#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Theme Dependency -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -91,7 +91,7 @@
                 <p class="xar-mod-title">#$themedependency#</p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
         <!-- Theme Preview -->
         <div class="xar-clearboth">
             <div class="xar-floatleft xar-thirdwidth">
@@ -123,7 +123,7 @@
                             This Page</option>
                         </select>
                         <noscript>
-                            <input type="submit" value="Go" />
+                            <input type="submit" value="Go"/>
                         </noscript>
                     <xar:else />
                         Theme not active, activate it first.
@@ -131,6 +131,6 @@
                 </p>
             </div>
         </div>
-        <hr class="xar-clearboth xar-border-solid xar-border-thin" />
+        <hr class="xar-clearboth xar-border-solid xar-border-thin"/>
     </div>
 </xar:template>

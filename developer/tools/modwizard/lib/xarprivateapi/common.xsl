@@ -12,15 +12,15 @@
 
     <xsl:message>      * xarprivateapi/common.php</xsl:message>
 
-    <xsl:document href="{$output}/xarprivateapi/common.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xarprivateapi/common.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xarprivateapi/common.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xarprivateapi_common_func" select="." />
+        <xsl:apply-templates mode="xarprivateapi_common_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -33,7 +33,7 @@
 
 -->
 <xsl:template mode="xarprivateapi_common_func" match="xaraya_module">
-    <xsl:variable name="module_prefix" select="registry/name" />
+    <xsl:variable name="module_prefix" select="registry/name"/>
 /**
  * This function provides information to the templates which are common to all
  * pageviews.
@@ -43,7 +43,7 @@
  *      'menu'      => Array with information about the module menu
  *      'statusmsg' => Status message if set
  */
-function <xsl:value-of select="$module_prefix" />_privateapi_common( $args ) 
+function <xsl:value-of select="$module_prefix"/>_privateapi_common( $args ) 
 {
     extract( $args );
 
@@ -52,21 +52,21 @@ function <xsl:value-of select="$module_prefix" />_privateapi_common( $args )
     $common['menu'] = array();
 
     // Initialize the statusmessage
-    $statusmsg = xarSessionGetVar( '<xsl:value-of select="$module_prefix" />_statusmsg' );
+    $statusmsg = xarSessionGetVar( '<xsl:value-of select="$module_prefix"/>_statusmsg' );
     if ( isset( $statusmsg ) ) {
-        xarSessionDelVar( '<xsl:value-of select="$module_prefix" />_statusmsg' );
+        xarSessionDelVar( '<xsl:value-of select="$module_prefix"/>_statusmsg' );
         $common['statusmsg'] = $statusmsg;
     }
 
     <xsl:if test="not( boolean( configuration/capabilities/setpagetitle ) ) or configuration/capabilities/setpagetitle/text() = 'yes'">
     // Set the page title
-    xarTplSetPageTitle( '<xsl:value-of select="$module_prefix" /> :: ' . $title );
+    xarTplSetPageTitle( '<xsl:value-of select="$module_prefix"/> :: ' . $title );
     </xsl:if>
 
     // Initialize the title
     $common['pagetitle'] = $title;
     if ( isset( $type ) and $type == 'admin' ) {
-        $common['type']      = xarML( '<xsl:value-of select="about/name" /> Administration' );
+        $common['type']      = xarML( '<xsl:value-of select="about/name"/> Administration' );
     }
 
     return array( 'common' => $common );

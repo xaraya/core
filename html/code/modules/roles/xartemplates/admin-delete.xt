@@ -5,7 +5,7 @@
         <span class="xar-mod-title">Roles Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>Manage #$itemtypename# '#$name#':</h2>
         <xar:if condition="count($parents) gt 0">
             <div>
@@ -68,12 +68,12 @@
             <form method="post" action="&xar-modurl-roles-admin-delete;" enctype="application/x-www-form-urlencoded">
                 <h3 class="xar-align-center">Confirm the deletion of #$itemtypename# #$name#</h3>
                 <div class="xar-align-center">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="id" id="id" value="#$id#" />
-                    <input type="hidden" name="confirmation" id="confirmation" value="1" />
-                    <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#" />
-                    <input type="submit" value="#xarML('Delete')#" class="xar-margin-thickright" />
-                    <input type="button" value="#xarML('Cancel')#" onclick="document.location='&xar-modurl-roles-admin-display;&amp;id=#$id#';" class="xar-margin-thickleft" />
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="id" id="id" value="#$id#"/>
+                    <input type="hidden" name="confirmation" id="confirmation" value="1"/>
+                    <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#"/>
+                    <input type="submit" value="#xarML('Delete')#" class="xar-margin-thickright"/>
+                    <input type="button" value="#xarML('Cancel')#" onclick="document.location='&xar-modurl-roles-admin-display;&amp;id=#$id#';" class="xar-margin-thickleft"/>
                 </div>
             </form>
         </xar:if>

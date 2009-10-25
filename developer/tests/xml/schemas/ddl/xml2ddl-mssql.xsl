@@ -3,7 +3,7 @@
   XSLT to create a DDL fragment which represents the same
   information as the ddl XML
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <!-- 
       Import common templates, we use import instead of include so the 
       imported templates get a lower priority than the ones in this file,

@@ -32,7 +32,7 @@
 -->
 <xsl:template name="xaraya_standard_php_file_header" match="xaraya_module">
 
-    <xsl:param name="filename" />
+    <xsl:param name="filename"/>
     <xsl:if test="not($filename)">
         <xsl:message terminate="yes">
             xaraya_standard_php_file_header() : parameter filename missing
@@ -40,15 +40,15 @@
     </xsl:if>
 
 /**
- * <xsl:value-of select="about/name" />
+ * <xsl:value-of select="about/name"/>
  *
- * @copyright   <xsl:value-of select="about/copyright" />
- * @license     <xsl:value-of select="about/license" />
- * @author      <xsl:value-of select="about/author/name" />
- * @link        <xsl:value-of select="about/author/link" />
+ * @copyright   <xsl:value-of select="about/copyright"/>
+ * @license     <xsl:value-of select="about/license"/>
+ * @author      <xsl:value-of select="about/author/name"/>
+ * @link        <xsl:value-of select="about/author/link"/>
  *
  * @package     Xaraya eXtensible Management System
- * @subpackage  <xsl:value-of select="about/name" />
+ * @subpackage  <xsl:value-of select="about/name"/>
  * @version     $Id$
  *
  */

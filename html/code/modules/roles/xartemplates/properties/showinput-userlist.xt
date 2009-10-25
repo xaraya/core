@@ -14,12 +14,12 @@
                 <xar:else />
                     <option value="#$option['id']#">#$option['name']#</option>
                 </xar:if>
-            <xar:elseif condition="$option['id'] eq $value" />
+            <xar:elseif condition="$option['id'] eq $value"/>
                 <option selected="selected">#$option['name']#</option>
             <xar:else />
                 <option>#$option['name']#</option>
             </xar:if>
         </xar:foreach>
     </select>
-    <xar:template file="dataproperty_additions" module="base" />
+    <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

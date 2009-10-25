@@ -5,7 +5,7 @@
             #$row['name']#
         </td>
         <td>
-            <a href="#xarModURL('roles','admin','showprivileges',array('id' => $row['role_id']))#" >
+            <a href="#xarModURL('roles','admin','showprivileges',array('id' => $row['role_id']))#">
                 #$row['role_name']#
             </a>
         </td>
@@ -20,11 +20,11 @@
         </td>
         <!--
         <td style="text-align: center;">
-            <input type="checkbox" name="#$row['role_id']#" id="#$row['role_id']#" />
+            <input type="checkbox" name="#$row['role_id']#" id="#$row['role_id']#"/>
         </td>
         -->
         <td style="text-align: center;">
-            <a href="#xarModURL('privileges','admin','assignprivileges',array('phase' => 'remove', 'assignment' => $row['role_id'] . ',' . $row['id']))#" >
+            <a href="#xarModURL('privileges','admin','assignprivileges',array('phase' => 'remove', 'assignment' => $row['role_id'] . ',' . $row['id']))#">
                 Remove
             </a>
         </td>

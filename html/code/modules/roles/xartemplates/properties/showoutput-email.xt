@@ -8,6 +8,6 @@
     </xar:if>
     -->
     <a href="mailto:#$value#">
-        <xar:var name="value" />
+        <xar:var name="value"/>
     </a>
 </xar:template>

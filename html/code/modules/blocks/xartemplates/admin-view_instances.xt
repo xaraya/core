@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:style scope="common" />
-    <xar:javascript module="base" filename="confirmlink.js" />
+    <xar:style scope="common"/>
+    <xar:javascript module="base" filename="confirmlink.js"/>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Blocks Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>View Blocks</h2>
         <form method="post" action="#xarModUrl('blocks', 'admin', 'settings')#">
             <fieldset>
@@ -27,24 +27,24 @@
                         array('id' => 'bytype',  'name' => xarML('By Type')),
                     )
                 </xar:set>
-                <xar:data-input type="dropdown" name="selstyle" options="$options" value="$selstyle" />
-                <input type="submit" value="#xarML('Refresh')#" />
+                <xar:data-input type="dropdown" name="selstyle" options="$options" value="$selstyle"/>
+                <input type="submit" value="#xarML('Refresh')#"/>
             </div>
             <div class="xar-form-input-wrapper">
                     <label for="filter" title="#xarML('Filter the instances to be shown.')#" class="xar-form-label">
                         Filter:
                     </label>
-                    <input type="text" id="filter" name="filter" value="#$filter#" class="xar-form-textmedium" />
+                    <input type="text" id="filter" name="filter" value="#$filter#" class="xar-form-textmedium"/>
                 </div>
             </fieldset>
             <xar:if condition="$selstyle eq 'compact'">
-                <xar:template file="compact" type="module" />
-            <xar:elseif condition="$selstyle eq 'plain'" />
-                <xar:template file="plain" type="module" />
-            <xar:elseif condition="$selstyle eq 'bytype'" />
-                <xar:template file="bytype" type="module" />
-            <xar:elseif condition="$selstyle eq 'bygroup'" />
-                <xar:template file="bygroup" type="module" />
+                <xar:template file="compact" type="module"/>
+            <xar:elseif condition="$selstyle eq 'plain'"/>
+                <xar:template file="plain" type="module"/>
+            <xar:elseif condition="$selstyle eq 'bytype'"/>
+                <xar:template file="bytype" type="module"/>
+            <xar:elseif condition="$selstyle eq 'bygroup'"/>
+                <xar:template file="bygroup" type="module"/>
             </xar:if>
         </form>
     </div>

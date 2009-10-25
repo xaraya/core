@@ -36,7 +36,7 @@ function modules_admin_hooks($args)
     $data['authid'] = '';
 
     // via arguments only, for use in BL tags :
-    // <xar:module main="false" module="modules" type="admin" func="hooks" curhook="hitcount" return_url="$thisurl" />
+    // <xar:module main="false" module="modules" type="admin" func="hooks" curhook="hitcount" return_url="$thisurl"/>
     if (empty($return_url)) $return_url = '';
 
     $data['return_url'] = $return_url;

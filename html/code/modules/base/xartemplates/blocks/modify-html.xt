@@ -16,7 +16,7 @@
                 array('id' => 0, 'name' => 'Unlimited'),
             )
         </xar:set>    
-        <xar:data-input type="dropdown" name="expire" id="expire#$blockid#" options="$options" value="$expireseconds" />
+        <xar:data-input type="dropdown" name="expire" id="expire#$blockid#" options="$options" value="$expireseconds"/>
     </div>
     <xar:if condition="$expirein ne 0">
         <div class="xar-form-input-wrapper">

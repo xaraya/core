@@ -16,13 +16,13 @@
                 <xar:if condition="!empty($error_message)">
                     <div class="xar-error">#xarVarPrepForDisplay($error_message)#</div>
                 </xar:if>
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="id" id="id" value="#$id#" />
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="id" id="id" value="#$id#"/>
                 <div>
                     <div>
                         <label for="subject">Subject:</label>
                     </div>
-                    <input type="text" name="subject" id="subject" size="40" maxlength="100" value="#xarVarPrepForDisplay($subject)#" />
+                    <input type="text" name="subject" id="subject" size="40" maxlength="100" value="#xarVarPrepForDisplay($subject)#"/>
                 </div>
                 <div>
                     <div>
@@ -32,7 +32,7 @@
                         #xarVarPrepForDisplay($message)#
                     </textarea>
                 </div>
-                <input name="submit" type="submit" value="#xarML('Send')#" />
+                <input name="submit" type="submit" value="#xarML('Send')#"/>
             </div>
         </form>
     </div>

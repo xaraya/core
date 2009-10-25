@@ -18,7 +18,7 @@
                             <a name="activeitem" title="#$mod['features']['label']#">
                                 #$mod['features']['label']#
                             </a>
-                        <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
+                        <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']"/>
                             <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">
                                 #$mod['features']['label']#
                             </a>
@@ -28,7 +28,7 @@
                             </a>
                         </xar:if>
                         <!-- Render the menu part -->
-                        <xar:template file="menu-part" subdata="array('mod' =&gt; $mod)" />
+                        <xar:template file="menu-part" subdata="array('mod' =&gt; $mod)"/>
                     </li>
                 </xar:foreach>
             </ul>

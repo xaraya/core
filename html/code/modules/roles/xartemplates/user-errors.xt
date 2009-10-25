@@ -5,50 +5,50 @@
     <div class="xar-mod-body">
         <fieldset>
             <legend>Roles Problem</legend>
-            <img src="#xarTplGetImage('user-error.png','base')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon" />
+            <img src="#xarTplGetImage('user-error.png','base')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon"/>
             <xar:if condition="!isset($layout)">
                 <div style="margin-top: 20px; margin-left: 20px">
                     No error message is available.
                     <br />
                     Please contact the system administrator.
                 </div>                    
-            <xar:elseif condition="$layout eq 'remove_sole_parent'" />
+            <xar:elseif condition="$layout eq 'remove_sole_parent'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     The user has one parent group, removal is not allowed.
                 </div>
-            <xar:elseif condition="$layout eq 'remove_defaultusergroup'" />
+            <xar:elseif condition="$layout eq 'remove_defaultusergroup'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     You are trying to remove the default group for new users (#$group#). To do so first change the appropriate configuration setting and make another group the default user group.
                 </div>
-            <xar:elseif condition="$layout eq 'remove_siteadmin'" />
+            <xar:elseif condition="$layout eq 'remove_siteadmin'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     The user #$user# is the designated site administrator. If you want to remove this user change the site admin in the roles configuration setting first.
                 </div>
-            <xar:elseif condition="$layout eq 'remove_nonempty_group'" />
+            <xar:elseif condition="$layout eq 'remove_nonempty_group'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     The group #$group# has children. If you want to remove this group you have to delete the children first.
                 </div>
-            <xar:elseif condition="$layout eq 'self_assignment'" />
+            <xar:elseif condition="$layout eq 'self_assignment'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     This assignment is not possible.
                 </div>
-            <xar:elseif condition="$layout eq 'duplicate_assignment'" />
+            <xar:elseif condition="$layout eq 'duplicate_assignment'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     This assignment already exists.
                 </div>
-            <xar:elseif condition="$layout eq 'circular_assignment'" />
+            <xar:elseif condition="$layout eq 'circular_assignment'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     The parent is already a descendant of the specified child. The assignment is not permitted.
                 </div>
-            <xar:elseif condition="$layout eq 'remove_active_session'" />
+            <xar:elseif condition="$layout eq 'remove_active_session'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     The user "#$user#" has an active session and can not be removed at this time.
                 </div>
-            <xar:elseif condition="$layout eq 'purge_active_user'" />
+            <xar:elseif condition="$layout eq 'purge_active_user'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     Purging active users is not allowed.
                 </div>
-            <xar:elseif condition="$layout eq 'remove_privilege'" />
+            <xar:elseif condition="$layout eq 'remove_privilege'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     Removing this privilege from this user or group is not allowed.
                 </div>
@@ -63,7 +63,7 @@
         <fieldset>
             <div class="xar-form-input-wrapper-after">
                 <xar:var name="label">Go back</xar:var>
-                <xar:button type="cancel" label="$label" />
+                <xar:button type="cancel" label="$label"/>
             </div>
         </fieldset>
     </div>

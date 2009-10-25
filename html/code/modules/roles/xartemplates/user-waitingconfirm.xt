@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- Roles module confirmation for existing users revalidating their email -->
     <xar:set name="adminemail">
-        <xar:var scope="module" module="mail" name="adminmail" />
+        <xar:var scope="module" module="mail" name="adminmail"/>
     </xar:set>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Change of Email</span>

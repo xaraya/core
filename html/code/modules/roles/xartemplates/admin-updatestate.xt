@@ -11,12 +11,12 @@
             <table border="0" cellpadding="2" cellspacing="2">
                 <tr>
                     <td colspan="2">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                        <input type="hidden" name="updatephase" id="updatephase" value="notify" />
-                        <input type="hidden" name="groupid" id="groupid" value="#$groupid#" />
-                        <input type="hidden" name="state" id="state" value="#$state#" />
-                        <input type="hidden" name="status" id="status" value="#$status#" />
-                        <input type="hidden" name="ids" id="ids" value="#$ids#" />
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <input type="hidden" name="updatephase" id="updatephase" value="notify"/>
+                        <input type="hidden" name="groupid" id="groupid" value="#$groupid#"/>
+                        <input type="hidden" name="state" id="state" value="#$state#"/>
+                        <input type="hidden" name="status" id="status" value="#$status#"/>
+                        <input type="hidden" name="ids" id="ids" value="#$ids#"/>
                         <a href="&xar-modurl-roles-admin-showusers;&amp;phase=#$state#&amp;id=#$groupid#">
                         Click here if you don't want to send any notification</a>
                     </td>
@@ -26,7 +26,7 @@
                         <label for="subject">Email Title</label>
                     </td>
                     <td>
-                        <input type="text" name="subject" id="subject" value="#$subject#" size="35" maxlength="100" />
+                        <input type="text" name="subject" id="subject" value="#$subject#" size="35" maxlength="100"/>
                     </td>
                 </tr>
                 <tr>
@@ -39,7 +39,7 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="xar-align-center">
-                        <input type="submit" value="Send Notification(s)" tabindex="9" />
+                        <input type="submit" value="Send Notification(s)" tabindex="9"/>
                     </td>
                 </tr>
             </table>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <!-- DDL is no XML -->
-  <xsl:output method="text" />
+  <xsl:output method="text"/>
   <xsl:strip-space elements="*"/>
 
   <!--
@@ -14,7 +14,7 @@
       - etc.
   -->
   <xsl:param name="vendor"  />
-  <xsl:param name="version" />
+  <xsl:param name="version"/>
   <xsl:param name="dbcreate"/>
   <xsl:param name="drop4create"/>
 
@@ -41,7 +41,7 @@
 <!-- Context sensitive header, reacts on name and element-name -->
 <xsl:template name="dynheader">
 /* ---------------------------------------------------------------------------
- * <xsl:value-of select="local-name()"/>: <xsl:value-of select="@name" />
+ * <xsl:value-of select="local-name()"/>: <xsl:value-of select="@name"/>
  */
 </xsl:template>
 

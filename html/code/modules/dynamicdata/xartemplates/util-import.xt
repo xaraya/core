@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:style scope="module" file="dd" />
+    <xar:style scope="module" file="dd"/>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Dynamic Data Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>Utilities - Import DataObject Definition</h2>
-        <xar:template type="module" file="utility-menu" />
+        <xar:template type="module" file="utility-menu"/>
         <xar:if condition="!empty($warning)">
             <p>#$warning#</p>
         </xar:if>
@@ -19,8 +19,8 @@
                     <label for="basedir" title="#xarML('Location of object definitions')#"
                     class="xar-form-label">Base Directory:</label>
                     <input type="text" name="basedir" id="basedir" value="#$basedir#"
-                    maxlength="250" class="xar-form-textxlong" />
-                    <input type="submit" name="refresh" id="refresh" value="#xarML('Refresh')#" />
+                    maxlength="250" class="xar-form-textxlong"/>
+                    <input type="submit" name="refresh" id="refresh" value="#xarML('Refresh')#"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="import" title="#xarML('XML files found in Base Directory')#"
@@ -32,13 +32,13 @@
                     </select>
                 </div>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="checkbox" name="overwrite" id="overwrite" value="1" />
+                    <input type="checkbox" name="overwrite" id="overwrite" value="1"/>
                     <label for="overwrite"
                     title="#xarML('Overwrite the definition if it already exists')#">Overwrite if
                     exists</label>
                 </div>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="checkbox" name="keepitemid" id="keepitemid" value="1" />
+                    <input type="checkbox" name="keepitemid" id="keepitemid" value="1"/>
                     <label for="keepitemid"
                     title="#xarML('Check to attempt to maintain item ids found in definition file')#">
                     Preserve Item ids If Possible</label>
@@ -58,14 +58,14 @@
                     class="xar-form-label">Prefix:</label>
                     <div class="xar-form-container-after">
                         <input name="prefix" id="prefix" class="xar-form-textshort"
-                        value="#$prefix#" />
+                        value="#$prefix#"/>
                     </div>
                 </div>
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="submit" value="#xarML('Import Definition')#" />
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="submit" value="#xarML('Import Definition')#"/>
                 </div>
             </fieldset>
         </form>

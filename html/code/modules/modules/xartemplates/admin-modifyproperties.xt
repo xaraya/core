@@ -5,20 +5,20 @@
         <span class="xar-mod-title">Modules Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>Modify Properties for Module: #$displayname#</h2>
         <xar:if condition="!empty($object)">
             <form action="&xar-modurl-modules-admin-modifyproperties;" method="post" enctype="application/x-www-form-urlencoded">
-                <xar:data-form object="$object" />
+                <xar:data-form object="$object"/>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
                         <xar:if condition="!empty($return_url)">
-                            <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
+                            <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                         </xar:if>
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                        <input type="hidden" name="id" id="id" value="#$id#" />
-                        <input type="hidden" name="phase" id="phase" value="update" />
-                        <input type="submit" value="#xarML('Save Changes')#" class="xar-margin-thick" />
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <input type="hidden" name="id" id="id" value="#$id#"/>
+                        <input type="hidden" name="phase" id="phase" value="update"/>
+                        <input type="submit" value="#xarML('Save Changes')#" class="xar-margin-thick"/>
                     </div>
                 </fieldset>
             </form>

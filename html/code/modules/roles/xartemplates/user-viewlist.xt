@@ -90,7 +90,7 @@
             <p>#xarVarPrepForDisplay($message)#</p>
         <xar:else />
             <xar:if condition="xarModIsAvailable('dynamicdata')">
-                <xar:data-getitems properties="$properties" values="$values" module="roles" itemids="$idlist" />
+                <xar:data-getitems properties="$properties" values="$values" module="roles" itemids="$idlist"/>
             </xar:if>
             <table width="100%" border="0" cellspacing="0" cellpadding="2">
                 <tr>
@@ -119,7 +119,7 @@
                         <!-- TODO: adapt % of column widths -->
                         <xar:foreach in="$properties" key="$key">
                         <th>
-                            <xar:data-label property="$properties[$key]" />
+                            <xar:data-label property="$properties[$key]"/>
                         </th>
                         </xar:foreach>
                     </xar:if>
@@ -155,11 +155,11 @@
                                 <xar:if condition="empty($loop:item['emailurl']) || !xarUserIsLoggedIn()">
 
                                     <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#"
-                                    title="#xarML('Email')#" />
+                                    title="#xarML('Email')#"/>
                                 <xar:else />
                                     <a href="#$loop:item['emailurl']#">
                                         <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#"
-                                        title="#xarML('Email')#" />
+                                        title="#xarML('Email')#"/>
                                     </a>
                                 </xar:if>
                             </td>
@@ -169,7 +169,7 @@
                             <xar:foreach in="$properties" key="$key">
                                 <td>
                                     <xar:if condition="isset($values[$id][$key])">
-                                        <xar:data-output property="$properties[$key]" value="$values[$id][$key]" />
+                                        <xar:data-output property="$properties[$key]" value="$values[$id][$key]"/>
                                     <xar:else />
                                         &#160;&#160;
                                     </xar:if>
@@ -183,11 +183,11 @@
             <div class="xar-align-center">#$pager#</div>
             <form method="post" action="&xar-modurl-roles-user-viewlist;">
                 <label for="search">Search:</label>
-                <input type="hidden" name="phase" id="phase" value="#xarVarPrepForDisplay($phase)#" />
-                <input type="hidden" name="order" id="order" value="#xarVarPrepForDisplay($order)#" />
-                <input type="hidden" name="letter" id="letter" value="" />
-                <input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1" />
-                <input type="submit" value="#xarVarPrepForDisplay($searchlabel)#" />
+                <input type="hidden" name="phase" id="phase" value="#xarVarPrepForDisplay($phase)#"/>
+                <input type="hidden" name="order" id="order" value="#xarVarPrepForDisplay($order)#"/>
+                <input type="hidden" name="letter" id="letter" value=""/>
+                <input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1"/>
+                <input type="submit" value="#xarVarPrepForDisplay($searchlabel)#"/>
             </form>
             <p>Search condition: 
             <strong>#xarVarPrepForDisplay($msg)#</strong></p>

@@ -5,7 +5,7 @@
         <span class="xar-mod-title">Roles Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>Site Lock</h2>
         <form action="&xar-modurl-roles-admin-sitelock;" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
@@ -14,7 +14,7 @@
                     <label for="FOR" title="#xarML('TITLE')#" class="xar-form-label">
                         #$statusmessage#
                     </label>
-                    <input type="button" value="#$togglelabel#" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=toggle';this.form.submit();" />
+                    <input type="button" value="#$togglelabel#" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=toggle';this.form.submit();"/>
                 </div>
             </fieldset>
             <h3>Configuration</h3>
@@ -28,17 +28,17 @@
                         <div class="xar-form-input-wrapper">
                             <label class="xar-form-label">#$loop:item['name']#</label>
                             <xar:if condition="$loop:item['notify'] == 'true'">
-                                <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#" value="#$loop:item['id']#" checked="checked" />
+                                <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#" value="#$loop:item['id']#" checked="checked"/>
                             <xar:else />
-                                <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#" value="#$loop:item['id']#" />
+                                <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#" value="#$loop:item['id']#"/>
                             </xar:if>
                             <label for="notify_#$loop:item['id']#" title="xarML('Toggle notifications sent to this Group')#">
                                 notify
                             </label>
                             <xar:if condition="count($roles) gt 1">
-                                <input type="button" value="#$deletelabel#" onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();" class="xar-amrgin-thickleft" />
+                                <input type="button" value="#$deletelabel#" onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();" class="xar-amrgin-thickleft"/>
                             <xar:else />
-                                <input type="button" value="#$deletelabel#" onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();" disabled="disabled" class="xar-amrgin-thickleft" />
+                                <input type="button" value="#$deletelabel#" onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();" disabled="disabled" class="xar-amrgin-thickleft"/>
                             </xar:if>
                         </div>
                     </xar:loop>
@@ -46,8 +46,8 @@
                         <label for="newname" title="#xarML('Add a Group to the lock notification list')#" class="xar-form-label">
                             Add Group:
                         </label>
-                        <input type="text" name="newname" id="newname" value="" class="xar-form-textlong xar-margin-thickright" />
-                        <input type="button" value="#xarML('Add')#" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=add';this.form.submit();" class="xar-margin-thickleft" />
+                        <input type="text" name="newname" id="newname" value="" class="xar-form-textlong xar-margin-thickright"/>
+                        <input type="button" value="#xarML('Add')#" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=add';this.form.submit();" class="xar-margin-thickleft"/>
                     </div>
             </fieldset>
             <p>
@@ -85,9 +85,9 @@
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#" />
-                    <input type="hidden" name="toggle" id="toggle" value="#$toggle#" />
-                    <input type="button" value="#xarML('Save Site Lock Settings')#" tabindex="2" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=save';this.form.submit();" />
+                    <input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#"/>
+                    <input type="hidden" name="toggle" id="toggle" value="#$toggle#"/>
+                    <input type="button" value="#xarML('Save Site Lock Settings')#" tabindex="2" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=save';this.form.submit();"/>
                 </div>
             </fieldset>
         </form>

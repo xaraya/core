@@ -11,6 +11,6 @@
             #$hour#:#$min#:#$sec#
         </xar:if>
     <xar:else />
-        <xar:var name="value" />
+        <xar:var name="value"/>
     </xar:if>
 </xar:template>

@@ -32,17 +32,17 @@
                         <label for="uname" class="xar-form-label" title="#xarML('Please enter your user name')#">
                             Username
                         </label>
-                        <input type="text" name="uname" id="uname" value="#xarVarPrepForDisplay($uname)#" />
+                        <input type="text" name="uname" id="uname" value="#xarVarPrepForDisplay($uname)#"/>
                     </div>
                     <div class="xar-form-input-wrapper">
                         <label for="valcode" class="xar-form-label" title="#xarML('Please enter your validation code')#">
                             Validation Code:
                         </label>
-                        <input type="text" name="valcode" id="valcode" value="" />
+                        <input type="text" name="valcode" id="valcode" value=""/>
                     </div>
                     <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="phase" id="phase" value="getvalidate" />
-                        <input type="submit" value="#xarVarPrepForDisplay($validatelabel)#" />
+                        <input type="hidden" name="phase" id="phase" value="getvalidate"/>
+                        <input type="submit" value="#xarVarPrepForDisplay($validatelabel)#"/>
                     </div>
                 </fieldset>
             </form>
@@ -55,11 +55,11 @@
                             Username:
                         </label>
                         &#160; 
-                        <input type="text" name="uname" id="unameresend" value="#$uname#" />
+                        <input type="text" name="uname" id="unameresend" value="#$uname#"/>
                    </div>
                     <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="phase" id="phase" value="resend" />
-                        <input type="submit" value="#$resendlabel#" />
+                        <input type="hidden" name="phase" id="phase" value="resend"/>
+                        <input type="submit" value="#$resendlabel#"/>
                     </div>
                 </fieldset>
             </form>

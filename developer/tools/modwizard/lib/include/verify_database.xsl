@@ -24,7 +24,7 @@
 
 <!-- ENTRY POINT    print out progress and call module template -->
 <xsl:template match="/" mode="verify" xml:space="default">
-    verifying database ... <xsl:apply-templates mode="verify_database" select="xaraya_module" /> ... finished
+    verifying database ... <xsl:apply-templates mode="verify_database" select="xaraya_module"/> ... finished
 </xsl:template>
 
 
@@ -39,7 +39,7 @@
 
         <xsl:if test="count ( structure/field[@primary_key = 'true'] ) != 1">
             <xsl:message terminate="yes">
-    You must specify exactly one primary_key field for table <xsl:value-of select="@name" /> !!
+    You must specify exactly one primary_key field for table <xsl:value-of select="@name"/> !!
             </xsl:message>
         </xsl:if>
 
@@ -48,7 +48,7 @@
     <xsl:for-each select="database/table">
         <xsl:if test="count ( structure/field[@overview = 'true'] ) = 0">
             <xsl:message terminate="yes">
-    You should at least specify one field of table <xsl:value-of select="@name" /> with overview="true" !!
+    You should at least specify one field of table <xsl:value-of select="@name"/> with overview="true" !!
             </xsl:message>
         </xsl:if>
 

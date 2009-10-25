@@ -6,7 +6,7 @@
     <column name="ip_addr" required="true"><text size="20"/></column>
     <column name="first_use" required="true"><time default="0"/></column>
     <column name="last_use" required="true"><time  default="0"/></column>
-    <column id="session_info.role_id" name="role_id" required="true"><number size="11" /></column>
+    <column id="session_info.role_id" name="role_id" required="true"><number size="11"/></column>
     <!-- @todo: is this really binary? -->
     <column name="vars"><binary/></column>
     <column name="remember"><boolean default="false"/></column>

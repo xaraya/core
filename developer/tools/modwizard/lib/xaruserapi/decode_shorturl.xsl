@@ -12,15 +12,15 @@
 
     <xsl:message>      * xaruserapi/decode_shorturl.php</xsl:message>
 
-    <xsl:document href="{$output}/xaruserapi/decode_shorturl.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaruserapi/decode_shorturl.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaruserapi/decode_shorturl.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaruserapi_decode_shorturl_func" select="." />
+        <xsl:apply-templates mode="xaruserapi_decode_shorturl_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -33,7 +33,7 @@
 
 -->
 <xsl:template mode="xaruserapi_decode_shorturl_func" match="xaraya_module">
-    <xsl:variable name="module_prefix" select="registry/name" />
+    <xsl:variable name="module_prefix" select="registry/name"/>
 /**
  * This function is called when xarModURL is invoked and Short URL Support is
  * enabled.
@@ -47,10 +47,10 @@
  * o
  *
  */
-function <xsl:value-of select="$module_prefix" />_userapi_decode_shorturl( $params ) 
+function <xsl:value-of select="$module_prefix"/>_userapi_decode_shorturl( $params ) 
 {
     <xsl:if test="boolean( database/table[@user='true'] )">
-    if ( $params[0] != '<xsl:value-of select="$module_prefix" />' )
+    if ( $params[0] != '<xsl:value-of select="$module_prefix"/>' )
         return;
 
     /*
@@ -61,8 +61,8 @@ function <xsl:value-of select="$module_prefix" />_userapi_decode_shorturl( $para
 
     switch ( $params[1] ) {
     <xsl:for-each select="database/table[@user='true']">
-        case '<xsl:value-of select="@name" />':
-            $itemtype = <xsl:value-of select="@itemtype" />;
+        case '<xsl:value-of select="@name"/>':
+            $itemtype = <xsl:value-of select="@itemtype"/>;
             break;
     </xsl:for-each>
 

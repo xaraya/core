@@ -10,21 +10,21 @@
     <xar:loop name="$attributes">
     <xar:if condition="$method eq 'link'">
     <xar:if condition="$loop:item['title'] ne ''">
-    <link rel="#$loop:item['rel']#" type="#$loop:item['type']#" href="#$loop:item['url']#" media="#$loop:item['media']#" title="#$loop:item['title']#" />
+    <link rel="#$loop:item['rel']#" type="#$loop:item['type']#" href="#$loop:item['url']#" media="#$loop:item['media']#" title="#$loop:item['title']#"/>
     <xar:else />
     <xar:if condition="$loop:item['condition'] ne ''">
-    <xar:comment iecondition="#$loop:item.condition#"><link rel="#$loop:item['rel']#" type="#$loop:item['type']#" href="#$loop:item['url']#" media="#$loop:item['media']#" /></xar:comment>
+    <xar:comment iecondition="#$loop:item.condition#"><link rel="#$loop:item['rel']#" type="#$loop:item['type']#" href="#$loop:item['url']#" media="#$loop:item['media']#"/></xar:comment>
     <xar:else />
-    <link rel="#$loop:item['rel']#" type="#$loop:item['type']#" href="#$loop:item['url']#" media="#$loop:item['media']#" />
+    <link rel="#$loop:item['rel']#" type="#$loop:item['type']#" href="#$loop:item['url']#" media="#$loop:item['media']#"/>
     </xar:if>
     </xar:if>
-    <xar:elseif condition="$method eq 'import'" />
+    <xar:elseif condition="$method eq 'import'"/>
     <xar:if condition="$loop:item['condition'] ne ''">
     <xar:comment iecondition="#$loop:item['condition']#"><style type="#$loop:item['type']#" media="#$loop:item['media']#">@import url(#$loop:item['url']#) #$loop:item['media']#;</style></xar:comment>
     <xar:else />
     <style type="#$loop:item['type']#" media="#$loop:item['media']#">@import url(#$loop:item['url']#); #$loop:item['media']#;</style>
     </xar:if>
-    <xar:elseif condition="$method eq 'embed'" />
+    <xar:elseif condition="$method eq 'embed'"/>
     <xar:if condition="$loop:item['condition'] ne ''">
     <xar:comment iecondition="#$loop:item['condition']#"><style type="#$loop:item['type']#" media="#$loop:item['media']#">#$loop:item['source']#</style></xar:comment>
     <xar:else />

@@ -11,7 +11,7 @@
         <h3 class="xar-align-center">Confirm Deleting This Item?</h3>
         <fieldset>
             <legend>Preview</legend>
-            <xar:data-display object="$object" />
+            <xar:data-display object="$object"/>
         </fieldset>
         <xar:if condition="$object:visibility ne 'public'">
             <h3 class="xar-align-center">Warning! This is a <i>#$object:visibility#</i> object used
@@ -23,22 +23,22 @@
         <form method="post" action="#$postlink#">
             <fieldset>
                 <div class="xar-align-center">
-                    <input type="hidden" name="object" id="object" value="#$object:name#" />
-                    <input type="hidden" name="method" id="method" value="delete" />
-                    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="join" id="join" value="#$object:join#" />
-                    <input type="hidden" name="table" id="table" value="#$object:table#" />
-                    <input type="hidden" name="notfresh" id="notfresh" value="true" />
+                    <input type="hidden" name="object" id="object" value="#$object:name#"/>
+                    <input type="hidden" name="method" id="method" value="delete"/>
+                    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                    <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                    <input type="hidden" name="notfresh" id="notfresh" value="true"/>
                     <xar:if condition="!empty($return_url)">
-                        <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
+                        <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                     </xar:if>
-                    <input type="submit" name="cancel" id="cancel" value="#xarML('Cancel')#" class="xar-margin-thickright" />
-                    <input type="submit" name="confirm" id="confirm" value="#xarML('Delete')#" class="xar-margin-thickleft" />
+                    <input type="submit" name="cancel" id="cancel" value="#xarML('Cancel')#" class="xar-margin-thickright"/>
+                    <input type="submit" name="confirm" id="confirm" value="#xarML('Delete')#" class="xar-margin-thickleft"/>
                 </div>
             </fieldset>
         </form>
         <xar:set name="viewlink">xarServer::getObjectURL($object->name,'view')</xar:set>
-        <a href="#$viewlink#">View <xar:data-label object="$object" /></a>
+        <a href="#$viewlink#">View <xar:data-label object="$object"/></a>
     </div>
 </xar:template>

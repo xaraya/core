@@ -10,7 +10,7 @@
         </p>
         <form class="xar-blocks-admin" action="#xarModURL('themes', 'admin', 'corecssupdate')#" method="post">
             <fieldset class="xar-norm">
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <fieldset class="formelements xar-norm">
                     <legend>
                         <strong>Core CSS Options</strong>
@@ -27,7 +27,7 @@
                                 <option value="dynamic">Dynamic</option>
                                 <option value="none">None</option>
                             </select>
-                        <xar:elseif condition="$csslinkoption eq 'dynamic'" />
+                        <xar:elseif condition="$csslinkoption eq 'dynamic'"/>
                             <select name="linkoptions" id="linkoptions" size="1">
                                 <option value="static">Static (default)</option>
                                 <option value="dynamic" selected="selected">Dynamic</option>
@@ -51,10 +51,10 @@
                                 </textarea>
                             </span>
                         </p>
-                    <xar:elseif condition="$csslinkoption eq 'dynamic'" />
+                    <xar:elseif condition="$csslinkoption eq 'dynamic'"/>
                         <p class="param">
                             <label for="resetsource">
-                                <input id="resetsource" name="resetsource" type="checkbox" value="1" />
+                                <input id="resetsource" name="resetsource" type="checkbox" value="1"/>
                             </label>
                             <strong>#$resetbutton#</strong>(Warning! All modifications will be lost)
                         </p>
@@ -70,7 +70,7 @@
                     </xar:if>
                 </fieldset>
             </fieldset>
-            <input type="submit" value="#$submitbutton#" />
+            <input type="submit" value="#$submitbutton#"/>
         </form>
         <xar:if condition="$csslinkoption ne 'none'">
             <h4>

@@ -15,15 +15,15 @@
 
     <xsl:message>      * xaruser/display.php</xsl:message>
 
-    <xsl:document href="{$output}/xaruser/display.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaruser/display.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaruser/display</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates select="." mode="xaruser_display_func" />
+        <xsl:apply-templates select="." mode="xaruser_display_func"/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -31,7 +31,7 @@
 
 <!-- FUNCTION module_admin_display() -->
 <xsl:template mode="xaruser_display_func" match="xaraya_module">
-    <xsl:variable name="module_prefix" select="registry/name" />
+    <xsl:variable name="module_prefix" select="registry/name"/>
 /**
  * Standard interface for displaying objects
  *
@@ -61,37 +61,37 @@
  *
  * </xsl:if>
  */
-function <xsl:value-of select="$module_prefix" />_user_display( $args ) 
+function <xsl:value-of select="$module_prefix"/>_user_display( $args ) 
 {
     $itemtype = xarVarCleanFromInput( 'itemtype' );
     extract( $args );
 
     switch( $itemtype ) {
     <xsl:for-each select="database/table[@user='true' or @admin='true']">
-        case <xsl:value-of select="@itemtype" />:
+        case <xsl:value-of select="@itemtype"/>:
             $data = xarModAPIFunc(
-                '<xsl:value-of select="$module_prefix" />'
-                ,'<xsl:value-of select="@name" />'
+                '<xsl:value-of select="$module_prefix"/>'
+                ,'<xsl:value-of select="@name"/>'
                 ,'display'
                 , $args );
-            $itemtype_name = '<xsl:value-of select="@name" />';
+            $itemtype_name = '<xsl:value-of select="@name"/>';
             break;
     </xsl:for-each>
 
         default:
             xarSessionSetVar(
-                '<xsl:value-of select="$module_prefix" />_statusmsg'
+                '<xsl:value-of select="$module_prefix"/>_statusmsg'
                 ,xarML( 'Error: Itemtype not specified or invalid. Redirected you to main page!' ) );
 
             xarResponseRedirect(
                 xarModURL(
-                    '<xsl:value-of select="$module_prefix" />'
+                    '<xsl:value-of select="$module_prefix"/>'
                     ,'user'
                     ,'main' ));
     }
 
     return xarTplModule(
-        '<xsl:value-of select="$module_prefix" />'
+        '<xsl:value-of select="$module_prefix"/>'
         ,'user'
         ,'display'
         ,$data

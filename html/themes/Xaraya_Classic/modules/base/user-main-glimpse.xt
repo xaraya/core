@@ -7,7 +7,7 @@
     design.</p>
     <p>This particular page is an example of content written in an 
     <em>override</em>template and located in (
-    <xar:var scope="config" name="Site.BL.ThemesDirectory" />/themename/modules/base/user-main.xt).
+    <xar:var scope="config" name="Site.BL.ThemesDirectory"/>/themename/modules/base/user-main.xt).
     The template overrides the original that is located in the 
     <em>base</em>module. This means its content is determined by the active theme in a Xaraya
     installation and not by the 

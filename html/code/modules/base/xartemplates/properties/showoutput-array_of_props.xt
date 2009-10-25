@@ -5,14 +5,14 @@
         <xar:if condition="is_array($value)">
         <div class="xar-form-container-after">
             <xar:foreach in="$value" key="$key" value="$val">
-                <div class="xar-form-input-wrapper" >
+                <div class="xar-form-input-wrapper">
                 <xar:if condition = "$associative_array eq 1">
                     <label for="#$key#_value" title="" style="">#$key#:</label>&#160;
                 </xar:if>
                 <xar:if condition="empty($property)">
                     <xar:var name="val"/>
                 <xar:else/>
-                    <xar:data-output property="$property" value="$val" />
+                    <xar:data-output property="$property" value="$val"/>
                 </xar:if>
                 </div>
             </xar:foreach>

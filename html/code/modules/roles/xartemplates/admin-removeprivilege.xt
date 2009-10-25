@@ -51,19 +51,19 @@
                 </xar:if>
             </ul>
         </div>
-        <form method="post" action="&xar-modurl-roles-admin-removeprivilege;" enctype="application/x-www-form-urlencoded" >
+        <form method="post" action="&xar-modurl-roles-admin-removeprivilege;" enctype="application/x-www-form-urlencoded">
             <div>
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
-                <input type="hidden" name="privid" id="privid" value="#$privid#" />
-                <input type="hidden" name="confirmation" id="confirmation" value="1" />
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="roleid" id="roleid" value="#$roleid#"/>
+                <input type="hidden" name="privid" id="privid" value="#$privid#"/>
+                <input type="hidden" name="confirmation" id="confirmation" value="1"/>
                 <p>
                     <span class="xar-title">Confirm the removal of '#$privname#' from&#160; 
                     <xar:if condition="$ptype eq 1">Group 
                     <xar:else />User</xar:if>'#$rolename#'</span>
                 </p>
                 <p>
-                    <input type="submit" value="#$removelabel#" tabindex="1" />
+                    <input type="submit" value="#$removelabel#" tabindex="1"/>
                     <br />
                     <br />
                     <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$roleid#">Cancel

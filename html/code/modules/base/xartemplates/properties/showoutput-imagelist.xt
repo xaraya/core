@@ -4,9 +4,9 @@
     <xar:if condition="$srcpath ne ''">
         <!--
             <xar:set name="size">getimagesize($basedir.'/'.$value)</xar:set>
-            <img src="#$basedir#/#$value#" width="#$size[0]#" height="#$size[1]#" alt="#$value#" />
+            <img src="#$basedir#/#$value#" width="#$size[0]#" height="#$size[1]#" alt="#$value#"/>
         -->
-        <img src="#$srcpath#" alt="" />
+        <img src="#$srcpath#" alt=""/>
     <xar:else />
         #$imagetext#
     </xar:if>

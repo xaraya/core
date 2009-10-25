@@ -60,7 +60,7 @@
         <xar:if condition="is_object($primary)">
           <primary name="#$primary:getName()#">
             <xar:foreach in="$primary:getColumns()" value="$primColumn">
-              <columnref id="#$table:getName()#.#$primColumn:getName()#" />
+              <columnref id="#$table:getName()#.#$primColumn:getName()#"/>
             </xar:foreach>
           </primary>
         <xar:else/>
@@ -73,13 +73,13 @@
           <xar:if condition="$index:isUnique()">
             <unique name="#$index:getName()#">
               <xar:foreach in="#$index:getColumns()#" value="$indexColumn">
-                <columnref id="#$table:getName()#.#$indexColumn:getName()#" />
+                <columnref id="#$table:getName()#.#$indexColumn:getName()#"/>
               </xar:foreach>
             </unique>
           <xar:else/>
             <index  name="#$index:getName()#">
               <xar:foreach in="#$index:getColumns()#" value="$indexColumn">
-                <columnref id="#$table:getName()#.#$indexColumn:getName()#" />
+                <columnref id="#$table:getName()#.#$indexColumn:getName()#"/>
               </xar:foreach>
             </index>
           </xar:if>

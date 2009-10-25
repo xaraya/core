@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="active_step">8</xar:set>
     <div id="main_right">
-        <xar:template file="status" />
+        <xar:template file="status"/>
     </div>
     <div id="main_left">
         <h1 class="xar-pagetitle">Choose Privileges Setup</h1>
@@ -14,9 +14,9 @@
                         <xar:if condition="$loop:item['option'] eq ''">#$loop:item['comment']# 
                             <xar:else />
                             <xar:if condition="$loop:item['option'] == 'true'">
-                                <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
+                                <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" checked="checked"/>
                                 <xar:else />
-                            <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
+                            <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" checked="checked"/>
                         </xar:if>
                         <label for="chosen1_#$loop:index#">#$loop:item['comment']#</label></xar:if>
                     </p>
@@ -45,9 +45,9 @@
                                 <xar:else />
                                 <p class="xar-normal">
                                     <xar:if condition="$loop:item['option'] == 'true'">
-                                        <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
+                                        <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" checked="checked"/>
                                     <xar:else />
-                                        <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" />
+                                        <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#"/>
                                     </xar:if>
                                     <label for="chosen2_#$loop:index#">
                                         #$loop:item['comment']#
@@ -75,10 +75,10 @@
                 </p>
             -->
             <div class="xar-align-center" style="margin: 2em 0;">
-                <input type="submit" name="create" id="create" value="Continue" />
-                <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-                <input type="hidden" name="configuration" id="configuration" value="#$configuration#" />
-                <input type="hidden" name="confirmed" id="confirmed" value="true" />
+                <input type="submit" name="create" id="create" value="Continue"/>
+                <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
+                <input type="hidden" name="configuration" id="configuration" value="#$configuration#"/>
+                <input type="hidden" name="confirmed" id="confirmed" value="true"/>
             </div>
         </form>
     </div>

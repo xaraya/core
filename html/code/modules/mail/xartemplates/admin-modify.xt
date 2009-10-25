@@ -7,12 +7,12 @@
 
       <!-- Normal edit form -->
       <form style="display: inline;" method="post" action="&xar-modurl-dynamicdata-admin-update;">
-        <xar:data-form object="$object" itemid="$itemid" linkfield="name" />
-        <input type="hidden" name="authid" value="#xarSecGenAuthKey('dynamicdata')#" />
-        <input type="hidden" name="itemid" value="#$itemid#" />
+        <xar:data-form object="$object" itemid="$itemid" linkfield="name"/>
+        <input type="hidden" name="authid" value="#xarSecGenAuthKey('dynamicdata')#"/>
+        <input type="hidden" name="itemid" value="#$itemid#"/>
         <input type="hidden" name="objectid" value="#$object:objectid#"/>
         <input type="hidden" name="modid" value="#$object:moduleid#"/>
-        <input type="hidden" name="return_url" value="&xar-modurl-mail-admin-view;" />
+        <input type="hidden" name="return_url" value="&xar-modurl-mail-admin-view;"/>
         <input type="hidden" name="itemtype" value="#$object:itemtype#"/>
         <input type="submit" value="#xarML('Save')#"/>
       </form>

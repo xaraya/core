@@ -15,7 +15,7 @@
 
     <xsl:message>       * xardocs/help.txt</xsl:message>
 
-<xsl:document href="{$output}/xardocs/help.txt" format="text" omit-xml-declaration="yes" >
+<xsl:document href="{$output}/xardocs/help.txt" format="text" omit-xml-declaration="yes">
 
 Add help for the module.
 

@@ -33,7 +33,7 @@
                         <xar:foreach in="$cats" value="$mod" key="$modname">
                             <xar:if condition="empty($mod['features'])">
                                 <xar:continue />
-                            <xar:elseif condition="$mod['features']['modactive'] and !$mod['features']['overview']" />
+                            <xar:elseif condition="$mod['features']['modactive'] and !$mod['features']['overview']"/>
                                 <li class="xar-menu-item-current">
                                     <a name="activeitem" title="#$mod['features']['label']#">
                                         #$mod['features']['label']#
@@ -59,7 +59,7 @@
                                         </ul>
                                     </xar:if>
                                 </li>
-                            <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
+                            <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']"/>
                                 <li class="xar-menu-item-current">
                                     <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">
                                         #$mod['features']['label']#

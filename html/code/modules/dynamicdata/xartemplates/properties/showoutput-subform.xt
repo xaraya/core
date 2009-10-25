@@ -14,7 +14,7 @@
                                 <td></td>
                                 <xar:foreach in="$item:fieldlist" value="$name">
                                     <!-- CHECKME: syntax for property doesn't work with : and . ? -->
-                                    <td><xar:data-label property="$item->properties[$name]" /></td>
+                                    <td><xar:data-label property="$item->properties[$name]"/></td>
                                 </xar:foreach>
                             </tr>
                         </xar:if>
@@ -27,7 +27,7 @@
                             </xar:if>
                             <xar:foreach in="$item:fieldlist" value="$name">
                                 <!-- CHECKME: syntax for property doesn't work with : and . ? -->
-                                <td><xar:data-output property="$item->properties[$name]" /></td>
+                                <td><xar:data-output property="$item->properties[$name]"/></td>
                             </xar:foreach>
                         </tr>
                     </xar:foreach>
@@ -37,28 +37,28 @@
                         <xar:if condition="!empty($key) and !is_numeric($key)">
                             <label>#$key#:</label>
                         </xar:if>
-                        <xar:data-display object="$item" />
+                        <xar:data-display object="$item"/>
                     </xar:foreach>
                 </xar:if>
             <xar:elseif condition="is_object($object)"/>
-                <xar:data-display object="$object" />
+                <xar:data-display object="$object"/>
             <xar:else/>
-                <xar:var name="object" />
+                <xar:var name="object"/>
             </xar:if>
         <xar:else />
-            <xar:var name="value" />
+            <xar:var name="value"/>
         </xar:if>
-    <xar:elseif condition="$style eq 'itemid'" />
+    <xar:elseif condition="$style eq 'itemid'"/>
         <xar:if condition="!empty($object)">
-            <xar:data-display object="$object" />
+            <xar:data-display object="$object"/>
             <xar:else />
-            <xar:var name="value" />
+            <xar:var name="value"/>
         </xar:if>
-    <xar:elseif condition="$style eq 'childlist' or $style eq 'parentid'" />
+    <xar:elseif condition="$style eq 'childlist' or $style eq 'parentid'"/>
         <xar:if condition="!empty($object)">
-            <xar:data-view object="$object" layout="subform" />
+            <xar:data-view object="$object" layout="subform"/>
         <xar:else />
-            <xar:var name="value" />
+            <xar:var name="value"/>
         </xar:if>
     </xar:if>
 </xar:template>

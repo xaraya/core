@@ -68,38 +68,38 @@
   <!-- All logical tags must be able to have nonchildTemplate as elements -->
   <define name="logicalTemplate">
     <choice>
-      <ref name="forTag" />
-      <ref name="foreachTag" />
-      <ref name="ifTag" />
-      <ref name="loopTag" />
-      <ref name="whileTag" />
-      <ref name="secTag" />
+      <ref name="forTag"/>
+      <ref name="foreachTag"/>
+      <ref name="ifTag"/>
+      <ref name="loopTag"/>
+      <ref name="whileTag"/>
+      <ref name="secTag"/>
     </choice>
   </define>
 
   <define name="displayTemplate">
     <choice>
-      <ref name="blockTag" />
-      <ref name="blockgroupTag" />
-      <ref name="mlTag" />
-      <ref name="mlkeyTag" />
-      <ref name="mlstringTag" />
-      <ref name="moduleTag" />
-      <ref name="templateTag" />
-      <ref name="varTag" />
+      <ref name="blockTag"/>
+      <ref name="blockgroupTag"/>
+      <ref name="mlTag"/>
+      <ref name="mlkeyTag"/>
+      <ref name="mlstringTag"/>
+      <ref name="moduleTag"/>
+      <ref name="templateTag"/>
+      <ref name="varTag"/>
     </choice>
   </define>
 
   <define name="varsetTemplate">
-    <ref name="setTag" />
+    <ref name="setTag"/>
   </define>
 
   <define name="childonlyTemplate">
-    <ref name="elseTag" />
-    <ref name="elseifTag" />
-    <ref name="breakTag" />
-    <ref name="continueTag" />
-    <ref name="mlvarTag" />
+    <ref name="elseTag"/>
+    <ref name="elseifTag"/>
+    <ref name="breakTag"/>
+    <ref name="continueTag"/>
+    <ref name="mlvarTag"/>
   </define>
 
   <!-- Every single tag can have an optional ID-attribute -->

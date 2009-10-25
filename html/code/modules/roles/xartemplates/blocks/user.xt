@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:style scope="block" file="onlineblock" />
+    <xar:style scope="block" file="onlineblock"/>
     <xar:set name="thisuser">xarMod::apiFunc('roles','user','get',array('id' => xarSession::getVar('role_id')))</xar:set>
     <table class="xar-fullwidth xar-roles-nicetable">
          <tr>

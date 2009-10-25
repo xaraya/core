@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="xar-form-input-wrapper-after">
-        <xar:data-input type="checkbox" name="usegeo" id="usegeo#$blockid#" checked="$usegeo" tabindex="1" />
+        <xar:data-input type="checkbox" name="usegeo" id="usegeo#$blockid#" checked="$usegeo" tabindex="1"/>
         <label for="usegeo#$blockid#" title="#xarML('GeoUrl allows you to locate websites that are geographically close to yours.')#">
             Use GeoURL
         </label>
@@ -33,13 +33,13 @@
             <label for="longitude#$blockid#" title="#xarML('Enter your longitude.')#" class="xar-form-label">
                 Your Longitude:
             </label>
-            <input type="text" name="longitude" id="longitude#$blockid#" value="#$longitude#" maxlength="100" class="xar-form-textmedium" />
+            <input type="text" name="longitude" id="longitude#$blockid#" value="#$longitude#" maxlength="100" class="xar-form-textmedium"/>
         </div>
         <div class="xar-form-input-wrapper">
             <label for="latitude#$blockid#" title="#xarML('Enter your latitude')#" class="xar-form-label">
                 Your Latitude:
             </label>
-            <input type="text" name="latitude" id="latitude#$blockid#" value="#$latitude#" maxlength="100" class="xar-form-textmedium" />
+            <input type="text" name="latitude" id="latitude#$blockid#" value="#$latitude#" maxlength="100" class="xar-form-textmedium"/>
         </div>
     </xar:if>
     <div class="xar-form-input-wrapper">
@@ -50,33 +50,33 @@
         <div class="xar-form-container-after">
             <div class="xar-displayblock">
                 <xar:if condition="$usedk eq 0">
-                    <input type="radio" name="usedk" id="usedk#$blockid#_none" value="0" checked="checked" /> 
+                    <input type="radio" name="usedk" id="usedk#$blockid#_none" value="0" checked="checked"/> 
                 <xar:else />
-                    <input type="radio" name="usedk" id="usedk#$blockid#_none" value="0" />
+                    <input type="radio" name="usedk" id="usedk#$blockid#_none" value="0"/>
                 </xar:if>
                 <label for="usedk#$blockid#_none">None</label>
             </div>
             <div class="xar-displayblock">
                 <xar:if condition="$usedk eq 1">
-                    <input type="radio" name="usedk" id="usedk#$blockid#_articles" value="1" checked="checked" /> 
+                    <input type="radio" name="usedk" id="usedk#$blockid#_articles" value="1" checked="checked"/> 
                 <xar:else />
-                    <input type="radio" name="usedk" id="usedk#$blockid#_articles" value="1" />
+                    <input type="radio" name="usedk" id="usedk#$blockid#_articles" value="1"/>
                 </xar:if>
                 <label for="usedk#$blockid#_articles">Articles module</label>
             </div>
             <div class="xar-displayblock">
                 <xar:if condition="$usedk eq 2">
-                    <input type="radio" name="usedk" id="usedk#$blockid#_keywords" value="2" checked="checked" /> 
+                    <input type="radio" name="usedk" id="usedk#$blockid#_keywords" value="2" checked="checked"/> 
                 <xar:else />
-                    <input type="radio" name="usedk" id="usedk#$blockid#_keywords" value="2" />
+                    <input type="radio" name="usedk" id="usedk#$blockid#_keywords" value="2"/>
                 </xar:if>
                 <label for="usedk#$blockid#_keywords">Keywords module</label>
             </div>
             <div class="xar-displayblock">
                 <xar:if condition="$usedk eq 3">
-                    <input type="radio" name="usedk" id="usedk#$blockid#_both" value="3" checked="checked" /> 
+                    <input type="radio" name="usedk" id="usedk#$blockid#_both" value="3" checked="checked"/> 
                 <xar:else />
-                    <input type="radio" name="usedk" id="usedk#$blockid#_both" value="3" />
+                    <input type="radio" name="usedk" id="usedk#$blockid#_both" value="3"/>
                 </xar:if>
                 <label for="usedk#$blockid#_both">Both</label>
             </div>
@@ -86,18 +86,18 @@
         <label for="copyrightpage#$blockid#" title="#xarML('Xaraya can generate the proper links for your copyright page as used by Mozilla and other popular browsers.')#" class="xar-form-label">
             Copyright Page:
         </label>
-        <input type="text" name="copyrightpage" id="copyrightpage#$blockid#" value="#$copyrightpage#" maxlength="100" class="xar-form-textlong" />
+        <input type="text" name="copyrightpage" id="copyrightpage#$blockid#" value="#$copyrightpage#" maxlength="100" class="xar-form-textlong"/>
     </div>
     <div class="xar-form-input-wrapper">
         <label for="helppage#$blockid#" title="#xarML('Xaraya can generate the proper links for your help page as used by Mozilla and other popular browsers.')#" class="xar-form-label">
             Help Page:
         </label>
-        <input type="text" name="helppage" id="helppage#$blockid#" value="#$helppage#" maxlength="100" class="xar-form-textlong" />
+        <input type="text" name="helppage" id="helppage#$blockid#" value="#$helppage#" maxlength="100" class="xar-form-textlong"/>
     </div>
     <div class="xar-form-input-wrapper">
         <label for="glossary#$blockid#" title="#xarML('Xaraya can generate the proper links for your glossary page as used by Mozilla and other popular browsers.')#" class="xar-form-label">
             Glossary:
         </label>
-        <input type="text" name="glossary" id="glossary#$blockid#" value="#$glossary#" maxlength="100" class="xar-form-textlong" />
+        <input type="text" name="glossary" id="glossary#$blockid#" value="#$glossary#" maxlength="100" class="xar-form-textlong"/>
     </div>
 </xar:template>

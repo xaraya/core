@@ -7,7 +7,7 @@
             <td>
                 <xar:set name="field">$name.'[objectname]'</xar:set>
                 <xar:data-input type="object" name="$field" value="$objectid"
-                tabindex="$tabindex" />
+                tabindex="$tabindex"/>
             </td>
             <td>Select the dynamic object you want to use as sub-form</td>
         </tr>
@@ -70,7 +70,7 @@
                             #$propinfo:label# 
                             <xar:break /></xar:if>
                         </xar:foreach>
-                        <xar:elseif condition="$style eq 'childlist' or $style eq 'parentid'" />
+                        <xar:elseif condition="$style eq 'childlist' or $style eq 'parentid'"/>
                         <!-- the parent property needs to be selected -->
                         <select name="#$name#[link]" id="#$id#_link">
                             <xar:foreach in="$properties" key="$propname" value="$propinfo">
@@ -97,17 +97,17 @@
                     <xar:if condition="empty($title)">
                         <label for="#$id#_title_0">
                         <input type="radio" name="#$name#[title]" id="#$id#_title_0" value="0"
-                        checked="checked" />select</label>
+                        checked="checked"/>select</label>
                         <label for="#$id#_title_1">
                         <input type="radio" name="#$name#[title]" id="#$id#_title_1"
-                        value="1" />fixed (use itemid field)</label>
+                        value="1"/>fixed (use itemid field)</label>
                         <xar:else />
                         <label for="#$id#_title_0">
                         <input type="radio" name="#$name#[title]" id="#$id#_title_0"
-                        value="0" />select</label>
+                        value="0"/>select</label>
                         <label for="#$id#_title_1">
                         <input type="radio" name="#$name#[title]" id="#$id#_title_1" value="1"
-                        checked="checked" />fixed (use itemid field)</label>
+                        checked="checked"/>fixed (use itemid field)</label>
                     </xar:if>
                 </td>
                 <td>Make the parent id configurable or not</td>
@@ -119,7 +119,7 @@
       Where
     </td>
     <td>
-      <input type="text" name="#$name#[where]" id="#$id#_where" value="#$where#" size="#$size#" tabindex="#$tabindex#" />
+      <input type="text" name="#$name#[where]" id="#$id#_where" value="#$where#" size="#$size#" tabindex="#$tabindex#"/>
     </td>
     <td>
       Additional WHERE clause for the link to item or list of children
@@ -152,17 +152,17 @@
                     <xar:if condition="empty($input)">
                         <label for="#$id#_input_1">
                         <input type="radio" name="#$name#[input]" id="#$id#_input_1"
-                        value="1" />yes</label>
+                        value="1"/>yes</label>
                         <label for="#$id#_input_0">
                         <input type="radio" name="#$name#[input]" id="#$id#_input_0" value="0"
-                        checked="checked" />no</label>
+                        checked="checked"/>no</label>
                         <xar:else />
                         <label for="#$id#_input_1">
                         <input type="radio" name="#$name#[input]" id="#$id#_input_1" value="1"
-                        checked="checked" />yes</label>
+                        checked="checked"/>yes</label>
                         <label for="#$id#_input_0">
                         <input type="radio" name="#$name#[input]" id="#$id#_input_0"
-                        value="0" />no</label>
+                        value="0"/>no</label>
                     </xar:if>
                 </td>
                 <td>Allow editing the subform items here</td>
@@ -171,7 +171,7 @@
         <tr>
             <td>Number of repetitions</td>
             <td>
-                <input type="text" name="#$name#[repeat]" id="#$id#_repeat" value="#$repeat#" size="#$size#" tabindex="#$tabindex#" class="xar-form-textshort" />
+                <input type="text" name="#$name#[repeat]" id="#$id#_repeat" value="#$repeat#" size="#$size#" tabindex="#$tabindex#" class="xar-form-textshort"/>
             </td>
             <td>
                 <ul>
@@ -185,9 +185,9 @@
             <td>Edit keys</td>
             <td>
                 <xar:if condition="!empty($editkeys)">
-                    <input type="checkbox" name="#$name#[editkeys]" id="#$id#_editkeys" value="1" tabindex="#$tabindex#" checked="checked" />
+                    <input type="checkbox" name="#$name#[editkeys]" id="#$id#_editkeys" value="1" tabindex="#$tabindex#" checked="checked"/>
                 <xar:else/>
-                    <input type="checkbox" name="#$name#[editkeys]" id="#$id#_editkeys" value="1" tabindex="#$tabindex#" />
+                    <input type="checkbox" name="#$name#[editkeys]" id="#$id#_editkeys" value="1" tabindex="#$tabindex#"/>
                 </xar:if>
             </td>
             <td>Allow editing of the keys in repititions<br/>(= associative array of sub-forms)</td>
@@ -196,14 +196,14 @@
             <td>Template layout</td>
             <td colspan="2">
                 <input type="text" name="#$name#[layout]" id="#$id#_layout" value="#$layout#"
-                size="#$size#" tabindex="#$tabindex#" />
+                size="#$size#" tabindex="#$tabindex#"/>
             </td>
         </tr>
         <tr>
             <td>Other rule</td>
             <td colspan="2">
                 <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#"
-                size="#$size#" tabindex="#$tabindex#" />
+                size="#$size#" tabindex="#$tabindex#"/>
             </td>
         </tr>
     </table>

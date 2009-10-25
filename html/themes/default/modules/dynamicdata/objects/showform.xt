@@ -8,12 +8,12 @@
     <xar:if condition="$layout eq 'default'">
         <xar:foreach in="$properties" key="$name" value="$property">
             <div class="xar-form-input-wrapper #$name#">
-                <xar:data-label property="$properties[$name]" for="id" />
-                <xar:data-input property="$properties[$name]" />
+                <xar:data-label property="$properties[$name]" for="id"/>
+                <xar:data-input property="$properties[$name]"/>
             </div>
         </xar:foreach>
         <xar:else />
         <!-- You can also specify your own layout here or in a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->
-        <xar:template module="$tplmodule" file="form-$layout" />
+        <xar:template module="$tplmodule" file="form-$layout"/>
     </xar:if>
 </xar:template>

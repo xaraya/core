@@ -7,8 +7,8 @@
         <xar:if condition="$properties[$name]:getDisplayStatus() ne DataPropertyMaster::DD_DISPLAYSTATE_DISABLED">
 
             <div class="xar-form-input-wrapper">
-                <xar:data-label property="$properties[$name]" for="id" />
-                <xar:data-input property="$properties[$name]" />
+                <xar:data-label property="$properties[$name]" for="id"/>
+                <xar:data-input property="$properties[$name]"/>
             </div>
         </xar:if>
     </xar:foreach>

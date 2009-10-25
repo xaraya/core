@@ -15,22 +15,22 @@ Heavily stripped for specific xaraya usage by Marcel van der Boom
 
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-<xsl:output method="text" />
+<xsl:output method="text"/>
 <xsl:strip-space elements="*"/>
 
 <xsl:template match="/root">
-    <xsl:apply-templates select="." mode="ascii-art" />
+    <xsl:apply-templates select="." mode="ascii-art"/>
 </xsl:template>
 
 <xsl:template match="/root" mode="ascii-art">
-    <xsl:apply-templates mode="ascii-art" />
+    <xsl:apply-templates mode="ascii-art"/>
 </xsl:template>
 
 <xsl:template match="*" mode="ascii-art">
-    <xsl:call-template name="ascii-art-hierarchy" />
-    <xsl:text />\___<xsl:value-of select="@xml:id" /><xsl:text />
+    <xsl:call-template name="ascii-art-hierarchy"/>
+    <xsl:text />\___<xsl:value-of select="@xml:id"/><xsl:text />
     <xsl:text>&#xA;</xsl:text>
-    <xsl:apply-templates mode="ascii-art" />
+    <xsl:apply-templates mode="ascii-art"/>
 </xsl:template>
 
 <xsl:template name="ascii-art-hierarchy">

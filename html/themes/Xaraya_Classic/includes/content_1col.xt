@@ -3,8 +3,8 @@
     <div id="xc-inner-wrapper">
         <div id="xc-innerbg">
             <div id="xc-center">
-                <xar:var name="centerblocksgroup" />
-                <xar:module class="modulespace" main="true" />
+                <xar:var name="centerblocksgroup"/>
+                <xar:module class="modulespace" main="true"/>
             </div>
             <div id="xc-clear">&#160; 
             <!-- this is the height clearing empty element --></div>

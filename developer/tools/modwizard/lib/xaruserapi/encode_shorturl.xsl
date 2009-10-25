@@ -12,15 +12,15 @@
 
     <xsl:message>      * xaruserapi/encode_shorturl.php</xsl:message>
 
-    <xsl:document href="{$output}/xaruserapi/encode_shorturl.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaruserapi/encode_shorturl.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaruserapi/encode_shorturl.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaruserapi_encode_shorturl_func" select="." />
+        <xsl:apply-templates mode="xaruserapi_encode_shorturl_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -32,7 +32,7 @@
 
 -->
 <xsl:template mode="xaruserapi_encode_shorturl_func" match="xaraya_module">
-    <xsl:variable name="module_prefix" select="registry/name" />
+    <xsl:variable name="module_prefix" select="registry/name"/>
 /**
  * This function is called when xarModURL is invoked and Short URL Support is
  * enabled.
@@ -46,7 +46,7 @@
  * o
  *
  */
-function <xsl:value-of select="$module_prefix" />_userapi_encode_shorturl( $args ) 
+function <xsl:value-of select="$module_prefix"/>_userapi_encode_shorturl( $args ) 
 {    <xsl:if test="boolean( database/table[@user='true'] )">
     $func       = NULL;
     $module     = NULL;
@@ -82,14 +82,14 @@ function <xsl:value-of select="$module_prefix" />_userapi_encode_shorturl( $args
     }
 
     // kind of a assertion :-))
-    if( isset( $module ) and $module != '<xsl:value-of select="$module_prefix" />' ) {
+    if( isset( $module ) and $module != '<xsl:value-of select="$module_prefix"/>' ) {
         return;
     }
 
     /*
      * LETS GO. We start with the module.
      */
-    $path = '/<xsl:value-of select="$module_prefix" />';
+    $path = '/<xsl:value-of select="$module_prefix"/>';
 
     if ( empty( $func ) )
         return;
@@ -107,8 +107,8 @@ function <xsl:value-of select="$module_prefix" />_userapi_encode_shorturl( $args
 
         switch ( $itemtype ) {
         <xsl:for-each select="database/table[@user='true']">
-            case <xsl:value-of select="@itemtype" />:
-                $itemtype_name = '<xsl:value-of select="@name" />';
+            case <xsl:value-of select="@itemtype"/>:
+                $itemtype_name = '<xsl:value-of select="@name"/>';
                 break;
         </xsl:for-each>
 

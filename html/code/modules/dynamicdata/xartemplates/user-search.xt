@@ -26,17 +26,17 @@
                                     <td class="xar-valign-top">
                                     <label for="q">Search for</label>:</td>
                                     <td>
-                                        <input type="hidden" name="module" value="dynamicdata" />
-                                        <input type="hidden" name="func" value="search" />
+                                        <input type="hidden" name="module" value="dynamicdata"/>
+                                        <input type="hidden" name="func" value="search"/>
                                         <xar:if condition="!empty($item['module_id'])">
-                                            <input type="hidden" name="module_id" module_idvalue="#$item['module_id']#" />
+                                            <input type="hidden" name="module_id" module_idvalue="#$item['module_id']#"/>
                                         </xar:if>
                                         <xar:if condition="!empty($item['itemtype'])">
                                             <input type="hidden" name="itemtype"
-                                            value="#$item['itemtype']#" />
+                                            value="#$item['itemtype']#"/>
                                         </xar:if>
                                         <input type="text" name="q" id="q" value="#$q#"
-                                        size="20" />
+                                        size="20"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -50,11 +50,11 @@
                                                     <input type="checkbox"
                                                     name="dd_check[#$field['id']#]"
                                                     id="dd_check_#$field['id']#" value="1"
-                                                    checked="checked" />
+                                                    checked="checked"/>
                                                     <xar:else />
                                                     <input type="checkbox"
                                                     name="dd_check[#$field['id']#]"
-                                                    id="dd_check_#$field['id']#" value="1" />
+                                                    id="dd_check_#$field['id']#" value="1"/>
                                                 </xar:if>
                                                 <label for="dd_check_#$field['id']#">
                                                 #$field['label']#</label>
@@ -66,7 +66,7 @@
                                 <tr>
                                     <td colspan="2">
                                         <xar:set name="search">'Search'</xar:set>
-                                        <input type="submit" value="#$search#" />
+                                        <input type="submit" value="#$search#"/>
                                     </td>
                                 </tr>
                             </table>
@@ -91,10 +91,10 @@
                             <xar:foreach in="$item['fields']" key="$name" value="$field">
                                 <xar:if condition="!empty($field['checked'])">
                                     <input type="checkbox" name="dd_check[#$field['id']#]"
-                                    id="dd_check_#$field['id']#" value="1" checked="checked" />
+                                    id="dd_check_#$field['id']#" value="1" checked="checked"/>
                                     <xar:else />
                                     <input type="checkbox" name="dd_check[#$field['id']#]"
-                                    id="dd_check_#$field['id']#" value="1" />
+                                    id="dd_check_#$field['id']#" value="1"/>
                                 </xar:if>
                                 <label for="dd_check_#$field['id']#">#$field['label']#</label>
                                 <br />

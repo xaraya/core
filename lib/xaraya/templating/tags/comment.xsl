@@ -13,7 +13,7 @@
     <xsl:if test="string-length(@iecondition)">
       <xsl:text>[</xsl:text><xsl:value-of select="@iecondition"/><xsl:text>]&gt;</xsl:text>
     </xsl:if>
-    <xsl:value-of select="." />
+    <xsl:value-of select="."/>
     <xsl:if test="string-length(@iecondition)">
       <xsl:text>&lt;![endif]</xsl:text>
     </xsl:if>

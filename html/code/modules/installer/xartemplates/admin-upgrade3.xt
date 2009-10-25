@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="active_step">3</xar:set>
     <div id="main_right">
-        <xar:template file="upstatus" />
+        <xar:template file="upstatus"/>
     </div>
     <div id="main_left">
         <h1>Miscelleneous Upgrades</h1>
@@ -12,9 +12,9 @@
         results on your site.</p>
         <form action="upgrade.php" method="post">
             <p class="center">
-                <input type="hidden" name="upgrade_phase" id="upgrade_phase" value="4" />
+                <input type="hidden" name="upgrade_phase" id="upgrade_phase" value="4"/>
                 <!-- TODO: the value attribute should be eligible for translation, is it? -->
-                <input type="submit" value="Continue" />
+                <input type="submit" value="Continue"/>
             </p>
         </form>
     </div>

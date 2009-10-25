@@ -7,9 +7,9 @@
 
     <xsl:message>      * xartemplates/admin-view.xd</xsl:message>
 
-<xsl:document href="{$output}/xartemplates/admin-view.xd" format="text" omit-xml-declaration="yes" >
+<xsl:document href="{$output}/xartemplates/admin-view.xd" format="text" omit-xml-declaration="yes">
 
-    <xar:template file="header" type="module" />
+    <xar:template file="header" type="module"/>
 
 <div class="xar-mod-body">
     <div style="padding: 1px;" class="xar-norm-outline">

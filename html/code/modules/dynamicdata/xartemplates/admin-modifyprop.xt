@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="base" filename="toggle.js" />
+    <xar:javascript module="base" filename="toggle.js"/>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Dynamic Data Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>Modify DataProperties #$label#</h2>
         <xar:if condition="!empty($objectid)">
             <div>
@@ -50,7 +50,7 @@
             </div>
             <fieldset>
                 <legend>Object summary</legend>
-                <xar:data-display layout="$layout" itemid="$objectid" fieldlist="objectid,name,label,class," />
+                <xar:data-display layout="$layout" itemid="$objectid" fieldlist="objectid,name,label,class,"/>
             </fieldset>
         </xar:if>
         <!-- This is where the list of properties shown starts -->
@@ -64,7 +64,7 @@
             <xar:set name="layout">'default'</xar:set>
         </xar:if>
         <form method="post" action="&xar-modurl-dynamicdata-admin-updateprop;">
-            <xar:template file="proplist-$layout" />
+            <xar:template file="proplist-$layout"/>
         </form>
         <p>[ 
             <xar:if condition="empty($details)">
@@ -90,7 +90,7 @@
                             <td>#$field['label']#</td>
                             <td>
                                 <xar:data-output property="$fieldtypeprop"
-                                name="static_type['.$field['id'].']" value="$field['type']" />
+                                name="static_type['.$field['id'].']" value="$field['type']"/>
                             </td>
                             <td>#$field['defaultvalue']#</td>
                             <td>#$field['source']#</td>
@@ -105,11 +105,11 @@
                     <xar:foreach in="$tables" value="$table">
                         <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
                             <div class="xar-align-center">
-                                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                                <input type="hidden" name="module_id" id="module_id" value="#$module_id#" />
-                                <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#" />
-                                <input type="hidden" name="table" id="table" value="#$table#" />
-                                <input type="submit" value="#xarML('Import table')# #$table#" />
+                                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                                <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>
+                                <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
+                                <input type="hidden" name="table" id="table" value="#$table#"/>
+                                <input type="submit" value="#xarML('Import table')# #$table#"/>
                             </div>
                         </form>
                     </xar:foreach>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <h3>
-        <xar:var name="title" />
+        <xar:var name="title"/>
     </h3>
-    <img src="#$body#" border="0" alt="#$title#" />
+    <img src="#$body#" border="0" alt="#$title#"/>
     <br />
     <span class="xar-quote">
-        <xar:var name="notes" />
+        <xar:var name="notes"/>
     </span>
 </xar:template>

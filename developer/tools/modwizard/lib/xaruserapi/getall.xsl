@@ -12,15 +12,15 @@
 
     <xsl:message>      * xaruserapi/getall.php</xsl:message>
 
-    <xsl:document href="{$output}/xaruserapi/getall.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaruserapi/getall.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaruserapi/getall.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaruserapi_getall_func" select="." />
+        <xsl:apply-templates mode="xaruserapi_getall_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -32,7 +32,7 @@
         MODE: xaruserapi_getall             MATCH:  table
 -->
 <xsl:template mode="xaruserapi_getall_func" match="xaraya_module">
-    <xsl:variable name="module_prefix" select="registry/name" />
+    <xsl:variable name="module_prefix" select="registry/name"/>
 /**
  *
  * @param array( 'itemtype' => &lt;itemtype&gt; )
@@ -46,7 +46,7 @@
  *                        'pubdate','pubtypeid','notes','status','body'
  *                        Optional fields : 'cids','author','counter','rating','dynamicdata'
  */
-function <xsl:value-of select="$module_prefix" />_userapi_getall( $args ) 
+function <xsl:value-of select="$module_prefix"/>_userapi_getall( $args ) 
 {
     extract( $args );
 
@@ -76,7 +76,7 @@ function <xsl:value-of select="$module_prefix" />_userapi_getall( $args )
         ,'user'
         ,'getitems'
         ,array(
-            'module'     => '<xsl:value-of select="$module_prefix" />'
+            'module'     => '<xsl:value-of select="$module_prefix"/>'
             ,'itemtype'  => $itemtype
             ,'numitems'  => $numitems
             ,'startnum'  => $startnum

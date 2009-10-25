@@ -216,7 +216,7 @@ div tag, belonging to the html (default) namespace can be (legally) extended
 by: 
 
     <div style="border:thin" xar:extra="somevalue">
-        <img src="myPicture.png" />
+        <img src="myPicture.png"/>
     </div>
 
 Assuming the namespaces are properly tagged onto the document, this is

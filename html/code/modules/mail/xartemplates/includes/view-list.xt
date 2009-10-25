@@ -27,11 +27,11 @@
                     <tr>
                         <th class="xar-align-right xar-form-textlong">
                             <a href="#$sorturl#=#$name#">
-                                <xar:data-label property="$properties[$name]" />
+                                <xar:data-label property="$properties[$name]"/>
                             </a>
                         </th>
                         <td>
-                            <xar:data-output property="$properties[$name]" value="$fields[$name]" />
+                            <xar:data-output property="$properties[$name]" value="$fields[$name]"/>
                         </td>
                     </tr>
                 </xar:foreach>

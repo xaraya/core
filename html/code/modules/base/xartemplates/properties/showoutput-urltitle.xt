@@ -5,7 +5,7 @@
         <a href="#$link#">#$title#</a>
     <xar:elseif condition="empty($link) and !empty($title)"/>
         #$title#
-    <xar:elseif condition="empty($title) and !empty($link)" />
+    <xar:elseif condition="empty($title) and !empty($link)"/>
         <a href="#$link#">#$link#</a>
     </xar:if>
 </xar:template>

@@ -20,7 +20,7 @@
         <span class="xar-mod-title">Roles Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>
             <a href="&xar-modurl-roles-admin-createmail;">Messaging System:</a>Send Mail To Users/Groups
         </h2>
@@ -116,11 +116,11 @@
                     </td>
                     <td class="xar-align-center">
                         <xar:set name="firstline">xarML('-- choose --')</xar:set>
-                        <xar:data-input type="dropdown" name="state" tabindex="5" onchange="this.form.submit()" firstline="$firstline" options="$stateoptions" value="$state" />
+                        <xar:data-input type="dropdown" name="state" tabindex="5" onchange="this.form.submit()" firstline="$firstline" options="$stateoptions" value="$state"/>
                     </td>
                     <xar:if condition="$id gt 0">
                         <td class="xar-align-center xar-valign-middle">
-                            <xar:data-input type="checkbox" name="includesubgroups" id="includesubgroups" checked="$includesubgroups" onchange="this.form.submit()" />
+                            <xar:data-input type="checkbox" name="includesubgroups" id="includesubgroups" checked="$includesubgroups" onchange="this.form.submit()"/>
                         </td>
                     </xar:if>
                     <td class="xar-align-center">
@@ -138,8 +138,8 @@
                         </select>
                     </td>
                     <td class="xar-align-center">
-                        <input type="hidden" name="q" id="q" value="new" />
-                        <input type="submit" name="reload" id="reload" value="#xarML('Reload')#" />
+                        <input type="hidden" name="q" id="q" value="new"/>
+                        <input type="submit" name="reload" id="reload" value="#xarML('Reload')#"/>
                     </td>
                 </tr>
             </table>
@@ -162,7 +162,7 @@
             -->
                 <xar:if condition="$selstyle eq '1'">
                     <p>#$totalselected# user(s) selected.</p>
-                <xar:elseif condition="$selstyle eq '2'" />
+                <xar:elseif condition="$selstyle eq '2'"/>
                     <xar:if condition="count($users) eq 0">
                         <p>No users match</p>
                     <xar:else />
@@ -202,9 +202,9 @@
                                     #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#</td>
                                     <td>
                                         <xar:if condition="$loop:item['status'] eq 1">Inactive 
-                                        <xar:elseif condition="$loop:item['status'] eq 2" />Not Validated 
-                                        <xar:elseif condition="$loop:item['status'] eq 3" />Active 
-                                        <xar:elseif condition="$loop:item['status'] eq 4" />Pending</xar:if>
+                                        <xar:elseif condition="$loop:item['status'] eq 2"/>Not Validated 
+                                        <xar:elseif condition="$loop:item['status'] eq 3"/>Active 
+                                        <xar:elseif condition="$loop:item['status'] eq 4"/>Pending</xar:if>
                                     </td>
                                 </tr>
                             </xar:loop>
@@ -227,7 +227,7 @@
                     <label for="subject" title="#xarML('Subject line of the email')#" class="xar-form-label">
                         Subject:
                     </label>
-                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong" />
+                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="message" title="#xarML('Body of the email')#" class="xar-form-label">
@@ -242,17 +242,17 @@
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="id" id="id" value="#$id#" />
-                    <input type="hidden" name="state" id="state" value="#$state#" />
-                    <input type="hidden" name="includesubgroups" id="includesubgroups" value="#$includesubgroups#" />
-                    <!--<input type="hidden" name="ids" id="ids" value="#$ids#" />-->
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="id" id="id" value="#$id#"/>
+                    <input type="hidden" name="state" id="state" value="#$state#"/>
+                    <input type="hidden" name="includesubgroups" id="includesubgroups" value="#$includesubgroups#"/>
+                    <!--<input type="hidden" name="ids" id="ids" value="#$ids#"/>-->
                     <xar:if condition="!isset($users) or $users eq 0">
-                        <input type="submit" value="#xarML('Send')#" disabled="disabled" class="xar-margin-thickright" />
+                        <input type="submit" value="#xarML('Send')#" disabled="disabled" class="xar-margin-thickright"/>
                     <xar:else />
-                        <input type="submit" value="#xarML('Send')#" class="xar-margin-thickright" />
+                        <input type="submit" value="#xarML('Send')#" class="xar-margin-thickright"/>
                     </xar:if>
-                    <input type="button" value="#xarML('Cancel')#" onclick="history.back(-1);" class="xar-margin-thickright" />
+                    <input type="button" value="#xarML('Cancel')#" onclick="history.back(-1);" class="xar-margin-thickright"/>
                 </div>
             </fieldset>
         </form>

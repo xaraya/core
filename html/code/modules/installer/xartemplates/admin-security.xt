@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="active_step">9</xar:set>
     <div id="main_right">
-        <xar:template file="status" />
+        <xar:template file="status"/>
     </div>
     <div id="main_left">
         <h1>Security Precautions</h1>
@@ -20,7 +20,7 @@
                 <label class="xar-form-label" for="remove">
                     Remove the install script
                 </label>
-                <xar:data-input type="checkbox" id="remove" name="remove" />
+                <xar:data-input type="checkbox" id="remove" name="remove"/>
             </div>
             <div class="xar-form-input-wrapper">
                 <p>
@@ -29,7 +29,7 @@
                 <label class="xar-form-label" for="rename">
                     Rename the install script
                 </label>
-                <xar:data-input type="checkbox" name="rename" id="rename" />
+                <xar:data-input type="checkbox" name="rename" id="rename"/>
                 &#160;&#160;
                 <label for="newname">
                     New name for the script
@@ -37,9 +37,9 @@
                 <xar:data-input type="textbox" name="newname" id="newname" size="30"/>.php                
             </div>
             <div class="xar-align-center" style="margin: 2em 0;">
-                <input type="submit" name="create" id="create" value="Continue" />
-                <input type="hidden" name="install_language" id="install_language" value="#$language#" />
-                <input type="hidden" name="confirmed" id="confirmed" value="true" />
+                <input type="submit" name="create" id="create" value="Continue"/>
+                <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
+                <input type="hidden" name="confirmed" id="confirmed" value="true"/>
             </div>
         </form>
 

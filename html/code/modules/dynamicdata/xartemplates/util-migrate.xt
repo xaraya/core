@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:style scope="module" file="dd" />
+    <xar:style scope="module" file="dd"/>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Dynamic Data Utilities</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>
             <xar:if condition="!empty($mapfrom) and !empty($mapto)">Utilities - Migrate Items from
             #$mapfrom# to #$mapto# 
             <xar:else />Utilities - Migrate Module Items</xar:if>
         </h2>
-        <xar:template type="module" file="utility-menu" />
+        <xar:template type="module" file="utility-menu"/>
         <xar:if condition="!empty($debug)">
             <div>
                 <pre>
@@ -38,15 +38,15 @@
                                 </xar:if>
                             </xar:foreach>
                         </select>
-                        <input type="submit" name="load" value="#xarML('Load')#" />
+                        <input type="submit" name="load" value="#xarML('Load')#"/>
                     <xar:else />No mappings available.</xar:if>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="newmap" title="#xarML('Enter a new mapping')#"
                     class="xar-form-label">Create Mapping:</label>
                     <input type="text" name="newmap" id="newmap" value="#$newmap#"
-                    class="xar-form-textlong" />
-                    <input type="submit" name="save" value="#xarML('Save')#" />
+                    class="xar-form-textlong"/>
+                    <input type="submit" name="save" value="#xarML('Save')#"/>
                 </div>
             </fieldset>
             <fieldset class="xar-clearboth">
@@ -59,7 +59,7 @@
                             <select name="from[module]" id="from_module">
                                 <xar:foreach in="$modulelist" key="$module_id" value="$modlabel">
                                     <xar:if condition="!in_array($module_id,$modulesupported)">
-                                    <xar:elseif condition="$module_id eq 151" />
+                                    <xar:elseif condition="$module_id eq 151"/>
                                         <!-- TODO: keep this preset to articles? -->
                                     <option value="#$module_id#" selected="selected">
                                     #$modlabel#</option>
@@ -70,13 +70,13 @@
                             </select>
                         <xar:else />#$modulelist[$from['module']]# 
                         <input type="hidden" name="from[module]"
-                        value="#$from['module']#" /></xar:if>
+                        value="#$from['module']#"/></xar:if>
                         <strong>To</strong>
                         <xar:if condition="empty($to['module'])">
                             <select name="to[module]" id="to_module">
                                 <xar:foreach in="$modulelist" key="$module_id" value="$modlabel">
                                     <xar:if condition="!in_array($module_id,$modulesupported)">
-                                    <xar:elseif condition="$module_id eq 151" />
+                                    <xar:elseif condition="$module_id eq 151"/>
                                         <!-- TODO: keep this preset to articles? -->
                                     <option value="#$module_id#" selected="selected">
                                     #$modlabel#</option>
@@ -86,7 +86,7 @@
                                 </xar:foreach>
                             </select>
                         <xar:else />#$modulelist[$to['module']]# 
-                        <input type="hidden" name="to[module]" value="#$to['module']#" /></xar:if>
+                        <input type="hidden" name="to[module]" value="#$to['module']#"/></xar:if>
                     </span>
                 </div>
                 <xar:if condition="!empty($from['module']) and !empty($to['module'])">
@@ -105,7 +105,7 @@
                             <xar:else />[#$from['itemtype']#]
                             #$fromitemtypes[$from['itemtype']]['label']# 
                             <input type="hidden" name="from[itemtype]" id="from_itemtype"
-                            value="#$from['itemtype']#" /></xar:if>
+                            value="#$from['itemtype']#"/></xar:if>
                             <strong>To</strong>
                             <xar:if condition="!isset($to['itemtype'])">
                                 <select name="to[itemtype]" id="to_itemtype">
@@ -117,7 +117,7 @@
                             <xar:else />[#$to['itemtype']#]
                             #$toitemtypes[$to['itemtype']]['label']# 
                             <input type="hidden" name="to[itemtype]"
-                            value="#$to['itemtype']#" /></xar:if>
+                            value="#$to['itemtype']#"/></xar:if>
                         </span>
                     </div>
                 </xar:if>
@@ -140,13 +140,13 @@
                                 [#$itemid#] #$info['label']# 
                                 <br /></xar:foreach>
                                 <input type="hidden" name="from[itemid]"
-                                value="#$from['itemid']#" />
+                                value="#$from['itemid']#"/>
                             </xar:if>
                         </div>
                         <div class="xar-form-input-wrapper-after">
                             <xar:set name="checked">empty($to['itemid'])</xar:set>
                             <xar:data-input type="checkbox" name="to[itemid]" id="to_itemid"
-                            checked="$checked" />
+                            checked="$checked"/>
                             <label for="to_itemid"
                             title="xarML('Attempt to preserve item id during this migration')#">
                             Preserve id</label>
@@ -156,24 +156,24 @@
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="step" value="#$step#" />
-                    <input type="hidden" name="authid" value="#xarSecGenAuthKey()#" />
+                    <input type="hidden" name="step" value="#$step#"/>
+                    <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
                     <xar:if condition="$step gt 1">
-                        <input class="dd-norm" type="submit" name="back" value="#xarML('Back')#" />
+                        <input class="dd-norm" type="submit" name="back" value="#xarML('Back')#"/>
                         <xar:else />
                         <input class="dd-norm" type="submit" name="back" value="#xarML('Back')#"
-                        disabled="disabled" />
+                        disabled="disabled"/>
                     </xar:if>
-                    <input class="dd-norm" type="submit" name="next" value="#xarML('Next')#" />
+                    <input class="dd-norm" type="submit" name="next" value="#xarML('Next')#"/>
                     <xar:if condition="!empty($check)">
-                        <input class="dd-norm" type="submit" name="test" value="#xarML('Test')#" />
+                        <input class="dd-norm" type="submit" name="test" value="#xarML('Test')#"/>
                         <input class="dd-norm" type="submit" name="confirm"
-                        value="#xarML('Finish')#" />
+                        value="#xarML('Finish')#"/>
                         <xar:else />
                         <input class="dd-norm" type="submit" name="test" value="#xarML('Test')#"
-                        disabled="disabled" />
+                        disabled="disabled"/>
                         <input class="dd-norm" type="submit" name="confirm"
-                        value="#xarML('Finish')#" disabled="disabled" />
+                        value="#xarML('Finish')#" disabled="disabled"/>
                     </xar:if>
                 </div>
             </fieldset>
@@ -194,7 +194,7 @@
                                             <option value="#$nameto#" selected="selected">
                                             [#$nameto#] #$infoto['label']#
                                             (#$infoto['type']#)</option>
-                                            <xar:elseif condition="!empty($fieldmap[$namefrom]) and $fieldmap[$namefrom] eq $nameto" />
+                                            <xar:elseif condition="!empty($fieldmap[$namefrom]) and $fieldmap[$namefrom] eq $nameto"/>
                                             <option value="#$nameto#" selected="selected">
                                             [#$nameto#] #$infoto['label']#
                                             (#$infoto['type']#)</option>
@@ -214,7 +214,7 @@
                                     #$hookmodfrom#:</label>
                                     <xar:if condition="!in_array($hookmodfrom,$hooksupported)">not
                                     supported 
-                                    <xar:elseif condition="$hookmodfrom eq 'dynamicdata'" />see
+                                    <xar:elseif condition="$hookmodfrom eq 'dynamicdata'"/>see
                                     field mapping above 
                                     <xar:else />
                                     <select name="hookmap[#$hookmodfrom#]"
@@ -226,10 +226,10 @@
 
                                                 <option value="#$hookmodto#" selected="selected">
                                                 #$hookmodto#</option>
-                                                <xar:elseif condition="!empty($hookmap[$hookmodfrom]) and $hookmap[$hookmodfrom] eq $hookmodto" />
+                                                <xar:elseif condition="!empty($hookmap[$hookmodfrom]) and $hookmap[$hookmodfrom] eq $hookmodto"/>
                                                 <option value="#$hookmodto#" selected="selected">
                                                 #$hookmodto#</option>
-                                                <xar:elseif condition="!in_array($hookmodto,$hooksupported)" />
+                                                <xar:elseif condition="!in_array($hookmodto,$hooksupported)"/>
                                                 <option value="#$hookmodto#" disabled="disabled">
                                                 #$hookmodto#</option>
                                                 <xar:else />

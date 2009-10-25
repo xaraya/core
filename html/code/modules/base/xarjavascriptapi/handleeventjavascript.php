@@ -13,7 +13,7 @@
 /**
  * Handle render javascript form field tags
  * Handle <xar:base-trigger-javascript ...> form field tags
- * Format : <xar:place-javascript definition="$definition" /> with $definition an array
+ * Format : <xar:place-javascript definition="$definition"/> with $definition an array
  *       or <xar:place-javascript position="head|body|whatever|" type="code|src|whatever|"/>
  * Default position is ''; default type is ''.
  * Typical use in the head section is: <xar:place-javascript position="head"/>

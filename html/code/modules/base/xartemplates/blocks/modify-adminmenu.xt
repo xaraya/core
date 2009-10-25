@@ -5,14 +5,14 @@
         <label class="xar-form-label" for="showlogout#$blockid#" title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
             Show A Logout Link
         </label>
-        <xar:data-input type="checkbox" name="showlogout" checked="$showlogout" />
+        <xar:data-input type="checkbox" name="showlogout" checked="$showlogout"/>
     </div>
     <!--
     <div class="xar-form-input-wrapper">
         <label class="xar-form-label" for="showhelp#$blockid#" title="#xarML('By checking this box a help link will be shown in the panel instance.')#">
             Show A Help Link
         </label>
-        <xar:data-input type="checkbox" name="showhelp" checked="$showhelp" />
+        <xar:data-input type="checkbox" name="showhelp" checked="$showhelp"/>
     </div>
     -->
     <div class="xar-form-input-wrapper">

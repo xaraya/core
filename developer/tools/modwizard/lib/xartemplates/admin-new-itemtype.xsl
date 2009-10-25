@@ -6,12 +6,12 @@
 
 <xsl:template match="table" mode="xd_admin-new-itemtype">
 
-    <xsl:variable name="table" select="@name" />
-    <xsl:message>      * xartemplates/admin-new-<xsl:value-of select="@name" />.xd</xsl:message>
+    <xsl:variable name="table" select="@name"/>
+    <xsl:message>      * xartemplates/admin-new-<xsl:value-of select="@name"/>.xd</xsl:message>
 
 <xsl:document href="{$output}/xartemplates/admin-new-{$table}.xd" format="text" omit-xml-declaration="yes" xml:space="preserve">
 
-    <xar:template file="header" type="module" />
+    <xar:template file="header" type="module"/>
 
     <div class="xar-mod-body">
     <div style="padding: 1px;" class="xar-norm-outline">
@@ -24,22 +24,22 @@
 
 <form method="post" action="#$action#">
 
-    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
 
     <xsl:for-each select="structure/field">
-        <xsl:comment>FIELD <xsl:value-of select="@name" /></xsl:comment>
+        <xsl:comment>FIELD <xsl:value-of select="@name"/></xsl:comment>
 
         <div style="clear: both; padding-top: 10px;">
         <span style="float: left; width: 20%; text-align: right;">
             <xsl:element name="xar:data-label" xml:space="default">
-                  <xsl:attribute name="property">$object_props['<xsl:value-of select="@name" />']</xsl:attribute>
+                  <xsl:attribute name="property">$object_props['<xsl:value-of select="@name"/>']</xsl:attribute>
                   <xsl:attribute name="label">id</xsl:attribute>
             </xsl:element>:
         </span>
         <span style="float: right; width: 78%; text-align: left;">
             <xsl:element name="xar:data-input" xml:space="default">
-                <xsl:attribute name="property">$object_props['<xsl:value-of select="@name" />']</xsl:attribute>
-                <xsl:attribute name="value">$object_values['<xsl:value-of select="@name" />']</xsl:attribute>
+                <xsl:attribute name="property">$object_props['<xsl:value-of select="@name"/>']</xsl:attribute>
+                <xsl:attribute name="value">$object_values['<xsl:value-of select="@name"/>']</xsl:attribute>
             </xsl:element>
         </span>
         </div>
@@ -53,9 +53,9 @@
     </xar:if>
 
     <div style="clear: both; padding-top: 10px; text-align: center; width: 100%;">
-        <input type="submit"                value="#xarML('Create')#" />
-        <input type="submit" name="preview" value="#xarML('Preview')#" />
-        <input type="submit" name="cancel"  value="#xarML('Cancel')#" />
+        <input type="submit"                value="#xarML('Create')#"/>
+        <input type="submit" name="preview" value="#xarML('Preview')#"/>
+        <input type="submit" name="cancel"  value="#xarML('Cancel')#"/>
     </div>
 </form>
 </div>

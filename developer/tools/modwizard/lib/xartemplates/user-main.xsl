@@ -7,7 +7,7 @@
 <xsl:template match="xaraya_module" mode="xd_user-main">
 
     <xsl:message>      * xartemplates/user-main.xd</xsl:message>
-    <xsl:apply-templates select="." mode="xd_user-main_file" />
+    <xsl:apply-templates select="." mode="xd_user-main_file"/>
 
 </xsl:template>
 
@@ -16,7 +16,7 @@
 <xsl:template match="xaraya_module" mode="xd_user-main_file">
 
 <xsl:document href="{$output}/xartemplates/user-main.xd" format="text" omit-xml-declaration="yes" xml:space="preserve">
-    <xar:template file="header" type="module" />
+    <xar:template file="header" type="module"/>
 
 <div class="xar-mod-body">
     <div style="padding: 1px;" class="xar-norm-outline">

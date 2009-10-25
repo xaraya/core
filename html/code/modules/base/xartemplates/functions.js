@@ -2,8 +2,8 @@
  * *** Deprecated ***
  * Please instead use xar_base_confirmlink() and xar_base_formcheck()
  * available to a template through the following theme tags:
- * <xar:javascript module="base" filename="comfirmlink.js" position="head" /> and
- * <xar:javascript module="base" filename="formcheck.js" position="head" />
+ * <xar:javascript module="base" filename="comfirmlink.js" position="head"/> and
+ * <xar:javascript module="base" filename="formcheck.js" position="head"/>
  */
 
 function confirmLink(theLink, xarConfirmMsg)

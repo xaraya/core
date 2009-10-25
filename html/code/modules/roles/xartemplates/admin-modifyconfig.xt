@@ -5,7 +5,7 @@
         <span class="xar-mod-title">Roles Administration</span>
     </div>
     <div class="xar-mod-body">
-      <xar:template type="module" file="admin-menu" />
+      <xar:template type="module" file="admin-menu"/>
         <h2>Modify Roles Configuration</h2>
         <div>
             <ul class="xar-tabs xar-alt xar-norm-outline">
@@ -74,7 +74,7 @@
         -->
         <xar:if condition="$tab eq 'general'">
             <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
-                <xar:data-form object="$module_settings" />
+                <xar:data-form object="$module_settings"/>
                 <fieldset>
                     <legend>Default Group and Site Administrator</legend>
                     <div class="xar-form-input-wrapper">
@@ -97,7 +97,7 @@
                     </div>
                     <div class="xar-form-input-wrapper">
                         <label for="defaultgroup" title="#xarML('New Users automatically get assigned to this Group')#" class="xar-form-label">Default Group For New Users:</label>
-                        <xar:data-input type="grouplist" name="defaultgroup" id="defaultgroup" value="$defaultgroup" />
+                        <xar:data-input type="grouplist" name="defaultgroup" id="defaultgroup" value="$defaultgroup"/>
                     </div>
                 </fieldset>
                 <fieldset>
@@ -106,28 +106,28 @@
                         <label for="defaultauthmodule" title="#xarML('Select the module that manages authentication of users')#" class="xar-form-label">
                             Authentication:
                         </label>
-                        <xar:data-input type="module" name="defaultauthmodule" class="Authentication" value="$defaultauthmod" validation="name" firstline="Choose a module" />
+                        <xar:data-input type="module" name="defaultauthmodule" class="Authentication" value="$defaultauthmod" validation="name" firstline="Choose a module"/>
                     </div>
                     <div class="xar-form-input-wrapper">
                         <label for="defaultregmodule" title="#xarML('Select the module that manages registration of users')#" class="xar-form-label">
                             Registration:
                         </label>
-                        <xar:data-input type="module" name="defaultregmodule" class="Registration" value="$defaultregmod" validation="name" firstline="Choose a module" />
+                        <xar:data-input type="module" name="defaultregmodule" class="Registration" value="$defaultregmod" validation="name" firstline="Choose a module"/>
                     </div>
                 </fieldset>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-                        <input type="hidden" name="phase" id="phase" value="update" />
-                        <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                        <input type="submit" value="#xarML('Update Roles Configuration')#" />
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="phase" id="phase" value="update"/>
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                        <input type="submit" value="#xarML('Update Roles Configuration')#"/>
                     </div>
                 </fieldset>
             </form>
             <!--
                 - - - - - - - - - - - - - - - - - Begin User Variable Options - - - - - - - - - - - - - - - - - - -
             -->
-            <xar:elseif condition="$tab eq 'duvs'" />
+            <xar:elseif condition="$tab eq 'duvs'"/>
                 <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
                     <fieldset>
                     <legend>Basic User Variables</legend>
@@ -160,7 +160,7 @@
                     <p>Optional in a user role. Once activated they can be retrieved as
                     <strong>xarModUserVars::get('roles','varname','id')</strong></p>
                         <br />
-                        <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="nolabels" fieldlist="duvsettings" />
+                        <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="nolabels" fieldlist="duvsettings"/>
                         <table style="width: 90%">
                             <tr>
                                 <th style="width: 100px">Name</th>
@@ -203,17 +203,17 @@
                     </fieldset>
                     <fieldset>
                         <div class="xar-form-input-wrapper-after">
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-                            <input type="hidden" name="phase" id="phase" value="update" />
-                            <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                            <input type="submit" value="#xarML('Update Roles Configuration')#" />
+                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                            <input type="hidden" name="phase" id="phase" value="update"/>
+                            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                            <input type="submit" value="#xarML('Update Roles Configuration')#"/>
                         </div>
                     </fieldset>
                 </form>
             <!--
                 - - - - - - - - - - - - - - - - - Begin User Hooks Options - - - - - - - - - - - - - - - - - - -
             -->
-            <xar:elseif condition="$tab eq 'hooks'" />
+            <xar:elseif condition="$tab eq 'hooks'"/>
             <xar:if condition="!empty($hooks)">
               <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
                 enctype="application/x-www-form-urlencoded">
@@ -225,10 +225,10 @@
                   </fieldset>
                   <fieldset>
                     <div class="xar-form-input-wrapper-after">
-                      <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-                      <input type="hidden" name="phase" id="phase" value="update" />
-                      <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                      <input type="submit" value="#xarML('Update Roles Configuration')#" />
+                      <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                      <input type="hidden" name="phase" id="phase" value="update"/>
+                      <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                      <input type="submit" value="#xarML('Update Roles Configuration')#"/>
                     </div>
                   </fieldset>
                 </form>
@@ -238,7 +238,7 @@
             <!--
                 - - - - - - - - - - - - - - - - - Begin Group Hooks Options - - - - - - - - - - - - - - - - - - -
             -->
-            <xar:elseif condition="$tab eq 'grouphooks'" />
+            <xar:elseif condition="$tab eq 'grouphooks'"/>
             <xar:if condition="!empty($hooks)">
                 <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
                 enctype="application/x-www-form-urlencoded">
@@ -249,10 +249,10 @@
                     </fieldset>
                     <fieldset>
                         <div class="xar-form-input-wrapper-after">
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-                            <input type="hidden" name="phase" id="phase" value="update" />
-                            <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                            <input type="submit" value="#xarML('Update Roles Configuration')#" />
+                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                            <input type="hidden" name="phase" id="phase" value="update"/>
+                            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                            <input type="submit" value="#xarML('Update Roles Configuration')#"/>
                         </div>
                     </fieldset>
                 </form>
@@ -262,11 +262,11 @@
             <!--
                 - - - - - - - - - - - - - - - - - Begin Member List Options - - - - - - - - - - - - - - - - - - -
             -->
-            <xar:elseif condition="$tab eq 'memberlist'" />
+            <xar:elseif condition="$tab eq 'memberlist'"/>
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <!-- display the default settings properties -->
-                    <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="admin" />
+                    <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="admin"/>
                     <!-- if you add more roles_user_settings properties you can display them
                         using the $user_settings object and specifying the fieldlist of
                         your properties, see example below
@@ -274,16 +274,16 @@
                     <!--
                         <xar:set name="mylist">array('foo','bar')</xar:set>
                         <h4>More Settings</h4>
-                        <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="default" fieldlist="$mylist" />
+                        <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="default" fieldlist="$mylist"/>
                     -->
                 </fieldset>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-                        <input type="hidden" name="phase" id="phase" value="update" />
-                        <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="phase" id="phase" value="update"/>
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                         <xar:var name="label">Update</xar:var>
-                        <xar:button type="submit" label="$label" />
+                        <xar:button type="submit" label="$label"/>
                     </div>
                 </fieldset>
             </form>

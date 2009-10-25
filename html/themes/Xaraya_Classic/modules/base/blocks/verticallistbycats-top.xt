@@ -67,7 +67,7 @@
                                             </ul>
                                         </xar:if>
                                     </li>
-                                    <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
+                                    <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']"/>
                                     <li>
                                         <a href="#$mod['features']['link']#"
                                         title="#$mod['features']['maintitle']#">#$modname#</a>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="base" filename="formcheck.js" />
+    <xar:javascript module="base" filename="formcheck.js"/>
     <script type="text/javascript">
     <!--
         // Enter name of mandatory fields
@@ -10,12 +10,12 @@
         var blocks_fieldDescription = Array("Name");
     //-->
     </script>
-    <xar:style scope="common" />
+    <xar:style scope="common"/>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Blocks Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>New Block</h2>
         <form action="#xarModURL('blocks', 'admin', 'create_instance')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
             <fieldset>
@@ -36,19 +36,19 @@
                     <label for="block_name" title="#xarML('Every block instance requires a unique name')#" class="xar-form-label">
                         Name:
                     </label>
-                    <input type="text" name="block_name" id="block_name" value="" maxlength="100" class="xar-form-textmedium" />
+                    <input type="text" name="block_name" id="block_name" value="" maxlength="100" class="xar-form-textmedium"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="block_title" title="#xarML('The title of the block as you want it to appear on your website')#" class="xar-form-label">
                         Title:
                     </label>
-                    <input type="text" name="block_title" id="block_title" value="" maxlength="255" class="xar-form-textmedium" />
+                    <input type="text" name="block_title" id="block_title" value="" maxlength="255" class="xar-form-textmedium"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="block_template" title="#xarML('Instance templates that you want to use for this block instance.')#" class="xar-form-label">
                         Instance Template (optional):
                     </label>
-                    <input type="text" name="block_template" id="block_template" value="" maxlength="255" class="xar-form-textlong" />
+                    <input type="text" name="block_template" id="block_template" value="" maxlength="255" class="xar-form-textlong"/>
                     (Specified as <code>outer<strong>;</strong>inner</code>)
                 </div>
                 <div class="xar-form-input-wrapper">
@@ -78,8 +78,8 @@
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-                    <input type="submit" value="#xarML('Create Instance')#" class="xar-margin-thickright" />
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="submit" value="#xarML('Create Instance')#" class="xar-margin-thickright"/>
                 </div>
             </fieldset>
         </form>

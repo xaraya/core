@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="base" filename="toggle.js" />
+    <xar:javascript module="base" filename="toggle.js"/>
     <xar:if condition="empty($return_url)">
         <!--
             When this template is not included somewhere else, build some header
@@ -11,7 +11,7 @@
             <span class="xar-mod-title">Modules Administration</span>
         </div>
         <div class="xar-mod-body">
-            <xar:template type="module" file="admin-menu" />
+            <xar:template type="module" file="admin-menu"/>
             <h2>Configure Hooks</h2>
             <p>Extend the functionality of your modules via one of the following available
             hooks.</p>
@@ -19,12 +19,12 @@
             the modules you would like to enable that functionality in (e.g. select "comments" and
             then check "articles" to enable comments in the articles module).</p>
             <br />
-            <xar:template file="hooks-mainpart" module="modules" />
+            <xar:template file="hooks-mainpart" module="modules"/>
         </div>
     <xar:else />
         <!--
             Just show the list
         -->
-        <xar:template file="hooks-mainpart" module="modules" />
+        <xar:template file="hooks-mainpart" module="modules"/>
     </xar:if>
 </xar:template>

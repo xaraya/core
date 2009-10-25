@@ -16,7 +16,7 @@
                     <label for="#$fieldid#" title="#$init['description']#" class="xar-form-label">
                         #$init['label']#
                     </label>
-                    <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']" />
+                    <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']"/>
                 </div>
             </xar:foreach>
         </fieldset>
@@ -46,14 +46,14 @@
                         <label for="#$fieldid#" title="#$init['description']#" class="xar-form-label">
                             #$init['label']#
                         </label>
-                        <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']" />
+                        <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']"/>
                     </div>
                     <!-- #$key# -->
                     <div class="xar-form-input-wrapper">
                         <label for="#$invalidid#" title="An optional error message for #$init['label']#" class="xar-form-label">
                             #$init['label']#&#160;Message
                         </label>
-                        <xar:data-input type="textarea" name="$invalidname" id="$invalidid" value="$invalidvalue" />
+                        <xar:data-input type="textarea" name="$invalidname" id="$invalidid" value="$invalidvalue"/>
                     </div>
                 </xar:foreach>
             <xar:else />
@@ -62,7 +62,7 @@
                         #$init['label']#
                     </label>
                     <!-- CHECKME: what name should we use here as fallback ? -->
-                    <xar:data-input type="textbox" name="" id="$id" value="$validation" />
+                    <xar:data-input type="textbox" name="" id="$id" value="$validation"/>
                 </div>
             </xar:if>
         </fieldset>
@@ -82,11 +82,11 @@
                     <label for="#$fieldid#" title="#$init['description']#" class="xar-form-label">
                         #$init['label']#
                     </label>
-                    <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']" />
+                    <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']"/>
                 </div>
             </xar:foreach>
         </fieldset>
     </xar:if>
 
-    <xar:template file="dataproperty_additions" module="base" />
+    <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

@@ -12,15 +12,15 @@
 
     <xsl:message>      * xaruserapi/getitemlinks.php</xsl:message>
 
-    <xsl:document href="{$output}/xaruserapi/getitemlinks.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaruserapi/getitemlinks.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaruserapi/getitemlinks.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaruserapi_getitemlinks_func" select="." />
+        <xsl:apply-templates mode="xaruserapi_getitemlinks_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -32,7 +32,7 @@
 -->
 <xsl:template match="xaraya_module" mode="xaruserapi_getitemlinks_func">
 
-<xsl:variable name="module_prefix" select="registry/name" />
+<xsl:variable name="module_prefix" select="registry/name"/>
 /**
  * Utility function to pass individual item links to whoever
  *
@@ -41,7 +41,7 @@
  * @returns array
  * @return array containing the itemlink(s) for the item(s).
  */
-function <xsl:value-of select="$module_prefix" />_userapi_getitemlinks ( $args ) 
+function <xsl:value-of select="$module_prefix"/>_userapi_getitemlinks ( $args ) 
 {
     extract($args);
 
@@ -51,13 +51,13 @@ function <xsl:value-of select="$module_prefix" />_userapi_getitemlinks ( $args )
 
     $itemlinks = array();
     $objects =&amp; xarModAPIFunc(
-        '<xsl:value-of select="$module_prefix" />'
+        '<xsl:value-of select="$module_prefix"/>'
         ,'user'
         ,'getall'
         ,array(
              'itemids'   => $itemids
             ,'itemtype'  => $itemtype
-#            ,'fieldlist' => array( <xsl:for-each select="labelfields/field">'<xsl:value-of select="@name" />'<xsl:if test="position() != last()">,</xsl:if>
+#            ,'fieldlist' => array( <xsl:for-each select="labelfields/field">'<xsl:value-of select="@name"/>'<xsl:if test="position() != last()">,</xsl:if>
 #               </xsl:for-each>)
         ));
     if ( empty($objects) ) return;
@@ -67,7 +67,7 @@ function <xsl:value-of select="$module_prefix" />_userapi_getitemlinks ( $args )
     foreach( $data as $id => $object ) {
 
         $title = xarModAPIFunc(
-            '<xsl:value-of select="$module_prefix" />'
+            '<xsl:value-of select="$module_prefix"/>'
             ,'user'
             ,'gettitle'
             ,array(
@@ -77,7 +77,7 @@ function <xsl:value-of select="$module_prefix" />_userapi_getitemlinks ( $args )
 
         $itemlinks[$id] = array(
             'url'   =>  xarModURL(
-                '<xsl:value-of select="$module_prefix" />'
+                '<xsl:value-of select="$module_prefix"/>'
                 ,'user'
                 ,'display'
                 ,array(

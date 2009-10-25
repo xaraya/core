@@ -18,26 +18,26 @@
             <xar:loop name="$contentlines">
                 <tr>
                     <td>
-                        <input type="text" class="xar-form-textmedium" name="linkname[#$loop:index#]" id="linkname_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[1])#" />
+                        <input type="text" class="xar-form-textmedium" name="linkname[#$loop:index#]" id="linkname_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[1])#"/>
                     </td>
                     <td>
-                        <input type="text" class="xar-form-textlong" name="linkurl[#$loop:index#]" id="linkurl_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[0])#" />
+                        <input type="text" class="xar-form-textlong" name="linkurl[#$loop:index#]" id="linkurl_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[0])#"/>
                     </td>
                     <td>
-                        <input type="text" class="xar-form-textlong" name="linkdesc[#$loop:index#]" id="linkdesc_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[2])#" />
+                        <input type="text" class="xar-form-textlong" name="linkdesc[#$loop:index#]" id="linkdesc_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[2])#"/>
                     </td>
                     <td class="xar-align-center">
-                        <input type="checkbox" name="linkdelete[#$loop:index#]" id="linkdelete_#$loop:index#" value="1" />
+                        <input type="checkbox" name="linkdelete[#$loop:index#]" id="linkdelete_#$loop:index#" value="1"/>
                     </td>
                     <td class="xar-align-center">
                         <xar:if condition="empty($loop:item[3])">
-                            <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1" />
+                            <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1"/>
                         <xar:else />
-                            <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1" checked="checked" />
+                            <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1" checked="checked"/>
                         </xar:if>
                     </td>
                     <td class="xar-align-center">
-                        <input type="checkbox" name="linkinsert[#$loop:index#]" id="linkinsert_#$loop:index#" value="1" />
+                        <input type="checkbox" name="linkinsert[#$loop:index#]" id="linkinsert_#$loop:index#" value="1"/>
                     </td>
                 </tr>
             </xar:loop>
@@ -71,17 +71,17 @@
         <label for="new_linkname" title="#xarML('Item title')#" class="xar-form-label">
             Title:
         </label>
-        <input type="text" name="new_linkname" id="new_linkname" maxlength="255" class="xar-form-textmedium" />
+        <input type="text" name="new_linkname" id="new_linkname" maxlength="255" class="xar-form-textmedium"/>
     </div>
     <div class="xar-form-input-wrapper">
         <label for="new_linkurl" title="#xarML('Item URL')#" class="xar-form-label">URL:</label>
-        <input type="text" name="new_linkurl" id="new_linkurl" maxlength="255" class="xar-form-textlong" />
+        <input type="text" name="new_linkurl" id="new_linkurl" maxlength="255" class="xar-form-textlong"/>
     </div>
     <div class="xar-form-input-wrapper">
         <label for="new_linkdesc" title="#xarML('Item description')#" class="xar-form-label">
             Description (optional):
         </label>
-        <input type="text" name="new_linkdesc" id="new_linkdesc" maxlength="255" class="xar-form-textlong" />
+        <input type="text" name="new_linkdesc" id="new_linkdesc" maxlength="255" class="xar-form-textlong"/>
     </div>
     <p class="xar-form-textmedium xar-padding-medium" style="display:block;">
         <strong>Menu Extras</strong>
@@ -98,20 +98,20 @@
                 array('id' => 'List', 'name' => xarML('Manual List')),
             )
         </xar:set>
-        <xar:data-input type="dropdown" name="displaymodules" options="$options" value="$displaymodules" />
+        <xar:data-input type="dropdown" name="displaymodules" options="$options" value="$displaymodules"/>
         <div class="xar-form-container-after">
             <p>To display a restricted list of modules in the menu, enter their names separated by
             commas in the field below, and choose Manual List from the dropdown.</p>
             <p>
-                <input type="text" name="modulelist" id="modulelist" size="50" maxlength="255" value="#$modulelist#" />
+                <input type="text" name="modulelist" id="modulelist" size="50" maxlength="255" value="#$modulelist#"/>
             </p>
         </div>
     </div>
     <div class="xar-form-input-wrapper-after">
         <xar:if condition="!empty($showlogout)">
-            <input type="checkbox" value="1" name="showlogout" id="showlogout" checked="checked" />
+            <input type="checkbox" value="1" name="showlogout" id="showlogout" checked="checked"/>
         <xar:else />
-            <input type="checkbox" value="1" name="showlogout" id="showlogout" />
+            <input type="checkbox" value="1" name="showlogout" id="showlogout"/>
         </xar:if>
         <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link for non-administrative users at the bottom of the menu.')#">
             Display Non-Admin User Logout
@@ -119,9 +119,9 @@
     </div>
     <div class="xar-form-input-wrapper-after">
         <xar:if condition="!empty($displayprint)">
-            <input type="checkbox" value="1" name="displayprint" id="displayprint" checked="checked" />
+            <input type="checkbox" value="1" name="displayprint" id="displayprint" checked="checked"/>
         <xar:else />
-            <input type="checkbox" value="1" name="displayprint" id="displayprint" />
+            <input type="checkbox" value="1" name="displayprint" id="displayprint"/>
         </xar:if>
         <label for="displayprint" title="#xarML('Select if you would like Xaraya to generate a link to your print page at the bottom of the menu.')#">
             Display Print Link
@@ -129,9 +129,9 @@
     </div>
     <div class="xar-form-input-wrapper-after">
         <xar:if condition="!empty($displayrss)">
-            <input type="checkbox" value="1" name="displayrss" id="displayrss" checked="checked" />
+            <input type="checkbox" value="1" name="displayrss" id="displayrss" checked="checked"/>
         <xar:else />
-            <input type="checkbox" value="1" name="displayrss" id="displayrss" />
+            <input type="checkbox" value="1" name="displayrss" id="displayrss"/>
         </xar:if>
         <label for="displayrss" title="#xarML('Select if you would like Xaraya to generate a link to your RSS at the bottom of the menu.')#">
             Display RSS Link
@@ -142,7 +142,7 @@
             <label for="marker" title="#xarML('When Xaraya is generating the menu, we can mark the current page. Use this to configure the marker for that display.')#" class="xar-form-label">
             Marker:
             </label>
-            <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort" />
+            <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort"/>
         </div>
     </xar:if>
 </xar:template>

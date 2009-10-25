@@ -2,13 +2,13 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:set name="active_step">4</xar:set>
     <div id="main_right">
-        <xar:template file="status" />
+        <xar:template file="status"/>
     </div>
     <div id="main_left">
         <h1>Database Settings Collection</h1>
         <form action="install.php" method="post">
             <input type="hidden" name="install_language" id="install_language"
-            value="#$language#" />
+            value="#$language#"/>
             <p>Enter your database settings. You can connect to databases on non-standard ports
             using 'hostname:port' in the Host field. (e.g. 'localhost:12345')</p>
             <p>Note the following: 
@@ -55,45 +55,45 @@
                 <label class="xar-form-label" for="install_database_host">
                     Host
                 </label>
-                <input type="text" name="install_database_host" id="install_database_host" maxlength="80" value="#$database_host#" />
+                <input type="text" name="install_database_host" id="install_database_host" maxlength="80" value="#$database_host#"/>
             </div>
             <div class="xar-form-input-wrapper">
                 <label class="xar-form-label" for="install_database_username">
                     Username
                 </label>
-                <input type="text" name="install_database_username" id="install_database_username" maxlength="80" value="#$database_username#" />
+                <input type="text" name="install_database_username" id="install_database_username" maxlength="80" value="#$database_username#"/>
             </div>
             <div class="xar-form-input-wrapper">
                 <label class="xar-form-label" for="install_database_password">
                     Password
                 </label>
-                <input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#" />
+                <input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#"/>
                 &#160;(Only valid characters)
             </div>
             <div class="xar-form-input-wrapper">
                 <label class="xar-form-label" for="install_database_name">
                     Database Name
                 </label>
-                <input type="text" name="install_database_name" id="install_database_name" maxlength="80" value="#$database_name#" />
+                <input type="text" name="install_database_name" id="install_database_name" maxlength="80" value="#$database_name#"/>
             </div>
             <div class="xar-form-input-wrapper">
                 <label class="xar-form-label" for="install_database_prefix">
                     Table Prefix
                 </label>
-                <input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#" />
+                <input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#"/>
                 &#160;(for Table Sharing)
             </div>
             <div class="xar-form-input-wrapper">
                 <label class="xar-form-label" for="install_database_charset">
                     Character Set
                 </label>
-                <input type="text" name="install_database_charset" id="install_database_charset" maxlength="10" value="#$database_charset#" />
+                <input type="text" name="install_database_charset" id="install_database_charset" maxlength="10" value="#$database_charset#"/>
             </div>
             <div class="xar-form-input-wrappe">
                 <label class="xar-form-label" for="install_create_database">
                     Create the database
                 </label>
-                <input type="checkbox" name="install_create_database" id="install_create_database" value="1" />
+                <input type="checkbox" name="install_create_database" id="install_create_database" value="1"/>
                 &#160;(MySQL only)
             </div>
             <p>
@@ -105,8 +105,8 @@
             an already existing database.
             </p>
             <div class="xar-align-center" style="margin: 2em 0;">
-                <input type="hidden" name="install_phase" id="install_phase" value="5" />
-                <input type="submit" value="Continue" />
+                <input type="hidden" name="install_phase" id="install_phase" value="5"/>
+                <input type="submit" value="Continue"/>
             </div>
         </form>
     </div>

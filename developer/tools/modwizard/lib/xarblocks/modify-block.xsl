@@ -14,25 +14,25 @@
 <!-- ENTRY POINT    print out progress and call module template -->
 <xsl:template match="block" mode="xarblocks_modify-block" xml:space="default">
 
-    <xsl:message>      * xarblocks/modify-<xsl:value-of select="@name" />.php</xsl:message>
+    <xsl:message>      * xarblocks/modify-<xsl:value-of select="@name"/>.php</xsl:message>
 
-    <xsl:variable name="block" select="@name" />
-    <xsl:document href="{$output}/xarblocks/modify-{$block}.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:variable name="block" select="@name"/>
+    <xsl:document href="{$output}/xarblocks/modify-{$block}.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <!-- call template for file header -->
         <xsl:call-template name="xaraya_standard_php_file_header" select="../..">
-            <xsl:with-param name="filename">modify-<xsl:value-of select="$block" />.php</xsl:with-param>
+            <xsl:with-param name="filename">modify-<xsl:value-of select="$block"/>.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xarblocks_block_update" select="." />
+        <xsl:apply-templates mode="xarblocks_block_update" select="."/>
 
-        <xsl:apply-templates mode="xarblocks_block_modify" select="." />
+        <xsl:apply-templates mode="xarblocks_block_modify" select="."/>
 
         <!-- call template for module_xarupgrade() function -->
-        <xsl:apply-templates mode="xarblocks_block_help" select="." />
+        <xsl:apply-templates mode="xarblocks_block_help" select="."/>
 
         <!-- call template for file footer -->
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="../.." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="../.."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -40,11 +40,11 @@
 
 <!-- update() Function -->
 <xsl:template mode="xarblocks_block_update" match="block">
-    <xsl:variable name="module_prefix" select="../../registry/name" />
+    <xsl:variable name="module_prefix" select="../../registry/name"/>
 /**
  * Update Block information
  */
-function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />block_update( $blockinfo )
+function <xsl:value-of select="$module_prefix"/>_<xsl:value-of select="@name"/>block_update( $blockinfo )
 {
 <xsl:if test="$gCommentsLevel >= 10">    // Get variables from content block.
     // Content is a serialized array for legacy support, but will be
@@ -75,11 +75,11 @@ function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" /
 
 <!-- help() Function -->
 <xsl:template mode="xarblocks_block_modify" match="block">
-    <xsl:variable name="module_prefix" select="../../registry/name" />
+    <xsl:variable name="module_prefix" select="../../registry/name"/>
 /**
  * Update block settings
  */
-function <xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />block_modify( $blockinfo )
+function <xsl:value-of select="$module_prefix"/>_<xsl:value-of select="@name"/>block_modify( $blockinfo )
 {
 <xsl:if test="$gCommentsLevel >= 10">    // Get variables from content block.
     // Content is a serialized array for legacy support, but will be

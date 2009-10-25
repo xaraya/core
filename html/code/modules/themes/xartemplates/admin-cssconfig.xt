@@ -4,7 +4,7 @@
     <!--
         Temporarily using blocks css because it's already implemented in stable scenario.. TODO: convert to native core.css as soon as practicable 
     -->
-    <xar:style scope="common" />
+    <xar:style scope="common"/>
     <div class="xar-mod-head">
         <span class="xar-mod-title">            
             Themes Administration             
@@ -23,26 +23,26 @@
                     <div class="xar-floatleft">
                         <xar:if condition="$configurable">
                             <div>
-                                <input type="radio" value="0" id="configurable_false" name="configurable" />
+                                <input type="radio" value="0" id="configurable_false" name="configurable"/>
                                 <label for="configurable_false" title="#xarML('Let the system handle CSS automatically')#">
                                     Unmanaged
                                 </label>
                             </div>
                             <div>
-                                <input type="radio" value="1" id="configurable_true" checked="checked" name="configurable" />
+                                <input type="radio" value="1" id="configurable_true" checked="checked" name="configurable"/>
                                 <label for="configurable_true" title="#xarML('Allow manual CSS management')#">
                                     Managed
                                 </label>
                             </div>
                         <xar:else />
                             <div>
-                                <input type="radio" value="0" id="configurable_false" checked="checked" name="configurable" />
+                                <input type="radio" value="0" id="configurable_false" checked="checked" name="configurable"/>
                                 <label for="configurable_false" title="#xarML('Let the system handle CSS automatically')#">
                                     Unmanaged
                                 </label>
                             </div>
                             <div>
-                                <input type="radio" value="1" id="configurable_true" name="configurable" />
+                                <input type="radio" value="1" id="configurable_true" name="configurable"/>
                                 <label for="configurable_true" title="#xarML('Allow manual CSS management')#">
                                     Managed
                                 </label>
@@ -56,20 +56,20 @@
                     </span>#$resettagsurlstatus#
                 </div>
                 <div class="xar-align-center">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="submit" value="#xarML('Submit')#" />
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="submit" value="#xarML('Submit')#"/>
                 </div>
             </form>
             <h4>Note: About stylesheet tags</h4>
             <p>
                 With the manager come the custom template tags. These should be used in modules and theme templates instead of (old) xarTplAddStyleLink and $tpl:additionalStyles. See examples in the Default theme and in this module templates. The complete list of the tags is also available in "Template Tags" panel, although modifying the tags from that interface would probably not be advisable.
             </p>
-            <xar:elseif condition="$component eq 'core'" />
-            <xar:template file="corecss" type="module" />
-            <xar:elseif condition="$component eq 'themes'" />
-            <xar:template file="themescss" type="module" />
-            <xar:elseif condition="$component eq 'modules'" />
-            <xar:template file="modulescss" type="module" />
+            <xar:elseif condition="$component eq 'core'"/>
+            <xar:template file="corecss" type="module"/>
+            <xar:elseif condition="$component eq 'themes'"/>
+            <xar:template file="themescss" type="module"/>
+            <xar:elseif condition="$component eq 'modules'"/>
+            <xar:template file="modulescss" type="module"/>
         </xar:if>
     </div>
 </xar:template>

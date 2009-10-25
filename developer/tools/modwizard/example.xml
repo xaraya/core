@@ -187,7 +187,7 @@
         <table name="member" itemtype="1" hooks="enable">
 
             <label>Member</label>
-            <labelfields separator=", "><field name="lastname" /><field name="firstname" /></labelfields>
+            <labelfields separator=", "><field name="lastname"/><field name="firstname"/></labelfields>
 
             <!-- describe the table -->
             <structure>
@@ -233,19 +233,19 @@
             </structure>
 
             <order>
-                <field name="lastname" />
-                <field name="firstname" />
+                <field name="lastname"/>
+                <field name="firstname"/>
             </order>
 
             <index name="name" unique="true">
                 <comment>index for name searching</comment>
-                <field name="lastname" />
-                <field name="firstname" />
+                <field name="lastname"/>
+                <field name="firstname"/>
             </index>
 
             <index name="birthday">
                 <comment>index for birthday access</comment>
-                <field name="birthday" />
+                <field name="birthday"/>
             </index>
 
         </table>
@@ -259,8 +259,8 @@
     <blocks>
 
         <!-- declaration of a block -->
-        <block name="useful" />
-        <block name="block2" />
+        <block name="useful"/>
+        <block name="block2"/>
 
     </blocks>
 

@@ -2,9 +2,9 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- TODO: multi-column output -->
-    <xar:style scope="module" module="dynamicdata" file="dd" />
+    <xar:style scope="module" module="dynamicdata" file="dd"/>
     <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
-        <xar:template file="catnavigation" />
+        <xar:template file="catnavigation"/>
     </xar:if>
     <h3>
         <a href="#xarModURL('dynamicdata','admin','new')#">Create New Data Object</a>
@@ -18,7 +18,7 @@
                 <xar:foreach in="$properties" key="$name">
                     <th class="xar-form-textlong">
                         <a href="#$sorturl#=#$name#">
-                            <xar:data-label property="$properties[$name]" />
+                            <xar:data-label property="$properties[$name]"/>
                         </a>
                     </th>
                 </xar:foreach>
@@ -48,15 +48,15 @@
                     <xar:foreach in="$properties" key="$name">
                         <td>
                             <xar:if condition="empty($fields[$name])">&#160; 
-                        <xar:elseif condition="!empty($linkfield) and $linkfield eq $name" />
+                        <xar:elseif condition="!empty($linkfield) and $linkfield eq $name"/>
                             <a href="#xarModURL($urlmodule,$linktype,$linkfunc,array('itemtype' =&gt; $itemtype,$urlparam =&gt; $itemid))#">
 
                                 <xar:data-output property="$properties[$name]"
-                                value="$fields[$name]" />
+                                value="$fields[$name]"/>
                             </a>
                         <xar:else />
                             <xar:data-output property="$properties[$name]"
-                            value="$fields[$name]" /></xar:if>
+                            value="$fields[$name]"/></xar:if>
                         </td>
                     </xar:foreach>
                     <xar:if condition="empty($linkfield)">

@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- TODO: give this some "modern" look and make it configurable -->
-    <xar:javascript module="base" filename="orderitem.js" position="head" />
+    <xar:javascript module="base" filename="orderitem.js" position="head"/>
     <div class="xar-form-input-wrapper">
     <legend>Social Profiles</legend>
     <xar:foreach in="$profiles" value="$profile">
@@ -15,15 +15,15 @@
                 </label>
                 <xar:foreach in="$profile[3]" value="$var">
                     <xar:if condition="!empty($value[$profile[0]][$var])">
-                        <input type="text" name="#$name#[#$profile[0]#][#$var#]" id="#$name#_#$profile[0]#_#$var#" value="#$value[$profile[0]][$var]#" size="15" />
+                        <input type="text" name="#$name#[#$profile[0]#][#$var#]" id="#$name#_#$profile[0]#_#$var#" value="#$value[$profile[0]][$var]#" size="15"/>
                     <xar:else/>
-                        <input type="text" name="#$name#[#$profile[0]#][#$var#]" id="#$name#_#$profile[0]#_#$var#" value="" size="15" />
+                        <input type="text" name="#$name#[#$profile[0]#][#$var#]" id="#$name#_#$profile[0]#_#$var#" value="" size="15"/>
                     </xar:if>
                 </xar:foreach>
                 #$profile[2]#
             </div>
         </xar:if>
     </xar:foreach>
-    <xar:template file="dataproperty_additions" module="base" />        
+    <xar:template file="dataproperty_additions" module="base"/>        
     </div>
 </xar:template>

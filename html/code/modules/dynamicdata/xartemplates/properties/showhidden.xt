@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
-    <xar:template file="dataproperty_additions" module="base" />
+    <input type="hidden" name="#$name#" id="#$id#" value="#$value#"/>
+    <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

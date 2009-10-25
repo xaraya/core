@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="xarModVars::get('base','editor') eq 'htmlarea'">
-        <xar:template file="htmlarea_insert" module="htmlarea" type="module" />
+        <xar:template file="htmlarea_insert" module="htmlarea" type="module"/>
     </xar:if>
     <xar:set name="messagetitle">
         xarML('Write this string in the message body or subject to display the corresponding information')
@@ -11,7 +11,7 @@
         <span class="xar-mod-title">Mail Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>Configure Notification Template</h2>
         <xar:if condition="!empty($settings)">
             <p>
@@ -51,22 +51,22 @@
                 <p>
                     <xar:if condition="$mailtype eq 'createhook'">
                         This email will be sent to 
-                        <xar:var scope="module" module="mail" name="adminname" />[ 
-                        <xar:var scope="module" module="mail" name="adminmail" />] when a hooked item
+                        <xar:var scope="module" module="mail" name="adminname"/>[ 
+                        <xar:var scope="module" module="mail" name="adminmail"/>] when a hooked item
                         is created. 
-                    <xar:elseif condition="$mailtype eq 'changehook'" />
+                    <xar:elseif condition="$mailtype eq 'changehook'"/>
                         This email will be sent to 
-                        <xar:var scope="module" module="mail" name="adminname" />[ 
-                        <xar:var scope="module" module="mail" name="adminmail" />] when a hooked item
+                        <xar:var scope="module" module="mail" name="adminname"/>[ 
+                        <xar:var scope="module" module="mail" name="adminmail"/>] when a hooked item
                         is updated. 
-                    <xar:elseif condition="$mailtype eq 'deletehook'" />
+                    <xar:elseif condition="$mailtype eq 'deletehook'"/>
                         This email will be sent to 
-                        <xar:var scope="module" module="mail" name="adminname" />[ 
-                        <xar:var scope="module" module="mail" name="adminmail" />] when a hooked item
+                        <xar:var scope="module" module="mail" name="adminname"/>[ 
+                        <xar:var scope="module" module="mail" name="adminmail"/>] when a hooked item
                         is deleted. 
                     <xar:else />This email will be sent to 
-                        <xar:var scope="module" module="mail" name="adminname" />[ 
-                        <xar:var scope="module" module="mail" name="adminmail" />].
+                        <xar:var scope="module" module="mail" name="adminname"/>[ 
+                        <xar:var scope="module" module="mail" name="adminmail"/>].
                     </xar:if>
                 </p>
             </fieldset>
@@ -76,7 +76,7 @@
                 <legend>Template Details</legend>
                 <div class="xar-form-input-wrapper">
                     <label for="subject" title="#xarML('Title of the notification')#" class="xar-form-label">Subject:</label>
-                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong" />
+                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="message" title="#xarML('Body of the notification')#" class="xar-form-label">Message:</label>
@@ -115,10 +115,10 @@
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="phase" id="phase" value="update" />
-                    <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#" />
-                    <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>
+                    <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright"/>
                 </div>
             </fieldset>
         </form>

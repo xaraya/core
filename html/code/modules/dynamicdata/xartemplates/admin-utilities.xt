@@ -5,7 +5,7 @@
         <span class="xar-mod-title">Dynamic Data Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <xar:if condition="empty($option)">
             <xar:set name="option">'query'</xar:set>
         </xar:if>
@@ -90,8 +90,8 @@
         </div>
     </div>
     <xar:if condition="empty($option) or $option eq 'query'">
-        <xar:module main="false" module="dynamicdata" type="admin" func="query" />
+        <xar:module main="false" module="dynamicdata" type="admin" func="query"/>
         <xar:else />
-        <xar:module main="false" module="dynamicdata" type="util" func="$option" />
+        <xar:module main="false" module="dynamicdata" type="util" func="$option"/>
     </xar:if>
 </xar:template>

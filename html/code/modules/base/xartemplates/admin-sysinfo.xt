@@ -5,7 +5,7 @@
         <span class="xar-mod-title">Base Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>System Information</h2>
         <ul class="xar-tabs xar-alt xar-norm-outline">
             <xar:var name="title">Click on a tab to display specific information from your server php installation</xar:var>
@@ -83,7 +83,7 @@ div.xar-base-phpinfo-wrapper i {color: #666666; background-color: #cccccc;}
 div.xar-base-phpinfo-wrapper img {float: right; border: 0px;}
 div.xar-base-phpinfo-wrapper hr {width: 90%; background-color: #cccccc; border: 0px; height: 1px; color: #000000;}
 //-->'</xar:set>
-        <xar:style method="embed" source="'.$localstyles.'" />
+        <xar:style method="embed" source="'.$localstyles.'"/>
         <div class="xar-base-phpinfo-wrapper">#$phpinfo#</div>
     </div>
 </xar:template>

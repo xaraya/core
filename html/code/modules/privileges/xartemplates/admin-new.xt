@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="privileges" filename="xarTree.js" />
+    <xar:javascript module="privileges" filename="xarTree.js"/>
     <script type="javascript">
     <!--
         var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
@@ -27,7 +27,7 @@
         <span class="xar-mod-title">Privileges Administration</span>
     </div>
     <div class="xar-mod-body">
-       <xar:template type="module" file="admin-menu" />
+       <xar:template type="module" file="admin-menu"/>
         <form id="privilegeform" action="&xar-modurl-privileges-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>                    
@@ -37,30 +37,30 @@
                     <label for="pname" title="#xarML('Name of the privilege')#" class="xar-form-label">                        
                         Name:                        
                     </label>
-                    <input type="text" name="pname" id="pname" value="#$pname#" maxlength="40" class="xar-form-textlong" />
+                    <input type="text" name="pname" id="pname" value="#$pname#" maxlength="40" class="xar-form-textlong"/>
                 </div>
                 <xar:if condition="$ptype eq null">
                     <div class="xar-form-input-wrapper-after">
-                        <input type="radio" name="ptype" id="ptype_empty" value="empty" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-new;';this.form.submit();" />
+                        <input type="radio" name="ptype" id="ptype_empty" value="empty" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-new;';this.form.submit();"/>
                         <label for="ptype_empty" title="#xarML('This privilege will have no children')#">                            
                             empty                            
                         </label>
                     </div>
                     <div class="xar-form-input-wrapper-after">
-                        <input type="radio" name="ptype" id="ptype_full" value="full" onclick="this.form.action='&xar-modurl-privileges-admin-new;';this.form.submit();" />
+                        <input type="radio" name="ptype" id="ptype_full" value="full" onclick="this.form.action='&xar-modurl-privileges-admin-new;';this.form.submit();"/>
                         <label for="ptype_full" title="#xarML('This privilege will have children')#">                            
                             with rights                            
                         </label>
                     </div>
                     <xar:else />
                     <div class="xar-form-input-wrapper-after">
-                        <input type="radio" name="ptype" id="ptype_empty" value="empty" onclick="this.form.action='&xar-modurl-privileges-admin-new;';this.form.submit();" />
+                        <input type="radio" name="ptype" id="ptype_empty" value="empty" onclick="this.form.action='&xar-modurl-privileges-admin-new;';this.form.submit();"/>
                         <label for="ptype_empty" title="#xarML('This privilege will have no children')#">                            
                             empty                            
                         </label>
                     </div>
                     <div class="xar-form-input-wrapper-after">
-                        <input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-new;';this.form.submit();" />
+                        <input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-new;';this.form.submit();"/>
                         <label for="ptype_full" title="#xarML('This privilege will have children')#">                            
                             with rights                            
                         </label>
@@ -69,14 +69,14 @@
                         <label for="pparentid" title="#xarML('Parent privilege of this')#" class="xar-form-label">                            
                             Member Of:                            
                         </label>
-                        <xar:data-input type="dropdown" name="pparentid" options="$privileges" value="$pparentid" />
+                        <xar:data-input type="dropdown" name="pparentid" options="$privileges" value="$pparentid"/>
                     </div>
                     <xar:if condition="xarModVars::get('privileges','showrealms')">
                         <div class="xar-form-input-wrapper">
                             <label for="prealm" title="#xarML('Realm in which this privilege applies')#" class="xar-form-label">                                
                                 Realm:                                
                             </label>
-                            <xar:data-input type="dropdown" name="prealm" options="$realms" value="$prealm" />
+                            <xar:data-input type="dropdown" name="prealm" options="$realms" value="$prealm"/>
                         </div>
                     </xar:if>
                     <div class="xar-form-input-wrapper">
@@ -84,7 +84,7 @@
                             Module:                            
                         </label>
                         <xar:set name="onchange">"javascript:this.form.action = '" . xarModURl('privileges','admin','new') . "';this.form.submit();"</xar:set>
-                        <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="All,All" onchange="$onchange"  store_prop="name" />
+                        <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="All,All" onchange="$onchange"  store_prop="name"/>
                     </div>
                     <div class="xar-form-input-wrapper">
                         <label for="pcomponent" title="#xarML('Component to which this privilege applies')#" class="xar-form-label">                            
@@ -108,7 +108,7 @@
                         <label for="plevel" title="#xarML('Security level required by this privilege')#" class="xar-form-label">                            
                             Level:                            
                         </label>
-                        <xar:data-input type="dropdown" name="plevel" value="$plevel" options="$levels" />
+                        <xar:data-input type="dropdown" name="plevel" value="$plevel" options="$levels"/>
                     </div>
                 </xar:if>
                 <xar:if condition="$ptype ne null">
@@ -122,7 +122,7 @@
                                     #$loop:item['header']#
                                 </label>
                                 <xar:if condition="$loop:item['type'] eq 'manual'">
-                                    <input type="text" name="pinstance[]" id="pinstance#$loop:index#" value="All" class="xar-form-textmedium" />
+                                    <input type="text" name="pinstance[]" id="pinstance#$loop:index#" value="All" class="xar-form-textmedium"/>
                                     &#160;                                    
                                     This field must contain a value                                    
                                 <xar:else />
@@ -136,7 +136,7 @@
                                 </xar:if>
                             </div>
                         </xar:loop>
-                        <xar:elseif condition="!empty($target)" />
+                        <xar:elseif condition="!empty($target)"/>
                         <p>
                             <a href="#$target#" title="#xarML('Use Wizard')#">                                
                                 Specify the instances that apply for this privilege                                
@@ -147,10 +147,10 @@
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="id" id="id" value="#$id#" />
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="id" id="id" value="#$id#"/>
                     <xar:var name="tmpaddvalue">Add</xar:var>
-                    <input type="submit" value="#$tmpaddvalue#" tabindex="8" />
+                    <input type="submit" value="#$tmpaddvalue#" tabindex="8"/>
                 </div>
             </fieldset>
         </form>

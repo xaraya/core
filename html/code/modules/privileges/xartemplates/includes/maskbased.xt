@@ -18,9 +18,9 @@
 
 <fieldset>
 <xar:if condition="!empty($isenabled)">
-    <legend><a href="#xarServer::getCurrentURL(array('enable'=> -1))#" title="Turn OFF mask-based security checks">DISABLE</a> Simple Mask-Based Security Checks by Group <a href="#xarServer::getCurrentURL(array('refresh'=> 1))#" title="Refresh based on currently assigned privileges (this might take a while)"><img src="#xarTplGetImage('icons/view-refresh.png','base')#" width="16" height="16" border="0" /></a></legend>
+    <legend><a href="#xarServer::getCurrentURL(array('enable'=> -1))#" title="Turn OFF mask-based security checks">DISABLE</a> Simple Mask-Based Security Checks by Group <a href="#xarServer::getCurrentURL(array('refresh'=> 1))#" title="Refresh based on currently assigned privileges (this might take a while)"><img src="#xarTplGetImage('icons/view-refresh.png','base')#" width="16" height="16" border="0"/></a></legend>
 <xar:else/>
-    <legend><a href="#xarServer::getCurrentURL(array('enable'=> 1))#" title="Turn ON mask-based security checks">ACTIVATE</a> Simple Mask-Based Security Checks by Group <a href="#xarServer::getCurrentURL(array('refresh'=> 1))#" title="Refresh based on currently assigned privileges (this might take a while)"><img src="#xarTplGetImage('icons/view-refresh.png','base')#" width="16" height="16" border="0" /></a></legend>
+    <legend><a href="#xarServer::getCurrentURL(array('enable'=> 1))#" title="Turn ON mask-based security checks">ACTIVATE</a> Simple Mask-Based Security Checks by Group <a href="#xarServer::getCurrentURL(array('refresh'=> 1))#" title="Refresh based on currently assigned privileges (this might take a while)"><img src="#xarTplGetImage('icons/view-refresh.png','base')#" width="16" height="16" border="0"/></a></legend>
 </xar:if>
 
 <xar:sec mask="AdminPrivilege" catch="false">
@@ -44,7 +44,7 @@ function by_name($a,$b) {
 }
 uasort($groups,'by_name')</xar:set>
 <!-- priv_type 3 means a mask -->
-<xar:data-getitems properties="$properties" values="$items" objectname="privileges_privileges" where="priv_type eq 3" sort="module,component,level" />
+<xar:data-getitems properties="$properties" values="$items" objectname="privileges_privileges" where="priv_type eq 3" sort="module,component,level"/>
 <xar:set name="fieldlist">array('name','module','component','level')</xar:set>
 
 <xar:sec mask="AdminPrivilege" catch="false">
@@ -67,7 +67,7 @@ uasort($groups,'by_name')</xar:set>
 <table class="xar-fullwidth">
 <tr>
     <xar:foreach in="$fieldlist" value="$name">
-        <th><xar:data-label property="$properties[$name]" /></th>
+        <th><xar:data-label property="$properties[$name]"/></th>
     </xar:foreach>
     <xar:foreach in="$groups" value="$group">
         <th>#$group['name']#</th>
@@ -76,18 +76,18 @@ uasort($groups,'by_name')</xar:set>
 <xar:foreach in="$items" key="$itemid" value="$fields">
 <tr>
     <xar:foreach in="$fieldlist" value="$name">
-        <td><xar:data-output property="$properties[$name]" value="$fields[$name]" /></td>
+        <td><xar:data-output property="$properties[$name]" value="$fields[$name]"/></td>
     </xar:foreach>
     <xar:foreach in="$groups" value="$group">
         <xar:set name="code">'SC:'.$fields['name'].':'.$group['id']</xar:set>
         <xar:set name="val">xarModVars::get('privileges',$code)</xar:set>
         <td align="center"><a href="#xarServer::getCurrentURL(array('flip'=> $code))#" title="Flip Setting">
         <xar:if condition="!empty($val)">
-            <img src="#xarTplGetImage('icons/activate.png','base')#" width="16" height="16" border="0" />
+            <img src="#xarTplGetImage('icons/activate.png','base')#" width="16" height="16" border="0"/>
         <xar:elseif condition="isset($val)"/>
-            <img src="#xarTplGetImage('icons/deactivate.png','base')#" width="16" height="16" border="0" />
+            <img src="#xarTplGetImage('icons/deactivate.png','base')#" width="16" height="16" border="0"/>
         <xar:else/>
-            <img src="#xarTplGetImage('icons/help-browser.png','base')#" width="16" height="16" border="0" />
+            <img src="#xarTplGetImage('icons/help-browser.png','base')#" width="16" height="16" border="0"/>
         </xar:if>
         </a></td>
     </xar:foreach>

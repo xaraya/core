@@ -14,7 +14,7 @@
             <xar:comment>Get the sort parameter from the URL request</xar:comment>
             <xar:set name="sort"><xar:var name="sort" scope="request"/></xar:set>
             <xar:comment>Show a sorted list of sample items</xar:comment>
-            <xar:data-view object="sample" sort="$sort" />
+            <xar:data-view object="sample" sort="$sort"/>
         </p>
 -->
     </div>

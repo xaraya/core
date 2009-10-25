@@ -12,18 +12,18 @@ dtd="rss">
             <title>#$tpl:pageTitle#</title>
             <link>#xarVarPrepForDisplay(xarServer::getBaseURL())#</link>
             <description>
-                <xar:var scope="module" module="themes" name="SiteSlogan" />
+                <xar:var scope="module" module="themes" name="SiteSlogan"/>
             </description>
             <dc:language>en-us</dc:language>
             <dc:creator>
-                <xar:var scope="module" module="mail" name="adminname" />
+                <xar:var scope="module" module="mail" name="adminname"/>
             </dc:creator>
-            <admin:generatorAgent rdf:resource="http://www.xaraya.org" />
-            <admin:errorReportsTo rdf:resource="mailto:#xarModVars::get('mail', 'adminmail')#" />
+            <admin:generatorAgent rdf:resource="http://www.xaraya.org"/>
+            <admin:errorReportsTo rdf:resource="mailto:#xarModVars::get('mail', 'adminmail')#"/>
             <sy:updatePeriod>hourly</sy:updatePeriod>
             <sy:updateFrequency>1</sy:updateFrequency>
             <docs>http://backend.userland.com/rss</docs>
-            <xar:module class="modulespace" main="true" />
+            <xar:module class="modulespace" main="true"/>
         </channel>
     </rss>
 </xar:blocklayout>

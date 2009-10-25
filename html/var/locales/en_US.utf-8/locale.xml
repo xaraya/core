@@ -41,9 +41,9 @@
     </xarlocale:integerDigits>
   </xarlocale:numeric>
   <xarlocale:decimalSymbols>
-    <xarlocale:infinity>∞</xarlocale:infinity>
+    <xarlocale:infinity>?</xarlocale:infinity>
     <xarlocale:minusSign>-</xarlocale:minusSign>
-    <xarlocale:notANumber>�</xarlocale:notANumber>
+    <xarlocale:notANumber>?</xarlocale:notANumber>
     <xarlocale:percent>%</xarlocale:percent>
     <xarlocale:perMill>‰</xarlocale:perMill>
     <xarlocale:zeroDigit>0</xarlocale:zeroDigit>
@@ -52,27 +52,27 @@
     <xarlocale:am>AM</xarlocale:am>
     <xarlocale:pm>PM</xarlocale:pm>
     <xarlocale:months>
-      <xarlocale:month full="January" short="Jan" />
-      <xarlocale:month full="February" short="Feb" />
-      <xarlocale:month full="March" short="Mar" />
-      <xarlocale:month full="April" short="Apr" />
-      <xarlocale:month full="May" short="May" />
-      <xarlocale:month full="June" short="Jun" />
-      <xarlocale:month full="July" short="Jul" />
-      <xarlocale:month full="August" short="Aug" />
-      <xarlocale:month full="September" short="Sep" />
-      <xarlocale:month full="October" short="Oct" />
-      <xarlocale:month full="November" short="Nov" />
-      <xarlocale:month full="December" short="Dec" />
+      <xarlocale:month full="January" short="Jan"/>
+      <xarlocale:month full="February" short="Feb"/>
+      <xarlocale:month full="March" short="Mar"/>
+      <xarlocale:month full="April" short="Apr"/>
+      <xarlocale:month full="May" short="May"/>
+      <xarlocale:month full="June" short="Jun"/>
+      <xarlocale:month full="July" short="Jul"/>
+      <xarlocale:month full="August" short="Aug"/>
+      <xarlocale:month full="September" short="Sep"/>
+      <xarlocale:month full="October" short="Oct"/>
+      <xarlocale:month full="November" short="Nov"/>
+      <xarlocale:month full="December" short="Dec"/>
     </xarlocale:months>
     <xarlocale:weekdays>
-      <xarlocale:weekday full="Sunday" short="Sun" />
-      <xarlocale:weekday full="Monday" short="Mon" />
-      <xarlocale:weekday full="Tuesday" short="Tue" />
-      <xarlocale:weekday full="Wednesday" short="Wed" />
-      <xarlocale:weekday full="Thursday" short="Thu" />
-      <xarlocale:weekday full="Friday" short="Fri" />
-      <xarlocale:weekday full="Saturday" short="Sat" />
+      <xarlocale:weekday full="Sunday" short="Sun"/>
+      <xarlocale:weekday full="Monday" short="Mon"/>
+      <xarlocale:weekday full="Tuesday" short="Tue"/>
+      <xarlocale:weekday full="Wednesday" short="Wed"/>
+      <xarlocale:weekday full="Thursday" short="Thu"/>
+      <xarlocale:weekday full="Friday" short="Fri"/>
+      <xarlocale:weekday full="Saturday" short="Sat"/>
     </xarlocale:weekdays>
   </xarlocale:dateSymbols>
   <xarlocale:dateFormats>

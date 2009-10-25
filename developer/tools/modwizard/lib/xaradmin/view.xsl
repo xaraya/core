@@ -12,15 +12,15 @@
 
     <xsl:message>      * xaradmin/view.php</xsl:message>
 
-    <xsl:document href="{$output}/xaradmin/view.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaradmin/view.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaradmin/view.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaradmin_view_func" select="." />
+        <xsl:apply-templates mode="xaradmin_view_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -37,7 +37,7 @@
 -->
 <xsl:template mode="xaradmin_view_func" match="xaraya_module">
 
-<xsl:variable name="module_prefix" select="registry/name" />
+<xsl:variable name="module_prefix" select="registry/name"/>
 <xsl:if test="$gCommentsLevel >=1">
 /**
  * Show a overview of all available administration options.
@@ -46,25 +46,25 @@
  * 'adminpanels - configurations - configure overview'.
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_admin_view($args) 
+function <xsl:value-of select="$module_prefix"/>_admin_view($args) 
 {
     list( $itemtype ) = xarVarCleanFromInput('itemtype' );
 
     switch( $itemtype ) {
     <xsl:for-each select="database/table[@admin='true']">
-        case <xsl:value-of select="@itemtype" />:
+        case <xsl:value-of select="@itemtype"/>:
             $data = xarModAPIFunc(
-                '<xsl:value-of select="$module_prefix" />'
-                ,'<xsl:value-of select="@name" />'
+                '<xsl:value-of select="$module_prefix"/>'
+                ,'<xsl:value-of select="@name"/>'
                 ,'view' );
-            $itemtype_name = '<xsl:value-of select="@name" />';
+            $itemtype_name = '<xsl:value-of select="@name"/>';
             break;
     </xsl:for-each>
 
         default:
             return
                 $data = xarModAPIFunc(
-                    '<xsl:value-of select="$module_prefix" />'
+                    '<xsl:value-of select="$module_prefix"/>'
                     ,'private'
                     ,'common'
                     ,array(
@@ -74,7 +74,7 @@ function <xsl:value-of select="$module_prefix" />_admin_view($args)
     }
 
     return xarTplModule(
-        '<xsl:value-of select="$module_prefix" />'
+        '<xsl:value-of select="$module_prefix"/>'
         ,'admin'
         ,'view'
         ,$data

@@ -24,14 +24,14 @@
                     <td>#$field.name#</td>
                     <td>#$field.label#</td>
                     <td>
-                        <xar:data-output property="$fieldtypeprop" value="$field['type']" />
+                        <xar:data-output property="$fieldtypeprop" value="$field['type']"/>
                     </td>
                     <td>
-                        <xar:var name="field.defaultvalue" />
+                        <xar:var name="field.defaultvalue"/>
                     </td>
                     <td>#$field.source#</td>
                     <td>
-                        <xar:var name="field.configuration" />
+                        <xar:var name="field.configuration"/>
                     </td>
                 </tr>
             </xar:foreach>

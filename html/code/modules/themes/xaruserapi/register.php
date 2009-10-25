@@ -30,7 +30,7 @@
  * method    - [(import)|link]          - what method do we use to include the style info
  * condition - [IE|(IE5)|(!IE6)|(lt IE7)] - encase in conditional comment (for serving to ie-win of various flavours)
  *
- * <xar:style file="basename" scope="theme" type="text/css" media="all" alternate="no" title="Great style" method="import" />
+ * <xar:style file="basename" scope="theme" type="text/css" media="all" alternate="no" title="Great style" method="import"/>
  */
 function themes_userapi_register($args)
 {

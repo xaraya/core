@@ -17,7 +17,7 @@
     <xar:set name="failuretitle">'FAILURE'</xar:set>
     <xar:set name="warningtitle">'CAUTION'</xar:set>
     <div id="main_right">
-        <xar:template file="status" />
+        <xar:template file="status"/>
     </div>
     <div id="main_left">
         <h1>Capabilities inventory</h1>
@@ -34,7 +34,7 @@
             </li>
         </ul></p>
         <h2>PHP Settings Check</h2>
-            <input type="hidden" name="install_language" value="#$language#" />
+            <input type="hidden" name="install_language" value="#$language#"/>
             <p>Xaraya has recommended settings for PHP. If your PHP settings do not meet
             requirements you may have difficulties in running install to completion.</p>
             <ul>
@@ -52,7 +52,7 @@
                     phase, a lot of memory is required. If in doubt, 
                     <strong>do a core only install</strong>and install modules manually
                     later.</li>
-                <xar:elseif condition="$memory_warning" />
+                <xar:elseif condition="$memory_warning"/>
                     <li class="warning">WARNING: Xaraya needs a MINIMUM of 8 Megabyte of PHP
                     memory (16M or higher STRONGLY recommended). The current memory limit is 
                     <strong>#$memory_limit#</strong>. Please check your PHP memory limit.
@@ -211,12 +211,12 @@
         <form action="install.php" method="post">
             <div class="xar-align-center">
                 <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $rssTemplatesIsWritable AND $metMinMemRequirement">
-                    <input type="hidden" name="install_phase" id="install_phase" value="4" />
-                    <input type="submit" value="Continue" />
+                    <input type="hidden" name="install_phase" id="install_phase" value="4"/>
+                    <input type="submit" value="Continue"/>
                 <xar:else />
-                    <input type="hidden" name="install_phase" id="install_phase" value="3" />
-                    <input type="hidden" name="agree" id="agree" value="agree" />
-                    <input type="submit" value="Check Again" />
+                    <input type="hidden" name="install_phase" id="install_phase" value="3"/>
+                    <input type="hidden" name="agree" id="agree" value="agree"/>
+                    <input type="submit" value="Check Again"/>
                 </xar:if>
             </div>
         </form>

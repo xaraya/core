@@ -12,15 +12,15 @@
 
     <xsl:message>      * xaradmin/main.php</xsl:message>
 
-    <xsl:document href="{$output}/xaradmin/main.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaradmin/main.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaradmin/main.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaradmin_main_func" select="." />
+        <xsl:apply-templates mode="xaradmin_main_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -36,15 +36,15 @@
 -->
 <xsl:template mode="xaradmin_main_func" match="xaraya_module">
 
-<xsl:variable name="module_prefix" select="registry/name" />
+<xsl:variable name="module_prefix" select="registry/name"/>
 <xsl:if test="$gCommentsLevel >=1">
 /*
  * The main ( default ) administration view.
  */
 </xsl:if>
-function <xsl:value-of select="$module_prefix" />_admin_main() 
+function <xsl:value-of select="$module_prefix"/>_admin_main() 
 {
-    if (!xarSecurityCheck( 'Edit<xsl:value-of select="$module_prefix" />')) return;
+    if (!xarSecurityCheck( 'Edit<xsl:value-of select="$module_prefix"/>')) return;
 
     // Check if we should show the overview page <xsl:if test="$gCommentsLevel >=2">
     // The admin system looks for a var to be set to skip the introduction
@@ -54,7 +54,7 @@ function <xsl:value-of select="$module_prefix" />_admin_main()
 
         // Yes we should
         $data = xarModAPIFunc(
-            '<xsl:value-of select="$module_prefix" />'
+            '<xsl:value-of select="$module_prefix"/>'
             ,'private'
             ,'common'
             ,array(
@@ -67,7 +67,7 @@ function <xsl:value-of select="$module_prefix" />_admin_main()
     // No we shouldn't. So we redirect to the admin_view() function.
     return xarResponseRedirect(
         xarModURL(
-            '<xsl:value-of select="registry/name" />'
+            '<xsl:value-of select="registry/name"/>'
             ,'admin'
             ,'view' ));
 

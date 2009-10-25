@@ -5,15 +5,15 @@
         <span class="xar-mod-title">Dynamic Data Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
+        <xar:template type="module" file="admin-menu"/>
         <h2>Configure Property Types</h2>
         <p>Click Flush Property Cache to clear the DynamicData Property Definitions cache and to
         reload the properties definitions from the file system.</p>
         <form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
             <div class="xar-align-center">
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="flushPropertyCache" value="true" />
-                <input type="submit" value="Flush Property Cache" />
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="flushPropertyCache" value="true"/>
+                <input type="submit" value="Flush Property Cache"/>
             </div>
         </form>
         <form method="post" action="&xar-modurl-dynamicdata-admin-updateconfig;">
@@ -39,13 +39,13 @@
                         <td class="xar-align-right">#$field['id']#</td>
                         <td>#$field['name']#</td>
                         <td>
-                            <input type="text" name="label[#$field['id']#]" id="label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium" />
+                            <input type="text" name="label[#$field['id']#]" id="label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium"/>
                         </td>
                         <td>
-                            <xar:data-output property="$fieldtypeprop" value="$field['format']" />
+                            <xar:data-output property="$fieldtypeprop" value="$field['format']"/>
                         </td>
                         <td>
-                            <xar:var name="field.configuration" />
+                            <xar:var name="field.configuration"/>
                             <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype'=>$field['name']))#">Preview</a>
                         </td>
                     </tr>
@@ -65,17 +65,17 @@
                 <tr>
                     <td>#$labels['new']#</td>
                     <td>
-                        <input type="text" name="name[0]" id="name_0" class="xar-form-textmedium" />
+                        <input type="text" name="name[0]" id="name_0" class="xar-form-textmedium"/>
                     </td>
                     <td>
-                        <input type="text" name="label[0]" id="label_0" class="xar-form-textmedium" />
+                        <input type="text" name="label[0]" id="label_0" class="xar-form-textmedium"/>
                     </td>
                     <td>
-                        <xar:data-input property="$fieldtypeprop" name="format[0]" id="format_0" value="" />
+                        <xar:data-input property="$fieldtypeprop" name="format[0]" id="format_0" value=""/>
                     </td>
 <!--
                     <td>
-                        <input type="text" name="validation[0]" id="validation_0" value="" class="xar-form-textmedium" />
+                        <input type="text" name="validation[0]" id="validation_0" value="" class="xar-form-textmedium"/>
                     </td>
 -->
                 </tr>
@@ -83,9 +83,9 @@
             <div class="xar-align-center">
                 <p>Note: any changes you make here will be lost whenever the property cache gets
                 flushed.</p>
-                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <xar:var name="label">Update Property Types</xar:var>
-                <xar:button type="submit" label="$label" />
+                <xar:button type="submit" label="$label"/>
             </div>
         </form>
     </div>

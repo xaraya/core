@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="active_step">1</xar:set>
     <div id="main_right">
-        <xar:template file="status" />
+        <xar:template file="status"/>
     </div>
     <div id="main_left">
         <h1>Select your Language</h1>
@@ -19,8 +19,8 @@
                         </xar:if>
                     </xar:foreach>
                 </select>
-                <input type="hidden" name="install_phase" id="install_phase" value="2" />
-                <input type="submit" value="Continue" />
+                <input type="hidden" name="install_phase" id="install_phase" value="2"/>
+                <input type="submit" value="Continue"/>
             </p>
         </form>
     </div>

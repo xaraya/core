@@ -15,7 +15,7 @@
 
     <xsl:message>       * xardocs/changelog.txt</xsl:message>
 
-<xsl:document href="{$output}/xardocs/changelog.txt" format="text" omit-xml-declaration="yes" >
+<xsl:document href="{$output}/xardocs/changelog.txt" format="text" omit-xml-declaration="yes">
 
 Add your changelog here
 

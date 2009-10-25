@@ -15,9 +15,9 @@
                     <xar:foreach in="$methods" key="$method" value="$checked">
                         <label for="#$id#_methods_#$method#">#$method#</label>
                         <xar:if condition="!empty($checked)">
-                            <input type="checkbox" name="#$name#[methods][#$method#]" id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#" checked="checked" />
+                            <input type="checkbox" name="#$name#[methods][#$method#]" id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#" checked="checked"/>
                         <xar:else/>
-                            <input type="checkbox" name="#$name#[methods][#$method#]" id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#" />
+                            <input type="checkbox" name="#$name#[methods][#$method#]" id="#$id#_methods_#$method#" value="1" tabindex="#$tabindex#"/>
                         </xar:if>
                         <br />
                     </xar:foreach>
@@ -28,7 +28,7 @@
                     <label for="#$id#_basedir">Upload Directory</label>
                 </td>
                 <td>
-                    <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#" size="#$size#" tabindex="#$tabindex#" />
+                    <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#" size="#$size#" tabindex="#$tabindex#"/>
                     <br />Note : {user} will be replaced by the current user uploading the file - e.g.
                     var/uploads/{user} -&gt; var/uploads/myusername_123
                 </td>
@@ -38,7 +38,7 @@
                     <label for="#$id#_importdir">Trusted Directory</label>
                 </td>
                 <td>
-                    <input type="text" name="#$name#[importdir]" id="#$id#_importdir" value="#$importdir#" size="#$size#" tabindex="#$tabindex#" />
+                    <input type="text" name="#$name#[importdir]" id="#$id#_importdir" value="#$importdir#" size="#$size#" tabindex="#$tabindex#"/>
                     <br />Note : {user} will be replaced by the current user importing the file - e.g.
                     var/imports/{user} -&gt; var/imports/myusername_123
                 </td>
@@ -52,9 +52,9 @@
         <tr>
             <td>Other rule</td>
             <td>
-                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="#$size#" tabindex="#$tabindex#" />
+                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="#$size#" tabindex="#$tabindex#"/>
             </td>
         </tr>
     </table>
-    <xar:template file="dataproperty_additions" module="base" />
+    <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

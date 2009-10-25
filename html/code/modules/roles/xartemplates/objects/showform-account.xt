@@ -24,18 +24,18 @@
             <xar:foreach in="$fields" value="$name">
                 <xar:if condition="!isset($properties[$name])"><xar:continue /></xar:if>
                 <div class="xar-form-input-wrapper">
-                    <xar:data-label property="$properties[$name]" for="id" />
-                    <xar:data-input property="$properties[$name]" />
+                    <xar:data-label property="$properties[$name]" for="id"/>
+                    <xar:data-input property="$properties[$name]"/>
                 </div>
             </xar:foreach>
             <!--
             <xar:data-form object="$object" fieldlist="name,uname,email,password,regdate"/>
             -->
-            <xar:data-input property="$object->properties['id']" hidden="hidden" />
-            <xar:data-input property="$object->properties['state']" hidden="hidden" />
-            <xar:data-input property="$object->properties['valcode']" hidden="hidden" />
-            <xar:data-input property="$object->properties['authmodule']" hidden="hidden" />
-            <xar:data-input property="$object->properties['role_type']" hidden="hidden" />
+            <xar:data-input property="$object->properties['id']" hidden="hidden"/>
+            <xar:data-input property="$object->properties['state']" hidden="hidden"/>
+            <xar:data-input property="$object->properties['valcode']" hidden="hidden"/>
+            <xar:data-input property="$object->properties['authmodule']" hidden="hidden"/>
+            <xar:data-input property="$object->properties['role_type']" hidden="hidden"/>
 
             <xar:if condition="in_array('passwordupdate', $settings)">
                 <xar:set name="passwordupdate">xarModUserVars::get('roles', 'passwordupdate')</xar:set>
@@ -73,6 +73,6 @@
         </fieldset>
     <xar:else />
         <!-- You can also specify your own layout here or in a separate template, e.g. if you want to handle individual fields differently for a particular module usermenu -->
-        <xar:template module="$tplmodule" file="form-$layout" />
+        <xar:template module="$tplmodule" file="form-$layout"/>
     </xar:if>
 </xar:template>

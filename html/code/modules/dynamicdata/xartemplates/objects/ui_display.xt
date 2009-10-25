@@ -7,7 +7,7 @@
     <div class="xar-mod-body">
         <xar:if condition="!empty($object)">
             <h2>
-                <xar:data-label object="$object" />
+                <xar:data-label object="$object"/>
             </h2>
     <!-- Get linked objects -->
     <!--
@@ -50,7 +50,7 @@
     -->
 
             <!-- Display object -->
-            <xar:data-display object="$object" />
+            <xar:data-display object="$object"/>
             <!-- Display hook output -->
             <xar:if condition="!empty($hooks)">
                 <xar:foreach in="$hooks" key="$module" value="$output">
@@ -94,7 +94,7 @@
             </xar:if>
     -->
             <xar:set name="viewlink">xarServer::getObjectURL($object->name,'view')</xar:set>
-            <p><a href="#$viewlink#">View <xar:data-label object="$object" /></a></p>
+            <p><a href="#$viewlink#">View <xar:data-label object="$object"/></a></p>
         </xar:if>
     </div>
 </xar:template>

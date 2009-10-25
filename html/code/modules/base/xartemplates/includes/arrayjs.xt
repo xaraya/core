@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <script type="text/javascript" >
+    <script type="text/javascript">
         function #$id#_addRow(removeflag)
         {           
             //get the div in which the rows are displayed            

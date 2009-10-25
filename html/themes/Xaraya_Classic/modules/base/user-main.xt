@@ -47,9 +47,9 @@
             even further control of layout in your theme.</p>
             <div class="xar-floatright xar-halfwidth xar-margin-thick xar-padding-thick xar-mod-body xar-alt xar-sidebox">
 
-                <xar:template file="hint.xt" type="system" />
+                <xar:template file="hint.xt" type="system"/>
             </div>
-            <xar:module main="false" module="base" func="main" page="glimpse" />
+            <xar:module main="false" module="base" func="main" page="glimpse"/>
             <xar:comment>Another easy way is to specify a static template as an extra page template
             of base module:</xar:comment>
             <h4>Getting Help</h4>

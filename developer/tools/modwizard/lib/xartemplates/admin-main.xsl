@@ -7,18 +7,18 @@
 
     <xsl:message>      * xartemplates/admin-main.xd</xsl:message>
 
-<xsl:document href="{$output}/xartemplates/admin-main.xd" format="text" omit-xml-declaration="yes" >
-    <xsl:variable name="module_prefix" select="registry/name" />
+<xsl:document href="{$output}/xartemplates/admin-main.xd" format="text" omit-xml-declaration="yes">
+    <xsl:variable name="module_prefix" select="registry/name"/>
 
-    <xar:template file="header" type="module" />
+    <xar:template file="header" type="module"/>
 
 <div class="xar-mod-body">
     <div style="padding: 1px;" class="xar-norm-outline">
         <div style="float:right;padding:10px;">
-            <xar:if condition="file_exists('modules/modules/xarimages/admin.gif')" >
-                <img src="modules/modules/xarimages/admin.gif" alt="official icon" width="96" height="96" />
+            <xar:if condition="file_exists('modules/modules/xarimages/admin.gif')">
+                <img src="modules/modules/xarimages/admin.gif" alt="official icon" width="96" height="96"/>
             <xar:else />
-                <img src="modules/modules/xarimages/admin_generic.gif" alt="official icon" width="96" height="96" />
+                <img src="modules/modules/xarimages/admin_generic.gif" alt="official icon" width="96" height="96"/>
             </xar:if>
         </div>
         <div class="xar-mod-title xar-norm-outline" style="margin-top: 1em; margin-left: 1em; margin-right: 1em; width: auto; border-style: none none dotted none;">

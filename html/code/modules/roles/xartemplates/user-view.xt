@@ -53,7 +53,7 @@
                                     <xar:foreach in="$properties" key="$key" value="$value">
                                         <xar:if condition="isset($items[$id][$key]) AND in_array($key,array('name','uname','email'))">
                                             <td>
-                                                <xar:data-output property="$properties[$key]" value="$items[$id][$key]" />
+                                                <xar:data-output property="$properties[$key]" value="$items[$id][$key]"/>
                                             </td>
                                         </xar:if>
                                     </xar:foreach>

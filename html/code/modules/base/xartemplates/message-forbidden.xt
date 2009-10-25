@@ -5,7 +5,7 @@
         <span class="xar-mod-title">403 Forbidden</span>
     </div>
     <div class="xar-mod-body">
-        <img src="#xarTplGetImage('privileges.png', 'base')#" alt="#xarML('Icon')#" class="xar-module-icon" />
+        <img src="#xarTplGetImage('privileges.png', 'base')#" alt="#xarML('Icon')#" class="xar-module-icon"/>
         <xar:if condition="!empty($msg)">
             <h2><xar:var name="msg"/></h2>
         </xar:if>

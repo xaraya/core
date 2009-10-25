@@ -5,7 +5,7 @@
             Enable debug mode:            
         </label>
         <xar:set name="checked">xarModVars::get('dynamicdata', 'debugmode')</xar:set>
-        <xar:data-input type="checkbox" name="debugmode"  checked="$checked" />
+        <xar:data-input type="checkbox" name="debugmode"  checked="$checked"/>
     </div>
     <xar:set name="users">
         implode(',', array_keys(unserialize(xarModVars::get('dynamicdata', 'debugusers'))))

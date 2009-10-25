@@ -11,18 +11,18 @@
                 <legend>Enter your username or your e-mail address.</legend>
                 <div class="xar-form-input-wrapper">
                     <label class="xar-form-label" for="username">Username:</label>
-                    <input type="text" name="uname" id="username" size="25" maxlength="255" />
+                    <input type="text" name="uname" id="username" size="25" maxlength="255"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label class="xar-form-label" for="email">E-mail address:</label>
-                    <input type="text" name="email" id="email" size="25" maxlength="255" />
+                    <input type="text" name="email" id="email" size="25" maxlength="255"/>
                 </div>
             </fieldset>
             <fieldset>
                 <div class="xar-align-center">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                    <input type="hidden" name="phase" id="phase" value="send" />
-                    <input type="submit" value="#$emaillabel#" />
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="phase" id="phase" value="send"/>
+                    <input type="submit" value="#$emaillabel#"/>
                 </div>
             </fieldset>
         </form>

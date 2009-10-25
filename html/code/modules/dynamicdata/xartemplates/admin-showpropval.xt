@@ -18,14 +18,14 @@
                 <xar:set name="fieldlist">
                     array('name','label','objectid','type')
                 </xar:set>
-                <xar:data-display object="$object" fieldlist="$fieldlist" />
+                <xar:data-display object="$object" fieldlist="$fieldlist"/>
             </fieldset>
-            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-            <input type="hidden" name="itemid" id="itemid" value="#$itemid#" />#$showval# 
+            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+            <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>#$showval# 
             <fieldset>
                 <div class="xar-align-center">
-                    <input type="submit" name="confirm" value="#xarML('Update')#" />
-                    <input type="submit" name="exit" value="#xarML('Update and Exit')#" /> 
+                    <input type="submit" name="confirm" value="#xarML('Update')#"/>
+                    <input type="submit" name="exit" value="#xarML('Update and Exit')#"/> 
                 </div>
             </fieldset>
         </form>
@@ -35,8 +35,8 @@
         <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
             <fieldset>
                 <legend>Select Property Type</legend>
-                <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="$proptype" />
-                <input type="submit" value="#xarML('Select')#" />
+                <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="$proptype"/>
+                <input type="submit" value="#xarML('Select')#"/>
             </fieldset>
         </form>
         <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
@@ -65,14 +65,14 @@
                     </tr>
                 </table>
             </fieldset>
-            <input type="hidden" name="proptype" value="#$proptype#" />
+            <input type="hidden" name="proptype" value="#$proptype#"/>
             #$showval#
             <fieldset>
                 <div class="xar-align-center">
-                    <input type="submit" name="preview" value="#xarML('Preview')#" />
+                    <input type="submit" name="preview" value="#xarML('Preview')#"/>
 <!-- See CHECKME in showpropval
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-                    <input type="submit" name="confirm" value="#xarML('Update')#" disabled="disabled" />
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="submit" name="confirm" value="#xarML('Update')#" disabled="disabled"/>
 -->
                 </div>
             </fieldset>
@@ -83,8 +83,8 @@
         <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
             <fieldset>
                 <legend>Select Property Type</legend>
-                <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="textbox" />
-                <input type="submit" value="#xarML('Select')#" />
+                <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="textbox"/>
+                <input type="submit" value="#xarML('Select')#"/>
             </fieldset>
         </form>
     </xar:if>

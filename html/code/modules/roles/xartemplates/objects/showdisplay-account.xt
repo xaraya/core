@@ -11,12 +11,12 @@
         <fieldset>
         <xar:foreach in="$properties" key="$name" value="$property">
             <div class="xar-form-input-wrapper">
-                    <xar:data-label property="$properties[$name]" for="id" />
+                    <xar:data-label property="$properties[$name]" for="id"/>
                 <xar:if condition="$name eq 'parent'">
                     <xar:set name="module_id">$properties['module_id']->value</xar:set>
-                    <xar:data-output property="$properties[$name]" modid="$module_id" />
+                    <xar:data-output property="$properties[$name]" modid="$module_id"/>
                 <xar:else />
-                    <xar:data-output property="$properties[$name]" />
+                    <xar:data-output property="$properties[$name]"/>
                 </xar:if>
             </div>
         </xar:foreach>
@@ -56,13 +56,13 @@
                 <xar:set name="value">
                     xarModUserVars::get('roles','usertimezone',$id)
                 </xar:set>
-                <xar:data-output type="timezone" value="$value" />
+                <xar:data-output type="timezone" value="$value"/>
             </div>
         </xar:if>
         -->
         </fieldset>
     <xar:else />
         <!-- You can include your own layout here or specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->
-        <xar:template module="$tplmodule" file="display-$layout" />
+        <xar:template module="$tplmodule" file="display-$layout"/>
     </xar:if>
 </xar:template>

@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:template type="theme" file="user-display-common" />
+    <xar:template type="theme" file="user-display-common"/>
 </xar:template>

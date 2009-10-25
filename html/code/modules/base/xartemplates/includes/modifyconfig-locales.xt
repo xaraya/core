@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- Initialization of some information -->
     <xar:set name="mlsmode">
-        <xar:var scope="config" name="Site.MLS.MLSMode" />
+        <xar:var scope="config" name="Site.MLS.MLSMode"/>
     </xar:set>
     <xar:set name="single_checked">false</xar:set>
     <xar:if condition="$mlsmode eq 'SINGLE'">
@@ -25,9 +25,9 @@
         <div class="xar-form-input-wrapper">
             <xar:if condition="$single_checked">
                 <input type="radio" id="mlsmode_single" name="mlsmode" value="SINGLE"
-                checked="checked" />
+                checked="checked"/>
             <xar:else/>
-                <input type="radio" id="mlsmode_single" name="mlsmode" value="SINGLE" />
+                <input type="radio" id="mlsmode_single" name="mlsmode" value="SINGLE"/>
             </xar:if>
             <label for="mlsmode_single">Single Language Mode (SINGLE)</label>
         </div>
@@ -36,9 +36,9 @@
         </p>
         <div class="xar-form-input-wrapper">
             <xar:if condition="$boxed_checked">
-                <input type="radio" id="mlsmode_boxed" name="mlsmode" value="BOXED" checked="checked" />
+                <input type="radio" id="mlsmode_boxed" name="mlsmode" value="BOXED" checked="checked"/>
             <xar:else/>
-                <input type="radio" id="mlsmode_boxed" name="mlsmode" value="BOXED" />
+                <input type="radio" id="mlsmode_boxed" name="mlsmode" value="BOXED"/>
             </xar:if>
             <label for="mlsmode_boxed">Per Page Mode (BOXED)</label>
         </div>
@@ -55,7 +55,7 @@
             <xar:if condition="$unboxed_checked">
                 <input type="radio" id="mlsmode_unboxed" name="mlsmode" value="UNBOXED" checked="checked"/>
             <xar:else/>
-                <input type="radio" id="mlsmode_unboxed" name="mlsmode" value="UNBOXED" />
+                <input type="radio" id="mlsmode_unboxed" name="mlsmode" value="UNBOXED"/>
             </xar:if>
             <label for="mlsmode_unboxed">Full Multilanguage (UNBOXED) (experimental!)</label>
         </div>
@@ -69,9 +69,9 @@
         <xar:loop name="$locales">
             <div class="xar-form-input-wrapper-after">
                 <xar:if condition="$loop:item['active'] eq 'true'">
-                    <input type="checkbox" id="locale_#$loop:index#" name="active[]" value="#$loop:item['name']#" checked="checked" />
+                    <input type="checkbox" id="locale_#$loop:index#" name="active[]" value="#$loop:item['name']#" checked="checked"/>
                 <xar:else />
-                    <input type="checkbox" id="locale_#$loop:index#" name="active[]" value="#$loop:item['name']#" />
+                    <input type="checkbox" id="locale_#$loop:index#" name="active[]" value="#$loop:item['name']#"/>
                 </xar:if>
                 <label for="locale_#$loop:index#">
                     #$loop:item['name']#
@@ -95,7 +95,7 @@
             </select>
         </div>
     </fieldset>
-    <input type="hidden" name="translationsbackend" id="translationsbackend" value="xml2php" />
+    <input type="hidden" name="translationsbackend" id="translationsbackend" value="xml2php"/>
     <!--    
     <fieldset>
         <legend>
@@ -115,11 +115,11 @@
                 <option value="xml" selected="selected">XML (good for interoperability)</option>
                 <option value="php">PHP (good for programmed access)</option>
                 <option value="xml2php">XML with caching in PHP (new experimental)</option>
-                <xar:elseif condition="xarConfigVars::get(null, 'Site.MLS.TranslationsBackend') eq 'php'" />
+                <xar:elseif condition="xarConfigVars::get(null, 'Site.MLS.TranslationsBackend') eq 'php'"/>
                 <option value="xml">XML (good for interoperability)</option>
                 <option value="php" selected="selected">PHP (good for programmed access)</option>
                 <option value="xml2php">XML with caching in PHP (new experimental)</option>
-                <xar:elseif condition="xarConfigVars::get(null, 'Site.MLS.TranslationsBackend') eq 'xml2php'" />
+                <xar:elseif condition="xarConfigVars::get(null, 'Site.MLS.TranslationsBackend') eq 'xml2php'"/>
                 <option value="xml">XML (good for interoperability)</option>
                 <option value="php">PHP (good for programmed access)</option>
                 <option value="xml2php" selected="selected">XML with caching in PHP (new experimental)</option>

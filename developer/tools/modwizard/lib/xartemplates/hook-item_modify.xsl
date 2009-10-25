@@ -5,14 +5,14 @@
 
 <xsl:template match="xaraya_module" mode="xd_hook-item_modify">
 
-    <xsl:variable name="table" select="@name" />
+    <xsl:variable name="table" select="@name"/>
     <xsl:message>      * xartemplates/hook-item_modify.xd</xsl:message>
 
 <xsl:document href="{$output}/xartemplates/hook-item_modify.xd" format="text" omit-xml-declaration="yes" xml:space="preserve">
 
     <div style="clear: both; padding-top: 10px;">
     <span style="float: left; width: 20%; text-align: right;">
-        <span class="help" title="#xarML('Add your help text.')#"><xsl:value-of select="about/name" />:</span>
+        <span class="help" title="#xarML('Add your help text.')#"><xsl:value-of select="about/name"/>:</span>
     </span>
     <span style="float: right; width: 78%; text-align: left;">
         No options yet.

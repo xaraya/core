@@ -9,18 +9,18 @@
 
 <xsl:document href="{$output}/xartemplates/admin-config.xd" format="text" omit-xml-declaration="yes" xml:space="preserve">
 
-    <xar:template file="header" type="module" />
+    <xar:template file="header" type="module"/>
     <div class="xar-mod-body">
     <div style="padding: 1px;" class="xar-norm-outline">
 
 <form method="post" action="#$action#">
 
-    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
 
     <table width="100%" cellspacing="0" cellpadding="8" border="0">
 
         <colgroup>
-            <col width="30%" />
+            <col width="30%"/>
             <col />
         </colgroup>
 
@@ -53,8 +53,8 @@
 
         <tr>
             <td colspan="2" align="center">
-                <input type="submit"                value="#xarML('Modify')#" />
-                <input type="submit" name="cancel"  value="#xarML('Cancel')#" />
+                <input type="submit"                value="#xarML('Modify')#"/>
+                <input type="submit" name="cancel"  value="#xarML('Cancel')#"/>
             </td>
         </tr>
 

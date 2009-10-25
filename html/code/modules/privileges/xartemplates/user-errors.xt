@@ -5,18 +5,18 @@
     <div class="xar-mod-body">
         <fieldset>
             <legend>Privileges Problem</legend>
-            <img src="#xarTplGetImage('user-error.png','base')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon" />
+            <img src="#xarTplGetImage('user-error.png','base')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon"/>
             <xar:if condition="!isset($layout)">
                 <div style="margin-top: 20px; margin-left: 20px">
                     No error message is available.
                     <br />
                     Please contact the system administrator.
                 </div>                    
-            <xar:elseif condition="$layout eq 'bad_author'" />
+            <xar:elseif condition="$layout eq 'bad_author'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     The operation you are attempting is not allowed in the current situation
                 </div>
-            <xar:elseif condition="$layout eq 'no_privileges'" />
+            <xar:elseif condition="$layout eq 'no_privileges'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     You don't have the correct privileges for this operation
                     <br />
@@ -33,7 +33,7 @@
         <fieldset>
             <div class="xar-form-input-wrapper-after">
                 <xar:var name="label">Go back</xar:var>
-                <xar:button type="cancel" label="$label" />
+                <xar:button type="cancel" label="$label"/>
             </div>
         </fieldset>
     </div>

@@ -12,15 +12,15 @@
 
     <xsl:message>      * xaradmin/config.php</xsl:message>
 
-    <xsl:document href="{$output}/xaradmin/config.php" format="text" omit-xml-declaration="yes" ><xsl:processing-instruction name="php">
+    <xsl:document href="{$output}/xaradmin/config.php" format="text" omit-xml-declaration="yes"><xsl:processing-instruction name="php">
 
         <xsl:call-template name="xaraya_standard_php_file_header" select=".">
             <xsl:with-param name="filename">xaradmin/config.php</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:apply-templates mode="xaradmin_config_func" select="." />
+        <xsl:apply-templates mode="xaradmin_config_func" select="."/>
 
-        <xsl:call-template name="xaraya_standard_php_file_footer" select="." />
+        <xsl:call-template name="xaraya_standard_php_file_footer" select="."/>
 
     </xsl:processing-instruction></xsl:document>
 
@@ -34,11 +34,11 @@
 
 -->
 <xsl:template mode="xaradmin_config_func" match="xaraya_module">
-    <xsl:variable name="module_prefix" select="registry/name" />
+    <xsl:variable name="module_prefix" select="registry/name"/>
 /**
- * Administration for the <xsl:value-of select="$module_prefix" /> module.
+ * Administration for the <xsl:value-of select="$module_prefix"/> module.
  */
-function <xsl:value-of select="$module_prefix" />_admin_config( $args ) 
+function <xsl:value-of select="$module_prefix"/>_admin_config( $args ) 
 {
     list( $cancel, $itemtype ) = xarVarCleanFromInput( 'cancel', 'itemtype' );
     extract( $args );
@@ -50,7 +50,7 @@ function <xsl:value-of select="$module_prefix" />_admin_config( $args )
         // the user to an appropriate page for them to carry on their work
         return xarResponseRedirect(
             xarModURL(
-                '<xsl:value-of select="$module_prefix" />'
+                '<xsl:value-of select="$module_prefix"/>'
                 ,'admin'
                 ,'config'
                 ,array(
@@ -60,22 +60,22 @@ function <xsl:value-of select="$module_prefix" />_admin_config( $args )
 
     switch( $itemtype ) {
     <xsl:for-each select="database/table[@admin='true']">
-        case <xsl:value-of select="@itemtype" />:
+        case <xsl:value-of select="@itemtype"/>:
             $data = xarModAPIFunc(
-                '<xsl:value-of select="$module_prefix" />'
-                ,'<xsl:value-of select="@name" />'
+                '<xsl:value-of select="$module_prefix"/>'
+                ,'<xsl:value-of select="@name"/>'
                 ,'config'
                 ,$args );
-            $itemtype_name = '<xsl:value-of select="@name" />';
+            $itemtype_name = '<xsl:value-of select="@name"/>';
             break;
     </xsl:for-each>
 
         default:
-            return <xsl:value-of select="$module_prefix" />_adminpriv_config( $args );
+            return <xsl:value-of select="$module_prefix"/>_adminpriv_config( $args );
     }
 
     return xarTplModule(
-        '<xsl:value-of select="$module_prefix" />'
+        '<xsl:value-of select="$module_prefix"/>'
         ,'admin'
         ,'config'
         ,$data
@@ -83,12 +83,12 @@ function <xsl:value-of select="$module_prefix" />_admin_config( $args )
 }
 
 /**
- * Administration for the <xsl:value-of select="$module_prefix" /> module.
+ * Administration for the <xsl:value-of select="$module_prefix"/> module.
  */
-function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args ) 
+function <xsl:value-of select="$module_prefix"/>_adminpriv_config( $args ) 
 {
     $data = xarModAPIFunc(
-        '<xsl:value-of select="$module_prefix" />'
+        '<xsl:value-of select="$module_prefix"/>'
         ,'private'
         ,'common'
         ,array(
@@ -116,7 +116,7 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args )
         }
 
         xarModVars::Set(
-            '<xsl:value-of select="$module_prefix" />'
+            '<xsl:value-of select="$module_prefix"/>'
             ,'enable_short_urls'
             ,$enable_short_urls );
 
@@ -125,22 +125,22 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args )
          * call the hook 'module:updateconfig:GUI'
          */
         $args = array(
-            'module'        =>  '<xsl:value-of select="$module_prefix" />'
+            'module'        =>  '<xsl:value-of select="$module_prefix"/>'
             ,'itemtype'     =>  0
             );
         $data['hooks'] = xarModCallHooks(
             'module'
             ,'updateconfig'
-            ,'<xsl:value-of select="$module_prefix" />'
+            ,'<xsl:value-of select="$module_prefix"/>'
             ,$args
-            ,'<xsl:value-of select="$module_prefix" />' );
+            ,'<xsl:value-of select="$module_prefix"/>' );
         </xsl:if>
 
         /*
          * Set a status message
          */
         xarSessionSetVar(
-            '<xsl:value-of select="$module_prefix" />_statusmsg'
+            '<xsl:value-of select="$module_prefix"/>_statusmsg'
             ,xarML( 'Updated the global module settings!' ) );
 
         /*
@@ -148,7 +148,7 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args )
          */
         return xarResponseRedirect(
             xarModURL(
-                '<xsl:value-of select="$module_prefix" />'
+                '<xsl:value-of select="$module_prefix"/>'
                 ,'admin'
                 ,'config'
                 ,array(
@@ -161,21 +161,21 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args )
      * call the hook 'module:modifyconfig:GUI'
      */
     $args = array(
-        'module'        =>  '<xsl:value-of select="$module_prefix" />'
+        'module'        =>  '<xsl:value-of select="$module_prefix"/>'
         ,'itemtype'     =>  0
         );
     $data['hooks'] = xarModCallHooks(
         'module'
         ,'modifyconfig'
-        ,'<xsl:value-of select="$module_prefix" />'
+        ,'<xsl:value-of select="$module_prefix"/>'
         ,$args
-        ,'<xsl:value-of select="$module_prefix" />' );
+        ,'<xsl:value-of select="$module_prefix"/>' );
 
     </xsl:if>
 
     $data['common']['menu_label'] = xarML( 'Configure' );
     $data['common']['menu']       = xarModAPIFunc(
-        '<xsl:value-of select="$module_prefix" />'
+        '<xsl:value-of select="$module_prefix"/>'
         ,'private'
         ,'adminconfigmenu'
         ,0 );
@@ -184,12 +184,12 @@ function <xsl:value-of select="$module_prefix" />_adminpriv_config( $args )
      * Populate the rest of the template
      */
     $data['action']     = xarModURL(
-        '<xsl:value-of select="$module_prefix" />'
+        '<xsl:value-of select="$module_prefix"/>'
         ,'admin'
         ,'config' );
     $data['authid']     = xarSecGenAuthKey();
     $data['enable_short_urls']   = xarModVars::Get(
-        '<xsl:value-of select="$module_prefix" />'
+        '<xsl:value-of select="$module_prefix"/>'
         ,'enable_short_urls' );
     return $data;
 

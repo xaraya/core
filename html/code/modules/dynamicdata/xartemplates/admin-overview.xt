@@ -20,8 +20,8 @@
         <span class="xar-mod-title">Dynamic Data Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu" />
-        <img src="#xarTplGetImage('dynamicdata.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon" />
+        <xar:template type="module" file="admin-menu"/>
+        <img src="#xarTplGetImage('dynamicdata.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
         <ul class="xar-tabs xar-alt xar-norm-outline" style="clear:both">
             <li id="tab-1">
@@ -311,12 +311,12 @@
             <table border="1">
                 <tr>
                     <td valign="middle">
-                        <xar:data-input type="grouplist" />
+                        <xar:data-input type="grouplist"/>
                     </td>
                     <td valign="middle">
                         Displays a dropdown of Xaraya groups:
     <pre>
-    &lt;xar:data-input type="grouplist" />
+    &lt;xar:data-input type="grouplist"/>
     </pre>
                     </td>
                 </tr>
@@ -370,7 +370,7 @@
     &lt;/xar:set>
     &lt;xar:data-input type="checkboxlist" 
         options="$options" value="green" 
-        layout="vertical" />
+        layout="vertical"/>
     </pre>
                     </td>
                 </tr>
@@ -388,13 +388,13 @@
                 </tr>
                 <tr>
                     <td valign="middle">
-                        <xar:data-output type="urlicon" link="http://www.xaraya.com" />
+                        <xar:data-output type="urlicon" link="http://www.xaraya.com"/>
                     </td>
                     <td valign="middle">
                         Displays a link to a url in an icon:
     <pre>
     &lt;xar:data-output type="urlicon" 
-        link="http://www.xaraya.com" />
+        link="http://www.xaraya.com"/>
     </pre>
                     </td>
                 </tr>
@@ -412,12 +412,12 @@
                 </tr>
                 <tr>
                     <td valign="middle">
-                        <xar:data-input type="calendar" />
+                        <xar:data-input type="calendar"/>
                     </td>
                     <td valign="middle">
                         Displays a popup calendar for dae input:
     <pre>
-    &lt;xar:data-input type="calendar" />
+    &lt;xar:data-input type="calendar"/>
     </pre>
                     </td>
                 </tr>

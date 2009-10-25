@@ -4,7 +4,7 @@
     <xar:set name="yahoo">'Yahoo Messenger'</xar:set>
     <xar:if condition="!empty($link)">
         <a href="#$link#">
-            <img src="#$image#" alt="#$yahoo#" width="18" height="18" />
+            <img src="#$image#" alt="#$yahoo#" width="18" height="18"/>
         </a>
     </xar:if>
 </xar:template>

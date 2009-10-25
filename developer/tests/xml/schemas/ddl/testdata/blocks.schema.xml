@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema>
   <table name="block_group_instances">
-    <column id="block_group_instances.id" name="id" required="true" auto="true"><number size="10" /></column>
+    <column id="block_group_instances.id" name="id" required="true" auto="true"><number size="10"/></column>
     <column id="block_group_instances.group_id" name="group_id" required="true"><number size="10" default="0"/></column>
     <column id="block_group_instances.instance_id" name="instance_id" required="true"><number size="10" default="0"/></column>
     <column id="block_group_instances.template" name="template"><text size="100"/></column>

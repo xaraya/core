@@ -5,13 +5,13 @@
     exclude-result-prefixes="xar">
 
 <xsl:template match="xaraya_module" mode="xd_includes_navbar">
-    <xsl:variable name="module_prefix" select="registry/name" />
+    <xsl:variable name="module_prefix" select="registry/name"/>
 
     <xsl:message>       * xartemplates/includes/navbar.xd</xsl:message>
 
 <xsl:document href="{$output}/xartemplates/includes/navbar.xd" format="text" omit-xml-declaration="yes" xml:space="preserve">
 
-    <xsl:text disable-output-escaping="yes">&lt;xar:if condition="xarTplAddStyleLink('</xsl:text><xsl:value-of select="$module_prefix" /><xsl:text disable-output-escaping="yes"> ', 'navbar')"&gt;</xsl:text>
+    <xsl:text disable-output-escaping="yes">&lt;xar:if condition="xarTplAddStyleLink('</xsl:text><xsl:value-of select="$module_prefix"/><xsl:text disable-output-escaping="yes"> ', 'navbar')"&gt;</xsl:text>
     <div>
         <div class="tabnav">
             <div class="navhelp help" title="#xarML('Click on a tab to display that itemtype' )#">
