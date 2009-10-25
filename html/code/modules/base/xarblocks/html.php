@@ -18,13 +18,14 @@
 
     class HTMLBlock extends BasicBlock implements iBlock
     {
-        public $no_cache            = 1;
 
         public $name                = 'HTMLBlock';
         public $module              = 'base';
         public $text_type           = 'HTML';
         public $text_type_long      = 'HTML';
         public $allow_multiple      = true;
+        public $no_cache            = true;
+        public $show_preview        = true;
 
         public $expire              = 0;
 
@@ -76,16 +77,16 @@
         public function update(Array $data=array())
         {
             $data = parent::update($data);
-            if (!xarVarFetch('expire', 'str:1', $vars['expire'], 0, XARVAR_NOT_REQUIRED)) {return;}
-            if (!xarVarFetch('html_content', 'str:1', $vars['html_content'], '', XARVAR_NOT_REQUIRED)) {return;}
+            if (!xarVarFetch('expire', 'str:1', $args['expire'], 0, XARVAR_NOT_REQUIRED)) {return;}
+            if (!xarVarFetch('html_content', 'str:1', $args['html_content'], '', XARVAR_NOT_REQUIRED)) {return;}
 
             // Defaults
-            if ($vars['expire'] != 0) {
+            if ($args['expire'] != 0) {
                 $now = time();
-                $vars['expire'] = $vars['expire'] + $now;
+                $args['expire'] = $args['expire'] + $now;
             }
 
-            $data['content'] = $vars;
+            $data['content'] = $args;
             return $data;
         }
     }
