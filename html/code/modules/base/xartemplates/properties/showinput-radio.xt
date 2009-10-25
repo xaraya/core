@@ -17,8 +17,8 @@
                 <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked"/>
             <xar:else />
                 <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#"/>
-            </xar:if>
-            <label for="#$theID#">#$option['name']# </label>&#160;
+            </xar:if>&#160;
+            <label for="#$theID#">#$option['name']#</label>&#160;&#160;
         </xar:foreach>
     <xar:elseif condition="$layout eq 'vertical'"/>
         <xar:if condition="isset($onchange)">
