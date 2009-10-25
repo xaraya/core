@@ -21,12 +21,12 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
-                                    <xar:var name="parents[$i].parentname" prep="true" />
+                                    <xar:var name="parents[$i].parentname" />
                                 </a>
                             </li>
                         </xar:if>
                         <xar:set name="prevgroup">
-                            <xar:var name="parents[$i].parentname" prep="true" />
+                            <xar:var name="parents[$i].parentname" />
                         </xar:set>
                     </xar:for>
                 </ul>
@@ -61,12 +61,12 @@
                             <tr>
                                 <td>
                                     <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$loop:item['privid']#">
-                                        <xar:var name="loop:item.name" prep="true" />
+                                        <xar:var name="loop:item.name" />
                                     </a>
                                 </td>
                                 <xar:if condition="xarModVars::get('privileges','showrealms')">
                                     <td>
-                                        <xar:var name="loop:item.realm" prep="true" />
+                                        <xar:var name="loop:item.realm" />
                                     </td>
                                 </xar:if>
                                 <td>#$loop:item.module#</td>
@@ -80,7 +80,7 @@
                                 </td>
                                 <td>
                                     <a href="#$groupurl#&amp;id=#$loop:item['groupid']#">
-                                        <xar:var name="loop:item.groupname" prep="true" />
+                                        <xar:var name="loop:item.groupname" />
                                     </a>
                                 </td>
                             </tr>
@@ -112,12 +112,12 @@
                         <tr>
                             <td>
                                 <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$loop:item['privid']#">
-                                    <xar:var name="loop:item.name" prep="true" />
+                                    <xar:var name="loop:item.name" />
                                 </a>
                             </td>
                             <xar:if condition="xarModVars::get('privileges','showrealms')">
                                 <td class="xar-align-center">
-                                    <xar:var name="loop:item.realm" prep="true" />
+                                    <xar:var name="loop:item.realm" />
                                 </td>
                             </xar:if>
                             <td>#$loop:item.module#</td>

@@ -45,7 +45,7 @@
                             <xar:data-output property="$fieldtypeprop" value="$field['format']" />
                         </td>
                         <td>
-                            <xar:var name="field.configuration" prep="true" />
+                            <xar:var name="field.configuration" />
                             <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype'=>$field['name']))#">Preview</a>
                         </td>
                     </tr>

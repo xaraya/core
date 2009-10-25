@@ -68,7 +68,7 @@
                 <xar:elseif condition="is_object($object)"/>
                     <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" fieldlist="$fieldlist" />
                 <xar:else/>
-                    <xar:var name="object" prep="true"/>
+                    <xar:var name="object"/>
                 </xar:if>
             <xar:else />
                 <!--

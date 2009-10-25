@@ -69,7 +69,7 @@
                             Mail admin:
                         </label>
                         <xar:set name="curadmin">
-                            <xar:var scope="module" module="mail" name="admin_outgoing" prep="true" />
+                            <xar:var scope="module" module="mail" name="admin_outgoing" />
                         </xar:set>
                         <xar:data-input name="admin_outgoing" value="$curadmin" type="userlist" group_list="Administrators" onchange="this.form.submit()" />
                     </div>
@@ -107,7 +107,7 @@
                                 Reply-to address:
                             </label>
                             <xar:set name="replytoemail">
-                                <xar:var scope="module" module="mail" name="replytoemail" prep="true" />
+                                <xar:var scope="module" module="mail" name="replytoemail" />
                             </xar:set>
                             <xar:data-input type="email" name="replytoemail" value="$replytoemail" />
                         </div>
@@ -161,7 +161,7 @@
                                 HTML email header:
                             </label>
                             <xar:set name="htmlheader">
-                                <xar:var scope="module" module="mail" name="htmlheader" prep="true"/>
+                                <xar:var scope="module" module="mail" name="htmlheader"/>
                             </xar:set>
                             <xar:data-input type="textarea_large" name="htmlheader" value="$htmlheader"/>
                         </div>
@@ -170,7 +170,7 @@
                             title="#xarML('Enter the footer that you wish displayed in your HTML emails.')#"
                             class="xar-form-label">HTML Email Footer:</label>
                             <xar:set name="htmlfooter">
-                                <xar:var scope="module" module="mail" name="htmlfooter" prep="true" />
+                                <xar:var scope="module" module="mail" name="htmlfooter" />
                             </xar:set>
                             <xar:data-input type="textarea_large" name="htmlfooter" value="$htmlfooter" />
                         </div>
@@ -185,7 +185,7 @@
                             Default word wrap size:
                         </label>
                         <xar:set name="wordwrap">
-                            <xar:var scope="module" module="mail" name="wordwrap" prep="true" />
+                            <xar:var scope="module" module="mail" name="wordwrap" />
                         </xar:set>
                         <xar:data-input type="integerbox" name="wordwrap" value="$wordwrap" />
                     </div>
@@ -234,7 +234,7 @@
                                 Text email header:
                             </label>
                             <xar:set name="textheader">
-                                <xar:var scope="module" module="mail" name="textheader" prep="true" />
+                                <xar:var scope="module" module="mail" name="textheader" />
                             </xar:set>
                             <xar:data-input type="textarea_large" name="textheader" value="$textheader" />
                         </div>
@@ -243,7 +243,7 @@
                                 Text email footer:
                             </label>
                             <xar:set name="textfooter">
-                                <xar:var scope="module" module="mail" name="textfooter" prep="true" />
+                                <xar:var scope="module" module="mail" name="textfooter" />
                             </xar:set>
                             <xar:data-input type="textarea_large" name="textfooter" value="$textfooter" />
                         </div>
@@ -275,7 +275,7 @@
                                 Path to Sendmail:
                             </label>
                             <xar:set name="sendmailpath">
-                                <xar:var scope="module" module="mail" name="sendmailpath" prep="true" />
+                                <xar:var scope="module" module="mail" name="sendmailpath" />
                             </xar:set>
                             <xar:data-input type="textbox" name="sendmailpath" value="$sendmailpath" />
                         </div>
@@ -286,7 +286,7 @@
                                 SMTP host:
                             </label>
                             <xar:set name="smtpHost">
-                                <xar:var scope="module" module="mail" name="smtpHost" prep="true" />
+                                <xar:var scope="module" module="mail" name="smtpHost" />
                             </xar:set>
                             <xar:data-input type="textbox" name="smtpHost" value="$smtpHost" />
                         </div>
@@ -301,7 +301,7 @@
                         </div>
                         <div class="xar-form-input-wrapper-after">
                             <xar:set name="smtpAuth">
-                                <xar:var scope="module" module="mail" name="smtpAuth" prep="true" />
+                                <xar:var scope="module" module="mail" name="smtpAuth" />
                             </xar:set>
                             <xar:data-input type="checkbox" name="smtpAuth" checked="$smtpAuth" onchange="this.form.submit();" />
                             <label for="smtpAuth" title="#xarML('If your SMTP server requires authentification, check the box.')#">
@@ -314,7 +314,7 @@
                                     SMTP username:
                                 </label>
                                 <xar:set name="smtpUserName">
-                                    <xar:var scope="module" module="mail" name="smtpUserName" prep="true" />
+                                    <xar:var scope="module" module="mail" name="smtpUserName" />
                                 </xar:set>
                                 <xar:data-input type="textbox" name="smtpUserName" value="$smtpUserName" />
                             </div>

@@ -7,7 +7,7 @@
     <div class="xar-mod-body">
         <img src="#xarTplGetImage('privileges.png', 'base')#" alt="#xarML('Icon')#" class="xar-module-icon" />
         <xar:if condition="!empty($msg)">
-            <h2><xar:var name="msg" prep="true"/></h2>
+            <h2><xar:var name="msg"/></h2>
         </xar:if>
         <h3>Our apologies, you are not allowed this operation</h3>
 

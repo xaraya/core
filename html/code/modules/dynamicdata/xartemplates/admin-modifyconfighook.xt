@@ -27,11 +27,11 @@
                         <xar:data-output property="$fieldtypeprop" value="$field['type']" />
                     </td>
                     <td>
-                        <xar:var name="field.defaultvalue" prep="true" />
+                        <xar:var name="field.defaultvalue" />
                     </td>
                     <td>#$field.source#</td>
                     <td>
-                        <xar:var name="field.configuration" prep="true" />
+                        <xar:var name="field.configuration" />
                     </td>
                 </tr>
             </xar:foreach>

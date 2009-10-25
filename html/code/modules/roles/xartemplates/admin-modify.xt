@@ -180,10 +180,10 @@
                         <td>
                             <xar:if condition="$loop:item['parentid'] gt 4">
                                 <a href="&xar-modurl-roles-admin-modify;&amp;id=#$loop:item['parentid']#">
-                                    <xar:var name="loop:item.parentname" prep="true" />
+                                    <xar:var name="loop:item.parentname" />
                                 </a>
                             <xar:else />
-                                <xar:var name="loop:item.parentname" prep="true" />
+                                <xar:var name="loop:item.parentname" />
                             </xar:if>
                         </td>
                         <td class="xar-align-center">
@@ -205,7 +205,7 @@
                         <select name="roleid" id="roleid">
                             <xar:loop name="$groups">
                                 <option value="#$loop:item['did']#">
-                                    <xar:var name="loop:item.dname" prep="true" />
+                                    <xar:var name="loop:item.dname" />
                                 </option>
                             </xar:loop>
                         </select>

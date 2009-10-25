@@ -10,7 +10,7 @@
                     <label for="#$key#_value" title="" style="">#$key#:</label>&#160;
                 </xar:if>
                 <xar:if condition="empty($property)">
-                    <xar:var name="val" prep="true"/>
+                    <xar:var name="val"/>
                 <xar:else/>
                     <xar:data-output property="$property" value="$val" />
                 </xar:if>
@@ -18,7 +18,7 @@
             </xar:foreach>
         </div>
         <xar:else/>
-            <xar:var name="value" prep="true"/>
+            <xar:var name="value"/>
         </xar:if>
     </xar:if>
 </xar:template>
