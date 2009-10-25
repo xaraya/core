@@ -75,9 +75,9 @@ class MenuBlock extends BasicBlock implements iBlock
             return;
         }
 
-        if (!isset($args['displaymodules'])) $args['displaymodules'] = $this->displaymodules;
-        if (!isset($args['modulelist'])) $args['modulelist'] = $this->modulelist;
-        if (!isset($args['content'])) $args['content'] = $this->content;
+        if (empty($args['displaymodules'])) $args['displaymodules'] = $this->displaymodules;
+        if (empty($args['modulelist'])) $args['modulelist'] = $this->modulelist;
+        if (empty($args['content'])) $args['content'] = $this->content;
 
         // which module is loaded atm?
         // we need it's name, type and function - dealing only with user type mods, aren't we?
@@ -191,7 +191,7 @@ class MenuBlock extends BasicBlock implements iBlock
 
                 // Security Check
                 //FIX: Should contain a check for the particular menu item
-                //     Like "menu:$blockinfo[title]:$blockinfo[bid]:$title"?
+                //     Like "menu:$data[title]:$data[bid]:$title"?
                 if (xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$data[title]:$data[bid]")) {
                     $title = xarVarPrepForDisplay($title);
                     $comment = xarVarPrepForDisplay($comment);
@@ -268,7 +268,7 @@ class MenuBlock extends BasicBlock implements iBlock
                                 }
 
                     // Security Check
-    //                                        if (xarSecurityCheck('ViewBaseBlocks',0,'Block',"$blockinfo[title]:$menulink[title]:All")) {
+    //                                        if (xarSecurityCheck('ViewBaseBlocks',0,'Block',"$data[title]:$menulink[title]:All")) {
                                     $indlinks[] = array('userlink'      => $menulink['url'],
                                                         'userlabel'     => $menulink['label'],
                                                         'usertitle'     => $menulink['title'],
@@ -328,7 +328,7 @@ class MenuBlock extends BasicBlock implements iBlock
         $printurl       = isset($args['printurl']) ? $args['printurl'] : $this->printurl;
         $rssurl         = isset($args['rssurl']) ? $args['rssurl'] : $this->rssurl;
 
-        $blockcontent = array(
+        $data['content'] = array(
             'usermods'         => $usermods,
             'indlinks'         => $indlinks,
             'logouturl'        => $logouturl,
@@ -345,8 +345,6 @@ class MenuBlock extends BasicBlock implements iBlock
             'printurl'         => $printurl,
             'rssurl'           => $rssurl
         );
-
-        $data['content'] = $blockcontent;
         return $data;
     }
 
@@ -358,21 +356,18 @@ class MenuBlock extends BasicBlock implements iBlock
     {
         $data = parent::modify($data);
 
-        if (!isset($data['marker'])) $data['marker'] = $this->marker;
-        if (!isset($data['displaymodules'])) $data['displaymodules'] = $this->displaymodules;
-        if (!isset($data['modulelist'])) $data['modulelist'] = $this->modulelist;
-        if (!isset($data['displayrss'])) $data['displayrss'] = $this->displayrss;
-        if (!isset($data['displayprint'])) $data['displayprint'] = $this->displayprint;
-        if (!isset($data['content'])) $data['content'] = $this->content;
+        if (empty($data['marker'])) $data['marker'] = $this->marker;
+        if (empty($data['displaymodules'])) $data['displaymodules'] = $this->displaymodules;
+        if (empty($data['modulelist'])) $data['modulelist'] = $this->modulelist;
+        if (empty($data['displayrss'])) $data['displayrss'] = $this->displayrss;
+        if (empty($data['displayprint'])) $data['displayprint'] = $this->displayprint;
+        if (empty($data['content'])) $data['content'] = $this->content;
+        if (empty($data['showlogout'])) $data['showlogout'] = $this->showlogout;
 
         // Defaults
         // @CHECKME: is this used?
         if (empty($data['style'])) {
             $data['style'] = 1;
-        }
-
-        if (!isset($data['showlogout'])) {
-            $data['showlogout'] = 1;
         }
 
         // Prepare output array
@@ -397,13 +392,14 @@ class MenuBlock extends BasicBlock implements iBlock
     public function update(Array $data=array())
     {
         $data = parent::update($data);
+
         // Global options.
-        if (!xarVarFetch('displaymodules', 'str:1', $vars['displaymodules'], $this->displaymodules, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('modulelist', 'str', $vars['modulelist'], $this->modulelist, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('showlogout', 'checkbox', $vars['showlogout'], $this->showlogout, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('displayrss', 'checkbox', $vars['displayrss'], $this->displayrss, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('displayprint', 'checkbox', $vars['displayprint'], $this->displayprint, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('marker', 'str:1', $vars['marker'], $this->marker, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('displaymodules', 'str:1', $args['displaymodules'], $this->displaymodules, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('modulelist', 'str', $args['modulelist'], $this->modulelist, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('showlogout', 'checkbox', $args['showlogout'], $this->showlogout, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('displayrss', 'checkbox', $args['displayrss'], $this->displayrss, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('displayprint', 'checkbox', $args['displayprint'], $this->displayprint, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('marker', 'str:1', $args['marker'], $this->marker, XARVAR_NOT_REQUIRED)) return;
 
         // User links.
         $content = array();
@@ -442,12 +438,8 @@ class MenuBlock extends BasicBlock implements iBlock
             $content[] = "||";
         }
 
-        $vars['content'] = implode("LINESPLIT", $content);
-
-        $data['content'] = $vars;
-
+        $data['content'] = implode("LINESPLIT", $content);
         return $data;
     }
-
 }
 ?>
