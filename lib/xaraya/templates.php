@@ -351,7 +351,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     $tplBase        = "$modType-$funcName";
 
     // Get the right source filename
-    $sourceFileName = xarTpl__GetSourceFileName($modName, $tplBase, $templateName);
+    $sourceFileName = xarTpl__getSourceFileName($modName, $tplBase, $templateName);
 
     //assert('!empty($sourceFileName); /* The source file for the template is empty in xarTplModule */');
 
@@ -404,7 +404,7 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, 
     $templateBase   = xarVarPrepForOS(empty($tplBase) ? $blockType : $tplBase);
 
     // Get the right source filename
-    $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $tplName, 'blocks');
+    $sourceFileName = xarTpl__getSourceFileName($modName, $templateBase, $tplName, 'blocks');
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
@@ -437,21 +437,21 @@ function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elem
         $templateBase   = xarVarPrepForOS(empty($tplBase) ? $tplType : $tplBase);
 
         // Get the right source filename
-        $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $ddName, $elements);
+        $sourceFileName = xarTpl__getSourceFileName($modName, $templateBase, $ddName, $elements);
 
         // Property fall-back to default template in the module the property belongs to
         if (empty($sourceFileName) &&
             $elements == 'properties') {
             $fallbackmodule = DataPropertyMaster::getProperty(array('type' => $ddName))->tplmodule;
             if ($fallbackmodule != $modName) {
-                $sourceFileName = xarTpl__GetSourceFileName($fallbackmodule, $templateBase, $ddName, $elements);
+                $sourceFileName = xarTpl__getSourceFileName($fallbackmodule, $templateBase, $ddName, $elements);
             }
         }
 
         // Final fall-back to default template in dynamicdata for both objects and properties
         if (empty($sourceFileName) &&
             $modName != 'dynamicdata') {
-            $sourceFileName = xarTpl__GetSourceFileName('dynamicdata', $templateBase, $ddName, $elements);
+            $sourceFileName = xarTpl__getSourceFileName('dynamicdata', $templateBase, $ddName, $elements);
         }
 
         xarCore::setCached('Templates.DDElement', $cachename, $sourceFileName);
