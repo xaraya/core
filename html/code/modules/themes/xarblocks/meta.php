@@ -144,9 +144,8 @@ class MetaBlock extends BasicBlock
         if (!isset($data['glossary'])) $data['glossary'] = $this->glossary;
 
         $data['blockid'] = $data['bid'];
-        $content = xarTplBlock('themes', 'metaAdmin', $data);
 
-        return $content;
+        return $data;
     }
 
 /**
