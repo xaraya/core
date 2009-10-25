@@ -21,7 +21,7 @@
     <xar:data-input type="checkbox" name="usegeo" id="usegeo#$blockid#" checked="$usegeo"
     tabindex="1" />
     <label for="usegeo#$blockid#"
-    title="#xarML('GeoUrl allows you to locate websites that are geographically close to yours.')#">
+    title="#xarML('GeoUrl allows you to locate websites that are geographically close to yours.')#">xxxxx
     Use GeoURL</label>( 
     <a href="http://geourl.org/" target="_BLANK">About GeoURL</a>)</div>
     <xar:if condition="!empty($usegeo)">

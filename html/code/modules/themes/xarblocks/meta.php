@@ -24,15 +24,13 @@ sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class MetaBlock extends BasicBlock
 {
-    public $no_cache            = 1;
-
     public $name                = 'MetaBlock';
     public $module              = 'themes';
     public $text_type           = 'Meta';
     public $text_type_long      = 'Meta Keywords';
-    public $allow_multiple      = false;
     public $show_preview        = true;
     public $usershared          = true;
+    public $pageshared          = false;
 
     public $metakeywords        = '';
     public $metadescription     = '';
@@ -51,7 +49,6 @@ class MetaBlock extends BasicBlock
     function display(Array $data=array())
     {
         $data = parent::display($data);
-        if (empty($data)) return;
 
         $meta = array();
 
@@ -177,6 +174,5 @@ class MetaBlock extends BasicBlock
 
         return $data;
     }
-
 }
 ?>
