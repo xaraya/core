@@ -607,5 +607,25 @@ class DataObject extends DataObjectMaster implements iDataObject
         $nexttype++;
         return $nexttype;
     }
+
+    /**
+     * Initialize whatever this object needs from the environment
+     * This operation is in general performed only once
+     *
+     * @param array $args
+     * @return integer value of the next item type
+     *
+     */
+    function initialize(Array $args = array())
+    {
+        foreach ($this->properties as $name => $property) {
+            $nameparts = explode(': ', $this->properties[$name]->source);
+            if (empty($nameparts[1])) throw new Exception(xarML('Incorrect module name: #(1)',$modulename));
+            $test = xarModVars::get($nameparts[1],$this->properties[$name]->name);
+            if ($test === null)
+                xarModVars::set($nameparts[1],$this->properties[$name]->name,$this->properties[$name]->defaultvalue);
+        }
+        return true;
+    }
 }
 ?>

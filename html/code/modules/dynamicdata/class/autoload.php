@@ -86,10 +86,6 @@ function dynamicdata_autoload($class)
             sys::import('xaraya.datastores.interface');
             return;
 */
-        case 'modvarobject':
-            sys::import('modules.dynamicdata.class.modvarobject');
-            return;
-
         default:
             break;
     }

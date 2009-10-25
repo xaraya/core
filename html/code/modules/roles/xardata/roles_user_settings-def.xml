@@ -3,8 +3,8 @@
   <label>Edit Settings</label>
   <module_id>182</module_id>
   <itemtype>8</itemtype>
-  <class>ModVarObject</class>
-  <filepath>modules/dynamicdata/class/modvarobject.php</filepath>
+  <class>DataObject</class>
+  <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <config>a:0:{}</config>
