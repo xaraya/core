@@ -49,36 +49,15 @@
         </label>
         <div class="xar-form-container-after">
             <div class="xar-displayblock">
-                <xar:if condition="$usedk eq 0">
-                    <input type="radio" name="usedk" id="usedk#$blockid#_none" value="0" checked="checked"/> 
-                <xar:else />
-                    <input type="radio" name="usedk" id="usedk#$blockid#_none" value="0"/>
-                </xar:if>
-                <label for="usedk#$blockid#_none">None</label>
-            </div>
-            <div class="xar-displayblock">
-                <xar:if condition="$usedk eq 1">
-                    <input type="radio" name="usedk" id="usedk#$blockid#_articles" value="1" checked="checked"/> 
-                <xar:else />
-                    <input type="radio" name="usedk" id="usedk#$blockid#_articles" value="1"/>
-                </xar:if>
-                <label for="usedk#$blockid#_articles">Articles module</label>
-            </div>
-            <div class="xar-displayblock">
-                <xar:if condition="$usedk eq 2">
-                    <input type="radio" name="usedk" id="usedk#$blockid#_keywords" value="2" checked="checked"/> 
-                <xar:else />
-                    <input type="radio" name="usedk" id="usedk#$blockid#_keywords" value="2"/>
-                </xar:if>
-                <label for="usedk#$blockid#_keywords">Keywords module</label>
-            </div>
-            <div class="xar-displayblock">
-                <xar:if condition="$usedk eq 3">
-                    <input type="radio" name="usedk" id="usedk#$blockid#_both" value="3" checked="checked"/> 
-                <xar:else />
-                    <input type="radio" name="usedk" id="usedk#$blockid#_both" value="3"/>
-                </xar:if>
-                <label for="usedk#$blockid#_both">Both</label>
+                <xar:set name="options">
+                    array(
+                        array('id' => 0, 'name' => 'None'),
+                        array('id' => 1, 'name' => 'Articles module'),
+                        array('id' => 2, 'name' => 'Keywords module'),
+                        array('id' => 3, 'name' => 'Both'),
+                    )
+                </xar:set>
+                <xar:data-input type="radio" name="usedk" value="$usedk" options="$options"/>
             </div>
         </div>
     </div>
