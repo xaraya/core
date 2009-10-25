@@ -15,12 +15,8 @@
  * @param $args['file'] location of the .xml file containing the object definition, or
  * @param $args['xml'] XML string containing the object definition
  * @param $args['keepitemid'] (try to) keep the item id of the different items (default false)
- * @param $args['objectname'] optional name to override object name we're importing.
  * @param $args['entry'] optional array of external references.
  * @return array object id on success, null on failure
- * @todo MichelV <1> add a check for already present definitions
-                     so the errors get more gracious
-                 <2> make sure an error doesn't kill the process, but offers a return option
  */
 function dynamicdata_utilapi_import($args)
 {
