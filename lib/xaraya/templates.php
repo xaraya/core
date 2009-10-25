@@ -701,9 +701,9 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
     foreach ($modules as $module) {
         $thismodule = trim($module);
         $sourceFileName = xarTplGetThemeDir() . "/modules/$thismodule/includes/$templateName.xt";
-    if (!file_exists($sourceFileName)) {
-            $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xt";
-    }
+        if (!file_exists($sourceFileName)) {
+                $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xt";
+        }
         if (file_exists($sourceFileName)) break;
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
