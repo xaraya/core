@@ -49,7 +49,8 @@ class MetaBlock extends BasicBlock
     function display(Array $data=array())
     {
         $data = parent::display($data);
-
+        if (empty($data)) return;
+        
         $meta = array();
 
         // Description
