@@ -23,6 +23,8 @@ class ArrayProperty extends DataProperty
     public $fields = array();
 
     public $display_columns = 30;
+    //default value of column dimension
+    public $display_columns_count = 1;
     public $display_rows = 4;
     public $initialization_rows = 0;
     //default value of Key label
@@ -59,9 +61,9 @@ class ArrayProperty extends DataProperty
             if (!xarVarFetch($name . '_key', 'array', $keys, array(), XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch($name . '_value',   'array', $values, array(), XARVAR_NOT_REQUIRED)) return;
             
-            //Psspl: Added code for getting value of associative_array.
+            //Check for an associative_array.
             if (!xarVarFetch($name . '_associative_array',   'int', $associative_array, null, XARVAR_NOT_REQUIRED)) return;
-            //Psspl : Set value to the initialization_associative_array
+            //Set value to the initialization_associative_array  
             $this->initialization_associative_array = $associative_array;
 
             // check if we have a specific property for the values
@@ -91,14 +93,15 @@ class ArrayProperty extends DataProperty
                         $thisvalue = array_shift($values);
                         if (empty($thiskey) && empty($thisvalue)) continue;
                         if ($this->initialization_associative_array && empty($thiskey)) continue;
-                        $value[$thiskey] = $thisvalue;
+                        if (count($thisvalue) == 1) $value[$thiskey] = current($thisvalue);
+                        else $value[$thiskey] = $thisvalue;
                         $hasvalues = true;
                     } catch (Exception $e) {}
                 }
                 if (!$hasvalues) $value = array();
             }
         }
-        return $this->validateValue($value);;
+        return $this->validateValue($value);
     }
 
     public function validateValue($value = null)
@@ -123,7 +126,11 @@ class ArrayProperty extends DataProperty
             if(!$this->initialization_associative_array) {
                 $elements = "";
                 foreach ($value as $element) {
-                    $elements .= $element.";";
+                    $subelements = "";
+                    foreach($element as $subelement){
+                        $subelements .= $subelement."%@$#";
+                    }
+                    $elements .= $subelements.";";
                 }
                 $this->value = $elements;
             } else {
@@ -173,6 +180,8 @@ class ArrayProperty extends DataProperty
                     } else {
                         // otherwise we'll assume no associative array
                         $element = trim(strtr($element,array('\,' => ',')));
+                        $element = explode('%@$#',$element); 
+                        array_pop($element);                            
                         array_push($elements, $element);
                     }
                 }
@@ -202,14 +211,19 @@ class ArrayProperty extends DataProperty
         foreach ($fieldlist as $field) {
             if (!isset($value[$field])) {
                 $data['value'][$field] = '';
+            } elseif (is_array($value[$field])) {
+                foreach($value[$field] as $k => $v){
+                    $data['value'][$field][$k] = xarVarPrepForDisplay($v);
+                }                
             } else {
-                $data['value'][$field] = $value[$field];
+                $data['value'][$field] = array($value[$field]);
             }
         }
+
         if (!isset($data['rows'])) $data['rows'] = $this->display_rows;
         if (!isset($data['size'])) $data['size'] = $this->display_columns;
+        if (!isset($data['columns'])) $data['columns'] = $this->display_columns_count;
         
-        //Psspl: Added code for getting the text of 'Key' and 'Value' label
         if (!isset($data['keylabel'])) $data['keylabel'] = $this->display_key_label;
         if (!isset($data['valuelabel'])) $data['valuelabel'] = $this->display_value_label;
         if (!isset($data['allowinput'])) $data['allowinput'] = $this->initialization_rows;
@@ -221,6 +235,7 @@ class ArrayProperty extends DataProperty
 
     public function showOutput(Array $data = array())
     {
+        if (!isset($data['columns'])) $data['columns'] = $this->display_columns_count;
         $value = isset($data['value']) ? $data['value'] : $this->getValue();
         $data['associative_array'] = !empty($associative_array) ? $associative_array : $this->initialization_associative_array;
         if (!is_array($value)) {
