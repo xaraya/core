@@ -32,6 +32,7 @@ function dynamicdata_util_relations($args)
     if(!xarVarFetch('withfield', 'isset', $withfield, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('withvalue', 'isset', $withvalue, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('confirm',   'isset', $confirm,   NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('update',    'isset', $update,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('delete',    'isset', $delete,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('what',      'isset', $what,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('extra',     'isset', $extra,     NULL, XARVAR_DONT_SET)) {return;}
@@ -96,6 +97,8 @@ function dynamicdata_util_relations($args)
         } else {
             $data['relations'] = array();
         }
+        // FIXME: remove initialization of modvar after next release
+        xarModVars::set('dynamicdata', 'getlinkedobjects', 0);
 
         if (!empty($withobjectid)) {
             $withobject = xarMod::apiFunc('dynamicdata','user','getobject',
@@ -121,6 +124,7 @@ function dynamicdata_util_relations($args)
             if (empty($extra)) {
                 $extra = '';
             }
+
             // add link
             DataObjectLinks::addLink($objectid, $field, $withobjectid, $withfield, $relation, $direction, $extra);
             xarResponse::Redirect(xarModURL('dynamicdata', 'util', 'relations',
@@ -139,6 +143,14 @@ function dynamicdata_util_relations($args)
             xarResponse::Redirect(xarModURL('dynamicdata', 'util', 'relations',
                                             array('objectid' => $objectid)));
             return true;
+
+        } elseif (!empty($update)) {
+            if(!xarVarFetch('getlinkedobjects', 'isset', $getlinkedobjects, NULL, XARVAR_DONT_SET)) {return;}
+            if (!empty($getlinkedobjects)) {
+                xarModItemVars::set('dynamicdata', 'getlinkedobjects', 1, $objectid);
+            } else {
+                xarModItemVars::set('dynamicdata', 'getlinkedobjects', 0, $objectid);
+            }
         }
 
         // get fieldtype property to show object properties
