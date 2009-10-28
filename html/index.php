@@ -91,17 +91,24 @@ function xarMain()
 
     if ($run) {
 
-        // Load the module
-        if (!xarModLoad($modName, $modType)) return; // throw back
-
         // if the debugger is active, start it
         if (xarCoreIsDebuggerActive()) {
             ob_start();
         }
 
-        // Call the main module function
-        $mainModuleOutput = xarModFunc($modName, $modType, $funcName);
+        if (xarRequest::isObjectURL()) {
+            sys::import('xaraya.objects');
 
+            // Call the object handler
+            $mainModuleOutput = xarObject::guiMethod($modType, $funcName);
+
+        } else {
+            // Load the module
+            if (!xarMod::load($modName, $modType)) return; // throw back
+
+            // Call the main module function
+            $mainModuleOutput = xarMod::guiFunc($modName, $modType, $funcName);
+        }
 
         if (xarCoreIsDebuggerActive()) {
             if (ob_get_length() > 0) {

@@ -53,7 +53,7 @@ class xarObject extends Object implements IxarObject
         // Pass the object name and method to the userinterface class
         $args['object'] = $objectName;
         $args['method'] = $methodName;
-    // FIXME: we'll use the 'object' GUI function type here, instead of the default 'user' (+ 'admin')
+        // we'll use the 'object' GUI function type here, instead of the default 'user' (+ 'admin')
         $args['type'] = 'object';
 
         sys::import('modules.dynamicdata.class.userinterface');

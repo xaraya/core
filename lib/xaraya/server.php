@@ -305,6 +305,7 @@ class xarRequest extends Object
     public static $allowShortURLs = true;
     public static $defaultRequestInfo = array();
     public static $shortURLVariables = array();
+    public static $isObjectURL = false;
 
     /**
      * Initialize
@@ -521,14 +522,24 @@ class xarRequest extends Object
             // Cache values into info static var
             $requestInfo = array($modName, $modType, $funcName);
         } else {
-            // If $modName is still empty we use the default module/type/func to be loaded in that such case
-            if (empty(self::$defaultRequestInfo)) {
-
-                self::$defaultRequestInfo = array(xarModVars::get('modules', 'defaultmodule'),
-                                                  xarModVars::get('modules', 'defaultmoduletype'),
-                                                  xarModVars::get('modules', 'defaultmodulefunction'));
+            // Check if we have an object to work with for object URLs
+            xarVarFetch('object', 'regexp:/^[a-zA-Z0-9_-]+$/', $objectName, NULL, XARVAR_NOT_REQUIRED);
+            if (!empty($objectName)) {
+                xarVarFetch('method', 'regexp:/^[a-zA-Z0-9_-]+$/', $methodName, 'view');
+                // specify 'dynamicdata' as module for xarTpl_* functions etc.
+                $requestInfo = array('dynamicdata', $objectName, $methodName);
+                if (empty($url)) {
+                    self::$isObjectURL = true;
+                }
+            } else {
+                // If $modName is still empty we use the default module/type/func to be loaded in that such case
+                if (empty(self::$defaultRequestInfo)) {
+                    self::$defaultRequestInfo = array(xarModVars::get('modules', 'defaultmodule'),
+                                                      xarModVars::get('modules', 'defaultmoduletype'),
+                                                      xarModVars::get('modules', 'defaultmodulefunction'));
+                }
+                $requestInfo = self::$defaultRequestInfo;
             }
-            $requestInfo = self::$defaultRequestInfo;
         }
         // Save the current info in case we call this function again
         if (empty($url)) $currentRequestInfo = $requestInfo;
@@ -561,12 +572,7 @@ class xarRequest extends Object
      */
     static function isObjectURL()
     {
-        list($modName, $modType) = self::getInfo();
-        if (empty($modType) || $modType != 'object') {
-            return false;
-        } else {
-            return true;
-        }
+        return self::$isObjectURL;
     }
 }
 
