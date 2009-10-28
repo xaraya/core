@@ -50,24 +50,26 @@
                             <xar:if condition="empty($fields[$name])">&#160; 
                         <xar:elseif condition="!empty($linkfield) and $linkfield eq $name"/>
                             <a href="#xarModURL($urlmodule,$linktype,$linkfunc,array('itemtype' =&gt; $itemtype,$urlparam =&gt; $itemid))#">
-
-                                <xar:data-output property="$properties[$name]"
-                                value="$fields[$name]"/>
+                                <xar:data-output property="$properties[$name]" value="$fields[$name]"/>
                             </a>
                         <xar:else />
-                            <xar:data-output property="$properties[$name]"
-                            value="$fields[$name]"/></xar:if>
+                            <xar:data-output property="$properties[$name]" value="$fields[$name]"/></xar:if>
                         </td>
                     </xar:foreach>
                     <xar:if condition="empty($linkfield)">
                         <td class="xar-align-center">
                             <xar:if condition="!empty($links[$itemid]) and count($links[$itemid]) gt 0">
                                 <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
-                                <xar:if condition="!empty($option['olink'])">#$option['ojoin']# 
-                                <a href="#$option['olink']#">#$option['otitle']#</a>
-                                <xar:else />#$option['ojoin']# #$option['otitle']#</xar:if>
+                                    <xar:if condition="!empty($option['olink'])">
+                                        #$option['ojoin']# 
+                                        <a href="#$option['olink']#">#$option['otitle']#</a>
+                                    <xar:else />
+                                        #$option['ojoin']# #$option['otitle']#
+                                    </xar:if>
                                 </xar:foreach>
-                            <xar:else />&#160;</xar:if>
+                            <xar:else />
+                                &#160;
+                            </xar:if>
                         </td>
                     </xar:if>
                 </tr>
@@ -81,10 +83,16 @@
     <xar:elseif condition="!empty($prevurl) or !empty($nexturl)"/>
         <div class="xar-align-center">
             <xar:if condition="!empty($prevurl)">
-        <a href="#$prevurl#">&lt;&lt; Prev</a>
-        <xar:else />&lt;&lt;</xar:if>&#160;&#160;&#160; 
+                <a href="#$prevurl#">&lt;&lt; Prev</a>
+            <xar:else />
+                &lt;&lt;
+            </xar:if>
+            &#160;&#160;&#160; 
             <xar:if condition="!empty($nexturl)">
-        <a href="#$nexturl#">Next&gt;&gt;</a>
-        <xar:else />&gt;&gt;</xar:if></div>
+                <a href="#$nexturl#">Next&gt;&gt;</a>
+            <xar:else />
+                &gt;&gt;
+            </xar:if>
+        </div>
     </xar:if>
 </xar:template>

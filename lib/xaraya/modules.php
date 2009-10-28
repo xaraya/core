@@ -963,12 +963,17 @@ class xarMod extends Object implements IxarMod
     private static function callFunc($modName,$modType,$funcName,$args,$funcType = '')
     {
         assert('($funcType == "api" or $funcType==""); /* Wrong funcType argument in private callFunc method */');
-        if (empty($modName)) throw new EmptyParameterException('modName');
-        if (empty($funcName)) throw new EmptyParameterException('funcName');
+        if (empty($modName) || empty($funcName)) {
+            // This is not a valid function syntax
+            return xarResponse::NotFound();
+        }
 
         // good thing this information is cached :)
         $modBaseInfo = self::getBaseInfo($modName);
-        if (!isset($modBaseInfo)) {return;} // throw back
+        if (!isset($modBaseInfo)) {
+            // This is not a valid module
+            return xarResponse::NotFound();
+        }
 
         // Build function name and call function
         $modFunc = "{$modName}_{$modType}{$funcType}_{$funcName}";
@@ -987,6 +992,7 @@ class xarMod extends Object implements IxarMod
                 // Q: who are we kidding with this? osdirectory == modName always, no?
                 $funcFile = sys::code() . 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.$funcType.'/'.strtolower($funcName).'.php';
                 if (!file_exists($funcFile)) {
+                    // Valid syntax, but the function doesn't exist
                     return xarResponse::NotFound();
                 } else {
                     ob_start();
@@ -1073,10 +1079,10 @@ class xarMod extends Object implements IxarMod
         xarLogMessage("xarMod::load: loading $modName:$modType");
 
         $modBaseInfo = self::getBaseInfo($modName);
-        if (!isset($modBaseInfo)) throw new ModuleNotFoundException($modName);
-
-        if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
-            throw new ModuleNotActiveException($modName);
+        if (!isset($modBaseInfo) ||
+        $modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE)) {
+            // Not a valid module or not a valid module state
+            return xarResponse::NotFound();
         }
 
         // Load the module files
