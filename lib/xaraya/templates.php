@@ -606,7 +606,7 @@ function xarTplFile($fileName, &$tplData)
  */
 function xarTplCompileString($templateSource)
 {
-    sys::import('xaraya.compiler');
+    sys::import('xaraya.templating.compiler');
     $compiler = XarayaCompiler::instance();
     return $compiler->compileString($templateSource);
 }
