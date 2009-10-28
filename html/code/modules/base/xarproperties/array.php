@@ -93,8 +93,11 @@ class ArrayProperty extends DataProperty
                         $thisvalue = array_shift($values);
                         if (empty($thiskey) && empty($thisvalue)) continue;
                         if ($this->initialization_associative_array && empty($thiskey)) continue;
-                        if (count($thisvalue) == 1) $value[$thiskey] = current($thisvalue);
-                        else $value[$thiskey] = $thisvalue;
+                        if (is_array($thisvalue) && count($thisvalue) == 1) {
+                            $value[$thiskey] = current($thisvalue);
+                        } else {
+                            $value[$thiskey] = $thisvalue;
+                        }
                         $hasvalues = true;
                     } catch (Exception $e) {}
                 }
@@ -126,11 +129,15 @@ class ArrayProperty extends DataProperty
             if(!$this->initialization_associative_array) {
                 $elements = "";
                 foreach ($value as $element) {
-                    $subelements = "";
-                    foreach($element as $subelement){
-                        $subelements .= $subelement."%@$#";
+                    if (is_array($element)) {
+                        $subelements = "";
+                        foreach($element as $subelement){
+                            $subelements .= $subelement."%@$#";
+                        }
+                        $elements .= $subelements.";";
+                    } else {
+                        $elements .= $element.";";
                     }
-                    $elements .= $subelements.";";
                 }
                 $this->value = $elements;
             } else {
@@ -216,7 +223,7 @@ class ArrayProperty extends DataProperty
                     $data['value'][$field][$k] = xarVarPrepForDisplay($v);
                 }                
             } else {
-                $data['value'][$field] = array($value[$field]);
+                $data['value'][$field] = $value[$field];
             }
         }
 
