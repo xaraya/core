@@ -1,6 +1,6 @@
 <?php
 /**
- * HTTP Protocol Server/Request/Response utilities
+ * HTTP Protocol URL/Server/Request/Response utilities
  *
  * @package core
  * @copyright (C) 2002-2009 The Digital Development Foundation
@@ -16,6 +16,117 @@
  * Convenience classes
  *
 **/
+class xarURL extends Object
+{
+    /**
+     * Encode parts of a URL.
+     * This will encode the path parts, the and GET parameter names
+     * and data. It cannot encode a complete URL yet.
+     *
+     * @access private
+     * @param data string the data to be encoded (see todo)
+     * @param type string the type of string to be encoded ('getname', 'getvalue', 'path', 'url', 'domain')
+     * @return string the encoded URL parts
+     * @todo this could be made public
+     * @todo support arrays and encode the complete array (keys and values)
+    **/
+    static function encode($data, $type = 'getname')
+    {
+        // Different parts of a URL are encoded in different ways.
+        // e.g. a '?' and '/' are allowed in GET parameters, but
+        // '?' must be encoded when in a path, and '/' is not
+        // allowed in a path at all except as the path-part
+        // separators.
+        // The aim is to encode as little as possible, so that URLs
+        // remain as human-readable as we can allow.
+
+        static $decode = array(
+            'path' => array(
+                array('%2C', '%24', '%21', '%2A', '%28', '%29', '%3D'),
+                array(',', '$', '!', '*', '(', ')', '=')
+            ),
+            'getname' => array(
+                array('%2C', '%24', '%21', '%2A', '%28', '%29', '%3D', '%27', '%5B', '%5D'),
+                array(',', '$', '!', '*', '(', ')', '=', '\'', '[', ']')
+            ),
+            'getvalue' => array(
+                array('%2C', '%24', '%21', '%2A', '%28', '%29', '%3D', '%27', '%5B', '%5D', '%3A', '%2F', '%3F', '%3D'),
+                array(',', '$', '!', '*', '(', ')', '=', '\'', '[', ']', ':', '/', '?', '=')
+            )
+        );
+
+        // We will encode everything first, then restore a select few
+        // characters.
+        // TODO: tackle it the other way around, i.e. have rules for
+        // what to encode, rather than undoing some ecoded characters.
+        $data = rawurlencode($data);
+
+        // TODO: check what automatic ML settings have on this.
+        // I suspect none, as all multi-byte characters have ASCII values
+        // of their parts > 127.
+        if (isset($decode[$type])) {
+            $data = str_replace($decode[$type][0], $decode[$type][1], $data);
+        }
+        return $data;
+    }
+
+    /**
+     * Format GET parameters formed by nested arrays, to support xarModURL().
+     * This function will recurse for each level to the arrays.
+     *
+     * @access private
+     * @param args array the array to be expanded as a GET parameter
+     * @param prefix string the prefix for the GET parameter
+     * @return string the expanded GET parameter(s)
+     **/
+    static function nested($args, $prefix)
+    {
+        $path = '';
+        foreach ($args as $key => $arg) {
+            if (is_array($arg)) {
+                $path .= self::nested($arg, $prefix . '['.self::encode($key, 'getname').']');
+            } else {
+                $path .= $prefix . '['.self::encode($key, 'getname').']' . '=' . self::encode($arg, 'getvalue');
+            }
+        }
+        return $path;
+    }
+
+    /**
+     * Add further parameters to the path, ensuring each value is encoded correctly.
+     *
+     * @access private
+     * @param args array the array to be encoded
+     * @param path string the current path to append parameters to
+     * @param psep string the path seperator to use
+     * @return string the path with encoded parameters
+     */
+    static function addParametersToPath($args, $path, $pini, $psep)
+    {
+        if (count($args) > 0)
+        {
+            $params = '';
+
+            foreach ($args as $k=>$v) {
+                if (is_array($v)) {
+                    // Recursively walk the array tree to as many levels as necessary
+                    // e.g. ...&foo[bar][dee][doo]=value&...
+                    $params .= self::nested($v, $psep . $k);
+                } elseif (isset($v)) {
+                    // TODO: rather than rawurlencode, use a xar function to encode
+                    $params .= (!empty($params) ? $psep : '') . self::encode($k, 'getname') . '=' . self::encode($v, 'getvalue');
+                }
+            }
+
+            // Join to the path with the appropriate character,
+            // depending on whether there are already GET parameters.
+            $path .= (strpos($path, $pini) === false ? $pini : $psep) . $params;
+        }
+
+        return $path;
+    }
+}
+
 class xarServer extends Object
 {
     public static $allowShortURLs = true;
@@ -216,8 +327,7 @@ class xarServer extends Object
             }
         }
 
-        // Note to Dracos: please don't replace & with &amp; here just yet - give me some time to test this first :-)
-        // Mike can we change these now, so we can work on validation a bit?
+// TODO: re-use some common code (with in-line replacement here) or use parse_url + http_build_query ?
 
         // add optional parameters
         if (count($args) > 0) {
@@ -274,7 +384,7 @@ class xarServer extends Object
     }
 
     /**
-     * Generates an URL that reference to an object user interface method (TODO).
+     * Generates an URL that reference to an object user interface method.
      */
     static function getObjectURL($objectName = NULL, $methodName = 'view', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array())
     {
@@ -295,8 +405,58 @@ class xarServer extends Object
         } elseif (!empty($args['itemid']) && $args['method'] == 'display') {
             unset($args['method']);
         }
-        // TODO: this is just a temporary fix (until xarRequest supports URLs with ?object=...&method=..., and index.php can call ... ?)
-        return xarServer::getModuleURL('dynamicdata', 'object', 'main', $args, $generateXMLURL, $fragment, $entrypoint);
+
+// TODO: some common code for getCurrentURL, getModuleURL and getObjectURL ?
+
+        // Parameter separator and initiator.
+        $psep = '&';
+        $pini = '?';
+        $pathsep = '/';
+
+        // Initialise the path.
+        $path = '';
+
+        // The following allows you to modify the BaseModURL from the config file
+        // it can be used to configure Xaraya for mod_rewrite by
+        // setting BaseModURL = '' in config.system.php
+        try {
+            $BaseModURL = xarSystemVars::get(sys::LAYOUT, 'BaseModURL');
+        } catch(Exception $e) {
+            $BaseModURL = 'index.php';
+        }
+/*
+        // No object specified - just jump to the home page.
+        if (empty($args['object'])) return xarServer::getBaseURL() . $BaseModURL;
+
+        // If an entry point has been set, then modify the URL entry point and args['type'].
+        if (!empty($entrypoint)) {
+            if (is_array($entrypoint)) {
+            // CHECKME: is this relevant here ?
+                $args['type'] = $entrypoint['action'];
+                $entrypoint = $entrypoint['entry'];
+            }
+            $BaseModURL = $entrypoint;
+        }
+
+        // Check the global short URL setting before trying to load the URL encoding function
+        // for the module. This also applies to custom entry points.
+        if (self::$allowShortURLs) {
+// CHECKME: short URLs for objects = go via getModuleURL or here ?
+        }
+*/
+
+        // Add GET parameters to the path, ensuring each value is encoded correctly.
+        $path = xarURL::addParametersToPath($args, $BaseModURL, $pini, $psep);
+
+        // Add the fragment if required.
+        if (isset($fragment)) $path .= '#' . urlencode($fragment);
+
+        // Encode the URL if an XML-compatible format is required.
+        if (!isset($generateXMLURL)) $generateXMLURL = self::$generateXMLURLs;
+        if ($generateXMLURL) $path = htmlspecialchars($path);
+
+        // Return the URL.
+        return xarServer::getBaseURL() . $path;
     }
 }
 
@@ -525,8 +685,9 @@ class xarRequest extends Object
             // Check if we have an object to work with for object URLs
             xarVarFetch('object', 'regexp:/^[a-zA-Z0-9_-]+$/', $objectName, NULL, XARVAR_NOT_REQUIRED);
             if (!empty($objectName)) {
-                xarVarFetch('method', 'regexp:/^[a-zA-Z0-9_-]+$/', $methodName, 'view');
-                // specify 'dynamicdata' as module for xarTpl_* functions etc.
+                // Check if we have a method to work with for object URLs
+                xarVarFetch('method', 'regexp:/^[a-zA-Z0-9_-]+$/', $methodName, NULL, XARVAR_NOT_REQUIRED);
+                // Specify 'dynamicdata' as module for xarTpl_* functions etc.
                 $requestInfo = array('dynamicdata', $objectName, $methodName);
                 if (empty($url)) {
                     self::$isObjectURL = true;
