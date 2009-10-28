@@ -1084,7 +1084,7 @@ class xarMod extends Object implements IxarMod
                 // Q: who are we kidding with this? osdirectory == modName always, no?
                 $funcFile = sys::code() . 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.$funcType.'/'.strtolower($funcName).'.php';
                 if (!file_exists($funcFile)) {
-                    $found = false;
+                    return xarResponse::NotFound();
                 } else {
                     ob_start();
                     sys::import('modules.'.$modName.'.xar'.$modType.$funcType.'.'.strtolower($funcName));
