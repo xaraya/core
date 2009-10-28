@@ -668,7 +668,7 @@ ALTER TABLE `xar_dynamic_objects` DROP `property_id`;
 ALTER TABLE `xar_dynamic_objects` DROP `parent_id`;
 
 /* remove the DProperty class */
-UPDATE `xar_dynamic_objects` SET  `object_class` = 'DataObject' , `object_filepath` = 'auto' WHERE `object_name` = 'dynamic_properties';
+UPDATE `xar_dynamic_objects` SET  `class` = 'DataObject' , `filepath` = 'auto' WHERE `name` = 'properties';
 
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
