@@ -580,8 +580,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
             $args['linkfield'] = 'N/A';
         }
-        // if $linktype == 'object' use getObjectURL()
-        if ($this->linktype == 'object') {
+        if (isset($args['newlink'])) {
+            // use pre-defined newlink (if this is an empty string, no link will be shown)
+        } elseif ($this->linktype == 'object') {
+            // if $linktype == 'object' use getObjectURL()
             $urlargs = array();
             $urlargs['table'] = $args['table'];
             $args['newlink'] = xarServer::getObjectURL($args['objectname'], 'create', $urlargs);
