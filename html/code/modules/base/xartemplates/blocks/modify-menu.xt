@@ -6,41 +6,51 @@
     -->
     <xar:if condition="!empty($content)">
         <table class="xar-fullwidth">
-            <caption>Edit Menu Items</caption>
+            <strong>Edit Menu Items</strong>
             <tr>
                 <th>Title</th>
                 <th>URL</th>
                 <th>Description</th>
+                <th>Visible</th>
                 <th>Delete</th>
                 <th>Child</th>
                 <th>Insert Blank</th>
             </tr>
-            <xar:loop name="$contentlines">
+            <xar:set name="index">0</xar:set>
+            <xar:foreach in="$lines" value="$line">
+                <xar:set name="index">$index+1</xar:set>
                 <tr>
                     <td>
-                        <input type="text" class="xar-form-textmedium" name="linkname[#$loop:index#]" id="linkname_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[1])#"/>
+                        <input type="text" class="xar-form-textmedium" name="name[#$index#]" id="url_#$index#" maxlength="255" value="#xarVarPrepForDisplay($line['name'])#"/>
                     </td>
                     <td>
-                        <input type="text" class="xar-form-textlong" name="linkurl[#$loop:index#]" id="linkurl_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[0])#"/>
+                        <input type="text" class="xar-form-textlong" name="url[#$index#]" id="url_#$index#" maxlength="255" value="#xarVarPrepForDisplay($line['url'])#"/>
                     </td>
                     <td>
-                        <input type="text" class="xar-form-textlong" name="linkdesc[#$loop:index#]" id="linkdesc_#$loop:index#" maxlength="255" value="#xarVarPrepForDisplay($loop:item[2])#"/>
+                        <input type="text" class="xar-form-textlong" name="description[#$index#]" id="description_#$index#" maxlength="255" value="#xarVarPrepForDisplay($line['description'])#"/>
                     </td>
                     <td class="xar-align-center">
-                        <input type="checkbox" name="linkdelete[#$loop:index#]" id="linkdelete_#$loop:index#" value="1"/>
-                    </td>
-                    <td class="xar-align-center">
-                        <xar:if condition="empty($loop:item[3])">
-                            <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1"/>
+                        <xar:if condition="empty($line['visible'])">
+                            <input type="checkbox" name="visible[#$index#]" id="visible_#$index#" value="1"/>
                         <xar:else />
-                            <input type="checkbox" name="linkchild[#$loop:index#]" id="linkchild_#$loop:index#" value="1" checked="checked"/>
+                            <input type="checkbox" name="visible[#$index#]" id="visible_#$index#" value="1" checked="checked"/>
                         </xar:if>
                     </td>
                     <td class="xar-align-center">
-                        <input type="checkbox" name="linkinsert[#$loop:index#]" id="linkinsert_#$loop:index#" value="1"/>
+                        <input type="checkbox" name="delete[#$index#]" id="delete_#$index#" value="1"/>
+                    </td>
+                    <td class="xar-align-center">
+                        <xar:if condition="empty($line['child'])">
+                            <input type="checkbox" name="child[#$index#]" id="child_#$index#" value="1"/>
+                        <xar:else />
+                            <input type="checkbox" name="child[#$index#]" id="child_#$index#" value="1" checked="checked"/>
+                        </xar:if>
+                    </td>
+                    <td class="xar-align-center">
+                        <input type="checkbox" name="insert[#$index#]" id="insert_#$index#" value="1"/>
                     </td>
                 </tr>
-            </xar:loop>
+            </xar:foreach>
         </table>
         <!--
             <table class="fullwidth">

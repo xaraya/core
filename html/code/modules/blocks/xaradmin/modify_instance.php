@@ -58,11 +58,11 @@ function blocks_admin_modify_instance()
             $extra = $block->modify($instance);
             if (is_array($extra)) {
                 // Render the extra settings if necessary.
-                try {
+//                try {
                     $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
-                } catch (Exception $e) {
-                    $extra = '';
-                }
+//                } catch (Exception $e) {
+//                    $extra = '';
+//                }
             }
         } else {
             $extra = '';

@@ -40,7 +40,12 @@ class MenuBlock extends BasicBlock implements iBlock
     public $displayrss          = false;
     public $displayprint        = false;
     public $marker              = '[x]';
-    public $content             = 'http://www.example.com/|Title|Example|';
+    public $content             = array(
+                                    'url' => '[base]&page=docs',
+                                    'name'=> 'Documentation',
+                                    'description' => 'General Documentation',
+                                    'visible' => true,
+                                    );
     public $showlogout          = true;
 
     public $rssurl;
@@ -62,8 +67,6 @@ class MenuBlock extends BasicBlock implements iBlock
         $data = parent::display($data);
         if (empty($data)) return;
 
-        $args = isset($data['content']) ? $data['content'] : array();
-
         // are there any user modules, then get their names
         // checking as early as possible :)
         $mods = xarMod::apiFunc('modules',
@@ -75,9 +78,9 @@ class MenuBlock extends BasicBlock implements iBlock
             return;
         }
 
-        if (empty($args['displaymodules'])) $args['displaymodules'] = $this->displaymodules;
-        if (empty($args['modulelist'])) $args['modulelist'] = $this->modulelist;
-        if (empty($args['content'])) $args['content'] = $this->content;
+        if (empty($data['displaymodules'])) $data['displaymodules'] = $this->displaymodules;
+        if (empty($data['modulelist'])) $data['modulelist'] = $this->modulelist;
+        if (empty($data['lines'])) $data['lines'] = array($this->content);
 
         // which module is loaded atm?
         // we need it's name, type and function - dealing only with user type mods, aren't we?
@@ -87,8 +90,8 @@ class MenuBlock extends BasicBlock implements iBlock
         // Sort Order, Status, Common Labels and Links Display preparation
         $logoutlabel = xarVarPrepForDisplay(xarML('logout'));
 
-        $authmoduledata=xarMod::apiFunc('roles','user','getdefaultauthdata');
-        $authmodlogout=$authmoduledata['defaultloginmodname'];
+        $authmoduledata = xarMod::apiFunc('roles','user','getdefaultauthdata');
+        $authmodlogout = $authmoduledata['defaultloginmodname'];
 
         $logouturl = xarModURL($authmodlogout,'user', 'logout', array());
         $loggedin = xarUserIsLoggedIn();
@@ -98,41 +101,37 @@ class MenuBlock extends BasicBlock implements iBlock
         $currenturl = xarServer::getCurrentURL();
 
         // Added Content For non-modules list.
-        if (!empty($args['content'])) {
+        if (!empty($data['lines'])) {
             $usercontent = array();
-            $contentlines = explode("LINESPLIT", $args['content']);
-            foreach ($contentlines as $contentline) {
-                //list($url, $title, $comment, $child) = explode('|', $contentline);
-                // FIXME: make sure we don't generate content lines with missing pieces elsewhere
-                $parts = explode('|', $contentline);
-                $url = $parts[0];
+            foreach ($data['lines'] as $line) {
+                if (empty($line['visible'])) continue;
                 // FIXME: this probably causes bug #3393
-                $here = (substr($truecurrenturl, -strlen($url)) == $url) ? 'true' : '';
-                if (!empty($url)){
-                    switch ($url[0])
+                $here = (substr($truecurrenturl, -strlen($line['url'])) == $line['url']) ? 'true' : '';
+                if (!empty($line['url'])){
+                    switch (substr($line['url'],0,1))
                     {
                         case '[': // module link
                         {
                             // Credit to Elek M?ton for further expansion
-                            $sections = explode(']',substr($url,1));
-                            $url = explode(':', $sections[0]);
+                            $sections = explode(']',substr($line['url'],1));
+                            $line['url'] = explode(':', $sections[0]);
                             // if the current module is active, then we are here
-                            if ($url[0] == $thismodname &&
-                                (!isset($url[1]) || $url[1] == $thismodtype) &&
-                                (!isset($url[2]) || $url[2] == $thisfuncname)) {
+                            if ($line['url'][0] == $thismodname &&
+                                (!isset($line['url'][1]) || $line['url'][1] == $thismodtype) &&
+                                (!isset($line['url'][2]) || $line['url'][2] == $thisfuncname)) {
                                 $here = 'true';
                             }
-                            if (empty($url[1])) $url[1]="user";
-                            if (empty($url[2])) $url[2]="main";
-                            $url = xarModUrl($url[0],$url[1],$url[2]);
+                            if (empty($line['url'][1])) $line['url'][1]="user";
+                            if (empty($line['url'][2])) $line['url'][2]="main";
+                            $line['url'] = xarModUrl($line['url'][0],$line['url'][1],$line['url'][2]);
                             if(isset($sections[1])) {
-                                $url .= xarVarPrepForDisplay($sections[1]);
+                                $line['url'] .= xarVarPrepForDisplay($sections[1]);
                             }
                             break;
                         }
                         case '{': // article link
                         {
-                            $url = explode(':', substr($url, 1,  - 1));
+                            $line['url'] = explode(':', substr($line['url'], 1,  - 1));
                             // Get current pubtype type (if any)
                             if (xarVarIsCached('Blocks.articles', 'ptid')) {
                                 $ptid = xarVarGetCached('Blocks.articles', 'ptid');
@@ -142,15 +141,15 @@ class MenuBlock extends BasicBlock implements iBlock
                                 xarVarFetch('ptid', 'isset', $ptid, NULL, XARVAR_DONT_SET);
                             }
                             // if the current pubtype is active, then we are here
-                            if ($url[0] == $ptid) {
+                            if ($line['url'][0] == $ptid) {
                                 $here = 'true';
                             }
-                            $url = xarModUrl('articles', 'user', 'view', array('ptid' => $url[0]));
+                            $line['url'] = xarModUrl('articles', 'user', 'view', array('ptid' => $line['url'][0]));
                             break;
                         }
                         case '(': // category link
                         {
-                            $url = explode(':', substr($url, 1,  - 1));
+                            $line['url'] = explode(':', substr($line['url'], 1,  - 1));
                             if (xarVarIsCached('Blocks.categories','catid')) {
                                 $catid = xarVarGetCached('Blocks.categories','catid');
                             }
@@ -170,24 +169,24 @@ class MenuBlock extends BasicBlock implements iBlock
                                                             'return_itself' => true));
                             if(!empty($ancestors)) {
                                 $ancestorcids = array_keys($ancestors);
-                                if (in_array($url[0], $ancestorcids)) {
+                                if (in_array($line['url'][0], $ancestorcids)) {
                                     // if we are on or below this category, then we are here
                                     $here = 'true';
                                 }
                             }
-                            $url = xarModUrl('articles', 'user', 'view', array('catid' => $url[0]));
+                            $line['url'] = xarModUrl('articles', 'user', 'view', array('catid' => $line['url'][0]));
                             break;
                         }
                         default: // standard URL
                             // BUG 2023: Make sure manual URLs are prepped for XML, consistent with xarModURL()
                             if (xarMod::$genXmlUrls) {
-                                $url = xarVarPrepForDisplay($url);
+                                $line['url'] = xarVarPrepForDisplay($line['url']);
                             }
                     }
                 }
-                $title = $parts[1];
-                $comment = $parts[2];
-                $child = isset($parts[3]) ? $parts[3] : '';
+                $title = $line['name'];
+                $comment = $line['description'];
+                $child = isset($line['child']) ? $line['child'] : false;
 
                 // Security Check
                 //FIX: Should contain a check for the particular menu item
@@ -196,7 +195,7 @@ class MenuBlock extends BasicBlock implements iBlock
                     $title = xarVarPrepForDisplay($title);
                     $comment = xarVarPrepForDisplay($comment);
                     $child = xarVarPrepForDisplay($child);
-                    $usercontent[] = array('title' => $title, 'url' => $url, 'comment' => $comment, 'child'=> $child, 'here'=> $here);
+                    $usercontent[] = array('title' => $title, 'url' => $line['url'], 'comment' => $comment, 'child'=> $child, 'here'=> $here);
                 }
             }
         } else {
@@ -204,17 +203,19 @@ class MenuBlock extends BasicBlock implements iBlock
         }
 
         // Added list of modules if selected.
-        if ($args['displaymodules'] != 'None') {
+        if ($data['displaymodules'] != 'None') {
             if (xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$data[title]:$data[bid]")) {
                $useAliasName=0;
                $module_alias_name='';
-                if ($args['displaymodules'] == 'List' && !empty($args['modulelist'])) {
-                    $modlist = explode(',',$args['modulelist']);
+                if ($data['displaymodules'] == 'List' && !empty($data['modulelist'])) {
+                    $modlist = explode(',',$data['modulelist']);
                     $list = array();
                     foreach ($modlist as $mod) {
-                        $temp = xarMod_getBaseInfo($mod);
-                        if(!empty($temp) && xarModIsAvailable($temp['name']))
-                            if (isset($temp)) $list[] = $temp;
+                        try {
+                            $temp = xarMod_getBaseInfo($mod);
+                            if(!empty($temp) && xarModIsAvailable($temp['name']))
+                                if (isset($temp)) $list[] = $temp;
+                        } catch (Exception $e) {}
                     }
                     $mods = $list;
                     if ($list == array()) $usermods = '';
@@ -316,17 +317,17 @@ class MenuBlock extends BasicBlock implements iBlock
         // Security Check
         if (xarSecurityCheck('AdminBaseBlock',0,'adminmenu',"$data[title]:All:All") or
             !xarUserIsLoggedIn() or
-            empty($args['showlogout'])) {
+            empty($data['showlogout'])) {
             $showlogout = false;
         } else {
             $showlogout = true;
         }
 
-        $marker         = isset($args['marker']) ? $args['marker'] : $this->marker;
-        $displayrss     = isset($args['displayrss']) ? $args['displayrss'] :$this->displayrss;
-        $displayprint   = isset($args['displayprint']) ? $args['displayprint'] : $this->displayprint;
-        $printurl       = isset($args['printurl']) ? $args['printurl'] : $this->printurl;
-        $rssurl         = isset($args['rssurl']) ? $args['rssurl'] : $this->rssurl;
+        $marker         = isset($data['marker']) ? $data['marker'] : $this->marker;
+        $displayrss     = isset($data['displayrss']) ? $data['displayrss'] :$this->displayrss;
+        $displayprint   = isset($data['displayprint']) ? $data['displayprint'] : $this->displayprint;
+        $printurl       = isset($data['printurl']) ? $data['printurl'] : $this->printurl;
+        $rssurl         = isset($data['rssurl']) ? $data['rssurl'] : $this->rssurl;
 
         $data['content'] = array(
             'usermods'         => $usermods,
@@ -367,18 +368,7 @@ class MenuBlock extends BasicBlock implements iBlock
         // @CHECKME: is this used?
         if (empty($data['style'])) $data['style'] = 1;
 
-        // Prepare output array
-        $c=0;
-        if (!empty($data['content'])) {
-            $contentlines = explode("LINESPLIT", $data['content']);
-            $data['contentlines'] = array();
-            foreach ($contentlines as $contentline) {
-                $link = explode('|', $contentline);
-                $data['contentlines'][] = $link;
-                $c++;
-            }
-        }
-
+        if (empty($data['lines'])) $data['lines'] = array($this->content);
         return $data;
     }
 
@@ -391,31 +381,37 @@ class MenuBlock extends BasicBlock implements iBlock
         $data = parent::update($data);
 
         // Global options.
-        if (!xarVarFetch('displaymodules', 'str:1', $args['displaymodules'], $this->displaymodules, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('modulelist', 'str', $args['modulelist'], $this->modulelist, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('showlogout', 'checkbox', $args['showlogout'], $this->showlogout, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('displayrss', 'checkbox', $args['displayrss'], $this->displayrss, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('displayprint', 'checkbox', $args['displayprint'], $this->displayprint, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('marker', 'str:1', $args['marker'], $this->marker, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('displaymodules', 'str:1',    $content['displaymodules'], $this->displaymodules, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('modulelist',     'str',      $content['modulelist'], $this->modulelist, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('showlogout',     'checkbox', $content['showlogout'], $this->showlogout, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('displayrss',     'checkbox', $content['displayrss'], $this->displayrss, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('displayprint',   'checkbox', $content['displayprint'], $this->displayprint, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('marker',         'str:1',    $content['marker'], $this->marker, XARVAR_NOT_REQUIRED)) return;
 
         // User links.
-        $content = array();
+        $content['lines'] = array();
         $c = 1;
-        if (!xarVarFetch('linkname', 'array', $linkname, NULL, XARVAR_NOT_REQUIRED)) return;
-        if (isset($linkname)) {
-            if (!xarVarFetch('linkurl',  'list:str', $linkurl,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-            if (!xarVarFetch('linkdesc',  'list:str', $linkdesc,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-            if (!xarVarFetch('linkchild', 'list:str', $linkchild, NULL, XARVAR_NOT_REQUIRED)) {return;}
-            if (!xarVarFetch('linkdelete', 'list:checkbox', $linkdelete, NULL, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('linkinsert', 'list:checkbox', $linkinsert, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('name', 'list:str', $linkname, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!empty($linkname)) {
+            if (!xarVarFetch('url',     'list:str',      $linkurl,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+            if (!xarVarFetch('description',    'list:str',      $linkdesc,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+            if (!xarVarFetch('visible', 'array', $linkvisible, NULL, XARVAR_NOT_REQUIRED)) {return;}
+            if (!xarVarFetch('child',   'list:checkbox', $linkchild, NULL, XARVAR_NOT_REQUIRED)) {return;}
+            if (!xarVarFetch('delete',  'list:checkbox', $linkdelete, NULL, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('insert',  'list:checkbox', $linkinsert, NULL, XARVAR_NOT_REQUIRED)) return;
 
             foreach ($linkname as $v) {
                 if (!isset($linkdelete[$c]) || $linkdelete[$c] == false) {
-                    // FIXME: MrB, i added the @ to avoid testing whether all fields contains something useful
-                    @$content[] = "$linkurl[$c]|$linkname[$c]|$linkdesc[$c]|$linkchild[$c]";
+                    $content['lines'][] = array(
+                                    'url' => $linkurl[$c],
+                                    'name' => $linkname[$c],
+                                    'description' => $linkdesc[$c],
+                                    'visible' => !empty($linkvisible[$c]) ? $linkvisible[$c] : 0,
+                                    'child' => !empty($linkchild[$c]) ? $linkchild[$c] : 0,
+                                );
                 }
                 if (!empty($linkinsert[$c])) {
-                    $content[] = "||";
+                    $content[] = array();
                 }
                 $c++;
             }
@@ -425,17 +421,17 @@ class MenuBlock extends BasicBlock implements iBlock
         if (!empty($new_linkname)) {
             if (!xarVarFetch('new_linkurl', 'str', $new_linkurl, '', XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('new_linkdesc', 'str', $new_linkdesc, '', XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('new_linkchild', 'str', $new_linkchild, '', XARVAR_NOT_REQUIRED)) return;
 
-            $content[] = $new_linkurl . '|' . $new_linkname . '|' . $new_linkdesc . '|' . $new_linkchild;
+            $content['lines'][] = array(
+                            'url' => $new_linkurl,
+                            'name' => $new_linkname,
+                            'description' => $new_linkdesc,
+                            'visible' => 1,
+                            'child' => 0,
+                        );
         }
 
-        if (!xarVarFetch('new_linkinsert', 'checkbox', $new_linkinsert, false, XARVAR_NOT_REQUIRED)) return;
-        if (!empty($new_linkinsert)) {
-            $content[] = "||";
-        }
-
-        $data['content'] = implode("LINESPLIT", $content);
+        $data['content'] = serialize($content);
         return $data;
     }
 }
