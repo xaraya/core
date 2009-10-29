@@ -99,14 +99,12 @@ function xarMain()
         if (xarRequest::isObjectURL()) {
             sys::import('xaraya.objects');
 
-            // Call the object handler
+            // Call the object handler and return the output (or exit with 404 Not Found)
             $mainModuleOutput = xarObject::guiMethod($modType, $funcName);
 
         } else {
-            // Load the module
-            if (!xarMod::load($modName, $modType)) return; // throw back
 
-            // Call the main module function
+            // Call the main module function and return the output (or exit with 404 Not Found)
             $mainModuleOutput = xarMod::guiFunc($modName, $modType, $funcName);
         }
 
@@ -141,7 +139,7 @@ function xarMain()
             xarTplSetPageTemplateName($pageName);
         }
 
-        // Render page
+        // Render page with the output
         $pageOutput = xarTpl_renderPage($mainModuleOutput);
 
         if ($pageCaching == 1) {
