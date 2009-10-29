@@ -26,18 +26,21 @@ function blocks_admin_view_instances()
     $data['selstyle'] = xarModUserVars::get('blocks', 'selstyle');
 
     if ($data['selstyle'] == 'bytype') {
-    } 
-    elseif ($data['selstyle'] == 'bygroup') {
+        $order = 'type';
+    } elseif ($data['selstyle'] == 'bygroup') {
+        $order = 'group';
+    } else {
+        $order = 'name';
     }
     // Get all block instances (whether they have group membership or not.
     // CHECKME: & removed below for php 4.4.
     $rowstodo = (int)xarModVars::get('blocks','items_per_page');
     // Need to find a better way to do this without breaking the API
     $instances = xarMod::apiFunc('blocks', 'user', 'getall', array('filter' => $filter,
-                                                                 'order' => 'name'));
+                                                                 'order' => $order));
     $total = count($instances);
     $instances = xarMod::apiFunc('blocks', 'user', 'getall', array('filter' => $filter,
-                                                                 'order' => 'name',
+                                                                 'order' => $order,
                                                                  'rowstodo' => $rowstodo,
                                                                  'startat' => $startat));
     // Create extra links and confirmation text.
@@ -50,6 +53,12 @@ function blocks_admin_view_instances()
             'blocks', 'admin', 'view_types',
             array('tid' => $instance['tid'])
         );
+        if (isset($instance['groupid'])) {
+            $instances[$index]['groupurl'] = xarModUrl(
+                'blocks', 'admin', 'modify_group',
+                array('id' => $instance['groupid'])
+            );
+        }
         $instances[$index]['deleteconfirm'] = xarML('Delete instance "#(1)"', addslashes($instance['name']));
     }
 
