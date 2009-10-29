@@ -26,11 +26,12 @@ function blocks_userapi_getall($args)
 
     if (!empty($order) && xarVarValidate('strlist:,|:enum:name:title:id', $order, true)) {
         $orderby = ' ORDER BY binst.' . $order;
-    } elseif ($order == 'type') {
+    } elseif (!empty($order) && $order == 'type') {
         $orderby = ' ORDER BY btypes.name';
-    } elseif ($order == 'group') {
+    } elseif (!empty($order) && $order == 'group') {
         $orderby = ' ORDER BY bgroups.name, binst.name';
     } else {
+        $order = '';
         $orderby = '';
     }
 
