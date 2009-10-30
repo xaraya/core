@@ -9,7 +9,6 @@
  * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
- * @todo try to replace xarTplModule with xarTplObject
  */
 
 sys::import('modules.dynamicdata.class.ui_handlers.default');
@@ -92,10 +91,6 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
 
 $this->object->callHooks('view');
 
-        $this->object->viewfunc = $this->func;
-        // Specify link type here as well
-        $this->object->linktype = $this->type;
-        $this->object->linkfunc = $this->func;
         return xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_view',
             array('object' => $this->object)

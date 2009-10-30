@@ -1122,6 +1122,27 @@ class xarMod extends Object implements IxarMod
         xarEvents::trigger('ModLoad', $modName);
         return true;
     }
+
+    /**
+     * Check if a particular module function exists, or default back to 'dynamicdata'
+     *
+     * @return string tplmodule or 'dynamicdata'
+     */
+    static function checkModuleFunction($tplmodule = 'dynamicdata', $type = 'user', $func = 'display', $defaultmodule = 'dynamicdata')
+    {
+        static $tplmodule_cache = array();
+
+        $key = "$tplmodule:$type:$func";
+        if (!isset($tplmodule_cache[$key])) {
+            $file = sys::code() . 'modules/' . $tplmodule . '/xar' . $type . '/' . $func . '.php';
+            if (file_exists($file)) {
+                $tplmodule_cache[$key] = $tplmodule;
+            } else {
+                $tplmodule_cache[$key] = $defaultmodule;
+            }
+        }
+        return $tplmodule_cache[$key];
+    }
 }
 
 

@@ -9,7 +9,7 @@
  */
 
 /**
- * Use the DataObjectUserInterface() to handle every GUI function for objects (to be handled by the core someday ?)
+ * Use the DataObjectUserInterface() to handle every GUI function for objects (deprecated - see xaraya.objects in core)
  *
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -17,8 +17,8 @@ sys::import('modules.dynamicdata.class.userinterface');
 
 function dynamicdata_object_main($args = array())
 {
-    // we'll use the 'object' GUI function type here, instead of the default 'user' (+ 'admin')
-    $args['type'] = 'object';
+    // we'll use the 'object' GUI link type here, instead of the default 'user' (+ 'admin')
+    $args['linktype'] = 'object';
 
     $interface = new DataObjectUserInterface($args);
 

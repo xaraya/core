@@ -9,7 +9,6 @@
  * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
- * @todo try to replace xarTplModule with xarTplObject
  */
 
 sys::import('modules.dynamicdata.class.ui_handlers.default');
@@ -99,7 +98,6 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
         $title = xarML('Delete #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
-        $this->object->viewfunc = $this->func;
         return xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_delete',
             array('object' => $this->object,

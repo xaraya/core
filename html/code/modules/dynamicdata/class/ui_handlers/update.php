@@ -9,7 +9,6 @@
  * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
- * @todo try to replace xarTplModule with xarTplObject
  */
 
 sys::import('modules.dynamicdata.class.ui_handlers.default');
@@ -106,7 +105,6 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
         // call item modify hooks for this item
         $this->object->callHooks('modify');
 
-        $this->object->viewfunc = $this->func;
         return xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_update',
             array('object'  => $this->object,
