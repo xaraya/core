@@ -36,7 +36,7 @@ include 'bootstrap.php';
 if (file_exists(sys::varpath() . '/cache/output/cache.touch')) {
     sys::import('xaraya.caching');
     // Note : we may already exit here if session-less page caching is enabled
-    xarCache_init();
+    xarOutputCache::init();
 }
 
 /**
@@ -85,9 +85,9 @@ function xarMain()
     }
 
     $run = 1;
-    if ($pageCaching == 1 && xarPageIsCached($cacheKey,'page')) {
+    if ($pageCaching == 1 && xarPageCache::isCached($cacheKey,'page')) {
         // output the cached page *or* a 304 Not Modified status
-        if (xarPageGetCached($cacheKey,'page')) {
+        if (xarPageCache::getCached($cacheKey,'page')) {
             // we could return true here, but we'll continue just in case
             // processing changes below someday...
             $run = 0;
@@ -149,7 +149,7 @@ function xarMain()
 
         if ($pageCaching == 1) {
             // save the output in cache *before* sending it to the client
-            xarPageSetCached($cacheKey, 'page', $pageOutput);
+            xarPageCache::setCached($cacheKey, 'page', $pageOutput);
         }
 
         echo $pageOutput;

@@ -11,66 +11,83 @@
  * @author jsb
  */
 
-/**
- * Initialise the caching options
- *
- * @return bool
- * @todo consider the use of a shutdownhandler for cache maintenance
- * @todo get rid of globals
- */
+class xarOutputCache extends Object
+{
+    public static $cacheCollection = '';
+    public static $cacheTheme = '';
+    public static $cacheSizeLimit = 2097152;
+    public static $cacheCookie = 'XARAYASID';
+    public static $cacheLocale = 'en_US.utf-8';
+
+    public static $cacheIsEnabled = false;
+    public static $cachePageIsEnabled = false;
+    public static $cacheBlockIsEnabled = false;
+
+    /**
+     * Initialise the caching options
+     *
+     * @return bool
+     * @todo consider the use of a shutdownhandler for cache maintenance
+     * @todo get rid of defines
+     */
+    public static function init($args = false)
+    {
+        $cachingConfiguration = array();
+
+        if (!empty($args)) {
+            extract($args);
+        }
+
+        $xarVarDir = sys::varpath();
+
+        if (!isset($cacheDir)) {
+            $cacheDir = $xarVarDir . '/cache/output';
+        }
+
+        // load the caching configuration
+        try {
+            include($xarVarDir . '/cache/config.caching.php');
+        } catch (Exception $e) {
+            // if the config file is missing, turn caching off
+            @unlink($cacheDir . '/cache.touch');
+            return false;
+        }
+
+        self::$cacheCollection = realpath($cacheDir);
+        self::$cacheTheme = isset($cachingConfiguration['Output.DefaultTheme']) ?
+            $cachingConfiguration['Output.DefaultTheme'] : '';
+        self::$cacheSizeLimit = isset($cachingConfiguration['Output.SizeLimit']) ?
+            $cachingConfiguration['Output.SizeLimit'] : 2097152;
+        self::$cacheCookie = isset($cachingConfiguration['Output.CookieName']) ?
+            $cachingConfiguration['Output.CookieName'] : 'XARAYASID';
+        self::$cacheLocale= isset($cachingConfiguration['Output.DefaultLocale']) ?
+            $cachingConfiguration['Output.DefaultLocale'] : 'en_US.utf-8';
+
+        if (file_exists($cacheDir . '/cache.pagelevel')) {
+            self::$cachePageIsEnabled = true;
+            define('XARCACHE_PAGE_IS_ENABLED',1);
+            sys::import('xaraya.caching.page');
+            // Note : we may already exit here if session-less page caching is enabled
+            xarPageCache::init($cachingConfiguration);
+        }
+
+        if (file_exists($cacheDir . '/cache.blocklevel')) {
+            self::$cacheBlockIsEnabled = true;
+            define('XARCACHE_BLOCK_IS_ENABLED',1);
+            sys::import('xaraya.caching.block');
+            xarBlockCache_init($cachingConfiguration);
+        }
+
+        self::$cacheIsEnabled = true;
+        define('XARCACHE_IS_ENABLED',1);
+        return true;
+    }
+
+}
+
 function xarCache_init($args = false)
 {
-    $cachingConfiguration = array();
-
-    if (!empty($args)) {
-        extract($args);
-    }
-
-    global $xarOutput_cacheCollection;
-    global $xarOutput_cacheTheme;
-    global $xarOutput_cacheSizeLimit;
-    global $xarOutput_cacheCookie;
-    global $xarOutput_cacheLocale;
-
-    $xarVarDir = sys::varpath();
-
-    if (!isset($cacheDir)) {
-        $cacheDir = $xarVarDir . '/cache/output';
-    }
-
-    // load the caching configuration
-    // FIXME: can we get rid of the @ ?
-    if (@!include($xarVarDir . '/cache/config.caching.php')) {
-        // if the config file is missing, turn caching off
-        @unlink($cacheDir . '/cache.touch');
-        return false;
-    }
-
-    $xarOutput_cacheCollection = realpath($cacheDir);
-    $xarOutput_cacheTheme = isset($cachingConfiguration['Output.DefaultTheme']) ?
-        $cachingConfiguration['Output.DefaultTheme'] : '';
-    $xarOutput_cacheSizeLimit = isset($cachingConfiguration['Output.SizeLimit']) ?
-        $cachingConfiguration['Output.SizeLimit'] : 2097152;
-    $xarOutput_cacheCookie = isset($cachingConfiguration['Output.CookieName']) ?
-        $cachingConfiguration['Output.CookieName'] : 'XARAYASID';
-    $xarOutput_cacheLocale= isset($cachingConfiguration['Output.DefaultLocale']) ?
-        $cachingConfiguration['Output.DefaultLocale'] : 'en_US.utf-8';
-
-    if (file_exists($cacheDir . '/cache.pagelevel')) {
-        define('XARCACHE_PAGE_IS_ENABLED',1);
-        sys::import('xaraya.caching.page');
-        // Note : we may already exit here if session-less page caching is enabled
-        xarPageCache_init($cachingConfiguration);
-    }
-
-    if (file_exists($cacheDir . '/cache.blocklevel')) {
-        define('XARCACHE_BLOCK_IS_ENABLED',1);
-        sys::import('xaraya.caching.block');
-        xarBlockCache_init($cachingConfiguration);
-    }
-
-    define('XARCACHE_IS_ENABLED',1);
-    return true;
+    return xarOutputCache::init($args);
 }
 
 /**

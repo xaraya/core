@@ -753,6 +753,7 @@ class xarResponse extends Object
      */
     static function Redirect($url)
     {
+        xarCore::setCached('Page.Caching', 'nocache', true);
         $redirectURL=urldecode($url); // this is safe if called multiple times.
         if (headers_sent() == true) return false;
 
@@ -805,6 +806,7 @@ class xarResponse extends Object
      */
     static function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = NULL)
     {
+        xarCore::setCached('Page.Caching', 'nocache', true);
         if (!headers_sent()) {
             header('HTTP/1.0 404 Not Found');
         }
@@ -832,6 +834,7 @@ class xarResponse extends Object
      */
     static function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = NULL)
     {
+        xarCore::setCached('Page.Caching', 'nocache', true);
         if (!headers_sent()) {
             header('HTTP/1.0 403 Forbidden');
         }
