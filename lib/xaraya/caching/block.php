@@ -77,11 +77,11 @@ function xarBlockIsCached(array $args)
         $dbconn = xarDB::getConn();
         $tables = $dbconn->MetaTables();
         if (in_array($blocksettings, $tables)) {
-            $query = "SELECT id, nocache,
-                             page, user, expire
+            $query = "SELECT blockinstance_id, nocache,
+                             page, theuser, expire
                      FROM $blocksettings";
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($query);
+            $result = $stmt->executeQuery();
             if ($result) {
                 $blocks = array();
                 while ($result->next()) {
