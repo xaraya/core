@@ -469,7 +469,9 @@ function xarPageCache_sendHeaders($modtime = 0)
 {
     global $xarPage_cacheCode,
            $xarPage_cacheExpireHeader,
-           $xarPage_cacheTime;
+           $xarPage_cacheTime,
+           $xarOutput_cacheCookie,
+           $xarOutput_cacheLocale;
 
     if (empty($modtime)) {
     // CHECKME: this means 304 will never apply then - is that what we want here ?
@@ -518,25 +520,32 @@ function xarPageCache_sendHeaders($modtime = 0)
     // we can't use this after session_start()
     //session_cache_limiter('public');
     // PHP doesn't set the Pragma header when sending back a cookie
-    if (isset($_COOKIE['XARAYASID'])) {
+    if (isset($_COOKIE[$xarOutput_cacheCookie])) {
         header("Pragma: public");
     } else {
         header("Pragma:");
     }
+    // Specify the charset
+    $defaultLocale = !empty($xarOutput_cacheLocale) ? $xarOutput_cacheLocale : 'en_US.utf-8';
+    list($lang_country, $charset) = explode('.',$defaultLocale);
+    if (empty($charset)) $charset = 'utf-8';
+    // CHECKME: what about other content types ?
+    header("Content-type: text/html; charset=" . $charset);
 }
 
 function xarPageCache_sessionLess()
 {
     global $xarOutput_cacheCollection;
+    global $xarOutput_cacheCookie;
     global $xarPage_sessionLess;
     global $xarPage_cacheCode;
     global $xarPage_cacheTime;
-    
+
     // Session-less page caching (TODO: extend and place in separate function)
     if (!empty($xarPage_sessionLess) &&
         is_array($xarPage_sessionLess) &&
     // we have no session id in a cookie or URL parameter
-        empty($_REQUEST['XARAYASID']) &&
+        empty($_REQUEST[$xarOutput_cacheCookie]) &&
     // we're dealing with a GET OR a HEAD request
         !empty($_SERVER['REQUEST_METHOD']) &&
         ($_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'HEAD') &&

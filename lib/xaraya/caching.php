@@ -29,6 +29,8 @@ function xarCache_init($args = false)
     global $xarOutput_cacheCollection;
     global $xarOutput_cacheTheme;
     global $xarOutput_cacheSizeLimit;
+    global $xarOutput_cacheCookie;
+    global $xarOutput_cacheLocale;
 
     $xarVarDir = sys::varpath();
 
@@ -49,6 +51,10 @@ function xarCache_init($args = false)
         $cachingConfiguration['Output.DefaultTheme'] : '';
     $xarOutput_cacheSizeLimit = isset($cachingConfiguration['Output.SizeLimit']) ?
         $cachingConfiguration['Output.SizeLimit'] : 2097152;
+    $xarOutput_cacheCookie = isset($cachingConfiguration['Output.CookieName']) ?
+        $cachingConfiguration['Output.CookieName'] : 'XARAYASID';
+    $xarOutput_cacheLocale= isset($cachingConfiguration['Output.DefaultLocale']) ?
+        $cachingConfiguration['Output.DefaultLocale'] : 'en_US.utf-8';
 
     if (file_exists($cacheDir . '/cache.pagelevel')) {
         define('XARCACHE_PAGE_IS_ENABLED',1);
