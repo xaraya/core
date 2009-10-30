@@ -41,7 +41,7 @@ class LoginBlock extends BasicBlock implements iBlock
         $data = parent::display($data);
         if (empty($data)) return;
 
-        $vars = isset($data['content']) ? $data['content'] : array();
+        $vars = $data;
         if (!isset($vars['showlogout'])) $vars['showlogout'] = $this->showlogout;
         if (!isset($vars['logouttitle'])) $vars['logouttitle'] = $this->logouttitle;
 
