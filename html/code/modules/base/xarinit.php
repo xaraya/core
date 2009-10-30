@@ -154,6 +154,7 @@ function base_init()
      * Set site configuration variables
      ******************************************************************/
     xarConfigVars::set(null, 'Site.BL.CacheTemplates',true);
+    xarConfigVars::set(null, 'Site.BL.MemCacheTemplates',false);
     xarConfigVars::set(null, 'Site.BL.ThemesDirectory','themes');
     xarConfigVars::set(null, 'Site.Core.FixHTMLEntities',true);
     xarConfigVars::set(null, 'Site.Core.TimeZone', 'Etc/UTC');

@@ -126,6 +126,23 @@
                 </div>
             </fieldset>
             <fieldset>
+                <legend>Template Caching options</legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="cachetemplates" class="xar-form-label">                        
+                        Cache compiled templates                        
+                    </label>
+                    <xar:set name="checked"><xar:var scope="config" name="Site.BL.CacheTemplates"/></xar:set>
+                    <xar:data-input type="checkbox" name="cachetemplates" checked="$checked"/>&#160;(always)
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="memcachetemplates" class="xar-form-label">
+                        Enable memory caching for templates
+                    </label>
+                    <xar:set name="checked"><xar:var scope="config" name="Site.BL.MemCacheTemplates"/></xar:set>
+                    <xar:data-input type="checkbox" name="memcachetemplates" checked="$checked"/>&#160;(experimental)
+                </div>
+            </fieldset>
+            <fieldset>
                 <legend>Template Debugging options</legend>
                 <xar:if condition="xarConfigVars::get(null,'Site.BL.CacheTemplates')">
                     <div class="xar-form-input-wrapper">
@@ -142,13 +159,6 @@
                     </label>
                     <xar:set name="checked"><xar:var scope="module" module="themes" name="ShowTemplates"/></xar:set>
                     <xar:data-input type="checkbox" name="showtemplates" checked="$checked"/>&#160;(filenames are shown as HTML comments)
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="cachetemplates" class="xar-form-label">                        
-                        Cache templates                        
-                    </label>
-                    <xar:set name="checked"><xar:var scope="config" name="Site.BL.CacheTemplates"/></xar:set>
-                    <xar:data-input type="checkbox" name="cachetemplates" checked="$checked"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="var_dump" class="xar-form-label">                        

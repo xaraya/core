@@ -175,18 +175,6 @@
                         <input type="text" id="defaultdatapath" name="defaultdatapath" value="#$value#" maxlength="100" class="xar-form-textlong"/>
                     </div>
                </fieldset>
-                <fieldset>
-                    <legend>
-                        Caching
-                    </legend>
-                    <div class="xar-form-input-wrapper">
-                        <label for="defaultdatapath" title="#xarML('Enable memory caching for templates.')#" class="xar-form-label">
-                            Enable caching:
-                        </label>
-                        <xar:set name="checked"><xar:var scope="config" name="System.Core.Caching"/></xar:set>
-                        <xar:data-input type="checkbox" name="caching" checked="$checked"/>
-                    </div>
-               </fieldset>
                <fieldset>
                     <legend>General Display Options</legend>
                     <div class="xar-form-input-wrapper">

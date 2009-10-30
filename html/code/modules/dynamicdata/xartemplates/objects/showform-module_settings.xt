@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <fieldset>
         <legend>
-            System Options
+            Module Settings
         </legend>
         <xar:if condition="isset($properties['items_per_page'])">
             <div class="xar-form-input-wrapper">
