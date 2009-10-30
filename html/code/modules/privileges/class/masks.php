@@ -68,7 +68,7 @@ class xarMasks extends Object
     */
     public static function initialize()
     {
-        if (!empty(self::$dbconn)) return;
+        if (!empty(self::$dbconn)  && !empty(self::$privilegestable)) return;
 
         self::$dbconn = xarDB::getConn();
         xarMod::loadDbInfo('privileges','privileges');

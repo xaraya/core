@@ -83,7 +83,7 @@ class Role extends DataObject
         $dynamicobjects = $this->rolestable;
         $bindvars = array();
         $query = "SELECT name, uname
-                  FROM $dynamicobjects "; 
+                  FROM $dynamicobjects ";
         if ($this->basetype == ROLES_GROUPTYPE) {
             if (empty($data['name'])) $data['name'] = $this->getName();
             $query .= " WHERE name = ? ";
@@ -100,7 +100,7 @@ class Role extends DataObject
             $result = $query->row();
             throw new DuplicateException(array('role',($this->basetype == ROLES_GROUPTYPE) ? $result['name'] :$result['uname'] ));
         }
-        
+
         $result->close();
 
         $id = parent::createItem($data);
@@ -161,23 +161,23 @@ class Role extends DataObject
     {
         // bail if the purported parent is not a group
         if ($this->isUser()) return false;
-        
+
         $query = "SELECT * FROM $this->rolememberstable
                  WHERE role_id = ? AND parent_id = ?";
-        
+
         $bindvars[] = $member->getID();
         $bindvars[] = $this->getID();
-                 
+
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-        
+
          if ($member->isUser()) {
             // get the current count
             $query = "SELECT users FROM $this->rolestable
                       WHERE id = ?";
             $bindvars[] = $this->getID();
-                
+
             $stmt = $dbconn->prepareStatement($query);
             if (!$stmt) return;
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
@@ -191,21 +191,21 @@ class Role extends DataObject
             if (!$stmt) return;
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
          }
-    
-        $query = "INSERT INTO $this->rolememberstable (role_id, parent_id) 
-                    values (".$member->getID().", ". $this->getID().")";                
-      
+
+        $query = "INSERT INTO $this->rolememberstable (role_id, parent_id)
+                    values (".$member->getID().", ". $this->getID().")";
+
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-        
+
         // for children that are users
         // add 1 to the users field of the parent group. This is for display purposes.
         if ($member->isUser()) {
             // get the current count
             $bindvars = array();
             $query = "SELECT  users
-                        FROM $this->rolestable";                
+                        FROM $this->rolestable";
             $query .= " WHERE id = ?";
             $bindvars[] =  $this->getID();
             $dbconn = xarDB::getConn();
@@ -222,7 +222,7 @@ class Role extends DataObject
             $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-                    
+
         }
         $item['module']   = 'roles';
         $item['itemtype'] = $this->getType();
@@ -258,7 +258,7 @@ class Role extends DataObject
             // get the current count.
             $bindvars = array();
             $query = "SELECT  users
-                        FROM $this->rolestable";                
+                        FROM $this->rolestable";
             $query .= " WHERE id = ?";
             $bindvars[] =  $this->getID();
             $dbconn = xarDB::getConn();
@@ -270,9 +270,9 @@ class Role extends DataObject
             // subtract 1 and update.
             $dynamicobjects = $this->rolestable;
             $value = $row['users']-1;
-            $query = "UPDATE  " . $dynamicobjects . " SET users = " . $value . " WHERE id = ?";                                     
+            $query = "UPDATE  " . $dynamicobjects . " SET users = " . $value . " WHERE id = ?";
             $bindvars[] =  $this->getID();
-            
+
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
         }
@@ -372,7 +372,7 @@ class Role extends DataObject
         xarMod::loadDbInfo('roles','roles');
         $xartable = xarDB::getTables();
         $bindvars = array();
-        $query = "UPDATE $this->rolestable 
+        $query = "UPDATE $this->rolestable
                   SET name = $name,
                       uname = $uname,
                       pass = $pass,
@@ -613,7 +613,7 @@ class Role extends DataObject
             $bindvars[] = $state;
         }
         $dbconn = xarDB::getConn();
-        if (isset($itemtype)) 
+        if (isset($itemtype))
             $query .= " AND r.itemtype = ? ";
             $bindvars[] = $itemtype;
         if (isset($selection)) {
@@ -626,7 +626,7 @@ class Role extends DataObject
         }
         if($result) return;
         while ($result->next()) $row = $result->fields;
-        
+
         return $row['children'];
     }
 
@@ -836,7 +836,7 @@ class Role extends DataObject
         $memberobject =  $this->rolestable;
         $bindvars = array();
         $query = "SELECT users AS users FROM $memberobject";
-        $query1 = "UPADATE $memberobject ";
+        $query1 = "UPDATE $memberobject ";
 
         $dbconn = xarDB::getConn();
         $parents = $this->getParents();
@@ -845,7 +845,7 @@ class Role extends DataObject
             $bindvars[] = $parent->getID();
             $query1 .= " WHERE id = ? ";
             $bindvars[] = $parent->getID();
-            
+
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
             if (!$result) return;
@@ -857,7 +857,7 @@ class Role extends DataObject
 
             $query1 .= " SET users = ? ";
             $value = $row['users'] + $adjust;
-            $bindvars[] = $value;       
+            $bindvars[] = $value;
             $stmt = $dbconn->prepareStatement($query1);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
             if (!$result) return;
