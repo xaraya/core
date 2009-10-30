@@ -95,7 +95,7 @@
                 </xar:if>
             </xar:if>
 
-            <xar:set name="viewlink">xarServer::getObjectURL($object->name,'view')</xar:set>
+            <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
             <p><a href="#$viewlink#">View <xar:data-label object="$object"/></a></p>
         </xar:if>
     </div>

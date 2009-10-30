@@ -24,7 +24,7 @@
             Trying to create this item here may break the module. Please proceed with caution.</h3>
         </xar:if>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
-        <xar:set name="postlink">xarServer::getObjectURL($object->name,'create')</xar:set>
+        <xar:set name="postlink">xarObject::getActionURL($object, 'create')</xar:set>
         <form method="post" action="#$postlink#" enctype="#$enc_type#">
             <fieldset>
                 <legend>Item Details</legend>
@@ -40,7 +40,10 @@
             </fieldset>
             <fieldset>
                 <div class="xar-align-center">
-                    <input type="hidden" name="object" id="object" value="#$object:name#"/>
+                    <!-- if we use the current URL, the object is already specified -->
+                    <xar:if condition="$object:linktype ne 'current'">
+                        <input type="hidden" name="object" id="object" value="#$object:name#"/>
+                    </xar:if>
                     <input type="hidden" name="method" id="method" value="create"/>
                     <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
@@ -55,7 +58,7 @@
                 </div>
             </fieldset>
         </form>
-        <xar:set name="viewlink">xarServer::getObjectURL($object->name,'view')</xar:set>
+        <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
         <a href="#$viewlink#">View <xar:data-label object="$object"/></a>
     </div>
 </xar:template>

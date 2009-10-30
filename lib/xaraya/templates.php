@@ -572,8 +572,7 @@ function xarTplString($templateCode, &$tplData)
     sys::import('blocklayout.template.compiled');
     $compiled = new CompiledTemplate(xarTemplateCache::cacheFile('memory'));
     try {
-// TODO: rename to Site.BL.VarCacheTemplates or whatever, and move config to themes like the other BL options
-        $caching = xarConfigVars::get(null, 'System.Core.Caching');
+        $caching = xarConfigVars::get(null, 'Site.BL.MemCacheTemplates');
     } catch (Exception $e) {
         $caching = 0;
     }
@@ -764,8 +763,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     sys::import('blocklayout.template.compiled');
     $compiled = new CompiledTemplate($cachedFileName,$sourceFileName,$tplType);
     try {
-// TODO: rename to Site.BL.VarCacheTemplates or whatever, and move config to themes like the other BL options
-        $caching = xarConfigVars::get(null, 'System.Core.Caching');
+        $caching = xarConfigVars::get(null, 'Site.BL.MemCacheTemplates');
     } catch (Exception $e) {
         $caching = 0;
     }

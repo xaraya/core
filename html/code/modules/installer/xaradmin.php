@@ -486,7 +486,6 @@ function installer_admin_phase5()
 
     $a = array();
     xarVar_init($a);
-    xarConfigVars::set(null, 'System.Core.Caching', 0);
     xarConfigVars::set(null, 'System.ModuleAliases',array());
     xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
 

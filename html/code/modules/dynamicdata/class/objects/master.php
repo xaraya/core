@@ -56,7 +56,9 @@ class DataObjectMaster extends Object
     public $layout = 'default';         // optional layout inside the templates
     public $template = '';              // optional sub-template, e.g. user-objectview-[template].xt (defaults to the object name)
     public $tplmodule = 'dynamicdata';  // optional module where the object templates reside (defaults to 'dynamicdata')
-    public $viewfunc = 'view';          // optional view function for use in xarModURL() (defaults to 'view')
+    public $linktype = 'user';          // optional link type for use in getActionURL() (defaults to 'user' for module URLs, 'object' for object URLs)
+    public $linkfunc = 'display';       // optional link function for use in getActionURL() (defaults to 'display', unused for object URLs)
+    private $cached_urls  = array();    // cached URLs for use in getActionURL()
 
     public $primary = null;             // primary key is item id
     public $secondary = null;           // secondary key could be item type (e.g. for articles)
@@ -977,6 +979,35 @@ class DataObjectMaster extends Object
         }
 
         return $types;
+    }
+
+    /**
+     * Generate URL for a specific action on an object - the format will depend on the linktype
+     *
+     * @access public
+     * @param object object the object or object list we want to create an URL for
+     * @param action string the action we want to take on this object (= method or func)
+     * @param itemid mixed the specific item id or null
+     * @param extra array extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
+     * @return string the generated URL
+     */
+    public function getActionURL($action = '', $itemid = null, $extra = array())
+    {
+        // if we have a cached URL already, use that
+        if (!empty($itemid) && !empty($this->cached_urls[$action])) {
+            $url = str_replace('=<itemid>', '='.$itemid, $this->cached_urls[$action]);
+            return $url;
+        }
+
+        // get URL for this object and action
+        $url = xarObject::getActionURL($this, $action, $itemid, $extra);
+
+        // cache the URL if the itemid is in there
+        if (!empty($itemid) && strpos($url, $this->urlparam . '=' . $itemid) !== false) {
+            $this->cached_urls[$action] = str_replace($this->urlparam . '=' . $itemid, $this->urlparam . '=<itemid>', $url);
+        }
+
+        return $url;
     }
 
     /**

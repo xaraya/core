@@ -21,6 +21,13 @@ function themes_admin_modifyconfig()
     // Security Check
     if (!xarSecurityCheck('AdminTheme')) return;
 
+    // FIXME: remove at next upgrade
+    try {
+        $tmp = xarConfigVars::get(null, 'Site.BL.MemCacheTemplates');
+    } catch (Exception $e) {
+        xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
+    }
+
     if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('sitename', 'str:1:', $data['sitename'], xarModVars::get('themes', 'SiteName'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('separator', 'str:1:', $data['separator'], xarModVars::get('themes', 'SiteTitleSeparator'), XARVAR_NOT_REQUIRED)) return;
@@ -28,6 +35,7 @@ function themes_admin_modifyconfig()
     if (!xarVarFetch('showphpcbit', 'checkbox', $data['showphpcbit'], (bool)xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('showtemplates', 'checkbox', $data['showtemplates'], (bool)xarModVars::get('themes', 'ShowTemplates'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('cachetemplates', 'checkbox', $data['cachetemplates'], xarConfigVars::get(null, 'Site.BL.CacheTemplates'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('memcachetemplates', 'checkbox', $data['memcachetemplates'], xarConfigVars::get(null, 'Site.BL.MemCacheTemplates'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('variable_dump', 'checkbox', $data['variable_dump'], (bool)xarModVars::get('themes', 'variable_dump'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('slogan', 'str::', $data['slogan'], xarModVars::get('themes', 'SiteSlogan'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('footer', 'str:1:', $data['footer'], xarModVars::get('themes', 'SiteFooter'), XARVAR_NOT_REQUIRED)) return;
@@ -83,6 +91,7 @@ function themes_admin_modifyconfig()
 //            xarModVars::set('themes', 'dashtemplate', $data['dashtemplate']);
             xarConfigVars::set(null,'Site.BL.ThemesDirectory', $data['defaultThemeDir']);
             xarConfigVars::set(null, 'Site.BL.CacheTemplates',$data['cachetemplates']);
+            xarConfigVars::set(null, 'Site.BL.MemCacheTemplates',$data['memcachetemplates']);
             xarModVars::set('themes', 'hidecore', $data['hidecore']);
             xarModVars::set('themes', 'selstyle', $data['selstyle']);
             xarModVars::set('themes', 'selfilter', $data['selfilter']);

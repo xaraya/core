@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout" xmlns:rdf="http://w3.org/TR/1999/PR-rdf-syntax-19990105#" xmlns:content="http://purl.org/rss/1.0/modules/content/">
     <!-- FIXME: this does not generate valid RSS feeds -->
-    <xar:set name="itemname">xarVarGetCached('XML','itemname')</xar:set>
     <xar:foreach in="$items" key="$itemid" value="$fields">
-        <xar:element name="#$itemname#">
-            <xar:foreach in="$fields" key="$name" value="$value">
-                <xar:element name="#$properties.$name:name#">
-                #xarVarPrepForDisplay($value)#</xar:element>
-            </xar:foreach>
-        </xar:element>
+    <item>
+        <xar:foreach in="$properties" key="$name">
+            <xar:if condition="!empty($linkfield) and $linkfield eq $name and !empty($links[$itemid]['display'])">
+                <title><xar:data-output property="$properties[$name]" value="$fields[$name]"/></title>
+                <link>#$links[$itemid]['display']['olink']#</link>
+                <guid isPermaLink="true">#$links[$itemid]['display']['olink']#</guid>
+                <xar:set name="condition">'1'</xar:set>
+                <xar:break />
+            </xar:if>
+        </xar:foreach>
+        <xar:if condition="empty($condition) and !empty($links[$itemid]['display'])">
+            <title>#$object:label# #$itemid#</title>
+            <link>#$links[$itemid]['display']['olink']#</link>
+            <guid isPermaLink="true">#$links[$itemid]['display']['olink']#</guid>
+        </xar:if>
+        <xar:if condition="isset($properties['author']) and !empty($fields['author'])">
+            <author><xar:data-output property="$properties['author']" value="$fields['author']"/></author>
+        </xar:if>
+        <xar:if condition="isset($properties['pubdate']) and !empty($fields['pubdate'])">
+            <pubDate>#xarLocaleFormatUTCDate("%a, %d %b %Y %H:%M:%S GMT",$field['pubdate'])#</pubDate>
+        </xar:if>
+        <!-- uncomment these if you want to eg use a property value as a description
+        <content:format rdf:resource="http://www.w3.org/1999/xhtml" />
+        <content:encoded><![CDATA[ #xarVarPrepHTMLDisplay($fields['description'])# ]]></content:encoded>
+        <description>#xarVarPrepForDisplay($fields['description'])#</description>
+        -->
+    </item>
     </xar:foreach>
 </xar:template>

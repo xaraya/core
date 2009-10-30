@@ -26,8 +26,8 @@
  *     //                                          'importname' => 'modules.mymodule.class.myhandler'
  *     //                                          'nextmethod' => 'display'));
  *     //$args['tplmodule'] = 'mymodule';
- *     //$args['type'] = 'user';
- *     //$args['func'] = 'test';
+ *     //$args['linktype'] = 'user';
+ *     //$args['linkfunc'] = 'test';
  *
  *     // Get the user interface
  *     $interface = new DataObjectUserInterface($args);
@@ -78,8 +78,8 @@ class DataObjectUserInterface extends Object
      *
      * And any other arguments we want to pass when creating the handler, e.g.
      * @param $args['tplmodule'] module where the main templates for the GUI reside (defaults to the object module)
-     * @param $args['type'] main type of function handling all object method calls (= 'object' or 'user' [+ 'admin'] GUI)
-     * @param $args['func'] main function handling all object method calls (to be handled by the core someday ?)
+     * @param $args['linktype'] main type of function handling all object method calls (= 'object' or 'user' [+ 'admin'] GUI)
+     * @param $args['linkfunc'] main function handling all object method calls (= if we're not using object URLs)
      * @param $args['nextmethod'] default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
      * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
      */

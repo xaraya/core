@@ -76,7 +76,12 @@ function xarMain()
     $pageCaching = 0;
     if (defined('XARCACHE_PAGE_IS_ENABLED')) {
         $pageCaching = 1;
-        $cacheKey = "$modName-$modType-$funcName";
+        if (xarRequest::isObjectURL()) {
+            // CHECKME: differentiate between view and display (= both with empty $funcName) based on itemid ??
+            $cacheKey = "objecturl-$modType-$funcName";
+        } else {
+            $cacheKey = "$modName-$modType-$funcName";
+        }
     }
 
     $run = 1;

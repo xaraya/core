@@ -88,6 +88,21 @@
                     </ul>
                 </li>
                 <li>
+                    <strong>Template Caching Options</strong>
+                    <ul>
+                        <li>
+                            <em>Cache compiled templates:</em>&#160;This option enables caching of templates. It
+                            is important for performance that you have Cache Templates checked and active
+                            on a site. Turn it off when developing your theme.
+                        </li>
+                        <li>
+                            <em>Enable memory caching for templates:</em>&#160;This option enables caching of
+                            compiled templates in memory during a single page request, which might (or might not)
+                            improve performance on your site. This option is <em>experimental</em>.
+                        </li>
+                    </ul>
+                </li>
+                <li>
                     <strong>Template Debugging Options</strong>
                     <ul>
                         <li>
@@ -103,12 +118,8 @@
                             option should be turned off on a live site.
                         </li>
                         <li>
-                            <em>Cache templates:</em>&#160;This option enables caching of templates. It
-                            is important for performance that you have Cache Templates checked and active
-                            on a site. Turn it off when developing your theme.</li>
-                        <li>
-                        <em>Debug Templates by showing variables available:</em>&#160;Shows the variables
-                        used in each template which is handy for debugging template errors.
+                            <em>Debug Templates by showing variables available:</em>&#160;Shows the variables
+                            used in each template which is handy for debugging template errors.
                         </li>
                     </ul>
                 </li>
