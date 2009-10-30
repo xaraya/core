@@ -7,7 +7,7 @@
     <xar:if condition="!isset($template) or empty($template)">
         <xar:set name="template">xarML('[unspecified template]')</xar:set>
     </xar:if>
-    <span class="xar-error">Warning: the template showinput-#$type#.xd or showinput-#$template#.xd
+    <span class="xar-error">Warning: the template showinput-#$type#.xt or showinput-#$template#.xt
     in module #$tplmodule# is missing for the property!</span>
     <br />
     <input type="text" id="#$id#" name="#$name#" value="#$value#"/>
