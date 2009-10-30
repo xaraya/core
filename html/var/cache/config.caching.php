@@ -18,8 +18,6 @@ $cachingConfiguration['Output.SizeLimit'] = 2097152;
 $cachingConfiguration['Output.CookieName'] = 'XARAYASID';
 // Default site locale
 $cachingConfiguration['Output.DefaultLocale'] = 'en_US.utf-8';
-// Size in bytes to limit the output cache to
-$cachingConfiguration['Output.SizeLimit'] = 2097152;
 
 // Cached page expiration time in seconds
 $cachingConfiguration['Page.TimeExpiration'] = 1800;

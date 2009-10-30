@@ -116,8 +116,8 @@ function xarPageIsCached($cacheKey, $name = '')
     $xarPage_cacheCode = md5($page);
     $GLOBALS['xarPage_cacheStorage']->setCode($xarPage_cacheCode);
 
-    if (// if this page is a user type page AND
-        strpos($cacheKey, '-user-') &&
+    if (// if this page is a user type page OR an object url AND
+        (strpos($cacheKey, '-user-') || strpos($cacheKey, 'objecturl-') !== false) &&
         // (display views can be cached OR it is not a display view) AND
         (($xarPage_cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
         // the http request is a GET OR a HEAD AND
@@ -204,8 +204,8 @@ function xarPageSetCached($cacheKey, $name, $value)
         return;
     }
 
-    if (// if this page is a user type page AND
-        strpos($cacheKey, '-user-') &&
+    if (// if this page is a user type page OR an object url AND
+        (strpos($cacheKey, '-user-') || strpos($cacheKey, 'objecturl-') !== false) &&
         // (display views can be cached OR it is not a display view) AND
         (($xarPage_cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
         // the http request is a GET OR a HEAD AND
