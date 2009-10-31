@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-Pending state of #$recipientname# at <xar:var scope="module" module="themes" name="SiteName"/>
+    Pending state of #$recipientname# at <xar:var scope="module" module="themes" name="SiteName"/>
 </xar:template>
