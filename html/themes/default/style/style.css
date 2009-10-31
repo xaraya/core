@@ -289,7 +289,7 @@ ul.xar-tabs li.xar-tab-active a:hover {
 fieldset {
     border: 1px solid #B9B6B3;
     margin: 0 0 2.25em;
-    padding: 0 1.5em .75em;
+    padding: 0.5em 1.5em .5em;
 }
 legend {
     text-transform: uppercase;
