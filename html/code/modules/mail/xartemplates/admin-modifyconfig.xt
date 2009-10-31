@@ -35,6 +35,8 @@
             <li class="#$tabclass#">
                 <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">General</a>
             </li>
+            
+            <!-- Hide for now
             <xar:set name="tabclass">'xar-tab'</xar:set>
             <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             <xar:if condition="$tab eq 'incoming'">
@@ -45,6 +47,8 @@
             <li class="#$tabclass#">
                 <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">Incoming</a>
             </li>
+            -->
+            
             <xar:set name="y">$params['tab']='outgoing'</xar:set>
             <xar:set name="tabclass">'xar-tab'</xar:set>
             <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>

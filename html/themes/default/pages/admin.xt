@@ -18,10 +18,40 @@
         <body>
             <div id="admin-wrapper">
                 <div id="admin-main">
+                    
+                <![CDATA[
+                <script type="text/javascript">
+                    function showtab (selectedindex, items)
+                    {
+                        for (i=1;i<=items;i++) {
+                            document.getElementById('docpage-' + i).style.display = "none";
+                            document.getElementById('doctab-' + i).style.display = "block";
+                        }
+                        document.getElementById('docpage-' + selectedindex).style.display = "block";
+                        document.getElementById('doctab-' + selectedindex).style.display = "none";
+                    }
+                </script>
+                ]]>
+
+                    <div id="doctab-1" style="display: none">
+                        <a id="href-1" href="javascript:showtab(1,2)">
+                            <img src="#xarTplGetImage('icons/toggle.png', 'base')#" />
+                        </a>
+                    </div>
+                    <div id="doctab-2">
+                        <a id="href-2" href="javascript:showtab(2,2)">
+                            <img src="#xarTplGetImage('icons/toggle.png', 'base')#" />
+                        </a>
+                    </div>
+        
                     <div style="text-align: right">
                         <xar:var name="SiteName" scope="module" module="themes"/>
                     </div>
-                    <xar:module id="modulespace"/>
+                    <div id="docpage-1">
+                        <xar:module id="modulespace"/>
+                    </div>
+                    <div id="docpage-2" style="display: none">
+                    </div>
                 </div>
                 <div id="sideInfo1" class="admin-sideInfo">
                     <xar:var name="title">Go to the front end interface</xar:var>
