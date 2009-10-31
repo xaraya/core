@@ -72,9 +72,13 @@
         <p>
             Clicking on the <strong>Test Configuration</strong>link in the Admin menu lets you send a test email to an email address of your choice (the default is the site administrator email address entered when Xaraya is installed).
         </p>
+        
+        <!-- Hide for now
         <p>
             Clicking on the <strong>Queue Management</strong>link in the Admin menu lets you create and manage mail queues in your Xaraya installation.
         </p>
+        -->
+        
         <p>
             Clicking on the <strong>Notification Templates</strong>link in the Admin menu lets you to customize the notification
             templates that are sent when the Mail module is hooked to another module.

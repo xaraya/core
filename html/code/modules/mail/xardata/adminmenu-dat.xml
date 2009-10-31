@@ -17,6 +17,8 @@
             <title>Test your email configuration</title>
             <label>Test Configuration</label>
         </menuitem>
+        
+        <!-- Hide for now
         <menuitem>
             <mask>AdminMail</mask>
             <includes>
@@ -26,6 +28,8 @@
             <title>Manage queues for mail item handling</title>
             <label>Queue Management</label>
         </menuitem>
+        -->
+        
         <menuitem>
             <mask>AdminMail</mask>
             <includes>
