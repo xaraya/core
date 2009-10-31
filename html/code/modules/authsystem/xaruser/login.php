@@ -190,7 +190,7 @@ function authsystem_user_login()
 
             // Check if the site is locked and this user is allowed in
             $lockvars = unserialize(xarModVars::get('roles','lockdata'));
-            if ($lockvars['locked'] ==1) {
+            if ($lockvars['locked'] == 1) {
                 $rolesarray = array();
                 $roles = $lockvars['roles'];
                 for($i=0, $max = count($roles); $i < $max; $i++)
@@ -209,6 +209,8 @@ function authsystem_user_login()
                 }
 
                 if (!$letthru) {
+                    // If there is a locked.xt page then use that, otherwise show the default.xt page
+                    xarTplSetPageTemplateName('locked');
                     return xarTplModule('authsystem','user','errors',array('layout' => 'site_locked', 'message'  => $lockvars['message']));
                 }
             }

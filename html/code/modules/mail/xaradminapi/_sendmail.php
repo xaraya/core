@@ -303,9 +303,10 @@ function mail_adminapi__sendmail($args)
     // Send the mail, or send an exception.
     $result = true;
     // CHECKME: does this hurt when a batch of emails is going out?
-    if (!$mail->Send()) {
-        $msg = xarML('The message was not sent. Mailer Error: #(1)',$mail->ErrorInfo);
-        throw new Exception($msg);
+    try {
+        $result = $mail->Send();
+    } catch (Exception $e) {
+        $result = false;
     }
 
     // Clear all recipients for next email
