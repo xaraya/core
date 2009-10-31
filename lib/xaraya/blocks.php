@@ -214,9 +214,9 @@ function xarBlock_renderGroup($groupname, $template = NULL)
             $args = array('cacheKey' => $cacheKey, 'name' => 'block', 'blockid' => $blockinfo['bid']);
         }
 
-        if ($blockCaching && xarBlockIsCached($args)) {
+        if ($blockCaching && xarBlockCache::isCached($args)) {
             // output the cached block
-            $output .= xarBlockGetCached($cacheKey,'block');
+            $output .= xarBlockCache::getCached($cacheKey,'block');
 
         } else {
             $blockinfo['last_update'] = $blockinfo['last_update'];
@@ -263,7 +263,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
             $blockoutput = xarBlock_render($blockinfo);
 
             if ($blockCaching) {
-                xarBlockSetCached($cacheKey, 'block', $blockoutput);
+                xarBlockCache::setCached($cacheKey, 'block', $blockoutput);
             }
             $output .= $blockoutput;
 
@@ -302,15 +302,15 @@ function xarBlock_renderBlock($args)
                           'blockid' => $blockinfo['bid'],
                           'blockinfo' => $blockinfo);
         }
-        if ($blockCaching && xarBlockIsCached($args)) {
+        if ($blockCaching && xarBlockCache::isCached($args)) {
             // output the cached block
-            $output = xarBlockGetCached($cacheKey,'block');
+            $output = xarBlockCache::getCached($cacheKey,'block');
 
         } else {
             $blockoutput = xarBlock_render($blockinfo);
 
             if ($blockCaching) {
-                xarBlockSetCached($cacheKey, 'block', $blockoutput);
+                xarBlockCache::setCached($cacheKey, 'block', $blockoutput);
             }
             $output = $blockoutput;
         }
