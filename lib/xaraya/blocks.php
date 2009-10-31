@@ -211,12 +211,11 @@ function xarBlock_renderGroup($groupname, $template = NULL)
 
         if ($blockCaching) {
             $cacheKey = $blockinfo['module'] . "-blockid" . $blockinfo['bid'] . "-" . $groupname;
-            $args = array('cacheKey' => $cacheKey, 'name' => 'block', 'blockid' => $blockinfo['bid']);
         }
 
-        if ($blockCaching && xarBlockCache::isCached($args)) {
+        if ($blockCaching && xarBlockCache::isCached($cacheKey, $blockinfo['bid'])) {
             // output the cached block
-            $output .= xarBlockCache::getCached($cacheKey,'block');
+            $output .= xarBlockCache::getCached($cacheKey);
 
         } else {
             $blockinfo['last_update'] = $blockinfo['last_update'];
@@ -263,7 +262,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
             $blockoutput = xarBlock_render($blockinfo);
 
             if ($blockCaching) {
-                xarBlockCache::setCached($cacheKey, 'block', $blockoutput);
+                xarBlockCache::setCached($cacheKey, $blockoutput);
             }
             $output .= $blockoutput;
 
@@ -297,20 +296,17 @@ function xarBlock_renderBlock($args)
     if (!empty($blockinfo) && $blockinfo['state'] !== 0) {
         if ($blockCaching) {
             $cacheKey = $blockinfo['module'] . '-blockid' . $blockinfo['bid'] . '-noGroup';
-            $args = array('cacheKey' => $cacheKey,
-                          'name' => 'block',
-                          'blockid' => $blockinfo['bid'],
-                          'blockinfo' => $blockinfo);
         }
-        if ($blockCaching && xarBlockCache::isCached($args)) {
+        // CHECKME: cfr. bug 4021 Override caching vars with block BL tag
+        if ($blockCaching && xarBlockCache::isCached($cacheKey, $blockinfo['bid'], $blockinfo)) {
             // output the cached block
-            $output = xarBlockCache::getCached($cacheKey,'block');
+            $output = xarBlockCache::getCached($cacheKey);
 
         } else {
             $blockoutput = xarBlock_render($blockinfo);
 
             if ($blockCaching) {
-                xarBlockCache::setCached($cacheKey, 'block', $blockoutput);
+                xarBlockCache::setCached($cacheKey, $blockoutput);
             }
             $output = $blockoutput;
         }

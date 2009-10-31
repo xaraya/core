@@ -100,16 +100,16 @@ class xarBlockCache extends Object
      * Check whether a block is cached
      *
      * @access public
-     * @param  array $args($cacheKey,$blockDynamics, $blockPermissions, $name = '')
+     * @param  string $cacheKey
+     * @param  integer $blockid
+     * @param  array $blockinfo
      * @return bool
      */
-    public static function isCached(array $args)
+    public static function isCached($cacheKey, $blockid = 0, $blockinfo = array())
     {
         if (empty(self::$cacheStorage)) {
             return false;
         }
-
-        extract($args);
 
         $blocks = self::getSettings();
 
@@ -119,7 +119,7 @@ class xarBlockCache extends Object
             $userShared = $blocks[$blockid]['usershared'];
             self::$expireTime = $blocks[$blockid]['cacheexpire'];
 
-        // cfr. bug 4021
+        // CHECKME: cfr. bug 4021 Override caching vars with block BL tag
         } elseif (!empty($blockinfo['content']) && is_array($blockinfo['content'])) {
             if (isset($blockinfo['content']['nocache'])) {
                 $noCache = $blockinfo['content']['nocache'];
@@ -184,14 +184,28 @@ class xarBlockCache extends Object
         return $result;
     }
 
-    public static function getCached($cacheKey, $name = '')
+    /**
+     * Get the contents of a block from the cache
+     *
+     * @access public
+     * @param  string $cacheKey
+     */
+    public static function getCached($cacheKey)
     {
         if (empty(self::$cacheStorage)) {
             return '';
         }
 
         // Note: we pass along the expiration time here, because it may be different for each block
-        return self::$cacheStorage->getCached($cacheKey, 0, self::$expireTime);
+        $value = self::$cacheStorage->getCached($cacheKey, 0, self::$expireTime);
+
+        // empty blocks are acceptable here
+        if (!empty($value) && $value === 'isEmptyBlock') {
+            // the filesystem cache ignores empty files
+            $value = '';
+        }
+
+        return $value;
     }
 
     /**
@@ -199,11 +213,9 @@ class xarBlockCache extends Object
      *
      * @access public
      * @param  string $cacheKey
-     * @param  string $name
      * @param  string $value
-     *
      */
-    public static function setCached($cacheKey, $name, $value)
+    public static function setCached($cacheKey, $value)
     {
         if (self::$noCache == 1) {
             self::$noCache = '';
@@ -212,6 +224,12 @@ class xarBlockCache extends Object
 
         if (empty(self::$cacheStorage)) {
             return;
+        }
+
+        // empty blocks are acceptable here
+        if (empty($value) && $value === '') {
+            // the filesystem cache ignores empty files
+            $value = 'isEmptyBlock';
         }
 
         if (// the http request is a GET AND
