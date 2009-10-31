@@ -1,10 +1,11 @@
 An item was created in the #$modulename# module.
+<xar:br/>
 "#$objectid#" is the new id for the item.
-
+<xar:br/><xar:br/>
 <xar:if condition="$modulename eq 'articles'">
-<xar:set name="article">#xarModAPIFunc('articles','user','get',array('aid' => $objectid))#</xar:set>
-Title : #$article['title']#
+    <xar:set name="article">#xarModAPIFunc('articles','user','get',array('aid' => $objectid))#</xar:set>
+    Title : #$article['title']#
 </xar:if>
-
+<xar:br/><xar:br/>
 Site Name: #$sitename# :: #$siteslogan# -- #$siteurl#
-  
+ 

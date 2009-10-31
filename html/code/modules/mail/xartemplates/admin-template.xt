@@ -82,7 +82,8 @@
                     <label for="message" title="#xarML('Body of the notification')#" class="xar-form-label">Message:</label>
                     <div class="xar-form-container-after">
                         <textarea name="message" id="message" class="xar-form-textareaxlarge">
-                        #xarVarPrepForDisplay($message)#</textarea>
+#xarVarPrepForDisplay($message)#
+                        </textarea>
                     </div>
                 </div>
                 <p>
