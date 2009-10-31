@@ -75,7 +75,7 @@ class xarOutputCache extends Object
             self::$cacheBlockIsEnabled = true;
             define('XARCACHE_BLOCK_IS_ENABLED',1);
             sys::import('xaraya.caching.block');
-            xarBlockCache_init($cachingConfiguration);
+            xarBlockCache::init($cachingConfiguration);
         }
 
         self::$cacheIsEnabled = true;
