@@ -62,7 +62,7 @@
                     </label>
                     <div class="xar-form-container-after">
                         <textarea name="notifymsg" id="notifymsg" class="xar-form-textarealarge">
-                            #$notifymsg#
+#$notifymsg#
                         </textarea>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
                     </label>
                     <div class="xar-form-container-after">
                         <textarea name="lockedoutmsg" id="lockedoutmsg" class="xar-form-textarealarge">
-                            #$lockedoutmsg#
+#$lockedoutmsg#
                         </textarea>
                     </div>
                 </div>
