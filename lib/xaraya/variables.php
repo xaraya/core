@@ -364,11 +364,11 @@ function xarVarValidate($validation, &$subject, $supress = false, $name = '')
  * @access public
  * @see xarCore
  */
-function xarVarIsCached($cacheKey,  $name)         { return xarCore::isCached($cacheKey, $name);         }
-function xarVarGetCached($cacheKey, $name)         { return xarCore::getCached($cacheKey, $name);        }
-function xarVarSetCached($cacheKey, $name, $value) { return xarCore::setCached($cacheKey, $name, $value);}
-function xarVarDelCached($cacheKey, $name)         { return xarCore::delCached($cacheKey, $name);        }
-function xarVarFlushCached($cacheKey)              { return xarCore::flushCached($cacheKey);             }
+function xarVarIsCached($scope,  $name)         { return xarCore::isCached($scope, $name);         }
+function xarVarGetCached($scope, $name)         { return xarCore::getCached($scope, $name);        }
+function xarVarSetCached($scope, $name, $value) { return xarCore::setCached($scope, $name, $value);}
+function xarVarDelCached($scope, $name)         { return xarCore::delCached($scope, $name);        }
+function xarVarFlushCached($scope)              { return xarCore::flushCached($scope);             }
 /**@-*/
 
 /*

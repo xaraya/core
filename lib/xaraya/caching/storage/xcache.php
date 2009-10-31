@@ -61,13 +61,25 @@ class xarCache_XCache_Storage extends xarCache_Storage
         }
         $cache_key = $this->getCacheKey($key);
         // XCache doesn't support caching objects, so we serialize them
+        $classname = '';
         if (is_object($value)) {
             $classname = get_class($value);
-            $value = array('_xcache_class_' => $classname,
-                           '_xcache_value_' => serialize($value));
+        } elseif (is_array($value) && count($value) > 0) {
+            // check if the array values are objects
+            foreach ($value as $idx => $val) {
+                if (isset($val) && is_object($val)) {
+                    $classname = get_class($val);
+                }
+                // we've seen enough
+                break;
+            }
         // XCache doesn't support caching resources, so we forget about it
         } elseif (is_resource($value)) {
             return;
+        }
+        if (!empty($classname)) {
+            $value = array('_xcache_class_' => $classname,
+                           '_xcache_value_' => serialize($value));
         }
         if (!empty($expire)) {
             xcache_set($cache_key, $value, $expire);

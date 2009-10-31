@@ -100,7 +100,7 @@ class xarBlockCache extends Object
      * Check whether a block is cached
      *
      * @access public
-     * @param  string $cacheKey
+     * @param  string $cacheKey the key identifying the particular block you want to access
      * @param  integer $blockid
      * @param  array $blockinfo
      * @return bool
@@ -188,7 +188,7 @@ class xarBlockCache extends Object
      * Get the contents of a block from the cache
      *
      * @access public
-     * @param  string $cacheKey
+     * @param  string $cacheKey the key identifying the particular block you want to access
      */
     public static function getCached($cacheKey)
     {
@@ -212,8 +212,8 @@ class xarBlockCache extends Object
      * Set the contents of a block in the cache
      *
      * @access public
-     * @param  string $cacheKey
-     * @param  string $value
+     * @param  string $cacheKey the key identifying the particular block you want to access
+     * @param  string $value    the new content for that block
      */
     public static function setCached($cacheKey, $value)
     {

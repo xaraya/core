@@ -148,12 +148,40 @@ class xarPageCache extends Object
         header("Content-type: text/html; charset=" . $charset);
     }
 
+    /**
+     * Check if this page is suitable for page caching
+     *
+     * @access public
+     * @param  string $cacheKey the key identifying the particular page you want to access
+     * @param  string $themeDir the current theme directory
+     * @returns bool
+     * @return true if the page is suitable for caching, false if not
+     */
+    public static function checkCachingRules($cacheKey, $themeDir)
+    {
+        if (// if this page is a user type page OR an object url AND
+            (strpos($cacheKey, '-user-') || strpos($cacheKey, 'objecturl-') !== false) &&
+            // (display views can be cached OR it is not a display view) AND
+            ((self::$cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
+            // the http request is a GET OR a HEAD AND
+            (xarServer::getVar('REQUEST_METHOD') == 'GET' || xarServer::getVar('REQUEST_METHOD') == 'HEAD') &&
+            // (we're caching the output of all themes OR this is the theme we're caching) AND
+            (empty(xarOutputCache::$cacheTheme) ||
+             strpos($themeDir, xarOutputCache::$cacheTheme)) &&
+            // the current user is eligible for receiving cached pages AND
+            xarPage_checkUserCaching(self::$cacheGroups)) {
+            return true;
+
+        } else {
+            return false;
+        }
+    }
 
     /**
      * check if the content of a page is available in cache or not
      *
      * @access public
-     * @param key the key identifying the particular cache you want to access
+     * @param  string $cacheKey the key identifying the particular page you want to access
      * @returns bool
      * @return true if the page is available in cache, false if not
      */
@@ -164,6 +192,12 @@ class xarPageCache extends Object
         }
 
         $xarTpl_themeDir = xarTplGetThemeDir();
+
+        // Check if this page is suitable for page caching
+        if (!(self::checkCachingRules($cacheKey, $xarTpl_themeDir))) {
+            xarCore::setCached('Page.Caching', 'nocache', true);
+            return false;
+        }
 
         $page = xarServer::getVar('HTTP_HOST') . $xarTpl_themeDir .
                 xarUserGetNavigationLocale();
@@ -186,19 +220,8 @@ class xarPageCache extends Object
         self::$cacheCode = md5($page);
         self::$cacheStorage->setCode(self::$cacheCode);
 
-        if (// if this page is a user type page OR an object url AND
-            (strpos($cacheKey, '-user-') || strpos($cacheKey, 'objecturl-') !== false) &&
-            // (display views can be cached OR it is not a display view) AND
-            ((self::$cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
-            // the http request is a GET OR a HEAD AND
-            (xarServer::getVar('REQUEST_METHOD') == 'GET' || xarServer::getVar('REQUEST_METHOD') == 'HEAD') &&
-            // (we're caching the output of all themes OR this is the theme we're caching) AND
-            (empty(xarOutputCache::$cacheTheme) ||
-             strpos($xarTpl_themeDir, xarOutputCache::$cacheTheme)) &&
-            // the cache entry exists and hasn't expired yet AND
-            (self::$cacheStorage->isCached($cacheKey)) &&
-            // the current user is eligible for receiving cached pages...
-            xarPage_checkUserCaching(self::$cacheGroups)) {
+        if (// the cache entry exists and hasn't expired yet...
+            (self::$cacheStorage->isCached($cacheKey))) {
 
             // create another copy for session-less page caching if necessary
             if (!empty(self::$cacheNoSession)) {
@@ -224,7 +247,7 @@ class xarPageCache extends Object
      * get the content of a cached page
      *
      * @access public
-     * @param  string $cacheKey the key identifying the particular cache you want to access
+     * @param  string $cacheKey the key identifying the particular page you want to access
      * @return bool   true if succeeded, false otherwise
      */
     public static function getCached($cacheKey)
@@ -244,40 +267,32 @@ class xarPageCache extends Object
      * set the content of a cached page
      *
      * @access public
-     * @param string $cacheKey the key identifying the particular cache you want to
-     *                         access
-     * @param string $value    value the new content for that page
+     * @param  string $cacheKey the key identifying the particular page you want to access
+     * @param  string $value    the new content for that page
      * @return void
      */
     public static function setCached($cacheKey, $value)
     {
-        if (xarCore::isCached('Page.Caching', 'nocache')) { return; }
+        if (empty(self::$cacheStorage)) {
+            return;
+        }
 
+        // Check if isCached() or xarSecurity or ... has told not to cache this page
+        if (xarCore::isCached('Page.Caching', 'nocache')) {
+            // reset for next page request when using second-level cache storage
+            xarCore::delCached('Page.Caching', 'nocache');
+            return;
+        }
+
+        // We delay checking this extra caching rule until now
         if (self::$cacheHookedOnly) {
             $modName = substr($cacheKey, 0, strpos($cacheKey, '-'));
             if (!xarModIsHooked('xarcachemanager', $modName)) { return; }
         }
 
-        if (empty(self::$cacheStorage)) {
-            return;
-        }
-
-        $xarTpl_themeDir = xarTplGetThemeDir();
-
-        if (// if this page is a user type page OR an object url AND
-            (strpos($cacheKey, '-user-') || strpos($cacheKey, 'objecturl-') !== false) &&
-            // (display views can be cached OR it is not a display view) AND
-            ((self::$cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
-            // the http request is a GET OR a HEAD AND
-            (xarServer::getVar('REQUEST_METHOD') == 'GET' || xarServer::getVar('REQUEST_METHOD') == 'HEAD') &&
-            // (we're caching the output of all themes OR this is the theme we're caching) AND
-            (empty(xarOutputCache::$cacheTheme) ||
-             strpos($xarTpl_themeDir, xarOutputCache::$cacheTheme)) &&
+        if (// the cache entry doesn't exist or has expired (no log here) AND
         // CHECKME: do we really want to check this again, or do we ignore it ?
-            // the cache entry doesn't exist or has expired (no log here) AND
             !(self::$cacheStorage->isCached($cacheKey, 0, 0)) &&
-            // the current user's page views are eligible for caching AND
-            xarPage_checkUserCaching(self::$cacheGroups) &&
             // the cache collection directory hasn't reached its size limit...
             !(self::$cacheStorage->sizeLimitReached()) ) {
 
