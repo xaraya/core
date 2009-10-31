@@ -19,9 +19,11 @@ class xarOutputCache extends Object
     public static $cacheCookie = 'XARAYASID';
     public static $cacheLocale = 'en_US.utf-8';
 
-    public static $cacheIsEnabled = false;
+    public static $cacheOutputIsEnabled = false;
     public static $cachePageIsEnabled = false;
     public static $cacheBlockIsEnabled = false;
+    public static $cacheObjectIsEnabled = false;
+    public static $cacheModuleIsEnabled = false;
 
     /**
      * Initialise the caching options
@@ -64,22 +66,29 @@ class xarOutputCache extends Object
             $cachingConfiguration['Output.DefaultLocale'] : 'en_US.utf-8';
 
         if (file_exists($cacheDir . '/cache.pagelevel')) {
-            self::$cachePageIsEnabled = true;
-            define('XARCACHE_PAGE_IS_ENABLED',1);
             sys::import('xaraya.caching.page');
             // Note : we may already exit here if session-less page caching is enabled
-            xarPageCache::init($cachingConfiguration);
+            self::$cachePageIsEnabled = xarPageCache::init($cachingConfiguration);
+            if (self::$cachePageIsEnabled) define('XARCACHE_PAGE_IS_ENABLED',1);
         }
 
         if (file_exists($cacheDir . '/cache.blocklevel')) {
-            self::$cacheBlockIsEnabled = true;
-            define('XARCACHE_BLOCK_IS_ENABLED',1);
             sys::import('xaraya.caching.block');
-            xarBlockCache::init($cachingConfiguration);
+            self::$cacheBlockIsEnabled = xarBlockCache::init($cachingConfiguration);
+            if (self::$cacheBlockIsEnabled) define('XARCACHE_BLOCK_IS_ENABLED',1);
         }
 
-        self::$cacheIsEnabled = true;
-        define('XARCACHE_IS_ENABLED',1);
+        if (file_exists($cacheDir . '/cache.objectlevel')) {
+            sys::import('xaraya.caching.object');
+            self::$cacheObjectIsEnabled = xarObjectCache::init($cachingConfiguration);
+        }
+
+        if (file_exists($cacheDir . '/cache.modulelevel')) {
+            sys::import('xaraya.caching.module');
+            self::$cacheModuleIsEnabled = xarModuleCache::init($cachingConfiguration);
+        }
+
+        self::$cacheOutputIsEnabled = true;
         return true;
     }
 

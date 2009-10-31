@@ -120,6 +120,7 @@ class xarCache_Storage extends Object
             $this->sizelimit = $args['sizelimit'];
         }
         if (!empty($args['logfile'])) {
+// CHECKME: this will return false if the file doesn't exist yet - is that what we want here ?
             $this->logfile = realpath($args['logfile']);
         }
         if (!empty($args['logsize'])) {

@@ -154,11 +154,10 @@ class xarPageCache extends Object
      *
      * @access public
      * @param key the key identifying the particular cache you want to access
-     * @param name the name of the page in that particular cache
      * @returns bool
      * @return true if the page is available in cache, false if not
      */
-    public static function isCached($cacheKey, $name = '')
+    public static function isCached($cacheKey)
     {
         if (empty(self::$cacheStorage)) {
             return false;
@@ -182,7 +181,7 @@ class xarPageCache extends Object
             $page .= '?' . $param;
         }
         // use this global instead of $cache_file so we can cache several things
-        // based on different $cacheKey (and $name if necessary) in one page request
+        // based on different $cacheKey in one page request
         // - e.g. for module and block caching
         self::$cacheCode = md5($page);
         self::$cacheStorage->setCode(self::$cacheCode);
@@ -226,10 +225,9 @@ class xarPageCache extends Object
      *
      * @access public
      * @param  string $cacheKey the key identifying the particular cache you want to access
-     * @param  string $name     the name of the page in that particular cache
      * @return bool   true if succeeded, false otherwise
      */
-    public static function getCached($cacheKey, $name = '')
+    public static function getCached($cacheKey)
     {
         if (empty(self::$cacheStorage)) {
             return false;
@@ -248,11 +246,10 @@ class xarPageCache extends Object
      * @access public
      * @param string $cacheKey the key identifying the particular cache you want to
      *                         access
-     * @param string $name     the name of the page in that particular cache
      * @param string $value    value the new content for that page
      * @return void
      */
-    public static function setCached($cacheKey, $name, $value)
+    public static function setCached($cacheKey, $value)
     {
         if (xarCore::isCached('Page.Caching', 'nocache')) { return; }
 
@@ -314,7 +311,7 @@ class xarPageCache extends Object
     /**
      * Delete a page cache entry (unused)
      */
-    public static function delCached($cacheKey, $name)
+    public static function delCached($cacheKey)
     {
         if (empty(self::$cacheStorage)) {
             return;

@@ -85,9 +85,9 @@ function xarMain()
     }
 
     $run = 1;
-    if ($pageCaching == 1 && xarPageCache::isCached($cacheKey,'page')) {
+    if ($pageCaching == 1 && xarPageCache::isCached($cacheKey)) {
         // output the cached page *or* a 304 Not Modified status
-        if (xarPageCache::getCached($cacheKey,'page')) {
+        if (xarPageCache::getCached($cacheKey)) {
             // we could return true here, but we'll continue just in case
             // processing changes below someday...
             $run = 0;
@@ -149,7 +149,7 @@ function xarMain()
 
         if ($pageCaching == 1) {
             // save the output in cache *before* sending it to the client
-            xarPageCache::setCached($cacheKey, 'page', $pageOutput);
+            xarPageCache::setCached($cacheKey, $pageOutput);
         }
 
         echo $pageOutput;
