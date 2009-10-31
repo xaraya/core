@@ -2,4 +2,4 @@ An item was changed in the #$modulename# module. --
 <xar:br/>
 "#$objectid#" is the id of the item that was changed.
 <xar:br/><xar:br/>
-Site Name: #$sitename# :: #$siteslogan# -- #$siteurl#
+Site Name: #$sitename# :: #$siteslogan# -- #$siteurl#                                                
