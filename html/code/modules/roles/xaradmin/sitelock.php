@@ -30,8 +30,7 @@ function roles_admin_sitelock($args)
         $roles = $lockvars['roles'];
         $lockedoutmsg = (!isset($lockvars['message']) || $lockvars['message'] == '') ? xarML('The site is currently locked. Thank you for your patience.') : $lockvars['message'];
         $notifymsg = $lockvars['notifymsg'];
-    }
-    else {
+    } else {
     // Get parameters from input
         if (!xarVarFetch('serialroles', 'str', $serialroles, NULL, XARVAR_NOT_REQUIRED)) return;
         $roles = unserialize($serialroles);
@@ -59,9 +58,7 @@ function roles_admin_sitelock($args)
                               'notifymsg' => $notifymsg);
             xarModVars::set('roles', 'lockdata', serialize($lockdata));
             }
-        }
-
-        elseif ($cmd == 'add') {
+        } elseif ($cmd == 'add') {
             if (!xarVarFetch('newname', 'str', $newname, NULL, XARVAR_DONT_SET)) return;
             if (isset($newname)) {
                 $r = xaruFindRole($newname);
@@ -83,18 +80,14 @@ function roles_admin_sitelock($args)
                               'notifymsg' => $notifymsg);
             xarModVars::set('roles', 'lockdata', serialize($lockdata));
             }
-        }
-
-        elseif ($cmd == 'save') {
+        } elseif ($cmd == 'save') {
             $lockdata = array('roles'     => $roles,
                               'message'   => $lockedoutmsg,
                               'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
             xarModVars::set('roles', 'lockdata', serialize($lockdata));
             xarResponse::Redirect(xarModURL('roles', 'admin', 'sitelock'));
-        }
-
-        elseif ($cmd == 'toggle') {
+        } elseif ($cmd == 'toggle') {
 
             // turn the site on or off
             $toggle = $toggle ? 0 : 1;
@@ -129,18 +122,18 @@ function roles_admin_sitelock($args)
                     throw new Exception($msg);
                 }
                 $mailinfo['message'] = 'The site ' . xarModVars::get('themes','SiteName') . ' has been locked.';
-            }
+            } else {
 // We unlocked the site
-            else {
                $mailinfo['message'] = 'The site ' . xarModVars::get('themes','SiteName') . ' has been unlocked.';
             }
 
             $mailinfo['message'] .= "\n\n" . $notifymsg;
 
             // Send the mails
+            $badmails = 0;
             foreach($notify as $recipient) {
                 $mailinfo['info'] = $recipient->getEmail();
-                xarMod::apiFunc('mail','admin','sendmail', $mailinfo);
+                if (!xarMod::apiFunc('mail','admin','sendmail', $mailinfo)) $badmails ++;
             }
 
             // Write the configuration to disk
@@ -149,6 +142,10 @@ function roles_admin_sitelock($args)
                               'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
             xarModVars::set('roles', 'lockdata', serialize($lockdata));
+
+            if($badmails) {
+                return xarTplModule('roles','user','errors',array('layout' => 'mail_failed', 'badmails' => $badmails));
+            }
         }
     }
 
