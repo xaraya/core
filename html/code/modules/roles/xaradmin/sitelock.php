@@ -109,7 +109,7 @@ function roles_admin_sitelock($args)
             $admin = xarRoles::get(xarModVars::get('roles','admin'));
             $mailinfo = array('subject' => 'Site Lock',
                               'from' => $admin->getEmail()
-            );
+                            );
 
 // We locked the site
             if ($toggle == 1) {
