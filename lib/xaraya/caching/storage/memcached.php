@@ -1,14 +1,18 @@
 <?php
 /**
  * Cache data using the PHP Memcache extension [http://www.php.net/memcache]
- * and a memcached server [http://www.danga.com/memcached/]
+ * and one or more memcached server(s) [http://www.danga.com/memcached/]
  */
 class xarCache_MemCached_Storage extends xarCache_Storage
 {
     public $host       = 'localhost';
-    public $port       = 11211;
+    public $port       = 11211; // default values, cfr. http://php.net/manual/en/function.memcache-addserver.php
+    public $persistent = true;
+    public $weight     = 1;
+    public $timeout    = 1;
+    public $retry      = 15;
+
     public $memcache   = null;
-    public $persistent = false;
 
     public function __construct(array $args = array())
     {
@@ -17,18 +21,58 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         if (!empty($args['host'])) {
             $this->host = $args['host'];
         }
-        if (!empty($args['port'])) {
+        // set to 0 for Unix socket
+        if (isset($args['port'])) {
             $this->port = $args['port'];
         }
         // true or false
         if (isset($args['persistent'])) {
             $this->persistent = $args['persistent'];
         }
-        if ($this->persistent) {
-            $this->memcache = @memcache_pconnect($this->host, $this->port);
-        } else {
-            $this->memcache = @memcache_connect($this->host, $this->port);
+        if (isset($args['weight'])) {
+            $this->weight = $args['weight'];
         }
+        if (isset($args['timeout'])) {
+            $this->timeout = $args['timeout'];
+        }
+        if (isset($args['retry'])) {
+            $this->retry = $args['retry'];
+        }
+
+        // default expiration time is set to 24 hours
+        if (empty($this->expire)) {
+            $this->expire = 24 * 60 * 60;
+        }
+
+        $this->memcache = new Memcache;
+        // support pooled connections, cfr. attachment in bug 6315 by Mark Frawley
+        if (is_array($this->host)) {
+            foreach($this->host as $server) {
+                if (is_array($server) && !empty($server['host'])) {
+                    if (!isset($server['port'])) {
+                        $server['port'] = $this->port;
+                    }
+                    if (!isset($server['persisten'])) {
+                        $server['persistent'] = $this->persistent;
+                    }
+                    if (!isset($server['weight'])) {
+                        $server['weight'] = $this->weight;
+                    }
+                    if (!isset($server['timeout'])) {
+                        $server['timeout'] = $this->timeout;
+                    }
+                    if (!isset($server['retry'])) {
+                        $server['retry'] = $this->retry;
+                    }
+                    $this->memcache->addServer($server['host'], $server['port'], $server['persistent'], $server['weight'], $server['timeout'], $server['retry']);
+                } else {
+                    $this->memcache->addServer($server, $this->port, $this->persistent, $this->weight, $this->timeout, $this->retry);
+                }
+            }
+        } else {
+            $this->memcache->addServer($this->host, $this->port, $this->persistent, $this->weight, $this->timeout, $this->retry);
+        }
+
         $this->storage = 'memcached';
     }
 
@@ -71,6 +115,26 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         }
     }
 
+/*
+    public function setNamespace($namespace = '')
+    {
+        // customize with site prefix, versioned namespaces etc. see bug 6315
+        parent::setNamespace($namespace);
+    }
+
+    public function getCacheKey($key = '')
+    {
+        // customize with site prefix, versioned namespaces etc. see bug 6315
+        return parent::getCacheKey($key);
+    }
+
+    public function flushCached($key = '')
+    {
+        // customize with site prefix, versioned namespaces etc. see bug 6315
+        return parent::flushCached($key);
+    }
+*/
+
     public function setCached($key = '', $value = '', $expire = 0)
     {
         if (empty($this->memcache)) return;
@@ -108,8 +172,8 @@ class xarCache_MemCached_Storage extends xarCache_Storage
     {
         if (empty($this->memcache)) return;
 
-        // this is the size of the whole cache
-        $stats = $this->memcache->getstats();
+        // this is the size of the whole cache for the current server
+        $stats = $this->memcache->getStats();
 
         $this->size = $stats['bytes'];
         if ($countitems) {
