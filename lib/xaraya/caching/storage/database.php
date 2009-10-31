@@ -1,7 +1,7 @@
 <?php
 /**
  * Cache data in the database using the xar_cache_data table
-**/
+ */
 class xarCache_Database_Storage extends xarCache_Storage
 {
     public $table = '';
@@ -10,7 +10,7 @@ class xarCache_Database_Storage extends xarCache_Storage
     public $value = null;
     private $dbconn = null;
 
-    public function __construct($args = array())
+    public function __construct(array $args = array())
     {
         parent::__construct($args);
         $this->storage = 'database';
@@ -215,31 +215,10 @@ class xarCache_Database_Storage extends xarCache_Storage
         $this->lastkey = null;
     }
 
-    public function cleanCached($expire = 0)
+    public function doGarbageCollection($expire = 0)
     {
-        if (empty($expire)) {
-            $expire = $this->expire;
-        }
-        if (empty($expire)) {
-            // TODO: delete oldest entries if we're at the size limit ?
-            return;
-        }
         $table = $this->getTable();
         if (empty($table)) return;
-
-        $touch_file = $this->cachedir . '/cache.' . $this->type . 'level';
-
-        // If the cache type has already been cleaned within the expiration time,
-        // don't bother checking again
-        if (file_exists($touch_file) && filemtime($touch_file) > time() - $expire) {
-            return;
-        }
-        if (!@touch($touch_file)) {
-            // hmm, somthings amiss... better let the administrator know,
-            // without disrupting the site
-            error_log('Error from Xaraya::xarCache::storage::filesystem
-                      - web process can not touch ' . $touch_file);
-        }
 
         $time = time() - ($expire + 60); // take some margin here
 
@@ -249,11 +228,6 @@ class xarCache_Database_Storage extends xarCache_Storage
         $stmt = $this->dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
 
-        // check the cache size and clear the lockfile set by sizeLimitReached()
-        $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
-        if ($this->getCacheSize() < $this->sizelimit && file_exists($lockfile)) {
-            @unlink($lockfile);
-        }
         $this->lastkey = null;
     }
 

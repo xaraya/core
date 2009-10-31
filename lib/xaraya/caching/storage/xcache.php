@@ -1,9 +1,7 @@
 <?php
-
 /**
  * Cache data using XCache [http://xcache.lighttpd.net/]
  */
-
 class xarCache_XCache_Storage extends xarCache_Storage
 {
     public function __construct(array $args = array())
@@ -17,17 +15,14 @@ class xarCache_XCache_Storage extends xarCache_Storage
         if (empty($expire)) {
             $expire = $this->expire;
         }
-        $oldkey = $key;
-        if (!empty($this->code)) {
-            $key .= '-' . $this->code;
-        }
-        if (xcache_isset($key)) {
+        $cache_key = $this->getCacheKey($key);
+        if (xcache_isset($cache_key)) {
             // FIXME: xcache doesn't keep track of modification times, except via xcache_list
             //$this->modtime = 0;
-            if ($log) $this->logStatus('HIT', $oldkey);
+            if ($log) $this->logStatus('HIT', $key);
             return true;
         } else {
-            if ($log) $this->logStatus('MISS', $oldkey);
+            if ($log) $this->logStatus('MISS', $key);
             return false;
         }
     }
@@ -37,10 +32,8 @@ class xarCache_XCache_Storage extends xarCache_Storage
         if (empty($expire)) {
             $expire = $this->expire;
         }
-        if (!empty($this->code)) {
-            $key .= '-' . $this->code;
-        }
-        $value = xcache_get($key);
+        $cache_key = $this->getCacheKey($key);
+        $value = xcache_get($cache_key);
         // XCache doesn't support caching objects, so we serialize them
         if (!empty($value) && is_array($value) && isset($value['_xcache_class_'])) {
             $classname = $value['_xcache_class_'];
@@ -66,9 +59,7 @@ class xarCache_XCache_Storage extends xarCache_Storage
         if (empty($expire)) {
             $expire = $this->expire;
         }
-        if (!empty($this->code)) {
-            $key .= '-' . $this->code;
-        }
+        $cache_key = $this->getCacheKey($key);
         // XCache doesn't support caching objects, so we serialize them
         if (is_object($value)) {
             $classname = get_class($value);
@@ -79,22 +70,25 @@ class xarCache_XCache_Storage extends xarCache_Storage
             return;
         }
         if (!empty($expire)) {
-            xcache_set($key, $value, $expire);
+            xcache_set($cache_key, $value, $expire);
         } else {
-            xcache_set($key, $value);
+            xcache_set($cache_key, $value);
         }
     }
 
     public function delCached($key = '')
     {
-        if (!empty($this->code)) {
-            $key .= '-' . $this->code;
-        }
-        xcache_unset($key);
+        $cache_key = $this->getCacheKey($key);
+        xcache_unset($cache_key);
     }
 
     public function flushCached($key = '')
     {
+        // add the type/namespace prefix
+        if (!empty($this->prefix)) {
+            $key = $this->prefix . $key;
+        }
+
         // Note: this isn't quite the same as in filesystem, but it's close enough :-)
         xcache_unset_by_prefix($key);
 
@@ -105,30 +99,8 @@ class xarCache_XCache_Storage extends xarCache_Storage
         }
     }
 
-    public function cleanCached($expire = 0)
+    public function doGarbageCollection($expire = 0)
     {
-        if (empty($expire)) {
-            $expire = $this->expire;
-        }
-        if (empty($expire)) {
-            // TODO: delete oldest entries if we're at the size limit ?
-            return;
-        }
-
-        $touch_file = $this->cachedir . '/cache.' . $this->type . 'level';
-
-        // If the cache type has already been cleaned within the expiration time,
-        // don't bother checking again
-        if (file_exists($touch_file) && filemtime($touch_file) > time() - $expire) {
-            return;
-        }
-        if (!@touch($touch_file)) {
-            // hmm, somthings amiss... better let the administrator know,
-            // without disrupting the site
-            error_log('Error from Xaraya::xarCache::storage::xcache
-                      - web process can not touch ' . $touch_file);
-        }
-
         // we rely on the built-in garbage collector here
         /*
         $vcnt = xcache_count(XC_TYPE_VAR);
@@ -136,12 +108,6 @@ class xarCache_XCache_Storage extends xarCache_Storage
             xcache_clear_cache(XC_TYPE_VAR, $i);
         }
         */
-
-        // check the cache size and clear the lockfile set by sizeLimitReached()
-        $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
-        if ($this->getCacheSize() < $this->sizelimit && file_exists($lockfile)) {
-            @unlink($lockfile);
-        }
     }
 
     public function getCacheSize($countitems = false)
@@ -162,35 +128,6 @@ class xarCache_XCache_Storage extends xarCache_Storage
         return $this->size;
     }
 
-    public function saveFile($key = '', $filename = '')
-    {
-        if (empty($filename)) return;
-
-        if (!empty($this->code)) {
-            $key .= '-' . $this->code;
-        }
-        // FIXME: avoid getting the value for the 2nd/3rd time here
-        $value = xcache_get($key);
-        if (empty($value)) return;
-
-        // CHECKME: don't try to unserialize objects here ?!
-
-        $tmp_file = $filename . '.tmp';
-
-        $fp = @fopen($tmp_file, "w");
-        if (!empty($fp)) {
-            @fwrite($fp, $value);
-            @fclose($fp);
-            // rename() doesn't overwrite existing files in Windows
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                @copy($tmp_file, $filename);
-                @unlink($tmp_file);
-            } else {
-                @rename($tmp_file, $filename);
-            }
-        }
-    }
-
     public function getCachedList()
     {
         $vcnt = xcache_count(XC_TYPE_VAR);
@@ -198,6 +135,9 @@ class xarCache_XCache_Storage extends xarCache_Storage
         for ($i = 0; $i < $vcnt; $i ++) {
             $info = xcache_list(XC_TYPE_VAR, $i);
             foreach ($info['cache_list'] as $entry) {
+                // filter out the keys that don't start with the right type/namespace prefix
+                if (!empty($this->prefix) && strpos($entry['name'], $this->prefix) !== 0) continue;
+            // CHECKME: this assumes the code is always hashed
                 if (preg_match('/^(.*)-(\w*)$/',$entry['name'],$matches)) {
                     $key = $matches[1];
                     $code = $matches[2];
