@@ -90,45 +90,4 @@ class xarOutputCache extends Object
 
 }
 
-/**
- * flush a particular cache (e.g. when a new item is created)
- *
- * @access  public
- * @param   string $cacheKey the key identifying the particular cache you want
- *                           to wipe out
- * @returns void
- * @deprec 2005-02-01
- */
-function xarOutputFlushCached($cacheKey, $dir = false)
-{
-    if (empty($dir)) {
-        if (function_exists('xarPageFlushCached')) {
-            xarPageFlushCached($cacheKey);
-        }
-        if (function_exists('xarBlockFlushCached')) {
-            xarBlockFlushCached($cacheKey);
-        }
-
-// TODO: find out where this is called with a directory and replace
-
-    } elseif (preg_match('/page\/?$/',$dir)) {
-        if (function_exists('xarPageFlushCached')) {
-            xarPageFlushCached($cacheKey);
-        }
-
-    } elseif (preg_match('/block\/?$/',$dir)) {
-        if (function_exists('xarBlockFlushCached')) {
-            xarBlockFlushCached($cacheKey);
-        }
-
-    } else {
-        if (function_exists('xarPageFlushCached')) {
-            xarPageFlushCached($cacheKey);
-        }
-        if (function_exists('xarBlockFlushCached')) {
-            xarBlockFlushCached($cacheKey);
-        }
-    }
-}
-
 ?>
