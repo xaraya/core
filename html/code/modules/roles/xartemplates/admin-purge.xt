@@ -81,9 +81,9 @@
                         </td>
                         <td class="xar-align-center">
                             <xar:set name="options">
-                                array( array('id' => ROLES_STATE_ACTIVE,'name' => 'Active'), 
-                                array('id' => ROLES_STATE_INACTIVE, 'name' => 'Inactive'), 
-                                array('id' => ROLES_STATE_NOTVALIDATED, 'name' => 'Not Validated'), 
+                                array( array('id' => ROLES_STATE_ACTIVE,'name' => 'Active'),
+                                array('id' => ROLES_STATE_INACTIVE, 'name' => 'Inactive'),
+                                array('id' => ROLES_STATE_NOTVALIDATED, 'name' => 'Not Validated'),
                                 array('id' => ROLES_STATE_PENDING, 'name' => 'Pending'), )
                             </xar:set>
                             <xar:data-input type="dropdown" name="recallstate" options="$options" value="$recallstate"/>
@@ -91,7 +91,7 @@
                         </tr>
                     </table>
                     <xar:if condition="count($recallroles) eq 0">
-                    <p>#$recallmessage# 
+                    <p>#$recallmessage#
                     <xar:if condition="$recallsearch ne ''">matching '#$recallsearch#'</xar:if></p>
                     <xar:else />
                         <table class="xar-fullwidth">
@@ -131,8 +131,10 @@
                             <input name="confirmation" type="submit" value="#xarML('Recall')#"/>
                         </div>
                         <!-- if there is a pager show it in the last row -->
-                        <xar:if condition="!empty($recallpager)">
-                            <div class="xar-align-center">#$recallpager#</div>
+                        <xar:if condition="$totalselect gt $itemsperpage">
+                            <div class="xar-align-center">
+                                <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
+                            </div>
                         </xar:if>
                     </xar:if>
             </form>
@@ -182,11 +184,11 @@
                 </table>
                 <xar:if condition="count($purgeusers) eq 0">
                     <p>
-                    #$purgemessage# 
+                    #$purgemessage#
                         <xar:if condition="$purgesearch ne ''">
-                            matching 
+                            matching
                             <xar:if condition="$purgestatetext ne ''">
-                                '#$purgesearch# / #$purgestatetext#' 
+                                '#$purgesearch# / #$purgestatetext#'
                             <xar:else />
                                 '#$purgesearch#'
                             </xar:if>
@@ -221,7 +223,7 @@
                     <div class="xar-align-right">
                         <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['purge'],true);return false;">
                             Check All
-                        </a>| 
+                        </a>|
                         <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['purge'],false);return false;">
                             Uncheck All
                         </a>
@@ -229,8 +231,10 @@
                     <div class="xar-align-center">
                         <input name="confirmation" type="submit" value="#xarML('Purge')#"/>
                     </div>
-                    <xar:if condition="!empty($purgepager)">
-                        <div class="xar-align-center">#$purgepager#</div>
+                    <xar:if condition="$totalselect gt $itemsperpage">
+                        <div class="xar-align-center">
+                            <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
+                        </div>
                     </xar:if>
                 </xar:if>
             </form>

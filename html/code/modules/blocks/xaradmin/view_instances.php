@@ -15,7 +15,7 @@
 function blocks_admin_view_instances()
 {
     if (!xarVarFetch('filter', 'str', $filter, "", XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('startat', 'int', $startat,   1,      XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('startnum', 'int', $startnum,   1,      XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('currenttab', 'str', $data['currenttab'],   "",      XARVAR_NOT_REQUIRED)) {return;}
 
 // Security Check
@@ -42,7 +42,7 @@ function blocks_admin_view_instances()
     $instances = xarMod::apiFunc('blocks', 'user', 'getall', array('filter' => $filter,
                                                                  'order' => $order,
                                                                  'rowstodo' => $rowstodo,
-                                                                 'startat' => $startat));
+                                                                 'startat' => $startnum));
     // Create extra links and confirmation text.
     foreach ($instances as $index => $instance) {
         $instances[$index]['deleteurl'] = xarModUrl(
@@ -70,11 +70,9 @@ function blocks_admin_view_instances()
     $data['authid'] = $authid;
     // Item filter and pager
     $data['filter'] = $filter;
-    sys::import('xaraya.pager');
-    $data['pager'] = xarTplGetPager($startat,
-                            $total,
-                            xarModURL('blocks', 'admin', 'view_instances',array('startat' => '%%')),
-                            $rowstodo);
+    $data['total'] = $total;
+    $data['startnum'] = $startnum;
+    $data['itemsperpage'] = $rowstodo;
 
     if ($data['selstyle'] == 'bytype') {
         $tabs = xarMod::apiFunc('blocks', 'user', 'getallblocktypes');
@@ -84,7 +82,7 @@ function blocks_admin_view_instances()
             $data['tabs'][] = $tab;
         }
         if (empty($data['currenttab'])) $data['currenttab'] = 'Login';
-    } 
+    }
     elseif ($data['selstyle'] == 'bygroup') {
         $data['tabs'] = xarMod::apiFunc('blocks', 'user', 'getallgroups');
         if (empty($data['currenttab'])) $data['currenttab'] = 'left';
