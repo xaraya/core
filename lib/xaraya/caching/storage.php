@@ -13,17 +13,21 @@ class xarCache_Storage extends Object
     public $cachedir   = 'var/cache/output';
     public $type       = '';        // page, block, object, module, template, core, ...
     public $code       = '';        // URL factors et al.
-    public $size       = null;
-    public $numitems   = 0;
     public $compressed = false;
     public $sizelimit  = 10000000;
-    public $reached    = null;
     public $expire     = 0;
     public $logfile    = null;
     public $logsize    = 2000000;   // for each logfile
-    public $modtime    = 0;         // last modification time
     public $namespace  = '';        // optional namespace prefix for the cache keys (= sitename, version, ...)
+
     public $prefix     = '';        // the default prefix for the cache keys will be 'type/namespace' (except in filesystem)
+
+    public $size       = 0;
+    public $items      = 0;
+    public $hits       = 0;
+    public $misses     = 0;
+    public $modtime    = 0;         // last modification time
+    public $reached    = null;      // result of sizeLimitReached()
 
     /**
      * Factory class method for cache storage (only 'storage' is semi-required)
@@ -303,10 +307,23 @@ class xarCache_Storage extends Object
     }
 
     /**
+     * Get information about the cache (not supported by all storage)
+     */
+    public function getCacheInfo()
+    {
+        return array('size'    => $this->size,
+                     'items'   => $this->items,
+                     'hits'    => $this->hits,
+                     'misses'  => $this->misses,
+                     'modtime' => $this->modtime);
+    }
+
+    /**
      * Get the current cache size (not supported by all storage)
      */
     public function getCacheSize($countitems = false)
     {
+        $this->getCacheInfo();
         return $this->size;
     }
 
@@ -315,7 +332,7 @@ class xarCache_Storage extends Object
      */
     public function getCacheItems()
     {
-        return $this->numitems;
+        return $this->items;
     }
 
     /**

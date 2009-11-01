@@ -160,7 +160,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         }
     }
 
-    public function getCacheSize($countitems = false)
+    public function getCacheInfo()
     {
         if (empty($this->blksize)) {
             $dirstat = stat($this->dir);
@@ -174,13 +174,16 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
             }
         }
 
-        if ($countitems) {
-            $this->numitems = 0;
-        }
+        $this->size = 0;
+        $this->items = 0;
+        $this->modtime = 0;
+        $this->size = $this->_getCacheDirSize($this->dir, true);
 
-        $this->size = $this->_getCacheDirSize($this->dir, $countitems);
-
-        return $this->size;
+        return array('size'    => $this->size,
+                     'items'   => $this->items,
+                     'hits'    => $this->hits,
+                     'misses'  => $this->misses,
+                     'modtime' => $this->modtime);
     }
 
     public function saveFile($key = '', $filename = '')
@@ -244,6 +247,9 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
                                 $size += $this->_getCacheDirSize($dir . $item, $countitems);
                             } elseif ($countitems) {
                                 $count++;
+                                if ($this->modtime < $filestat['mtime']) {
+                                    $this->modtime = $filestat['mtime'];
+                                }
                             }
                         }
                     }
@@ -262,6 +268,10 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
                                 $size += filesize($dir . $item);
                                 if ($countitems) {
                                     $count++;
+                                    $time = filemtime($dir . $item);
+                                    if ($this->modtime < $time) {
+                                        $this->modtime = $time;
+                                    }
                                 }
                             }
                         }
@@ -271,7 +281,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
             }
         }
         if ($countitems) {
-            $this->numitems = $this->numitems + $count;
+            $this->items = $this->items + $count;
         }
         return $size;
     }

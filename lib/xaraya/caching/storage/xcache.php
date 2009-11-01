@@ -86,6 +86,7 @@ class xarCache_XCache_Storage extends xarCache_Storage
         } else {
             xcache_set($cache_key, $value);
         }
+        $this->modtime = time();
     }
 
     public function delCached($key = '')
@@ -96,13 +97,27 @@ class xarCache_XCache_Storage extends xarCache_Storage
 
     public function flushCached($key = '')
     {
-        // add the type/namespace prefix
-        if (!empty($this->prefix)) {
+        // add the type/namespace prefix if necessary
+        if (!empty($this->prefix) && strpos($key, $this->prefix) !== 0) {
             $key = $this->prefix . $key;
         }
 
         // Note: this isn't quite the same as in filesystem, but it's close enough :-)
-        xcache_unset_by_prefix($key);
+        if (function_exists('xcache_unset_by_prefix')) {
+            xcache_unset_by_prefix($key);
+        } else {
+            $cache_list = $this->getCachedList();
+            foreach ($cache_list as $cache_entry) {
+                // if this cache entry starts with prefix.key
+                if (strpos($cache_entry['key'], $key) === 0) {
+                    if (!empty($cache_entry['code'])) {
+                        xcache_unset($cache_entry['key'] . '-' . $cache_entry['code']);
+                    } else {
+                        xcache_unset($cache_entry['key']);
+                    }
+                }
+            }
+        }
 
         // check the cache size and clear the lockfile set by sizeLimitReached()
         $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
@@ -122,22 +137,28 @@ class xarCache_XCache_Storage extends xarCache_Storage
         */
     }
 
-    public function getCacheSize($countitems = false)
+    public function getCacheInfo()
     {
-        // this is the size of the whole cache
+        $this->size = 0;
+        $this->items = 0;
+        $this->hits = 0;
+        $this->misses = 0;
+
+        // this is the info for the whole cache
         $vcnt = xcache_count(XC_TYPE_VAR);
-        $size = 0;
-        $numitems = 0;
         for ($i = 0; $i < $vcnt; $i ++) {
             $info = xcache_info(XC_TYPE_VAR, $i);
-            $size += ($info['size'] - $info['avail']);
-            $numitems += $info['cached'];
+            $this->size += ($info['size'] - $info['avail']);
+            $this->items += $info['cached'];
+            $this->hits += $info['hits'];
+            $this->misses += $info['misses'];
         }
-        $this->size = $size;
-        if ($countitems) {
-            $this->numitems = $numitems;
-        }
-        return $this->size;
+
+        return array('size'    => $this->size,
+                     'items'   => $this->items,
+                     'hits'    => $this->hits,
+                     'misses'  => $this->misses,
+                     'modtime' => $this->modtime);
     }
 
     public function getCachedList()

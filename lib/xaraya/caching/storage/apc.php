@@ -56,6 +56,7 @@ class xarCache_APC_Storage extends xarCache_Storage
         } else {
             apc_store($cache_key, $value);
         }
+        $this->modtime = time();
     }
 
     public function delCached($key = '')
@@ -72,19 +73,27 @@ class xarCache_APC_Storage extends xarCache_Storage
         */
     }
 
-    public function getCacheSize($countitems = false)
+    public function getCacheInfo()
     {
-        $cacheinfo = apc_cache_info();
-        
-        $this->numitems = count($cacheinfo['cache_list']);
-        
-        $size = 0;
-        foreach ($cacheinfo['cache_list'] as $k => $v) {
-            $size += $v['mem_size'];
-        }
+        $this->size = 0;
 
-        $this->size = $size;
-        return $this->size;
+        // this is the info for the whole cache
+        $cacheinfo = apc_cache_info('user');
+        foreach ($cacheinfo['cache_list'] as $k => $v) {
+            $this->size += $v['mem_size'];
+            if (!empty($v['mtime']) && $v['mtime'] > $this->modtime) {
+                $this->modtime = $v['mtime'];
+            }
+        }
+        $this->items = count($cacheinfo['cache_list']);
+        $this->hits = $cacheinfo['num_hits'];
+        $this->misses = $cacheinfo['num_misses'];
+
+        return array('size'    => $this->size,
+                     'items'   => $this->items,
+                     'hits'    => $this->hits,
+                     'misses'  => $this->misses,
+                     'modtime' => $this->modtime);
     }
 
     public function getCachedList()

@@ -153,6 +153,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         } else {
             $this->memcache->set($cache_key, $value, $flag);
         }
+        $this->modtime = time();
     }
 
     public function delCached($key = '')
@@ -168,7 +169,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         // we rely on the built-in garbage collector here
     }
 
-    public function getCacheSize($countitems = false)
+    public function getCacheInfo()
     {
         if (empty($this->memcache)) return;
 
@@ -176,10 +177,15 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         $stats = $this->memcache->getStats();
 
         $this->size = $stats['bytes'];
-        if ($countitems) {
-            $this->numitems = $stats['curr_items'];
-        }
-        return $stats['bytes'];
+        $this->items = $stats['curr_items'];
+        $this->hits = $stats['get_hits'];
+        $this->misses = $stats['get_misses'];
+
+        return array('size'    => $this->size,
+                     'items'   => $this->items,
+                     'hits'    => $this->hits,
+                     'misses'  => $this->misses,
+                     'modtime' => $this->modtime);
     }
 
     public function sizeLimitReached()

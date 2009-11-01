@@ -231,37 +231,30 @@ class xarCache_Database_Storage extends xarCache_Storage
         $this->lastkey = null;
     }
 
-    public function getCacheSize($countitems = false)
+    public function getCacheInfo()
     {
         $table = $this->getTable();
         if (empty($table)) return;
 
-        $size = 0;
-        if ($countitems) {
-            $query = "SELECT SUM(xar_size), COUNT(xar_id)
-                        FROM $table
-                       WHERE xar_type = ?";
-            $bindvars = array($this->type);
-            $stmt = $this->dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars);
-            if ($result->first()) {
-                list($size,$count) = $result->fields;
-                $this->numitems = $count;
-            }
-        } else {
-            $query = "SELECT SUM(xar_size)
-                        FROM $table
-                       WHERE xar_type = ?";
-            $bindvars = array($this->type);
-            $stmt = $this->dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars);
-            if ($result->first()) {
-                list($size) = $result->fields;
-            }
+        $query = "SELECT SUM(xar_size), COUNT(xar_id), MAX(xar_time)
+                   FROM $table
+                   WHERE xar_type = ?";
+        $bindvars = array($this->type);
+        $stmt = $this->dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
+        if ($result->first()) {
+            list($size,$count,$time) = $result->fields;
+            $this->size = $size;
+            $this->items = $count;
+            $this->modtime = $time;
         }
         $result->close();
-        $this->size = $size;
-        return $size;
+
+        return array('size'    => $this->size,
+                     'items'   => $this->items,
+                     'hits'    => $this->hits,
+                     'misses'  => $this->misses,
+                     'modtime' => $this->modtime);
     }
 
     public function saveFile($key = '', $filename = '')

@@ -56,6 +56,7 @@ class xarCache_MMCache_Storage extends xarCache_Storage
         } else {
             mmcache_put($cache_key, $value);
         }
+        $this->modtime = time();
     }
 
     public function delCached($key = '')
@@ -70,7 +71,7 @@ class xarCache_MMCache_Storage extends xarCache_Storage
         mmcache_gc();
     }
 
-    public function getCacheSize($countitems = false)
+    public function getCacheInfo()
     {
         // this is the size of the whole cache
         ob_start();
@@ -80,10 +81,16 @@ class xarCache_MMCache_Storage extends xarCache_Storage
         if (preg_match('/Memory Allocated<.+?>([0-9,]+) Bytes/',$output,$matches)) {
             $this->size = strtr($matches[1],array(',' => ''));
         }
-        if ($countitems && preg_match('/Cached Keys<.+?>(\d+)/',$output,$matches)) {
-            $this->numitems = $matches[1];
+        if (preg_match('/Cached Keys<.+?>(\d+)/',$output,$matches)) {
+            $this->items = $matches[1];
         }
-        return $this->size;
+        // TODO: extract other values
+
+        return array('size'    => $this->size,
+                     'items'   => $this->items,
+                     'hits'    => $this->hits,
+                     'misses'  => $this->misses,
+                     'modtime' => $this->modtime);
     }
 
     public function getCachedList()
