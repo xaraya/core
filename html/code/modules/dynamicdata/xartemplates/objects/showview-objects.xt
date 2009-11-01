@@ -47,7 +47,7 @@
                     <!-- we could use xar:data-display here too, instead of looping over fields ourselves -->
                     <xar:foreach in="$properties" key="$name">
                         <td>
-                            <xar:if condition="empty($fields[$name])">&#160; 
+                            <xar:if condition="empty($fields[$name])">&#160;
                         <xar:elseif condition="!empty($linkfield) and $linkfield eq $name"/>
                             <a href="#xarModURL($urlmodule,$linktype,$linkfunc,array('itemtype' =&gt; $itemtype,$urlparam =&gt; $itemid))#">
                                 <xar:data-output property="$properties[$name]" value="$fields[$name]"/>
@@ -61,7 +61,7 @@
                             <xar:if condition="!empty($links[$itemid]) and count($links[$itemid]) gt 0">
                                 <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
                                     <xar:if condition="!empty($option['olink'])">
-                                        #$option['ojoin']# 
+                                        #$option['ojoin']#
                                         <a href="#$option['olink']#">#$option['otitle']#</a>
                                     <xar:else />
                                         #$option['ojoin']# #$option['otitle']#
@@ -76,23 +76,9 @@
             </xar:foreach>
         </table>
     </div>
-    <xar:if condition="!empty($pager)">
+    <xar:if condition="$object:itemcount gt $object:numitems">
         <div class="xar-align-center">
-            #$pager#
-        </div>
-    <xar:elseif condition="!empty($prevurl) or !empty($nexturl)"/>
-        <div class="xar-align-center">
-            <xar:if condition="!empty($prevurl)">
-                <a href="#$prevurl#">&lt;&lt; Prev</a>
-            <xar:else />
-                &lt;&lt;
-            </xar:if>
-            &#160;&#160;&#160; 
-            <xar:if condition="!empty($nexturl)">
-                <a href="#$nexturl#">Next&gt;&gt;</a>
-            <xar:else />
-                &gt;&gt;
-            </xar:if>
+            <xar:base-pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->itemcount" urltemplate="$object->pagerurl"/>
         </div>
     </xar:if>
 </xar:template>
