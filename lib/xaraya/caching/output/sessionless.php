@@ -76,7 +76,7 @@ class xarSessionLessCache extends Object
 
                 // CHECKME: if we do this after xarPageCache::sendHeaders(), we'll never get the 304's logged for autocache
                 if (file_exists(xarOutputCache::$cacheCollection.'/autocache.start')) {
-                    sys::import('xaraya.caching.autosession');
+                    sys::import('xaraya.caching.output.autosession');
                     xarAutoSessionCache::logStatus('HIT', $autoCachePeriod);
                 }
 
@@ -91,7 +91,7 @@ class xarSessionLessCache extends Object
         }
         // we haven't found a cache hit for this URL
         if (file_exists(xarOutputCache::$cacheCollection.'/autocache.start')) {
-            sys::import('xaraya.caching.autosession');
+            sys::import('xaraya.caching.output.autosession');
             xarAutoSessionCache::logStatus('MISS', $autoCachePeriod);
         }
     }

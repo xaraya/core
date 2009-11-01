@@ -56,7 +56,7 @@ class xarPageCache extends Object
 
         // Note : we may already exit here if session-less page caching is enabled
         if (!empty($sessionLessList) || !empty($autoCachePeriod)) {
-            sys::import('xaraya.caching.sessionless');
+            sys::import('xaraya.caching.output.sessionless');
             xarSessionLessCache::isCached($sessionLessList, $autoCachePeriod);
         }
 
