@@ -36,6 +36,16 @@
             return $this->getPublicProperties();
         }
 
+        public function getInit()
+        {
+            $result = $this->getPublicProperties();
+            $skiplist = array('name', 'module', 'text_type', 'text_type_long', 'func_update', 'allow_multiple', 'form_content', 'form_refresh', 'show_preview');
+            foreach ($skiplist as $propname) {
+                unset($result[$propname]);
+            }
+            return $result;
+        }
+
         public function display(Array $data=array())
         {
             if (!xarSecurityCheck('View' . $data['module'], 0, 'Block', $data['type'] . ":" . $data['name'] . ":" . "$data[bid]")) {return;}
