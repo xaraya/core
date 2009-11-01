@@ -1,7 +1,7 @@
 <?php
 /**
- * Block caching
- * 
+ * Object gui method caching
+ *
  * @package core
  * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -11,7 +11,7 @@
  * @author jsb
 **/
 
-class xarBlockCache extends Object
+class xarObjectCache extends Object
 {
     public static $cacheTime = 7200;
     public static $cacheSizeLimit = 2097152;
@@ -26,24 +26,24 @@ class xarBlockCache extends Object
     public static $expireTime = null;
 
     /**
-     * Initialise the block caching options
+     * Initialise the object caching options
      *
      * @return bool true on success, false on failure
      */
     public static function init(array $args = array())
     {
-        self::$cacheTime = isset($args['Block.TimeExpiration']) ?
-            $args['Block.TimeExpiration'] : 7200;
-        self::$cacheSizeLimit = isset($args['Block.SizeLimit']) ?
-            $args['Block.SizeLimit'] : 2097152;
+        self::$cacheTime = isset($args['Object.TimeExpiration']) ?
+            $args['Object.TimeExpiration'] : 7200;
+        self::$cacheSizeLimit = isset($args['Object.SizeLimit']) ?
+            $args['Object.SizeLimit'] : 2097152;
 
-        $storage = !empty($args['Block.CacheStorage']) ?
-            $args['Block.CacheStorage'] : 'filesystem';
-        $logfile = !empty($args['Block.LogFile']) ?
-            $args['Block.LogFile'] : null;
+        $storage = !empty($args['Object.CacheStorage']) ?
+            $args['Object.CacheStorage'] : 'filesystem';
+        $logfile = !empty($args['Object.LogFile']) ?
+            $args['Object.LogFile'] : null;
         sys::import('xaraya.caching.storage');
         self::$cacheStorage = xarCache_Storage::getCacheStorage(array('storage'   => $storage,
-                                                                      'type'      => 'block',
+                                                                      'type'      => 'object',
                                                                       'cachedir'  => xarOutputCache::$cacheCollection,
                                                                       'expire'    => self::$cacheTime,
                                                                       'sizelimit' => self::$cacheSizeLimit,
@@ -56,7 +56,7 @@ class xarBlockCache extends Object
     }
 
     /**
-     * Get cache settings for the blocks
+     * Get cache settings for the objects
      * @return array
      */
     public static function getCacheSettings()
@@ -64,49 +64,25 @@ class xarBlockCache extends Object
         if (!isset(self::$cacheSettings)) {
             $settings = array();
             // We need to get it.
-            $blocksettings = xarDB::getPrefix() . '_cache_blocks';
-            $dbconn = xarDB::getConn();
-            $tables = $dbconn->MetaTables();
-            if (in_array($blocksettings, $tables)) {
-                $query = "SELECT blockinstance_id, nocache,
-                                 page, theuser, expire
-                         FROM $blocksettings";
-                $stmt = $dbconn->prepareStatement($query);
-                $result = $stmt->executeQuery();
-                if ($result) {
-                    while ($result->next()) {
-                        list ($bid,
-                              $noCache,
-                              $pageShared,
-                              $userShared,
-                              $expireTime) = $result->getRow();
-                        $settings[$bid] = array('bid'         => $bid,
-                                                'nocache'     => $noCache,
-                                                'pageshared'  => $pageShared,
-                                                'usershared'  => $userShared,
-                                                'cacheexpire' => $expireTime);
-                    }
-                    $result->close();
-                }
-            }
+
             self::$cacheSettings = $settings;
         }
         return self::$cacheSettings;
     }
 
     /**
-     * Check if this block is suitable for block caching
+     * Check if this object is suitable for object caching
      *
      * @access public
-     * @param  string  $cacheKey  the key identifying the particular block you want to access
-     * @param  integer $blockid   the current block id
-     * @param  array   $blockinfo optional blockinfo when using the block BL tag
+     * @param  string  $cacheKey  the key identifying the particular object you want to access
+     * @param  integer $objectid   the current object id
+     * @param  array   $objectinfo optional objectinfo when using the object BL tag
      * @returns bool
-     * @return true if the block is suitable for caching, false if not
+     * @return true if the object is suitable for caching, false if not
      */
-    public static function checkCachingRules($cacheKey, $blockid = 0, $blockinfo = array())
+    public static function checkCachingRules($cacheKey, $objectid = 0, $objectinfo = array())
     {
-        // CHECKME: watch out for nested blocks ?
+        // CHECKME: watch out for nested objects !
         self::$noCache    = null;
         self::$pageShared = null;
         self::$userShared = null;
@@ -114,25 +90,25 @@ class xarBlockCache extends Object
 
         $settings = self::getCacheSettings();
 
-        if (isset($settings[$blockid])) {
-            self::$noCache    = $settings[$blockid]['nocache'];
-            self::$pageShared = $settings[$blockid]['pageshared'];
-            self::$userShared = $settings[$blockid]['usershared'];
-            self::$expireTime = $settings[$blockid]['cacheexpire'];
+        if (isset($settings[$objectid])) {
+            self::$noCache    = $settings[$objectid]['nocache'];
+            self::$pageShared = $settings[$objectid]['pageshared'];
+            self::$userShared = $settings[$objectid]['usershared'];
+            self::$expireTime = $settings[$objectid]['cacheexpire'];
 
-        // CHECKME: cfr. bug 4021 Override caching vars with block BL tag
-        } elseif (!empty($blockinfo['content']) && is_array($blockinfo['content'])) {
-            if (isset($blockinfo['content']['nocache'])) {
-                self::$noCache    = $blockinfo['content']['nocache'];
+        // CHECKME: cfr. bug 4021 Override caching vars with object BL tag
+        } elseif (!empty($objectinfo['content']) && is_array($objectinfo['content'])) {
+            if (isset($objectinfo['content']['nocache'])) {
+                self::$noCache    = $objectinfo['content']['nocache'];
             }
-            if (isset($blockinfo['content']['pageshared'])) {
-                self::$pageShared = $blockinfo['content']['pageshared'];
+            if (isset($objectinfo['content']['pageshared'])) {
+                self::$pageShared = $objectinfo['content']['pageshared'];
             }
-            if (isset($blockinfo['content']['usershared'])) {
-                self::$userShared = $blockinfo['content']['usershared'];
+            if (isset($objectinfo['content']['usershared'])) {
+                self::$userShared = $objectinfo['content']['usershared'];
             }
-            if (isset($blockinfo['content']['cacheexpire'])) {
-                self::$expireTime = $blockinfo['content']['cacheexpire'];
+            if (isset($objectinfo['content']['cacheexpire'])) {
+                self::$expireTime = $objectinfo['content']['cacheexpire'];
             }
         }
 
@@ -157,22 +133,22 @@ class xarBlockCache extends Object
     }
 
     /**
-     * Check whether a block is cached
+     * Check whether a object is cached
      *
      * @access public
-     * @param  string  $cacheKey  the key identifying the particular block you want to access
-     * @param  integer $blockid   the current block id
-     * @param  array   $blockinfo optional blockinfo when using the block BL tag
+     * @param  string  $cacheKey  the key identifying the particular object you want to access
+     * @param  integer $objectid   the current object id
+     * @param  array   $objectinfo optional objectinfo when using the object BL tag
      * @return bool
      */
-    public static function isCached($cacheKey, $blockid = 0, $blockinfo = array())
+    public static function isCached($cacheKey, $objectid = 0, $objectinfo = array())
     {
         if (empty(self::$cacheStorage)) {
             return false;
         }
 
-        // Check if this block is suitable for block caching
-        if (!(self::checkCachingRules($cacheKey, $blockid, $blockinfo))) {
+        // Check if this object is suitable for object caching
+        if (!(self::checkCachingRules($cacheKey, $objectid, $objectinfo))) {
             self::$noCache = 1;
             return false;
         }
@@ -199,24 +175,24 @@ class xarBlockCache extends Object
             $factors .= xarSession::getVar('role_id');
         }
 
-        if (isset($blockinfo)) {
-            $factors .= md5(serialize($blockinfo));
+        if (isset($objectinfo)) {
+            $factors .= md5(serialize($objectinfo));
         }
 
         self::$cacheCode = md5($factors);
         self::$cacheStorage->setCode(self::$cacheCode);
 
-        // Note: we pass along the expiration time here, because it may be different for each block
+        // Note: we pass along the expiration time here, because it may be different for each object
         $result = self::$cacheStorage->isCached($cacheKey, self::$expireTime);
 
         return $result;
     }
 
     /**
-     * Get the contents of a block from the cache
+     * Get the contents of a object from the cache
      *
      * @access public
-     * @param  string $cacheKey the key identifying the particular block you want to access
+     * @param  string $cacheKey the key identifying the particular object you want to access
      */
     public static function getCached($cacheKey)
     {
@@ -224,11 +200,11 @@ class xarBlockCache extends Object
             return '';
         }
 
-        // Note: we pass along the expiration time here, because it may be different for each block
+        // Note: we pass along the expiration time here, because it may be different for each object
         $value = self::$cacheStorage->getCached($cacheKey, 0, self::$expireTime);
 
-        // empty blocks are acceptable here
-        if (!empty($value) && $value === 'isEmptyBlock') {
+        // empty object output is acceptable here ?
+        if (!empty($value) && $value === 'isEmptyObject') {
             // the filesystem cache ignores empty files
             $value = '';
         }
@@ -237,15 +213,15 @@ class xarBlockCache extends Object
     }
 
     /**
-     * Set the contents of a block in the cache
+     * Set the contents of a object in the cache
      *
      * @access public
-     * @param  string $cacheKey the key identifying the particular block you want to access
-     * @param  string $value    the new content for that block
+     * @param  string $cacheKey the key identifying the particular object you want to access
+     * @param  string $value    the new content for that object
      */
     public static function setCached($cacheKey, $value)
     {
-        // CHECKME: watch out for nested blocks ?
+        // CHECKME: watch out for nested objects !
         if (self::$noCache == 1) {
             self::$noCache = '';
             return;
@@ -255,10 +231,10 @@ class xarBlockCache extends Object
             return;
         }
 
-        // empty blocks are acceptable here
+        // empty object output is acceptable here ?
         if (empty($value) && $value === '') {
             // the filesystem cache ignores empty files
-            $value = 'isEmptyBlock';
+            $value = 'isEmptyObject';
         }
 
         if (// the http request is a GET AND
@@ -269,13 +245,13 @@ class xarBlockCache extends Object
             // the cache collection directory hasn't reached its size limit...
             !(self::$cacheStorage->sizeLimitReached()) ) {
 
-            // Note: we pass along the expiration time here, because it may be different for each block
+            // Note: we pass along the expiration time here, because it may be different for each object
             self::$cacheStorage->setCached($cacheKey, $value, self::$expireTime);
         }
     }
 
     /**
-     * Flush block cache entries
+     * Flush object cache entries
      */
     public static function flushCached($cacheKey)
     {

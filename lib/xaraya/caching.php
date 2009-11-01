@@ -263,7 +263,7 @@ function xarCacheGetDirSize($dir = false)
  */
 function xarCache_getParents()
 {
-    $currentid = xarSessionGetVar('role_id');
+    $currentid = xarSession::getVar('role_id');
     if (xarCore::isCached('User.Variables.'.$currentid, 'parentlist')) {
         return xarCore::getCached('User.Variables.'.$currentid, 'parentlist');
     }
