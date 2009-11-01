@@ -24,13 +24,9 @@
   -->
 
   <!--
-    The default identity transform which will just copy over anything we dont match
+    Include default transformations
   -->
-  <xsl:import href="defaults/identity.xsl"/>
-  <!--
-    The defaults for html type stuff
-  -->
-  <xsl:include href="defaults/html.xsl" />
+  <xsl:includedefaults />
 
   <!--
     Debugging templates, this (tries to) be more verbose.
@@ -42,14 +38,14 @@
 
     This include should by default be commented out.
   -->
-  <!-- <xsl:import href="default/debug" /> -->
+  <!-- <xsl:import href="default/debug"/> -->
 
   <!--
     We produce an UTF-8 encoded XML document as output. As we compile the
     each document to a (hopefully valid) php script ultimately. We leave out
     the xml declaration, as PHP interprets that as the start of a PHP block.
   -->
-  <xsl:output  method="xml" omit-xml-declaration="yes" indent="yes" encoding="UTF-8"/>
+  <xsl:output  method="xml" omit-xml-declaration="yes" indent="no" encoding="UTF-8"/>
 
   <!--
     Parameters, we'd like as few as possible
@@ -65,7 +61,7 @@
     and then correct for the elements which cause us trouble. In theory
     there shouldnt be any, but alas.
   -->
-  <xsl:strip-space elements="*" />
+  <xsl:strip-space elements="*"/>
 
   <!--
     Start of the transform usually starts with matching the root, so do we
@@ -82,75 +78,15 @@
   <xsl:template match="comment()"/>
 
   <!--
-    Xaraya specific tag implementations are brought in here.
-
-    @todo: should we use import or include here?
+    Include Blocklayout tag defintions
   -->
-  <!-- xar:additional-styles -->
-  <xsl:include href="tags/additional-styles.xsl"/>
-  <!-- xar:base-include-javascript -->
-  <xsl:include href="tags/base-include-javascript.xsl"/>
-  <!-- xar:base-render-javascript -->
-  <xsl:include href="tags/base-render-javascript.xsl"/>
-  <!-- xar:block -->
-  <xsl:include href="tags/block.xsl"/>
-  <!-- xar:blockgroup -->
-  <xsl:include href="tags/blockgroup.xsl"/>
-  <!-- xar:blocklayout -->
-  <xsl:include href="tags/blocklayout.xsl"/>
-  <!-- xar:br -->
-  <xsl:include href="tags/br.xsl"/>
-  <!-- xar:break -->
-  <xsl:include href="tags/break.xsl"/>
-  <!-- xar:comment -->
-  <xsl:include href="tags/comment.xsl"/>
-  <!-- xar:continue -->
-  <xsl:include href="tags/continue.xsl"/>
-  <!-- xar:button -->
-  <xsl:include href="tags/button.xsl"/>
+  <xsl:includebltags />
 
-  <!-- TODO: organize this -->
-  <!-- xar:data-view/output/label etc. -->
-  <xsl:include href="tags/data.xsl"/>
-  <xsl:include href="tags/articles.xsl"/>
-  <xsl:include href="tags/calendar.xsl"/>
-  <!-- <xsl:include href="tags/recommend.xsl"/> -->
-
-  <!-- xar:else -->
-  <xsl:include href="tags/else.xsl"/>
-  <!-- xar:elseif -->
-  <xsl:include href="tags/elseif.xsl"/>
-  <!-- xar:event -->
-  <xsl:include href="tags/event.xsl"/>
-  <!-- xar:for -->
-  <xsl:include href="tags/for.xsl"/>
-  <!-- xar:foreach -->
-  <xsl:include href="tags/foreach.xsl"/>
-  <!-- xar:if -->
-  <xsl:include href="tags/if.xsl"/>
-  <!-- xar:loop -->
-  <xsl:include href="tags/loop.xsl"/>
-
-  <!-- MLS functionality -->
-  <xsl:include href="tags/mls.xsl"/>
-
-  <!-- xar:module -->
-  <xsl:include href="tags/module.xsl"/>
-  <!-- xar:sec -->
-  <xsl:include href="tags/sec.xsl"/>
-  <!-- xar:set -->
-  <xsl:include href="tags/set.xsl"/>
-  <!-- xar:style -->
-  <xsl:include href="tags/style.xsl"/>
-  <!-- xar:template -->
-  <xsl:include href="tags/template.xsl"/>
-  <!-- xar:var -->
-  <xsl:include href="tags/var.xsl" />
-  <!-- xar:while -->
-  <xsl:include href="tags/while.xsl"/>
-
-  <!-- Others -->
-  <xsl:include href="tags/element.xsl"/>
+  <!--
+    Include Xaraya tag defintions
+  -->
+  <xsl:includeclienttags />
+  
 <!--
     Utility template for resolving text nodes. It recursively resolves
     #-pairs from left to right. Pre- and Post- hash content are treated
@@ -160,7 +96,7 @@
     to resolve.
     @todo leave #(1) constructs alone?
 -->
-<xsl:template name="resolveText" >
+<xsl:template name="resolveText">
   <xsl:param name="expr"/>
 
   <!-- 
@@ -233,7 +169,7 @@
 </xsl:template>
 
 <xsl:template name="translateText">
-  <xsl:param name="expr" />
+  <xsl:param name="expr"/>
   <xsl:choose>
     <xsl:when test="string(number($expr))!='NaN'">
       <xsl:value-of select="$expr"/>
@@ -277,7 +213,7 @@
   @param  string to     contains what will be the replacement.
   @return string with the replacements done.
 -->
-<xsl:template name="replace" >
+<xsl:template name="replace">
   <!-- Specifiy the parameters -->
   <xsl:param name="source"/>
   <xsl:param name="from" select="&quot;'&quot;"/>
@@ -333,11 +269,11 @@
     <xsl:param name="delimiter" select="'#'"/>
     <xsl:choose>
       <xsl:when test="contains($expr,$delimiter) = 0">
-        <xsl:value-of select="string-length($expr) + 1" />
+        <xsl:value-of select="string-length($expr) + 1"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="initial-position">
-          <xsl:value-of select="string-length(substring-before($expr,$delimiter)) + 1" />
+          <xsl:value-of select="string-length(substring-before($expr,$delimiter)) + 1"/>
         </xsl:variable>
         <xsl:choose>
           <xsl:when test="starts-with(substring-after($expr,$delimiter),$delimiter)">
@@ -346,7 +282,7 @@
                 <xsl:with-param name="expr" select="substring($expr,$initial-position + 2)"/>
               </xsl:call-template>
             </xsl:variable>
-            <xsl:value-of select="$initial-position + 1 + $add-on-position" />
+            <xsl:value-of select="$initial-position + 1 + $add-on-position"/>
           </xsl:when>
           
           <!-- Honor the #(n) construct here. Replace this with the matches function at some point -->
@@ -359,12 +295,12 @@
                 <xsl:with-param name="expr" select="substring($expr,$initial-position + 1)"/>
               </xsl:call-template>
             </xsl:variable>
-            <xsl:value-of select="$initial-position + 1 + $add-on-position" />
+            <xsl:value-of select="$initial-position + 1 + $add-on-position"/>
           </xsl:when>
           <!-- End of #(n) clause -->
 
           <xsl:otherwise>
-            <xsl:value-of select="$initial-position" />
+            <xsl:value-of select="$initial-position"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>

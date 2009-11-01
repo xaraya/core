@@ -347,6 +347,47 @@ complementary text related styling
 .xar-error { color: #ff0000; }
 .xar-title { font-weight: bold; }
 
+
+/* tab structure (margin, padding, float, etc is controlled in core css in          
+   the base module.  Colors (border, background) are inherited from the norm,        
+   alt, accent classes above.  The below rules are intended to be                  
+   theme-specific supplements.  
+*/
+
+/* tabs parent element */ 
+ul.xar-tabs { 
+}
+/* tabs label */
+ul.xar-tabs li.xar-tabs-label {
+    background-image: none;
+}
+/* inactive tab */
+ul.xar-tabs li.xar-tab {
+    font-weight: bold;
+    background-image: none;
+}
+/* active tab */
+ul.xar-tabs li.xar-tab-active {
+    font-weight: bold;
+}
+/* inactive tab link */
+ul.xar-tabs li.xar-tab a {
+    text-decoration: none;
+}
+/* active tab link */
+ul.xar-tabs li.xar-tab-active a {
+    text-decoration: none;
+}             
+/* inactive tab link hover - not handled elsewhere */
+ul.xar-tabs li.xar-tab a:hover {
+/* see colstyle files */
+}
+/* active tab link hover - not handled elsewhere */
+ul.xar-tabs li.xar-tab-active a:hover {
+/* see colstyle files */
+}
+
+
 /*
 not sure if we still using this rule anywhere TODO: check
 -------------------------------------------------------------------------[comment] */
@@ -386,4 +427,23 @@ div.xar-block-body-topnav {
 abbr, acronym, .help {
     border-bottom: 1px dotted #999;
     cursor: help;
+}
+
+/*
+icon related styling
+-------------------------------------------------------------------------[comment] */
+
+a.xar-icon {
+    text-decoration: none;
+}
+a.xar-icon img{
+    vertical-align: text-top;
+}
+img.xar-icon {
+    vertical-align: text-top;
+}
+img.xar-icon-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    vertical-align: text-top;
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <h2>Dynamic Data Utilities</h2>
+        <xar:template type="module" file="utility-menu"/>
+        <ul>
+            <li>Import / Export
+            <ul>
+                <li>
+                    <a href="#xarModURL('dynamicdata', 'util', 'import')#">Import Object Definitions and Data</a>
+                </li>
+                <li>
+                    <a href="#xarModURL('dynamicdata', 'util', 'export')#">Export Object Definitions and Data</a>
+                </li>
+            </ul></li>
+            <li>Database Utilites
+            <ul>
+                <li>
+                    <a href="#xarModURL('dynamicdata', 'util', 'view_static')#">Static Table Definitions</a>
+                </li>
+                <li>
+                    <a href="#xarModURL('dynamicdata', 'util', 'meta')#">Data Browser</a>
+                </li>
+                <li>
+                    <a href="#xarModURL('dynamicdata', 'admin', 'query')#">Query Data Objects or Database Tables</a>
+                </li>
+            </ul></li>
+            <li>New Dynamic Data Features
+            <ul>
+                <li>
+                    <a href="#xarModURL('dynamicdata', 'object', 'main')#">Dynamic Object User Interface</a>
+                </li>
+                <li>
+                    Object Hooks
+                    <xar:if condition="xarModIsAvailable('hitcount')">
+                        <xar:if condition="xarModIsHooked('hitcount','dynamicdata', 3)">
+                            e.g. <a href="&xar-modurl-hitcount-admin-hooks;">Hitcount</a> hooks with <a href="&xar-modurl-dynamicdata-object-main;&amp;object=sample">Sample Object</a>
+                        <xar:else/>
+                            e.g. <a href="&xar-modurl-hitcount-admin-hooks;">Hitcount</a> hooks with Sample Object
+                        </xar:if>
+                    <xar:else/>
+                        e.g. Hitcount hooks with Sample Object
+                    </xar:if>
+                </li>
+                <li>
+                    <a href="#xarModURL('dynamicdata', 'util', 'relations')#">Links between Objects or Tables</a>
+                </li>
+            </ul></li>
+            <li>Migration
+            <ul>
+                <li>
+                    <a href="#xarModURL('dynamicdata', 'util', 'migrate')#">Migrate Module Items</a> (experimental - for test sites only)
+                </li>
+            </ul></li>
+        </ul>
+    </div>
+</xar:template>

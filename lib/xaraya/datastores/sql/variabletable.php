@@ -32,6 +32,8 @@ class VariableTableDataStore extends SQLDataStore
      */
     function getItem(array $args = array())
     {
+        if (empty($args['itemid']))
+            throw new BadParameterException(xarML('Cannot get itemid 0'));
         if (count($this->fields) < 1) return;
         $itemid = $args['itemid'];
 
@@ -107,6 +109,8 @@ class VariableTableDataStore extends SQLDataStore
      */
     function updateItem(array $args = array())
     {
+        if (empty($args['itemid']))
+            throw new BadParameterException(xarML('Cannot update itemid 0'));
         $itemid = $args['itemid'];
         if (count($this->fields) < 1) return $itemid;
 

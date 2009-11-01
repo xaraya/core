@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="active_step">7</xar:set>
+    <div id="main_right">
+        <xar:template file="status"/>
+    </div>
+    <div id="main_left">
+        <h1>Choose a Configuration</h1>
+        <form action="#xarModURL('installer','admin','confirm_configuration')#" method="post">
+            <h3>Available Configurations</h3>
+            <xar:if condition="isset($warning)">
+                #$warning# 
+            <xar:else />
+                <xar:set name="configsize">count($names)</xar:set>
+                <select id="configuration" name="configuration" size="#$configsize#">
+                    <xar:loop name="$names">
+                        <xar:if condition="$loop:item['selected']">
+                            <option value="#$loop:item['value']#" selected="selected">
+                            #$loop:item['display']#</option>
+                        <xar:else />
+                            <option value="#$loop:item['value']#">#$loop:item['display']#</option>
+                        </xar:if>
+                    </xar:loop>
+                </select>
+            </xar:if>
+            <p>
+                Each configuration will load a predefined set of modules, menus, hooks etc. as
+                well as create an initial configuration of the security system. On the next page
+                you can change some of the options of your chosen configuration.
+            </p>
+            <div class="xar-align-center" style="margin: 2em 0;">
+                <input type="submit" name="create" id="create" value="Continue"/>
+                <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
+            </div>
+        </form>
+    </div>
+</xar:template>

@@ -17,7 +17,18 @@
  */
 
 /* This one exception depends on BL being inside Xaraya, try to correct this later */
-sys::import('xaraya.exceptions');
+if (!class_exists('xarExceptions')) {
+    sys::import('xaraya.exceptions');
+}
+/**
+ * Exceptions raised by this subsystem
+ *
+ * @package compiler
+ */
+class BLCompilerException extends xarExceptions
+{
+    protected $message = "Cannot open template file '#(1)'";
+}
 
 /**
  *  Interface definition for the blocklayout compiler, these are the things
@@ -27,6 +38,7 @@ sys::import('xaraya.exceptions');
 interface IxarBLCompiler
 {
     static function &instance();        // Get an instance of the compiler
+    function configure();               // configure the compiler
     function compileFile($fileName);    // compile a file
     function compileString(&$data);     // compile a string
 }
@@ -41,16 +53,15 @@ interface IxarBLCompiler
  */
 class xarBLCompiler extends Object implements IxarBLCompiler
 {
-    private static $instance = null;
+    public static $instance  = null;
     private $lastFile        = null;
+    private $processor       = null;
     
 
     /**
      * Private constructor, since this is a Singleton
      */
-    private function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * Implementation of the interface
@@ -74,7 +85,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         $this->lastFile = $fileName;
         // The @ makes the code better to handle, leave it.
         if (!($fp = @fopen($fileName, 'r'))) {
-            throw new BLCompilerException($fileName,"Cannot open template file '#(1)'");
+            throw new BLCompilerException($fileName);
         }
 
         if ($fsize = filesize($fileName)) {
@@ -87,27 +98,78 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         }
 
         fclose($fp);
-        sys::import('xaraya.log');
+        if (!function_exists('xarLogMessage')) {
+            sys::import('xaraya.log');
+        }
         xarLogMessage("BL: compiling $fileName");
 
         $res = $this->compile($templateSource);
         return $res;
     }
 
+    public function getTagPaths($filepath, $prefix)
+    {
+        $files = array();
+        foreach (new DirectoryIterator($filepath) as $fileInfo) {
+            if($fileInfo->isDot()) continue;
+            $pathinfo = pathinfo($fileInfo->getPathName());
+            if(isset($pathinfo['extension']) && $pathinfo['extension'] != 'xsl') continue;
+            $files[] = $prefix . "/" . $fileInfo->getFileName();
+        }
+        return $files;
+    }
+
+    public function configure()
+    {
+        return array();
+    }
+    
     /**
      * Private methods
      */
-    private function compile(&$templateSource)
+    private function boot()
     {
         sys::import('blocklayout.xsltransformer');
-        $xslFile = sys::root() . '/lib/blocklayout/xslt/xar2php.xsl';
+        $xslFile = sys::lib() . 'blocklayout/xslt/booter.xsl';
         $xslProc = new BlockLayoutXSLTProcessor($xslFile);
+        $xmlFile = sys::lib() . 'blocklayout/xslt/xar2php.xsl';
+        $doc = new DOMDocument;
+        $doc->load($xmlFile);
+
+        // Pass the default tags
+        $baseDir = sys::lib() . 'blocklayout/xslt/defaults';
+        $xslFiles = $this->getTagPaths($baseDir, 'defaults');
+        $xslProc->setParameter('', 'defaults', implode(',', $xslFiles));
+
+        // Pass the Blocklayout tags
+        $baseDir = sys::lib() . 'blocklayout/xslt/tags';
+        $xslFiles = $this->getTagPaths($baseDir, 'tags');
+        $xslProc->setParameter('', 'bltags', implode(',', $xslFiles));
+        
+        // Pass the custom tags of the client using Blocklayout
+        $clienttags = $this->configure();
+        $xslProc->setParameter('', 'clienttags', implode(',', $clienttags));
+        
+        // Compile the compiler
+        $outDoc = $xslProc->transformToXML($doc);
+        return $outDoc;
+    }
+
+    private function compile(&$templateSource)
+    {
+        if (!isset($this->processor)) {
+            sys::import('blocklayout.xsltransformer');
+            $this->processor = new BlockLayoutXSLTProcessor();
+            $xslDoc = new DOMDocument;
+            $xslDoc->loadXML($this->boot());
+            $this->processor->importStyleSheet($xslDoc);
+        }
 
         // This is confusing, dont do this here.
-        $xslProc->xmlFile = $this->lastFile;
-
+        $this->processor->xmlFile = $this->lastFile;
+        
         // This generates php code, the documentree is not visible here anymore
-        $outDoc = $xslProc->transform($templateSource);
+        $outDoc = $this->processor->transform($templateSource);
         return $outDoc;
     }
 }

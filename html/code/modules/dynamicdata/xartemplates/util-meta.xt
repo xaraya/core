@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="module" file="dd"/>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <h2>Utilities - Data Browser</h2>
+        <xar:template type="module" file="utility-menu"/>
+        <xar:if condition="empty($export)">
+            <xar:if condition="!empty($databases)">
+                <form method="post" action="&xar-modurl-dynamicdata-util-meta;">
+                    <fieldset>
+                        <legend>Select Database</legend>
+                        <div class="xar-form-input-wrapper">
+                            <label for="xml" class="xar-form-label">Database :</label>
+                            <div class="xar-form-container-after">
+                                <xar:data-input type="dropdown" name="db" value="$db" options="$databases" onchange="submit()"/>
+                                <input type="submit" value="Refresh"/>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </xar:if>
+            <xar:if condition="empty($tables)">
+            <xar:elseif condition="empty($table)"/>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                    <xar:foreach in="$tables" key="$curtable" value="$fields">
+                        <tr>
+                            <td>
+                                <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$curtable#">
+                                #$curtable#</a>
+                            </td>
+                            <td class="xar-align-center">
+                                <a href="&xar-modurl-dynamicdata-admin-view;&amp;table=#$curtable#">
+                            View</a>| 
+                                <a href="&xar-modurl-dynamicdata-admin-query;&amp;table=#$curtable#">
+                            Query</a>| 
+                                <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$curtable#&amp;export=object">
+                            Export Object</a>| 
+                                <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$curtable#&amp;export=ddl">
+                            Export DDL</a>
+                            <!--
+                                | <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$curtable#">
+                            Add Relation</a>
+                            -->
+                           </td>
+                        </tr>
+                    </xar:foreach>
+                </table>
+                <xar:else />
+                <h3>Table: #$table#</h3>
+                <p>
+                <a href="&xar-modurl-dynamicdata-admin-view;&amp;table=#$table#">View</a>| 
+                <a href="&xar-modurl-dynamicdata-admin-query;&amp;table=#$table#">Query</a>| 
+                    <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$table#&amp;export=object">
+                Export Object</a>| 
+                    <a href="&xar-modurl-dynamicdata-util-meta;&amp;table=#$table#&amp;export=ddl">
+                Export DDL</a>
+                <!--
+                | <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$table#">Add
+                Relation</a>
+                -->
+                </p>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Label</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Source</th>
+                        <th>Configuration</th>
+                    </tr>
+                    <xar:foreach in="$tables" key="$curtable" value="$fields">
+                        <xar:if condition="!empty($table) and $curtable eq $table">
+                            <xar:foreach in="$fields" value="$field">
+                                <tr>
+                                    <td>#$field['name']#</td>
+                                    <td>#$field['label']#</td>
+                                    <td>
+                                        <xar:data-output property="$prop" value="$field['type']"/>
+                                    </td>
+                                    <td>#$field['defaultvalue']#</td>
+                                    <td>#$field['source']#</td>
+                                    <td>#$field['configuration']#</td>
+                                </tr>
+                            </xar:foreach>
+                        </xar:if>
+                    </xar:foreach>
+                </table>
+            </xar:if>
+            <p class="xar-align-center">
+            <a href="&xar-modurl-dynamicdata-util-meta;&amp;export=object">Export all tables to
+            Objects</a>| 
+            <a href="&xar-modurl-dynamicdata-util-meta;&amp;export=ddl">Export all tables to
+            DDL</a>| 
+            <a href="&xar-modurl-dynamicdata-util-meta;&amp;showdb=1">Show other databases</a></p>
+        <xar:else />
+            <form method="post" action="&xar-modurl-dynamicdata-util-import;">
+                <fieldset>
+                    <xar:if condition="$export eq 'ddl'">
+                        <legend>Data definition for #$table#</legend>
+                    <xar:else/>
+                        <legend>Object definition for #$table#</legend>
+                    </xar:if>
+                    <div class="xar-form-input-wrapper">
+                        <label for="xml" class="xar-form-label">Definition:</label>
+                        <div class="xar-form-container-after">
+                            <textarea name="xml" id="xml" class="xar-form-textarealarge">
+                                <xar:if condition="$export eq 'ddl'">
+                                <xar:template file="exportddl"/>
+                                <xar:else />
+                                <xar:foreach in="$tables" key="$curtable" value="$fields">
+                                <xar:set name="tablename">
+                                strtr($curtable,'.','_')</xar:set>&lt;object
+                                name="#$tablename#"&gt; &lt;label&gt;#$curtable#&lt;/label&gt;
+                                &lt;module_id&gt;182&lt;/module_id&gt;
+                                &lt;itemtype&gt;-1&lt;/itemtype&gt;
+                                &lt;urlparam&gt;itemid&lt;/urlparam&gt;
+                                &lt;maxid&gt;0&lt;/maxid&gt; &lt;config&gt;&lt;/config&gt;
+                                &lt;isalias&gt;0&lt;/isalias&gt; &lt;properties&gt; 
+                                <xar:foreach in="$fields" key="$name" value="$field">&lt;property
+                                name="#$name#"&gt; 
+                                <xar:foreach in="$field" key="$key" value="$value">
+                                    <xar:if condition="$key eq 'type'">
+                                    &lt;#$key#&gt;#$proptypes[$value]#&lt;/#$key#&gt;
+                                    <xar:elseif condition="$key ne 'name'"/>
+                                    &lt;#$key#&gt;#$value#&lt;/#$key#&gt;</xar:if>
+                                </xar:foreach>&lt;/property&gt;</xar:foreach>&lt;/properties&gt;
+                                &lt;/object&gt;</xar:foreach></xar:if>
+                            </textarea>
+                        </div>
+                    </div>
+                </fieldset>
+                <xar:if condition="$export ne 'ddl'">
+                    <div class="xar-align-center">
+                        <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="submit" value="#xarML('Import Object Definition')#"/>
+                    </div>
+                </xar:if>
+            </form>
+        </xar:if>
+    </div>
+</xar:template>

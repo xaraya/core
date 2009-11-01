@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:image-resize src="$modinfo[preview]" label="xarML('Preview image for this theme')"
-    width="250px" height="187px" constrain="true" class="xar-alt-outline" />
-</xar:template>

@@ -3,7 +3,7 @@
  * XSLT version of the BL compiler
  *
  * @package core
- * @copyright 2007 The Digital Development Foundation.
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @link http://www.xaraya.com
  *
  * @subpackage xsl
@@ -11,7 +11,7 @@
 **/
 
 sys::import('blocklayout.compiler'); // expression transformer
-class BlocklayoutXSLTProcessor extends Object
+class BlockLayoutXSLTProcessor extends Object
 {
     private $xslProc = null;    // Object representing the processor.
     private $xslDoc  = null;    // Object representing the stylesheet.
@@ -23,7 +23,7 @@ class BlocklayoutXSLTProcessor extends Object
 
     public  $xmlFile = null;
 
-    public function __construct($xslFile)
+    public function __construct($xslFile=null)
     {
         // Set up the xsl processor
         $this->xslProc = new XSLTProcessor();
@@ -31,7 +31,7 @@ class BlocklayoutXSLTProcessor extends Object
 
         // Set up the stylesheet
         set_exception_handler(array('ExceptionHandlers','bone'));
-        $this->setStyleSheet($xslFile);
+        if (isset($xslFile)) $this->setStyleSheet($xslFile);
 
         // Set up the document to transform
         $this->xmlDoc = new DOMDocument();
@@ -87,6 +87,19 @@ class BlocklayoutXSLTProcessor extends Object
         //$this->prepXml  = preg_replace_callback($mlsPattern, $callBack, $this->prepXml);
     }
 
+    public function importStyleSheet($xslDoc)
+    {
+        $this->xslProc->importStyleSheet($xslDoc);
+    }
+    public function setParameter($space, $name, $value)
+    {
+        $this->xslProc->setParameter($space, $name, $value);
+    }
+    public function transformToXML($xmlFile)
+    {
+        return $this->xslProc->transformToXML($xmlFile);
+    }
+
     public function transform(&$xml)
     {
         // Save the original XML
@@ -101,7 +114,7 @@ class BlocklayoutXSLTProcessor extends Object
         // Transform it
         set_exception_handler(array('ExceptionHandlers','defaulthandler'));
         // What should we initialize $result to?
-        $this->postXML = $this->xslProc->transformToXML($this->xmlDoc);
+        $this->postXML = $this->transformToXML($this->xmlDoc);
 
         // Postprocess it
         $this->postProcess();

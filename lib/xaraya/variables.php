@@ -3,7 +3,7 @@
  * Variable utilities
  *
  * @package variables
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini marco@xaraya.com
@@ -364,11 +364,11 @@ function xarVarValidate($validation, &$subject, $supress = false, $name = '')
  * @access public
  * @see xarCore
  */
-function xarVarIsCached($cacheKey,  $name)         { return xarCore::isCached($cacheKey, $name);         }
-function xarVarGetCached($cacheKey, $name)         { return xarCore::getCached($cacheKey, $name);        }
-function xarVarSetCached($cacheKey, $name, $value) { return xarCore::setCached($cacheKey, $name, $value);}
-function xarVarDelCached($cacheKey, $name)         { return xarCore::delCached($cacheKey, $name);        }
-function xarVarFlushCached($cacheKey)              { return xarCore::flushCached($cacheKey);             }
+function xarVarIsCached($scope,  $name)         { return xarCore::isCached($scope, $name);         }
+function xarVarGetCached($scope, $name)         { return xarCore::getCached($scope, $name);        }
+function xarVarSetCached($scope, $name, $value) { return xarCore::setCached($scope, $name, $value);}
+function xarVarDelCached($scope, $name)         { return xarCore::delCached($scope, $name);        }
+function xarVarFlushCached($scope)              { return xarCore::flushCached($scope);             }
 /**@-*/
 
 /*
@@ -408,9 +408,20 @@ function xarVarFlushCached($cacheKey)              { return xarCore::flushCached
 function xarVarPrepForDisplay()
 {
     $resarray = array();
+    $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+    // stopgap for now. we need to agree on a naming convention for the charsets that won't confuse the hell out of everyone
+    $charset = $charset == 'utf8' ? 'utf-8' : $charset;
     foreach (func_get_args() as $var) {
-        // Prepare var
-        $var = htmlspecialchars($var);
+        if (is_bool($var)) {
+            $var = $var ? 'true' : 'false';
+        } else {
+            // Prepare var
+            try {
+                $var = htmlspecialchars($var, ENT_COMPAT, $charset);
+            } catch (Exception $e) {
+                $var = htmlspecialchars($var);
+            }
+        }
         // Add to array
         array_push($resarray, $var);
     }

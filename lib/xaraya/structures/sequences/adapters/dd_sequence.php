@@ -42,7 +42,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
                         'where'    => 'id = '.$this->items[$position]['id']);
         // And get the data, we do this explicitly because the 'data' field might be very big
         // so it is not included in the items property for this object by default.
-        $item = xarModApiFunc('dynamicdata','user','getitems',$params);
+        $item = xarMod::apiFunc('dynamicdata','user','getitems',$params);
         $item = $item[$this->items[$position]['id']]['data'];
         $item = unserialize(base64_decode($item));
         return $item;
@@ -124,7 +124,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
                         'sort'      => 'nextid',
                         'fieldlist' => array('id','nextid'));
         // And get the data
-        $objectData = xarModApiFunc('dynamicdata','user','getitems',$params);
+        $objectData = xarMod::apiFunc('dynamicdata','user','getitems',$params);
         // Make sure we have them in the right order (logically), i.e. sort on nextid
         $this->items = array_reverse($objectData);
     }
@@ -137,7 +137,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
                         'itemid'    => $itemid,
                         'fields'    => array(array('name'=>'nextid','value'=>$nextid)));
 
-        $res = xarModAPIFunc('dynamicdata','admin','update',$params);
+        $res = xarMod::apiFunc('dynamicdata','admin','update',$params);
         return $res;
     }
 }

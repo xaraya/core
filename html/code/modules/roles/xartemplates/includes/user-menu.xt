@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">
+                Account Information
+        </span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:if condition="!empty($message)">
+            #$message#
+            <xar:else />
+            <div>
+                <ul class="xar-tabs xar-alt xar-norm-outline">
+                    <xar:foreach in="$menutabs" value="$menutab">
+                        <xar:if condition="$menutab['active']">
+                            <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                            <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                        <xar:else />
+                            <xar:set name="tabclass">'xar-tab'</xar:set>
+                            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                        </xar:if>
+                        <li class="#$tabclass#">
+                            <a href="#$menutab['url']#" title="#$menutab['title']#" class="#$linkclass#">#$menutab['label']#</a>
+                        </li>
+                    </xar:foreach>
+                </ul>
+            </div>
+        </xar:if>
+    </div>
+</xar:template>

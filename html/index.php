@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Xaraya Web Interface Entry Point
  *
@@ -9,11 +9,24 @@
  * @author Marco Canini
  */
 
+$GLOBALS["Xaraya_PageTime"] = microtime(true);
+
+ /**
+ * Load the layout file so we know where to find the Xaraya directories
+ */
+$systemConfiguration = array();
+include 'var/layout.system.php';
+if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
+if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
+if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
+if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
+$GLOBALS['systemConfiguration'] = $systemConfiguration;
+set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
+
  /**
  * Load the Xaraya bootstrap so we can get started
  */
-set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
-include 'lib/bootstrap.php';
+include 'bootstrap.php';
 
 /**
  * Set up output caching if enabled
@@ -23,7 +36,7 @@ include 'lib/bootstrap.php';
 if (file_exists(sys::varpath() . '/cache/output/cache.touch')) {
     sys::import('xaraya.caching');
     // Note : we may already exit here if session-less page caching is enabled
-    xarCache_init();
+    xarOutputCache::init();
 }
 
 /**
@@ -63,13 +76,18 @@ function xarMain()
     $pageCaching = 0;
     if (defined('XARCACHE_PAGE_IS_ENABLED')) {
         $pageCaching = 1;
-        $cacheKey = "$modName-$modType-$funcName";
+        if (xarRequest::isObjectURL()) {
+            // CHECKME: differentiate between view and display (= both with empty $funcName) based on itemid ??
+            $cacheKey = "objecturl-$modType-$funcName";
+        } else {
+            $cacheKey = "$modName-$modType-$funcName";
+        }
     }
 
     $run = 1;
-    if ($pageCaching == 1 && xarPageIsCached($cacheKey,'page')) {
+    if ($pageCaching == 1 && xarPageCache::isCached($cacheKey)) {
         // output the cached page *or* a 304 Not Modified status
-        if (xarPageGetCached($cacheKey,'page')) {
+        if (xarPageCache::getCached($cacheKey)) {
             // we could return true here, but we'll continue just in case
             // processing changes below someday...
             $run = 0;
@@ -78,17 +96,22 @@ function xarMain()
 
     if ($run) {
 
-        // Load the module
-        if (!xarModLoad($modName, $modType)) return; // throw back
-
         // if the debugger is active, start it
         if (xarCoreIsDebuggerActive()) {
             ob_start();
         }
 
-        // Call the main module function
-        $mainModuleOutput = xarModFunc($modName, $modType, $funcName);
+        if (xarRequest::isObjectURL()) {
+            sys::import('xaraya.objects');
 
+            // Call the object handler and return the output (or exit with 404 Not Found)
+            $mainModuleOutput = xarObject::guiMethod($modType, $funcName);
+
+        } else {
+
+            // Call the main module function and return the output (or exit with 404 Not Found)
+            $mainModuleOutput = xarMod::guiFunc($modName, $modType, $funcName);
+        }
 
         if (xarCoreIsDebuggerActive()) {
             if (ob_get_length() > 0) {
@@ -107,25 +130,8 @@ function xarMain()
         // We're all done, one ServerRequest made
         xarEvents::trigger('ServerRequest');
 
-        // Note : the page template may be set to something else in the module function
-        if (xarTplGetPageTemplateName() == 'default' && $modType != 'admin') {
-            // NOTE: we should fallback to the way we were handling this before
-            // (ie: use pages/$modName.xt if pages/user-$modName is not found)
-            // instead of just switching to the new way without a deprecation period
-            // so as to prevent breaking anyone's sites. <rabbitt>
-            if (!xarTplSetPageTemplateName('user-'.$modName)) {
-                xarTplSetPageTemplateName($modName);
-            }
-        }
-
         // Set page template
-        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default' && xarModVars::Get('themes', 'usedashboard')) {
-            $dashtemplate=xarModVars::Get('themes','dashtemplate');
-            //if dashboard is enabled, use the dashboard template else fallback on the normal template override system for admin templates
-              if (!xarTplSetPageTemplateName($dashtemplate.'-'.$modName)) {
-                xarTplSetPageTemplateName($dashtemplate);
-            }
-        }elseif ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
+        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
              // Use the admin-$modName.xt page if available when $modType is admin
             // falling back on admin.xt if the former isn't available
             if (!xarTplSetPageTemplateName('admin-'.$modName)) {
@@ -138,12 +144,12 @@ function xarMain()
             xarTplSetPageTemplateName($pageName);
         }
 
-        // Render page
+        // Render page with the output
         $pageOutput = xarTpl_renderPage($mainModuleOutput);
 
         if ($pageCaching == 1) {
             // save the output in cache *before* sending it to the client
-            xarPageSetCached($cacheKey, 'page', $pageOutput);
+            xarPageCache::setCached($cacheKey, $pageOutput);
         }
 
         echo $pageOutput;

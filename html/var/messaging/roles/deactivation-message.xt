@@ -1,9 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-#$recipientname#,
-
-Your account was deactivated by the administrator.
-If you want to know the reason, contact <xar:var scope="module" module="mail" name="adminmail"/>
-You will receive an email as soon as your account is activated again.
-
-<xar:var scope="module" module="mail" name="adminname"/>
+    #$recipientname#,
+    <xar:br/><xar:br/>
+    Your account was deactivated by the administrator.
+    <xar:br/>
+    If you want to know the reason, contact <xar:var scope="module" module="mail" name="adminmail"/>
+    <xar:br/>
+    You will receive an email as soon as your account is activated again.
+    <xar:br/><xar:br/>
+    <xar:var scope="module" module="mail" name="adminname"/>
 </xar:template>

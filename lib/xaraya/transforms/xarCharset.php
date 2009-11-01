@@ -3,7 +3,7 @@
  * Class for conversion between charsets
  *
  * @package multilanguage
- * @copyright (C) 2002-2007 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -11,7 +11,7 @@
  * @author Vladimirs Metenchuks <voll@xaraya.com>
 **/
 
-define ("CONVERT_TABLES_DIR", sys::root() . '/lib/transforms/convtables/');
+define ("CONVERT_TABLES_DIR", sys::lib() . 'transforms/convtables/');
 
 /**
  * Main FEATURES of this class:

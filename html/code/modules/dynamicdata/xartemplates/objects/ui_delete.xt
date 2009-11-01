@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Object Interface</span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>
+          Delete Item #$object:itemid# in #$object:label#
+        </h2>
+        <h3 class="xar-align-center">Confirm Deleting This Item?</h3>
+        <fieldset>
+            <legend>Preview</legend>
+            <xar:data-display object="$object"/>
+        </fieldset>
+        <xar:if condition="$object:visibility ne 'public'">
+            <h3 class="xar-align-center">Warning! This is a <i>#$object:visibility#</i> object used
+            internally by the #xarMod::getName($object:moduleid)# module.<br/>
+            Trying to delete this item here may break the module. Please proceed with caution.</h3>
+        </xar:if>
+        <!-- TODO: distinguish between 'protected' and 'private' ? -->
+        <xar:set name="postlink">xarObject::getActionURL($object, 'delete')</xar:set>
+        <form method="post" action="#$postlink#">
+            <fieldset>
+                <div class="xar-align-center">
+                    <!-- if we use the current URL, the object is already specified -->
+                    <xar:if condition="$object:linktype ne 'current'">
+                        <input type="hidden" name="object" id="object" value="#$object:name#"/>
+                    </xar:if>
+                    <input type="hidden" name="method" id="method" value="delete"/>
+                    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                    <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                    <input type="hidden" name="notfresh" id="notfresh" value="true"/>
+                    <xar:if condition="!empty($return_url)">
+                        <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                    </xar:if>
+                    <input type="submit" name="cancel" id="cancel" value="#xarML('Cancel')#" class="xar-margin-thickright"/>
+                    <input type="submit" name="confirm" id="confirm" value="#xarML('Delete')#" class="xar-margin-thickleft"/>
+                </div>
+            </fieldset>
+        </form>
+        <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
+        <a href="#$viewlink#">View <xar:data-label object="$object"/></a>
+    </div>
+</xar:template>

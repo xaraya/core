@@ -4,7 +4,7 @@
  *
  * @package lib
  * @subpackage legacy
- * @copyright (C) 2002-2007 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini
@@ -115,7 +115,7 @@ function xarServerGetBaseURL()  { return xarServer::getBaseURL();  }
 function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL) { return xarServer::getCurrentURL($args, $generateXMLURL, $target); }
 function xarRequestGetVar($name, $allowOnlyMethod = NULL) { return xarRequest::getVar($name, $allowOnlyMethod);}
 function xarRequestGetInfo()                              { return xarRequest::getInfo();        }
-function xarRequestIsLocalReferer()                       { return xarRequest::IsLocalReferer(); }
+function xarRequestIsLocalReferer()                       { return xarRequest::isLocalReferer(); }
 function xarResponseRedirect($redirectURL)                { return xarResponse::Redirect($redirectURL); }
 
 

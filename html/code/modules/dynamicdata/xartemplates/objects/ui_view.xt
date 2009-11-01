@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Object Interface</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:if condition="!empty($object)">
+            <h2>View <xar:data-label object="$object"/></h2>
+            <xar:if condition="$object:name eq 'objects' and $object:linktype eq 'object'">
+                <!-- show a list of objects -->
+                <ul>
+                    <xar:foreach in="$object:items" value="$item">
+                        <xar:if condition="$item['module_id'] eq 182 and $item['itemtype'] gt 2">
+                            <li><a href="#xarServer::getObjectURL($item['name'])#">#$item['label']#</a></li>
+                        </xar:if>
+                    </xar:foreach>
+                </ul>
+            <xar:else/>
+                <xar:data-view object="$object"/>
+            </xar:if>
+        <xar:else />
+            <div class="xar-align-center">
+                <a href="&xar-modurl-dynamicdata-object-main;">Please select one of the available objects</a>
+            </div>
+        </xar:if>
+    </div>
+</xar:template>

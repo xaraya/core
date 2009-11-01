@@ -1,7 +1,7 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:set name="siteslogan">
-        <xar:var scope="module" module="themes" name="SiteSlogan" />
+        <xar:var scope="module" module="themes" name="SiteSlogan"/>
     </xar:set>
     <div id="xc-header">
         <div id="xc-header-rightbevel">
@@ -9,7 +9,7 @@
         </div>
         <!-- See if we need the styleswitcher controls here -->
         <xar:if condition="$styleswitchertype ne 'none'">
-            <xar:template file="styleswitchercontrols" type="theme" />
+            <xar:template file="styleswitchercontrols" type="theme"/>
         </xar:if>
         <!-- Logo and bevel are combined and positioned with css -->
         <h1>
@@ -18,7 +18,7 @@
             </a>
         </h1>
         <p id="xc-slogan">
-            <xar:var name="siteslogan" />
+            <xar:var name="siteslogan"/>
         </p>
     </div>
 </xar:template>

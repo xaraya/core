@@ -3,7 +3,7 @@
  * Short description of purpose of file
  *
  * @package validation
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
 */
@@ -19,9 +19,9 @@ class CheckBoxValidation extends ValueValidations
     function validate(&$subject, Array $parameters)
     {
         if (empty($subject) || is_null($subject)) {
-            $subject = false;
+            $subject = 0;
         } elseif (is_string($subject)) {
-            $subject = true;
+            $subject = 1;
         } else {
             $msg = 'Not a checkbox value';
             throw new VariableValidationException(null,$msg);

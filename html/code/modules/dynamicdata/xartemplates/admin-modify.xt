@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <h2>
+            Modify Item #$object:itemid# in #$object:label#
+        </h2>
+        <xar:if condition="!empty($objectid) and $objectid eq 1">
+            <xar:set name="action">'modify'</xar:set>
+            <xar:template file="object-actions"/>
+        </xar:if>
+        <xar:if condition="isset($preview)">
+            <fieldset>
+                <legend>Preview</legend>
+                <xar:data-display object="$object"/>
+            </fieldset>
+        </xar:if>
+        <xar:set name="isupload">#$object:upload#</xar:set>
+        <xar:if condition="!empty($isupload)">
+            <xar:set name="enc_type">'multipart/form-data'</xar:set>
+        <xar:else/>
+            <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
+        </xar:if>
+        <form method="post" action="&xar-modurl-dynamicdata-admin-update;" enctype="#$enc_type#">
+            <fieldset>
+                <legend>Modify Object Definition</legend>
+                <xar:if condition="$object:visibility ne 'public'">
+                    <h3 class="xar-align-center">Warning! This is a <i>#$object:visibility#</i> object used
+                    internally by the #xarMod::getName($object:moduleid)# module.<br/>
+                    Trying to modify this item here may break the module. Please proceed with caution.</h3>
+                </xar:if>
+                <!-- TODO: distinguish between 'protected' and 'private' ? -->
+                <!-- this does most of the hard work :) -->
+                <xar:template file="showinvalids" module="dynamicdata"/>
+                <xar:data-form object="$object"/>
+                <xar:if condition="!empty($hooks)">
+                    <xar:foreach in="$hooks" key="$module" value="$output">
+                        #$output#
+                    </xar:foreach>
+                </xar:if>
+            </fieldset>
+            <fieldset>
+                <div class="xar-align-center">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
+                    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+                    <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                    <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                    <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
+                    <xar:if condition="!empty($return_url)">
+                        <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                    </xar:if>
+                    <xar:var name="label">Preview</xar:var>
+                    <input type="submit" name="preview" value="#$label#" class="xar-margin-thickright"/>
+                    <input type="hidden" name="notfresh" id="notfresh" value="true"/>
+                    <xar:var name="label">Update</xar:var>
+                    <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
+                </div>
+                <xar:if condition="!empty($objectid) and $objectid eq 2">
+                    <p>
+                        <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#">
+                            Edit configuration</a>
+                    </p>
+                </xar:if>
+          </fieldset>
+        </form>
+    </div>
+</xar:template>

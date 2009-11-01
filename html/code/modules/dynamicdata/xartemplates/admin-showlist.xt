@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="empty($layout) or $layout eq 'default'">
+        <table width="100%" border="1" cellspacing="0" cellpadding="4">
+        <tr>
+            <xar:foreach in="$labels" value="$item">
+                <th class="xar-align-center">#$item['label']#</th>
+            </xar:foreach>
+            <th class="xar-align-center">Options</th>
+        </tr>
+        <xar:foreach in="$items" value="$item">
+            <tr>
+                <!-- we don't use xar:data-form or xar:data-input here, because this
+             is typically not an input form -->
+                <xar:foreach in="$item['fields']" value="$field">
+                    <td>
+                        <xar:data-output type="$field['type']" name="dd_'.$field['id'].'"
+                        value="$field['value']"/>
+                    </td>
+                </xar:foreach>
+                <td>
+                    <xar:foreach in="$item['options']" value="$option">#$option['join']# 
+                    <a href="#$option['link']#">#$option['title']#</a></xar:foreach>
+                </td>
+            </tr>
+        </xar:foreach>
+        <xar:if condition="!empty($newlink)">
+            <tr>
+                <xar:foreach in="$labels" value="$item">
+                    <td>&#160;</td>
+                </xar:foreach>
+                <td>
+                    <a href="#$newlink#">New</a>
+                </td>
+            </tr>
+        </xar:if>
+        </table>
+        <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+            <br />
+            <div class="xar-align-center">
+        <xar:if condition="!empty($prevurl)">
+        <a href="#$prevurl#">&lt;&lt;</a>
+        <xar:else />---</xar:if>&#160;&#160;&#160; 
+        <xar:if condition="!empty($nexturl)">
+        <a href="#$nexturl#">&gt;&gt;</a>
+        <xar:else />---</xar:if></div>
+        </xar:if>
+    <xar:elseif condition="$layout eq 'cells'"/>
+        <table width="100%" border="1" cellspacing="0" cellpadding="4">
+        <tr>
+            <xar:foreach in="$labels" value="$item">
+                <th class="xar-align-center">#$item['label']#</th>
+            </xar:foreach>
+        </tr>
+        <xar:foreach in="$items" value="$item">
+            <tr>
+                <xar:foreach in="$item['fields']" value="$field">
+                    <td>
+                        <xar:data-input type="$field['type']" name="dd_'.$field['id'].'"
+                        value="$field['value']" size="15"/>
+                    </td>
+                </xar:foreach>
+            </tr>
+        </xar:foreach>
+        <xar:if condition="!empty($newlink)">
+            <tr>
+                <xar:foreach in="$labels" value="$item">
+                    <td>&#160;</td>
+                </xar:foreach>
+                <td>
+                    <a href="#$newlink#">New</a>
+                </td>
+            </tr>
+        </xar:if>
+        </table>
+        <xar:if condition="!empty($prevurl) or !empty($nexturl)">
+            <div class="xar-align-center">
+        <xar:if condition="!empty($prevurl)">
+        <a href="#$prevurl#">&lt;&lt;</a>
+        <xar:else />---</xar:if>&#160;&#160;&#160; 
+        <xar:if condition="!empty($nexturl)">
+        <a href="#$nexturl#">&gt;&gt;</a>
+        <xar:else />---</xar:if></div>
+        </xar:if>
+    <!-- TODO: multi-column output -->
+    <xar:else />Specify your own layout here... 
+    <br />
+    <br />You can also specify a separate template, e.g. if you want to handle individual fields
+    differently for a particular module / itemtype</xar:if>
+</xar:template>

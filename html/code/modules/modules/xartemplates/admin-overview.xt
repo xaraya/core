@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Modules Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <img src="#xarTplGetImage('modules.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
+        <h2>Overview</h2>
+
+        <h3>What is it?</h3>
+        <p>
+            The Modules module controls the installation, upgrade, and removal of modules on your Xaraya site. The module also lets you connect different modules via "hooks" to allow them to share functionality  The Modules module is a core module within Xaraya and cannot be removed. 
+        </p>
+
+        <h3>Concepts</h3>
+        <h4>Modules</h4>
+        <p>
+            Modules are self-contained building blocks that provide functionality. Xaraya comes with 10 so-called core modules that provide basic services. Further modules can be added and installed at any time. Modules generally focus on functionality in one area, such as content management, messaging, forums, calendaring etc. The ability to combine modules easily to achieve a desired overall result is a characteristic of Xaraya.
+        </p>
+        
+        <h4>Hooks</h4>
+        <p>
+            Hooks are a way of sharing functionality across modules. Similar to the publish/subscribe functionality in other systems, each module can broadcast services it makes available, and other modules can use those services if they are hooked. For instance, hooking the Mail module to the Roles module will cause Xaraya to send an email to the site administrator on certain changes to users and groups.
+        </p>
+        <ul>
+            <li>
+                Hooks are <em>anonymous</em>: The modules providing and using the service(s) need know almost nothing about each other. Note that the order in which hook services are executed is not defined.
+            </li>
+            <li>
+                Hooks are <em>flexible</em>: They can be applied to all or only some of the <em>itemtypes</em> of the module receiving the service(s). See the DynamicData module for more information on itemtypes.
+            </li>
+            <li>
+                Hooks are <em>versatile</em>: They can be activated or disabled at any time..
+            </li>
+        </ul>
+
+        <h3>The Admin interface</h3>
+        <p>
+            As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Modules &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
+        </p>
+        <p>
+            In addition, this module also supports the following configuration options:
+            <ul>
+                <li>
+                    <strong>Disable overviews:</strong>&#160;If this option is active, the module overview page will not be displayed when going to the admin menu of a module.
+                </li>
+            </ul>
+        </p>
+
+        <p>
+            Clicking on the <strong>View Modules</strong>link in the Admin menu displays a list of all modules that are available, but not necessarily active and installed, in your Xaraya installation. Note that:
+            <ul>
+                <li>
+                    You can add more modules to this list at any time by adding them to your Xaraya modules directory and clicking the Reload button
+                </li>
+                <li>
+                    Modules must be installed and active to be available for use on your Xaraya site.
+                    You may also need to setup the appropriate privileges for your users to view or use the
+                    module (see Privileges and Roles modules).
+                </li>
+                <li>
+                    When installing a new version of an existing module, check its state and click on the "upgrade" link if it is shpw in order to run its upgrade routine. Modules in upgrade state are not available on your site until actually upgraded and set to active.
+                </li>
+                <li>
+                    You cannot uninstall or deactivate core modules.
+                </li>
+            </ul>
+        </p>
+        <p>
+            There are a number of options with drop down selection lists for displaying your modules.
+        </p>
+        <ul>
+            <li>
+                <strong>Style:</strong> displays the interface with icons or text links..
+            </li>
+            <li>
+                <strong>View:</strong> filters the modules to be listed. By default ALL modules are displayed.
+            </li>
+            <li>
+                <strong>Sort By:</strong> defines the sort order for the module list.
+            </li>
+            <li>
+                <strong>Hide</strong>: removes the core modules from the display.
+            </li>
+        </ul>
+        <p>
+            Clicking on the <strong>Configure Hooks</strong>link in the Admin menu lets you add extra functionality to modules by configuring hooks from one module to another.
+        </p>
+        <!--
+        <p>
+            Within the view itself we have the following headers.
+        </p>
+        <ol>
+            <li>
+            <em>Name</em>: The module name.</li>
+            <li>
+            <em>Version</em>: The module version number.</li>
+            <li>
+            <em>Info</em>: Some basic module information.</li>
+            <li>
+            <em>Status</em>: The current status of the module.</li>
+            <li>
+            <em>Actions</em>: Displays the actions available to you for this module</li>
+            <li>
+            <em>Properties</em>: Provides a link that allows you to alter the module display in the
+            User or Admin menu</li>
+            <li>
+            <em>Hooks</em>: This provides an alternative means for setting hooks from other modules
+            to on or off. If you do not understand this setting, please use the 'Configuring Hooks'
+            settings below to configure and set functionality with hooks.</li>
+        </ol>
+        -->
+        
+        <h3>Available Blocks</h3>
+        <p>The Modules module has no blocks</p>
+
+        <h3>Available Dataproperties</h3>
+        <ul>
+            <li>
+                <strong>Module</strong>:&#160;displays a list of modules of the site as a dropdown.
+            </li>
+        </ul>
+        
+        <h3>Available Hooks</h3>
+        <p>The Modules module has no hooks</p>
+
+        <!--
+        <h3>Further Information</h3>
+        <p>Further information on the Modules module can be found at</p>
+        <ul>
+            <li>Modules Module Extension page at 
+            <a title="#xarML('Modules Module - Xaraya Extension 36')#"
+            href="http://www.xaraya.com/index.php/release/1.html">Xaraya Extension and
+            Releases</a>. Click on Version History tab at the bottom to get the latest release
+            information.</li>
+            <li>Related tutorials and documentation on Modules module found at 
+            <a href="http://www.xaraya.com/index.php/keywords/modules/"
+            title="#xarML('Related documentation on Modules')#">Xaraya Documentation.</a></li>
+        </ul>
+        <p class="xar-sub">
+        <strong>&#160;Modules Module Overview</strong>
+        <br />&#160;Version 2.3.1&#160; 2006-02-08</p>
+        -->
+    </div>
+</xar:template>

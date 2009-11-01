@@ -95,7 +95,7 @@ class xarLogger_simple extends xarLogger
     // @param $conf['mode'] string File mode of the log file, in Octal (optional)
     // @param $conf['maxFileSize'] integer The maximum size the logfile can be before it is moved or deleted (optional, bytes)
     // @access public
-    function setConfig(&$conf)
+    function setConfig(array &$conf)
     {
         parent::setConfig($conf);
 

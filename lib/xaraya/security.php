@@ -2,7 +2,7 @@
 /**
  *
  * @package security
- * @copyright (C) 2002-2007 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Jim McDonald
@@ -324,7 +324,7 @@ function xarTree()
  */
 function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$level)
 {
-    return xarModAPIFunc('privileges','admin','returnprivilege',array(
+    return xarMod::apiFunc('privileges','admin','returnprivilege',array(
         'pid' => $pid,
         'name' => $name,
         'realm' => $realm,
@@ -521,7 +521,7 @@ function xarSecGenAuthKey($modName = NULL)
  * @throws ForbiddenOperationException
  * @todo bring back possibility of time authorized keys
  */
-function xarSecConfirmAuthKey($modName = NULL, $authIdVarName = 'authid')
+function xarSecConfirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=false)
 {
     if(!isset($modName)) list($modName) = xarRequest::getInfo();
     $authid = xarRequest::getVar($authIdVarName);
@@ -555,7 +555,8 @@ function xarSecConfirmAuthKey($modName = NULL, $authIdVarName = 'authid')
         return true;
     }
     // Not found, assume invalid
-    throw new ForbiddenOperationException();
+    if ($catch) throw new ForbiddenOperationException();
+    else return false;
 }
 
 ?>

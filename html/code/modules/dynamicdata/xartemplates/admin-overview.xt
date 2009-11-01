@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <![CDATA[
+    <script type="text/javascript">
+        function showtab (selectedindex, items)
+        {
+            for (i=1;i<=items;i++) {
+                document.getElementById('page-' + i).style.display = "none";
+                document.getElementById('tab-' + i).className = "xar-tab";
+                document.getElementById('href-' + i).className = "xar-norm xar-norm-outline";
+            }
+            document.getElementById('page-' + selectedindex).style.display = "block";
+            document.getElementById('tab-' + selectedindex).className = "xar-tab-active";
+            document.getElementById('href-' + selectedindex).className = "xar-accent xar-accent-outline";
+        }
+    </script>
+    ]]>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <img src="#xarTplGetImage('dynamicdata.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
+        <h2>Overview</h2>
+        <ul class="xar-tabs xar-alt xar-norm-outline" style="clear:both">
+            <li id="tab-1">
+                <a id="href-1" href="javascript:showtab(1,3)">
+                    Overview
+                </a>
+            </li>
+            <li id="tab-2">
+                <a id="href-2" href="javascript:showtab(2,3)">
+                    How To
+                </a>
+            </li>
+            <li id="tab-3">
+                <a id="href-3" href="javascript:showtab(3,3)">
+                    Examples
+                </a>
+            </li>
+        </ul>
+        <div id="page-1">
+            <h3>What is it?</h3>
+            <p>
+                The Dynamic Data module lets you create and manage custom objects ("dataobjects") on a Xaraya site. Dataobjects hold certain types of information and interact with Xaraya. You can use them to replace or extend objects Xaraya already has available (such as users, privileges, blocks etc.), or to create completely new objects for your site, representing e.g. customers, surveys, publications etc., according to your specific needs. The DynamicData module is a core module within Xaraya and cannot be removed. 
+            </p>
+
+            <h3>Concepts</h3>
+            <h4>Dataobjects</h4>
+            <p>
+                Dataobjects are Xaraya constructs that represent "things with data" in a Xaraya application. These can be real-life objects, such as news articles, projects, surveys, race tracks (depending on your application); or they can be Xaraya objects such as roles or privileges. Representing such diverse things as dataobjects lets you manage them in a consistent, and in may cases use the DynamicData module's own methods to do so. This saves development time and avoids duplication.                
+            </p>
+            <p>
+                Dataobjects have a simple basic structure. Each is given a unique ID, unique name, a label and some configuration settings. What sets one dataobject apart from another is the dataproperties it is given and the data they contain.
+            </p>
+            <h4>Dataproperties</h4>
+            <p>
+               A dataobject is characterized by its dataproperties. A dataproperty represents a certain type of information a dataobject contains. In the case of a news article this might be a title, author or article text. In the case of a role this might be a username, password, registration date, and so on. Dataobjects can have any number of dataproperties. Note that to be useful, however, a dataobject should always have an Itemid property, which represents a unique idea for that particular set of data (an "item") the dataobject contains.
+            </p>
+            <p>
+               Dataproperties come in different flavors, or "types". Some of these model HTML constructs such as textboxes, radio buttons, file uploads, etc., and can also be used as standalone HTML widgets without reference to a dataobject. Others model more abstract or complex concepts: there are is, instance, a username dataproperty, a password dataproperty and so on. A summary list of each module's dataproperties is given in its overview page (see above).
+            </p>
+            <h4>Items</h4>
+            <p>
+               A dataobject and its dataproperties cna be thought of as a container for holding different sets of data. A news article dataobject can contain specific articles, a roles dataobject can contain different users and groups. We refer to these sets of data as the dataobject's <em>items</em>.
+            </p>
+            <p>
+               Note that different dataobjects can have the same items. For instance, a roles object used in a user's profile display will show the.name, user name, date of registration etc. A different dataobject used by the site administrator to track users may show the same item with additional fields, such as state and group memberships.
+            </p>
+
+            <h3>The Admin interface</h3>
+            <p>
+                As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Dynamicdata &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
+            </p>
+
+
+            <h3>Available Blocks</h3>
+            <ul>
+                <li>
+                    <strong>Form Block</strong>:&#160;displays an input form for a dataobject. This can be used for "quick entry" of data by users, such as a registration.or a feedback submission.
+                </li>
+            </ul>
+
+            <h3>Available Hooks</h3>
+            <ul>
+                <li>
+                    <strong>Search Hook</strong>:&#160;allows user to search the content of the Dynamicdata module. This hook is known to be used by the Search module (a non-core module).
+                </li>
+            </ul>
+
+            <h3>Available Dataproperties</h3>
+            <ul>
+                <li>
+                    <strong>Configuration</strong>:&#160;used for input and display of a dataproperty's configuration.
+                </li>
+                <li>
+                    <strong>Datasource</strong>:&#160;displays a list of datasources of a dataobject as a dropdown.
+                </li>
+                <li>
+                    <strong>Fieldstatus</strong>:&#160;displays the input and display status of a dataproperty as a set of two dropdowns.
+                </li>
+                <li>
+                    <strong>Fieldtype</strong>:&#160;displays the list of available dataproperty types as a dropdown.
+                </li>
+                <li>
+                    <strong>Itemid</strong>:&#160;used for input and display of autoincremented dataobject IDs.
+                </li>
+                <li>
+                    <strong>Itemtype</strong>:&#160;a Combobox property used for input and display of dataobject itemtypes.
+                </li>
+                <li>
+                    <strong>Object</strong>:&#160;an ObjectRef property used to display the items of the Objects dataobject (i.e. the available dataobjects). This is a special case of the ObjectRef property.
+                </li>
+                <li>
+                    <strong>ObjectRef</strong>:&#160;a Select property used to display the items of a dataobject.
+                </li>
+                <li>
+                    <strong>Subform</strong>:&#160;a property used to model subitems of a dataobject.
+                </li>
+            </ul>
+
+            <!--
+            <h3>Further Information</h3>
+            <p>Further information on the DynamicData module can be found at:</p>
+                <ul>
+                <li>DynamicData Module Extension page at 
+                <a title="#xarML('DynamicData Module - Xaraya Extension 182')#"
+                href="http://www.xaraya.com/index.php/release/182.html">Xaraya Extension and
+                Releases</a>.</li>
+                <li>Related tutorials and documentation on DynamicData module at 
+                <a href="http://www.xaraya.com/index.php/keywords/dynamicdata/"
+                title="#xarML('Related documentation on DynamicData')#">Xaraya Documentation.</a></li>
+            </ul>
+            <p class="xar-sub">
+            <strong>&#160;DynamicData Module - Overview</strong>
+            <br />&#160;Version 1.2.1&#160; 2005-11-03</p>
+            -->
+        </div>
+        
+        <div id="page-2" style="display: none">
+                <h3>Using the &lt;xar:data-* ...&gt; tags in your templates</h3>
+                
+                <h4>Available tags</h4>
+                <p>
+                    Tags on properties:show their input or output displays, or their labels: 
+                </p>
+                <pre>
+    &lt;xar:data-input ... /&gt;
+    &lt;xar:data-output ... /&gt;
+    &lt;xar:data-label ... /&gt;
+                </pre>
+                <p>
+                    Tags on objects:show their forms, or item displays (one item) or item lists (many items): 
+                </p>
+                <pre>
+    &lt;xar:data-form ... /&gt;
+    &lt;xar:data-display ... /&gt;
+    &lt;xar:data-view ... /&gt;
+                </pre>
+                <p>
+                    Special tags can be used to retrieve properties and values related to one or more items 
+                </p>
+                <pre>
+    &lt;xar:data-getitem ... /&gt;
+    &lt;xar:data-getitems ... /&gt;
+                </pre>
+
+
+                <h4>Working with lists of items (I)</h4>
+                <p>
+                    The data-getitems tag retrieves a list of properties and item values from a dataobject:
+                </p>
+                <pre>
+    &lt;xar:data-getitems properties="&#36;properties" values="&#36;values" object="$myobject" /&gt;
+                </pre>
+                <p>
+                    The properties and values (from the name and value attributes) can be used to display the list of items (see below). The list can be restricted by passing the tag an array of itemids::
+                </p>
+                <pre>
+    &lt;xar:data-getitems properties="&#36;properties" values="&#36;values"  object="$myobject"
+        itemids="&#36;idlist" /&gt;
+            </pre>
+                <p>
+                    We can build headers for the list using the data-label tag:
+                </p>
+                <pre>
+    &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
+        &lt;th width="10%"&gt;
+            &lt;xar:data-label property="&#36;properties[&#36;name]" /&gt;
+        &lt;/th&gt;
+    &lt;/xar:foreach&gt;
+                </pre>
+                <p>
+                    When looping over the individual items, the value for item &#36;id) can be added dynamically:
+                </p>
+
+                <pre>
+    &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
+        &lt;td class="xar-norm"&gt;
+        &lt;xar:if condition="isset(&#36;values[&#36;id][&#36;name])"&gt;
+            &lt;xar:data-output property="&#36;properties[&#36;name]" 
+                value="&#36;values[&#36;id][&#36;name]" /&gt;
+        &lt;xar:else /&gt;
+            &amp;nbsp;
+        &lt;/xar:if&gt;
+        &lt;/td&gt;
+    &lt;/xar:foreach&gt;
+                </pre>
+            
+                <h4>Working with lists of items (II)</h4>
+                <p>
+                    The basic data-view tag shows all the items of an object 
+                </p>
+                <pre>
+    &lt;xar:data-view object="$myobject" /&gt;
+                </pre>
+                <p>
+                    The display of hte data can be adapted by using a custom template  or layout
+                </p>
+                    <pre>
+    &lt;xar:data-view object="$myobject" layout="list" /&gt;
+    &lt;xar:data-view object="$myobject" template="mylist" /&gt;
+                </pre>
+
+                <p>
+                    We can specify that only certain fields (properties) be shown. They will be displayed in the order entered (left to right, top to bottom). We can also select to display only certain items, given by their ids.
+                </p>
+                <pre>
+    &lt;xar:data-view object="$myobject" fieldlist="exid,name" /&gt;
+    &lt;xar:data-view object="$myobject" itemids="1,20,273" /&gt;
+                </pre>
+
+                <p>
+                    We can specify sorts, number of items to be displayed, and specify filters (given by the where attribute):
+                </p>
+                <pre>
+    &lt;xar:data-view object="$myobject" sort="hitcount,title"
+         where="authorid eq 2" numitems="20" /&gt;
+                </pre>
+
+                
+                <h4>Working with a single items</h4>
+                <p>
+                    We can display a form for entering an item, or simply display an object item's data:
+                </p>
+                <pre>
+    &lt;xar:data-form object="&#36;object" /&gt;
+    &lt;xar:data-display object="&#36;object" /&gt;
+                </pre>
+                <p>
+                    The tags can accept attributes, for instance to customize their display:
+                </p>
+                <pre>
+    &lt;xar:data-form object="&#36;object" template="mytemplate" layout="mylayout" /&gt;
+                </pre>
+                <p>
+                    In the above example the object $object already contains the item we are interested in. We can load a specific item by specifying an itemid attribute:
+                <pre>
+    &lt;xar:data-form object="&#36;object" itemid="666" /&gt;
+                </pre>                    
+                    We can also assemble an object item by getting the item first via a getitem tag:
+                </p>
+                <pre>
+    &lt;xar:data-getitem properties="&#36;properties" object="$myobject" itemid="&#36;id" /&gt;
+                </pre>
+                <p>
+                    Note that in this example the attribute object can refer to an onject or its name. The itemid attribute defines which item's data to retrieve, and the output is an array of fields with that data, called $properties. We can then use the $properties array to define a custom display, such as givne below (a custom form for input would simply use data-input, rather than data-output, tags):
+                </p>
+                <pre>
+    &lt;xar:foreach in="&#36;properties" key="&#36;field"&gt;
+        &lt;tr class="xar-norm xar-valign-top"&gt;
+            &lt;td&gt;
+                &lt;xar:data-label property="&#36;properties[&#36;field]" /&gt;:
+            &lt;/td&gt;
+            &lt;td&gt;
+                &lt;xar:data-output property="&#36;properties[&#36;field]" /&gt;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/xar:foreach&gt;
+                </pre>
+
+                <h4>Working with a single item fields</h4>
+                <p>
+                    We can assemble the field from scratch by stipulating its attributes in a tag:
+                </p>
+                <pre>
+    &lt;xar:set name="myval"&gt;'hello'&lt;/xar:set&gt; 
+    &lt;xar:data-input name="greeting" type="textbox" value="&#36;myval" /&gt;
+                </pre>
+                <p>
+                    By passing the tag a dataproperty object, it will take on the properties of that object (type, value etc.)
+                </p>
+                <pre>
+    &lt;xar:data-input property="&#36;myproperty" /&gt;
+                </pre>
+                <p>
+                    We can also override properties by explicitly adding other values as attributes:
+                </p>
+                <pre>
+    &lt;xar:set name="myval"&gt;'hello'&lt;/xar:set&gt; 
+    &lt;xar:data-input property="&#36;myproperty" value="&#36;myval" /&gt;
+                </pre>
+        </div>
+        
+        <div id="page-3" style="display: none">
+            <h3>Dataproperty examples</h3>
+            <p>
+                Dataproperties can be deployed as fields in a dataobject or as standalone widgets. The following are some examples of standalone dataproperties that can be included as tags on web pages.
+            </p>
+            <table border="1">
+                <tr>
+                    <td valign="middle">
+                        <xar:data-input type="grouplist"/>
+                    </td>
+                    <td valign="middle">
+                        Displays a dropdown of Xaraya groups:
+    <pre>
+    &lt;xar:data-input type="grouplist"/>
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:set name="options">
+                            array(
+                                array('id' => 'red', 'name' => 'Dark red'),
+                                array('id' => 'green', 'name' => 'Light green'),
+                            )
+                        </xar:set>
+                        <xar:data-input type="radio" options="$options" value="green" layout="vertical"/>
+                    </td>
+                    <td valign="middle">
+                        Displays a configurable group of radio buttons for input:
+    <pre>
+    &lt;xar:set name="options">
+        array(
+            array('id' => 'red', 
+                'name' => 'Dark red'),
+            array('id' => 'green', 
+                'name' => 'Light green'),
+        )
+    &lt;/xar:set>
+    &lt;xar:data-input type="radio" 
+        options="$options" value="green" 
+        layout="vertical"/>
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:set name="options">
+                            array(
+                                array('id' => 'red', 'name' => 'Dark red'),
+                                array('id' => 'green', 'name' => 'Light green'),
+                            )
+                        </xar:set>
+                        <xar:data-input type="checkboxlist" options="$options" value="green" layout="vertical"/>
+                    </td>
+                    <td valign="middle">
+                        Displays a configurable group of checkboxes for input:
+    <pre>
+    &lt;xar:set name="options">
+        array(
+            array('id' => 'red', 
+                'name' => 'Dark red'),
+            array('id' => 'green', 
+                'name' => 'Light green'),
+        )
+    &lt;/xar:set>
+    &lt;xar:data-input type="checkboxlist" 
+        options="$options" value="green" 
+        layout="vertical"/>
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:data-output type="username" user="myself"/>
+                    </td>
+                    <td valign="middle">
+                        Displays the user name of the current user:
+    <pre>
+    &lt;xar:data-output type="username" 
+        user="myself"/>
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:data-output type="urlicon" link="http://www.xaraya.com"/>
+                    </td>
+                    <td valign="middle">
+                        Displays a link to a url in an icon:
+    <pre>
+    &lt;xar:data-output type="urlicon" 
+        link="http://www.xaraya.com"/>
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:data-input type="filepicker" basedir="var/messaging/roles"/>
+                    </td>
+                    <td valign="middle">
+                        Displays a dropdown of the files in a directory:
+    <pre>
+    &lt;xar:data-input type="filepicker" 
+        basedir="var/messaging/roles"/>
+    </pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <xar:data-input type="calendar"/>
+                    </td>
+                    <td valign="middle">
+                        Displays a popup calendar for dae input:
+    <pre>
+    &lt;xar:data-input type="calendar"/>
+    </pre>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+    <script type="text/javascript">
+        showtab (1,3)
+    </script>
+</xar:template>

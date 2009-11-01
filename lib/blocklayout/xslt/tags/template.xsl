@@ -32,17 +32,17 @@
         <xsl:text>echo </xsl:text>
         <xsl:choose>
           <xsl:when test="@type='theme'">
-            <xsl:text>xarTpl_includeThemeTemplate('</xsl:text>
+            <xsl:text>xarTpl_includeThemeTemplate("</xsl:text>
             <xsl:value-of select="@file"/>
-            <xsl:text>',</xsl:text>
+            <xsl:text>",</xsl:text>
             <xsl:value-of select="$subdata"/>
             <xsl:text>);</xsl:text>
           </xsl:when>
           <xsl:when test="@type='system'">
             <!-- The name is to be interpreted relative to the file we're parsing now -->
-            <xsl:text>xarTplFile('</xsl:text>
+            <xsl:text>xarTplFile("</xsl:text>
             <xsl:value-of select="$bl_dirname"/><xsl:text>/</xsl:text><xsl:value-of select="@file"/>
-            <xsl:text>',</xsl:text>
+            <xsl:text>",</xsl:text>
             <xsl:call-template name="resolvePHP">
               <xsl:with-param name="expr" select="$subdata"/>
             </xsl:call-template>

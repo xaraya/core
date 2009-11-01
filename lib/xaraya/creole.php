@@ -7,7 +7,7 @@
  *
  * @package lib
  * @subpackage database
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @link http://www.xaraya.com
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
@@ -18,10 +18,10 @@ class xarDB extends Creole
 
     // Instead of the globals, we save our db info here.
     private static $firstDSN = null;
+    private static $firstFlags = null;
     private static $connections = array();
     private static $tables = array();
     private static $prefix = '';
-
 
     public static function getPrefix() { return self::$prefix;}
     public static function setPrefix($prefix) { self::$prefix =  $prefix; }
@@ -39,15 +39,41 @@ class xarDB extends Creole
         self::$tables = array_merge(self::$tables,$tables);
     }
 
-    public static function getHost() { self::setFirstDSN(); return self::$firstDSN['hostspec']; }
-    public static function getType() { self::setFirstDSN(); return self::$firstDSN['phptype'];  }
-    public static function getName() { self::setFirstDSN(); return self::$firstDSN['database']; }
+    public static function getHost() { return self::$firstDSN['hostspec']; }
+    public static function getType() { return self::$firstDSN['phptype'];  }
+    public static function getName() { return self::$firstDSN['database']; }
 
-    private static function setFirstDSN()
+    public static function configure($dsn, $flags = Creole::COMPAT_ASSOC_LOWER, $prefix = 'xar')
+    {
+        $persistent = !empty($dsn['persistent']) ? true : false;
+        if ($persistent) $flags |= Creole::PERSISTENT;
+
+        self::setFirstDSN($dsn);
+        self::setFirstFlags($flags);
+        self::setPrefix($prefix);
+    }
+
+    private static function setFirstDSN($dsn = null)
     {
         if(!isset(self::$firstDSN)) {
+            if (isset($dsn)) {
+                self::$firstDSN = $dsn;
+                return;
+            }
             $conn = self::$connections[0];
             self::$firstDSN = $conn->getDSN();
+        }
+    }
+
+    private static function setFirstFlags($flags = null)
+    {
+        if(!isset(self::$firstFlags)) {
+            if (isset($flags)) {
+                self::$firstFlags = $flags;
+                return;
+            }
+            $conn = self::$connections[0];
+            self::$firstFlags = $conn->getFlags();
         }
     }
 
@@ -58,6 +84,10 @@ class xarDB extends Creole
      */
     public static function &getConn($index = 0) 
     { 
+      // get connection on demand
+      if (count(self::$connections) <= $index && isset(self::$firstDSN) && isset(self::$firstFlags)) {
+          self::getConnection(self::$firstDSN, self::$firstFlags);
+      }
       // CHECKME: I've spent almost a day debuggin this when not assigning
       //          it first to a temporary variable before returning. 
       // The observed effect was that an exception did not occur when $index
@@ -71,6 +101,11 @@ class xarDB extends Creole
     public static function getConnection($dsn, $flags = 0)
     {
         $conn = parent::getConnection($dsn, $flags);
+        if (!isset($conn)) {
+            return;
+        }
+        self::setFirstDSN($conn->getDSN());
+        self::setFirstFlags($conn->getFlags());
         self::$connections[] =& $conn;
         self::$count++;
         return $conn;

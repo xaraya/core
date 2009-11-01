@@ -1,0 +1,24 @@
+<object name="themes_user_settings">
+  <objectid>13</objectid>
+  <label>Themes</label>
+  <module_id>182</module_id>
+  <itemtype>7</itemtype>
+  <class>DataObject</class>
+  <filepath>auto</filepath>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config>a:0:{}</config>
+  <isalias>false</isalias>
+  <properties>
+    <property name="default">
+      <id>85</id>
+      <label>Select Theme:</label>
+      <type>dropdown</type>
+      <defaultvalue></defaultvalue>
+      <source>module variable: themes</source>
+      <status>33</status>
+      <seq>1</seq>
+      <configuration>a:2:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:71:"xarMod::apiFunc('themes', 'admin', 'dropdownlist', array('Class' => 2))";}</configuration>
+    </property>
+  </properties>
+</object>

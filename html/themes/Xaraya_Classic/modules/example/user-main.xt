@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <p class="xar-error">This is an over-ridden template. See
     #xarTplGetThemeDir()#/modules/example/user-main.xt for the example</p>
@@ -7,7 +7,7 @@
         <!-- the variables used in this menu come from example_user_menu() -->
         <tr>
             <th class="xar-align-center">
-                <xar:var name="menutitle" />
+                <xar:var name="menutitle"/>
             </th>
         </tr>
         <tr>
@@ -30,7 +30,7 @@
     <!-- some variable filled in by the function using this template -->
     <div class="xar-align-center">
         <strong>
-            <xar:var name="welcome" />
+            <xar:var name="welcome"/>
         </strong>
     </div>
 </xar:template>

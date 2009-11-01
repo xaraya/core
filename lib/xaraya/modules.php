@@ -9,7 +9,7 @@
  *      xarMod
  *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Jim McDonald
@@ -103,118 +103,22 @@ sys::import('xaraya.variables.moduser');
 **/
 function xarModGetVarId($modName, $name)             {   return xarModVars::getID($modName, $name);       }
 
-function xarModDelUserVar($modName, $name, $id=NULL)                {   return xarModUserVars::delete($modName, $name, $id);      }
+function xarModDelUserVar($modName, $name, $id=NULL) {   return xarModUserVars::delete($modName, $name, $id);      }
 
-
-/**
- * Encode parts of a URL.
- * This will encode the path parts, the and GET parameter names
- * and data. It cannot encode a complete URL yet.
- *
- * @access private
- * @param data string the data to be encoded (see todo)
- * @param type string the type of string to be encoded ('getname', 'getvalue', 'path', 'url', 'domain')
- * @return string the encoded URL parts
- * @todo this could be made public
- * @todo support arrays and encode the complete array (keys and values)
-**/
 function xarMod__URLencode($data, $type = 'getname')
 {
-    // Different parts of a URL are encoded in different ways.
-    // e.g. a '?' and '/' are allowed in GET parameters, but
-    // '?' must be encoded when in a path, and '/' is not
-    // allowed in a path at all except as the path-part
-    // separators.
-    // The aim is to encode as little as possible, so that URLs
-    // remain as human-readable as we can allow.
-
-    // We will encode everything first, then restore a select few
-    // characters.
-    // TODO: tackle it the other way around, i.e. have rules for
-    // what to encode, rather than undoing some ecoded characters.
-    $data = rawurlencode($data);
-
-    $decode = array(
-        'path' => array(
-            array('%2C', '%24', '%21', '%2A', '%28', '%29', '%3D'),
-            array(',', '$', '!', '*', '(', ')', '=')
-        ),
-        'getname' => array(
-            array('%2C', '%24', '%21', '%2A', '%28', '%29', '%3D', '%27', '%5B', '%5D'),
-            array(',', '$', '!', '*', '(', ')', '=', '\'', '[', ']')
-        ),
-        'getvalue' => array(
-            array('%2C', '%24', '%21', '%2A', '%28', '%29', '%3D', '%27', '%5B', '%5D', '%3A', '%2F', '%3F', '%3D'),
-            array(',', '$', '!', '*', '(', ')', '=', '\'', '[', ']', ':', '/', '?', '=')
-        )
-    );
-
-    // TODO: check what automatic ML settings have on this.
-    // I suspect none, as all multi-byte characters have ASCII values
-    // of their parts > 127.
-    if (isset($decode[$type])) {
-        $data = str_replace($decode[$type][0], $decode[$type][1], $data);
-    }
-    return $data;
+    return xarURL::encode($data, $type);
 }
 
-/**
- * Format GET parameters formed by nested arrays, to support xarModURL().
- * This function will recurse for each level to the arrays.
- *
- * @access private
- * @param args array the array to be expanded as a GET parameter
- * @param prefix string the prefix for the GET parameter
- * @return string the expanded GET parameter(s)
- **/
 function xarMod__URLnested($args, $prefix)
 {
-    $path = '';
-    foreach ($args as $key => $arg) {
-        if (is_array($arg)) {
-            $path .= xarMod__URLnested($arg, $prefix . '['.xarMod__URLencode($key, 'getname').']');
-        } else {
-            $path .= $prefix . '['.xarMod__URLencode($key, 'getname').']' . '=' . xarMod__URLencode($arg, 'getvalue');
-        }
-    }
-
-    return $path;
+    return xarURL::nested($args, $prefix);
 }
 
-/**
- * Add further parameters to the path, ensuring each value is encoded correctly.
- *
- * @access private
- * @param args array the array to be encoded
- * @param path string the current path to append parameters to
- * @param psep string the path seperator to use
- * @return string the path with encoded parameters
- */
 function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
 {
-    if (count($args) > 0)
-    {
-        $params = '';
-
-        foreach ($args as $k=>$v) {
-            if (is_array($v)) {
-                // Recursively walk the array tree to as many levels as necessary
-                // e.g. ...&foo[bar][dee][doo]=value&...
-                $params .= xarMod__URLnested($v, $psep . $k);
-            } elseif (isset($v)) {
-                // TODO: rather than rawurlencode, use a xar function to encode
-                $params .= (!empty($params) ? $psep : '') . xarMod__URLencode($k, 'getname') . '=' . xarMod__URLencode($v, 'getvalue');
-            }
-        }
-
-        // Join to the path with the appropriate character,
-        // depending on whether there are already GET parameters.
-        $path .= (strpos($path, $pini) === false ? $pini : $psep) . $params;
-    }
-
-    return $path;
+    return xarURL::addParametersToPath($args, $path, $pini, $psep);
 }
-
 
 /**
  * Generates an URL that reference to a module function.
@@ -243,7 +147,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     // it can be used to configure Xaraya for mod_rewrite by
     // setting BaseModURL = '' in config.system.php
     try {
-        $BaseModURL = xarSystemVars::get(sys::CONFIG, 'BaseModURL');
+        $BaseModURL = xarSystemVars::get(sys::LAYOUT, 'BaseModURL');
     } catch(Exception $e) {
         $BaseModURL = 'index.php';
     }
@@ -278,12 +182,12 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         // The encode_shorturl will be in userapi.
         // Note: if a module declares itself as supporting short URLs, then the encoding
         // API subsequently fails to load, then we want those errors to be raised.
-        if ($modType == 'user' && xarModVars::get($modName, 'SupportShortURLs') && xarMod::apiLoad($modName, $modType)) {
+        if ($modType == 'user' && xarModVars::get($modName, 'enable_short_urls') && xarMod::apiLoad($modName, $modType)) {
             $encoderArgs = $args;
             $encoderArgs['func'] = $funcName;
 
             // Execute the short URL function.
-            // It must exist if the SupportShortURLs variable is set for the module.
+            // It must exist if the enable_short_urls variable is set for the module.
             // FIXME: if the function does not exist, then errors are not handled well, often hidden.
             // Ensure a missing short URL encoding function gets written to the log file.
             $short = xarMod::apiFunc($modName, $modType, 'encode_shorturl', $encoderArgs);
@@ -295,7 +199,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
                             // Use path encoding method, which can differ from
                             // the GET parameter encoding method.
                             if ($pathpart != '') {
-                                $path .= $pathsep . xarMod__URLencode($pathpart, 'path');
+                                $path .= $pathsep . xarURL::encode($pathpart, 'path');
                             }
                         }
                     }
@@ -303,7 +207,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
                     // These may actually be additional GET parameters injected by the
                     // short URL function - it makes no difference either way.
                     if (!empty($short['get']) && is_array($short['get'])) {
-                        $path = xarMod__URLaddParametersToPath($short['get'], $path, $pini, $psep);
+                        $path = xarURL::addParametersToPath($short['get'], $path, $pini, $psep);
                     } else {
                         $args = array();
                     }
@@ -353,7 +257,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         }
 
         // Add GET parameters to the path, ensuring each value is encoded correctly.
-        $path = xarMod__URLaddParametersToPath($args, $BaseModURL, $pini, $psep);
+        $path = xarURL::addParametersToPath($args, $BaseModURL, $pini, $psep);
 
         // We have the long form of the URL here.
         // Again, some form of hook may be useful.
@@ -369,352 +273,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     return xarServer::getBaseURL() . $path;
 }
 
-/**
- * Carry out hook operations for module
- * Some commonly used hooks are :
- *   item - display        (user GUI)
- *   item - transform      (user API)
- *   item - new            (admin GUI)
- *   item - create         (admin API)
- *   item - modify         (admin GUI)
- *   item - update         (admin API)
- *   item - delete         (admin API)
- *   item - search         (user GUI)
- *   item - usermenu       (user GUI)
- *   module - modifyconfig (admin GUI)
- *   module - updateconfig (admin API)
- *   module - remove       (module API)
- *
- * @access public
- * @param hookObject string the object the hook is called for - 'item', 'category', 'module', ...
- * @param hookAction string the action the hook is called for - 'transform', 'display', 'new', 'create', 'delete', ...
- * @param hookId integer the id of the object the hook is called for (module-specific)
- * @param extraInfo mixed extra information for the hook, dependent on hookAction
- * @param callerModName string for what module are we calling this (default = current main module)
- *        Note : better pass the caller module via $extrainfo['module'] if necessary, so that hook functions receive it too
- * @param callerItemType string optional item type for the calling module (default = none)
- *        Note : better pass the item type via $extrainfo['itemtype'] if necessary, so that hook functions receive it too
- * @return mixed output from hooks, or null if there are no hooks
- * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
- * @todo <marco> add BAD_PARAM exception
- * @todo <marco> <mikespub> re-evaluate how GUI / API hooks are handled
- * @todo add itemtype (in extrainfo or as additional parameter)
- */
-function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo = NULL, $callerModName = NULL, $callerItemType = '')
-{
-    //if ($hookObject != 'item' && $hookObject != 'category') {
-    //    throw new BadParameterException('hookObject');
-    //if ($hookAction != 'create' && $hookAction != 'delete' && $hookAction != 'transform' && $hookAction != 'display') {
-    //    throw new BadParameterException('hookAction');
-
-
-    // allow override of current module if necessary (e.g. modules admin, blocks, API functions, ...)
-    if (empty($callerModName)) {
-        if (isset($extraInfo) && is_array($extraInfo) && !empty($extraInfo['module'])) {
-            $modName = $extraInfo['module'];
-        } else {
-            list($modName) = xarRequest::getInfo();
-            $extraInfo['module'] = $modName;
-        }
-    } else {
-        $modName = $callerModName;
-    }
-    // retrieve the item type from $extraInfo if necessary (e.g. for articles, xarbb, ...)
-    if (empty($callerItemType) && isset($extraInfo) &&
-        is_array($extraInfo) && !empty($extraInfo['itemtype'])) {
-        $callerItemType = $extraInfo['itemtype'];
-    }
-    xarLogMessage("xarModCallHooks: getting $hookObject $hookAction hooks for $modName.$callerItemType");
-    $hooklist = xarModGetHookList($modName, $hookObject, $hookAction, $callerItemType);
-
-    $output = array();
-    $isGUI = false;
-
-    // TODO: #3
-    // Call each hook
-    foreach ($hooklist as $hook) {
-        //THIS IS BROKEN
-        //$hook['type'] and $type in the xarMod::isAvailable ARE NOT THE SAME THING
-//        if (!xarMod::isAvailable($hook['module'], $hook['type'])) continue;
-        if (!xarMod::isAvailable($hook['module'])) continue;
-        if ($hook['area'] == 'GUI') {
-            $isGUI = true;
-            if (!xarMod::load($hook['module'], $hook['type'])) return;
-            $res = xarMod::guiFunc($hook['module'], $hook['type'], $hook['func'],
-                              array('objectid' => $hookId, 'extrainfo' => $extraInfo));
-            if (!isset($res)) return;
-            // Note: hook modules can only register 1 hook per hookObject, hookAction and hookArea
-            //       so using the module name as key here is OK (and easier for designers)
-            $output[$hook['module']] = $res;
-        } else {
-            if (!xarMod::apiLoad($hook['module'], $hook['type'])) return;
-            $res = xarMod::apiFunc($hook['module'], $hook['type'], $hook['func'],
-                                 array('objectid' => $hookId,
-                                       'extrainfo' => $extraInfo));
-            if (!isset($res)) return;
-            $extraInfo = $res;
-        }
-    }
-
-// FIXME: this still returns the wrong output for many of the hook calls, whenever there are no hooks enabled
-// Reason : we don't "know" here if the hooks defined by hookObject + hookAction are GUI or API hooks,
-//          if we don't get that information from at least one enabled hook. But this is silly, really,
-//          because there are *no* cases where you can have the same hookObject + hookAction in 2 different
-//          hookAreas (GUI or API).
-    if ($isGUI || eregi('^(display|new|modify|search|usermenu|modifyconfig)$',$hookAction)) {
-        return $output;
-    } else {
-        return $extraInfo;
-    }
-}
-
-/**
- * Get list of available hooks for a particular module, object and action
- *
- * @access private
- * @param callerModName string name of the calling module
- * @param object string the hook object
- * @param action string the hook action
- * @param callerItemType string optional item type for the calling module (default = none)
- * @return array of hook information arrays, or null if database error
- * @throws DATABASE_ERROR
- */
-function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItemType = '')
-{
-    static $hookListCache = array();
-
-    if (empty($callerModName)) throw new EmptyParameterException('callerModName');
-
-    //if ($hookObject != 'item' && $hookObject != 'category') {
-    //    throw new BadParameterException('hookObject');
-    //}
-    //if ($hookAction != 'create' && $hookAction != 'delete' && $hookAction != 'transform' && $hookAction != 'display') {
-    //    throw new BadParameterException('hookAction');
-    //}
-
-    if (isset($hookListCache["$callerModName$callerItemType$hookObject$hookAction"])) {
-        return $hookListCache["$callerModName$callerItemType$hookObject$hookAction"];
-    }
-
-    // Get database info
-    $dbconn   = xarDB::getConn();
-    $xartable = xarDB::getTables();
-    $hookstable    = $xartable['hooks'];
-    $modulestable  = $xartable['modules'];
-
-    // Get applicable hooks
-    // New query:
-    $query ="SELECT DISTINCT hooks.t_area, tmods.name,
-                             hooks.t_type, hooks.t_func, hooks.priority
-             FROM $hookstable hooks, $modulestable tmods, $modulestable smods
-             WHERE hooks.t_module_id = tmods.id AND
-                   hooks.s_module_id = smods.id AND
-                   smods.name = ?";
-    $bindvars = array($callerModName);
-
-    if (empty($callerItemType)) {
-        // Itemtype is not specified, only get the generic hooks
-        $query .= " AND hooks.s_type = ?";
-        $bindvars[] = '';
-    } else {
-        // hooks can be enabled for all or for a particular item type
-        $query .= " AND (hooks.s_type = ? OR hooks.s_type = ?)";
-        $bindvars[] = '';
-        $bindvars[] = (string)$callerItemType;
-        // Q     : if itemtype is specified, why get the generic hooks? To save a function call in the modules?
-        // Answer: generic hooks apply for *all* itemtypes, so if a caller specifies an itemtype, you
-        //         need to check whether hooks are enabled for this particular itemtype or for all
-        //         itemtypes here...
-    }
-    $query .= " AND hooks.object = ? AND hooks.action = ? ORDER BY hooks.priority ASC";
-    $bindvars[] = $hookObject;
-    $bindvars[] = $hookAction;
-    $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_NUM);
-
-    $resarray = array();
-    while($result->next()) {
-        list($hookArea, $hookModName, $hookModType, $hookFuncName, $hookOrder) = $result->getRow();
-
-        $tmparray = array('area' => $hookArea,
-                          'module' => $hookModName,
-                          'type' => $hookModType,
-                          'func' => $hookFuncName);
-
-        array_push($resarray, $tmparray);
-    }
-    $result->Close();
-    $hookListCache["$callerModName$callerItemType$hookObject$hookAction"] = $resarray;
-    return $resarray;
-}
-
-/**
- * Check if a particular hook module is hooked to the current module (+ itemtype)
- *
- * @access public
- * @static modHookedCache array
- * @param hookModName string name of the hook module we're looking for
- * @param callerModName string name of the calling module (default = current)
- * @param callerItemType string optional item type for the calling module (default = none)
- * @return mixed true if the module is hooked
- * @throws DATABASE_ERROR, BAD_PARAM
- */
-function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '')
-{
-    static $modHookedCache = array();
-
-    if (empty($hookModName)) throw new EmptyParameterException('hookModName');
-
-    if (empty($callerModName)) {
-        list($callerModName) = xarRequest::getInfo();
-    }
-
-    // Get all hook modules for the caller module once
-    if (!isset($modHookedCache[$callerModName])) {
-        // Get database info
-        $dbconn   = xarDB::getConn();
-        $xartable = xarDB::getTables();
-        $hookstable   = $xartable['hooks'];
-        $modulestable = $xartable['modules'];
-
-        // Get applicable hooks
-        // New query:
-        $query = "SELECT DISTINCT tmods.name, hooks.s_type
-                  FROM  $hookstable hooks, $modulestable tmods, $modulestable smods
-                  WHERE hooks.s_module_id = smods.id AND
-                        hooks.t_module_id = tmods.id AND
-                        smods.name = ?";
-        $bindvars = array($callerModName);
-        $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars);
-
-        $modHookedCache[$callerModName] = array();
-        while($result->next()) {
-            list($modname,$itemtype) = $result->fields;
-            if (!empty($itemtype)) {
-                $itemtype = trim($itemtype);
-            }
-            if (!isset($modHookedCache[$callerModName][$itemtype])) {
-                $modHookedCache[$callerModName][$itemtype] = array();
-            }
-            $modHookedCache[$callerModName][$itemtype][$modname] = 1;
-        }
-        $result->close();
-    }
-    if (empty($callerItemType)) {
-        if (isset($modHookedCache[$callerModName][''][$hookModName])) {
-            // generic hook is enabled
-            return true;
-        } else {
-            return false;
-        }
-    } elseif (is_numeric($callerItemType)) {
-        if (isset($modHookedCache[$callerModName][''][$hookModName])) {
-            // generic hook is enabled
-            return true;
-        } elseif (isset($modHookedCache[$callerModName][$callerItemType][$hookModName])) {
-            // or itemtype-specific hook is enabled
-            return true;
-        } else {
-            return false;
-        }
-    } elseif (is_array($callerItemType) && count($callerItemType) > 0) {
-        if (isset($modHookedCache[$callerModName][''][$hookModName])) {
-            // generic hook is enabled
-            return true;
-        } else {
-            foreach ($callerItemType as $itemtype) {
-                if (!is_numeric($itemtype)) continue;
-                if (isset($modHookedCache[$callerModName][$itemtype][$hookModName])) {
-                    // or at least one of the itemtype-specific hooks is enabled
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
-/**
- * register a hook function
- *
- * @access public
- * @param hookObject the hook object
- * @param hookAction the hook action
- * @param hookArea the area of the hook (either 'GUI' or 'API')
- * @param hookModName name of the hook module
- * @param hookModType name of the hook type
- * @param hookFuncName name of the hook function
- * @return bool true on success
- * @throws DATABASE_ERROR
- * @todo check for params?
- */
-function xarModRegisterHook($hookObject, $hookAction, $hookArea, $hookModName, $hookModType, $hookFuncName)
-{
-    // Get database info
-    $dbconn   = xarDB::getConn();
-    $xartable = xarDB::getTables();
-    $hookstable = $xartable['hooks'];
-
-    // Insert hook
-    try {
-        $dbconn->begin();
-        // New query: the same but insert the modid's instead of the modnames into tmodule
-        $tmodInfo = xarMod::getBaseInfo($hookModName);
-        $tmodId = $tmodInfo['systemid'];
-        $query = "INSERT INTO $hookstable
-                  (object, action, s_type, t_area, t_module_id, t_type, t_func)
-                  VALUES (?,?,?,?,?,?,?)";
-        $bindvars = array($hookObject,$hookAction,'',$hookArea,$tmodId,$hookModType,$hookFuncName);
-        $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeUpdate($bindvars);
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
-    return true;
-}
-
-/**
- * unregister a hook function
- *
- * @access public
- * @param hookObject the hook object
- * @param hookAction the hook action
- * @param hookArea the area of the hook (either 'GUI' or 'API')
- * @param hookModName name of the hook module
- * @param hookModType name of the hook type
- * @param hookFuncName name of the hook function
- * @return bool true if the unregister call suceeded, false if it failed
- */
-function xarModUnregisterHook($hookObject, $hookAction, $hookArea,$hookModName, $hookModType, $hookFuncName)
-{
-    // Get database info
-    $dbconn   = xarDB::getConn();
-    $xartable = xarDB::getTables();
-    $hookstable = $xartable['hooks'];
-
-    // Remove hook
-    try {
-        $dbconn->begin();
-        // New query: same but test on tmodid instead of tmodname
-        $tmodInfo = xarMod::getBaseInfo($hookModName);
-        $tmodId = $tmodInfo['systemid'];
-        $query = "DELETE FROM $hookstable
-                  WHERE object = ?
-                  AND action = ? AND t_area = ? AND t_module_id = ?
-                  AND t_type = ?  AND t_func = ?";
-        $stmt = $dbconn->prepareStatement($query);
-        $bindvars = array($hookObject,$hookAction,$hookArea,$tmodId,$hookModType,$hookFuncName);
-        $stmt->executeUpdate($bindvars);
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
-    return true;
-}
+// (Module) Hooks handling subsystem - moved from modules to hooks for (future) clarity
 
 /**
  * Wrapper functions to support Xaraya 1 API for module managment
@@ -735,7 +294,7 @@ function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
 function xarModGetIDFromName($modName, $type = 'module')
 {   return xarMod::getRegID($modName, $type); }
 
-function xarModgetInfo($modRegId, $type = 'module')
+function xarModGetInfo($modRegId, $type = 'module')
 {   return xarMod::getInfo($modRegId, $type); }
 
 function xarMod_getBaseInfo($modName, $type = 'module')
@@ -1060,6 +619,8 @@ class xarMod extends Object implements IxarMod
         $modInfo['regid'] = (int) $modRegId;
         $modInfo['displayname'] = self::getDisplayName($modInfo['name'], $type);
         $modInfo['displaydescription'] = self::getDisplayDescription($modInfo['name'], $type);
+        $modInfo['systemid'] = (int)$modInfo['systemid'];
+        $modInfo['state'] = (int)$modInfo['state'];
 
         // Shortcut for os prepared directory
         $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
@@ -1081,28 +642,29 @@ class xarMod extends Object implements IxarMod
         if (!isset($modFileInfo)) {
             // We couldn't get file info, fill in unknowns.
             // The exception for this is logged in getFileInfo
-            $modFileInfo['class'] = xarML('Unknown');
+            $unknown = xarML('Unknown');
+            $modFileInfo['class'] = $unknown;
             $modFileInfo['description'] = xarML('This module is not installed properly. Not all info could be retrieved');
-            $modFileInfo['category'] = xarML('Unknown');
-            $modFileInfo['displayname'] = xarML('Unknown');
-            $modFileInfo['displaydescription'] = xarML('Unknown');
-            $modFileInfo['author'] = xarML('Unknown');
-            $modFileInfo['contact'] = xarML('Unknown');
-            $modFileInfo['admin'] = xarML('Unknown');
-            $modFileInfo['user'] = xarML('Unknown');
+            $modFileInfo['category'] = $unknown;
+            $modFileInfo['displayname'] = $unknown;
+            $modFileInfo['displaydescription'] = $unknown;
+            $modFileInfo['author'] = $unknown;
+            $modFileInfo['contact'] = $unknown;
+            $modFileInfo['admin'] = $unknown;
+            $modFileInfo['user'] = $unknown;
             $modFileInfo['dependency'] = array();
             $modFileInfo['extensions'] = array();
 
-            $modFileInfo['xar_version'] = xarML('Unknown');
-            $modFileInfo['bl_version'] = xarML('Unknown');
-            $modFileInfo['class'] = xarML('Unknown');
-            $modFileInfo['author'] = xarML('Unknown');
-            $modFileInfo['homepage'] = xarML('Unknown');
-            $modFileInfo['email'] = xarML('Unknown');
-            $modFileInfo['description'] = xarML('Unknown');
-            $modFileInfo['contactinfo'] = xarML('Unknown');
-            $modFileInfo['publishdate'] = xarML('Unknown');
-            $modFileInfo['license'] = xarML('Unknown');
+            $modFileInfo['xar_version'] = $unknown;
+            $modFileInfo['bl_version'] = $unknown;
+            $modFileInfo['class'] = $unknown;
+            $modFileInfo['author'] = $unknown;
+            $modFileInfo['homepage'] = $unknown;
+            $modFileInfo['email'] = $unknown;
+            $modFileInfo['description'] = $unknown;
+            $modFileInfo['contactinfo'] = $unknown;
+            $modFileInfo['publishdate'] = $unknown;
+            $modFileInfo['license'] = $unknown;
         }
 
         $modInfo = array_merge($modFileInfo, $modInfo);
@@ -1210,7 +772,7 @@ class xarMod extends Object implements IxarMod
     {
         if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
 
-        if (empty($GLOBALS['xarMod_noCacheState']) && xarCore::isCached('Mod.getFileInfos', $modOsDir)) {
+        if (empty($GLOBALS['xarMod_noCacheState']) && xarCore::isCached('Mod.getFileInfos', $modOsDir ." / " . $type)) {
             return xarCore::getCached('Mod.getFileInfos', $modOsDir ." / " . $type);
         }
         // Log it when it didnt came from cache
@@ -1221,7 +783,7 @@ class xarMod extends Object implements IxarMod
         switch($type) {
         case 'module':
             // Spliffster, additional mod info from modules/$modDir/xarversion.php
-            $fileName = 'modules/' . $modOsDir . '/xarversion.php';
+            $fileName = sys::code() . 'modules/' . $modOsDir . '/xarversion.php';
             $part = 'xarversion';
             // If the locale is already present, it means we can make the translations available
             if(!empty($GLOBALS['xarMLS_currentLocale']))
@@ -1302,10 +864,14 @@ class xarMod extends Object implements IxarMod
      */
     static function loadDbInfo($modName, $modDir = NULL, $type = 'module')
     {
-        if($type == 'theme') return true; // sigh.
         static $loadedDbInfoCache = array();
 
+        if($type == 'theme') return true; // sigh.
+
         if (empty($modName)) throw new EmptyParameterException('modName');
+
+        // Check to ensure we aren't doing this twice
+        if (isset($loadedDbInfoCache[$modName])) return true;
 
         // Get the directory if we don't already have it
         if (empty($modDir)) {
@@ -1316,14 +882,21 @@ class xarMod extends Object implements IxarMod
             $modDir = xarVarPrepForOS($modDir);
         }
 
-        // Check to ensure we aren't doing this twice
-        if (isset($loadedDbInfoCache[$modName])) return true;
+        // For base and modules, which don't have a xartables - CHECKME: why not again ?
+        if (!file_exists(sys::code() . 'modules/' . $modDir . '/xartables.php')) {
+            // set anyway, so we don't try over and over
+            $loadedDbInfoCache[$modName] = false;
+            return false;
+        }
 
         // Load the database definition if required
-        $osxartablefile = "modules/$modDir/xartables.php";
-        if (!file_exists($osxartablefile)) return false;
-        // CHECKME: do we need to track this one?
-        sys::import('modules.'.$modDir.'.xartables');
+        try {
+            sys::import('modules.'.$modDir.'.xartables');
+        } catch (Exception $e) {
+            // set anyway, so we don't try over and over
+            $loadedDbInfoCache[$modName] = false;
+            return false;
+        }
 
         $tablefunc = $modName . '_' . 'xartables';
         if (function_exists($tablefunc)) xarDB::importTables($tablefunc());
@@ -1390,12 +963,17 @@ class xarMod extends Object implements IxarMod
     private static function callFunc($modName,$modType,$funcName,$args,$funcType = '')
     {
         assert('($funcType == "api" or $funcType==""); /* Wrong funcType argument in private callFunc method */');
-        if (empty($modName)) throw new EmptyParameterException('modName');
-        if (empty($funcName)) throw new EmptyParameterException('funcName');
+        if (empty($modName) || empty($funcName)) {
+            // This is not a valid function syntax - CHECKME: also for api functions ?
+            return xarResponse::NotFound();
+        }
 
         // good thing this information is cached :)
         $modBaseInfo = self::getBaseInfo($modName);
-        if (!isset($modBaseInfo)) {return;} // throw back
+        if (!isset($modBaseInfo)) {
+            // This is not a valid module - CHECKME: also for api functions ?
+            return xarResponse::NotFound();
+        }
 
         // Build function name and call function
         $modFunc = "{$modName}_{$modType}{$funcType}_{$funcName}";
@@ -1412,9 +990,16 @@ class xarMod extends Object implements IxarMod
             // let's check for that function again to be sure
             if (!function_exists($modFunc)) {
                 // Q: who are we kidding with this? osdirectory == modName always, no?
-                $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.$funcType.'/'.strtolower($funcName).'.php';
+                $funcFile = sys::code() . 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.$funcType.'/'.strtolower($funcName).'.php';
                 if (!file_exists($funcFile)) {
-                    $found = false;
+                    // Valid syntax, but the function doesn't exist
+                    if ($funcType == 'api') {
+                        // throw an exception below for unknown api functions - catch later if you want
+                        $found = false;
+                    } else {
+                        // fatal error for unknown gui functions !?
+                        return xarResponse::NotFound();
+                    }
                 } else {
                     ob_start();
                     sys::import('modules.'.$modName.'.xar'.$modType.$funcType.'.'.strtolower($funcName));
@@ -1500,15 +1085,17 @@ class xarMod extends Object implements IxarMod
         xarLogMessage("xarMod::load: loading $modName:$modType");
 
         $modBaseInfo = self::getBaseInfo($modName);
+        // Not a valid module - throw exception
         if (!isset($modBaseInfo)) throw new ModuleNotFoundException($modName);
 
+        // Not a valid module state - throw exception
         if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
             throw new ModuleNotActiveException($modName);
         }
 
         // Load the module files
         $modDir = $modBaseInfo['directory'];
-        $fileName = 'modules/'.$modDir.'/xar'.$modType.'.php';
+        $fileName = sys::code() . 'modules/'.$modDir.'/xar'.$modType.'.php';
 
         // Removed the exception.  Causing some wierd results with modules without an api.
         // <nuncanada> But now we wont know if something was loaded or not!
@@ -1517,9 +1104,12 @@ class xarMod extends Object implements IxarMod
         if (file_exists($fileName)) {
             sys::import('modules.'.$modDir.'.xar'.$modType);
             $loadedModuleCache[$cacheKey] = true;
-        } elseif (is_dir('modules/'.$modDir.'/xar'.$modType)) {
+        } elseif (is_dir(sys::code() . 'modules/'.$modDir.'/xar'.$modType)) {
             // this is OK too - do nothing
             $loadedModuleCache[$cacheKey] = true;
+        } else {
+            // this is (not really) OK too - do nothing
+            $loadedModuleCache[$cacheKey] = false;
         }
 
         // Load the module translations files (common functions, uncut functions etc.)
@@ -1531,6 +1121,27 @@ class xarMod extends Object implements IxarMod
         // Module loaded successfully, trigger the proper event
         xarEvents::trigger('ModLoad', $modName);
         return true;
+    }
+
+    /**
+     * Check if a particular module function exists, or default back to 'dynamicdata'
+     *
+     * @return string tplmodule or 'dynamicdata'
+     */
+    static function checkModuleFunction($tplmodule = 'dynamicdata', $type = 'user', $func = 'display', $defaultmodule = 'dynamicdata')
+    {
+        static $tplmodule_cache = array();
+
+        $key = "$tplmodule:$type:$func";
+        if (!isset($tplmodule_cache[$key])) {
+            $file = sys::code() . 'modules/' . $tplmodule . '/xar' . $type . '/' . $func . '.php';
+            if (file_exists($file)) {
+                $tplmodule_cache[$key] = $tplmodule;
+            } else {
+                $tplmodule_cache[$key] = $defaultmodule;
+            }
+        }
+        return $tplmodule_cache[$key];
     }
 }
 

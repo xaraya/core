@@ -1,9 +1,9 @@
 <?php
 /**
- * HTTP Protocol Server/Request/Response utilities
+ * HTTP Protocol URL/Server/Request/Response utilities
  *
  * @package core
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -16,8 +16,120 @@
  * Convenience classes
  *
 **/
+class xarURL extends Object
+{
+    /**
+     * Encode parts of a URL.
+     * This will encode the path parts, the and GET parameter names
+     * and data. It cannot encode a complete URL yet.
+     *
+     * @access private
+     * @param data string the data to be encoded (see todo)
+     * @param type string the type of string to be encoded ('getname', 'getvalue', 'path', 'url', 'domain')
+     * @return string the encoded URL parts
+     * @todo this could be made public
+     * @todo support arrays and encode the complete array (keys and values)
+    **/
+    static function encode($data, $type = 'getname')
+    {
+        // Different parts of a URL are encoded in different ways.
+        // e.g. a '?' and '/' are allowed in GET parameters, but
+        // '?' must be encoded when in a path, and '/' is not
+        // allowed in a path at all except as the path-part
+        // separators.
+        // The aim is to encode as little as possible, so that URLs
+        // remain as human-readable as we can allow.
+
+        static $decode = array(
+            'path' => array(
+                array('%2C', '%24', '%21', '%2A', '%28', '%29', '%3D'),
+                array(',', '$', '!', '*', '(', ')', '=')
+            ),
+            'getname' => array(
+                array('%2C', '%24', '%21', '%2A', '%28', '%29', '%3D', '%27', '%5B', '%5D'),
+                array(',', '$', '!', '*', '(', ')', '=', '\'', '[', ']')
+            ),
+            'getvalue' => array(
+                array('%2C', '%24', '%21', '%2A', '%28', '%29', '%3D', '%27', '%5B', '%5D', '%3A', '%2F', '%3F', '%3D'),
+                array(',', '$', '!', '*', '(', ')', '=', '\'', '[', ']', ':', '/', '?', '=')
+            )
+        );
+
+        // We will encode everything first, then restore a select few
+        // characters.
+        // TODO: tackle it the other way around, i.e. have rules for
+        // what to encode, rather than undoing some ecoded characters.
+        $data = rawurlencode($data);
+
+        // TODO: check what automatic ML settings have on this.
+        // I suspect none, as all multi-byte characters have ASCII values
+        // of their parts > 127.
+        if (isset($decode[$type])) {
+            $data = str_replace($decode[$type][0], $decode[$type][1], $data);
+        }
+        return $data;
+    }
+
+    /**
+     * Format GET parameters formed by nested arrays, to support xarModURL().
+     * This function will recurse for each level to the arrays.
+     *
+     * @access private
+     * @param args array the array to be expanded as a GET parameter
+     * @param prefix string the prefix for the GET parameter
+     * @return string the expanded GET parameter(s)
+     **/
+    static function nested($args, $prefix)
+    {
+        $path = '';
+        foreach ($args as $key => $arg) {
+            if (is_array($arg)) {
+                $path .= self::nested($arg, $prefix . '['.self::encode($key, 'getname').']');
+            } else {
+                $path .= $prefix . '['.self::encode($key, 'getname').']' . '=' . self::encode($arg, 'getvalue');
+            }
+        }
+        return $path;
+    }
+
+    /**
+     * Add further parameters to the path, ensuring each value is encoded correctly.
+     *
+     * @access private
+     * @param args array the array to be encoded
+     * @param path string the current path to append parameters to
+     * @param psep string the path seperator to use
+     * @return string the path with encoded parameters
+     */
+    static function addParametersToPath($args, $path, $pini, $psep)
+    {
+        if (count($args) > 0)
+        {
+            $params = '';
+
+            foreach ($args as $k=>$v) {
+                if (is_array($v)) {
+                    // Recursively walk the array tree to as many levels as necessary
+                    // e.g. ...&foo[bar][dee][doo]=value&...
+                    $params .= self::nested($v, $psep . $k);
+                } elseif (isset($v)) {
+                    // TODO: rather than rawurlencode, use a xar function to encode
+                    $params .= (!empty($params) ? $psep : '') . self::encode($k, 'getname') . '=' . self::encode($v, 'getvalue');
+                }
+            }
+
+            // Join to the path with the appropriate character,
+            // depending on whether there are already GET parameters.
+            $path .= (strpos($path, $pini) === false ? $pini : $psep) . $params;
+        }
+
+        return $path;
+    }
+}
+
 class xarServer extends Object
 {
+    public static $allowShortURLs = true;
     public static $generateXMLURLs = true;
 
     /**
@@ -26,6 +138,7 @@ class xarServer extends Object
      */
     static function init($args)
     {
+        self::$allowShortURLs = $args['enableShortURLsSupport'];
         self::$generateXMLURLs = $args['generateXMLURLs'];
         xarEvents::register('ServerRequest');
     }
@@ -65,7 +178,7 @@ class xarServer extends Object
         // it can be used to configure Xaraya for mod_rewrite by
         // setting BaseURI = '' in config.php
         try {
-            $BaseURI =  xarSystemVars::get(sys::CONFIG, 'BaseURI');
+            $BaseURI =  xarSystemVars::get(sys::LAYOUT, 'BaseURI');
             return $BaseURI;
         } catch(Exception $e) {
             // We need to build it
@@ -168,6 +281,17 @@ class xarServer extends Object
     }
 
     /**
+     * get the elapsed time since this page started
+     *
+     * @access public
+     * @return seconds and microseconds elapsed since the page started
+     */
+    static function getPageTime()
+    {
+        return microtime(true) - $GLOBALS["Xaraya_PageTime"];
+    }
+
+    /**
      * Get current URL (and optionally add/replace some parameters)
      *
      * @access public
@@ -203,8 +327,7 @@ class xarServer extends Object
             }
         }
 
-        // Note to Dracos: please don't replace & with &amp; here just yet - give me some time to test this first :-)
-        // Mike can we change these now, so we can work on validation a bit?
+// TODO: re-use some common code (with in-line replacement here) or use parse_url + http_build_query ?
 
         // add optional parameters
         if (count($args) > 0) {
@@ -248,6 +371,93 @@ class xarServer extends Object
         if ($generateXMLURL) $request = htmlspecialchars($request);
         return $baseurl . $request;
     }
+
+    /**
+     * Generates an URL that reference to a module function.
+     *
+     * Cfr. xarModURL() in modules
+     */
+    static function getModuleURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array())
+    {
+        // CHECKME: move xarModURL() and xarMod__URL* stuff here, and leave stub in modules ?
+        return xarModURL($modName, $modType, $funcName, $args, $generateXMLURL, $fragment, $entrypoint);
+    }
+
+    /**
+     * Generates an URL that reference to an object user interface method.
+     */
+    static function getObjectURL($objectName = NULL, $methodName = 'view', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array())
+    {
+        // 1. override any existing 'method' in args, and place before the rest
+        if (!empty($methodName)) {
+            $args = array('method' => $methodName) + $args;
+        }
+        // 2. override any existing 'object' or 'name' in args, and place before the rest
+        if (!empty($objectName)) {
+            unset($args['name']);
+            // use 'object' here to distinguish from module URLs
+            $args = array('object' => $objectName) + $args;
+        }
+        // 3. remove default method 'view' from URLs
+        if ($args['method'] == 'view') {
+            unset($args['method']);
+        // and remove default method 'display' from URLs with an itemid
+        } elseif (!empty($args['itemid']) && $args['method'] == 'display') {
+            unset($args['method']);
+        }
+
+// TODO: some common code for getCurrentURL, getModuleURL and getObjectURL ?
+
+        // Parameter separator and initiator.
+        $psep = '&';
+        $pini = '?';
+        $pathsep = '/';
+
+        // Initialise the path.
+        $path = '';
+
+        // The following allows you to modify the BaseModURL from the config file
+        // it can be used to configure Xaraya for mod_rewrite by
+        // setting BaseModURL = '' in config.system.php
+        try {
+            $BaseModURL = xarSystemVars::get(sys::LAYOUT, 'BaseModURL');
+        } catch(Exception $e) {
+            $BaseModURL = 'index.php';
+        }
+/*
+        // No object specified - just jump to the home page.
+        if (empty($args['object'])) return xarServer::getBaseURL() . $BaseModURL;
+
+        // If an entry point has been set, then modify the URL entry point and args['type'].
+        if (!empty($entrypoint)) {
+            if (is_array($entrypoint)) {
+            // CHECKME: is this relevant here ?
+                $args['type'] = $entrypoint['action'];
+                $entrypoint = $entrypoint['entry'];
+            }
+            $BaseModURL = $entrypoint;
+        }
+
+        // Check the global short URL setting before trying to load the URL encoding function
+        // for the module. This also applies to custom entry points.
+        if (self::$allowShortURLs) {
+// CHECKME: short URLs for objects = go via getModuleURL or here ?
+        }
+*/
+
+        // Add GET parameters to the path, ensuring each value is encoded correctly.
+        $path = xarURL::addParametersToPath($args, $BaseModURL, $pini, $psep);
+
+        // Add the fragment if required.
+        if (isset($fragment)) $path .= '#' . urlencode($fragment);
+
+        // Encode the URL if an XML-compatible format is required.
+        if (!isset($generateXMLURL)) $generateXMLURL = self::$generateXMLURLs;
+        if ($generateXMLURL) $path = htmlspecialchars($path);
+
+        // Return the URL.
+        return xarServer::getBaseURL() . $path;
+    }
 }
 
 class xarRequest extends Object
@@ -255,6 +465,7 @@ class xarRequest extends Object
     public static $allowShortURLs = true;
     public static $defaultRequestInfo = array();
     public static $shortURLVariables = array();
+    public static $isObjectURL = false;
 
     /**
      * Initialize
@@ -333,7 +544,7 @@ class xarRequest extends Object
 
 
     /**
-     * Gets request info for current page.
+     * Gets request info for current page or a given url.
      *
      * Example of short URL support :
      *
@@ -352,28 +563,62 @@ class xarRequest extends Object
      * + check security impact of people combining PATH_INFO with func/type param
      *
      * @return array requested module, type and func
-     * @todo <mikespub> Allow user select start page
      * @todo <marco> Do we need to do a preg_match on $params[1] here?
      * @todo <mikespub> you mean for upper-case Admin, or to support other funcs than user and admin someday ?
      * @todo <marco> Investigate this aliases thing before to integrate and promote it!
      */
-    public static function getInfo()
+    public static function getInfo($url='')
     {
-        static $requestInfo = NULL;
+        static $currentRequestInfo = NULL;
         static $loopHole = NULL;
-        if (is_array($requestInfo)) {
-            return $requestInfo;
+        if (is_array($currentRequestInfo) && empty($url)) {
+            return $currentRequestInfo;
         } elseif (is_array($loopHole)) {
             // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
             //        because they request the current module too at the moment - unnecessary ?
             xarLogMessage('Avoiding loop in xarRequest::getInfo()');
             return $loopHole;
         }
-
         // Get variables
-        xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
-        xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $modType, 'user');
-        xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
+        if (empty($url)) {
+            xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
+            xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $modType, 'user');
+            xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
+        } else {
+            $decomposed = parse_url($url);
+            $params = array();
+            if (isset($decomposed['query'])) {
+                $pairs = explode('&', $decomposed['query']);
+                try {
+                    foreach($pairs as $pair) {
+                        if (trim($pair) == '') continue;
+                        list($key, $value) = explode('=', $pair);
+                        $params[$key] = urldecode($value);
+                    }
+                } catch(Exception $e) {}
+                sys::import('xaraya.validations');
+                $regex = ValueValidations::get('regexp');
+            }
+
+            if (isset($params['module'])) {
+                $isvalid =  $regex->validate($params['module'], array('/^[a-z][a-z_0-9]*$/'));
+                $modName = $isvalid ? $params['module'] : null;
+            } else {
+                $modName = null;
+            }
+            if (isset($params['type'])) {
+                $isvalid =  $regex->validate($params['type'], array('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/'));
+                $modType = $isvalid ? $params['type'] : 'user';
+            } else {
+                $modType = 'user';
+            }
+            if (isset($params['func'])) {
+                $isvalid =  $regex->validate($params['func'], array('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/'));
+                $funcName = $isvalid ? $params['func'] : 'main';
+            } else {
+                $funcName = 'main';
+            }
+        }
 
         if (self::$allowShortURLs && empty($modName) && ($path = xarServer::getVar('PATH_INFO')) != ''
             // IIS fix
@@ -402,13 +647,13 @@ class xarRequest extends Object
                 if (isset($params[1]) && $params[1] == 'admin') $modType = 'admin';
 
                 // Check if this is an alias for some other module
-                $modName = self::resolveModuleAlias($modName);
+                $modName = xarModAlias::resolve($modName);
                 // Call the appropriate decode_shorturl function
-                if (xarMod::isAvailable($modName) && xarModVars::get($modName, 'SupportShortURLs') && xarMod::apiLoad($modName, $modType)) {
+                if (xarMod::isAvailable($modName) && xarModVars::get($modName, 'enable_short_urls') && xarMod::apiLoad($modName, $modType)) {
                     $loopHole = array($modName,$modType,$funcName);
                     // don't throw exception on missing file or function anymore
                     try {
-                        $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params);
+                        $res = xarMod::apiFunc($modName, $modType, 'decode_shorturl', $params);
                     } catch ( NotFoundExceptions $e) {
                         // No worry
                     }
@@ -433,20 +678,32 @@ class xarRequest extends Object
 
         if (!empty($modName)) {
             // Check if this is an alias for some other module
-            $modName = self::resolveModuleAlias($modName);
+            $modName = xarModAlias::resolve($modName);
             // Cache values into info static var
             $requestInfo = array($modName, $modType, $funcName);
         } else {
-            // If $modName is still empty we use the default module/type/func to be loaded in that such case
-            if (empty(self::$defaultRequestInfo)) {
-
-                self::$defaultRequestInfo = array(xarModVars::get('modules', 'defaultmodule'),
-                                                  xarModVars::get('modules', 'defaultmoduletype'),
-                                                  xarModVars::get('modules', 'defaultmodulefunction'));
+            // Check if we have an object to work with for object URLs
+            xarVarFetch('object', 'regexp:/^[a-zA-Z0-9_-]+$/', $objectName, NULL, XARVAR_NOT_REQUIRED);
+            if (!empty($objectName)) {
+                // Check if we have a method to work with for object URLs
+                xarVarFetch('method', 'regexp:/^[a-zA-Z0-9_-]+$/', $methodName, NULL, XARVAR_NOT_REQUIRED);
+                // Specify 'dynamicdata' as module for xarTpl_* functions etc.
+                $requestInfo = array('dynamicdata', $objectName, $methodName);
+                if (empty($url)) {
+                    self::$isObjectURL = true;
+                }
+            } else {
+                // If $modName is still empty we use the default module/type/func to be loaded in that such case
+                if (empty(self::$defaultRequestInfo)) {
+                    self::$defaultRequestInfo = array(xarModVars::get('modules', 'defaultmodule'),
+                                                      xarModVars::get('modules', 'defaultmoduletype'),
+                                                      xarModVars::get('modules', 'defaultmodulefunction'));
+                }
+                $requestInfo = self::$defaultRequestInfo;
             }
-            $requestInfo = self::$defaultRequestInfo;
         }
-
+        // Save the current info in case we call this function again
+        if (empty($url)) $currentRequestInfo = $requestInfo;
         return $requestInfo;
     }
 
@@ -456,7 +713,7 @@ class xarRequest extends Object
      * @access public
      * @return bool true if locally referred, false if not
      */
-    static function IsLocalReferer()
+    static function isLocalReferer()
     {
         $server  = xarServer::getHost();
         $referer = xarServer::getVar('HTTP_REFERER');
@@ -469,21 +726,14 @@ class xarRequest extends Object
     }
 
     /**
-     * Checks if a module name is an alias for some other module
+     * Check to see if this request is an object URL
      *
-     * @access private
-     * @param var string name of the module
-     * @return string containing the module name
-     * @throws BAD_PARAM
+     * @access public
+     * @return bool true if object URL, false if not
      */
-    private static function resolveModuleAlias($var)
+    static function isObjectURL()
     {
-        try {
-          $aliasesMap = xarConfigVars::get(null, 'System.ModuleAliases');
-          return $aliasesMap[$var];
-        } catch (VariableNotFoundException $e) {
-          return $var;
-        }
+        return self::$isObjectURL;
     }
 }
 
@@ -503,6 +753,7 @@ class xarResponse extends Object
      */
     static function Redirect($url)
     {
+        xarCore::setCached('Page.Caching', 'nocache', true);
         $redirectURL=urldecode($url); // this is safe if called multiple times.
         if (headers_sent() == true) return false;
 
@@ -532,6 +783,65 @@ class xarResponse extends Object
         // so for now, we exit here explicitly. Besides the end of index.php this should be the only
         // exit point.
         exit();
+    }
+
+// CHECKME: Should we support this kind of high-level user response in module GUI functions ?
+//          And should some of the existing exceptions (to be defined) call those methods too ?
+
+    /**
+     * Return a 404 Not Found header, and fill in the template message-notfound.xt from the base module
+     *
+     * Usage in GUI functions etc.:
+     *
+     *    if (something not found, e.g. item $id) {
+     *        $msg = xarML("Sorry, item #(1) is not available right now", $id);
+     *        return xarResponse::NotFound($msg);
+     *    }
+     *    ...
+     *
+     * @access public
+     * @param msg string the message
+     * @param ... string template overrides, cfr. xarTplModule (optional)
+     * @return string the template message-notfound.xt from the base module filled in
+     */
+    static function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = NULL)
+    {
+        xarCore::setCached('Page.Caching', 'nocache', true);
+        if (!headers_sent()) {
+            header('HTTP/1.0 404 Not Found');
+        }
+
+        xarTplSetPageTitle('404 Not Found');
+
+        return xarTplModule($modName, $modType, $funcName, array('msg' => $msg), $templateName);
+    }
+
+    /**
+     * Return a 403 Forbidden header, and fill in the message-forbidden.xt template from the base module
+     *
+     * Usage in GUI functions etc.:
+     *
+     *    if (something not allowed, e.g. edit item $id) {
+     *        $msg = xarML("Sorry, you are not allowed to edit item #(1)", $id);
+     *        return xarResponse::Forbidden($msg);
+     *    }
+     *    ...
+     *
+     * @access public
+     * @param msg string the message
+     * @param ... string template overrides, cfr. xarTplModule (optional)
+     * @return string the template message-forbidden.xt from the base module filled in
+     */
+    static function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = NULL)
+    {
+        xarCore::setCached('Page.Caching', 'nocache', true);
+        if (!headers_sent()) {
+            header('HTTP/1.0 403 Forbidden');
+        }
+
+        xarTplSetPageTitle('403 Forbidden');
+
+        return xarTplModule($modName, $modType, $funcName, array('msg' => $msg), $templateName);
     }
 }
 ?>

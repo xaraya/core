@@ -25,7 +25,7 @@
     <div>
       <xsl:attribute name="class">textInputContainer</xsl:attribute>
       <xsl:apply-templates />
-      <input type="textbox" >
+      <input type="textbox">
         <xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
       </input>
     </div>

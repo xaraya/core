@@ -27,13 +27,13 @@ class ModuleVariablesDataStore extends FlatTableDataStore
     private function setModvarName($name="")
     {
         if (empty($name)) throw new Exception('Bad modvar name');
-        $namepart = explode('_',$name);
+        $namepart = explode('__',$name);
         if (empty($namepart[1])) {
             $this->modulename = 'dynamicdata';
             $this->variablename = $namepart[0];
         } else {
-            $this->modulename = array_pop($namepart);
-            $this->variablename = implode('_',$namepart);
+            $this->modulename = $namepart[0];
+            $this->variablename = $namepart[1];
         }
     }
 
@@ -44,13 +44,12 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 
     function getItem(Array $args = array())
     {
+        $this->setModvarName($this->name);
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
         $fieldlist = array_keys($this->fields);
         if (count($fieldlist) < 1) return;
-
         foreach ($fieldlist as $field) {
-            $this->setModvarName(field);
-            $value = xarModItemVars::get($this->modulename,$this->variablename,$itemid);
+            $value = xarModItemVars::get($this->modulename,$field,$itemid);
             // set the value for this property
             $this->fields[$field]->value = $value;
         }
@@ -59,7 +58,6 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 
     function createItem(Array $args = array())
     {
-        // There's no difference with updateItem() here, because xarModItemVars:set() handles that
         return $this->updateItem($args);
     }
 
@@ -70,14 +68,16 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         if (count($fieldlist) < 1) {
             return 0;
         }
-
         foreach ($fieldlist as $field) {
             // get the value from the corresponding property
             $value = $this->fields[$field]->value;
             // skip fields where values aren't set
             if (!isset($value)) continue;
-            $this->setModvarName(field);
-            xarModItemVars::set($this->modulename,$this->variablename,$value,$itemid);
+            if (empty($itemid)) {
+                xarModVars::set($this->modulename,$field,$value);
+            } else {
+                xarModItemVars::set($this->modulename,$field,$value,$itemid);
+            }
         }
         return $itemid;
     }
@@ -89,8 +89,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         if (count($fieldlist) < 1) return;
 
         foreach ($fieldlist as $field) {
-            $this->setModvarName(field);
-            xarModItemVars::delete($this->modulename,$this->variablename,$itemid);
+            xarModItemVars::delete($this->modulename,$field,$itemid);
         }
 
         return $itemid;
@@ -137,8 +136,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             // split the fields to be gotten up by module
             $modulefields['dynamicdata'] = array();
             foreach ($fields as $field) {
-                $this->setModvarName(field);
-                $modulefields[$this->modulename][] = $this->variablename;
+                $modulefields[$this->modulename][] = $field;
             }
 
             if (count($this->sort) > 0) {
@@ -175,7 +173,8 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                 $itemidlist = array();
                 while ($result->next()) {
                     list($field,$itemid,$value) = $result->getRow();
-                    if ($key != 'dynamic_data') $field .= '_' . $key;
+// CHECKME: no longer valid / needed !?
+                    //if ($key != 'dynamic_data') $field .= '_' . $key;
                     $itemidlist[$itemid] = 1;
                     if (isset($value)) {
                         if ($dosort) {
@@ -348,8 +347,8 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         */
 
             foreach ($fields as $field) {
-                $this->setModvarName(field);
-                $modulefields[$this->modulename][] = $this->variablename;
+                $this->setModvarName($field);
+                $modulefields[$this->modulename][] = $field;
             }
 
             foreach ($modulefields as $key => $fieldvalues) {
@@ -447,7 +446,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                         $this->_itemids[] = $id;
                         foreach ($this->groupby as $field) {
                             // add the item to the value list for this property
-                            $this->setModvarName(field);
+                            $this->setModvarName($field);
                             $this->fields[$field]->setItemValue($id,$propval[$this->modulename]);
                         }
                         foreach ($process as $field) {
@@ -531,8 +530,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             // split the fields to be gotten up by module
             $modulefields['dynamicdata'] = array();
             foreach ($fields as $field) {
-                $this->setModvarName(field);
-                $modulefields[$this->modulename][] = $this->variablename;
+                $modulefields[$this->modulename][] = $field;
             }
 
             foreach ($modulefields as $key => $values) {
@@ -659,8 +657,8 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             // split the fields to be gotten up by module
             $modulefields['dynamicdata'] = array();
             foreach ($fields as $field) {
-                $this->setModvarName(field);
-                $modulefields[$this->modulename][] = $this->variablename;
+                $this->setModvarName($field);
+                $modulefields[$this->modulename][] = $field;
             }
             $numitems = 0;
             foreach ($modulefields as $key => $values) {

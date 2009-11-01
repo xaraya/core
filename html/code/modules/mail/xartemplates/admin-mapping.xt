@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:template file="mod-head"/>
+    <div class="xar-mod-body">
+        <xar:set name="active_tab">'mapping'</xar:set>
+        <xar:template file="queue-tabs"/>
+        <fieldset>
+            <legend>Map items to queues</legend>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label" for="qlist">Show rules for queue:</label>
+                <xar:data-input type="checkboxmask" id="qlist" name="showq" options="$qlist"/>
+            </div>
+        </fieldset>
+    </div>
+</xar:template>

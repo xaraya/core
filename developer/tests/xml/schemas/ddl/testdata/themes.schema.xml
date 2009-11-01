@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema>
+  <table name="themes">
+    <column name="id" id="themes.id"  required="true" auto="true"><number size="10" default=""/></column>
+    <column name="name" required="true"><text size="64"/></column>
+    <column name="regid"><number size="10" default=""/></column>
+    <column name="directory" required="true"><text size="64"/></column>
+    <column name="author" required="true"><text size="64"/></column>
+    <column name="homepage" required="true"><text size="64"/></column>
+    <column name="email" required="true"><text size="64"/></column>
+    <column name="description" required="true"><text size="255"/></column>
+    <column name="contactinfo" required="true"><text size="255"/></column>
+    <column name="publishdate" required="true"><text size="32"/></column>
+    <column name="license" required="true"><text size="255"/></column>
+    <column name="version" required="true"><text size="10"/></column>
+    <column name="xaraya_version" required="true"><text size="10"/></column>
+    <column name="bl_version" required="true"><text size="10"/></column>
+    <column name="class" required="true"><number size="2" default="0"/></column>
+    <column name="state" required="true"><number size="1" default="1"/></column>
+
+    <constraints>
+      <primary><columnref id="themes.id"/></primary>
+    </constraints>
+  </table>
+</schema>

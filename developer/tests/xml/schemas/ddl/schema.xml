@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Schema which contains all the tricks in the trade, to which the implementation
+  should react responsibly
+-->
+<schema name="devtest">
+  <description>Schema description can optionally be put here</description>
+  <table name="first">
+    <description>A nice table with some sort of description</description>
+    <column id="first.id" name="id" auto="true" required="true">
+       <description>A unique id column</description>
+       <number size="11"/>
+    </column>
+    <column id="first.ref_id" name="ref_id" required="true">
+       <description>A reference to an id column</description>
+       <number size="11"/>
+    </column>
+    <column id="first.name" name="name" required="true">
+    <text size="255"/>
+    </column>
+    <constraints>
+      <primary name="id">
+        <columnref id="first.id"/>
+      </primary>
+      <index name="ref_id">
+        <description>We index on the ref_id column because we can</description>
+        <columnref id="first.ref_id"/>
+      </index>
+      <unique name="name">
+        <columnref id="first.name"/>
+      </unique>
+    </constraints>
+  </table>
+</schema>

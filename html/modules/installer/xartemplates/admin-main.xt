@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:comment>This template is empty</xar:comment>
-    <p>You've reached the admin main template of the installer module, this is not supposed to
-    happen.</p>
-</xar:template>

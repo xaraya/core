@@ -9,7 +9,7 @@
  * THE MAINTAINED SUBSYSTEM.
 
  * @package database
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @subpackage table_api
@@ -42,6 +42,7 @@ function xarDB__mysqlCreateTable($tableName, $fields)
 
         $sql_fields[] = $field_name .' '
                       . $this_field['type'] .' '
+                      . $this_field['charset'] .' '
                       . $this_field['unsigned'] .' '
                       . $this_field['null'] .' '
                       . $this_field['default'] .' '
@@ -77,7 +78,6 @@ function xarDB__mysqlCreateTable($tableName, $fields)
     if ($increment_start) {
         $sql .= ' AUTO_INCREMENT=' . $increment_start;
     }
-
     return $sql;
 }
 
@@ -292,7 +292,9 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
         case 'boolean':
             // mrb: Mysql has no native boolean, BOOL evaluates to TinyInt(1), which 
             //      i dont really understand, they could have used BIT(1)
-            $this_field['type'] = "BIT(1)";
+            // this returns as a binary string for MySQL 5.0.3+, which messes up true/false comparisons in PHP !
+            //$this_field['type'] = "BIT(1)";
+            $this_field['type'] = "BOOLEAN";
             if (isset($parameters['default'])) {
                 // default values are numbers, not strings
                 $parameters['default'] = $parameters['default'] ? 1 : 0;
@@ -431,11 +433,14 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
         $this_field['default'] = '';
     }
 
+    // Set character set
+    if(isset($parameters['charset'])) $this_field['charset'] = "CHARACTER SET " . $parameters['charset'];
+    else $this_field['charset'] = "";
+    
     // Test for PRIMARY KEY
     $this_field['primary_key'] = (isset($parameters['primary_key']) && $parameters['primary_key'] == true)
                                ? true
                                : false;
-
     return $this_field;
 }
 

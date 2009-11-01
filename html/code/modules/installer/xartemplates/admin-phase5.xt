@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="active_step">5</xar:set>
+    <xar:if condition="$confirmDB">
+        <meta http-equiv="refresh"
+        content="1;URL=&xar-modurl-installer-admin-bootstrap;&amp;install_language=#$language#"/>
+        <div id="main_right">
+            <xar:template file="status"/>
+        </div>
+        <div id="main_left">
+            <h1>Beginning Initialization</h1>
+            <form action="install.php" method="post">
+                <input type="hidden" name="install_phase" id="install_phase" value="6"/>
+                <p> This may take a moment, so please wait...</p>
+                <p>Thank you for your patience.</p>
+                <p>
+                    If your browser does not automatically redirect, please click to 
+                    <a href="&xar-modurl-installer-admin-bootstrap;&amp;install_language=#$language#">
+                        manually continue to the next stage
+                    </a>.
+                </p>
+            </form>
+        </div>
+    <xar:else />
+        <div id="main_right">
+            <xar:template file="status"/>
+        </div>
+        <div id="main_left">
+            <h1>Database Found</h1>
+            <div>
+                <p>You already have an installed database named #$dbName#.</p>
+                <!--
+                <p>
+                    If you plan on <strong>upgrading</strong> an existing Xaraya then please run the <strong>upgrade.php</strong> script, not this install script.
+                </p>
+                -->
+                <p class="warning">
+                    If you continue, any tables using the #$dbPrefix#_ prefix will be overwritten.
+                </p>
+                <div class="xar-align-center" style="margin: 2em 0;">
+                    <form action="install.php" method="post" class="xar-displayinline">
+                        <span>
+                            <input type="hidden" name="install_phase" id="install_phase" value="4"/>
+                            <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
+                            <xar:var name="label">Back</xar:var>
+                            <input type="submit" value="#$label#"/>
+                        </span>
+                    </form>
+                    <form action="install.php" method="post" class="xar-displayinline">
+                        <span class="xar-align-center">
+                            <input type="hidden" name="install_phase" id="install_phase" value="5"/>
+                            <input type="hidden" name="install_database_host" id="dbHost" value="#$dbHost#"/>
+                            <input type="hidden" name="install_database_name" id="dbName" value="#$dbName#"/>
+                            <input type="hidden" name="install_database_username" id="dbUname" value="#$dbUname#"/>
+                            <input type="hidden" name="install_database_password" id="dbPass" value="#$dbPass#"/>
+                            <input type="hidden" name="install_database_prefix" id="dbPrefix" value="#$dbPrefix#"/>
+                            <input type="hidden" name="install_database_type" id="dbType" value="#$dbType#"/>
+                            <input type="hidden" name="install_database_charset" id="dbCharset" value="#$dbCharset#"/>
+                            <input type="hidden" name="confirmDB" id="confirmDB" value="true"/>
+                            <!-- <input type="hidden" name="newDB" id="newDB" value="#$newDB#"/> -->
+                            <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
+                            <xar:var name="label">Continue</xar:var>
+                            <input type="submit" value="#$label#"/>
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </xar:if>
+</xar:template>

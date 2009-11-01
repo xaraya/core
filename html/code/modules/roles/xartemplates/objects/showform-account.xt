@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- This is the form for roles dd roles_users object. -->
+    <xar:if condition="empty($layout)">
+        <xar:set name="layout">'default'</xar:set>
+    </xar:if>
+    <xar:if condition="$layout eq 'default'">
+        <!--
+            This is the layout used by the roles module itself when a user is editing their basic account info
+            Any data not provided by the object is provided by the $formdata array
+        -->
+        <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
+        <h2>Edit User : #$object->properties['uname']->getValue()#</h2>
+        <fieldset>
+            <legend>User Details</legend>
+            <xar:if condition="(bool)xarModVars::get('roles', 'requirevalidation')">
+                <div class="xar-form-input-wrapper">
+                    <label for="email">Changing your email address will require you to
+                    revalidate your account.</label>
+                </div>
+            </xar:if>
+            <xar:set name="fields">array('name','uname','email','password','regdate')</xar:set>
+            <xar:foreach in="$fields" value="$name">
+                <xar:if condition="!isset($properties[$name])"><xar:continue /></xar:if>
+                <div class="xar-form-input-wrapper">
+                    <xar:data-label property="$properties[$name]" for="id"/>
+                    <xar:data-input property="$properties[$name]"/>
+                </div>
+            </xar:foreach>
+            <!--
+            <xar:data-form object="$object" fieldlist="name,uname,email,password,regdate"/>
+            -->
+            <xar:data-input property="$object->properties['id']" hidden="hidden"/>
+            <xar:data-input property="$object->properties['state']" hidden="hidden"/>
+            <xar:data-input property="$object->properties['valcode']" hidden="hidden"/>
+            <xar:data-input property="$object->properties['authmodule']" hidden="hidden"/>
+            <xar:data-input property="$object->properties['role_type']" hidden="hidden"/>
+
+            <xar:if condition="in_array('passwordupdate', $settings)">
+                <xar:set name="passwordupdate">xarModUserVars::get('roles', 'passwordupdate')</xar:set>
+                <xar:if condition="!empty($passwordupdate)">
+                    <div class="xar-form-input-wrapper">
+                        <label for="passwordupdate" class="xar-form-label">
+                            Password last updated:
+                        </label>
+                        #xarLocaleGetFormattedDate('medium', $passwordupdate)#
+                        #xarLocaleGetFormattedTime('medium', $passwordupdate)#
+                    </div>
+                </xar:if>
+            </xar:if>
+
+            <xar:if condition="in_array('userlastlogin', $settings)">
+                <xar:set name="userlastlogin">xarModUserVars::get('roles', 'userlastlogin')</xar:set>
+                <xar:if condition="!empty($userlastlogin)">
+                    <div class="xar-form-input-wrapper">
+                        <label for="userlastlogin" class="xar-form-label">
+                            Time of Last Login:
+                        </label>
+                        #xarLocaleGetFormattedDate('medium', $userlastlogin)#
+                        #xarLocaleGetFormattedTime('medium', $userlastlogin)#
+                    </div>
+                </xar:if>
+            </xar:if>
+
+            <xar:if condition="!empty($formdata['hooks'])">
+                <div class="xar-form-input-wrapper">
+                    <xar:foreach in="$formdata['hooks']" key="$module" value="$output">
+                    #$output#</xar:foreach>
+                </div>
+            </xar:if>
+
+        </fieldset>
+    <xar:else />
+        <!-- You can also specify your own layout here or in a separate template, e.g. if you want to handle individual fields differently for a particular module usermenu -->
+        <xar:template module="$tplmodule" file="form-$layout"/>
+    </xar:if>
+</xar:template>

@@ -1,0 +1,52 @@
+<object name="modules_modvars">
+  <objectid>11</objectid>
+  <label>Module Vars</label>
+  <module_id>182</module_id>
+  <itemtype>4</itemtype>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>true</isalias>
+  <properties>
+    <property name="id">
+      <id>74</id>
+      <label>ID</label>
+      <type>itemid</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_module_vars.id</source>
+      <status>65</status>
+      <seq>1</seq>
+      <configuration></configuration>
+    </property>
+    <property name="module_id">
+      <id>75</id>
+      <label>Module ID</label>
+      <type>integerbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_module_vars.modid</source>
+      <status>33</status>
+      <seq>2</seq>
+      <configuration></configuration>
+    </property>
+    <property name="name">
+      <id>76</id>
+      <label>Name</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_module_vars.name</source>
+      <status>33</status>
+      <seq>3</seq>
+      <configuration></configuration>
+    </property>
+    <property name="value">
+      <id>77</id>
+      <label>Value</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_module_vars.value</source>
+      <status>33</status>
+      <seq>4</seq>
+      <configuration></configuration>
+    </property>
+  </properties>
+</object>

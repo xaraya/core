@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Modules Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>Module Removal with dependents still not removed</h2>
+        <xar:if condition="count($dependencies['active']) ne 0">
+            <h3>Dependents still Active</h3>
+            <ul>
+                <xar:foreach in="$dependencies['active']" value="$modInfo">
+                    <li>#xarML($modInfo['displayname'])#</li>
+                </xar:foreach>
+            </ul>
+        </xar:if>
+        <xar:if condition="count($dependencies['initialised']) ne 0">
+            <h3>Dependents still Initialized (Inactive)</h3>
+            <ul>
+                <xar:foreach in="$dependencies['initialised']" value="$modInfo">
+                    <li>#xarML($modInfo['displayname'])#</li>
+                </xar:foreach>
+            </ul>
+        </xar:if>
+        <!-- The form for editting the module settings and hooks -->
+        <form action="&xar-modurl-modules-admin-remove;" method="post" enctype="application/x-www-form-urlencoded">
+            <div class="xar-align-center">
+                <input type="hidden" name="id" id="id" value="#$id#"/>
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="submit" name="command" id="command" value="#xarML('Remove All')#" class="xar-margin-thickright"/>
+                <input type="button" name="return" id="return" onclick="document.location='&xar-modurl-modules-admin-list;';" value="#xarML('Go back to the modules list')#" class="xar-margin-thickleft"/>
+            </div>
+        </form>
+    </div>
+</xar:template>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <h2>Manage - View #$label#</h2>
+        <xar:template type="module" file="manage-menu"/>
+        <!--
+            this does all the hard work
+        -->
+        <xar:if condition="empty($numitems)">
+            <xar:set name="numitems">30</xar:set>
+        </xar:if>
+        <xar:if condition="isset($object)">
+            <xar:if condition="$object:visibility ne 'public'">
+                <h3 class="xar-align-center">Warning! This is a <i>#$object:visibility#</i> object used
+                internally by the #xarMod::getName($object:moduleid)# module.<br/>
+                Trying to modify items here may break the module. Please proceed with caution.</h3>
+            </xar:if>
+            <!-- TODO: distinguish between 'protected' and 'private' ? -->
+            <xar:data-view layout="$layout" object="$object" param="$urlparam"/>
+        <xar:else />
+            <xar:data-view layout="$layout" module="$module_id" itemtype="$itemtype" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid" sort="$sort"/>
+        </xar:if>
+        <xar:if condition="!empty($querylink)">
+            <p>
+                <a href="#$querylink#">Query #$label#</a>
+            </p>
+        </xar:if>
+    </div>
+</xar:template>

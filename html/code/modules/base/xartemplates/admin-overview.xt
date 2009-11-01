@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Base Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <img src="#xarTplGetImage('base.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon"/>
+        <h2>Overview</h2>
+
+        <h3>What is it?</h3>
+        <p>
+            The Base module provides overall site configuration options and displays global information about the site to the administrator(s) through its administration menu. It also provides a simple means of adding custom static pages to your site. The Base module is a core module within Xaraya and cannot be removed.
+        </p>
+
+        <h3>Concepts</h3>
+        <h4>Custom Templates and Static Pages</h4>
+        <p>
+            As well as providing a means to provide a custom template for your front page by creating an override for the base user-main.xd template, you can also create further custom 'static' pages using base module templates. See the documentation for further information.
+        </p>
+        <h4>Core CSS</h4>
+        <p>
+            Xaraya comes with a rich ste of CSS classes that are located in the xarstyles directory of the Base module. These classes are used by the core module templates and are also available to the themes. Individual themes can override or ignore these classes simply by overriding the file modules/base/xarstyles/xarcore-xhtml1-strict.css in the theme.
+        </p>
+        <h4>Javascript Tags</h4>
+        <p>
+            The Base Module provides several tags that can be used by theme creators and
+            module developers to incorporate javascript into templates. These include notably the <pre>&lt;xar:javascript .../&gt;</pre> tag, which signals the inclusion of a javascript snippet or file in a template, and the
+            <pre>&lt;xar:place-javascript ... /&gt;</pre> which is used to position the javascript snippet or file inclusion on the compiled page when it is sent to the browser.
+        </p>
+        <p>
+            You can use these javascript tags to add javascript files located in the xartemplates/includes directory of your modules to your templates.
+        </p>
+
+        <h4>Special classes</h4>
+        <p>
+            The Base module contains several useful PHP classes:
+        </p>
+        <ul>
+            <li>
+                <strong>RSS Class:</strong> The RSS capabilities in Xaraya use <a href="http://freshmeat.net/projects/phpfeedparser/?topic_id=914">PHP feedParser</a> written by the Reverend Jim as their backend.
+            </li>
+            <li>
+                <strong>Curl Class:</strong> a convenient wrapper for the PHP cURL functions, written by Jason Judge.
+            </li>
+        </ul>
+        <p>
+            Note that the classes for XML parsing support in Xaraya 1x have been replace by calls to the XML functions and classes in PHP5.
+        </p>
+
+        <h3>The Admin interface</h3>
+        <p>
+            As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Base &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules:.
+            <ul>
+                <li><strong>List items per page:</strong>&#160; how many items are displayed in this module's list views</li>
+                <li><strong>Short URLs:</strong>&#160; whether this module supports short URLs. If the module includes code for a short URL scheme, checking this checkbox will activate it.</li>
+                <li><strong>Module alias:</strong>&#160; whether this module should display an alias name in its displays, rather than the standard name (i.e. "base"). The alias can be defined in the text box below. If the alias checkbox is checked and the textbox is empty, the standard module name is used.</li>
+            </ul>
+        </p>
+        <p>
+            In addition, this module also supports the following configuration options:
+            <ul>
+                <li>
+                    <strong>Front page settings:</strong>&#160;sets the default page to be displayed when a user first accesses the site..
+                </li>
+                <li>
+                    <strong>Session and security settings:</strong>&#160;Session duration and inactivity timeout can be set. Xaraya uses its own cookies, whose name path and domain can be set. An overall security setting (low, medium, high) can be set for use by modules that recognize it.
+                </li>
+                <li>
+                    <strong>Locales:</strong>&#160;The locales available to the site can be set (the corresponding locale folders must be available under var/locales) as well as the default locale to be used. A setting also exists to allow (or not) users to switch locales/languages via e.g. the Language block in the Roles module.
+                </li>
+                <li>
+                    <strong>Timezones:</strong>&#160;Server and host timezones can be set separately.
+                </li>
+                <li>
+                    <strong>Proxy server:</strong>&#160;If the site's webserver uses a proxy server for outgoing connections, its configuration can be added..
+                </li>
+                <li>
+                    <strong>WYSIWYG editors:</strong>&#160;A default WYSIWYG editor can be chosen from a dropdown of available editors (these need to be installed by their modules).
+                </li>
+                <li>
+                    <strong>Legacy support:</strong>&#160;Activating legacy support will allow earlier versions of Xaraya modules to run on the site. Note that legacy support changes as versions are released, so the setting  in general provides support only for the most recent versions. 
+                </li>
+                <li>
+                    <strong>ShortURLs:</strong>&#160;a global setting which defines whether the site supports short URLs. Single modules must have their own settings enabled to activate their own support for short URLs.
+                </li>
+            </ul>
+        </p>
+        <p>
+            Clicking on the <strong>System Information</strong>link in the Admin menu lets you see your PHP configuration via the standard phpinfo() function.
+        </p>
+        <p>
+            Clicking on the <strong>Latest Releases</strong>link in the Admin menu lists the 10 latest extension releases from www.xaraya.com.
+        </p>
+
+        <h3>Available Blocks</h3>
+        <ul>
+            <li>
+                <strong>Adminmenu Block</strong>:&#160;defines and displays an administration menu for the site. The block has options for displaying a logout menu item, a help link, and sorting by module name or category.
+            </li>
+            <li>
+                <strong>Content Block</strong>:&#160;runs code and displays content in different forms: html, text, php. included file
+            </li>
+            <li>
+                <strong>Menu Block</strong>:&#160;defines and displays a user menu for the site. The block has a number of options for displaying and sorting entries of different sets of modules
+            </li>
+            <li>
+                <strong>Waiting Content Block</strong>:&#160;display content waiting for administrator approval for any modules that supply a hook for waiting content.  To use it, create a block and then hook the module
+                supplying the waiting content to the Base module.
+            </li>
+        </ul>
+
+        <h3>Available Dataproperties</h3>
+        <ul>
+            <li>
+                <strong>Array</strong>:&#160;used for input and display of array data.
+            </li>
+            <li>
+                <strong>Calculated</strong>:&#160;displays a value calculated from the values of other properties.
+            </li>
+            <li>
+                <strong>Calendar</strong>:&#160;displays a calendar popup for input.
+            </li>
+            <li>
+                <strong>Checkbox</strong>:&#160;used for input and display of checkboxes.
+            </li>
+            <li>
+                <strong>Checkboxlist</strong>:&#160;used for input and display of groups of checkboxes.
+            </li>
+            <li>
+                <strong>Combobox</strong>:&#160;displays a dropdown of items and/or a textbox for input.
+            </li>
+            <li>
+                <strong>Countrylisting</strong>:&#160; a Select property that displays a list of countries of the world.
+            </li>
+            <li>
+                <strong>Dateformat</strong>:&#160;displays a dropdown of data formats.
+            </li>
+            <li>
+                <strong>Select</strong>:&#160;displays a generic dropdown.
+            </li>
+            <li>
+                <strong>Extendeddate</strong>:&#160;a Calendar property that translates its values.to a universal YYYY-MM-DD format, rather than a UNIX timestamp.
+            </li>
+            <li>
+                <strong>Filepicker</strong>:&#160;displays a dropdown of files in a given directory..
+            </li>
+            <li>
+                <strong>Fileupload</strong>:&#160;displays a file upload box that lets a user upload a file. The configuration options include the target directory and the allowed file extensions, among others..
+            </li>
+            <li>
+                <strong>Floatbox</strong>:&#160;used for input and display of floating numbers.
+            </li>
+            <li>
+                <strong>Hidden</strong>:&#160;used for adding a hidden value to a page.
+            </li>
+            <li>
+                <strong>Image</strong>:&#160;used for input and display of images.
+            </li>
+            <li>
+                <strong>Imagelist</strong>:&#160;used for input and display of a group of images.
+            </li>
+            <li>
+                <strong>Integerbox</strong>:&#160;used for input and display of integers.
+            </li>
+            <li>
+                <strong>Integerlist</strong>:&#160;used for input and display of groups of integers.
+            </li>
+            <li>
+                <strong>Language</strong>:&#160;displays a dropdown of languages, as given by the available site locales..
+            </li>
+            <li>
+                <strong>Multiselect</strong>:&#160;displays a select box that accepts multiple inputs.
+            </li>
+            <li>
+                <strong>Radio</strong>:&#160;displays a set of radio buttons.
+            </li>
+            <li>
+                <strong>Statelisting</strong>:&#160;a Select property that displays a dropdown of the US states.
+            </li>
+            <li>
+                <strong>Static</strong>:&#160;displays data as static text..
+            </li>
+            <li>
+                <strong>ColorPicker</strong>:&#160;displays a color palette to choose a color from.
+            </li>
+            <li>
+                <strong>Textarea</strong>:&#160;used for input and display of large text items.
+            </li>
+            <li>
+                <strong>Textbox</strong>:&#160;used for input and display of strings.
+            </li>
+            <li>
+                <strong>Timezone</strong>:&#160;displays a dropdown of time zones.
+            </li>
+            <li>
+                <strong>URL</strong>:&#160;used for input and display of URLs.
+            </li>
+            <li>
+                <strong>URLIcon</strong>:&#160;allows input and displays a URL and associated icon
+            </li>
+            <li>
+                <strong>URLTitle</strong>:&#160;allows input and displays a URL and associated title
+            </li>
+            <li>
+                <strong>Webpage</strong>:&#160;used for input and display of HTML data.
+            </li>
+        </ul>
+
+        <h3>Available Hooks</h3>
+        <p>The Base module has no hooks</p>
+
+        <!--
+        <h3>Further Information</h3>
+        <p>Further information on the Base module can be found at</p>
+        <ul>
+            <li>Base Module Extension page at 
+            <a title="#xarML('Base Module - Xaraya Extension 68')#"
+            href="http://www.xaraya.com/index.php/release/68.html">Xaraya Extension and
+            Releases</a>. Click on Version History tab at the bottom to get the latest release
+            information.</li>
+            <li>Related tutorials and documentation on Base Module found at 
+            <a href="http://www.xaraya.com/index.php/keywords/base/"
+            title="#xarML('Related documentation on Base')#">Xaraya Documentation.</a></li>
+        </ul>
+        <p class="xar-sub">
+        <strong>&#160;Base Module Overview</strong>
+        <br />&#160;Version 1.0.2&#160; 2006-02-09</p>
+        -->
+    </div>
+</xar:template>

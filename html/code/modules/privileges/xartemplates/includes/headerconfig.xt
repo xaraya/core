@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <br />
+    <ul class="xar-tabs xar-alt xar-norm-outline">
+        <xar:var name="title">Module</xar:var>
+        <xar:var name="label">Module</xar:var>
+        <li class="xar-tabs-label" title="#$title#">#$label#</li>
+        <xar:if condition="$tab eq 'all'">
+            <xar:set name="tabclass">'xar-tab-active'</xar:set>
+            <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+        <xar:else />
+            <xar:set name="tabclass">'xar-tab'</xar:set>
+            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+        </xar:if>
+        <li class="#$tabclass#">
+            <a href="#xarModURL('privileges', 'admin', 'assignprivileges', array('tabmodule' => 'All Modules', 'tab' => 'all'))#" class="#$linkclass#">
+                All modules
+            </a>
+        </li>
+        <xar:foreach in="$moduletabs" key="$tabname" value="$thistab">
+            <xar:if condition="$tab eq $tabname">
+                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+            <xar:else />
+                <xar:set name="tabclass">'xar-tab'</xar:set>
+                <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+            </xar:if>
+            <li class="#$tabclass#">
+                <a href="#xarModURL('privileges', 'admin', 'assignprivileges', array('tabmodule' => $tabname,'tab' => $tabname))#" class="#$linkclass#">
+                    #$thistab['displayname']#
+                </a>
+            </li>
+        </xar:foreach>
+    </ul>
+</xar:template>

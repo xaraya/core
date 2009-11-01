@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="module" file="privtree"/>
+    <xar:javascript module="privileges" filename="xarTree.js"/>
+    <script type="javascript">
+        <!--
+        var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
+        function doOnLoad() {
+             oldOnLoadFunction();
+             xarTree_init('PrivilegesTree');
+             }
+        var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;");
+        function doOnUnload() {
+             oldOnUnloadFunction();
+             xarTree_init('PrivilegesTree');
+             }
+
+        window.onload = doOnLoad;
+        window.onunload = doOnUnload;
+
+        function setaction(target){
+        document.forms['privilegeform'].action = target;
+        document.forms['privilegeform'].submit();}
+        // -->
+    </script>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Privileges Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <h2>Manage Privilege: #$pname#</h2>
+        <xar:if condition="count($parents) ne 0">
+            <div>
+                <ul class="xar-tabs xar-alt xar-norm-outline">
+                    <xar:var name="title">These are the privileges that contain #$pname# as a component</xar:var>
+                    <xar:var name="label">Used in</xar:var>
+                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
+                    <xar:set name="prevgroup">""</xar:set>
+                    <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+                        <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+                            <li class="xar-tab">
+                                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">
+                                    #$parents[$i]['parentname']#
+                                </a>
+                            </li>
+                        </xar:if>
+                        <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
+                    </xar:for>
+                </ul>
+            </div>
+        </xar:if>
+        <div>
+            <ul class="xar-tabs xar-alt xar-norm-outline">
+                <xar:var name="title">Choose an action to perform on this privilege</xar:var>
+                <xar:var name="label">Manage privilege</xar:var>
+                <li class="xar-tabs-label" title="#$title#">#$label#</li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$id#" class="xar-norm xar-norm-outline">
+                        Display
+                    </a>
+                </li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$id#" class="xar-norm xar-norm-outline">
+                        Modify
+                    </a>
+                </li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$id#" class="xar-norm xar-norm-outline">
+                        Delete
+                    </a>
+                </li>
+                <li class="xar-tab-active">
+                    <a href="&xar-modurl-privileges-admin-viewroles;&amp;id=#$id#" class="xar-accent xar-accent-outline">
+                        Groups/Users
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <fieldset>
+            <legend>Assignments</legend>
+            <xar:if condition="count($roles) eq 0">
+                <p>This privilege is not assigned to any user or group.</p>
+                <xar:else />
+                <table class="xar-fullwidth">
+                    <tr>
+                        <th>Type</th>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                    <xar:foreach in="$roles" value="$role">
+                        <tr>
+                            <td>
+                                <xar:if condition="$role['itemtype'] eq 2">User 
+                                <xar:else />Group</xar:if>
+                            </td>
+                            <td>
+                                <a href="&xar-modurl-roles-admin-modify;&amp;id=#$role['roleid']#"
+                                title="#xarML('Go to this role')#">#$role['name']#</a>
+                            </td>
+                            <td class="xar-align-center">
+                                <a href="#$removeurl#&amp;roleid=#$role['roleid']#" title="#xarML('Remove this Privilege assignment')#">
+                                    <img src="modules/privileges/xarimages/delete.gif" class="xar-valign-middle"/>
+                                </a>
+                            </td>
+                        </tr>
+                    </xar:foreach>
+                </table>
+            </xar:if>
+          <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
+                <div class="xar-form-input-wrapper">
+                    <label for="roleid" title="#xarML('Choose a new Group to assign this Privilege.')#" class="xar-form-label">
+                        Assign to Group:
+                    </label>
+                    <select name="roleid" id="roleid" class="xar-margin-thickright">
+                        <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
+                            <option value="#$groups[$i]['id']#">#$groups[$i]['name']# -
+                            #$groups[$i]['users']#</option>
+                        </xar:for>
+                    </select>
+                    <input type="submit" value="#xarML('Assign')#"/>
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('roles')#"/>
+                    <input type="hidden" name="privid" id="privid" value="#$id#"/>
+                    <input type="hidden" name="return_url" id="return_url"
+                    value="&xar-modurl-privileges-admin-viewroles;&amp;id=#$id#"/>
+                </div>
+            </form>
+        </fieldset>
+        <fieldset>
+            <legend>Current Privileges</legend>
+            <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-viewroles;" method="post" enctype="application/x-www-form-urlencoded">
+                <input type="hidden" name="id" id="id" value="#$id#"/>
+                <p>
+                    <a href="&xar-modurl-privileges-admin-newprivilege;">Add Privilege</a>
+                </p>
+                <p>
+                    Show Privileges that are: 
+                    <xar:set name="options">
+                        array(
+                            array('id' => 'assigned', 'name' => xarML('Assigned')),
+                            array('id' => 'unassigned', 'name' => xarML('Unassigned')),
+                        )
+                    </xar:set>
+                </p>
+                <xar:data-input type="radio" options="$options" value="$show"  onclick="this.form.submit();"/>
+            </form>
+            <xar:data-input type="privilegestree" show="$show"/>
+        </fieldset>
+    </div>
+</xar:template>

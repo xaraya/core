@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:javascript module="base" filename="toggle.js"/>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <h2>Modify DataProperties #$label#</h2>
+        <xar:if condition="!empty($objectid)">
+            <div>
+                <ul class="xar-tabs xar-alt xar-norm-outline">
+                    <xar:var name="title">Options</xar:var>
+                    <xar:var name="label">Options</xar:var>
+                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
+                    <li class="xar-tab">
+                        <a href="&xar-modurl-dynamicdata-admin-modify;&amp;itemid=#$objectid#" class="xar-norm xar-norm-outline">
+                            Modify Object Definition
+                        </a>
+                    </li>
+                    <li class="xar-tab-active">
+                        <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">
+                            Modify DataProperties
+                        </a>
+                    </li>
+                    <li class="xar-tab">
+                        <a href="&xar-modurl-dynamicdata-util-export;&amp;module_id=#$module_id#&amp;itemtype=#$itemtype#" class="xar-norm xar-norm-outline">
+                            Export to XML
+                        </a>
+                    </li>
+                    <xar:if condition="!empty($fields)">
+                        <li class="xar-tab">
+                            <script type="text/javascript">
+                            function xar_dynamicdata_formpreview()
+                            {
+                                var my_window = window.open('#$urlform#',
+                                                            'FormPreview',
+                                                            'width=780,height=580,status=no,scrollbars=1,resizable=yes,top=0,left=0,dependent=yes,alwaysRaised=yes');
+                                my_window.opener = window;
+                                my_window.focus();
+                            }
+                            </script>
+                            <a href="javascript:xar_dynamicdata_formpreview();" class="xar-norm xar-norm-outline">
+                                Preview Input Form
+                            </a>
+                        </li>
+                    </xar:if>
+                </ul>
+            </div>
+            <fieldset>
+                <legend>Object summary</legend>
+                <xar:data-display layout="$layout" itemid="$objectid" fieldlist="objectid,name,label,class,"/>
+            </fieldset>
+        </xar:if>
+        <!-- This is where the list of properties shown starts -->
+        <xar:if condition="$visibility ne 'public'">
+            <h3 class="xar-align-center">Warning! This is a <i>#$visibility#</i> object used
+            internally by the #xarMod::getName($module_id)# module.<br/>
+            Trying to modify the properties of this object here may break the module. Please proceed with caution.</h3>
+        </xar:if>
+        <!-- TODO: distinguish between 'protected' and 'private' ? -->
+        <xar:if condition="!isset($layout)">
+            <xar:set name="layout">'default'</xar:set>
+        </xar:if>
+        <form method="post" action="&xar-modurl-dynamicdata-admin-updateprop;">
+            <xar:template file="proplist-$layout"/>
+        </form>
+        <p>[ 
+            <xar:if condition="empty($details)">
+            <a href="#$detailslink#">Show Static Properties and Relations</a>
+            <xar:else />
+            <a href="#$detailslink#">Hide Static Properties and Relations</a>
+        </xar:if>]</p>
+        <xar:if condition="count($static) gt 0">
+            <fieldset>
+                <legend>#$statictitle#</legend>
+                <table class="xar-fullwidth">
+                    <tr>
+                        <th>Name</th>
+                        <th>Label</th>
+                        <th>Property Type</th>
+                        <th>Default</th>
+                        <th>Data Source</th>
+                        <th>Configuration</th>
+                    </tr>
+                    <xar:foreach in="$static" value="$field">
+                        <tr>
+                            <td>#$field['name']#</td>
+                            <td>#$field['label']#</td>
+                            <td>
+                                <xar:data-output property="$fieldtypeprop"
+                                name="static_type['.$field['id'].']" value="$field['type']"/>
+                            </td>
+                            <td>#$field['defaultvalue']#</td>
+                            <td>#$field['source']#</td>
+                            <td>#$field['configuration']#</td>
+                        </tr>
+                    </xar:foreach>
+                </table>
+            </fieldset>
+            <fieldset>
+                <!-- xar:data-view module="dynamicdata" itemtype="1" where="$where" param="itemid" layout="cells" / -->
+                <xar:if condition="count($tables) gt 0">
+                    <xar:foreach in="$tables" value="$table">
+                        <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
+                            <div class="xar-align-center">
+                                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                                <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>
+                                <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
+                                <input type="hidden" name="table" id="table" value="#$table#"/>
+                                <input type="submit" value="#xarML('Import table')# #$table#"/>
+                            </div>
+                        </form>
+                    </xar:foreach>
+                </xar:if>
+            </fieldset>
+        </xar:if>
+        <xar:if condition="count($relations) gt 0">
+            <h2>#$relationstitle#</h2>
+            <!--
+            TODO: very much under construction, obviously :-)
+            -->
+            <form method="post" action="&xar-modurl-dynamicdata-admin-modifyprop;">
+                <!-- don't accept updates for this (for now) -->
+                <xar:foreach in="$relations" value="$relation">
+                    <xar:if condition="count($relation['links']) gt 0">
+                        <xar:foreach in="$relation['links']" value="$link">
+                            <p>
+                                <label>
+                                <strong>#$labels['module']#</strong>#$relation['module']#</label>
+                                <label>
+                                <strong>#$labels['linktype']#</strong>#$link['type']#</label>
+                                <label>
+                                <strong>#$labels['linkfrom']#</strong>#$link['from']#</label>
+                                <label>
+                                <strong>#$labels['linkto']#</strong>#$link['to']#</label>
+                            </p>
+                        </xar:foreach>
+                        <xar:else />
+                        <p>
+                            <label>
+                            <strong>#$labels['module']#</strong>#$relation['module']#</label>
+                            <label>
+                            <strong>#$labels['linktype']#</strong>( not found )</label>
+                            <label>
+                            <strong>#$labels['linkfrom']#</strong>-</label>
+                            <label>
+                            <strong>#$labels['linkto']#</strong>( not found )</label>
+                        </p>
+                    </xar:if>
+                </xar:foreach>
+            </form>
+        </xar:if>
+    </div>
+</xar:template>

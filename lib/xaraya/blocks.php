@@ -3,7 +3,7 @@
  * Display Blocks
  * *
  * @package blocks
- * @copyright (C) 2002-2007 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Paul Rosania
@@ -62,14 +62,14 @@ function xarBlock_render($blockinfo)
     xarCore::setCached('Security.Variables', 'currentmodule', $modName);
 
     // Load the block.
-    if (!xarModAPIFunc(
+    if (!xarMod::apiFunc(
         'blocks', 'admin', 'load',
         array('modName' => $modName, 'blockType' => $blockType, 'blockFunc' => 'display') )
     ) {return;}
 
     // Get the block display function name.
     $displayFuncName = "{$modName}_{$blockType}block_display";
-    $classpath = 'modules/' . $modName . '/xarblocks/' . $blockType . '.php';
+    $classpath = sys::code() . 'modules/' . $modName . '/xarblocks/' . $blockType . '.php';
 
     // Fetch complete blockinfo array.
     if (function_exists($displayFuncName)) {
@@ -211,21 +211,20 @@ function xarBlock_renderGroup($groupname, $template = NULL)
 
         if ($blockCaching) {
             $cacheKey = $blockinfo['module'] . "-blockid" . $blockinfo['bid'] . "-" . $groupname;
-            $args = array('cacheKey' => $cacheKey, 'name' => 'block', 'blockid' => $blockinfo['bid']);
         }
 
-        if ($blockCaching && xarBlockIsCached($args)) {
+        if ($blockCaching && xarBlockCache::isCached($cacheKey, $blockinfo['bid'])) {
             // output the cached block
-            $output .= xarBlockGetCached($cacheKey,'block');
+            $output .= xarBlockCache::getCached($cacheKey);
 
         } else {
             $blockinfo['last_update'] = $blockinfo['last_update'];
 
             // Get the overriding template name.
             // Levels, in order (most significant first): group instance, instance, group
-            $group_inst_bl_template = split(';', $blockinfo['group_inst_bl_template'], 3);
-            $inst_bl_template = split(';', $blockinfo['inst_bl_template'], 3);
-            $group_bl_template = split(';', $blockinfo['group_bl_template'], 3);
+            $group_inst_bl_template = explode(';', $blockinfo['group_inst_bl_template'], 3);
+            $inst_bl_template = explode(';', $blockinfo['inst_bl_template'], 3);
+            $group_bl_template = explode(';', $blockinfo['group_bl_template'], 3);
 
             if (empty($group_bl_template[0])) {
                 // Default the box template to the group name.
@@ -263,7 +262,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
             $blockoutput = xarBlock_render($blockinfo);
 
             if ($blockCaching) {
-                xarBlockSetCached($cacheKey, 'block', $blockoutput);
+                xarBlockCache::setCached($cacheKey, $blockoutput);
             }
             $output .= $blockoutput;
 
@@ -291,26 +290,23 @@ function xarBlock_renderBlock($args)
 {
     // All the hard work is done in this function.
     // It keeps the core code lighter when standalone blocks are not used.
-    $blockinfo = xarModAPIFunc('blocks', 'user', 'getinfo', $args);
+    $blockinfo = xarMod::apiFunc('blocks', 'user', 'getinfo', $args);
     $blockCaching = xarCore::getCached('xarcache', 'blockCaching');
 
     if (!empty($blockinfo) && $blockinfo['state'] !== 0) {
         if ($blockCaching) {
             $cacheKey = $blockinfo['module'] . '-blockid' . $blockinfo['bid'] . '-noGroup';
-            $args = array('cacheKey' => $cacheKey,
-                          'name' => 'block',
-                          'blockid' => $blockinfo['bid'],
-                          'blockinfo' => $blockinfo);
         }
-        if ($blockCaching && xarBlockIsCached($args)) {
+        // CHECKME: cfr. bug 4021 Override caching vars with block BL tag
+        if ($blockCaching && xarBlockCache::isCached($cacheKey, $blockinfo['bid'], $blockinfo)) {
             // output the cached block
-            $output = xarBlockGetCached($cacheKey,'block');
+            $output = xarBlockCache::getCached($cacheKey);
 
         } else {
             $blockoutput = xarBlock_render($blockinfo);
 
             if ($blockCaching) {
-                xarBlockSetCached($cacheKey, 'block', $blockoutput);
+                xarBlockCache::setCached($cacheKey, $blockoutput);
             }
             $output = $blockoutput;
         }

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <style type="text/css">.testcase { padding: 3pt; margin: 5pt; border: thin solid black;
     }</style>
@@ -110,7 +110,7 @@
       </xar:ml>
     </xar:set>
       R: 
-<xar:var name="nextpagelabel" />
+<xar:var name="nextpagelabel"/>
     
 </pre>
         </div>
@@ -151,17 +151,17 @@ E: Next page;
           
 <xar:ml>
             R: Next page; 
-<xar:var name="next" /> items, yes really 
-<xar:var name="next" />.
+<xar:var name="next"/> items, yes really 
+<xar:var name="next"/>.
           </xar:ml>
         </xar:set>
         
-<xar:var name="nextpagelabel" />
+<xar:var name="nextpagelabel"/>
         
 <xar:ml>
           R: Next page; 
-<xar:var name="link" />, yes really 
-<xar:var name="next" />
+<xar:var name="link"/>, yes really 
+<xar:var name="next"/>
         </xar:ml>
       
 </pre>
@@ -207,7 +207,7 @@ E: Next page;
     
 <![CDATA[
       <xar:var scope="config" name="System.Core.VersionNumber"/>
-      <xar:var scope="request" name="page" />
+      <xar:var scope="request" name="page"/>
       <xar:var scope="session" name="navigationLocale"/>
       <xar:var scope="invalid" name="nonexistent"/>
     ]]>
@@ -218,13 +218,13 @@ E: Next page;
             <pre>
       E: [ongoing development version]compilertesten_US.utf-8&#x2707;
       R: 
-<xar:var scope="config" name="System.Core.VersionNumber" />
+<xar:var scope="config" name="System.Core.VersionNumber"/>
       
-<xar:var scope="request" name="page" />
+<xar:var scope="request" name="page"/>
       
-<xar:var scope="session" name="navigationLocale" />
+<xar:var scope="session" name="navigationLocale"/>
       
-<xar:var scope="invalid" name="nonexistent" />
+<xar:var scope="invalid" name="nonexistent"/>
     
 </pre>
         </div>

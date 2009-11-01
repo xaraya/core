@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <table class="xar-norm">
+        <tr>
+            <td>Object</td>
+            <td>
+                <xar:set name="field">$name.'[objectname]'</xar:set>
+                <xar:data-input type="object" name="$field" value="$objectid"
+                tabindex="$tabindex"/>
+            </td>
+            <td>Select the dynamic object you want to use as sub-form</td>
+        </tr>
+        <tr>
+            <td>Style</td>
+            <td>
+                <select name="#$name#[style]" id="#$name#_style">
+                    <xar:foreach in="$styles" key="$sname" value="$slabel">
+                        <xar:if condition="!empty($style) and $style eq $sname">
+                            <option value="#$sname#" selected="selected">#$slabel#</option>
+                            <xar:else />
+                            <option value="#$sname#">#$slabel#</option>
+                        </xar:if>
+                    </xar:foreach>
+                </select>
+            </td>
+            <td>
+                <ul>
+                    <li>Local value : the item values will be stored locally in serialized
+                    format</li>
+                    <li>Link to item : the item id of the parent/sibling item will be stored
+                    locally</li>
+                    <li>List of children (child ids) : the list of item ids for the child items
+                    will be stored locally</li>
+                    <li>List of children (parent id) : the parent id for the child items will be
+                    stored locally (you can use the 'dummy' data source for this property if the
+                    parent id corresponds to the current item id)</li>
+                </ul>
+            </td>
+        </tr>
+        <xar:if condition="!empty($objectid) and !empty($style) and $style eq 'itemid'">
+            <tr>
+                <td>Title Field</td>
+                <td>
+                    <!-- the title property needs to be selected -->
+                    <select name="#$name#[title]" id="#$id#_title">
+                        <option value="">[ no dropdown list ]</option>
+                        <xar:foreach in="$properties" key="$propname" value="$propinfo">
+                            <xar:if condition="!empty($title) and $title eq $propname">
+                                <option value="#$propname#" selected="selected">
+                                #$propinfo:label#</option>
+                                <xar:else />
+                                <option value="#$propname#">#$propinfo:label#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+                <td>Specify which field (if any) should be used to select the sibling/parent
+                item</td>
+            </tr>
+        </xar:if>
+        <xar:if condition="!empty($objectid) and !empty($style) and $style ne 'serialized'">
+            <tr>
+                <td>Link Field</td>
+                <td>
+                    <xar:if condition="$style eq 'itemid'">
+                        <!-- the property of type 'itemid' is the link -->
+                        <xar:foreach in="$properties" key="$propname" value="$propinfo">
+                            <xar:if condition="!empty($propinfo:type) and $propinfo:type eq 21">
+                            #$propinfo:label# 
+                            <xar:break /></xar:if>
+                        </xar:foreach>
+                        <xar:elseif condition="$style eq 'childlist' or $style eq 'parentid'"/>
+                        <!-- the parent property needs to be selected -->
+                        <select name="#$name#[link]" id="#$id#_link">
+                            <xar:foreach in="$properties" key="$propname" value="$propinfo">
+                                <xar:if condition="!empty($link) and $link eq $propname">
+                                    <option value="#$propname#" selected="selected">
+                                    #$propinfo:label#</option>
+                                    <xar:else />
+                                    <option value="#$propname#">#$propinfo:label#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                    </xar:if>
+                </td>
+                <td>For the list of children with parent id, specify which field references the
+                parent id (foreign key) in the child items</td>
+            </tr>
+        </xar:if>
+        <xar:if condition="!empty($objectid) and !empty($style) and ($style eq 'childlist' or $style eq 'parentid')">
+
+            <tr>
+                <td>Parent Id</td>
+                <td>
+                    <!-- equal to itemid or selectable -->
+                    <xar:if condition="empty($title)">
+                        <label for="#$id#_title_0">
+                        <input type="radio" name="#$name#[title]" id="#$id#_title_0" value="0"
+                        checked="checked"/>select</label>
+                        <label for="#$id#_title_1">
+                        <input type="radio" name="#$name#[title]" id="#$id#_title_1"
+                        value="1"/>fixed (use itemid field)</label>
+                        <xar:else />
+                        <label for="#$id#_title_0">
+                        <input type="radio" name="#$name#[title]" id="#$id#_title_0"
+                        value="0"/>select</label>
+                        <label for="#$id#_title_1">
+                        <input type="radio" name="#$name#[title]" id="#$id#_title_1" value="1"
+                        checked="checked"/>fixed (use itemid field)</label>
+                    </xar:if>
+                </td>
+                <td>Make the parent id configurable or not</td>
+            </tr>
+        </xar:if>
+        <!--  TODO: check this
+  <tr>
+    <td>
+      Where
+    </td>
+    <td>
+      <input type="text" name="#$name#[where]" id="#$id#_where" value="#$where#" size="#$size#" tabindex="#$tabindex#"/>
+    </td>
+    <td>
+      Additional WHERE clause for the link to item or list of children
+    </td>
+  </tr>
+-->
+        <xar:if condition="!empty($objectid)">
+            <tr>
+                <td>Field List</td>
+                <td>
+                    <select name="#$name#[fieldlist][]" id="#$name#_fieldlist" multiple="multiple">
+                        <xar:foreach in="$properties" key="$propname" value="$propinfo">
+                            <xar:if condition="!empty($fieldlist) and in_array($propname,$fieldlist)">
+
+                                <option value="#$propname#" selected="selected">
+                                #$propinfo:label#</option>
+                                <xar:else />
+                                <option value="#$propname#">#$propinfo:label#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+                <td>Select the fields to display in the interface</td>
+            </tr>
+        </xar:if>
+        <xar:if condition="!empty($objectid) and !empty($style) and $style ne 'serialized'">
+            <tr>
+                <td>Input Form</td>
+                <td>
+                    <xar:if condition="empty($input)">
+                        <label for="#$id#_input_1">
+                        <input type="radio" name="#$name#[input]" id="#$id#_input_1"
+                        value="1"/>yes</label>
+                        <label for="#$id#_input_0">
+                        <input type="radio" name="#$name#[input]" id="#$id#_input_0" value="0"
+                        checked="checked"/>no</label>
+                        <xar:else />
+                        <label for="#$id#_input_1">
+                        <input type="radio" name="#$name#[input]" id="#$id#_input_1" value="1"
+                        checked="checked"/>yes</label>
+                        <label for="#$id#_input_0">
+                        <input type="radio" name="#$name#[input]" id="#$id#_input_0"
+                        value="0"/>no</label>
+                    </xar:if>
+                </td>
+                <td>Allow editing the subform items here</td>
+            </tr>
+        </xar:if>
+        <tr>
+            <td>Number of repetitions</td>
+            <td>
+                <input type="text" name="#$name#[repeat]" id="#$id#_repeat" value="#$repeat#" size="#$size#" tabindex="#$tabindex#" class="xar-form-textshort"/>
+            </td>
+            <td>
+                <ul>
+                    <li>The number of times the subform appears on displays and forms. Zero means
+                    repetitions are added dynamically, i.e. one appears initially on the form and
+                    more are added or removed with buttons.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>Edit keys</td>
+            <td>
+                <xar:if condition="!empty($editkeys)">
+                    <input type="checkbox" name="#$name#[editkeys]" id="#$id#_editkeys" value="1" tabindex="#$tabindex#" checked="checked"/>
+                <xar:else/>
+                    <input type="checkbox" name="#$name#[editkeys]" id="#$id#_editkeys" value="1" tabindex="#$tabindex#"/>
+                </xar:if>
+            </td>
+            <td>Allow editing of the keys in repititions<br/>(= associative array of sub-forms)</td>
+        </tr>
+        <tr>
+            <td>Template layout</td>
+            <td colspan="2">
+                <input type="text" name="#$name#[layout]" id="#$id#_layout" value="#$layout#"
+                size="#$size#" tabindex="#$tabindex#"/>
+            </td>
+        </tr>
+        <tr>
+            <td>Other rule</td>
+            <td colspan="2">
+                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#"
+                size="#$size#" tabindex="#$tabindex#"/>
+            </td>
+        </tr>
+    </table>
+    <xar:if condition="!empty($invalid)">
+        <span class="xar-error">#$invalid#</span>
+    </xar:if>
+</xar:template>

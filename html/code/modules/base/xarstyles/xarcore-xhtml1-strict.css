@@ -1,0 +1,376 @@
+@import url(tabs.css);
+
+/* explicit removal of default or inherited borders */
+.xar-noborder { border: 0 none; }
+
+/* good for generic static container-boxes */
+.xar-standard-box-padding { padding: 0 1em 1em 1em; }
+
+/* generic alignments */
+.xar-align-center { text-align: center; }
+.xar-align-left { text-align: left; }
+.xar-align-right { text-align: right; }
+
+/* white space control */
+.xar-nowrap { white-space: nowrap; }
+
+/* inline boxes alignments */
+.xar-valign-top { vertical-align: top; }
+.xar-valign-middle { vertical-align: middle; }
+.xar-valign-bottom { vertical-align: bottom; }
+.xar-valign-baseline { vertical-align: baseline; }
+.xar-valign-texttop { vertical-align: text-top; }
+.xar-valign-textbottom { vertical-align: text-bottom; }
+.xar-valign-sub { vertical-align: sub; }
+.xar-valign-super { vertical-align: super; }
+
+/* EXPERIMENTAL RULES - keep them near the bottom!! the following rules arent used anywhere yet, when actually deployed, move near the top */
+.xar-quarterwidth { width: 24%; }
+.xar-thirdwidth { width: 33%; }
+.xar-halfwidth { width: 49%; }
+.xar-twothirdwidth { width: 66%; }
+.xar-threequarterswidth { width: 75%; }
+.xar-inheritwidth { width: inherit; }
+.xar-autowidth { width: auto; }
+
+/* we use this class when positioning tables inside generic box, so that ie-win can calculate the widths correctly */
+.xar-fullwidth { width: 100%; }
+
+.xar-fullwidth, .xar-halfwidth, .xar-thirdwidth, .xar-quarterwidth, .xar-twothirdwidth, .xar-threequarterswidth {
+    padding: 0;
+    /* margin: auto 0; */
+}
+
+/* elements display directives */
+.xar-displayinline { display: inline; }
+.xar-displayblock { display: block; }
+/* .xar-displayinline-block { display: inline-block; } */
+.xar-displaytable { display: table; }
+/* .xar-displayinline-table { display: inline-table; } */
+.xar-displaytable-row { display: table-row; }
+.xar-displaytable-rowgroup { display: table-row-group; }
+.xar-displaytable-column { display: table-column; }
+.xar-displaytable-columngroup { display: table-column-group; }
+.xar-displaytable-cell { display: table-cell; }
+.xar-displaytable-caption { display: table-caption; }
+.xar-displaylist { display: list-item; }
+.xar-displayinherit { display: inherit; }
+.xar-displaynone { display: none; }
+
+/* floated box elements positioning */
+.xar-floatleft { float: left; }
+.xar-floatright { float: right; }
+
+/* floater height clearing - use with caution, see Hint (3) above */
+.xar-clearleft { clear: left; }
+.xar-clearright { clear: right; }
+.xar-clearboth { clear: both; }
+
+/* overflow control */
+.xar-overflow-auto { overflow: auto; }
+.xar-overflow-scroll { overflow: scroll; }
+.xar-overflow-hidden { overflow: hidden; }
+.xar-overflow-visible { overflow: visible; }
+
+/* this class may be deprecated in future in favour of more specific rules */
+.xar-clearnone { clear: none; }
+
+/* this class will magically fix floated elements that "bleed" out of their parents
+most common usage is on a <br /> as the last child of the parent.  Only exists 
+because ie6 and below doesn't support :last-child and :after pseudo-classes */
+.xar-clearall { clear:both; content: '.'; font-size: 0; display: block; height: 0; visibility: hidden; }
+
+/* common form elements */
+.xar-form-textshort { width: 5em; }
+.xar-form-textmedium { width: 10em; }
+.xar-form-textlong { width: 15em; }
+.xar-form-textxlong { width: 20em; }
+.xar-form-textxxlong { width: 25em; }
+
+.xar-form-textareasmall {
+    height: 6ex;
+    width: 90%;
+}
+
+.xar-form-textareamedium {
+    height: 10ex;
+    width: 90%;
+}
+
+.xar-form-textarealarge {
+    height: 20ex;
+    width: 90%;
+}
+
+.xar-form-textareaxlarge {
+    height: 40ex;
+    width: 90%;
+}
+
+/* scrollable area heights */
+.xar-area-small { height: 10ex; }
+.xar-area-medium { height: 20ex; }
+.xar-area-large { height: 40ex; }
+
+/* minimal formatting - relative padding */
+.xar-padding-none { padding: 0; }
+.xar-padding-nonetop { padding-top: 0; }
+.xar-padding-noneright { padding-right: 0; }
+.xar-padding-nonebottom { padding-bottom: 0; }
+.xar-padding-noneleft { padding-left: 0; }
+
+.xar-padding-nonesides {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.xar-padding-noneends {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.xar-padding-thin { padding: 1px; }
+.xar-padding-thintop { padding-top: 1px; }
+.xar-padding-thinright { padding-right: 1px; }
+.xar-padding-thinbottom { padding-bottom: 1px; }
+.xar-padding-thinleft { padding-left: 1px; }
+
+.xar-padding-thinsides {
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+.xar-padding-thinends {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.xar-padding-medium { padding: 2px; }
+.xar-padding-mediumtop { padding-top: 2px; }
+.xar-padding-mediumright { padding-right: 2px; }
+.xar-padding-mediumbottom { padding-bottom: 2px; }
+.xar-padding-mediumleft { padding-left: 2px; }
+
+.xar-padding-mediumsides {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.xar-padding-mediumends {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.xar-padding-thick { padding: 4px; }
+.xar-padding-thicktop { padding-top: 4px; }
+.xar-padding-thickright { padding-right: 4px; }
+.xar-padding-thickbottom { padding-bottom: 4px; }
+.xar-padding-thickleft { padding-left: 4px; }
+
+.xar-padding-thicksides {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.xar-padding-thickends {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+/* minimal formatting - relative margin */
+.xar-margin-none { margin: 0; }
+.xar-margin-nonetop { margin-top: 0; }
+.xar-margin-noneright { margin-right: 0; }
+.xar-margin-nonebottom { margin-bottom: 0; }
+.xar-margin-noneleft { margin-left: 0; }
+
+.xar-margin-nonesides {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.xar-margin-noneends {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.xar-margin-thin { margin: 1px; }
+.xar-margin-thintop { margin-top: 1px; }
+.xar-margin-thinright { margin-right: 1px; }
+.xar-margin-thinbottom { margin-bottom: 1px; }
+.xar-margin-thinleft { margin-left: 1px; }
+
+.xar-margin-thinsides {
+    margin-left: 1px;
+    margin-right: 1px;
+}
+
+.xar-margin-thinends {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.xar-margin-medium { margin: 2px; }
+.xar-margin-mediumtop { margin-top: 2px; }
+.xar-margin-mediumright { margin-right: 2px; }
+.xar-margin-mediumbottom { margin-bottom: 2px; }
+.xar-margin-mediumleft { margin-left: 2px; }
+
+.xar-margin-mediumsides {
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.xar-margin-mediumends {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.xar-margin-thick { margin: 4px; }
+.xar-margin-thicktop { margin-top: 4px; }
+.xar-margin-thickright { margin-right: 4px; }
+.xar-margin-thickbottom { margin-bottom: 4px; }
+.xar-margin-thickleft { margin-left: 4px; }
+
+.xar-margin-thicksides {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.xar-margin-thickends {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+/* minimal formatting - border control */
+.xar-border-none { border-width: 0; }
+.xar-border-nonetop { border-top-width: 0; }
+.xar-border-noneright { border-right-width: 0; }
+.xar-border-nonebottom { border-bottom-width: 0; }
+.xar-border-noneleft { border-left-width: 0; }
+
+.xar-border-nonesides {
+    border-left-width: 0;
+    border-right-width: 0;
+}
+
+.xar-border-noneends {
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.xar-border-thin { border: 1px solid; }
+.xar-border-thintop { border-top: 1px solid; }
+.xar-border-thinright { border-right: 1px solid; }
+.xar-border-thinbottom { border-bottom: 1px solid; }
+.xar-border-thinleft { border-left: 1px solid; }
+
+.xar-border-thinsides {
+    border-left-width: 1px;
+    border-right-width: 1px;
+}
+
+.xar-border-thinends {
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.xar-border-medium { border-width: 2px; }
+.xar-border-mediumtop { border-top-width: 2px; }
+.xar-border-mediumright { border-right-width: 2px; }
+.xar-border-mediumbottom { border-bottom-width: 2px; }
+.xar-border-mediumleft { border-left-width: 2px; }
+
+.xar-border-mediumsides {
+    border-left-width: 2px;
+    border-right-width: 2px;
+}
+
+.xar-border-mediumends {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+}
+
+.xar-border-thick { border-width: 4px; }
+.xar-border-thicktop { border-top-width: 4px; }
+.xar-border-thickright { border-right-width: 4px; }
+.xar-border-thickbottom { border-bottom-width: 4px; }
+.xar-border-thickleft { border-left-width: 4px; }
+
+.xar-border-thicksides {
+    border-left-width: 4px;
+    border-right-width: 4px;
+}
+
+.xar-border-thickends {
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+}
+
+/* minimal formatting - border styles */
+.xar-border-inherit { border-style: inherit; }
+.xar-border-none { border-style: none; }
+.xar-border-hidden { border-style: hidden; }
+.xar-border-dotted { border-style: dotted; }
+.xar-border-dashed { border-style: dashed; }
+.xar-border-solid { border-style: solid; }
+.xar-border-groove { border-style: groove; }
+.xar-border-ridge { border-style: ridge; }
+.xar-border-inset { border-style: inset; }
+.xar-border-outset { border-style: outset; }
+.xar-border-double { border-style: double; }
+
+/* positioning of specific block elements */
+div.xar-center {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* lists and related elements */
+.xar-navlist {
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.xar-list-nostyle { list-style: none; }
+
+/* miscellaneous utility clases */
+.xar-module-icon {
+    float: right;
+    padding: 10px;
+}
+
+.xar-form-label {
+    width: 15em;
+    display: block;
+    float: left;
+}
+
+.xar-form-labelshort {
+    width: 7em;
+    display: block;
+    float: left;
+}
+
+.xar-form-labellong {
+    width: 25em;
+    display: block;
+    float: left;
+}
+
+.xar-form-input-wrapper {
+    margin-bottom: 4px;
+}
+
+.xar-form-input-wrapper-after {
+    width: auto;
+    padding-left: 16em;
+    margin-bottom: 4px;
+    clear: both;
+}
+
+.xar-form-container-after {
+    margin-left: 16em;
+    margin-bottom: 4px;
+}

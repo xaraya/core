@@ -3,7 +3,7 @@
  * Multi Language System
  *
  * @package multilanguage
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
@@ -146,7 +146,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         $phpFileName = $this->basePHPDir;
         $xmlFileName = $this->baseXMLDir;
 
-        if (!ereg("^[a-z]+:$", $ctxType)) {
+        if (!mb_ereg("^[a-z]+:$", $ctxType)) {
             list($prefix,$directory) = explode(':',$ctxType);
             if ($directory != "") {
                 $phpFileName .= $directory . "/";
@@ -290,7 +290,7 @@ class PHPBackendGenerator extends Object
         $this->fileName = $this->baseDir;
         $this->xmlFileName = $this->baseXMLDir;
 
-        if (!ereg("^[a-z]+:$", $ctxType)) {
+        if (!mb_ereg("^[a-z]+:$", $ctxType)) {
             list($prefix,$directory) = explode(':',$ctxType);
             if ($directory != "") {
                 $this->fileName .= $directory . "/";

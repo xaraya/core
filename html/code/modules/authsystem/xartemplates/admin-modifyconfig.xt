@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Authsystem Authentication Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <h2>Modify Authsystem Configuration</h2>
+        <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
+            <xar:data-form object="$module_settings"/>
+            <fieldset>
+                <legend>Login Security Options</legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="uselockout" class="xar-form-label" title="Lock a user out after a number of failed logins">
+                        Enable lockout option?
+                    </label>
+                    <xar:set name="checked">xarModVars::get('authsystem', 'uselockout')</xar:set>
+                    <xar:data-input type="checkbox" name="uselockout" id="uselockout" checked="$checked"/>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="lockouttries" class="xar-form-label" title="The number of attempts allowed before lockout">
+                        Allowed attempts:
+                    </label>
+                    <xar:data-input type="integerbox" name="lockouttries" id="lockouttries" value="$lockouttries" size="2" maxlength="2"/>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="lockouttime" class="xar-form-label" title="The time a lockout is in effect">
+                        Lockout time (minutes) :
+                    </label>
+                    <xar:data-input type="textbox" name="lockouttime" id="lockouttime" value="$lockouttime" size="2" maxlength="2"/>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <xar:data-input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <xar:var name="label">Update</xar:var>
+                    <xar:button type="submit" label="$label"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</xar:template>

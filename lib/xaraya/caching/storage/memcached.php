@@ -1,16 +1,18 @@
 <?php
-
 /**
  * Cache data using the PHP Memcache extension [http://www.php.net/memcache]
- * and a memcached server [http://www.danga.com/memcached/]
+ * and one or more memcached server(s) [http://www.danga.com/memcached/]
  */
-
 class xarCache_MemCached_Storage extends xarCache_Storage
 {
     public $host       = 'localhost';
-    public $port       = 11211;
+    public $port       = 11211; // default values, cfr. http://php.net/manual/en/function.memcache-addserver.php
+    public $persistent = true;
+    public $weight     = 1;
+    public $timeout    = 1;
+    public $retry      = 15;
+
     public $memcache   = null;
-    public $persistent = false;
 
     public function __construct(array $args = array())
     {
@@ -19,20 +21,80 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         if (!empty($args['host'])) {
             $this->host = $args['host'];
         }
-        if (!empty($args['port'])) {
+        // set to 0 for Unix socket
+        if (isset($args['port'])) {
             $this->port = $args['port'];
         }
         // true or false
         if (isset($args['persistent'])) {
             $this->persistent = $args['persistent'];
         }
-        if ($this->persistent) {
-            $this->memcache = @memcache_pconnect($this->host, $this->port);
-        } else {
-            $this->memcache = @memcache_connect($this->host, $this->port);
+        if (isset($args['weight'])) {
+            $this->weight = $args['weight'];
         }
+        if (isset($args['timeout'])) {
+            $this->timeout = $args['timeout'];
+        }
+        if (isset($args['retry'])) {
+            $this->retry = $args['retry'];
+        }
+
+        // default expiration time is set to 24 hours
+        if (empty($this->expire)) {
+            $this->expire = 24 * 60 * 60;
+        }
+
+        $this->memcache = new Memcache;
+        // support pooled connections, cfr. attachment in bug 6315 by Mark Frawley
+        if (is_array($this->host)) {
+            foreach($this->host as $server) {
+                if (is_array($server) && !empty($server['host'])) {
+                    if (!isset($server['port'])) {
+                        $server['port'] = $this->port;
+                    }
+                    if (!isset($server['persisten'])) {
+                        $server['persistent'] = $this->persistent;
+                    }
+                    if (!isset($server['weight'])) {
+                        $server['weight'] = $this->weight;
+                    }
+                    if (!isset($server['timeout'])) {
+                        $server['timeout'] = $this->timeout;
+                    }
+                    if (!isset($server['retry'])) {
+                        $server['retry'] = $this->retry;
+                    }
+                    $this->memcache->addServer($server['host'], $server['port'], $server['persistent'], $server['weight'], $server['timeout'], $server['retry']);
+                } else {
+                    $this->memcache->addServer($server, $this->port, $this->persistent, $this->weight, $this->timeout, $this->retry);
+                }
+            }
+        } else {
+            $this->memcache->addServer($this->host, $this->port, $this->persistent, $this->weight, $this->timeout, $this->retry);
+        }
+
         $this->storage = 'memcached';
     }
+
+/*
+    public function setNamespace($namespace = '')
+    {
+        // customize with site prefix, versioned namespaces etc. see bug 6315
+        parent::setNamespace($namespace);
+    }
+
+    public function getCacheKey($key = '')
+    {
+        // customize with site prefix, versioned namespaces etc. see bug 6315
+        return parent::getCacheKey($key);
+    }
+
+    public function flushCached($key = '')
+    {
+        // customize with site prefix, versioned namespaces etc. see bug 6315
+        return parent::flushCached($key);
+    }
+*/
 
     public function isCached($key = '', $expire = 0, $log = 1)
     {
@@ -41,19 +103,16 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         if (empty($expire)) {
             $expire = $this->expire;
         }
-        $oldkey = $key;
-        if (!empty($this->code)) {
-            $key .= '-' . $this->code;
-        }
-        // we actually retrieve the value here too
-        $value = $this->memcache->get($key);
-        if ($value) {
+        $cache_key = $this->getCacheKey($key);
+        // we actually retrieve the value here too - returns FALSE on failure
+        $value = $this->memcache->get($cache_key);
+        if (isset($value) && $value !== false) {
             // FIXME: memcached doesn't keep track of modification times !
             //$this->modtime = 0;
-            if ($log) $this->logStatus('HIT', $oldkey);
+            if ($log) $this->logStatus('HIT', $key);
             return true;
         } else {
-            if ($log) $this->logStatus('MISS', $oldkey);
+            if ($log) $this->logStatus('MISS', $key);
             return false;
         }
     }
@@ -65,10 +124,8 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         if (empty($expire)) {
             $expire = $this->expire;
         }
-        if (!empty($this->code)) {
-            $key .= '-' . $this->code;
-        }
-        $value = $this->memcache->get($key);
+        $cache_key = $this->getCacheKey($key);
+        $value = $this->memcache->get($cache_key);
         if ($output) {
             // output the value directly to the browser
             echo $value;
@@ -85,18 +142,16 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         if (empty($expire)) {
             $expire = $this->expire;
         }
-        if (!empty($this->code)) {
-            $key .= '-' . $this->code;
-        }
+        $cache_key = $this->getCacheKey($key);
         if ($this->compressed) {
             $flag = MEMCACHE_COMPRESSED;
         } else {
             $flag = false;
         }
         if (!empty($expire)) {
-            $this->memcache->set($key, $value, $flag, $expire);
+            $this->memcache->set($cache_key, $value, $flag, $expire);
         } else {
-            $this->memcache->set($key, $value, $flag);
+            $this->memcache->set($cache_key, $value, $flag);
         }
     }
 
@@ -104,41 +159,21 @@ class xarCache_MemCached_Storage extends xarCache_Storage
     {
         if (empty($this->memcache)) return;
 
-        if (!empty($this->code)) {
-            $key .= '-' . $this->code;
-        }
-        $this->memcache->delete($key);
+        $cache_key = $this->getCacheKey($key);
+        $this->memcache->delete($cache_key);
     }
 
-    public function flushCached($key = '')
+    public function doGarbageCollection($expire = 0)
     {
-        // CHECKME: we can't really flush part of the cache here, unless we
-        //          keep track of all cache entries, perhaps ?
-
-        // check the cache size and clear the lockfile set by sizeLimitReached()
-        $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
-        if ($this->getCacheSize() < $this->sizelimit && file_exists($lockfile)) {
-            @unlink($lockfile);
-        }
-    }
-
-    public function cleanCached($expire = 0)
-    {
-        // we rely on the expire value here
-
-        // check the cache size and clear the lockfile set by sizeLimitReached()
-        $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
-        if ($this->getCacheSize() < $this->sizelimit && file_exists($lockfile)) {
-            @unlink($lockfile);
-        }
+        // we rely on the built-in garbage collector here
     }
 
     public function getCacheSize($countitems = false)
     {
         if (empty($this->memcache)) return;
 
-        // this is the size of the whole cache
-        $stats = $this->memcache->getstats();
+        // this is the size of the whole cache for the current server
+        $stats = $this->memcache->getStats();
 
         $this->size = $stats['bytes'];
         if ($countitems) {
@@ -147,33 +182,9 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         return $stats['bytes'];
     }
 
-    public function saveFile($key = '', $filename = '')
+    public function sizeLimitReached()
     {
-        if (empty($this->memcache)) return;
-
-        if (empty($filename)) return;
-
-        if (!empty($this->code)) {
-            $key .= '-' . $this->code;
-        }
-        // FIXME: avoid getting the value for the 2nd/3rd time here
-        $value = $this->memcache->get($key);
-        if (empty($value)) return;
-
-        $tmp_file = $filename . '.tmp';
-
-        $fp = @fopen($tmp_file, "w");
-        if (!empty($fp)) {
-            @fwrite($fp, $value);
-            @fclose($fp);
-            // rename() doesn't overwrite existing files in Windows
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                @copy($tmp_file, $filename);
-                @unlink($tmp_file);
-            } else {
-                @rename($tmp_file, $filename);
-            }
-        }
+        return false;
     }
 
     public function getCachedList()

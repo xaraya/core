@@ -1,28 +1,28 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <h3>
-        <xar:var name="title" />
+        <xar:var name="title"/>
     </h3>
     <span class="xar-sub">Posted by: 
     <xar:if condition="!empty($profile)">
         <a href="#$profile#">
-            <xar:var name="author" />
+            <xar:var name="author"/>
         </a>
         <xar:else />
-        <xar:var name="author" />
+        <xar:var name="author"/>
     </xar:if>on 
-    <xar:var name="date" /></span>
+    <xar:var name="date"/></span>
     <br />
-    <xar:var name="summary" />
+    <xar:var name="summary"/>
     <br />
     <br />
-    <xar:var name="body" />
+    <xar:var name="body"/>
     <br />
     <xar:if condition="!empty($notes)">
         <br />
         <span class="xar-quote">Note :
         <i>
-            <xar:var name="notes" />
+            <xar:var name="notes"/>
         </i></span>
     </xar:if>
 </xar:template>

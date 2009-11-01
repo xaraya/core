@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema>
+  <table name="dynamic_data">
+    <column id="dynamic_data.dd_id" name="dd_id" required="true" auto="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_data.dd_propid" name="dd_propid" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_data.dd_itemid" name="dd_itemid" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_data.dd_value" name="dd_value">
+      <text size=""/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="dynamic_data.dd_id"/>
+      </primary>
+      <index name="i_dyndata_propid">
+        <columnref id="dynamic_data.dd_propid"/>
+      </index>
+      <index name="i_dyndata_itemid">
+        <columnref id="dynamic_data.dd_itemid"/>
+      </index>
+    </constraints>
+  </table>
+  <table name="dynamic_objects">
+    <column id="dynamic_objects.object_id" name="object_id" required="true" auto="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_objects.object_name" name="object_name" required="true">
+      <text size="30"/>
+    </column>
+    <column id="dynamic_objects.object_label" name="object_label" required="true">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_objects.object_moduleid" name="object_moduleid" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_objects.object_itemtype" name="object_itemtype" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_objects.object_class" name="object_class" required="true">
+      <text size="255"/>
+    </column>
+    <column id="dynamic_objects.object_filepath" name="object_filepath" required="true">
+      <text size="255"/>
+    </column>
+    <column id="dynamic_objects.object_urlparam" name="object_urlparam" required="true">
+      <text size="30"/>
+    </column>
+    <column id="dynamic_objects.object_maxid" name="object_maxid" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_objects.object_config" name="object_config">
+      <text size=""/>
+    </column>
+    <column id="dynamic_objects.object_isalias" name="object_isalias" required="true">
+      <number size="10" default="1"/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="dynamic_objects.object_id"/>
+      </primary>
+      <index name="i_dynobjects_name">
+        <columnref id="dynamic_objects.object_name"/>
+      </index>
+      <index name="i_dynobjects_combo">
+        <columnref id="dynamic_objects.object_moduleid"/>
+        <columnref id="dynamic_objects.object_itemtype"/>
+      </index>
+    </constraints>
+  </table>
+  <table name="dynamic_properties">
+    <column id="dynamic_properties.prop_id" name="prop_id" required="true" auto="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_properties.prop_name" name="prop_name" required="true">
+      <text size="30"/>
+    </column>
+    <column id="dynamic_properties.prop_label" name="prop_label" required="true">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties.prop_objectid" name="prop_objectid" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_properties.prop_type" name="prop_type" required="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="dynamic_properties.prop_default" name="prop_default">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties.prop_source" name="prop_source" required="true">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties.prop_status" name="prop_status" required="true">
+      <number size="10" default="33"/>
+    </column>
+    <column id="dynamic_properties.prop_order" name="prop_order" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_properties.prop_validation" name="prop_validation">
+      <text size=""/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="dynamic_properties.prop_id"/>
+      </primary>
+      <index name="i_dynprops_combo">
+        <columnref id="dynamic_properties.prop_objectid"/>
+        <columnref id="dynamic_properties.prop_name"/>
+      </index>
+    </constraints>
+  </table>
+  <table name="dynamic_properties_def">
+    <column id="dynamic_properties_def.prop_id" name="prop_id" required="true" auto="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="dynamic_properties_def.prop_name" name="prop_name">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_label" name="prop_label">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_parent" name="prop_parent">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_filepath" name="prop_filepath">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_class" name="prop_class">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_validation" name="prop_validation">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_source" name="prop_source">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_reqfiles" name="prop_reqfiles">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_modid" name="prop_modid">
+      <number size="10" default=""/>
+    </column>
+    <column id="dynamic_properties_def.prop_args" name="prop_args" required="true">
+      <text size=""/>
+    </column>
+    <column id="dynamic_properties_def.prop_aliases" name="prop_aliases">
+      <text size="254"/>
+    </column>
+    <column id="dynamic_properties_def.prop_format" name="prop_format">
+      <number size="10" default="0"/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="dynamic_properties_def.prop_id"/>
+      </primary>
+      <index name="i_dynpropdef_modid">
+        <columnref id="dynamic_properties_def.prop_modid"/>
+      </index>
+    </constraints>
+  </table>
+</schema>

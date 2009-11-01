@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Modules Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <h2>Modify Modules Configuration</h2>
+        <form method="post" action="#xarServer::getCurrentURL()#">
+            <xar:data-form object="$module_settings"/>
+            <fieldset>
+                <legend>Configuration settings</legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="disableoverview" title="#xarML('Disable the display by default of all module overview pages.')#" class="xar-form-label">
+                        Disable overviews
+                    </label>
+                    <xar:set name="checked">xarModVars::get('modules', 'disableoverview')</xar:set>
+                    <xar:data-input type="checkbox" name="disableoverview" checked="$checked"/>&#160;(disable the display by default of the module overview pages)
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <xar:data-input type="hidden" name="phase" id="phase" value="update"/>
+                    <xar:var name="label">Update</xar:var>
+                    <xar:button type="submit" label="$label"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</xar:template>

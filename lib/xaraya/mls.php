@@ -3,7 +3,7 @@
  * Multi Language System
  *
  * @package core
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -163,19 +163,22 @@ function xarMLSGetCharsetFromLocale($locale)
  * @access public
  * @return string the translated string, or the original string if no translation is available
  */
-function xarML($string/*, ...*/)
+function xarML($rawstring/*, ...*/)
 {
     // if an empty string is passed in, just return an empty string. it's
     // the most sensible thing to do
-    $string = trim($string);
-    if($string == '') return '';
+    $string = trim($rawstring);
+    if($string == '') return $rawstring;
+    
+    $start = strpos($rawstring, $string);
+    $prefix = substr($rawstring,0,$start);
+    $suffix = substr($rawstring,$start+strlen($string));
 
     // Make sure string is sane
     // - hex 0D -> ''
     // - space around newline -> ' '
     // - multiple newlines -> 1 newline
-    $string = preg_replace(array('[\x0d]','/[\t ]+/','/\s*\n\s*/'),
-                           array('',' ',"\n"),$string);
+//    $string = preg_replace(array('[\x0d]','/[\t ]+/','/\s*\n\s*/'), array('',' ',"\n"),$string);
 
     if (isset($GLOBALS['xarMLS_backend'])) {
         $trans = $GLOBALS['xarMLS_backend']->translate($string,1);
@@ -196,7 +199,7 @@ function xarML($string/*, ...*/)
         $trans = xarMLS__bindVariables($trans, $args);
     }
 
-    return $trans;
+    return $prefix . $trans . $suffix;
 }
 
 /**

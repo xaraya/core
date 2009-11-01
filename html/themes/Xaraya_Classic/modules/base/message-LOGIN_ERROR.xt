@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
     <xar:comment>*********** * WARNING * Modify this template at your own risk. * If the template
@@ -8,7 +8,7 @@
     message templates</xar:comment>
     <div class="xar-mod-body">
         <div class="xar-bordermedium">
-            <img src="#xarTplGetImage('user-error.png', 'base')#" alt="#xarML('User ErrorIcon')#" class="xar-module-icon" />
+            <img src="#xarTplGetImage('user-error.png', 'base')#" alt="#xarML('User ErrorIcon')#" class="xar-module-icon"/>
             <!--<h2>#$type#</h2>-->
             <h3>A login error has occurred</h3>
             <p>#$short#</p>
@@ -23,13 +23,13 @@
         </div>
         <p>
         <xar:set name="contactus">
-            <xar:var scope="module" module="mail" name="adminmail" />
+            <xar:var scope="module" module="mail" name="adminmail"/>
         </xar:set>Please review the information above and try logging in again. If you continue to
         have difficulty with logging in and you believe your account and password should be active,
         then please 
         <a href="mailto:#$contactus#">contact us</a>.</p>
         <div class="xar-thirdwidth">
-            <xar:block module="authsystem" type="login" />
+            <xar:block module="authsystem" type="login"/>
         </div>
     </div>
 </xar:template>

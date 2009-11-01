@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <table class="xar-norm">
+        <tr>
+            <td>Store as</td>
+            <td>
+                <select name="#$name#[dbformat]" id="#$id#_dbformat" tabindex="#$tabindex#">
+                    <xar:set name="timestamp">#xarMLS_userTime()#</xar:set>
+                    <xar:set name="datetime">#xarLocaleFormatDate('%Y-%m-%d %H:%M:%S')#</xar:set>
+                    <xar:set name="date">#xarLocaleFormatDate('%Y-%m-%d')#</xar:set>
+                    <!--
+              Note : timestamp is not an option for ExtendedDate
+            -->
+                    <xar:if condition="empty($class) or $class ne 'dynamic_extendeddate_property'">
+                        <option value="">timestamp : #$timestamp#</option>
+                    </xar:if>
+                    <xar:if condition="!empty($dbformat) and $dbformat == 'datetime'">
+                        <option value="datetime" selected="selected">datetime :
+                            #$datetime#
+                        </option>
+                    <xar:else />
+                        <option value="datetime">datetime : #$datetime#</option>
+                    </xar:if>
+                    <xar:if condition="!empty($dbformat) and $dbformat == 'date'">
+                        <option value="date" selected="selected">date : #$date#</option>
+                    <xar:else/>
+                        <option value="date">date : #$date#</option>
+                    </xar:if>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Other rule</td>
+            <td>
+                <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#"  size="50" tabindex="#$tabindex#"/>
+            </td>
+        </tr>
+    </table>
+    <xar:template file="dataproperty_additions" module="base"/>
+</xar:template>

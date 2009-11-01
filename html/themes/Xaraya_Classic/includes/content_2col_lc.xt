@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <div id="xc-leftbg-wrapper">
         <div id="xc-outermargin-noright-wrapper">
@@ -6,13 +6,13 @@
                 <div id="xc-innerbg">
                     <div id="xc-left">
                         <div class="xc-side-content">
-                            <xar:var name="leftblocksgroup" />
+                            <xar:var name="leftblocksgroup"/>
                         </div>
                     </div>
                     <div id="xc-center-wrapper">
                         <div id="xc-center">
-                            <xar:var name="centerblocksgroup" />
-                            <xar:module class="modulespace" main="true" />
+                            <xar:var name="centerblocksgroup"/>
+                            <xar:module class="modulespace" main="true"/>
                         </div>
                     </div>
                     <div id="xc-clear">&#160; 

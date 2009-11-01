@@ -2,7 +2,7 @@
 /**
  * Interface declarations for the datastores hierarchy
  *
- * @copyright The Digital Development Foundation, 2006
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
@@ -78,7 +78,7 @@ interface ISQLDataStore
     // @note tied to properties, as used by dd
     function     addWhere(DataProperty &$property, $clause, $join, $pre = '', $post = '');
     function   addGroupBy(DataProperty &$property);
-    function      addJoin($table, $key, $fields, array $where = array(), $andor = 'and', $more = '', $sort = array());
+    function      addJoin($table, $key, $fields, $where = '', $andor = 'and', $more = '', $sort = array());
 
     // @note this looks pretty generic
     function cleanWhere();

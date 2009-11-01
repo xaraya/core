@@ -114,6 +114,13 @@ function xarWebservicesMain()
                 $server->service($HTTP_RAW_POST_DATA);
             }
         }
+        if (!$server) {
+            xarLogMessage("Could not load SOAP server, giving up");
+            // TODO: we need a specific handler for this
+            throw new Exception('Could not load SOAP server');
+        } else {
+            xarLogMessage("Created SOAP server");
+        }
         break;
     case 'webdav' :
         xarLogMessage("WebDAV request");
@@ -128,6 +135,13 @@ function xarWebservicesMain()
             }
             $server->ServeRequest();
         }
+        if (!$server) {
+            xarLogMessage("Could not load webdav server, giving up");
+            // TODO: we need a specific handler for this
+            throw new Exception('Could not load webdav server');
+        } else {
+            xarLogMessage("Created webdav server");
+        }
         break;
       case 'flashremoting' :
           xarLogMessage("FlashRemoting request");
@@ -139,15 +153,30 @@ function xarWebservicesMain()
           } else {
             echo "could not create flashremoting server";
 
-          }// if
-        }// if
-            break;
+          }
+        }
+        if (!$server) {
+            xarLogMessage("Could not load flashremoting server, giving up");
+            // TODO: we need a specific handler for this
+            throw new Exception('Could not load flashremoting server');
+        } else {
+            xarLogMessage("Created flashremoting server");
+        }
+        break;
 
     default:
         if (xarServer::getVar('QUERY_STRING') == 'wsdl') {
             // FIXME: for now wsdl description is in soapserver module
             // consider making the webservices module a container for wsdl files (multiple?)
-            header('Location: ' . xarServerGetBaseURL() . 'modules/soapserver/xaraya.wsdl');
+            $wsdllocation = xarServer::getBaseURL() . 'modules/soapserver/xaraya.wsdl';
+            if (file_exists($wsdllocation)) {
+                xarLogMessage("Moving to wsdl location");
+                header('Location: ' . $$wsdllocation);
+            } else {
+                xarLogMessage("No wsdl location available, giving up");
+                // TODO: we need a specific handler for this
+                throw new Exception('Could not move to wsdl location. URL not found.');
+            }
         } else {
             // TODO: show something nice(r) ?
             echo '<a href="ws.php?wsdl">WSDL</a><br />

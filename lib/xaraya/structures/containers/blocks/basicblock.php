@@ -12,8 +12,8 @@
 
         public $name                = 'BlockName';
         public $module              = 'BlockModule';
-        public $text_type           = null;
-        public $text_type_long      = 'base';
+        public $text_type           = 'Basic Block';
+        public $text_type_long      = 'Parent class for blocks';
         public $func_update         = null;
         public $allow_multiple      = false;
         public $form_content        = false;    // display textarea for content in the admin UI
@@ -36,12 +36,16 @@
             return $this->getPublicProperties();
         }
 
-        function display(Array $data=array())
+        public function display(Array $data=array())
         {
             if (!xarSecurityCheck('View' . $data['module'], 0, 'Block', $data['type'] . ":" . $data['name'] . ":" . "$data[bid]")) {return;}
             // Get variables from content block
-            if (!is_array($data['content'])) $data['content'] = unserialize($data['content']);
-            if (empty($data['content'])) $data['content'] = array();
+            if (!is_array($data['content'])) {
+                $exploded = @unserialize($data['content']);
+                if (is_array($exploded)) $data = array_merge($data,$exploded);
+            } else {
+                $data = array_merge($data,$data['content']);
+            }
             return $data;
         }
 

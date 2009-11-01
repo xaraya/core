@@ -1,0 +1,144 @@
+<object name="roles_user_settings">
+  <objectid>14</objectid>
+  <label>Edit Settings</label>
+  <module_id>182</module_id>
+  <itemtype>8</itemtype>
+  <class>DataObject</class>
+  <filepath>auto</filepath>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config>a:0:{}</config>
+  <isalias>false</isalias>
+  <properties>
+    <property name="searchbyemail">
+      <id>89</id>
+      <label>Allow search by email?</label>
+      <type>checkbox</type>
+      <defaultvalue>false</defaultvalue>
+      <source>module variable: roles</source>
+      <status>33</status>
+      <seq>1</seq>
+      <configuration>a:2:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:42:"Allow searching for users by email address";}</configuration>
+    </property>
+    <property name="displayrolelist">
+      <id>90</id>
+      <label>Enable Memberslist?</label>
+      <type>checkbox</type>
+      <defaultvalue>false</defaultvalue>
+      <source>module variable: roles</source>
+      <status>33</status>
+      <seq>2</seq>
+      <configuration></configuration>
+    </property>
+    <property name="allowemail">
+      <id>91</id>
+      <label>Allow user email?</label>
+      <type>checkbox</type>
+      <defaultvalue>false</defaultvalue>
+      <source>module variable: roles</source>
+      <status>33</status>
+      <seq>3</seq>
+      <configuration></configuration>
+    </property>
+    <property name="usereditaccount">
+      <id>92</id>
+      <label>Allow user account edit?</label>
+      <type>checkbox</type>
+      <defaultvalue>false</defaultvalue>
+      <source>module variable: roles</source>
+      <status>33</status>
+      <seq>4</seq>
+      <configuration></configuration>
+    </property>
+    <property name="requirevalidation">
+      <id>95</id>
+      <label>Email change requires validation?</label>
+      <type>checkbox</type>
+      <defaultvalue></defaultvalue>
+      <source>module variable: roles</source>
+      <status>33</status>
+      <seq>5</seq>
+      <configuration></configuration>
+    </property>
+    <property name="userhome">
+      <id>96</id>
+      <label>Set Home Page:</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>module variable: roles</source>
+      <status>33</status>
+      <seq>6</seq>
+      <configuration></configuration>
+    </property>
+    <property name="loginredirect">
+      <id>97</id>
+      <label>Redirect on log in?</label>
+      <type>checkbox</type>
+      <defaultvalue></defaultvalue>
+      <source>module variable: roles</source>
+      <status>33</status>
+      <seq>7</seq>
+      <configuration></configuration>
+    </property>
+    <property name="allowuserhomeedit">
+      <id>98</id>
+      <label>Allow edit home page?</label>
+      <type>checkbox</type>
+      <defaultvalue></defaultvalue>
+      <source>module variable: roles</source>
+      <status>33</status>
+      <seq>8</seq>
+      <configuration></configuration>
+    </property>
+    <property name="allowexternalurl">
+      <id>99</id>
+      <label>Allow external URL?</label>
+      <type>checkbox</type>
+      <defaultvalue></defaultvalue>
+      <source>module variable: roles</source>
+      <status>33</status>
+      <seq>9</seq>
+      <configuration></configuration>
+    </property>
+    <property name="passwordupdate">
+      <id>101</id>
+      <label>Show last password update?</label>
+      <type>calendar</type>
+      <defaultvalue>xarMLS_userTime()</defaultvalue>
+      <source>module variable: roles</source>
+      <status>66</status>
+      <seq>11</seq>
+      <configuration></configuration>
+    </property>
+    <property name="userlastlogin">
+      <id>102</id>
+      <label>Show last login?</label>
+      <type>calendar</type>
+      <defaultvalue>xarMLS_userTime()</defaultvalue>
+      <source>module variable: roles</source>
+      <status>66</status>
+      <seq>12</seq>
+      <configuration></configuration>
+    </property>
+    <property name="usertimezone">
+      <id>106</id>
+      <label>Set Timezone:</label>
+      <type>static</type>
+      <defaultvalue></defaultvalue>
+      <source>module variable: roles</source>
+      <status>65</status>
+      <seq>14</seq>
+      <configuration></configuration>
+    </property>
+    <property name="duvsettings">
+      <id>105</id>
+      <label>Dynamic User Var Settings</label>
+      <type>checkboxlist</type>
+      <defaultvalue></defaultvalue>
+      <source>module variable: roles</source>
+      <status>33</status>
+      <seq>15</seq>
+      <configuration>a:3:{s:15:"display_columns";s:1:"3";s:14:"display_layout";s:8:"vertical";s:22:"initialization_options";s:166:"userhome,User Home Page;primaryparent,Primary Parent;passwordupdate,Last Password Update;userlastlogin,Last Login;usertimezone,Time Zone;useremailformat,Email Format;";}</configuration>
+    </property>
+  </properties>
+</object>

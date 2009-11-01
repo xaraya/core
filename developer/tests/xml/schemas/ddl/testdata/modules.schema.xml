@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema>
+  <table name="hooks">
+    <column id="hooks.id" name="id" required="true" auto="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="hooks.object" name="object" required="true">
+      <text size="64"/>
+    </column>
+    <column id="hooks.action" name="action" required="true">
+      <text size="64"/>
+    </column>
+    <column id="hooks.s_module_id" name="s_module_id">
+      <number size="10" default=""/>
+    </column>
+    <column id="hooks.s_type" name="s_type" required="true">
+      <text size="64"/>
+    </column>
+    <column id="hooks.t_area" name="t_area" required="true">
+      <text size="64"/>
+    </column>
+    <column id="hooks.t_module_id" name="t_module_id" required="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="hooks.t_type" name="t_type" required="true">
+      <text size="64"/>
+    </column>
+    <column id="hooks.t_func" name="t_func" required="true">
+      <text size="64"/>
+    </column>
+    <column id="hooks.priority" name="priority" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="hooks.id"/>
+      </primary>
+    </constraints>
+  </table>
+  <table name="module_itemvars">
+    <column id="module_itemvars.module_var_id" name="module_var_id" required="true" auto="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="module_itemvars.item_id" name="item_id" required="true" auto="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="module_itemvars.value" name="value">
+      <text size=""/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="module_itemvars.module_var_id"/>
+        <columnref id="module_itemvars.item_id"/>
+      </primary>
+      <index name="(module_itemvars autoindex 1)">
+        <columnref id="module_itemvars.module_var_id"/>
+        <columnref id="module_itemvars.item_id"/>
+      </index>
+    </constraints>
+  </table>
+  <table name="module_vars">
+    <column id="module_vars.id" name="id" required="true" auto="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="module_vars.module_id" name="module_id">
+      <number size="10" default=""/>
+    </column>
+    <column id="module_vars.name" name="name" required="true">
+      <text size="64"/>
+    </column>
+    <column id="module_vars.value" name="value">
+      <text size=""/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="module_vars.id"/>
+      </primary>
+      <index name="i_module_vars_name">
+        <columnref id="module_vars.name"/>
+      </index>
+      <index name="i_module_vars_module_id">
+        <columnref id="module_vars.module_id"/>
+      </index>
+      <index name="i_config_name">
+        <columnref id="module_vars.name"/>
+        <columnref id="module_vars.module_id"/>
+      </index>
+    </constraints>
+  </table>
+  <table name="modules">
+    <column id="modules.id" name="id" required="true" auto="true">
+      <number size="10" default=""/>
+    </column>
+    <column id="modules.name" name="name" required="true">
+      <text size="64"/>
+    </column>
+    <column id="modules.regid" name="regid">
+      <number size="10" default=""/>
+    </column>
+    <column id="modules.directory" name="directory" required="true">
+      <text size="64"/>
+    </column>
+    <column id="modules.version" name="version" required="true">
+      <text size="10"/>
+    </column>
+    <column id="modules.class" name="class" required="true">
+      <text size="64"/>
+    </column>
+    <column id="modules.category" name="category" required="true">
+      <text size="64"/>
+    </column>
+    <column id="modules.admin_capable" name="admin_capable" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="modules.user_capable" name="user_capable" required="true">
+      <number size="10" default="0"/>
+    </column>
+    <column id="modules.state" name="state" required="true">
+      <number size="10" default="1"/>
+    </column>
+    <constraints>
+      <primary>
+        <columnref id="modules.id"/>
+      </primary>
+    </constraints>
+  </table>
+</schema>

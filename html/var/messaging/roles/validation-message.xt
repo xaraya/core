@@ -1,12 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-Your account must be validated again because your e-mail address has changed or
-an administrator has unvalidated it. You can either do this now, or on the next
-time that you log in. If you prefer to do it now, then you will need to follow
-this link : #$validationlink#
-
-Validation Code to activate your account:  #$valcode#
-
-You will receive an email has soon as your account is activated again.
-
-<xar:var scope="module" module="mail" name="adminname"/>
+    Your account must be validated again because your e-mail address has changed or an administrator has unvalidated it. You can either do this now, or on the next time that you log in. If you prefer to do it now, then you will need to follow this link : #$validationlink#
+    <xar:br/><xar:br/>
+    Validation Code to activate your account:  #$valcode#
+    <xar:br/><xar:br/>
+    You will receive an email has soon as your account is activated again.
+    <xar:br/><xar:br/>
+    <xar:var scope="module" module="mail" name="adminname"/>
 </xar:template>

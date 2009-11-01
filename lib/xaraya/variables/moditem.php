@@ -84,6 +84,9 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         // FIXME: do we really want this ?
         self::delete($scope,$name,$itemid);
 
+        if($value === false) $value = 0;
+        if($value === true) $value = 1;
+        
         // Only store setting if different from global setting
         if ($value != $modsetting)
         {

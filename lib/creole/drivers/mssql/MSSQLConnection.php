@@ -48,7 +48,8 @@ include_once 'creole/drivers/mssql/MSSQLResultSet.php';
  * @version   $Revision: 1.25 $
  * @package   creole.drivers.mssql
  */ 
-class MSSQLConnection extends ConnectionCommon implements Connection {        
+class MSSQLConnection extends ConnectionCommon implements Connection 
+{        
     
     /** Current database (used in mssql_select_db()). */
     private $database;
@@ -70,8 +71,8 @@ class MSSQLConnection extends ConnectionCommon implements Connection {
         $user = $dsninfo['username'];
         $pw = $dsninfo['password'];
         $dbhost = $dsninfo['hostspec'] ? $dsninfo['hostspec'] : 'localhost';
-		
-		if (PHP_OS == "WINNT" || PHP_OS == "WIN32") {
+        
+        if (PHP_OS == "WINNT" || PHP_OS == "WIN32") {
             $portDelimiter = ",";
         } else {
             $portDelimiter = ":";
@@ -82,7 +83,7 @@ class MSSQLConnection extends ConnectionCommon implements Connection {
         } else {
                 $dbhost .= $portDelimiter.'1433';
         }
-		
+        
         $connect_function = $persistent ? 'mssql_pconnect' : 'mssql_connect';
 
         if ($dbhost && $user && $pw) {
@@ -190,7 +191,7 @@ class MSSQLConnection extends ConnectionCommon implements Connection {
             $order_by = $order_segment[0];
         } else {
             // no order by clause, if there are columns we can attempt to sort by the columns in the select statement
-            $select_items = split(',',trim(substr($modified_select,0,strlen($modified_select)-4)));
+            $select_items = explode(',',trim(substr($modified_select,0,strlen($modified_select)-4)));
             if(count($select_items)>0) {
                 $item_number = 0;
                 $order_by = null;
@@ -230,12 +231,12 @@ class MSSQLConnection extends ConnectionCommon implements Connection {
 
         // modify the sort order for paging
         $inverted_order = '';
-        $order_columns = split(',',str_ireplace('order by ','',$order_by));
+        $order_columns = explode(',',str_ireplace('order by ','',$order_by));
         $original_order_by = $order_by;
         $order_by = '';
         foreach($order_columns as $column) {
             // strip "table." from order by columns
-            $column = array_reverse(split("\.",$column));
+            $column = array_reverse(explode("\.",$column));
             $column = $column[0];
 
             // commas if we have multiple sort columns
@@ -446,3 +447,4 @@ class MSSQLConnection extends ConnectionCommon implements Connection {
         return new MSSQLCallableStatement($this, $stmt);
     }
 }
+?>

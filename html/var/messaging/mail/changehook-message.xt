@@ -1,4 +1,5 @@
 An item was changed in the #$modulename# module. -- 
+<xar:br/>
 "#$objectid#" is the id of the item that was changed.
-
-Site Name: #$sitename# :: #$siteslogan# -- #$siteurl#
+<xar:br/><xar:br/>
+Site Name: #$sitename# :: #$siteslogan# -- #$siteurl#                                                

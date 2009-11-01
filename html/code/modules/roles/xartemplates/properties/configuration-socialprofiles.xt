@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:javascript module="base" filename="checkall.js" position="head"/>
+    <xar:javascript module="base" filename="orderitem.js" position="head"/>
+    <fieldset>
+        <legend>Social Profiles</legend>
+        <div class="xar-form-input-wrapper">
+            <label for="#$name#_info1_5">
+                <img src="#xarTplGetImage('icons/help-browser.png','base')#" alt="Help" title="Enable All Profiles or None" width="16" height="16" border="0"/>&#160;
+            </label>
+            <input type="checkbox" id="#$name#_info1_5" value="1" checked="checked" onclick="xar_base_checkall(this.form,this.checked);return true;"/>&#160;
+            <img src="#xarTplGetImage('icons/go-up.png','base')#" alt="Up" title="Move Up" onClick="xar_base_moveElementUp(this.parentNode);"/>&#160;
+            <input type="text" value="Site Name" size="16" disabled="disabled"/>&#160;
+            <input type="text" value="Site Link" size="24" disabled="disabled"/>&#160;
+            <input type="text" value="Profile Link" size="28" disabled="disabled"/>&#160;
+            <input type="text" value="Site Icon" size="18" disabled="disabled"/>
+        </div>
+        <xar:foreach in="$configuration" value="$profile">
+            <xar:set name="key">$profile[0]</xar:set>
+            <div class="xar-form-input-wrapper">
+                <label for="#$name#_#$key#_5">
+                    <img src="#xarTplGetImage($profile[4],'roles')#" alt="#$key#" title="#$key#" width="16" height="16" border="0"/>&#160;
+                </label>
+                <xar:if condition="!empty($profile[5])">
+                    <input type="checkbox" name="#$name#[#$key#][5]" id="#$name#_#$key#_5" value="1" checked="checked"/>
+                <xar:else/>
+                    <input type="checkbox" name="#$name#[#$key#][5]" id="#$name#_#$key#_5" value="1"/>
+                </xar:if>&#160;
+                <img src="#xarTplGetImage('icons/go-up.png','base')#" alt="Up" title="Move Up" onClick="xar_base_moveElementUp(this.parentNode);"/>&#160;
+                <input type="text" name="#$name#[#$key#][0]" id="#$name#_#$key#_0" value="#$profile[0]#" size="16"/>&#160;
+                <input type="text" name="#$name#[#$key#][1]" id="#$name#_#$key#_1" value="#$profile[1]#" size="24"/>&#160;
+                <input type="text" name="#$name#[#$key#][2]" id="#$name#_#$key#_2" value="#$profile[2]#" size="28"/>&#160;
+                <input type="text" name="#$name#[#$key#][4]" id="#$name#_#$key#_4" value="#$profile[4]#" size="18"/>
+                <!--img src="#xarTplGetImage('icons/go-down.png','base')# alt="Down" title="Move Down" onClick="xar_base_moveElementDown(this.parentNode);"/-->
+                <!-- we don't really need to keep track of the sort order, when the browser/server fills in the array in the right order -->
+                <!--input type="hidden" name="#$name#[_sortorder_][]" id="#$name#_sortorder" value="#$key#" /-->
+            </div>
+        </xar:foreach>
+        Enable
+        <input type="button" value="All" onclick="xar_base_checkall(this.form,true);return false;"/>
+        <input type="button" value="None" onclick="xar_base_checkall(this.form,false);return false;"/>
+        <p>
+            <strong>
+                Hint: leave the <i>Site Name</i> or <i>Profile Link</i> empty if you want to permanently delete it from the list.
+                If you don't see any icons except at the top of the list, please unzip the file <i>social_images.zip</i> in modules/roles/xarimages/social first.
+            </strong>
+        </p>
+    </fieldset>
+    <xar:template file="dataproperty_additions" module="base"/>
+</xar:template>

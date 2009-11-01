@@ -3,7 +3,7 @@
  * Template caching abstraction
  *
  * @package blocklayout
- * @copyright The Digital Development Foundation, 2006
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
@@ -150,7 +150,7 @@ class xarTemplateCache extends Object implements ixarTemplateCache
                ( filemtime($fileName) < filemtime($cacheFile)
                 // TODO: this is obviously just to make my life easier during xslt compiler development
                 // it needs to be moved somewhere else (for one, because it is going to be configurable)
-                && filemtime(sys::root() . '/lib/blocklayout/xslt/xar2php.xsl') < filemtime($cacheFile)
+                && filemtime(sys::lib() . 'blocklayout/xslt/xar2php.xsl') < filemtime($cacheFile)
                ) ) ) return false; // not dirty
 
         return true; // either cache not active of entry needs recompilation

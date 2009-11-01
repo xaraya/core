@@ -1,0 +1,52 @@
+<adminmenu>
+    <menuitems>
+        <menuitem>
+            <includes>
+                <includeitem>main</includeitem>
+                <includeitem>overview</includeitem>
+            </includes>
+            <target>main</target>
+            <label>Overview</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminMail</mask>
+            <includes>
+                <includeitem>compose</includeitem>
+            </includes>
+            <target>compose</target>
+            <title>Test your email configuration</title>
+            <label>Test Configuration</label>
+        </menuitem>
+        
+        <!-- Hide for now
+        <menuitem>
+            <mask>AdminMail</mask>
+            <includes>
+                <includeitem>view</includeitem>
+            </includes>
+            <target>view</target>
+            <title>Manage queues for mail item handling</title>
+            <label>Queue Management</label>
+        </menuitem>
+        -->
+        
+        <menuitem>
+            <mask>AdminMail</mask>
+            <includes>
+                <includeitem>template</includeitem>
+            </includes>
+            <target>template</target>
+            <title>Change the mail template for notifications</title>
+            <label>Notification Template</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminMail</mask>
+            <includes>
+                <includeitem>modifyconfig</includeitem>
+            </includes>
+            <target>modifyconfig</target>
+            <title>Modify the configuration for the utility mail module</title>
+            <label>Modify Configuration</label>
+        </menuitem>
+    </menuitems>
+</adminmenu>

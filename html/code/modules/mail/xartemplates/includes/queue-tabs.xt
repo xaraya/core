@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!--
+        Tabs for the Queue section, takes one parameter to decide 
+        which tab should be active.
+        Variables:
+        $active_tab - name of tab which should be active
+    -->
+    <ul class="xar-tabs xar-alt xar-norm-outline">
+        <xar:var name="title">Queue management areas</xar:var>
+        <xar:var name="label">Queue</xar:var>
+        <li class="xar-tabs-label" title="#$title#">#$label#</li>
+        <xar:set name="tabclass">'xar-tab'</xar:set>
+        <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+        <xar:if condition="$active_tab eq 'registration'">
+            <xar:set name="tabclass">'xar-tab-active'</xar:set>
+            <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+        </xar:if>
+        <li class="#$tabclass#">
+            <a href="&xar-modurl-mail-admin-view;" class="#$tlinkclass#">Registration</a>
+        </li>
+        <xar:set name="tabclass">'xar-tab'</xar:set>
+        <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+        <xar:if condition="$active_tab eq 'status'">
+            <xar:set name="tabclass">'xar-tab-active'</xar:set>
+            <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+        </xar:if>
+        <li class="#$tabclass#">
+            <a href="&xar-modurl-mail-admin-qstatus;" class="#$tlinkclass#">Status</a>
+        </li>
+        <xar:set name="tabclass">'xar-tab'</xar:set>
+        <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+        <xar:if condition="$active_tab eq 'mapping'">
+            <xar:set name="tabclass">'xar-tab-active'</xar:set>
+            <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+        </xar:if>
+        <li class="#$tabclass#">
+            <a href="&xar-modurl-mail-admin-mapping;" class="#$tlinkclass#">Mapping</a>
+        </li>
+    </ul>
+</xar:template>

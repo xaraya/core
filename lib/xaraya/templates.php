@@ -3,7 +3,7 @@
  * BlockLayout Template Engine
  *
  * @package blocklayout
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Paul Rosania <paul@xaraya.com>
@@ -351,7 +351,9 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     $tplBase        = "$modType-$funcName";
 
     // Get the right source filename
-    $sourceFileName = xarTpl__GetSourceFileName($modName, $tplBase, $templateName);
+    $sourceFileName = xarTpl__getSourceFileName($modName, $tplBase, $templateName);
+
+    //assert('!empty($sourceFileName); /* The source file for the template is empty in xarTplModule */');
 
     // Common data for BL
     $tplData['_bl_module_name'] = $modName;
@@ -402,7 +404,7 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, 
     $templateBase   = xarVarPrepForOS(empty($tplBase) ? $blockType : $tplBase);
 
     // Get the right source filename
-    $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $tplName, 'blocks');
+    $sourceFileName = xarTpl__getSourceFileName($modName, $templateBase, $tplName, 'blocks');
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
@@ -422,27 +424,37 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, 
  */
 function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elements)
 {
-    $tplType = xarVarPrepForOS($tplType);
+    $cachename = "$modName:$ddName:$tplType:$tplBase:$elements";
 
-    // Template type for the property can be overridden too (currently unused)
-    $templateBase   = xarVarPrepForOS(empty($tplBase) ? $tplType : $tplBase);
+    // cache frequently-used sourcefilenames for DD elements
+    if (xarCore::isCached('Templates.DDElement', $cachename)) {
+        $sourceFileName = xarCore::getCached('Templates.DDElement', $cachename);
 
-    // Get the right source filename
-    $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $ddName, $elements);
+    } else {
+        $tplType = xarVarPrepForOS($tplType);
 
-    // Property fall-back to default template in the module the property belongs to
-    if ((empty($sourceFileName) || !file_exists($sourceFileName)) &&
-        $elements == 'properties') {
-        $fallbackmodule = DataPropertyMaster::getProperty(array('type' => $ddName))->tplmodule;
-        if ($fallbackmodule != $modName) {
-            $sourceFileName = xarTpl__GetSourceFileName($fallbackmodule, $templateBase, $ddName, $elements);
+        // Template type for the property can be overridden too (currently unused)
+        $templateBase   = xarVarPrepForOS(empty($tplBase) ? $tplType : $tplBase);
+
+        // Get the right source filename
+        $sourceFileName = xarTpl__getSourceFileName($modName, $templateBase, $ddName, $elements);
+
+        // Property fall-back to default template in the module the property belongs to
+        if (empty($sourceFileName) &&
+            $elements == 'properties') {
+            $fallbackmodule = DataPropertyMaster::getProperty(array('type' => $ddName))->tplmodule;
+            if ($fallbackmodule != $modName) {
+                $sourceFileName = xarTpl__getSourceFileName($fallbackmodule, $templateBase, $ddName, $elements);
+            }
         }
-    }
 
-    // Final fall-back to default template in dynamicdata for both objects and properties
-    if ((empty($sourceFileName) || !file_exists($sourceFileName)) &&
-        $modName != 'dynamicdata') {
-        $sourceFileName = xarTpl__GetSourceFileName('dynamicdata', $templateBase, $ddName, $elements);
+        // Final fall-back to default template in dynamicdata for both objects and properties
+        if (empty($sourceFileName) &&
+            $modName != 'dynamicdata') {
+            $sourceFileName = xarTpl__getSourceFileName('dynamicdata', $templateBase, $ddName, $elements);
+        }
+
+        xarCore::setCached('Templates.DDElement', $cachename, $sourceFileName);
     }
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
@@ -512,7 +524,7 @@ function xarTplGetImage($modImage, $modName = NULL)
     }
 
     // relative url to the current module's image
-    $moduleImage = 'modules/'.$modOsDir.'/xarimages/'.$modImage;
+    $moduleImage = sys::code() . 'modules/'.$modOsDir.'/xarimages/'.$modImage;
 
     // obtain current theme directory
     $themedir = xarTplGetThemeDir();
@@ -542,235 +554,6 @@ function xarTplGetImage($modImage, $modName = NULL)
 }
 
 /**
- * Creates pager information with no assumptions to output format.
- *
- * @since 2003/10/09
- * @access public
- * @param integer $startNum     start item
- * @param integer $total        total number of items present
- * @param integer $itemsPerPage number of links to display (default=10)
- * @param integer $blockOptions number of pages to display at once (default=10) or array of advanced options
- *
- * @todo  Move this somewhere else, preferably transparent and a widget (which might be mutually exclusive)
- */
-function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions = 10)
-{
-    // Default block options.
-    if (is_numeric($blockOptions)) {
-        $pageBlockSize = $blockOptions;
-    }
-
-    if (is_array($blockOptions)) {
-        if (!empty($blockOptions['blocksize'])) {$blockSize = $blockOptions['blocksize'];}
-        if (!empty($blockOptions['firstitem'])) {$firstItem = $blockOptions['firstitem'];}
-        if (!empty($blockOptions['firstpage'])) {$firstPage = $blockOptions['firstpage'];}
-        if (!empty($blockOptions['urltemplate'])) {$urltemplate = $blockOptions['urltemplate'];}
-        if (!empty($blockOptions['urlitemmatch'])) {
-            $urlItemMatch = $blockOptions['urlitemmatch'];
-        } else {
-            $urlItemMatch = '%%';
-        }
-        $urlItemMatchEnc = rawurlencode($urlItemMatch);
-    }
-
-    // Default values.
-    if (empty($blockSize) || $blockSize < 1) {$blockSize = 10;}
-    if (empty($firstItem)) {$firstItem = 1;}
-    if (empty($firstPage)) {$firstPage = 1;}
-
-    // The last item may be offset if the first item is not 1.
-    $lastItem = ($total + $firstItem - 1);
-
-    // Sanity check on arguments.
-    if ($itemsPerPage < 1) {$itemsPerPage = 10;}
-    if ($currentItem < $firstItem) {$currentItem = $firstItem;}
-    if ($currentItem > $lastItem) {$currentItem = $lastItem;}
-
-    // If this request was the same as the last one, then return the cached pager details.
-    // TODO: is there a better way of caching for each unique request?
-    $request = md5($currentItem . ':' . $lastItem . ':' . $itemsPerPage . ':' . serialize($blockOptions));
-    if (xarCore::getCached('Pager.core', 'request') == $request) {
-        return xarCore::getCached('Pager.core', 'details');
-    }
-
-    // Record the values in this request.
-    xarCore::setCached('Pager.core', 'request', $request);
-
-    // Max number of items in a block of pages.
-    $itemsPerBlock = ($blockSize * $itemsPerPage);
-
-    // Get the start and end items of the page block containing the current item.
-    $blockFirstItem = $currentItem - (($currentItem - $firstItem) % $itemsPerBlock);
-    $blockLastItem = $blockFirstItem + $itemsPerBlock - 1;
-    if ($blockLastItem > $lastItem) {$blockLastItem = $lastItem;}
-
-    // Current/Last page numbers.
-    $currentPage = (int)ceil(($currentItem-$firstItem+1) / $itemsPerPage) + $firstPage - 1;
-    $totalPages = (int)ceil($total / $itemsPerPage);
-
-    // First/Current/Last block numbers
-    $firstBlock = 1;
-    $currentBlock = (int)ceil(($currentItem-$firstItem+1) / $itemsPerBlock);
-    $totalBlocks = (int)ceil($total / $itemsPerBlock);
-
-    // Get start and end items of the current page.
-    $pageFirstItem = $currentItem - (($currentItem-$firstItem) % $itemsPerPage);
-    $pageLastItem = $pageFirstItem + $itemsPerPage - 1;
-    if ($pageLastItem > $lastItem) {$pageLastItem = $lastItem;}
-
-    // Initialise data array.
-    $data = array();
-
-    $data['middleitems'] = array();
-    $data['middleurls'] = array();
-    $pageNum = (int)ceil(($blockFirstItem - $firstItem + 1) / $itemsPerPage) + $firstPage - 1;
-    for ($i = $blockFirstItem; $i <= $blockLastItem; $i += $itemsPerPage) {
-        if (!empty($urltemplate)) {
-            $data['middleurls'][$pageNum] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $i, $urltemplate);
-        }
-        $data['middleitems'][$pageNum] = $i;
-        $data['middleitemsfrom'][$pageNum] = $i;
-        $data['middleitemsto'][$pageNum] = $i + $itemsPerPage - 1;
-        if ($data['middleitemsto'][$pageNum] > $total) {$data['middleitemsto'][$pageNum] = $total;}
-        $pageNum += 1;
-    }
-
-    $data['currentitem'] = $currentItem;
-    $data['totalitems'] = $total;
-    $data['lastitem'] = $lastItem;
-    $data['firstitem'] = $firstItem;
-    $data['itemsperpage'] = $itemsPerPage;
-    $data['itemsperblock'] = $itemsPerBlock;
-    $data['pagesperblock'] = $blockSize;
-
-    $data['currentblock'] = $currentBlock;
-    $data['totalblocks'] = $totalBlocks;
-    $data['firstblock'] = $firstBlock;
-    $data['lastblock'] = $totalBlocks;
-    $data['blockfirstitem'] = $blockFirstItem;
-    $data['blocklastitem'] = $blockLastItem;
-
-    $data['currentpage'] = $currentPage;
-    $data['currentpagenum'] = $currentPage;
-    $data['totalpages'] = $totalPages;
-    $data['pagefirstitem'] = $pageFirstItem;
-    $data['pagelastitem'] = $pageLastItem;
-
-    // These two are item numbers. The naming is historical.
-    $data['firstpage'] = $firstItem;
-    $data['lastpage'] = $lastItem - (($lastItem-$firstItem) % $itemsPerPage);
-
-    if (!empty($urltemplate)) {
-        // These two links are for first and last pages.
-        $data['firsturl'] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $data['firstpage'], $urltemplate);
-        $data['lasturl'] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $data['lastpage'], $urltemplate);
-    }
-
-    $data['firstpagenum'] = $firstPage;
-    $data['lastpagenum'] = ($totalPages + $firstPage - 1);
-
-    // Data for previous page of items.
-    if ($currentPage > $firstPage) {
-        $data['prevpageitems'] = $itemsPerPage;
-        $data['prevpage'] = ($pageFirstItem - $itemsPerPage);
-        if (!empty($urltemplate)) {
-            $data['prevpageurl'] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $data['prevpage'], $urltemplate);
-        }
-    } else {
-        $data['prevpageitems'] = 0;
-    }
-
-    // Data for next page of items.
-    if ($pageLastItem < $lastItem) {
-        $nextPageLastItem = ($pageLastItem + $itemsPerPage);
-        if ($nextPageLastItem > $lastItem) {$nextPageLastItem = $lastItem;}
-        $data['nextpageitems'] = ($nextPageLastItem - $pageLastItem);
-        $data['nextpage'] = ($pageLastItem + 1);
-        if (!empty($urltemplate)) {
-            $data['nextpageurl'] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $data['nextpage'], $urltemplate);
-        }
-    } else {
-        $data['nextpageitems'] = 0;
-    }
-
-    // Data for previous block of pages.
-    if ($currentBlock > $firstBlock) {
-        $data['prevblockpages'] = $blockSize;
-        $data['prevblock'] = ($blockFirstItem - $itemsPerBlock);
-        if (!empty($urltemplate)) {
-            $data['prevblockurl'] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $data['prevblock'], $urltemplate);
-        }
-    } else {
-        $data['prevblockpages'] = 0;
-    }
-
-    // Data for next block of pages.
-    if ($currentBlock < $totalBlocks) {
-        $nextBlockLastItem = ($blockLastItem + $itemsPerBlock);
-        if ($nextBlockLastItem > $lastItem) {$nextBlockLastItem = $lastItem;}
-        $data['nextblockpages'] = ceil(($nextBlockLastItem - $blockLastItem) / $itemsPerPage);
-        $data['nextblock'] = ($blockLastItem + 1);
-        if (!empty($urltemplate)) {
-            $data['nextblockurl'] = str_replace(array($urlItemMatch,$urlItemMatchEnc), $data['nextblock'], $urltemplate);
-        }
-    } else {
-        $data['nextblockpages'] = 0;
-    }
-
-    // Cache all the pager details.
-    xarCore::setCached('Pager.core', 'details', $data);
-
-    return $data;
-}
-
-/**
- * Equivalent of pnHTML()'s Pager function (to get rid of pnHTML calls in modules while waiting for widgets)
- *
- * @since 1.13 - 2003/10/09
- * @access public
- * @param integer $startnum     start item
- * @param integer $total        total number of items present
- * @param string  $urltemplate  template for url, will replace '%%' with item number
- * @param integer $perpage      number of links to display (default=10)
- * @param integer $blockOptions number of pages to display at once (default=10) or array of advanced options
- * @param integer $template     alternative template name within base/user (default 'pager')
- *
- * @todo Move this somewhere else
- */
-function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $blockOptions = array(), $template = 'default')
-{
-    // Quick check to ensure that we have work to do
-    if ($total <= $itemsPerPage) {return '';}
-
-    // Number of pages in a page block - support older numeric 'pages per block'.
-    if (is_numeric($blockOptions)) {
-        $blockOptions = array('blocksize' => $blockOptions);
-    }
-
-    // Pass the url template into the pager calculator.
-    $blockOptions['urltemplate'] = $urltemplate;
-
-    // Get the pager information.
-    $data = xarTplPagerInfo($startNum, $total, $itemsPerPage, $blockOptions);
-
-    // Nothing to do: perhaps there is an error in the parameters?
-    if (empty($data)) {return '';}
-
-    // Couple of cached values used in various pages.
-    // It is unclear what these values are supposed to be used for.
-    if ($data['prevblockpages'] > 0) {
-        xarCore::setCached('Pager.first', 'leftarrow', $data['firsturl']);
-    }
-
-    // Links for next block of pages.
-    if ($data['nextblockpages'] > 0) {
-        xarCore::setCached('Pager.last', 'rightarrow', $data['lasturl']);
-    }
-
-    return trim(xarTplModule('base', 'pager', $template, $data));
-}
-
-/**
  * Execute a pre-compiled template string with the supplied template variables
  *
  * @access public
@@ -788,7 +571,12 @@ function xarTplString($templateCode, &$tplData)
     // Execute the cache file
     sys::import('blocklayout.template.compiled');
     $compiled = new CompiledTemplate(xarTemplateCache::cacheFile('memory'));
-    $out = $compiled->execute($tplData);
+    try {
+        $caching = xarConfigVars::get(null, 'Site.BL.MemCacheTemplates');
+    } catch (Exception $e) {
+        $caching = 0;
+    }
+    $out = $compiled->execute($tplData, $caching);
     return $out;
 }
 
@@ -814,13 +602,12 @@ function xarTplFile($fileName, &$tplData)
  * @access public
  * @param  string $templateSource template source
  * @return string compiled template
- * @todo    subclass xarBLCompiler, it has this method
  */
 function xarTplCompileString($templateSource)
 {
-    sys::import('blocklayout.compiler');
-    $blCompiler = xarBLCompiler::instance();
-    return $blCompiler->compileString($templateSource);
+    sys::import('xaraya.templating.compiler');
+    $compiler = XarayaCompiler::instance();
+    return $compiler->compileString($templateSource);
 }
 
 /**
@@ -913,9 +700,9 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
     foreach ($modules as $module) {
         $thismodule = trim($module);
         $sourceFileName = xarTplGetThemeDir() . "/modules/$thismodule/includes/$templateName.xt";
-    if (!file_exists($sourceFileName)) {
-            $sourceFileName = "modules/$thismodule/xartemplates/includes/$templateName.xt";
-    }
+        if (!file_exists($sourceFileName)) {
+                $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xt";
+        }
         if (file_exists($sourceFileName)) break;
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
@@ -927,46 +714,60 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
  * Execute template from file
  *
  * @access private
- * @param  string $sourceFileName       From which file do we want to execute?
+ * @param  string $sourceFileName       From which file do we want to execute? Assume it exists by now ;-)
  * @param  array  $tplData              Template variables
  * @param  string $tplType              'module' or 'page'
  * @return string generated output from the file
  * @todo  insert log warning when double entry in cachekeys occurs? (race condition)
  * @todo  make the checking whether templatecode is set more robust (related to templated exception handling)
- * @todo  subclass xarBLCompiler?
  */
 function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
 {
+    assert('!empty($sourceFileName); /* The source file for the template is empty in xarTpl__executeFromFile */');
     assert('is_array($tplData); /* Template data should always be passed in as array */');
 
-    // Load translations for the template
-    xarMLSLoadTranslations($sourceFileName);
+    // cache frequently-used cachedfilenames
+    if (xarCore::isCached('Templates.ExecuteFromFile', $sourceFileName)) {
+        $cachedFileName = xarCore::getCached('Templates.ExecuteFromFile', $sourceFileName);
 
-    xarLogMessage("Using template : $sourceFileName");
-    $templateCode = null;
-    // Determine if we need to compile this template
-    if (xarTemplateCache::isDirty($sourceFileName)) {
-        // Get an instance of SourceTemplate
-        sys::import('blocklayout.template.source');
-        $srcTemplate = new SourceTemplate($sourceFileName);
+    } else {
+        // Load translations for the template
+        xarMLSLoadTranslations($sourceFileName);
 
-        // Compile it
-        // @todo return a CompiledTemplate object here?
-        $templateCode = $srcTemplate->compile();
+        xarLogMessage("Using template : $sourceFileName");
+        $templateCode = null;
 
-        // Save the entry in templatecache (if active)
-        xarTemplateCache::saveEntry($sourceFileName,$templateCode);
+        // Determine if we need to compile this template
+        if (xarTemplateCache::isDirty($sourceFileName)) {
+            // Get an instance of SourceTemplate
+            sys::import('xaraya.templating.source');
+            $srcTemplate = new XarayaSourceTemplate($sourceFileName);
+
+            // Compile it
+            // @todo return a CompiledTemplate object here?
+            $templateCode = $srcTemplate->compile();
+
+            // Save the entry in templatecache (if active)
+            xarTemplateCache::saveEntry($sourceFileName,$templateCode);
+        }
+
+        // Execute either the compiled template, or the code determined
+        // @todo get rid of the cachedFileName usage
+        $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
+
+        xarCore::setCached('Templates.ExecuteFromFile', $sourceFileName, $cachedFileName);
     }
-
-    // Execute either the compiled template, or the code determined
-    // @todo get rid of the cachedFileName usage
-    $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
 
     // Execute the compiled template from the cache file
     // @todo the tplType should be irrelevant
     sys::import('blocklayout.template.compiled');
     $compiled = new CompiledTemplate($cachedFileName,$sourceFileName,$tplType);
-    $output = $compiled->execute($tplData);
+    try {
+        $caching = xarConfigVars::get(null, 'Site.BL.MemCacheTemplates');
+    } catch (Exception $e) {
+        $caching = 0;
+    }
+    $output = $compiled->execute($tplData, $caching);
     return $output;
 }
 
@@ -982,7 +783,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
  * @param  string $tplBase      The base name for the template
  * @param  string $templateName The name for the template to use if any
  * @param  string $tplSubPart   A subpart ('' or 'blocks' or 'properties')
- * @return string
+ * @return string the path [including sys::code()] to an existing template sourcefile, or empty
  *
  * @todo do we need to load the translations here or a bit later? (here:easy, later: better abstraction)
  */
@@ -1009,55 +810,41 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     // 7. complain (later on)
 
     $tplThemesDir = xarTplGetThemeDir();
-    $tplBaseDir   = "modules/$modOsDir";
-    $use_internal = false;
-    unset($sourceFileName);
-
-    xarLogMessage("TPL: 1. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt");
-    xarLogMessage("TPL: 2. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt");
-    xarLogMessage("TPL: 3. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt");
-    xarLogMessage("TPL: 4. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xt");
+    $tplBaseDir   = sys::code() . "modules/$modOsDir";
 
     $canTemplateName = strtr($templateName, "-", "/");
     $canonical = ($canTemplateName == $templateName) ? false : true;
 
+    if (!empty($templateName)) {
+        xarLogMessage("TPL: 1. $tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt");
+        xarLogMessage("TPL: 2. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt");
+    }
+    xarLogMessage("TPL: 3. $tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt");
+    xarLogMessage("TPL: 4. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xt");
+    if ($canonical) {
+        xarLogMessage("TPL: 5. $tplThemesDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt");
+        xarLogMessage("TPL: 6. $tplBaseDir/xartemplates/$tplSubPart/$canTemplateName.xt");
+    }
+
     if(!empty($templateName) &&
-        file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")) {
-        $tplBase .= "-$templateName";
+        file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt")) {
     } elseif(!empty($templateName) &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt")) {
-        $use_internal = true;
-        $tplBase .= "-$templateName";
     } elseif(
-        file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt")) {
-        ;
+        file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt")) {
     } elseif(
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xt")) {
-        $use_internal = true;
     } elseif($canonical &&
-        file_exists($sourceFileName = "$tplThemesDir/$tplBaseDir/$tplSubPart/$canTemplateName.xt")) {
+        file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt")) {
     } elseif($canonical &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$canTemplateName.xt")) {
-        $use_internal = true;
     } else {
-        // CHECKME: should we do something here ? At the moment, translations still get loaded,
-        //          the (invalid) $sourceFileName gets passed back to xarTpl*, and we'll get
-        //          an exception when it's passed to xarTpl__executeFromFile().
-        //          We probably don't want to throw an exception here, but we might return
-        //          now, or have some final fall-back template in base (resp. DD for properties)
+        // let functions higher up worry about what to do, e.g. DD object of property fallback template
+        $sourceFileName = '';
     }
+
     // Subpart may have been empty,
     $sourceFileName = str_replace('//','/',$sourceFileName);
-    // assert('isset($sourceFileName); /* The source file for the template has no value in xarTplModule */');
-
-    // Load the appropriate translations
-    if($use_internal) {
-        $domain  = XARMLS_DNTYPE_MODULE; $instance= $modName;
-        $context = rtrim("modules:templates/$tplSubPart",'/');
-    } else {
-        $domain = XARMLS_DNTYPE_THEME; $instance = $GLOBALS['xarTpl_themeName'];
-        $context = rtrim("themes:modules/$modName/$tplSubPart",'/');
-    }
 
     return $sourceFileName;
 }

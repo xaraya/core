@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- TODO: give this some "modern" look and make it configurable -->
+    <xar:foreach in="$value" key="$site" value="$profile">
+        <xar:if condition="!empty($profile['_info_'])">
+            <xar:set name="info">$profile['_info_']</xar:set>
+            <a href="#$info['link']#" title="#$info['site']#"><img src="#xarTplGetImage($info['icon'],'roles')#" alt="#$info['site']#" width="16" height="16" border="0"/></a>
+        </xar:if>
+    </xar:foreach>
+</xar:template>

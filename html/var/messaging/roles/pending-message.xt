@@ -1,11 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-#$recipientname#,
-
-Your account is pending.
-You'll have to wait for the explicit approval of the administrator to log
-again.
-If you want to know the reason, contact <xar:var scope="module" module="mail" name="adminmail"/>.
-You will receive an email has soon as your account is activated again.
-
--- <xar:var scope="module" module="mail" name="adminname"/>
+    #$recipientname#,
+    <xar:br/><xar:br/>
+    Your account is pending activation.
+    <xar:br/>
+    You'll have to wait for the explicit approval of the administrator to log again.
+    <xar:br/>
+    If you want to know the reason, contact <xar:var scope="module" module="mail" name="adminmail"/>.
+    <xar:br/>
+    You will receive an email has soon as your account is activated again.
+    <xar:br/><xar:br/>
+    -- <xar:var scope="module" module="mail" name="adminname"/>
 </xar:template>

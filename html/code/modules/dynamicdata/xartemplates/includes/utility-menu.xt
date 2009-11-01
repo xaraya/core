@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:comment>Common Administration menu</xar:comment>
+    <xar:set name="request">xarRequest::getInfo()</xar:set>
+    <xar:set name="activetab">#$request.2#</xar:set>
+    <xar:set name="activetype">#$request.1#</xar:set>
+    <div>
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <xar:var name="title">Select a utility function</xar:var>
+            <xar:var name="label">Utility</xar:var>
+            <li class="xar-tabs-label" title="#$title#">#$label#</li>
+            <!--
+            <xar:sec mask="EditDynamicData" catch="false">
+                <xar:set name="dummy">$activetab=='query'?xarTplSetPageTitle('Query'):''</xar:set>
+                <xar:set name="tabclass">$activetab=='query'?'xar-tab-active':'xar-tab'</xar:set>
+                <xar:set name="linkclass">$activetab=='query'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarModURL('dynamicdata','admin','query')#" class="#$linkclass#">Query</a>
+                </li>
+            </xar:sec>
+            -->
+            <xar:sec mask="EditDynamicData" catch="false">
+                <xar:set name="dummy">$activetab=='import'?xarTplSetPageTitle('Import'):''</xar:set>
+                <xar:set name="tabclass">$activetab=='import'?'xar-tab-active':'xar-tab'</xar:set>
+                <xar:set name="linkclass">$activetab=='import'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarModURL('dynamicdata','util','import')#" class="#$linkclass#">Import</a>
+                </li>
+            </xar:sec>
+            <xar:sec mask="EditDynamicData" catch="false">
+                <xar:set name="dummy">$activetab=='export'?xarTplSetPageTitle('Export'):''</xar:set>
+                <xar:set name="tabclass">$activetab=='export'?'xar-tab-active':'xar-tab'</xar:set>
+                <xar:set name="linkclass">$activetab=='export'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarModURL('dynamicdata','util','export')#" class="#$linkclass#">Export</a>
+                </li>
+            </xar:sec>
+            <xar:sec mask="EditDynamicData" catch="false">
+                <xar:set name="dummy">$activetab=='view_static'?xarTplSetPageTitle('Table Definitions'):''</xar:set>
+                <xar:set name="tabclass">$activetab=='view_static'?'xar-tab-active':'xar-tab'</xar:set>
+                <xar:set name="linkclass">$activetab=='view_static'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarModURL('dynamicdata','util','view_static')#" class="#$linkclass#">Table Definitions</a>
+                </li>
+            </xar:sec>
+            <xar:sec mask="AdminDynamicData" catch="false">
+                <xar:set name="dummy">$activetab=='meta'?xarTplSetPageTitle('Data Browser'):''</xar:set>
+                <xar:set name="tabclass">$activetab=='meta'?'xar-tab-active':'xar-tab'</xar:set>
+                <xar:set name="linkclass">$activetab=='meta'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarModURL('dynamicdata','util','meta')#" class="#$linkclass#">Data Browser</a>
+                </li>
+            </xar:sec>
+            <!--
+            <xar:sec mask="AdminDynamicData" catch="false">
+                <xar:set name="dummy">$activetab=='relations'?xarTplSetPageTitle('Relations'):''</xar:set>
+                <xar:set name="tabclass">$activetab=='relations'?'xar-tab-active':'xar-tab'</xar:set>
+                <xar:set name="linkclass">$activetab=='relations'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarModURL('dynamicdata','util','relations')#" class="#$linkclass#">
+                    Relationships
+                  </a>
+                </li>
+            </xar:sec>
+            -->
+            <!--
+            <xar:sec mask="AdminDynamicData" catch="false">
+                <xar:set name="dummy">$activetab=='migrate'?xarTplSetPageTitle('Migrate'):''</xar:set>
+                <xar:set name="tabclass">$activetab=='migrate'?'xar-tab-active':'xar-tab'</xar:set>
+                <xar:set name="linkclass">$activetab=='migrate'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarModURL('dynamicdata','util','migrate')#" class="#$linkclass#">Migrate Items</a>
+                </li>
+            </xar:sec>
+            -->
+        </ul>
+    </div>
+</xar:template>

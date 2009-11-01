@@ -11,6 +11,8 @@ $systemConfiguration['DB.Host'] = 'localhost';
 $systemConfiguration['DB.Name'] = 'Xaraya';
 // Database Type: the type of the database server.
 $systemConfiguration['DB.Type'] = 'mysql';
+// Database Charset: the charset of the database.
+$systemConfiguration['DB.Charset'] = 'utf8';
 // Database TablePrefix: a string that will be prefixed to every database tables that are part of the core.
 //                       Those tables are shared across multi-sites.
 $systemConfiguration['DB.TablePrefix'] = 'xar';
@@ -38,21 +40,4 @@ $systemConfiguration['DB.Persistent'] = false;
  *       in php4.4 and php5.x versions or the bug in the zend optimizer
  */
  $systemConfiguration['Exception.ErrorLevel'] = E_ALL;
-/*
- * This value is used to change the default behavior of the
- * xarServerGetBaseURL() and xarModURL() functions to allow you
- * to use things like Apache's mod_rewrite to shorten your
- * URLs even further then Short URL's allows, for example
- * completely removing the "index.php" from your site's URLs
- *
- * Comment them out to use Xaraya's built-in/auto values
- * TODO: move this out of here
- */
-// 1. When you want to use some alternate URI path to your site
-//$systemConfiguration['BaseURI'] = '/test';
-// 2. When you want to use some alternate script file for your site
-//$systemConfiguration['BaseModURL'] = 'index2.php';
-// 3. When you want to use URLs like http://mysite.com/news/123
-//$systemConfiguration['BaseURI'] = '';
-//$systemConfiguration['BaseModURL'] = '';
 ?>

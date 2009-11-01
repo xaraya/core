@@ -3,7 +3,7 @@
  * The Core
  *
  * @package core
- * @copyright (C) 2002-2006 by the Xaraya Development Team.
+ * @copyright (C) 2002-2009 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
@@ -32,31 +32,40 @@ define('XARCORE_VERSION_REV', $rev);
 /*
  * System dependencies for (optional) systems
  * FIXME: This diagram isn't correct (or at least not detailed enough)
- * ----------------------------------------------
- * | Name           | Depends on                |
- * ----------------------------------------------
- * | DATABASE       | nothing                   |
- * | SESSION        | DATABASE                  |
- * | CONFIGURATION  | DATABASE                  |
- * | USER           | SESSION, DATABASE         |
- * | BLOCKS         | CONFIGURATION, DATABASE   |
- * | MODULES        | CONFIGURATION, DATABASE   |
- * | EVENTS         | MODULES                   |
- * ----------------------------------------------
+ * -------------------------------------------------------
+ * | Name           | Depends on                | Define |
+ * -------------------------------------------------------
+ * | EXCEPTIONS     | nothing (really ?)        |        |
+ * | LOG            | nothing                   |        |
+ * | SYSTEMVARS     | nothing                   |        |
+ * | DATABASE       | SYSTEMVARS                |    1   |
+ * | EVENTS         | nothing ?                 |        |
+ * | CONFIGURATION  | DATABASE                  |    8   |
+ * | LEGACY         | CONFIGURATION             |        |
+ * | SERVER         | CONFIGURATION (?)         |        |
+ * | MLS            | CONFIGURATION             |        |
+ * | SESSION        | CONFIGURATION (?), SERVER |    2   |
+ * | BLOCKS         | CONFIGURATION             |   16   |
+ * | MODULES        | CONFIGURATION             |   32   |
+ * | TEMPLATE       | MODULES, MLS (?)          |   64   |
+ * | USER           | SESSION, MODULES          |    4   |
+ * -------------------------------------------------------
  *
+ * TODO: update dependencies and order
  *
  *   DATABASE           (00000001)
  *   |
- *   |- SESSION         (00000011)
- *   |  |
- *   |  |- USER         (00000111)
- *   |
  *   |- CONFIGURATION   (00001001)
+ *      |
+ *      |- SESSION      (00001011)
  *      |
  *      |- BLOCKS       (00011001)
  *      |
  *      |- MODULES      (00101001)
+ *         |
+ *         |- USER      (00101111)
  *
+ *   ALL                (01111111)
  */
 
 /**#@+
@@ -71,11 +80,11 @@ define('XARCORE_VERSION_REV', $rev);
 **/
 define('XARCORE_SYSTEM_NONE'         , 0);
 define('XARCORE_SYSTEM_DATABASE'     , 1);
-define('XARCORE_SYSTEM_SESSION'      , 2 | XARCORE_SYSTEM_DATABASE);
-define('XARCORE_SYSTEM_USER'         , 4 | XARCORE_SYSTEM_SESSION);
 define('XARCORE_SYSTEM_CONFIGURATION', 8 | XARCORE_SYSTEM_DATABASE);
+define('XARCORE_SYSTEM_SESSION'      , 2 | XARCORE_SYSTEM_CONFIGURATION);
 define('XARCORE_SYSTEM_BLOCKS'       , 16 | XARCORE_SYSTEM_CONFIGURATION);
 define('XARCORE_SYSTEM_MODULES'      , 32 | XARCORE_SYSTEM_CONFIGURATION);
+define('XARCORE_SYSTEM_USER'         , 4 | XARCORE_SYSTEM_SESSION | XARCORE_SYSTEM_MODULES);
 define('XARCORE_SYSTEM_ALL'          , 127); // bit OR of all optional systems (includes templates now)
 /**#@-*/
 
@@ -171,7 +180,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      * Flags can be OR-ed together
      */
+// CHECKME: make this configurable too !?
     xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );
+//    xarCoreActivateDebugger(XARDBG_INACTIVE);
 
     /*
      * If there happens something we want to be able to log it
@@ -190,7 +201,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if ($whatToLoad & XARCORE_SYSTEM_DATABASE) { // yeah right, as if this is optional
-        sys::import('xaraya.database');
+        sys::import('xaraya.variables.system');
 
         // Decode encoded DB parameters
         // These need to be there
@@ -214,11 +225,15 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // Optionals dealt with, do the rest inline
         $systemArgs = array('userName' => $userName,
                             'password' => $password,
-                            'databaseHost' => xarSystemVars::get(sys::CONFIG, 'DB.Host'),
-                            'databaseType' => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
-                            'databaseName' => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
-                            'persistent' => $persistent,
-                            'prefix' => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
+                            'databaseHost'    => xarSystemVars::get(sys::CONFIG, 'DB.Host'),
+                            'databaseType'    => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
+                            'databaseName'    => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
+                            'databaseCharset' => xarSystemVars::get(sys::CONFIG, 'DB.Charset'),
+                            'persistent'      => $persistent,
+                            'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
+
+        sys::import('xaraya.database');
+
         // Connect to database
         xarDB_init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_DATABASE;
@@ -233,6 +248,18 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     sys::import('xaraya.events');
 
+/* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ?
+    sys::import('xaraya.autoload');
+    xarAutoload::initialize();
+
+// Testing of autoload + second-level cache storage - please do not use on live sites
+    sys::import('xaraya.caching.storage');
+    $cache = xarCache_Storage::getCacheStorage(array('storage' => 'xcache', 'type' => 'core'));
+    xarCore::setCacheStorage($cache);
+    // For bulk load, we might have to do this after loading the modules, otherwise
+    // unserialize + autoload might trigger a function that complains about xarMod:: etc.
+    //xarCore::setCacheStorage($cache,0,1);
+*/
 
     /*
      * Start Configuration System
@@ -247,6 +274,12 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         sys::import('xaraya.variables');
         xarVar_init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
+
+    // we're about done here - everything else requires configuration, at least to initialize them !?
+    } else {
+        // Make the current load level == the new load level
+        $current_load_level = $new_load_level;
+        return true;
     }
 
     /**
@@ -272,7 +305,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     sys::import('xaraya.server');
     $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
                         'generateXMLURLs' => true);
-
     xarServer::init($systemArgs);
     xarRequest::init($systemArgs);
     xarResponse::init($systemArgs);
@@ -351,6 +383,15 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'generateXMLURLs' => true);
         xarMod::init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_MODULES;
+
+        // Module hooks are currently linked with modules - see also xaraya.structures.hooks.* ?
+        sys::import('xaraya.hooks');
+
+    // we're about done here - everything else requires modules !?
+    } else {
+        // Make the current load level == the new load level
+        $current_load_level = $new_load_level;
+        return true;
     }
 
     /*
@@ -368,7 +409,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     xarTpl_init($systemArgs);
     $whatToLoad ^= XARCORE_BIT_TEMPLATE;
-
 
     /**
      * At last, we can give people access to the system.
@@ -500,7 +540,6 @@ class xarDebug extends Object
  *
  * @package core
  * @todo this is closer to the caching subsystem than here
- * @todo i dont like the array shuffling
  * @todo separate file
  * @todo this is not xarCore, this is xarCoreCache
 **/
@@ -513,91 +552,171 @@ class xarCore extends Object
     const VERSION_SUB = 'post rabiem risus';
 
     private static $cacheCollection = array();
+    private static $cacheStorage = null;
+    private static $isBulkStorage = 0;
 
     /**
      * Check if a variable value is cached
      *
-     * @param key string the key identifying the particular cache you want to access
-     * @param name string the name of the variable in that particular cache
+     * @param scope string the scope identifying which part of the cache you want to access
+     * @param name string the name of the variable in that particular scope
      * @return mixed value of the variable, or false if variable isn't cached
      * @todo make sure we can make this protected
     **/
-    public static function isCached($cacheKey, $name)
+    public static function isCached($scope, $name)
     {
-        if (!isset(self::$cacheCollection[$cacheKey])) {
-            self::$cacheCollection[$cacheKey] = array();
-            return false;
+        if (!isset(self::$cacheCollection[$scope])) {
+            // initialize the cache if necessary
+            self::$cacheCollection[$scope] = array();
         }
-        return isset(self::$cacheCollection[$cacheKey][$name]);
+        if (isset(self::$cacheCollection[$scope][$name])) {
+            return true;
+
+        // cache storage typically only works with a single cache namespace, so we add our own scope prefix here
+        } elseif (isset(self::$cacheStorage) && empty(self::$isBulkStorage) && self::$cacheStorage->isCached($scope.':'.$name)) {
+            // pre-fetch the value from second-level cache here (if we don't load from bulk storage)
+            self::$cacheCollection[$scope][$name] = self::$cacheStorage->getCached($scope.':'.$name);
+            return true;
+        }
+        return false;
     }
 
     /**
      * Get the value of a cached variable
      *
-     * @param string $key  the key identifying the particular cache you want to access
-     * @param string $name the name of the variable in that particular cache
+     * @param scope string the scope identifying which part of the cache you want to access
+     * @param name string the name of the variable in that particular scope
      * @return mixed value of the variable, or null if variable isn't cached
      * @todo make sure we can make this protected
     **/
-    public static function getCached($cacheKey, $name)
+    public static function getCached($scope, $name)
     {
-        if (!isset(self::$cacheCollection[$cacheKey][$name])) {
+        if (!isset(self::$cacheCollection[$scope][$name])) {
+            // don't fetch the value from second-level cache here
             return;
         }
-        return self::$cacheCollection[$cacheKey][$name];
+        return self::$cacheCollection[$scope][$name];
     }
 
     /**
      * Set the value of a cached variable
      *
-     * @param key string the key identifying the particular cache you want to access
-     * @param name string the name of the variable in that particular cache
+     * @param scope string the scope identifying which part of the cache you want to access
+     * @param name string the name of the variable in that particular scope
      * @param value string the new value for that variable
      * @return void
      * @todo make sure we can make this protected
     **/
-    public static function setCached($cacheKey, $name, $value)
+    public static function setCached($scope, $name, $value)
     {
-        if (!isset(self::$cacheCollection[$cacheKey])) {
-            self::$cacheCollection[$cacheKey] = array();
+        if (!isset(self::$cacheCollection[$scope])) {
+            // initialize cache if necessary
+            self::$cacheCollection[$scope] = array();
         }
-        self::$cacheCollection[$cacheKey][$name] = $value;
+        self::$cacheCollection[$scope][$name] = $value;
+        if (isset(self::$cacheStorage) && empty(self::$isBulkStorage)) {
+            // save the value to second-level cache here
+            self::$cacheStorage->setCached($scope.':'.$name, $value);
+        }
     }
 
     /**
      * Delete a cached variable
      *
-     * @param key the key identifying the particular cache you want to access
-     * @param name the name of the variable in that particular cache
+     * @param scope string the scope identifying which part of the cache you want to access
+     * @param name string the name of the variable in that particular scope
      * @return null
      * @todo remove the double whammy
      * @todo make sure we can make this protected
     **/
-    public static function delCached($cacheKey, $name)
+    public static function delCached($scope, $name)
     {
-        if (isset(self::$cacheCollection[$cacheKey][$name])) {
-            unset(self::$cacheCollection[$cacheKey][$name]);
+        if (isset(self::$cacheCollection[$scope][$name])) {
+            unset(self::$cacheCollection[$scope][$name]);
         }
-        //This unsets the key that said that collection had already been retrieved
-
-        //Seems to have caused a problem because of the expected behaviour of the old code
-        //FIXME: Change how this works for a mainstream function, stop the hacks
-        if (isset(self::$cacheCollection[$cacheKey][0])) {
-            unset(self::$cacheCollection[$cacheKey][0]);
+        if (isset(self::$cacheStorage) && empty(self::$isBulkStorage)) {
+            // delete the value from second-level cache here
+            self::$cacheStorage->delCached($scope.':'.$name);
         }
     }
 
     /**
      * Flush a particular cache (e.g. for session initialization)
      *
-     * @param  cacheKey the key identifying the particular cache you want to wipe out
+     * @param scope string the scope identifying which part of the cache you want to wipe out
      * @return null
      * @todo make sure we can make this protected
     **/
-    public static function flushCached($cacheKey)
+    public static function flushCached($scope)
     {
-        if(isset(self::$cacheCollection[$cacheKey])) {
-            unset(self::$cacheCollection[$cacheKey]);
+        if(isset(self::$cacheCollection[$scope])) {
+            unset(self::$cacheCollection[$scope]);
+        }
+        if (isset(self::$cacheStorage) && empty(self::$isBulkStorage)) {
+            // CHECKME: not all cache storage supports this in the same way !
+            self::$cacheStorage->flushCached($scope.':');
+        }
+    }
+
+    /**
+     * Set second-level cache storage if you want to keep values for longer than the current HTTP request
+     *
+     * @param  cacheStorage the cache storage instance you want to use (typically in-memory like apc, memcached, xcache, ...)
+     * @param  cacheExpire how long do you want to keep values in second-level cache storage (if the storage supports it)
+     * @param  isBulkStorage do we load/save all variables in bulk by scope or not ?
+     * @return null
+    **/
+    public static function setCacheStorage($cacheStorage, $cacheExpire = 0, $isBulkStorage = 0)
+    {
+        self::$cacheStorage = $cacheStorage;
+        self::$cacheStorage->setExpire($cacheExpire);
+        // Make sure we use type 'core' for the cache storage here
+        if (empty(self::$cacheStorage->type) || self::$cacheStorage->type != 'core') {
+            self::$cacheStorage->type = 'core';
+            // Update the global namespace and prefix of the cache storage
+            self::$cacheStorage->setNamespace(self::$cacheStorage->namespace);
+        }
+        // see what's going on in the cache storage ;-)
+        //self::$cacheStorage->logfile = sys::varpath() . '/logs/core_cache.txt';
+        // FIXME: some in-memory cache storage requires explicit garbage collection !?
+
+        self::$isBulkStorage = $isBulkStorage;
+        if ($isBulkStorage) {
+            // load from second-level cache storage here
+            self::loadBulkStorage();
+            // save to second-level cache storage at shutdown
+            register_shutdown_function(array('xarCore','saveBulkStorage'));
+        }
+    }
+
+// CHECKME: work with bulk load / bulk save per scope instead of individual gets per scope:name ?
+//          But what about concurrent updates in bulk then (+ unserialize & autoload too early) ?
+//          There doesn't seem to be a big difference in performance using bulk or not, at least with xcache
+    public static function loadBulkStorage()
+    {
+        if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) return;
+        // get the list of scopes
+        if (!self::$cacheStorage->isCached('__scopelist__')) return;
+        $scopelist = self::$cacheStorage->getCached('__scopelist__');
+        if (empty($scopelist)) return;
+        // load each scope from second-level cache
+        foreach ($scopelist as $scope) {
+            $value = self::$cacheStorage->getCached($scope);
+            if (!empty($value)) {
+                self::$cacheCollection[$scope] = unserialize($value);
+            }
+        }
+    }
+    public static function saveBulkStorage()
+    {
+        if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) return;
+        // get the list of scopes
+        $scopelist = array_keys(self::$cacheCollection);
+        self::$cacheStorage->setCached('__scopelist__', $scopelist);
+        // save each scope to second-level cache
+        foreach ($scopelist as $scope) {
+            $value = serialize(self::$cacheCollection[$scope]);
+            self::$cacheStorage->setCached($scope, $value);
         }
     }
 }

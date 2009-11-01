@@ -1,0 +1,52 @@
+<adminmenu>
+    <menuitems>
+        <menuitem>
+            <type>admin</type>
+            <includes>
+                <includeitem>main</includeitem>
+            </includes>
+            <target>main</target>
+            <label>Overview</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminDynamicData</mask>
+            <type>admin</type>
+            <includes>
+                <includeitem>view</includeitem>
+            </includes>
+            <target>view</target>
+            <title>Manage dataobjects using dynamicdata</title>
+            <label>Manage DataObjects</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminDynamicData</mask>
+            <type>admin</type>
+            <includes>
+                <includeitem>modifyconfig</includeitem>
+            </includes>
+            <target>modifyconfig</target>
+            <title>Configure the default data proerty types</title>
+            <label>Manage Property Types</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminDynamicData</mask>
+            <type>admin</type>
+            <includes>
+                <includeitem>utilities</includeitem>
+            </includes>
+            <target>utilities</target>
+            <title>Import/export and other utilities</title>
+            <label>Utilities</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminDynamicData</mask>
+            <type>admin</type>
+            <includes>
+                <includeitem>modifymoduleconfig</includeitem>
+            </includes>
+            <target>modifymoduleconfig</target>
+            <title>Modify the configuration of this module</title>
+            <label>Modify Configuration</label>
+        </menuitem>
+    </menuitems>
+</adminmenu>

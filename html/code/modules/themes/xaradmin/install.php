@@ -1,0 +1,39 @@
+<?php
+/**
+ * @package modules
+ * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Themes module
+ * @link http://xaraya.com/index.php/release/70.html
+ */
+/**
+ * Installs a theme
+ *
+ * Loads module themes API and calls the initialise
+ * function to actually perform the initialisation,
+ * then redirects to the list function with a
+ * status message and returns true.
+ * <andyv implementation of JC's request> attempt to activate module immediately after it's inited
+ *
+ * @param id the module id to initialise
+ * @returns
+ * @return
+ */
+function themes_admin_install()
+{
+    // Security and sanity checks
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
+    if (!xarVarFetch('id', 'int:1:', $id)) return;
+    $minfo=xarThemeGetInfo($id);
+    if (!xarMod::apiFunc('themes','admin','install',array('regid'=>$id))) return;
+
+    // set the target location (anchor) to go to within the page
+    $target = $minfo['name'];
+    xarResponse::Redirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
+    return true;
+}
+?>

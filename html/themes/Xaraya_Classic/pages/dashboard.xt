@@ -6,20 +6,20 @@
 dtd="xhtml1-strict">
     <xar:set name="themedir">#xarTplGetThemeDir()#</xar:set>
     <xar:set name="sitename">
-        <xar:var scope="module" module="themes" name="SiteName" />
+        <xar:var scope="module" module="themes" name="SiteName"/>
     </xar:set>
     <xar:set name="adminnav">
-        <xar:block module="base" type="adminmenu" template="mainnavbubble;top" />
+        <xar:block module="base" type="adminmenu" template="mainnavbubble;top"/>
     </xar:set>
     <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
         <head>
-            <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+            <meta http-equiv="content-type" content="text/html; charset=iso-8859-1"/>
             <title>#$sitename# Administration</title>
-            <meta name="ROBOTS" content="INDEX,FOLLOW" />
-            <xar:style scope="common" />
+            <meta name="ROBOTS" content="INDEX,FOLLOW"/>
+            <xar:style scope="common"/>
             <style type="text/css">@import url("themes/Xaraya_Classic/style/admin.css");</style>
-            <xar:additional-styles />
-            <xar:base-render-javascript position="head" />
+            <xar:place-css />
+            <xar:place-javascript position="head"/>
             <script type="text/javascript" src="#$themedir#/scripts/nav.js"></script>
         </head>
         <body>
@@ -27,14 +27,14 @@ dtd="xhtml1-strict">
             <a href="#xarModUrl()#" title="#$sitename#">( View Site &gt; )</a></div>
             <div id="wrapper">
                 <div id="adminmenu">
-                    <xar:var name="adminnav" />
+                    <xar:var name="adminnav"/>
                 </div>
                 <div id="main">
-                    <xar:module main="true" />
-                    <br class="xar-clearboth" />
+                    <xar:module main="true"/>
+                    <br class="xar-clearboth"/>
                 </div>
             </div>
-            <xar:base-render-javascript position="body" />
+            <xar:place-javascript position="body"/>
         </body>
     </html>
 </xar:blocklayout>

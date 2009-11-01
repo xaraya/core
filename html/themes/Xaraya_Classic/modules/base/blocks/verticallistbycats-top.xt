@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <div id="hmenu">
         <ul id="hmenuroot">
@@ -67,7 +67,7 @@
                                             </ul>
                                         </xar:if>
                                     </li>
-                                    <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
+                                    <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']"/>
                                     <li>
                                         <a href="#$mod['features']['link']#"
                                         title="#$mod['features']['maintitle']#">#$modname#</a>

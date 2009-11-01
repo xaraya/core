@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Object Interface</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:if condition="!empty($object)">
+            <h2>
+                <xar:data-label object="$object"/>
+            </h2>
+
+            <xar:set name="getlinked">xarModItemVars::get('dynamicdata','getlinkedobjects',$object->objectid)</xar:set>
+            <xar:if condition="!empty($getlinked)">
+                <!-- Get linked objects -->
+                <xar:set name="linked">#$object:getLinkedObjects()#</xar:set>
+
+                <!-- Show parents and linkedfrom - template syntax may still change -->
+                <xar:if condition="!empty($object:links.parents)">
+                    <fieldset>
+                    <legend>Parents</legend>
+                    <xar:foreach in="$object:links.parents" value="$link">
+                        <xar:if condition="!empty($link.list:itemids)">
+                            <xar:set name="fromprop">#$link.from_prop#</xar:set>
+                            <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
+                            <xar:set name="toprop">#$link.to_prop#</xar:set>
+                            <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
+                            <xar:set name="args">array('linktype' => 'object', 'newlink' => '', 'layout' => 'default')</xar:set>
+                            #$fromlabel# &lt;= #$link.list:label# #$tolabel#
+                            #$link.list:showView($args)#
+                        </xar:if>
+                    </xar:foreach>
+                    </fieldset>
+                </xar:if>
+                <xar:if condition="!empty($object:links.linkedfrom)">
+                    <fieldset>
+                    <legend>Linked From</legend>
+                    <xar:foreach in="$object:links.linkedfrom" value="$link">
+                        <xar:if condition="!empty($link.list:itemids)">
+                            <xar:set name="fromprop">#$link.from_prop#</xar:set>
+                            <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
+                            <xar:set name="toprop">#$link.to_prop#</xar:set>
+                            <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
+                            <xar:set name="args">array('linktype' => 'object', 'newlink' => '', 'layout' => 'default')</xar:set>
+                            #$fromlabel# &lt;= #$link.list:label# #$tolabel#
+                            #$link.list:showView($args)#
+                        </xar:if>
+                    </xar:foreach>
+                    </fieldset>
+                </xar:if>
+            </xar:if>
+
+            <!-- Display object -->
+            <xar:data-display object="$object"/>
+            <!-- Display hook output -->
+            <xar:if condition="!empty($hooks)">
+                <xar:foreach in="$hooks" key="$module" value="$output">
+                    #$output#
+                </xar:foreach>
+            </xar:if>
+
+            <xar:if condition="!empty($getlinked)">
+                <!-- Show linkedto and children - template syntax may still change -->
+                <xar:if condition="!empty($object:links.linkedto)">
+                    <fieldset>
+                    <legend>Linked To</legend>
+                    <xar:foreach in="$object:links.linkedto" value="$link">
+                        <xar:if condition="!empty($link.list:itemids)">
+                            <xar:set name="fromprop">#$link.from_prop#</xar:set>
+                            <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
+                            <xar:set name="toprop">#$link.to_prop#</xar:set>
+                            <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
+                            <xar:set name="args">array('linktype' => 'object', 'newlink' => '', 'layout' => 'default')</xar:set>
+                            #$fromlabel# =&gt; #$link.list:label# #$tolabel#
+                            #$link.list:showView($args)#
+                        </xar:if>
+                    </xar:foreach>
+                    </fieldset>
+                </xar:if>
+                <xar:if condition="!empty($object:links.children)">
+                    <fieldset>
+                    <legend>Children</legend>
+                    <xar:foreach in="$object:links.children" value="$link">
+                        <xar:if condition="!empty($link.list:itemids)">
+                            <xar:set name="fromprop">#$link.from_prop#</xar:set>
+                            <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
+                            <xar:set name="toprop">#$link.to_prop#</xar:set>
+                            <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
+                            <xar:set name="args">array('linktype' => 'object', 'newlink' => '', 'layout' => 'default')</xar:set>
+                            #$fromlabel# =&gt; #$link.list:label# #$tolabel#
+                            #$link.list:showView($args)#
+                        </xar:if>
+                    </xar:foreach>
+                    </fieldset>
+                </xar:if>
+            </xar:if>
+
+            <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
+            <p><a href="#$viewlink#">View <xar:data-label object="$object"/></a></p>
+        </xar:if>
+    </div>
+</xar:template>

@@ -14,7 +14,7 @@
  * that need to check whether the proper things are loaded themselves.
  *
  * @package events
- * @copyright (C) 2002-2007 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
@@ -189,7 +189,7 @@ class xarEvents extends Object implements IxarEvents
         if (empty($modDir)) $modDir = $modName;
 
         // We can't rely on the API, the event system IS the API!
-        // - no use of xarModAPIFunc because that sets exceptions and we
+        // - no use of xarMod::apiFunc because that sets exceptions and we
         //   don't want that when a module doesn't react to an event.
         // - we could use xarMod::apiLoad. This will create another event ModAPILoad
         //   if the api wasn't loaded yet. The event will *not* be created if the

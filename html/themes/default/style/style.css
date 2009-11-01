@@ -20,6 +20,12 @@ input, textarea {
     max-width: 84em;
     position: relative;
 }
+#admin-wrapper {
+    /* to prevent the content area to become too wide (with respect to line-length) */
+    margin: 1.5em auto;
+    width: 100%;
+    position: relative;
+}
 #main {
     padding: 1.5em;
     margin: 0 16.5em;
@@ -29,17 +35,26 @@ input, textarea {
     color: #020;
     min-height: 537px;
 }
+#admin-main {
+    padding: 1.5em;
+    margin: 0 1.5em 0 16.5em;
+    border: 1px dotted #D77043;
+    border-width: 0 1px;
+    background: #F6F0E7;
+    color: #020;
+    min-height: 537px;
+}
 #logo {
     padding: 1.5em;
-    /*	we have something to chose from */
-    /*	background: #8BADA4 url(../images/header4b2.jpg) repeat-x left bottom;*/
+    /*  we have something to chose from */
+    /*  background: #8BADA4 url(../images/header4b2.jpg) repeat-x left bottom;*/
     background: #D77043 url(../images/header2b.jpg) no-repeat left top;
     height: 90px;
     position: relative;
 }
 #logo img {
     float: left;
-    width: 90px;
+    width: 115px;
     margin-right: 1.5em;
 }
 #logo p {
@@ -62,6 +77,13 @@ input, textarea {
     margin: 0 1.5em;
     padding: 4.5em 0 1.5em;
 }
+.admin-sideInfo {
+    position: absolute;
+    top: 0px;
+    width: 13.5em;
+    margin: 0 1.5em;
+    padding: 4.5em 0 1.5em;
+}
 #sideInfo1 {
     left: 0;
 }
@@ -73,35 +95,37 @@ a img {
 }
 a:link {
     color: #2380A8;
-    border-bottom: 1px dotted #2380A8;
-    text-decoration: none;
+/*    border-bottom: 1px dotted #2380A8;
+    text-decoration: none; */
 }
 a:visited {
     color: #8F5D59;
-    border-bottom: 1px dotted #8F5D59;
-    text-decoration: none;
+/*    border-bottom: 1px dotted #8F5D59;
+    text-decoration: none;*/
 }
 a:visited {
     color: #6B5273;
-    border-bottom: 1px dotted #6B5273;
-    text-decoration: none;
+/*    border-bottom: 1px dotted #6B5273;
+    text-decoration: none; */
 }
 a:visited {
     color: #845161;
-    border-bottom: 1px dotted #845161;
-    text-decoration: none;
+/*    border-bottom: 1px dotted #845161;
+    text-decoration: none; */
 }
 a:hover, a:focus {
     color: #2352A8;
-    border-bottom: 1px solid #2352A8;
+/*    border-bottom: 1px solid #2352A8; */
 }
 a:active {
     color: #D77043;
-    border-bottom: 1px solid #D77043;
+/*    border-bottom: 1px solid #D77043; */
 }
 #main h2 {
     font: italic normal 1.5em Georgia, Times, "Times New Roman", serif;
     text-align: center;
+}
+.xar-mod-head {
 }
 .xar-mod-title {
     text-transform: uppercase;
@@ -109,6 +133,70 @@ a:active {
     letter-spacing: .1em;
     color: #D77043;
 }
+.xar-mod-body {
+}
+.xar-mod-foot {
+}
+.xar-norm {
+    background-color: #f6f0e7;
+}
+.xar-norm-outline {
+    border-color: #002200;
+}
+.xar-alt {
+    background-color: #F5DCBB;
+}
+.xar-alt-outline {
+    border-color: #6B5273;
+}
+.xar-accent {
+    background-color: #f9d57f;
+}
+.xar-accent-outline {
+    border-color: #2352a8;
+}
+.xar-sub {
+}
+
+/* tab structure (margin, padding, float, etc is controlled in core css in 
+   the base module.  Colors (border, background) are inherited from the norm, 
+   alt, accent classes above.  The below rules are intended to be 
+   theme-specific supplements.
+*/
+
+/* tabs parent element */
+ul.xar-tabs {
+    font-size: .9em;
+}
+/* tabs label */
+ul.xar-tabs li.xar-tabs-label {
+    color: #D77043;
+    text-transform: uppercase;
+}
+/* inactive tab */
+ul.xar-tabs li.xar-tab {
+}
+/* active tab */
+ul.xar-tabs li.xar-tab-active {
+}
+/* inactive tab link */
+ul.xar-tabs li.xar-tab a {
+    text-decoration: none;
+}
+/* active tab link */
+ul.xar-tabs li.xar-tab-active a {
+    text-decoration: none;
+}
+/* inactive tab link hover - not handled elsewhere */
+ul.xar-tabs li.xar-tab a:hover {
+    background-color: #F5EADC;
+}
+/* active tab link hover - not handled elsewhere */
+ul.xar-tabs li.xar-tab-active a:hover {
+    background-color: #f5dcbb;
+}
+
+
 .sideInfo .xar-block-title {
     text-transform: uppercase;
     font-size: .88em;
@@ -140,12 +228,68 @@ a:active {
     margin: 0;
     font: italic normal 1em Georgia, Times, "Times New Roman", serif;
 }
+.admin-sideInfo .xar-block-title {
+    text-transform: uppercase;
+    font-size: .88em;
+    letter-spacing: .1em;
+    color: #D77043;
+    border-top: 1px solid #D77043;
+    text-align: right;
+}
+.admin-sideInfo .xar-block-body {
+    margin: 0 0 1.5em;
+}
+.admin-sideInfo ul {
+    margin: 0 0 1.5em;
+    padding: 0;
+}
+.admin-sideInfo ul ul {
+    margin: 0;
+}
+.admin-sideInfo li {
+    margin: 0;
+    list-style-type: none;
+}
+.admin-sideInfo li li li {
+    padding-left: 1em;
+    margin-left: .25em;
+    background: transparent url(../images/li-bullet2-5.png) no-repeat center left;
+}
+.admin-sideInfo h4 {
+    margin: 0;
+    font: italic normal 1em Georgia, Times, "Times New Roman", serif;
+}
+.xar-menu-section {
+}
+.xar-menu-section-current {
+}
+.xar-menu-item {
+}
+.xar-menu-item-current {
+}
+.xar-menu-item:hover {
+}
+.xar-menu-subitem {
+}
+.xar-menu-subitem:hover {
+
+}
+.xar-menu-subitem-current {
+}
+.xar-menu-item-current > .xar-menu-subitem > a {
+}
+.xar-menu-item-current > .xar-menu-subitem > a:visited {
+}
+.xar-title {
+}
+.xar-error {
+}
 
 /* standard forms */
 fieldset {
     border: 1px solid #B9B6B3;
     margin: 0 0 2.25em;
-    padding: 0 1.5em .75em;
+    padding: 0.5em 1.5em .5em;
 }
 legend {
     text-transform: uppercase;
@@ -160,7 +304,7 @@ fieldset fieldset {
     border-right: 0;
     border-left: 0;
     padding-bottom: 0;
-    /*	background-color: rgba(255,255,255,.33);*/
+    /*  background-color: rgba(255,255,255,.33);*/
     clear: left;
 }
 fieldset fieldset legend {
@@ -241,6 +385,11 @@ tfoot {
     border-top: 1px solid #D77043;
 }
 
+pre {
+    font-size: 95%;
+    font-family: monaco, courier, monospace;
+}
+
 /* specific blocks */
 #authsystemBlocksLogin fieldset {
     padding: 0 .75em .75em;
@@ -257,4 +406,23 @@ tfoot {
 }
 #authsystemBlocksLogin .textInputContainer input, #authsystemBlocksLogin .passInputContainer input {
     width: 96%; /* wanted to do this with display: block, but that does not work correctly, this seems to work best... */
+}
+
+/*
+icon related styling
+-------------------------------------------------------------------------[comment] */
+
+a.xar-icon {
+    text-decoration: none;
+}
+a.xar-icon img{
+    vertical-align: text-top;
+}
+img.xar-icon {
+    vertical-align: text-top;
+}
+img.xar-icon-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    vertical-align: text-top;
 }

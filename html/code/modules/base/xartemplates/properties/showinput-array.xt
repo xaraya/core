@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-form-container-after">
+        <xar:if condition="$allowinput eq 0">       
+            <xar:if condition="is_array($value)">
+                <xar:set name="index">0</xar:set>
+                <xar:foreach in="$value" key="$key" value="$val">
+                    <div class="xar-form-input-wrapper">                   
+                        <xar:if condition = "$associative_array eq 0">
+                            <xar:set name="keyvalue">$index+1</xar:set>                         
+                            <input type="hidden" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$keyvalue#" size="#$size#"/>                                   
+                        <xar:else />
+                            <xar:if condition="!empty($keylabel)">
+                                <label for="#$id#_key_#$index#">#$keylabel#:</label>&#160;
+                            </xar:if>
+                            <xar:if condition="!empty($fixedkeys)">
+                                #$key#:<input type="hidden" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$key#"/>
+                            <xar:else/>
+                                <input class="xar-form-textmedium" type="text" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$key#" size="#$size#"/>
+                            </xar:if>
+                        </xar:if>                   
+                        &#160;
+                        <xar:if condition="!empty($valuelabel)">
+                            <label for="#$id#_value_#$index#">#$valuelabel#:</label>&#160;
+                        </xar:if>
+                        <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#]" id="#$id#_value_#$index#" value="#$val#" size="#$size#"/>
+                    </div>
+                    <xar:set name="index">$index+1</xar:set>
+                </xar:foreach>
+                <xar:for start="$i = $index" test="$i lt $rows" iter="$i++">
+                    <div class="xar-form-input-wrapper">                    
+                        <xar:if condition = "$associative_array eq 0">
+                            <xar:set name="keyvalue">$i+1</xar:set>                         
+                            <input type="hidden" name="#$name#_key[#$i#]" id="#$id#_key_#$i#" value="#$keyvalue#" size="#$size#"/>                     
+                        <xar:else />
+                            <xar:if condition="!empty($keylabel)">
+                                <label for="#$id#_key_#$i#">#$keylabel#:</label>&#160;
+                            </xar:if>
+                            <input class="xar-form-textmedium" type="text" name="#$name#_key[#$i#]" id="#$id#_key_#$i#" value="" size="#$size#"/>
+                        </xar:if>                   
+                        &#160;
+                        <xar:if condition="!empty($valuelabel)">
+                            <label for="#$id#_value_#$i#">#$valuelabel#:</label>&#160;
+                        </xar:if>
+                        <input class="xar-form-textlong" type="text" name="#$name#_value[#$i#]" id="#$id#_value_#$i#" value="" size="#$size#"/>
+                    </div>
+                </xar:for>
+            <xar:else />
+                <div class="xar-form-input-wrapper-after">
+                    <textarea name="#$name#" rows="8" cols="50" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
+                </div>
+            </xar:if>   
+        <xar:else/>
+            <xar:set name="rowsdisplayed">""</xar:set>
+            <xar:set name="j">0</xar:set>
+            <xar:template module="base" file="arrayjs"/>
+            <div id="#$id#_rows">           
+                <xar:if condition="is_array($value)">           
+                    <xar:set name="index">0</xar:set>                       
+                    <xar:foreach in="$value" key="$key" value="$val">
+                        <div class="xar-form-input-wrapper" id="#$id#_#$index#">                        
+                            <xar:if condition = "$associative_array eq 0">
+                                <xar:set name="keyvalue">$index+1</xar:set>                         
+                                <input type="hidden" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$keyvalue#" size="#$size#"/>
+                            <xar:else />
+                                <xar:if condition="!empty($keylabel)">
+                                    <label for="#$id#_key_#$index#">#$keylabel#:</label>&#160;
+                                </xar:if>
+                                <xar:if condition="!empty($fixedkeys)">
+                                    #$key#:<input type="hidden" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$key#"/>
+                                <xar:else/>
+                                    <input class="xar-form-textmedium" type="text" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$key#" size="#$size#"/>
+                                </xar:if>
+                            </xar:if>
+                            &#160;
+                            <xar:if condition="!empty($valuelabel)">
+                                <label for="#$id#_value_#$index#">#$valuelabel#:</label>&#160;
+                            </xar:if>
+                            <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#]" id="#$id#_value_#$index#" value="#$val#" size="#$size#"/>
+                            <xar:if condition = "$rows le $index AND $allowinput eq 2">
+                                <input type="button" title="#xarML('Remove')#&#160;#$suffixlabel#" value="#xarML('Remove')#&#160;#$suffixlabel#" style="height: 23px; font-size: small;" onclick="javascript:#$id#_removeRow('#$id#','#$index#')"/>
+                            </xar:if>
+                            <xar:set name="rowsdisplayed">$rowsdisplayed . "," . $j</xar:set>
+                        </div>
+                        <xar:set name="index">$index+1</xar:set>
+                        <xar:set name="j">$j+1</xar:set>
+                    </xar:foreach>          
+                    <xar:for start="$i = $index" test="$i lt $rows" iter="$i++">
+                        <xar:set name="j">$i+1</xar:set>
+                        <div class="xar-form-input-wrapper" id="#$id#_#$i#">                        
+                            <xar:if condition = "$associative_array eq 0">
+                                <xar:set name="keyvalue">$i+1</xar:set>                         
+                                <input type="hidden" name="#$name#_key[#$i#]" id="#$id#_key_#$i#" value="#$keyvalue#" size="#$size#"/>
+                            <xar:else />
+                                <xar:if condition="!empty($keylabel)">
+                                    <label for="#$id#_key_#$i#">#$keylabel#:</label>&#160;
+                                </xar:if>
+                                <input class="xar-form-textmedium" type="text" name="#$name#_key[#$i#]" id="#$id#_key_#$i#" value="" size="#$size#"/>
+                            </xar:if>                       
+                            &#160;
+                            <xar:if condition="!empty($valuelabel)">
+                                <label for="#$id#_value_#$i#">#$valuelabel#:</label>&#160;
+                            </xar:if>
+                            <input class="xar-form-textlong" type="text" name="#$name#_value[#$i#]" id="#$id#_value_#$i#" value="" size="#$size#"/>
+                            <xar:set name="rowsdisplayed">$rowsdisplayed . "," . $j</xar:set>                   
+                        </div>     
+                    </xar:for>              
+                    <input type="hidden" name="#$id#_lastrow" id="#$id#_lastrow" value="#$j#"/>            
+                <xar:else />
+                    <div class="xar-form-input-wrapper-after">
+                        <textarea name="#$name#" rows="8" cols="50" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
+                    </div>
+                </xar:if>
+            </div>
+            <div class="xar-form-input-wrapper-after">
+                <xar:if condition="$allowinput eq 1">
+                    <input class="xar-form-input-wrapper-before" type="button" title="#xarML('Add')#&#160;#$suffixlabel#" value="#xarML('Add')#&#160;#$suffixlabel#" onclick="#$id#_addRow(0);" style="height: 23px; font-size: small;"/>
+                <xar:else />
+                    <input class="xar-form-input-wrapper-before" type="button" title="#xarML('Add')#&#160;#$suffixlabel#" value="#xarML('Add')#&#160;#$suffixlabel#" onclick="#$id#_addRow(1);" style="height: 23px; font-size: small;"/>
+                </xar:if>
+            </div>
+            <xar:set name="rowsdisplayed">trim($rowsdisplayed,",")</xar:set>
+            <input type="hidden" name="#$id#_rowsdisplayed" id="#$id#_rowsdisplayed" value="#$rowsdisplayed#"/>
+        </xar:if >
+        <div class ="xar-displaynone">
+            <div id="#$id#_rowtemplate">                
+                <xar:if condition = "$associative_array eq 0">                              
+                    <input type="hidden" name="dummyid_key[dummy]" id="dummyid_key_dummy" value="dummy" size="#$size#"/>
+                <xar:else />
+                    <xar:if condition="!empty($keylabel)">
+                        <label for="dummyid_key_dummy">#$keylabel#:</label>&#160;
+                    </xar:if>
+                    <input class="xar-form-textmedium" type="text" name="dummyid_key[dummy]" id="dummyid_key_dummy" value="" size="#$size#"/>
+                </xar:if>           
+                &#160;
+                <xar:if condition="!empty($valuelabel)">
+                    <label for="dummyid_value_dummy">#$valuelabel#:</label>&#160;
+                </xar:if>
+                <input class="xar-form-textlong" type="text" name="dummyid_value[dummy]" id="dummyid_value_dummy" value="" size="#$size#"/>                        
+            </div>
+        </div>
+        <div class ="xar-displaynone">
+            <div id="#$id#_removetemplate">         
+                <input type="button" title="#xarML('Remove')#&#160;#$suffixlabel#" value="#xarML('Remove')#&#160;#$suffixlabel#" style="height: 23px; font-size: small;" onclick="javascript:#$id#_removeRow('#$id#','dummy')"/>                                                   
+            </div>
+        </div>
+        <!--PSspl:Added hidden field for associative array configuration value. -->
+        <input type="hidden" name="#$name#_associative_array" id="#$name#_associative_array" value="#$associative_array#"/>        
+        <br class="xar-clearall"/>
+        <xar:template file="dataproperty_additions" module="base"/>        
+    </div>
+</xar:template>

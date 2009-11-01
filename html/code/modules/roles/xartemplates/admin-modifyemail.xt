@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- @todo make this editor configurable -->
+    <xar:if condition="xarModVars::get('base','editor') eq 'htmlarea'">
+        <xar:template file="htmlarea_insert" module="htmlarea" type="module"/>
+    </xar:if>
+    <xar:var name="messagetitle">
+        Write this string in the message body or subject to display the corresponding information
+    </xar:var>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Roles Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <h2>
+            <a href="&xar-modurl-roles-admin-createmail;">Messaging System:</a>Modify Notification Template: #$mailtype#
+        </h2>
+        <div>
+            <ul class="xar-tabs xar-alt xar-norm-outline">
+                <xar:var name="label">Option</xar:var>
+                <li class="xar-tabs-label" title="#$label#">#$label#</li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-roles-admin-createmail;" class="xar-norm xar-accent-outline">Send mail</a>
+                </li>
+                <li class="xar-tab-active">
+                    <a href="&xar-modurl-roles-admin-modifyemail;" class="xar-accent xar-accent-outline">Templates</a>
+                </li>
+                <li class="xar-tab">
+                    <a href="&xar-modurl-roles-admin-modifynotice;" class="xar-norm xar-norm-outline">Configure</a>
+                </li>
+            </ul>
+        </div>
+        <form method="post" action="&xar-modurl-roles-admin-modifyemail;">
+            <fieldset>
+                <legend>Select Template</legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="mailtype" title="#xarML('Select the template to edit')#" class="xar-form-label">
+                        Template:
+                    </label>
+                    <select name="mailtype" id="mailtype" size="1" tabindex="5" onchange="this.form.submit()">
+                            <xar:loop name="$templates">
+                                <xar:if condition="$mailtype eq $loop:item['key']">
+                                    <option value="#$loop:item['key']#" selected="selected">
+                                    #$loop:item['value']#</option>
+                                <xar:else />
+                                    <option value="#$loop:item['key']#">#$loop:item['value']#</option>
+                                </xar:if>
+                            </xar:loop>
+                        </select>
+                </div>
+                <p>
+                    <xar:if condition="$mailtype eq 'validation'">
+                        This email will be sent to users when they re-validate their account (i.e. change email address). 
+                    <xar:elseif condition="$mailtype eq 'confirmation'"/>
+                        This email will be sent to users to complete their registration by a link in the email. 
+                    <xar:elseif condition="$mailtype eq 'welcome'"/>
+                        This email will be sent to users to welcome them. 
+                    <xar:elseif condition="$mailtype eq 'reminder'"/>
+                        This email will be sent to users who use the lost password option. 
+                    <xar:elseif condition="$mailtype eq 'pending'"/>
+                        This email will be sent to users when their accounts are pending approval. 
+                    <xar:elseif condition="$mailtype eq 'deactivation'"/>
+                        This email will be sent to users when their accounts are deactivated. 
+                    <xar:elseif condition="$mailtype eq 'password'"/>
+                        This email will be sent to users when an administrator changes their password. 
+                    <xar:else />
+                        This email will be sent to users when an administrator changes their password.
+                    </xar:if>
+                </p>
+            </fieldset>
+        </form>
+        <form action="&xar-modurl-roles-admin-modifyemail;" method="post" enctype="application/x-www-form-urlencoded">
+            <fieldset>
+                <legend>Email</legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="subject" title="#xarML('Title of the notification')#" class="xar-form-label">
+                        Subject:
+                    </label>
+                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="message" title="#xarML('Body of the notification')#" class="xar-form-label">
+                        Message:
+                    </label>
+                        <div class="xar-form-container-after">
+                            <textarea name="message" id="message" class="xar-form-textareaxlarge">
+                                #xarVarPrepForDisplay($message)#
+                            </textarea>
+                        </div>
+                    </div>
+            </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>
+                    <input type="submit" value="#xarML('Update')#"/>
+                </div>
+            </fieldset>
+            <p>The following variables will be replaced in the text with specific information:</p>
+            <xar:if condition="$mailtype eq 'confirmation' or $mailtype eq 'validation'">
+                <div class="xar-form-input-wrapper">
+                    <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                        ##$password##
+                    </span>
+                    <span class="xar-padding-thickleft">Password of the user</span>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                        ##$validationlink##
+                    </span>
+                    <span class="xar-padding-thickleft">Validation link for the user</span>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                        ##$valcode##
+                    </span>
+                    <span class="xar-padding-thickleft">Validation code for the user</span>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                        ##$ipaddress##
+                    </span>
+                    <span class="xar-padding-thickleft">IP address of the user</span>
+                </div>
+            <xar:elseif condition="$mailtype eq 'password' or $mailtype eq 'reminder'"/>
+                <div class="xar-form-input-wrapper">
+                    <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                        ##$password##
+                    </span>
+                    <span class="xar-padding-thickleft">Password of the user</span>
+                </div>
+            </xar:if>
+            <div class="xar-form-input-wrapper">
+                <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                    ##$sitename##
+                </span>
+                <span class="xar-padding-thickleft">Name of the site</span>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                    ##$siteadmin##
+                </span>
+                <span class="xar-padding-thickleft">Name of the administrator</span>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                    ##$adminmail##
+                </span>
+                <span class="xar-padding-thickleft">Email address of the administrator</span>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                    ##$siteurl##
+                </span>
+                <span class="xar-padding-thickleft">
+                    URL of the site&#160;(#xarServer::getBaseURL()#)
+                </span>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                    ##$myname##
+                </span>
+                <span class="xar-padding-thickleft">Name of the user</span>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                    ##$username##
+                </span>
+                <span class="xar-padding-thickleft">Username of the user</span>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                    ##$useremail##
+                </span>
+                <span class="xar-padding-thickleft">Email address of the user</span>
+            </div>
+            <xar:foreach in="$properties" key="$name">
+                <div class="xar-form-input-wrapper">
+                    <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                        ##$<xar:var name="name"/>##
+                    </span>
+                    <span class="xar-padding-thickleft">
+                        <xar:data-label property="$properties[$name]"/>
+                    </span>
+                </div>
+            </xar:foreach>
+            <br class="xar-clearboth"/>
+        </form>
+    </div>
+</xar:template>

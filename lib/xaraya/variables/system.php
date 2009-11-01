@@ -2,7 +2,7 @@
 sys::import('xaraya.variables');
 /**
  * Class to handle system variables
- * 
+ *
  * These variables come from a config file, typically config.system.php
  * in the var dir. Most, if not all are REQUIRED. This file should not depend
  * on anything else but that file and xarCore.php.
@@ -14,7 +14,7 @@ class xarSystemVars extends xarVars implements IxarVars
 {
     private static $KEY = 'System.Variables'; // const cannot be private :-(
     private static $systemVars = null;
-        
+
     /**
      * Gets a core system variable
      *
@@ -26,38 +26,38 @@ class xarSystemVars extends xarVars implements IxarVars
     {
         if(!isset($scope))
             $scope = sys::CONFIG;
-            
-        if (!isset(self::$systemVars)) 
+
+        if (!isset(self::$systemVars[$scope]))
             self::preload($scope);
 
-        if (!isset(self::$systemVars[$name])) 
+        if (!isset(self::$systemVars[$scope][$name]))
             throw new Exception("xarSystemVars: Unknown system variable: '$name'.");
 
-        return self::$systemVars[$name];
+        return self::$systemVars[$scope][$name];
     }
-    
+
     public static function set($scope, $name, $value)
     {
         // Not supported ?
         return false;
     }
-    
+
     public static function delete($scope, $name)
     {
         // Not supported ?
         return false;
     }
-    
+
     private static function preload($scope)
     {
         $fileName = sys::varpath() . '/' . $scope;
-        if (!file_exists($fileName)) 
+        if (!file_exists($fileName))
             throw new Exception("The system config file '$fileName' could not be found.");
 
         // Make stuff from config.system.php available
         // NOTE: we can not use sys::import since the variable scope would be wrong.
         include $fileName;
-        self::$systemVars = $systemConfiguration;
+        self::$systemVars[$scope] = $systemConfiguration;
     }
 }
 ?>

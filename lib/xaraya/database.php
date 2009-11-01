@@ -3,7 +3,7 @@
  * Database Abstraction Layer API Helpers
  *
  * @package database
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2009 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage database
@@ -63,7 +63,8 @@ function &xarDBNewConn(array $args = null)
                  'hostspec'  => $args['databaseHost'],
                  'username'  => $args['userName'],
                  'password'  => $args['password'],
-                 'database'  => $args['databaseName']);
+                 'database'  => $args['databaseName'],
+                 'encoding'  => $args['databaseCharset']);
     // Set flags
     $flags = 0;
     $persistent = !empty($args['persistent']) ? true : false;
@@ -76,7 +77,7 @@ function &xarDBNewConn(array $args = null)
     $flags |= xarDB::COMPAT_ASSOC_LOWER;
 
     $conn = xarDB::getConnection($dsn,$flags); // cached on dsn hash, so no worries
-    xarLogMessage("New connection created, now serving " . count(xarDB::$count) . " connections");
+    xarLogMessage("New connection created, now serving " . xarDB::$count . " connections");
     return $conn;
 }
 ?>

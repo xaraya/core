@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="!empty($value)">
+        <xar:if condition="is_array($value)">
+            <xar:if condition = "$associative_array eq 1">
+                <xar:foreach in="$value" key="$key" value="$val">
+                    #$key#,&#160;<xar:var name="val"/>
+                    <br/>
+                </xar:foreach>
+            <xar:else/>
+                <xar:foreach in="$value" key="$key" value="$val">
+                    <xar:var name="val"/>
+                    <br/>
+                </xar:foreach>
+            </xar:if>
+        <xar:else/>
+            <xar:var name="value"/>
+        </xar:if>
+    </xar:if>
+</xar:template>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="empty($layout)">
+        <xar:set name="layout">'default'</xar:set>
+    </xar:if>
+    <xar:set name="userid">$object->itemid</xar:set>
+    <xar:set name="currentid">xarUserGetVar('id')</xar:set>
+    <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
+    <xar:if condition="$layout eq 'default'">
+        <h2>Profile for #xarVarPrepForDisplay(xarUserGetVar('name', $userid))#</h2>
+        <fieldset>
+        <xar:foreach in="$properties" key="$name" value="$property">
+            <div class="xar-form-input-wrapper">
+                    <xar:data-label property="$properties[$name]" for="id"/>
+                <xar:if condition="$name eq 'parent'">
+                    <xar:set name="module_id">$properties['module_id']->value</xar:set>
+                    <xar:data-output property="$properties[$name]" modid="$module_id"/>
+                <xar:else />
+                    <xar:data-output property="$properties[$name]"/>
+                </xar:if>
+            </div>
+        </xar:foreach>
+        <xar:if condition="in_array('userlastlogin',$settings)">
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label">
+                    Last Login
+                </label>
+                #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$userid))#  #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$userid))#
+            </div>
+        </xar:if>
+        <xar:if condition="(bool)xarModVars::get('roles', 'allowemail') and (bool)xarModUserVars::get('roles', 'allowemail', $userid) and ($currentid ne $userid)">
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label">
+                    Email
+                </label>
+                <a href="&xar-modurl-roles-user-email;&amp;id=#$userid#">
+                    Send an Email to #xarVarPrepForDisplay(xarUserGetVar('name', $userid))#
+                </a>
+            </div>
+        </xar:if>
+        <xar:if condition="xarModUserVars::get('roles', 'userhome', $userid) ne '' and in_array('userhome', $settings)">
+            <xar:set name="homelink">xarModUserVars::get('roles', 'userhome', $userid)</xar:set>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label">
+                    Home Page
+                </label>
+                <!-- <a href="#$homelink#" title="#xarML('Home Page')#">#$homelink#</a> -->
+            </div>
+        </xar:if>
+        <!-- Revisit in php5.3.0
+        <xar:if condition="in_array('usertimezone',$settings)">
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label">
+                    User Timezone:
+                </label>
+                <xar:set name="value">
+                    xarModUserVars::get('roles','usertimezone',$id)
+                </xar:set>
+                <xar:data-output type="timezone" value="$value"/>
+            </div>
+        </xar:if>
+        -->
+        </fieldset>
+    <xar:else />
+        <!-- You can include your own layout here or specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->
+        <xar:template module="$tplmodule" file="display-$layout"/>
+    </xar:if>
+</xar:template>

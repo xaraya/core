@@ -1,22 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-Your account has been created for #$sitename# and needs to be activated.
-You can either do this now, or on the first time that you log in.
-If you prefer to do it now, then you will need to follow this link :
-#$myvalidationlink#
-
-Here are the details that were provided.
-
-IP Address of the person creating that account: <xar:var name="myipaddress"/>
-
-User Name:  <xar:var name="myusername"/>
-
-Password:  #$mypassword#
-
-Validation Code to activate your account:  <xar:var name="myvalcode"/>
-
-If you did not create this account, then do nothing.  The account will be deemed
-inactive after a period of time and deleted from our records.  You will receive
-no further emails from us.Thank you,
-
-<xar:var scope="module" module="mail" name="adminname"/>
+    Your account has been created for #$sitename# and needs to be activated. You can either do this now, or on the first time that you log in. If you prefer to do it now, then you will need to follow this link:
+    <xar:br/>
+    #$myvalidationlink#
+    <xar:br/><xar:br/>
+    Here are the details that were provided.
+    <xar:br/><xar:br/>
+    IP Address of the person creating that account: <xar:var name="myipaddress"/>
+    <xar:br/><xar:br/>
+    User Name:  <xar:var name="myusername"/>
+    <xar:br/><xar:br/>
+    Password:  #$mypassword#
+    <xar:br/><xar:br/>
+    Validation Code to activate your account:  <xar:var name="myvalcode"/>
+    <xar:br/><xar:br/>
+    If you did not create this account, then do nothing.  The account will be deemed inactive after a period of time and deleted from our records.  You will receive no further emails from us.Thank you,
+    <xar:br/><xar:br/>
+    <xar:var scope="module" module="mail" name="adminname"/>
 </xar:template>

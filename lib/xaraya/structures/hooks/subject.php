@@ -15,12 +15,12 @@ class HookSubject extends BasicSubject
     function attach(SplObserver $observer, $callerItemType = '')
     {
         if (!xarModIsHooked($observer->getmodule(), $this->getmodule(), $callerItemType))
-        xarModAPIFunc('modules','admin','enablehooks',array('callerModName' => $this->getmodule(), 'hookModName' => $observer->getmodule(), 'callerItemType' => $callerItemType));
+        xarMod::apiFunc('modules','admin','enablehooks',array('callerModName' => $this->getmodule(), 'hookModName' => $observer->getmodule(), 'callerItemType' => $callerItemType));
     }
 
     function detach(SplObserver $observer, $callerItemType = '')
     {
-        xarModAPIFunc('modules','admin','disablehooks',array('callerModName' => $this->getmodule(), 'hookModName' => $observer->getmodule(), 'callerItemType' => $callerItemType));
+        xarMod::apiFunc('modules','admin','disablehooks',array('callerModName' => $this->getmodule(), 'hookModName' => $observer->getmodule(), 'callerItemType' => $callerItemType));
     }
 
     function getMessenger($itemid=0, $extrainfo=array())

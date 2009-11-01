@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Roles</span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>Password Sent</h2>
+        <p>
+            Your new password has been sent to your email address on record. You will want to change this new password once you have logged in.
+        </p>
+    </div>
+</xar:template>
