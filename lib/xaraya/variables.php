@@ -359,16 +359,16 @@ function xarVarValidate($validation, &$subject, $supress = false, $name = '')
 
 /**@+
  * Wrapper functions for var caching as in Xaraya 1 API
- * See the documentation of protected xarCore::*Cached for details
+ * See the documentation of protected xarCoreCache::*Cached for details
  *
  * @access public
  * @see xarCore
  */
-function xarVarIsCached($scope,  $name)         { return xarCore::isCached($scope, $name);         }
-function xarVarGetCached($scope, $name)         { return xarCore::getCached($scope, $name);        }
-function xarVarSetCached($scope, $name, $value) { return xarCore::setCached($scope, $name, $value);}
-function xarVarDelCached($scope, $name)         { return xarCore::delCached($scope, $name);        }
-function xarVarFlushCached($scope)              { return xarCore::flushCached($scope);             }
+function xarVarIsCached($scope,  $name)         { return xarCoreCache::isCached($scope, $name);         }
+function xarVarGetCached($scope, $name)         { return xarCoreCache::getCached($scope, $name);        }
+function xarVarSetCached($scope, $name, $value) { return xarCoreCache::setCached($scope, $name, $value);}
+function xarVarDelCached($scope, $name)         { return xarCoreCache::delCached($scope, $name);        }
+function xarVarFlushCached($scope)              { return xarCoreCache::flushCached($scope);             }
 /**@-*/
 
 /*

@@ -665,8 +665,8 @@ class DataProperty extends Object implements iDataProperty
     public function getConfigProperties($type="", $fullname=0)
     {
         // cache configuration for all properties
-        if (xarCore::isCached('DynamicData','Configurations')) {
-             $allconfigproperties = xarCore::getCached('DynamicData','Configurations');
+        if (xarCoreCache::isCached('DynamicData','Configurations')) {
+             $allconfigproperties = xarCoreCache::getCached('DynamicData','Configurations');
         } else {
             $xartable = xarDB::getTables();
             $configurations = $xartable['dynamic_configurations'];
@@ -691,7 +691,7 @@ class DataProperty extends Object implements iDataProperty
                 $item = $result->fields;
                 $allconfigproperties[$item['name']] = $item;
             }
-            xarCore::setCached('DynamicData','Configurations', $allconfigproperties);
+            xarCoreCache::setCached('DynamicData','Configurations', $allconfigproperties);
             // Can't use DD methods here as we go into a recursion loop
         }
         // if no items found, bail

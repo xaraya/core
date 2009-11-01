@@ -355,7 +355,7 @@ function xarUserGetVar($name, $userId = NULL)
     // Don't allow any module to retrieve passwords in this way
     if ($name == 'pass') throw new BadParameterException('name');
 
-    if (!xarCore::isCached('User.Variables.'.$userId, $name)) {
+    if (!xarCoreCache::isCached('User.Variables.'.$userId, $name)) {
 
         if ($name == 'name' || $name == 'uname' || $name == 'email') {
             if ($userId == XARUSER_LAST_RESORT) {
@@ -369,15 +369,15 @@ function xarUserGetVar($name, $userId = NULL)
                 throw new IDNotFoundException($userId,'User identified by id #(1) does not exist.');
             }
 
-            xarCore::setCached('User.Variables.'.$userId, 'uname', $userRole['uname']);
-            xarCore::setCached('User.Variables.'.$userId, 'name', $userRole['name']);
-            xarCore::setCached('User.Variables.'.$userId, 'email', $userRole['email']);
+            xarCoreCache::setCached('User.Variables.'.$userId, 'uname', $userRole['uname']);
+            xarCoreCache::setCached('User.Variables.'.$userId, 'name', $userRole['name']);
+            xarCoreCache::setCached('User.Variables.'.$userId, 'email', $userRole['email']);
 
         } elseif (!xarUser__isVarDefined($name)) {
             if (xarModVars::get('roles',$name) || xarModVars::get('roles','set'.$name)) { //acount for optionals that need to be activated)
                 $value = xarModUserVars::get('roles',$name,$userId);
                 if ($value == null) {
-                    xarCore::setCached('User.Variables.'.$userId, $name, false);
+                    xarCoreCache::setCached('User.Variables.'.$userId, $name, false);
                     // Here we can't raise an exception because they're all optional
                     $optionalvars=array('locale','timezone','usertimezone','userlastlogin',
                                         'userhome','primaryparent','passwordupdate');
@@ -390,7 +390,7 @@ function xarUserGetVar($name, $userId = NULL)
                     return;
                 }
                 else {
-                    xarCore::setCached('User.Variables.'.$userId, $name, $value);
+                    xarCoreCache::setCached('User.Variables.'.$userId, $name, $value);
                 }
             }
 
@@ -405,17 +405,17 @@ function xarUserGetVar($name, $userId = NULL)
             $properties =& $GLOBALS['xarUser_objectRef']->getProperties();
             foreach (array_keys($properties) as $key) {
                 if (isset($properties[$key]->value)) {
-                    xarCore::setCached('User.Variables.'.$userId, $key, $properties[$key]->value);
+                    xarCoreCache::setCached('User.Variables.'.$userId, $key, $properties[$key]->value);
                 }
             }
         }
     }
 
-    if (!xarCore::isCached('User.Variables.'.$userId, $name)) {
+    if (!xarCoreCache::isCached('User.Variables.'.$userId, $name)) {
         return false; //failure
     }
 
-    $cachedValue = xarCore::getCached('User.Variables.'.$userId, $name);
+    $cachedValue = xarCoreCache::getCached('User.Variables.'.$userId, $name);
     if ($cachedValue === false) {
         // Variable already searched but doesn't exist and has no default
         return;
@@ -460,7 +460,7 @@ function xarUserSetVar($name, $value, $userId = null)
 
     } elseif (!xarUser__isVarDefined($name)) {
         if (xarModVars::get('roles',$name)) {
-            xarCore::setCached('User.Variables.'.$userId, $name, false);
+            xarCoreCache::setCached('User.Variables.'.$userId, $name, false);
             throw new xarException($name,'User variable #(1) was not correctly registered');
         } else {
             xarModUserVars::set('roles',$name,$value,$userId);
@@ -486,7 +486,7 @@ function xarUserSetVar($name, $value, $userId = null)
     }
 
     // Keep in sync the UserVariables cache
-    xarCore::setCached('User.Variables.'.$userId, $name, $value);
+    xarCoreCache::setCached('User.Variables.'.$userId, $name, $value);
 
     return true;
 }

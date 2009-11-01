@@ -427,8 +427,8 @@ function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elem
     $cachename = "$modName:$ddName:$tplType:$tplBase:$elements";
 
     // cache frequently-used sourcefilenames for DD elements
-    if (xarCore::isCached('Templates.DDElement', $cachename)) {
-        $sourceFileName = xarCore::getCached('Templates.DDElement', $cachename);
+    if (xarCoreCache::isCached('Templates.DDElement', $cachename)) {
+        $sourceFileName = xarCoreCache::getCached('Templates.DDElement', $cachename);
 
     } else {
         $tplType = xarVarPrepForOS($tplType);
@@ -454,7 +454,7 @@ function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elem
             $sourceFileName = xarTpl__getSourceFileName('dynamicdata', $templateBase, $ddName, $elements);
         }
 
-        xarCore::setCached('Templates.DDElement', $cachename, $sourceFileName);
+        xarCoreCache::setCached('Templates.DDElement', $cachename, $sourceFileName);
     }
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
@@ -727,8 +727,8 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     assert('is_array($tplData); /* Template data should always be passed in as array */');
 
     // cache frequently-used cachedfilenames
-    if (xarCore::isCached('Templates.ExecuteFromFile', $sourceFileName)) {
-        $cachedFileName = xarCore::getCached('Templates.ExecuteFromFile', $sourceFileName);
+    if (xarCoreCache::isCached('Templates.ExecuteFromFile', $sourceFileName)) {
+        $cachedFileName = xarCoreCache::getCached('Templates.ExecuteFromFile', $sourceFileName);
 
     } else {
         // Load translations for the template
@@ -755,7 +755,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
         // @todo get rid of the cachedFileName usage
         $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
 
-        xarCore::setCached('Templates.ExecuteFromFile', $sourceFileName, $cachedFileName);
+        xarCoreCache::setCached('Templates.ExecuteFromFile', $sourceFileName, $cachedFileName);
     }
 
     // Execute the compiled template from the cache file

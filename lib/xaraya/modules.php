@@ -545,13 +545,13 @@ class xarMod extends Object implements IxarMod
 
         switch($type) {
         case 'module':
-            if (xarCore::isCached('Mod.Infos', $modRegId)) {
-                return xarCore::getCached('Mod.Infos', $modRegId);
+            if (xarCoreCache::isCached('Mod.Infos', $modRegId)) {
+                return xarCoreCache::getCached('Mod.Infos', $modRegId);
             }
             break;
         case 'theme':
-            if (xarCore::isCached('Theme.Infos', $modRegId)) {
-                return xarCore::getCached('Theme.Infos', $modRegId);
+            if (xarCoreCache::isCached('Theme.Infos', $modRegId)) {
+                return xarCoreCache::getCached('Theme.Infos', $modRegId);
             }
             break;
         default:
@@ -672,10 +672,10 @@ class xarMod extends Object implements IxarMod
         switch($type) {
         case 'module':
         default:
-            xarCore::setCached('Mod.Infos', $modRegId, $modInfo);
+            xarCoreCache::setCached('Mod.Infos', $modRegId, $modInfo);
             break;
         case 'theme':
-            xarCore::setCached('Theme.Infos', $modRegId, $modInfo);
+            xarCoreCache::setCached('Theme.Infos', $modRegId, $modInfo);
             break;
         }
         return $modInfo;
@@ -709,8 +709,8 @@ class xarMod extends Object implements IxarMod
             $checkNoState = 'xarTheme_noCacheState';
         }
 
-        if (empty($GLOBALS[$checkNoState]) && xarCore::isCached($cacheCollection, $modName)) {
-            return xarCore::getCached($cacheCollection, $modName);
+        if (empty($GLOBALS[$checkNoState]) && xarCoreCache::isCached($cacheCollection, $modName)) {
+            return xarCoreCache::getCached($cacheCollection, $modName);
         }
         // Log it when it doesnt come from the cache
         xarLogMessage("xarMod::getBaseInfo ". $modName ." / ". $type);
@@ -753,7 +753,7 @@ class xarMod extends Object implements IxarMod
         if (empty($modBaseInfo['state'])) {
             $modBaseInfo['state'] = XARMOD_STATE_UNINITIALISED;
         }
-        xarCore::setCached($cacheCollection, $name, $modBaseInfo);
+        xarCoreCache::setCached($cacheCollection, $name, $modBaseInfo);
 
         return $modBaseInfo;
     }
@@ -772,8 +772,8 @@ class xarMod extends Object implements IxarMod
     {
         if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
 
-        if (empty($GLOBALS['xarMod_noCacheState']) && xarCore::isCached('Mod.getFileInfos', $modOsDir ." / " . $type)) {
-            return xarCore::getCached('Mod.getFileInfos', $modOsDir ." / " . $type);
+        if (empty($GLOBALS['xarMod_noCacheState']) && xarCoreCache::isCached('Mod.getFileInfos', $modOsDir ." / " . $type)) {
+            return xarCoreCache::getCached('Mod.getFileInfos', $modOsDir ." / " . $type);
         }
         // Log it when it didnt came from cache
         xarLogMessage("xarMod::getFileInfo ". $modOsDir ." / " . $type);
@@ -847,7 +847,7 @@ class xarMod extends Object implements IxarMod
         }
         $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
 
-        xarCore::setCached('Mod.getFileInfos', $modOsDir ." / " . $type, $FileInfo);
+        xarCoreCache::setCached('Mod.getFileInfos', $modOsDir ." / " . $type, $FileInfo);
         return $FileInfo;
     }
 

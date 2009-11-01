@@ -41,8 +41,8 @@ class xarModVars extends xarVars implements IxarModVars
         $cacheCollection = 'Mod.Variables.' . $scope;
 
         // Try to get it from the cache
-        if (xarCore::isCached($cacheCollection, $name)) {
-            $value = xarCore::getCached($cacheCollection, $name);
+        if (xarCoreCache::isCached($cacheCollection, $name)) {
+            $value = xarCoreCache::getCached($cacheCollection, $name);
             return $value;
         }
 
@@ -65,7 +65,7 @@ class xarModVars extends xarVars implements IxarModVars
         {
             // Found
             $value = $result->get(2);
-            xarCore::setCached($cacheCollection, $result->getString(1), $value);
+            xarCoreCache::setCached($cacheCollection, $result->getString(1), $value);
         }
         $result->close();
         return $value;
@@ -98,7 +98,7 @@ class xarModVars extends xarVars implements IxarModVars
         $result = $stmt->executeQuery(array($modBaseInfo['systemid']),ResultSet::FETCHMODE_ASSOC);
 
         while ($result->next()) {
-            xarCore::setCached('Mod.Variables.' . $scope, $result->getString('name'), $result->get('value'));
+            xarCoreCache::setCached('Mod.Variables.' . $scope, $result->getString('name'), $result->get('value'));
         }
         $result->close();
 
@@ -148,7 +148,7 @@ class xarModVars extends xarVars implements IxarModVars
         $stmt->executeUpdate($bindvars);
 
         // Update cache for the variable
-        xarCore::setCached('Mod.Variables.' . $scope, $name, $value);
+        xarCoreCache::setCached('Mod.Variables.' . $scope, $name, $value);
         return true;
     }
 
@@ -189,7 +189,7 @@ class xarModVars extends xarVars implements IxarModVars
         $stmt->executeUpdate($bindvars);
 
         // Removed it from the cache
-        xarCore::delCached('Mod.Variables.' . $scope, $name);
+        xarCoreCache::delCached('Mod.Variables.' . $scope, $name);
         return true;
     }
 
@@ -276,8 +276,8 @@ class xarModVars extends xarVars implements IxarModVars
         $modBaseInfo = xarMod::getBaseInfo($scope);
         if (!isset($modBaseInfo)) return; // throw back
 
-        if (xarCore::isCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
-            return xarCore::getCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
+        if (xarCoreCache::isCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
+            return xarCoreCache::getCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
         }
 
         $dbconn = xarDB::getConn();
@@ -295,7 +295,7 @@ class xarModVars extends xarVars implements IxarModVars
         $modvarid = $result->getInt(1);
         $result->Close();
 
-        xarCore::setCached('Mod.GetVarID', $scope . $name, $modvarid);
+        xarCoreCache::setCached('Mod.GetVarID', $scope . $name, $modvarid);
         return $modvarid;
     }
 }

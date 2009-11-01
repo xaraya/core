@@ -257,10 +257,10 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 // Testing of autoload + second-level cache storage - please do not use on live sites
     sys::import('xaraya.caching.storage');
     $cache = xarCache_Storage::getCacheStorage(array('storage' => 'xcache', 'type' => 'core'));
-    xarCore::setCacheStorage($cache);
+    xarCoreCache::setCacheStorage($cache);
     // For bulk load, we might have to do this after loading the modules, otherwise
     // unserialize + autoload might trigger a function that complains about xarMod:: etc.
-    //xarCore::setCacheStorage($cache,0,1);
+    //xarCoreCache::setCacheStorage($cache,0,1);
 */
 
     /*

@@ -529,8 +529,8 @@ class DataObjectMaster extends Object
             }
             $infoid = $args['moduleid'].':'.$args['itemtype'];
         }
-        if(xarCore::isCached($cacheKey,$infoid)) {
-            return xarCore::getCached($cacheKey,$infoid);
+        if(xarCoreCache::isCached($cacheKey,$infoid)) {
+            return xarCoreCache::getCached($cacheKey,$infoid);
         }
 
         $dbconn = xarDB::getConn();
@@ -582,7 +582,7 @@ class DataObjectMaster extends Object
         {
             $info['label'] .= ' + ' . $args['join'];
         }
-        xarCore::setCached($cacheKey,$infoid,$info);
+        xarCoreCache::setCached($cacheKey,$infoid,$info);
         return $info;
     }
 
@@ -609,9 +609,9 @@ class DataObjectMaster extends Object
         else return $info;
 
         // TODO: Try to get the object from the cache ?
-//        if (!empty($args['objectid']) && xarCore::isCached('DDObject', $args['objectid'])) {
+//        if (!empty($args['objectid']) && xarCoreCache::isCached('DDObject', $args['objectid'])) {
 //            // serialize is better here - shallow cloning is not enough for array of properties, datastores etc. and with deep cloning internal references are lost
-//            $object = unserialize(xarCore::getCached('DDObject', $args['objectid']));
+//            $object = unserialize(xarCoreCache::getCached('DDObject', $args['objectid']));
 //            return $object;
 //        }
 
@@ -630,7 +630,7 @@ class DataObjectMaster extends Object
 
         $object = new $args['class']($descriptor);
         // serialize is better here - shallow cloning is not enough for array of properties, datastores etc. and with deep cloning internal references are lost
-//        xarCore::setCached('DDObject', $args['objectid'], serialize($object));
+//        xarCoreCache::setCached('DDObject', $args['objectid'], serialize($object));
 
         return $object;
     }
@@ -1024,7 +1024,7 @@ class DataObjectMaster extends Object
         } elseif (empty($this->primary)) {
             return;
         // if we already have some hook call in progress
-        } elseif (xarCore::isCached('DynamicData','HookAction')) {
+        } elseif (xarCoreCache::isCached('DynamicData','HookAction')) {
             return;
         }
 
@@ -1035,7 +1035,7 @@ class DataObjectMaster extends Object
         }
 
         // CHECKME: prevent recursive hook calls in general
-        xarCore::setCached('DynamicData','HookAction',$action);
+        xarCoreCache::setCached('DynamicData','HookAction',$action);
 
         // let xarObjectHooks worry about calling the different hooks
         xarObjectHooks::callHooks($this, $action);
@@ -1044,7 +1044,7 @@ class DataObjectMaster extends Object
         // the result of GUI actions will be in $this->hookoutput
 
         // CHECKME: prevent recursive hook calls in general
-        xarCore::delCached('DynamicData','HookAction');
+        xarCoreCache::delCached('DynamicData','HookAction');
     }
 
     /**

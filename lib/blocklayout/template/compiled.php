@@ -55,14 +55,14 @@ class CompiledTemplate extends Object
                 global $_compiler_output;
 
                 // Have we already cached this template?
-                if (!xarCore::isCached( 'template',$this->source)) {
+                if (!xarCoreCache::isCached( 'template',$this->source)) {
                     // Get the compiled template from the template cache
                     $_compiler_output = file_get_contents($this->fileName);
                     // Stick it in the cache
-                    xarCore::setCached( 'template',$this->source, $_compiler_output);
+                    xarCoreCache::setCached( 'template',$this->source, $_compiler_output);
                 } else {
                     // Retrieve the compiled template from cache
-                    $_compiler_output = xarCore::getCached( 'template',$this->source);
+                    $_compiler_output = xarCoreCache::getCached( 'template',$this->source);
                 }
 
                 $res = include("var://_compiler_output");

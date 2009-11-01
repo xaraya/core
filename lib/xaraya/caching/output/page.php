@@ -195,7 +195,7 @@ class xarPageCache extends Object
 
         // Check if this page is suitable for page caching
         if (!(self::checkCachingRules($cacheKey, $xarTpl_themeDir))) {
-            xarCore::setCached('Page.Caching', 'nocache', true);
+            xarCoreCache::setCached('Page.Caching', 'nocache', true);
             return false;
         }
 
@@ -278,9 +278,9 @@ class xarPageCache extends Object
         }
 
         // Check if isCached() or xarSecurity or ... has told not to cache this page
-        if (xarCore::isCached('Page.Caching', 'nocache')) {
+        if (xarCoreCache::isCached('Page.Caching', 'nocache')) {
             // reset for next page request when using second-level cache storage
-            xarCore::delCached('Page.Caching', 'nocache');
+            xarCoreCache::delCached('Page.Caching', 'nocache');
             return;
         }
 

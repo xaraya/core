@@ -412,7 +412,7 @@ function xarQueryMask($mask, $showException=1, $component='', $instance='', $mod
  */
 function xarSecurityCheck($mask, $showException=1, $component='', $instance='', $module='', $role='',$pnrealm=0,$pnlevel=0)
 {
-    $installing = xarCore::getCached('installer','installing');
+    $installing = xarCoreCache::getCached('installer','installing');
     if(isset($installing) && ($installing == true)) {
        return true;
     }
@@ -503,7 +503,7 @@ function xarSecGenAuthKey($modName = NULL)
     $authid = md5($key);
 
     // Tell xarCache not to cache this page
-    xarCore::setCached('Page.Caching', 'nocache', true);
+    xarCoreCache::setCached('Page.Caching', 'nocache', true);
 
     // Return encrypted key
     return $authid;

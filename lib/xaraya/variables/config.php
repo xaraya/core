@@ -55,7 +55,7 @@ class xarConfigVars extends xarVars implements IxarVars
         $bindvars = array(null, $name, $serialvalue);
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
-        xarCore::setCached(self::$KEY, $name, $value);
+        xarCoreCache::setCached(self::$KEY, $name, $value);
 
         return true;
     }
@@ -101,9 +101,9 @@ class xarConfigVars extends xarVars implements IxarVars
         }
 
         // From the cache
-        if(xarCore::isCached(self::$KEY, $name))
+        if(xarCoreCache::isCached(self::$KEY, $name))
         {
-            $value = xarCore::getCached(self::$KEY, $name);
+            $value = xarCoreCache::getCached(self::$KEY, $name);
             return $value;
         }
 
@@ -127,7 +127,7 @@ class xarConfigVars extends xarVars implements IxarVars
             // Found it, retrieve and cache it
             $value = $result->get(2);
             $value = unserialize($value);
-            xarCore::setCached(self::$KEY, $result->getString(1), $value);
+            xarCoreCache::setCached(self::$KEY, $result->getString(1), $value);
             $result->close();
             return $value;
         }
@@ -146,7 +146,7 @@ class xarConfigVars extends xarVars implements IxarVars
         // We want to make the next two statements atomic
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate(array($name));
-        xarCore::delCached(self::$KEY, $name);
+        xarCoreCache::delCached(self::$KEY, $name);
 
         return true;
     }
@@ -175,7 +175,7 @@ class xarConfigVars extends xarVars implements IxarVars
         while ($result->next())
         {
             $newval = unserialize($result->getString('value'));
-            xarCore::setCached(self::$KEY, $result->getString('name'), $newval);
+            xarCoreCache::setCached(self::$KEY, $result->getString('name'), $newval);
         }
         $result->close();
 
