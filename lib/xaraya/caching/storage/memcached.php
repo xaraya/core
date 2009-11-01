@@ -76,6 +76,26 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         $this->storage = 'memcached';
     }
 
+/*
+    public function setNamespace($namespace = '')
+    {
+        // customize with site prefix, versioned namespaces etc. see bug 6315
+        parent::setNamespace($namespace);
+    }
+
+    public function getCacheKey($key = '')
+    {
+        // customize with site prefix, versioned namespaces etc. see bug 6315
+        return parent::getCacheKey($key);
+    }
+
+    public function flushCached($key = '')
+    {
+        // customize with site prefix, versioned namespaces etc. see bug 6315
+        return parent::flushCached($key);
+    }
+*/
+
     public function isCached($key = '', $expire = 0, $log = 1)
     {
         if (empty($this->memcache)) return false;
@@ -114,26 +134,6 @@ class xarCache_MemCached_Storage extends xarCache_Storage
             return $value;
         }
     }
-
-/*
-    public function setNamespace($namespace = '')
-    {
-        // customize with site prefix, versioned namespaces etc. see bug 6315
-        parent::setNamespace($namespace);
-    }
-
-    public function getCacheKey($key = '')
-    {
-        // customize with site prefix, versioned namespaces etc. see bug 6315
-        return parent::getCacheKey($key);
-    }
-
-    public function flushCached($key = '')
-    {
-        // customize with site prefix, versioned namespaces etc. see bug 6315
-        return parent::flushCached($key);
-    }
-*/
 
     public function setCached($key = '', $value = '', $expire = 0)
     {

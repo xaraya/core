@@ -33,8 +33,11 @@ function xarBlock_init(&$args)
     xarDB::importTables($tables);
 
     // Decide if we will be using the output caching system
-    $outputCachePath = sys::varpath() . '/cache/output/';
-    xarCore::setCached('xarcache', 'blockCaching', defined('XARCACHE_BLOCK_IS_ENABLED'));
+    if (xarCache::$outputCacheIsEnabled && xarOutputCache::$blockCacheIsEnabled) {
+        xarCoreCache::setCached('xarcache', 'blockCaching', true);
+    } else {
+        xarCoreCache::setCached('xarcache', 'blockCaching', false);
+    }
     return true;
 }
 
@@ -59,7 +62,7 @@ function xarBlock_render($blockinfo)
     // This lets the security system know what module we're in
     // no need to update / select in database for each block here
     // TODO: this looks weird
-    xarCore::setCached('Security.Variables', 'currentmodule', $modName);
+    xarCoreCache::setCached('Security.Variables', 'currentmodule', $modName);
 
     // Load the block.
     if (!xarMod::apiFunc(
@@ -167,7 +170,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
 {
     if (empty($groupname)) throw new EmptyParameterException('groupname');
 
-    $blockCaching = xarCore::getCached('xarcache', 'blockCaching');
+    $blockCaching = xarCoreCache::getCached('xarcache', 'blockCaching');
 
     $dbconn = xarDB::getConn();
     $tables = xarDB::getTables();
@@ -291,7 +294,7 @@ function xarBlock_renderBlock($args)
     // All the hard work is done in this function.
     // It keeps the core code lighter when standalone blocks are not used.
     $blockinfo = xarMod::apiFunc('blocks', 'user', 'getinfo', $args);
-    $blockCaching = xarCore::getCached('xarcache', 'blockCaching');
+    $blockCaching = xarCoreCache::getCached('xarcache', 'blockCaching');
 
     if (!empty($blockinfo) && $blockinfo['state'] !== 0) {
         if ($blockCaching) {

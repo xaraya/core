@@ -51,8 +51,18 @@ class xarCache_Storage extends Object
                 $classname = 'xarCache_Database_Storage';
                 break;
 
+            case 'apc':
+                if (function_exists('apc_fetch')) {
+                    sys::import('xaraya.caching.storage.apc');
+                    $classname = 'xarCache_APC_Storage';
+                } else {
+                    sys::import('xaraya.caching.storage.filesystem');
+                    $classname = 'xarCache_FileSystem_Storage';
+                }
+                break;
+
             case 'memcached':
-                if (extension_loaded('memcache')) {
+                if (class_exists('Memcache')) {
                     sys::import('xaraya.caching.storage.memcached');
                     $classname = 'xarCache_MemCached_Storage';
                 } else {
@@ -62,7 +72,7 @@ class xarCache_Storage extends Object
                 break;
 
             case 'mmcache':
-                if (function_exists('mmcache')) {
+                if (function_exists('mmcache_get')) {
                     sys::import('xaraya.caching.storage.mmcache');
                     $classname = 'xarCache_MMCache_Storage';
                 } else {
@@ -72,7 +82,7 @@ class xarCache_Storage extends Object
                 break;
 
             case 'eaccelerator':
-                if (function_exists('eaccelerator')) {
+                if (function_exists('eaccelerator_get')) {
                     sys::import('xaraya.caching.storage.eaccelarator');
                     $classname = 'xarCache_eAccelerator_Storage';
                 } else {
@@ -82,7 +92,7 @@ class xarCache_Storage extends Object
                 break;
 
             case 'xcache':
-                if (extension_loaded('xcache')) {
+                if (function_exists('xcache_get')) {
                     sys::import('xaraya.caching.storage.xcache');
                     $classname = 'xarCache_XCache_Storage';
                 } else {

@@ -23,21 +23,19 @@ if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = '
 $GLOBALS['systemConfiguration'] = $systemConfiguration;
 set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
 
- /**
+/**
  * Load the Xaraya bootstrap so we can get started
  */
 include 'bootstrap.php';
 
 /**
- * Set up output caching if enabled
+ * Set up caching
  * Note: this happens first so we can serve cached pages to first-time visitors
  *       without loading the core
  */
-if (file_exists(sys::varpath() . '/cache/output/cache.touch')) {
-    sys::import('xaraya.caching');
-    // Note : we may already exit here if session-less page caching is enabled
-    xarOutputCache::init();
-}
+sys::import('xaraya.caching');
+// Note : we may already exit here if session-less page caching is enabled
+xarCache::init();
 
 /**
  * Load the Xaraya core
@@ -74,7 +72,7 @@ function xarMain()
 
     // Check if page caching is enabled
     $pageCaching = 0;
-    if (defined('XARCACHE_PAGE_IS_ENABLED')) {
+    if (xarCache::$outputCacheIsEnabled && xarOutputCache::$pageCacheIsEnabled) {
         $pageCaching = 1;
         if (xarRequest::isObjectURL()) {
             // CHECKME: differentiate between view and display (= both with empty $funcName) based on itemid ??

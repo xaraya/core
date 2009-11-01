@@ -14,12 +14,13 @@
 class xarSessionLessCache extends Object
 {
     /**
-     * Check session-less page caching
+     * Check if this page is suitable for session-less page caching
      *
-     * @returns none
-     * @return exit if session-less page caching finds a hit
+     * @access public
+     * @returns bool
+     * @return true if the page is suitable for session-less caching, false if not
      */
-    public static function isCached($sessionLessList = null, $autoCachePeriod = 0)
+    public static function checkCachingRules()
     {
         if (
         // we have no session id in a cookie or URL parameter
@@ -32,8 +33,23 @@ class xarSessionLessCache extends Object
             !empty($_SERVER['REQUEST_URI'])
            ) {
            // the URL is one of the candidates for session-less caching
+           return true;
         } else {
-           return;
+           return false;
+        }
+    }
+
+    /**
+     * Check session-less page caching
+     *
+     * @returns none
+     * @return exit if session-less page caching finds a hit
+     */
+    public static function isCached($sessionLessList = null, $autoCachePeriod = 0)
+    {
+        // Check if this page is suitable for session-less page caching
+        if (!(self::checkCachingRules())) {
+            return;
         }
 
         if (empty($sessionLessList) || !is_array($sessionLessList)) {
@@ -56,13 +72,11 @@ class xarSessionLessCache extends Object
                 xarPageCache::sendHeaders($modtime);
 
                 // send the content of the cache file to the browser
-                @readfile($cache_file);
-            // FIXME: separate cache cleaning for session-less caching if necessary
-                //xarCache_CleanCached('Page');
+                self::getCached($cache_file);
 
                 // CHECKME: if we do this after xarPageCache::sendHeaders(), we'll never get the 304's logged for autocache
                 if (file_exists(xarOutputCache::$cacheCollection.'/autocache.start')) {
-                    sys::import('xaraya.caching.autosession');
+                    sys::import('xaraya.caching.output.autosession');
                     xarAutoSessionCache::logStatus('HIT', $autoCachePeriod);
                 }
 
@@ -71,13 +85,13 @@ class xarSessionLessCache extends Object
 
             } else {
                 // tell xarPageCache::setCached() that we want to save another copy here
-                xarPageCache::$cacheNoSession = 1;
+                self::setCached();
                 // we'll continue with the core loading etc. here
             }
         }
         // we haven't found a cache hit for this URL
         if (file_exists(xarOutputCache::$cacheCollection.'/autocache.start')) {
-            sys::import('xaraya.caching.autosession');
+            sys::import('xaraya.caching.output.autosession');
             xarAutoSessionCache::logStatus('MISS', $autoCachePeriod);
         }
     }
@@ -88,6 +102,12 @@ class xarSessionLessCache extends Object
         @readfile($cache_file);
     // FIXME: separate cache cleaning for session-less caching if necessary
         //xarCache_CleanCached('Page');
+    }
+
+    public static function setCached()
+    {
+        // tell xarPageCache::setCached() that we want to save another copy here
+        xarPageCache::$cacheNoSession = 1;
     }
 }
 
