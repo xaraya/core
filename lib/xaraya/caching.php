@@ -73,7 +73,7 @@ class xarCache extends Object
         }
         $rolemembers = xarDB::getPrefix() . '_rolemembers';
         $dbconn = xarDB::getConn();
-        $query = "SELECT parentid FROM $rolemembers WHERE id = ?";
+        $query = "SELECT parent_id FROM $rolemembers WHERE role_id = ?";
         $stmt   = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($currentid));
     
