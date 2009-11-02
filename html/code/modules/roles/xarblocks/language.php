@@ -25,7 +25,7 @@ class LanguageBlock extends BasicBlock
     public $text_type           = 'Language';
     public $text_type_long      = 'Language selection';
 
-    public $no_cache            = 1;
+    public $nocache             = 1;
     public $usershared          = 0;
 
     function display(Array $data=array())

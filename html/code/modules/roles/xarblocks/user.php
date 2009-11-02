@@ -26,7 +26,7 @@ class UserBlock extends BasicBlock
     public $text_type_long      = 'User\'s Custom Box';
     public $show_preview        = true;
 
-    public $no_cache            = 1;
+    public $nocache             = 1;
     public $usershared          = 0;
 
     function display(Array $data=array())

@@ -31,7 +31,7 @@ class MenuBlock extends BasicBlock implements iBlock
     public $text_type_long      = 'Generic menu';
     public $allow_multiple      = true;
     public $show_preview        = true;
-    public $no_cache            = 1;
+    public $nocache             = 1;
     public $pageshared          = 0;
     public $usershared          = 1;
 

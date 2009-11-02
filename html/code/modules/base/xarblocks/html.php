@@ -24,9 +24,9 @@
         public $text_type           = 'HTML';
         public $text_type_long      = 'HTML';
         public $allow_multiple      = true;
-        public $no_cache            = true;
         public $show_preview        = true;
 
+        public $nocache             = 1;
         public $expire              = 0;
 
 /**

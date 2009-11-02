@@ -19,7 +19,7 @@ sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class SkinBlock extends BasicBlock implements iBlock
 {
-    public $no_cache            = 1;
+    public $nocache             = 1;
 
     public $name                = 'SkinBlock';
     public $module              = 'themes';

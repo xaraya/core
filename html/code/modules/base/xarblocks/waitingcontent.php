@@ -15,7 +15,7 @@
 
     class WaitingContentBlock extends BasicBlock implements iBlock
     {
-        public $no_cache            = 1;
+        public $nocache             = 1;
 
         public $name                = 'WaitingContentBlock';
         public $module              = 'base';

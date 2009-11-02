@@ -21,7 +21,7 @@ sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class AdminMenuBlock extends BasicBlock implements iBlock
 {
-    public $no_cache            = 1;
+    public $nocache             = 1;
 
     public $name                = 'AdminMenuBlock';
     public $module              = 'base';

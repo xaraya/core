@@ -5,7 +5,7 @@
         protected $descriptor;
 
         public $html_content = "";
-        public $no_cache            = 0;
+        public $nocache             = 0;
         public $pageshared          = 1;
         public $usershared          = 1;
         public $cacheexpire         = null;
