@@ -7,8 +7,8 @@
 // sys::varpath() . '/cache/output/cache.touch' : activate output caching in general
 // sys::varpath() . '/cache/output/cache.pagelevel' : enable page caching
 // sys::varpath() . '/cache/output/cache.blocklevel' : enable block caching
-
-$cachingConfiguration = array();
+// sys::varpath() . '/cache/output/cache.modulelevel' : enable module caching
+// sys::varpath() . '/cache/output/cache.objectlevel' : enable object caching
 
 // Only cache this theme
 $cachingConfiguration['Output.DefaultTheme'] = 'default';
@@ -62,4 +62,27 @@ $cachingConfiguration['Block.CacheStorage'] = 'filesystem';
 $cachingConfiguration['Block.LogFile'] = '';
 // Size in bytes to limit the block cache to
 $cachingConfiguration['Block.SizeLimit'] = 2097152;
+
+// Maximum life time of module cache in seconds
+$cachingConfiguration['Module.TimeExpiration'] = 7200;
+// Store the cached modules in filesystem, database or memcache
+$cachingConfiguration['Module.CacheStorage'] = 'filesystem';
+// Keep a logfile of the cache hits and misses for modules, e.g. in var/logs/module.log
+$cachingConfiguration['Module.LogFile'] = '';
+// Size in bytes to limit the module cache to
+$cachingConfiguration['Module.SizeLimit'] = 2097152;
+// Default cache settings for module functions
+$cachingConfiguration['Module.CacheFunctions'] = array('main' => 1, 'view' => 1, 'display' => 0);
+
+// Maximum life time of object cache in seconds
+$cachingConfiguration['Object.TimeExpiration'] = 7200;
+// Store the cached objects in filesystem, database or memcache
+$cachingConfiguration['Object.CacheStorage'] = 'filesystem';
+// Keep a logfile of the cache hits and misses for objects, e.g. in var/logs/object.log
+$cachingConfiguration['Object.LogFile'] = '';
+// Size in bytes to limit the object cache to
+$cachingConfiguration['Object.SizeLimit'] = 2097152;
+// Default cache settings for object methods
+$cachingConfiguration['Object.CacheMethods'] = array('view' => 1, 'display' => 1);
+
 ?>

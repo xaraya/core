@@ -15,8 +15,8 @@ class xarBlockCache extends Object
 {
     public static $cacheTime = 7200;
     public static $cacheSizeLimit = 2097152;
-
     public static $cacheStorage = null;
+
     public static $cacheCode = '';
     public static $cacheSettings = null;
 
@@ -200,7 +200,7 @@ class xarBlockCache extends Object
         }
 
         if (isset($blockinfo)) {
-            $factors .= md5(serialize($blockinfo));
+            $factors .= serialize($blockinfo);
         }
 
         self::$cacheCode = md5($factors);

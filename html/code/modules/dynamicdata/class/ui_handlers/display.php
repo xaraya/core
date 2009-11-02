@@ -42,6 +42,15 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
         if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
 
+        if (xarCache::$outputCacheIsEnabled && xarOutputCache::$objectCacheIsEnabled) {
+            // we'll let xarObjectCache determine the cacheKey here
+            $cacheKey = xarObjectCache::checkCachingRules(null, $this->args);
+            if ($cacheKey && xarObjectCache::isCached($cacheKey, $this->args)) {
+        // CHECKME: save & get page title here too ?
+                return xarObjectCache::getCached($cacheKey);
+            }
+        }
+
         if(!isset($this->object)) 
         {
             $this->object =& DataObjectMaster::getObject($this->args);
@@ -82,11 +91,16 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
             // show a blank object
         }
 
-        return xarTplObject(
+        $output = xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_display',
             array('object' => $this->object,
                   'hooks'  => $this->object->hookoutput)
         );
+
+        if (!empty($cacheKey)) {
+            xarObjectCache::setCached($cacheKey, $output);
+        }
+        return $output;
     }
 }
 

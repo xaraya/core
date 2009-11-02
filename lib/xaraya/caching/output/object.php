@@ -13,17 +13,18 @@
 
 class xarObjectCache extends Object
 {
-    public static $cacheTime = 7200;
+    public static $cacheTime      = 7200;
     public static $cacheSizeLimit = 2097152;
+    public static $cacheStorage   = null;
+    public static $cacheMethods   = null;
 
-    public static $cacheStorage = null;
-    public static $cacheCode = '';
-    public static $cacheSettings = null;
+    public static $cacheSettings  = null;
+    public static $cacheKey       = '';
+    public static $cacheCode      = '';
 
-    public static $noCache    = null;
-    public static $pageShared = null;
-    public static $userShared = null;
-    public static $expireTime = null;
+    public static $noCache        = null;
+    public static $userShared     = null;
+    public static $expireTime     = null;
 
     /**
      * Initialise the object caching options
@@ -36,6 +37,8 @@ class xarObjectCache extends Object
             $args['Object.TimeExpiration'] : 7200;
         self::$cacheSizeLimit = isset($args['Object.SizeLimit']) ?
             $args['Object.SizeLimit'] : 2097152;
+        self::$cacheMethods = isset($args['Object.CacheMethods']) ?
+            $args['Object.CacheMethods'] : array('view' => 1, 'display' => 1);
 
         $storage = !empty($args['Object.CacheStorage']) ?
             $args['Object.CacheStorage'] : 'filesystem';
@@ -63,60 +66,93 @@ class xarObjectCache extends Object
     {
         if (!isset(self::$cacheSettings)) {
             $settings = array();
-            // We need to get it.
-
+            $serialsettings = xarModVars::get('dynamicdata','objectcache_settings');
+            if (!empty($serialsettings)) {
+                $settings = unserialize($serialsettings);
+            }
             self::$cacheSettings = $settings;
         }
         return self::$cacheSettings;
     }
 
     /**
-     * Check if this object is suitable for object caching
+     * Check if this object is suitable for object caching and return the cacheKey
      *
      * @access public
-     * @param  string  $cacheKey  the key identifying the particular object you want to access
-     * @param  integer $objectid   the current object id
-     * @param  array   $objectinfo optional objectinfo when using the object BL tag
-     * @returns bool
-     * @return true if the object is suitable for caching, false if not
+     * @param  string  $cacheKey   the key identifying the particular object you want to access
+     * @param  array   $objectInfo the object info when using a object UI method or BL tag
+     * @returns mixed
+     * @return cacheKey if the object is suitable for caching, false if not
      */
-    public static function checkCachingRules($cacheKey, $objectid = 0, $objectinfo = array())
+    public static function checkCachingRules($cacheKey = null, $objectInfo = array())
     {
         // CHECKME: watch out for nested objects !
+        self::$cacheKey   = null;
         self::$noCache    = null;
-        self::$pageShared = null;
         self::$userShared = null;
         self::$expireTime = null;
 
+        if (!empty($cacheKey)) {
+            list($objectname,$method,$itemid) = explode('-', $cacheKey);
+
+        } elseif (!empty($objectInfo) && !empty($objectInfo['object']) && !empty($objectInfo['method'])) {
+            $objectname = $objectInfo['object'];
+            $method = $objectInfo['method'];
+            if (!empty($objectInfo['itemid'])) {
+                $itemid = $objectInfo['itemid'];
+            } else {
+                $itemid = '';
+            }
+            $cacheKey = $objectname .'-' . $method . '-' . $itemid;
+
+        } else {
+            // we have nothing to work with here ?
+            return false;
+        }
+
+        if (!empty($objectInfo) && !empty($objectInfo['preview'])) {
+            // we don't cache preview
+            return false;
+        }
+
         $settings = self::getCacheSettings();
 
-        if (isset($settings[$objectid])) {
-            self::$noCache    = $settings[$objectid]['nocache'];
-            self::$pageShared = $settings[$objectid]['pageshared'];
-            self::$userShared = $settings[$objectid]['usershared'];
-            self::$expireTime = $settings[$objectid]['cacheexpire'];
+        if (!empty($settings[$objectname]) && !empty($settings[$objectname][$method])) {
+            self::$noCache    = $settings[$objectname][$method]['nocache'];
+            self::$userShared = $settings[$objectname][$method]['usershared'];
+            self::$expireTime = $settings[$objectname][$method]['cacheexpire'];
 
         // CHECKME: cfr. bug 4021 Override caching vars with object BL tag
-        } elseif (!empty($objectinfo['content']) && is_array($objectinfo['content'])) {
-            if (isset($objectinfo['content']['nocache'])) {
-                self::$noCache    = $objectinfo['content']['nocache'];
+        } elseif (!empty($objectInfo['content']) && is_array($objectInfo['content'])) {
+            if (isset($objectInfo['content']['nocache'])) {
+                self::$noCache    = $objectInfo['content']['nocache'];
             }
-            if (isset($objectinfo['content']['pageshared'])) {
-                self::$pageShared = $objectinfo['content']['pageshared'];
+            if (isset($objectInfo['content']['usershared'])) {
+                self::$userShared = $objectInfo['content']['usershared'];
             }
-            if (isset($objectinfo['content']['usershared'])) {
-                self::$userShared = $objectinfo['content']['usershared'];
+            if (isset($objectInfo['content']['cacheexpire'])) {
+                self::$expireTime = $objectInfo['content']['cacheexpire'];
             }
-            if (isset($objectinfo['content']['cacheexpire'])) {
-                self::$expireTime = $objectinfo['content']['cacheexpire'];
+
+        // check against default methods 
+        } elseif (!empty(self::$cacheMethods) && isset(self::$cacheMethods[$method])) {
+            // flip from docache in config to nocache in settings
+            if (!empty(self::$cacheMethods[$method])) {
+                self::$noCache    = 0;
+            } else {
+                self::$noCache    = 1;
             }
+
+        } else {
+            // this object method is not configured for caching
+            return false;
         }
 
-        if (empty(self::$noCache)) {
+        if (!empty(self::$noCache)) {
+            // this object method is configured for nocache
+            return false;
+        } else {
             self::$noCache = 0;
-        }
-        if (empty(self::$pageShared)) {
-            self::$pageShared = 0;
         }
         if (empty(self::$userShared)) {
             self::$userShared = 0;
@@ -125,30 +161,32 @@ class xarObjectCache extends Object
             self::$expireTime = self::$cacheTime;
         }
 
-        if (!empty(self::$noCache)) {
-            return false;
-        }
+        // set the current cacheKey to avoid doing this twice
+        self::$cacheKey = $cacheKey;
 
-        return true;
+        // return the cacheKey
+        return $cacheKey;
     }
 
     /**
      * Check whether a object is cached
      *
      * @access public
-     * @param  string  $cacheKey  the key identifying the particular object you want to access
-     * @param  integer $objectid   the current object id
-     * @param  array   $objectinfo optional objectinfo when using the object BL tag
-     * @return bool
+     * @param  string  $cacheKey   the key identifying the particular object you want to access
+     * @param  array   $objectInfo the object info when using a object UI method or BL tag
+     * @returns bool
      */
-    public static function isCached($cacheKey, $objectid = 0, $objectinfo = array())
+    public static function isCached($cacheKey = null, $objectInfo = array())
     {
         if (empty(self::$cacheStorage)) {
             return false;
         }
 
-        // Check if this object is suitable for object caching
-        if (!(self::checkCachingRules($cacheKey, $objectid, $objectinfo))) {
+        // Check if this object is suitable for object caching if this wasn't done earlier
+        if (empty($cacheKey) || empty(self::$cacheKey) || $cacheKey != self::$cacheKey) {
+            $cacheKey = self::checkCachingRules($cacheKey, $objectInfo);
+        }
+        if (empty($cacheKey)) {
             self::$noCache = 1;
             return false;
         }
@@ -157,14 +195,6 @@ class xarObjectCache extends Object
 
         $factors = xarServer::getVar('HTTP_HOST') . $xarTpl_themeDir .
                    xarUserGetNavigationLocale();
-
-        if (self::$pageShared == 0) {
-            $factors .= xarServer::getVar('REQUEST_URI');
-            $param = xarServer::getVar('QUERY_STRING');
-            if (!empty($param)) {
-                $factors .= '?' . $param;
-            }
-        }
 
         if (self::$userShared == 2) {
             $factors .= 0;
@@ -175,8 +205,8 @@ class xarObjectCache extends Object
             $factors .= xarSession::getVar('role_id');
         }
 
-        if (isset($objectinfo)) {
-            $factors .= md5(serialize($objectinfo));
+        if (isset($objectInfo)) {
+            $factors .= serialize($objectInfo);
         }
 
         self::$cacheCode = md5($factors);
