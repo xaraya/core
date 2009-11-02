@@ -51,8 +51,11 @@
             if (!xarSecurityCheck('View' . $data['module'], 0, 'Block', $data['type'] . ":" . $data['name'] . ":" . "$data[bid]")) {return;}
             // Get variables from content block
             if (!is_array($data['content'])) {
-                $exploded = @unserialize($data['content']);
-                if (is_array($exploded)) $data = array_merge($data,$exploded);
+                if (!empty($data['content'])) {
+                    $exploded = @unserialize($data['content']);
+                    if (is_array($exploded)) $data = array_merge($data,$exploded);
+                    $data['content'] = $exploded;
+                }
             } else {
                 $data = array_merge($data,$data['content']);
             }
