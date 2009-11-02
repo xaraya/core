@@ -1,6 +1,6 @@
 <?php
 /**
- * Time Since
+ * base-pager template tag
  *
  * @package modules
  * @copyright (C) 2002-2009 The Digital Development Foundation
@@ -10,9 +10,10 @@
  * @subpackage Base Module
  * @link http://xaraya.com/index.php/release/151.html
 */
-/* Returns a pager based on url, startnum, itemsperpage and totalitems
- * Used by the base pager template tag
- * Usage <xar:base-pager param="value" ... />
+/* Wrapper for xarTplPager::getPager() (see modules/base/class/pager.php)
+ * Used by the base-pager template tag
+ * Returns a pager based on url, startnum, itemsperpage and totalitems
+ * Usage, eg <xar:base-pager startnum="1" itemsperpage="10" total="30"/>
  * @param int $args['total'] - required, total items of this type
  * @param int $args['startnum'] optional, the current page startnum, if empty
  * the tag will try to fetch the startnum from the currenturl, and fall back to
@@ -30,7 +31,8 @@
  * @param int $args['tplmodule'] - optional, the module to look for pager
  * templates in, default 'base'
  * @param int $args['template'] - optional, the template to use
- * (pager-[template]), default 'default'
+ * (pager-[template]), default 'default',
+ * template options are (default|multipage|mulitpagenext|multipageprev|openended)
  * @param int $args['blocksize'] - optional, the number of pages per block, default 10
  * advanced options of xarTplPagerInfo
  * (not sure what they do, included for completeness)
@@ -47,24 +49,17 @@ function base_userapi_pager($args)
         if (empty($module))
             list($module) = xarRequest::getInfo();
         if (!empty($module))
+            // @TODO: setting per itemtype?
+            // if (!empty($itemtype)) $itemsperpage = xarModUserVars::get($module, 'items_per_page'.$itemtype);
             $itemsperpage = xarModUserVars::get($module, 'items_per_page');
     }
     if ((empty($itemsperpage) || (empty($total) || !is_numeric($total))) || ($total <= $itemsperpage)) return '';
 
-    if (empty($urlitemmatch))
-        $urlitemmatch = '%%';
+    sys::import('modules.base.class.pager');
 
-    if (empty($urltemplate))
-        $urltemplate = xarServer::getCurrentURL(array('startnum' => $urlitemmatch));
-
-    if (strpos($urltemplate, $urlitemmatch) === false) {
-        if (preg_match('/startnum=(.*)?(&amp;|$)/', $urltemplate)) {
-            $urltemplate = preg_replace('/startnum=(.*)?(&amp;|$)/', 'startnum='.$urlitemmatch.'//2', $urltemplate);
-        } else {
-            $urljoin = preg_match('/\?/', $urltemplate) ? '$amp;' : '?';
-            $urltemplate .= $urljoin . 'startnum=' . $urlitemmatch;
-        }
-    }
+    if (empty($urlitemmatch)) $urlitemmatch = '%%';
+    if (empty($urltemplate)) $urltemplate = null;
+    $urltemplate = xarTplPager::getPagerURL($urlitemmatch, $urltemplate);
 
     $blockoptions = array();
     if (empty($blocksize) || !is_numeric($blocksize)) $blocksize = 10;
@@ -74,13 +69,9 @@ function base_userapi_pager($args)
     if (!empty($firstitem) && is_numeric($firstitem)) $blockoptions['firstitem'] = $firstitem;
     if (!empty($firstpage) && is_numeric($firstpage)) $blockoptions['firstpage'] = $firstpage;
 
-
-    sys::import('xaraya.pager');
-    $data = xarTplPagerInfo($startnum, $total, $itemsperpage, $blockoptions);
-
     if (empty($tplmodule)) $tplmodule = 'base';
     if (empty($template)) $template = 'default';
 
-    return xarTplModule($tplmodule, 'pager', $template, $data);
+    return xarTplPager::getPager($startnum, $total, $urltemplate, $itemsperpage, $blockoptions, $template, $tplmodule);
 }
 ?>
