@@ -237,7 +237,9 @@ class xarTplPager Extends Object
         if (empty($urltemplate))
             return xarServer::getCurrentURL(array('startnum' => $urlitemmatch));
 
-        if (strpos($urltemplate, urlencode($urlitemmatch)) === false) {
+        $urlitemmatch = rawurlencode($urlitemmatch);
+
+        if (strpos($urltemplate, $urlitemmatch) === false) {
             if (preg_match('/startnum=(.*)?(&amp;|$)/', $urltemplate)) {
                 $urltemplate = preg_replace('/startnum=(.*)?(&amp;|$)/', 'startnum='.$urlitemmatch.'\\2', $urltemplate);
             } else {
