@@ -181,6 +181,8 @@ class xarCache_XCache_Storage extends xarCache_Storage
                 $time = $entry['ctime'];
                 $size = $entry['size'];
                 $check = '';
+                // remove the prefix from the key
+                if (!empty($this->prefix)) $key = str_replace($this->prefix,'',$key);
                 $list[] = array('key'   => $key,
                                 'code'  => $code,
                                 'time'  => $time,

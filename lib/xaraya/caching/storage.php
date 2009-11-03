@@ -426,7 +426,21 @@ class xarCache_Storage extends Object
 
     public function getCachedList()
     {
-        return array();
+        $list = array();
+        //$items = ... get list of items in cache ...
+        //foreach ($items as $item) {
+        //    // ... get information about this item ...
+        //    // filter out the keys that don't start with the right type/namespace prefix
+        //    if (!empty($this->prefix) && strpos($key, $this->prefix) !== 0) continue;
+        //    // remove the prefix from the key
+        //    if (!empty($this->prefix)) $key = str_replace($this->prefix,'',$key);
+        //    $list[] = array('key'   => $key,
+        //                    'code'  => $code,
+        //                    'time'  => $time,
+        //                    'size'  => $size,
+        //                    'check' => $check);
+        //}
+        return $list;
     }
 
     public function getCachedKeys()
@@ -435,8 +449,8 @@ class xarCache_Storage extends Object
         $keys = array();
         foreach ($list as $item) {
             if (empty($item['key'])) continue;
-            // filter out the keys that don't start with the right type/namespace prefix
-            if (!empty($this->prefix) && strpos($item['key'], $this->prefix) !== 0) continue;
+            // filter out the keys that don't start with the right type/namespace prefix - if this wasn't done already
+            //if (!empty($this->prefix) && strpos($item['key'], $this->prefix) !== 0) continue;
             $keys[$item['key']] = 1;
         }
         return array_keys($keys);

@@ -41,9 +41,11 @@ class xarCache_Dummy_Storage extends xarCache_Storage
         if (isset(self::$varcache[$this->prefix]) && isset(self::$varcache[$this->prefix][$cache_key])) {
             // FIXME: dummy doesn't keep track of modification times !
             //$this->modtime = 0;
+            $this->hits += 1;
             if ($log) $this->logStatus('HIT', $key);
             return true;
         } else {
+            $this->misses += 1;
             if ($log) $this->logStatus('MISS', $key);
             return false;
         }
@@ -66,6 +68,7 @@ class xarCache_Dummy_Storage extends xarCache_Storage
     {
         $cache_key = $this->getCacheKey($key);
         self::$varcache[$this->prefix][$cache_key] = $value;
+        $this->modtime = time();
     }
 
     public function delCached($key = '')
@@ -88,9 +91,53 @@ class xarCache_Dummy_Storage extends xarCache_Storage
         return false;
     }
 
-    public function getCachedKeys()
+    public function getCacheInfo()
     {
-        return array_keys(self::$varcache[$this->prefix]);
+        $this->size = 0;
+        $keylist = array_keys(self::$varcache[$this->prefix]);
+        foreach ($keylist as $cache_key) {
+            if (is_string(self::$varcache[$this->prefix][$cache_key])) {
+                $this->size += strlen(self::$varcache[$this->prefix][$cache_key]);
+            } else {
+                //$this->size += 0;
+            }
+        }
+        $this->items = count($keylist);
+        return array('size'    => $this->size,
+                     'items'   => $this->items,
+                     'hits'    => $this->hits,
+                     'misses'  => $this->misses,
+                     'modtime' => $this->modtime);
+    }
+
+    public function getCachedList()
+    {
+        $list = array();
+        // Note: this will probably be empty in most cases, unless you call this right after caching something
+        $keylist = array_keys(self::$varcache[$this->prefix]);
+        foreach ($keylist as $cache_key) {
+        // CHECKME: this assumes the code is always hashed
+            if (preg_match('/^(.*)-(\w*)$/',$cache_key,$matches)) {
+                $key = $matches[1];
+                $code = $matches[2];
+            } else {
+                $key = $cache_key;
+                $code = '';
+            }
+            $time = time();
+            if (is_string(self::$varcache[$this->prefix][$cache_key])) {
+                $size = strlen(self::$varcache[$this->prefix][$cache_key]);
+            } else {
+                $size = '';
+            }
+            $check = '';
+            $list[] = array('key'   => $key,
+                            'code'  => $code,
+                            'time'  => $time,
+                            'size'  => $size,
+                            'check' => $check);
+        }
+        return $list;
     }
 }
 

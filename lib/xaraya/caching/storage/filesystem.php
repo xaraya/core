@@ -303,6 +303,8 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
                 $time = filemtime($cache_file);
                 $size = filesize($cache_file);
                 $check = '';
+                // remove the prefix from the key
+                if (!empty($this->prefix)) $key = str_replace($this->prefix,'',$key);
                 $list[] = array('key'   => $key,
                                 'code'  => $code,
                                 'time'  => $time,
