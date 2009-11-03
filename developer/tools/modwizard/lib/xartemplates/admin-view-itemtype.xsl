@@ -60,11 +60,11 @@
             </xsl:element>
         </td>
     </tr>
-    <xar:if condition="!empty( $pager )">
+    <xar:if condition="$total gt $itemsperpage">
     <tr>
         <xar:set name="$count">count($objects_props) + 1</xar:set>
         <td colspan="#$count#" align="center">
-            #$pager#
+            <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total" urltemplate="$urltemplate"/>
         </td>
     </tr>
     </xar:if>
