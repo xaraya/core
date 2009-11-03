@@ -607,7 +607,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if (empty($currenturl)) {
             $currenturl = xarServer::getCurrentURL(array('startnum' => null, 'sort' => null));
         } else {
-            $currenturl = preg_replace('/&amp;(startnum|sort)=(.*)?(&amp;|$)/', '\\3', $currenturl);
+            $currenturl = preg_replace('/&amp;(startnum|sort)=(.*)?(&amp;|$)/', '$3', $currenturl);
             $currenturl = preg_replace('/\?(startnum|sort)=(.*)?&amp;/', '?', $currenturl);
             $currenturl = preg_replace('/\?(startnum|sort)=(.*)?$/', '', $currenturl);
         }
