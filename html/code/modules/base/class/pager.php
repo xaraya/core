@@ -238,8 +238,8 @@ class xarTplPager Extends Object
             return xarServer::getCurrentURL(array('startnum' => $urlitemmatch));
 
         if (strpos($urltemplate, urlencode($urlitemmatch)) === false) {
-            if (preg_match('/startnum=(\d+)?(&amp;|$)/', $urltemplate)) {
-                $urltemplate = preg_replace('/startnum=(\d+)?(&amp;|$)/', 'startnum='.$urlitemmatch.'\\2', $urltemplate);
+            if (preg_match('/startnum=(.*)?(&amp;|$)/', $urltemplate)) {
+                $urltemplate = preg_replace('/startnum=(.*)?(&amp;|$)/', 'startnum='.$urlitemmatch.'\\2', $urltemplate);
             } else {
                 $urljoin = preg_match('/\?/', $urltemplate) ? '&amp;' : '?';
                 $urltemplate .= $urljoin . 'startnum=' . $urlitemmatch;
