@@ -9,6 +9,7 @@
             <title>
                 <xar:var name="tpl:pageTitle"/>
             </title>
+            <base href="#xarServer::getBaseURL()#index.php"/>
             <link rel='icon' href="favicon.ico"/>
             <xar:style scope="common"/>
             <xar:style scope="theme" file="style" title="Xaraya Default Stylesheet"/>
