@@ -40,6 +40,7 @@ class MenuBlock extends BasicBlock implements iBlock
     public $displayrss          = false;
     public $displayprint        = false;
     public $marker              = '[x]';
+// CHECKME: are you sure you want to hard-code this for all sites ?!?
     public $content             = array(
                                     'url' => '[base]&page=docs',
                                     'name'=> 'Documentation',
@@ -125,6 +126,10 @@ class MenuBlock extends BasicBlock implements iBlock
                             if (empty($line['url'][2])) $line['url'][2]="main";
                             $line['url'] = xarModUrl($line['url'][0],$line['url'][1],$line['url'][2]);
                             if(isset($sections[1])) {
+                                // fix if the URL is encoded and the next part starts with &
+                                if (!strpos($line['url'], '?') && substr($sections[1],0,1) == '&') {
+                                    $sections[1] = preg_replace('/^(&amp;|&)/','?',$sections[1]);
+                                }
                                 $line['url'] .= xarVarPrepForDisplay($sections[1]);
                             }
                             break;
