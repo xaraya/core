@@ -31,7 +31,7 @@ interface iDataObjectList
     public function showView(Array $data = array());
     public function getViewOptions($data = null);
     public function &getViewValues(Array $data = array());
-    public function getPager($data = null);
+    public function getSortURL($data = null);
     public function getNext(Array $data = array());
 }
 ?>

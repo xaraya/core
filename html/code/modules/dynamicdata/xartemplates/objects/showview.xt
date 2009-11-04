@@ -22,23 +22,9 @@
         <xar:set name="layout">'default'</xar:set>
     </xar:if>
     <xar:template module="$tplmodule" file="view-$layout"/>
-    <xar:if condition="!empty($pager)">
+    <xar:if condition="$object:itemcount gt $object:numitems">
         <div class="xar-align-center">
-            #$pager#
-        </div>
-    <xar:elseif condition="!empty($prevurl) or !empty($nexturl)"/>
-        <div class="xar-align-center">
-            <xar:if condition="!empty($prevurl)">
-            <a href="#$prevurl#">&lt;&lt; Prev</a>
-            <xar:else />
-                &lt;&lt;
-            </xar:if>
-            &#160;&#160;&#160; 
-            <xar:if condition="!empty($nexturl)">
-                <a href="#$nexturl#">Next&gt;&gt;</a>
-            <xar:else />
-                &gt;&gt;
-            </xar:if>
+            <xar:base-pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->itemcount" urltemplate="$object->pagerurl"/>
         </div>
     </xar:if>
 </xar:template>

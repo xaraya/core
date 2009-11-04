@@ -163,11 +163,11 @@ function roles_admin_showusers()
     $filter['search']   = $data['search'];
     $filter['order']    = $data['order'];
 
-    sys::import('xaraya.pager');
-    $data['pager']      = xarTplGetPager($startnum,
-                                         $data['totalselect'],
-                                         xarModURL('roles', 'admin', 'showusers',$filter),
-                                         $numitems);
+    $data['startnum'] = $startnum;
+    $data['itemsperpage'] = $numitems;
+    $data['urltemplate'] = xarModURL('roles', 'admin', 'showusers',$filter);
+    $data['urlitemmatch'] = '%%';
+
     return $data;
 }
 ?>

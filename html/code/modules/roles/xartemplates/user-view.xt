@@ -62,8 +62,11 @@
                         </xar:loop>
                     </xar:if>
                 </table>
-                <!-- add the pager here -->
-                <div class="xar-align-center">#$pager#</div>
+                <xar:if condition="$total gt $itemsperpage">
+                    <div class="xar-align-center">
+                        <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
+                    </div>
+                </xar:if>
             </xar:if>
         </fieldset>
     </div>

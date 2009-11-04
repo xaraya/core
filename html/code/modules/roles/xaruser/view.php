@@ -55,7 +55,7 @@ function roles_user_view($args)
     $data['itemlabels'] = $itemlabels;
     if (!isset($order)) $data['order'] = 'name';
     if (!isset($search)) $data['search'] = '';
-    if (!isset($startnum)) $data['startnum'] = 1;
+    $data['startnum'] = (!isset($args['startnum'])) ? 1 : $args['startnum'];
     if (!isset($numitems)) $numitems = (int)xarModVars::get('roles', 'items_per_page');
 
     $numitems = (int)xarModVars::get('roles', 'items_per_page');
@@ -63,13 +63,9 @@ function roles_user_view($args)
     $pagerfilter['search'] = $data['search'];
     $pagerfilter['startnum'] = '%%';
 
-    sys::import('xaraya.pager');
-    $data['pager'] = xarTplGetPager(
-        $data['startnum'],
-        $data['total'],
-        xarModURL('roles', 'user', 'view', $pagerfilter),
-        $numitems
-    );
+    $data['itemsperpage'] = $numitems;
+    $data['urltemplate'] = xarModURL('roles', 'user', 'view', $pagerfilter);
+    $data['urlitemmatch'] = '%%';
 
     return xarTplModule($args['tplmodule'],'user','view',$data,$args['template']);
 }

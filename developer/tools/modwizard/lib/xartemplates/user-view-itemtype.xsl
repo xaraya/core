@@ -64,10 +64,10 @@
     </xar:foreach>
 
     <!-- view the pager -->
-    <xar:if condition="!empty($pager)">
+    <xar:if condition="$total gt $itemsperpage">
     <tr>
         <td colspan="#$count#" align="center">
-            #$pager#
+            <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total" urltemplate="$urltemplate"/>
         </td>
     </tr>
     </xar:if>
