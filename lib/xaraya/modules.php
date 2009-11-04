@@ -919,13 +919,14 @@ class xarMod extends Object implements IxarMod
     static function guiFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
-        if (xarCache::$outputCacheIsEnabled && xarOutputCache::$moduleCacheIsEnabled) {
+        if ($modType == 'user' && xarCache::$outputCacheIsEnabled && xarOutputCache::$moduleCacheIsEnabled) {
             $cacheKey = $modName . '-' . $funcName . '-';
             $cacheKey = xarModuleCache::checkCachingRules($cacheKey, $args);
             if ($cacheKey && xarModuleCache::isCached($cacheKey)) {
                 return xarModuleCache::getCached($cacheKey);
             }
         }
+
         $tplData = self::callFunc($modName,$modType,$funcName,$args);
         // If we have a string of data, we assume someone else did xarTpl* for us
         if (!is_array($tplData)) {
