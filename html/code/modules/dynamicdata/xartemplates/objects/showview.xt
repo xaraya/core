@@ -24,7 +24,7 @@
     <xar:template module="$tplmodule" file="view-$layout"/>
     <xar:if condition="$object:itemcount gt $object:numitems">
         <div class="xar-align-center">
-            <xar:base-pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->itemcount" urltemplate="$object->pagerurl"/>
+            <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->itemcount" urltemplate="$object->pagerurl"/>
         </div>
     </xar:if>
 </xar:template>

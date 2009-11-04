@@ -18,7 +18,7 @@
     </xsl:processing-instruction>
   </xsl:template>
 
-  <xsl:template match="xar:base-pager">
+  <xsl:template match="xar:pager">
     <xsl:processing-instruction name="php">
         <xsl:text>echo xarMod::apiFunc('base','user','pager',</xsl:text>
           <xsl:call-template name="atts2args">

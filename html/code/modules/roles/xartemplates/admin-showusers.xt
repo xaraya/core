@@ -251,7 +251,7 @@
                 </div>
                 <xar:if condition="$totalselect gt $itemsperpage">
                     <div class="xar-align-center">
-                        <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
+                        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
                     </div>
                 </xar:if>
             </form>

@@ -5,7 +5,7 @@
     <xar:set name="icon_modify">xarTplGetImage('icons/modify.png','base')</xar:set>
     <xar:if condition="$total gt $itemsperpage">
         <div>
-            <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
         </div>
     </xar:if>
     <table class="xar-fullwidth">
@@ -89,7 +89,7 @@
     </table>
     <xar:if condition="$total gt $itemsperpage">
         <div>
-            <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
         </div>
     </xar:if>
 </xar:template>

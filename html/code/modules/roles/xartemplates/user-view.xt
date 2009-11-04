@@ -64,7 +64,7 @@
                 </table>
                 <xar:if condition="$total gt $itemsperpage">
                     <div class="xar-align-center">
-                        <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
+                        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
                     </div>
                 </xar:if>
             </xar:if>
