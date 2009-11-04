@@ -97,24 +97,27 @@ class xarCache_XCache_Storage extends xarCache_Storage
 
     public function flushCached($key = '')
     {
-        // add the type/namespace prefix if necessary
-        if (!empty($this->prefix) && strpos($key, $this->prefix) !== 0) {
-            $key = $this->prefix . $key;
-        }
-
         // Note: this isn't quite the same as in filesystem, but it's close enough :-)
         if (function_exists('xcache_unset_by_prefix')) {
+            // add the type/namespace prefix if necessary
+            if (!empty($this->prefix)) {
+                $key = $this->prefix . $key;
+            }
             xcache_unset_by_prefix($key);
+
         } else {
             $cache_list = $this->getCachedList();
             foreach ($cache_list as $cache_entry) {
-                // if this cache entry starts with prefix.key
-                if (strpos($cache_entry['key'], $key) === 0) {
-                    if (!empty($cache_entry['code'])) {
-                        xcache_unset($cache_entry['key'] . '-' . $cache_entry['code']);
-                    } else {
-                        xcache_unset($cache_entry['key']);
-                    }
+                // check if this cache entry starts with the key
+                if (strpos($cache_entry['key'], $key) !== 0) continue;
+                // add the type/namespace prefix if necessary
+                if (!empty($this->prefix)) {
+                    $cache_entry['key'] = $this->prefix . $cache_entry['key'];
+                }
+                if (!empty($cache_entry['code'])) {
+                    xcache_unset($cache_entry['key'] . '-' . $cache_entry['code']);
+                } else {
+                    xcache_unset($cache_entry['key']);
                 }
             }
         }
