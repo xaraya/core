@@ -919,9 +919,21 @@ class xarMod extends Object implements IxarMod
     static function guiFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
+        if (xarCache::$outputCacheIsEnabled && xarOutputCache::$moduleCacheIsEnabled) {
+            $cacheKey = $modName . '-' . $funcName . '-';
+            $cacheKey = xarModuleCache::checkCachingRules($cacheKey, $args);
+            if ($cacheKey && xarModuleCache::isCached($cacheKey)) {
+                return xarModuleCache::getCached($cacheKey);
+            }
+        }
         $tplData = self::callFunc($modName,$modType,$funcName,$args);
         // If we have a string of data, we assume someone else did xarTpl* for us
-        if (!is_array($tplData)) return $tplData;
+        if (!is_array($tplData)) {
+            if (!empty($cacheKey)) {
+                xarModuleCache::setCached($cacheKey, $tplData);
+            }
+            return $tplData;
+        }
 
         // See if we have a special template to apply
         $templateName = NULL;
@@ -929,6 +941,9 @@ class xarMod extends Object implements IxarMod
 
         // Create the output.
         $tplOutput = xarTplModule($modName, $modType, $funcName, $tplData, $templateName);
+        if (!empty($cacheKey)) {
+            xarModuleCache::setCached($cacheKey, $tplOutput);
+        }
         return $tplOutput;
     }
 
