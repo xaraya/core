@@ -51,6 +51,7 @@ if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = '
 $GLOBALS['systemConfiguration'] = $systemConfiguration;
 set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
 include 'bootstrap.php';
+sys::import('xaraya.caching');
 sys::import('xaraya.core');
 
 // Besides what we explicitly load, we dont want to load
