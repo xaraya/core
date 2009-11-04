@@ -22,7 +22,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
-        <h2>#xarVarPrepForDisplay($title)#: 
+        <h2>#xarVarPrepForDisplay($title)#:
             <a href="&xar-modurl-roles-admin-modify;&amp;id=#$groupid#" title="#xarML('Modify role')#">
                 #xarVarPrepForDisplay($groupname)#
             </a>
@@ -159,7 +159,7 @@
             </table>
         </form>
         <xar:if condition="count($users) eq 0">
-            <p>#$message# 
+            <p>#$message#
             <xar:if condition="$search ne ''">&#160;matching '#$search#'</xar:if></p>
         <xar:else />
             <form method="post" action="&xar-modurl-roles-admin-updatestate;" name="state">
@@ -197,7 +197,7 @@
                                         <xar:if condition="$name eq 'name' and $users[$itemid]['frozen']">
                                             <strong>#xarVarPrepForDisplay($fields['name'])#</strong>
                                         <xar:elseif condition="$name eq 'uname' and $users[$itemid]['frozen']"/>
-                                            #xarVarPrepForDisplay($fields['uname'])#                                        
+                                            #xarVarPrepForDisplay($fields['uname'])#
                                         <xar:elseif condition="$name eq 'email' and $users[$itemid]['frozen']"/>
                                             None
                                         <xar:else />
@@ -211,24 +211,24 @@
                                     <a href="&xar-modurl-roles-admin-createpassword;&amp;id=#$fields.id#&amp;state=#$state#&amp;groupid #$groupid#" title="#xarML('Generate a new password for this User')#">
                                         <img src="#$icon_password#" class="xar-valign-middle"/>
                                     </a>
-                                    &#160; 
+                                    &#160;
                                     <a href="&xar-modurl-roles-admin-modify;&amp;id=#$fields.id#" title="#xarML('Modify this user')#">
                                         <img src="#$icon_modify#" class="xar-valign-middle"/>
                                     </a>
-                                    &#160; 
+                                    &#160;
                                     <a href="&xar-modurl-roles-admin-delete;&amp;id=#$fields.id#" title="#xarML('Delete this User')#">
                                         <img src="#$icon_delete#" class="xar-valign-middle"/>
                                     </a>
-                                    &#160; 
+                                    &#160;
                                 <xar:else />
-                                    <img src="#$icon_none#" class="xar-valign-middle"/>&#160; 
-                                    <img src="#$icon_none#" class="xar-valign-middle"/>&#160; 
+                                    <img src="#$icon_none#" class="xar-valign-middle"/>&#160;
+                                    <img src="#$icon_none#" class="xar-valign-middle"/>&#160;
                                     <img src="#$icon_none#" class="xar-valign-middle"/>&#160;
                                 </xar:if>
                                 <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$fields.id#" title="#xarML('Show the Privileges assigned to this User')#">
                                     <img src="#$icon_privileges#" class="xar-valign-middle"/>
                                 </a>
-                                &#160; 
+                                &#160;
                                 <a href="&xar-modurl-roles-admin-testprivileges;&amp;id=#$fields.id#" title="#xarML('Test the Privileges of this User')#">
                                     <img src="#$icon_test#" class="xar-valign-middle"/>
                                 </a>
@@ -244,20 +244,22 @@
                 <div class="xar-align-right">
                     <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['state'],true);return false;">
                         Check All
-                    </a>| 
+                    </a>|
                     <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['state'],false);return false;">
                         Uncheck All
                     </a>
                 </div>
-                <xar:if condition="!empty($pager)">
-                    <div class="xar-align-center">#$pager#</div>
+                <xar:if condition="$totalselect gt $itemsperpage">
+                    <div class="xar-align-center">
+                        <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
+                    </div>
                 </xar:if>
             </form>
         </xar:if>
         <p>
             <a href="&xar-modurl-roles-admin-new;&amp;ptype=0&amp;pparentid=#$groupid#" title="#xarML('Add a new user')#">
                 Add a new user to this group
-            </a>| 
+            </a>|
             <a href="&xar-modurl-roles-admin-createmail;">Email users in this group</a>
         </p>
     </div>

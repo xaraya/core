@@ -77,22 +77,20 @@ function <xsl:value-of select="$module_prefix"/>_<xsl:value-of select="@name"/>a
     $data['objects_props']  =&amp; $objects->getProperties();
     $data['objects_values'] =&amp; $objects->items;
     $data['itemtype'] = <xsl:value-of select="@itemtype"/>;
-    sys::import('xaraya.pager');
-    $data['pager'] = xarTplGetPager(
-        $startnum
-        ,xarModAPIFunc(
+    $data['startnum'] = $startnum;
+    $data['total'] = xarModAPIFunc(
             '<xsl:value-of select="$module_prefix"/>'
             ,'user'
             ,'count'
-            ,array( 'itemtype' => <xsl:value-of select="@itemtype"/> ))
-        ,xarModURL(
+            ,array( 'itemtype' => <xsl:value-of select="@itemtype"/> ));
+    $data['urltemplate'] = xarModURL(
             '<xsl:value-of select="$module_prefix"/>'
             ,$type
             ,'view'
             ,array(
                 'startnum'  => '%%'
-                ,'itemtype' => <xsl:value-of select="@itemtype"/> ))
-        ,$items_per_page );
+                ,'itemtype' => <xsl:value-of select="@itemtype"/> ));
+    $data['itemsperpage'] = $items_per_page;
 
     return $data;
 }

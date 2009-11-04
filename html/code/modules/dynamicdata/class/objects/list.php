@@ -591,14 +591,29 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if(empty($args['pagerurl'])) {
             $args['pagerurl'] = '';
         }
-        list(
-            $args['prevurl'],
-            $args['nexturl'],
-            $args['sorturl'],
-            $args['pager']) = $this->getPager($args['pagerurl']);
+        $this->pagerurl = $args['pagerurl'];
+        $args['sorturl'] = $this->getSortURL($this->pagerurl);
+
+        if(empty($this->numitems) || ( (count($this->items) < $this->numitems) && $this->startnum == 1 )) {
+            if (!isset($this->itemcount)) $this->itemcount = count($this->items);
+        }
 
         $args['object'] = $this;
         return xarTplObject($args['tplmodule'],$args['template'],'showview',$args);
+    }
+
+    public function getSortURL($currenturl = null)
+    {
+        if (empty($currenturl)) {
+            $currenturl = xarServer::getCurrentURL(array('startnum' => null, 'sort' => null));
+        } else {
+            $currenturl = preg_replace('/&amp;(startnum|sort)=(.*)?(&amp;|$)/', '$3', $currenturl);
+            $currenturl = preg_replace('/\?(startnum|sort)=(.*)?&amp;/', '?', $currenturl);
+            $currenturl = preg_replace('/\?(startnum|sort)=(.*)?$/', '', $currenturl);
+        }
+        $currenturl .= preg_match('/\?/', $currenturl) ? '&amp;sort' : '?sort';
+
+        return $currenturl;
     }
 
     /**
@@ -790,84 +805,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $this->fieldsummarylabel = $label;
         }
         return $item;
-    }
-
-    public function getPager($currenturl=null)
-    {
-        $currenturl = isset($currenturl) ? $currenturl : "";
-        $prevurl = '';
-        $nexturl = '';
-        $sorturl = '';
-        $pager   = '';
-
-        if(empty($this->startnum)) $this->startnum = 1;
-
-        // Get current URL (this uses &amp; by default now)
-        if(empty($currenturl)) $currenturl = xarServer::getCurrentURL();
-
-        // TODO: clean up generation of sort URL
-
-        // get rid of current startnum and sort params
-        $sorturl = $currenturl;
-        $sorturl = preg_replace('/&amp;startnum=\d+/','',$sorturl);
-        $sorturl = preg_replace('/\?startnum=\d+&amp;/','?',$sorturl);
-        $sorturl = preg_replace('/\?startnum=\d+$/','',$sorturl);
-        $sorturl = preg_replace('/&amp;sort=\w+/','',$sorturl);
-        $sorturl = preg_replace('/\?sort=\w+&amp;/','?',$sorturl);
-        $sorturl = preg_replace('/\?sort=\w+$/','',$sorturl);
-        // add sort param at the end of the URL
-        if(preg_match('/\?/',$sorturl)) {
-            $sorturl = $sorturl . '&amp;sort';
-        } else {
-            $sorturl = $sorturl . '?sort';
-        }
-        if(empty($this->numitems) || ( (count($this->items) < $this->numitems) && $this->startnum == 1 )) {
-            return array($prevurl,$nexturl,$sorturl,$pager);
-        }
-
-        if(preg_match('/startnum=\d+/',$currenturl)) {
-            if(count($this->items) == $this->numitems) {
-                $next = $this->startnum + $this->numitems;
-                $nexturl = preg_replace('/startnum=\d+/',"startnum=$next",$currenturl);
-            }
-            if($this->startnum > 1) {
-                $prev = $this->startnum - $this->numitems;
-                $prevurl = preg_replace('/startnum=\d+/',"startnum=$prev",$currenturl);
-            }
-            $pagerurl = preg_replace('/startnum=\d+/','startnum=%%',$currenturl);
-        }
-        elseif(preg_match('/\?/',$currenturl)) {
-            if(count($this->items) == $this->numitems) {
-                $next = $this->startnum + $this->numitems;
-                $nexturl = $currenturl . '&amp;startnum=' . $next;
-            }
-            if($this->startnum > 1) {
-                $prev = $this->startnum - $this->numitems;
-                $prevurl = $currenturl . '&amp;startnum=' . $prev;
-            }
-            $pagerurl = $currenturl . '&amp;startnum=%%';
-        } else {
-            if(count($this->items) == $this->numitems) {
-                $next = $this->startnum + $this->numitems;
-                $nexturl = $currenturl . '?startnum=' . $next;
-            }
-            if($this->startnum > 1) {
-                $prev = $this->startnum - $this->numitems;
-                $prevurl = $currenturl . '?startnum=' . $prev;
-            }
-            $pagerurl = $currenturl . '?startnum=%%';
-        }
-
-        // we already counted items earlier, or received the itemcount in showView()
-        if (!empty($this->itemcount)) {
-            sys::import('xaraya.pager');
-            $pager = xarTplGetPager($this->startnum,
-                                    $this->itemcount,
-                                    $pagerurl,
-                                    $this->numitems);
-        }
-
-        return array($prevurl,$nexturl,$sorturl,$pager);
     }
 
     /**

@@ -180,7 +180,11 @@
                 </xar:loop>
             </table>
             <!-- add the pager here -->
-            <div class="xar-align-center">#$pager#</div>
+            <xar:if condition="$total gt $itemsperpage">
+                <div class="xar-align-center">
+                    <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
+                </div>
+            </xar:if>
             <form method="post" action="&xar-modurl-roles-user-viewlist;">
                 <label for="search">Search:</label>
                 <input type="hidden" name="phase" id="phase" value="#xarVarPrepForDisplay($phase)#"/>
@@ -189,7 +193,7 @@
                 <input type="text" name="search" id="search" value="" size="40" maxlength="255" tabindex="1"/>
                 <input type="submit" value="#xarVarPrepForDisplay($searchlabel)#"/>
             </form>
-            <p>Search condition: 
+            <p>Search condition:
             <strong>#xarVarPrepForDisplay($msg)#</strong></p>
         </xar:if>
     </div>

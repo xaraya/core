@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:if condition="$pager ne ''">
-        <table class="xar-fullwidth" border="0" cellspacing="2" cellpadding="2">
-            <tr>
-                <th align="center">#$pager#</th>
-            </tr>
-        </table>
+    <xar:if condition="$total gt $itemsperpage">
+        <div>
+            <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+        </div>
     </xar:if>
     <table class="xar-fullwidth">
         <tr>
@@ -22,7 +20,7 @@
             <tr>
                 <td>
                     <xar:if condition="empty($loop:item['title'])">
-                        #$loop:item['name']# 
+                        #$loop:item['name']#
                     <xar:else />
                         <span title="#xarVarPrepfordisplay($loop:item['title'])#">
                         #$loop:item['name']#</span>
@@ -47,10 +45,10 @@
                 <td>
                     <xar:if condition="$loop:item['template'] ne NULL">
                         #$loop:item['template']#
-                        &#160; 
+                        &#160;
                     <xar:else />
                         <xar:if condition="empty($loop:item['group_template'])">
-                            [ default ] 
+                            [ default ]
                         <xar:else />
                             #$loop:item['group_template']# &#160;
                         </xar:if>
@@ -60,7 +58,7 @@
                 <td class="xar-align-center">
                     <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                         Edit
-                    </a>| 
+                    </a>|
                     <a href="#$loop:item['deleteurl']#" onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
                         Delete
                     </a>
@@ -68,11 +66,9 @@
             </tr>
         </xar:loop>
     </table>
-    <xar:if condition="$pager ne ''">
-        <table class="xar-fullwidth" border="0" cellspacing="2" cellpadding="2">
-            <tr>
-                <th align="center">#$pager#</th>
-            </tr>
-        </table>
+    <xar:if condition="$total gt $itemsperpage">
+        <div>
+            <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+        </div>
     </xar:if>
 </xar:template>
