@@ -316,6 +316,14 @@ class xarModuleCache extends Object
             // the cache collection directory hasn't reached its size limit...
             !(self::$cacheStorage->sizeLimitReached()) ) {
 
+            // CHECKME: add cacheKey cacheCode in comments if template filenames are already added
+            if (xarTpl_outputTemplateFilenames()) {
+                // separate with space here - we must avoid issues with double -- !?
+                $value = "<!-- start cache: module/" . $cacheKey . ' ' . self::$cacheCode . " -->\n"
+                         . $value
+                         . "<!-- end cache: module/" . $cacheKey . ' ' . self::$cacheCode . " -->\n";
+            }
+
             $content = array('output' => $value,
                              'title'  => self::$setTitle,
                              'styles' => self::$addStyles,

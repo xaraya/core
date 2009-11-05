@@ -109,7 +109,7 @@ class xarCache_XCache_Storage extends xarCache_Storage
             $cache_list = $this->getCachedList();
             foreach ($cache_list as $cache_entry) {
                 // check if this cache entry starts with the key
-                if (strpos($cache_entry['key'], $key) !== 0) continue;
+                if (!empty($key) && strpos($cache_entry['key'], $key) !== 0) continue;
                 // add the type/namespace prefix if necessary
                 if (!empty($this->prefix)) {
                     $cache_entry['key'] = $this->prefix . $cache_entry['key'];
