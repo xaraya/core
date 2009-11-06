@@ -2,16 +2,24 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- Pager for displaying legacy next-page links on multi-page documents -->
-    <!-- Display next-page link if we are not on the last page -->
+    <!-- Get the pager css, this css deals only with layout for the pager links
+         Styles can be applied either by adding classes to your theme,eg. to
+         style.css or by applying classes directly in your template.
+         This template uses the default Xaraya classes xar-alt, xar-accent
+         and xar-norm to indicate the current state of links -->
+    <xar:style scope="module" module="base" file="pager"/>
     <div class="xar-pager">
+        <!-- Display next-page link if we are not on the last page -->
         <xar:if condition="$currentpagenum ne $lastpagenum">
+            <span class="xar-page">
             <a title="#xarML('Next page')#" href="#$nextpageurl#">#xarML('next')# (#$nextpage#/#$totalpages#)</a>
+            </span>
         </xar:if>
         <!-- Display last-page link if we are not on the last page -->
-        <xar:if condition="$currentpagenum ne $lastpagenum">&#160;
-            <a title="#xarML('Last page')#" href="#$lasturl#">&gt;&gt;</a>
-        <xar:else />
-            &#160;
+        <xar:if condition="$currentpagenum ne $lastpagenum">
+            <span class="xar-page">
+            <a title="#xarML('Last page')#" href="#$lasturl#">&gt;|</a>
+            </span>
         </xar:if>
     </div>
 </xar:template>

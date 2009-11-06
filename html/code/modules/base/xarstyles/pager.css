@@ -1,0 +1,29 @@
+/* pager layout */
+div.xar-pager {
+
+}
+div.xar-pager span {
+    white-space: nowrap;
+	display: inline-block;
+    margin: 0 1px 0 1px !important;
+}
+div.xar-pager span.xar-norm-outline,
+div.xar-pager span.xar-accent-outline,
+div.xar-pager span.xar-alt-outline {
+    border-width: 1px !important;
+    border-style: solid;
+}
+div.xar-pager span.xar-pager-label {
+    padding: .1em .3em .1em .3em !important;
+}
+div.xar-pager span.xar-page {
+}
+div.xar-pager span.xar-page-current {
+    padding: .1em 3px .1em 3px !important;
+}
+div.xar-pager span.xar-page a {
+    white-space: nowrap !important;
+	text-decoration: none;
+    padding: .1em 3px .1em 3px !important;
+	display: block;
+}
