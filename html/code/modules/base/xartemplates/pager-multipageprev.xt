@@ -10,9 +10,8 @@
             &#160;
         </xar:if>
         <!-- Display previous-page link if we are not on the first page -->
-        <xar:if condition="$currentpagenum ne $firstpagenum">&#160; 
-            <a title="#xarML('Previous page')#" href="#$prevpageurl#">#xarML('prev')#">
-                (#$prevpage#/#$totalpages#)
+        <xar:if condition="$currentpagenum ne $firstpagenum">&#160;
+            <a title="#xarML('Previous page')#" href="#$prevpageurl#">#xarML('prev')#"> (#$prevpage#/#$totalpages#)
             </a>
         </xar:if>
     </div>
