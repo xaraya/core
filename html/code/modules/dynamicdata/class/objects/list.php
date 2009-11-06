@@ -593,10 +593,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         $this->pagerurl = $args['pagerurl'];
         $args['sorturl'] = $this->getSortURL($this->pagerurl);
-
-        if(empty($this->numitems) || ( (count($this->items) < $this->numitems) && $this->startnum == 1 )) {
-            if (!isset($this->itemcount)) $this->itemcount = count($this->items);
-        }
+        if (!isset($this->startnum)) $this->startnum = 1;
 
         $args['object'] = $this;
         return xarTplObject($args['tplmodule'],$args['template'],'showview',$args);

@@ -22,7 +22,24 @@
         <xar:set name="layout">'default'</xar:set>
     </xar:if>
     <xar:template module="$tplmodule" file="view-$layout"/>
-    <xar:if condition="$object:itemcount gt $object:numitems">
+    <xar:if condition="empty($object:itemcount)">
+        <!-- if we don't have an item total show prev / next links -->
+        <div>
+        <xar:if condition="$object:startnum gt 1">
+            <div class="xar-halfwidth xar-floatleft">
+            <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->startnum" urltemplate="$object->pagerurl" template="multipageprev"/>
+            </div>
+        </xar:if>
+        <xar:if condition="count($object:items) eq $object:numitems">
+            <div class="xar-halfwidth xar-floatright xar-align-right">
+            <xar:set name="newtotal">$object->startnum+$object->numitems</xar:set>
+            <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$newtotal" urltemplate="$object->pagerurl" template="multipagenext"/>
+            </div>
+        </xar:if>
+        <br class="xar-clearboth"/>
+        </div>
+    <xar:elseif condition="$object:itemcount gt $object:numitems"/>
+        <!-- show the pager -->
         <div class="xar-align-center">
             <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->itemcount" urltemplate="$object->pagerurl"/>
         </div>
