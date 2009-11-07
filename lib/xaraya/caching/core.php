@@ -11,6 +11,9 @@
  * @author jsb
  */
 
+/**
+ * Core caching in memory for frequently-used values (within a single HTTP request)
+ */
 class xarCoreCache extends Object
 {
     private static $cacheCollection = array();
@@ -20,9 +23,11 @@ class xarCoreCache extends Object
     /**
      * Initialise the caching options
      *
+     * @param array $config caching configuration from config.caching.php
      * @return bool
-     */
-    public static function init($args = false)
+     * @todo configure optional second-level cache here ?
+    **/
+    public static function init(array $config = array())
     {
         return true;
     }
@@ -30,10 +35,9 @@ class xarCoreCache extends Object
     /**
      * Check if a variable value is cached
      *
-     * @param scope string the scope identifying which part of the cache you want to access
-     * @param name string the name of the variable in that particular scope
-     * @return mixed value of the variable, or false if variable isn't cached
-     * @todo make sure we can make this protected
+     * @param string $scope the scope identifying which part of the cache you want to access
+     * @param string $name  the name of the variable in that particular scope
+     * @return bool true if the variable is cached, false if not
     **/
     public static function isCached($scope, $name)
     {
@@ -56,10 +60,9 @@ class xarCoreCache extends Object
     /**
      * Get the value of a cached variable
      *
-     * @param scope string the scope identifying which part of the cache you want to access
-     * @param name string the name of the variable in that particular scope
+     * @param string $scope the scope identifying which part of the cache you want to access
+     * @param string $name  the name of the variable in that particular scope
      * @return mixed value of the variable, or null if variable isn't cached
-     * @todo make sure we can make this protected
     **/
     public static function getCached($scope, $name)
     {
@@ -73,11 +76,10 @@ class xarCoreCache extends Object
     /**
      * Set the value of a cached variable
      *
-     * @param scope string the scope identifying which part of the cache you want to access
-     * @param name string the name of the variable in that particular scope
-     * @param value string the new value for that variable
-     * @return void
-     * @todo make sure we can make this protected
+     * @param string $scope the scope identifying which part of the cache you want to access
+     * @param string $name  the name of the variable in that particular scope
+     * @param string $value the new value for that variable
+     * @return null
     **/
     public static function setCached($scope, $name, $value)
     {
@@ -95,11 +97,9 @@ class xarCoreCache extends Object
     /**
      * Delete a cached variable
      *
-     * @param scope string the scope identifying which part of the cache you want to access
-     * @param name string the name of the variable in that particular scope
+     * @param string $scope the scope identifying which part of the cache you want to access
+     * @param string $name  the name of the variable in that particular scope
      * @return null
-     * @todo remove the double whammy
-     * @todo make sure we can make this protected
     **/
     public static function delCached($scope, $name)
     {
@@ -115,9 +115,8 @@ class xarCoreCache extends Object
     /**
      * Flush a particular cache (e.g. for session initialization)
      *
-     * @param scope string the scope identifying which part of the cache you want to wipe out
+     * @param string $scope the scope identifying which part of the cache you want to wipe out
      * @return null
-     * @todo make sure we can make this protected
     **/
     public static function flushCached($scope)
     {
@@ -133,9 +132,9 @@ class xarCoreCache extends Object
     /**
      * Set second-level cache storage if you want to keep values for longer than the current HTTP request
      *
-     * @param  cacheStorage the cache storage instance you want to use (typically in-memory like apc, memcached, xcache, ...)
-     * @param  cacheExpire how long do you want to keep values in second-level cache storage (if the storage supports it)
-     * @param  isBulkStorage do we load/save all variables in bulk by scope or not ?
+     * @param object $cacheStorage  the cache storage instance you want to use (typically in-memory like apc, memcached, xcache, ...)
+     * @param int    $cacheExpire   how long do you want to keep values in second-level cache storage (if the storage supports it)
+     * @param bool   $isBulkStorage do we load/save all variables in bulk by scope or not ?
      * @return null
     **/
     public static function setCacheStorage($cacheStorage, $cacheExpire = 0, $isBulkStorage = 0)
@@ -161,9 +160,12 @@ class xarCoreCache extends Object
         }
     }
 
-// CHECKME: work with bulk load / bulk save per scope instead of individual gets per scope:name ?
-//          But what about concurrent updates in bulk then (+ unserialize & autoload too early) ?
-//          There doesn't seem to be a big difference in performance using bulk or not, at least with xcache
+/**
+ * CHECKME: work with bulk load / bulk save per scope instead of individual gets per scope:name ?
+ *          But what about concurrent updates in bulk then (+ unserialize & autoload too early) ?
+ *          There doesn't seem to be a big difference in performance using bulk or not, at least with xcache
+ */
+
     public static function loadBulkStorage()
     {
         if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) return;

@@ -230,10 +230,9 @@ function xarTplSetDoctype($doctypeName)
  */
 function xarTplSetPageTitle($title = NULL, $module = NULL)
 {
-    // keep track of page title set by module functions when we're caching
-    if (xarCache::$outputCacheIsEnabled && xarOutputCache::$moduleCacheIsEnabled && !empty(xarModuleCache::$cacheKey)) {
-        xarModuleCache::setTitle($title, $module);
-    }
+    // keep track of page title when we're caching
+    xarCache::setPageTitle($title, $module);
+
     xarLogMessage("TPL: Setting pagetitle to $title");
     // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable!!!
     if (!method_exists('xarModVars','Get')){
@@ -297,10 +296,8 @@ function xarTplAddJavaScript($position, $type, $data, $index = '')
 {
     if (empty($position) || empty($type) || empty($data)) {return;}
 
-    // keep track of javascript added by module functions when we're caching
-    if (xarCache::$outputCacheIsEnabled && xarOutputCache::$moduleCacheIsEnabled && !empty(xarModuleCache::$cacheKey)) {
-        xarModuleCache::addScript($position, $type, $data, $index = '');
-    }
+    // keep track of javascript when we're caching
+    xarCache::addJavaScript($position, $type, $data, $index);
 
     //Do lazy initialization of the array. There are instances of the logging system
     //where we need to use this function before the Template System was initialized
