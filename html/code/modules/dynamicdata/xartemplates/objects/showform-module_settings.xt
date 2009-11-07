@@ -23,17 +23,13 @@
         <xar:if condition="isset($properties['use_module_alias'])">
             <div class="xar-form-input-wrapper">
                 <label for = "modulealias" class="xar-form-label" title="#xarML('Use an alias instead of the module name')#">
-                    Use a module alias
+                    Enable module alias(es)
                 </label>
-                <xar:data-input property="$properties['use_module_alias']"/>
-            </div>
-        </xar:if>
-        <xar:if condition="isset($properties['module_alias_name'])">
-            <div class="xar-form-input-wrapper">
-                <label for="module_alias_name" class="xar-form-label" title="#xarML('The name of the module alias to be used.')#">
-                        Module Alias Name
-                </label>
-                <xar:data-input property="$properties['module_alias_name']"/>
+                <xar:data-input id="aliascheckbox" property="$properties['use_module_alias']" onchange="toggle(\'aliaslink\',\'aliascheckbox\')"/>&#160;
+                <xar:set name="info">xarRequest::getInfo()</xar:set>
+                <a href="#xarModURL('modules','admin','aliases',array('name' => $info[0]))#">
+                    Manage Aliases
+                </a>
             </div>
         </xar:if>
         <xar:if condition="isset($properties['enable_user_menu'])">

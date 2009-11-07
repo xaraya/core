@@ -40,16 +40,6 @@
       <seq>3</seq>
       <configuration></configuration>
     </property>
-    <property name="module_alias_name">
-      <id>42</id>
-      <label>Module Alias Name</label>
-      <type>textbox</type>
-      <defaultvalue></defaultvalue>
-      <source>module variable: base</source>
-      <status>33</status>
-      <seq>4</seq>
-      <configuration></configuration>
-    </property>
     <property name="enable_user_menu">
       <id>109</id>
       <label>Enable User Settings</label>
@@ -57,7 +47,7 @@
       <defaultvalue>0</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
-      <seq>5</seq>
+      <seq>4</seq>
       <configuration></configuration>
     </property>
     <property name="user_menu_link">
@@ -67,7 +57,7 @@
       <defaultvalue>0</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
-      <seq>6</seq>
+      <seq>5</seq>
       <configuration></configuration>
     </property>
     <property name="admin_menu_link">
@@ -77,7 +67,7 @@
       <defaultvalue>0</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
-      <seq>7</seq>
+      <seq>6</seq>
       <configuration></configuration>
     </property>
   </properties>
