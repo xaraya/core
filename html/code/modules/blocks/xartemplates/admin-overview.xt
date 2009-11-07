@@ -43,6 +43,9 @@
                 The Blocks module lets site administrator(s) create and manage the configuration, display position and grouping of 'blocks' of content or functionality on a Xaraya site. The Blocks module is a core module within
                 Xaraya and cannot be removed.
             </p>
+            <p>
+                Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('blocks')))#">here</a>.
+            </p>
 
             <h3>Concepts</h3>
             <h4>Block Types</h4>

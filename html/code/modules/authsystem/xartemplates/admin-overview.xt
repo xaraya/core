@@ -14,6 +14,9 @@
             The Authsystem module is Xaraya's default authentication module.
             It handles user authentication on your site by checking for a valid user log in. The Authsystem module is a core module within Xaraya and cannot be removed.
         </p>
+        <p>
+            Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('authsystem')))#">here</a>.
+        </p>
 
         <h3>Concepts</h3>
         <h4>Authentication modules</h4>

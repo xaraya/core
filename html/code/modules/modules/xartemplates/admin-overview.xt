@@ -13,6 +13,9 @@
         <p>
             The Modules module controls the installation, upgrade, and removal of modules on your Xaraya site. The module also lets you connect different modules via "hooks" to allow them to share functionality  The Modules module is a core module within Xaraya and cannot be removed. 
         </p>
+        <p>
+            Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('modules')))#">here</a>.
+        </p>
 
         <h3>Concepts</h3>
         <h4>Modules</h4>

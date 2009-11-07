@@ -15,6 +15,9 @@
             This is a utility module that takes information from other modules installed on your site,
             and formats and sends email for them. The Mail module is a core module within Xaraya and cannot be removed.
         </p>
+        <p>
+            Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('mail')))#">here</a>.
+        </p>
 
         <h3>The Admin interface</h3>
         <p>
