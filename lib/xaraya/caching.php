@@ -67,9 +67,8 @@ class xarCache extends Object
     {
         // load the caching configuration
         $cachingConfiguration = array();
-        try {
-            include(self::$cacheDir . '/config.caching.php');
-        } catch (Exception $e) {
+        if (file_exists(self::$cacheDir . '/config.caching.php')) {
+            @include(self::$cacheDir . '/config.caching.php');
         }
         return $cachingConfiguration;
     }
