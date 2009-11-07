@@ -13,23 +13,25 @@
 
 class xarPageCache extends Object
 {
-    public static $cacheTime = 1800;
-    public static $cacheDisplay = 0;
-    public static $cacheShowTime = 1;
+    public static $cacheTime         = 1800;
+    public static $cacheDisplay      = 0;
+    public static $cacheShowTime     = 1;
     public static $cacheExpireHeader = 0;
-    public static $cacheGroups = '';
-    public static $cacheHookedOnly = 0;
-    public static $cacheSizeLimit = 2097152;
+    public static $cacheGroups       = '';
+    public static $cacheHookedOnly   = 0;
+    public static $cacheSizeLimit    = 2097152;
+    public static $cacheStorage      = null;
 
-    public static $cacheStorage = null;
-    public static $cacheCode = '';
-    public static $cacheNoSession = 0;
+    public static $cacheSettings     = null;
+    public static $cacheKey          = null;
+    public static $cacheCode         = null;
+    public static $cacheNoSession    = 0;
 
     /**
      * Initialise the page caching options
      *
-     * @returns mixed
-     * @return true on success, exit if session-less page caching finds a hit
+     * @param array $args cache configuration
+     * @return mixed true on success, exit if session-less page caching finds a hit
      */
     public static function init(array $args = array())
     {
@@ -54,10 +56,10 @@ class xarPageCache extends Object
         $autoCachePeriod = isset($args['AutoCache.Period']) ?
             $args['AutoCache.Period'] : 0;
 
-        // Note : we may already exit here if session-less page caching is enabled
         if (!empty($sessionLessList) || !empty($autoCachePeriod)) {
             sys::import('xaraya.caching.output.sessionless');
             xarSessionLessCache::isCached($sessionLessList, $autoCachePeriod);
+            // Note : we may already exit here if session-less page caching is enabled
         }
 
         $storage = !empty($args['Page.CacheStorage']) ?
@@ -65,19 +67,135 @@ class xarPageCache extends Object
         $logfile = !empty($args['Page.LogFile']) ?
             $args['Page.LogFile'] : null;
         // Note: make sure this isn't used before core loading if we use database storage
-        sys::import('xaraya.caching.storage');
-        self::$cacheStorage = xarCache_Storage::getCacheStorage(array('storage'   => $storage,
-                                                                      'type'      => 'page',
-                                                                      // we store output cache files under this
-                                                                      'cachedir'  => xarOutputCache::$cacheCollection,
-                                                                      'expire'    => self::$cacheTime,
-                                                                      'sizelimit' => self::$cacheSizeLimit,
-                                                                      'logfile'   => $logfile));
+        self::$cacheStorage = xarCache::getStorage(array('storage'   => $storage,
+                                                         'type'      => 'page',
+                                                         // we store output cache files under this
+                                                         'cachedir'  => xarOutputCache::$cacheDir,
+                                                         'expire'    => self::$cacheTime,
+                                                         'sizelimit' => self::$cacheSizeLimit,
+                                                         'logfile'   => $logfile));
         if (empty(self::$cacheStorage)) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Get a cache key if this page is suitable for output caching
+     *
+     * @param string $url optional url to be checked if not the current url
+     * @return mixed cacheKey to be used with (is|get|set)Cached, or null if not applicable
+     */
+    public static function getCacheKey($url = null)
+    {
+        if (empty(self::$cacheStorage)) {
+            return;
+        }
+
+        // check if this page is suitable for page caching
+        if (!(self::checkCachingRules($url))) {
+            return;
+        }
+
+        // we should be safe for caching now
+
+        // set the current cacheKey - already done in checkCachingRules() here
+        //self::$cacheKey = $cacheKey;
+
+        // set the cacheCode for the current cacheKey
+
+        // the output depends on the current host, theme and locale
+        $factors = xarServer::getVar('HTTP_HOST') . xarTplGetThemeDir() .
+                xarUserGetNavigationLocale();
+
+        // add user groups as a factor if necessary
+        // Note : we don't share the cache between groups or with anonymous here
+        if (!empty(self::$cacheGroups) && xarUserIsLoggedIn()) {
+            $gidlist = xarCache::getParents();
+            $factors .= join(';',$gidlist);
+        }
+
+        // add page identifier
+        $factors .= xarServer::getVar('REQUEST_URI');
+        $param = xarServer::getVar('QUERY_STRING');
+        if (!empty($param)) {
+            $factors .= '?' . $param;
+        }
+
+        self::$cacheCode = md5($factors);
+        self::$cacheStorage->setCode(self::$cacheCode);
+
+        // return the cacheKey
+        return self::$cacheKey;
+    }
+
+    /**
+     * Get cache settings for the pages
+     * @return array
+     */
+    public static function getCacheSettings()
+    {
+        if (!isset(self::$cacheSettings)) {
+            $settings = array();
+        // TODO: make more things configurable ?
+            self::$cacheSettings = $settings;
+        }
+        return self::$cacheSettings;
+    }
+
+    /**
+     * Check if this page is suitable for page caching
+     *
+     * @access public
+     * @param  string $url optional url to be checked if not the current url
+     * @return bool   true if the page is suitable for caching, false if not
+     */
+    public static function checkCachingRules($url = null)
+    {
+        if (empty($url)) {
+            // get module parameters
+            list($modName, $modType, $funcName) = xarRequest::getInfo();
+            // define the cacheKey
+            if (xarRequest::isObjectURL()) {
+                // CHECKME: differentiate between view and display (= both with empty $funcName) based on itemid ??
+                $cacheKey = "objecturl-$modType-$funcName";
+            } else {
+                $cacheKey = "$modName-$modType-$funcName";
+            }
+            // get the current themeDir
+            $themeDir = xarTplGetThemeDir();
+
+        } else {
+            $params = parse_url($url);
+            // TODO: how far do we want to go here ?
+            $cacheKey = '?';
+            $themeDir = '?';
+            return false;
+        }
+
+        $settings = self::getCacheSettings();
+
+        if (// if this page is a user type page OR an object url AND
+            (strpos($cacheKey, '-user-') || strpos($cacheKey, 'objecturl-') !== false) &&
+            // (display views can be cached OR it is not a display view) AND
+            ((self::$cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
+            // the http request is a GET OR a HEAD AND
+            (xarServer::getVar('REQUEST_METHOD') == 'GET' || xarServer::getVar('REQUEST_METHOD') == 'HEAD') &&
+            // (we're caching the output of all themes OR this is the theme we're caching) AND
+            (empty(xarOutputCache::$cacheTheme) ||
+             strpos($themeDir, xarOutputCache::$cacheTheme)) &&
+            // the current user is eligible for receiving cached pages AND
+            xarPage_checkUserCaching(self::$cacheGroups)) {
+
+            // set the current cacheKey
+            self::$cacheKey = $cacheKey;
+
+            return true;
+
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -149,76 +267,21 @@ class xarPageCache extends Object
     }
 
     /**
-     * Check if this page is suitable for page caching
-     *
-     * @access public
-     * @param  string $cacheKey the key identifying the particular page you want to access
-     * @param  string $themeDir the current theme directory
-     * @returns bool
-     * @return true if the page is suitable for caching, false if not
-     */
-    public static function checkCachingRules($cacheKey, $themeDir)
-    {
-        if (// if this page is a user type page OR an object url AND
-            (strpos($cacheKey, '-user-') || strpos($cacheKey, 'objecturl-') !== false) &&
-            // (display views can be cached OR it is not a display view) AND
-            ((self::$cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
-            // the http request is a GET OR a HEAD AND
-            (xarServer::getVar('REQUEST_METHOD') == 'GET' || xarServer::getVar('REQUEST_METHOD') == 'HEAD') &&
-            // (we're caching the output of all themes OR this is the theme we're caching) AND
-            (empty(xarOutputCache::$cacheTheme) ||
-             strpos($themeDir, xarOutputCache::$cacheTheme)) &&
-            // the current user is eligible for receiving cached pages AND
-            xarPage_checkUserCaching(self::$cacheGroups)) {
-            return true;
-
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * check if the content of a page is available in cache or not
      *
      * @access public
      * @param  string $cacheKey the key identifying the particular page you want to access
-     * @returns bool
-     * @return true if the page is available in cache, false if not
+     * @return bool   true if the page is available in cache, false if not
      */
     public static function isCached($cacheKey)
     {
         if (empty(self::$cacheStorage)) {
             return false;
         }
-
-        $xarTpl_themeDir = xarTplGetThemeDir();
-
-        // Check if this page is suitable for page caching
-        if (!(self::checkCachingRules($cacheKey, $xarTpl_themeDir))) {
-            xarCoreCache::setCached('Page.Caching', 'nocache', true);
-            return false;
+        // we only cache the top-most page in case of nested pages
+        if (empty($cacheKey) || $cacheKey != self::$cacheKey) {
+            return;
         }
-
-        $page = xarServer::getVar('HTTP_HOST') . $xarTpl_themeDir .
-                xarUserGetNavigationLocale();
-
-        // add user groups as a factor if necessary
-        // Note : we don't share the cache between groups or with anonymous here
-        if (!empty(self::$cacheGroups) && xarUserIsLoggedIn()) {
-            $gidlist = xarCache_getParents();
-            $page .= join(';',$gidlist);
-        }
-
-        $page .= xarServer::getVar('REQUEST_URI');
-        $param = xarServer::getVar('QUERY_STRING');
-        if (!empty($param)) {
-            $page .= '?' . $param;
-        }
-        // use this global instead of $cache_file so we can cache several things
-        // based on different $cacheKey in one page request
-        // - e.g. for module and block caching
-        self::$cacheCode = md5($page);
-        self::$cacheStorage->setCode(self::$cacheCode);
 
         if (// the cache entry exists and hasn't expired yet...
             (self::$cacheStorage->isCached($cacheKey))) {
@@ -227,7 +290,7 @@ class xarPageCache extends Object
             if (!empty(self::$cacheNoSession)) {
                 $cacheKey2 = 'static';
                 $cacheCode2 = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-                $cache_file2 = xarOutputCache::$cacheCollection."/page/$cacheKey2-$cacheCode2.php";
+                $cache_file2 = xarOutputCache::$cacheDir."/page/$cacheKey2-$cacheCode2.php";
             // Note that if we get here, the first-time visitor will receive a session cookie,
             // so he will no longer benefit from this himself ;-)
                 self::$cacheStorage->saveFile($cacheKey, $cache_file2);
@@ -255,11 +318,14 @@ class xarPageCache extends Object
         if (empty(self::$cacheStorage)) {
             return false;
         }
+        // we only cache the top-most page in case of nested pages
+        if (empty($cacheKey) || $cacheKey != self::$cacheKey) {
+            return;
+        }
 
         // output the content directly to the browser here
         $result = self::$cacheStorage->getCached($cacheKey, 1);
 
-        self::$cacheStorage->cleanCached();
         return $result;
     }
 
@@ -274,6 +340,10 @@ class xarPageCache extends Object
     public static function setCached($cacheKey, $value)
     {
         if (empty(self::$cacheStorage)) {
+            return;
+        }
+        // we only cache the top-most page in case of nested pages
+        if (empty($cacheKey) || $cacheKey != self::$cacheKey) {
             return;
         }
 
@@ -312,7 +382,7 @@ class xarPageCache extends Object
             if (!empty(self::$cacheNoSession)) {
                 $cacheKey2 = 'static';
                 $cacheCode2 = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-                $cache_file2 = xarOutputCache::$cacheCollection."/page/$cacheKey2-$cacheCode2.php";
+                $cache_file2 = xarOutputCache::$cacheDir."/page/$cacheKey2-$cacheCode2.php";
             // Note that if we get here, the first-time visitor will receive a session cookie,
             // so he will no longer benefit from this himself ;-)
                 self::$cacheStorage->saveFile($cacheKey, $cache_file2);
@@ -324,19 +394,8 @@ class xarPageCache extends Object
     }
 
     /**
-     * Delete a page cache entry (unused)
-     */
-    public static function delCached($cacheKey)
-    {
-        if (empty(self::$cacheStorage)) {
-            return;
-        }
-
-        self::$cacheStorage->delCached($cacheKey);
-    }
-
-    /**
      * Flush page cache entries
+     * @return void
      */
     public static function flushCached($cacheKey)
     {
@@ -353,7 +412,6 @@ class xarPageCache extends Object
  *
  * @access private
  * @return bool
- * @todo avoid DB lookup by passing group via cookies ?
  * @todo Note : don't do this if admins get cached too :)
  */
 function xarPage_checkUserCaching($cacheGroups)
@@ -366,7 +424,7 @@ function xarPage_checkUserCaching($cacheGroups)
         return false;
     }
 
-    $gidlist = xarCache_getParents();
+    $gidlist = xarCache::getParents();
 
     $groups = explode(';',$cacheGroups);
     foreach ($groups as $groupid) {

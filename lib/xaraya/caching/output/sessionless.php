@@ -59,23 +59,26 @@ class xarSessionLessCache extends Object
         // the URL is already in the list for session-less page caching
         if (in_array('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], $sessionLessList)) {
             $cacheKey = 'static';
-            xarPageCache::$cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-            $cache_file = xarOutputCache::$cacheCollection . "/page/$cacheKey-" . xarPageCache::$cacheCode . ".php";
+            $cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+            $cache_file = xarOutputCache::$cacheDir . "/page/$cacheKey-" . $cacheCode . ".php";
         // Note: we stick to filesystem for session-less caching
             if (file_exists($cache_file) &&
                 filesize($cache_file) > 0 &&
                 (xarPageCache::$cacheTime == 0 ||
                  filemtime($cache_file) > time() - xarPageCache::$cacheTime)) {
 
+                // CHECKME: set xarPageCache::$cacheCode for the ETag here or not ???
+                xarPageCache::$cacheCode = $cacheCode;
+
                 $modtime = filemtime($cache_file);
-                // this may already exit if we have a 304 Not Modified
                 xarPageCache::sendHeaders($modtime);
+                // this may already exit if we have a 304 Not Modified
 
                 // send the content of the cache file to the browser
                 self::getCached($cache_file);
 
                 // CHECKME: if we do this after xarPageCache::sendHeaders(), we'll never get the 304's logged for autocache
-                if (file_exists(xarOutputCache::$cacheCollection.'/autocache.start')) {
+                if (file_exists(xarOutputCache::$cacheDir.'/autocache.start')) {
                     sys::import('xaraya.caching.output.autosession');
                     xarAutoSessionCache::logStatus('HIT', $autoCachePeriod);
                 }
@@ -90,7 +93,7 @@ class xarSessionLessCache extends Object
             }
         }
         // we haven't found a cache hit for this URL
-        if (file_exists(xarOutputCache::$cacheCollection.'/autocache.start')) {
+        if (file_exists(xarOutputCache::$cacheDir.'/autocache.start')) {
             sys::import('xaraya.caching.output.autosession');
             xarAutoSessionCache::logStatus('MISS', $autoCachePeriod);
         }

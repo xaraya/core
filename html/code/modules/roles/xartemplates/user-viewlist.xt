@@ -182,7 +182,7 @@
             <!-- add the pager here -->
             <xar:if condition="$total gt $itemsperpage">
                 <div class="xar-align-center">
-                    <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
+                    <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
                 </div>
             </xar:if>
             <form method="post" action="&xar-modurl-roles-user-viewlist;">

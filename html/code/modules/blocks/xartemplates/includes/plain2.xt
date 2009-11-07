@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="$total gt $itemsperpage">
         <div>
-            <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
         </div>
     </xar:if>
     <table class="xar-fullwidth">
@@ -68,7 +68,7 @@
     </table>
     <xar:if condition="$total gt $itemsperpage">
         <div>
-            <xar:base-pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
         </div>
     </xar:if>
 </xar:template>

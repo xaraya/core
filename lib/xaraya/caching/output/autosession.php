@@ -33,13 +33,13 @@ class xarAutoSessionCache extends Object
             //$ref = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-';
 
             if (!empty($autoCachePeriod) &&
-                filemtime(xarOutputCache::$cacheCollection.'/autocache.start') < time() - $autoCachePeriod) {
+                filemtime(xarOutputCache::$cacheDir.'/autocache.start') < time() - $autoCachePeriod) {
                 // re-calculate Page.SessionLess based on autocache.log and save in config.caching.php
                 self::refreshSessionLessList();
 
-                $fp = @fopen(xarOutputCache::$cacheCollection.'/autocache.log', 'w');
+                $fp = @fopen(xarOutputCache::$cacheDir.'/autocache.log', 'w');
             } else {
-                $fp = @fopen(xarOutputCache::$cacheCollection.'/autocache.log', 'a');
+                $fp = @fopen(xarOutputCache::$cacheDir.'/autocache.log', 'a');
             }
             if ($fp) {
                 @fwrite($fp, "$time $status $addr $url\n");
@@ -54,7 +54,7 @@ class xarAutoSessionCache extends Object
      */
     public static function refreshSessionLessList()
     {
-        @touch(xarOutputCache::$cacheCollection.'/autocache.start');
+        @touch(xarOutputCache::$cacheDir.'/autocache.start');
 
         $xarVarDir = sys::varpath();
 
@@ -62,12 +62,13 @@ class xarAutoSessionCache extends Object
         if (file_exists($cachingConfigFile) &&
             is_writable($cachingConfigFile)) {
 
+            $cachingConfiguration = array();
             include $cachingConfigFile;
             if (!empty($cachingConfiguration['AutoCache.MaxPages']) &&
-                file_exists(xarOutputCache::$cacheCollection.'/autocache.log') &&
-                filesize(xarOutputCache::$cacheCollection.'/autocache.log') > 0) {
+                file_exists(xarOutputCache::$cacheDir.'/autocache.log') &&
+                filesize(xarOutputCache::$cacheDir.'/autocache.log') > 0) {
 
-                $logs = @file(xarOutputCache::$cacheCollection.'/autocache.log');
+                $logs = @file(xarOutputCache::$cacheDir.'/autocache.log');
                 $autocacheproposed = array();
                 if (!empty($cachingConfiguration['AutoCache.KeepStats'])) {
                     $autocachestats = array();
@@ -133,10 +134,10 @@ class xarAutoSessionCache extends Object
                 }
                 // save cache statistics
                 if (!empty($cachingConfiguration['AutoCache.KeepStats'])) {
-                    if (file_exists(xarOutputCache::$cacheCollection.'/autocache.stats') &&
-                        filesize(xarOutputCache::$cacheCollection.'/autocache.stats') > 0) {
+                    if (file_exists(xarOutputCache::$cacheDir.'/autocache.stats') &&
+                        filesize(xarOutputCache::$cacheDir.'/autocache.stats') > 0) {
 
-                        $stats = @file(xarOutputCache::$cacheCollection.'/autocache.stats');
+                        $stats = @file(xarOutputCache::$cacheDir.'/autocache.stats');
                         foreach ($stats as $entry) {
                             if (empty($entry)) continue;
                             list($url,$hit,$miss,$first,$last) = explode(' ',$entry);
@@ -154,7 +155,7 @@ class xarAutoSessionCache extends Object
                         }
                         unset($stats);
                     }
-                    $fp = @fopen(xarOutputCache::$cacheCollection.'/autocache.stats', 'w');
+                    $fp = @fopen(xarOutputCache::$cacheDir.'/autocache.stats', 'w');
                     if ($fp) {
                         foreach ($autocachestats as $url => $stats) {
                             if ($stats['HIT'] + $stats['MISS'] < 2) {
