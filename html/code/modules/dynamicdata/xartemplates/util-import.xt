@@ -16,15 +16,14 @@
             <fieldset>
                 <legend>Import Object Definition</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="basedir" title="#xarML('Location of object definitions')#"
-                    class="xar-form-label">Base Directory:</label>
-                    <input type="text" name="basedir" id="basedir" value="#$basedir#"
-                    maxlength="250" class="xar-form-textxlong"/>
+                    <label for="basedir" title="#xarML('Location of object definitions')#" class="xar-form-label">Base Directory:</label>
+                    <input type="text" name="basedir" id="basedir" value="#$basedir#" maxlength="250" class="xar-form-textxlong"/>
                     <input type="submit" name="refresh" id="refresh" value="#xarML('Refresh')#"/>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="import" title="#xarML('XML files found in Base Directory')#"
-                    class="xar-form-label">Available .xml Files:</label>
+                    <label for="import" title="#xarML('XML files found in Base Directory')#" class="xar-form-label">
+                        Available .xml Files:
+                    </label>
                     <select name="import" id="import">
                         <xar:foreach in="$options" value="$option">
                             <option value="#$option['id']#">#$option['name']#</option>
@@ -32,33 +31,32 @@
                     </select>
                 </div>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="checkbox" name="overwrite" id="overwrite" value="1"/>
-                    <label for="overwrite"
-                    title="#xarML('Overwrite the definition if it already exists')#">Overwrite if
-                    exists</label>
+                    <input type="checkbox" name="overwrite" id="overwrite" value="1"/>&#160;
+                    <label for="overwrite" title="#xarML('Overwrite the definition if it already exists')#">
+                        Overwrite if exists
+                    </label>
                 </div>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="checkbox" name="keepitemid" id="keepitemid" value="1"/>
-                    <label for="keepitemid"
-                    title="#xarML('Check to attempt to maintain item ids found in definition file')#">
-                    Preserve Item ids If Possible</label>
+                    <input type="checkbox" name="keepitemid" id="keepitemid" value="1"/>&#160;
+                    <label for="keepitemid" title="#xarML('Check to attempt to maintain item ids found in definition file')#">
+                        Preserve Item ids If Possible
+                    </label>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="xml" title="#xarML('Object definition to import.')#"
-                    class="xar-form-label">Select a file in the list above, or paste the object
-                    definition in here:</label>
+                    <label for="xml" title="#xarML('Object definition to import.')#" class="xar-form-label">
+                        Select a file in the list above, or paste the object definition in here:
+                    </label>
                     <div class="xar-form-container-after">
                         <textarea name="xml" id="xml" class="xar-form-textarealarge">
                         &#160;</textarea>
                     </div>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="prefix"
-                    title="#xarML('The prefix to use for storage definitions')#"
-                    class="xar-form-label">Prefix:</label>
+                    <label for="prefix" title="#xarML('The prefix to use for storage definitions')#" class="xar-form-label">
+                        Prefix:
+                    </label>
                     <div class="xar-form-container-after">
-                        <input name="prefix" id="prefix" class="xar-form-textshort"
-                        value="#$prefix#"/>
+                        <input name="prefix" id="prefix" class="xar-form-textshort" value="#$prefix#"/>
                     </div>
                 </div>
             </fieldset>
