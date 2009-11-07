@@ -30,7 +30,7 @@ $modversion['changelog']      = 'xardocs/changelog.txt';
 $modversion['license']        = 'xardocs/license.txt';
 $modversion['official']       = true;
 $modversion['author']         = 'John Cox via phpMailer';
-$modversion['contact']        = 'niceguyeddie@xaraya.com';
+$modversion['contact']        = '';
 $modversion['admin']          = true;
 $modversion['user']           = false;
 $modversion['securityschema'] = array('mail::' => '::');

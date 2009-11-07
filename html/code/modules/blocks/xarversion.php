@@ -29,7 +29,7 @@ $modversion['changelog'] = '';
 $modversion['license'] = '';
 $modversion['official'] = true;
 $modversion['author'] = 'Jim McDonald, Paul Rosania';
-$modversion['contact'] = 'http://www.mcdee.net/, paul@xaraya.com';
+$modversion['contact'] = '';
 $modversion['admin'] = true;
 $modversion['user'] = false;
 $modversion['securityschema'] = array('Blocks::Group'    => 'Group name::Group ID',

@@ -30,7 +30,7 @@ $modversion['changelog']      = 'xardocs/changelog.txt';
 $modversion['license']        = '';
 $modversion['official']       = true;
 $modversion['author']         = 'Marty Vance, Andy Varganov';
-$modversion['contact']        = 'andyv@xaraya.com';
+$modversion['contact']        = '';
 $modversion['admin']          = true;
 $modversion['user']           = false;
 $modversion['securityschema'] = array('Themes::' => '::');

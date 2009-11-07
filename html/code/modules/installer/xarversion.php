@@ -28,7 +28,7 @@ $modversion['changelog'] = '';
 $modversion['license'] = '';
 $modversion['official'] = true;
 $modversion['author'] = 'Paul Rosania, Johnny Robeson';
-$modversion['contact'] = 'paul@xaraya.com, johnny@xaraya.com';
+$modversion['contact'] = '';
 $modversion['admin'] = false;
 $modversion['user'] = false;
 $modversion['securityschema'] = array('Installer::' => '::');

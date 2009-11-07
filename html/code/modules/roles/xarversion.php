@@ -30,7 +30,7 @@ $modversion['changelog']      = 'xardocs/changelog.txt';
 $modversion['license']        = 'xardocs/license.txt';
 $modversion['official']       = true;
 $modversion['author']         = 'Jim McDonald, Marco Canini, Jan Schrage, Camille Perinel';
-$modversion['contact']        = 'http://www.mcdee.net/, marco@xaraya.com, jan@xaraya.com, kams@xaraya.com';
+$modversion['contact']        = 'http://www.xaraya.com';
 $modversion['admin']          = true;
 $modversion['user']           = true;
 $modversion['securityschema'] = array('roles::' => 'Role uname:Role id');
