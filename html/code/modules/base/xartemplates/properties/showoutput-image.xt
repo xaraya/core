@@ -2,7 +2,11 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="!empty($value)">
-        <img src="#$value#" alt="#$imagealt#"/>
+        <xar:if condition="!empty($title)">
+            <img src="#$value#" alt="#$imagealt#" title="#$title#"/>
+        <xar:else />
+            <img src="#$value#" alt="#$imagealt#"/>
+        </xar:if>
     <xar:else />
         #$imagetext#
     </xar:if>
