@@ -11,7 +11,7 @@
 
 $GLOBALS["Xaraya_PageTime"] = microtime(true);
 
- /**
+/**
  * Load the layout file so we know where to find the Xaraya directories
  */
 $systemConfiguration = array();
@@ -70,21 +70,13 @@ function xarMain()
         }
     }
 
-    // Check if page caching is enabled
-    $pageCaching = 0;
-    if (xarCache::$outputCacheIsEnabled && xarOutputCache::$pageCacheIsEnabled) {
-        $pageCaching = 1;
-        if (xarRequest::isObjectURL()) {
-            // CHECKME: differentiate between view and display (= both with empty $funcName) based on itemid ??
-            $cacheKey = "objecturl-$modType-$funcName";
-        } else {
-            $cacheKey = "$modName-$modType-$funcName";
-        }
-    }
+    // Get a cache key for this page if it's suitable for page caching
+    $cacheKey = xarCache::getPageKey();
 
     $run = 1;
-    if ($pageCaching == 1 && xarPageCache::isCached($cacheKey)) {
-        // output the cached page *or* a 304 Not Modified status
+    // Check if the page is cached
+    if (!empty($cacheKey) && xarPageCache::isCached($cacheKey)) {
+        // Output the cached page *or* a 304 Not Modified status
         if (xarPageCache::getCached($cacheKey)) {
             // we could return true here, but we'll continue just in case
             // processing changes below someday...
@@ -145,7 +137,8 @@ function xarMain()
         // Render page with the output
         $pageOutput = xarTpl_renderPage($mainModuleOutput);
 
-        if ($pageCaching == 1) {
+        // Set the output of the page in cache
+        if (!empty($cacheKey)) {
             // save the output in cache *before* sending it to the client
             xarPageCache::setCached($cacheKey, $pageOutput);
         }

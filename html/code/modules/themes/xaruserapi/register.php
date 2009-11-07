@@ -34,10 +34,9 @@
  */
 function themes_userapi_register($args)
 {
-    // keep track of styles added by module functions when we're caching
-    if (xarCache::$outputCacheIsEnabled && xarOutputCache::$moduleCacheIsEnabled && !empty(xarModuleCache::$cacheKey)) {
-        xarModuleCache::addStyle($args);
-    }
+    // keep track of style when we're caching
+    xarCache::addStyle($args);
+
     sys::import('modules.themes.class.xarcss');
     $obj = new xarCSS($args);
     return $obj->run_output();

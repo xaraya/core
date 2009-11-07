@@ -503,7 +503,7 @@ function xarSecGenAuthKey($modName = NULL)
     $authid = md5($key);
 
     // Tell xarCache not to cache this page
-    xarCoreCache::setCached('Page.Caching', 'nocache', true);
+    xarCache::noCache();
 
     // Return encrypted key
     return $authid;

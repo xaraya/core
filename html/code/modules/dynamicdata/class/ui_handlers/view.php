@@ -64,11 +64,12 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
         if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
 
-        if (xarCache::$outputCacheIsEnabled && xarOutputCache::$objectCacheIsEnabled) {
-            // we'll let xarObjectCache determine the cacheKey here
-            $cacheKey = xarObjectCache::checkCachingRules(null, $this->args);
-            if ($cacheKey && xarObjectCache::isCached($cacheKey, $this->args)) {
-        // CHECKME: save & get page title here too ?
+        if (!empty($this->args['object']) && !empty($this->args['method'])) {
+            // Get a cache key for this object method if it's suitable for object caching
+            $cacheKey = xarCache::getObjectKey($this->args['object'], $this->args['method'], $this->args);
+            // Check if the object method is cached
+            if (!empty($cacheKey) && xarObjectCache::isCached($cacheKey)) {
+                // Return the cached object method output
                 return xarObjectCache::getCached($cacheKey);
             }
         }
@@ -105,6 +106,7 @@ $this->object->callHooks('view');
             array('object' => $this->object)
         );
 
+        // Set the output of the object method in cache
         if (!empty($cacheKey)) {
             xarObjectCache::setCached($cacheKey, $output);
         }
