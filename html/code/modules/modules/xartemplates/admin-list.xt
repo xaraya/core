@@ -135,7 +135,7 @@
                                     <xar:if condition="$selstyle eq 'pro'">
                                         <input type="submit" name="info" id="info" value="#$infolabel#"/>
                                     <xar:elseif condition="$selstyle eq 'icons'"/>
-                                        <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new">
+                                        <a href="#$modinfo['infourlnew']#">
                                             <img src="#$icon_info#" alt="#$infolabel#"/>
                                         </a>
                                         <noscript>
@@ -144,7 +144,7 @@
                                         </a>
                                         </noscript>
                                     <xar:else />
-                                        <a href="#$modinfo['infourlnew']#&amp;theme=print" target="_new">
+                                        <a href="#$modinfo['infourlnew']#">
                                             Info
                                         </a>
                                         <noscript>
