@@ -18,21 +18,21 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
-$modversion['name']         = 'Base';
-$modversion['id']           = '68';
-$modversion['displayname']  = xarML('Base');
-$modversion['version']      = '2.0.0';
-$modversion['description']  = 'Home Page';
+$modversion['name']               = 'Base';
+$modversion['id']                 = '68';
+$modversion['displayname']        = xarML('Base');
+$modversion['version']            = '2.0.0';
+$modversion['description']        = 'Home Page';
 $modversion['displaydescription'] = xarML('Home Page');
-$modversion['credits']      = 'xardocs/credits.txt';
-$modversion['help']         = 'xardocs/help.txt';
-$modversion['changelog']    = 'xardocs/changelog.txt';
-$modversion['license']      = 'xardocs/license.txt';
-$modversion['official']     = true;
-$modversion['author']       = 'John Robeson, Greg Allan';
-$modversion['contact']      = '';
-$modversion['admin']        = true;
-$modversion['user']         = true;
-$modversion['class']        = 'Core Admin';
-$modversion['category']     = 'System';
+$modversion['credits']            = 'xardocs/credits.txt';
+$modversion['help']               = 'xardocs/help.txt';
+$modversion['changelog']          = 'xardocs/changelog.txt';
+$modversion['license']            = 'xardocs/license.txt';
+$modversion['official']           = true;
+$modversion['author']             = 'John Robeson, Greg Allan';
+$modversion['contact']            = 'http://www.xaraya.com/';
+$modversion['admin']              = true;
+$modversion['user']               = true;
+$modversion['class']              = 'Core Admin';
+$modversion['category']           = 'System';
 ?>
