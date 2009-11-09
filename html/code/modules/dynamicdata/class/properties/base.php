@@ -63,8 +63,8 @@ class DataProperty extends Object implements iDataProperty
     public $display_tooltip                 = "";              // there is no tooltip text, and so no tooltip
     public $initialization_transform        = false;           // generic trigger that can be checked in getValue and setValue
     public $initialization_other_rule       = null;
-    public $validation_notequals            = null;           // 
-    public $validation_equals               = null;           // 
+    public $validation_notequals            = null;           //  check whether a property value does not equal a given value
+    public $validation_equals               = null;           //  check whether a property value equals a given value
     public $validation_allowempty           = null;           // 
 
     /**
