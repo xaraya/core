@@ -188,7 +188,7 @@ function <xsl:value-of select="$module_prefix"/>_adminpriv_config( $args )
         ,'admin'
         ,'config' );
     $data['authid']     = xarSecGenAuthKey();
-    $data['enable_short_urls']   = xarModVars::Get(
+    $data['enable_short_urls']   = xarModVars::get(
         '<xsl:value-of select="$module_prefix"/>'
         ,'enable_short_urls' );
     return $data;
