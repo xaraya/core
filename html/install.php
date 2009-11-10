@@ -92,7 +92,7 @@ $systemArgs = array('enableShortURLsSupport' =>false,
                     'defaultModuleFunction'  => 'main',
                     'generateXMLURLs'        => false);
 xarServer::init($systemArgs);
-xarRequest::init($systemArgs);
+xarController::init($systemArgs);
 xarResponse::init($systemArgs);
 
 // Start BlockLayout Template Engine

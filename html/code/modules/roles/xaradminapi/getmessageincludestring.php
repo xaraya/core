@@ -23,7 +23,7 @@ function roles_adminapi_getmessageincludestring($args)
     if (!isset($template)) throw new EmptyParameterException('template');
 
     if(!isset($module)){
-        list($module) = xarRequest::getInfo();
+        list($module) = xarController::$request->getInfo();
     }
 
 // Get the template that defines the substitution vars
