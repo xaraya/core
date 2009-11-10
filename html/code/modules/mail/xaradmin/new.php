@@ -2,6 +2,6 @@
 
 function mail_admin_new($args)
 {
-    return xarResponse::Redirect(xarModUrl('mail','admin','view'));
+    return xarController::$response->redirect(xarModUrl('mail','admin','view'));
 }
 ?>

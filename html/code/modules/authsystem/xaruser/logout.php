@@ -35,7 +35,7 @@ function authsystem_user_logout()
     if (!xarUserLogOut()) {
         throw new ForbiddenOperationException(array('authsystem', 'logout'),xarML('Problem Logging Out.  Module #(1) Function #(2)'));
     }
-    xarResponse::Redirect($redirecturl);
+    xarController::$response->redirect($redirecturl);
     return true;
 }
 ?>

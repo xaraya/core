@@ -78,7 +78,7 @@ function privileges_admin_updateprivilege()
                     'privileges'));
 
 // redirect to the next page
-    xarResponse::Redirect(xarModURL('privileges', 'admin', 'modifyprivilege', array('id' => $id)));
+    xarController::$response->redirect(xarModURL('privileges', 'admin', 'modifyprivilege', array('id' => $id)));
 }
 
 ?>

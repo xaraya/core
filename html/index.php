@@ -55,7 +55,6 @@ function xarMain()
 
     // Get module parameters
     $request = xarController::getRequest();
-    // list($modName, $modType, $funcName) = xarController::$request->getInfo();
 
     // Default Page Title
     $SiteSlogan = xarModVars::Get('themes', 'SiteSlogan');
@@ -92,17 +91,8 @@ function xarMain()
             ob_start();
         }
 
-        if ($request->isObjectURL()) {
-            sys::import('xaraya.objects');
-
-            // Call the object handler and return the output (or exit with 404 Not Found)
-            $mainModuleOutput = xarObject::guiMethod($request->getType(), $request->getFunction());
-
-        } else {
-
-            // Call the main module function and return the output (or exit with 404 Not Found)
-            $mainModuleOutput = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction());
-        }
+        xarController::dispatch($request);
+        $mainModuleOutput = xarController::$response->getOutput();
 
         if (xarCoreIsDebuggerActive()) {
             if (ob_get_length() > 0) {

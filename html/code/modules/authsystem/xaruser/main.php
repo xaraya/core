@@ -22,7 +22,7 @@
 function authsystem_user_main()
 {
     //no registration here - just redirect to the login form
-    xarResponse::Redirect(xarModURL('authsystem','user','showloginform'));
+    xarController::$response->redirect(xarModURL('authsystem','user','showloginform'));
 
     return true;
 }

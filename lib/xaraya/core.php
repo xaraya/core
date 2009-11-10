@@ -309,7 +309,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'generateXMLURLs' => true);
     xarServer::init($systemArgs);
     xarController::init($systemArgs);
-    xarResponse::init($systemArgs);
+//    xarController::$response->init($systemArgs);
 
     /*
      * Bring Multi Language System online

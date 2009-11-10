@@ -65,7 +65,7 @@ function <xsl:value-of select="$module_prefix"/>_admin_main()
     }
 
     // No we shouldn't. So we redirect to the admin_view() function.
-    return xarResponseRedirect(
+    return xarController::$response->redirect(
         xarModURL(
             '<xsl:value-of select="registry/name"/>'
             ,'admin'

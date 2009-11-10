@@ -465,6 +465,7 @@ class xarController extends Object
     public static $allowShortURLs = true;
 
     public static $request;
+    public static $response;
 
     /**
      * Initialize
@@ -552,6 +553,21 @@ class xarController extends Object
         return self::$request;
     }
 
+    static function dispatch()
+    {
+        self::$response = new xarResponse();
+        if (self::$request->isObjectURL()) {
+            sys::import('xaraya.objects');
+
+            // Call the object handler and return the output (or exit with 404 Not Found)
+            self::$response->output = xarObject::guiMethod(self::$request->getType(), self::$request->getFunction());
+
+        } else {
+
+            // Call the main module function and return the output (or exit with 404 Not Found)
+            self::$response->output = xarMod::guiFunc(self::$request->getModule(), self::$request->getType(), self::$request->getFunction());
+        }
+    }
 
     /**
      * Check to see if this is a local referral
@@ -574,6 +590,8 @@ class xarController extends Object
 
 class xarResponse extends Object
 {
+    public $output;
+    
     /**
      * initialize
      *
@@ -586,7 +604,7 @@ class xarResponse extends Object
      * @access public
      * @param redirectURL string the URL to redirect to
      */
-    static function Redirect($url)
+    function redirect($url)
     {
         xarCache::noCache();
         $redirectURL=urldecode($url); // this is safe if called multiple times.
@@ -639,7 +657,7 @@ class xarResponse extends Object
      * @param ... string template overrides, cfr. xarTplModule (optional)
      * @return string the template message-notfound.xt from the base module filled in
      */
-    static function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = NULL)
+    function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = NULL)
     {
         xarCache::noCache();
         if (!headers_sent()) {
@@ -667,7 +685,7 @@ class xarResponse extends Object
      * @param ... string template overrides, cfr. xarTplModule (optional)
      * @return string the template message-forbidden.xt from the base module filled in
      */
-    static function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = NULL)
+    function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = NULL)
     {
         xarCache::noCache();
         if (!headers_sent()) {
@@ -678,6 +696,8 @@ class xarResponse extends Object
 
         return xarTplModule($modName, $modType, $funcName, array('msg' => $msg), $templateName);
     }
+
+    function getOutput() { return $this->output; }
 }
 
 class xarRequest extends Object

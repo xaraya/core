@@ -18,6 +18,6 @@ function mail_admin_delete($args = array())
     $result = $qdefObject->deleteItem(array('itemid' => $itemid));
     if(!$result) return;
 
-    return xarResponse::Redirect(xarModUrl('mail','admin','view'));
+    return xarController::$response->redirect(xarModUrl('mail','admin','view'));
 }
 ?>

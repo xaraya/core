@@ -104,7 +104,7 @@ function roles_admin_testprivileges()
     $data['authid'] = xarSecGenAuthKey();
     return $data;
     // redirect to the next page
-    xarResponse::Redirect(xarModURL('roles', 'admin', 'new'));
+    xarController::$response->redirect(xarModURL('roles', 'admin', 'new'));
 }
 
 ?>

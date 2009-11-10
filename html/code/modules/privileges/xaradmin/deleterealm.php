@@ -60,7 +60,7 @@ function privileges_admin_deleterealm()
 //xarModCallHooks('item', 'delete', $id, '');
 
 // redirect to the next page
-    xarResponse::Redirect(xarModURL('privileges', 'admin', 'viewrealms'));
+    xarController::$response->redirect(xarModURL('privileges', 'admin', 'viewrealms'));
 }
 
 ?>

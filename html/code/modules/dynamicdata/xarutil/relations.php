@@ -127,7 +127,7 @@ function dynamicdata_util_relations($args)
 
             // add link
             DataObjectLinks::addLink($objectid, $field, $withobjectid, $withfield, $relation, $direction, $extra);
-            xarResponse::Redirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarController::$response->redirect(xarModURL('dynamicdata', 'util', 'relations',
                                             array('objectid' => $objectid)));
             return true;
 
@@ -140,7 +140,7 @@ function dynamicdata_util_relations($args)
                 if (empty($link_id) || empty($val)) continue;
                 DataObjectLinks::removeLink($link_id);
             }
-            xarResponse::Redirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarController::$response->redirect(xarModURL('dynamicdata', 'util', 'relations',
                                             array('objectid' => $objectid)));
             return true;
 
@@ -202,7 +202,7 @@ function dynamicdata_util_relations($args)
             // CHECKME: always bi-directional for tables ?
             $direction = 'bi';
             DataStoreLinks::addLink($table, $field, $withtable, $withfield, $relation, $direction, $extra);
-            xarResponse::Redirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarController::$response->redirect(xarModURL('dynamicdata', 'util', 'relations',
                                           array('table' => $table)));
             return true;
 
@@ -215,7 +215,7 @@ function dynamicdata_util_relations($args)
                 if (empty($link_id) || empty($val)) continue;
                 DataStoreLinks::removeLink($link_id);
             }
-            xarResponse::Redirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarController::$response->redirect(xarModURL('dynamicdata', 'util', 'relations',
                                           array('table' => $table)));
             return true;
         }

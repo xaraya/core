@@ -134,7 +134,7 @@ class DataObjectDefaultHandler extends Object
                 $this->object =& DataObjectMaster::getObjectList($this->args);
             }
             if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
 
             if(empty($this->tplmodule)) 
             {
@@ -150,18 +150,18 @@ class DataObjectDefaultHandler extends Object
         // Pre-fetch item(s) for some standard dataobject methods
         if (empty($args['itemid']) && $this->method == 'showview') {
             if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
-                return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));
+                return xarController::$response->Forbidden(xarML('View #(1) is forbidden', $this->object->label));
 
             $this->object->getItems();
 
         } elseif (!empty($args['itemid']) && ($this->method == 'showdisplay' || $this->method == 'showform')) {
             if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
-                return xarResponse::Forbidden(xarML('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+                return xarController::$response->Forbidden(xarML('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
 
             // get the requested item
             $itemid = $this->object->getItem();
             if(empty($itemid) || $itemid != $this->object->itemid) 
-                return xarResponse::NotFound(xarML('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
+                return xarController::$response->NotFound(xarML('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
         }
 
         $title = $this->object->label;
