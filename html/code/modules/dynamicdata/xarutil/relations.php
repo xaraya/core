@@ -100,6 +100,97 @@ function dynamicdata_util_relations($args)
         // FIXME: remove initialization of modvar after next release
         xarModVars::set('dynamicdata', 'getlinkedobjects', 0);
 
+        $data['yumlspec'] = '';
+        $data['yumlpath'] = '';
+        if (!empty($data['relations'])) {
+            $yuml_spec = '[' . $object->label;
+
+        /* Add the properties to the class diagram
+            $proptypes = DataPropertyMaster::getPropertyTypes();
+            $join = '|';
+            foreach ($object->properties as $property) {
+                $yuml_spec .= $join . $property->name . ': ' . $proptypes[$property->type]['name'];
+                if ($property->defaultvalue !== '') {
+                    $yuml_spec .= ' = ' . $property->defaultvalue;
+                }
+                $join = ';';
+            }
+        */
+            $yuml_spec .= ']';
+
+            $name2label = array();
+            foreach ($data['objects'] as $info) {
+                $name2label[$info['name']] = $info['label'];
+            }
+
+            foreach ($data['relations'] as $link) {
+                if ($link['link_type'] == 'parents') {
+                    if ($link['direction'] == 'bi') {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']' . $link['to_prop'] . '-' . $link['from_prop'] . ' *[' . $object->label . ']';
+                    } elseif ($link['direction'] == 'uni') {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']' . $link['to_prop'] . '-' . $link['from_prop'] . ' *>[' . $object->label . ']';
+                    } else {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']' . $link['to_prop'] . '-' . $link['from_prop'] . ' *>[' . $object->label . ']';
+                    }
+                } elseif ($link['link_type'] == 'linkedfrom' && $link['target'] != $object->name) {
+                    if ($link['direction'] == 'bi') {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']' . $link['from_prop'] . '-' . $link['to_prop'] . '[' . $object->label . ']';
+                    } elseif ($link['direction'] == 'uni') {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']' . $link['from_prop'] . '-' . $link['to_prop'] . '>[' . $object->label . ']';
+                    } else {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']' . $link['from_prop'] . '-' . $link['to_prop'] . '>[' . $object->label . ']';
+                    }
+                } elseif ($link['link_type'] == 'extended' && $link['target'] != $object->name) {
+                    if ($link['direction'] == 'bi') {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']^-[' . $object->label . ']';
+                    } elseif ($link['direction'] == 'uni') {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']^-.-[' . $object->label . ']';
+                    } else {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']^-.-[' . $object->label . ']';
+                    }
+                } elseif ($link['link_type'] == 'extensions') {
+                    if ($link['direction'] == 'bi') {
+                        $yuml_spec .= ', [' . $object->label . ']^-[' . $name2label[$link['target']] . ']';
+                    } elseif ($link['direction'] == 'uni') {
+                        $yuml_spec .= ', [' . $object->label . ']^-.-[' . $name2label[$link['target']] . ']';
+                    } else {
+                        $yuml_spec .= ', [' . $object->label . ']^-.-[' . $name2label[$link['target']] . ']';
+                    }
+                } elseif ($link['link_type'] == 'linkedto') {
+                    if ($link['direction'] == 'bi') {
+                        $yuml_spec .= ', [' . $object->label . ']' . $link['from_prop'] . '-' . $link['to_prop'] . '[' . $name2label[$link['target']] . ']';
+                    } elseif ($link['direction'] == 'uni') {
+                        $yuml_spec .= ', [' . $object->label . ']' . $link['from_prop'] . '-' . $link['to_prop'] . '>[' . $name2label[$link['target']] . ']';
+                    } else {
+                        $yuml_spec .= ', [' . $object->label . ']' . $link['from_prop'] . '-' . $link['to_prop'] . '>[' . $name2label[$link['target']] . ']';
+                    }
+                } elseif ($link['link_type'] == 'children' && $link['target'] != $object->name) {
+                    if ($link['direction'] == 'bi') {
+                        $yuml_spec .= ', [' . $object->label . ']' . $link['from_prop'] . '-' . $link['to_prop'] . ' *[' . $name2label[$link['target']] . ']';
+                    } elseif ($link['direction'] == 'uni') {
+                        $yuml_spec .= ', [' . $object->label . ']' . $link['from_prop'] . '-' . $link['to_prop'] . ' *>[' . $name2label[$link['target']] . ']';
+                    } else {
+                        $yuml_spec .= ', [' . $object->label . ']' . $link['from_prop'] . '-' . $link['to_prop'] . ' *>[' . $name2label[$link['target']] . ']';
+                    }
+                }
+            }
+
+            $yuml_hash = md5($yuml_spec);
+        // CHECKME: what if var/processes is not under the web root anymore ?
+            $filepath = sys::varpath() . '/processes/yuml-' . $yuml_hash . '.png';
+            if (!file_exists($filepath)) {
+                $image = file_get_contents('http://yuml.me/diagram/class/' . rawurlencode($yuml_spec));
+                if (!empty($image)) {
+                    file_put_contents($filepath, $image);
+                    $data['yumlpath'] = $filepath;
+                } else {
+                    $data['yumlspec'] = $yuml_spec;
+                }
+            } else {
+                $data['yumlpath'] = $filepath;
+            }
+        }
+
         if (!empty($withobjectid)) {
             $withobject = xarMod::apiFunc('dynamicdata','user','getobject',
                                         array('objectid' => $withobjectid));
