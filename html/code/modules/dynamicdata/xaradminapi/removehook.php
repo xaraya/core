@@ -37,6 +37,11 @@ function dynamicdata_adminapi_removehook($args)
         //return $extrainfo;
     }
 
+    // don't allow hooking to yourself in DD
+    if ($objectid == 'dynamicdata') {
+        return $extrainfo;
+    }
+
     $module_id = xarMod::getRegID($objectid);
     if (empty($module_id)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';

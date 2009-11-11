@@ -31,6 +31,12 @@ function dynamicdata_admin_newhook($args)
     } else {
         $modname = $extrainfo['module'];
     }
+
+    // don't allow hooking to yourself in DD
+    if ($modname == 'dynamicdata') {
+        return '';
+    }
+
     $module_id = xarMod::getRegID($modname);
     if (empty($module_id)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
