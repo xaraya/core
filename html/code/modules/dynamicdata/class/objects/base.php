@@ -417,7 +417,10 @@ class DataObject extends DataObjectMaster implements iDataObject
         //  2. An id arg passed ot the primary index
         //  3. 0
         
-        $this->properties[$this->primary]->setValue(0);
+        // reset the primary property holding the itemid if there is one
+        if (!empty($this->primary) && !empty($this->properties[$this->primary])) {
+            $this->properties[$this->primary]->setValue(0);
+        }
         if(count($args) > 0) {
             foreach($args as $name => $value) {
                 if(isset($this->properties[$name])) {
@@ -433,6 +436,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         // special case when we try to create a new object handled by dynamicdata
         if(
             $this->objectid == 1 &&
+        // FIXME: this should really be moduleid, not module_id
             $this->properties['module_id']->value == xarMod::getRegID('dynamicdata')
             //&& $this->properties['itemtype']->value < 2
         )

@@ -48,7 +48,7 @@ function dynamicdata_admin_modifyconfighook($args)
     if (!xarModAPILoad('dynamicdata', 'user')) return;
 
     $fields = xarMod::apiFunc('dynamicdata','user','getprop',
-                           array('module_id' => $module_id,
+                           array('moduleid' => $module_id,
                                  'itemtype' => $itemtype));
     if (!isset($fields) || $fields == false) {
         $fields = array();
@@ -75,15 +75,17 @@ function dynamicdata_admin_modifyconfighook($args)
     $data['fields'] = $fields;
     $data['fieldtypeprop'] = & DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
 
-    $object = & DataObjectMaster::getObject(array('module_id' => $module_id,
-                                                       'itemtype' => $itemtype,
-                                                       'extend' => false));
-    if (!isset($object)) return;
-
-    if (!empty($object->template)) {
-        $template = $object->template;
+    $object = & DataObjectMaster::getObject(array('moduleid' => $module_id,
+                                                  'itemtype' => $itemtype,
+                                                  'extend' => false));
+    if (!empty($object)) {
+        if (!empty($object->template)) {
+            $template = $object->template;
+        } else {
+            $template = $object->name;
+        }
     } else {
-        $template = $object->name;
+        $template = null;
     }
     return xarTplModule('dynamicdata','admin','modifyconfighook',$data,$template);
 }

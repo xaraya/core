@@ -50,8 +50,7 @@ function dynamicdata_admin_newhook($args)
     } elseif (isset($objectid) && !empty($objectid)) {
         $itemid = $objectid;
     } else {
-//        $itemid = 0;
-        return "";
+        $itemid = 0;
     }
     $object = & DataObjectMaster::getObject(array(
                                        'moduleid' => $module_id,
