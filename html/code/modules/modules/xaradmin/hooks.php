@@ -48,7 +48,14 @@ function modules_admin_hooks($args)
         if (!isset($modList)) return;
 
         $oldcat = '';
+        $deletemod = null;
         for ($i = 0, $max = count($modList); $i < $max; $i++) {
+            // CHECKME: don't allow hooking to yourself !?
+            if ($modList[$i]['name'] == $curhook) {
+                $deletemod = $i;
+                continue;
+            }
+
             $modList[$i]['header'] = '';
             $modList[$i]['itemtypes'] = array();
             $modList[$i]['checked'] = array();
@@ -88,6 +95,10 @@ function modules_admin_hooks($args)
                     break;
                 }
             }
+        }
+        // CHECKME: don't allow hooking to yourself !?
+        if (!empty($deletemod)) {
+            unset($modList[$deletemod]);
         }
         $data['curhook'] = $curhook;
         $data['hookedmodules'] = $modList;

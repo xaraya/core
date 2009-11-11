@@ -31,6 +31,11 @@ function modules_adminapi_enablehooks($args)
     if (empty($callerModName)) throw new EmptyParameterException('callerModName');
     if (empty($hookModName))   throw new EmptyParameterException('hookModName');
 
+    // CHECKME: don't allow hooking to yourself !?
+    if ($callerModName == $hookModName) {
+        throw new BadParameterException('hookModName');
+    }
+
     if (empty($callerItemType)) {
         $callerItemType = '';
     }

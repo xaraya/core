@@ -626,6 +626,11 @@ class xarModuleHooks
         while($result->next()) {
             list($hookArea, $hookModName, $hookModType, $hookModFunc, $hookModFile, $hookOrder) = $result->getRow();
 
+            // CHECKME: don't allow hooking to yourself !?
+            if ($hookModName == $callerModName) {
+                continue;
+            }
+
             $tmparray = array('area' => $hookArea,
                               'module' => $hookModName,
                               'type' => $hookModType,
