@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -13,7 +13,6 @@
  * get the list of defined dynamic objects
  *
  * @author the DynamicData module development team
- * @returns array
  * @return array of object definitions
  * @throws DATABASE_ERROR, NO_PERMISSION
  */
