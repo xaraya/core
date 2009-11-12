@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -18,7 +18,6 @@
  * @param $args['itemid'] item id of the original item
  * @param $args['values'] array of id => value, or
  * @param $args['fields'] array containing the field definitions and values
- * @returns mixed
  * @return item id on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */

@@ -28,6 +28,10 @@ function dynamicdata_userapi_getprop($args)
 {
     static $propertybag = array();
 
+    // switch back to moduleid here (instead of module_id)
+    if (!empty($args['module_id']) && empty($args['moduleid'])) {
+        $args['moduleid'] = $args['module_id'];
+    }
     $args = DataObjectMaster::getObjectInfo($args);
     if (empty($args)) return array();
 

@@ -5,6 +5,14 @@
         <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
             <fieldset>
             <legend>Links for #$object:label#</legend>
+
+            <xar:if condition="!empty($yumlpath)">
+                <!-- CHECKME: what if var/processes is not under the web root anymore ? -->
+                <img src="#$yumlpath#" />
+            <xar:elseif condition="!empty($yumlspec)"/>
+                <img src="http://yuml.me/diagram/class/#$yumlspec#" />
+            </xar:if>
+
             <table>
                 <tr>
                     <th>Delete</th>
@@ -77,6 +85,7 @@
             </fieldset>
         </form>
     </xar:if>
+
     <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
         <fieldset>
         <legend>Add Link for #$object:label#</legend>
