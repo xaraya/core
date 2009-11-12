@@ -87,7 +87,7 @@
             </tr>
         </xar:loop>
     </table>
-    <xar:if condition="$total gt $itemsperpage">
+    <xar:if condition="$total gt 2">
         <div>
             <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
         </div>
