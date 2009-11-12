@@ -890,10 +890,7 @@ class xarRequest extends Object
      * @access public
      * @return bool true if object URL, false if not
      */
-    function isObjectURL()
-    {
-        return $this->isObjectURL;
-    }
+    function isObjectURL() { return $this->isObjectURL; }
 
     function getModule()   { return $this->module; }
     function getType()     { return $this->type; }

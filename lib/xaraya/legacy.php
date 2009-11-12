@@ -116,7 +116,7 @@ function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target
 function xarRequestGetVar($name, $allowOnlyMethod = NULL) { return xarController::getVar($name, $allowOnlyMethod);}
 function xarRequestGetInfo()                              { return xarController::$request->getInfo(); }
 function xarRequestIsLocalReferer()                       { return xarController::isLocalReferer(); }
-function xarResponseRedirect($redirectURL)                { return xarResponse::redirect($redirectURL); }
+function xarResponseRedirect($redirectURL)                { return xarController::redirect($redirectURL); }
 //function xarRequest::getVar($name, $allowOnlyMethod)      { return xarController::getVar($name, $allowOnlyMethod);}
 //function xarRequest::getInfo()                            { return xarController::$request->getInfo(); }
 //function xarRequest::isLocalReferer()                     { return xarController::isLocalReferer(); }

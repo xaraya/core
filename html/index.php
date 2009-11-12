@@ -53,7 +53,7 @@ function xarMain()
     // Load the core with all optional systems loaded
     xarCoreInit(XARCORE_SYSTEM_ALL);
 
-    // Get module parameters
+    // Get the object that models this request
     $request = xarController::getRequest();
 
     // Default Page Title
@@ -91,7 +91,9 @@ function xarMain()
             ob_start();
         }
 
+        // Process the request
         xarController::dispatch($request);
+        // Retrieve the output to send to the browser
         $mainModuleOutput = xarController::$response->getOutput();
 
         if (xarCoreIsDebuggerActive()) {
