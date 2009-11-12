@@ -96,7 +96,7 @@ function modules_admin_install()
         xarOutputFlushCached('base-block');
     }
 
-    xarController::$response->redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+    xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
 
     return true;
 }

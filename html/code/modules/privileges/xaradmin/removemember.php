@@ -38,7 +38,7 @@ function privileges_admin_removemember()
    }
 
 // redirect to the next page
-    xarController::$response->redirect(xarModURL('privileges',
+    xarController::redirect(xarModURL('privileges',
                              'admin',
                              'modifyprivilege',
                              array('id'=>$childid)));

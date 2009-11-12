@@ -63,7 +63,7 @@ function blocks_admin_update_group()
         )
     ) {return;}
 
-    xarController::$response->redirect(xarModURL('blocks', 'admin', 'view_groups'));
+    xarController::redirect(xarModURL('blocks', 'admin', 'view_groups'));
 
     return true;
 }

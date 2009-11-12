@@ -53,7 +53,7 @@ function blocks_admin_create_instance()
     if (!$bid) {return;}
 
     // Go on and edit the new instance
-    xarController::$response->redirect(
+    xarController::redirect(
         xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $bid))
     );
 

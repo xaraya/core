@@ -64,7 +64,7 @@ function <xsl:value-of select="$module_prefix"/>_user_view( $args )
                 '<xsl:value-of select="$module_prefix"/>_statusmsg'
                 ,xarML( 'Error: Itemtype not specified or invalid. Redirected you to main page!' ) );
 
-            xarController::$response->redirect(
+            xarController::redirect(
                 xarModURL(
                     '<xsl:value-of select="$module_prefix"/>'
                     ,'user'

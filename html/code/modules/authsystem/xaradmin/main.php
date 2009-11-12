@@ -26,7 +26,7 @@ function authsystem_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTplModule('authsystem','admin','overview');
     } else {
-        xarController::$response->redirect(xarModURL('authsystem', 'admin', 'modifyconfig'));
+        xarController::redirect(xarModURL('authsystem', 'admin', 'modifyconfig'));
         return true;
     }
 }

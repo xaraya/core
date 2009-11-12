@@ -586,17 +586,6 @@ class xarController extends Object
             return false;
         }
     }
-}
-
-class xarResponse extends Object
-{
-    public $output;
-    
-    /**
-     * initialize
-     *
-     */
-    static function init($args) { }
 
     /**
      * Carry out a redirect
@@ -604,10 +593,10 @@ class xarResponse extends Object
      * @access public
      * @param redirectURL string the URL to redirect to
      */
-    function redirect($url)
+    static function redirect($url)
     {
         xarCache::noCache();
-        $redirectURL=urldecode($url); // this is safe if called multiple times.
+        $redirectURL = urldecode($url); // this is safe if called multiple times.
         if (headers_sent() == true) return false;
 
         // Remove &amp; entities to prevent redirect breakage
@@ -637,6 +626,18 @@ class xarResponse extends Object
         // exit point.
         exit();
     }
+
+}
+
+class xarResponse extends Object
+{
+    public $output;
+    
+    /**
+     * initialize
+     *
+     */
+    static function init($args) { }
 
 // CHECKME: Should we support this kind of high-level user response in module GUI functions ?
 //          And should some of the existing exceptions (to be defined) call those methods too ?

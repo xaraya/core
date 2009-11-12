@@ -68,7 +68,7 @@ function <xsl:value-of select="$module_prefix"/>_admin_delete( $args )
 
         // This function generated no output, and so now it is complete we redirect
         // the user to an appropriate page for them to carry on their work
-        return xarController::$response->redirect(
+        return xarController::redirect(
             xarModURL(
                 '<xsl:value-of select="$module_prefix"/>'
                 ,'admin'
@@ -106,7 +106,7 @@ function <xsl:value-of select="$module_prefix"/>_admin_delete( $args )
                     xarSessionSetVar(
                         '<xsl:value-of select="$module_prefix"/>_statusmsg'
                         ,xarML( 'Unknown itemtype #(1). Redirected you to the main page!', $itemid ) );
-                    return xarController::$response->redirect(
+                    return xarController::redirect(
                         xarModURL(
                             '<xsl:value-of select="$module_prefix"/>'
                             ,'admin'
@@ -115,7 +115,7 @@ function <xsl:value-of select="$module_prefix"/>_admin_delete( $args )
 
             // This function generated no output, and so now it is complete we redirect
             // the user to an appropriate page for them to carry on their work
-            xarController::$response->redirect(
+            xarController::redirect(
                 xarModURL(
                     '<xsl:value-of select="$module_prefix"/>'
                     ,'admin'
@@ -141,7 +141,7 @@ function <xsl:value-of select="$module_prefix"/>_admin_delete( $args )
             xarSessionSetVar(
                 '<xsl:value-of select="$module_prefix"/>_statusmsg'
                 ,xarML( 'Unknown itemtype #(1). Redirected you to the main page!', $itemid ) );
-            return xarController::$response->redirect(
+            return xarController::redirect(
                 xarModURL(
                     '<xsl:value-of select="$module_prefix"/>'
                     ,'admin'

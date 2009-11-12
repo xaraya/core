@@ -117,7 +117,7 @@ function dynamicdata_admin_orderprops()
         }
     }
 
-    xarController::$response->redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
+    xarController::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
                         array('module_id'    => $module_id,
                               'itemtype' => $itemtype,
         )));

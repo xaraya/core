@@ -47,7 +47,7 @@ function themes_admin_deactivate()
 
     // Hmmm, I wonder if the target adding is considered a hack
     // it certainly depends on the implementation of xarModUrl
-    xarController::$response->redirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
+    xarController::redirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
 
     return true;
 }

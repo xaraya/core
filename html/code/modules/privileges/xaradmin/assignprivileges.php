@@ -56,7 +56,7 @@
                     if (!$dbconn->Execute($query,$bindvars)) return;
                 }
 
-                xarController::$response->redirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
+                xarController::redirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
                 return true;
                 break;
             case 'remove':
@@ -71,7 +71,7 @@
                     $dbconn->Execute($query,$bindvars);
                 }
 
-                xarController::$response->redirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
+                xarController::redirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
                 return true;
                 break;
         }

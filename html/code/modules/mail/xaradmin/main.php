@@ -31,7 +31,7 @@ function mail_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTplModule('mail','admin','overview');
     } else {
-        xarController::$response->redirect(xarModURL('mail', 'admin', 'modifyconfig'));
+        xarController::redirect(xarModURL('mail', 'admin', 'modifyconfig'));
         return true;
     }
 } 

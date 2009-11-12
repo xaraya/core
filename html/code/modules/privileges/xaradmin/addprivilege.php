@@ -77,7 +77,7 @@ function privileges_admin_addprivilege()
                     'privileges'));
 
 // redirect to the next page
-    xarController::$response->redirect(xarModURL('privileges', 'admin', 'new'));
+    xarController::redirect(xarModURL('privileges', 'admin', 'new'));
 }
 
 ?>

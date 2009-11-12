@@ -23,7 +23,7 @@ function roles_user_lostpassword()
     //If a user is already logged in, no reason to see this.
     //We are going to send them to their account.
     if (xarUserIsLoggedIn()) {
-        xarController::$response->redirect(xarModURL('roles',
+        xarController::redirect(xarModURL('roles',
                                       'user',
                                       'account'));
        return true;

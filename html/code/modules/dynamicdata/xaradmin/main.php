@@ -26,7 +26,7 @@ function dynamicdata_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTplModule('dynamicdata','admin','overview');
     } else {
-        xarController::$response->redirect(xarModURL('dynamicdata', 'admin', 'view'));
+        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view'));
         return true;
     }
 }

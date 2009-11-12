@@ -25,7 +25,7 @@ if (!xarVarFetch('u', 'str:1', $u)) return;
 
 $user = xarModAPIFunc('roles','user','get', array('uid' => $u));
 
-xarController::$response->redirect(xarModURL('roles', 'user','getvalidation',
+xarController::redirect(xarModURL('roles', 'user','getvalidation',
                               array('stage'   => 'getvalidate',
                                     'valcode' => $v,
                                     'uname'   => $user['uname'],

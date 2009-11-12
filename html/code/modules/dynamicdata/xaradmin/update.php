@@ -110,16 +110,16 @@ function dynamicdata_admin_update($args)
     }
 
     if (!empty($return_url)) {
-        xarController::$response->redirect($return_url);
+        xarController::redirect($return_url);
     } elseif ($myobject->objectid == 2) { // for dynamic properties, return to modifyprop
         $objectid = $myobject->properties['objectid']->value;
-        xarController::$response->redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
+        xarController::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
                                       array('itemid' => $objectid)));
     } elseif (!empty($table)) {
-        xarController::$response->redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array('table' => $table)));
     } else {
-        xarController::$response->redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array(
                                       'itemid' => $objectid,
                                       'tplmodule' => $tplmodule

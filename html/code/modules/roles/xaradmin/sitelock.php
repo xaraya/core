@@ -86,7 +86,7 @@ function roles_admin_sitelock($args)
                               'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
             xarModVars::set('roles', 'lockdata', serialize($lockdata));
-            xarController::$response->redirect(xarModURL('roles', 'admin', 'sitelock'));
+            xarController::redirect(xarModURL('roles', 'admin', 'sitelock'));
         } elseif ($cmd == 'toggle') {
 
             // turn the site on or off

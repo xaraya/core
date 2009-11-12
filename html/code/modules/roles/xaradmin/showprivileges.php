@@ -211,7 +211,7 @@ function roles_admin_showprivileges()
     $data['addlabel'] = xarML('Add');
     return $data;
     // redirect to the next page
-    xarController::$response->redirect(xarModURL('roles', 'admin', 'new'));
+    xarController::redirect(xarModURL('roles', 'admin', 'new'));
 }
 
 ?>

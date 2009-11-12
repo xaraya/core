@@ -40,7 +40,7 @@ function blocks_admin_create_group()
         array('name' => $name, 'template' => $template))
     ) {return;}
 
-    xarController::$response->redirect(xarModURL('blocks', 'admin', 'view_groups'));
+    xarController::redirect(xarModURL('blocks', 'admin', 'view_groups'));
 
     return true;
 }
