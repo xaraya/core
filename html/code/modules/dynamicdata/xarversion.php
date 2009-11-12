@@ -20,7 +20,7 @@
 $modversion['name']         = 'Dynamic Data';
 $modversion['id']           = '182';
 $modversion['displayname']  = xarML('Dynamic Data');
-$modversion['version']      = '2.0.1';
+$modversion['version']      = '2.0.2';
 $modversion['description']  = 'Dynamic Data Module';
 $modversion['displaydescription'] = xarML('Dynamic Data Module');
 $modversion['credits']      = 'xardocs/credits.txt';
@@ -31,7 +31,7 @@ $modversion['official']     = true;
 $modversion['author']       = 'mikespub';
 $modversion['contact']      = 'http://www.xaraya.com/';
 $modversion['admin']        = true;
-$modversion['user']         = false;
+$modversion['user']         = true;
 $modversion['class']        = 'Core Complete';
 $modversion['category']     = 'Content';
 ?>

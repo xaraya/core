@@ -68,10 +68,15 @@
         </form>
         <p>[ 
             <xar:if condition="empty($details)">
-            <a href="#$detailslink#">Show Static Properties and Relations</a>
+                <xar:if condition="!empty($objectid)">
+                    <a href="#xarModURL('dynamicdata','util','relations',array('objectid' => $objectid))#">Show Object Links</a>
+                <xar:else />
+                    <a href="#$detailslink#">Show Static Properties and Relations</a>
+                </xar:if>
             <xar:else />
-            <a href="#$detailslink#">Hide Static Properties and Relations</a>
-        </xar:if>]</p>
+                <a href="#$detailslink#">Hide Static Properties and Relations</a>
+            </xar:if>
+        ]</p>
         <xar:if condition="count($static) gt 0">
             <fieldset>
                 <legend>#$statictitle#</legend>

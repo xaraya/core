@@ -52,18 +52,14 @@
                     <a href="#xarModURL('dynamicdata','util','meta')#" class="#$linkclass#">Data Browser</a>
                 </li>
             </xar:sec>
-            <!--
             <xar:sec mask="AdminDynamicData" catch="false">
-                <xar:set name="dummy">$activetab=='relations'?xarTplSetPageTitle('Relations'):''</xar:set>
+                <xar:set name="dummy">$activetab=='relations'?xarTplSetPageTitle('Object Mapping'):''</xar:set>
                 <xar:set name="tabclass">$activetab=='relations'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='relations'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','util','relations')#" class="#$linkclass#">
-                    Relationships
-                  </a>
+                    <a href="#xarModURL('dynamicdata','util','relations')#" class="#$linkclass#">Object Mapping</a>
                 </li>
             </xar:sec>
-            -->
             <!--
             <xar:sec mask="AdminDynamicData" catch="false">
                 <xar:set name="dummy">$activetab=='migrate'?xarTplSetPageTitle('Migrate'):''</xar:set>

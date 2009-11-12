@@ -175,19 +175,23 @@ function dynamicdata_util_relations($args)
                 }
             }
 
-            $yuml_hash = md5($yuml_spec);
-        // CHECKME: what if var/processes is not under the web root anymore ?
-            $filepath = sys::varpath() . '/processes/yuml-' . $yuml_hash . '.png';
-            if (!file_exists($filepath)) {
-                $image = file_get_contents('http://yuml.me/diagram/class/' . rawurlencode($yuml_spec));
-                if (!empty($image)) {
-                    file_put_contents($filepath, $image);
-                    $data['yumlpath'] = $filepath;
+            // CHECKME: what if var/processes is not under the web root anymore ?
+            if (is_writable(sys::varpath() . '/processes/')) {
+                $yuml_hash = md5($yuml_spec);
+                $filepath = sys::varpath() . '/processes/yuml-' . $yuml_hash . '.png';
+                if (!file_exists($filepath)) {
+                    $image = file_get_contents('http://yuml.me/diagram/class/' . rawurlencode($yuml_spec));
+                    if (!empty($image)) {
+                        file_put_contents($filepath, $image);
+                        $data['yumlpath'] = $filepath;
+                    } else {
+                        $data['yumlspec'] = $yuml_spec;
+                    }
                 } else {
-                    $data['yumlspec'] = $yuml_spec;
+                    $data['yumlpath'] = $filepath;
                 }
             } else {
-                $data['yumlpath'] = $filepath;
+                $data['yumlspec'] = $yuml_spec;
             }
         }
 

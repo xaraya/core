@@ -8,14 +8,8 @@
         <xar:if condition="!empty($object)">
             <h2>View <xar:data-label object="$object"/></h2>
             <xar:if condition="$object:name eq 'objects' and $object:linktype eq 'object'">
-                <!-- show a list of objects -->
-                <ul>
-                    <xar:foreach in="$object:items" value="$item">
-                        <xar:if condition="$item['module_id'] eq 182 and $item['itemtype'] gt 2">
-                            <li><a href="#xarServer::getObjectURL($item['name'])#">#$item['label']#</a></li>
-                        </xar:if>
-                    </xar:foreach>
-                </ul>
+                <!-- show the list of main objects -->
+                <xar:template type="module" file="mainobjects"/>
             <xar:else/>
                 <xar:data-view object="$object"/>
             </xar:if>

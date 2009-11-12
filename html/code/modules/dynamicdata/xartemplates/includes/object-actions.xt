@@ -39,7 +39,7 @@
                 </li>
             <xar:else />
                 <li class="xar-tab">
-                    <a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#&amp;name=#$object:name#" class="xar-norm xar-norm-outline">
+                    <a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#" class="xar-norm xar-norm-outline">
                         Export to XML
                     </a>
                 </li>
@@ -52,7 +52,7 @@
                 </li>
             <xar:else />
                 <li class="xar-tab">
-                    <a href="&xar-modurl-dynamicdata-admin-view;&amp;itemid=#$itemid#&amp;name=#$object:name#" class="xar-norm xar-norm-outline">
+                    <a href="&xar-modurl-dynamicdata-admin-view;&amp;itemid=#$itemid#" class="xar-norm xar-norm-outline">
                         View Items
                     </a>
                 </li>

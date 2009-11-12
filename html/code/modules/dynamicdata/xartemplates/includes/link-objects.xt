@@ -197,7 +197,7 @@
 
     <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
         <fieldset>
-        <legend>Display Linked Objects for #$object:label#</legend>
+        <legend>Display Options for #$object:label#</legend>
         <xar:set name="getlinkedobjects">xarModItemVars::get('dynamicdata','getlinkedobjects',$objectid)</xar:set>
         <div class="xar-form-input-wrapper">
             <xar:if condition="!empty($getlinkedobjects)">
@@ -215,7 +215,7 @@
     </form>
 
     <fieldset>
-    <legend>Properties of #$object:label#</legend>
+    <legend>Properties of #$object:label# [ <a href="#xarModURL('dynamicdata','admin','modifyprop', array('itemid' => $objectid))#">Modify</a> ]</legend>
     <table>
         <tr>
             <th>Name</th>
