@@ -6,7 +6,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -20,7 +20,7 @@
 $modversion['name']         = 'Dynamic Data';
 $modversion['id']           = '182';
 $modversion['displayname']  = xarML('Dynamic Data');
-$modversion['version']      = '2.0.0';
+$modversion['version']      = '2.0.1';
 $modversion['description']  = 'Dynamic Data Module';
 $modversion['displaydescription'] = xarML('Dynamic Data Module');
 $modversion['credits']      = 'xardocs/credits.txt';

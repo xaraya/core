@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -20,7 +20,7 @@
  * @param int itemtype the id of the itemtype of the item
  * @param join
  * @param table
- * @return
+ * @return string
  */
 function dynamicdata_admin_modify($args)
 {

@@ -48,7 +48,7 @@
  *     ...
  * }
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @subpackage dynamicdata
  */
 class DataObjectUserInterface extends Object
@@ -264,7 +264,7 @@ class DataObjectUserInterface extends Object
 /**
  * Dynamic Object Interface (deprecated)
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @subpackage dynamicdata
  */
 class DataObjectInterface extends DataObjectUserInterface

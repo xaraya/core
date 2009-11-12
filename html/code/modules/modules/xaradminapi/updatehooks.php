@@ -52,6 +52,8 @@ function modules_adminapi_updatehooks($args)
         // see for which one(s) we need to enable this hook
         $todo = array();
         foreach ($modList as $mod) {
+            // CHECKME: don't allow hooking to yourself !?
+            if ($mod['systemid'] == $modinfo['systemid']) continue;
             // Get selected value of hook (which is an array of all the itemtypes selected)
             // hooked_$mod['name'][0] contains the global setting ( 0 -> not, 1 -> all, 2 -> some)
             xarVarFetch("hooked_" . $mod['name'],'isset',$ishooked,'',XARVAR_DONT_REUSE);

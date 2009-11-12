@@ -60,6 +60,8 @@ function modules_adminapi_update($args)
             unset($hookvalue);
             // ignore modules that are missing or in some weird state
             if (!isset($todo[$hooktmodid])) continue;
+            // CHECKME: don't allow hooking to yourself !?
+            if ($hooktmodid == $modinfo['systemid']) continue;
             xarVarFetch("hooks_" . $todo[$hooktmodid], 'isset', $hookvalue,  NULL, XARVAR_DONT_SET);
             // See if this is checked and isn't in the database
             if ((isset($hookvalue)) && (is_array($hookvalue)) && (empty($hooksmodid))) {
