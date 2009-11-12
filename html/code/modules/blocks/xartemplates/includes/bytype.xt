@@ -3,11 +3,9 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="icon_delete">xarTplGetImage('icons/delete.png','base')</xar:set>
     <xar:set name="icon_modify">xarTplGetImage('icons/modify.png','base')</xar:set>
-    <xar:if condition="$total gt $itemsperpage">
-        <div>
-            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
-        </div>
-    </xar:if>
+    <div>
+        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+    </div>
     <table class="xar-fullwidth">
         <tr>
             <th>Name</th>
@@ -87,9 +85,7 @@
             </tr>
         </xar:loop>
     </table>
-    <xar:if condition="$total gt $itemsperpage">
-        <div>
-            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
-        </div>
-    </xar:if>
+    <div>
+        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+    </div>
 </xar:template>
