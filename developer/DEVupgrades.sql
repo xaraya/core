@@ -669,6 +669,8 @@ ALTER TABLE `xar_dynamic_objects` DROP `parent_id`;
 
 /* remove the DProperty class */
 UPDATE `xar_dynamic_objects` SET  `class` = 'DataObject' , `filepath` = 'auto' WHERE `name` = 'properties';
+/* Add a field to the hooks table */
+ALTER TABLE `xar_hooks` ADD COLUMN t_file varchar(254) NOT NULL;
 
 /*
     Suggestion: do all further renames above this and adjust field type details by changing the appropriate line(s) here
@@ -754,6 +756,7 @@ ALTER TABLE `xar_hooks` CHANGE `t_area` `t_area`             varchar(64) NOT NUL
 ALTER TABLE `xar_hooks` CHANGE `t_module_id` `t_module_id`   integer unsigned NOT NULL;
 ALTER TABLE `xar_hooks` CHANGE `t_type` `t_type`             varchar(64) NOT NULL;
 ALTER TABLE `xar_hooks` CHANGE `t_func` `t_func`             varchar(64) NOT NULL;
+ALTER TABLE `xar_hooks` CHANGE `t_file` `t_file`             varchar(254) NOT NULL;
 ALTER TABLE `xar_hooks` CHANGE `priority` `priority`         tinyint unsigned NOT NULL default '0';
 
 ALTER TABLE `xar_module_itemvars` CHANGE `module_var_id` `module_var_id`     integer unsigned NOT NULL;

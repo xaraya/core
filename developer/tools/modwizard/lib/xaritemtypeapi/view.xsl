@@ -54,7 +54,7 @@ function <xsl:value-of select="$module_prefix"/>_<xsl:value-of select="@name"/>a
             ,'type' => $type
             ));
 
-    $items_per_page = xarModVars::Get(
+    $items_per_page = xarModVars::get(
             '<xsl:value-of select="$module_prefix"/>'
             ,'items_per_page.' . <xsl:value-of select="@itemtype"/> );
 
