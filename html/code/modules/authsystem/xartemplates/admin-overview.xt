@@ -5,7 +5,7 @@
         <span class="xar-mod-title">Authsystem Authentication Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
+<xar:data-view objectname="objects" fieldlist="id, name"/>         <xar:template type="module" file="admin-menu"/>
         <img src="#xarTplGetImage('authsystem.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
 
