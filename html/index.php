@@ -57,7 +57,7 @@ function xarMain()
     list($modName, $modType, $funcName) = xarRequest::getInfo();
 
     // Default Page Title
-    $SiteSlogan = xarModVars::Get('themes', 'SiteSlogan');
+    $SiteSlogan = xarModVars::get('themes', 'SiteSlogan');
     xarTplSetPageTitle(xarVarPrepForDisplay($SiteSlogan));
 
     // Theme Override
