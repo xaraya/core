@@ -16,22 +16,21 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
-$modversion['name'] = 'Xaraya Installer';
-$modversion['id'] = '200';
-$modversion['version'] = '2.0.0';
-$modversion['displayname'] = xarML('Installer');
-$modversion['description'] = 'Install and customize Xaraya.';
+$modversion['name']               = 'Xaraya Installer';
+$modversion['id']                 = '200';
+$modversion['version']            = '2.0.0';
+$modversion['displayname']        = xarML('Installer');
+$modversion['description']        = 'Install and customize Xaraya.';
 $modversion['displaydescription'] = xarML('Install and customize Xaraya.');
-$modversion['credits'] = '';
-$modversion['help'] = '';
-$modversion['changelog'] = '';
-$modversion['license'] = '';
-$modversion['official'] = true;
-$modversion['author'] = 'Paul Rosania, Johnny Robeson';
-$modversion['contact'] = '';
-$modversion['admin'] = false;
-$modversion['user'] = false;
-$modversion['securityschema'] = array('Installer::' => '::');
-$modversion['class'] = 'Core Admin';
-$modversion['category'] = 'System';
+$modversion['credits']            = '';
+$modversion['help']               = '';
+$modversion['changelog']          = '';
+$modversion['license']            = '';
+$modversion['official']           = true;
+$modversion['author']             = 'Paul Rosania, Johnny Robeson';
+$modversion['contact']            = 'http://www.xaraya.com/';
+$modversion['admin']              = false;
+$modversion['user']               = false;
+$modversion['class']              = 'Core Admin';
+$modversion['category']           = 'System';
 ?>

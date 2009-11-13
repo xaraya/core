@@ -122,7 +122,7 @@ function <xsl:value-of select="$module_prefix"/>_<xsl:value-of select="@name"/>a
 
     $data['itemtype']       = <xsl:value-of select="@itemtype"/>;
     $data['itemtype_label'] = <xsl:value-of select="@itemtype"/>;
-    $data['items_per_page']   = xarModVars::Get(
+    $data['items_per_page']   = xarModVars::get(
         '<xsl:value-of select="$module_prefix"/>'
         ,'items_per_page.' . '<xsl:value-of select="@itemtype"/>' );
 
