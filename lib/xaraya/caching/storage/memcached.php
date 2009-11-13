@@ -3,7 +3,8 @@
  * Cache data using the PHP Memcache extension [http://www.php.net/memcache]
  * and one or more memcached server(s) [http://www.danga.com/memcached/]
  */
-class xarCache_MemCached_Storage extends xarCache_Storage
+
+class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_Storage
 {
     public $host       = 'localhost';
     public $port       = 11211; // default values, cfr. http://php.net/manual/en/function.memcache-addserver.php
@@ -14,7 +15,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage
 
     public $memcache   = null;
 
-    public function __construct(array $args = array())
+    public function __construct(Array $args = array())
     {
         parent::__construct($args);
 

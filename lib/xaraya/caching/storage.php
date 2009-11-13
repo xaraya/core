@@ -7,6 +7,9 @@
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @todo get the var directory from the configured sys:varpath(), dont hardcode
 **/
+
+sys::import('xaraya.caching.interfaces');
+
 class xarCache_Storage extends Object
 {
     public $storage    = '';        // filesystem, database, memcached, ...
@@ -124,7 +127,7 @@ class xarCache_Storage extends Object
      * 
      * @todo using an args array here is taking the easy way out, lets define a proper interface
      */
-    public function __construct(array $args = array())
+    public function __construct(Array $args = array())
     {
         if (!empty($args['type'])) {
             $this->type = strtolower($args['type']);
