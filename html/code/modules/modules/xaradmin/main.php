@@ -20,14 +20,14 @@ function modules_admin_main()
 {
     if(!xarSecurityCheck('EditModules')) return;
 
-    $refererinfo = xarRequest::getInfo(xarServer::getVar('HTTP_REFERER'));
-    $info = xarRequest::getInfo();
+    $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
+    $info = xarController::$request->getInfo();
     $samemodule = $info[0] == $refererinfo[0];
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTplModule('modules','admin','overview');
     } else {
-        xarResponse::Redirect(xarModURL('modules', 'admin', 'list'));
+        xarController::redirect(xarModURL('modules', 'admin', 'list'));
         return true;
     }
 }

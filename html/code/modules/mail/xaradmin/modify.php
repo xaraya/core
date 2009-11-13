@@ -3,6 +3,6 @@
 function mail_admin_modify($args = array())
 {
     if(!xarVarFetch('itemid','id',$itemid,0,XARVAR_NOT_REQUIRED)) return;
-    return xarResponse::Redirect(xarModUrl('mail','admin','view',array('itemid' => $itemid)));
+    return xarController::redirect(xarModUrl('mail','admin','view',array('itemid' => $itemid)));
 }
 ?>

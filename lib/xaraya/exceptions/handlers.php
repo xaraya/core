@@ -168,8 +168,8 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
             $msg = $rawmsg;
         } else {
             $module = '';
-            if (xarRequest::$allowShortURLs && isset(xarRequest::$shortURLVariables['module'])) {
-                $module = xarRequest::$shortURLVariables['module'];
+            if (xarController::$allowShortURLs && isset(xarController::$shortURLVariables['module'])) {
+                $module = xarController::$shortURLVariables['module'];
             } elseif (isset($_GET['module'])) {
                 // Then check in $_GET
                 $module = $_GET['module'];

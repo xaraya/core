@@ -83,7 +83,7 @@ function <xsl:value-of select="$module_prefix"/>_<xsl:value-of select="@name"/>a
 
         // This function generated no output, and so now it is complete we redirect
         // the user to an appropriate page for them to carry on their work
-        xarResponseRedirect(
+        xarController::redirect(
             xarModURL(
                 '<xsl:value-of select="$module_prefix"/>'
                 ,'admin'

@@ -350,7 +350,7 @@ class xarMasks extends Object
 
             // get the masks pertaining to the current module and the component requested
             // <mikespub> why do you need this in the first place ?
-            if ($module == '') list($module) = xarRequest::getInfo();
+            if ($module == '') list($module) = xarController::$request->getInfo();
 
             // I'm a bit lost on this line. Does this var ever get set?
             // <mikespub> this gets set in xarBlock_render, to replace the xarModVars::set /
@@ -504,10 +504,10 @@ class xarMasks extends Object
                 // The current authentication module will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login
                 $requrl = xarServer::getCurrentURL(array(),false);
-                xarResponse::Redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
+                xarController::redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
             } else {
 //                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
-                xarResponse::Redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
+                xarController::redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
                 $msg = xarML("You don't have the correct privileges for this operation");
                 $candebug = (xarSession::getVar('role_id') == self::$tester);
                 $test = self::$test && $candebug;

@@ -22,14 +22,14 @@ function base_admin_main()
 {
     if(!xarSecurityCheck('EditBase')) return;
 
-    $refererinfo = xarRequest::getInfo(xarServer::getVar('HTTP_REFERER'));
-    $info = xarRequest::getInfo();
+    $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
+    $info = xarController::$request->getInfo();
     $samemodule = $info[0] == $refererinfo[0];
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTplModule('base','admin','overview');
     } else {
-        xarResponse::Redirect(xarModURL('base', 'admin', 'modifyconfig'));
+        xarController::redirect(xarModURL('base', 'admin', 'modifyconfig'));
         return true;
     }
 }

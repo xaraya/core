@@ -57,7 +57,7 @@ function modules_admin_deactivate ()
         } else {
             // No dependents, we can deactivate the module
             if(!xarMod::apiFunc('modules','admin','deactivate',array('regid' => $id)))  return;
-            xarResponse::Redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));               
+            xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));               
         }
     }
 
@@ -78,7 +78,7 @@ function modules_admin_deactivate ()
 
     // Hmmm, I wonder if the target adding is considered a hack
     // it certainly depends on the implementation of xarModUrl
-    xarResponse::Redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+    xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
 
     return true;
 }

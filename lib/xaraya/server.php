@@ -460,12 +460,12 @@ class xarServer extends Object
     }
 }
 
-class xarRequest extends Object
+class xarController extends Object
 {
     public static $allowShortURLs = true;
-    public static $defaultRequestInfo = array();
-    public static $shortURLVariables = array();
-    public static $isObjectURL = false;
+
+    public static $request;
+    public static $response;
 
     /**
      * Initialize
@@ -542,6 +542,178 @@ class xarRequest extends Object
         return $value;
     }
 
+    static function setRequest($url=null)
+    {
+        self::$request = new xarRequest($url);
+    }
+
+    static function getRequest($url=null)
+    {
+        if (empty(self::$request) || !empty($url)) self::setRequest($url);
+        return self::$request;
+    }
+
+    static function dispatch()
+    {
+        self::$response = new xarResponse();
+        if (self::$request->isObjectURL()) {
+            sys::import('xaraya.objects');
+
+            // Call the object handler and return the output (or exit with 404 Not Found)
+            self::$response->output = xarObject::guiMethod(self::$request->getType(), self::$request->getFunction());
+
+        } else {
+
+            // Call the main module function and return the output (or exit with 404 Not Found)
+            self::$response->output = xarMod::guiFunc(self::$request->getModule(), self::$request->getType(), self::$request->getFunction());
+        }
+    }
+
+    /**
+     * Check to see if this is a local referral
+     *
+     * @access public
+     * @return bool true if locally referred, false if not
+     */
+    static function isLocalReferer()
+    {
+        $server  = xarServer::getHost();
+        $referer = xarServer::getVar('HTTP_REFERER');
+
+        if (!empty($referer) && preg_match("!^https?://$server(:\d+|)/!", $referer)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Carry out a redirect
+     *
+     * @access public
+     * @param redirectURL string the URL to redirect to
+     */
+    static function redirect($url)
+    {
+        xarCache::noCache();
+        $redirectURL = urldecode($url); // this is safe if called multiple times.
+        if (headers_sent() == true) return false;
+
+        // Remove &amp; entities to prevent redirect breakage
+        $redirectURL = str_replace('&amp;', '&', $redirectURL);
+
+        if (substr($redirectURL, 0, 4) != 'http') {
+            // Removing leading slashes from redirect url
+            $redirectURL = preg_replace('!^/*!', '', $redirectURL);
+
+            // Get base URL
+            $baseurl = xarServer::getBaseURL();
+
+            $redirectURL = $baseurl.$redirectURL;
+        }
+
+        if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE')) && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE')) ) {
+            $header = "Refresh: 0; URL=$redirectURL";
+        } else {
+            $header = "Location: $redirectURL";
+        }// if
+
+        // Start all over again
+        header($header);
+
+        // NOTE: we *could* return for pure '1 exit point' but then we'd have to keep track of more,
+        // so for now, we exit here explicitly. Besides the end of index.php this should be the only
+        // exit point.
+        exit();
+    }
+
+}
+
+class xarResponse extends Object
+{
+    public $output;
+    
+    /**
+     * initialize
+     *
+     */
+    static function init($args) { }
+
+// CHECKME: Should we support this kind of high-level user response in module GUI functions ?
+//          And should some of the existing exceptions (to be defined) call those methods too ?
+
+    /**
+     * Return a 404 Not Found header, and fill in the template message-notfound.xt from the base module
+     *
+     * Usage in GUI functions etc.:
+     *
+     *    if (something not found, e.g. item $id) {
+     *        $msg = xarML("Sorry, item #(1) is not available right now", $id);
+     *        return xarResponse::NotFound($msg);
+     *    }
+     *    ...
+     *
+     * @access public
+     * @param msg string the message
+     * @param ... string template overrides, cfr. xarTplModule (optional)
+     * @return string the template message-notfound.xt from the base module filled in
+     */
+    function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = NULL)
+    {
+        xarCache::noCache();
+        if (!headers_sent()) {
+            header('HTTP/1.0 404 Not Found');
+        }
+
+        xarTplSetPageTitle('404 Not Found');
+
+        return xarTplModule($modName, $modType, $funcName, array('msg' => $msg), $templateName);
+    }
+
+    /**
+     * Return a 403 Forbidden header, and fill in the message-forbidden.xt template from the base module
+     *
+     * Usage in GUI functions etc.:
+     *
+     *    if (something not allowed, e.g. edit item $id) {
+     *        $msg = xarML("Sorry, you are not allowed to edit item #(1)", $id);
+     *        return xarResponse::Forbidden($msg);
+     *    }
+     *    ...
+     *
+     * @access public
+     * @param msg string the message
+     * @param ... string template overrides, cfr. xarTplModule (optional)
+     * @return string the template message-forbidden.xt from the base module filled in
+     */
+    function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = NULL)
+    {
+        xarCache::noCache();
+        if (!headers_sent()) {
+            header('HTTP/1.0 403 Forbidden');
+        }
+
+        xarTplSetPageTitle('403 Forbidden');
+
+        return xarTplModule($modName, $modType, $funcName, array('msg' => $msg), $templateName);
+    }
+
+    function getOutput() { return $this->output; }
+}
+
+class xarRequest extends Object
+{
+    public $defaultRequestInfo = array();
+    public $shortURLVariables = array();
+    public $isObjectURL = false;
+
+    public $url;
+    public $module;
+    
+    function __construct($url=null)
+    {
+        $this->url= $url;
+    }
 
     /**
      * Gets request info for current page or a given url.
@@ -567,7 +739,7 @@ class xarRequest extends Object
      * @todo <mikespub> you mean for upper-case Admin, or to support other funcs than user and admin someday ?
      * @todo <marco> Investigate this aliases thing before to integrate and promote it!
      */
-    public static function getInfo($url='')
+    public function getInfo($url='')
     {
         static $currentRequestInfo = NULL;
         static $loopHole = NULL;
@@ -576,7 +748,7 @@ class xarRequest extends Object
         } elseif (is_array($loopHole)) {
             // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
             //        because they request the current module too at the moment - unnecessary ?
-            xarLogMessage('Avoiding loop in xarRequest::getInfo()');
+            xarLogMessage('Avoiding loop in xarController::$request->getInfo()');
             return $loopHole;
         }
         // Get variables
@@ -620,7 +792,7 @@ class xarRequest extends Object
             }
         }
 
-        if (self::$allowShortURLs && empty($modName) && ($path = xarServer::getVar('PATH_INFO')) != ''
+        if (xarController::$allowShortURLs && empty($modName) && ($path = xarServer::getVar('PATH_INFO')) != ''
             // IIS fix
             && $path != xarServer::getVar('SCRIPT_NAME')) {
             /*
@@ -660,14 +832,14 @@ class xarRequest extends Object
                     if (isset($res) && is_array($res)) {
                         list($funcName, $args) = $res;
                         if (!empty($funcName)) { // bingo
-                            // Forward decoded args to xarRequest::getVar
+                            // Forward decoded args to xarController::getVar
                             if (isset($args) && is_array($args)) {
                                 $args['module'] = $modName;
                                 $args['type'] = $modType;
                                 $args['func'] = $funcName;
-                                self::$shortURLVariables = $args;
+                                $this->shortURLVariables = $args;
                             } else {
-                                self::$shortURLVariables = array('module' => $modName,'type' => $modType,'func' => $funcName);
+                                $this->shortURLVariables = array('module' => $modName,'type' => $modType,'func' => $funcName);
                             }
                         }
                     }
@@ -690,158 +862,38 @@ class xarRequest extends Object
                 // Specify 'dynamicdata' as module for xarTpl_* functions etc.
                 $requestInfo = array('dynamicdata', $objectName, $methodName);
                 if (empty($url)) {
-                    self::$isObjectURL = true;
+                    $this->isObjectURL = true;
                 }
             } else {
                 // If $modName is still empty we use the default module/type/func to be loaded in that such case
-                if (empty(self::$defaultRequestInfo)) {
-                    self::$defaultRequestInfo = array(xarModVars::get('modules', 'defaultmodule'),
+                if (empty($this->defaultRequestInfo)) {
+                    $this->defaultRequestInfo = array(xarModVars::get('modules', 'defaultmodule'),
                                                       xarModVars::get('modules', 'defaultmoduletype'),
                                                       xarModVars::get('modules', 'defaultmodulefunction'));
                 }
-                $requestInfo = self::$defaultRequestInfo;
+                $requestInfo = $this->defaultRequestInfo;
             }
         }
         // Save the current info in case we call this function again
         if (empty($url)) $currentRequestInfo = $requestInfo;
+        
+        list($this->module,
+             $this->type,
+             $this->func) = $requestInfo;
+
         return $requestInfo;
     }
-
-    /**
-     * Check to see if this is a local referral
-     *
-     * @access public
-     * @return bool true if locally referred, false if not
-     */
-    static function isLocalReferer()
-    {
-        $server  = xarServer::getHost();
-        $referer = xarServer::getVar('HTTP_REFERER');
-
-        if (!empty($referer) && preg_match("!^https?://$server(:\d+|)/!", $referer)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+    
     /**
      * Check to see if this request is an object URL
      *
      * @access public
      * @return bool true if object URL, false if not
      */
-    static function isObjectURL()
-    {
-        return self::$isObjectURL;
-    }
-}
+    function isObjectURL() { return $this->isObjectURL; }
 
-class xarResponse extends Object
-{
-    /**
-     * initialize
-     *
-     */
-    static function init($args) { }
-
-    /**
-     * Carry out a redirect
-     *
-     * @access public
-     * @param redirectURL string the URL to redirect to
-     */
-    static function Redirect($url)
-    {
-        xarCache::noCache();
-        $redirectURL=urldecode($url); // this is safe if called multiple times.
-        if (headers_sent() == true) return false;
-
-        // Remove &amp; entities to prevent redirect breakage
-        $redirectURL = str_replace('&amp;', '&', $redirectURL);
-
-        if (substr($redirectURL, 0, 4) != 'http') {
-            // Removing leading slashes from redirect url
-            $redirectURL = preg_replace('!^/*!', '', $redirectURL);
-
-            // Get base URL
-            $baseurl = xarServer::getBaseURL();
-
-            $redirectURL = $baseurl.$redirectURL;
-        }
-
-        if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE')) && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE')) ) {
-            $header = "Refresh: 0; URL=$redirectURL";
-        } else {
-            $header = "Location: $redirectURL";
-        }// if
-
-        // Start all over again
-        header($header);
-
-        // NOTE: we *could* return for pure '1 exit point' but then we'd have to keep track of more,
-        // so for now, we exit here explicitly. Besides the end of index.php this should be the only
-        // exit point.
-        exit();
-    }
-
-// CHECKME: Should we support this kind of high-level user response in module GUI functions ?
-//          And should some of the existing exceptions (to be defined) call those methods too ?
-
-    /**
-     * Return a 404 Not Found header, and fill in the template message-notfound.xt from the base module
-     *
-     * Usage in GUI functions etc.:
-     *
-     *    if (something not found, e.g. item $id) {
-     *        $msg = xarML("Sorry, item #(1) is not available right now", $id);
-     *        return xarResponse::NotFound($msg);
-     *    }
-     *    ...
-     *
-     * @access public
-     * @param msg string the message
-     * @param ... string template overrides, cfr. xarTplModule (optional)
-     * @return string the template message-notfound.xt from the base module filled in
-     */
-    static function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = NULL)
-    {
-        xarCache::noCache();
-        if (!headers_sent()) {
-            header('HTTP/1.0 404 Not Found');
-        }
-
-        xarTplSetPageTitle('404 Not Found');
-
-        return xarTplModule($modName, $modType, $funcName, array('msg' => $msg), $templateName);
-    }
-
-    /**
-     * Return a 403 Forbidden header, and fill in the message-forbidden.xt template from the base module
-     *
-     * Usage in GUI functions etc.:
-     *
-     *    if (something not allowed, e.g. edit item $id) {
-     *        $msg = xarML("Sorry, you are not allowed to edit item #(1)", $id);
-     *        return xarResponse::Forbidden($msg);
-     *    }
-     *    ...
-     *
-     * @access public
-     * @param msg string the message
-     * @param ... string template overrides, cfr. xarTplModule (optional)
-     * @return string the template message-forbidden.xt from the base module filled in
-     */
-    static function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = NULL)
-    {
-        xarCache::noCache();
-        if (!headers_sent()) {
-            header('HTTP/1.0 403 Forbidden');
-        }
-
-        xarTplSetPageTitle('403 Forbidden');
-
-        return xarTplModule($modName, $modType, $funcName, array('msg' => $msg), $templateName);
-    }
+    function getModule()   { return $this->module; }
+    function getType()     { return $this->type; }
+    function getFunction() { return $this->func; }
 }
 ?>

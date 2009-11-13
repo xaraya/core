@@ -92,8 +92,8 @@ $systemArgs = array('enableShortURLsSupport' =>false,
                     'defaultModuleFunction'  => 'main',
                     'generateXMLURLs'        => false);
 xarServer::init($systemArgs);
-xarRequest::init($systemArgs);
-xarResponse::init($systemArgs);
+xarController::init($systemArgs);
+//xarResponse::init($systemArgs);
 
 // Start BlockLayout Template Engine
 // This is probably the trickiest part, but we want the installer

@@ -26,7 +26,7 @@
                     Enable module alias(es)
                 </label>
                 <xar:data-input id="aliascheckbox" property="$properties['use_module_alias']" onchange="toggle(\'aliaslink\',\'aliascheckbox\')"/>&#160;
-                <xar:set name="info">xarRequest::getInfo()</xar:set>
+                <xar:set name="info">xarController::$request->getInfo()</xar:set>
                 <a href="#xarModURL('modules','admin','aliases',array('name' => $info[0]))#">
                     Manage Aliases
                 </a>

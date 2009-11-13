@@ -53,8 +53,8 @@ function xarMain()
     // Load the core with all optional systems loaded
     xarCoreInit(XARCORE_SYSTEM_ALL);
 
-    // Get module parameters
-    list($modName, $modType, $funcName) = xarRequest::getInfo();
+    // Get the object that models this request
+    $request = xarController::getRequest();
 
     // Default Page Title
     $SiteSlogan = xarModVars::get('themes', 'SiteSlogan');
@@ -91,17 +91,10 @@ function xarMain()
             ob_start();
         }
 
-        if (xarRequest::isObjectURL()) {
-            sys::import('xaraya.objects');
-
-            // Call the object handler and return the output (or exit with 404 Not Found)
-            $mainModuleOutput = xarObject::guiMethod($modType, $funcName);
-
-        } else {
-
-            // Call the main module function and return the output (or exit with 404 Not Found)
-            $mainModuleOutput = xarMod::guiFunc($modName, $modType, $funcName);
-        }
+        // Process the request
+        xarController::dispatch($request);
+        // Retrieve the output to send to the browser
+        $mainModuleOutput = xarController::$response->getOutput();
 
         if (xarCoreIsDebuggerActive()) {
             if (ob_get_length() > 0) {
@@ -121,10 +114,10 @@ function xarMain()
         xarEvents::trigger('ServerRequest');
 
         // Set page template
-        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default') {
+        if ($request->getType() == 'admin' && xarTplGetPageTemplateName() == 'default') {
              // Use the admin-$modName.xt page if available when $modType is admin
             // falling back on admin.xt if the former isn't available
-            if (!xarTplSetPageTemplateName('admin-'.$modName)) {
+            if (!xarTplSetPageTemplateName('admin-'.$request->getModule())) {
                 xarTplSetPageTemplateName('admin');
             }
         }

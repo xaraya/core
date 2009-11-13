@@ -308,8 +308,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
                         'generateXMLURLs' => true);
     xarServer::init($systemArgs);
-    xarRequest::init($systemArgs);
-    xarResponse::init($systemArgs);
+    xarController::init($systemArgs);
+//    xarController::$response->init($systemArgs);
 
     /*
      * Bring Multi Language System online

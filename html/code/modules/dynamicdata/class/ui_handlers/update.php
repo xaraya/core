@@ -49,7 +49,7 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
         {
             $this->object =& DataObjectMaster::getObject($this->args);
             if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
 
             if(empty($this->tplmodule)) 
             {
@@ -58,11 +58,11 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
             }
         }
         if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
-            return xarResponse::Forbidden(xarML('Update Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+            return xarController::$response->Forbidden(xarML('Update Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
 
         $itemid = $this->object->getItem();
         if(empty($itemid) || $itemid != $this->object->itemid) 
-            return xarResponse::NotFound(xarML('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
+            return xarController::$response->NotFound(xarML('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
 
         if (!empty($this->args['values'])) {
             // always set the properties based on the given values !?
@@ -92,7 +92,7 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
                 if(empty($args['return_url'])) 
                     $args['return_url'] = $this->getReturnURL();
 
-                xarResponse::Redirect($args['return_url']);
+                xarController::redirect($args['return_url']);
                 // Return
                 return true;
             }

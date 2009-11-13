@@ -22,7 +22,7 @@ function mail_adminapi_getmessagestrings($args)
     if (!isset($template)) throw new EmptyParameterException('template');
 
     if(!isset($module)){
-        list($module) = xarRequest::getInfo();
+        list($module) = xarController::$request->getInfo();
     }
 
     $messaginghome = sys::varpath() . "/messaging/" . $module;
