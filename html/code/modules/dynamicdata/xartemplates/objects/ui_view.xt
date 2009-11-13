@@ -12,6 +12,8 @@
                 <xar:template type="module" file="mainobjects"/>
             <xar:else/>
                 <xar:data-view object="$object"/>
+                <xar:set name="searchlink">xarObject::getActionURL($object, 'search')</xar:set>
+                <a href="#$searchlink#">Search <xar:data-label object="$object"/></a>
             </xar:if>
         <xar:else />
             <div class="xar-align-center">

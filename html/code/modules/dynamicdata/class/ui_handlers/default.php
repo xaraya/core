@@ -86,6 +86,11 @@ class DataObjectDefaultHandler extends Object
             $args['fieldlist'] = explode(',',$fieldlist);
         }
 
+        // Default number of items per page in object view
+        if (!isset($args['numitems'])) {
+            $args['numitems'] = xarModVars::get('dynamicdata', 'items_per_page');
+        }
+
         // support name=... parameter for DD if no object=... is found
         if (empty($args['object']) && !empty($args['name'])) {
             $args['object'] = $args['name'];

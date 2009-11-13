@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Object Interface</span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>Query in <xar:data-label object="$object"/></h2>
+        <!-- TODO: distinguish between 'protected' and 'private' ? -->
+        <xar:set name="getlink">xarObject::getActionURL($object, 'query')</xar:set>
+        <form method="get" action="#$getlink#">
+            <fieldset>
+                <!-- if we use the current URL, the object is already specified -->
+                <xar:if condition="$object:linktype ne 'current'">
+                    <input type="hidden" name="object" id="object" value="#$object:name#"/>
+                </xar:if>
+                <input type="hidden" name="method" id="method" value="query"/>
+                <xar:if condition="!empty($object:join)">
+                    <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                </xar:if>
+                <xar:if condition="!empty($object:table)">
+                    <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                </xar:if>
+                <xar:if condition="!empty($return_url)">
+                    <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                </xar:if>
+                <legend>Query Criteria</legend>
+                <!-- only show properties with status ACTIVE, DISPLAYONLY and VIEWONLY -->
+                <xar:set name="filterstatus">array(1, 2, 4)</xar:set>
+                <xar:foreach in="$object:properties" key="$name" value="$property">
+                    <xar:set name="displaystatus">$property->getDisplayStatus()</xar:set>
+                    <xar:if condition="!in_array($displaystatus, $filterstatus)">
+                        <xar:continue/>
+                    </xar:if>
+                    <div class="xar-form-input-wrapper">
+                        <label class="xar-form-label" for="field_#$name#">#$property:label#</label>
+                        <!-- CHECKME: could the dummy datastore actually do something here ? -->
+                        <xar:if condition="$property:datastore eq '_dummy_'">
+                            N/A
+                            <xar:continue/>
+                        </xar:if>
+
+                        <!-- initialize fieldname, fieldid and fieldvalue -->
+                        <xar:set name="fieldname">'field['.$name.']'</xar:set>
+                        <xar:set name="fieldid">'field_'.$name</xar:set>
+                        <xar:if condition="isset($query['field'][$name])">
+                            <xar:set name="fieldvalue">#$query['field'][$name]#</xar:set>
+                        <xar:else/>
+                            <xar:set name="fieldvalue">null</xar:set>
+                        </xar:if>
+
+                        <!-- handle input depending on the property type -->
+                        <xar:if condition="is_a($property, 'SelectProperty') or is_a($property, 'UsernameProperty')">
+                            <select name="#$fieldname#" id="#$fieldid#">
+                                <!-- make sure we have an empty default entry -->
+                                <option value="">Undefined</option>
+                                <!-- get the options for this select property -->
+                                <xar:if condition="is_a($property, 'UsernameProperty')">
+                                    <xar:set name="options">xarMod::apiFunc('roles', 'user', 'getall')</xar:set>
+                                <xar:else/>
+                                    <xar:set name="options">$property->getOptions()</xar:set>
+                                </xar:if>
+                                <xar:foreach in="$options" value="$option">
+                                    <xar:if condition="!isset($option['id'])">
+                                        <!-- field status has an array of arrays - skip for now -->
+                                        <xar:continue/>
+                                    </xar:if>
+                                    <xar:if condition="$fieldvalue eq $option['id']">
+                                        <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                                    <xar:else/>
+                                        <option value="#$option['id']#">#$option['name']#</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>
+
+                        <xar:elseif condition="is_a($property, 'CalendarProperty')"/>
+                            <xar:set name="name2">$name.'2'</xar:set>
+                            <xar:set name="fieldname2">'field['.$name2.']'</xar:set>
+                            <xar:set name="fieldid2">'field_'.$name2</xar:set>
+                            <xar:if condition="isset($query['field'][$name2])">
+                                <xar:set name="fieldvalue2">#$query['field'][$name2]#</xar:set>
+                            <xar:else/>
+                                <xar:set name="fieldvalue2">null</xar:set>
+                            </xar:if>
+                            <xar:data-input type="calendar" name="$fieldname" id="$fieldid" value="$fieldvalue" />
+                            &#160;
+                            <select name="match[#$name#]" id="match_#$name#">
+                                <option value="eq"></option>
+                                <xar:if condition="!empty($query['match'][$name]) and $query['match'][$name] eq 'range'">
+                                    <option value="range" selected="selected">to</option>
+                                <xar:else/>
+                                    <option value="range">to</option>
+                                </xar:if>
+                            </select>
+                            <div class="xar-form-input-wrapper-after">
+                            <xar:data-input type="calendar" name="$fieldname2" id="$fieldid2" value="$fieldvalue2" />
+                            </div>
+
+                        <xar:elseif condition="is_a($property, 'NumberBoxProperty')"/>
+                            <xar:set name="name2">$name.'2'</xar:set>
+                            <xar:set name="fieldname2">'field['.$name2.']'</xar:set>
+                            <xar:set name="fieldid2">'field_'.$name2</xar:set>
+                            <xar:if condition="isset($query['field'][$name2])">
+                                <xar:set name="fieldvalue2">#$query['field'][$name2]#</xar:set>
+                            <xar:else/>
+                                <xar:set name="fieldvalue2">null</xar:set>
+                            </xar:if>
+                            <input type="text" name="#$fieldname#" id="#$fieldid#" value="#$fieldvalue#" size="5" />
+                            &#160;
+                            <select name="match[#$name#]" id="match_#$name#">
+                                <option value="eq"></option>
+                                <xar:if condition="!empty($query['match'][$name]) and $query['match'][$name] eq 'range'">
+                                    <option value="range" selected="selected">to</option>
+                                <xar:else/>
+                                    <option value="range">to</option>
+                                </xar:if>
+                            </select>
+                            &#160;
+                            <input type="text" name="#$fieldname2#" id="#$fieldid2#" value="#$fieldvalue2#" size="5" />
+
+                        <xar:elseif condition="is_a($property, 'CheckboxProperty')"/>
+                            <xar:if condition="!empty($fieldvalue)">
+                                <input type="checkbox" name="#$fieldname#" id="#$fieldid#" value="#$fieldvalue#" checked="checked" />
+                            <xar:else/>
+                                <input type="checkbox" name="#$fieldname#" id="#$fieldid#" value="1" />
+                            </xar:if>
+
+                        <xar:elseif condition="is_a($property, 'HiddenProperty')"/>
+                            &#160;<input type="hidden" name="#$fieldname#" id="#$fieldid#" value="#$fieldvalue#" />
+
+                        <xar:else/>
+                            <input type="text" name="#$fieldname#" id="#$fieldid#" value="#$fieldvalue#" size="20" />
+                            &#160;
+                            <select name="match[#$name#]" id="match_#$name#">
+                                <xar:foreach in="$query.options" key="$value" value="$label">
+                                    <xar:if condition="!empty($query['match'][$name]) and $query['match'][$name] eq $value">
+                                        <option value="#$value#" selected="selected">#$label#</option>
+                                    <xar:else/>
+                                        <option value="#$value#">#$label#</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>
+                            <!-- check class: #get_class($property)# (#get_parent_class($property)#) -->
+                        </xar:if>
+                    </div>
+                </xar:foreach>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="submit" value="#xarML('Query')#" class="xar-margin-thickleft"/>
+                    &#160;<a href="#$getlink#">Reset</a>
+                    &#160;<a href="#xarObject::getActionURL($object, 'search')#">Search</a>
+                </div>
+            </fieldset>
+        </form>
+        <xar:if condition="!empty($result)">
+            <xar:data-view object="$result" newlink=""/>
+        </xar:if>
+        <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
+        <a href="#$viewlink#">View <xar:data-label object="$object"/></a>
+    </div>
+</xar:template>

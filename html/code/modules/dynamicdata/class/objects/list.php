@@ -197,6 +197,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         } elseif($this->properties[$name]->type == 21)
             $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
 
+        if ($datastore == '_dummy_') {
+            // CHECKME: could the dummy datastore actually do something here ?
+            return;
+        }
+
         $this->datastores[$datastore]->addWhere(
             $this->properties[$name],
             $clause,
