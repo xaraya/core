@@ -43,23 +43,7 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
         if(!xarVarFetch('startnum', 'isset', $args['startnum'], NULL, XARVAR_DONT_SET)) 
             return;
 
-        // TODO: support array in objectlist->setWhere()
-        if (!empty($args['where']) && is_array($args['where'])) {
-            $whereparts = array();
-            foreach ($args['where'] as $key => $val) {
-                if (empty($key) || !isset($val) || $val === '') continue;
-                if (is_numeric($val)) {
-                    $whereparts[] = $key . " eq " . $val;
-                } else {
-                    $whereparts[] = $key . " eq '" . $val . "'";
-                }
-            }
-            if (count($whereparts) > 0) {
-                $args['where'] = implode(' and ', $whereparts);
-            } else {
-                unset($args['where']);
-            }
-        }
+        // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
