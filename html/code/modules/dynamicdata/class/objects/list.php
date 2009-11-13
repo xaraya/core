@@ -508,7 +508,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
         }
         if(count($args['fieldlist']) > 0) {
-            foreach($args['fieldlist'] as $name) {
+            foreach($args['fieldlist'] as $field) {
+                $name = trim($field);
                 if(isset($this->properties[$name])) {
                     if(($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE)

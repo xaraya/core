@@ -18,21 +18,21 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
-$modversion['name'] = 'authsystem';
-$modversion['displayname'] = xarML('Authsystem');
-$modversion['id'] = '42';
-$modversion['version'] = '2.0.0';
-$modversion['description'] = 'Xaraya default authentication module';
+$modversion['name']               = 'authsystem';
+$modversion['displayname']        = xarML('Authsystem');
+$modversion['id']                 = '42';
+$modversion['version']            = '2.0.0';
+$modversion['description']        = 'Xaraya default authentication module';
 $modversion['displaydescription'] = xarML('Xaraya default authentication module');
-$modversion['credits'] = 'xardocs/credits.txt';
-$modversion['help'] = 'xardocs/help.txt';
-$modversion['changelog'] = 'xardocs/changelog.txt';
-$modversion['license'] = 'docs/license.txt';
-$modversion['official'] = true;
-$modversion['author'] = 'Marco Canini, Jo Dalle Nogare';
-$modversion['contact'] = '';
-$modversion['admin'] = true;
-$modversion['user'] = false;
-$modversion['class'] = 'Authentication';
-$modversion['category'] = 'System';
+$modversion['credits']            = 'xardocs/credits.txt';
+$modversion['help']               = 'xardocs/help.txt';
+$modversion['changelog']          = 'xardocs/changelog.txt';
+$modversion['license']            = 'docs/license.txt';
+$modversion['official']           = true;
+$modversion['author']             = 'Marco Canini, Jo Dalle Nogare';
+$modversion['contact']            = 'http://www.xaraya.com/';
+$modversion['admin']              = true;
+$modversion['user']               = false;
+$modversion['class']              = 'Authentication';
+$modversion['category']           = 'System';
 ?>

@@ -2,7 +2,8 @@
 /**
  * Cache data in the database using the xar_cache_data table
  */
-class xarCache_Database_Storage extends xarCache_Storage
+
+class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_Storage
 {
     public $table = '';
     public $lastkey = null;
@@ -10,7 +11,7 @@ class xarCache_Database_Storage extends xarCache_Storage
     public $value = null;
     private $dbconn = null;
 
-    public function __construct(array $args = array())
+    public function __construct(Array $args = array())
     {
         parent::__construct($args);
         $this->storage = 'database';

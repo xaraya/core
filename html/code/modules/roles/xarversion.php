@@ -18,22 +18,21 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
-$modversion['name']           = 'Roles';
-$modversion['id']             = '27';
-$modversion['version']        = '2.0.0';
-$modversion['displayname']    = xarML('Roles');
-$modversion['description']    = 'User and Group management';
+$modversion['name']               = 'Roles';
+$modversion['id']                 = '27';
+$modversion['version']            = '2.0.0';
+$modversion['displayname']        = xarML('Roles');
+$modversion['description']        = 'User and Group management';
 $modversion['displaydescription'] = xarML('User and Group management');
-$modversion['credits']        = 'xardocs/credits.txt';
-$modversion['help']           = 'xardocs/help.txt';
-$modversion['changelog']      = 'xardocs/changelog.txt';
-$modversion['license']        = 'xardocs/license.txt';
-$modversion['official']       = true;
-$modversion['author']         = 'Jim McDonald, Marco Canini, Jan Schrage, Camille Perinel';
-$modversion['contact']        = 'http://www.xaraya.com';
-$modversion['admin']          = true;
-$modversion['user']           = true;
-$modversion['securityschema'] = array('roles::' => 'Role uname:Role id');
-$modversion['class']          = 'Core Complete';
-$modversion['category']       = 'Users & Groups';
+$modversion['credits']            = 'xardocs/credits.txt';
+$modversion['help']               = 'xardocs/help.txt';
+$modversion['changelog']          = 'xardocs/changelog.txt';
+$modversion['license']            = 'xardocs/license.txt';
+$modversion['official']           = true;
+$modversion['author']             = 'Jim McDonald, Marco Canini, Jan Schrage, Camille Perinel';
+$modversion['contact']            = 'http://www.xaraya.com';
+$modversion['admin']              = true;
+$modversion['user']               = true;
+$modversion['class']              = 'Core Complete';
+$modversion['category']           = 'Users & Groups';
 ?>
