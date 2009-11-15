@@ -5,7 +5,17 @@
         <span class="xar-mod-title">Dynamic Data Object Interface</span>
     </div>
     <div class="xar-mod-body">
-        <h2>Search in <xar:data-label object="$object"/></h2>
+        <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
+        <xar:set name="querylink">xarObject::getActionURL($object, 'query')</xar:set>
+        <h2>
+            Search #$object:label#&#160;
+            <a href="#$viewlink#" title="View #$object:label#">
+                <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+            </a>&#160;
+            <a href="#$querylink#" title="Query #$object:label#">
+                <img src="#xarTplGetImage('icons/document-properties.png', 'base')#" width="16" height="16" alt="query"/>
+            </a>
+        </h2>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
         <xar:set name="getlink">xarObject::getActionURL($object, 'search')</xar:set>
         <form method="get" action="#$getlink#">
@@ -82,9 +92,8 @@
             </fieldset>
         </form>
         <xar:if condition="!empty($result)">
+            <!-- don't show a newlink here -->
             <xar:data-view object="$result" newlink=""/>
         </xar:if>
-        <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
-        <a href="#$viewlink#">View <xar:data-label object="$object"/></a>
     </div>
 </xar:template>

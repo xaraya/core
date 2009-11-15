@@ -60,7 +60,7 @@
                     <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVarPrepForDisplay($field['defaultvalue'])#" class="xar-form-textmedium"/>
                 </td>
                 <td class="#$displayclass#">
-                    <xar:set name="title">xarML('Edit configuration for property \"#(1)\"',$field['name'])</xar:set>
+                    <xar:set name="title">xarML('Edit configuration for property #(1)',$field['name'])</xar:set>
                     <xar:set name="link">
                         xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $field['id']))
                     </xar:set>

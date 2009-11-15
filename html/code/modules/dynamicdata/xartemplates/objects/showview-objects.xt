@@ -6,9 +6,9 @@
     <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
         <xar:template file="catnavigation"/>
     </xar:if>
-    <h3>
-        <a href="#xarModURL('dynamicdata','admin','new')#">Create New Data Object</a>
-    </h3>
+    <div style="text-align: right;">
+        <a href="#xarModURL('dynamicdata','admin','new')#" title="Create New Data Object"><img src="#xarTplGetImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/></a>
+    </div>
     <xar:if condition="empty($layout)">
         <xar:set name="layout">'default'</xar:set>
     </xar:if>
@@ -23,7 +23,7 @@
                     </th>
                 </xar:foreach>
                 <xar:if condition="empty($linkfield)">
-                    <th class="xar-form-textlong">&#160;</th>
+                    <th class="xar-form-textlong">Action</th>
                 </xar:if>
             </tr>
             <xar:set name="adminlistserial">xarModVars::get('dynamicdata','administrators')</xar:set>
@@ -61,8 +61,12 @@
                             <xar:if condition="!empty($links[$itemid]) and count($links[$itemid]) gt 0">
                                 <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
                                     <xar:if condition="!empty($option['olink'])">
-                                        #$option['ojoin']#
-                                        <a href="#$option['olink']#">#$option['otitle']#</a>
+                                        <xar:if condition="!empty($option['oicon'])">
+                                            <a href="#$option['olink']#" title="#$option['otitle']#"><img src="#xarTplGetImage('icons/'.$option['oicon'], 'base')#" width="16" height="16" alt="#$otype#"/></a>&#160;
+                                        <xar:else/>
+                                            #$option['ojoin']#
+                                            <a href="#$option['olink']#">#$option['otitle']#</a>
+                                        </xar:if>
                                     <xar:else />
                                         #$option['ojoin']# #$option['otitle']#
                                     </xar:if>

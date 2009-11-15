@@ -229,7 +229,7 @@
     </form>
 
     <fieldset>
-    <legend>Properties of #$object:label# [ <a href="#xarModURL('dynamicdata','admin','modifyprop', array('itemid' => $objectid))#">Modify</a> ]</legend>
+    <legend>Properties of #$object:label# <a href="#xarModURL('dynamicdata','admin','modifyprop', array('itemid' => $objectid))#" title="Modify Properties for #$object:label#"><img src="#xarTplGetImage('icons/modify-config.png', 'base')#"/></a></legend>
     <table>
         <tr>
             <th>Name</th>
@@ -237,6 +237,7 @@
             <th>Property Type</th>
             <th>Default</th>
             <th>Source</th>
+            <th>&#160;</th>
 <!--
             <th>Configuration</th>
 -->
@@ -251,6 +252,7 @@
                 </td>
                 <td>#$property:defaultvalue#</td>
                 <td>#$property:source#</td>
+                <td><a href="#xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $property->id))#" title="Edit configuration for property #$property:name#"><img src="#xarTplGetImage('icons/modify.png', 'base')#"/></a></td>
 <!--
                 <td>#$property:configuration#</td>
 -->

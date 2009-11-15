@@ -708,29 +708,33 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         if ($allow_read) {
             $options['display'] = array('otitle' => xarML('Display'),
+                                        'oicon'  => 'display.png',
                                         'olink'  => $this->getActionURL('display', $itemid),
                                         'ojoin'  => '');
         }
         if ($allow_edit) {
             $options['modify'] = array('otitle' => xarML('Edit'),
+                                       'oicon'  => 'modify.png',
                                        'olink'  => $this->getActionURL('modify', $itemid),
                                        'ojoin'  => '|');
-
-            // extra options when showing the dynamic objects themselves
-            if ($this->objectid == 1) {
-                $options['viewitems'] = array('otitle' => xarML('Items'),
-                                              'olink'  => $this->getActionURL('viewitems', $itemid),
-                                              'ojoin'  => '|'
-                                             );
-                $options['modifyprops'] = array('otitle' => xarML('Properties'),
-                                     'olink'  => $this->getActionURL('modifyprop', $itemid),
-                                     'ojoin'  => '|');
-            }
         }
         if ($allow_delete)  {
             $options['delete'] = array('otitle' => xarML('Delete'),
+                                       'oicon'  => 'delete.png',
                                        'olink'  => $this->getActionURL('delete', $itemid),
                                        'ojoin'  => '|');
+        }
+        // extra options when showing the dynamic objects themselves
+        if ($allow_edit && $this->objectid == 1) {
+            $options['viewitems'] = array('otitle' => xarML('Items'),
+                                          'oicon'  => 'item-list.png',
+                                          'olink'  => $this->getActionURL('viewitems', $itemid),
+                                          'ojoin'  => '|'
+                                         );
+            $options['modifyprops'] = array('otitle' => xarML('Properties'),
+                                            'oicon'  => 'modify-config.png',
+                                            'olink'  => $this->getActionURL('modifyprop', $itemid),
+                                            'ojoin'  => '|');
         }
 
         return $options;

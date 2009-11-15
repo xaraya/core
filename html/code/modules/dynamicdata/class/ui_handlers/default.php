@@ -87,7 +87,7 @@ class DataObjectDefaultHandler extends Object
         }
 
         // Default number of items per page in object view
-        if (!isset($args['numitems'])) {
+        if (!isset($args['numitems']) && $args['object'] != 'objects') {
             $args['numitems'] = xarModVars::get('dynamicdata', 'items_per_page');
         }
 

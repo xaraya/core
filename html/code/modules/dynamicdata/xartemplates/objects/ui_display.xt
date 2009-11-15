@@ -6,10 +6,13 @@
     </div>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object)">
+            <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
             <h2>
-                <xar:data-label object="$object"/>
+                #$object:label#&#160;
+                <a href="#$viewlink#" title="View #$object:label#">
+                    <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                </a>
             </h2>
-
             <xar:set name="getlinked">xarModItemVars::get('dynamicdata','getlinkedobjects',$object->objectid)</xar:set>
             <xar:if condition="!empty($getlinked)">
                 <!-- Get linked objects -->
@@ -138,9 +141,6 @@
                     </fieldset>
                 </xar:if>
             </xar:if>
-
-            <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
-            <p><a href="#$viewlink#">View <xar:data-label object="$object"/></a></p>
         </xar:if>
     </div>
 </xar:template>

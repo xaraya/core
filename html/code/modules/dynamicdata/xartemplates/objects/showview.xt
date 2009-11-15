@@ -13,9 +13,11 @@
     </xar:if>
     <xar:if condition="!empty($isprimary) and !empty($newlink)">
         <xar:sec mask="AddDynamicDataItem" catch="false" component="Item" instance="$moduleid .':' . $itemtype.':All'">
-            <a href="#$newlink#">
-                <strong>Create New</strong> <!-- #$objectlabel# -->
+            <div style="text-align: right;">
+            <a href="#$newlink#" title="Create New #$object:label#">
+                <img src="#xarTplGetImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/>
             </a>
+            </div>
         </xar:sec>
     </xar:if>
     <xar:if condition="empty($layout)">
