@@ -6,17 +6,20 @@
     </div>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object)">
-            <xar:set name="searchlink">xarObject::getActionURL($object, 'search')</xar:set>
-            <h2>
-                View #$object:label#&#160;
-                <a href="#$searchlink#" title="Search #$object:label#">
-                    <img src="#xarTplGetImage('icons/system-search.png', 'base')#" width="16" height="16" alt="search"/>
-                </a>
-            </h2>
             <xar:if condition="$object:name eq 'objects' and $object:linktype eq 'object'">
+                <h2>
+                    View #$object:label#
+                </h2>
                 <!-- show the list of main objects -->
                 <xar:template type="module" file="mainobjects"/>
             <xar:else/>
+                <xar:set name="searchlink">xarObject::getActionURL($object, 'search')</xar:set>
+                <h2>
+                    View #$object:label#&#160;
+                    <a href="#$searchlink#" title="Search #$object:label#">
+                        <img src="#xarTplGetImage('icons/system-search.png', 'base')#" width="16" height="16" alt="search"/>
+                    </a>
+                </h2>
                 <xar:data-view object="$object"/>
             </xar:if>
         <xar:else />
