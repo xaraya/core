@@ -11,6 +11,7 @@
     <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
         <xar:template file="catnavigation"/>
     </xar:if>
+<!-- FIXME: get rid of newlink here and add higher up -->
     <xar:if condition="!empty($isprimary) and !empty($newlink)">
         <xar:set name="instance">$moduleid .':'. $itemtype .':All'</xar:set>
         <xar:sec mask="AddDynamicDataItem" catch="false" component="Item" instance="$instance">
