@@ -13,21 +13,18 @@
         </xar:if>
         <h2>
             <xar:if condition="!empty($objectid) and $objectid eq 1">
-                Modify DataObject #$object:properties.label:value#&#160;
-                <a href="#$viewlink#" title="Back to DataObjects">
-                    <img src="#xarTplGetImage('icons/go-home.png', 'base')#" width="16" height="16" alt="home"/>
-                </a>
+                Modify DataObject for #$object:properties.label:value#
                 <xar:set name="proplink">xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $object->itemid))</xar:set>
-                &#160;<a href="#$proplink#" title="Modify Properties for #$object:properties.label:value#">
+                &#160;<a href="#$proplink#" title="Modify DataProperties for #$object:properties.label:value#">
                     <img src="#xarTplGetImage('icons/modify-config.png', 'base')#" width="16" height="16" alt="modifyprop"/>
+                </a>
+                <xar:set name="itemslink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->itemid))</xar:set>
+                &#160;<a href="#$itemslink#" title="View Items for #$object:properties.label:value#">
+                    <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="viewitems"/>
                 </a>
                 <xar:set name="exportlink">xarModURL('dynamicdata','util','export',array('objectid' => $object->itemid))</xar:set>
                 &#160;<a href="#$exportlink#" title="Export Object Definition for #$object:properties.label:value#">
                     <img src="#xarTplGetImage('icons/export-xml.png', 'base')#" width="16" height="16" alt="export"/>
-                </a>
-                <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->itemid))</xar:set>
-                &#160;<a href="#$viewlink#" title="View Items for #$object:properties.label:value#">
-                    <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="viewitems"/>
                 </a>
             <xar:else/>
                 Modify Item #$object:itemid# in #$object:label#&#160;

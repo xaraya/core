@@ -57,6 +57,10 @@
                         <td class="xar-align-center">
                             <xar:if condition="!empty($links[$itemid]) and count($links[$itemid]) gt 0">
                                 <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
+                                    <xar:if condition="$otype eq 'display'">
+                                        <!-- skip display for dataobjects -->
+                                        <xar:continue/>
+                                    </xar:if>
                                     <xar:if condition="!empty($option['olink'])">
                                         <xar:if condition="!empty($option['oicon'])">
                                             <a href="#$option['olink']#" title="#$option['otitle']#"><img src="#xarTplGetImage('icons/'.$option['oicon'], 'base')#" width="16" height="16" alt="#$otype#"/></a>&#160;

@@ -11,7 +11,7 @@
                     View #$object:label#
                 </h2>
                 <!-- show the list of main objects -->
-                <xar:template type="module" file="mainobjects"/>
+                <xar:template type="module" file="main_objects"/>
             <xar:else/>
                 <xar:set name="searchlink">xarObject::getActionURL($object, 'search')</xar:set>
                 <xar:if condition="!empty($object->primary)">
