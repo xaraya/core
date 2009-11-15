@@ -155,7 +155,7 @@ class DataObjectUserInterface extends Object
             'remove'   => 'delete', // we don't allow removing all items for an object here
             'show'     => 'display',
             'list'     => 'view',
-            'query'    => 'search',
+            'query'    => 'search', // same handler, different private method called by run()
             'settings' => 'config',
             'report'   => 'stats',
             'other'    => 'default',

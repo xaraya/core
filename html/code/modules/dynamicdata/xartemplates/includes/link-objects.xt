@@ -24,6 +24,8 @@
                     <th>Direction</th>
                 </tr>
                 <xar:foreach in="$relations" value="$link">
+                    <xar:set name="where">0</xar:set>
+                    <xar:set name="wherename">#$link['target']#</xar:set>
                     <xar:foreach in="$objects" value="$info">
                         <xar:if condition="$info['name'] eq $link['target']">
                             <xar:set name="where">$info['objectid']</xar:set>
@@ -36,8 +38,11 @@
                         </td>
                         <xar:if condition="$link['link_type'] eq 'parents'">
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;objectid=#$where#">
-                            #$wherename#</a>
+                            <xar:if condition="empty($where)">
+                                <em>#$wherename#</em>
+                            <xar:else/>
+                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;objectid=#$where#">#$wherename#</a>
+                            </xar:if>
                             <br />#$link['to_prop']#</td>
                             <td>&#160;</td>
                             <td>#$link['from_prop']#</td>
@@ -49,23 +54,32 @@
                             <td>#$link['from_prop']#</td>
                             <td class="xar-nowrap">&#160;</td>
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;objectid=#$where#">
-                            #$wherename#</a>
+                            <xar:if condition="empty($where)">
+                                <em>#$wherename#</em>
+                            <xar:else/>
+                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;objectid=#$where#">#$wherename#</a>
+                            </xar:if>
                             <br />#$link['to_prop']#</td>
                         <xar:elseif condition="$link['link_type'] eq 'linkedto' or $link['link_type'] eq 'extensions'"/>
                             <td>&#160;</td>
                             <td>&#160;</td>
                             <td>#$link['from_prop']#</td>
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;objectid=#$where#">
-                            #$wherename#</a>
+                            <xar:if condition="empty($where)">
+                                <em>#$wherename#</em>
+                            <xar:else/>
+                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;objectid=#$where#">#$wherename#</a>
+                            </xar:if>
                             <br />#$link['to_prop']#</td>
                             <td class="xar-nowrap">&#160;</td>
                         <xar:elseif condition="$link['link_type'] eq 'linkedfrom' or $link['link_type'] eq 'extended'"/>
                             <td>&#160;</td>
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;objectid=#$where#">
-                            #$wherename#</a>
+                            <xar:if condition="empty($where)">
+                                <em>#$wherename#</em>
+                            <xar:else/>
+                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;objectid=#$where#">#$wherename#</a>
+                            </xar:if>
                             <br />#$link['to_prop']#</td>
                             <td>#$link['from_prop']#</td>
                             <td class="xar-nowrap">&#160;</td>

@@ -124,6 +124,10 @@ function dynamicdata_util_relations($args)
             }
 
             foreach ($data['relations'] as $link) {
+                // in case we have links with unknown objects
+                if (empty($name2label[$link['target']])) {
+                    $name2label[$link['target']] = $link['target'];
+                }
                 if ($link['link_type'] == 'parents') {
                     if ($link['direction'] == 'bi') {
                         $yuml_spec .= ', [' . $name2label[$link['target']] . ']' . $link['to_prop'] . '-' . $link['from_prop'] . ' *[' . $object->label . ']';
