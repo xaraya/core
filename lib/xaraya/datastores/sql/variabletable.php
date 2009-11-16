@@ -215,6 +215,16 @@ class VariableTableDataStore extends SQLDataStore
             return;
         }
 
+        $process = array();
+        foreach ($propids as $propid) {
+            if (!empty($this->groupby) && in_array($propid,$this->groupby)) {
+                continue;
+            } elseif (empty($this->fields[$propid]->operation)) {
+                continue; // all fields should be either GROUP BY or have some operation
+            }
+            array_push($process, $propid);
+        }
+
         $dynamicdata = $this->tables['dynamic_data'];
 
         // easy case where we already know the items we want
@@ -576,6 +586,95 @@ class VariableTableDataStore extends SQLDataStore
                                 $newval = $curval['total'] / $curval['count'];
                                 $this->fields[$propid]->setItemValue($curid,$newval);
                             }
+                        }
+                    }
+                }
+            }
+
+        // here we grab everyting and process it - TODO: better way to do this ?
+        } elseif (count($process) > 0) {
+            $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
+            $query = "SELECT DISTINCT property_id,
+                             item_id,
+                             value
+                        FROM $dynamicdata
+                       WHERE property_id IN ($bindmarkers)";
+
+            $stmt = $this->db->prepareStatement($query);
+            $result = $stmt->executeQuery($propids);
+
+            // we only have one "itemid" with the result of the operations
+            $curid = 1;
+            foreach ($process as $propid) {
+                // add the item to the value list for this property
+                $this->fields[$propid]->setItemValue($curid,null);
+            }
+
+            while ($result->next()) {
+                list($propid,$itemid,$value) = $result->getRow();
+                if (isset($value)) {
+                    $curval = $this->fields[$propid]->getItemValue($curid);
+                    switch ($this->fields[$propid]->operation) {
+                        case 'COUNT':
+                            if (!isset($curval)) {
+                                $curval = 0;
+                            }
+                            $curval++;
+                            break;
+                        case 'SUM':
+                            if (!isset($curval)) {
+                                $curval = $value;
+                            } else {
+                                $curval += $value;
+                            }
+                            break;
+                        case 'MIN':
+                            if (!isset($curval)) {
+                                $curval = $value;
+                            } elseif ($curval > $value) {
+                                $curval = $value;
+                            }
+                            break;
+                        case 'MAX':
+                            if (!isset($curval)) {
+                                $curval = $value;
+                            } elseif ($curval < $value) {
+                                $curval = $value;
+                            }
+                            break;
+                        case 'AVG':
+                            if (!isset($curval)) {
+                                $curval = array('total' => $value, 'count' => 1);
+                            } else {
+                                $curval['total'] += $value;
+                                $curval['count']++;
+                            }
+                            // TODO: divide total by count afterwards
+                            break;
+                        default:
+                            break;
+                    }
+                    $this->fields[$propid]->setItemValue($curid,$curval);
+                }
+            }
+            // add this "itemid" to the list
+            $this->_itemids[] = $curid;
+            $result->close();
+
+            // divide total by count afterwards
+            $divide = array();
+            foreach ($process as $propid) {
+                if ($this->fields[$propid]->operation == 'AVG') {
+                    $divide[] = $propid;
+                }
+            }
+            if (count($divide) > 0) {
+                foreach ($this->_itemids as $curid) {
+                    foreach ($divide as $propid) {
+                        $curval = $this->fields[$propid]->getItemValue($curid);
+                        if (!empty($curval) && is_array($curval) && !empty($curval['count'])) {
+                            $newval = $curval['total'] / $curval['count'];
+                            $this->fields[$propid]->setItemValue($curid,$newval);
                         }
                     }
                 }

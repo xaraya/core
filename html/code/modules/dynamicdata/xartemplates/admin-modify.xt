@@ -6,13 +6,33 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
-        <h2>
-            Modify Item #$object:itemid# in #$object:label#
-        </h2>
-        <xar:if condition="!empty($objectid) and $objectid eq 1">
-            <xar:set name="action">'modify'</xar:set>
-            <xar:template file="object-actions"/>
+        <xar:if condition="!empty($object:objectid)">
+            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
+        <xar:else/>
+            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
         </xar:if>
+        <h2>
+            <xar:if condition="!empty($objectid) and $objectid eq 1">
+                Modify DataObject for #$object:properties.label:value#
+                <xar:set name="proplink">xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $object->itemid))</xar:set>
+                &#160;<a href="#$proplink#" title="Modify DataProperties for #$object:properties.label:value#">
+                    <img src="#xarTplGetImage('icons/modify-config.png', 'base')#" width="16" height="16" alt="modifyprop"/>
+                </a>
+                <xar:set name="itemslink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->itemid))</xar:set>
+                &#160;<a href="#$itemslink#" title="View Items for #$object:properties.label:value#">
+                    <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="viewitems"/>
+                </a>
+                <xar:set name="exportlink">xarModURL('dynamicdata','util','export',array('objectid' => $object->itemid))</xar:set>
+                &#160;<a href="#$exportlink#" title="Export Object Definition for #$object:properties.label:value#">
+                    <img src="#xarTplGetImage('icons/export-xml.png', 'base')#" width="16" height="16" alt="export"/>
+                </a>
+            <xar:else/>
+                Modify Item #$object:itemid# in #$object:label#&#160;
+                <a href="#$viewlink#" title="View #$object:label#">
+                    <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                </a>
+            </xar:if>
+        </h2>
         <xar:if condition="isset($preview)">
             <fieldset>
                 <legend>Preview</legend>

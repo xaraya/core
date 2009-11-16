@@ -20,7 +20,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     public $itemids  = array();           // the list of item ids used in data stores
     public $where    = '';
     public $sort     = '';
-    public $groupby  = array();
+    public $groupby  = array();     // the list of property names to group by (if any) - see also isgrouped
     public $numitems = null;
     public $startnum = null;
     public $count    = 0;           // specify if you want DD to count items before getting them (e.g. for the pager)
@@ -522,6 +522,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
                     ) {
                         $args['properties'][$name] =& $this->properties[$name];
+                    } elseif (!empty($this->groupby) && in_array($name, $this->groupby)) {
+                        $args['properties'][$name] =& $this->properties[$name];
+                    } elseif (!empty($this->properties[$name]->operation)) {
+                        $args['properties'][$name] =& $this->properties[$name];
                     }
                 }
             }
@@ -532,7 +536,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
                 ) {
-                        $args['properties'][$name] =& $this->properties[$name];
+                    $args['properties'][$name] =& $this->properties[$name];
+                } elseif (!empty($this->groupby) && in_array($name, $this->groupby)) {
+                    $args['properties'][$name] =& $this->properties[$name];
+                } elseif (!empty($this->properties[$name]->operation)) {
+                    $args['properties'][$name] =& $this->properties[$name];
                 }
 
             // Order the fields if this is an extended object
@@ -595,7 +603,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         sys::import('xaraya.objects');
 
         // get view options for each item
-        if(empty($this->groupby)) {
+        if(empty($this->isgrouped)) {
             // reset cached urls
             $this->cached_urls = array();
             foreach(array_keys($this->items) as $itemid) {
@@ -620,7 +628,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
         }
 
-        if(!empty($this->groupby)) {
+        if(!empty($this->isgrouped)) {
             foreach(array_keys($args['properties']) as $name) {
                 if(!empty($this->properties[$name]->operation))
                     $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
@@ -718,23 +726,23 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                                        'olink'  => $this->getActionURL('modify', $itemid),
                                        'ojoin'  => '|');
         }
-        if ($allow_delete)  {
-            $options['delete'] = array('otitle' => xarML('Delete'),
-                                       'oicon'  => 'delete.png',
-                                       'olink'  => $this->getActionURL('delete', $itemid),
-                                       'ojoin'  => '|');
-        }
         // extra options when showing the dynamic objects themselves
         if ($allow_edit && $this->objectid == 1) {
+            $options['modifyprops'] = array('otitle' => xarML('Properties'),
+                                            'oicon'  => 'modify-config.png',
+                                            'olink'  => $this->getActionURL('modifyprop', $itemid),
+                                            'ojoin'  => '|');
             $options['viewitems'] = array('otitle' => xarML('Items'),
                                           'oicon'  => 'item-list.png',
                                           'olink'  => $this->getActionURL('viewitems', $itemid),
                                           'ojoin'  => '|'
                                          );
-            $options['modifyprops'] = array('otitle' => xarML('Properties'),
-                                            'oicon'  => 'modify-config.png',
-                                            'olink'  => $this->getActionURL('modifyprop', $itemid),
-                                            'ojoin'  => '|');
+        }
+        if ($allow_delete)  {
+            $options['delete'] = array('otitle' => xarML('Delete'),
+                                       'oicon'  => 'delete.png',
+                                       'olink'  => $this->getActionURL('delete', $itemid),
+                                       'ojoin'  => '|');
         }
 
         return $options;
