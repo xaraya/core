@@ -15,7 +15,7 @@ function dynamicdata_admin_modifymoduleconfig()
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'dynamicdata'));
-    $data['module_settings']->setFieldList('items_per_page,');
+    $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons');
     $data['module_settings']->getItem();
     switch (strtolower($phase)) {
         case 'modify':

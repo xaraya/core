@@ -6,9 +6,15 @@
     <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
         <xar:template file="catnavigation"/>
     </xar:if>
-    <div style="text-align: right;">
-        <a href="#xarModURL('dynamicdata','admin','new')#" title="Create New Data Object"><img src="#xarTplGetImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/></a>
-    </div>
+    <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
+        <div style="text-align: right;">
+            <a href="#xarModURL('dynamicdata','admin','new')#" title="Create New Data Object"><img src="#xarTplGetImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/></a>
+        </div>
+    <xar:else />
+        <h3>
+            <a href="#xarModURL('dynamicdata','admin','new')#">Create New Data Object</a>
+        </h3>
+    </xar:if>
     <xar:if condition="empty($layout)">
         <xar:set name="layout">'default'</xar:set>
     </xar:if>
@@ -59,18 +65,29 @@
                     <xar:if condition="empty($linkfield)">
                         <td class="xar-align-center">
                             <xar:if condition="!empty($links[$itemid]) and count($links[$itemid]) gt 0">
-                                <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
-                                    <xar:if condition="!empty($option['olink'])">
-                                        <xar:if condition="!empty($option['oicon'])">
-                                            <a href="#$option['olink']#" title="#$option['otitle']#"><img src="#xarTplGetImage('icons/'.$option['oicon'], 'base')#" width="16" height="16" alt="#$otype#"/></a>&#160;
-                                        <xar:else/>
+                                <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
+                                    <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
+                                        <xar:if condition="!empty($option['olink'])">
+                                            <xar:if condition="!empty($option['oicon'])">
+                                                <a href="#$option['olink']#" title="#$option['otitle']#"><img src="#xarTplGetImage('icons/'.$option['oicon'], 'base')#" width="16" height="16" alt="#$otype#"/></a>&#160;
+                                            <xar:else/>
+                                                #$option['ojoin']#
+                                                <a href="#$option['olink']#">#$option['otitle']#</a>
+                                            </xar:if>
+                                        <xar:else />
+                                            #$option['ojoin']# #$option['otitle']#
+                                        </xar:if>
+                                    </xar:foreach>
+                                <xar:else />
+                                    <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
+                                        <xar:if condition="!empty($option['olink'])">
                                             #$option['ojoin']#
                                             <a href="#$option['olink']#">#$option['otitle']#</a>
+                                        <xar:else />
+                                            #$option['ojoin']# #$option['otitle']#
                                         </xar:if>
-                                    <xar:else />
-                                        #$option['ojoin']# #$option['otitle']#
-                                    </xar:if>
-                                </xar:foreach>
+                                    </xar:foreach>
+                                </xar:if>
                             <xar:else />
                                 &#160;
                             </xar:if>
@@ -86,13 +103,13 @@
         <div>
         <xar:if condition="$object:startnum gt 1">
             <div class="xar-halfwidth xar-floatleft">
-            <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->startnum" urltemplate="$object->pagerurl" template="multipageprev"/>
+                <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->startnum" urltemplate="$object->pagerurl" template="multipageprev"/>
             </div>
         </xar:if>
         <xar:if condition="count($object:items) eq $object:numitems">
             <div class="xar-halfwidth xar-floatright xar-align-right">
-            <xar:set name="newtotal">$object->startnum+$object->numitems</xar:set>
-            <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$newtotal" urltemplate="$object->pagerurl" template="multipagenext"/>
+                <xar:set name="newtotal">$object->startnum+$object->numitems</xar:set>
+                <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$newtotal" urltemplate="$object->pagerurl" template="multipagenext"/>
             </div>
         </xar:if>
         <br class="xar-clearboth"/>
