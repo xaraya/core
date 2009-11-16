@@ -125,9 +125,6 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         $stats['grouplist'] = array();
         foreach ($this->object->properties as $name => $property) {
             if (empty($stats['proptypes'][$property->type])) continue;
-            if (empty($stats['field'][$name])) {
-                $stats['field'][$name] = 'hide';
-            }
             $proptype = $stats['proptypes'][$property->type]['name'];
             switch ($proptype)
             {
@@ -138,13 +135,16 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
                     }
                     break;
                 case 'calendar':
-                    $stats['grouplist'][$name.'_year']  = $property->label . ' Year';
-                    $stats['grouplist'][$name.'_month'] = $property->label . ' Month';
-                    $stats['grouplist'][$name.'_day']   = $property->label . ' Day';
+                    $stats['grouplist'][$name.':year']  = $property->label . ' Year';
+                    $stats['grouplist'][$name.':month'] = $property->label . ' Month';
+                    $stats['grouplist'][$name.':day']   = $property->label . ' Day';
                     break;
                 default:
                     $stats['grouplist'][$name] = $property->label;
                     break;
+            }
+            if (empty($stats['field'][$name])) {
+                $stats['field'][$name] = 'hide';
             }
         }
 
@@ -157,8 +157,22 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
                 $fieldlist[] = $name;
                 $groupby[] = $name;
                 $sort[] = $name;
-            } else {
+            } elseif (strpos($name,':')) {
                 // TODO: calendar field by year, month or day
+                list($name,$format) = explode(':',$name);
+                if (empty($this->object->properties[$name])) continue;
+                $property = $this->object->properties[$name];
+                $proptype = $stats['proptypes'][$property->type]['name'];
+                if ($proptype == 'calendar' && empty($property->configuration)) {
+                    list($field,$group) = $this->getTimestamp($name,$format);
+                } else {
+                    list($field,$group) = $this->getDate($name,$format);
+                }
+                if (!empty($field) && !empty($group)) {
+                    $fieldlist[] = $field;
+                    $groupby[] = $group;
+                    $sort[] = $group;
+                }
             }
         }
 
@@ -176,7 +190,12 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
                     $fieldlist[] = "COUNT($name)";
                     break;
                 case 'distinct':
-                    $fieldlist[] = "COUNT(DISTINCT $name)"; // CHECKME too !
+                    $fieldlist[] = "COUNT(DISTINCT $name)"; // FIXME for getDataStores in master.php
+/* FIXME:
+For sqlite, we need something like
+SELECT COUNT(*)
+FROM ( SELECT DISTINCT field FROM table )
+*/
                     break;
                 case 'min':
                     $fieldlist[] = "MIN($name)";
@@ -195,12 +214,8 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             }
         }
 
-//echo var_dump($stats);
-//        $this->object->countItems();
-
-    // FIXME: COUNT(id), SUM(age) etc. alone doesn't work anymore without grouping !?
-        //if (empty($fieldlist)) {
-        if (empty($groupby)) {
+        if (empty($fieldlist)) {
+            $this->object->countItems();
             $result = 0;
         } else {
             $this->object->getItems(array('fieldlist' => $fieldlist,
@@ -210,9 +225,9 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         }
 
         $stats['options'] = array('hide'     => '',
-                                  'show'     => 'Show',
+                                  //'show'     => 'Show', // can't be mixed with group by etc.
                                   'count'    => 'Count',
-                                  'distinct' => 'Distinct', // SELECT COUNT(DISTINCT ...) ? FIXME for getDataStores in master.php
+                                  //'distinct' => 'Distinct', // SELECT COUNT(DISTINCT ...) ? FIXME for getDataStores in master.php
                                   'min'      => 'Minimum',
                                   'max'      => 'Maximum',
                                   'avg'      => 'Average',
@@ -230,6 +245,142 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             xarObjectCache::setCached($cacheKey, $output);
         }
         return $output;
+    }
+
+    function getTimestamp($field,$format)
+    {
+        $newfield = '';
+        $newgroup = '';
+        if ($format == 'year') {
+            $dbtype = xarDB::getType();
+            switch ($dbtype) {
+                case 'mysql':
+                    $newfield = "LEFT(FROM_UNIXTIME($field),4) AS $field" . "_year";
+                    $newgroup = $field . "_year";
+                    break;
+                case 'postgres':
+                    $newfield = "TO_CHAR(ABSTIME($field),'YYYY') AS $field" . "_year";
+                // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
+                    $newgroup = $field . "_year";
+                    break;
+                case 'mssql':
+                    $newfield = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),4) as $field" . "_year";
+                    $newgroup = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),4)";
+                    break;
+                // TODO:  Add SQL queries for Oracle, etc.
+                default:
+                    break;
+            }
+        } elseif ($format == 'month') {
+            $dbtype = xarDB::getType();
+            switch ($dbtype) {
+                case 'mysql':
+                    $newfield = "LEFT(FROM_UNIXTIME($field),7) AS $field" . "_month";
+                    $newgroup = $field . "_month";
+                    break;
+                case 'postgres':
+                    $newfield = "TO_CHAR(ABSTIME($field),'YYYY-MM') AS $field" . "_month";
+                // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
+                    $newgroup = $field . "_month";
+                    break;
+                case 'mssql':
+                    $newfield = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),7) as $field" . "_month";
+                    $newgroup = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),7)";
+                    break;
+                // TODO:  Add SQL queries for Oracle, etc.
+                default:
+                    break;
+            }
+        } elseif ($format == 'day') {
+            $dbtype = xarDB::getType();
+            switch ($dbtype) {
+                case 'mysql':
+                    $newfield = "LEFT(FROM_UNIXTIME($field),10) AS $field" . "_day";
+                    $newgroup = $field . "_day";
+                    break;
+                case 'postgres':
+                    $newfield = "TO_CHAR(ABSTIME($field),'YYYY-MM-DD') AS $field" . "_day";
+                // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
+                    $newgroup = $field . "_day";
+                    break;
+                case 'mssql':
+                    $newfield = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),10) as $field" . "_day";
+                    $newgroup = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),10)";
+                    break;
+                // TODO:  Add SQL queries for Oracle, etc.
+                default:
+                    break;
+            }
+        }
+        return array($newfield,$newgroup);
+    }
+
+    function getDate($field,$format) // CHECKME for all database types
+    {
+        $newfield = '';
+        $newgroup = '';
+        if ($format == 'year') {
+            $dbtype = xarDB::getType();
+            switch ($dbtype) {
+                case 'mysql':
+                    $newfield = "LEFT($field,4) AS $field" . "_year";
+                    $newgroup = $field . "_year";
+                    break;
+                case 'postgres':
+                    $newfield = "LEFT($field,4) AS $field" . "_year";
+                // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
+                    $newgroup = $field . "_year";
+                    break;
+                case 'mssql':
+                    $newfield = "LEFT($field,4) as $field" . "_year";
+                    $newgroup = "LEFT($field,4)";
+                    break;
+                // TODO:  Add SQL queries for Oracle, etc.
+                default:
+                    break;
+            }
+        } elseif ($format == 'month') {
+            $dbtype = xarDB::getType();
+            switch ($dbtype) {
+                case 'mysql':
+                    $newfield = "LEFT($field,7) AS $field" . "_month";
+                    $newgroup = $field . "_month";
+                    break;
+                case 'postgres':
+                    $newfield = "LEFT($field,7) AS $field" . "_month";
+                // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
+                    $newgroup = $field . "_month";
+                    break;
+                case 'mssql':
+                    $newfield = "LEFT($field,7) AS $field" . "_month";
+                    $newgroup = "LEFT($field,7)";
+                    break;
+                // TODO:  Add SQL queries for Oracle, etc.
+                default:
+                    break;
+            }
+        } elseif ($format == 'day') {
+            $dbtype = xarDB::getType();
+            switch ($dbtype) {
+                case 'mysql':
+                    $newfield = "LEFT($field,10) AS $field" . "_day";
+                    $newgroup = $field . "_day";
+                    break;
+                case 'postgres':
+                    $newfield = "LEFT($field,10) AS $field" . "_day";
+                // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
+                    $newgroup = $field . "_day";
+                    break;
+                case 'mssql':
+                    $newfield = "LEFT($field,10) AS $field" . "_day";
+                    $newgroup = "LEFT($field,10)";
+                    break;
+                // TODO:  Add SQL queries for Oracle, etc.
+                default:
+                    break;
+            }
+        }
+        return array($newfield,$newgroup);
     }
 }
 

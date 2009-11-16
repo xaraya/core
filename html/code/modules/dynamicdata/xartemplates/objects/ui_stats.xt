@@ -37,42 +37,22 @@
                 <xar:if condition="!empty($return_url)">
                     <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                 </xar:if>
-                <legend>Statistics Criteria</legend>
+                <legend>Selection Criteria</legend>
                 <div class="xar-form-input-wrapper">
                     <label class="xar-form-label-short" for="group_0">Group By</label>
-                    &#160;
-                    <select name="group[0]" id="group_0">
-                        <option value=""></option>
-                        <xar:foreach in="$stats.grouplist" key="$value" value="$label">
-                            <xar:if condition="!empty($stats['group'][0]) and $stats['group'][0] eq $value">
-                                <option value="#$value#" selected="selected">#$label#</option>
-                            <xar:else/>
-                                <option value="#$value#">#$label#</option>
-                            </xar:if>
-                        </xar:foreach>
-                    </select>
-                    &#160;
-                    <select name="group[1]" id="group_1">
-                        <option value=""></option>
-                        <xar:foreach in="$stats.grouplist" key="$value" value="$label">
-                            <xar:if condition="!empty($stats['group'][1]) and $stats['group'][1] eq $value">
-                                <option value="#$value#" selected="selected">#$label#</option>
-                            <xar:else/>
-                                <option value="#$value#">#$label#</option>
-                            </xar:if>
-                        </xar:foreach>
-                    </select>
-                    &#160;
-                    <select name="group[2]" id="group_2">
-                        <option value=""></option>
-                        <xar:foreach in="$stats.grouplist" key="$value" value="$label">
-                            <xar:if condition="!empty($stats['group'][2]) and $stats['group'][2] eq $value">
-                                <option value="#$value#" selected="selected">#$label#</option>
-                            <xar:else/>
-                                <option value="#$value#">#$label#</option>
-                            </xar:if>
-                        </xar:foreach>
-                    </select>
+                    <xar:for start="$i = 0" test="$i le 3" iter="$i++">
+                        &#160;
+                        <select name="group[#$i#]" id="group_#$i#">
+                            <option value=""></option>
+                            <xar:foreach in="$stats.grouplist" key="$value" value="$label">
+                                <xar:if condition="!empty($stats['group'][$i]) and $stats['group'][$i] eq $value">
+                                    <option value="#$value#" selected="selected">#$label#</option>
+                                <xar:else/>
+                                    <option value="#$value#">#$label#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                    </xar:for>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label class="xar-form-label-short" for="field">Operation</label>
@@ -109,7 +89,9 @@
         </form>
         <xar:if condition="!empty($result)">
             <!-- don't show a newlink here -->
-            <xar:data-view object="$object" newlink=""/>
+            <xar:data-view object="$object" tplmodule="dynamicdata" newlink=""/>
+        <xar:elseif condition="!empty($object->itemcount)"/>
+            <p>There are #$object:itemcount# items in #$object:label#</p>
         </xar:if>
     </div>
 </xar:template>
