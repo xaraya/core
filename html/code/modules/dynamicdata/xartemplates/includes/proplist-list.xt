@@ -87,12 +87,12 @@
                         xarTplGetImage('icons/go-down.png', 'base')
                     </xar:set>
                     <xar:if condition="$index lt $numprops and $numprops ne 1">
-                    <xar:set name="link">
-                        xarModURL('dynamicdata', 'admin', 'orderprops', array('module_id' => $module_id, 'itemtype' => $itemtype, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
-                    </xar:set>
-                    <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
+                        <xar:set name="link">
+                            xarModURL('dynamicdata', 'admin', 'orderprops', array('module_id' => $module_id, 'itemtype' => $itemtype, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
+                        </xar:set>
+                        <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
                     <xar:else />
-                    <img class="xar-icon-disabled" src="#$icon#" alt="down" title="#$title#"/>
+                        <img class="xar-icon-disabled" src="#$icon#" alt="down" title="#$title#"/>
                     </xar:if>
                 </td>
             </tr>
