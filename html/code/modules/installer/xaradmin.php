@@ -31,6 +31,10 @@ function installer_admin_main()
     return $data;
 }
 
+
+// TODO: move this to some place central
+define('MYSQL_REQIRED_VERSION', '5.0.0');
+
 /**
  * Phase 1: Welcome (Set Language and Locale) Page
  *
@@ -140,7 +144,7 @@ function installer_admin_phase3()
     $cacheTemplatesIsWritable = false;
     $rssTemplatesIsWritable   = false;
     $metRequiredPHPVersion    = false;
-
+    
     $systemVarDir             = sys::varpath();
     $cacheDir                 = $systemVarDir . XARCORE_CACHEDIR;
     $cacheTemplatesDir        = $systemVarDir . XARCORE_TPL_CACHEDIR;
@@ -200,6 +204,14 @@ function installer_admin_phase3()
     $data['language']    = $install_language;
     $data['phase']       = 3;
     $data['phase_label'] = xarML('Step Three');
+    
+    // We only check this extension if MySQL is loaded
+    if ($data['mysqlextension']) {
+        $data['mysql_required_version']     = MYSQL_REQIRED_VERSION;
+        preg_match('@[0-9]+\.[0-9]+\.[0-9]+@', mysql_get_server_info(), $version);
+        $data['mysql_version_ok']       = version_compare($version[0],MYSQL_REQIRED_VERSION,'ge');
+        $data['mysql_version']          = $version[0];
+    }
 
     return $data;
 }
@@ -223,8 +235,16 @@ function installer_admin_phase4()
     $data['database_prefix']     = xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
     $data['database_type']       = xarSystemVars::get(sys::CONFIG, 'DB.Type');
     $data['database_charset']    = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+
     // Supported  Databases:
-    $data['database_types']      = array('mysql'       => array('name' => 'MySQL'   , 'available' => extension_loaded('mysql')),
+    if (extension_loaded('mysql')) {
+        preg_match('@[0-9]+\.[0-9]+\.[0-9]+@', mysql_get_server_info(), $version);
+        $mysql_version_ok = version_compare($version[0],MYSQL_REQIRED_VERSION,'ge');
+    } else {
+        $mysql_version_ok = false;
+    }
+
+    $data['database_types']      = array('mysql'       => array('name' => 'MySQL'   , 'available' => extension_loaded('mysql') && $mysql_version_ok),
                                          'postgres'    => array('name' => 'Postgres', 'available' => extension_loaded('pgsql')),
                                          'sqlite'      => array('name' => 'SQLite'  , 'available' => extension_loaded('sqlite')),
                                          //'pdosqlite'   => array('name' => 'PDO SQLite'  , 'available' => extension_loaded('pdo_sqlite')),
