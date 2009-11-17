@@ -32,14 +32,14 @@ function dynamicdata_admin_updateconfig($args)
     if ( isset($flushPropertyCache) && ($flushPropertyCache == true) ) {
         $args['flush'] = 'true';
         if(xarMod::apiFunc('dynamicdata','admin','importpropertytypes', $args)) {
-            xarResponse::redirect(xarModURL('dynamicdata','admin','modifyconfig'));
+            xarController::redirect(xarModURL('dynamicdata','admin','modifyconfig'));
             return true;
         } else {
             return 'Unknown error while clearing and reloading Property Definition Cache.';
         }
     }
 
-    xarResponse::redirect(xarModURL('dynamicdata','admin','modifyconfig'));
+    xarController::redirect(xarModURL('dynamicdata','admin','modifyconfig'));
     return true;
 }
 ?>

@@ -114,7 +114,7 @@ function roles_user_email($args)
             )) return;
 
             // lets update status and display updated configuration
-            xarResponse::redirect(xarModURL('roles', 'user', 'viewlist'));
+            xarController::redirect(xarModURL('roles', 'user', 'viewlist'));
 
             break;
     }

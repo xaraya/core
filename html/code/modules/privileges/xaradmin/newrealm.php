@@ -54,7 +54,7 @@ function privileges_admin_newrealm()
         $result = $stmt->executeQuery($bindvars);
 
         //Redirect to view page
-        xarResponse::redirect(xarModURL('privileges', 'admin', 'viewrealms'));
+        xarController::redirect(xarModURL('privileges', 'admin', 'viewrealms'));
     }
 
     $data['authid'] = xarSecGenAuthKey();

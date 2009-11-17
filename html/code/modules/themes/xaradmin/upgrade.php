@@ -36,7 +36,7 @@ function themes_admin_upgrade()
     //throw back
     if(!isset($upgraded)) return;
 
-    xarResponse::redirect(xarModURL('themes', 'admin', 'list'));
+    xarController::redirect(xarModURL('themes', 'admin', 'list'));
 
     return true;
 }

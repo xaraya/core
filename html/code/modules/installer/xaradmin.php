@@ -136,7 +136,7 @@ function installer_admin_phase3()
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
-        xarResponse::redirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
+        xarController::redirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
     }
 
     //Defaults
@@ -626,7 +626,8 @@ function installer_admin_bootstrap()
         }
     }
 
-    xarResponse::redirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
+    xarController::redirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
+    return true;
 }
 
 /**
@@ -756,7 +757,8 @@ function installer_admin_create_administrator()
             return;
         }
     }
-    xarResponse::redirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
+    xarController::redirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
+    return true;
 }
 
 /**
@@ -1018,7 +1020,7 @@ function installer_admin_confirm_configuration()
      //TODO: Check why this var is being reset to null in sqlite install - reset here for now to be sure
      //xarModVars::set('roles', 'defaultauthmodule', xarMod::getRegID('authsystem'));
 
-        xarResponse::redirect(xarModURL('installer', 'admin', 'security'));
+        xarController::redirect(xarModURL('installer', 'admin', 'security'));
         return true;
     }
 
@@ -1221,12 +1223,12 @@ function installer_admin_finish()
 
     switch ($returnurl) {
         case ('modules'):
-            xarResponse::redirect(xarModURL('modules','admin','list'));
+            xarController::redirect(xarModURL('modules','admin','list'));
         case ('blocks'):
-            xarResponse::redirect(xarModURL('blocks','admin','view_instances'));
+            xarController::redirect(xarModURL('blocks','admin','view_instances'));
         case ('site'):
         default:
-            xarResponse::redirect('index.php');
+            xarController::redirect('index.php');
     }
     return true;
 }

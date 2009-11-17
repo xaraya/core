@@ -49,9 +49,9 @@ function modules_admin_updateproperties()
 
     xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET);
     if (!empty($return_url)) {
-        xarResponse::redirect($return_url);
+        xarController::redirect($return_url);
     } else {
-        xarResponse::redirect(xarModURL('modules', 'admin', 'list'));
+        xarController::redirect(xarModURL('modules', 'admin', 'list'));
     }
 
     return true;

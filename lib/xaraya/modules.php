@@ -386,7 +386,7 @@ class xarMod extends Object implements IxarMod
     static function getName($regID = NULL)
     {
         if(!isset($regID)) {
-            list($modName) = xarRequest::getInfo();
+            list($modName) = xarController::$request->getInfo();
         } else {
             $modinfo = self::getInfo($regID);
             $modName = $modinfo['name'];
@@ -988,14 +988,14 @@ class xarMod extends Object implements IxarMod
         assert('($funcType == "api" or $funcType==""); /* Wrong funcType argument in private callFunc method */');
         if (empty($modName) || empty($funcName)) {
             // This is not a valid function syntax - CHECKME: also for api functions ?
-            return xarResponse::NotFound();
+            return xarController::$response->NotFound();
         }
 
         // good thing this information is cached :)
         $modBaseInfo = self::getBaseInfo($modName);
         if (!isset($modBaseInfo)) {
             // This is not a valid module - CHECKME: also for api functions ?
-            return xarResponse::NotFound();
+            return xarController::$response->NotFound();
         }
 
         // Build function name and call function
@@ -1021,7 +1021,7 @@ class xarMod extends Object implements IxarMod
                         $found = false;
                     } else {
                         // fatal error for unknown gui functions !?
-                        return xarResponse::NotFound();
+                        return xarController::$response->NotFound();
                     }
                 } else {
                     ob_start();

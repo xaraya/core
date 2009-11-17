@@ -516,7 +516,7 @@ function xarTplGetImage($modImage, $modName = NULL)
     // obtain current module name if not specified
     // FIXME: make a fallback for weird requests
     if(!isset($modName)){
-        list($modName) = xarRequest::getInfo();
+        list($modName) = xarController::$request->getInfo();
     }
 
     // get module directory (could be different from module name)
