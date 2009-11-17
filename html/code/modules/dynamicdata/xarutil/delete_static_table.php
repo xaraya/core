@@ -30,7 +30,7 @@
             $dbconn->Execute($query);
 
             // Jump to the next page
-            xarResponse::Redirect(xarModURL('dynamicdata','util','view_static'));
+            xarResponse::redirect(xarModURL('dynamicdata','util','view_static'));
             return true;
         }
         return $data;

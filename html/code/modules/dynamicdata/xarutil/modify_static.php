@@ -64,7 +64,7 @@
                 $dbconn->Execute($query);
                 
                 // Jump to the next page
-                xarResponse::Redirect(xarModURL('dynamicdata','util','view_static',array('table' => $data['table'])));
+                xarResponse::redirect(xarModURL('dynamicdata','util','view_static',array('table' => $data['table'])));
                 return true;
             }
         } else {

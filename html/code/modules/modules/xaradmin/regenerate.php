@@ -34,7 +34,7 @@ function modules_admin_regenerate()
     if (!isset($regenerated)) return;
 
     // Redirect
-    xarResponse::Redirect(xarModURL('modules', 'admin', 'list'));
+    xarResponse::redirect(xarModURL('modules', 'admin', 'list'));
 
     return true;
 }

@@ -52,7 +52,7 @@ function modules_admin_remove ()
             if(!xarMod::apiFunc('modules','admin','remove',array('regid' => $id)))  return;
             // Clear the property cache
             PropertyRegistration::importPropertyTypes(true);
-            xarResponse::Redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+            xarResponse::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
         } else {
             // There are dependents, let's build a GUI
             $data                 = array();
@@ -76,8 +76,8 @@ function modules_admin_remove ()
 
     // Hmmm, I wonder if the target adding is considered a hack
     // it certainly depends on the implementation of xarModUrl
-    //    xarResponse::Redirect(xarModURL('modules', 'admin', "list#$target"));
-    xarResponse::Redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+    //    xarResponse::redirect(xarModURL('modules', 'admin', "list#$target"));
+    xarResponse::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
     // Never reached
     return true;
 }

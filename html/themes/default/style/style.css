@@ -203,7 +203,7 @@ ul.xar-tabs li.xar-tab-active a:hover {
 /* pager label */
 div.xar-pager span.xar-pager-label {
     color: #D77043;
-	font-size: 0.9em;
+    font-size: 0.9em;
 }
 /* inactive page link hover - not handled elsewhere */
 div.xar-pager span.xar-page a:hover {

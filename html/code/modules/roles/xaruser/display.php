@@ -39,7 +39,7 @@ function roles_user_display($args)
 
         $currentid = xarUserGetVar('id');
         if ($currentid == $id) {
-            xarResponse::Redirect(xarModURL('roles', 'user', 'account'));
+            xarResponse::redirect(xarModURL('roles', 'user', 'account'));
         }
 
         $name = $role->getName();

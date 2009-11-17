@@ -34,7 +34,7 @@ function themes_admin_regenerate()
 
     if (!isset($regenerated)) return;
     // Redirect
-    xarResponse::Redirect(xarModURL('themes', 'admin', 'list'));
+    xarResponse::redirect(xarModURL('themes', 'admin', 'list'));
 
     return true;
 }

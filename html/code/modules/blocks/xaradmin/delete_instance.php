@@ -49,7 +49,7 @@ function blocks_admin_delete_instance()
         array('bid' => $bid)
     );
 
-    xarResponse::Redirect(xarModURL('blocks', 'admin', 'view_instances'));
+    xarResponse::redirect(xarModURL('blocks', 'admin', 'view_instances'));
 
     return true;
 }
