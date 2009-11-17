@@ -553,8 +553,9 @@ class xarController extends Object
         return self::$request;
     }
 
-    static function dispatch()
+    static function dispatch($request=null)
     {
+        if (!empty($request)) self::$request = $request;
         self::$response = new xarResponse();
         if (self::$request->isObjectURL()) {
             sys::import('xaraya.objects');
@@ -562,10 +563,14 @@ class xarController extends Object
             // Call the object handler and return the output (or exit with 404 Not Found)
             self::$response->output = xarObject::guiMethod(self::$request->getType(), self::$request->getFunction());
 
-        } else {
+        } elseif (self::$request->isModuleURL()) {
 
             // Call the main module function and return the output (or exit with 404 Not Found)
             self::$response->output = xarMod::guiFunc(self::$request->getModule(), self::$request->getType(), self::$request->getFunction());
+        } else {
+            $dispatcher = new xarDispatcher($request);
+            $controller = $dispatcher->getController();
+            self::$response->output = $controller->getOutput();
         }
     }
 
@@ -703,9 +708,11 @@ class xarResponse extends Object
 
 class xarRequest extends Object
 {
+    private $isObjectURL = false;
+    private $isModuleURL = false;
+    
     public $defaultRequestInfo = array();
     public $shortURLVariables = array();
-    public $isObjectURL = false;
 
     public $url;
     public $module;
@@ -713,6 +720,7 @@ class xarRequest extends Object
     function __construct($url=null)
     {
         $this->url= $url;
+        $this->getInfo($url);
     }
 
     /**
@@ -756,6 +764,7 @@ class xarRequest extends Object
             xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
             xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $modType, 'user');
             xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
+            if (isset($modName)) $this->isModuleURL = true; 
         } else {
             $decomposed = parse_url($url);
             $params = array();
@@ -775,6 +784,7 @@ class xarRequest extends Object
             if (isset($params['module'])) {
                 $isvalid =  $regex->validate($params['module'], array('/^[a-z][a-z_0-9]*$/'));
                 $modName = $isvalid ? $params['module'] : null;
+                $this->isModuleURL = true; 
             } else {
                 $modName = null;
             }
@@ -891,9 +901,30 @@ class xarRequest extends Object
      * @return bool true if object URL, false if not
      */
     function isObjectURL() { return $this->isObjectURL; }
+    function isModuleURL() { return $this->isModuleURL; }
 
     function getModule()   { return $this->module; }
     function getType()     { return $this->type; }
     function getFunction() { return $this->func; }
+}
+
+class xarDispatcher extends Object
+{
+    private $controller;
+    private $request;
+
+    function __construct($request=null)
+    {
+        try {
+            sys::import('modules.' . $request->getModule() . '.controller');
+            $controllername = self::$request->getModule() . '.ActionController';
+            $this->controller = new ActionController($request);
+        } catch (Exception $e) {
+            sys::import('xaraya.controllers.action');
+            $this->controller = new ActionController($request);
+        }
+    }
+    function getController()  { return $this->controller; }
+    function getRequest()     { return $this->request; }
 }
 ?>
