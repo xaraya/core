@@ -132,7 +132,7 @@ function installer_admin_phase3()
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
-        xarResponse::Redirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
+        xarResponse::redirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
     }
 
     //Defaults
@@ -606,7 +606,7 @@ function installer_admin_bootstrap()
         }
     }
 
-    xarResponse::Redirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
+    xarResponse::redirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
 
 /**
@@ -736,7 +736,7 @@ function installer_admin_create_administrator()
             return;
         }
     }
-    xarResponse::Redirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
+    xarResponse::redirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
 
 /**
@@ -998,7 +998,7 @@ function installer_admin_confirm_configuration()
      //TODO: Check why this var is being reset to null in sqlite install - reset here for now to be sure
      //xarModVars::set('roles', 'defaultauthmodule', xarMod::getRegID('authsystem'));
 
-        xarResponse::Redirect(xarModURL('installer', 'admin', 'security'));
+        xarResponse::redirect(xarModURL('installer', 'admin', 'security'));
         return true;
     }
 
@@ -1201,12 +1201,12 @@ function installer_admin_finish()
 
     switch ($returnurl) {
         case ('modules'):
-            xarResponse::Redirect(xarModURL('modules','admin','list'));
+            xarResponse::redirect(xarModURL('modules','admin','list'));
         case ('blocks'):
-            xarResponse::Redirect(xarModURL('blocks','admin','view_instances'));
+            xarResponse::redirect(xarModURL('blocks','admin','view_instances'));
         case ('site'):
         default:
-            xarResponse::Redirect('index.php');
+            xarResponse::redirect('index.php');
     }
     return true;
 }

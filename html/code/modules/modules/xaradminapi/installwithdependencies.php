@@ -102,7 +102,7 @@ function modules_adminapi_installwithdependencies ($args)
 
             // Is there an install page?
             if (!$initialised && file_exists(sys::code() . 'modules/' . $modInfo['osdirectory'] . '/xartemplates/includes/installoptions.xt')) {
-                xarResponse::Redirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $mainId)));
+                xarResponse::redirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $mainId)));
                 return true;
             } else {
                 //No install page; move to install the module now
@@ -142,7 +142,7 @@ function modules_adminapi_installwithdependencies ($args)
                     xarOutputFlushCached('base-block');
                 }
 
-                xarResponse::Redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+                xarResponse::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
             } else {
                 // Do the next module
                 if (!xarMod::apiFunc('modules','admin','installwithdependencies',array('regid' => array_pop($modstack), 'phase' => 0))) return;

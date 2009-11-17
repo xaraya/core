@@ -19,7 +19,7 @@ function roles_user_view($args)
 
     // members list disabled? only show to roles admins
     if ((bool)xarModVars::get('roles', 'displayrolelist') == false && !xarSecurityCheck('AdminRoles', 0)) {
-        xarResponse::Redirect(xarModURL('roles', 'user', 'main'));
+        xarResponse::redirect(xarModURL('roles', 'user', 'main'));
     }
 //    extract($args);
 

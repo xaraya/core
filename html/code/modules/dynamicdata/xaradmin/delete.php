@@ -50,15 +50,15 @@ function dynamicdata_admin_delete($args)
 
     if (!empty($noconfirm)) {
         if (!empty($return_url)) {
-            xarResponse::Redirect($return_url);
+            xarResponse::redirect($return_url);
         } elseif (!empty($table)) {
-            xarResponse::Redirect(xarModURL('dynamicdata', 'admin', 'view',
+            xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'view',
                                           array(
                                             'table'     => $table,
                                             'tplmodule' => $data['tplmodule'],
                                           )));
         } else {
-            xarResponse::Redirect(xarModURL('dynamicdata', 'admin', 'view',
+            xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'view',
                                           array(
                                             'itemid'    => $data['objectid'],
                                             'tplmodule' => $data['tplmodule'],
@@ -119,15 +119,15 @@ function dynamicdata_admin_delete($args)
 
     $itemid = $myobject->deleteItem();
     if (!empty($return_url)) {
-        xarResponse::Redirect($return_url);
+        xarResponse::redirect($return_url);
     } elseif (!empty($table)) {
-        xarResponse::Redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array(
                                       'table'     => $table,
                                       'tplmodule' => $tplmodule,
                                       )));
     } else {
-        xarResponse::Redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array(
                                       'name' => $myobject->name,
                                       'tplmodule' => $tplmodule,

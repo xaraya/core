@@ -62,7 +62,7 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
             if(empty($args['return_url'])) 
                 $args['return_url'] = $this->getReturnURL();
 
-            xarResponse::Redirect($args['return_url']);
+            xarResponse::redirect($args['return_url']);
             // Return
             return true;
         }
@@ -90,7 +90,7 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
             if(empty($args['return_url'])) 
                 $args['return_url'] = $this->getReturnURL();
 
-            xarResponse::Redirect($args['return_url']);
+            xarResponse::redirect($args['return_url']);
             // Return
             return true;
         }

@@ -63,6 +63,6 @@ function roles_admin_addprivilege()
     }
 
     // redirect to the next page
-    xarResponse::Redirect($return_url);
+    xarResponse::redirect($return_url);
 }
 ?>
