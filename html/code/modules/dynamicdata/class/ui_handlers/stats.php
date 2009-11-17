@@ -269,7 +269,7 @@ FROM ( SELECT DISTINCT field FROM table )
         // save the report and redirect
         } elseif (!empty($save) && !empty($stats['report']) && xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All')) {
             $this->saveReport($stats['report'], $stats, $info);
-            xarResponse::Redirect(xarServer::getObjectURL($this->object->name, 'report', array('report' => $stats['report'])));
+            xarController::Rredirect(xarServer::getObjectURL($this->object->name, 'report', array('report' => $stats['report'])));
             return true;
 
         // get the result
