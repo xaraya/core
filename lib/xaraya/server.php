@@ -307,6 +307,11 @@ class xarServer extends Object
         $protocol = self::getProtocol();
         $baseurl  = "$protocol://$server";
 
+        return $baseurl . self::getCurrentRequestString($args, $generateXMLURL, $target);
+    }
+
+    static function getCurrentRequestString($args = array(), $generateXMLURL = NULL, $target = NULL)
+    {
         // get current URI
         $request = self::getVar('REQUEST_URI');
 
@@ -369,9 +374,9 @@ class xarServer extends Object
         if (!isset($generateXMLURL)) $generateXMLURL = self::$generateXMLURLs;
         if (isset($target)) $request .= '#' . urlencode($target);
         if ($generateXMLURL) $request = htmlspecialchars($request);
-        return $baseurl . $request;
+        return $request;
     }
-
+    
     /**
      * Generates an URL that reference to a module function.
      *
@@ -710,11 +715,11 @@ class xarRequest extends Object
 {
     private $isObjectURL = false;
     private $isModuleURL = false;
+    private $url;
     
     public $defaultRequestInfo = array();
     public $shortURLVariables = array();
 
-    public $url;
     public $module;
     
     function __construct($url=null)
@@ -906,25 +911,40 @@ class xarRequest extends Object
     function getModule()   { return $this->module; }
     function getType()     { return $this->type; }
     function getFunction() { return $this->func; }
+    function getURL()      { return $this->url; }
 }
 
 class xarDispatcher extends Object
 {
     private $controller;
     private $request;
+    private $index ='index.php';
+    private $delimiter ='/';
+    private $stringparts = array();
 
     function __construct($request=null)
     {
+        $this->stringparts = $this->getParts();
         try {
-            sys::import('modules.' . $request->getModule() . '.controller');
-            $controllername = self::$request->getModule() . '.ActionController';
-            $this->controller = new ActionController($request);
+            sys::import('modules.' . $this->getModule() . '.controller');
+            $controllername = ucfirst($this->getModule()) . 'ActionController';
+            $this->controller = new $controllername($request);
         } catch (Exception $e) {
             sys::import('xaraya.controllers.action');
             $this->controller = new ActionController($request);
         }
     }
+    
+    function getParts() 
+    { 
+        $url = xarServer::getCurrentURL();
+        $requeststring = substr($url,strlen(xarServer::getBaseURL() . $this->index . $this->delimiter));
+        $parts = explode($this->delimiter, $requeststring);
+        return $parts;
+    }
+    
     function getController()  { return $this->controller; }
     function getRequest()     { return $this->request; }
+    function getModule()      { return isset($this->stringparts[0]) ? $this->stringparts[0] : ''; }
 }
 ?>
