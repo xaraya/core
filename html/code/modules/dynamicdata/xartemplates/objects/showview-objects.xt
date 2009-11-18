@@ -8,7 +8,9 @@
     </xar:if>
     <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
         <div style="text-align: right;">
-            <a href="#xarModURL('dynamicdata','admin','new')#" title="Create New Data Object"><img src="#xarTplGetImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/></a>
+            <a href="#xarModURL('dynamicdata','admin','new')#" title="Create New Data Object">
+                <img src="#xarTplGetImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/>
+            </a>
         </div>
     <xar:else />
         <h3>
