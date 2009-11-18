@@ -27,7 +27,7 @@ function modules_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTplModule('modules','admin','overview');
     } else {
-        xarResponse::Redirect(xarModURL('modules', 'admin', 'list'));
+        xarResponse::redirect(xarModURL('modules', 'admin', 'list'));
         return true;
     }
 }

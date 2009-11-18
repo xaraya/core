@@ -6,19 +6,19 @@
     </div>
     <div class="xar-mod-body">
         <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
+        <xar:set name="searchlink">xarObject::getActionURL($object, 'search')</xar:set>
         <xar:set name="querylink">xarObject::getActionURL($object, 'query')</xar:set>
         <h2>
             Search #$object:label#&#160;
             <a href="#$viewlink#" title="View #$object:label#">
                 <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
             </a>&#160;
-            <a href="#$querylink#" title="Query #$object:label#">
-                <img src="#xarTplGetImage('icons/document-properties.png', 'base')#" width="16" height="16" alt="query"/>
+            <a href="#$searchlink#" title="Reset Search">
+                <img src="#xarTplGetImage('icons/view-refresh.png', 'base')#" width="16" height="16" alt="reset"/>
             </a>
         </h2>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
-        <xar:set name="getlink">xarObject::getActionURL($object, 'search')</xar:set>
-        <form method="get" action="#$getlink#">
+        <form method="get" action="#$searchlink#">
             <fieldset>
                 <legend>Search Criteria</legend>
                 <div class="xar-form-input-wrapper">
@@ -39,8 +39,7 @@
                     </xar:if>
                     <input type="text" name="q" id="q" value="#$search['q']#" size="20"/>
                     <input type="submit" value="#xarML('Search')#" class="xar-margin-thickleft"/>
-                    &#160;<a href="#$getlink#">Reset</a>
-                    &#160;<a href="#xarObject::getActionURL($object, 'query')#">Query</a>
+                    &#160;<a href="#xarObject::getActionURL($object, 'query')#">Advanced</a>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label class="xar-form-label" for="match">Search type</label>
@@ -66,8 +65,9 @@
                         </xar:if>
                         <xar:set name="dummy">array_push($show_props, $name)</xar:set>
                     </xar:foreach>
-                    <!-- show properties in columns of three to save screen space -->
-                    <xar:set name="columns">array_chunk($show_props, 3)</xar:set>
+                    <!-- show properties in three columns to save screen space -->
+                    <xar:set name="size">floor((count($show_props) - 0.5) / 3) + 1</xar:set>
+                    <xar:set name="columns">array_chunk($show_props,$size)</xar:set>
                     <table>
                         <tr>
                         <xar:foreach in="$columns" value="$proplist">

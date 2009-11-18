@@ -250,9 +250,12 @@
             please implement a GUI switch</xar:comment>
             <table summary="Query Options" class="xar-align-left xar-fullwidth">
                 <tr>
-                    <th>Properties:</th>
-                    <th>Conditions:</th>
-                    <th>Operation:</th>
+                    <th>Property:</th>
+                    <xar:if condition="!empty($groupby)">
+                        <th>Operation:</th>
+                    </xar:if>
+                    <th>Condition:</th>
+                    <th>Value:</th>
                     <th>Sort Order:</th>
                 </tr>
                 <xar:if condition="!empty($properties)">
@@ -286,8 +289,8 @@
                                     </label>
                                 </xar:if>
                             </td>
-                            <td>
-                                <xar:if condition="!empty($groupby)">
+                            <xar:if condition="!empty($groupby)">
+                                <td>
                                     <select name="operation[#$name#]" id="operation_#$name#">
                                         <option value=""></option>
                                         <xar:foreach in="$operationoptions" value="$option">
@@ -300,7 +303,9 @@
                                         </xar:foreach>
                                     </select>
                                     <label for="operation_#$name#"/>
-                                </xar:if>
+                                </td>
+                            </xar:if>
+                            <td>
                                 <select name="where[#$name#]" id="where_#$name#">
                                     <option value=""></option>
                                     <xar:foreach in="$whereoptions" value="$option">
@@ -359,7 +364,8 @@
         </xar:if>
         <xar:if condition="isset($mylist)">
             <xar:if condition="!empty($groupby)">
-                <xar:data-view object="$mylist" layout="list"/>
+                <!-- xar:data-view object="$mylist" layout="list"/-->
+                <xar:data-view object="$mylist"/>
             <xar:else />
                 <xar:data-view object="$mylist"/>
             </xar:if>

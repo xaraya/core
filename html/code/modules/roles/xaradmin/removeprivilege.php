@@ -79,7 +79,7 @@ function roles_admin_removeprivilege()
         xarModCallHooks('item', 'update', $roleid, $pargs);
 
         // redirect to the next page
-        xarResponse::Redirect(xarModURL('roles', 'admin', 'showprivileges', array('id' => $roleid)));
+        xarResponse::redirect(xarModURL('roles', 'admin', 'showprivileges', array('id' => $roleid)));
     }
 }
 

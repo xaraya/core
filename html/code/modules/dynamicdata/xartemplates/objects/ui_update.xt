@@ -6,10 +6,14 @@
     </div>
     <div class="xar-mod-body">
         <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
+        <xar:set name="displaylink">xarObject::getActionURL($object, 'display', $object->itemid)</xar:set>
         <h2>
             Modify Item #$object:itemid# in #$object:label#&#160;
             <a href="#$viewlink#" title="View #$object:label#">
                 <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+            </a>&#160;
+            <a href="#$displaylink#" title="Display #$object:label#">
+                <img src="#xarTplGetImage('icons/display.png', 'base')#" width="16" height="16" alt="display"/>
             </a>
         </h2>
         <xar:if condition="isset($preview)">

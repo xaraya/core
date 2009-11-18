@@ -36,7 +36,7 @@ function modules_admin_updateversion()
     if (!isset($updated)) return;
 
     // Redirect to module list
-    xarResponse::Redirect(xarModURL('modules', 'admin', 'list'));
+    xarResponse::redirect(xarModURL('modules', 'admin', 'list'));
 
     return true;
 }

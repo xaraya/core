@@ -49,6 +49,6 @@ function mail_admin_createqdef($args)
         // All went well, we can set the modvar now
         xarModVars::set('mail','queue-definition',$qdefName);
     }
-    xarResponse::Redirect(xarModUrl('mail','admin','view'));
+    xarResponse::redirect(xarModUrl('mail','admin','view'));
 }
 ?>

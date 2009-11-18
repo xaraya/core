@@ -79,6 +79,8 @@ class DataObjectMaster extends Object
 
     public $links         = null;       // links between objects
 
+    public $isgrouped     = 0;          // indicates that we have operations (COUNT, SUM, etc.) on properties
+
 // TODO: relink objects, properties and datastores in __wakeup() methods after unserialize()
 
     /**
@@ -100,6 +102,7 @@ class DataObjectMaster extends Object
     function toArray(Array $args=array())
     {
         $properties = $this->getPublicProperties();
+    // CHECKME: this also copies the properties, items etc. to $args - is that what we really want here ?
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
         // object property is called module_id now instead of moduleid for whatever reason !?
         if (empty($args['moduleid']) && !empty($args['module_id'])) {
@@ -298,6 +301,7 @@ class DataObjectMaster extends Object
 //                    if(isset($this->properties[$name]))
                         $cleanlist[] = $name;
                 } elseif (preg_match('/^(.+)\((.+)\)/',$name,$matches)) {
+    // FIXME: support more complex operations like COUNT(DISTINCT ...) and calendar year/month/day
                     $operation = $matches[1];
                     $field = $matches[2];
                     if(isset($this->properties[$field]))

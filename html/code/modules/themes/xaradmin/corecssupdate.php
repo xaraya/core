@@ -33,7 +33,7 @@ function themes_admin_corecssupdate()
     // set modvars
     xarModVars::set('themes', 'csslinkoption', $linkoptions);
 
-    xarResponse::Redirect(xarModURL('themes','admin','cssconfig',array('component'=>'core')));
+    xarResponse::redirect(xarModURL('themes','admin','cssconfig',array('component'=>'core')));
     // Return
     return true;
 }

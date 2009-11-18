@@ -9,7 +9,7 @@ function mail_userapi_getqueues($args)
     // Do we have the master ?
     if(!$qdefInfo = xarMod::apiFunc('mail','admin','getqdef')) {
         // Redirect to the view page, which offers to create one
-        xarResponse::Redirect(xarModUrl('mail','admin','view'));
+        xarResponse::redirect(xarModUrl('mail','admin','view'));
         return true;
     }
     $params = array('modid' => $qdefInfo['moduleid'],'itemtype' => $qdefInfo['itemtype']);

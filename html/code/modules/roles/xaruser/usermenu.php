@@ -28,7 +28,7 @@ function roles_user_usermenu($args)
     $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
 
     if (!xarUserIsLoggedIn()){
-        xarResponse::Redirect(xarModURL($defaultloginmodname,'user','showloginform'));
+        xarResponse::redirect(xarModURL($defaultloginmodname,'user','showloginform'));
     }
 
     $id = xarUserGetVar('id');
@@ -143,7 +143,7 @@ function roles_user_usermenu($args)
                 }
                 if (empty($returnurl))
                     $returnurl = xarModURL('roles', 'user', 'account', array('tab' => 'basic'));
-                return xarResponse::Redirect($returnurl);
+                return xarResponse::redirect($returnurl);
             } else {
                 // invalid, we need to show the form data again
                 $data = array();
@@ -278,7 +278,7 @@ function roles_user_usermenu($args)
                 }
                 if (empty($returnurl))
                     $returnurl = xarModURL('roles', 'user', 'account', array('moduleload' => $moduleload));
-                return xarResponse::Redirect($returnurl);
+                return xarResponse::redirect($returnurl);
             }
 
             // must have invalid data, show the form again

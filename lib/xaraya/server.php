@@ -751,7 +751,7 @@ class xarResponse extends Object
      * @access public
      * @param redirectURL string the URL to redirect to
      */
-    static function Redirect($url)
+    static function redirect($url)
     {
         xarCache::noCache();
         $redirectURL=urldecode($url); // this is safe if called multiple times.
