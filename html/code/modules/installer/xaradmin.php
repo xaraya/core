@@ -208,9 +208,14 @@ function installer_admin_phase3()
     // We only check this extension if MySQL is loaded
     if ($data['mysqlextension']) {
         $data['mysql_required_version']     = MYSQL_REQIRED_VERSION;
-        preg_match('@[0-9]+\.[0-9]+\.[0-9]+@', mysql_get_server_info(), $version);
-        $data['mysql_version_ok']       = version_compare($version[0],MYSQL_REQIRED_VERSION,'ge');
-        $data['mysql_version']          = $version[0];
+        ob_start();
+        phpinfo(INFO_MODULES);
+        $info = ob_get_contents();
+        ob_end_clean();
+        $info = stristr($info, 'Client API version');
+        preg_match('/[1-9].[0-9].[1-9][0-9]/', $info, $match);
+        $data['mysql_version_ok'] = version_compare($match[0],MYSQL_REQIRED_VERSION,'ge');
+        $data['mysql_version']          = $match[0];
     }
 
     return $data;
@@ -238,8 +243,13 @@ function installer_admin_phase4()
 
     // Supported  Databases:
     if (extension_loaded('mysql')) {
-        preg_match('@[0-9]+\.[0-9]+\.[0-9]+@', mysql_get_server_info(), $version);
-        $mysql_version_ok = version_compare($version[0],MYSQL_REQIRED_VERSION,'ge');
+        ob_start();
+        phpinfo(INFO_MODULES);
+        $info = ob_get_contents();
+        ob_end_clean();
+        $info = stristr($info, 'Client API version');
+        preg_match('/[1-9].[0-9].[1-9][0-9]/', $info, $match);
+        $mysql_version_ok = version_compare($match[0],MYSQL_REQIRED_VERSION,'ge');
     } else {
         $mysql_version_ok = false;
     }
