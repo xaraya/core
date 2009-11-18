@@ -20,7 +20,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     public $itemids  = array();           // the list of item ids used in data stores
     public $where    = '';
     public $sort     = '';
-    public $groupby  = array();
+    public $groupby  = array();     // the list of property names to group by (if any) - see also isgrouped
     public $numitems = null;
     public $startnum = null;
     public $count    = 0;           // specify if you want DD to count items before getting them (e.g. for the pager)
@@ -171,12 +171,86 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     }
 
     /**
+     * Add where clause for a property
+     *
+     * @param string $name property name
+     * @param string $clause SQL clause, e.g. = 123, IN ('this', 'that'),  LIKE '%something%', etc.
+     * @param string $join '' for the first, 'and' or 'or' for the next
+     * @param string $pre optional pre (
+     * @param string $post optional post )
+     */
+    public function addWhere($name, $clause, $join='', $pre='', $post='')
+    {
+        if (!isset($this->properties[$name])) return;
+
+        // pass the where clause to the right data store
+        $datastore = $this->properties[$name]->datastore;
+        // assign property to datastore if necessary
+        if(empty($datastore)) {
+            list($storename, $storetype) = $this->properties[$name]->getDataStore();
+            if(!isset($this->datastores[$storename]))
+                $this->addDataStore($storename, $storetype);
+
+            $this->properties[$name]->datastore = $storename;
+            $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
+            $datastore = $storename;
+        } elseif($this->properties[$name]->type == 21)
+            $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
+
+        if ($datastore == '_dummy_') {
+            // CHECKME: could the dummy datastore actually do something here ?
+            return;
+        }
+
+        $this->datastores[$datastore]->addWhere(
+            $this->properties[$name],
+            $clause,
+            $join,
+            $pre,
+            $post
+        );
+    }
+
+    /**
      * Set where clause
      *
-     * @param string where
+     * @param mixed where string or array of name => value pairs
      */
     public function setWhere($where)
     {
+        if (empty($where)) {
+            return;
+
+        } elseif (is_array($where)) {
+            $join = '';
+            foreach ($where as $name => $val) {
+                if (empty($name) || !isset($val) || $val === '') continue;
+                if (!isset($this->properties[$name])) continue;
+                if (is_numeric($val)) {
+                    $mywhere = " = " . $val;
+                } elseif (is_string($val)) {
+                    $val = str_replace("'","\\'",$val);
+                    $mywhere = " = '" . $val . "'";
+                } elseif (is_array($val) && count($val) > 0) {
+                    if (is_numeric($val[0])) {
+                        $mywhere = " IN (" . implode(", ", $val) . ")";
+                    } elseif (is_string($val[0])) {
+                        $val = str_replace("'","\\'",$val);
+                        $mywhere = " IN ('" . implode("', '", $val) . "')";
+                    } else {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+                $this->addWhere($name, $mywhere, $join);
+
+                // default AND when using array format
+                $join = 'and';
+            }
+            return;
+        }
+
         // find all single-quoted pieces of text with and/or and replace them first, to
         // allow where clauses like : title eq 'this and that' and body eq 'here or there'
         $idx = 0;
@@ -239,20 +313,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
 
             if(isset($this->properties[$name])) {
-                // pass the where clause to the right data store
-                $datastore = $this->properties[$name]->datastore;
-                // assign property to datastore if necessary
-                if(empty($datastore)) {
-                    list($storename, $storetype) = $this->properties[$name]->getDataStore();
-                    if(!isset($this->datastores[$storename]))
-                        $this->addDataStore($storename, $storetype);
-
-                    $this->properties[$name]->datastore = $storename;
-                    $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
-                    $datastore = $storename;
-                } elseif($this->properties[$name]->type == 21)
-                    $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
-
                 if(empty($idx)) {
                     $mywhere = join(' ',$pieces);
                 } else {
@@ -266,13 +326,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                         $mywhere .= $piece . ' ';
                     }
                 }
-                $this->datastores[$datastore]->addWhere(
-                    $this->properties[$name],
-                    $mywhere,
-                    $join,
-                    $pre,
-                    $post
-                );
+                $this->addWhere($name, $mywhere, $join, $pre, $post);
             }
         }
     }
@@ -468,6 +522,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
                     ) {
                         $args['properties'][$name] =& $this->properties[$name];
+                    } elseif (!empty($this->groupby) && in_array($name, $this->groupby)) {
+                        $args['properties'][$name] =& $this->properties[$name];
+                    } elseif (!empty($this->properties[$name]->operation)) {
+                        $args['properties'][$name] =& $this->properties[$name];
                     }
                 }
             }
@@ -478,7 +536,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
                 ) {
-                        $args['properties'][$name] =& $this->properties[$name];
+                    $args['properties'][$name] =& $this->properties[$name];
+                } elseif (!empty($this->groupby) && in_array($name, $this->groupby)) {
+                    $args['properties'][$name] =& $this->properties[$name];
+                } elseif (!empty($this->properties[$name]->operation)) {
+                    $args['properties'][$name] =& $this->properties[$name];
                 }
 
             // Order the fields if this is an extended object
@@ -541,7 +603,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         sys::import('xaraya.objects');
 
         // get view options for each item
-        if(empty($this->groupby)) {
+        if(empty($this->isgrouped)) {
             // reset cached urls
             $this->cached_urls = array();
             foreach(array_keys($this->items) as $itemid) {
@@ -566,7 +628,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
         }
 
-        if(!empty($this->groupby)) {
+        if(!empty($this->isgrouped)) {
             foreach(array_keys($args['properties']) as $name) {
                 if(!empty($this->properties[$name]->operation))
                     $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
@@ -654,27 +716,31 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         if ($allow_read) {
             $options['display'] = array('otitle' => xarML('Display'),
+                                        'oicon'  => 'display.png',
                                         'olink'  => $this->getActionURL('display', $itemid),
                                         'ojoin'  => '');
         }
         if ($allow_edit) {
             $options['modify'] = array('otitle' => xarML('Edit'),
+                                       'oicon'  => 'modify.png',
                                        'olink'  => $this->getActionURL('modify', $itemid),
                                        'ojoin'  => '|');
-
-            // extra options when showing the dynamic objects themselves
-            if ($this->objectid == 1) {
-                $options['viewitems'] = array('otitle' => xarML('Items'),
-                                              'olink'  => $this->getActionURL('viewitems', $itemid),
-                                              'ojoin'  => '|'
-                                             );
-                $options['modifyprops'] = array('otitle' => xarML('Properties'),
-                                     'olink'  => $this->getActionURL('modifyprop', $itemid),
-                                     'ojoin'  => '|');
-            }
+        }
+        // extra options when showing the dynamic objects themselves
+        if ($allow_edit && $this->objectid == 1) {
+            $options['modifyprops'] = array('otitle' => xarML('Properties'),
+                                            'oicon'  => 'modify-config.png',
+                                            'olink'  => $this->getActionURL('modifyprop', $itemid),
+                                            'ojoin'  => '|');
+            $options['viewitems'] = array('otitle' => xarML('Items'),
+                                          'oicon'  => 'item-list.png',
+                                          'olink'  => $this->getActionURL('viewitems', $itemid),
+                                          'ojoin'  => '|'
+                                         );
         }
         if ($allow_delete)  {
             $options['delete'] = array('otitle' => xarML('Delete'),
+                                       'oicon'  => 'delete.png',
                                        'olink'  => $this->getActionURL('delete', $itemid),
                                        'ojoin'  => '|');
         }

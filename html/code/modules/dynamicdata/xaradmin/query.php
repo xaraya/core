@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -198,7 +198,10 @@ function dynamicdata_admin_query($args)
     $data['field'] = array();
     if (empty($field) || count($field) == 0) {
         foreach (array_keys($data['properties']) as $name) {
-            if ($data['properties'][$name]->status == 1) {
+            $status = $data['properties'][$name]->getDisplayStatus();
+            if ($status == DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE ||
+                $status == DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY ||
+                $status == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY) {
                 $data['field'][$name] = 1;
             }
         }

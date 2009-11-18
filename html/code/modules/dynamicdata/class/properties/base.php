@@ -491,7 +491,7 @@ class DataProperty extends Object implements iDataProperty
      * Note: don't use this if you already check the input for the whole object or in the code
      * See also preview="yes", which can be used on the object level to preview the whole object
      *
-     * @access private (= do not sub-class)
+     * @access private
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
      * @param $args['value'] value of the field (default is the current value)
      * @param $args['id'] id of the field

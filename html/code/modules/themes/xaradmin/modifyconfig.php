@@ -58,7 +58,7 @@ function themes_admin_modifyconfig()
 //    }
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'themes'));
-    $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, enable_user_menu');
+    $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls, enable_user_menu');
     $data['module_settings']->getItem();
     switch (strtolower($phase)) {
         case 'modify':

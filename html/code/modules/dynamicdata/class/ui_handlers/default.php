@@ -16,7 +16,7 @@ sys::import('xaraya.objects');
 /**
  * Dynamic Object User Interface Handler
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @subpackage dynamicdata
  */
 class DataObjectDefaultHandler extends Object
@@ -84,6 +84,11 @@ class DataObjectDefaultHandler extends Object
         // @todo should the object class do it?
         if (!empty($fieldlist)) {
             $args['fieldlist'] = explode(',',$fieldlist);
+        }
+
+        // Default number of items per page in object view
+        if (!isset($args['numitems']) && $args['object'] != 'objects') {
+            $args['numitems'] = xarModVars::get('dynamicdata', 'items_per_page');
         }
 
         // support name=... parameter for DD if no object=... is found

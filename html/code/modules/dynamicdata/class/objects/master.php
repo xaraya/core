@@ -79,6 +79,8 @@ class DataObjectMaster extends Object
 
     public $links         = null;       // links between objects
 
+    public $isgrouped     = 0;          // indicates that we have operations (COUNT, SUM, etc.) on properties
+
 // TODO: relink objects, properties and datastores in __wakeup() methods after unserialize()
 
     /**
@@ -100,9 +102,14 @@ class DataObjectMaster extends Object
     function toArray(Array $args=array())
     {
         $properties = $this->getPublicProperties();
+    // CHECKME: this also copies the properties, items etc. to $args - is that what we really want here ?
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
+        // object property is called module_id now instead of moduleid for whatever reason !?
+        if (empty($args['moduleid']) && !empty($args['module_id'])) {
+            $args['moduleid'] = $args['module_id'];
+        }
         //FIXME where do we need to define the modname best?
-        if (!empty($args['moduleid'])) $args['modname'] = xarMod::getName($args['moduleid']); //FIXME change to systemid
+        if (!empty($args['moduleid'])) $args['modname'] = xarMod::getName($args['moduleid']);
         return $args;
     }
 
@@ -294,6 +301,7 @@ class DataObjectMaster extends Object
 //                    if(isset($this->properties[$name]))
                         $cleanlist[] = $name;
                 } elseif (preg_match('/^(.+)\((.+)\)/',$name,$matches)) {
+    // FIXME: support more complex operations like COUNT(DISTINCT ...) and calendar year/month/day
                     $operation = $matches[1];
                     $field = $matches[2];
                     if(isset($this->properties[$field]))
@@ -490,7 +498,7 @@ class DataObjectMaster extends Object
      * @param $args['name'] name of the object you're looking for, OR
      * @param $args['moduleid'] module id of the object you're looking for + $args['itemtype'] item type of the object you're looking for
      * @return array containing the name => value pairs for the object
-     * @todo cache on id/name/module_id ?
+     * @todo cache on id/name/moduleid ?
      * @todo when we had a constructor which was more passive, this could be non-static. (cheap construction is a good rule of thumb)
      * @todo no ref return?
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.

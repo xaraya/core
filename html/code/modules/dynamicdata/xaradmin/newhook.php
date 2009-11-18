@@ -6,7 +6,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -15,8 +15,7 @@
  *
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
+ * @return bool true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
 function dynamicdata_admin_newhook($args)
@@ -32,6 +31,12 @@ function dynamicdata_admin_newhook($args)
     } else {
         $modname = $extrainfo['module'];
     }
+
+    // don't allow hooking to yourself in DD
+    if ($modname == 'dynamicdata') {
+        return '';
+    }
+
     $module_id = xarMod::getRegID($modname);
     if (empty($module_id)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
@@ -50,8 +55,7 @@ function dynamicdata_admin_newhook($args)
     } elseif (isset($objectid) && !empty($objectid)) {
         $itemid = $objectid;
     } else {
-//        $itemid = 0;
-        return "";
+        $itemid = 0;
     }
     $object = & DataObjectMaster::getObject(array(
                                        'moduleid' => $module_id,

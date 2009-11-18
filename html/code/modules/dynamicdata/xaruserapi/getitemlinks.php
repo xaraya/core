@@ -6,7 +6,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -15,7 +15,6 @@
  *
  * @param $args['itemtype'] item type (optional)
  * @param $args['itemids'] array of item ids to get
- * @returns array
  * @return array containing the itemlink(s) for the item(s).
  */
 function dynamicdata_userapi_getitemlinks($args)

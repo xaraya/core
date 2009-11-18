@@ -13,9 +13,6 @@
 
 /**
  * Dynamic Data Autoload - moved this from xarAutoload::autoload_todo because it has lots :-)
- *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata
  */
 function dynamicdata_autoload($class)
 {

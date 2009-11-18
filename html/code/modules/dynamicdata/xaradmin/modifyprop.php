@@ -89,8 +89,8 @@ function dynamicdata_admin_modifyprop()
 
     $data['fields'] = xarMod::apiFunc('dynamicdata','user','getprop',
                                    array('objectid' => $objectid,
-                                            'module_id' => $module_id,
-                                            'itemtype' => $itemtype,
+                                         'moduleid' => $module_id,
+                                         'itemtype' => $itemtype,
                                          'allprops' => true));
     if (!isset($data['fields']) || $data['fields'] == false) {
         $data['fields'] = array();
@@ -152,6 +152,8 @@ function dynamicdata_admin_modifyprop()
         }
         return $data;
     }
+
+// CHECKME: this part is no longer relevant when dealing with actual objects !?
 
     $data['details'] = $details;
 

@@ -6,7 +6,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -15,8 +15,7 @@
  *
  * @param $args['objectid'] ID of the object (must be the module name here !!)
  * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
+ * @return bool true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
 function dynamicdata_adminapi_removehook($args)
@@ -36,6 +35,11 @@ function dynamicdata_adminapi_removehook($args)
         // we *must* return $extrainfo for now, or the next hook will fail
         // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
         //return $extrainfo;
+    }
+
+    // don't allow hooking to yourself in DD
+    if ($objectid == 'dynamicdata') {
+        return $extrainfo;
     }
 
     $module_id = xarMod::getRegID($objectid);

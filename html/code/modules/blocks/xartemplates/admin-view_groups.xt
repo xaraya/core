@@ -43,11 +43,23 @@
                         <xar:else />#$loop:item['template']#</xar:if>
                     </td>
                     <td class="xar-align-center">
-                    <a href="#xarModUrl('blocks', 'admin', 'modify_group', array('id' =&gt; $loop:item['id']))#">
-                    Edit</a>| 
-                    <a href="#$loop:item['deleteurl']#"
-                    onclick="return xar_base_confirmLink(this, '#$loop:item['deleteconfirm']#')">
-                    Delete</a></td>
+                        <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
+                            <a href="#xarModUrl('blocks', 'admin', 'modify_group', array('id' =&gt; $loop:item['id']))#">
+                                <img src="#xarTplGetImage('icons/modify.png', 'base')#" width="16" height="16" alt="modify"/>
+                            </a>
+                            &#160;
+                            <a href="#$loop:item['deleteurl']#" onclick="return xar_base_confirmLink(this, '#$loop:item['deleteconfirm']#')">
+                                <img src="#xarTplGetImage('icons/delete.png', 'base')#" width="16" height="16" alt="delete"/>
+                            </a>
+                        <xar:else />
+                            <a href="#xarModUrl('blocks', 'admin', 'modify_group', array('id' =&gt; $loop:item['id']))#">
+                                Edit
+                            </a>| 
+                            <a href="#$loop:item['deleteurl']#" onclick="return xar_base_confirmLink(this, '#$loop:item['deleteconfirm']#')">
+                                Delete
+                            </a>
+                        </xar:if>
+                    </td>
                 </tr>
             </xar:loop>
         </table>

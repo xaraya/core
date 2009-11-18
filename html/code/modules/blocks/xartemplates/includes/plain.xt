@@ -3,11 +3,9 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="icon_delete">xarTplGetImage('icons/delete.png','base')</xar:set>
     <xar:set name="icon_modify">xarTplGetImage('icons/modify.png','base')</xar:set>
-    <xar:if condition="$total gt $itemsperpage">
-        <div>
-            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
-        </div>
-    </xar:if>
+    <div>
+        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+    </div>
     <table class="xar-fullwidth">
         <tr>
             <th>Name</th>
@@ -58,7 +56,7 @@
                     </xar:if>
                 </td>
                 <td class="xar-align-center">#$state_desc[$loop:item['state']]#</td>
-                <xar:if condition="xarModVars::get('blocks','use_icons')">
+                <xar:if condition="xarModVars::get('blocks','use_module_icons')">
                     <td class="xar-item-actions">
                         <a href="#xarModURL('blocks','admin','modify_instance',array('bid' =&gt; $loop:item.bid))#" title="#xarML('Modify')#">
                             <img src="#$icon_modify#" alt="#xarML('Modify')#" />
@@ -81,9 +79,7 @@
             </tr>
         </xar:loop>
     </table>
-    <xar:if condition="$total gt $itemsperpage">
-        <div>
-            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
-        </div>
-    </xar:if>
+    <div>
+        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+    </div>
 </xar:template>
