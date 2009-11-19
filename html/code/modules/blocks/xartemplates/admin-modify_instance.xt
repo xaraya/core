@@ -42,7 +42,7 @@
                     <xar:set name="options">
                         array(
                             array('id' => 0, 'name' => xarML('Hidden')),
-                            array('id' => 2, 'name' => xarML('Maximized')),
+                            array('id' => 2, 'name' => xarML('Visible')),
                         )
                     </xar:set>
                     <xar:set name="value">

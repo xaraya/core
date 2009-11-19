@@ -91,7 +91,7 @@ function blocks_admin_view_instances()
     // State descriptions.
     $data['state_desc'][0] = xarML('Hidden');
     $data['state_desc'][1] = xarML('Minimized');
-    $data['state_desc'][2] = xarML('Maximized');
+    $data['state_desc'][2] = xarML('Visible');
 
     $data['blocks'] = $instances;
 
