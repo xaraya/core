@@ -103,6 +103,8 @@ class DataObjectDescriptor extends ObjectDescriptor
             $args['objectid'] = (int)$row['id'];
             $args['name'] = $row['name'];
         }
+        // object property is called module_id now instead of moduleid for whatever reason !?
+        $args['module_id'] = $args['moduleid'];
         if (empty($args['tplmodule'])) $args['tplmodule'] = xarMod::getName($args['moduleid']); //FIXME: go to systemid
         if (empty($args['template'])) $args['template'] = $args['name'];
         return $args;
