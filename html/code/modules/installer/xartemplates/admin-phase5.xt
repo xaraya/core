@@ -47,6 +47,7 @@
                             <input type="submit" value="#$label#"/>
                         </span>
                     </form>
+                    &#160;
                     <form action="install.php" method="post" class="xar-displayinline">
                         <span class="xar-align-center">
                             <input type="hidden" name="install_phase" id="install_phase" value="5"/>
