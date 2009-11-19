@@ -6,7 +6,7 @@ function dynamicdata_admin_modifymoduleconfig()
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'dynamicdata'));
-    $data['module_settings']->setFieldList('items_per_page,');
+    $data['module_settings']->setFieldList('items_per_page,user_menu_link');
     $data['module_settings']->getItem();
     switch (strtolower($phase)) {
         case 'modify':
@@ -18,14 +18,14 @@ function dynamicdata_admin_modifymoduleconfig()
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) {
                 return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-            }        
+            }
             if (!xarVarFetch('debugmode',    'checkbox', $debugmode, xarModVars::get('dynamicdata', 'debugmode'), XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('administrators', 'str', $administrators, '', XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('debugusers', 'str', $candidates, '', XARVAR_NOT_REQUIRED)) return;
 
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
-                return xarTplModule('dynamicdata','admin','modifyconfig', $data);        
+                return xarTplModule('dynamicdata','admin','modifyconfig', $data);
             } else {
                 $itemid = $data['module_settings']->updateItem();
             }
