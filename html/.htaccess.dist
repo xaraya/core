@@ -14,9 +14,6 @@
 # Disallow directory listings
     Options -Indexes
 
-# Set the default handler.
-    DirectoryIndex index.php
-
 # Follow symlinks
     Options +FollowSymLinks
 
