@@ -468,7 +468,7 @@ class xarServer extends Object
 class xarController extends Object
 {
     public static $allowShortURLs = true;
-
+    public static $shortURLVariables;
     public static $request;
     public static $response;
 
@@ -568,14 +568,21 @@ class xarController extends Object
             // Call the object handler and return the output (or exit with 404 Not Found)
             self::$response->output = xarObject::guiMethod(self::$request->getType(), self::$request->getFunction());
 
-        } elseif (self::$request->isModuleURL()) {
-
-            // Call the main module function and return the output (or exit with 404 Not Found)
-            self::$response->output = xarMod::guiFunc(self::$request->getModule(), self::$request->getType(), self::$request->getFunction());
         } else {
-            $dispatcher = new xarDispatcher($request);
-            $controller = $dispatcher->getController();
-            self::$response->output = $controller->getOutput();
+            if (!xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport')) {
+                // Call the main module function and return the output (or exit with 404 Not Found)
+                self::$response->output = xarMod::guiFunc(self::$request->getModule(), self::$request->getType(), self::$request->getFunction());
+            } else {
+                if (self::$request->isModuleURL()) {
+                    // Call the main module function and return the output (or exit with 404 Not Found)
+                    self::$response->output = xarMod::guiFunc(self::$request->getModule(), self::$request->getType(), self::$request->getFunction());
+
+                } else {
+                    $dispatcher = new xarDispatcher($request);
+                    $controller = $dispatcher->getController();
+                    self::$response->output = $controller->getOutput();
+                }
+            }
         }
     }
 
@@ -716,6 +723,7 @@ class xarRequest extends Object
     private $isObjectURL = false;
     private $isModuleURL = false;
     private $url;
+    private $actionstring;
     
     public $defaultRequestInfo = array();
     public $shortURLVariables = array();
@@ -908,10 +916,14 @@ class xarRequest extends Object
     function isObjectURL() { return $this->isObjectURL; }
     function isModuleURL() { return $this->isModuleURL; }
 
-    function getModule()   { return $this->module; }
-    function getType()     { return $this->type; }
-    function getFunction() { return $this->func; }
-    function getURL()      { return $this->url; }
+    function getModule()       { return $this->module; }
+    function getType()         { return $this->type; }
+    function getFunction()     { return $this->func; }
+    function getActionString() { return $this->actionstring; }
+    function getURL()          { return $this->url; }
+
+    function setActionString($str)  { $this->actionstring = $str; }
+    function setURL($url)           { $this->url = $url; }
 }
 
 class xarDispatcher extends Object
@@ -919,12 +931,15 @@ class xarDispatcher extends Object
     private $controller;
     private $request;
     private $index ='index.php';
-    private $delimiter ='/';
-    private $stringparts = array();
+
+    public $delimiter ='/';
+    public $module = 'base';
 
     function __construct($request=null)
     {
-        $this->stringparts = $this->getParts();
+        if (empty($request)) $request = new xarRequest();
+        $actionstring = $this->getActionString();
+        $request->setActionString($actionstring);
         try {
             sys::import('modules.' . $this->getModule() . '.controller');
             $controllername = ucfirst($this->getModule()) . 'ActionController';
@@ -933,18 +948,20 @@ class xarDispatcher extends Object
             sys::import('xaraya.controllers.action');
             $this->controller = new ActionController($request);
         }
+        $this->controller->delimiter = $this->delimiter;
     }
     
-    function getParts() 
+    function getActionString() 
     { 
         $url = xarServer::getCurrentURL();
         $requeststring = substr($url,strlen(xarServer::getBaseURL() . $this->index . $this->delimiter));
-        $parts = explode($this->delimiter, $requeststring);
-        return $parts;
+        $tokens = explode($this->delimiter, $requeststring);
+        $this->module = array_shift($tokens);
+        return implode($this->delimiter, $tokens);
     }
     
     function getController()  { return $this->controller; }
     function getRequest()     { return $this->request; }
-    function getModule()      { return isset($this->stringparts[0]) ? $this->stringparts[0] : ''; }
+    function getModule()      { return $this->module; }
 }
 ?>

@@ -16,9 +16,45 @@ sys::import('xaraya.controllers.action');
 class RolesActionController extends ActionController
 {
 
-    function __construct($request=null)
+    function assemble()
     {
-        echo"hello world";
+        $data = array();
+        $token1 = $this->firstToken();
+        switch ($token1) {
+            case 'account':
+                $data['func'] = 'account';
+                
+                $token2 = $this->nextToken();
+                if ($token2 == 'profile')  $data['tab'] = 'profile';
+                elseif ($token2 == 'edit')  $data['tab'] = 'basic';
+                elseif ($token2)  $data['loadmodule'] = $token2;
+            break;
+
+            case 'list':
+                $data['func'] = 'view';
+
+                $token2 = $this->nextToken();
+                if ($token2 == 'viewall')  $data['phase'] = 'viewall';
+                else $data['letter'] = $token2;
+
+                if ($token3)  $data['letter'] = $token3;
+            break;
+
+            case 'password':
+                $data['func'] = 'lostpassword';
+            break;
+
+            case 'settings':
+                $data['func'] = 'account';
+                $data['tab'] = 'basic';
+            break;
+
+            default:
+                $data['func'] = 'account';
+            break;
+        }
+        $this->run($data);
+        
     }
     
 }
