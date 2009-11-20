@@ -251,8 +251,7 @@ class DataObjectMaster extends Object
             } else {
                 // no status filter: return those that are not disabled
                 foreach($this->properties as $property)
-                    if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED &&
-                       $property->getDisplayStatus() != $filterstate)
+                    if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
                         $fields[$property->id] = $property->name;
             }
         }
