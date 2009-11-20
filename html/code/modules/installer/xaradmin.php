@@ -242,19 +242,7 @@ function installer_admin_phase4()
     $data['database_charset']    = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
 
     // Supported  Databases:
-    if (extension_loaded('mysql')) {
-        ob_start();
-        phpinfo(INFO_MODULES);
-        $info = ob_get_contents();
-        ob_end_clean();
-        $info = stristr($info, 'Client API version');
-        preg_match('/[1-9].[0-9].[1-9][0-9]/', $info, $match);
-        $mysql_version_ok = version_compare($match[0],MYSQL_REQIRED_VERSION,'ge');
-    } else {
-        $mysql_version_ok = false;
-    }
-
-    $data['database_types']      = array('mysql'       => array('name' => 'MySQL'   , 'available' => extension_loaded('mysql') && $mysql_version_ok),
+    $data['database_types']      = array('mysql'       => array('name' => 'MySQL'   , 'available' => extension_loaded('mysql')),
                                          'postgres'    => array('name' => 'Postgres', 'available' => extension_loaded('pgsql')),
                                          'sqlite'      => array('name' => 'SQLite'  , 'available' => extension_loaded('sqlite')),
                                          //'pdosqlite'   => array('name' => 'PDO SQLite'  , 'available' => extension_loaded('pdo_sqlite')),
@@ -354,10 +342,21 @@ function installer_admin_phase5()
       }
     }
 
+    if ($dbType == 'mysql') {
+        $tokens = explode('.',mysql_get_server_info());
+        $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
+        $data['required_version'] = MYSQL_REQIRED_VERSION;
+        $mysql_version_ok = version_compare($data['version'],$data['required_version'],'ge');
+        if (!$mysql_version_ok) {
+            $data['layout'] = 'bad_version';
+            return xarTplModule('installer','admin','check_database',$data);
+        }
+    }
+    
     if (!$createDB && !$dbExists) {
-        $msg = xarML('Database #(1) doesn\'t exist and it wasn\'t selected to be created. <br />
-        Please go back and either check the checkbox to create the database or choose a database that already exists.', $dbName);
-        die($msg);
+        $data['dbName'] = $dbName;
+        $data['layout'] = 'not_found';
+        return xarTplModule('installer','admin','check_database',$data);
     }
 
     $data['confirmDB']  = $confirmDB;
