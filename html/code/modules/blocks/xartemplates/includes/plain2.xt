@@ -39,8 +39,8 @@
                 <td>#$loop:item['module']#</td>
                 <td>
                     <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
-                        #$loop:item['type']#<
-                    /a>
+                        #$loop:item['type']#
+                    </a>
                 </td>
                 <td>
                     <xar:if condition="$loop:item['template'] ne NULL">
