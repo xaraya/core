@@ -1,1 +1,1 @@
-Files are stored here by the uploads module.
+This directory can be used by the Uploads and other modules to store files uploaded to the server from users' local machines.
