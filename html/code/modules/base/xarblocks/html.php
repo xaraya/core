@@ -39,7 +39,7 @@
             if (empty($data)) return;
             $now = time();
 
-            if (isset($data['expire']) && $now > $data['expire']){
+            if (isset($data['expire']) && $now > $data['expire']) {
                 if ($data['expire'] != 0) return;
             }
             if (empty($data['content']['html_content'])) $data['content']['html_content'] = $this->html_content;
