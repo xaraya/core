@@ -21,7 +21,7 @@ function blocks_admin_new_instance()
     xarVarFetch('formodule', 'str:1', $module, NULL, XARVAR_NOT_REQUIRED);
 
     // Fetch block type list.
-    $block_types = xarMod::apiFunc(
+    $types = xarMod::apiFunc(
         'blocks', 'user', 'getallblocktypes',
         array('order' => 'module,type', 'module' => $module)
     );

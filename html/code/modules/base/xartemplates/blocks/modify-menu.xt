@@ -79,7 +79,7 @@
         <strong>Add New Menu Item</strong>
     </p>
     <div class="xar-form-input-wrapper">
-        <label for="new_linkname" title="#xarML('Item title')#" class="xar-form-label">Title:</label>
+        <label for="new_linkname" title="#xarML('Item title')#" class="xar-form-label">
             Title:
         </label>
         <input type="text" name="new_linkname" id="new_linkname" maxlength="255" class="xar-form-textmedium"/>
@@ -89,7 +89,7 @@
         <input type="text" name="new_linkurl" id="new_linkurl" maxlength="255" class="xar-form-textlong"/>
     </div>
     <div class="xar-form-input-wrapper">
-        <label for="new_linkdesc" title="#xarML('Item description')#" class="xar-form-label">Description (optional):</label>
+        <label for="new_linkdesc" title="#xarML('Item description')#" class="xar-form-label">
             Description (optional):
         </label>
         <input type="text" name="new_linkdesc" id="new_linkdesc" maxlength="255" class="xar-form-textlong"/>
@@ -132,8 +132,19 @@
                     #$module['name']#
                 </td>
                 <td>
+                    <xar:if condition="isset($view_access[$module['name']])">
+                        <xar:set name="value">$view_access[$module['name']]</xar:set>
+                    <xar:else />
+                        <xar:set name="value">
+                            array(
+                                'group' => 0,
+                                'level' => 0,
+                                'failure' => 0
+                            )
+                        </xar:set>
+                    </xar:if>
                     <xar:set name="accessname">'view_access_' . $module['name']</xar:set>
-                    <xar:data-input type="access" name="$accessname" layout="horizontal" failure="1" value="$view_access[$module['name']]" />
+                    <xar:data-input type="access" name="$accessname" layout="horizontal" failure="1" value="$value" />
                 </td>
             </tr>
         </xar:foreach>

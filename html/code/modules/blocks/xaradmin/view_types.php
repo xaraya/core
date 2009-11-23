@@ -27,7 +27,7 @@ function blocks_admin_view_types()
     $detail = array();
     if (!empty($tid)) {
         // Get details for a specific block type.
-        $detail = xarMod::apifunc('blocks', 'user', 'getblocktype', array('tid' => $tid));
+        $detail = xarMod::apiFunc('blocks', 'user', 'getblocktype', array('tid' => $tid));
         if (!empty($detail)) {
             // The block type exists.
 
@@ -84,7 +84,7 @@ function blocks_admin_view_types()
             $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
             $isvalid = $accessproperty->checkInput($detail['type'] . '_new');
             $info['new_access'] = $accessproperty->value;
-            xarModAPIfunc('blocks', 'admin', 'update_type_info', array('tid' => $tid, 'info' => $info));
+            xarMod::apiFunc('blocks', 'admin', 'update_type_info', array('tid' => $tid, 'info' => $info));
         }        
     }
 

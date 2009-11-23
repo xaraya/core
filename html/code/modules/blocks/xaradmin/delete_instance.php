@@ -39,6 +39,8 @@ function blocks_admin_delete_instance()
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
+
     sys::import('modules.dynamicdata.class.properties.master');
     $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
     $exploded = unserialize($blockinfo['content']);

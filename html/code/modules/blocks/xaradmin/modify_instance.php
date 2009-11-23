@@ -57,7 +57,8 @@ function blocks_admin_modify_instance()
 
             $extra = $block->modify($instance);
             $instance['display_access'] = isset($extra['display_access']) ? $extra['display_access'] : array();
-            $instance['modify_access'] = isset($extra['modify_access']) ? $extra['modify_access'] : array();
+            $instance['modify_access'] = isset($extra['modify_access']) ? $extra['modify_access'] : 
+            array('group' => 0, 'level' => 100, 'failure' => 0);
             $instance['delete_access'] = isset($extra['delete_access']) ? $extra['delete_access'] : array();
 
             $access = $instance['modify_access'];

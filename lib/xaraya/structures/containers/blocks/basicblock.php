@@ -51,17 +51,25 @@
             // Get variables from content block
             if (!is_array($data['content'])) {
                 if (!empty($data['content'])) {
+                    $exploded = @unserialize($data['content']);
+                    if (is_array($exploded)) $data = array_merge($data,$exploded);
+                    $data['content'] = $exploded;
+                }
+            } else {
+                $data = array_merge($data,$data['content']);
+            }
 
             $access = isset($data['content']['display_access']) ? $data['content']['display_access'] : array();
             $data['allowaccess'] = false;
             
             // FIXME: remove this once all blocks have access data
             if (empty($access)) {
-                if (xarSecurityCheck('View' . $data['module'], 0, 'Block', $data['type'] . ":" . $data['name'] . ":" . "$data[bid]")) {
-                    $data['allowaccess'] = true;
-                }
-            } else {
-                $data = array_merge($data,$data['content']);
+                try {
+                    if (xarSecurityCheck('View' . $data['module'], 0, 'Block', $data['type'] . ":" . $data['name'] . ":" . "$data[bid]")) {
+                        $data['allowaccess'] = true;
+                    }
+                } catch (Exception $e) {}
+                return $data;
             }
 
             // Decide whether this block is displayed to the current user
@@ -72,6 +80,7 @@
                 'group' => $access['group'],
                 'level' => $access['level'],
             );
+            sys::import('modules.dynamicdata.class.properties.master');
             $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
             $data['allowaccess'] = $accessproperty->check($args);
             
@@ -89,7 +98,6 @@
             } else {
                 $data = array_merge($data,$data['content']);
             }
-
             $data['blockid'] = $data['bid'];
             return $data;
         }
