@@ -22,14 +22,12 @@ function blocks_admin_delete_instance()
     // Security Check
     if (!xarSecurityCheck('DeleteBlock', 0, 'Instance')) {return;}
 
+    // Get details on current block
+    $blockinfo = xarModAPIFunc('blocks', 'user', 'get', array('bid' => $bid));
+
     // Check for confirmation
     if (empty($confirm)) {
         // No confirmation yet - get one
-
-        // Get details on current block
-        $blockinfo = xarMod::apiFunc(
-            'blocks', 'user', 'get', array('bid' => $bid)
-        );
 
         return array(
             'instance' => $blockinfo,
@@ -41,7 +39,19 @@ function blocks_admin_delete_instance()
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
+    sys::import('modules.dynamicdata.class.properties.master');
+    $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+    $exploded = unserialize($blockinfo['content']);
+    if (isset($exploded['delete_access'])) {
+        $args = array(
+            'component' => 'Block',
+            'instance' => "All:All:" . $bid,
+            'group' => $exploded['delete_access']['group'],
+            'level' => $exploded['delete_access']['level'],
+        );
+        if(!$accessproperty->check($args))
+            return xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
+    }
 
     // Pass to API
     xarMod::apiFunc(

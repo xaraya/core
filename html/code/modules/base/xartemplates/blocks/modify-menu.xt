@@ -5,8 +5,9 @@
         We know that blocks.css file is already included by admin-modify_instance.xd, so no need to do it twice
     -->
     <xar:if condition="!empty($content)">
-        <table class="xar-fullwidth">
+        <p>
             <strong>Edit Menu Items</strong>
+        </p>
             <tr>
                 <th>Title</th>
                 <th>URL</th>
@@ -74,11 +75,11 @@
             </table>
         -->
     </xar:if>
-    <p class="xar-form-textmedium xar-padding-medium" style="display:block;">
+    <p>
         <strong>Add New Menu Item</strong>
     </p>
     <div class="xar-form-input-wrapper">
-        <label for="new_linkname" title="#xarML('Item title')#" class="xar-form-label">
+        <label for="new_linkname" title="#xarML('Item title')#" class="xar-form-label">Title:</label>
             Title:
         </label>
         <input type="text" name="new_linkname" id="new_linkname" maxlength="255" class="xar-form-textmedium"/>
@@ -88,7 +89,7 @@
         <input type="text" name="new_linkurl" id="new_linkurl" maxlength="255" class="xar-form-textlong"/>
     </div>
     <div class="xar-form-input-wrapper">
-        <label for="new_linkdesc" title="#xarML('Item description')#" class="xar-form-label">
+        <label for="new_linkdesc" title="#xarML('Item description')#" class="xar-form-label">Description (optional):</label>
             Description (optional):
         </label>
         <input type="text" name="new_linkdesc" id="new_linkdesc" maxlength="255" class="xar-form-textlong"/>
@@ -112,40 +113,53 @@
         <div class="xar-form-container-after">
             <p>To display a restricted list of modules in the menu, enter their names separated by
             commas in the field below, and choose Manual List from the dropdown.</p>
-            <p>
                 <input type="text" name="modulelist" id="modulelist" size="50" maxlength="255" value="#$modulelist#"/>
-            </p>
         </div>
     </div>
-    <div class="xar-form-input-wrapper-after">
-        <xar:if condition="!empty($showlogout)">
-            <input type="checkbox" value="1" name="showlogout" id="showlogout" checked="checked"/>
-        <xar:else />
-            <input type="checkbox" value="1" name="showlogout" id="showlogout"/>
-        </xar:if>
-        <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link for non-administrative users at the bottom of the menu.')#">
-            Display Non-Admin User Logout
+
+    <table class="xar-fullwidth">
+        <tr>
+            <th style="text-align: left">
+                Module
+            </th>
+            <th style="text-align: left">
+                Required Access Group or Level
+            </th>
+        </tr>
+        <xar:foreach in="$modules" value="$module">
+            <tr>
+                <td>
+                    #$module['name']#
+                </td>
+                <td>
+                    <xar:set name="accessname">'view_access_' . $module['name']</xar:set>
+                    <xar:data-input type="access" name="$accessname" layout="horizontal" failure="1" value="$view_access[$module['name']]" />
+                </td>
+            </tr>
+        </xar:foreach>
+    </table>
+
+    <p>
+        <strong>Display Options</strong>
+    </p>
+
+    <div class="xar-form-input-wrapper">
+        <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link for non-administrative users at the bottom of the menu.')#" class="xar-form-label">
+            Display User Logout
         </label>
+        <xar:data-input type="checkbox" name="showlogout" checked="$showlogout" />
     </div>
-    <div class="xar-form-input-wrapper-after">
-        <xar:if condition="!empty($displayprint)">
-            <input type="checkbox" value="1" name="displayprint" id="displayprint" checked="checked"/>
-        <xar:else />
-            <input type="checkbox" value="1" name="displayprint" id="displayprint"/>
-        </xar:if>
-        <label for="displayprint" title="#xarML('Select if you would like Xaraya to generate a link to your print page at the bottom of the menu.')#">
+    <div class="xar-form-input-wrapper">
+        <label for="displayprint" title="#xarML('Select if you would like Xaraya to generate a link to your print page at the bottom of the menu.')#" class="xar-form-label">
             Display Print Link
         </label>
+        <xar:data-input type="checkbox" name="displayprint" checked="$displayprint" />
     </div>
-    <div class="xar-form-input-wrapper-after">
-        <xar:if condition="!empty($displayrss)">
-            <input type="checkbox" value="1" name="displayrss" id="displayrss" checked="checked"/>
-        <xar:else />
-            <input type="checkbox" value="1" name="displayrss" id="displayrss"/>
-        </xar:if>
-        <label for="displayrss" title="#xarML('Select if you would like Xaraya to generate a link to your RSS at the bottom of the menu.')#">
+    <div class="xar-form-input-wrapper">
+        <label for="displayrss" title="#xarML('Select if you would like Xaraya to generate a link to your RSS at the bottom of the menu.')#" class="xar-form-label">
             Display RSS Link
         </label>
+        <xar:data-input type="checkbox" name="displayrss" checked="$displayrss" />
     </div>
     <xar:if condition="!empty($displaymodules)">
         <div class="xar-form-input-wrapper">

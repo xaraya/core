@@ -135,11 +135,18 @@ function xarBlock_render($blockinfo)
 
         $blockinfo = $block->display($blockinfo);
         if (!is_array($blockinfo)) {
+        if (isset($blockinfo['allowaccess']) && !$blockinfo['allowaccess']) {
+            if (isset($blockinfo['display_access']) && $blockinfo['display_access']['failure']) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
+            } else {
+                return '';
+            }
             // Set the output of the block in cache
             if (!empty($cacheKey)) {
                 xarBlockCache::setCached($cacheKey, '');
             }
             return '';
+        }
         }
         if (is_array($blockinfo['content'])) {
             // Here $blockinfo['content'] is template data.

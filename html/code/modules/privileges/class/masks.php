@@ -506,13 +506,7 @@ class xarMasks extends Object
                 $requrl = xarServer::getCurrentURL(array(),false);
                 xarResponse::redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
             } else {
-//                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
                 xarResponse::redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
-                $msg = xarML("You don't have the correct privileges for this operation");
-                $candebug = (xarSession::getVar('role_id') == self::$tester);
-                $test = self::$test && $candebug;
-                if ($test) $msg .= ": " . $maskname;
-                throw new Exception($msg);
             }
         }
         return $pass;
@@ -708,7 +702,6 @@ class xarMasks extends Object
                 }
             }
         }
-
         foreach ($privilegeset['privileges'] as $privilege) {
             if($test && ($testmask == $mask['name'] || $testmask == "All")) {
                 echo "Comparing <font color='blue'>[" . self::present($privilege) . "]</font> and <font color='green'>[" . self::present($mask) . "]</font>. ";

@@ -24,7 +24,7 @@
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class MenuBlock extends BasicBlock implements iBlock
-{
+    {
     public $name                = 'MenuBlock';
     public $module              = 'base';
     public $text_type           = 'Menu';
@@ -50,6 +50,7 @@ class MenuBlock extends BasicBlock implements iBlock
 
     public $rssurl;
     public $printurl;
+        public $marker = '[x]';
 
     public function __construct(ObjectDescriptor $descriptor)
     {
@@ -224,10 +225,23 @@ class MenuBlock extends BasicBlock implements iBlock
                     $mods = $list;
                     if ($list == array()) $usermods = '';
                 }
-
+                    
+                    $access = isset($args['view_access']) ? $args['view_access'] : array();
                 foreach($mods as $mod){
-                    if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$data['name']. ":" . $mod['name'])) continue;
+                        if (isset($access[$mod['name']])) {
                     if ((bool)xarModVars::get($mod['name'], 'user_menu_link')) continue;
+                            $args = array(
+                                'module' => 'base',
+                                'component' => 'Block',
+                                'instance' => $data['title'] . "All:All",
+                                'group' => $access[$mod['name']]['group'],
+                                'level' => $access[$mod['name']]['level'],
+                            );
+                            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+                            if (!$accessproperty->check($args)) continue;
+                        }
+
+                        if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$data['name']. ":" . $mod['name'])) continue;
                     /* Check for active module alias */
                     /* jojodee -  We need to review the module alias functions and, thereafter it's use here */
                     $useAliasName = xarModVars::get($mod['name'], 'use_module_alias');
@@ -436,7 +450,13 @@ class MenuBlock extends BasicBlock implements iBlock
         }
 
         $data['content'] = serialize($content);
+            $data['content']['view_access'] = array();
+            foreach ($modules as $module) {
+                $isvalid = $accessproperty->checkInput('view_access_' . $module['name']);echo $isvalid;
+                $data['content']['view_access'][$module['name']] = $accessproperty->value;
+            }
+            $data['content'] = array_merge($data['content'],$args);                   
         return $data;
     }
-}
+    }
 ?>
