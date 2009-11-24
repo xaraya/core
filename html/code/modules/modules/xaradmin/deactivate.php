@@ -63,8 +63,8 @@ function modules_admin_deactivate ()
 
     // See if we have lost any modules since last generation
     sys::import('modules.modules.class.installer');
-    $installer = new Installer();    
-    if (!$installer->checkmissing()) {
+    $installer = Installer::getInstance();    
+    if (!$installer->checkformissing()) {
         return;
     }
 

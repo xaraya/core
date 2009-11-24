@@ -69,7 +69,9 @@ function modules_admin_install()
     }
 
     // See if we have lost any modules since last generation
-    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) return;
+    sys::import('modules.modules.class.installer');
+    $installer = Installer::getInstance();    
+    if (!$installer->checkformissing()) {return;}
 
     xarSession::setVar('installing',true);
 

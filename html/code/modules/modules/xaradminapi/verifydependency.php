@@ -35,8 +35,8 @@ function modules_adminapi_verifydependency($args)
 
     // See if we have lost any modules since last generation
     sys::import('modules.modules.class.installer');
-    $installer = new Installer();    
-    if (!$installer->checkmissing()) {
+    $installer = Installer::getInstance();    
+    if (!$installer->checkformissing()) {
         throw new ModuleNotFoundException();
     }
 

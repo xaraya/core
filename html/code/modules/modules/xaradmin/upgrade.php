@@ -33,7 +33,9 @@ function modules_admin_upgrade()
     if (!xarVarFetch('id', 'int:1:', $id)) {return;}
 
     // See if we have lost any modules since last generation
-    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {
+    sys::import('modules.modules.class.installer');
+    $installer = Installer::getInstance();    
+    if (!$installer->checkformissing()) {
         return;
     }
 

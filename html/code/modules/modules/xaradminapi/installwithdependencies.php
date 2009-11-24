@@ -53,8 +53,8 @@ function modules_adminapi_installwithdependencies ($args)
 
             // See if we have lost any modules since last generation
             sys::import('modules.modules.class.installer');
-            $installer = new Installer();    
-            if (!$installer->checkmissing()) {return;}
+            $installer = Installer::getInstance();    
+            if (!$installer->checkformissing()) {return;}
 
             // Make xarMod::getInfo not cache anything...
             //We should make a funcion to handle this or maybe whenever we

@@ -24,8 +24,8 @@ function modules_adminapi_regenerate()
 
     //Finds and updates missing modules
     sys::import('modules.modules.class.installer');
-    $installer = new Installer();    
-    if (!$installer->checkmissing()) {return;}
+    $installer = Installer::getInstance();    
+    if (!$installer->checkformissing()) {return;}
 
     //Get all modules in the filesystem
     $fileModules = xarMod::apiFunc('modules', 'admin', 'getfilemodules');

@@ -16,7 +16,7 @@
  * @return bool null on exceptions, true on sucess to update
  * @throws NO_PERMISSION
  */
-function modules_adminapi_checkmissing()
+function modules_adminapi_checkformissing()
 {
     static $check = false;
 
