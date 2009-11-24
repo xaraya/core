@@ -24,7 +24,7 @@
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class MenuBlock extends BasicBlock implements iBlock
-    {
+{
     public $name                = 'MenuBlock';
     public $module              = 'base';
     public $text_type           = 'Menu';
