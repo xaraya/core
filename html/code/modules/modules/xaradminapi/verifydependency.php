@@ -34,7 +34,9 @@ function modules_adminapi_verifydependency($args)
     if (!isset($modInfo)) throw new ModuleBaseInfoNotFoundException("with regid $regid");
 
     // See if we have lost any modules since last generation
-    if (!xarMod::apiFunc('modules','admin','checkmissing')) {
+    sys::import('modules.modules.class.installer');
+    $installer = new Installer();    
+    if (!$installer->checkmissing()) {
         throw new ModuleNotFoundException();
     }
 

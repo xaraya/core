@@ -23,7 +23,9 @@ function modules_adminapi_regenerate()
     if(!xarSecurityCheck('AdminModules', 1, 'All', 'All', 'modules')) {return;}
 
     //Finds and updates missing modules
-    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {return;}
+    sys::import('modules.modules.class.installer');
+    $installer = new Installer();    
+    if (!$installer->checkmissing()) {return;}
 
     //Get all modules in the filesystem
     $fileModules = xarMod::apiFunc('modules', 'admin', 'getfilemodules');

@@ -52,7 +52,9 @@ function modules_adminapi_installwithdependencies ($args)
             if (!isset($mainId)) throw new EmptyParameterException('regid');
 
             // See if we have lost any modules since last generation
-            if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) return;
+            sys::import('modules.modules.class.installer');
+            $installer = new Installer();    
+            if (!$installer->checkmissing()) {return;}
 
             // Make xarMod::getInfo not cache anything...
             //We should make a funcion to handle this or maybe whenever we
