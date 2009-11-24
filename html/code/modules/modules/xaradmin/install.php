@@ -24,8 +24,11 @@
  * @returns
  * @return
  */
+sys::import('modules.modules.class.installer');
+
 function modules_admin_install()
 {
+    $installer = Installer::getInstance();    
     // Security and sanity checks
     // TODO: check under what conditions this is needed
 //    if (!xarSecConfirmAuthKey()) return;
@@ -35,7 +38,7 @@ function modules_admin_install()
     //First check the modules dependencies
     // TODO: investigate try/catch clause here, it's not trivial
     try {
-        xarMod::apiFunc('modules','admin','verifydependency',array('regid'=>$id));
+        $installer->verifydependency($id);
 
         //Checking if the user has already passed thru the GUI:
         xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
@@ -69,8 +72,6 @@ function modules_admin_install()
     }
 
     // See if we have lost any modules since last generation
-    sys::import('modules.modules.class.installer');
-    $installer = Installer::getInstance();    
     if (!$installer->checkformissing()) {return;}
 
     xarSession::setVar('installing',true);
