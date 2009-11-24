@@ -20,7 +20,7 @@
 function blocks_userapi_read_type_init($args)
 {
     extract($args);
-    
+
     if (empty($module) && empty($type)) {
         // No identifier provided.
         throw new EmptyParameterException('module or type');
@@ -28,7 +28,6 @@ function blocks_userapi_read_type_init($args)
 
     // Function to execute, to get the block info.
     $initfunc = $module . '_' . $type . 'block_init';
-
     if (function_exists($initfunc)) {
         $result = $initfunc();
     } else {
@@ -52,7 +51,7 @@ function blocks_userapi_read_type_init($args)
             $name = ucfirst($type) . "Block";
             $descriptor = new ObjectDescriptor(array());
             $block = new $name($descriptor);
-
+            $result = $block->getInfo();
             $result = $block->getInit();
         } else {
             // No block info function found.

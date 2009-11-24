@@ -50,7 +50,7 @@ function blocks_userapi_getallgroups($args)
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
 
-    $block_groups_table =& $xartable['block_groups'];
+    $block_groups_table =& $xartable['block_instances'];
     $query = 'SELECT id as id, name as name, template as template'
         . ' FROM ' . $block_groups_table . $where_clause . $orderby;
     $stmt = $dbconn->prepareStatement($query);
