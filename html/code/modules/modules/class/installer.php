@@ -23,11 +23,11 @@ class Installer extends Object
     private $modulestack;
 
     protected static $instance        = null;
-    protected static $unsatisfiable   = array();
-    protected static $satisfiable     = array();
-    protected static $satisfied       = array();
-    protected $active          = array();
-    protected $initialised     = array();
+    protected $unsatisfiable          = array();
+    protected $satisfiable            = array();
+    protected $satisfied              = array();
+    protected $active                 = array();
+    protected $initialised            = array();
 
     public $fileModules               = array();
     public $databaseModules           = array();
@@ -49,7 +49,6 @@ class Installer extends Object
         if (null === self::$instance) {
             self::$instance = new self();
         }
-
         return self::$instance;
     }
     
@@ -397,7 +396,7 @@ class Installer extends Object
                 }
 
                 PropertyRegistration::importPropertyTypes(true, array('modules/' . $modInfo['directory'] . '/xarproperties'));
-//                    var_dump($phase);exit;
+
                 $nextmodule = $this->modulestack->peek();
                 if (empty($nextmodule)) {
                     // Looks like we're done
@@ -421,6 +420,44 @@ class Installer extends Object
             default:
                 throw new Exception('Unknown install phase...aborting');
         }
+    }
+
+    public function deactivatewithdependents ($regid=null)
+    {
+        // Argument check
+        if (!isset($regid)) throw new EmptyParameterException('regid');
+
+        // See if we have lost any modules since last generation
+        if (!$this->checkformissing()) { return; }
+
+        // Make xarMod::getInfo not cache anything...
+        //We should make a funcion to handle this instead of seeting a global var
+        //or maybe whenever we have a central caching solution...
+        $GLOBALS['xarMod_noCacheState'] = true;
+
+        // Get module information
+        $modInfo = xarMod::getInfo($regid);
+        if (!isset($modInfo)) throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
+
+
+        if ($modInfo['state'] != XARMOD_STATE_ACTIVE &&
+            $modInfo['state'] != XARMOD_STATE_UPGRADED) {
+            //We shouldnt be here
+            //Throw Exception
+            $msg = xarML('Module to be deactivated (#(1)) is not active nor upgraded', $modInfo['displayname']);
+            throw new Exception($msg);
+        }
+
+        $dependents = $this->getalldependents($regid);
+
+        foreach ($dependents['active'] as $active_dependent) {
+            if (!xarMod::apiFunc('modules', 'admin', 'deactivate', array('regid' => $active_dependent['regid']))) {
+                $msg = xarML('Unable to deactivate module "#(1)".', $active_dependent['displayname']);
+                throw new Exception($msg);
+            }
+        }
+
+        return true;
     }
 }
 

@@ -71,7 +71,7 @@ function modules_admin_deactivate ()
     if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_ACTIVE) {
         //Deactivate with dependents, first dependents
         //then the module itself
-        if (!xarMod::apiFunc('modules','admin','deactivatewithdependents',array('regid'=>$id))) {
+        if (!$installer->deactivatewithdependents($id)) {
             //Call exception
             return;
         } // Else

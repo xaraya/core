@@ -46,7 +46,7 @@ function modules_admin_install()
         $command = false;
     }
 
-    $data['dependencies'] = xarMod::apiFunc('modules','admin','getalldependencies',array('regid'=>$id));
+    $data['dependencies'] = $installer->getalldependencies($id);
 
     //Only show the status screen if there are dependencies that cannot be satisfied
     if (!$command && !empty($data['dependencies']['unsatisfiable'])) {
