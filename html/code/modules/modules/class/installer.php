@@ -322,8 +322,8 @@ class Installer extends Object
             case XARMOD_STATE_INACTIVE: $initialised = true; break;
             default:                    $initialised = false; break;
         }
-        if (!isset($args['phase'])) $args['phase'] = 0;
-        switch ($args['phase']) {
+
+        switch ($phase) {
 
             case 0:
 
@@ -334,7 +334,7 @@ class Installer extends Object
                 if (!$this->checkformissing()) {return;}
 
                 // Make xarMod::getInfo not cache anything...
-                //We should make a funcion to handle this or maybe whenever we
+                //We should make a function to handle this or maybe whenever we
                 //have a central caching solution...
                 $GLOBALS['xarMod_noCacheState'] = true;
 
@@ -347,24 +347,23 @@ class Installer extends Object
                     }
                 }
 
-                $dependency = $modInfo['dependency'];
+                $dependencies = $modInfo['dependency'];
 
-                if (empty($dependency)) $dependency = array();
+                if (empty($dependencies)) $dependencies = array();
 
                 $testmod = $this->modulestack->peek();
                 if ($regid != $testmod) $this->modulestack->push($regid);
             
                 //The dependencies are ok, assuming they shouldnt change in the middle of the
                 //script execution.
-                foreach ($dependency as $module_id => $conditions) {
-                    if (is_array($conditions)) {
+                foreach ($dependencies as $module_id => $dependency) {
+                    if (is_array($dependency)) {
                         //The module id is in $modId
                         $modId = $module_id;
                     } else {
-                        //The module id is in $conditions
-                        $modId = $conditions;
+                        //The module id is in $dependency
+                        $modId = $dependency;
                     }
-
                     if (!xarMod::isAvailable(xarMod::getName($modId))) {
                         if (!$this->installwithdependencies($modId)) {
                             $msg = xarML('Unable to initialise dependency module with ID (#(1)).', $modId);
@@ -377,9 +376,6 @@ class Installer extends Object
                 if (!$initialised && file_exists(sys::code() . 'modules/' . $modInfo['osdirectory'] . '/xartemplates/includes/installoptions.xt')) {
                     xarResponse::redirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $regid)));
                     return true;
-                } else {
-                    //No install page; move to install the module now
-                    $args['phase'] =1;
                 }
 
             case 1:
@@ -401,7 +397,9 @@ class Installer extends Object
                 }
 
                 PropertyRegistration::importPropertyTypes(true, array('modules/' . $modInfo['directory'] . '/xarproperties'));
-                if (empty($modstack)) {
+//                    var_dump($phase);exit;
+                $nextmodule = $this->modulestack->peek();
+                if (empty($nextmodule)) {
                     // Looks like we're done
                     $this->modulestack->clear();
                     // set the target location (anchor) to go to within the page
