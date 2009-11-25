@@ -9,7 +9,7 @@
  */
 /**
  * Remove module and its dependents
- * To be used after the user assured he wants to unitialize the module
+ * To be used after the user assured he wants to initialise the module
  * and all its dependents (should show a list of them to the user)
  *
  * @author Xaraya Development Team
@@ -40,7 +40,7 @@ function modules_adminapi_removewithdependents ($args)
     }
 
     //Get the dependents list
-    $dependents = xarMod::apiFunc('modules','admin','getalldependents',array('regid'=>$mainId));
+    $dependents = $installer->getalldependents($mainId);
     xarLogVariable('dependents',$dependents);
 
     //Deactivate Actives

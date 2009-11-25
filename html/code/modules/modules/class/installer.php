@@ -15,15 +15,19 @@
  * Initialise the modules module
  */
  
-class Installer
+class Installer extends Object
 {
     private $dependencieschecked      = false;
     private $moduleschecked           = array();
+    private $dependentmodules         = array();
+    private $modulestack;
 
     protected static $instance        = null;
     protected static $unsatisfiable   = array();
     protected static $satisfiable     = array();
     protected static $satisfied       = array();
+    protected $active          = array();
+    protected $initialised     = array();
 
     public $fileModules               = array();
     public $databaseModules           = array();
@@ -35,6 +39,9 @@ class Installer
         // FIXME do something else here
         if (empty($this->databaseModules)) throw new ModuleNotFoundException();
         if (empty($this->fileModules)) throw new ModuleNotFoundException();
+
+        sys::import('xaraya.structures.sequences.stack');
+        $this->modulestack = new Stack();
     }
 
     public static function getInstance()
@@ -75,7 +82,7 @@ class Installer
     
     public function verifydependency($regid=null)
     {
-        if (!isset($regid)) throw new EmptyParameterException('mainId');
+        if (!isset($regid)) throw new EmptyParameterException('regid');
 
         // Get module information
         $modInfo = xarMod::getInfo($regid);
@@ -200,19 +207,19 @@ class Installer
         }
 
         // Unsatisfiable and Satisfiable are assuming the user can't
-        //use some hack or something to set the modules as initialized/active
+        //use some hack or something to set the modules as initialised/active
         //without its proper dependencies
         if (count($this->unsatisfiable)) {
             //Then this module is unsatisfiable too
             $this->unsatisfiable[] = $modInfo;
         } elseif (count($this->satisfiable)) {
             //Then this module is satisfiable too
-            //As if it were initialized, then all depdencies would have
+            //As if it were initialised, then all dependencies would have
             //to be already satisfied
             $this->satisfiable[] = $modInfo;
         } else {
             //Then this module is at least satisfiable
-            //Depends if it is already initialized or not
+            //Depends if it is already initialised or not
 
             //TODO: Add version checks later on
             // Add a new state in the dependency array for version
@@ -227,7 +234,195 @@ class Installer
             }
         }
 
-        return $dependency_array;
+        return true;
+    }
+
+    public function getalldependents($regid=null)
+    {
+        // Argument check
+        if (!isset($regid)) throw new EmptyParameterException('regid');
+
+        // See if we have lost any modules since last generation
+        if (!$this->checkformissing()) { return; }
+
+        // If we have already got the same id in the same request, dont do it again.
+        if(in_array($regid, $this->dependentmodules)) {
+            xarLogMessage("We already checked module $regid, not doing it a second time");
+            return true;
+        }
+        $this->dependentmodules[] = $regid;
+
+        foreach ($this->fileModules as $name => $modinfo) {
+
+            // If the module is not in the database, then its not initialised or activated
+            if (!isset($this->databaseModules[$name])) continue;
+
+            // If the module is not INITIALISED dont bother...
+            // Later on better have a full range of possibilities (adding missing and
+            // unitialised). For that a good cleanup in the constant logic and
+            // adding a proper array of module states would be nice...
+            if ($this->databaseModules[$name]['state'] == XARMOD_STATE_UNINITIALISED) continue;
+
+            if (isset($modinfo['dependency']) &&
+                !empty($modinfo['dependency'])) {
+                $dependency = $modinfo['dependency'];
+            } else {
+                $dependency = array();
+            }
+
+            foreach ($dependency as $module_id => $conditions) {
+                if (is_array($conditions)) {
+                    //The module id is in $modId
+                    $modId = $module_id;
+                } else {
+                    //The module id is in $conditions
+                    $modId = $conditions;
+                }
+
+                //Not dependent, then go to the next dependency!!!
+                if ($modId != $regid) continue;
+
+                //If we are here, then it is dependent
+                // RECURSIVE CALL                ;
+                if (!$this->getalldependents($modinfo['regid'])) {
+                    $msg = xarML('Unable to get dependencies for module with ID (#(1)).', $modinfo['regid']);
+                    throw new Exception($msg);
+                }
+            }
+        }
+
+        // Get module information
+        $modInfo = xarMod::getInfo($regid);
+
+        //TODO: Add version checks later on
+        switch ($modInfo['state']) {
+            case XARMOD_STATE_ACTIVE:
+            case XARMOD_STATE_UPGRADED:  $this->active[] = $modInfo; break;
+            case XARMOD_STATE_INACTIVE:
+            default:                     $this->initialised[] = $modInfo; break;
+        }
+
+        $dependents = array(
+                        'active' => $this->active,
+                        'initialised' => $this->initialised,
+                            );
+        return $dependents;
+    }
+
+    public function installwithdependencies($regid=null, $phase=0)
+    {
+        $modInfo = xarMod::getInfo($regid);
+        if (!isset($modInfo)) {
+            throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
+        }
+
+        switch ($modInfo['state']) {
+            case XARMOD_STATE_ACTIVE:
+            case XARMOD_STATE_UPGRADED: return true;
+            case XARMOD_STATE_INACTIVE: $initialised = true; break;
+            default:                    $initialised = false; break;
+        }
+        if (!isset($args['phase'])) $args['phase'] = 0;
+        switch ($args['phase']) {
+
+            case 0:
+
+                // Argument check
+                if (!isset($regid)) throw new EmptyParameterException('regid');
+
+                // See if we have lost any modules since last generation
+                if (!$this->checkformissing()) {return;}
+
+                // Make xarMod::getInfo not cache anything...
+                //We should make a funcion to handle this or maybe whenever we
+                //have a central caching solution...
+                $GLOBALS['xarMod_noCacheState'] = true;
+
+                if (!empty($modInfo['extensions'])) {
+                    foreach ($modInfo['extensions'] as $extension) {
+                        if (!empty($extension) && !extension_loaded($extension)) {
+                            throw new ModuleNotFoundException(array($extension,$modInfo['displayname']),
+                                                              "Required PHP extension '#(1)' is missing for module '#(2)'");
+                        }
+                    }
+                }
+
+                $dependency = $modInfo['dependency'];
+
+                if (empty($dependency)) $dependency = array();
+
+                $testmod = $this->modulestack->peek();
+                if ($regid != $testmod) $this->modulestack->push($regid);
+            
+                //The dependencies are ok, assuming they shouldnt change in the middle of the
+                //script execution.
+                foreach ($dependency as $module_id => $conditions) {
+                    if (is_array($conditions)) {
+                        //The module id is in $modId
+                        $modId = $module_id;
+                    } else {
+                        //The module id is in $conditions
+                        $modId = $conditions;
+                    }
+
+                    if (!xarMod::isAvailable(xarMod::getName($modId))) {
+                        if (!$this->installwithdependencies($modId)) {
+                            $msg = xarML('Unable to initialise dependency module with ID (#(1)).', $modId);
+                            throw new Exception($msg);
+                        }
+                    }
+                }
+
+                // Is there an install page?
+                if (!$initialised && file_exists(sys::code() . 'modules/' . $modInfo['osdirectory'] . '/xartemplates/includes/installoptions.xt')) {
+                    xarResponse::redirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $regid)));
+                    return true;
+                } else {
+                    //No install page; move to install the module now
+                    $args['phase'] =1;
+                }
+
+            case 1:
+                $regid = $this->modulestack->pop();
+
+                //Checks if the module is already initialised
+                if (!$initialised) {
+                    // Finally, now that dependencies are dealt with, initialize the module
+                    if (!xarMod::apiFunc('modules', 'admin', 'initialise', array('regid' => $regid))) {
+                        $msg = xarML('Unable to initialise module "#(1)".', $modInfo['displayname']);
+                        throw new Exception($msg);
+                    }
+                }
+
+                // And activate it!
+                if (!xarMod::apiFunc('modules', 'admin', 'activate', array('regid' => $regid))) {
+                    $msg = xarML('Unable to activate module "#(1)".', $modInfo['displayname']);
+                    throw new Exception($msg);
+                }
+
+                PropertyRegistration::importPropertyTypes(true, array('modules/' . $modInfo['directory'] . '/xarproperties'));
+                if (empty($modstack)) {
+                    // Looks like we're done
+                    $this->modulestack->clear();
+                    // set the target location (anchor) to go to within the page
+                    $target = $modInfo['name'];
+
+                    if (function_exists('xarOutputFlushCached')) {
+                        xarOutputFlushCached('base');
+                        xarOutputFlushCached('modules');
+                        xarOutputFlushCached('base-block');
+                    }
+
+                    xarResponse::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+                } else {
+                    // Do the next module
+                    if (!$this->installwithdependencies($this->modulestack->pop())) return;
+                }
+                return true;
+
+            default:
+                throw new Exception('Unknown install phase...aborting');
+        }
     }
 }
 

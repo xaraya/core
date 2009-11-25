@@ -10,7 +10,7 @@
  */
 /**
  * Deactivate module and its dependents
- * To be used after the user assured he wants to unitialize the module
+ * To be used after the user assured he wants to initialise the module
  * and all its dependents (should show a list of them to the user)
  *
  * @param $maindId int ID of the module to look dependents for
@@ -55,7 +55,7 @@ function modules_adminapi_deactivatewithdependents ($args)
         throw new Exception($msg);
     }
 
-    $dependents = xarMod::apiFunc('modules','admin','getalldependents',array('regid'=>$mainId));
+    $dependents = $installer->getalldependents($mainId);
 
     foreach ($dependents['active'] as $active_dependent) {
         if (!xarMod::apiFunc('modules', 'admin', 'deactivate', array('regid' => $active_dependent['regid']))) {

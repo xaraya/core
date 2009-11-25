@@ -96,7 +96,7 @@ function modules_adminapi_installwithdependencies ($args)
 
                 if (!xarMod::isAvailable(xarMod::getName($modId))) {
                     if (!xarMod::apiFunc('modules', 'admin', 'installwithdependencies', array('regid'=>$modId, 'phase' => 0))) {
-                        $msg = xarML('Unable to initialize dependency module with ID (#(1)).', $modId);
+                        $msg = xarML('Unable to initialise dependency module with ID (#(1)).', $modId);
                         throw new Exception($msg);
                     }
                 }
@@ -120,7 +120,7 @@ function modules_adminapi_installwithdependencies ($args)
             if (!$initialised) {
                 // Finally, now that dependencies are dealt with, initialize the module
                 if (!xarMod::apiFunc('modules', 'admin', 'initialise', array('regid' => $mainId))) {
-                    $msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
+                    $msg = xarML('Unable to initialise module "#(1)".', $modInfo['displayname']);
                     throw new Exception($msg);
                 }
             }

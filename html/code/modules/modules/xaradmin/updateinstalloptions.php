@@ -4,7 +4,9 @@ function modules_admin_updateinstalloptions()
     // TODO: check under what conditions this is needed
 //    if (!xarSecConfirmAuthKey()) return;
     xarVarFetch('regid', 'int', $regid, NULL, XARVAR_DONT_SET);
-    if (!xarMod::apiFunc('modules','admin','installwithdependencies',array('regid'=>$regid, 'phase' => 1))) return;
+    sys::import('modules.modules.class.installer');
+    $installer = Installer::getInstance();    
+    if (!$installer->installwithdependencies($regid,1)) return;
 }
 
 ?>

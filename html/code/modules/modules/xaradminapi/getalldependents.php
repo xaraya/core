@@ -38,7 +38,7 @@ function modules_adminapi_getalldependents ($args)
         return;
     }
 
-    //Initialize the dependencies array
+    //Initialise the dependencies array
     $dependents_array                  = array();
     $dependents_array['active']        = array();
     $dependents_array['initialised']   = array();
@@ -116,7 +116,7 @@ function modules_adminapi_getalldependents ($args)
     switch ($modInfo['state']) {
         case XARMOD_STATE_ACTIVE:
         case XARMOD_STATE_UPGRADED:
-            //It is satisfied if already initialized
+            //It is satisfied if already initialised
             $dependents_array['active'][] = $modInfo;
         break;
         case XARMOD_STATE_INACTIVE:

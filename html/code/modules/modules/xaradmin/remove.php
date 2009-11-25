@@ -46,7 +46,9 @@ function modules_admin_remove ()
         // FIXME: double check this line and the line with removeewithdependents below,
         // they can NOT be called in the same request due to the statics used in there, the logic
         // needs to be reviewed, it's not solid enough.
-        $dependents = xarMod::apiFunc('modules','admin','getalldependents',array('regid'=>$id));
+        sys::import('modules.modules.class.installer');
+        $installer = Installer::getInstance();    
+        $dependents = $installer->getalldependents($id);
         if (!(count($dependents['active']) > 0 || count($dependents['initialised']) > 1 )) {
             //No dependents, just remove the module
             if(!xarMod::apiFunc('modules','admin','remove',array('regid' => $id)))  return;

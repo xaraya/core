@@ -27,5 +27,12 @@ class Stack extends SequenceAdapter implements iStack
     {
         parent::clear();
     }
+
+    public function peek()
+    {
+        $item = $this->pop();
+        $this->push($item);
+        return $item;
+    }
 }
 ?>

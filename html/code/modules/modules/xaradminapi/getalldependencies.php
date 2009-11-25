@@ -39,7 +39,7 @@ function modules_adminapi_getalldependencies($args)
         return;
     }
 
-    //Initialize the dependecies array
+    //Initialise the dependecies array
     $dependency_array = array();
     $dependency_array['unsatisfiable'] = array();
     $dependency_array['satisfiable']   = array();
@@ -109,19 +109,19 @@ function modules_adminapi_getalldependencies($args)
     }
 
     // Unsatisfiable and Satisfiable are assuming the user can't
-    //use some hack or something to set the modules as initialized/active
+    //use some hack or something to set the modules as initialised/active
     //without its proper dependencies
     if (count($dependency_array['unsatisfiable'])) {
         //Then this module is unsatisfiable too
         $dependency_array['unsatisfiable'][] = $modInfo;
     } elseif (count($dependency_array['satisfiable'])) {
         //Then this module is satisfiable too
-        //As if it were initialized, then all depdencies would have
+        //As if it were initialised, then all dependencies would have
         //to be already satisfied
         $dependency_array['satisfiable'][] = $modInfo;
     } else {
         //Then this module is at least satisfiable
-        //Depends if it is already initialized or not
+        //Depends if it is already initialised or not
 
         //TODO: Add version checks later on
         // Add a new state in the dependency array for version
@@ -130,7 +130,7 @@ function modules_adminapi_getalldependencies($args)
         switch ($modInfo['state']) {
             case XARMOD_STATE_ACTIVE:
             case XARMOD_STATE_UPGRADED:
-                //It is satisfied if already initialized
+                //It is satisfied if already initialised
                 $dependency_array['satisfied'][] = $modInfo;
             break;
             case XARMOD_STATE_INACTIVE:
