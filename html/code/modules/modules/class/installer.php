@@ -459,6 +459,47 @@ class Installer extends Object
 
         return true;
     }
+
+    function removewithdependents($regid=null)
+    {
+        xarLogMessage('Removing with dependents');
+
+        // Argument check
+        if (!isset($regid)) throw new EmptyParameterException('regid');
+
+        // See if we have lost any modules since last generation
+        if (!$this->checkformissing()) {
+            xarLogMessage('Missing module since last generation');
+            return;
+        }
+
+        //Get the dependents list
+        $dependents = $this->getalldependents($regid);
+        xarLogVariable('dependents',$dependents);
+
+        //Deactivate Actives
+        foreach ($dependents['active'] as $active_dependent) {
+            if (!xarMod::apiFunc('modules', 'admin', 'deactivate', array('regid' => $active_dependent['regid']))) {
+                throw new BadParameterException($active_dependent['displayname'],'Unable to deactivate module "#(1)".');
+            }
+        }
+
+        //Remove the previously active
+        foreach ($dependents['active'] as $active_dependent) {
+            if (!xarMod::apiFunc('modules', 'admin', 'remove', array('regid' => $active_dependent['regid']))) {
+                throw new BadParameterException($active_dependent['displayname'], 'Unable to remove module "#(1)".');
+            }
+        }
+
+        //Remove the initialised
+        foreach ($dependents['initialised'] as $active_dependent) {
+            if (!xarMod::apiFunc('modules', 'admin', 'remove', array('regid' => $active_dependent['regid']))) {
+                throw new BadParameterException($active_dependent['displayname'], 'Unable to remove module "#(1)".');
+            }
+        }
+
+        return true;
+    }
 }
 
 ?>

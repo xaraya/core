@@ -44,9 +44,6 @@ function modules_admin_deactivate ()
     // If we haven't been to the deps GUI, check that first
     if (!$command) {
         //First check the modules dependencies
-        // FIXME: double check this line and the line with deactivatewithdependents below,
-        // they can NOT be called in the same request due to the statics used in there, the logic
-        // needs to be reviewed, it's not solid enough.
         $dependents = $installer->getalldependents($id);
         if(count($dependents['active']) > 1) {
             //Let's make a nice GUI to show the user the options
