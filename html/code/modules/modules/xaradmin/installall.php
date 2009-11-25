@@ -45,7 +45,7 @@ function modules_admin_installall()
         } else {
             sys::import('modules.modules.class.installer');
             $installer = Installer::getInstance();    
-            if (!$installer->installwithdependencies($info['regid'])) {
+            if (!$installer->installmodule($info['regid'])) {
                 foreach ($dependencies['satisfiable'] as $key => $modInfo) {
                     $dbModules[$modInfo['name']]['state'] = XARMOD_STATE_INSTALLED;
                 }

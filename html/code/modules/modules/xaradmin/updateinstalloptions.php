@@ -6,7 +6,7 @@ function modules_admin_updateinstalloptions()
     xarVarFetch('regid', 'int', $regid, NULL, XARVAR_DONT_SET);
     sys::import('modules.modules.class.installer');
     $installer = Installer::getInstance();    
-    if (!$installer->installwithdependencies($regid,1)) return;
+    if (!$installer->installmodule($regid,1)) return;
 }
 
 ?>
