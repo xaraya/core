@@ -232,8 +232,12 @@ class Installer extends Object
                 default:                         $this->unsatisfiable[] = $modInfo; break;
             }
         }
-
-        return true;
+        $dependencies = array(
+                            'satisfied'     => $this->satisfied,
+                            'satisfiable'   => $this->satisfiable,
+                            'unsatisfiable' => $this->unsatisfiable,
+                            );
+        return $dependencies;
     }
 
     public function getalldependents($regid=null)
@@ -311,7 +315,7 @@ class Installer extends Object
     public function installmodule($regid=null)
     {
         $this->assembledependencies($regid);
-        $this->installdependencies();
+        $this->installdependencies($regid);
     }
     
     public function assembledependencies($regid=null)
@@ -320,14 +324,6 @@ class Installer extends Object
         if (!isset($modInfo)) {
             throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
         }
-
-        switch ($modInfo['state']) {
-            case XARMOD_STATE_ACTIVE:
-            case XARMOD_STATE_UPGRADED: return true;
-            case XARMOD_STATE_INACTIVE: $initialised = true; break;
-            default:                    $initialised = false; break;
-        }
-
 
         // Argument check
         if (!isset($regid)) throw new EmptyParameterException('regid');
@@ -372,16 +368,12 @@ class Installer extends Object
                 }
             }
         }
-        // Is there an install page?
-        if (!$initialised && file_exists(sys::code() . 'modules/' . $modInfo['osdirectory'] . '/xartemplates/includes/installoptions.xt')) {
-            xarResponse::redirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $regid)));
-        }
         return true;
     }
 
-    public function installdependencies()
+    public function installdependencies($regid)
     {
-        $regid = $this->modulestack->pop();
+        $topid = $this->modulestack->peek();
 
         $modInfo = xarMod::getInfo($regid);
         if (!isset($modInfo)) {
@@ -393,6 +385,16 @@ class Installer extends Object
             case XARMOD_STATE_UPGRADED: return true;
             case XARMOD_STATE_INACTIVE: $initialised = true; break;
             default:                    $initialised = false; break;
+        }
+
+        if ($regid == $topid) {
+            // First time we've come to this module
+            $regid = $this->modulestack->pop();
+            // Is there an install page?
+            if (!$initialised && file_exists(sys::code() . 'modules/' . $modInfo['osdirectory'] . '/xartemplates/includes/installoptions.xt')) {
+                xarResponse::redirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $regid)));
+                return true;
+            }
         }
 
         //Checks if the module is already initialised
@@ -428,7 +430,7 @@ class Installer extends Object
             xarResponse::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
         } else {
             // Do the next module
-            if (!$this->installdependencies()) return;
+            if (!$this->installdependencies($nextmodule)) return;
         }
         return true;
     }

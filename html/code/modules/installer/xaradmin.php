@@ -962,13 +962,15 @@ function installer_admin_confirm_configuration()
         $GLOBALS['xarMod_noCacheState'] = true;
         xarMod::apiFunc('modules','admin','regenerate');
 
+        sys::import('modules.modules.class.installer');
+        $installer = Installer::getInstance();    
         // load the modules from the configuration
         foreach ($options2 as $module) {
             if(in_array($module['item'],$chosen)) {
-                $dependents = xarMod::apiFunc('modules','admin','getalldependencies',array('regid'=>$module['item']));
-                if (count($dependents['unsatisfiable']) > 0) {
+                $dependencies = $installer->getalldependencies($module['item']);
+                if (count($dependencies['unsatisfiable']) > 0) {
                     $msg = xarML("Cannot load because of unsatisfied dependencies. One or more of the following modules is missing: ");
-                    foreach ($dependents['unsatisfiable'] as $dependent) {
+                    foreach ($dependencies['unsatisfiable'] as $dependent) {
                         $modname = isset($dependent['name']) ? $dependent['name'] : "Unknown";
                         $modid = isset($dependent['id']) ? $dependent['id'] : $dependent;
                         $msg .= $modname . " (ID: " . $modid . "), ";
