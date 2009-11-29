@@ -26,23 +26,20 @@ class ActionController extends Object
     
     function __construct(Object $request=null)
     {
-        // CHECKME: How to handle null request?
-//        if (empty($request)) $request = new xarRequest();
         $this->request = $request;
         $this->actionstring = $this->request->getActionString();
         $this->delimiter = $this->request->delimiter;
         $this->module = $this->request->module;
     }
     
-    function run() 
+/*    function run() 
     { 
         $url = 'module=' . $this->module;
         $url .= '&type=' . $this->type;
         foreach ($this->decodearray as $key => $value) $url .= '&' . $key . '=' . $value;
-//        echo $url;exit;
         
         return true; 
-    }
+    }*/
     
     function decode()        { return array(); }
     function encode($request)          
