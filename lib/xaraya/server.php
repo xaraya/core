@@ -560,6 +560,7 @@ class xarController extends Object
 
     static function dispatch($request=null)
     {
+        // CHECKME: How to handle null request?
         if (!empty($request)) self::$request = $request;
         self::$response = new xarResponse();
         if (self::$request->isObjectURL()) {
@@ -583,6 +584,19 @@ class xarController extends Object
                     self::$response->output = $controller->getOutput();
                 }
             }
+        }
+    }
+    static function encode($request=null)
+    {
+        // CHECKME: How to handle null request?
+        if (!empty($request)) self::$request = $request;
+
+        if (self::$request->isObjectURL()) {
+            // Stuck for now
+        } else {
+            $dispatcher = new xarDispatcher($request);
+            $controller = $dispatcher->getController();
+            return $controller->encode($request);
         }
     }
 
@@ -724,18 +738,64 @@ class xarRequest extends Object
     private $isModuleURL = false;
     private $url;
     private $actionstring;
+    private $index ='index.php';
     
     public $defaultRequestInfo = array();
     public $shortURLVariables = array();
 
-    public $module;
+    public $module   = 'base';
+    public $type     = 'user';
+    public $func;
+    public $delimiter ='/';
     
     function __construct($url=null)
     {
-        $this->url= $url;
-        $this->getInfo($url);
+        if (is_array($url)) {
+            // This is a URL as a traditional Xaraya URL array
+            if (!empty($url['module'])) {
+                $this->module = $url['module'];
+                unset($url['module']);
+                // Resolve if this is an alias for some other module
+                $this->module = xarModAlias::resolve($this->module);
+            }
+            if (!empty($url['type'])) {
+                $this->type = $url['type'];
+                unset($url['type']);
+            }
+            if (!empty($url['func'])) {
+                $this->func = $url['func'];
+                unset($url['func']);
+            }
+            $this->shortURLVariables = $url;
+        } else {
+            // This is a string representing a URL
+            // First figure out which module is to be addressed
+            if (null == $url) {
+                // Try and get it from the current request path
+                $path = xarServer::getVar('PATH_INFO');
+                if (($path != '')
+                // IIS fix
+                && ($path != xarServer::getVar('SCRIPT_NAME'))) {
+                    preg_match_all('|/([^/]+)|i', $path, $matches);
+                    $params = $matches[1];
+                    if (count($params) > 0) $this->module = $params[0];
+                }
+            } else {
+                // Try and get it from the URL passed
+                // CHECKME: test this for stability
+                $path = substr($url,strlen(xarServer::getBaseURL() . $this->index . $this->delimiter));
+                $tokens = explode($this->delimiter, $path);
+                $this->module = array_shift($tokens);
+            }
+            // Resolve if this is an alias for some other module
+            $this->module = xarModAlias::resolve($this->module);
+            
+            // Now that we have the module, resolve the rest via the appropriate controller
+            $this->url= $url;
+            $this->getInfo($url);
+        }
     }
-
+    
     /**
      * Gets request info for current page or a given url.
      *
@@ -815,65 +875,19 @@ class xarRequest extends Object
             }
         }
 
-        if (xarController::$allowShortURLs && empty($modName) && ($path = xarServer::getVar('PATH_INFO')) != ''
-            // IIS fix
-            && $path != xarServer::getVar('SCRIPT_NAME')) {
-            /*
-             Note: we need to match anything that might be used as module params here too ! (without compromising security)
-             preg_match_all('|/([a-z0-9_ .+-]+)|i', $path, $matches);
-
-             The original regular expression prevents the use of titles, even when properly encoded,
-             as parts of a short-url path -- because it wouldn't not permit many characters that would
-             in titles, such as parens, commas, or apostrophes.  Since a similiar "security" check is not
-             done to normal URL params, I've changed this to a more flexable regex at the other extreme.
-
-             This also happens to address Bug 2927
-
-             TODO: The security of doing this should be examined by someone more familiar with why this works
-             as a security check in the first place.
-            */
-            preg_match_all('|/([^/]+)|i', $path, $matches);
-
-            $params = $matches[1];
-            if (count($params) > 0) {
-                $modName = $params[0];
-                // if the second part is not admin, it's user by default
-                $modType = 'user';
-                if (isset($params[1]) && $params[1] == 'admin') $modType = 'admin';
-
-                // Check if this is an alias for some other module
-                $modName = xarModAlias::resolve($modName);
-                // Call the appropriate decode_shorturl function
-                if (xarMod::isAvailable($modName) && xarModVars::get($modName, 'enable_short_urls') && xarMod::apiLoad($modName, $modType)) {
-                    $loopHole = array($modName,$modType,$funcName);
-                    // don't throw exception on missing file or function anymore
-                    try {
-                        $res = xarMod::apiFunc($modName, $modType, 'decode_shorturl', $params);
-                    } catch ( NotFoundExceptions $e) {
-                        // No worry
-                    }
-                    if (isset($res) && is_array($res)) {
-                        list($funcName, $args) = $res;
-                        if (!empty($funcName)) { // bingo
-                            // Forward decoded args to xarController::getVar
-                            if (isset($args) && is_array($args)) {
-                                $args['module'] = $modName;
-                                $args['type'] = $modType;
-                                $args['func'] = $funcName;
-                                $this->shortURLVariables = $args;
-                            } else {
-                                $this->shortURLVariables = array('module' => $modName,'type' => $modType,'func' => $funcName);
-                            }
-                        }
-                    }
-                    $loopHole = NULL;
-                }
+        if (xarController::$allowShortURLs) {
+            $dispatcher = new xarDispatcher($this);
+            $controller = $dispatcher->getController();
+            $controller->decode($this);
+            if (xarMod::isAvailable($this->module) && xarModVars::get($this->module, 'enable_short_urls')) {
+               $requestInfo = array($this->module,
+                     $this->type,
+                     $this->func) ;
+                     return $requestInfo;
             }
         }
 
         if (!empty($modName)) {
-            // Check if this is an alias for some other module
-            $modName = xarModAlias::resolve($modName);
             // Cache values into info static var
             $requestInfo = array($modName, $modType, $funcName);
         } else {
@@ -922,7 +936,6 @@ class xarRequest extends Object
     function getActionString() { return $this->actionstring; }
     function getURL()          { return $this->url; }
 
-    function setActionString($str)  { $this->actionstring = $str; }
     function setURL($url)           { $this->url = $url; }
 }
 
@@ -930,38 +943,21 @@ class xarDispatcher extends Object
 {
     private $controller;
     private $request;
-    private $index ='index.php';
-
-    public $delimiter ='/';
-    public $module = 'base';
 
     function __construct($request=null)
     {
         if (empty($request)) $request = new xarRequest();
-        $actionstring = $this->getActionString();
-        $request->setActionString($actionstring);
         try {
-            sys::import('modules.' . $this->getModule() . '.controller');
-            $controllername = ucfirst($this->getModule()) . 'ActionController';
+            sys::import('modules.' . $request->getModule() . '.controller');
+            $controllername = ucfirst($request->getModule()) . 'ActionController';
             $this->controller = new $controllername($request);
         } catch (Exception $e) {
             sys::import('xaraya.controllers.action');
             $this->controller = new ActionController($request);
         }
-        $this->controller->delimiter = $this->delimiter;
-    }
-    
-    function getActionString() 
-    { 
-        $url = xarServer::getCurrentURL();
-        $requeststring = substr($url,strlen(xarServer::getBaseURL() . $this->index . $this->delimiter));
-        $tokens = explode($this->delimiter, $requeststring);
-        $this->module = array_shift($tokens);
-        return implode($this->delimiter, $tokens);
     }
     
     function getController()  { return $this->controller; }
     function getRequest()     { return $this->request; }
-    function getModule()      { return $this->module; }
 }
 ?>

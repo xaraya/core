@@ -16,7 +16,7 @@ sys::import('xaraya.controllers.action');
 class RolesActionController extends ActionController
 {
 
-    function assemble()
+    function decode()
     {
         $data = array();
         $token1 = $this->firstToken();
@@ -34,9 +34,10 @@ class RolesActionController extends ActionController
                 $data['func'] = 'view';
 
                 $token2 = $this->nextToken();
-                if ($token2 == 'viewall')  $data['phase'] = 'viewall';
+                if ($token2 == 'viewall' || !$token2)  $data['phase'] = 'viewall';
                 else $data['letter'] = $token2;
 
+                $token3 = $this->nextToken();
                 if ($token3)  $data['letter'] = $token3;
             break;
 
@@ -53,8 +54,64 @@ class RolesActionController extends ActionController
                 $data['func'] = 'account';
             break;
         }
-        $this->run($data);
-        
+        return $data;
+    }
+    
+    function encode($request)
+    {  
+        switch($request->func) {
+            case 'main':
+                // Note : if your main function calls some other function by default,
+                // you should set the path to directly to that other function
+                $path[] = '';
+                break;
+            case 'view':
+                $path[] = 'list';
+                if (!empty($phase) && $phase == 'viewall') {
+                    unset($args['phase']);
+                    $path[] = 'viewall';
+                }
+                if (!empty($letter)) {
+                    unset($args['letter']);
+                    $path[] = $letter;
+                }
+                break;
+
+            case 'lostpassword':
+                $path[] = 'password';
+                break;
+
+             case 'account':
+                $path[] = 'account';
+                if(!empty($moduleload)) {
+                    // Note: this handles usermenu requests for hooked modules (including roles itself).
+                    unset($args['moduleload']);
+                    $path[] = $moduleload;
+                }
+                break;
+
+              case 'usermenu':
+                $path[] = 'settings';
+                if (!empty($phase) && ($phase == 'formbasic' || $phase == 'form')) {
+                    // Note : this URL format is no longer in use
+                    unset($args['phase']);
+                    $path[] = 'form';
+                }
+                break;
+
+              case 'display':
+                // check for required parameters
+                if (isset($id) && is_numeric($id)) {
+                    unset($args['id']);
+                    $path[] = $id;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        return parent::encode($request);
     }
     
 }

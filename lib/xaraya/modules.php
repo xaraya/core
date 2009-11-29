@@ -176,62 +176,23 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         unset($args[NULL]);
     }
 
-    // Check the global short URL setting before trying to load the URL encoding function
-    // for the module. This also applies to custom entry points.
-    if (xarMod::$genShortUrls) {
-        // The encode_shorturl will be in userapi.
-        // Note: if a module declares itself as supporting short URLs, then the encoding
-        // API subsequently fails to load, then we want those errors to be raised.
-        if ($modType == 'user' && xarModVars::get($modName, 'enable_short_urls') && xarMod::apiLoad($modName, $modType)) {
-            $encoderArgs = $args;
-            $encoderArgs['func'] = $funcName;
+    // Check the short URL settings
+    if (xarMod::$genShortUrls && xarModVars::get($modName, 'enable_short_urls') && $modType == 'user') {
+        $encoderArgs = $args;
+        $encoderArgs['module'] = $modName;
+        $encoderArgs['func'] = $funcName;
+        $request = new xarRequest($encoderArgs);
+        $path = xarController::encode($request);
 
-            // Execute the short URL function.
-            // It must exist if the enable_short_urls variable is set for the module.
-            // FIXME: if the function does not exist, then errors are not handled well, often hidden.
-            // Ensure a missing short URL encoding function gets written to the log file.
-            $short = xarMod::apiFunc($modName, $modType, 'encode_shorturl', $encoderArgs);
-            if (!empty($short)) {
-                if (is_array($short)) {
-                    // An array of path and args has been returned (both optional) - new style.
-                    if (!empty($short['path'])) {
-                        foreach($short['path'] as $pathpart) {
-                            // Use path encoding method, which can differ from
-                            // the GET parameter encoding method.
-                            if ($pathpart != '') {
-                                $path .= $pathsep . xarURL::encode($pathpart, 'path');
-                            }
-                        }
-                    }
-                    // Unconsumed arguments, to be treated as additional GET parameters.
-                    // These may actually be additional GET parameters injected by the
-                    // short URL function - it makes no difference either way.
-                    if (!empty($short['get']) && is_array($short['get'])) {
-                        $path = xarURL::addParametersToPath($short['get'], $path, $pini, $psep);
-                    } else {
-                        $args = array();
-                    }
-                } else {
-                    // A string URL has been returned - old style - deprecated.
-                    $path = $short;
-                    $args = array();
-                }
+        // Use xaraya default (index.php) or BaseModURL if provided in config.system.php
+        $path = $BaseModURL . $path;
 
-                // Use xaraya default (index.php) or BaseModURL if provided in config.system.php
-                $path = $BaseModURL . $path;
+        // Remove the leading / from the path (if any).
+        $path = preg_replace('/^\//', '', $path);
 
-                // Remove the leading / from the path (if any).
-                $path = preg_replace('/^\//', '', $path);
-
-                // Workaround for bug 3603
-                // why: template might add extra params we dont see here
-                if (!empty($open_get_flag) && !strpos($path, $pini)) {$path .= $pini;}
-
-                // We now have the short form of the URL.
-                // Further custom manipulation of the URL can be added here.
-                // It may be worthwhile allowing for some kind of hook?
-            }
-        }
+        // Workaround for bug 3603
+        // why: template might add extra params we dont see here
+        if (!empty($open_get_flag) && !strpos($path, $pini)) {$path .= $pini;}
     }
 
     // If the path is still empty, then there is either no short URL support
