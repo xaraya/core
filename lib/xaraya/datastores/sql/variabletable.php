@@ -465,7 +465,6 @@ class VariableTableDataStore extends SQLDataStore
             // All prepared, run it
             $result = $stmt->executeQuery();
 
-
             $isgrouped = 0;
             if (count($this->groupby) > 0) {
                 $isgrouped = 1;
@@ -475,6 +474,7 @@ class VariableTableDataStore extends SQLDataStore
                 $process = array();
                 foreach ($propids as $propid) {
                     if (in_array($propid,$this->groupby)) {
+                        // Note: we'll process the *TIME_BY_* operations for the groupid
                         continue;
                     } elseif (empty($this->fields[$propid]->operation)) {
                         continue; // all fields should be either GROUP BY or have some operation
@@ -505,6 +505,31 @@ class VariableTableDataStore extends SQLDataStore
                     }
                     $groupid = '';
                     foreach ($this->groupby as $propid) {
+                        // handle *TIME_BY_* operations here
+                        if (!empty($propval[$propid]) && !empty($this->fields[$propid]->operation)) {
+                            switch ($this->fields[$propid]->operation) {
+                                case 'UNIXTIME_BY_YEAR':
+                                    $propval[$propid] = gmdate('Y',$propval[$propid]);
+                                    break;
+                                case 'UNIXTIME_BY_MONTH':
+                                    $propval[$propid] = gmdate('Y-m',$propval[$propid]);
+                                    break;
+                                case 'UNIXTIME_BY_DAY':
+                                    $propval[$propid] = gmdate('Y-m-d',$propval[$propid]);
+                                    break;
+                                case 'DATETIME_BY_YEAR':
+                                    $propval[$propid] = substr($propval[$propid],0,4);
+                                    break;
+                                case 'DATETIME_BY_MONTH':
+                                    $propval[$propid] = substr($propval[$propid],0,7);
+                                    break;
+                                case 'DATETIME_BY_DAY':
+                                    $propval[$propid] = substr($propval[$propid],0,10);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                         $groupid .= $propval[$propid] . '~';
                     }
                     if (!isset($combo[$groupid])) {
@@ -559,8 +584,16 @@ class VariableTableDataStore extends SQLDataStore
                                     $curval['total'] += $propval[$propid];
                                     $curval['count']++;
                                 }
-                                // TODO: divide total by count afterwards
+                                // Note: divide total by count afterwards
                                 break;
+                            case 'COUNT_DISTINCT':
+                                if (!isset($curval)) {
+                                    $curval = array();
+                                }
+                                $curval[$propval[$propid]] = 1;
+                                // Note: count distinct keys afterwards
+                                break;
+                            case 'UNIXTIME_BY_YEAR': // etc. - do nothing
                             default:
                                 break;
                         }
@@ -571,11 +604,15 @@ class VariableTableDataStore extends SQLDataStore
             $result->close();
 
             // divide total by count afterwards
+            // count distinct keys afterwards
             if ($isgrouped) {
                 $divide = array();
+                $distinct = array();
                 foreach ($process as $propid) {
                     if ($this->fields[$propid]->operation == 'AVG') {
                         $divide[] = $propid;
+                    } elseif ($this->fields[$propid]->operation == 'COUNT_DISTINCT') {
+                        $distinct[] = $propid;
                     }
                 }
                 if (count($divide) > 0) {
@@ -584,6 +621,17 @@ class VariableTableDataStore extends SQLDataStore
                             $curval = $this->fields[$propid]->getItemValue($curid);
                             if (!empty($curval) && is_array($curval) && !empty($curval['count'])) {
                                 $newval = $curval['total'] / $curval['count'];
+                                $this->fields[$propid]->setItemValue($curid,$newval);
+                            }
+                        }
+                    }
+                }
+                if (count($distinct) > 0) {
+                    foreach ($this->_itemids as $curid) {
+                        foreach ($distinct as $propid) {
+                            $curval = $this->fields[$propid]->getItemValue($curid);
+                            if (!empty($curval) && is_array($curval)) {
+                                $newval = count(array_keys($curval));
                                 $this->fields[$propid]->setItemValue($curid,$newval);
                             }
                         }
@@ -649,7 +697,14 @@ class VariableTableDataStore extends SQLDataStore
                                 $curval['total'] += $value;
                                 $curval['count']++;
                             }
-                            // TODO: divide total by count afterwards
+                            // Note: divide total by count afterwards
+                            break;
+                        case 'COUNT_DISTINCT':
+                            if (!isset($curval)) {
+                                $curval = array();
+                            }
+                            $curval[$value] = 1;
+                            // Note: count distinct keys afterwards
                             break;
                         default:
                             break;
@@ -662,10 +717,14 @@ class VariableTableDataStore extends SQLDataStore
             $result->close();
 
             // divide total by count afterwards
+            // count distinct keys afterwards
             $divide = array();
+            $distinct = array();
             foreach ($process as $propid) {
                 if ($this->fields[$propid]->operation == 'AVG') {
                     $divide[] = $propid;
+                } elseif ($this->fields[$propid]->operation == 'COUNT_DISTINCT') {
+                    $distinct[] = $propid;
                 }
             }
             if (count($divide) > 0) {
@@ -674,6 +733,17 @@ class VariableTableDataStore extends SQLDataStore
                         $curval = $this->fields[$propid]->getItemValue($curid);
                         if (!empty($curval) && is_array($curval) && !empty($curval['count'])) {
                             $newval = $curval['total'] / $curval['count'];
+                            $this->fields[$propid]->setItemValue($curid,$newval);
+                        }
+                    }
+                }
+            }
+            if (count($distinct) > 0) {
+                foreach ($this->_itemids as $curid) {
+                    foreach ($distinct as $propid) {
+                        $curval = $this->fields[$propid]->getItemValue($curid);
+                        if (!empty($curval) && is_array($curval)) {
+                            $newval = count(array_keys($curval));
                             $this->fields[$propid]->setItemValue($curid,$newval);
                         }
                     }

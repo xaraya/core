@@ -29,9 +29,11 @@ function modules_adminapi_initialise($args)
     if (!isset($modInfo)) throw new ModuleNotFoundException($regid,'Module (regid: $regid) does not exist.');
 
     //Checks module dependency
-    if (!xarMod::apiFunc('modules','admin','verifydependency',array('regid'=>$regid))) {
+    sys::import('modules.modules.class.installer');
+    $installer = Installer::getInstance();    
+    if (!$installer->verifydependency($regid)) {
         //TODO: Add description of the dependencies
-        $msg = xarML('The dependencies to initialize the module "#(1)" were not met.', $modInfo['displayname']);
+        $msg = xarML('The dependencies to initialise the module "#(1)" were not met.', $modInfo['displayname']);
         throw new Exception($msg);
     }
 

@@ -44,9 +44,12 @@ class DataProperty extends Object implements iDataProperty
     public $anonymous = 0;        // if true the name, rather than the dd_xx designation is used in displaying the property
 
     public $datastore = '';    // name of the data store where this property comes from
+    public $operation = null;  // some operation or function to apply for this property (COUNT, SUM, ...)
+    public $aliasname = null;  // the aliasname used with the operation or function on this property
 
     public $value = null;      // value of this property for a particular DataObject
     public $invalid = '';      // result of the checkInput/validateValue methods
+    public $fieldname = null;  // fieldname used by checkInput() for configurations who need them (e.g. file uploads)
 
     public $include_reference = 0; // tells the object this property belongs to whether to add a reference of itself to me
     public $objectref = null;  // object this property belongs to

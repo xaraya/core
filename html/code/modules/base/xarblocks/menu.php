@@ -40,7 +40,6 @@ class MenuBlock extends BasicBlock implements iBlock
     public $displayrss          = false;
     public $displayprint        = false;
     public $marker              = '[x]';
-// CHECKME: are you sure you want to hard-code this for all sites ?!?
     public $content             = array(
                                     'url' => '[base]&page=docs',
                                     'name'=> 'Documentation',

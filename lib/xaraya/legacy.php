@@ -137,4 +137,18 @@ function &xarDBNewDataDict(Connection &$dbconn, $mode = 'READONLY')
 {
     throw new ApiDeprecationException(array('xarDBNewDataDict','[TO BE DETERMINED]'));
 }
+
+/**
+ * Support Xaraya 1 pager functions
+ *
+**/
+function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions = 10)
+{
+    return xarTplPager::getInfo($currentItem, $total, $itemsPerPage, $blockOptions);
+}
+function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $blockOptions = array(), $template = 'default', $tplmodule = 'base')
+{
+    return xarTplPager::getPager($startNum, $total, $urltemplate, $itemsPerPage, $blockOptions, $template, $tplmodule);
+}
+
 ?>
