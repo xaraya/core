@@ -288,6 +288,9 @@ function installer_admin_phase5()
     if (!xarVarFetch('install_create_database','checkbox',$createDB,false,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('confirmDB','bool',$confirmDB,false,XARVAR_NOT_REQUIRED)) return;
 
+    if ($dbHost == 'localhost') {
+        $dbHost = '127.0.0.1';
+    }
     if ($dbName == '') {
         $msg = xarML('No database was specified');
         throw new Exception($msg);
