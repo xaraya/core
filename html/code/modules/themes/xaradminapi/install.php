@@ -29,7 +29,9 @@ function themes_adminapi_install($args)
     // Argument check
     if (!isset($mainId)) throw new EmptyParameterException('regid');
     // See if we have lost any modules since last generation
-    if (!xarMod::apiFunc('themes', 'admin', 'checkmissing')) return;
+    sys::import('modules.modules.class.installer');
+    $installer = Installer::getInstance('themes');  
+    if (!$installer->checkformissing()) {return;}
 
     // Make xarMod::getInfo not cache anything...
     //We should make a funcion to handle this or maybe whenever we

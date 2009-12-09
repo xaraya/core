@@ -17,6 +17,7 @@
  
 class Installer extends Object
 {
+    private $extType                  = 'modules';
     private $dependencieschecked      = false;
     private $moduleschecked           = array();
     private $dependentmodules         = array();
@@ -29,16 +30,21 @@ class Installer extends Object
     protected $active                 = array();
     protected $initialised            = array();
 
-    public $fileModules               = array();
-    public $databaseModules           = array();
+    public $fileExtensions            = array();
+    public $databaseExtensions        = array();
 
-    protected function __construct()
+    protected function __construct($type = 'modules')
     {
-        $this->fileModules = xarMod::apiFunc('modules','admin','getfilemodules');
-        $this->databaseModules = xarMod::apiFunc('modules','admin','getdbmodules');
+        if ($this->extType == 'themes') {
+            $this->fileThemes = xarMod::apiFunc('themes','admin','getfilethemes');
+            $this->dbThemes = xarMod::apiFunc('themes','admin','getdbthemes');
+        } else {
+            $this->fileExtensions = xarMod::apiFunc('modules','admin','getfilemodules');
+            $this->databaseExtensions = xarMod::apiFunc('modules','admin','getdbmodules');
+        }
         // FIXME do something else here
-        if (empty($this->databaseModules)) throw new ModuleNotFoundException();
-        if (empty($this->fileModules)) throw new ModuleNotFoundException();
+        if (empty($this->fileExtensions)) throw new ModuleNotFoundException();
+        if (empty($this->databaseExtensions)) throw new ModuleNotFoundException();
 
         sys::import('xaraya.structures.sequences.stack');
         $this->modulestack = new Stack();
@@ -56,20 +62,20 @@ class Installer extends Object
     {
         if ($this->dependencieschecked) {return true;}
 
-        foreach ($this->databaseModules as $name => $modInfo) {
-            if (empty($this->fileModules[$name])) {
+        foreach ($this->databaseExtensions as $name => $extInfo) {
+            if (empty($this->fileExtensions[$name])) {
 
                 // Get module ID
-                $regId = $modInfo['regid'];
+                $regId = $extInfo['regid'];
                 // Set state of module to 'missing'
-                switch ($modInfo['state']) {
+                switch ($extInfo['state']) {
                     case XARMOD_STATE_UNINITIALISED: $newstate = XARMOD_STATE_MISSING_FROM_UNINITIALISED; break;
                     case XARMOD_STATE_INACTIVE:      $newstate = XARMOD_STATE_MISSING_FROM_INACTIVE; break;
                     case XARMOD_STATE_ACTIVE:        $newstate = XARMOD_STATE_MISSING_FROM_ACTIVE; break;
                     case XARMOD_STATE_UPGRADED:      $newstate = XARMOD_STATE_MISSING_FROM_UPGRADED; break;
                 }
                 if (isset($newstate)) {
-                    $set = xarMod::apiFunc('modules', 'admin', 'setstate',
+                    $set = xarMod::apiFunc($this->extType, 'admin', 'setstate',
                                         array('regid'=> $regId,
                                               'state'=> $newstate));
                 }
@@ -84,8 +90,8 @@ class Installer extends Object
         if (!isset($regid)) throw new EmptyParameterException('regid');
 
         // Get module information
-        $modInfo = xarMod::getInfo($regid);
-        if (!isset($modInfo)) throw new ModuleBaseInfoNotFoundException("with regid $regid");
+        $extInfo = xarMod::getInfo($regid);
+        if (!isset($extInfo)) throw new ModuleBaseInfoNotFoundException("with regid $regid");
 
         // See if we have lost any modules since last generation
         if (!$this->checkformissing()) throw new ModuleNotFoundException();
@@ -93,23 +99,23 @@ class Installer extends Object
         $dbMods = array();
 
         //Find the modules which are active (should upgraded be added too?)
-        foreach ($this->databaseModules as $name => $dbInfo) {
+        foreach ($this->databaseExtensions as $name => $dbInfo) {
             if (($dbInfo['state'] != XARMOD_STATE_MISSING_FROM_UNINITIALISED) && ($dbInfo['state'] < XARMOD_STATE_MISSING_FROM_INACTIVE))
             {
                 $dbMods[$dbInfo['regid']] = $dbInfo;
             }
         }
 
-        if (!empty($modInfo['extensions'])) {
-            foreach ($modInfo['extensions'] as $extension) {
+        if (!empty($extInfo['extensions'])) {
+            foreach ($extInfo['extensions'] as $extension) {
                 if (!empty($extension) && !extension_loaded($extension)) {
-                    $msg = xarML("Required PHP extension '#(1)' is missing for module '#(2)'", $extension, $modInfo['displayname']);
+                    $msg = xarML("Required PHP extension '#(1)' is missing for module '#(2)'", $extension, $extInfo['displayname']);
                     throw new Exception($msg);
                 }
             }
         }
 
-        $dependency = $modInfo['dependency'];
+        $dependency = $extInfo['dependency'];
         if (empty($dependency)) $dependency = array();
 
         foreach ($dependency as $module_id => $conditions) {
@@ -167,7 +173,7 @@ class Installer extends Object
 
         // Get module information
         try {
-            $modInfo = xarMod::getInfo($regid);
+            $extInfo = xarMod::getInfo($regid);
         } catch (NotFoundExceptions $e) {
             //Add this module to the unsatisfiable list
             $this->unsatisfiable[] = $regid;
@@ -175,8 +181,8 @@ class Installer extends Object
             return true;
         }
 
-        if (!empty($modInfo['extensions'])) {
-            foreach ($modInfo['extensions'] as $extension) {
+        if (!empty($extInfo['extensions'])) {
+            foreach ($extInfo['extensions'] as $extension) {
                 if (!empty($extension) && !extension_loaded($extension)) {
                     //Add this extension to the unsatisfiable list
                     $this->unsatisfiable[] = $extension;
@@ -184,7 +190,7 @@ class Installer extends Object
             }
         }
 
-        $dependency = $modInfo['dependency'];
+        $dependency = $extInfo['dependency'];
         if (empty($dependency)) $dependency = array();
 
         //The dependencies are ok, they shouldnt change in the middle of the
@@ -210,12 +216,12 @@ class Installer extends Object
         //without its proper dependencies
         if (count($this->unsatisfiable)) {
             //Then this module is unsatisfiable too
-            $this->unsatisfiable[] = $modInfo;
+            $this->unsatisfiable[] = $extInfo;
         } elseif (count($this->satisfiable)) {
             //Then this module is satisfiable too
             //As if it were initialised, then all dependencies would have
             //to be already satisfied
-            $this->satisfiable[] = $modInfo;
+            $this->satisfiable[] = $extInfo;
         } else {
             //Then this module is at least satisfiable
             //Depends if it is already initialised or not
@@ -224,12 +230,12 @@ class Installer extends Object
             // Add a new state in the dependency array for version
             // So that we can present that nicely in the gui...
 
-            switch ($modInfo['state']) {
+            switch ($extInfo['state']) {
                 case XARMOD_STATE_ACTIVE:
-                case XARMOD_STATE_UPGRADED:      $this->satisfied[] = $modInfo; break;
+                case XARMOD_STATE_UPGRADED:      $this->satisfied[] = $extInfo; break;
                 case XARMOD_STATE_INACTIVE:
-                case XARMOD_STATE_UNINITIALISED: $this->satisfiable[] = $modInfo; break;
-                default:                         $this->unsatisfiable[] = $modInfo; break;
+                case XARMOD_STATE_UNINITIALISED: $this->satisfiable[] = $extInfo; break;
+                default:                         $this->unsatisfiable[] = $extInfo; break;
             }
         }
         $dependencies = array(
@@ -255,20 +261,20 @@ class Installer extends Object
         }
         $this->dependentmodules[] = $regid;
 
-        foreach ($this->fileModules as $name => $modinfo) {
+        foreach ($this->fileExtensions as $name => $extInfo) {
 
             // If the module is not in the database, then its not initialised or activated
-            if (!isset($this->databaseModules[$name])) continue;
+            if (!isset($this->databaseExtensions[$name])) continue;
 
             // If the module is not INITIALISED dont bother...
             // Later on better have a full range of possibilities (adding missing and
             // unitialised). For that a good cleanup in the constant logic and
             // adding a proper array of module states would be nice...
-            if ($this->databaseModules[$name]['state'] == XARMOD_STATE_UNINITIALISED) continue;
+            if ($this->databaseExtensions[$name]['state'] == XARMOD_STATE_UNINITIALISED) continue;
 
-            if (isset($modinfo['dependency']) &&
-                !empty($modinfo['dependency'])) {
-                $dependency = $modinfo['dependency'];
+            if (isset($extInfo['dependency']) &&
+                !empty($extInfo['dependency'])) {
+                $dependency = $extInfo['dependency'];
             } else {
                 $dependency = array();
             }
@@ -287,22 +293,22 @@ class Installer extends Object
 
                 //If we are here, then it is dependent
                 // RECURSIVE CALL                ;
-                if (!$this->getalldependents($modinfo['regid'])) {
-                    $msg = xarML('Unable to get dependencies for module with ID (#(1)).', $modinfo['regid']);
+                if (!$this->getalldependents($extInfo['regid'])) {
+                    $msg = xarML('Unable to get dependencies for module with ID (#(1)).', $extInfo['regid']);
                     throw new Exception($msg);
                 }
             }
         }
 
         // Get module information
-        $modInfo = xarMod::getInfo($regid);
+        $extInfo = xarMod::getInfo($regid);
 
         //TODO: Add version checks later on
-        switch ($modInfo['state']) {
+        switch ($extInfo['state']) {
             case XARMOD_STATE_ACTIVE:
-            case XARMOD_STATE_UPGRADED:  $this->active[] = $modInfo; break;
+            case XARMOD_STATE_UPGRADED:  $this->active[] = $extInfo; break;
             case XARMOD_STATE_INACTIVE:
-            default:                     $this->initialised[] = $modInfo; break;
+            default:                     $this->initialised[] = $extInfo; break;
         }
 
         $dependents = array(
@@ -320,8 +326,8 @@ class Installer extends Object
     
     public function assembledependencies($regid=null)
     {
-        $modInfo = xarMod::getInfo($regid);
-        if (!isset($modInfo)) {
+        $extInfo = xarMod::getInfo($regid);
+        if (!isset($extInfo)) {
             throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
         }
 
@@ -336,16 +342,16 @@ class Installer extends Object
         //have a central caching solution...
         $GLOBALS['xarMod_noCacheState'] = true;
 
-        if (!empty($modInfo['extensions'])) {
-            foreach ($modInfo['extensions'] as $extension) {
+        if (!empty($extInfo['extensions'])) {
+            foreach ($extInfo['extensions'] as $extension) {
                 if (!empty($extension) && !extension_loaded($extension)) {
-                    throw new ModuleNotFoundException(array($extension,$modInfo['displayname']),
+                    throw new ModuleNotFoundException(array($extension,$extInfo['displayname']),
                                                       "Required PHP extension '#(1)' is missing for module '#(2)'");
                 }
             }
         }
 
-        $dependencies = $modInfo['dependency'];
+        $dependencies = $extInfo['dependency'];
         if (empty($dependencies)) $dependencies = array();
 
         $testmod = $this->modulestack->peek();
@@ -375,12 +381,12 @@ class Installer extends Object
     {
         $topid = $this->modulestack->peek();
 
-        $modInfo = xarMod::getInfo($regid);
-        if (!isset($modInfo)) {
+        $extInfo = xarMod::getInfo($regid);
+        if (!isset($extInfo)) {
             throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
         }
 
-        switch ($modInfo['state']) {
+        switch ($extInfo['state']) {
             case XARMOD_STATE_ACTIVE:
             case XARMOD_STATE_UPGRADED: return true;
             case XARMOD_STATE_INACTIVE: $initialised = true; break;
@@ -391,7 +397,7 @@ class Installer extends Object
             // First time we've come to this module
             $regid = $this->modulestack->pop();
             // Is there an install page?
-            if (!$initialised && file_exists(sys::code() . 'modules/' . $modInfo['osdirectory'] . '/xartemplates/includes/installoptions.xt')) {
+            if (!$initialised && file_exists(sys::code() . 'modules/' . $extInfo['osdirectory'] . '/xartemplates/includes/installoptions.xt')) {
                 xarResponse::redirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $regid)));
                 return true;
             }
@@ -401,25 +407,25 @@ class Installer extends Object
         if (!$initialised) {
             // Finally, now that dependencies are dealt with, initialize the module
             if (!xarMod::apiFunc('modules', 'admin', 'initialise', array('regid' => $regid))) {
-                $msg = xarML('Unable to initialise module "#(1)".', $modInfo['displayname']);
+                $msg = xarML('Unable to initialise module "#(1)".', $extInfo['displayname']);
                 throw new Exception($msg);
             }
         }
 
         // And activate it!
         if (!xarMod::apiFunc('modules', 'admin', 'activate', array('regid' => $regid))) {
-            $msg = xarML('Unable to activate module "#(1)".', $modInfo['displayname']);
+            $msg = xarML('Unable to activate module "#(1)".', $extInfo['displayname']);
             throw new Exception($msg);
         }
 
-        PropertyRegistration::importPropertyTypes(true, array('modules/' . $modInfo['directory'] . '/xarproperties'));
+        PropertyRegistration::importPropertyTypes(true, array('modules/' . $extInfo['directory'] . '/xarproperties'));
 
         $nextmodule = $this->modulestack->peek();
         if (empty($nextmodule)) {
             // Looks like we're done
             $this->modulestack->clear();
             // set the target location (anchor) to go to within the page
-            $target = $modInfo['name'];
+            $target = $extInfo['name'];
 
             if (function_exists('xarOutputFlushCached')) {
                 xarOutputFlushCached('base');
@@ -449,15 +455,15 @@ class Installer extends Object
         $GLOBALS['xarMod_noCacheState'] = true;
 
         // Get module information
-        $modInfo = xarMod::getInfo($regid);
-        if (!isset($modInfo)) throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
+        $extInfo = xarMod::getInfo($regid);
+        if (!isset($extInfo)) throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
 
 
-        if ($modInfo['state'] != XARMOD_STATE_ACTIVE &&
-            $modInfo['state'] != XARMOD_STATE_UPGRADED) {
+        if ($extInfo['state'] != XARMOD_STATE_ACTIVE &&
+            $extInfo['state'] != XARMOD_STATE_UPGRADED) {
             //We shouldnt be here
             //Throw Exception
-            $msg = xarML('Module to be deactivated (#(1)) is not active nor upgraded', $modInfo['displayname']);
+            $msg = xarML('Module to be deactivated (#(1)) is not active nor upgraded', $extInfo['displayname']);
             throw new Exception($msg);
         }
 
