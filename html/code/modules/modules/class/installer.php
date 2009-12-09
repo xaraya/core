@@ -35,9 +35,10 @@ class Installer extends Object
 
     protected function __construct($type = 'modules')
     {
+        $this->extType = $type;
         if ($this->extType == 'themes') {
-            $this->fileThemes = xarMod::apiFunc('themes','admin','getfilethemes');
-            $this->dbThemes = xarMod::apiFunc('themes','admin','getdbthemes');
+            $this->fileExtensions = xarMod::apiFunc('themes','admin','getfilethemes');
+            $this->databaseExtensions = xarMod::apiFunc('themes','admin','getdbthemes');
         } else {
             $this->fileExtensions = xarMod::apiFunc('modules','admin','getfilemodules');
             $this->databaseExtensions = xarMod::apiFunc('modules','admin','getdbmodules');
@@ -50,10 +51,10 @@ class Installer extends Object
         $this->modulestack = new Stack();
     }
 
-    public static function getInstance()
+    public static function getInstance($type = 'modules')
     {
         if (null === self::$instance) {
-            self::$instance = new self();
+            self::$instance = new self($type);
         }
         return self::$instance;
     }
@@ -320,7 +321,7 @@ class Installer extends Object
 
     public function installmodule($regid=null)
     {
-        $this->assembledependencies($regid);
+        if ($this->extType == 'modules') $this->assembledependencies($regid);
         $this->installdependencies($regid);
     }
     
@@ -380,10 +381,17 @@ class Installer extends Object
     public function installdependencies($regid)
     {
         $topid = $this->modulestack->peek();
-
-        $extInfo = xarMod::getInfo($regid);
-        if (!isset($extInfo)) {
-            throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
+        
+        if ($this->extType == 'themes'){
+            $extInfo = xarThemeGetInfo($regid);
+            if (!isset($extInfo)) {
+                throw new ThemeNotFoundException($regid,'Theme (regid: #(1)) does not exist.');
+            }
+        } else {
+            $extInfo = xarMod::getInfo($regid);
+            if (!isset($extInfo)) {
+                throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
+            }
         }
 
         switch ($extInfo['state']) {
@@ -403,21 +411,27 @@ class Installer extends Object
             }
         }
 
-        //Checks if the module is already initialised
+        //Checks if the extension is already initialised
         if (!$initialised) {
             // Finally, now that dependencies are dealt with, initialize the module
-            if (!xarMod::apiFunc('modules', 'admin', 'initialise', array('regid' => $regid))) {
-                $msg = xarML('Unable to initialise module "#(1)".', $extInfo['displayname']);
+            if (!xarMod::apiFunc($this->extType, 'admin', 'initialise', array('regid' => $regid))) {
+                $msg = xarML('Unable to initialise extension "#(1)".', $extInfo['displayname']);
                 throw new Exception($msg);
             }
         }
 
         // And activate it!
-        if (!xarMod::apiFunc('modules', 'admin', 'activate', array('regid' => $regid))) {
-            $msg = xarML('Unable to activate module "#(1)".', $extInfo['displayname']);
+        if (!xarMod::apiFunc($this->extType, 'admin', 'activate', array('regid' => $regid))) {
+            $msg = xarML('Unable to activate extension "#(1)".', $extInfo['displayname']);
             throw new Exception($msg);
         }
 
+        // if this is a theme we're done
+        if ($this->extType == 'themes') {
+            xarResponse::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0)));
+            return true;
+        }
+        
         PropertyRegistration::importPropertyTypes(true, array('modules/' . $extInfo['directory'] . '/xarproperties'));
 
         $nextmodule = $this->modulestack->peek();
@@ -433,7 +447,7 @@ class Installer extends Object
                 xarOutputFlushCached('base-block');
             }
 
-            xarResponse::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+            xarResponse::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0), NULL, $target));
         } else {
             // Do the next module
             if (!$this->installdependencies($nextmodule)) return;
