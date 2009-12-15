@@ -15,32 +15,27 @@ class ActionController extends Object
 {
     private $controller;
     private $request;
-    private $actionstring = '';
+    private $url = '';
     
     protected $decodearray  = array();
 
-    public $delimiter = '/';
-    public $module    = 'base';
-    public $type      = 'user';
-    public $func      = 'main';
+    public $delimiter = '&';    // This is the defualt delimiter in the default Xaraya route
     
     function __construct(Object $request=null)
     {
         $this->request = $request;
-        $this->actionstring = $this->request->getActionString();
+        $this->actionstring = $request->getActionString();
         $this->delimiter = $this->request->delimiter;
         $this->module = $this->request->module;
     }
-    
-/*    function run() 
-    { 
-        $url = 'module=' . $this->module;
-        $url .= '&type=' . $this->type;
-        foreach ($this->decodearray as $key => $value) $url .= '&' . $key . '=' . $value;
         
-        return true; 
-    }*/
-    
+    function run(xarRequest $request=null, xarResponse $response=null)          
+    {
+        $this->actionstring = $request->getActionString();
+        $this->chargeRequest($request, $this->decode());
+        $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getURLParams());
+    }
+
     function decode()        { return array(); }
     function encode($request)          
     {         
@@ -56,13 +51,31 @@ class ActionController extends Object
     function getRequest()      { return $this->request; }
     function getOutput()       
     { 
-        $data = $this->decode();
-        $this->decodearray = $data;
-        $this->func = $data['func'];
-        unset($data['func']);
-        return xarMod::guiFunc($this->module, $this->type, $this->func); 
+//        $data = $this->decode();
+//        $this->decodearray = $data;
+//        $this->func = $data['func'];
+//        unset($data['func']);
+        return $response->output;
+//        return xarMod::guiFunc($this->module, $this->type, $this->func); 
     }
     function firstToken()      { return strtok($this->actionstring, $this->delimiter); }
     function nextToken()       { return strtok($this->delimiter); }
+    
+    function chargeRequest(xarRequest $request, Array $params=array())       
+    { 
+        if (isset($params['module'])) {
+            $request->setModule($params['module']);
+            unset($params['module']);
+        }
+        if (isset($params['type'])) {
+            $request->setType($params['type']);
+            unset($params['type']);
+        }
+        if (isset($params['func'])) {
+            $request->setFunc($params['func']);
+            unset($params['func']);
+        }
+        $request->setURLParams($params);
+    }
 }
 ?>

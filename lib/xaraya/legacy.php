@@ -121,6 +121,14 @@ function xarResponseRedirect($redirectURL)                { return xarController
 //function xarRequest::getInfo()                            { return xarController::$request->getInfo(); }
 //function xarRequest::isLocalReferer()                     { return xarController::isLocalReferer(); }
 
+/**
+ * Wrapper functions to support Xaraya 1 API Module functions
+ *
+**/
+function xarModURL($modName=NULL, $modType='user', $funcName='main', $args=array(), $generateXMLURL=NULL, $fragment=NULL, $entrypoint=array())
+{   
+    return xarController::URL($modName, $modType, $funcName, $args, $generateXMLURL, $fragment, $entrypoint); 
+}
 
 /**
  * Wrapper function to support Xaraya 1 API Database functions

@@ -11,7 +11,7 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-sys::import('xaraya.controllers.action');
+sys::import('xaraya.mapper.action');
 
 class RolesActionController extends ActionController
 {

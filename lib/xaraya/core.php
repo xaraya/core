@@ -308,6 +308,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
                         'generateXMLURLs' => true);
     xarServer::init($systemArgs);
+    sys::import('xaraya.mapper.main');
     xarController::init($systemArgs);
 //    xarController::$response->init($systemArgs);
 
