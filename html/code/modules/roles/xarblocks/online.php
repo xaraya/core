@@ -61,11 +61,12 @@
                     FROM $sessioninfotable
                     WHERE last_use > ? AND role_id > ?";
             }
-            $result = $dbconn->Execute($sql, array($activetime,2));
-            // CHECKME: do we catch the exception here?
-            list($args['numusers']) = $result->fields;
-            $result->Close();
-            if (empty($args['numusers'])) {
+            try {
+                $result = $dbconn->Execute($sql, array($activetime,2));
+                list($args['numusers']) = $result->fields;
+                $result->Close();
+                if (empty($args['numusers'])) $args['numusers'] = 0;
+            } catch (Exception $e) {
                 $args['numusers'] = 0;
             }
 
@@ -121,11 +122,12 @@
                        FROM $sessioninfotable
                        WHERE last_use > ? AND role_id = ?";
             }
-            $result2 = $dbconn->Execute($query2, array($activetime,2));
-            // CHECKME: do we catch the exception here?
-            list($args['numguests']) = $result2->fields;
-            $result2->Close();
-            if (empty($args['numguests'])) {
+            try {
+                $result2 = $dbconn->Execute($query2, array($activetime,2));
+                list($args['numguests']) = $result2->fields;
+                $result2->Close();
+                if (empty($args['numguests'])) $args['numguests'] = 0;
+            } catch (Exception $e) {
                 $args['numguests'] = 0;
             }
 

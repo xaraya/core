@@ -250,17 +250,4 @@ class xarTplPager Extends Object
         return $urltemplate;
     }
 }
-
-/**
- * @CHECKME: support 1x function calls?
-**/
-function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions = 10)
-{
-    return xarTplPager::getInfo($currentItem, $total, $itemsPerPage, $blockOptions);
-}
-function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $blockOptions = array(), $template = 'default', $tplmodule = 'base')
-{
-    return xarTplPager::getPager($startNum, $total, $urltemplate, $itemsPerPage, $blockOptions, $template, $tplmodule);
-}
-
 ?>

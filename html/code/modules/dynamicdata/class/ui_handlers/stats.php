@@ -203,15 +203,18 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
                 if (empty($this->object->properties[$name])) continue;
                 $property = $this->object->properties[$name];
                 $proptype = $proptypes[$property->type]['name'];
+                $field = '';
                 if ($proptype == 'calendar' && empty($property->configuration)) {
-                    list($field,$group) = $this->getTimestampField($name,$format);
+                    $field = $this->getTimestampField($name,$format);
                 } else {
-                    list($field,$group) = $this->getDateField($name,$format);
+                    $field = $this->getDateField($name,$format);
                 }
-                if (!empty($field) && !empty($group)) {
+                if (!empty($field)) {
+                    // add the custom operation to the fieldlist
                     $fieldlist[] = $field;
-                    $groupby[] = $group;
-                    $sort[] = $group;
+                    // add the property to the groupby and sort list
+                    $groupby[] = $name;
+                    $sort[] = $name;
                 }
             }
         }
@@ -229,14 +232,6 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
                 case 'count':
                     $fieldlist[] = "COUNT($name)";
                     break;
-                case 'distinct':
-                    $fieldlist[] = "COUNT(DISTINCT $name)"; // FIXME for getDataStores in master.php
-/* FIXME:
-For sqlite, we need something like
-SELECT COUNT(*)
-FROM ( SELECT DISTINCT field FROM table )
-*/
-                    break;
                 case 'min':
                     $fieldlist[] = "MIN($name)";
                     break;
@@ -248,6 +243,10 @@ FROM ( SELECT DISTINCT field FROM table )
                     break;
                 case 'sum':
                     $fieldlist[] = "SUM($name)";
+                    break;
+                // We use a custom operation here that gets translated to a database-specific one by the datastore
+                case 'distinct':
+                    $fieldlist[] = "COUNT_DISTINCT($name)"; // CHECKME in datastores
                     break;
                 default:
                     break;
@@ -281,7 +280,7 @@ FROM ( SELECT DISTINCT field FROM table )
         $stats['options'] = array('hide'     => '',
                                   //'show'     => 'Show', // can't be mixed with group by etc.
                                   'count'    => 'Count',
-                                  //'distinct' => 'Distinct', // SELECT COUNT(DISTINCT ...) ? FIXME for getDataStores in master.php
+                                  'distinct' => 'Distinct', // CHECKME in datastores
                                   'min'      => 'Minimum',
                                   'max'      => 'Maximum',
                                   'sum'      => 'Sum',
@@ -364,140 +363,36 @@ FROM ( SELECT DISTINCT field FROM table )
         return $output;
     }
 
-    function getTimestampField($field,$format)
+    /**
+     * We use a custom operation here that gets translated to a database-specific one by the datastore
+     */
+    function getTimestampField($field,$format) // CHECKME for all database types
     {
         $newfield = '';
-        $newgroup = '';
         if ($format == 'year') {
-            $dbtype = xarDB::getType();
-            switch ($dbtype) {
-                case 'mysql':
-                    $newfield = "LEFT(FROM_UNIXTIME($field),4) AS $field" . "_year";
-                    $newgroup = $field . "_year";
-                    break;
-                case 'postgres':
-                    $newfield = "TO_CHAR(ABSTIME($field),'YYYY') AS $field" . "_year";
-                // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
-                    $newgroup = $field . "_year";
-                    break;
-                case 'mssql':
-                    $newfield = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),4) as $field" . "_year";
-                    $newgroup = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),4)";
-                    break;
-                // TODO:  Add SQL queries for Oracle, etc.
-                default:
-                    break;
-            }
+            $newfield = "UNIXTIME_BY_YEAR($field)";
         } elseif ($format == 'month') {
-            $dbtype = xarDB::getType();
-            switch ($dbtype) {
-                case 'mysql':
-                    $newfield = "LEFT(FROM_UNIXTIME($field),7) AS $field" . "_month";
-                    $newgroup = $field . "_month";
-                    break;
-                case 'postgres':
-                    $newfield = "TO_CHAR(ABSTIME($field),'YYYY-MM') AS $field" . "_month";
-                // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
-                    $newgroup = $field . "_month";
-                    break;
-                case 'mssql':
-                    $newfield = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),7) as $field" . "_month";
-                    $newgroup = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),7)";
-                    break;
-                // TODO:  Add SQL queries for Oracle, etc.
-                default:
-                    break;
-            }
+            $newfield = "UNIXTIME_BY_MONTH($field)";
         } elseif ($format == 'day') {
-            $dbtype = xarDB::getType();
-            switch ($dbtype) {
-                case 'mysql':
-                    $newfield = "LEFT(FROM_UNIXTIME($field),10) AS $field" . "_day";
-                    $newgroup = $field . "_day";
-                    break;
-                case 'postgres':
-                    $newfield = "TO_CHAR(ABSTIME($field),'YYYY-MM-DD') AS $field" . "_day";
-                // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
-                    $newgroup = $field . "_day";
-                    break;
-                case 'mssql':
-                    $newfield = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),10) as $field" . "_day";
-                    $newgroup = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),10)";
-                    break;
-                // TODO:  Add SQL queries for Oracle, etc.
-                default:
-                    break;
-            }
+            $newfield = "UNIXTIME_BY_DAY($field)";
         }
-        return array($newfield,$newgroup);
+        return $newfield;
     }
 
+    /**
+     * We use a custom operation here that gets translated to a database-specific one by the datastore
+     */
     function getDateField($field,$format) // CHECKME for all database types
     {
         $newfield = '';
-        $newgroup = '';
         if ($format == 'year') {
-            $dbtype = xarDB::getType();
-            switch ($dbtype) {
-                case 'mysql':
-                    $newfield = "LEFT($field,4) AS $field" . "_year";
-                    $newgroup = $field . "_year";
-                    break;
-                case 'postgres':
-                    $newfield = "LEFT($field,4) AS $field" . "_year";
-                // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
-                    $newgroup = $field . "_year";
-                    break;
-                case 'mssql':
-                    $newfield = "LEFT($field,4) as $field" . "_year";
-                    $newgroup = "LEFT($field,4)";
-                    break;
-                // TODO:  Add SQL queries for Oracle, etc.
-                default:
-                    break;
-            }
+            $newfield = "DATETIME_BY_YEAR($field)";
         } elseif ($format == 'month') {
-            $dbtype = xarDB::getType();
-            switch ($dbtype) {
-                case 'mysql':
-                    $newfield = "LEFT($field,7) AS $field" . "_month";
-                    $newgroup = $field . "_month";
-                    break;
-                case 'postgres':
-                    $newfield = "LEFT($field,7) AS $field" . "_month";
-                // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
-                    $newgroup = $field . "_month";
-                    break;
-                case 'mssql':
-                    $newfield = "LEFT($field,7) AS $field" . "_month";
-                    $newgroup = "LEFT($field,7)";
-                    break;
-                // TODO:  Add SQL queries for Oracle, etc.
-                default:
-                    break;
-            }
+            $newfield = "DATETIME_BY_MONTH($field)";
         } elseif ($format == 'day') {
-            $dbtype = xarDB::getType();
-            switch ($dbtype) {
-                case 'mysql':
-                    $newfield = "LEFT($field,10) AS $field" . "_day";
-                    $newgroup = $field . "_day";
-                    break;
-                case 'postgres':
-                    $newfield = "LEFT($field,10) AS $field" . "_day";
-                // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
-                    $newgroup = $field . "_day";
-                    break;
-                case 'mssql':
-                    $newfield = "LEFT($field,10) AS $field" . "_day";
-                    $newgroup = "LEFT($field,10)";
-                    break;
-                // TODO:  Add SQL queries for Oracle, etc.
-                default:
-                    break;
-            }
+            $newfield = "DATETIME_BY_DAY($field)";
         }
-        return array($newfield,$newgroup);
+        return $newfield;
     }
 
     function getReportList()

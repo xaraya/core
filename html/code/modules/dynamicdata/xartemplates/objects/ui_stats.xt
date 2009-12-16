@@ -152,7 +152,7 @@
         </form>
         <xar:if condition="!empty($result)">
             <!-- don't show a newlink here -->
-            <xar:data-view object="$object" tplmodule="dynamicdata" newlink=""/>
+            <xar:data-view object="$object" tplmodule="dynamicdata" layout="stats" newlink=""/>
         <xar:elseif condition="!empty($object->itemcount)"/>
             <p>There are #$object:itemcount# items in #$object:label#</p>
         </xar:if>
