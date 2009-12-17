@@ -421,7 +421,6 @@ class xarServer extends Object
 
         // Parameter separator and initiator.
         $psep = '&';
-        $pini = '?';
         $pathsep = '/';
 
         // Initialise the path.
@@ -457,7 +456,7 @@ class xarServer extends Object
 */
 
         // Add GET parameters to the path, ensuring each value is encoded correctly.
-        $path = xarURL::addParametersToPath($args, $BaseModURL, $pini, $psep);
+        $path = xarURL::addParametersToPath($args, $BaseModURL, xarController::$delimiter, $psep);
 
         // Add the fragment if required.
         if (isset($fragment)) $path .= '#' . urlencode($fragment);

@@ -3,7 +3,8 @@ class xarController extends Object
 {
     public static $allowShortURLs = true;
     public static $shortURLVariables;
-    public static $delimiter = '/';
+    public static $delimiter = '?';    // This character divides the URL into entry point and parameters
+    public static $separator = '/';
     public static $dispatcher;
     public static $request;
     public static $response;
@@ -268,7 +269,6 @@ class xarController extends Object
     {
         // Parameter separator and initiator.
         $psep = '&';
-        $pini = '?';
         $pathsep = '/';
 
         // Initialise the path.
@@ -288,7 +288,6 @@ class xarController extends Object
             }
             self::$emtryPoint = $entrypoint;
         }
-
 /*        // If we have an empty argument (ie null => null) then set a flag and
         // remove that element.
         // FIXME: this is way too hacky, NULL as a key for an array sooner or later will fail. (php 4.2.2 ?)
@@ -300,11 +299,11 @@ class xarController extends Object
 */
 
         // Create a new request and make its route the current route
-        $encoderArgs = $args;
-        $encoderArgs['module'] = $modName;
-        $encoderArgs['func'] = $funcName;
+        $args['module'] = $modName;
+        $args['type'] = $modType;
+        $args['func'] = $funcName;
         sys::import('xaraya.mapper.request');
-        $request = new xarRequest($encoderArgs);
+        $request = new xarRequest($args);
         $router = self::getRouter();
         $request->setRoute($router->getRoute());
 

@@ -829,7 +829,7 @@ function installer_admin_choose_configuration()
     if (count($fileModules) == 0){
     // No non-core modules present. Show only the minimal configuration
         $names = array();
-        include sys::code() . 'modules/installer/xarconfigurations/core.conf.php';
+        include_once sys::code() . 'modules/installer/xarconfigurations/core.conf.php';
         $names[] = array('value' => sys::code() . 'modules/installer/xarconfigurations/core.conf.php',
                          'display'  => 'Core Xaraya install (aka minimal)',
                          'selected' => true);
@@ -883,7 +883,7 @@ function installer_admin_confirm_configuration()
     $data['phase'] = 8;
     $data['phase_label'] = xarML('Choose configuration options');
 
-    include $configuration;
+    include_once $configuration;
     $fileModules = unserialize(xarModVars::get('installer','modulelist'));
     $func = "installer_" . basename(strval($configuration),'.conf.php') . "_moduleoptions";
     $modules = $func();
@@ -1157,9 +1157,7 @@ function installer_admin_cleanup()
 
     $loginBlockTypeId = xarMod::apiFunc('blocks','admin','register_block_type',
                     array('modName' => 'authsystem', 'blockType' => 'login'));
-    if (empty($loginBlockTypeId)) {
-        return;
-    }
+    if (empty($loginBlockTypeId)) return;
 
     if (!xarMod::apiFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
         if (xarMod::apiFunc('blocks', 'admin', 'create_instance',
@@ -1171,8 +1169,6 @@ function installer_admin_cleanup()
         } else {
             throw new Exception('Could not create login block');
         }
-    } else {
-        throw new Exception('Login block created too early?');
     }
 
     // Same query, but for header group.

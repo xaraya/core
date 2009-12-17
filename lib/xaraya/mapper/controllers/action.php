@@ -19,7 +19,6 @@ class ActionController extends Object
     
     protected $decodearray  = array();
 
-    public $delimiter = '?';    // This character divides the URL into entry point and parameters
     public $separator = '&';    // This is the default separator between URL parameters in the default Xaraya route
     
     function __construct(Object $request=null)
@@ -44,7 +43,7 @@ class ActionController extends Object
         $path[$request->getTypeKey()] = $request->getType();
         $path[$request->getFunctionKey()] = $request->getFunction();
 //        $path = $path + $request->getURLParams();
-        $path = xarURL::addParametersToPath($path, '', $this->delimiter, $this->separator);
+        $path = xarURL::addParametersToPath($path, '', xarController::$delimiter, $this->separator);
         return $path;
     }
 

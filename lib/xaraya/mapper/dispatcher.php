@@ -15,7 +15,7 @@ class xarDispatcher extends Object
         $initialpath = xarServer::getBaseURL() . $request->entryPoint;
         $coredirectory = realpath(sys::root() . 'lib/xaraya/mapper');
         if ($request->getRoute() == 'default') {
-            sys::import('xaraya.mapper.default');
+            sys::import('xaraya.mapper.controllers.default');
             $controller = new DefaultActionController();
         } elseif (file_exists($coredirectory . '/' . $request->getModule() . '.php')) {
             sys::import('xaraya.mapper.' .$request->getModule());
@@ -30,12 +30,12 @@ class xarDispatcher extends Object
         } else {            
             // This is either an unknown route or an empty route for now
             // Send 404
-            sys::import('xaraya.mapper.default');
+            sys::import('xaraya.mapper.controllers.default');
             $controller = new ActionController($request);
         }
-//            var_dump($controller);exit;
         $actionstring = substr($request->getURL(), strlen($initialpath));
         $request->setActionString($actionstring);
+//            var_dump($controller);exit;
         return $controller;
     }
 
@@ -43,7 +43,6 @@ class xarDispatcher extends Object
     {
         $this->response = $response;
         $this->controller = $this->findController($request);
-        echo "X";
         $this->controller->run($request, $response);
         return $response->output;
     }
