@@ -11,9 +11,9 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-sys::import('xaraya.mapper.action');
+sys::import('xaraya.mapper.controllers.short');
 
-class RolesActionController extends ActionController
+class RolesActionController extends ShortActionController
 {
 
     function decode()

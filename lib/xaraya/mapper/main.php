@@ -289,7 +289,7 @@ class xarController extends Object
             self::$emtryPoint = $entrypoint;
         }
 
-        // If we have an empty argument (ie null => null) then set a flag and
+/*        // If we have an empty argument (ie null => null) then set a flag and
         // remove that element.
         // FIXME: this is way too hacky, NULL as a key for an array sooner or later will fail. (php 4.2.2 ?)
         if (is_array($args) && @array_key_exists(NULL, $args) && $args[NULL] === NULL) {
@@ -297,36 +297,29 @@ class xarController extends Object
             $open_get_flag = true;
             unset($args[NULL]);
         }
-
-        // Check the short URL settings
-//       if (xarMod::$genShortUrls && xarModVars::get($modName, 'enable_short_urls') && $modType == 'user') {
-        
-            // Create a new request and make its route the current route
-            $encoderArgs = $args;
-            $encoderArgs['module'] = $modName;
-            $encoderArgs['func'] = $funcName;
-            $request = new xarRequest($encoderArgs);
-            $router = self::getRouter();
-            $request->setRoute($router->getRoute());
-            
-            // Get the appropriate action controller for this request
-            $dispatcher = self::getDispatcher();
-            $controller = $dispatcher->findController($request);
-            $path = $controller->encode($request);
-
-             // Use Xaraya default (index.php) or BaseModURL if provided in config.system.php
-            $path = self::$entryPoint . $path;
-
-            // Remove the leading / from the path (if any).
-            $path = preg_replace('/^\//', '', $path);
-/*
-            // CHECKME: what is this?
-            // Workaround for bug 3603
-            // why: template might add extra params we dont see here
-            if (!empty($open_get_flag) && !strpos($path, $pini)) {$path .= $pini;}
-        }
 */
-        // If the path is still empty, then there is either no short URL support
+
+        // Create a new request and make its route the current route
+        $encoderArgs = $args;
+        $encoderArgs['module'] = $modName;
+        $encoderArgs['func'] = $funcName;
+        sys::import('xaraya.mapper.request');
+        $request = new xarRequest($encoderArgs);
+        $router = self::getRouter();
+        $request->setRoute($router->getRoute());
+
+        // Get the appropriate action controller for this request
+        $dispatcher = self::getDispatcher();
+        $controller = $dispatcher->findController($request);
+        $path = $controller->encode($request);
+
+         // Use Xaraya default (index.php) or BaseModURL if provided in config.system.php
+        $path = self::$entryPoint . $path;
+
+        // Remove the leading / from the path (if any).
+        $path = preg_replace('/^\//', '', $path);
+
+/*        // If the path is still empty, then there is either no short URL support
         // at all, or no short URL encoding was available for these arguments.
         if (empty($path)) {
             if (!empty($entrypoint)) {
@@ -349,11 +342,10 @@ class xarController extends Object
             }
 
             // Add GET parameters to the path, ensuring each value is encoded correctly.
-            $path = xarURL::addParametersToPath($args, self::$entryPoint, $pini, $psep);
+//            $path = xarURL::addParametersToPath($args, self::$entryPoint, $pini, $psep);
 
-            // We have the long form of the URL here.
-            // Again, some form of hook may be useful.
         }
+*/
 
         // Add the fragment if required.
         if (isset($fragment)) $path .= '#' . urlencode($fragment);

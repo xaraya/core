@@ -7,18 +7,17 @@ class xarRequest extends Object
     protected $url;
     protected $actionstring;
     protected $dispatched = false;
+    protected $modulekey = 'module';
+    protected $typekey   = 'type';
+    protected $funckey   = 'func';
+    protected $module    = 'base';
+    protected $type      = 'user';
+    protected $func      = 'main';
+    protected $urlparams = array();
     
     public $defaultRequestInfo = array();
-    public $shortURLVariables = array();
 
     public $entryPoint;
-    public $moduleKey;
-    public $typeKey;
-    public $funcKey;
-    public $module    = 'base';
-    public $type      = 'user';
-    public $func      = 'main';
-    public $urlparams = array();
     public $delimiter ='/';
     public $route;
     
@@ -46,7 +45,7 @@ class xarRequest extends Object
                 $this->func = $url['func'];
                 unset($url['func']);
             }
-            $this->shortURLVariables = $url;
+            $this->urlparams = $url;
         } else {
             // This is a string representing a URL
             // First figure out which module is to be addressed
@@ -213,6 +212,9 @@ class xarRequest extends Object
 
     function getProtocol()       { return xarServer::getProtocol(); }
     function getHost()           { return xarServer::getHost(); }
+    function getModuleKey()      { return $this->modulekey; }
+    function getTypeKey()        { return $this->typekey; }
+    function getFunctionKey()    { return $this->funckey; }
     function getModule()         { return $this->module; }
     function getType()           { return $this->type; }
     function getFunction()       { return $this->func; }

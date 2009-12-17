@@ -33,6 +33,7 @@ class xarDispatcher extends Object
             sys::import('xaraya.mapper.default');
             $controller = new ActionController($request);
         }
+//            var_dump($controller);exit;
         $actionstring = substr($request->getURL(), strlen($initialpath));
         $request->setActionString($actionstring);
         return $controller;
@@ -42,6 +43,7 @@ class xarDispatcher extends Object
     {
         $this->response = $response;
         $this->controller = $this->findController($request);
+        echo "X";
         $this->controller->run($request, $response);
         return $response->output;
     }

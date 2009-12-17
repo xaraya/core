@@ -19,14 +19,15 @@ class ActionController extends Object
     
     protected $decodearray  = array();
 
-    public $delimiter = '&';    // This is the defualt delimiter in the default Xaraya route
+    public $delimiter = '?';    // This character divides the URL into entry point and parameters
+    public $separator = '&';    // This is the default separator between URL parameters in the default Xaraya route
     
     function __construct(Object $request=null)
     {
         $this->request = $request;
         $this->actionstring = $request->getActionString();
-        $this->delimiter = $this->request->delimiter;
-        $this->module = $this->request->module;
+        $this->separator = $this->request->delimiter;
+        $this->module = $this->request->getModule();
     }
         
     function run(xarRequest $request=null, xarResponse $response=null)          
@@ -39,12 +40,12 @@ class ActionController extends Object
     function decode()        { return array(); }
     function encode($request)          
     {         
-        $data['path'][] = $request->module;
-        $data['path'][] = $request->type;
-        $data['path'][] = $request->func;
-        $data['path'] = array_merge($data['path'], $request->shortURLVariables);
-        $encoded_path = $this->delimiter . implode($this->delimiter,$data['path']);
-        return $encoded_path;
+        $path[$request->getModuleKey()] = $request->getModule();
+        $path[$request->getTypeKey()] = $request->getType();
+        $path[$request->getFunctionKey()] = $request->getFunction();
+//        $path = $path + $request->getURLParams();
+        $path = xarURL::addParametersToPath($path, '', $this->delimiter, $this->separator);
+        return $path;
     }
 
     function getController()   { return $this->controller; }
@@ -58,8 +59,8 @@ class ActionController extends Object
         return $response->output;
 //        return xarMod::guiFunc($this->module, $this->type, $this->func); 
     }
-    function firstToken()      { return strtok($this->actionstring, $this->delimiter); }
-    function nextToken()       { return strtok($this->delimiter); }
+    function firstToken()      { return strtok($this->actionstring, $this->separator); }
+    function nextToken()       { return strtok($this->separator); }
     
     function chargeRequest(xarRequest $request, Array $params=array())       
     { 

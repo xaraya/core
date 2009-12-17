@@ -15,10 +15,6 @@ sys::import('xaraya.mapper.controllers.action');
 
 class ShortActionController extends ActionController
 {    
-    function __construct(xarRequest $request=null)
-    {
-        $this->request = $request;
-    }
         
 }
 ?>
