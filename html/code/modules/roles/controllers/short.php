@@ -15,8 +15,7 @@ sys::import('xaraya.mapper.controllers.short');
 
 class RolesShortController extends ShortActionController
 {
-
-    function decode()
+    function decode(xarRequest $request)
     {
         $data = array();
         $token1 = $this->firstToken();
@@ -110,9 +109,8 @@ class RolesShortController extends ShortActionController
             default:
                 break;
         }
-
+        $request->setActionString($path);
         return parent::encode($request);
-    }
-    
+    }    
 }
 ?>

@@ -45,13 +45,9 @@ class xarDispatcher extends Object
             // Send 404
             sys::import('xaraya.mapper.controllers.default');
             $controller = new ActionController($request);
-echo $request->getRoute();
         }
         */
-        $initialpath = xarServer::getBaseURL() . $request->entryPoint;
-        $actionstring = substr($request->getURL(), strlen($initialpath));
-        $request->setActionString($actionstring);
-//            var_dump($controller);//exit;
+        $request->setActionString($controller->getActionString($request));
         return $controller;
     }
 

@@ -311,6 +311,7 @@ class xarController extends Object
         $dispatcher = self::getDispatcher();
         $controller = $dispatcher->findController($request);
         $path = $controller->encode($request);
+//        var_dump($modType);echo $router->getRoute().$path."XX<br/>";//exit;
 
          // Use Xaraya default (index.php) or BaseModURL if provided in config.system.php
         $path = self::$entryPoint . $path;

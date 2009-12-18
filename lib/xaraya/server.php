@@ -30,7 +30,7 @@ class xarURL extends Object
      * @todo this could be made public
      * @todo support arrays and encode the complete array (keys and values)
     **/
-    static function encode($data, $type = 'getname')
+    static private function encode($data, $type = 'getname')
     {
         // Different parts of a URL are encoded in different ways.
         // e.g. a '?' and '/' are allowed in GET parameters, but
@@ -79,7 +79,7 @@ class xarURL extends Object
      * @param prefix string the prefix for the GET parameter
      * @return string the expanded GET parameter(s)
      **/
-    static function nested($args, $prefix)
+    static private function nested($args, $prefix)
     {
         $path = '';
         foreach ($args as $key => $arg) {

@@ -11,7 +11,9 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-class BaseActionController extends Object
+sys::import('xaraya.mapper.controllers.interfaces');
+
+class BaseActionController extends Object implements iController
 {
     private $controller;
     private $request;
@@ -21,7 +23,7 @@ class BaseActionController extends Object
 
     public $separator = '&';    // This is the default separator between URL parameters in the default Xaraya route
     
-    function __construct(Object $request=null)
+    public function __construct(xarRequest $request=null)
     {
         $this->request = $request;
         $this->actionstring = $request->getActionString();
@@ -32,12 +34,13 @@ class BaseActionController extends Object
     function run(xarRequest $request=null, xarResponse $response=null)          
     {
         $this->actionstring = $request->getActionString();
-        $this->chargeRequest($request, $this->decode());
+        $this->decode($request);
+//        $this->chargeRequest($request, $this->decode(request));
         $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getURLParams());
     }
 
-    function decode()        { return array(); }
-    function encode($request)          
+    function decode(xarRequest $request)        { return array(); }
+    function encode(xarRequest $request)          
     {         
         $path[$request->getModuleKey()] = $request->getModule();
         $path[$request->getTypeKey()] = $request->getType();
@@ -76,6 +79,12 @@ class BaseActionController extends Object
             unset($params['func']);
         }
         $request->setURLParams($params);
+    }
+    public function getActionString(xarRequest $request)       
+    { 
+        $initialpath = xarServer::getBaseURL() . $request->entryPoint;
+        $actionstring = substr($request->getURL(), strlen($initialpath));
+        return $actionstring;
     }
 }
 ?>

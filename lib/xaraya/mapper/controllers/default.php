@@ -12,10 +12,11 @@
 **/
 
 sys::import('xaraya.mapper.controllers.base');
+sys::import('xaraya.mapper.controllers.interfaces');
 
-class DefaultActionController extends BaseActionController
+class DefaultActionController extends BaseActionController implements iController
 {    
-    function __construct(xarRequest $request=null)
+    public function __construct(xarRequest $request=null)
     {
         $this->request = $request;
     }
