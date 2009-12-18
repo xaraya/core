@@ -11,9 +11,9 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-sys::import('xaraya.mapper.controllers.action');
+sys::import('xaraya.mapper.controllers.base');
 
-class DefaultActionController extends ActionController
+class DefaultActionController extends BaseActionController
 {    
     function __construct(xarRequest $request=null)
     {

@@ -11,7 +11,7 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-class ActionController extends Object
+class BaseActionController extends Object
 {
     private $controller;
     private $request;
@@ -72,7 +72,7 @@ class ActionController extends Object
             unset($params['type']);
         }
         if (isset($params['func'])) {
-            $request->setFunc($params['func']);
+            $request->setFunction($params['func']);
             unset($params['func']);
         }
         $request->setURLParams($params);

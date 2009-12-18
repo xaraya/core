@@ -13,7 +13,7 @@
 
 sys::import('xaraya.mapper.controllers.short');
 
-class RolesActionController extends ShortActionController
+class RolesShortController extends ShortActionController
 {
 
     function decode()
@@ -59,7 +59,7 @@ class RolesActionController extends ShortActionController
     
     function encode($request)
     {  
-        switch($request->func) {
+        switch($request->getFunction()) {
             case 'main':
                 // Note : if your main function calls some other function by default,
                 // you should set the path to directly to that other function

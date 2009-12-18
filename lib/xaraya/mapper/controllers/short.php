@@ -11,9 +11,9 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-sys::import('xaraya.mapper.controllers.action');
+sys::import('xaraya.mapper.controllers.base');
 
-class ShortActionController extends ActionController
+class ShortActionController extends BaseActionController
 {    
         
 }

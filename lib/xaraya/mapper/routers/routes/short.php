@@ -36,8 +36,8 @@ class ShortRoute extends xarRoute
 
         $path = explode($this->delimiter, $path);
         if ($this->dispatcher && $this->dispatcher->isValidModule($path[0])) {
-            $request->module = array_shift($path);
-            $parts[$this->moduleKey] = $request->module;
+            $request->setModule(array_shift($path));
+            $parts[$this->moduleKey] = $request->getModule();
             $this->validModule = true;
         }
 
@@ -49,8 +49,8 @@ class ShortRoute extends xarRoute
         //exit;
 
         if (count($path) && !empty($path[0])) {
-            $request->func = array_shift($path);
-            $parts[$this->funcKey] = $request->func;
+            $request->setFunction(array_shift($path));
+            $parts[$this->funcKey] = $request->getFunction();
         }
 
         if ($numSegs = count($path)) {

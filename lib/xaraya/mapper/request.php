@@ -14,12 +14,12 @@ class xarRequest extends Object
     protected $type      = 'user';
     protected $func      = 'main';
     protected $urlparams = array();
+    protected $route     = 'default';
     
     public $defaultRequestInfo = array();
 
     public $entryPoint;
     public $delimiter ='/';
-    public $route;
     
     function __construct($url=null)
     {
@@ -225,7 +225,7 @@ class xarRequest extends Object
 
     function setModule($p)       { $this->module = $p; }
     function setType($p)         { $this->type = $p; }
-    function setFunc($p)         { $this->func = $p; }
+    function setFunction($p)     { $this->func = $p; }
     function setURLParams($p)    { $this->urlparams = $p; }
     function setRoute($r)        { $this->route = $r; }
     function setActionString($p) { $this->actionstring = $p; }
