@@ -780,7 +780,6 @@ class xarMod extends Object implements IxarMod
             // Return the cached module function output
             return xarModuleCache::getCached($cacheKey);
         }
-
         $tplData = self::callFunc($modName,$modType,$funcName,$args);
 
         // If we have a string of data, we assume someone else did xarTpl* for us

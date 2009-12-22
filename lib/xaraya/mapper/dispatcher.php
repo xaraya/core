@@ -5,17 +5,11 @@ class xarDispatcher extends Object
     protected $request;
     protected $response;
 
-/*    function __construct($request=null)
-    {
-        if (empty($request)) $request = new xarRequest();
-    }
-*/    
     public function findController(xarRequest $request)
     {
 //        $coredirectory = realpath(sys::root() . 'lib/xaraya/mapper');
-        
-        if (file_exists(sys::code() . '/modules/' . $request->getModule() . '/' . $request->getRoute() . 'controller.php')) {
-            sys::import('modules.' . $request->getModule() . '.' . $request->getRoute() . 'controller');
+        if (file_exists(sys::code() . 'modules/' . $request->getModule() . '/controllers/' . $request->getRoute() . '.php')) {
+            sys::import('modules.' . $request->getModule() . '.controllers.' . $request->getRoute());
             $controllername = UCFirst($request->getModule()) . UCFirst($request->getRoute()) . 'Controller';
             $controller = new $controllername($request);
         } else {
@@ -62,7 +56,6 @@ class xarDispatcher extends Object
     public function isValidModule($module)
     {
         if (!is_string($module)) return false;
-
         $available = xarModIsAvailable($module);
         return $available;
     }

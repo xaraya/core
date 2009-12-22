@@ -34,14 +34,18 @@ class BaseActionController extends Object implements iController
     function run(xarRequest $request=null, xarResponse $response=null)          
     {
         $this->actionstring = $request->getActionString();
-        $this->decode($request);
-//        $this->chargeRequest($request, $this->decode(request));
+        $this->chargeRequest($request, $this->decode());
+        $_GET = $_GET + $request->getURLParams();
         $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getURLParams());
     }
 
-    function decode(xarRequest $request)        { return array(); }
-    function encode(xarRequest $request)          
-    {         
+    function decode(Array $data=array())
+    {
+        return $data;
+    }
+
+    public function encode(xarRequest $request)
+    {
         $path[$request->getModuleKey()] = $request->getModule();
         $path[$request->getTypeKey()] = $request->getType();
         $path[$request->getFunctionKey()] = $request->getFunction();
@@ -80,11 +84,17 @@ class BaseActionController extends Object implements iController
         }
         $request->setURLParams($params);
     }
+    
     public function getActionString(xarRequest $request)       
     { 
         $initialpath = xarServer::getBaseURL() . $request->entryPoint;
         $actionstring = substr($request->getURL(), strlen($initialpath));
         return $actionstring;
     }
+
+    public function getInitialPath(xarRequest $request)
+    {  
+        return '';
+    }           
 }
 ?>

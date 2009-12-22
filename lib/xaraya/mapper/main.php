@@ -133,11 +133,12 @@ class xarController extends Object
                 self::$request->setDispatched(true);
                 if (!self::$request->isDispatched()) continue;
                 self::$dispatcher->dispatch(self::$request, self::$response);
-
+//var_dump(self::$request->getURLParams());
             } while (!self::$request->isDispatched());
         } catch (Exception $e) {
                 throw $e;
         }
+        /*
         if (self::$request->isObjectURL()) {
             sys::import('xaraya.objects');
 
@@ -156,10 +157,10 @@ class xarController extends Object
                     self::$response->output = self::$response->notFound();
                 }
             }
-        }
+        }*/
     }
     
-    static function encode($request=null)
+/*    static function encode($request=null)
     {
         // CHECKME: How to handle null request?
         if (!empty($request)) self::$request = $request;
@@ -171,7 +172,7 @@ class xarController extends Object
             $controller = $dispatcher->getController();
             return $controller->encode($request);
         }
-    }
+    }*/
 
     /**
      * Check to see if this is a local referral
@@ -311,7 +312,6 @@ class xarController extends Object
         $dispatcher = self::getDispatcher();
         $controller = $dispatcher->findController($request);
         $path = $controller->encode($request);
-//        var_dump($modType);echo $router->getRoute().$path."XX<br/>";//exit;
 
          // Use Xaraya default (index.php) or BaseModURL if provided in config.system.php
         $path = self::$entryPoint . $path;

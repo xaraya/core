@@ -13,6 +13,7 @@ class xarRequest extends Object
     protected $module    = 'base';
     protected $type      = 'user';
     protected $func      = 'main';
+    protected $funcargs  = array();
     protected $urlparams = array();
     protected $route     = 'default';
     
@@ -158,7 +159,6 @@ class xarRequest extends Object
             sys::import('xaraya.mapper.dispatcher');
             $dispatcher = new xarDispatcher($this);
             $controller = $dispatcher->getController();
-//            $controller->decode($this);
             if (xarMod::isAvailable($this->module) && xarModVars::get($this->module, 'enable_short_urls')) {
                $requestInfo = array($this->module,
                      $this->type,
@@ -219,6 +219,7 @@ class xarRequest extends Object
     function getType()           { return $this->type; }
     function getFunction()       { return $this->func; }
     function getActionString()   { return $this->actionstring; }
+    function getFunctionArgs()   { return $this->funcargs; }
     function getURL()            { return $this->url; }
     function getURLParams()      { return $this->urlparams; }
     function getRoute()          { return $this->route; }
@@ -229,6 +230,7 @@ class xarRequest extends Object
     function setURLParams($p)    { $this->urlparams = $p; }
     function setRoute($r)        { $this->route = $r; }
     function setActionString($p) { $this->actionstring = $p; }
+    function setFunctionArgs($p) { $this->funcargs = $p; }
 
     public function isDispatched()
     {

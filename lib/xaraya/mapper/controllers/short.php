@@ -16,33 +16,13 @@ sys::import('xaraya.mapper.controllers.interfaces');
 
 class ShortActionController extends BaseActionController implements iController
 {    
-    public function decode(xarRequest $request)
-    {
-        $data = array();
-        $token1 = $this->firstToken();
-        $token2 = $this->nextToken();
-        if ($token2) {
-            $request->setType($token1);
-            $request->setFunction($token2);
-        } else {
-            $request->setFunction($token1);
-        }
-        return true;
-    }
-
-    protected function getInitialPath(xarRequest $request)
-    {  
-        $path = $request->getModule();
-        if ('user' != $request->getType()) $path .= xarController::$separator . $request->getType();
-        return $path;
-    }       
-    
     public function encode(xarRequest $request)
     {  
         $path = $this->getInitialPath($request);
-        $functionstring = $request->getActionString();
+        $functionstring = $request->getFunctionArgs();
         if (empty($functionstring)) $path .= xarController::$separator . $request->getFunction();
-        $path = xarURL::addParametersToPath($request->getURLParams(), $path, xarController::$delimiter, xarController::$separator);
+        $path .= xarController::$separator . implode(xarController::$separator, $request->getFunctionArgs());
+//        $path = xarURL::addParametersToPath($request->getURLParams(), $path, xarController::$delimiter, xarController::$separator);
         return xarController::$separator . $path;
     }        
 
@@ -54,5 +34,12 @@ class ShortActionController extends BaseActionController implements iController
         $actionstring = substr($actionstring,strpos($actionstring,xarController::$separator)+1);
         return $actionstring;
     }
+
+    public function getInitialPath(xarRequest $request)
+    {  
+        $path = $request->getModule();
+        if ('user' != $request->getType()) $path .= xarController::$separator . $request->getType();
+        return $path;
+    }       
 }
 ?>

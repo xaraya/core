@@ -15,9 +15,8 @@ sys::import('xaraya.mapper.controllers.short');
 
 class RolesShortController extends ShortActionController
 {
-    function decode(xarRequest $request)
+    function decode(Array $data=array())
     {
-        $data = array();
         $token1 = $this->firstToken();
         switch ($token1) {
             case 'account':
@@ -53,11 +52,12 @@ class RolesShortController extends ShortActionController
                 $data['func'] = 'account';
             break;
         }
-        return $data;
+        return parent::decode($data);
     }
     
-    function encode($request)
+    public function encode(xarRequest $request)
     {  
+        $params = $request->getURLParams();
         switch($request->getFunction()) {
             case 'main':
                 // Note : if your main function calls some other function by default,
@@ -82,10 +82,10 @@ class RolesShortController extends ShortActionController
 
              case 'account':
                 $path[] = 'account';
-                if(!empty($moduleload)) {
-                    // Note: this handles usermenu requests for hooked modules (including roles itself).
-                    unset($args['moduleload']);
-                    $path[] = $moduleload;
+                if (!empty($params['tab'])){
+                    switch ($params['tab']) {
+                        case 'basic': {$path[] = 'edit';break; }
+                    }
                 }
                 break;
 
@@ -109,7 +109,7 @@ class RolesShortController extends ShortActionController
             default:
                 break;
         }
-        $request->setActionString($path);
+        $request->setFunctionArgs($path);
         return parent::encode($request);
     }    
 }
