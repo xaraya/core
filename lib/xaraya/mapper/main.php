@@ -4,7 +4,7 @@ class xarController extends Object
     public static $allowShortURLs = true;
     public static $shortURLVariables;
     public static $delimiter = '?';    // This character divides the URL into entry point and parameters
-    public static $separator = '/';
+    public static $separator = '&';    // This is the default separator between URL parameters in the default Xaraya route
     public static $dispatcher;
     public static $request;
     public static $response;
@@ -114,26 +114,26 @@ class xarController extends Object
         return self::$request;
     }
 
-    static function dispatch($request=null)
+    static function normalizeRequest($request=null)
     {
-        // CHECKME: How to handle null request?
         if (!empty($request)) self::$request = $request;
-        sys::import('xaraya.mapper.response');
-        self::$response = new xarResponse();
         $router = self::getRouter();
         try {
             $router->route(self::$request);
-
-            /**
-             *  Attempt to dispatch the controller/action. If the self::$request
-             *  indicates that it needs to be dispatched, move to the next
-             *  action in the request.
-             */
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    
+    static function dispatch($request=null)
+    {
+        sys::import('xaraya.mapper.response');
+        self::$response = new xarResponse();
+        try {
             do {
                 self::$request->setDispatched(true);
                 if (!self::$request->isDispatched()) continue;
                 self::$dispatcher->dispatch(self::$request, self::$response);
-//var_dump(self::$request->getURLParams());
             } while (!self::$request->isDispatched());
         } catch (Exception $e) {
                 throw $e;
@@ -160,20 +160,6 @@ class xarController extends Object
         }*/
     }
     
-/*    static function encode($request=null)
-    {
-        // CHECKME: How to handle null request?
-        if (!empty($request)) self::$request = $request;
-
-        if (self::$request->isObjectURL()) {
-            // Stuck for now
-        } else {
-            $dispatcher = new xarDispatcher($request);
-            $controller = $dispatcher->getController();
-            return $controller->encode($request);
-        }
-    }*/
-
     /**
      * Check to see if this is a local referral
      *
@@ -289,15 +275,6 @@ class xarController extends Object
             }
             self::$emtryPoint = $entrypoint;
         }
-/*        // If we have an empty argument (ie null => null) then set a flag and
-        // remove that element.
-        // FIXME: this is way too hacky, NULL as a key for an array sooner or later will fail. (php 4.2.2 ?)
-        if (is_array($args) && @array_key_exists(NULL, $args) && $args[NULL] === NULL) {
-            // This flag means that the GET part of the URL must be opened.
-            $open_get_flag = true;
-            unset($args[NULL]);
-        }
-*/
 
         // Create a new request and make its route the current route
         $args['module'] = $modName;
@@ -319,34 +296,6 @@ class xarController extends Object
         // Remove the leading / from the path (if any).
         $path = preg_replace('/^\//', '', $path);
 
-/*        // If the path is still empty, then there is either no short URL support
-        // at all, or no short URL encoding was available for these arguments.
-        if (empty($path)) {
-            if (!empty($entrypoint)) {
-                // Custom entry-point.
-                // TODO: allow the alt entry point to work without assuming it is calling
-                // ws.php, so retaining the module and type params, and short url.
-                // Entry Point comes as an array since ws.php sets a type var.
-                // Entry array should be $entrypoint['entry'], $entrypoint['action']
-                // e.g. ws.php?type=xmlrpc&args=foo
-                // * Can also pass in the 'action' to $modType, and the entry point as
-                // a string. It makes sense using existing parameters that way.
-                $args = array('type' => $modType) + $args;
-            }  else {
-                $baseargs = array('module' => $modName);
-                if ($modType !== 'user')  $baseargs['type'] = $modType;
-                if ($funcName !== 'main') $baseargs['func'] = $funcName;
-
-                // Standard entry point - index.php or BaseModURL if provided in config.system.php
-                $args = $baseargs + $args;
-            }
-
-            // Add GET parameters to the path, ensuring each value is encoded correctly.
-//            $path = xarURL::addParametersToPath($args, self::$entryPoint, $pini, $psep);
-
-        }
-*/
-
         // Add the fragment if required.
         if (isset($fragment)) $path .= '#' . urlencode($fragment);
 
@@ -356,6 +305,25 @@ class xarController extends Object
         // Return the URL.
         return xarServer::getBaseURL() . $path;
     }
+    
+    public static function parseQuery($url='') 
+    {
+        $params = array();
+        if (empty($url)) return $params;
+        $decomposed = parse_url($url);
+        if (isset($decomposed['query'])) {
+            $pairs = explode('&', $decomposed['query']);
+            try {
+                foreach($pairs as $pair) {
+                    if (trim($pair) == '') continue;
+                    list($key, $value) = explode('=', $pair);
+                    $params[$key] = urldecode($value);
+                }
+            } catch(Exception $e) {}
+        }
+        return $params;
+    }
+
 }
 
 ?>

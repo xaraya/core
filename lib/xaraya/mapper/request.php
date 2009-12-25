@@ -20,7 +20,7 @@ class xarRequest extends Object
     public $defaultRequestInfo = array();
 
     public $entryPoint;
-    public $delimiter ='/';
+    public $separator    = '&';
     
     function __construct($url=null)
     {
@@ -33,46 +33,55 @@ class xarRequest extends Object
         if (is_array($url)) {
             // This is an array representing a traditional Xaraya URL array
             if (!empty($url['module'])) {
-                $this->module = $url['module'];
-                unset($url['module']);
                 // Resolve if this is an alias for some other module
-                $this->module = xarModAlias::resolve($this->module);
+                $this->setModule(xarModAlias::resolve($url['module']));
+                unset($url['module']);
             }
             if (!empty($url['type'])) {
-                $this->type = $url['type'];
+                $this->setType($url['type']);
                 unset($url['type']);
             }
             if (!empty($url['func'])) {
-                $this->func = $url['func'];
+                $this->setFunction($url['func']);
                 unset($url['func']);
             }
-            $this->urlparams = $url;
+            $this->setURLParams($url);
         } else {
-            // This is a string representing a URL
-            // First figure out which module is to be addressed
             if (null == $url) {
+                // This is a string representing a URL
                 // Try and get it from the current request path
                 $url = xarServer::getCurrentURL();
-                if (($url != '')
-                // IIS fix
-                && ($url != xarServer::getVar('SCRIPT_NAME'))) {
-                    preg_match_all('|/([^/]+)|i', $url, $matches);
-                    $params = $matches[1];
-                    if (count($params) > 0) $this->module = $params[0];
-                }
+                $params = $_GET;
             } else {
-                // Try and get it from the URL passed
-                // CHECKME: test this for stability
-                $url = substr($url,strlen(xarServer::getBaseURL() . $this->entryPoint . $this->delimiter));
-                $tokens = explode($this->delimiter, $path);
-                $this->module = array_shift($tokens);
+                $params = xarController::parseQuery($url);
             }
-            // Resolve if this is an alias for some other module
-            $this->module = xarModAlias::resolve($this->module);
+        
+            // We now have a URL. Set it.
+            $this->url = $url;
             
-            // Now that we have the module, resolve the rest via the appropriate controller
-            $this->url= $url;
-//            $this->getInfo($url);
+            // Try and get the module the traditional Xaraya way
+            xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
+            
+            // Else assume a form of short urls
+            if (null == $modName) {
+                $path = substr($url,strlen(xarServer::getBaseURL() . $this->entryPoint . xarController::$delimiter));
+                $tokens = explode(xarController::$separator, $path);
+                $modName = array_shift($tokens);
+            }
+                
+            // If this is a good module name saveit (otherwise the default will beused)
+            // Resolve if this is an alias for some other module
+            if (!empty($modName)) $this->setModule(xarModAlias::resolve($modName));
+            
+            // Get the query parameters too
+            // CHECKME: Module, type and func are reserved names, so remove them from the array
+            unset($params['module']);
+            unset($params['type']);
+            unset($params['func']);
+            $this->setURLParams($params);
+            
+            // At this point the request has assembled the module it belongs to and any query parameters.
+            // What is still to be defined by routing are the type and function/function arguments.            
         }
     }
     
@@ -102,6 +111,7 @@ class xarRequest extends Object
      */
     public function getInfo($url='')
     {
+        
         static $currentRequestInfo = NULL;
         static $loopHole = NULL;
         if (is_array($currentRequestInfo) && empty($url)) {
@@ -119,21 +129,11 @@ class xarRequest extends Object
             xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
             if (isset($modName)) $this->isModuleURL = true; 
         } else {
-            $decomposed = parse_url($url);
-            $params = array();
-            if (isset($decomposed['query'])) {
-                $pairs = explode('&', $decomposed['query']);
-                try {
-                    foreach($pairs as $pair) {
-                        if (trim($pair) == '') continue;
-                        list($key, $value) = explode('=', $pair);
-                        $params[$key] = urldecode($value);
-                    }
-                } catch(Exception $e) {}
+            $params = xarController::parseQuery($url);
+            if (!empty($params)) {
                 sys::import('xaraya.validations');
                 $regex = ValueValidations::get('regexp');
             }
-
             if (isset($params['module'])) {
                 $isvalid =  $regex->validate($params['module'], array('/^[a-z][a-z_0-9]*$/'));
                 $modName = $isvalid ? $params['module'] : null;
@@ -152,18 +152,6 @@ class xarRequest extends Object
                 $funcName = $isvalid ? $params['func'] : 'main';
             } else {
                 $funcName = 'main';
-            }
-        }
-
-        if (xarController::$allowShortURLs) {
-            sys::import('xaraya.mapper.dispatcher');
-            $dispatcher = new xarDispatcher($this);
-            $controller = $dispatcher->getController();
-            if (xarMod::isAvailable($this->module) && xarModVars::get($this->module, 'enable_short_urls')) {
-               $requestInfo = array($this->module,
-                     $this->type,
-                     $this->func) ;
-                     return $requestInfo;
             }
         }
 
@@ -224,13 +212,13 @@ class xarRequest extends Object
     function getURLParams()      { return $this->urlparams; }
     function getRoute()          { return $this->route; }
 
-    function setModule($p)       { $this->module = $p; }
-    function setType($p)         { $this->type = $p; }
-    function setFunction($p)     { $this->func = $p; }
-    function setURLParams($p)    { $this->urlparams = $p; }
-    function setRoute($r)        { $this->route = $r; }
-    function setActionString($p) { $this->actionstring = $p; }
-    function setFunctionArgs($p) { $this->funcargs = $p; }
+    function setModule($p)               { $this->module = $p; }
+    function setType($p)                 { $this->type = $p; }
+    function setFunction($p)             { $this->func = $p; }
+    function setURLParams($p=array())    { $this->urlparams = $p; }
+    function setRoute($r)                { $this->route = $r; }
+    function setActionString($p)         { $this->actionstring = $p; }
+    function setFunctionArgs($p=array()) { $this->funcargs = $p; }
 
     public function isDispatched()
     {

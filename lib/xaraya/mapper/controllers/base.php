@@ -21,20 +21,22 @@ class BaseActionController extends Object implements iController
     
     protected $decodearray  = array();
 
-    public $separator = '&';    // This is the default separator between URL parameters in the default Xaraya route
+    public $separator; 
     
     public function __construct(xarRequest $request=null)
     {
         $this->request = $request;
         $this->actionstring = $request->getActionString();
-        $this->separator = $this->request->delimiter;
+//        $this->separator = $this->request->separator;
         $this->module = $this->request->getModule();
     }
         
     function run(xarRequest $request=null, xarResponse $response=null)          
     {
         $this->actionstring = $request->getActionString();
-        $this->chargeRequest($request, $this->decode());
+        $args = $this->decode();
+        $this->chargeRequest($request, $args);
+        $_GET = $_GET + $args;
         $_GET = $_GET + $request->getURLParams();
         $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getURLParams());
     }

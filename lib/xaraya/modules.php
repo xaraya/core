@@ -238,7 +238,7 @@ class xarMod extends Object implements IxarMod
     static function getName($regID = NULL)
     {
         if(!isset($regID)) {
-            list($modName) = xarController::$request->getInfo();
+            $modName = xarController::$request->getModule();
         } else {
             $modinfo = self::getInfo($regID);
             $modName = $modinfo['name'];
@@ -781,7 +781,6 @@ class xarMod extends Object implements IxarMod
             return xarModuleCache::getCached($cacheKey);
         }
         $tplData = self::callFunc($modName,$modType,$funcName,$args);
-
         // If we have a string of data, we assume someone else did xarTpl* for us
         if (!is_array($tplData)) {
             // Set the output of the module function in cache

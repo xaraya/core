@@ -55,6 +55,7 @@ function xarMain()
 
     // Get the object that models this request
     $request = xarController::getRequest();
+    xarController::normalizeRequest($request);
 
     // Default Page Title
     $SiteSlogan = xarModVars::get('themes', 'SiteSlogan');

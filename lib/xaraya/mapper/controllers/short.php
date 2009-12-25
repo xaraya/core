@@ -16,14 +16,30 @@ sys::import('xaraya.mapper.controllers.interfaces');
 
 class ShortActionController extends BaseActionController implements iController
 {    
+    public $separator = '/';
+    
+    function decode(Array $data=array())
+    {
+        $data['module'] = xarController::$request->getModule();
+        $token = $this->firstToken();
+        if ($token == 'admin') {
+            $data['type'] = $token;
+            $token = $this->nextToken();
+            // If no function was passed we get the default
+            if (!$token) $token = xarController::$func;
+        }
+        $data['func'] = $token;
+        return $data;
+    }
+
     public function encode(xarRequest $request)
     {  
         $path = $this->getInitialPath($request);
         $functionstring = $request->getFunctionArgs();
-        if (empty($functionstring)) $path .= xarController::$separator . $request->getFunction();
-        $path .= xarController::$separator . implode(xarController::$separator, $request->getFunctionArgs());
-//        $path = xarURL::addParametersToPath($request->getURLParams(), $path, xarController::$delimiter, xarController::$separator);
-        return xarController::$separator . $path;
+        if (empty($functionstring))  $path .= $this->separator . $request->getFunction();
+        $path .= $this->separator . implode($this->separator, $request->getFunctionArgs());
+        $path= trim($path,$this->separator);
+        return $this->separator . $path;
     }        
 
     public function getActionString(xarRequest $request)
@@ -31,14 +47,14 @@ class ShortActionController extends BaseActionController implements iController
         $initialpath = xarServer::getBaseURL() . $request->entryPoint;
         $actionstring = substr($request->getURL(), strlen($initialpath));
         $actionstring = substr($actionstring,1);
-        $actionstring = substr($actionstring,strpos($actionstring,xarController::$separator)+1);
+        $actionstring = substr($actionstring,strpos($actionstring,$this->separator)+1);
         return $actionstring;
     }
 
     public function getInitialPath(xarRequest $request)
     {  
         $path = $request->getModule();
-        if ('user' != $request->getType()) $path .= xarController::$separator . $request->getType();
+        if ('user' != $request->getType()) $path .= $this->separator . $request->getType();
         return $path;
     }       
 }

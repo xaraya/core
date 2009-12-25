@@ -19,6 +19,10 @@ class RolesShortController extends ShortActionController
     {
         $token1 = $this->firstToken();
         switch ($token1) {
+            case 'admin':
+                return parent::decode($data);
+            break;
+
             case 'account':
                 $data['func'] = 'account';
                 
@@ -52,12 +56,13 @@ class RolesShortController extends ShortActionController
                 $data['func'] = 'account';
             break;
         }
-        return parent::decode($data);
+        return $data;
     }
     
     public function encode(xarRequest $request)
     {  
         $params = $request->getURLParams();
+        $path = array();
         switch($request->getFunction()) {
             case 'main':
                 // Note : if your main function calls some other function by default,
@@ -106,10 +111,17 @@ class RolesShortController extends ShortActionController
                 }
                 break;
 
+              case 'admin':
+              echo "dick";
+              break;
             default:
                 break;
         }
+        
+        // Send the processed args back
         $request->setFunctionArgs($path);
+        // Remove the processed args (in this case all of them)
+        $request->setURLParams();
         return parent::encode($request);
     }    
 }

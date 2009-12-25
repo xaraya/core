@@ -16,10 +16,14 @@ sys::import('xaraya.mapper.controllers.interfaces');
 
 class DefaultActionController extends BaseActionController implements iController
 {    
-    public function __construct(xarRequest $request=null)
+    public $separator = '&';
+
+    function decode(Array $data=array())
     {
-        $this->request = $request;
+        xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $data['module'], NULL, XARVAR_NOT_REQUIRED);
+        xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['type'], 'user');
+        xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['func'], 'main');
+        return $data;
     }
-        
 }
 ?>
