@@ -133,8 +133,7 @@ class xarRequest extends Object
      * @todo <marco> Investigate this aliases thing before to integrate and promote it!
      */
     public function getInfo($url='')
-    {
-        
+    {        
         static $currentRequestInfo = NULL;
         static $loopHole = NULL;
         if (is_array($currentRequestInfo) && empty($url)) {
@@ -147,10 +146,12 @@ class xarRequest extends Object
         }
         // Get variables
         if (empty($url)) {
-            xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
-            xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $modType, 'user');
-            xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
-            if (isset($modName)) $this->isModuleURL = true; 
+            $info = array(
+                $this->getModule(),
+                $this->getType(),
+                $this->getFunction(),
+            );
+            return $info;
         } else {
             $params = xarController::parseQuery($url);
             if (!empty($params)) {
