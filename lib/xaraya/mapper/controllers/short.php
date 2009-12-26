@@ -21,18 +21,23 @@ class ShortActionController extends BaseActionController implements iController
     function decode(Array $data=array())
     {
         $token = $this->firstToken();
-        if ($token == 'admin') {
+        if (xarController::$request->getModule() == 'object') {
             $data['type'] = $token;
-            $token = $this->nextToken();
-            
-            // No admin equivalent for objectURL for now
-            if (xarController::$request->getModule() == 'object') {
+            if ($token == 'admin') {
+                // No admin equivalent for objectURL for now
                 xarController::$request->setModule('dynamicdata');
                 $token = false;
             }
+            $token = $this->nextToken();
+            $data['func'] = empty($token) ? xarController::$method : $token;
+        } else {
+            if ($token == 'admin') {
+                $data['type'] = $token;
+                $token = $this->nextToken();
+            }
+            // If no function was passed we get the default
+            $data['func'] = empty($token) ? xarController::$func : $token;
         }
-        // If no function was passed we get the default
-        $data['func'] = empty($token) ? xarController::$request->getFunction() : $token;
         return $data;
     }
 

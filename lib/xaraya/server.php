@@ -419,24 +419,25 @@ class xarServer extends Object
 
 // TODO: some common code for getCurrentURL, getModuleURL and getObjectURL ?
 
-        // Parameter separator and initiator.
-        $psep = '&';
-        $pathsep = '/';
+        // Create a new request and make its route the current route
+        $args['module'] = 'object';
+        $args['type'] = $objectName;
+        $args['func'] = $methodName;
+        sys::import('xaraya.mapper.request');
+        $request = new xarRequest($args);
+        $router = xarController::getRouter();
+        $request->setRoute($router->getRoute());
 
-        // Initialise the path.
-        $path = '';
+        // Get the appropriate action controller for this request
+        $dispatcher = xarController::getDispatcher();
+        $controller = $dispatcher->findController($request);
+        $path = $controller->encode($request);
 
-        // The following allows you to modify the BaseModURL from the config file
-        // it can be used to configure Xaraya for mod_rewrite by
-        // setting BaseModURL = '' in config.system.php
-        try {
-            $BaseModURL = xarSystemVars::get(sys::LAYOUT, 'BaseModURL');
-        } catch(Exception $e) {
-            $BaseModURL = 'index.php';
-        }
+         // Use Xaraya default (index.php) or BaseModURL if provided in config.system.php
+        $path = xarController::$entryPoint . $path;
 
-        // Add GET parameters to the path, ensuring each value is encoded correctly.
-        $path = xarURL::addParametersToPath($args, $BaseModURL, xarController::$delimiter, $psep);
+        // Remove the leading / from the path (if any).
+        $path = preg_replace('/^\//', '', $path);
 
         // Add the fragment if required.
         if (isset($fragment)) $path .= '#' . urlencode($fragment);
@@ -446,7 +447,7 @@ class xarServer extends Object
         if ($generateXMLURL) $path = htmlspecialchars($path);
 
         // Return the URL.
-        return xarServer::getBaseURL() . $path;
+        return self::getBaseURL() . $path;
     }
 }
 

@@ -256,18 +256,8 @@ class xarController extends Object
      */
     static function URL($modName=NULL, $modType='user', $funcName='main', $args=array(), $generateXMLURL=NULL, $fragment=NULL, $entrypoint=array())
     {
-        // Parameter separator and initiator.
-        $psep = '&';
-        $pathsep = '/';
-
-        // Initialise the path.
-        $path = '';
-
         // No module specified - just jump to the home page.
         if (empty($modName)) return xarServer::getBaseURL() . self::$entryPoint;
-
-        // Take the global setting for XML format generation, if not specified.
-        if (!isset($generateXMLURL)) $generateXMLURL = xarMod::$genXmlUrls;
 
         // If an entry point has been set, then modify the URL entry point and modType.
         if (!empty($entrypoint)) {
@@ -302,6 +292,8 @@ class xarController extends Object
         if (isset($fragment)) $path .= '#' . urlencode($fragment);
 
         // Encode the URL if an XML-compatible format is required.
+        // Take the global setting for XML format generation, if not specified.
+        if (!isset($generateXMLURL)) $generateXMLURL = xarMod::$genXmlUrls;
         if ($generateXMLURL) $path = htmlspecialchars($path);
 
         // Return the URL.
