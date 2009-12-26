@@ -33,7 +33,7 @@ class BaseActionController extends Object
     function run(xarRequest $request=null, xarResponse $response=null)          
     {
         $this->actionstring = $request->getActionString();
-        $args = $this->decode();var_dump($args);
+        $args = $this->decode();
         $this->chargeRequest($request, $args);
         $_GET = $_GET + $args;
         $_GET = $_GET + $request->getURLParams();
@@ -43,11 +43,6 @@ class BaseActionController extends Object
         } else {
             $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getURLParams());
         }
-    }
-
-    function decode(Array $data=array())
-    {
-        return $data;
     }
 
     function getController()   { return $this->controller; }
