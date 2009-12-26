@@ -20,15 +20,13 @@ class ShortActionController extends BaseActionController implements iController
     
     function decode(Array $data=array())
     {
-        $data['module'] = xarController::$request->getModule();
         $token = $this->firstToken();
         if ($token == 'admin') {
             $data['type'] = $token;
-            $token = $this->nextToken();
-            // If no function was passed we get the default
-            if (!$token) $token = xarController::$func;
+            $token1 = $this->nextToken();
         }
-        $data['func'] = $token;
+        // If no function was passed we get the default
+        $data['func'] = empty($token) ? xarController::$request->getFunction() : $token;
         return $data;
     }
 
@@ -45,9 +43,10 @@ class ShortActionController extends BaseActionController implements iController
     public function getActionString(xarRequest $request)
     { 
         $initialpath = xarServer::getBaseURL() . $request->entryPoint;
-        $actionstring = substr($request->getURL(), strlen($initialpath));
-        $actionstring = substr($actionstring,1);
-        $actionstring = substr($actionstring,strpos($actionstring,$this->separator)+1);
+        $actionstring = substr($request->getURL(), strlen($initialpath)+1);
+        $separatorposition = strpos($actionstring, $this->separator);
+        if (false === $separatorposition) return "";
+        $actionstring = substr($actionstring,$separatorposition+1);
         return $actionstring;
     }
 

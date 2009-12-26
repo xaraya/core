@@ -391,7 +391,7 @@ class xarServer extends Object
     static function getModuleURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array())
     {
         // CHECKME: move xarModURL() and xarMod__URL* stuff here, and leave stub in modules ?
-        return xarModURL($modName, $modType, $funcName, $args, $generateXMLURL, $fragment, $entrypoint);
+        return xarController::URL($modName, $modType, $funcName, $args, $generateXMLURL, $fragment, $entrypoint);
     }
 
     /**
@@ -434,26 +434,6 @@ class xarServer extends Object
         } catch(Exception $e) {
             $BaseModURL = 'index.php';
         }
-/*
-        // No object specified - just jump to the home page.
-        if (empty($args['object'])) return xarServer::getBaseURL() . $BaseModURL;
-
-        // If an entry point has been set, then modify the URL entry point and args['type'].
-        if (!empty($entrypoint)) {
-            if (is_array($entrypoint)) {
-            // CHECKME: is this relevant here ?
-                $args['type'] = $entrypoint['action'];
-                $entrypoint = $entrypoint['entry'];
-            }
-            $BaseModURL = $entrypoint;
-        }
-
-        // Check the global short URL setting before trying to load the URL encoding function
-        // for the module. This also applies to custom entry points.
-        if (self::$allowShortURLs) {
-// CHECKME: short URLs for objects = go via getModuleURL or here ?
-        }
-*/
 
         // Add GET parameters to the path, ensuring each value is encoded correctly.
         $path = xarURL::addParametersToPath($args, $BaseModURL, xarController::$delimiter, $psep);

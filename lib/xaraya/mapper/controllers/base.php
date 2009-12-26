@@ -13,7 +13,7 @@
 
 sys::import('xaraya.mapper.controllers.interfaces');
 
-class BaseActionController extends Object implements iController
+class BaseActionController extends Object
 {
     private $controller;
     private $request;
@@ -33,15 +33,15 @@ class BaseActionController extends Object implements iController
     function run(xarRequest $request=null, xarResponse $response=null)          
     {
         $this->actionstring = $request->getActionString();
-        $args = $this->decode();
+        $args = $this->decode();var_dump($args);
         $this->chargeRequest($request, $args);
         $_GET = $_GET + $args;
         $_GET = $_GET + $request->getURLParams();
-        if (isset($args['module'])) {
-            $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getURLParams());
-        } elseif (isset($args['object'])) {
+        if ($request->getModule() == 'object') {
             sys::import('xaraya.objects');
-            $response->output = xarObject::guiMethod($request->getObject(), $request->getMethod());
+            $response->output = xarObject::guiMethod($request->getType(), $request->getFunction());
+        } else {
+            $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getURLParams());
         }
     }
 
@@ -50,27 +50,9 @@ class BaseActionController extends Object implements iController
         return $data;
     }
 
-    public function encode(xarRequest $request)
-    {
-        $path[$request->getModuleKey()] = $request->getModule();
-        $path[$request->getTypeKey()] = $request->getType();
-        $path[$request->getFunctionKey()] = $request->getFunction();
-//        $path = $path + $request->getURLParams();
-        $path = xarURL::addParametersToPath($path, '', xarController::$delimiter, $this->separator);
-        return $path;
-    }
-
     function getController()   { return $this->controller; }
     function getRequest()      { return $this->request; }
-    function getOutput()       
-    { 
-//        $data = $this->decode();
-//        $this->decodearray = $data;
-//        $this->func = $data['func'];
-//        unset($data['func']);
-        return $response->output;
-//        return xarMod::guiFunc($this->module, $this->type, $this->func); 
-    }
+    function getOutput()       { return $response->output;}
     function firstToken()      { return strtok($this->actionstring, $this->separator); }
     function nextToken()       { return strtok($this->separator); }
     
@@ -88,27 +70,8 @@ class BaseActionController extends Object implements iController
             $request->setFunction($params['func']);
             unset($params['func']);
         }
-        if (isset($params['object'])) {
-            $request->setObject($params['object']);
-            unset($params['object']);
-        }
-        if (isset($params['method'])) {
-            $request->setMethod($params['method']);
-            unset($params['method']);
-        }
         $request->setURLParams($params);
     }
     
-    public function getActionString(xarRequest $request)       
-    { 
-        $initialpath = xarServer::getBaseURL() . $request->entryPoint;
-        $actionstring = substr($request->getURL(), strlen($initialpath));
-        return $actionstring;
-    }
-
-    public function getInitialPath(xarRequest $request)
-    {  
-        return '';
-    }           
 }
 ?>

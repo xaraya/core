@@ -16,30 +16,6 @@ class xarDispatcher extends Object
             $controllername = UCFirst($request->getRoute()) . 'ActionController';
             $controller = new $controllername($request);
         }
-        
-/*        if ($request->getRoute() == 'default') {
-            sys::import('xaraya.mapper.controllers.default');
-            $controller = new DefaultActionController();
-        } ($request->getRoute() == 'short') {
-            if (file_exists($coredirectory . '/' . $request->getModule() . '.php')) {
-                sys::import('xaraya.mapper.' .$request->getModule());
-                $controllername = ucfirst($request->getModule()) . 'ActionController';
-                $controller = new $controllername($request);
-            } else {
-            }
-            $initialpath .= $request->delimiter . $request->getModule();
-        } elseif (file_exists(sys::code() . '/modules/' . $request->getModule() . '/controller.php')) {
-            sys::import('modules.' . $request->getModule() . '.controller');
-            $controllername = ucfirst($request->getModule()) . 'ActionController';
-            $controller = new $controllername($request);
-            $initialpath .= $request->delimiter . $request->getModule() . $request->delimiter;
-        } else {            
-            // This is either an unknown route or an empty route for now
-            // Send 404
-            sys::import('xaraya.mapper.controllers.default');
-            $controller = new ActionController($request);
-        }
-        */
         $request->setActionString($controller->getActionString($request));
         return $controller;
     }

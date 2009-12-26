@@ -61,29 +61,48 @@ class xarRequest extends Object
             // We now have a URL. Set it.
             $this->url = $url;
             
-            // Try and get the module the traditional Xaraya way
-            xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
-            
-            // Else assume a form of short urls
-            if (null == $modName) {
-                $path = substr($url,strlen(xarServer::getBaseURL() . $this->entryPoint . xarController::$delimiter));
-                $tokens = explode(xarController::$separator, $path);
-                $modName = array_shift($tokens);
+            // See if this is an object call; easiest to start like this 
+            xarVarFetch('object', 'regexp:/^[a-z][a-z_0-9]*$/', $objectName, NULL, XARVAR_NOT_REQUIRED);
+            // Found a module object name
+            if (null != $objectName) {
+                $this->setModule('object');
+                $this->setType($objectName);
+            } else {
+                // Try and get the module the traditional Xaraya way
+                xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
+
+                // Else assume a form of short urls. The module name or the object keyword will be the first item
+                if (null == $modName) {
+                    $path = substr($url,strlen(xarServer::getBaseURL() . $this->entryPoint . xarController::$delimiter));
+                    $tokens = explode('/', $path);
+                    $modName = array_shift($tokens);
+                    
+                    // This is an object call
+                    if ($modName == 'object') {
+                        $this->setModule('object');
+                        $this->setType(array_shift($tokens));
+                    
+                    // This is a module name
+                    } else {
+                        // Resolve if this is an alias for some other module
+                        if (!empty($modName)) $this->setModule(xarModAlias::resolve($modName));
+                    }
+                } else {
+                    // Resolve if this is an alias for some other module
+                    if (!empty($modName)) $this->setModule(xarModAlias::resolve($modName));
+                }
+
             }
-                
-            // If this is a good module name saveit (otherwise the default will beused)
-            // Resolve if this is an alias for some other module
-            if (!empty($modName)) $this->setModule(xarModAlias::resolve($modName));
-            
             // Get the query parameters too
-            // CHECKME: Module, type and func are reserved names, so remove them from the array
+            // CHECKME: Module, type, func, object and method are reserved names, so remove them from the array
             unset($params['module']);
             unset($params['type']);
             unset($params['func']);
+            unset($params['object']);
+            unset($params['method']);
             $this->setURLParams($params);
-            
-            // At this point the request has assembled the module it belongs to and any query parameters.
-            // What is still to be defined by routing are the type and function/function arguments.            
+            // At this point the request has assembled the module or object it belongs to and any query parameters.
+            // What is still to be defined by routing are the type (for modules) and function/function arguments or method (for objects).            
         }
     }
     
