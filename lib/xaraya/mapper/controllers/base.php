@@ -27,7 +27,6 @@ class BaseActionController extends Object implements iController
     {
         $this->request = $request;
         $this->actionstring = $request->getActionString();
-//        $this->separator = $this->request->separator;
         $this->module = $this->request->getModule();
     }
         
@@ -38,7 +37,12 @@ class BaseActionController extends Object implements iController
         $this->chargeRequest($request, $args);
         $_GET = $_GET + $args;
         $_GET = $_GET + $request->getURLParams();
-        $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getURLParams());
+        if (isset($args['module'])) {
+            $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getURLParams());
+        } elseif (isset($args['object'])) {
+            sys::import('xaraya.objects');
+            $response->output = xarObject::guiMethod($request->getObject(), $request->getMethod());
+        }
     }
 
     function decode(Array $data=array())
@@ -83,6 +87,14 @@ class BaseActionController extends Object implements iController
         if (isset($params['func'])) {
             $request->setFunction($params['func']);
             unset($params['func']);
+        }
+        if (isset($params['object'])) {
+            $request->setObject($params['object']);
+            unset($params['object']);
+        }
+        if (isset($params['method'])) {
+            $request->setMethod($params['method']);
+            unset($params['method']);
         }
         $request->setURLParams($params);
     }

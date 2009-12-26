@@ -14,6 +14,8 @@ class xarRequest extends Object
     protected $type      = 'user';
     protected $func      = 'main';
     protected $funcargs  = array();
+    protected $object    = 'objects';
+    protected $method    = 'view';
     protected $urlparams = array();
     protected $route     = 'default';
     
@@ -206,6 +208,8 @@ class xarRequest extends Object
     function getModule()         { return $this->module; }
     function getType()           { return $this->type; }
     function getFunction()       { return $this->func; }
+    function getObject()         { return $this->object; }
+    function getMethod()         { return $this->method; }
     function getActionString()   { return $this->actionstring; }
     function getFunctionArgs()   { return $this->funcargs; }
     function getURL()            { return $this->url; }
@@ -215,6 +219,8 @@ class xarRequest extends Object
     function setModule($p)               { $this->module = $p; }
     function setType($p)                 { $this->type = $p; }
     function setFunction($p)             { $this->func = $p; }
+    function setObject($p)               { $this->object = $p; }
+    function setMethod($p)               { $this->method = $p; }
     function setURLParams($p=array())    { $this->urlparams = $p; }
     function setRoute($r)                { $this->route = $r; }
     function setActionString($p)         { $this->actionstring = $p; }

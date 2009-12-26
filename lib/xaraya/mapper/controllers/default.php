@@ -20,9 +20,17 @@ class DefaultActionController extends BaseActionController implements iControlle
 
     function decode(Array $data=array())
     {
-        xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $data['module'], NULL, XARVAR_NOT_REQUIRED);
-        xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['type'], 'user');
-        xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['func'], 'main');
+        xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $module, NULL, XARVAR_NOT_REQUIRED);
+        if (null != $module) {
+            $data['module'] = $module;
+            xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['type'], xarController::$request->getType());
+            xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['func'], xarController::$request->getFunction());
+        }
+        xarVarFetch('object', 'regexp:/^[a-z][a-z_0-9]*$/', $object, NULL, XARVAR_NOT_REQUIRED);
+        if (null != $object) {
+            $data['object'] = $object;
+            xarVarFetch('method', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['method'], xarController::$request->getMethod());
+        }
         return $data;
     }
 }

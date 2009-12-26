@@ -7,7 +7,6 @@ class xarDispatcher extends Object
 
     public function findController(xarRequest $request)
     {
-//        $coredirectory = realpath(sys::root() . 'lib/xaraya/mapper');
         if (file_exists(sys::code() . 'modules/' . $request->getModule() . '/controllers/' . $request->getRoute() . '.php')) {
             sys::import('modules.' . $request->getModule() . '.controllers.' . $request->getRoute());
             $controllername = UCFirst($request->getModule()) . UCFirst($request->getRoute()) . 'Controller';

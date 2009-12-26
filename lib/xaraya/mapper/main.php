@@ -16,6 +16,8 @@ class xarController extends Object
     public static $module    = 'base';
     public static $type      = 'user';
     public static $func      = 'main';
+    public static $object    = 'objects';
+    public static $method    = 'view';
     public static $entryPoint;
     
     /**
