@@ -17,11 +17,6 @@ class BaseActionController extends Object
 {
     private $controller;
     private $request;
-    private $url = '';
-    
-    protected $decodearray  = array();
-
-    public $separator; 
     
     public function __construct(xarRequest $request=null)
     {
@@ -35,8 +30,7 @@ class BaseActionController extends Object
         $this->actionstring = $request->getActionString();
         $args = $this->decode();
         $this->chargeRequest($request, $args);
-        $_GET = $_GET + $args;
-        $_GET = $_GET + $request->getURLParams();
+        $_GET = $_GET + $args + $request->getURLParams();
         if ($request->getModule() == 'object') {
             sys::import('xaraya.objects');
             $response->output = xarObject::guiMethod($request->getType(), $request->getFunction());
