@@ -24,6 +24,12 @@ class ShortActionController extends BaseActionController implements iController
         if ($token == 'admin') {
             $data['type'] = $token;
             $token = $this->nextToken();
+            
+            // No admin equivalent for objectURL for now
+            if (xarController::$request->getModule() == 'object') {
+                xarController::$request->setModule('dynamicdata');
+                $token = false;
+            }
         }
         // If no function was passed we get the default
         $data['func'] = empty($token) ? xarController::$request->getFunction() : $token;

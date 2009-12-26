@@ -30,6 +30,12 @@ class DefaultActionController extends BaseActionController implements iControlle
         if (null != $object) {
             $data['object'] = $object;
             xarVarFetch('method', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['method'], xarController::$request->getMethod(), XARVAR_NOT_REQUIRED);
+
+            // No admin equivalent for objectURL for now
+            if ((xarController::$request->getModule() == 'object') && xarController::$request->getType() == 'admin') {
+                xarController::$request->setModule('dynamicdata');
+                $data['func'] = 'view';
+            }
         }
         return $data;
     }

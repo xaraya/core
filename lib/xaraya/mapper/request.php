@@ -67,6 +67,7 @@ class xarRequest extends Object
             if (null != $objectName) {
                 $this->setModule('object');
                 $this->setType($objectName);
+                $this->setFunction($this->method);
             } else {
                 // Try and get the module the traditional Xaraya way
                 xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
@@ -81,6 +82,7 @@ class xarRequest extends Object
                     if ($modName == 'object') {
                         $this->setModule('object');
                         $this->setType(array_shift($tokens));
+                        $this->setFunction($this->method);
                     
                     // This is a module name
                     } else {
