@@ -203,10 +203,10 @@ class xarRequest extends Object
         // Save the current info in case we call this function again
         if (empty($url)) $currentRequestInfo = $requestInfo;
         
-        list($this->module,
+/*        list($this->module,
              $this->type,
              $this->func) = $requestInfo;
-
+*/
         return $requestInfo;
     }
     

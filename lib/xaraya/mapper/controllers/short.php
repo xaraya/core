@@ -23,7 +23,7 @@ class ShortActionController extends BaseActionController implements iController
         $token = $this->firstToken();
         if ($token == 'admin') {
             $data['type'] = $token;
-            $token1 = $this->nextToken();
+            $token = $this->nextToken();
         }
         // If no function was passed we get the default
         $data['func'] = empty($token) ? xarController::$request->getFunction() : $token;
@@ -44,6 +44,8 @@ class ShortActionController extends BaseActionController implements iController
     { 
         $initialpath = xarServer::getBaseURL() . $request->entryPoint;
         $actionstring = substr($request->getURL(), strlen($initialpath)+1);
+        $delimiterposition = strpos($actionstring, xarController::$delimiter);
+        if ($delimiterposition) $actionstring = substr($actionstring,0,$delimiterposition);
         $separatorposition = strpos($actionstring, $this->separator);
         if (false === $separatorposition) return "";
         $actionstring = substr($actionstring,$separatorposition+1);
