@@ -76,6 +76,7 @@ class ChainRoute extends xarRoute
      * @param array $data An array of variable and value pairs used as parameters
      * @return string Route path with user submitted parameters
      */
+     /*
     public function encode($data=array(), $reset=false, $encode=true, $partial=false)
     {
         $url     = '';
@@ -99,5 +100,6 @@ class ChainRoute extends xarRoute
 
         return $url;
     }
+    */
 }
 ?>

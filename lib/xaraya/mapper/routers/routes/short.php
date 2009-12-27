@@ -41,13 +41,6 @@ class ShortRoute extends xarRoute
             $this->validModule = true;
         }
 
-//        if (count($path) && !empty($path[0])) {
-//            $request->type = array_shift($path);
-//            $parts[$this->typeKey] = $request->type;
-//        }
-//        $request->type = 'user';
-        //exit;
-
         if (count($path) && !empty($path[0])) {
             $request->setFunction(array_shift($path));
             $parts[$this->funcKey] = $request->getFunction();
@@ -73,6 +66,7 @@ class ShortRoute extends xarRoute
      * @param bool $reset Whether to reset the current params
      * @return string Route path with user submitted parameters
      */
+     /*
     public function encode($data=array(), $reset=false, $encode=true, $partial=false)
     {
         if (!$this->keysSet) $this->setRequestKeys();
@@ -135,29 +129,7 @@ class ShortRoute extends xarRoute
 
         return ltrim($url, $this->delimiter);
     }
-
-    /**
-     * Return a single parameter of route's defaults
-     *
-     * @param string $name Array key of the parameter
-     * @return string Previously set default
-     */
-    public function getDefault($name) 
-    {
-        if (isset($this->_defaults[$name])) {
-            return $this->_defaults[$name];
-        }
-    }
-
-    /**
-     * Return an array of defaults
-     *
-     * @return array Route defaults
-     */
-    public function getDefaults() 
-    {
-        return $this->_defaults;
-    }
+*/
 
 }
 ?>

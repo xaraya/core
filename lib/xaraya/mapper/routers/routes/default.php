@@ -44,7 +44,7 @@ class DefaultRoute extends xarRoute
         $request->setRoute('default');
         return true;
     }
-    
+/*    
     public function encode($data=array(), $reset=false, $encode=true, $partial=false)
     {
         if (!$this->keysSet) $this->setRequestKeys();
@@ -88,5 +88,6 @@ class DefaultRoute extends xarRoute
         }
         return $url;
     }
+    */
 }
 ?>

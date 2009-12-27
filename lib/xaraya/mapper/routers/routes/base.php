@@ -69,33 +69,11 @@ class xarRoute extends Object implements iRoute
      * @param array $data An array of variable and value pairs used as parameters
      * @return string Route path with user submitted parameters
      */
+     /*
     public function encode($data=array(), $reset=false, $encode=true, $partial=false)
     {
         return $this->route;
     }
-
-    /**
-     * Return a single parameter of route's defaults
-     *
-     * @param string $name Array key of the parameter
-     * @return string Previously set default
-     */
-    public function getDefault($name) 
-    {
-        if (isset($this->_defaults[$name])) {
-            return $this->_defaults[$name];
-        }
-        return null;
-    }
-
-    /**
-     * Return an array of defaults
-     *
-     * @return array Route defaults
-     */
-    public function getDefaults() { return $this->defaults; }
-    public function getRequest()         { return $this->request; }
-
-    public function setRequest(xarRequest $request)         { $this->request = $request; }
+*/
 }
 ?>

@@ -93,7 +93,7 @@ class HostnameRoute extends xarRoute
         return $return;
 
     }
-
+/*
     public function encode($data=array(), $reset=false, $encode=true, $partial=false)
     {
         $host = array();
@@ -147,5 +147,6 @@ class HostnameRoute extends xarRoute
 
         return $url;
     }
+    */
 }
 ?>
