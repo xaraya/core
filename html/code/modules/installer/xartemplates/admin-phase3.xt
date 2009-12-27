@@ -39,7 +39,7 @@
             requirements you may have difficulties in running install to completion.</p>
             <ul>
                 <xar:if condition="$metRequiredPHPVersion">
-                    <li class="success">PHP Version is greater than or equal to 5.2. Your PHP
+                    <li class="success">PHP Version is greater than or equal that the required version #PHP_REQIRED_VERSION#. Your PHP
                     Version is #$phpVersion#</li>
                 <xar:else />
                     <li class="failure">PHP Version is less than 5.0. Your PHP Version is
@@ -50,7 +50,7 @@
                     memory (16M or higher STRONGLY recommended). The current memory limit is
                     #$memory_limit# If you are planning to install modules during the install
                     phase, a lot of memory is required. If in doubt, 
-                    <strong>do a core only install</strong>and install modules manually
+                    <strong>do a core only install</strong> and install modules manually
                     later.</li>
                 <xar:elseif condition="$memory_warning"/>
                     <li class="warning">WARNING: Xaraya needs a MINIMUM of 8 Megabyte of PHP
@@ -59,7 +59,7 @@
                     Installation requires a lot of memory especially if you are planning to
                     install modules during this phase. If in doubt about your PHP memory limit,
 
-                    <strong>do a core only install</strong>and install modules manually
+                    <strong>do a core only install</strong> and install modules manually
                     later.</li>
                 <xar:else />
                     <li class="failure">ERROR: Xaraya needs a MINIMUM of 8 Megabyte of PHP
@@ -74,7 +74,7 @@
                     want to increase it for a full distribution install. How much time you need
                     will depend on your system and number of modules you choose during this
                     installation. If in doubt about your maximum (script) execution time, 
-                    <strong>do a core only install</strong>and install modules manually
+                    <strong>do a core only install</strong> and install modules manually
                     later.</li>
                 <xar:else />
                     <li class="success">SUCCESS: Your max_execution_time for a php script is
@@ -82,7 +82,7 @@
                     want to increase it for a full distribution install. How much time you need
                     will depend on your system and number of modules you choose during this
                     installation. If in doubt about your maximum (script) execution time, 
-                    <strong>do a core only install</strong>and install modules manually
+                    <strong>do a core only install</strong> and install modules manually
                     later.</li>
                 </xar:if>
             </ul>

@@ -33,6 +33,7 @@ function installer_admin_main()
 
 
 // TODO: move this to some place central
+define('PHP_REQIRED_VERSION', '5.3.0');
 define('MYSQL_REQIRED_VERSION', '5.0.0');
 
 /**
@@ -154,7 +155,7 @@ function installer_admin_phase3()
     $xmlLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/xml';
 
     if (function_exists('version_compare')) {
-        if (version_compare(PHP_VERSION,'5.2','>=')) $metRequiredPHPVersion = true;
+        if (version_compare(PHP_VERSION,PHP_REQIRED_VERSION,'>=')) $metRequiredPHPVersion = true;
     }
 
     $systemConfigIsWritable     = is_writable($systemConfigFile);
