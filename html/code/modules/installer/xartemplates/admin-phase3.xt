@@ -155,7 +155,7 @@
             <h2>Information on Loaded PHP Extensions</h2>
             <p>These extensions may be required for some modules to work, however Xaraya is not
             dependant on these extensions for installation. Refer to 
-            <a href="http://www.php.net">PHP.net</a>for further information on these
+            <a href="http://www.php.net">PHP.net</a> for further information on these
             extensions.</p>
             <ul>
                 <xar:if condition="$xmlextension">
