@@ -27,10 +27,15 @@ class BaseActionController extends Object
         
     function run(xarRequest $request=null, xarResponse $response=null)          
     {
+        // Get the part of the URL we will tokenize and decode
         $this->actionstring = $request->getActionString();
+        // Add the results of decoding to the params we already got when the request was created
         $args = $this->decode() + $request->getURLParams();
+        // Allocate those we can to module/type/function and store the rest as URLParams
         $this->chargeRequest($request, $args);
-        $_GET = $_GET + $args + $request->getURLParams();
+        // Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xarVarFetch
+        $_GET = $_GET + $args;
+        // Now get the output
         if ($request->getModule() == 'object') {
             sys::import('xaraya.objects');
             $response->output = xarObject::guiMethod($request->getType(), $request->getFunction(), $request->getURLParams());
