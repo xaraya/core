@@ -161,11 +161,11 @@ function base_admin_modifyconfig()
 
                     break;
                 case 'other':
-                    if (!xarVarFetch('loadlegacy', 'checkbox', $loadLegacy, true, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('proxyhost', 'str:1:', $proxyhost,'', XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('proxyport','int:1:', $proxyport, 0, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('editor','str:1:',$editor,'none', XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('releasenumber','int:1:', $releasenumber, xarModVars::get('base','releasenumber'),XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('loadlegacy',   'checkbox', $loadLegacy,    xarConfigVars::get(null, 'Site.Core.LoadLegacy'), XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('proxyhost',    'str:1:',   $proxyhost,     xarModVars::get('base', 'proxyhost'), XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('proxyport',    'int:1:',   $proxyport,     xarModVars::get('base', 'proxyport'), XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('editor',       'str:1:',   $editor,        xarModVars::get('base', 'editor'), XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('releasenumber','int:1:',   $releasenumber, xarModVars::get('base','releasenumber'),XARVAR_NOT_REQUIRED)) return;
                     // Save these in normal module variables for now
                     xarModVars::set('base','proxyhost',$proxyhost);
                     xarModVars::set('base','proxyport',$proxyport);

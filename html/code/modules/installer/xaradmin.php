@@ -696,12 +696,13 @@ function installer_admin_create_administrator()
     xarModVars::set('roles', 'adminpass', $data['admin']->properties['password']->password);
 
 // CHECKME: misc. undefined module variables
+    xarModVars::set('themes', 'var_dump', false);
+    xarModVars::set('base', 'releasenumber', 10);
     xarModVars::set('base', 'AlternatePageTemplateName', '');
     xarModVars::set('base', 'UseAlternatePageTemplate', false);
-    xarModVars::set('themes', 'var_dump', false);
-    xarModVars::set('base', 'editor', '');
+    xarModVars::set('base', 'editor', 'none');
     xarModVars::set('base', 'proxyhost', '');
-    xarModVars::set('base', 'proxyport', '');
+    xarModVars::set('base', 'proxyport', 0);
 
     //Try to update the role to the repository and bail if an error was thrown
     $itemid = $data['admin']->updateItem();
