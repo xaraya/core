@@ -12,6 +12,8 @@
  * @package dynamicdata
  *
 **/
+sys::import('modules.dynamicdata.class.datastores.base');
+
 class Dynamic_Function_DataStore extends BasicDataStore
 {
     /**
