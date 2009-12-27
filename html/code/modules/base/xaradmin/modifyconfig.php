@@ -35,15 +35,13 @@ function base_admin_modifyconfig()
     }
     closedir($dd);
 
-    sys::import('xaraya.structures.datetime');
-    $dateobject = new XarDateTime();
+    $data['hostdatetime'] = new DateTime();
     $tzobject = new DateTimeZone(xarConfigVars::get(null, 'System.Core.TimeZone'));
-    $dateobject->setTimezone($tzobject);
-    $data['hostnow'] = $dateobject->format("r");
+    $data['hostdatetime']->setTimezone($tzobject);
 
-    $tzobject = new DateTimeZone(xarModUserVars::get('roles','usertimezone'));
-    $dateobject->setTimezone($tzobject);
-    $data['localnow'] = $dateobject->format("r");
+    $data['sitedatetime'] = new DateTime();
+    $tzobject = new DateTimeZone(xarConfigVars::get(null, 'Site.Core.TimeZone'));
+    $data['sitedatetime']->setTimezone($tzobject);
 
     $data['editor'] = xarModVars::get('base','editor');
     $data['editors'] = array(array('displayname' => xarML('none')));
@@ -178,19 +176,19 @@ function base_admin_modifyconfig()
                     xarModVars::set('base','editor',$editor);
 
                     // Timezone, offset and DST
-                    if (!xarVarFetch('defaultsystemtimezone','str:1:',$defaultsystemtimezone,'UTC',XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('defaulttimezone','str:1:',$defaulttimezone,'UTC',XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('hosttimezone','str:1:',$hosttimezone,'UTC',XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('sitetimezone','str:1:',$sitetimezone,'UTC',XARVAR_NOT_REQUIRED)) return;
 
-                    $tzobject = new DateTimezone($defaultsystemtimezone);
+                    $tzobject = new DateTimezone($hosttimezone);
                     if (!empty($tzobject)) {
-                        xarConfigVars::set(null, 'System.Core.TimeZone', $defaultsystemtimezone);
+                        xarConfigVars::set(null, 'System.Core.TimeZone', $hosttimezone);
                     } else {
                         xarConfigVars::set(null, 'System.Core.TimeZone', "UTC");
                     }
-                    $tzobject = new DateTimezone($defaulttimezone);
+                    $tzobject = new DateTimezone($sitetimezone);
                     if (!empty($tzobject)) {
                         $datetime = new DateTime();
-                        xarConfigVars::set(null, 'Site.Core.TimeZone', $defaulttimezone);
+                        xarConfigVars::set(null, 'Site.Core.TimeZone', $sitetimezone);
                         xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', $tzobject->getOffset($datetime));
                     } else {
                         xarConfigVars::set(null, 'Site.Core.TimeZone', "UTC");

@@ -88,7 +88,7 @@ class TimeZoneProperty extends SelectProperty
         if (!isset($data['value'])) $data['value'] = $this->value;
         $zone = new DateTimeZone($data['value']);
         $datetime = new DateTime('now',$zone);
-        $data['offset'] = $zone->getOffset($datetime);
+        $data['offset'] = $zone->getOffset($datetime)/3600;
         return parent::showOutput($data);
     }
 
