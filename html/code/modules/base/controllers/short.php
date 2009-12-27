@@ -31,13 +31,9 @@ class BaseShortController extends ShortActionController
                 return parent::decode($data);
             break;
 
-            case 'login':
-                $data['func'] = 'main';
-                $data['page'] = $token;
-            break;
-
             default:
                 $data['func'] = 'main';
+                $data['page'] = $token;
             break;
         }
         return $data;
