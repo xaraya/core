@@ -31,7 +31,7 @@ class BaseActionController extends Object
         $this->actionstring = $request->getActionString();
         // Add the results of decoding to the params we already got when the request was created
         $args = $this->decode() + $request->getURLParams();
-        // Allocate those we can to module/type/function and store the rest as URLParams
+        // Allocate those params we can to module/type/function and store the rest as URLParams in the request
         $this->chargeRequest($request, $args);
         // Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xarVarFetch
         $_GET = $_GET + $args;
