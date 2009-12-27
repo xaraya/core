@@ -42,9 +42,14 @@ class DefaultActionController extends BaseActionController implements iControlle
     
     public function encode(xarRequest $request)
     {
-        $pathargs[$request->getModuleKey()] = $request->getModule();
-        $pathargs[$request->getTypeKey()] = $request->getType();
-        $pathargs[$request->getFunctionKey()] = $request->getFunction();
+        if ($request->getModule() =='object') {
+            $pathargs['object'] = $request->getType();
+            $pathargs['method'] = $request->getFunction();
+        } else {
+            $pathargs[$request->getModuleKey()] = $request->getModule();
+            $pathargs[$request->getTypeKey()] = $request->getType();
+            $pathargs[$request->getFunctionKey()] = $request->getFunction();
+        }
         $pathargs = $pathargs + $request->getURLParams();
         $path = xarURL::addParametersToPath($pathargs, '', xarController::$delimiter, $this->separator);
         return $path;
