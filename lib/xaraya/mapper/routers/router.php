@@ -28,7 +28,6 @@ class xarRouter extends Object
     {
         if (empty($this->routes['default'])) {
             $dispatcher = xarController::getDispatcher();
-//            $request = xarController::getRequest();
 
             sys::import('xaraya.mapper.routers.routes.default');
             $route = new DefaultRoute(array(), $dispatcher);
@@ -38,18 +37,6 @@ class xarRouter extends Object
             $route = new ShortRoute(array(), $dispatcher);
             $this->routes['short'] = $route;
 
-/*            sys::import('xaraya.mapper.routers.routes.object');
-            $route = new ObjectRoute(array(), $dispatcher);
-            $this->routes['object'] = $route;
-
-            $data=array(
-                'module' => 'object',
-                'object' => 'object',
-                'method' => 'method',
-            );
-//            $route = new ObjectRoute();
-//            $this->routes['short'] = $route;
-*/
             sys::import('xaraya.mapper.routers.routes.hostname');
             $route = new HostnameRoute(array(), $dispatcher);
             $this->routes['hostname'] = $route;
@@ -67,7 +54,6 @@ class xarRouter extends Object
         $this->addDefaultRoutes();
         foreach (array_reverse($this->routes) as $name => $route) {
             if ($params = $route->match($request)) {
-                $request->setURLParams($params);
                 $request->setRoute($name);
                 $this->currentRoute = $name;
                 return true;

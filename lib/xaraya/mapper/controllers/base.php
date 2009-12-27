@@ -28,12 +28,12 @@ class BaseActionController extends Object
     function run(xarRequest $request=null, xarResponse $response=null)          
     {
         $this->actionstring = $request->getActionString();
-        $args = $this->decode();
+        $args = $this->decode() + $request->getURLParams();
         $this->chargeRequest($request, $args);
         $_GET = $_GET + $args + $request->getURLParams();
         if ($request->getModule() == 'object') {
             sys::import('xaraya.objects');
-            $response->output = xarObject::guiMethod($request->getType(), $request->getFunction());
+            $response->output = xarObject::guiMethod($request->getType(), $request->getFunction(), $request->getURLParams());
         } else {
             $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getURLParams());
         }
@@ -58,6 +58,14 @@ class BaseActionController extends Object
         if (isset($params['func'])) {
             $request->setFunction($params['func']);
             unset($params['func']);
+        }
+        if (isset($params['object'])) {
+            $request->setType($params['object']);
+            unset($params['object']);
+        }
+        if (isset($params['method'])) {
+            $request->setFunction($params['method']);
+            unset($params['method']);
         }
         $request->setURLParams($params);
     }
