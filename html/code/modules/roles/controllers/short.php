@@ -129,9 +129,6 @@ class RolesShortController extends ShortActionController
                 }
                 break;
 
-              case 'admin':
-              echo "dick";
-              break;
             default:
                 break;
         }
