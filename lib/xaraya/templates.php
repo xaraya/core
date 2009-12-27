@@ -709,6 +709,9 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
         if (!file_exists($sourceFileName)) {
                 $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xt";
         }
+        if (!file_exists($sourceFileName)) {
+                $sourceFileName = sys::code() . "modules/dynamicdata/xartemplates/includes/$templateName.xt";
+        }
         if (file_exists($sourceFileName)) break;
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
