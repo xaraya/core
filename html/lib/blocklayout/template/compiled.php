@@ -3,7 +3,7 @@
  * Representing blocklayout compiled templates
  *
  * @package blocklayout
- * @copyright The Digital Development Foundation, 2006
+ * @copyright see the html/credits.html file in this release
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/

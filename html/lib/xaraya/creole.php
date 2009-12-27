@@ -7,7 +7,7 @@
  *
  * @package lib
  * @subpackage database
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @link http://www.xaraya.com
  * @author Marcel van der Boom <marcel@hsdev.com>
  */

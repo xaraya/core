@@ -1,6 +1,6 @@
 <?php
 /*
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
 
     The exception detailed below is granted for the following files in this 
     directory:

@@ -3,7 +3,7 @@
  * Validate a date value.
  *
  * @package validation
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
 */
 
 /**

@@ -3,7 +3,7 @@
  * Privileges administration API
  *
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -784,7 +784,6 @@ class xarMasks extends Object
 
     static function includes($privilege,$mask)
     {
-        if ($mask['name'] == 'EditPrivilege' && $mask['component'] == 'Privileges') var_dump($privilege);
         $p1 = $privilege;
         $p2 = $mask;
 
