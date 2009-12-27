@@ -700,7 +700,6 @@ function installer_admin_create_administrator()
     xarModVars::set('base', 'UseAlternatePageTemplate', false);
     xarModVars::set('themes', 'var_dump', false);
     xarModVars::set('base', 'editor', '');
-    xarModVars::set('base', 'releasenumber', '');
     xarModVars::set('base', 'proxyhost', '');
     xarModVars::set('base', 'proxyport', '');
 

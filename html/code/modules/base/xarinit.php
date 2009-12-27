@@ -199,6 +199,8 @@ function base_init()
     $authModules = array('authsystem');
     xarConfigVars::set(null, 'Site.User.AuthenticationModules',$authModules);
 
+    xarModVars::set('base', 'releasenumber', 10);
+
     // Start Modules Support
     $systemArgs = array('enableShortURLsSupport' => false,
                         'generateXMLURLs' => false);

@@ -54,8 +54,7 @@ function base_admin_modifyconfig()
         else $active = false;
         $data['locales'][] = array('name' => $locale, 'active' => $active);
     }
-    $releasenumber=xarModVars::get('base','releasenumber');
-    $data['releasenumber']=isset($releasenumber) ? $releasenumber:10;
+    $data['releasenumber'] = xarModVars::get('base','releasenumber');
 
     // TODO: delete after new backend testing
     // $data['translationsBackend'] = xarConfigVars::get(null, 'Site.MLS.TranslationsBackend');
@@ -162,12 +161,11 @@ function base_admin_modifyconfig()
 
                     break;
                 case 'other':
-                    if (!xarVarFetch('loadlegacy','checkbox',$loadLegacy,true,XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('proxyhost','str:1:',$proxyhost,'',XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('proxyport','int:1:',$proxyport,0,XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('editor','str:1:',$editor,'none',XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('releasenumber','int:1:',$releasenumber,10,XARVAR_NOT_REQUIRED)) return;
-
+                    if (!xarVarFetch('loadlegacy', 'checkbox', $loadLegacy, true, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('proxyhost', 'str:1:', $proxyhost,'', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('proxyport','int:1:', $proxyport, 0, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('editor','str:1:',$editor,'none', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('releasenumber','int:1:', $releasenumber, xarModVars::get('base','releasenumber'),XARVAR_NOT_REQUIRED)) return;
                     // Save these in normal module variables for now
                     xarModVars::set('base','proxyhost',$proxyhost);
                     xarModVars::set('base','proxyport',$proxyport);
