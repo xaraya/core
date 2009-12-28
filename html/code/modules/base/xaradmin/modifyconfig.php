@@ -36,7 +36,7 @@ function base_admin_modifyconfig()
     closedir($dd);
 
     $data['hostdatetime'] = new DateTime();
-    $tzobject = new DateTimeZone(xarConfigVars::get(null, 'System.Core.TimeZone'));
+    $tzobject = new DateTimeZone(xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
     $data['hostdatetime']->setTimezone($tzobject);
 
     $data['sitedatetime'] = new DateTime();
@@ -179,9 +179,11 @@ function base_admin_modifyconfig()
 
                     $tzobject = new DateTimezone($hosttimezone);
                     if (!empty($tzobject)) {
-                        xarConfigVars::set(null, 'System.Core.TimeZone', $hosttimezone);
+                        xarMod::apiFUnc('installer','admin','modifysystemvar', array('name'=> 'SystemTimeZone',
+                                                                                     'value' => $hosttimezone));
                     } else {
-                        xarConfigVars::set(null, 'System.Core.TimeZone', "UTC");
+                        xarMod::apiFUnc('installer','admin','modifysystemvar', array('name'=> 'SystemTimeZone',
+                                                                                     'value' => 'UTC'));
                     }
                     $tzobject = new DateTimezone($sitetimezone);
                     if (!empty($tzobject)) {

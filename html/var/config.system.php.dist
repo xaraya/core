@@ -32,6 +32,11 @@ $systemConfiguration['DB.Persistent'] = false;
  * For more advanced logging options use the logconfig module
  */
 
+/* System Time Zone
+ * This is the local time zone of your host machine. This time is used by the logging subsystem
+ */
+ $systemConfiguration['SystemTimeZone'] = 'UTC';
+
 /*
  * Global error level, optional
  * If set it is passed directly into the error_reporting() function of PHP

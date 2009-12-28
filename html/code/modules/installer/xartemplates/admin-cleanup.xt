@@ -12,13 +12,16 @@
         <p>
             You can now customize your installation to match your needs. Use the <strong>Modules administration</strong>to install any additional features, or use the <strong>Blocks administration</strong>to adjust the look of your sidebars or add blocks to your site. You can do either of these at any time via the Admin menu.
         </p>
-        <div style="clear: both; float: left; width: 33%">
+        <div style="clear: both; float: left; width: 25%">
+            <a href="#$finalurl#&amp;returnurl=base" style="font-size: 14pt">I want to configure the site!</a>
+        </div>
+        <div style="float: left; width: 25%">
             <a href="#$finalurl#&amp;returnurl=modules" style="font-size: 14pt">I want to add modules</a>
         </div>
-        <div style="float: left; width: 33%">
+        <div style="float: left; width: 25%">
             <a href="#$finalurl#&amp;returnurl=blocks" style="font-size: 14pt">I want to manage blocks</a>
         </div>
-        <div style="float: left; width: 33%">
+        <div style="float: left; width: 25%">
             <a href="#$finalurl#&amp;returnurl=site" style="font-size: 14pt">Just launch the site!</a>
         </div>
         <br />

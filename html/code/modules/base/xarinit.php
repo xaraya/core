@@ -145,7 +145,6 @@ function base_init()
     /****************************************************************
      * Set System Configuration Variables
      *****************************************************************/
-    xarConfigVars::set(null, 'System.Core.TimeZone', 'Etc/UTC');
     xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
     xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);
     xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);

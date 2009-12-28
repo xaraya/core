@@ -1228,11 +1228,12 @@ function installer_admin_finish()
 
     if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'privileges', 'objects' => $objects))) return;
 
-    $machinetz = date_default_timezone_get();
-    xarConfigVars::set(null, 'System.Core.TimeZone', $machinetz);
-    xarConfigVars::set(null, 'Site.Core.TimeZone', $machinetz);
+    // Default for the site time zone is the system time zone
+    xarConfigVars::set(null, 'Site.Core.TimeZone', xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
 
     switch ($returnurl) {
+        case ('base'):
+            xarResponse::redirect(xarModURL('base','admin','modifyconfig'));
         case ('modules'):
             xarResponse::redirect(xarModURL('modules','admin','list'));
         case ('blocks'):

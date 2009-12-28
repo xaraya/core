@@ -52,6 +52,30 @@ function installer_adminapi_modifyconfig($args)
 }
 
 /**
+ * Modify a single variable in the system configuration file
+ *
+ * @author Marc Lutolf
+ * @param string args['name']
+ * @param string args['value']
+ * @return bool
+ */
+
+function installer_adminapi_modifysystemvar($args)
+{
+    extract($args);
+    $systemConfigFile = sys::varpath() . '/config.system.php';
+    $config_php = join('', file($systemConfigFile));
+
+    $config_php = preg_replace('/\[\''.$name.'\'\]\s*=\s*(\'|\")(.*)\\1;/', "['".$name."'] = '$value';", $config_php);
+
+    $fp = fopen ($systemConfigFile, 'wb');
+    fwrite ($fp, $config_php);
+    fclose ($fp);
+
+    return true;
+}
+
+/**
  * Include a module init file and run a function
  *
  * @access public

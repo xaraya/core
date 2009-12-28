@@ -394,7 +394,7 @@
                     <div class="xar-form-input-wrapper">
                         <label for="mytimezone" title="#xarML('This is the timezone your operating system is set to.')#" class="xar-form-label">Host Timezone:</label>
                         <xar:set name="hosttimezone">
-                            <xar:var scope="config" name="System.Core.TimeZone"/>
+                            xarSystemVars::get(sys::CONFIG, 'SystemTimeZone')
                         </xar:set>
                         <xar:data-input type="timezone" name="hosttimezone" id="hosttimezone" value="$hosttimezone"/>
                         &#160;The time is #$hostdatetime->format(DATE_RSS)#

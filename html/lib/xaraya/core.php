@@ -187,12 +187,15 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 //    xarCoreActivateDebugger(XARDBG_INACTIVE);
 
     /*
-     * If there happens something we want to be able to log it
-     *
+     * If something happens we want to be able to log it
+     * And to do so we will need the system time
      */
     $systemArgs = array();
     sys::import('xaraya.log');
     xarLog_init($systemArgs);
+
+    sys::import('xaraya.variables.system');
+    date_default_timezone_set(xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
 
     /*
      * Start Database Connection Handling System
@@ -203,7 +206,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if ($whatToLoad & XARCORE_SYSTEM_DATABASE) { // yeah right, as if this is optional
-        sys::import('xaraya.variables.system');
 
         // Decode encoded DB parameters
         // These need to be there
