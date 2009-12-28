@@ -18,7 +18,6 @@
 
     class HTMLBlock extends BasicBlock implements iBlock
     {
-
         public $name                = 'HTMLBlock';
         public $module              = 'base';
         public $text_type           = 'HTML';
