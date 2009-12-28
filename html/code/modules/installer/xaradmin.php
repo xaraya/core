@@ -1169,8 +1169,6 @@ function installer_admin_cleanup()
         } else {
             throw new Exception('Could not create login block');
         }
-    } else {
-        throw new Exception('Login block created too early?');
     }
 
     // Same query, but for header group.
