@@ -36,7 +36,7 @@ function xarBlock_init(&$args)
 }
 
 /**
- * Renders a block
+ * Renders a block in a block group
  *
  * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access protected
