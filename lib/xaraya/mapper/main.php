@@ -140,26 +140,6 @@ class xarController extends Object
         } catch (Exception $e) {
                 throw $e;
         }
-        /*
-        if (self::$request->isObjectURL()) {
-            sys::import('xaraya.objects');
-
-            // Call the object handler and return the output (or exit with 404 Not Found)
-            self::$response->output = xarObject::guiMethod(self::$request->getType(), self::$request->getFunction());
-
-        } else {
-            if (!xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport')) {
-                // Call the main module function and return the output (or exit with 404 Not Found)
-                self::$response->output = xarMod::guiFunc(self::$request->getModule(), self::$request->getType(), self::$request->getFunction());
-            } else {
-                if (self::$request->isModuleURL()) {
-                    // Call the main module function and return the output (or exit with 404 Not Found)
-                    self::$response->output = xarMod::guiFunc(self::$request->getModule(), self::$request->getType(), self::$request->getFunction());
-                } else {
-                    self::$response->output = self::$response->notFound();
-                }
-            }
-        }*/
     }
     
     /**

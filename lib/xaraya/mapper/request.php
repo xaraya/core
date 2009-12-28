@@ -1,9 +1,6 @@
 <?php
 class xarRequest extends Object
 {
-    private $isObjectURL = false;
-    private $isModuleURL = false;
-    
     protected $url;
     protected $actionstring;
     protected $dispatched = false;
@@ -96,7 +93,7 @@ class xarRequest extends Object
 
             }
             // Get the query parameters too
-            // CHECKME: Module, type, func, object and method are reserved names, so remove them from the array
+            // Module, type, func, object and method are reserved names, so remove them from the array
             unset($params['module']);
             unset($params['type']);
             unset($params['func']);
@@ -161,7 +158,6 @@ class xarRequest extends Object
             if (isset($params['module'])) {
                 $isvalid =  $regex->validate($params['module'], array('/^[a-z][a-z_0-9]*$/'));
                 $modName = $isvalid ? $params['module'] : null;
-                $this->isModuleURL = true; 
             } else {
                 $modName = null;
             }
@@ -189,10 +185,7 @@ class xarRequest extends Object
                 // Check if we have a method to work with for object URLs
                 xarVarFetch('method', 'regexp:/^[a-zA-Z0-9_-]+$/', $methodName, NULL, XARVAR_NOT_REQUIRED);
                 // Specify 'dynamicdata' as module for xarTpl_* functions etc.
-                $requestInfo = array('dynamicdata', $objectName, $methodName);
-                if (empty($url)) {
-                    $this->isObjectURL = true;
-                }
+                $requestInfo = array('object', $objectName, $methodName);
             } else {
                 // If $modName is still empty we use the default module/type/func to be loaded in that such case
                 if (empty($this->defaultRequestInfo)) {
@@ -206,10 +199,6 @@ class xarRequest extends Object
         // Save the current info in case we call this function again
         if (empty($url)) $currentRequestInfo = $requestInfo;
         
-/*        list($this->module,
-             $this->type,
-             $this->func) = $requestInfo;
-*/
         return $requestInfo;
     }
     
@@ -220,7 +209,6 @@ class xarRequest extends Object
      * @return bool true if object URL, false if not
      */
     function isObjectURL() { return $this->isObjectURL; }
-    function isModuleURL() { return $this->isModuleURL; }
 
     function getProtocol()       { return xarServer::getProtocol(); }
     function getHost()           { return xarServer::getHost(); }
