@@ -39,10 +39,10 @@
             requirements you may have difficulties in running install to completion.</p>
             <ul>
                 <xar:if condition="$metRequiredPHPVersion">
-                    <li class="success">PHP Version is greater than or equal that the required version #PHP_REQIRED_VERSION#. Your PHP
+                    <li class="success">PHP Version is greater than or equal that the required version #PHP_REQUIRED_VERSION#. Your PHP
                     Version is #$phpVersion#</li>
                 <xar:else />
-                    <li class="failure">PHP Version is less than 5.0. Your PHP Version is
+                    <li class="failure">PHP Version is less than #PHP_REQUIRED_VERSION#. Your PHP Version is
                     #$phpVersion# please upgrade PHP.</li>
                 </xar:if>
                 <xar:if condition="$metMinMemRequirement and !$memory_warning">

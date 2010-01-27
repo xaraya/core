@@ -33,8 +33,8 @@ function installer_admin_main()
 
 
 // TODO: move this to some place central
-define('PHP_REQIRED_VERSION', '5.3.0');
-define('MYSQL_REQIRED_VERSION', '5.0.0');
+define('PHP_REQUIRED_VERSION', '5.3.0');
+define('MYSQL_REQUIRED_VERSION', '5.0.0');
 
 /**
  * Phase 1: Welcome (Set Language and Locale) Page
@@ -155,7 +155,7 @@ function installer_admin_phase3()
     $xmlLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/xml';
 
     if (function_exists('version_compare')) {
-        if (version_compare(PHP_VERSION,PHP_REQIRED_VERSION,'>=')) $metRequiredPHPVersion = true;
+        if (version_compare(PHP_VERSION,PHP_REQUIRED_VERSION,'>=')) $metRequiredPHPVersion = true;
     }
 
     $systemConfigIsWritable     = is_writable($systemConfigFile);
@@ -208,14 +208,14 @@ function installer_admin_phase3()
     
     // We only check this extension if MySQL is loaded
     if ($data['mysqlextension']) {
-        $data['mysql_required_version']     = MYSQL_REQIRED_VERSION;
+        $data['mysql_required_version']     = MYSQL_REQUIRED_VERSION;
         ob_start();
         phpinfo(INFO_MODULES);
         $info = ob_get_contents();
         ob_end_clean();
         $info = stristr($info, 'Client API version');
         preg_match('/[1-9].[0-9].[1-9][0-9]/', $info, $match);
-        $data['mysql_version_ok'] = version_compare($match[0],MYSQL_REQIRED_VERSION,'ge');
+        $data['mysql_version_ok'] = version_compare($match[0],MYSQL_REQUIRED_VERSION,'ge');
         $data['mysql_version']          = $match[0];
     }
 
@@ -349,7 +349,7 @@ function installer_admin_phase5()
     if ($dbType == 'mysql') {
         $tokens = explode('.',mysql_get_server_info());
         $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
-        $data['required_version'] = MYSQL_REQIRED_VERSION;
+        $data['required_version'] = MYSQL_REQUIRED_VERSION;
         $mysql_version_ok = version_compare($data['version'],$data['required_version'],'ge');
         if (!$mysql_version_ok) {
             $data['layout'] = 'bad_version';
