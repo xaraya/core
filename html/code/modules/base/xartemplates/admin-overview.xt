@@ -83,7 +83,7 @@
                     <strong>WYSIWYG editors:</strong>&#160;A default WYSIWYG editor can be chosen from a dropdown of available editors (these need to be installed by their modules).
                 </li>
                 <li>
-                    <strong>Legacy support:</strong>&#160;Activating legacy support will allow earlier versions of Xaraya modules to run on the site. Note that legacy support changes as versions are released, so the setting  in general provides support only for the most recent versions. 
+                    <strong>Legacy support:</strong>&#160;Activating legacy support will allow earlier versions of Xaraya modules to run on the site. Note that legacy support changes as versions are released, so the setting  in general provides support only for the most recent versions.
                 </li>
                 <li>
                     <strong>ShortURLs:</strong>&#160;a global setting which defines whether the site supports short URLs. Single modules must have their own settings enabled to activate their own support for short URLs.
@@ -91,10 +91,10 @@
             </ul>
         </p>
         <p>
-            Clicking on the <strong>System Information</strong>link in the Admin menu lets you see your PHP configuration via the standard phpinfo() function.
+            Clicking on the <strong>System Information</strong> link in the Admin menu lets you see your PHP configuration via the standard phpinfo() function.
         </p>
         <p>
-            Clicking on the <strong>Latest Releases</strong>link in the Admin menu lists the 10 latest extension releases from www.xaraya.com.
+            Clicking on the <strong>Latest Releases</strong> link in the Admin menu lists the 10 latest extension releases from www.xaraya.com.
         </p>
 
         <h3>Available Blocks</h3>
@@ -218,12 +218,12 @@
         <h3>Further Information</h3>
         <p>Further information on the Base module can be found at</p>
         <ul>
-            <li>Base Module Extension page at 
+            <li>Base Module Extension page at
             <a title="#xarML('Base Module - Xaraya Extension 68')#"
             href="http://www.xaraya.com/index.php/release/68.html">Xaraya Extension and
             Releases</a>. Click on Version History tab at the bottom to get the latest release
             information.</li>
-            <li>Related tutorials and documentation on Base Module found at 
+            <li>Related tutorials and documentation on Base Module found at
             <a href="http://www.xaraya.com/index.php/keywords/base/"
             title="#xarML('Related documentation on Base')#">Xaraya Documentation.</a></li>
         </ul>

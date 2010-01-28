@@ -11,7 +11,7 @@
 
         <h3>What is it?</h3>
         <p>
-            The Themes module manages the themes available on your Xaraya installation, which in turn define the site's display and look-and-feel. It also provides performance and development options for administrators and theme developers. The Themes module is a core module within Xaraya and cannot be removed. 
+            The Themes module manages the themes available on your Xaraya installation, which in turn define the site's display and look-and-feel. It also provides performance and development options for administrators and theme developers. The Themes module is a core module within Xaraya and cannot be removed.
         </p>
         <p>
             Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('themes')))#">here</a>.
@@ -33,7 +33,7 @@
                 <strong>Overrides:</strong> are templates that display.the content of blocks and modules. They override native default templates already present in the respective blocks or modules. Depending on how different the display should be from the defaults there may be few or many of these templates in the theme. The concept of overrides lets themers selectively change displays without having to create tempaltes for the entire site.
             </li>
         </ul>
-        
+
         <h3>The Admin interface</h3>
         <p>
             As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Themes &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
@@ -42,7 +42,7 @@
             In addition, this module also supports the following configuration options:
             <ul>
                 <li>
-                    <strong>User defined theme:</strong>&#160;If this option is active, then users can define the theme to view the site with fomr their account page 
+                    <strong>Enable user settings:</strong>&#160;If this option is active, then users can define the theme to view the site with from their account page
                 </li>
                 <li>
                     <strong>Admin Dashboard</strong>
@@ -53,13 +53,13 @@
                         </li>
                         <li>
                             <em>Dashboard Template Name:</em>&#160;This is the name of the Admin Dashboard
-                            template located in your themes/yourtheme/pages directory. By default it is called 
+                            template located in your themes/yourtheme/pages directory. By default it is called
                             dashboard.xt, but you can change it with this option. Do not include the .xt extension in the name when using this option.
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <strong>Site Display Options</strong>&#160;These are variables that can be inserted into your templates for display on your site. They are all used in the Default theme at installation time. To display these variables on your site, insert them in your templates with the appropriate <pre>&lt;xar:var /&gt;</pre> blocklayout tag. 
+                    <strong>Site Display Options</strong>&#160;These are variables that can be inserted into your templates for display on your site. They are all used in the Default theme at installation time. To display these variables on your site, insert them in your templates with the appropriate <pre>&lt;xar:var /&gt;</pre> blocklayout tag.
                     <ul>
                         <li>
                             <em>Site Name</em>:
@@ -70,7 +70,7 @@
                         </li>
                         <li>
                             <em>Copyright</em>: Defaults to "&#169; Copyright 2009 &lt;administrator name&gt;".
-                            Change the text as necessary and insert in your theme with 
+                            Change the text as necessary and insert in your theme with
                             <pre>&lt;xar:var scope="module" module="themes" name="SiteCopyRight" /&gt;</pre></li>
                         <li>
                             <em>Footer note</em>: The 'footer' is displayed at the bottom (the 'foot') of every page on your site in the Default theme.
@@ -130,7 +130,7 @@
         </p>
 
         <p>
-            Clicking on the <strong>View Themes</strong>link in the Admin menu displays a list of all themes that are available but not necessarily active and installed in your Xaraya installation.
+            Clicking on the <strong>View Themes</strong> link in the Admin menu displays a list of all themes that are available but not necessarily active and installed in your Xaraya installation.
         </p>
         <ul>
             <li>
@@ -144,7 +144,7 @@
         </ul>
         <p>
             Within the list of themes you can view further information on each theme by clicking on its link in the Info column.
-            If more than one theme is active, the themes the site is <em>not</em> displayed in by default will have a Set as Default link in the Actions column. Clicking on the link will make that theme the default theme for displaying the site. 
+            If more than one theme is active, the themes the site is <em>not</em> displayed in by default will have a Set as Default link in the Actions column. Clicking on the link will make that theme the default theme for displaying the site.
         </p>
 
         <p>
@@ -176,22 +176,18 @@
         <p>The Themes module has no dataproperties</p>
 
         <h3>Available Hooks</h3>
-        <ul>
-            <li>
-                <strong>Usermenu Hook</strong>:&#160;if hooked to the Roles module, shows a tab in the user's account page with a dropdown that allows the user to define the theme for the site to display in.
-            </li>
-        </ul>
+        <p>The Themes module has no hooks</p>
 
         <!--
         <h3>Further Information</h3>
         <p>Further information on the Themes module can be found at</p>
         <ul>
-            <li>Themes Module Extension page at 
+            <li>Themes Module Extension page at
             <a title="#xarML('Themes Module - Xaraya Extension 70')#"
             href="http://www.xaraya.com/index.php/release/70.html">Xaraya Extension and
             Releases</a>. Click on Version History tab at the bottom to get the latest release
             information.</li>
-            <li>Related tutorials and documentation on Themes module found at 
+            <li>Related tutorials and documentation on Themes module found at
             <a href="http://www.xaraya.com/index.php/keywords/themes/"
             title="#xarML('Related documentation on Themes')#">Xaraya Documentation.</a></li>
         </ul>
