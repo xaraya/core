@@ -64,6 +64,7 @@ class AdminMenuBlock extends BasicBlock implements iBlock
         $showhelp = false;
         if(isset($vars['showhelp'])&& $vars['showhelp']) $showhelp =true;
         // Show a link to front end?
+        $showfront = false;
         if(isset($vars['showfront']) && $vars['showfront']) $showfront = true;
 
         // SETTING 2: Menustyle
@@ -105,6 +106,7 @@ class AdminMenuBlock extends BasicBlock implements iBlock
                         // 1. blank label 2. no URL 3. no title text 4. links to module functions, when users looking at default main function
                         // 5. URL with title text, when user is looking at other than default function of this module
 
+                        $adminmods[$modname]['features']['modactive'] = 1;
                         // adding attributes and flags to each module link for the template
                         if ($thisfuncname != 'main' || $thismodtype != 'admin'){
                             $adminmods[$modname]['features']['overview'] = 1;
