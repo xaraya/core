@@ -48,6 +48,7 @@ class MenuBlock extends BasicBlock implements iBlock
                                     'visible' => true,
                                     );
     public $showlogout          = true;
+    public $showback            = true;
 
     public $rssurl;
     public $printurl;
@@ -82,6 +83,7 @@ class MenuBlock extends BasicBlock implements iBlock
         if (empty($data['displaymodules'])) $data['displaymodules'] = $this->displaymodules;
         if (empty($data['modulelist'])) $data['modulelist'] = $this->modulelist;
         if (empty($data['lines'])) $data['lines'] = array($this->content);
+        if (!isset($data['showback'])) $data['showback'] = $this->showback;
 
         // which module is loaded atm?
         // we need it's name, type and function - dealing only with user type mods, aren't we?
@@ -319,6 +321,7 @@ class MenuBlock extends BasicBlock implements iBlock
 
         // we dont want to show logout link if the user is anonymous or admin
         // admins have their own logout method, which is more robust
+        // @CHECKME: why don't we display the admin logout link?
         // Security Check
         if (xarSecurityCheck('AdminBaseBlock',0,'adminmenu',"$data[title]:All:All") or
             !xarUserIsLoggedIn() or
@@ -326,6 +329,12 @@ class MenuBlock extends BasicBlock implements iBlock
             $showlogout = false;
         } else {
             $showlogout = true;
+        }
+        // optionally show a link to the back end for admins
+        if (xarSecurityCheck('AdminBase', 0) && !empty($data['showback'])) {
+            $showback = true;
+        } else {
+            $showback = false;
         }
 
         $marker         = isset($data['marker']) ? $data['marker'] : $this->marker;
@@ -349,7 +358,8 @@ class MenuBlock extends BasicBlock implements iBlock
             'displayrss'       => $displayrss,
             'displayprint'     => $displayprint,
             'printurl'         => $printurl,
-            'rssurl'           => $rssurl
+            'rssurl'           => $rssurl,
+            'showback'         => $showback,
         );
         return $data;
     }
@@ -362,13 +372,14 @@ class MenuBlock extends BasicBlock implements iBlock
     {
         $data = parent::modify($data);
 
-        if (empty($data['marker'])) $data['marker'] = $this->marker;
-        if (empty($data['displaymodules'])) $data['displaymodules'] = $this->displaymodules;
-        if (empty($data['modulelist'])) $data['modulelist'] = $this->modulelist;
-        if (empty($data['displayrss'])) $data['displayrss'] = $this->displayrss;
-        if (empty($data['displayprint'])) $data['displayprint'] = $this->displayprint;
-        if (empty($data['content'])) $data['content'] = $this->content;
-        if (empty($data['showlogout'])) $data['showlogout'] = $this->showlogout;
+        if (!isset($data['marker'])) $data['marker'] = $this->marker;
+        if (!isset($data['displaymodules'])) $data['displaymodules'] = $this->displaymodules;
+        if (!isset($data['modulelist'])) $data['modulelist'] = $this->modulelist;
+        if (!isset($data['displayrss'])) $data['displayrss'] = $this->displayrss;
+        if (!isset($data['displayprint'])) $data['displayprint'] = $this->displayprint;
+        if (!isset($data['content'])) $data['content'] = $this->content;
+        if (!isset($data['showlogout'])) $data['showlogout'] = $this->showlogout;
+        if (!isset($data['showback'])) $data['showback'] = $this->showback;
 
         // @CHECKME: is this used?
         if (empty($data['style'])) $data['style'] = 1;
@@ -388,10 +399,11 @@ class MenuBlock extends BasicBlock implements iBlock
         // Global options.
         if (!xarVarFetch('displaymodules', 'str:1',    $content['displaymodules'], $this->displaymodules, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('modulelist',     'str',      $content['modulelist'], $this->modulelist, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('showlogout',     'checkbox', $content['showlogout'], $this->showlogout, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('displayrss',     'checkbox', $content['displayrss'], $this->displayrss, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('displayprint',   'checkbox', $content['displayprint'], $this->displayprint, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('showlogout',     'checkbox', $content['showlogout'], false, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('displayrss',     'checkbox', $content['displayrss'], false, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('displayprint',   'checkbox', $content['displayprint'], false, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('marker',         'str:1',    $content['marker'], $this->marker, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('showback',       'checkbox', $content['showback'], false, XARVAR_NOT_REQUIRED)) return;
 
         // User links.
         $content['lines'] = array();

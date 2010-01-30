@@ -128,6 +128,12 @@
         </label>
     </div>
     <div class="xar-form-input-wrapper-after">
+        <xar:data-input type="checkbox" name="showback" id="showback" checked="$showback"/>
+        <label for="showback" title="#xarML('Select if you would like Xaraya to generate a link to the back end for administrative users at the bottom of the menu.')#">
+            Display Admin Link to Back End
+        </label>
+    </div>
+    <div class="xar-form-input-wrapper-after">
         <xar:if condition="!empty($displayprint)">
             <input type="checkbox" value="1" name="displayprint" id="displayprint" checked="checked"/>
         <xar:else />
