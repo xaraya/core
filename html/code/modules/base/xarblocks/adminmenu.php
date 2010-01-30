@@ -32,6 +32,7 @@ class AdminMenuBlock extends BasicBlock implements iBlock
     public $showlogout          = 1;
     public $menustyle           = 'bycat';
     public $showhelp            = 0;
+    public $showfront           = 1;
 
 /**
  * Display func.
@@ -45,6 +46,7 @@ class AdminMenuBlock extends BasicBlock implements iBlock
         if (!isset($vars['showlogout'])) $vars['showlogout'] = $this->showlogout;
         if (!isset($vars['menustyle'])) $vars['menustyle'] = $this->menustyle;
         if (!isset($vars['showhelp'])) $vars['showhelp'] = $this->showhelp;
+        if (!isset($vars['showfront'])) $vars['showfront'] = $this->showfront;
 
         // are there any admin modules, then get the whole list sorted by names
         // checking this as early as possible
@@ -61,6 +63,8 @@ class AdminMenuBlock extends BasicBlock implements iBlock
         /// Show a help link
         $showhelp = false;
         if(isset($vars['showhelp'])&& $vars['showhelp']) $showhelp =true;
+        // Show a link to front end?
+        if(isset($vars['showfront']) && $vars['showfront']) $showfront = true;
 
         // SETTING 2: Menustyle
         if(!isset($vars['menustyle'])) {
@@ -238,6 +242,7 @@ class AdminMenuBlock extends BasicBlock implements iBlock
         if(empty($data['showlogout'])) $data['showlogout'] = 0;
         if(empty($data['menustyle']))  $data['menustyle'] = 'bycat'; //xarModVars::get('base','menustyle');
         if(empty($data['showhelp'])) $data['showhelp'] = 0;
+        if(empty($data['showfront'])) $data['showfront'] = 0;
 
         // Set the template data we need
         $sortorder = array('byname' => xarML('By Name'),
@@ -256,6 +261,7 @@ class AdminMenuBlock extends BasicBlock implements iBlock
         if (!xarVarFetch('showlogout', 'int:0:1', $vars['showlogout'], 0, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('menustyle' , 'str::'  , $vars['menustyle'] , 'bycat', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('showhelp', 'int:0:1', $vars['showhelp'], 0, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('showfront', 'int:0:1', $vars['showfront'], 0, XARVAR_NOT_REQUIRED)) return;
         $data['content'] = $vars;
         return $data;
     }

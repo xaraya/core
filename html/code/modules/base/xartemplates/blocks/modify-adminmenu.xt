@@ -16,6 +16,12 @@
     </div>
     -->
     <div class="xar-form-input-wrapper">
+        <label class="xar-form-label" for="showfront#$blockid#" title="#xarML('By checking this box a link to the front end will be shown in the panel instance.')#">
+            Show Link to Front End
+        </label>
+        <xar:data-input type="checkbox" name="showfront" checked="$showfront"/>
+    </div>
+    <div class="xar-form-input-wrapper">
         <label for="menustyle" title="#xarML('How should the menu items be ordered?')#" class="xar-form-label">
             Sort Admin Menu Items:
         </label>
