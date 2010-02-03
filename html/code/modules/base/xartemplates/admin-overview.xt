@@ -20,11 +20,11 @@
         <h3>Concepts</h3>
         <h4>Custom Templates and Static Pages</h4>
         <p>
-            As well as providing a means to provide a custom template for your front page by creating an override for the base user-main.xd template, you can also create further custom 'static' pages using base module templates. See the documentation for further information.
+            As well as providing a means to provide a custom template for your front page by creating an override for the base user-main.xt template, you can also create further custom 'static' pages using base module templates. See the documentation for further information.
         </p>
         <h4>Core CSS</h4>
         <p>
-            Xaraya comes with a rich ste of CSS classes that are located in the xarstyles directory of the Base module. These classes are used by the core module templates and are also available to the themes. Individual themes can override or ignore these classes simply by overriding the file modules/base/xarstyles/xarcore-xhtml1-strict.css in the theme.
+            Xaraya comes with a rich set of CSS classes that are located in the xarstyles directory of the Base module. These classes are used by the core module templates and are also available to the themes. Individual themes can override or ignore these classes simply by overriding the file modules/base/xarstyles/xarcore-xhtml1-strict.css in the theme.
         </p>
         <h4>Javascript Tags</h4>
         <p>
