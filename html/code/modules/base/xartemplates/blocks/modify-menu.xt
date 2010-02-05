@@ -123,8 +123,8 @@
         <xar:else />
             <input type="checkbox" value="1" name="showlogout" id="showlogout"/>
         </xar:if>
-        <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link for non-administrative users at the bottom of the menu.')#">
-            Display Non-Admin User Logout
+        <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link at the bottom of the menu.')#">
+            Display Logout
         </label>
     </div>
     <div class="xar-form-input-wrapper-after">

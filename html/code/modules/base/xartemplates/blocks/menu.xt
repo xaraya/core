@@ -126,7 +126,7 @@
                 <!-- @CHECKME: why not admin? -->
                 <xar:if condition="$showlogout">
                    <li class="xar-menu-item">
-                        <a title="#xarML('Logout as administrator')#" href="#$logouturl#">
+                        <a title="#xarML('Logout')#" href="#$logouturl#">
                             #$logoutlabel#
                         </a>
                     </li>

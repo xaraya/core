@@ -91,12 +91,16 @@ class MenuBlock extends BasicBlock implements iBlock
         list($thismodname, $thismodtype, $thisfuncname) = xarRequest::getInfo();
 
         // Sort Order, Status, Common Labels and Links Display preparation
-        $logoutlabel = xarVarPrepForDisplay(xarML('logout'));
 
         $authmoduledata = xarMod::apiFunc('roles','user','getdefaultauthdata');
         $authmodlogout = $authmoduledata['defaultloginmodname'];
-
-        $logouturl = xarModURL($authmodlogout,'user', 'logout', array());
+        if (xarSecurityCheck('AdminBaseBlock',0,'adminmenu',"$data[title]:All:All")) {
+            $logoutlabel = xarVarPrepForDisplay(xarML('Admin Logout'));
+            $logouturl = xarModURL('base', 'admin', 'confirmlogout');
+        } else {
+            $logoutlabel = xarVarPrepForDisplay(xarML('Logout'));
+            $logouturl = xarModURL($authmodlogout,'user', 'logout', array());
+        }
         $loggedin = xarUserIsLoggedIn();
 
         // Get current URL
@@ -323,9 +327,7 @@ class MenuBlock extends BasicBlock implements iBlock
         // admins have their own logout method, which is more robust
         // @CHECKME: why don't we display the admin logout link?
         // Security Check
-        if (xarSecurityCheck('AdminBaseBlock',0,'adminmenu',"$data[title]:All:All") or
-            !xarUserIsLoggedIn() or
-            empty($data['showlogout'])) {
+        if (!$loggedin or empty($data['showlogout'])) {
             $showlogout = false;
         } else {
             $showlogout = true;
