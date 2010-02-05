@@ -30,13 +30,8 @@
         {
             $data = parent::display($data);
             if (empty($data)) return;
-
-            // Get variables from content block
-            if (!is_array($data['content'])) {
-                $args = unserialize($data['content']);
-            } else {
-                $args = $data['content'];
-            }
+            $args = $data['content'];
+            
             if (!isset($args['showusers']))     $args['showusers'] = true;
             if (!isset($args['showusertotal'])) $args['showusertotal'] = false;
             if (!isset($args['showanontotal'])) $args['showanontotal'] = false;
