@@ -33,13 +33,15 @@ function modules_admin_upgrade()
     if (!xarVarFetch('id', 'int:1:', $id)) {return;}
 
     // See if we have lost any modules since last generation
-    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {
+    sys::import('modules.modules.class.installer');
+    $installer = Installer::getInstance();    
+    if (!$installer->checkformissing()) {
         return;
     }
 
     // TODO: give the user the opportunity to upgrade the dependancies automatically.
     try {
-        xarMod::apiFunc('modules', 'admin', 'verifydependency', array('regid'=>$id));
+        $installer->verifydependency($id);
         $minfo=xarMod::getInfo($id);
         //Bail if we've lost our module
         if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_UPGRADED) {

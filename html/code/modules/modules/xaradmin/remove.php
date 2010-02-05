@@ -41,12 +41,11 @@ function modules_admin_remove ()
     // set the target location (anchor) to go to within the page
     $target=$minfo['name'];
 
+    sys::import('modules.modules.class.installer');
+    $installer = Installer::getInstance();    
     if(!$command) {
         // not been thru gui yet, first check the modules dependencies
-        // FIXME: double check this line and the line with removeewithdependents below,
-        // they can NOT be called in the same request due to the statics used in there, the logic
-        // needs to be reviewed, it's not solid enough.
-        $dependents = xarMod::apiFunc('modules','admin','getalldependents',array('regid'=>$id));
+        $dependents = $installer->getalldependents($id);
         if (!(count($dependents['active']) > 0 || count($dependents['initialised']) > 1 )) {
             //No dependents, just remove the module
             if(!xarMod::apiFunc('modules','admin','remove',array('regid' => $id)))  return;
@@ -65,7 +64,7 @@ function modules_admin_remove ()
 
     // User has seen the GUI
     // Removes with dependents, first remove the necessary dependents then the module itself
-    if (!xarMod::apiFunc('modules','admin','removewithdependents',array('regid'=>$id))) {
+    if (!$installer->removewithdependents($id)) {
         //Call exception
         xarLogMessage('Missing module since last generation!');
         return;
