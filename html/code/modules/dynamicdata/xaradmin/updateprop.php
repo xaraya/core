@@ -24,7 +24,7 @@ function dynamicdata_admin_updateprop()
     if(!xarVarFetch('module_id',         'isset', $module_id,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype',          'int:1:', $itemtype,         0,    XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',             'isset', $table,             NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_name',           'isset', $dd_name,          NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_name',           'isset', $dd_name,           NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_label',          'isset', $dd_label,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_type',           'isset', $dd_type,           NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_default',        'isset', $dd_defaultvalue,   NULL, XARVAR_DONT_SET)) {return;}

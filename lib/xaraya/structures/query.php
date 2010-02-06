@@ -143,6 +143,9 @@ class Query
                 if ($this->fields == array() && $numfields > 0) {
                     $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
                     $result->next(); $result->previous();
+                    foreach ($result->fields as $key => $value) {
+                        $this->fields[$key]['name'] = strtolower($key); 
+                    }
                     for ($i=0;$i< $numfields;$i++) {
                         // Fetchfield was the only one used throughout the whole codebase, simulate it here instead of in creole
                         //$o = $result->FetchField($i);
