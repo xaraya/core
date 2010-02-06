@@ -1083,10 +1083,10 @@ function installer_admin_cleanup()
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
 
-        $blockGroupsTable = $tables['block_groups'];
+        $blockTable = $tables['block_instances'];
 
         $query = "SELECT    id as id
-                  FROM      $blockGroupsTable
+                  FROM      $blockTable
                   WHERE     name = ?";
 
         $result =& $dbconn->Execute($query,array('left'));
