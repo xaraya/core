@@ -122,8 +122,6 @@
                     </li>
                     </xar:sec>
                 </xar:if>
-                <!-- Logout only if not admin or anomymous -->
-                <!-- @CHECKME: why not admin? -->
                 <xar:if condition="$showlogout">
                    <li class="xar-menu-item">
                         <a title="#xarML('Logout')#" href="#$logouturl#">

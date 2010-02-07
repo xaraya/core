@@ -40,7 +40,6 @@ class MenuBlock extends BasicBlock implements iBlock
     public $displayrss          = false;
     public $displayprint        = false;
     public $marker              = '[x]';
-// CHECKME: are you sure you want to hard-code this for all sites ?!?
     public $content             = array(
                                     'url' => '[base]&page=docs',
                                     'name'=> 'Documentation',
@@ -324,11 +323,7 @@ class MenuBlock extends BasicBlock implements iBlock
             $indlinks = '';
         }
 
-        // we dont want to show logout link if the user is anonymous or admin
-        // admins have their own logout method, which is more robust
-        // @CHECKME: why don't we display the admin logout link?
-        // Security Check
-        if (!$loggedin or empty($data['showlogout'])) {
+        if (!$loggedin || empty($data['showlogout'])) {
             $showlogout = false;
         } else {
             $showlogout = true;
