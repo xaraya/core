@@ -234,16 +234,18 @@ class MenuBlock extends BasicBlock implements iBlock
                 foreach($mods as $mod){
                     if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$data['name']. ":" . $mod['name'])) continue;
                     if ((bool)xarModVars::get($mod['name'], 'user_menu_link')) continue;
+
                     /* Check for active module alias */
-                    /* jojodee -  We need to review the module alias functions and, thereafter it's use here */
                     $useAliasName = xarModVars::get($mod['name'], 'use_module_alias');
                     $module_alias_name = xarModVars::get($mod['name'],'module_alias_name');
+
                     /* use the alias name if it exists for the label */
                     if (isset($useAliasName) && $useAliasName==1 && isset($module_alias_name) && !empty($module_alias_name)) {
                         $label = $module_alias_name;
                     } else {
                         $label = xarModGetDisplayableName($mod['name']);
                     }
+                    
                     $title = xarModGetDisplayableDescription($mod['name']);
                     $link = xarModURL($mod['name'] ,'user', 'main', array());
                     // depending on which module is currently loaded we display accordingly
