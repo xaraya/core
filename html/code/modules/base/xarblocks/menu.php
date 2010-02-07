@@ -84,6 +84,7 @@ class MenuBlock extends BasicBlock implements iBlock
         if (empty($data['modulelist'])) $data['modulelist'] = $this->modulelist;
         if (empty($data['lines'])) $data['lines'] = array($this->content);
         if (!isset($data['showback'])) $data['showback'] = $this->showback;
+        if (!isset($data['showlogout'])) $data['showlogout'] = $this->showlogout;
 
         // which module is loaded atm?
         // we need it's name, type and function - dealing only with user type mods, aren't we?
@@ -139,6 +140,9 @@ class MenuBlock extends BasicBlock implements iBlock
                             }
                             break;
                         }
+                        // @CHECKME: Q1) Does anybody use these?
+                        // @CHECKME: Q2) As non-core modules do they belong here?
+                        // @TODO: Get answers to Q1 and Q2 :-P ; Figure out a friendlier syntax
                         case '{': // article link
                         {
                             $line['url'] = explode(':', substr($line['url'], 1,  - 1));
@@ -245,7 +249,7 @@ class MenuBlock extends BasicBlock implements iBlock
                     } else {
                         $label = xarModGetDisplayableName($mod['name']);
                     }
-                    
+
                     $title = xarModGetDisplayableDescription($mod['name']);
                     $link = xarModURL($mod['name'] ,'user', 'main', array());
                     // depending on which module is currently loaded we display accordingly
