@@ -3,8 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="active_step">5</xar:set>
     <xar:if condition="$confirmDB">
-        <meta http-equiv="refresh"
-        content="1;URL=&xar-modurl-installer-admin-bootstrap;&amp;install_language=#$language#"/>
+        <meta http-equiv="refresh" content="1;URL=&xar-modurl-installer-admin-bootstrap;&amp;install_language=#$language#"/>
         <div id="main_right">
             <xar:template file="status"/>
         </div>
@@ -47,6 +46,7 @@
                             <input type="submit" value="#$label#"/>
                         </span>
                     </form>
+                    &#160;
                     <form action="install.php" method="post" class="xar-displayinline">
                         <span class="xar-align-center">
                             <input type="hidden" name="install_phase" id="install_phase" value="5"/>

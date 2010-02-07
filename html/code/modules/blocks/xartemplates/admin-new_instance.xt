@@ -49,7 +49,7 @@
                         Instance Template (optional):
                     </label>
                     <input type="text" name="block_template" id="block_template" value="" maxlength="255" class="xar-form-textlong"/>
-                    (Specified as <code>outer<strong>;</strong>inner</code>)
+                    (Specified as <strong>outer;inner</strong>)
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="block_groups" title="#xarML('Initial block group to place this block into (optional)')#" class="xar-form-label">
@@ -72,7 +72,7 @@
                     <select name="block_state" id="block_state">
                         <option value="0">Hidden</option>
                         <option value="1">Minimized</option>
-                        <option value="2" selected="selected">Maximized</option>
+                        <option value="2" selected="selected">Visible</option>
                     </select>
                 </div>
             </fieldset>

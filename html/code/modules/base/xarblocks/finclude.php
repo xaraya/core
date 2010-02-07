@@ -2,7 +2,7 @@
 /**
  * Finclude block
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -13,88 +13,70 @@
  * Block init - holds security.
  * @author Patrick Kellum
  */
-function base_fincludeblock_init()
-{
-    return array(
-        'url' => 'http://www.example.com/',
-        'nocache' => 0, // cache by default
-        'pageshared' => 1, // share across pages here
-        'usershared' => 1, // and for group members
-        'cacheexpire' => null
-    );
-}
+    sys::import('xaraya.structures.containers.blocks.basicblock');
 
-/**
- * Block info array
- */
-function base_fincludeblock_info()
-{
-    return array('text_type' => 'finclude',
-         'text_type_long' => 'Simple File Include',
-         'module' => 'base',
-         'func_update' => 'base_fincludeblock_update',
-         'allow_multiple' => true,
-         'form_content' => false,
-         'form_refresh' => false,
-         'show_preview' => true);
-}
+    class FincludeBlock extends BasicBlock implements iBlock
+    {
+
+        public $name                = 'HTMLBlock';
+        public $module              = 'base';
+        public $text_type           = 'finclude';
+        public $text_type_long      = 'Simple File Include';
+        public $allow_multiple      = true;
+        public $show_preview        = true;
+
+        public $url                 = 'http://www.xaraya.com/';
 
 /**
  * Display func.
  * @param $blockinfo array containing title,content
  */
-function base_fincludeblock_display($blockinfo)
-{
-    // Security Check
-    if (!xarSecurityCheck('ViewBaseBlocks',0,'Block',"finclude:$blockinfo[title]:$blockinfo[bid]")) {return;}
-
-    if (!is_array($blockinfo['content'])) {
-        $blockinfo['content'] = unserialize($blockinfo['content']);
-    } else {
-        $blockinfo['content'] = $blockinfo['content'];
-    }
-
-    if (empty($blockinfo['content']['url'])){
-        $blockinfo['content'] = xarML('Block has no file defined to include');
-    } else {
-        $blockinfo['url'] = $blockinfo['content']['url'];
-        if (!file_exists($blockinfo['url'])) {
-            $blockinfo['content'] = xarML('Warning: File to include does not exist. Check file definition in finclude block instance.');
-        } else {
-            $blockinfo['content'] = implode(file($blockinfo['url']), '');
+        function display(Array $data=array())
+        {
+            $data = parent::display($data);
+            if (empty($data)) return;
+            if (empty($data['content']['url'])){
+                $data['content']['url'] = xarML('Block has no file defined to include');
+            } else {
+                if (!file_exists($data['content']['url'])) {
+                    $data['content']['url'] = xarML('Warning: File to include does not exist. Check file definition in finclude block instance.');
+                } else {
+                    $data['content']['url'] = implode(file($data['content']['url']), '');
+                }
+            }
+            return $data;
         }
-    }
-
-    return $blockinfo;
-}
 
 /**
  * Modify Function to the Blocks Admin
  * @param $blockinfo array containing title,content
  */
-function base_fincludeblock_modify($blockinfo)
-{
-    if (!empty($blockinfo['url'])) {
-        $args['url'] = $blockinfo['url'];
-    } else {
-        $args['url'] = '';
-    }
-    $args['blockid'] = $blockinfo['bid'];
+        public function modify(Array $data=array())
+        {
+            $data = parent::modify($data);
 
-    return $args;
-}
+            if (!empty($data['url'])) {
+                $args['url'] = $data['url'];
+            } else {
+                $args['url'] = '';
+            }
+            $args['blockid'] = $data['bid'];
+
+            return $args;
+        }
 
 /**
  * Updates the Block config from the Blocks Admin
  * @param $blockinfo array containing title,content
  */
-function base_fincludeblock_update($blockinfo)
-{
-    $vars = array();
-    if (!xarVarFetch('url', 'isset', $vars['url'], xarML('Error - No Url Specified'), XARVAR_DONT_SET)) {return;}
+        public function update(Array $data=array())
+        {
+            $data = parent::update($data);
+            $args = array();
+            if (!xarVarFetch('url', 'isset', $args['url'], xarML('Error - No Url Specified'), XARVAR_DONT_SET)) {return;}
 
-    $blockinfo['content'] = $vars;
-    return $blockinfo;
-}
-
+            $data['content'] = $args;
+            return $data;
+        }
+    }
 ?>

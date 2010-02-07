@@ -19,7 +19,7 @@
         <body>
             <div id="admin-wrapper">
                 <div id="admin-main">
-                    
+
                     <!-- Hide for now
                     <![CDATA[
                     <script type="text/javascript">
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     -->
-                    
+
                     <div style="text-align: right">
                         <xar:var name="SiteName" scope="module" module="themes"/>
                     </div>
@@ -57,10 +57,14 @@
                     </div>
                 </div>
                 <div id="sideInfo1" class="admin-sideInfo">
+                    <!-- Convenience link to front end
+                    Note: the adminmenu block has an option to show this link,
+                    but you might want to use this, eg, when the adminmenu block isn't displayed
                     <xar:var name="title">Go to the front end interface</xar:var>
                     <a href="index.php" title="#$title#">
                         [ Front end ]
                     </a>
+                    -->
                     <xar:blockgroup name="admin" id="admin"/>
                 </div>
                 <xar:place-javascript position="body"/>

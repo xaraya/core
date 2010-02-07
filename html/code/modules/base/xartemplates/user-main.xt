@@ -22,9 +22,9 @@
     <div class="xar-mod-body">
 
         <h2>Congratulations!</h2>
-        <p>You have successfully installed a 'release candidate' of Xaraya 2  <em>code-name Jamaica</em>!
+        <p>You have successfully installed Xaraya <strong>Jamaica</strong>!
         This message can be edited by creating an override template ( themes/themename/modules/base/user-main.xt ) for the base module.</p>
-                
+
         <ul class="xar-tabs xar-alt xar-norm-outline">
             <li class="xar-tab-active" id="tab-1">
                 <a id="href-1" href="javascript:showtab(1,2)">
@@ -33,7 +33,7 @@
             </li>
             <li class="xar-tab" id="tab-2">
                 <a id="href-2" href="javascript:showtab(2,2)">
-                    More Info
+                    Getting Started
                 </a>
             </li>
         </ul>
@@ -47,9 +47,9 @@
             <li>Enhanced dynamicdata functionality: more consistent and flexible objects and properties for more power and better performance</li>
             <li>New Installer and Default themes</li>
         </ul>
-                
+
         <h3>Support</h3>
-        <p>In addition to the support is available on the xaraya website, further help can be found at:</p>
+        <p>In addition to the support available on the xaraya website, further help can be found at:</p>
         <ul>
             <li>Forums - <a href="http://xaraya.com/index.php/xarbb" target="_blank">http://xaraya.com/index.php/xarbb</a></li>
             <li>IRC - irc.xaraya.com, in the #support channel. Also accessible through <a href="http://xaraya.com/index.php/chat" target="_blank">http://xaraya.com/index.php/chat</a></li>
@@ -57,7 +57,7 @@
             <li>Email - <a href="http://xaraya.com/index.php/sitecontact" target="_blank">http://xaraya.com/index.php/sitecontact</a></li>
         </ul>
         <p>If you enjoy Xaraya and want to show your support, you can contact us by any of the above mentioned methods.</p>
-        
+
         <h3>Additional Resources</h3>
         <!--
         <p>Modules and themes can be downloaded from the Xaraya Monotone repository.</p>
@@ -65,11 +65,75 @@
             <li>Modules - <a href="http://mt.xaraya.com/download/nightly/modules" target="_blank">http://mt.xaraya.com/download/nightly/modules</a></li>
             <li>Themes - <a href="http://mt.xaraya.com/download/nightly/themes" target="_blank">http://mt.xaraya.com/download/nightly/themes</a></li>
         </ul>
-         -->       
+         -->
         <p>Bugs can be reported to <a href="http://bugs.xaraya.com/" target="_blank">http://bugs.xaraya.com/</a></p>
         </div>
-        
+
         <div id="page-2" style="display: none">
+            <h3>First Look</h3>
+            <p>
+                The page you are viewing is divided into different components. The central part of the page, in which this text is located, is called the page's <em>module space</em>. This is usually the main focus of the display  in a Xaraya site. The areas around the module space, such as the menu to the left, or the header and footer of the page, are called <em>blocks</em>.
+            </p>
+            <p>
+
+                Xaraya sites are conceptually divided into two areas. The <em>front end</em> or user area is generally visible to anyonymous visitors or registered users of the site. The <em>back end</em> or admin area, is usually only accessible to registered administrators of the site. You can get to the back end from this page by clicking on the [Back end] link to the left.
+            </p>
+            <p>
+                The front end display can be visually changed by the use of <em>themes</em> to meet the specific requirements of a site. In the (currently active) Default theme, the module space is of alimited width in the center of the screen. For the back end display, not being publicly visible, it is usually convenient to leave the menu inaleft column and have the module space run the full screen width.
+            </p>
+            <h3>The Basic Components</h3>
+            <p>
+                You add functionality to your Xaraya site by installing modules, and visual diversity by using themes.
+            </p>
+            <p>
+                The basic Xaraya installation is deliberately maintained lean. The 9 core modules initially installed by the installer module are meant to contain the basic functionality you need to be able to build more complex sites and applications on:
+                <ul>
+                    <li>
+                        The <a href="#xarModURL('base','admin')#">Base</a> module manages the sitewide settings of Xaraya.
+                    </li>
+                    <li>
+                        The <a href="#xarModURL('blocks','admin')#">Blocks</a> module lets you create and manage blocks.
+                    </li>
+                    <li>
+                        The <a href="#xarModURL('dynamicdata','admin')#">DynamicData</a> module makesit possible to create custom objects for your applications.
+                    </li>
+                    <li>
+                        The <a href="#xarModURL('mail','admin')#">Mail</a> module gives Xaraya basic mail functionality.
+                    </li>
+                    <li>
+                        The <a href="#xarModURL('modules','admin')#">Modules</a> module lets you install and manage additional modules.
+                    </li>
+                    <li>
+                        The <a href="#xarModURL('privileges','admin')#">Privileges</a> module manages the permissions users have on your site.
+                    </li>
+                    <li>
+                        The <a href="#xarModURL('roles','admin')#">Roles</a> module manages users and their profiles.
+                    </li>
+                    <li>
+                        The <a href="#xarModURL('themes','admin')#">Themes</a> module lets you install and manage additional themes.
+                    </li>
+                </ul>
+            </p>
+            <p>
+                The basic Xaraya installation contains 5 themes
+                <ul>
+                    <li>
+                        The installer theme which is used by the installer module when Xaraya is installed.
+                    </li>
+                    <li>
+                        The default theme is used by default when Xaraya runs..
+                    </li>
+                    <li>
+                        The Xaraya_Classic theme is the standard theme from earlier versions of Xaraya.
+                    </li>
+                    <li>
+                        The rss theme can be used for displaying rss blocks.
+                    </li>
+                    <li>
+                        The print theme can be used when printing page.
+                    </li>
+                </ul>
+            </p>
         </div>
     </div>
     <script type="text/javascript">

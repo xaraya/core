@@ -107,11 +107,26 @@
         the modvar to display/hide admin logout link should be available starting from version 1.2.3 of adminpanels : upgrade transparently via modules module
         Note: Moved to base as of xaraya 1.1.x series
     -->
-    <xar:if condition="$showlogout">
+    <xar:if condition="$showlogout or $showfront">
         <ul class="xar-menu-section">
-            <li class="xar-menu-item">
-                <a title="#xarML('Logout as administrator')#"
-                href="&xar-modurl-base-admin-confirmlogout;">Admin logout</a>
+            <li class="xar-menu-section">
+                <h4>Controls</h4>
+                <ul class="xar-menu-item">
+                <xar:if condition="$showfront">
+                    <li class="xar-menu-item">
+                        <a title="#xarML('View the site front end')#" href="#xarServer::getBaseURL()#">
+                            View Front End
+                        </a>
+                    </li>
+                </xar:if>
+                <xar:if condition="$showlogout">
+                   <li class="xar-menu-item">
+                        <a title="#xarML('Logout as administrator')#" href="&xar-modurl-base-admin-confirmlogout;">
+                            Logout
+                        </a>
+                    </li>
+                </xar:if>
+                </ul>
             </li>
         </ul>
     </xar:if>

@@ -3,7 +3,7 @@
  * Menu Block
  *
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -47,6 +47,7 @@ class MenuBlock extends BasicBlock implements iBlock
                                     'visible' => true,
                                     );
     public $showlogout          = true;
+    public $showback            = true;
 
     public $rssurl;
     public $printurl;
@@ -82,6 +83,8 @@ class MenuBlock extends BasicBlock implements iBlock
         if (empty($data['displaymodules'])) $data['displaymodules'] = $this->displaymodules;
         if (empty($data['modulelist'])) $data['modulelist'] = $this->modulelist;
         if (empty($data['lines'])) $data['lines'] = array($this->content);
+        if (!isset($data['showback'])) $data['showback'] = $this->showback;
+        if (!isset($data['showlogout'])) $data['showlogout'] = $this->showlogout;
 
         // which module is loaded atm?
         // we need it's name, type and function - dealing only with user type mods, aren't we?
@@ -89,12 +92,15 @@ class MenuBlock extends BasicBlock implements iBlock
         list($thismodname, $thismodtype, $thisfuncname) = xarRequest::getInfo();
 
         // Sort Order, Status, Common Labels and Links Display preparation
-        $logoutlabel = xarVarPrepForDisplay(xarML('logout'));
 
         $authmoduledata = xarMod::apiFunc('roles','user','getdefaultauthdata');
         $authmodlogout = $authmoduledata['defaultloginmodname'];
-
-        $logouturl = xarModURL($authmodlogout,'user', 'logout', array());
+        if (xarSecurityCheck('AdminBaseBlock',0,'adminmenu',"$data[title]:All:All")) {
+            $logouturl = xarModURL('base', 'admin', 'confirmlogout');
+        } else {
+            $logouturl = xarModURL($authmodlogout,'user', 'logout', array());
+        }
+        $logoutlabel = xarVarPrepForDisplay(xarML('Logout'));
         $loggedin = xarUserIsLoggedIn();
 
         // Get current URL
@@ -134,6 +140,9 @@ class MenuBlock extends BasicBlock implements iBlock
                             }
                             break;
                         }
+                        // @CHECKME: Q1) Does anybody use these?
+                        // @CHECKME: Q2) As non-core modules do they belong here?
+                        // @TODO: Get answers to Q1 and Q2 :-P ; Figure out a friendlier syntax
                         case '{': // article link
                         {
                             $line['url'] = explode(':', substr($line['url'], 1,  - 1));
@@ -243,16 +252,18 @@ class MenuBlock extends BasicBlock implements iBlock
 
                     if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$data['name']. ":" . $mod['name'])) continue;
                     if ((bool)xarModVars::get($mod['name'], 'user_menu_link')) continue;
+
                     /* Check for active module alias */
-                    /* jojodee -  We need to review the module alias functions and, thereafter it's use here */
                     $useAliasName = xarModVars::get($mod['name'], 'use_module_alias');
                     $module_alias_name = xarModVars::get($mod['name'],'module_alias_name');
+
                     /* use the alias name if it exists for the label */
                     if (isset($useAliasName) && $useAliasName==1 && isset($module_alias_name) && !empty($module_alias_name)) {
                         $label = $module_alias_name;
                     } else {
                         $label = xarModGetDisplayableName($mod['name']);
                     }
+
                     $title = xarModGetDisplayableDescription($mod['name']);
                     $link = xarModURL($mod['name'] ,'user', 'main', array());
                     // depending on which module is currently loaded we display accordingly
@@ -331,15 +342,16 @@ class MenuBlock extends BasicBlock implements iBlock
             $indlinks = '';
         }
 
-        // we dont want to show logout link if the user is anonymous or admin
-        // admins have their own logout method, which is more robust
-        // Security Check
-        if (xarSecurityCheck('AdminBaseBlock',0,'adminmenu',"$data[title]:All:All") or
-            !xarUserIsLoggedIn() or
-            empty($data['showlogout'])) {
+        if (!$loggedin || empty($data['showlogout'])) {
             $showlogout = false;
         } else {
             $showlogout = true;
+        }
+        // optionally show a link to the back end for admins
+        if (xarSecurityCheck('AdminBase', 0) && !empty($data['showback'])) {
+            $showback = true;
+        } else {
+            $showback = false;
         }
 
         $marker         = isset($data['marker']) ? $data['marker'] : $this->marker;
@@ -363,7 +375,8 @@ class MenuBlock extends BasicBlock implements iBlock
             'displayrss'       => $displayrss,
             'displayprint'     => $displayprint,
             'printurl'         => $printurl,
-            'rssurl'           => $rssurl
+            'rssurl'           => $rssurl,
+            'showback'         => $showback,
         );
         return $data;
     }
@@ -376,13 +389,14 @@ class MenuBlock extends BasicBlock implements iBlock
     {
         $data = parent::modify($data);
 
-        if (empty($data['marker'])) $data['marker'] = $this->marker;
-        if (empty($data['displaymodules'])) $data['displaymodules'] = $this->displaymodules;
-        if (empty($data['modulelist'])) $data['modulelist'] = $this->modulelist;
-        if (empty($data['displayrss'])) $data['displayrss'] = $this->displayrss;
-        if (empty($data['displayprint'])) $data['displayprint'] = $this->displayprint;
-        if (empty($data['content'])) $data['content'] = $this->content;
-        if (empty($data['showlogout'])) $data['showlogout'] = $this->showlogout;
+        if (!isset($data['marker'])) $data['marker'] = $this->marker;
+        if (!isset($data['displaymodules'])) $data['displaymodules'] = $this->displaymodules;
+        if (!isset($data['modulelist'])) $data['modulelist'] = $this->modulelist;
+        if (!isset($data['displayrss'])) $data['displayrss'] = $this->displayrss;
+        if (!isset($data['displayprint'])) $data['displayprint'] = $this->displayprint;
+        if (!isset($data['content'])) $data['content'] = $this->content;
+        if (!isset($data['showlogout'])) $data['showlogout'] = $this->showlogout;
+        if (!isset($data['showback'])) $data['showback'] = $this->showback;
 
         // @CHECKME: is this used?
         if (empty($data['style'])) $data['style'] = 1;
@@ -417,10 +431,11 @@ class MenuBlock extends BasicBlock implements iBlock
         // Global options.
         if (!xarVarFetch('displaymodules', 'str:1',    $content['displaymodules'], $this->displaymodules, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('modulelist',     'str',      $content['modulelist'], $this->modulelist, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('showlogout',     'checkbox', $content['showlogout'], $this->showlogout, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('displayrss',     'checkbox', $content['displayrss'], $this->displayrss, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('displayprint',   'checkbox', $content['displayprint'], $this->displayprint, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('showlogout',     'checkbox', $content['showlogout'], false, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('displayrss',     'checkbox', $content['displayrss'], false, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('displayprint',   'checkbox', $content['displayprint'], false, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('marker',         'str:1',    $content['marker'], $this->marker, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('showback',       'checkbox', $content['showback'], false, XARVAR_NOT_REQUIRED)) return;
 
         // User links.
         $content['lines'] = array();

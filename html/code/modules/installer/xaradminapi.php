@@ -2,7 +2,7 @@
 /**
  * Modify the system configuration File
  * @package Installer
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -43,6 +43,30 @@ function installer_adminapi_modifyconfig($args)
     $config_php = preg_replace('/\[\'DB.TablePrefix\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.TablePrefix'] = '$dbPrefix';", $config_php);
     $config_php = preg_replace('/\[\'DB.Charset\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Charset'] = '$dbCharset';", $config_php);
     //$config_php = preg_replace('/\[\'DB.Encoded\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Encoded'] = '1';", $config_php);
+
+    $fp = fopen ($systemConfigFile, 'wb');
+    fwrite ($fp, $config_php);
+    fclose ($fp);
+
+    return true;
+}
+
+/**
+ * Modify a single variable in the system configuration file
+ *
+ * @author Marc Lutolf
+ * @param string args['name']
+ * @param string args['value']
+ * @return bool
+ */
+
+function installer_adminapi_modifysystemvar($args)
+{
+    extract($args);
+    $systemConfigFile = sys::varpath() . '/config.system.php';
+    $config_php = join('', file($systemConfigFile));
+
+    $config_php = preg_replace('/\[\''.$name.'\'\]\s*=\s*(\'|\")(.*)\\1;/', "['".$name."'] = '$value';", $config_php);
 
     $fp = fopen ($systemConfigFile, 'wb');
     fwrite ($fp, $config_php);

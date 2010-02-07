@@ -40,12 +40,12 @@
                             <xar:else />
                                 <img src="#$blankicon#" alt="#xarML('Delete')#"/>
                             </xar:sec>
-
+                            &#160;
                             <xar:set name="userslink">xarModUrl('privileges','admin','viewroles',array('id'=&gt; $id))</xar:set>
                             <a href="#$userslink#" title="#xarML('Show the Groups/Users this Privilege is assigned to')#">
                                 <img src="#$groupsicon#" alt="xarML('Groups')#"/>
                             </a>
-
+                            &#160;
                             <xar:if condition="$parentid ne 0">
                                 <xar:set name="removelink">xarModUrl('privileges','admin','removebranch',array('id'=&gt; $id))</xar:set>
                                 <a href="#$removelink#" title="#xarML('Remove this privilege from its parent')#">

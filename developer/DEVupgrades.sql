@@ -703,7 +703,7 @@ ALTER TABLE `xar_block_types` CHANGE `info` `info`               text;
 ALTER TABLE `xar_cache_blocks` CHANGE `blockinstance_id` `blockinstance_id`  integer unsigned NOT NULL;
 ALTER TABLE `xar_cache_blocks` CHANGE `nocache` `nocache`                    bool default '0';
 ALTER TABLE `xar_cache_blocks` CHANGE `page` `page`                          bool default '0';
-ALTER TABLE `xar_cache_blocks` CHANGE `user` `theuser`                          integer unsigned NOT NULL;
+ALTER TABLE `xar_cache_blocks` CHANGE `user` `theuser`                       integer unsigned NOT NULL;
 ALTER TABLE `xar_cache_blocks` CHANGE `expire` `expire`                      integer unsigned default '0';
 
 ALTER TABLE `xar_dynamic_data` CHANGE `id` `id`                   integer unsigned NOT NULL auto_increment;
@@ -840,12 +840,3 @@ ALTER TABLE `xar_themes` CHANGE `state` `state`                     tinyint unsi
 INSERT INTO `xar_module_vars` (module_id, name, value)
     SELECT mods.id, 'debugusers', 'a:0:{}' FROM xar_modules mods
     WHERE mods.name = 'dynamicdata';
-    
-# ----- 17.11.2008
-ALTER TABLE xar_categories 
-    ADD COLUMN `child_object` varchar(255) default NULL;
-ALTER TABLE xar_categories_linkage
-    ADD COLUMN `child_category_id` int(11) NOT NULL;
-
-/* User is a reserved word in postgres and we are likely to refactor cache_blocks anyways */
-ALTER TABLE `xar_cache_blocks` CHANGE `user` `theuser`              integer unsigned NOT NULL;

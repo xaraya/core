@@ -3,7 +3,7 @@
  *  View recent extension releases
  *
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -25,7 +25,7 @@ function base_admin_release()
     if(!xarSecurityCheck('EditModules')) return;
 
     //number of releases to show
-    $releasenumber=(int)xarModVars::get('base','releasenumber');
+    $releasenumber = (int)xarModVars::get('base','releasenumber');
 
     if (!isset($releasenumber) || $releasenumber ==0) {
          $releasenumber=10;

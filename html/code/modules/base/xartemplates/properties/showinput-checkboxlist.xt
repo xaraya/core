@@ -37,7 +37,7 @@
                         <xar:else />
                             <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#"/>
                         </xar:if>
-
+                        &#160;
                         <label for="#$theID#">#$option['name']#</label>
                     </div>
                 </xar:foreach>

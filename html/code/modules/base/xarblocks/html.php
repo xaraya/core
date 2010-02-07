@@ -2,7 +2,7 @@
 /**
  * HTML block
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -18,7 +18,6 @@
 
     class HTMLBlock extends BasicBlock implements iBlock
     {
-
         public $name                = 'HTMLBlock';
         public $module              = 'base';
         public $text_type           = 'HTML';
@@ -39,7 +38,7 @@
             if (empty($data)) return;
             $now = time();
 
-            if (isset($data['expire']) && $now > $data['expire']){
+            if (isset($data['expire']) && $now > $data['expire']) {
                 if ($data['expire'] != 0) return;
             }
             if (empty($data['content']['html_content'])) $data['content']['html_content'] = $this->html_content;

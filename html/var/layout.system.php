@@ -3,21 +3,21 @@
  * These values let you define the layout of Xaraya's root
  * directory and three main components
  *
- * For a default installation ("out of the box")
+ * For a standard installation ("out of the box")
  * use these values
  */
-$systemConfiguration['rootDir'] = "../";
-$systemConfiguration['webDir']  = "html/";
-$systemConfiguration['libDir']  = "lib/";
-$systemConfiguration['codeDir'] = "html/code/";
+//$systemConfiguration['rootDir'] = "../";
+//$systemConfiguration['webDir']  = "html/";
+//$systemConfiguration['libDir']  = "lib/";
+//$systemConfiguration['codeDir'] = "html/code/";
 /*
  * For a shared hosting environment ("flat install")
  * uncomment these values
  */
-//$systemConfiguration['rootDir'] = "";
-//$systemConfiguration['webDir']  = "";
-//$systemConfiguration['libDir']  = "lib/";
-//$systemConfiguration['codeDir'] = "code/";
+$systemConfiguration['rootDir'] = "";
+$systemConfiguration['webDir']  = "/";
+$systemConfiguration['libDir']  = "lib/";
+$systemConfiguration['codeDir'] = "code/";
 
 /*
  * This value is used to change the default behavior of the

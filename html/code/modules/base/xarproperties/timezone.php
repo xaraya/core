@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -88,7 +88,7 @@ class TimeZoneProperty extends SelectProperty
         if (!isset($data['value'])) $data['value'] = $this->value;
         $zone = new DateTimeZone($data['value']);
         $datetime = new DateTime('now',$zone);
-        $data['offset'] = $zone->getOffset($datetime);
+        $data['offset'] = $zone->getOffset($datetime)/3600;
         return parent::showOutput($data);
     }
 

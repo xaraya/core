@@ -39,10 +39,10 @@
             requirements you may have difficulties in running install to completion.</p>
             <ul>
                 <xar:if condition="$metRequiredPHPVersion">
-                    <li class="success">PHP Version is greater than or equal to 5.2. Your PHP
+                    <li class="success">PHP Version is greater than or equal that the required version #PHP_REQUIRED_VERSION#. Your PHP
                     Version is #$phpVersion#</li>
                 <xar:else />
-                    <li class="failure">PHP Version is less than 5.0. Your PHP Version is
+                    <li class="failure">PHP Version is less than #PHP_REQUIRED_VERSION#. Your PHP Version is
                     #$phpVersion# please upgrade PHP.</li>
                 </xar:if>
                 <xar:if condition="$metMinMemRequirement and !$memory_warning">
@@ -50,7 +50,7 @@
                     memory (16M or higher STRONGLY recommended). The current memory limit is
                     #$memory_limit# If you are planning to install modules during the install
                     phase, a lot of memory is required. If in doubt, 
-                    <strong>do a core only install</strong>and install modules manually
+                    <strong>do a core only install</strong> and install modules manually
                     later.</li>
                 <xar:elseif condition="$memory_warning"/>
                     <li class="warning">WARNING: Xaraya needs a MINIMUM of 8 Megabyte of PHP
@@ -59,7 +59,7 @@
                     Installation requires a lot of memory especially if you are planning to
                     install modules during this phase. If in doubt about your PHP memory limit,
 
-                    <strong>do a core only install</strong>and install modules manually
+                    <strong>do a core only install</strong> and install modules manually
                     later.</li>
                 <xar:else />
                     <li class="failure">ERROR: Xaraya needs a MINIMUM of 8 Megabyte of PHP
@@ -74,7 +74,7 @@
                     want to increase it for a full distribution install. How much time you need
                     will depend on your system and number of modules you choose during this
                     installation. If in doubt about your maximum (script) execution time, 
-                    <strong>do a core only install</strong>and install modules manually
+                    <strong>do a core only install</strong> and install modules manually
                     later.</li>
                 <xar:else />
                     <li class="success">SUCCESS: Your max_execution_time for a php script is
@@ -82,7 +82,7 @@
                     want to increase it for a full distribution install. How much time you need
                     will depend on your system and number of modules you choose during this
                     installation. If in doubt about your maximum (script) execution time, 
-                    <strong>do a core only install</strong>and install modules manually
+                    <strong>do a core only install</strong> and install modules manually
                     later.</li>
                 </xar:if>
             </ul>
@@ -155,7 +155,7 @@
             <h2>Information on Loaded PHP Extensions</h2>
             <p>These extensions may be required for some modules to work, however Xaraya is not
             dependant on these extensions for installation. Refer to 
-            <a href="http://www.php.net">PHP.net</a>for further information on these
+            <a href="http://www.php.net">PHP.net</a> for further information on these
             extensions.</p>
             <ul>
                 <xar:if condition="$xmlextension">
@@ -176,33 +176,23 @@
             <h2>You will need at least one available database type</h2>
             <ul>
                 <xar:if condition="$mysqlextension OR $pgsqlextension OR $sqliteextension">
-                    <li class="success">SUCCESS: You have at least one database type
-                    available.</li>
+                    <li class="success">SUCCESS: You have at least one database type available.</li>
                 <xar:else />
-                    <li class="warning">WARNING: You do not have a supported database type
-                    available.</li>
+                    <li class="warning">WARNING: You do not have a supported database type available.</li>
                 </xar:if>
-                <xar:set name="databaseAvailable">false</xar:set>
                 <xar:if condition="$mysqlextension">
-                    <xar:if condition="$mysql_version_ok">
-                        <li class="success">SUCCESS: The MySQL Extension is loaded. Your version is #$mysql_version#</li>
-                        <xar:set name="databaseAvailable">true</xar:set>
-                    <xar:else />
-                        <li class="warning">WARNING: The MySQL Extension is loaded, but your version is #$mysql_version#. The minimum required version is #$mysql_required_version#</li>
-                    </xar:if>
+                    <li class="success">SUCCESS: The MySQL Extension is loaded.</li>
                 <xar:else />
                     <li class="warning">WARNING: MySQL as database will not be available</li>
                 </xar:if>
                 <xar:if condition="$pgsqlextension">
                     <li class="success">SUCCESS: The PGSQL Extension is loaded.</li>
-                    <xar:set name="databaseAvailable">true</xar:set>
                 <xar:else />
                     <li class="warning">WARNING: PostgreSQL as database will not be
                     available</li>
                 </xar:if>
                 <xar:if condition="$sqliteextension">
                     <li class="success">SUCCESS: The SQLite Extension is loaded.</li>
-                    <xar:set name="databaseAvailable">true</xar:set>
                 <xar:else />
                     <li class="warning">WARNING: SQLITE as database will not be available</li>
                 </xar:if>
@@ -210,7 +200,6 @@
                     <li class="success">
                         SUCCESS: The PDO SQLite Extension is loaded.
                     </li>
-                    <xar:set name="databaseAvailable">true</xar:set>
                 <xar:else />
                    <li class="warning">
                        WARNING: PDO SQLITE as database will not be available
@@ -219,7 +208,7 @@
             </ul>
         <form action="install.php" method="post">
             <div class="xar-align-center">
-                <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $rssTemplatesIsWritable AND $metMinMemRequirement AND $databaseAvailable">
+                <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $rssTemplatesIsWritable AND $metMinMemRequirement">
                     <input type="hidden" name="install_phase" id="install_phase" value="4"/>
                     <input type="submit" value="Continue"/>
                 <xar:else />

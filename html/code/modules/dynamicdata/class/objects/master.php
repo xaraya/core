@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -253,16 +253,8 @@ class DataObjectMaster extends Object
                         $fields[$property->id] = $property->name;
             } else {
                 // no status filter: return those that are not disabled
-                // CHECKME: filter out DISPLAYONLY or VIEWONLY depending on the class we're in !
-                sys::import('modules.dynamicdata.class.properties.master');
-                if (method_exists($this, 'getItems')) {
-                    $filterstate = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
-                } else {
-                    $filterstate = DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY;
-                }
                 foreach($this->properties as $property)
-                    if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED &&
-                       $property->getDisplayStatus() != $filterstate)
+                    if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
                         $fields[$property->id] = $property->name;
             }
         }

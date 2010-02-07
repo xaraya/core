@@ -617,6 +617,7 @@ class xarPrivileges extends xarMasks
     {
         $parent = self::findPrivilege($parentname);
         $child = self::findPrivilege($childname);
+        if ($child->isParentPrivilege($parent)) return true;
         return $parent->addMember($child);
     }
 }
