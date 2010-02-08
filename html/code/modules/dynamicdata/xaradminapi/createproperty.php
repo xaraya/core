@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -84,7 +84,7 @@ function dynamicdata_adminapi_createproperty($args)
 */
 
     $propid = xarMod::apiFunc('dynamicdata', 'admin', 'create',
-                            array('module_id'    => xarMod::getRegID('dynamicdata'),
+                            array('modid'    => xarMod::getRegID('dynamicdata'), //$moduleid,
                                   'itemtype' => 1, //$itemtype,
                                   'itemid'   => $itemid,
                                   'values'   => $values));

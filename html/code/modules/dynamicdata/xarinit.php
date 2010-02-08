@@ -3,7 +3,7 @@
  * Dynamic data initialization
  *
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -546,9 +546,38 @@ function dynamicdata_upgrade($oldversion)
     // Upgrade dependent on old version number
     switch ($oldversion) {
         case '2.0.0':
+
+            // when a new module item is being specified
+            xarModRegisterHook('item', 'new', 'GUI', 'dynamicdata', 'admin', 'newhook');
+            // when a module item is created (uses 'dd_*')
+            xarModRegisterHook('item', 'create', 'API', 'dynamicdata', 'admin', 'createhook');
+            // when a module item is being modified (uses 'dd_*')
+            xarModRegisterHook('item', 'modify', 'GUI', 'dynamicdata', 'admin', 'modifyhook');
+            // when a module item is updated (uses 'dd_*')
+            xarModRegisterHook('item', 'update', 'API', 'dynamicdata', 'admin', 'updatehook');
+            // when a module item is deleted
+            xarModRegisterHook('item', 'delete', 'API', 'dynamicdata', 'admin', 'deletehook');
+            // when a module configuration is being modified (uses 'dd_*')
+            xarModRegisterHook('module', 'modifyconfig', 'GUI', 'dynamicdata', 'admin', 'modifyconfighook');
+            // when a module configuration is updated (uses 'dd_*')
+            xarModRegisterHook('module', 'updateconfig', 'API', 'dynamicdata', 'admin', 'updateconfighook');
+            // when a whole module is removed, e.g. via the modules admin screen
+            // (set object ID to the module name !)
+            xarModRegisterHook('module', 'remove', 'API', 'dynamicdata', 'admin', 'removehook');
+
+        //  Ideally, people should be able to use the dynamic fields in their
+        //  module templates as if they were 'normal' fields -> this means
+        //  adapting the get() function in the user API of the module, and/or
+        //  using some common data retrieval function (DD) in the future...
+
+        /*  display hook is now disabled by default - use the BL tags or APIs instead
+            xarModRegisterHook('item', 'display', 'GUI', 'dynamicdata', 'user', 'displayhook');
+        */
+
             // fall through to next upgrade
 
         case '2.0.1':
+
             // fall through to next upgrade
 
         default:

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -38,7 +38,7 @@ function blocks_userapi_groupgetinfo($args)
 
     $blockInstancesTable      = $tables['block_instances'];
     $blockTypesTable          = $tables['block_types'];
-    $blockGroupsTable         = $tables['block_groups'];
+    $blockGroupsTable         = $tables['block_instances'];
     $blockGroupInstancesTable = $tables['block_group_instances'];
     $modulesTable             = $tables['modules'];
 

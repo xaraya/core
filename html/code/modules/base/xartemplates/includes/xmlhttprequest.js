@@ -2,7 +2,7 @@
  * Xaraya XML HTTP Requests
  *
  * @package modules
- * @copyright (C) 2004-2006 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *

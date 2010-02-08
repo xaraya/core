@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="../themes/installer/style/style.css"/>
+        <link rel="stylesheet" type="text/css" href="../code/modules/base/xarstyles/xarcore-xhtml1-strict.css"/>
+        <link rel="stylesheet" type="text/css" href="../code/modules/base/xarstyles/tabs.css"/>
+        <style>
+            .active {
+                background-image: url(../code/modules/base/xarimages/icons/initialize.png);
+            }
+        </style>
+    </head>
+    <body>
+        <div id="header">
+            <div id="header_logo">
+                <div id="head_link">Xaraya</div>
+                <div id="header_content_wrap">
+                    <div id="header_content">
+                        <div id="header_tlcorner"><div id="header_trcorner">&#160;</div></div>
+
+                        <div id="header_contentcore">
+                            <h1>Upgrading to Xaraya Jamaica from Earlier Versions</h1>
+                            <p>
+
+                            </p>
+                        </div>
+                        <div id="header_blcorner"><div id="header_brcorner">&#160;</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="navbar">
+            <div id="navbar_inner">
+                <ul id="navbar_core">
+                    <li class="navbar-item">
+                        <a href="http://www.xaraya.com/index.php/xarpages/support" target="_blank">Support at www.xaraya.com</a>
+                    </li>
+                    <li class="navbar-item">
+                        <a href="license.html">GPL License</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="contentouter">
+            <div id="contentwrap">
+                <div id="contentmain">
+                    <div id="contentmain_inner"><div id="contentmain_tlcorner"><div id="contentmain_trcorner">&#160;</div></div>
+                        <div id="contentmain_core">
+                            <div id="main_right">
+                              <div id="status">
+                                  <div id="status_body">
+                                    <ul>
+                                        <li class="active"><a href="#strategies" style="text-decoration: none;">Upgrade Strategies</a></li>
+                                        <li class="active"><a href="#database" style="text-decoration: none;">Upgrading the Database</a></li>
+                                        <li class="active"><a href="#core" style="text-decoration: none;">Core, Core Modules and Themes</a></li>
+                                        <li class="active"><a href="#modules" style="text-decoration: none;">Third Party Modules</a></li>
+                                        <li class="active"><a href="#themes" style="text-decoration: none;">Third Party Themes</a></li>
+                                        <li class="active"><a href="#misc" style="text-decoration: none;">Miscellaneous</a></li>
+                                    </ul>
+                                  </div>
+                                  <div id="status_foot">
+                                    <!--Empty tag workaround for div tag-->
+                                  </div>
+                                </div>
+                            </div>
+                            <div id="main_left">
+                                <h1>Upgrade Guide</h1>
+                                <p>
+                                    The purpose of this guide is to document the changes that need to be made to migrate a site to from an earlier version of Xaraya to Xaraya Jamaica. There is no simple point-and-click way to do this. Rather, what we aim to do with this guide is highlight the changes so that developers can implement them according to the needs of their specific sites. The positive side of this is that what is laid out below applies to pretty much any earlier version still supported by Xaraya.
+                                </p>
+                                <p>
+                                    This guide is not for the fainthearted. It assumes you know Xaraya as a developer and are comfortable at least with PHP5 and SQL. The instructions are fairly generic and assume you will be able to adapt them to your given situation.
+                                </p>
+                                <p>
+                                    It is important to note that, given the wide range of versions, customized sites, themes and modules out there, no one upgrade document can cover all the bases. The first and most important step you need to take is to <strong>back up your site</strong>. Lets repeat that:
+                                    <div style="text-align: center">
+                                        <strong>BACK UP YOUR SITE</strong>
+                                    </div>
+                                </p>
+                                <p>
+                                    Broadly speaking, the following upgrade tasks need to be performed:
+                                    <ol>
+                                        <li>
+                                            Site database: requires upgrading.
+                                        </li>
+                                        <li>
+                                            Core in the includes directory: replaced by the Jamaica lib directory
+                                        </li>
+                                        <li>
+                                            Core modules in the html/modules directory: replaced by the Jamaica core modules in the html/code/modules directory
+                                        </li>
+                                        <li>
+                                            Included themes in the html/themes directory (installer, print, rss, Xaraya_Classic): replaced by Jamaica themes in the html/themes directory (default, installer, print, rss, Xaraya_Classic).
+                                        </li>
+                                        <li>
+                                            Third party modules in the html/modules directory: replaced by the Jamaica modules in the html/code/modules directory
+                                        </li>
+                                        <li>
+                                            Third party themes in the html/themes directory: replaced by Jamaica themes in the html/themes directory
+                                        </li>
+                                    </ol>
+                                </p>
+
+                                <a name="strategies" style="text-decoration: none;"><h2>Upgrade Strategies</h2></a> <a href="#top">top</a>
+                                    <p>
+                                        While you need to upgrade your site's database in all cases, there are 2 ways to proceed for upgrading the code and templates:
+                                        <ul>
+                                            <li>
+                                                Replace the core, core modules and included themes of earlier versions with Jamaica versions. This is more laborious and prone to more errors. It is the less recommended way to proceed.
+                                            </li>
+                                            <li>
+                                                Put the Jamaica code as it is in a separate directory, add any Jamaica compatible third party modules and themes, and then point your site to that new location. This is the recommended way to proceed, and saves you steps 2, 3 and 4 above.
+                                            </li>
+                                        </ul>
+                                    </p>
+
+                                <a name="database" style="text-decoration: none;"><h2>Upgrading the Database</h2></a> <a href="#top">top</a>
+
+                                <p>
+                                    Upgrading the site database is the most complex task. We will describe this in detail, but be aware that there is enough variation between sites that the instructions below may not cover all bases. Therefore making a backup of your database before starting is essential.
+                                </p>
+                                <p>
+                                    Some of the steps involved cannot be undone, so if you get stuck along the way you will likely need to start over.
+                                </p>
+                                <p>
+                                    <ol>
+                                        <li>
+                                            <p>
+                                                The first step in upgrading the database involves running the DEVupgrades.sql upgrade script found in the developer directory. This has been tested with MySQL databases only. You can run the script using a tool such as phpMyAdmin. The script needs to be adapted for other database types. The final part of the script, starting around line 675 is a convenient summary of the structure of the entire database. Any database having this structure should becompatible with Jamaica.
+                                            </p>
+                                            <p>
+                                                Once this step has been completed the database structure is correct. The subsequent steps deal with changing the data appropriately.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Add configvars of the old configvars table to the modvars table. There should be at least 27 of these. If there are more you're likely OK. Many are not widely used, but you'll know when one is missed. Once this has been done you can delete the configvars table.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Add a themes directory modvar with the module id the themes module has in the modules table and value = 'themes' if it doesn't exist.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Add the (new) roles data objects: For reference (i.e. the id index values may vary in your database):
+                                                <pre>
+INSERT INTO `xar_dynamic_objects` (`id`, `name`, `label`, `module_id`, `itemtype`, `parent_id`, `class`,
+`filepath`, `urlparam`, `maxid`, `config`, `isalias`) VALUES
+(7, 'roles_roles', 'Role', 27, 1, 0, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1),
+(8, 'roles_users', 'User', 27, 2, 0, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1),
+(9, 'roles_groups', 'Group', 27, 3, 0, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1);
+                                                </pre>
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Add the (new) privileges data objects: For reference (i.e. the id index values may vary in your database):
+                                                <pre>
+INSERT INTO `xar_dynamic_objects` (`id`, `name`, `label`, `module_id`, `itemtype`, `parent_id`, `class`,
+`filepath`, `urlparam`, `maxid`, `config`, `isalias`) VALUES
+(10, 'privileges_baseprivileges', 'Base Privileges', 1098, 1, 0, 'DataObject', '', 'itemid', 0, '', 1),
+(11, 'privileges_privileges', 'Privileges', 1098, 2, 0, 'DataObject', '', 'itemid', 0, '', 1);
+                                                </pre>
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Change the configvar holding the anonymous user id if necessary, to match the ID of the anonymous user in the roles table.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Load the configurations object and import the table.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Add the $duvsettings modvar in roles if required.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Empty the properties definition table. It needs to be refreshed and this will probably happen automatically when navigating the site. In order to have the property cache correctly filled the current user that triggers it needs to have the correct permissions.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Change xar_dynamic_properties.value to xar_dynamic_properties.defaultvalue in the dd properties table if required.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Add the modules modvars:
+                                                <br/>
+                                                    defaultmoduletype:   user
+                                                <br/>
+                                                    defaultmodule:   base
+                                                <br/>
+                                                    defaultmodulefunction:   main
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Make sure the objects object definition is correct. For reference (i.e. the id index values may vary in your database):
+                                                <pre>
+INSERT INTO `xar_dynamic_properties` (`id`, `name`, `label`, `object_id`, `type`, `defaultvalue`, `source`,
+`status`, `seq`, `configuration`) VALUES
+(1, 'objectid', 'Id', 1, 21, '', 'xar_dynamic_objects.id', 65, 1, ''),
+(2, 'name', 'Name', 1, 2, '', 'xar_dynamic_objects.name', 33, 2, ''),
+(3, 'label', 'Label', 1, 2, '', 'xar_dynamic_objects.label', 33, 3, ''),
+(4, 'parent', 'Parent', 1, 24, '0', 'xar_dynamic_objects.parent_id', 33, 4, 'a:11:{s:14:"display_layout";s:7:"default";
+s:15:"display_tooltip";s:0:"";s:19:"validation_override";s:1:"1";s:25:"initialization_store_prop";s:8:"itemtype";
+s:24:"initialization_refobject";s:7:"objects";s:27:"initialization_display_prop";s:4:"name";s:23:"initialization_function";
+s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";
+s:25:"initialization_other_rule";s:0:"";}'),
+(5, 'module_id', 'Module', 1, 19, '182', 'xar_dynamic_objects.module_id', 33, 5, 'a:4:{s:14:"display_layout";s:7:"default";
+s:24:"initialization_refobject";s:7:"modules";s:25:"initialization_store_prop";s:2:"id";s:27:"initialization_display_prop";
+s:4:"name";}'),
+(6, 'itemtype', 'Item Type', 1, 20, 'xarModAPIFunc(''dynamicdata'',''admin'',''getnextitemtype'')', 'xar_dynamic_objects.itemtype',
+33, 6, 'a:10:{s:18:"display_combo_mode";s:1:"2";s:14:"display_layout";s:7:"default";s:19:"validation_override";
+s:1:"1";s:21:"initialization_module";s:1:"3";s:23:"initialization_itemtype";s:1:"0";s:23:"initialization_function";
+s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";
+s:0:"";s:25:"initialization_other_rule";s:0:"";}'),
+(7, 'class', 'Class', 1, 2, 'DataObject', 'xar_dynamic_objects.class', 33, 7, ''),
+(8, 'filepath', 'Location', 1, 2, '', 'xar_dynamic_objects.filepath', 34, 8, ''),
+(9, 'urlparam', 'URL Param', 1, 2, 'itemid', 'xar_dynamic_objects.urlparam', 34, 9, ''),
+(10, 'maxid', 'Max Id', 1, 15, '0', 'xar_dynamic_objects.maxid', 34, 10, ''),
+(11, 'config', 'Config', 1, 4, '', 'xar_dynamic_objects.config', 34, 11, ''),
+(12, 'isalias', 'Alias in short URLs', 1, 14, '1', 'xar_dynamic_objects.isalias', 34, 12, '');
+                                                </pre>
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Make sure the properties object definition is correct. For reference (i.e. the id index values may vary in your database):
+                                                <pre>
+INSERT INTO `xar_dynamic_properties` (`id`, `name`, `label`, `object_id`, `type`, `defaultvalue`, `source`,
+`status`, `seq`, `configuration`) VALUES
+(13, 'id', 'Id', 2, 21, '', 'xar_dynamic_properties.id', 33, 1, ''),
+(14, 'name', 'Name', 2, 2, '', 'xar_dynamic_properties.name', 34, 2, ''),
+(15, 'label', 'Label', 2, 2, '', 'xar_dynamic_properties.label', 33, 3, ''),
+(16, 'objectid', 'Object', 2, 24, '', 'xar_dynamic_properties.object_id', 33, 4, ''),
+(17, 'type', 'Property Type', 2, 22, '', 'xar_dynamic_properties.type', 33, 7, ''),
+(18, 'defaultvalue', 'Default', 2, 3, '', 'xar_dynamic_properties.defaultvalue', 33, 8, 'varchar (254)'),
+(19, 'source', 'Source', 2, 23, 'dynamic_data', 'xar_dynamic_properties.source', 1, 9, ''),
+(20, 'status', 'Status', 2, 25, '1', 'xar_dynamic_properties.status', 33, 10, ''),
+(21, 'seq', 'Order', 2, 15, '0', 'xar_dynamic_properties.seq', 34, 11, ''),
+(22, 'configuration', 'Configuration', 2, 3, '', 'xar_dynamic_properties.configuration', 34, 12, '');
+                                                </pre>
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Make sure the object definitions for roles_roles, roles_users and roles_groups are correct. Here are the latter two for reference (first and fouth columns would need to be adjusted):
+                                                <pre>
+INSERT INTO `xar_dynamic_properties` (`id`, `name`, `label`, `object_id`, `type`, `defaultvalue`, `source`,
+`status`, `seq`, `configuration`) VALUES
+(144, 'id', 'ID', 5, 21, '', 'xar_roles.id', 65, 1, ''),
+(145, 'name', 'Name', 5, 2, '', 'xar_roles.name', 33, 2, ''),
+(146, 'role_type', 'Type', 5, 20, '2', 'xar_roles.itemtype', 67, 3, 'a:9:{s:18:"display_combo_mode";s:1:"1";s:14:"display_layout";
+s:7:"default";s:21:"initialization_module";s:1:"4";s:23:"initialization_itemtype";s:1:"0";s:23:"initialization_function";
+s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";
+s:0:"";s:25:"initialization_other_rule";s:0:"";}'),
+(147, 'uname', 'User Name', 5, 7, '', 'xar_roles.uname', 33, 3, ''),
+(148, 'email', 'Email', 5, 26, '', 'xar_roles.email', 33, 5, ''),
+(149, 'password', 'Password', 5, 46, '', 'xar_roles.pass', 33, 6, 'a:8:{s:12:"display_size";s:2:"25";s:17:"display_maxlength";
+s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:1:"4";s:21:"validation_max_length";
+s:2:"30";s:27:"validation_password_confirm";s:1:"1";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";
+s:0:"";}'),
+(150, 'regdate', 'Reg. Date', 5, 8, 'xarMLS_userTime()', 'xar_roles.date_reg', 66, 7, ''),
+(151, 'valcode', 'Val. Code', 5, 2, 'createdbyadmin', 'xar_roles.valcode', 67, 8, ''),
+(152, 'state', 'State', 5, 6, '1', 'xar_roles.state', 33, 9, 'a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";
+s:41:"xarModAPIFunc(''roles'',''user'',''getstates'')";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";
+s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}'),
+(153, 'authmodule', 'Auth. Module', 5, 15, 'xarMod::getID(xarModVars::get(''roles'', ''defaultauthmodule''))',
+'xar_roles.auth_module_id', 67, 10, '');
+
+
+INSERT INTO `xar_dynamic_properties` (`id`, `name`, `label`, `object_id`, `type`, `defaultvalue`, `source`, `status`,
+`seq`, `configuration`) VALUES
+(154, 'id', 'ID', 9, 21, '', 'xar_roles.id', 65, 1, ''),
+(155, 'name', 'Name', 9, 2, '', 'xar_roles.name', 33, 2, ''),
+(156, 'role_type', 'Type', 9, 20, '3', 'xar_roles.itemtype', 67, 3, 'a:9:{s:18:"display_combo_mode";s:1:"1";s:14:"display_layout";
+s:7:"default";s:21:"initialization_module";s:1:"4";s:23:"initialization_itemtype";s:1:"0";s:23:"initialization_function";
+s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";
+s:25:"initialization_other_rule";s:0:"";}'),
+(157, 'users', 'Users', 9, 15, '0', 'xar_roles.users', 67, 4, ''),
+(158, 'uname', 'User Name', 9, 2, 'time()', 'xar_roles.uname', 67, 5, ''),
+(159, 'regdate', 'Reg. Date', 9, 8, 'xarMLS_userTime()', 'xar_roles.date_reg', 67, 6, ''),
+(160, 'valcode', 'Val. Code', 9, 2, '', 'xar_roles.valcode', 67, 7, ''),
+(161, 'state', 'State', 9, 6, '3', 'xar_roles.state', 67, 8, 'a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";
+s:41:"xarModAPIFunc(''roles'',''user'',''getstates'')";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";
+s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}'),
+(162, 'authmodule', 'Auth. Module', 9, 15, 'xarMod::getID(xarModVars::get(''roles'', ''defaultauthmodule''))',
+'xar_roles.auth_module_id', 67, 9, '');
+                                                </pre>
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                In the base module change any menu blocks with content by replacing the manual entries separated by | with an array.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Make the module var System.Core.TimeZone s:7:"Etc/UTC"; In older versions of Xaraya it may be s:11:"US/New York"; which blows up.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Remove the Myself user,e.g. using a script like
+                                                <pre>
+DELETE FROM `xar_roles` WHERE `xar_roles`.`name` = 'Myself' LIMIT 1;
+                                                </pre>
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Remove privileges that refer to the adminpanels module, e.g. using a script like
+                                                <pre>
+DELETE FROM xar_security_acl s INNER JOIN xar_privileges p ON p.id = s.privilege_id
+INNER JOIN xar_modules m ON p.module_id = m.id AND m.regid = 9
+                                                </pre>
+                                            </p>
+                                        </li>
+                                    </ol>
+                                </p>
+
+                                <a name="database" style="text-decoration: none;"><h2>Core, Core Modules and Included Themes</h2></a> <a href="#top">top</a>
+                                <p>
+                                    If you made custom changes to any of the core modules or the themes included in a Xaraya install of a previous version,then you need to replicate these changes in the Jamaica equivalents. The changes to earlier versions are too great that one could replace a Jamaica core module/theme with the code of an earlier version.
+                                </p>
+                                <p>
+                                    If you have made custom changes to the Xaraya core then you likely don't need this guide in the first place and we'd like you to consider contributing to the Jamaica effort!
+                                </p>
+
+                                <a name="modules" style="text-decoration: none;"><h2>Third Party Modules</h2></a> <a href="#top">top</a>
+                                <p>
+                                    If your site uses third party modules you should first check whether a Jamaica version of the module(s) you need already exists. The number of these modules grows with time and several of the most popular ones have already been ported. If no Jamaica version is available the following instructions can help you port a module from an earlier version to Jamaica.
+                                </p>
+                                <p>
+                                    <ol>
+                                        <li>
+                                            Empty the template cache to make sure old compiled templates are no longer found.
+                                        </li>
+                                        <li>
+                                            Change the extension of all templates from "xd" to "xt".
+                                        </li>
+                                        <li>
+                                            Enclose each templatein a template tag:
+                                            <pre>
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+
+    [template content goes here]
+
+&lt;/xar:template>
+                                            </pre>
+                                        </li>
+                                        <li>
+                                            Change all "label" attributes in dataproperty tags to "for".
+                                        </li>
+                                        <li>
+                                            Change legacy code calls:
+                                            <pre>
+    OLD:                              NEW:
+    xarModAPIFunc                     xarMod::apiFunc
+    xarModFunc                        xarMod::guiFunc
+
+    xarServerGetVar                   xarServer::getVar
+    xarServerGetBaseURI               xarServer::getBaseURI
+    xarServerGetHost                  xarServer::getHost
+    xarServerGetProtocol              xarServer::getProtocol
+    xarServerGetBaseURL               xarServer::getBaseURL
+    xarServerGetCurrentURL            xarServer::getCurrentURL
+    xarRequest::getVar                  xarRequest::getVar
+    xarRequestGetInfo                 xarRequest::getInfo
+    xarRequestIsLocalReferer          xarRequest::isLocalReferer
+    xarResponseRedirect               xarResponse::redirect
+    xarTplPagerInfo                   xarTplPager::getInfo
+    xarTplGetPager                    xarTplPager::getPager
+
+    xarModGetVar                      xarModVars::get
+    xarModSetVar                      xarModVars::set
+    xarModDelVar                      xarModVars::delete($modName, $name);      }
+    xarModDelAllVars                  xarModVars::delete_all
+
+    xarModGetUserVar                  xarModUserVars::get
+    xarModSetUserVar                  xarModUserVars::set
+                                            </pre>.
+                                        </li>
+                                        <li>
+                                            Change legacy tags:
+                                            <pre>
+    &lt;xar:base-include-javascript...   &lt;xar:javascript...
+    &lt;xar:base-render-javascript...    &lt;xar:place-javascript...
+    &lt;xar:additional-styles />         &lt;xar:place-css />
+                                            </pre>.
+                                        </li>
+                                        <li>
+                                            Where &lt;xar:set... tags contain unquoted string, replace these with &lt;xar:var...
+                                        </li>
+                                        <li>
+                                            Ideally you can remove all <xar:mstring> tags that are not contained in a <xar:ml> construct, but this is not necessary and the tags will be ignored if present.
+                                        </li>
+                                        <li>
+                                            Remove all "$" from xar:set name definitions in the templates:
+                                            <pre>
+&lt;xar:set name="$foo"...  becomes &lt;xar:set name="foo"...
+                                            </pre>
+                                        </li>
+                                        <li>
+                                            Make all entities numeric, e.g.:&amp;nbsp; --> &amp;#160;:
+                                            <pre>
+OLD    NEW
+reg    174
+amp     38
+quote   39
+hash    35
+copy   169
+tm     153
+deg    176
+lt      60
+gt      62
+nbsp   160
+                                            </pre>
+                                        </li>
+                                        <li>
+                                            Replace solitary single hash characters (#) with double hash (##)
+                                            <pre>
+#ffffff becomes ##ffffff..
+                                            </pre>
+                                        </li>
+                                        <li>
+                                            If the module has custom tags these will need to be rewritten in xsl and placed in a tags directory for the module.
+                                        </li>
+                                        <li>
+                                            If the module has dataproperties these will need to be rewritten to conform with the Jamaica structure of dataproperties. See e.g. the properties in the Base module's xarproperties directory for examples.
+                                        </li>
+                                        <li>
+                                            If the module uses &lt;xar:getitem or &lt;xar:getitem tags these need to be adjusted.
+                                            <ul>
+                                                <li>
+                                                    Use the object attribute to pass the tag an object, and the objectnameattribute to pass the name of an object.
+                                                </li>
+                                                <li>
+                                                    The values and properties attributes need to both contain $ variables,and not just names(strings).
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            Replace include(..), include_once(..), require(..), require_once(..) in the PHP code with sys::import calls. See the core code for examples. This can only be done if the filen does not contain a period (".") in its name (apart from the delimiter to the file's extension). If that is the case do not change the include call.
+                                        </li>
+                                        <li>
+                                            For any remaining include calls to module files, change these as follows:
+                                            <pre>
+include('modules/foo/xaruser/bar.php')  becomes  include(sys::code() . 'modules/foo/xaruser/bar.php')
+                                            </pre>
+                                        </li>
+                                        <li>
+                                            Replace Xaraya exceptions code with PHP5 exception calls: generically "throw new Exception($msg)". No return is required after the call. More differentiated calls are available, but beyond the scope ofthis document.
+                                            <pre>
+if (!$good) {
+    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException('Not good'));
+    return;
+}
+
+becomes
+
+if (!$good) throw new Exception('Not good');
+                                            </pre>
+                                        </li>
+                                        <li>
+                                            Jamaica uses the standard name "id" for the primary index of database tables. Change all references of aid, cid, uid etc. to id. Care must be taken to avoid conflicts if more than one primary index is referenced simultaneously.
+                                        </li>
+                                    </ol>
+                                </p>
+                                <p>
+                                    The BlockLayout compiler is very strict and will throw errors if any template markup is not XML conform. You can test your templates by downloading the Xarayatesting module and using it (under "Other Tests") to check the validity of your templates.
+                                </p>
+
+                                <a name="themes" style="text-decoration: none;"><h2>Third Party Themes</h2></a> <a href="#top">top</a>
+                                <p>
+                                    The same template changes listed above for modules should be applied to third party themes where appropriate.
+                                </p>
+                                <p>
+                                    In addition a template should be added to the theme as pages/admin.xt. This template is displayed when working in the back end of a site. The easiest solution here is to use a copy of the admin page template of either the Xaraya_Classic or default themes.
+                                </p>
+                                <p>
+                                    The block group of any admin menus in your themes should be changed to "admin". This makes the admin menus show in the back end when the admin page template mentioned above is being displayed.
+                                </p>
+                                <a name="misc" style="text-decoration: none;"><h2>Miscellaneous</h2></a> <a href="#top">top</a>
+                                <p>
+                                    Replace the file html/var/config.system.php with a copy of Jamaica's html/var/config.system.php.dist file, and manually transpose the database information of your old file to the new one.
+                                </p>
+                                  </div>
+                            </div>
+                        <div id="contentmain_blcorner"><div id="contentmain_brcorner">&#160;</div></div>
+                    </div>
+                </div>
+            </div>
+            <br class="xar-clearboth"/>
+        </div>
+    </body>
+</html>

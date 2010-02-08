@@ -2,7 +2,7 @@
 /**
  * Read the info details of a block type
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -36,10 +36,14 @@ function blocks_adminapi_update_type_info($args)
     }
 
     // Load and execute the info function of the block.
-    $block_info = xarMod::apiFunc('blocks', 'user', 'read_type_info',
-                                array('module' => $type['module'],
-                                      'type' => $type['type']));
-    if (empty($block_info)) {return;}
+    if (empty($args['info'])) {
+        $block_info = xarMod::apiFunc('blocks', 'user', 'read_type_info',
+                                    array('module' => $type['module'],
+                                          'type' => $type['type']));
+        if (empty($block_info)) {return;}
+    } else {
+        $block_info = $args['info'];
+    }
 
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();

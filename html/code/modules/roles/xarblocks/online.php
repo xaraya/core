@@ -3,7 +3,7 @@
  * Online Block
  *
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -30,13 +30,8 @@
         {
             $data = parent::display($data);
             if (empty($data)) return;
-
-            // Get variables from content block
-            if (!is_array($data['content'])) {
-                $args = unserialize($data['content']);
-            } else {
-                $args = $data['content'];
-            }
+            $args = $data['content'];
+            
             if (!isset($args['showusers']))     $args['showusers'] = true;
             if (!isset($args['showusertotal'])) $args['showusertotal'] = false;
             if (!isset($args['showanontotal'])) $args['showanontotal'] = false;

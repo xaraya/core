@@ -1,1 +1,1 @@
-Workflow process files are stored here by the workflow module.
+This directory contains workflow process definition files, such as those created by the Workflow module.

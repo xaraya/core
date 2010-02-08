@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -32,8 +32,8 @@ function blocks_admin_view_instances()
     } else {
         $order = 'name';
     }
+    
     // Get all block instances (whether they have group membership or not.
-    // CHECKME: & removed below for php 4.4.
     $rowstodo = (int)xarModVars::get('blocks','items_per_page');
     // Need to find a better way to do this without breaking the API
     $instances = xarMod::apiFunc('blocks', 'user', 'getall', array('filter' => $filter,
@@ -91,7 +91,7 @@ function blocks_admin_view_instances()
     // State descriptions.
     $data['state_desc'][0] = xarML('Hidden');
     $data['state_desc'][1] = xarML('Minimized');
-    $data['state_desc'][2] = xarML('Maximized');
+    $data['state_desc'][2] = xarML('Visible');
 
     $data['blocks'] = $instances;
 

@@ -392,28 +392,20 @@
                 <fieldset>
                     <legend>Timezone Configuration</legend>
                     <div class="xar-form-input-wrapper">
-                        <label for="defaulttimezone" title="#xarML('This is the timezone your operating system is set to.')#" class="xar-form-label">Host Timezone:</label>
-                        <xar:set name="timezone">
-                            <xar:var scope="config" name="System.Core.TimeZone"/>
+                        <label for="mytimezone" title="#xarML('This is the timezone your operating system is set to.')#" class="xar-form-label">Host Timezone:</label>
+                        <xar:set name="hosttimezone">
+                            xarSystemVars::get(sys::CONFIG, 'SystemTimeZone')
                         </xar:set>
-                        <xar:data-input type="timezone" name="defaultsystemtimezone" id="defaultsystemtimezone" value="$timezone"/>
+                        <xar:data-input type="timezone" name="hosttimezone" id="hosttimezone" value="$hosttimezone"/>
+                        &#160;The time is #$hostdatetime->format(DATE_RSS)#
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="defaulttimezone" title="#xarML('This is the timezone the server/site is based in.')#" class="xar-form-label">Server Timezone:</label>
-                        <xar:set name="timezone">
+                        <label for="sitetimezone" title="#xarML('This is the timezone the server/site is based in.')#" class="xar-form-label">Site Timezone:</label>
+                        <xar:set name="sitetimezone">
                             <xar:var scope="config" name="Site.Core.TimeZone"/>
                         </xar:set>
-                        <xar:data-input type="timezone" name="defaulttimezone" id="defaulttimezone" value="$timezone"/>
-                    </div>
-                    <div class="xar-form-input-wrapper">
-                        <label for="defaulttimezone" title="#xarML('The current server time based on the timezone selected.')#" class="xar-form-label">
-                        The server time is:</label>#$hostnow#&#160;in&#160; 
-                        <xar:data-output type="timezone" value="$timezone"/>
-                    </div>
-                    <div class="xar-form-input-wrapper">
-                        <label for="defaulttimezone" title="#xarML('The current time of this user.')#" class="xar-form-label">      
-                            Your local time is:
-                        </label>#$localnow#
+                        <xar:data-input type="timezone" name="sitetimezone" id="sitetimezone" value="$sitetimezone"/>
+                        &#160;The time is #$sitedatetime->format(DATE_RSS)#
                     </div>
                 </fieldset>
                 <fieldset>

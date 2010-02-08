@@ -22,8 +22,8 @@
                     <a href="&xar-modurl-roles-user-lostpassword;">Request a new password</a>
                 </p>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:data-input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3"/>
-                    <label for="remembermeform">Remember me</label>
+                    <xar:data-input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3"/>&#160;
+                    <label for="remembermeform">Remember me</label>xx
                 </div>
             </fieldset>
             <fieldset>

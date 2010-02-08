@@ -3,7 +3,7 @@
  * Base Module Initialisation
  *
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -145,7 +145,6 @@ function base_init()
     /****************************************************************
      * Set System Configuration Variables
      *****************************************************************/
-    xarConfigVars::set(null, 'System.Core.TimeZone', 'Etc/UTC');
     xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
     xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);
     xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);

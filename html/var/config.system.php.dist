@@ -6,6 +6,7 @@ $systemConfiguration['DB.UserName'] = '';
 $systemConfiguration['DB.Password'] = '';
 // Database Host: the host name where the database server is located.
 // A different port can also be specified, e.g. 'localhost:12345'
+// Note thaton Vista systems you shoulduse the localhost IP, e.g. '127.0.0.1:12345'
 $systemConfiguration['DB.Host'] = 'localhost';
 // Database Name: the name of the database to connect to.
 $systemConfiguration['DB.Name'] = 'Xaraya';
@@ -30,6 +31,11 @@ $systemConfiguration['DB.Persistent'] = false;
  * file in var/logs/log.txt
  * For more advanced logging options use the logconfig module
  */
+
+/* System Time Zone
+ * This is the local time zone of your host machine. This time is used by the logging subsystem
+ */
+ $systemConfiguration['SystemTimeZone'] = 'UTC';
 
 /*
  * Global error level, optional

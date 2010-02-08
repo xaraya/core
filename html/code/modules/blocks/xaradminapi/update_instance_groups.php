@@ -2,7 +2,7 @@
 /**
  * Update the group details for a block instance
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -44,7 +44,7 @@ function blocks_adminapi_update_instance_groups($args)
 
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
-    $block_groups_table = $xartable['block_groups'];
+    $block_groups_table = $xartable['block_instances'];
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];
 
@@ -61,7 +61,7 @@ function blocks_adminapi_update_instance_groups($args)
 
         $current[$id] = array (
             'id'        => $result->getInt(1),
-            'group_id'  => $id,
+            'id'       => $id,
             'template'  => $result->getString(3)
         );
     }

@@ -3,7 +3,7 @@
  * Installer
  *
  * @package Installer
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -33,7 +33,8 @@ function installer_admin_main()
 
 
 // TODO: move this to some place central
-define('MYSQL_REQIRED_VERSION', '5.0.0');
+define('PHP_REQUIRED_VERSION', '5.3.0');
+define('MYSQL_REQUIRED_VERSION', '5.0.0');
 
 /**
  * Phase 1: Welcome (Set Language and Locale) Page
@@ -154,7 +155,7 @@ function installer_admin_phase3()
     $xmlLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/xml';
 
     if (function_exists('version_compare')) {
-        if (version_compare(PHP_VERSION,'5.2','>=')) $metRequiredPHPVersion = true;
+        if (version_compare(PHP_VERSION,PHP_REQUIRED_VERSION,'>=')) $metRequiredPHPVersion = true;
     }
 
     $systemConfigIsWritable     = is_writable($systemConfigFile);
@@ -207,14 +208,14 @@ function installer_admin_phase3()
     
     // We only check this extension if MySQL is loaded
     if ($data['mysqlextension']) {
-        $data['mysql_required_version']     = MYSQL_REQIRED_VERSION;
+        $data['mysql_required_version']     = MYSQL_REQUIRED_VERSION;
         ob_start();
         phpinfo(INFO_MODULES);
         $info = ob_get_contents();
         ob_end_clean();
         $info = stristr($info, 'Client API version');
         preg_match('/[1-9].[0-9].[1-9][0-9]/', $info, $match);
-        $data['mysql_version_ok'] = version_compare($match[0],MYSQL_REQIRED_VERSION,'ge');
+        $data['mysql_version_ok'] = version_compare($match[0],MYSQL_REQUIRED_VERSION,'ge');
         $data['mysql_version']          = $match[0];
     }
 
@@ -242,19 +243,7 @@ function installer_admin_phase4()
     $data['database_charset']    = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
 
     // Supported  Databases:
-    if (extension_loaded('mysql')) {
-        ob_start();
-        phpinfo(INFO_MODULES);
-        $info = ob_get_contents();
-        ob_end_clean();
-        $info = stristr($info, 'Client API version');
-        preg_match('/[1-9].[0-9].[1-9][0-9]/', $info, $match);
-        $mysql_version_ok = version_compare($match[0],MYSQL_REQIRED_VERSION,'ge');
-    } else {
-        $mysql_version_ok = false;
-    }
-
-    $data['database_types']      = array('mysql'       => array('name' => 'MySQL'   , 'available' => extension_loaded('mysql') && $mysql_version_ok),
+    $data['database_types']      = array('mysql'       => array('name' => 'MySQL'   , 'available' => extension_loaded('mysql')),
                                          'postgres'    => array('name' => 'Postgres', 'available' => extension_loaded('pgsql')),
                                          'sqlite'      => array('name' => 'SQLite'  , 'available' => extension_loaded('sqlite')),
                                          //'pdosqlite'   => array('name' => 'PDO SQLite'  , 'available' => extension_loaded('pdo_sqlite')),
@@ -300,6 +289,9 @@ function installer_admin_phase5()
     if (!xarVarFetch('install_create_database','checkbox',$createDB,false,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('confirmDB','bool',$confirmDB,false,XARVAR_NOT_REQUIRED)) return;
 
+    if ($dbHost == 'localhost') {
+        $dbHost = '127.0.0.1';
+    }
     if ($dbName == '') {
         $msg = xarML('No database was specified');
         throw new Exception($msg);
@@ -354,10 +346,21 @@ function installer_admin_phase5()
       }
     }
 
+    if ($dbType == 'mysql') {
+        $tokens = explode('.',mysql_get_server_info());
+        $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
+        $data['required_version'] = MYSQL_REQUIRED_VERSION;
+        $mysql_version_ok = version_compare($data['version'],$data['required_version'],'ge');
+        if (!$mysql_version_ok) {
+            $data['layout'] = 'bad_version';
+            return xarTplModule('installer','admin','check_database',$data);
+        }
+    }
+    
     if (!$createDB && !$dbExists) {
-        $msg = xarML('Database #(1) doesn\'t exist and it wasn\'t selected to be created. <br />
-        Please go back and either check the checkbox to create the database or choose a database that already exists.', $dbName);
-        die($msg);
+        $data['dbName'] = $dbName;
+        $data['layout'] = 'not_found';
+        return xarTplModule('installer','admin','check_database',$data);
     }
 
     $data['confirmDB']  = $confirmDB;
@@ -695,20 +698,20 @@ function installer_admin_create_administrator()
     xarModVars::set('roles', 'adminpass', $data['admin']->properties['password']->password);
 
 // CHECKME: misc. undefined module variables
+    xarModVars::set('themes', 'var_dump', false);
+    xarModVars::set('base', 'releasenumber', 10);
     xarModVars::set('base', 'AlternatePageTemplateName', '');
     xarModVars::set('base', 'UseAlternatePageTemplate', false);
-    xarModVars::set('themes', 'var_dump', false);
-    xarModVars::set('base', 'editor', '');
-    xarModVars::set('base', 'releasenumber', '');
+    xarModVars::set('base', 'editor', 'none');
     xarModVars::set('base', 'proxyhost', '');
-    xarModVars::set('base', 'proxyport', '');
+    xarModVars::set('base', 'proxyport', 0);
 
     //Try to update the role to the repository and bail if an error was thrown
     $itemid = $data['admin']->updateItem();
     if (!$itemid) {return;}
 
     // Register Block types from modules installed before block apis (base)
-    $blocks = array('adminmenu','waitingcontent','finclude','html','menu','php','text','content');
+    $blocks = array('wrapper', 'adminmenu','waitingcontent','finclude','html','menu','php','text','content');
 
     foreach ($blocks as $block) {
         if (!xarMod::apiFunc('blocks', 'admin', 'register_block_type', array('modName'  => 'base', 'blockType'=> $block))) return;
@@ -726,10 +729,19 @@ function installer_admin_create_administrator()
                                   'topnav' => 'topnav'
                                   );
 
+    $wrapperBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+                                    array('module'  => 'base',
+                                          'type'    => 'wrapper'));
+
+    $wrapperBlockTypeID = $wrapperBlockType['tid'];
+    assert('is_numeric($wrapperBlockTypeID);');
+
     foreach ($default_blockgroups as $name => $template) {
         if(!xarMod::apiFunc('blocks','user','groupgetinfo', array('name' => $name))) {
             // Not there yet
-            if(!xarMod::apiFunc('blocks','admin','create_group', array('name' => $name, 'template' => $template))) return;
+            if(!xarMod::apiFunc('blocks','admin','create_instance', array('name' => $name, 'template' => $template,
+                'type' => $wrapperBlockTypeID, 'state' => 2
+            ))) return;
         }
     }
 
@@ -737,7 +749,7 @@ function installer_admin_create_administrator()
     $dbconn = xarDB::getConn();
     $tables = xarDB::getTables();
 
-    $blockGroupsTable = $tables['block_groups'];
+    $blockGroupsTable = $tables['block_instances'];
 
     $query = "SELECT    id as id
               FROM      $blockGroupsTable
@@ -996,7 +1008,7 @@ function installer_admin_confirm_configuration()
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
 
-        $blockGroupsTable = $tables['block_groups'];
+        $blockGroupsTable = $tables['block_instances'];
 
         $query = "SELECT    id as id
                   FROM      $blockGroupsTable
@@ -1077,10 +1089,10 @@ function installer_admin_cleanup()
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
 
-        $blockGroupsTable = $tables['block_groups'];
+        $blockTable = $tables['block_instances'];
 
         $query = "SELECT    id as id
-                  FROM      $blockGroupsTable
+                  FROM      $blockTable
                   WHERE     name = ?";
 
         $result =& $dbconn->Execute($query,array('left'));
@@ -1136,7 +1148,7 @@ function installer_admin_cleanup()
     $dbconn = xarDB::getConn();
     $tables = xarDB::getTables();
 
-    $blockGroupsTable = $tables['block_groups'];
+    $blockGroupsTable = $tables['block_instances'];
 
     // Prepare getting one blockgroup
     $query = "SELECT    id as id
@@ -1226,11 +1238,12 @@ function installer_admin_finish()
 
     if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'privileges', 'objects' => $objects))) return;
 
-    $machinetz = date_default_timezone_get();
-    xarConfigVars::set(null, 'System.Core.TimeZone', $machinetz);
-    xarConfigVars::set(null, 'Site.Core.TimeZone', $machinetz);
+    // Default for the site time zone is the system time zone
+    xarConfigVars::set(null, 'Site.Core.TimeZone', xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
 
     switch ($returnurl) {
+        case ('base'):
+            xarResponse::redirect(xarModURL('base','admin','modifyconfig'));
         case ('modules'):
             xarController::redirect(xarModURL('modules','admin','list'));
         case ('blocks'):

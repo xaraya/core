@@ -3,7 +3,7 @@
  * Read a block's type info.
  *
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -29,20 +29,19 @@ function blocks_userapi_read_type_info($args)
 
     // Function to execute, to get the block info.
     $infofunc = $module . '_' . $type . 'block_info';
-
     if (function_exists($infofunc)) {
         return $infofunc();
-    } else {
-        // Load and execute the info function of the block.
-        if (!xarMod::apiFunc(
-            'blocks', 'admin', 'load',
-            array(
-                'modName' => $module,
-                'blockName' => $type,
-                'blockFunc' => 'info'
-            )
-        )) {return false;}
     }
+
+    // Load and execute the info function of the block.
+        if (!xarMod::apiFunc(
+        'blocks', 'admin', 'load',
+        array(
+            'modName' => $module,
+            'blockName' => $type,
+            'blockFunc' => 'info'
+        )
+    )) {return;}
 
     $classpath = sys::code() . 'modules/' . $module . '/xarblocks/' . $type . '.php';
     if (function_exists($infofunc)) {
