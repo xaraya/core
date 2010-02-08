@@ -401,8 +401,8 @@ class MenuBlock extends BasicBlock implements iBlock
         // @CHECKME: is this used?
         if (empty($data['style'])) $data['style'] = 1;
 
-/*        $data['modules'] = xarMod::apiFunc('modules', 'admin', 'getlist', array('filter' => array('UserCapable' => 1, 'State' => XARMOD_STATE_ACTIVE)));
-        // Prepare output array
+        $data['modules'] = xarMod::apiFunc('modules', 'admin', 'getlist', array('filter' => array('UserCapable' => 1, 'State' => XARMOD_STATE_ACTIVE)));
+/*        // Prepare output array
         $c=0;
         if (!empty($data['content'])) {
             $contentlines = explode("LINESPLIT", $data['content']);

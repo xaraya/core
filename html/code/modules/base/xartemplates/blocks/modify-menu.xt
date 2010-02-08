@@ -144,14 +144,6 @@
                             )
                         </xar:set>
                     </xar:if>
-        <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link at the bottom of the menu.')#">
-            Display Logout
-        </label>
-    </div>
-    <div class="xar-form-input-wrapper-after">
-        <xar:data-input type="checkbox" name="showback" id="showback" checked="$showback"/>
-        <label for="showback" title="#xarML('Select if you would like Xaraya to generate a link to the back end for administrative users at the bottom of the menu.')#">
-            Display Admin Link to Back End
                     <xar:set name="accessname">'view_access_' . $module['name']</xar:set>
                     <xar:data-input type="access" name="$accessname" layout="horizontal" failure="1" value="$value" />
                 </td>
@@ -164,8 +156,14 @@
     </p>
 
     <div class="xar-form-input-wrapper">
+        <label for="showback" title="#xarML('Select if you would like Xaraya to generate a link to the back end for administrative users at the bottom of the menu.')#">
+            Display Admin Link to Back End
+        </label>
+        <xar:data-input type="checkbox" name="showback" id="showback" checked="$showback"/>
+    </div>
+    <div class="xar-form-input-wrapper">
         <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link for non-administrative users at the bottom of the menu.')#" class="xar-form-label">
-            Display User Logout
+            Display Logout
         </label>
         <xar:data-input type="checkbox" name="showlogout" checked="$showlogout" />
     </div>
