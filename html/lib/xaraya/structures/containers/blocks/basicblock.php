@@ -133,29 +133,12 @@
         }
     }
 
-interface iBlock
-{
-    public function getInfo();
-    public function display(Array $data=array());
-    public function modify(Array $data=array());
-    public function update(Array $data=array());
-}
-
-/*public class Block extends Object
+    interface iBlock
     {
-
-        public function info()
-        {
-            return array('text_type' => 'HTML',
-                 'text_type_long' => 'HTML',
-                 'module' => 'base',
-                 'func_update' => 'base_htmlblock_update',
-                 'allow_multiple' => true,
-                 'form_content' => false,
-                 'form_refresh' => false,
-                 'show_preview' => true);
-
-        }
+        public function getInfo();
+        public function display(Array $data=array());
+        public function modify(Array $data=array());
+        public function update(Array $data=array());
     }
-    */
+
 ?>
