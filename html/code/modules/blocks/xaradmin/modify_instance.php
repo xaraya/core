@@ -39,7 +39,7 @@ function blocks_admin_modify_instance()
     // Execute the function if it exists.
     $usname = preg_replace('/ /', '_', $instance['module']);
     $modfunc = $usname . '_' . $instance['type'] . 'block_modify';
-    $classpath = sys::code() . 'modules/' . $instance['module'] . '/xarblocks/' . $instance['type'] . '.php';
+    $classpath = sys::code() . 'modules/' . $instance['module'] . '/xarblocks/' . $instance['type'] . '_admin.php';
     if (function_exists($modfunc)) {
         $extra = $modfunc($instance);
 

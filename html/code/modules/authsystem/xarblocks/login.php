@@ -75,36 +75,5 @@ class LoginBlock extends BasicBlock implements iBlock
         $data['content'] = $args;
         return $data;
     }
-
-/**
- * Modify Function to the Blocks Admin
- * @param $data array containing title,content
- */
-    public function modify(Array $data=array())
-    {
-        $data = parent::modify($data);
-
-        if (!isset($data['showlogout'])) $data['showlogout'] = $this->showlogout;
-        if (!isset($data['logouttitle'])) $data['logouttitle'] = $this->logouttitle;
-
-        $data['blockid'] = $data['bid'];
-        return $data;
-
-    }
-
-/**
- * Updates the Block config from the Blocks Admin
- * @param $data array containing title,content
- */
-    public function update(Array $data=array())
-    {
-        $data = parent::update($data);
-        if (!xarVarFetch('showlogout', 'checkbox', $vars['showlogout'], $this->showlogout, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('logouttitle', 'str', $vars['logouttitle'], $this->logouttitle, XARVAR_NOT_REQUIRED)) return;
-
-        $data['content'] = $vars;
-
-        return $data;
-    }
 }
 ?>
