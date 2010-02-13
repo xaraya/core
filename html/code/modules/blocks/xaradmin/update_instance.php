@@ -98,8 +98,8 @@ function blocks_admin_update_instance()
     if (function_exists($updatefunc)) {
         $blockinfo = $updatefunc($blockinfo);
     } elseif (file_exists($classpath)) {
-        sys::import('modules.' . $blockinfo['module'] . '.xarblocks.' . $blockinfo['type']);
-        $name = ucfirst($blockinfo['type']) . "Block";
+        sys::import('modules.' . $blockinfo['module'] . '.xarblocks.' . $blockinfo['type'] . '_admin');
+        $name = ucfirst($blockinfo['type']) . "BlockAdmin";
         if (class_exists($name)) {
             sys::import('xaraya.structures.descriptor');
             $descriptor = new ObjectDescriptor(array());
