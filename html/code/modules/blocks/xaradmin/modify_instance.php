@@ -48,8 +48,8 @@ function blocks_admin_modify_instance()
             $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
         }
     } elseif (file_exists($classpath)) {
-        sys::import('modules.' . $instance['module'] . '.xarblocks.' . $instance['type']);
-        $name = ucfirst($instance['type']) . "Block";
+        sys::import('modules.' . $instance['module'] . '.xarblocks.' . $instance['type'] . '_admin');
+        $name = ucfirst($instance['type']) . "BlockAdmin";
         if (class_exists($name)) {
             sys::import('xaraya.structures.descriptor');
             $descriptor = new ObjectDescriptor(array());
