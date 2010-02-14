@@ -478,7 +478,17 @@ class DataProperty extends Object implements iDataProperty
         if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
         if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
 
-        $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->getValue());
+        $data['value']    = isset($data['value']) ? $data['value'] : $this->getValue();
+        
+        // The value might be an array
+        if (is_array($data['value'])){
+            $temp = array();
+            foreach ($data['value'] as $tmp) $temp[] = arVarPrepForDisplay($tmp);
+            $data['value'] = $temp;
+        } else {
+            $data['value'] = xarVarPrepForDisplay($data['value']);
+        }
+
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
