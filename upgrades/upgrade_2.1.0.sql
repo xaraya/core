@@ -11,4 +11,4 @@ DROP TABLE xar_block_groups;
 UPDATE `xar_dynamic_configurations` SET `name` = REPLACE(name, "installation_rows", "installation_addremove");
 UPDATE `xar_dynamic_configurations` SET `description` = REPLACE(description, "Allow adding of rows", "Allow adding of items");
 UPDATE `xar_dynamic_configurations` SET `label` = REPLACE(label, "Add/Delete Rows", "Add/Delete Items");
-UPDATE `xar_dynamic_properties` SET `configuration` = REPLACE(configuration, "Add/Delete Rows", "Add/Delete Items");
+UPDATE `xar_dynamic_properties` SET `configuration` = REPLACE(configuration, 's:19:"initialization_rows";', 's:24:"initialization_addremove";');
