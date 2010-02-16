@@ -19,9 +19,9 @@
 
     <xsl:apply-templates/>
 
-    <xsl:text>;$_bl_data['</xsl:text>
+    <xsl:text>;$_bl_data["</xsl:text>
     <xsl:value-of select="@name"/>
-    <xsl:text>']=$</xsl:text>
+    <xsl:text>"]=$</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>;&nl;</xsl:text>
   </xsl:processing-instruction>
