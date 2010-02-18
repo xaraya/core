@@ -11,7 +11,7 @@
         </span>
     </div>
     <div class="xar-mod-body">
-        <h2>Modify Item #$object:itemid# in #$object:label#</h2>
+        <h2>Modify field #$oldname# in table #$table#</h2>
 
         <xar:if condition="isset($preview)">
             <fieldset>
