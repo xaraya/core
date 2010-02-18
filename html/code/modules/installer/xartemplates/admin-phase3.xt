@@ -153,22 +153,22 @@
             </ul>
             
             <h2>Information on Loaded PHP Extensions</h2>
-            <p>These extensions may be required for some modules to work, however Xaraya is not
-            dependant on these extensions for installation. Refer to 
+            <p>These extensions are required for Xaraya to work correctly. If they are not present they
+            need to be added to your PHP installation. Refer to 
             <a href="http://www.php.net">PHP.net</a> for further information on these
             extensions.</p>
             <ul>
                 <xar:if condition="$xmlextension">
                     <li class="success">SUCCESS: The XML Extension is loaded.</li>
                 <xar:else />
-                    <li class="warning">WARNING: The XML Extension is not loaded. You will
+                    <li class="failure">ERROR: The XML Extension is not loaded. You will
                     require this extension if you plan to use the Xaraya Translations
                     module.</li>
                 </xar:if>
                 <xar:if condition="$xslextension">
                     <li class="success">SUCCESS: The XSL Extension is loaded.</li>
                 <xar:else />
-                    <li class="warning">WARNING: The XSL Extension is not loaded. You will
+                    <li class="failure">ERROR: The XSL Extension is not loaded. You will
                     require this extension for the BlockLayout templating system.</li>
                 </xar:if>
             </ul>
@@ -208,12 +208,23 @@
             </ul>
         <form action="install.php" method="post">
             <div class="xar-align-center">
-                <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $rssTemplatesIsWritable AND $metMinMemRequirement">
+                <xar:if condition="$systemConfigIsWritable 
+                                   AND $cacheTemplatesIsWritable 
+                                   AND $cacheIsWritable 
+                                   AND $rssTemplatesIsWritable 
+                                   AND $metMinMemRequirement
+                                   AND $xmlextension
+                                   AND $xslextension
+                                   AND $metRequiredPHPVersion
+                                   ">
                     <input type="hidden" name="install_phase" id="install_phase" value="4"/>
                     <input type="submit" value="Continue"/>
                 <xar:else />
                     <input type="hidden" name="install_phase" id="install_phase" value="3"/>
                     <input type="hidden" name="agree" id="agree" value="agree"/>
+                    <p class="warning">
+                        Some requirements for installation were not met. Please check the list above and make the appropriate adjustments.
+                    </p>
                     <input type="submit" value="Check Again"/>
                 </xar:if>
             </div>
