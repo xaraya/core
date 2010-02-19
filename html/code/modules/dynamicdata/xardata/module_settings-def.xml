@@ -24,7 +24,7 @@
       <id>40</id>
       <label>Enable Short URLs</label>
       <type>checkbox</type>
-      <defaultvalue>0</defaultvalue>
+      <defaultvalue>false</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
       <seq>2</seq>
@@ -34,40 +34,50 @@
       <id>41</id>
       <label>Use Module Alias</label>
       <type>checkbox</type>
-      <defaultvalue>0</defaultvalue>
+      <defaultvalue>false</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
       <seq>3</seq>
+      <configuration></configuration>
+    </property>
+    <property name="use_module_icons">
+      <id>41</id>
+      <label>Use Icons</label>
+      <type>checkbox</type>
+      <defaultvalue>true</defaultvalue>
+      <source>module variable: base</source>
+      <status>33</status>
+      <seq>4</seq>
       <configuration></configuration>
     </property>
     <property name="enable_user_menu">
       <id>109</id>
       <label>Enable User Settings</label>
       <type>checkbox</type>
-      <defaultvalue>0</defaultvalue>
+      <defaultvalue>false</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
-      <seq>4</seq>
+      <seq>5</seq>
       <configuration></configuration>
     </property>
     <property name="user_menu_link">
       <id>99</id>
       <label>Show link in user menu</label>
       <type>checkbox</type>
-      <defaultvalue>0</defaultvalue>
+      <defaultvalue>false</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
-      <seq>5</seq>
+      <seq>6</seq>
       <configuration></configuration>
     </property>
     <property name="admin_menu_link">
       <id>100</id>
       <label>Show link in admin menu</label>
       <type>checkbox</type>
-      <defaultvalue>0</defaultvalue>
+      <defaultvalue>false</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
-      <seq>6</seq>
+      <seq>7</seq>
       <configuration></configuration>
     </property>
   </properties>

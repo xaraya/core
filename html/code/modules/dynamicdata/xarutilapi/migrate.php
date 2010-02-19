@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -18,8 +18,7 @@
  * @param $args['fieldmap'] the field mapping
  * @param $args['hookmap'] the hook mapping
  * @param $args['debug'] don't actually update anything :-)
- * @returns mixed
- * @return true or debug string on success, null on failure
+ * @return mixed true or debug string on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_utilapi_migrate($args)

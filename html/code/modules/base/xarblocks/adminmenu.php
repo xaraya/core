@@ -231,42 +231,5 @@ class AdminMenuBlock extends BasicBlock implements iBlock
         $data['content'] = $vars;
         return $data;
     }
-
-/**
- * Modify Function to the Blocks Admin
- * @param $data array containing title,content
- */
-    public function modify(Array $data=array())
-    {
-        $data = parent::modify($data);
-
-        // Defaults
-        if(empty($data['showlogout'])) $data['showlogout'] = 0;
-        if(empty($data['menustyle']))  $data['menustyle'] = 'bycat'; //xarModVars::get('base','menustyle');
-        if(empty($data['showhelp'])) $data['showhelp'] = 0;
-        if(empty($data['showfront'])) $data['showfront'] = 0;
-
-        // Set the template data we need
-        $sortorder = array('byname' => xarML('By Name'),
-                           'bycat'  => xarML('By Category'));
-        $data['sortorder'] = $sortorder;
-        return $data;
-    }
-
-/**
- * Updates the Block config from the Blocks Admin
- * @param $data array containing title,content
- */
-    public function update(Array $data=array())
-    {
-        $data = parent::update($data);
-        if (!xarVarFetch('showlogout', 'int:0:1', $vars['showlogout'], 0, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('menustyle' , 'str::'  , $vars['menustyle'] , 'bycat', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('showhelp', 'int:0:1', $vars['showhelp'], 0, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('showfront', 'int:0:1', $vars['showfront'], 0, XARVAR_NOT_REQUIRED)) return;
-        $data['content'] = $vars;
-        return $data;
-    }
-
 }
 ?>

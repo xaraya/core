@@ -21,9 +21,13 @@
     <xar:if condition="$expirein ne 0">
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">
-                This Block Will Expire:
+                Expiration date:
             </label>
-            #$expirein# hours from now.
+            <xar:if condition="$expirein > 0">
+                #$expirein# hours from now.
+            <xar:else />
+                this block has expired
+            </xar:if>
         </div>
     </xar:if>
     <div class="xar-form-input-wrapper">

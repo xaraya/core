@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+
+    <!-- get the list of main objects -->
+    <xar:set name="startserial">xarModVars::get('dynamicdata','starter_object_list')</xar:set>
+    <xar:if condition="!empty($startserial)">
+        <xar:set name="startlist">unserialize($startserial)</xar:set>
+    <xar:else/>
+        <xar:set name="startlist">array()</xar:set>
+    </xar:if>
+
+    <!-- define the list of main objects -->
+    <xar:set name="dummy">xarVarFetch('update','isset',$update,NULL,XARVAR_NOT_REQUIRED)</xar:set>
+    <xar:if condition="(empty($startlist) or !empty($update)) and xarSecurityCheck('AdminDynamicData', 0)">
+        <xar:set name="dummy">xarVarFetch('starter','array',$starter,NULL,XARVAR_NOT_REQUIRED)</xar:set>
+        <xar:if condition="!empty($starter) and is_array($starter) and xarSecConfirmAuthKey()">
+            <xar:set name="startlist">array_keys($starter)</xar:set>
+            <xar:set name="dummy">xarModVars::set('dynamicdata','starter_object_list',serialize($startlist))</xar:set>
+            #xarResponse::Redirect(xarServer::getCurrentURL(array('update'=> null)))#
+        </xar:if>
+        <form method="post">
+        <p>Please specify which objects should be shown to your users here</p>
+        <ul>
+            <xar:foreach in="$object:items" value="$item">
+                <xar:if condition="empty($startlist)">
+                    <!-- take a guess at which objects could be candidates -->
+                    <xar:if condition="$item['module_id'] eq 182 and $item['itemtype'] lt 3">
+                        <!-- skip dd objects -->
+                    <xar:elseif condition="$item['module_id'] eq 182 and $item['itemtype'] gt 2 and $item['maxid'] gt 0"/>
+                        <li><input type="checkbox" name="starter[#$item['name']#]" id="starter_#$item['name']#" checked="checked"/>&#160;<a href="#xarServer::getObjectURL($item['name'])#">#$item['label']#</a></li>
+                    <xar:else/>
+                        <li><input type="checkbox" name="starter[#$item['name']#]" id="starter_#$item['name']#"/>&#160;<a href="#xarServer::getObjectURL($item['name'])#">#$item['label']#</a></li>
+                    </xar:if>
+                <xar:elseif condition="in_array($item['name'],$startlist)"/>
+                    <li><input type="checkbox" name="starter[#$item['name']#]" id="starter_#$item['name']#" checked="checked"/>&#160;<a href="#xarServer::getObjectURL($item['name'])#">#$item['label']#</a></li>
+                <xar:else/>
+                    <li><input type="checkbox" name="starter[#$item['name']#]" id="starter_#$item['name']#"/>&#160;<a href="#xarServer::getObjectURL($item['name'])#">#$item['label']#</a></li>
+                </xar:if>
+            </xar:foreach>
+        </ul>
+        <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
+        <input type="submit" value=" Update List "/>
+        </form>
+
+    <!-- show the list of main objects -->
+    <xar:elseif condition="!empty($startlist)"/>
+        <ul>
+        <xar:foreach in="$object:items" value="$item">
+            <xar:if condition="in_array($item['name'],$startlist)">
+                <li><a href="#xarServer::getObjectURL($item['name'])#">#$item['label']#</a></li>
+            </xar:if>
+        </xar:foreach>
+        </ul>
+        <xar:if condition="xarSecurityCheck('AdminDynamicData', 0)">
+            <a href="#xarServer::getCurrentURL(array('update'=> 1))#">Update this list</a>
+        </xar:if>
+
+    <!-- nothing to show -->
+    <xar:else/>
+        <p>No starter objects have been defined for the object interface</p>
+    </xar:if>
+
+</xar:template>

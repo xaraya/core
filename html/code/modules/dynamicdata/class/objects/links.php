@@ -126,9 +126,6 @@ class DataObjectLinks extends Object
      */
     static function addLink($from_object, $from_propname, $to_object, $to_propname, $link_type, $direction, $extra = '', $add_reverse = true)
     {
-        $linkobject = DataObjectMaster::getObject(array('name' => 'dynamic_object_links'));
-        if (empty($linkobject) || empty($linkobject->objectid)) return;
-
         $from_object = self::getName($from_object);
         $to_object = self::getName($to_object);
         if (empty($from_object) || empty($to_object)) return;
@@ -140,8 +137,36 @@ class DataObjectLinks extends Object
                       'link_type' => $link_type,
                       'direction' => $direction,
                       'extra'     => $extra);
-        $link_id = $linkobject->createItem($link);
-        if (empty($link_id)) return;
+
+        // get the list of all existing links
+        $linklist = self::initLinks();
+        if (empty($linklist) || empty($linklist->objectid)) return;
+        $checklinks = $linklist->getItems();
+        if (empty($checklinks)) {
+            $checklinks = array();
+        }
+
+        // make sure the link doesn't exist yet
+        $link_id = 0;
+        foreach ($checklinks as $checklink) {
+            if ($link['source'] == $checklink['source'] &&
+                $link['from_prop'] == $checklink['from_prop'] &&
+                $link['target'] == $checklink['target'] && 
+                $link['to_prop'] == $checklink['to_prop'] &&
+                $link['link_type'] == $checklink['link_type']) {
+                $link_id = $checklink['id'];
+                break;
+            }
+        }
+
+        // create the link
+        if (empty($link_id)) {
+            $linkobject = DataObjectMaster::getObject(array('name' => 'dynamic_object_links'));
+            if (empty($linkobject) || empty($linkobject->objectid)) return;
+
+            $link_id = $linkobject->createItem($link);
+            if (empty($link_id)) return;
+        }
 
         // see if we need to create a reverse link too
         if (empty($add_reverse) || empty(self::$reverselinktypes[$link_type])) {
@@ -169,6 +194,30 @@ class DataObjectLinks extends Object
                       'direction' => $reversedir,
                       // CHECKME: probably not the right syntax in reverse !
                       'extra'     => $extra);
+
+        // make sure the reverse link doesn't exist yet
+        $link_id = 0;
+        foreach ($checklinks as $checklink) {
+            if ($link['source'] == $checklink['source'] &&
+                $link['from_prop'] == $checklink['from_prop'] &&
+                $link['target'] == $checklink['target'] && 
+                $link['to_prop'] == $checklink['to_prop'] &&
+                $link['link_type'] == $checklink['link_type']) {
+                $link_id = $checklink['id'];
+                break;
+            }
+        }
+
+        if (!empty($link_id)) {
+            // nothing more to add
+            return $link_id;
+        }
+
+        // create the reverse link
+        if (empty($linkobject)) {
+            $linkobject = DataObjectMaster::getObject(array('name' => 'dynamic_object_links'));
+            if (empty($linkobject) || empty($linkobject->objectid)) return;
+        }
 
         $link_id = $linkobject->createItem($link);
         return $link_id;
@@ -263,7 +312,6 @@ class DataObjectLinks extends Object
 
             // get an objectlist for the target
             $linkedlist = DataObjectMaster::getObjectList(array('name' => $link['target']));
-
             // skip links to unknown objects or properties
             if (empty($linkedlist->objectid) || empty($linkedlist->properties[$link['to_prop']])) continue;
 
@@ -275,7 +323,12 @@ class DataObjectLinks extends Object
             if (!empty($object->itemid)) {
                 // get item(s) ?
                 $where = array();
+// get original role id
+//if ($object->properties[$link['from_prop']]->type == 7) {
+//                $value = $object->properties[$link['from_prop']]->value;
+//} else {
                 $value = $object->properties[$link['from_prop']]->getValue();
+//}
                 if (isset($value)) {
                     if (is_numeric($value)) {
                         $where[] = $link['to_prop'] . ' = ' . $value;

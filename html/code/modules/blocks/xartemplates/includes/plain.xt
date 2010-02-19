@@ -3,13 +3,11 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="icon_delete">xarTplGetImage('icons/delete.png','base')</xar:set>
     <xar:set name="icon_modify">xarTplGetImage('icons/modify.png','base')</xar:set>
-    <xar:if condition="$total gt $itemsperpage">
-        <div>
-            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
-        </div>
-    </xar:if>
-    <table class="xar-fullwidth">
-        <tr>
+    <div>
+        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+    </div>
+<table class="xar-fullwidth">
+    <tr>
             <th>Name</th>
             <th>Groups</th>
             <th>Module</th>
@@ -17,20 +15,20 @@
             <th>Template</th>
             <th>Status</th>
             <th>Actions</th>
-        </tr>
-        <xar:loop name="$blocks">
-            <tr>
-                <td>
+    </tr>
+    <xar:loop name="$blocks">
+        <tr>
+            <td>
                     <xar:if condition="empty($loop:item['title'])">
                         #$loop:item['name']#
                     <xar:else />
                         <span title="#xarVarPrepfordisplay($loop:item['title'])#">
-                            #$loop:item['name']#
-                        </span>
-                    </xar:if>
-                </td>
-                <td>
-                    <xar:if condition="!empty($loop:item.groups)">
+                        #$loop:item['name']# 
+                    </span>
+                </xar:if>
+            </td>
+            <td>
+                <xar:if condition="!empty($loop:item.groups)">
                         <xar:loop name="$loop:item.groups" id="groups">
                                 <a href="#xarModURL('blocks','admin','modify_group')#&amp;id=#$loop:groups:item.id#">
                             #$loop:groups:item.name#</a>
@@ -38,17 +36,16 @@
                     <xar:else />
                         [ none ]
                     </xar:if>
-                </td>
+            </td>
                 <td>#$loop:item['module']#</td>
-                <td>
-                    <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
-                        #$loop:item['type']#
-                    </a>
-                </td>
-                <td>
-                    <xar:if condition="$loop:item['template'] ne NULL">
-                        #$loop:item['template']#
-                        &#160;
+            <td>
+                <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
+                    #$loop:item['type']# 
+                </a>
+            </td>
+            <td>
+                <xar:if condition="$loop:item['template'] ne NULL">
+                    #$loop:item['template']# &#160; 
                     <xar:else />
                         <xar:if condition="empty($loop:item['group_template'])">
                             [ default ]
@@ -56,9 +53,9 @@
                             #$loop:item['group_template']# &#160;
                         </xar:if>
                     </xar:if>
-                </td>
+            </td>
                 <td class="xar-align-center">#$state_desc[$loop:item['state']]#</td>
-                <xar:if condition="xarModVars::get('blocks','use_icons')">
+                <xar:if condition="xarModVars::get('blocks','use_module_icons')">
                     <td class="xar-item-actions">
                         <a href="#xarModURL('blocks','admin','modify_instance',array('bid' =&gt; $loop:item.bid))#" title="#xarML('Modify')#">
                             <img src="#$icon_modify#" alt="#xarML('Modify')#" />
@@ -78,12 +75,11 @@
                         </a>
                     </td>
                 </xar:if>
-            </tr>
-        </xar:loop>
-    </table>
-    <xar:if condition="$total gt $itemsperpage">
-        <div>
-            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
-        </div>
-    </xar:if>
+        </tr>
+    </xar:loop>
+</table>
+    <div>
+        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+    </div>
+
 </xar:template>

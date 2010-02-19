@@ -32,8 +32,8 @@ function blocks_admin_view_instances()
     } else {
         $order = 'name';
     }
+    
     // Get all block instances (whether they have group membership or not.
-    // CHECKME: & removed below for php 4.4.
     $rowstodo = (int)xarModVars::get('blocks','items_per_page');
     // Need to find a better way to do this without breaking the API
     $instances = xarMod::apiFunc('blocks', 'user', 'getall', array('filter' => $filter,

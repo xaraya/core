@@ -25,13 +25,13 @@
                 <legend>                    
                     Defaults                    
                 </legend>
-                <xar:template file="defaults"/>
+                <xar:template file="config_defaults"/>
             </fieldset>
             <fieldset>
                 <legend>                    
                     Display                    
                 </legend>
-                <xar:template file="display"/>
+                <xar:template file="config_display"/>
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">

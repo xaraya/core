@@ -25,7 +25,6 @@ function xarBlock_init(&$args)
 
     $tables = array(
         'block_instances'       => $prefix . '_block_instances',
-        'block_groups'          => $prefix . '_block_groups',
         'block_group_instances' => $prefix . '_block_group_instances',
         'block_types'           => $prefix . '_block_types'
     );
@@ -135,11 +134,18 @@ function xarBlock_render($blockinfo)
 
         $blockinfo = $block->display($blockinfo);
         if (!is_array($blockinfo)) {
+        if (isset($blockinfo['allowaccess']) && !$blockinfo['allowaccess']) {
+            if (isset($blockinfo['display_access']) && $blockinfo['display_access']['failure']) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
+            } else {
+                return '';
+            }
             // Set the output of the block in cache
             if (!empty($cacheKey)) {
                 xarBlockCache::setCached($cacheKey, '');
             }
             return '';
+        }
         }
         if (is_array($blockinfo['content'])) {
             // Here $blockinfo['content'] is template data.
@@ -203,7 +209,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
 
     $blockGroupInstancesTable = $tables['block_group_instances'];
     $blockInstancesTable      = $tables['block_instances'];
-    $blockGroupsTable         = $tables['block_groups'];
+    $blockGroupsTable         = $tables['block_instances'];
     $blockTypesTable          = $tables['block_types'];
     $modulesTable             = $tables['modules'];
 

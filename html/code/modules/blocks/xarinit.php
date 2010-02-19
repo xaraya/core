@@ -27,27 +27,10 @@ function blocks_init()
         $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         $dbconn->begin();
         
-        // prototypes
         $id_type       = array('type'=>'integer', 'unsigned'=>true, 'null'=>false, 'increment'=>true, 'primary_key'=>true);
         $idref_type    = array('type'=>'integer', 'unsigned'=>true, 'null'=>false);
         $template_type = array('type'=>'varchar', 'size'=>254, 'null'=>true, 'default'=>null, 'charset' => $charset);
         
-        // *_block_groups
-        $query = xarDBCreateTable($prefix . '_block_groups',
-                                  array('id'          => $id_type,
-                                        'name'        => array('type'        => 'varchar',
-                                                                   'size'        => 64,
-                                                                   'null'        => false,
-                                                                   'charset' => $charset),
-                                        'template'    => $template_type));
-        $dbconn->Execute($query);
-
-        $query = xarDBCreateIndex($prefix . '_block_groups',
-                                  array('name'   => $prefix . '_block_groups_name',
-                                        'fields' => array('name'),
-                                        'unique' => 'true'));
-        $dbconn->Execute($query);
-
         // *_block_instances
         $query = xarDBCreateTable($prefix . '_block_instances',
                                   array('id'          => $id_type,
@@ -63,7 +46,7 @@ function blocks_init()
                                                                    'default'     => NULL,
                                                                    'charset' => $charset),
                                         'content'     => array('type'        => 'text',
-                                                                   'null'        => false,
+                                                                   'null'        => true,
                                                                    'charset' => $charset),
                                         'template'    => $template_type,
                                         'state'       => array('type'        => 'integer',
