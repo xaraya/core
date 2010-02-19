@@ -166,6 +166,17 @@ function dynamicdata_utilapi_maketable($args)
     if (empty($query)) return; // throw back
     $dbconn->Execute($query);
 
+    sys::import('xaraya.structures.query');
+    $objectlist = DataObjectMaster::getObjectList(array('name' => $myobject->name));
+    $items = $objectlist->getItems();
+    $q = new Query('INSERT', $table);
+    foreach ($items as $row) {
+        foreach ($row as $key => $value) {
+            $q->addfield($key, $value);
+        }
+        if (!$q->run()) return;
+    }
+
     return true;
 }
 
