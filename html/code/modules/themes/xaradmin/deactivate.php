@@ -38,9 +38,9 @@ function themes_admin_deactivate()
     $target=$minfo['name'];
 
     // See if we have lost any modules since last generation
-    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {
-        return;
-    }
+    sys::import('modules.modules.class.installer');
+    $installer = Installer::getInstance('themes');  
+    if (!$installer->checkformissing()) {return;}
 
     // deactivate
     $deactivated = xarMod::apiFunc('themes','admin','setstate',array('regid' => $id,'state' => XARTHEME_STATE_INACTIVE)); 

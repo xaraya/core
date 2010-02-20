@@ -7,51 +7,43 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
-        <h2>Modify DataProperties #$label#</h2>
         <xar:if condition="!empty($objectid)">
-            <div>
-                <ul class="xar-tabs xar-alt xar-norm-outline">
-                    <xar:var name="title">Options</xar:var>
-                    <xar:var name="label">Options</xar:var>
-                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
-                    <li class="xar-tab">
-                        <a href="&xar-modurl-dynamicdata-admin-modify;&amp;itemid=#$objectid#" class="xar-norm xar-norm-outline">
-                            Modify Object Definition
-                        </a>
-                    </li>
-                    <li class="xar-tab-active">
-                        <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">
-                            Modify DataProperties
-                        </a>
-                    </li>
-                    <li class="xar-tab">
-                        <a href="&xar-modurl-dynamicdata-util-export;&amp;module_id=#$module_id#&amp;itemtype=#$itemtype#" class="xar-norm xar-norm-outline">
-                            Export to XML
-                        </a>
-                    </li>
-                    <xar:if condition="!empty($fields)">
-                        <li class="xar-tab">
-                            <script type="text/javascript">
-                            function xar_dynamicdata_formpreview()
-                            {
-                                var my_window = window.open('#$urlform#',
-                                                            'FormPreview',
-                                                            'width=780,height=580,status=no,scrollbars=1,resizable=yes,top=0,left=0,dependent=yes,alwaysRaised=yes');
-                                my_window.opener = window;
-                                my_window.focus();
-                            }
-                            </script>
-                            <a href="javascript:xar_dynamicdata_formpreview();" class="xar-norm xar-norm-outline">
-                                Preview Input Form
-                            </a>
-                        </li>
-                    </xar:if>
-                </ul>
-            </div>
+            <h2>
+                Modify DataProperties #$label#
+                <xar:set name="editlink">xarModURL('dynamicdata','admin','modify',array('itemid' => $objectid))</xar:set>
+                &#160;<a href="#$editlink#" title="Modify DataObject #$label#">
+                    <img src="#xarTplGetImage('icons/modify.png', 'base')#" width="16" height="16" alt="modify"/>
+                </a>
+                <xar:set name="itemslink">xarModURL('dynamicdata','admin','view',array('itemid' => $objectid))</xar:set>
+                &#160;<a href="#$itemslink#" title="View Items #$label#">
+                    <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="viewitems"/>
+                </a>
+                <xar:set name="exportlink">xarModURL('dynamicdata','util','export',array('objectid' => $objectid))</xar:set>
+                &#160;<a href="#$exportlink#" title="Export Object Definition #$label#">
+                    <img src="#xarTplGetImage('icons/export-xml.png', 'base')#" width="16" height="16" alt="export"/>
+                </a>
+                <xar:if condition="!empty($fields)">
+                    <script type="text/javascript">
+                    function xar_dynamicdata_formpreview()
+                    {
+                        var my_window = window.open('#$urlform#',
+                                                    'FormPreview',
+                                                    'width=780,height=580,status=no,scrollbars=1,resizable=yes,top=0,left=0,dependent=yes,alwaysRaised=yes');
+                        my_window.opener = window;
+                        my_window.focus();
+                    }
+                    </script>
+                    &#160;<a href="javascript:xar_dynamicdata_formpreview();" title="Preview Input Form #$label#">
+                        <img src="#xarTplGetImage('icons/document-properties.png', 'base')#" width="16" height="16" alt="preview"/>
+                    </a>
+                </xar:if>
+            </h2>
             <fieldset>
                 <legend>Object summary</legend>
                 <xar:data-display layout="$layout" itemid="$objectid" fieldlist="objectid,name,label,class,"/>
             </fieldset>
+        <xar:else/>
+            <h2>Modify DataProperties #$label#</h2>
         </xar:if>
         <!-- This is where the list of properties shown starts -->
         <xar:if condition="$visibility ne 'public'">
@@ -68,10 +60,15 @@
         </form>
         <p>[ 
             <xar:if condition="empty($details)">
-            <a href="#$detailslink#">Show Static Properties and Relations</a>
+                <xar:if condition="!empty($objectid)">
+                    <a href="#xarModURL('dynamicdata','util','relations',array('objectid' => $objectid))#">Show Object Links</a>
+                <xar:else />
+                    <a href="#$detailslink#">Show Static Properties and Relations</a>
+                </xar:if>
             <xar:else />
-            <a href="#$detailslink#">Hide Static Properties and Relations</a>
-        </xar:if>]</p>
+                <a href="#$detailslink#">Hide Static Properties and Relations</a>
+            </xar:if>
+        ]</p>
         <xar:if condition="count($static) gt 0">
             <fieldset>
                 <legend>#$statictitle#</legend>

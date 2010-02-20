@@ -1,17 +1,16 @@
 <?php
   /**************************************************************************\
-  * Query class for SQL abstraction                                     *
+  * Query class for SQL abstraction                                          *
   * Written by Marc Lutolf (marcinmilan@xaraya.com)                          *
   \**************************************************************************/
 
 class Query
 {
-
-    public $version = "3.2";
-    public $key;
+    public $version = "3.4";
     public $type;
     public $tables;
     public $fields;
+    public $primary;
     public $conditions;
     public $conjunctions;
     public $bindings;
@@ -33,8 +32,10 @@ class Query
     public $limits = 1;
     public $distinctselect = false;
     public $distinctarray = array();
-    public $starttime;
 
+    private $starttime;
+    private $key;
+    
 // Flags
 // Set to true to use binding variables supported by some dbs
     public $usebinding = true;
@@ -97,8 +98,10 @@ class Query
         if ($this->debugflag) $querystart = microtime(true);
 
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
+        if (empty($statement)) $this->optimize();
         $this->setstatement($statement);
 
+        if ($this->type == 'INSERT' && count($this->tables) > 1) return true;
         if ($this->type != 'SELECT') {
             if ($this->usebinding  && !$this->israwstatement) {
                 $result = $this->dbconn->Execute($this->statement,$this->bindvars);
@@ -140,6 +143,9 @@ class Query
                 if ($this->fields == array() && $numfields > 0) {
                     $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
                     $result->next(); $result->previous();
+                    foreach ($result->fields as $key => $value) {
+                        $this->fields[$key]['name'] = strtolower($key); 
+                    }
                     for ($i=0;$i< $numfields;$i++) {
                         // Fetchfield was the only one used throughout the whole codebase, simulate it here instead of in creole
                         //$o = $result->FetchField($i);
@@ -322,7 +328,7 @@ class Query
                 if (isset($argsarray['alias'])) {
                     $this->fields[$i]['alias'] = $argsarray['alias'];                
                 }
-                $this->fields[$i]['value'] = $argsarray['value'];
+                if (isset($argsarray['value'])) $this->fields[$i]['value'] = $argsarray['value'];
                 $done = true;
                 break;
             }
@@ -774,7 +780,19 @@ class Query
                 $condition['op'] = mb_eregi('JOIN', $condition['op']) ? '=' : $condition['op'];
             }
         }
-        return $condition['field1'] . " " . $condition['op'] . " " . $sqlfield;
+        switch ($this->type) {
+            case "SELECT" :
+                $field = $condition['field1'];
+                break;
+            case "INSERT" :
+            case "UPDATE" :
+            case "DELETE" :
+                $parts = explode('.',$condition['field1']);
+                $field = isset($parts[1]) ? $parts[1] : $parts[0];
+                $field = $condition['field1'];
+                break;
+        }
+        return $field . " " . $condition['op'] . " " . $sqlfield;
     }
 
     private function _getconditions()
@@ -879,6 +897,12 @@ class Query
             $st .= $this->assembledsorts();
             break;
         case "INSERT" :
+            if (count($this->tables) > 1) {
+                if (empty($this->primary))
+                    throw new Exception(xarML('Cannot execute a multitable insert without a primary field defined'));
+                $this->multiinsert(); 
+                return true;
+            }
             $st .= "INTO ";
             $st .= $this->assembledtables();
             $st .= $this->assembledfields("INSERT");
@@ -891,6 +915,7 @@ class Query
             $st .= $this->assembledconditions();
             break;
         case "DELETE" :
+            $st .= $this->assembledaliases();
             $st .= " FROM ";
             $st .= $this->assembledtables();
             $st .= $this->assembledconditions();
@@ -903,6 +928,21 @@ class Query
         default :
         }
         return $st;
+    }
+
+    private function assembledaliases()
+    {
+        $t = '';
+        foreach ($this->tables as $table) {
+            if (is_array($table)) {
+                $t .= $table['alias'] . ", ";
+            }
+            else {
+                $t .= $table . ", ";
+            }
+        }
+        if ($t != "") $t = trim($t," ,");
+        return $t;
     }
 
     private function assembledtables()
@@ -928,14 +968,26 @@ class Query
         $this->tablelinks = $links;
         if (count($this->tables) == 0) return "*MISSING*";
         $t = '';
-        if ($this->on_syntax) {
+        if ($this->on_syntax && count($this->tables) > 1) {
             $t .= $this->assembledtablelinks();
         } else {
             foreach ($this->tables as $table) {
                 if (is_array($table)) {
-                    $t .= $table['name'] . " " . $table['alias'] . ", ";
-                }
-                else {
+                    switch ($this->type) {
+                        case "SELECT" :
+                            if (empty($table['alias'])) $t .= $table['name'] . ", ";
+                            else $t .= $table['name'] . " AS " . $table['alias'] . ", ";
+                            break;
+                        case "INSERT" :
+                            $t .= $table['name'] . " ";
+                            break;
+                        case "UPDATE" :
+                        case "DELETE" :
+                            if (empty($table['alias'])) $t .= $table['name'] . ", ";
+                            else $t .= $table['name'] . " AS " . $table['alias'] . ", ";
+                            break;
+                    }
+                } else {
                     $t .= $table . ", ";
                 }
             }
@@ -1079,7 +1131,7 @@ class Query
                 if (is_array($field)) {
                     if(isset($field['name']) && isset($field['value'])) {
                         if ($this->usebinding) {
-                            $this->bindstring .= $field['name'] . " = ?, ";
+                            $this->bindstring .= $this->_reconstructfield($field) . " = ?, ";
                             $this->bindvars[] = $field['value'];
                         }
                         else {
@@ -1094,7 +1146,7 @@ class Query
                                     $sqlfield = $field['value'];
                                 }
                             }
-                            $this->bindstring .= $field['name'] . " = " . $sqlfield . ", ";
+                            $this->bindstring .= $this->_reconstructfield($field) . " = " . $sqlfield . ", ";
                         }
                     }
                 }
@@ -1196,11 +1248,16 @@ class Query
             $field = trim($match[1]);
             $alias = trim($match[2]);
         }
-        $fieldparts = explode('.',$field);
-        if (count($fieldparts) > 1) 
-            $fullfield = array('name' => $fieldparts[1], 'table' => $fieldparts[0]);
-        else 
+        $pos = strpos($field, ' ');
+        if ($pos !== false) {
             $fullfield = array('name' => $field, 'table' => '');
+        } else {
+            $fieldparts = explode('.',$field);
+            if (count($fieldparts) > 1) 
+                $fullfield = array('name' => $fieldparts[1], 'table' => $fieldparts[0]);
+            else 
+                $fullfield = array('name' => $field, 'table' => '');
+        }
         if (isset($alias)) $fullfield['alias'] = $alias;
         else $fullfield['alias'] = '';
         return $fullfield;
@@ -1215,7 +1272,7 @@ class Query
         return $bindstring;
     }
 
-    private function deconstructfield($field)
+    public function deconstructfield($field)
     {
         return $this->_deconstructfield($field);
     }
@@ -1314,6 +1371,7 @@ class Query
     public function getrows()
     {
         if (isset($this->output) && $this->rowstodo == 0) return count($this->output);
+        $this->optimize();
         if ($this->type == 'SELECT' && $this->rowstodo != 0 && $this->limits == 1) {
             if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
             if ($this->israwstatement) {
@@ -1397,7 +1455,10 @@ class Query
     public function lastid($table="", $id="")
     {
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
-        $result = $this->dbconn->Execute("SELECT MAX($id) FROM $table");
+        $parts = explode('.',$id);
+        $field = isset($parts[1]) ? $parts[1] : $parts[0];
+        $table = isset($parts[1]) ? $parts[0] : $table;
+        $result = $this->dbconn->Execute("SELECT MAX($field) FROM $table");
         list($id) = $result->fields;
         return $id;
     }
@@ -1582,6 +1643,258 @@ class Query
         $this->setandop('and');
         $this->setorop('or');
     }
+    
+    public function present()
+    {
+        $string = '';
+        $string .= "Tables: <br />";
+        foreach ($this->tables as $table) {
+            $string .= "name = " . $table['name'] . ", alias = " . $table['alias'] . "<br/>";
+        }
+        $string .= "Links: <br />";
+        foreach ($this->tablelinks as $link) {
+            $string .= "field1 = " . $link['field1'] . ", field2 = " . $link['field2'] . "<br/>";
+        }
+        $string .= "Bindings: <br />";
+        foreach ($this->bindings as $binding) {
+            $string .= "field1 = " . $binding['field1'] . ", field2 = " . $binding['field2'] . "<br/>";
+        }
+        $string .= "Fields: <br />";
+        foreach ($this->fields as $field) {
+            $string .= "name = " . $field['name'] . ", alias = " . $field['alias'] . ", table = " . $field['table'] . ", value = " . $field['value'] . "<br/>";
+        }
+        echo $string;
+    }
 
+    public function optimize()
+    {
+        // If we don't have multiple tables, no need to optimize
+        if (count($this->tables) < 2) return true;
+        
+        // Put the table names in an array for processing
+        $tables = array();
+        foreach ($this->tables as $table) $tables[$table['alias']] = $table['name'];
+        
+        // Check which tables the fields reference; remove those they do from the array
+        foreach ($this->fields as $field) {
+            if (isset($tables[$field['table']])) {
+                unset($tables[$field['table']]);
+//            } elseif (in_array($field['table'],array_values($tables)))  {
+//                $selbat = array_flip($tables);
+//                unset($tables[$selbat[$field['table']]]);
+            }
+        }
+
+        // Check which tables the conditions reference; remove those they do from the array      
+        foreach ($this->conditions as $condition) {
+            $fullfield = $this->_deconstructfield($condition['field1']);
+            if (isset($tables[$fullfield['table']])) unset($tables[$fullfield['table']]);
+            $fullfield = $this->_deconstructfield($condition['field2']);
+            if (isset($tables[$fullfield['table']])) unset($tables[$fullfield['table']]);
+        }
+
+        // Remove any tables that have more than 1 link
+        $tablehits = array();
+        foreach ($tables as $key => $table) $tablehits[$key] = 0;
+        foreach ($this->tablelinks as $link) {
+            $fullfield = $this->_deconstructfield($link['field1']);
+            if (isset($tables[$fullfield['table']])) $tablehits[$fullfield['table']] += 1;
+            $fullfield = $this->_deconstructfield($link['field1']);
+            if (isset($tables[$fullfield['table']])) $tablehits[$fullfield['table']] += 1;
+        }
+        foreach ($tablehits as $key => $hits) if ($hits > 1) unset($tables[$key]);
+                    
+        // What is left are the table with no fields; remove them
+        $newtables = array();
+        foreach ($this->tables as $table) {
+            if (!isset($tables[$table['alias']])) $newtables[] = $table;
+        }
+        $this->tables = $newtables;
+        
+        // Now remove the links that contain them
+        $newlinks = array();
+        foreach ($this->tablelinks as $link) {
+            $fullfield1 = $this->_deconstructfield($link['field1']);
+            $fullfield2 = $this->_deconstructfield($link['field2']);
+            if (isset($tables[$fullfield1['table']]) || isset($tables[$fullfield2['table']])) continue;
+            $newlinks[] = $link;
+        }
+        $this->tablelinks = $newlinks;
+        
+        return true;
+    }
+
+    private function multiinsert()
+    {
+        // Determine which is the primary table and field, get its value
+        $parts = explode('.',$this->primary);
+        if (!isset($parts[1])) 
+            throw new Exception(xarML('Incorrect format for primary field: missing table alias'));            
+        $primarytable = $parts[0];
+        $primaryfield = $parts[1];
+        
+        $tablesource = '';
+        foreach($this->tables as $table) {
+            if ($table['alias'] == $parts[0]) {
+                $tablesource = $table['name'];
+                break;
+            }
+        }
+        $primaryvalue = $this->lastid($tablesource, $parts[1]) + 1;
+        
+        // Get convenient arrays to track the tables, links and fields
+        foreach ($this->tables as $table) $tablestodo[$table['alias']] = $table;
+        $linkstodo = $this->tablelinks;
+        foreach ($this->fields as $field) $fieldstodo[$field['table'] . '.' . $field['name']] = $field;
+
+        // Assign values to all the link fields where we can
+        // At the end of this process we will have linkfields with either values at both ends of the link
+        // or no values. In the latter case the code will just insert the next possible value, as such cases
+        // must involve at least one primary key.
+        $linkstoprocess = $this->tablelinks;
+        $temp = array();
+        
+        $fieldstodonames = array_keys($fieldstodo);
+        while (count($linkstoprocess)) {
+            $linkdone = false;
+            $linkpair = current($linkstoprocess);
+            if (in_array($linkpair['field1'],$fieldstodonames)) {
+                $temp[$linkpair['field1']] = $fieldstodo[$linkpair['field1']]['value'];
+                $temp[$linkpair['field2']] = $temp[$linkpair['field1']];
+            } elseif (in_array($linkpair['field2'],$fieldstodonames)) {
+                $temp[$linkpair['field2']] = $fieldstodo[$linkpair['field2']]['value'];
+                $temp[$linkpair['field1']] = $temp[$linkpair['field2']];
+            } elseif (($linkpair['field1'] == $this->primary)) {
+                $temp[$linkpair['field2']] = $primaryvalue;
+            } elseif (($linkpair['field2'] == $this->primary)) {
+                $temp[$linkpair['field1']] = $primaryvalue;
+            }
+            array_shift($linkstoprocess);            
+        }
+
+        $linkfields = array();
+        foreach ($temp as $key => $value) {
+            $parts = $this->_deconstructfield($key);
+            $linkfields[$parts['table']][$parts['table'] . "." . $parts['name']] = array('name' => $parts['name'], 'table' => $parts['table'], 'value' => $value);
+        }
+
+        // Set up an array which holds the number of links per table
+        $tablequeue = array();
+        foreach ($tablestodo as $table) $tablequeue[$table['alias']] = 0;
+
+        // Go through the tables, running an insert for each and its fields
+        while (count($tablestodo)) {
+
+            foreach ($linkstodo as $link) {
+                // This link is not present in the insert fields
+                if (!isset($fieldstodo[$link['field1']])) {
+                    $fulllink = $this->_deconstructfield($link['field1']);
+                    $tablequeue[$fulllink['table']] += 1;
+                }
+                if (!isset($fieldstodo[$link['field2']])) {
+                    $fulllink = $this->_deconstructfield($link['field2']);
+                    $tablequeue[$fulllink['table']] += 1;
+                }            
+            }
+
+            // Now pick up the table to run an insert on
+            // Look for a table with 1 link, saving the primary table for last
+            foreach ($tablequeue as $alias => $hits) {
+                if (($hits == 1) && ($alias != $primarytable)) {
+                    $thistable = $tablestodo[$alias];
+                    break;
+                }
+            }
+            // Sanity check:do we still have our primary table?
+            if (!isset($tablestodo[$primarytable])) throw new Exception('Primary table no longer available!');
+            
+            // If we found nothing we must be almost finished: run an insert on the primary table
+            if (empty($thistable)) $thistable = $tablestodo[$primarytable];
+
+            // Run an insert
+            $theselinks = isset($linkfields[$thistable['alias']]) ? $linkfields[$thistable['alias']] : array();
+            $fieldsdone = $this->partialinsert($thistable,$fieldstodo,$theselinks);            
+        
+            // We've run the insert for this table, remove it from the list of todos
+            unset($tablestodo[$thistable['alias']]);
+            $tablequeue = array();
+            foreach ($tablestodo as $table) $tablequeue[$table['alias']] = 0;
+
+            // Now check the fieldlinks for links to other tables
+            $newlinks = array();
+            foreach ($linkstodo as $link) {
+                $fulllink = $this->_deconstructfield($link['field1']);
+                if (isset($fieldsdone[$fulllink['name']]) && $fulllink['table'] == $thistable['alias']) {
+                    $fulllink1 = $this->_deconstructfield($link['field2']);
+                    $fulllink1['value'] = $fieldsdone[$fulllink['name']];
+                    $fieldstodo[$link['field2']] = $fulllink1;
+                    break;
+                }
+                $fulllink = $this->_deconstructfield($link['field2']);
+                if (isset($fieldsdone[$fulllink['name']]) && $fulllink['table'] == $thistable['alias']) {
+                    $fulllink1 = $this->_deconstructfield($link['field1']);
+                    $fulllink1['value'] = $fieldsdone[$fulllink['name']];
+                    $fieldstodo[$link['field1']] = $fulllink1;
+                    break;
+                }
+                
+                // This link was not involved in the last insert; pass it on
+                $newlinks[] = $link;
+            }
+            $linkstodo = $newlinks;
+            $thistable = '';
+            
+        }
+        return true;
+    }
+    
+    private function partialinsert($table=array(), $fieldstodo=array(),$linkfields=array())
+    {
+        // Create an insert query based on this table
+        $q = new Query('INSERT');
+        $q->tables[] = $table;
+        
+        // Pick out the fields that are in this table
+        $fieldsdone = array();
+        foreach ($fieldstodo as $key => $field) {
+            //Ignore the fields of other tables
+            if ($field['table'] != $table['alias']) continue;
+            
+            // If we used the %next% keyword, get the next itemid
+            if ($fieldstodo[$key]['value'] === '%next%') {
+                $fieldstodo[$key]['value'] = $q->lastid($table['name'], $field['name']) + 1;
+            }
+            // Add it to this query
+            $q->fields[] =& $fieldstodo[$key];
+            $fieldsdone[$key] =& $fieldstodo[$key];
+        }
+
+        // Now add the link fields from this table, only if it hasn't already been added
+        foreach ($linkfields as $key => $field) {
+            // If we used the %next% keyword, get the next itemid
+            if ($linkfields[$key]['value'] === '%next%') {
+                $linkfields[$key]['value'] = $q->lastid($table['name'], $field['name']) + 1;
+            }
+            if (!isset($fieldsdone[$key])) $q->fields[] = $linkfields[$key];
+        }
+
+        // Run the insert on this table
+        if (!$q->run()) return false;
+                
+        // Try to retrieve the record we just inserted
+        $dbInfo = $this->dbconn->getDatabaseInfo();
+        $tableobject = $dbInfo->getTable($table['name']);
+        $primarykey = $tableobject->getPrimaryKey()->getName();
+        if (empty($primarykey))
+            throw new Exception('Unable to retrieve primary key');
+
+        $itemid = $q->lastid($table['name'], $primarykey);
+        $q = new Query('SELECT',$table['name']);
+        $q->eq($primarykey, $itemid);
+        if (!$q->run()) return false;
+        
+        // Return the array of the fields we used for this insert and their values
+        return $q->row();
+    }
 }
 ?>

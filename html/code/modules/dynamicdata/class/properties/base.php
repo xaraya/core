@@ -44,9 +44,12 @@ class DataProperty extends Object implements iDataProperty
     public $anonymous = 0;        // if true the name, rather than the dd_xx designation is used in displaying the property
 
     public $datastore = '';    // name of the data store where this property comes from
+    public $operation = null;  // some operation or function to apply for this property (COUNT, SUM, ...)
+    public $aliasname = null;  // the aliasname used with the operation or function on this property
 
     public $value = null;      // value of this property for a particular DataObject
     public $invalid = '';      // result of the checkInput/validateValue methods
+    public $fieldname = null;  // fieldname used by checkInput() for configurations who need them (e.g. file uploads)
 
     public $include_reference = 0; // tells the object this property belongs to whether to add a reference of itself to me
     public $objectref = null;  // object this property belongs to
@@ -475,7 +478,17 @@ class DataProperty extends Object implements iDataProperty
         if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
         if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
 
-        $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->getValue());
+        $data['value']    = isset($data['value']) ? $data['value'] : $this->getValue();
+        
+        // The value might be an array
+        if (is_array($data['value'])){
+            $temp = array();
+            foreach ($data['value'] as $tmp) $temp[] = arVarPrepForDisplay($tmp);
+            $data['value'] = $temp;
+        } else {
+            $data['value'] = xarVarPrepForDisplay($data['value']);
+        }
+
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
@@ -491,7 +504,7 @@ class DataProperty extends Object implements iDataProperty
      * Note: don't use this if you already check the input for the whole object or in the code
      * See also preview="yes", which can be used on the object level to preview the whole object
      *
-     * @access private (= do not sub-class)
+     * @access private
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
      * @param $args['value'] value of the field (default is the current value)
      * @param $args['id'] id of the field

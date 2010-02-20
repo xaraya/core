@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package modules
+ * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata
+ * @link http://xaraya.com/index.php/release/182.html
+ */
 
 function dynamicdata_admin_modifymoduleconfig()
 {
@@ -6,7 +15,7 @@ function dynamicdata_admin_modifymoduleconfig()
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'dynamicdata'));
-    $data['module_settings']->setFieldList('items_per_page,user_menu_link');
+    $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons');
     $data['module_settings']->getItem();
     switch (strtolower($phase)) {
         case 'modify':

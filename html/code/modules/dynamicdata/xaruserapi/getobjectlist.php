@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -16,8 +16,7 @@
  * @param $args['objectid'] id of the object you're looking for, or
  * @param $args['moduleid'] module id of the item field to get
  * @param $args['itemtype'] item type of the item field to get
- * @returns object
- * @return a particular DataObject
+ * @return object a particular DataObjectList
  */
 function &dynamicdata_userapi_getobjectlist($args)
 {

@@ -15,7 +15,7 @@
             </ul>
         </xar:if>
         <xar:if condition="count($dependencies['initialised']) ne 0">
-            <h3>Dependents still Initialized (Inactive)</h3>
+            <h3>Dependents still Initialised (Inactive)</h3>
             <ul>
                 <xar:foreach in="$dependencies['initialised']" value="$modInfo">
                     <li>#xarML($modInfo['displayname'])#</li>

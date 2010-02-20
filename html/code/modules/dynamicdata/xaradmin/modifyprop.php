@@ -153,6 +153,8 @@ function dynamicdata_admin_modifyprop()
         return $data;
     }
 
+// CHECKME: this part is no longer relevant when dealing with actual objects !?
+
     $data['details'] = $details;
 
 // TODO: allow modules to specify their own properties

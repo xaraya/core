@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -19,8 +19,7 @@
  * @param $args['module'] module name of the item fields, or
  * @param $args['module_id'] module id of the item field to get
  * @param $args['itemtype'] item type of the item field to get
- * @returns mixed
- * @return value of the field, or false on failure
+ * @return mixed value of the field, or false on failure
  * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  */
 function dynamicdata_utilapi_getrelations($args)

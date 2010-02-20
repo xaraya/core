@@ -24,8 +24,11 @@
  * @returns
  * @return
  */
+sys::import('modules.modules.class.installer');
+
 function modules_admin_install()
 {
+    $installer = Installer::getInstance();    
     // Security and sanity checks
     // TODO: check under what conditions this is needed
 //    if (!xarSecConfirmAuthKey()) return;
@@ -35,7 +38,7 @@ function modules_admin_install()
     //First check the modules dependencies
     // TODO: investigate try/catch clause here, it's not trivial
     try {
-        xarMod::apiFunc('modules','admin','verifydependency',array('regid'=>$id));
+        $installer->verifydependency($id);
 
         //Checking if the user has already passed thru the GUI:
         xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
@@ -43,7 +46,7 @@ function modules_admin_install()
         $command = false;
     }
 
-    $data['dependencies'] = xarMod::apiFunc('modules','admin','getalldependencies',array('regid'=>$id));
+    $data['dependencies'] = $installer->getalldependencies($id);
 
     //Only show the status screen if there are dependencies that cannot be satisfied
     if (!$command && !empty($data['dependencies']['unsatisfiable'])) {
@@ -69,7 +72,7 @@ function modules_admin_install()
     }
 
     // See if we have lost any modules since last generation
-    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) return;
+    if (!$installer->checkformissing()) {return;}
 
     xarSession::setVar('installing',true);
 
@@ -79,11 +82,7 @@ function modules_admin_install()
     if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_INACTIVE) {
         //Installs with dependencies, first initialise the necessary dependencies
         //then the module itself
-        xarSession::setVar('modulestoinstall',serialize(array()));
-        if (!xarMod::apiFunc('modules','admin','installwithdependencies',array('regid'=>$id, 'phase' => 0))) {
-            // Don't return yet - the stack is rendered here.
-            //return;
-        }
+        $installer->installmodule($id);
     }
     xarSessionDelVar('installing');
 

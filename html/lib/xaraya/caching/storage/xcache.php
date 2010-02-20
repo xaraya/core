@@ -2,9 +2,10 @@
 /**
  * Cache data using XCache [http://xcache.lighttpd.net/]
  */
-class xarCache_XCache_Storage extends xarCache_Storage
+
+class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    public function __construct(array $args = array())
+    public function __construct(Array $args = array())
     {
         parent::__construct($args);
         $this->storage = 'xcache';

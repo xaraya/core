@@ -14,7 +14,7 @@
         </xar:if>
         <xar:if condition="isset($properties['enable_short_urls'])">
             <div class="xar-form-input-wrapper">
-                <label for="shorturls" class="xar-form-label"  title="#xarML('Enable short URLs for this module')#">
+                <label for="enable_short_urls" class="xar-form-label"  title="#xarML('Enable short URLs for this module')#">
                     Enable Short URLs
                 </label>
                 <xar:data-input property="$properties['enable_short_urls']"/>
@@ -22,14 +22,22 @@
         </xar:if>
         <xar:if condition="isset($properties['use_module_alias'])">
             <div class="xar-form-input-wrapper">
-                <label for = "modulealias" class="xar-form-label" title="#xarML('Use an alias instead of the module name')#">
+                <label for="use_module_alias" class="xar-form-label" title="#xarML('Use an alias instead of the module name')#">
                     Enable module alias(es)
                 </label>
-                <xar:data-input id="aliascheckbox" property="$properties['use_module_alias']" onchange="toggle(\'aliaslink\',\'aliascheckbox\')"/>&#160;
+                <xar:data-input id="use_module_alias" property="$properties['use_module_alias']" onchange="toggle(\'aliaslink\',\'aliascheckbox\')"/>&#160;
                 <xar:set name="info">xarRequest::getInfo()</xar:set>
                 <a href="#xarModURL('modules','admin','aliases',array('name' => $info[0]))#">
                     Manage Aliases
                 </a>
+            </div>
+        </xar:if>
+        <xar:if condition="isset($properties['use_module_icons'])">
+            <div class="xar-form-input-wrapper">
+                <label for="use_module_icons" class="xar-form-label" title="#xarML('Display icons instead of text')#">
+                    Use Icons
+                </label>
+                <xar:data-input id="use_module_icons" property="$properties['use_module_icons']" />
             </div>
         </xar:if>
         <xar:if condition="isset($properties['enable_user_menu'])">
@@ -37,7 +45,7 @@
                 <label for="enable_user_menu" class="xar-form-label" title="#xarML('Enable the user settings for this module in Roles User Account.')#">
                         Enable User Settings
                 </label>
-                <xar:data-input property="$properties['enable_user_menu']"/>
+                <xar:data-input id="enable_user_menu" property="$properties['enable_user_menu']"/>
             </div>
         </xar:if>
         <xar:if condition="isset($properties['user_menu_link'])">
@@ -45,7 +53,7 @@
                 <label for="user_menu_link" class="xar-form-label" title="#xarML('Hide the link to this module\'s user functions in the Base module User Menu Block.')#">
                         Hide link in User Menu
                 </label>
-                <xar:data-input property="$properties['user_menu_link']"/>
+                <xar:data-input id="user_menu_link" property="$properties['user_menu_link']"/>
             </div>
         </xar:if>
         <xar:if condition="isset($properties['admin_menu_link'])">
@@ -53,7 +61,7 @@
                 <label for="admin_menu_link" class="xar-form-label" title="#xarML('Hide the link to this module\'s admin functions in the Base module Admin Menu Block.')#">
                         Hide link in Admin Menu
                 </label>
-                <xar:data-input property="$properties['admin_menu_link']"/>
+                <xar:data-input id="admin_menu_link" property="$properties['admin_menu_link']"/>
             </div>
         </xar:if>
     </fieldset>

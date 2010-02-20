@@ -20,11 +20,11 @@
 
   <xsl:template match="xar:pager">
     <xsl:processing-instruction name="php">
-        <xsl:text>echo xarMod::apiFunc('base','user','pager',</xsl:text>
-          <xsl:call-template name="atts2args">
-            <xsl:with-param name="nodeset" select="@*"/>
-          </xsl:call-template>
-        <xsl:text>);</xsl:text>
+      <xsl:text>echo xarMod::apiFunc('base','user','pager',</xsl:text>
+        <xsl:call-template name="atts2args">
+          <xsl:with-param name="nodeset" select="@*"/>
+        </xsl:call-template>
+      <xsl:text>);</xsl:text>
     </xsl:processing-instruction>
   </xsl:template>
 

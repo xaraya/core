@@ -249,11 +249,9 @@
                         Uncheck All
                     </a>
                 </div>
-                <xar:if condition="$totalselect gt $itemsperpage">
-                    <div class="xar-align-center">
-                        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
-                    </div>
-                </xar:if>
+                <div class="xar-align-center">
+                    <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
+                </div>
             </form>
         </xar:if>
         <p>

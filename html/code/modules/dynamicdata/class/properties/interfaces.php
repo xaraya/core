@@ -1,7 +1,14 @@
 <?php
 /**
- * Interfaces for Dynamic Properties:
+ * Interfaces for Dynamic Properties
  *
+ * @package modules
+ * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata
+ * @link http://xaraya.com/index.php/release/182.html
  */
 
 interface iDataProperty
