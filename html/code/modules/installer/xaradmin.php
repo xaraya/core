@@ -31,11 +31,6 @@ function installer_admin_main()
     return $data;
 }
 
-
-// TODO: move this to some place central
-define('PHP_REQUIRED_VERSION', '5.3.0');
-define('MYSQL_REQUIRED_VERSION', '5.0.0');
-
 /**
  * Phase 1: Welcome (Set Language and Locale) Page
  *
