@@ -75,7 +75,7 @@ function modules_admin_hooks($args)
             try {
                 $itemtypes = xarMod::apiFunc($modList[$i]['name'],'user','getitemtypes',array());
             } catch ( FunctionNotFoundException $e) {
-                // No worries
+                $itemtypes = array();
             }
             if (isset($itemtypes)) $modList[$i]['itemtypes'] = $itemtypes;
 

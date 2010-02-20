@@ -63,7 +63,7 @@
                                 <xar:else/>
                                     <input onclick="setDisplayOff('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="NOT_hooked_#$hookedmod['name']#_0" value="0"/>
                                 </xar:if>
-                            </xar:if>
+                            </xar:if>&#160;
                             <label for="NOT_hooked_#$hookedmod['name']#_0">Do NOT enable
                             #$hookmod['modname']# functionality in #$hookedmod['name']#</label>
                             <br />
@@ -81,12 +81,12 @@
                                 <xar:else/>
                                     <input onclick="setDisplayOff('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="ALL_hooked_#$hookedmod['name']#_0" value="1"/>
                                 </xar:if>
-                            </xar:if>
+                            </xar:if>&#160;
                             <label for="ALL_hooked_#$hookedmod['name']#_0">Enable the
                             #$hookmod['modname']# hooks for ALL items in
                             #$hookedmod['name']#</label>
                             <br />
-                            <xar:if condition="count($hookedmod['itemtypes']) gt 0">
+                            <xar:if condition="isset($hookedmod['itemtypes']) AND count($hookedmod['itemtypes']) gt 0">
                                 <!-- The SOME radio -->
                                 <xar:if condition="$SOMEischecked">
                                     <xar:if condition="$hookedmoddisabled">
@@ -100,7 +100,7 @@
                                     <xar:else/>
                                         <input onclick="setDisplayOn('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="SOME_hooked_#$hookedmod['name']#_0" value="2"/>
                                     </xar:if>
-                                </xar:if>
+                                </xar:if>&#160;
                                 <label for="SOME_hooked_#$hookedmod['name']#_0">Enable
                                 #$hookmod['modname']# functionality for SOME itemtypes in
                                 #$hookedmod['name']#</label>
