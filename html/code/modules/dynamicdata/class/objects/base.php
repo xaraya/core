@@ -20,9 +20,6 @@ sys::import('modules.dynamicdata.class.objects.interfaces');
  */
 class DataObject extends DataObjectMaster implements iDataObject
 {
-
-    protected $descriptor  = null;    // descriptor object of this class
-
     public $itemid         = 0;
     public $missingfields  = array(); // reference to fields not found by checkInput
 
