@@ -216,7 +216,6 @@
             <xar:elseif condition="$tab eq 'hooks'"/>
             <xar:if condition="!empty($hooks)">
               <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
-                enctype="application/x-www-form-urlencoded">
                   <fieldset>
                         <legend>Default Hooks For Users</legend>
                         <xar:foreach in="$hooks" key="$hookmodule">
