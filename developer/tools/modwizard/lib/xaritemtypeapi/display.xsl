@@ -59,7 +59,7 @@ function <xsl:value-of select="$module_prefix"/>_<xsl:value-of select="@name"/>a
 
         // If there is no itemid let's go to the itemtypes overview page.
         if ( empty( $itemid ) ) {
-            xarResponseRedirect(
+            xarController::redirect(
                 xarModURL(
                     '<xsl:value-of select="$module_prefix"/>'
                     ,'user'
