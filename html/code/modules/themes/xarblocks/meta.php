@@ -125,54 +125,5 @@ class MetaBlock extends BasicBlock
         return $data;
 
     }
-
-/**
- * Modify Function to the Blocks Admin
- * @param $data array containing title,content
- */
-    public function modify(Array $data=array())
-    {
-        $data = parent::modify($data);
-
-        if (!isset($data['metakeywords'])) $data['metakeywords'] = $this->metakeywords;
-        if (!isset($data['metadescription'])) $data['metadescription'] = $this->metadescription;
-        if (!isset($data['usegeo'])) $data['usegeo'] = $this->usegeo;
-        if (!isset($data['usedk'])) $data['usedk'] = $this->usedk;
-        if (!isset($data['longitude'])) $data['longitude'] = $this->longitude;
-        if (!isset($data['latitude'])) $data['latitude'] = $this->latitude;
-        if (!isset($data['copyrightpage'])) $data['copyrightpage'] = $this->copyrightpage;
-        if (!isset($data['helppage'])) $data['helppage'] = $this->helppage;
-        if (!isset($data['glossary'])) $data['glossary'] = $this->glossary;
-
-        $data['blockid'] = $data['bid'];
-
-        return $data;
-    }
-
-/**
- * Updates the Block config from the Blocks Admin
- * @param $data array containing title,content
- */
-    public function update(Array $data=array())
-    {
-        $data = parent::update($data);
-
-        // FIXME: use better validation on these parameters.
-        $vars = array();
-        if (!xarVarFetch('metakeywords',    'notempty', $vars['metakeywords'],    $this->metakeywords, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('metadescription', 'notempty', $vars['metadescription'], $this->metadescription, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('usegeo',          'int:0:1',  $vars['usegeo'],          $this->usegeo,  XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('longitude',       'notempty', $vars['longitude'],       $this->longitude, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('latitude',        'notempty', $vars['latitude'],        $this->latitude, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('usedk',           'notempty', $vars['usedk'],           $this->usedk, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('copyrightpage',   'notempty', $vars['copyrightpage'],   $this->copyrightpage, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('helppage',        'notempty', $vars['helppage'],        $this->helppage, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('glossary',        'notempty', $vars['glossary'],        $this->glossary, XARVAR_NOT_REQUIRED)) return;
-
-        // Merge the submitted block info content into the existing block info.
-        $data['content'] = $vars; //array_merge($blockinfo['content'], $vars);
-
-        return $data;
-    }
 }
 ?>

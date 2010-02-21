@@ -26,7 +26,7 @@ class ArrayProperty extends DataProperty
     //default value of column dimension
     public $display_columns_count = 1;
     public $display_rows = 4;
-    public $initialization_rows = 0;
+    public $initialization_addremove = 0;
     //default value of Key label
     public $display_key_label = "Key";
     //default value of value label
@@ -233,7 +233,7 @@ class ArrayProperty extends DataProperty
         
         if (!isset($data['keylabel'])) $data['keylabel'] = $this->display_key_label;
         if (!isset($data['valuelabel'])) $data['valuelabel'] = $this->display_value_label;
-        if (!isset($data['allowinput'])) $data['allowinput'] = $this->initialization_rows;
+        if (!isset($data['allowinput'])) $data['allowinput'] = $this->initialization_addremove;
         if (!isset($data['associative_array'])) $data['associative_array'] = $this->initialization_associative_array;
         if (!isset($data['fixedkeys'])) $data['fixedkeys'] = $this->initialization_fixed_keys;
         $data['numberofrows'] = count($data['value']);

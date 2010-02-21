@@ -72,6 +72,7 @@ function modules_admin_hooks($args)
             }
 
             // Get the list of all item types for this module (if any)
+            $itemtypes = null;
             try {
                 $itemtypes = xarMod::apiFunc($modList[$i]['name'],'user','getitemtypes',array());
             } catch ( FunctionNotFoundException $e) {

@@ -2,19 +2,18 @@
 /**
  * Get the next itemtype of extended objects pertaining to a given module
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @copyright see the html/credits.html file in this release
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  *
- * @subpackage dynamicdata module
+ * @subpackage dynamicdata
  * @author random <mfl@netspan.ch>
 */
 /**
  * get the next itemtype of objects pertaining to a given module
  *
  * @author the DynamicData module development team
- * @returns array
  * @return array of object definitions
  * @raise DATABASE_ERROR, NO_PERMISSION
  * @todo should we wrap this?

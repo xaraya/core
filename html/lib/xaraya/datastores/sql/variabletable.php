@@ -215,6 +215,16 @@ class VariableTableDataStore extends SQLDataStore
             return;
         }
 
+        $process = array();
+        foreach ($propids as $propid) {
+            if (!empty($this->groupby) && in_array($propid,$this->groupby)) {
+                continue;
+            } elseif (empty($this->fields[$propid]->operation)) {
+                continue; // all fields should be either GROUP BY or have some operation
+            }
+            array_push($process, $propid);
+        }
+
         $dynamicdata = $this->tables['dynamic_data'];
 
         // easy case where we already know the items we want
@@ -455,7 +465,6 @@ class VariableTableDataStore extends SQLDataStore
             // All prepared, run it
             $result = $stmt->executeQuery();
 
-
             $isgrouped = 0;
             if (count($this->groupby) > 0) {
                 $isgrouped = 1;
@@ -465,6 +474,7 @@ class VariableTableDataStore extends SQLDataStore
                 $process = array();
                 foreach ($propids as $propid) {
                     if (in_array($propid,$this->groupby)) {
+                        // Note: we'll process the *TIME_BY_* operations for the groupid
                         continue;
                     } elseif (empty($this->fields[$propid]->operation)) {
                         continue; // all fields should be either GROUP BY or have some operation
@@ -495,6 +505,31 @@ class VariableTableDataStore extends SQLDataStore
                     }
                     $groupid = '';
                     foreach ($this->groupby as $propid) {
+                        // handle *TIME_BY_* operations here
+                        if (!empty($propval[$propid]) && !empty($this->fields[$propid]->operation)) {
+                            switch ($this->fields[$propid]->operation) {
+                                case 'UNIXTIME_BY_YEAR':
+                                    $propval[$propid] = gmdate('Y',$propval[$propid]);
+                                    break;
+                                case 'UNIXTIME_BY_MONTH':
+                                    $propval[$propid] = gmdate('Y-m',$propval[$propid]);
+                                    break;
+                                case 'UNIXTIME_BY_DAY':
+                                    $propval[$propid] = gmdate('Y-m-d',$propval[$propid]);
+                                    break;
+                                case 'DATETIME_BY_YEAR':
+                                    $propval[$propid] = substr($propval[$propid],0,4);
+                                    break;
+                                case 'DATETIME_BY_MONTH':
+                                    $propval[$propid] = substr($propval[$propid],0,7);
+                                    break;
+                                case 'DATETIME_BY_DAY':
+                                    $propval[$propid] = substr($propval[$propid],0,10);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                         $groupid .= $propval[$propid] . '~';
                     }
                     if (!isset($combo[$groupid])) {
@@ -549,8 +584,16 @@ class VariableTableDataStore extends SQLDataStore
                                     $curval['total'] += $propval[$propid];
                                     $curval['count']++;
                                 }
-                                // TODO: divide total by count afterwards
+                                // Note: divide total by count afterwards
                                 break;
+                            case 'COUNT_DISTINCT':
+                                if (!isset($curval)) {
+                                    $curval = array();
+                                }
+                                $curval[$propval[$propid]] = 1;
+                                // Note: count distinct keys afterwards
+                                break;
+                            case 'UNIXTIME_BY_YEAR': // etc. - do nothing
                             default:
                                 break;
                         }
@@ -561,11 +604,15 @@ class VariableTableDataStore extends SQLDataStore
             $result->close();
 
             // divide total by count afterwards
+            // count distinct keys afterwards
             if ($isgrouped) {
                 $divide = array();
+                $distinct = array();
                 foreach ($process as $propid) {
                     if ($this->fields[$propid]->operation == 'AVG') {
                         $divide[] = $propid;
+                    } elseif ($this->fields[$propid]->operation == 'COUNT_DISTINCT') {
+                        $distinct[] = $propid;
                     }
                 }
                 if (count($divide) > 0) {
@@ -576,6 +623,128 @@ class VariableTableDataStore extends SQLDataStore
                                 $newval = $curval['total'] / $curval['count'];
                                 $this->fields[$propid]->setItemValue($curid,$newval);
                             }
+                        }
+                    }
+                }
+                if (count($distinct) > 0) {
+                    foreach ($this->_itemids as $curid) {
+                        foreach ($distinct as $propid) {
+                            $curval = $this->fields[$propid]->getItemValue($curid);
+                            if (!empty($curval) && is_array($curval)) {
+                                $newval = count(array_keys($curval));
+                                $this->fields[$propid]->setItemValue($curid,$newval);
+                            }
+                        }
+                    }
+                }
+            }
+
+        // here we grab everyting and process it - TODO: better way to do this ?
+        } elseif (count($process) > 0) {
+            $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
+            $query = "SELECT DISTINCT property_id,
+                             item_id,
+                             value
+                        FROM $dynamicdata
+                       WHERE property_id IN ($bindmarkers)";
+
+            $stmt = $this->db->prepareStatement($query);
+            $result = $stmt->executeQuery($propids);
+
+            // we only have one "itemid" with the result of the operations
+            $curid = 1;
+            foreach ($process as $propid) {
+                // add the item to the value list for this property
+                $this->fields[$propid]->setItemValue($curid,null);
+            }
+
+            while ($result->next()) {
+                list($propid,$itemid,$value) = $result->getRow();
+                if (isset($value)) {
+                    $curval = $this->fields[$propid]->getItemValue($curid);
+                    switch ($this->fields[$propid]->operation) {
+                        case 'COUNT':
+                            if (!isset($curval)) {
+                                $curval = 0;
+                            }
+                            $curval++;
+                            break;
+                        case 'SUM':
+                            if (!isset($curval)) {
+                                $curval = $value;
+                            } else {
+                                $curval += $value;
+                            }
+                            break;
+                        case 'MIN':
+                            if (!isset($curval)) {
+                                $curval = $value;
+                            } elseif ($curval > $value) {
+                                $curval = $value;
+                            }
+                            break;
+                        case 'MAX':
+                            if (!isset($curval)) {
+                                $curval = $value;
+                            } elseif ($curval < $value) {
+                                $curval = $value;
+                            }
+                            break;
+                        case 'AVG':
+                            if (!isset($curval)) {
+                                $curval = array('total' => $value, 'count' => 1);
+                            } else {
+                                $curval['total'] += $value;
+                                $curval['count']++;
+                            }
+                            // Note: divide total by count afterwards
+                            break;
+                        case 'COUNT_DISTINCT':
+                            if (!isset($curval)) {
+                                $curval = array();
+                            }
+                            $curval[$value] = 1;
+                            // Note: count distinct keys afterwards
+                            break;
+                        default:
+                            break;
+                    }
+                    $this->fields[$propid]->setItemValue($curid,$curval);
+                }
+            }
+            // add this "itemid" to the list
+            $this->_itemids[] = $curid;
+            $result->close();
+
+            // divide total by count afterwards
+            // count distinct keys afterwards
+            $divide = array();
+            $distinct = array();
+            foreach ($process as $propid) {
+                if ($this->fields[$propid]->operation == 'AVG') {
+                    $divide[] = $propid;
+                } elseif ($this->fields[$propid]->operation == 'COUNT_DISTINCT') {
+                    $distinct[] = $propid;
+                }
+            }
+            if (count($divide) > 0) {
+                foreach ($this->_itemids as $curid) {
+                    foreach ($divide as $propid) {
+                        $curval = $this->fields[$propid]->getItemValue($curid);
+                        if (!empty($curval) && is_array($curval) && !empty($curval['count'])) {
+                            $newval = $curval['total'] / $curval['count'];
+                            $this->fields[$propid]->setItemValue($curid,$newval);
+                        }
+                    }
+                }
+            }
+            if (count($distinct) > 0) {
+                foreach ($this->_itemids as $curid) {
+                    foreach ($distinct as $propid) {
+                        $curval = $this->fields[$propid]->getItemValue($curid);
+                        if (!empty($curval) && is_array($curval)) {
+                            $newval = count(array_keys($curval));
+                            $this->fields[$propid]->setItemValue($curid,$newval);
                         }
                     }
                 }

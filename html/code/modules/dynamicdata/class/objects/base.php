@@ -20,9 +20,6 @@ sys::import('modules.dynamicdata.class.objects.interfaces');
  */
 class DataObject extends DataObjectMaster implements iDataObject
 {
-
-    protected $descriptor  = null;    // descriptor object of this class
-
     public $itemid         = 0;
     public $missingfields  = array(); // reference to fields not found by checkInput
 
@@ -214,7 +211,8 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function showForm(Array $args = array())
     {
-        $args = $this->toArray($args);
+        $args = $args + $this->getPublicProperties();
+        $this->setFieldPrefix($args['fieldprefix']);
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview'])) $this->checkInput();

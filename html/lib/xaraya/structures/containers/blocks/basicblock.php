@@ -48,7 +48,6 @@
 
         public function display(Array $data=array())
         {
-            if (!xarSecurityCheck('View' . $data['module'], 0, 'Block', $data['type'] . ":" . $data['name'] . ":" . "$data[bid]")) {return;}
             // Get variables from content block
             if (!is_array($data['content'])) {
                 if (!empty($data['content'])) {
@@ -59,6 +58,34 @@
             } else {
                 $data = array_merge($data,$data['content']);
             }
+
+            $access = isset($data['content']['display_access']) ? $data['content']['display_access'] : array();
+            $data['allowaccess'] = false;
+            
+            // FIXME: remove this once all blocks have access data
+            if (empty($access)) {
+                try {
+                    if (xarSecurityCheck('View' . $data['module'], 0, 'Block', $data['type'] . ":" . $data['name'] . ":" . "$data[bid]")) {
+                        $data['allowaccess'] = true;
+                    }
+                } catch (Exception $e) {}
+                return $data;
+            }
+
+            // Decide whether this block is displayed to the current user
+            $args = array(
+                'module' => $data['module'],
+                'component' => 'Block',
+                'instance' => $data['type'] . ":" . $data['name'] . ":" . "$data[bid]",
+                'group' => $access['group'],
+                'level' => $access['level'],
+            );
+            sys::import('modules.dynamicdata.class.properties.master');
+            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+            $data['allowaccess'] = $accessproperty->check($args);
+            
+            //Pass the access data along
+            $data['display_access'] = $access;
             return $data;
         }
 
@@ -67,7 +94,8 @@
             // Get current content
             if (!is_array($data['content'])) {
                 $exploded = @unserialize($data['content']);
-                if (is_array($exploded)) $data = array_merge($data,$exploded);
+                if (is_array($exploded)) 
+                    $data = array_merge($data,$exploded);
             } else {
                 $data = array_merge($data,$data['content']);
             }
@@ -92,35 +120,25 @@
                 if (!xarVarFetch('text_content', 'str:1', $text_content, '', XARVAR_DONT_SET)) {return;}
                 $vars['text_content'] = $text_content;
             }
+            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+            $isvalid = $accessproperty->checkInput($data['name'] . '_display');
+            $vars['display_access'] = $accessproperty->value;
+            $isvalid = $accessproperty->checkInput($data['name'] . '_modify');
+            $vars['modify_access'] = $accessproperty->value;
+            $isvalid = $accessproperty->checkInput($data['name'] . '_delete');
+            $vars['delete_access'] = $accessproperty->value;
 
             $data['content'] = $vars;
             return $data;
         }
     }
 
-interface iBlock
-{
-    public function getInfo();
-    public function display(Array $data=array());
-    public function modify(Array $data=array());
-    public function update(Array $data=array());
-}
-
-/*public class Block extends Object
+    interface iBlock
     {
-
-        public function info()
-        {
-            return array('text_type' => 'HTML',
-                 'text_type_long' => 'HTML',
-                 'module' => 'base',
-                 'func_update' => 'base_htmlblock_update',
-                 'allow_multiple' => true,
-                 'form_content' => false,
-                 'form_refresh' => false,
-                 'show_preview' => true);
-
-        }
+        public function getInfo();
+        public function display(Array $data=array());
+        public function modify(Array $data=array());
+        public function update(Array $data=array());
     }
-    */
+
 ?>

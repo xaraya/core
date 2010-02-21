@@ -83,9 +83,9 @@
           <xsl:call-template name="xarvar_setcode"/>
           <xsl:text>;</xsl:text>
         </xsl:if>
-        <xsl:text>$_bl_data['</xsl:text>
+        <xsl:text>$_bl_data["</xsl:text>
         <xsl:value-of select="@name"/>
-        <xsl:text>']=$</xsl:text>
+        <xsl:text>"]=$</xsl:text>
         <xsl:value-of select="@name"/>
         <xsl:text>;&nl;</xsl:text>
       </xsl:otherwise>

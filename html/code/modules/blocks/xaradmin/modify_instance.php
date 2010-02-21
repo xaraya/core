@@ -39,7 +39,7 @@ function blocks_admin_modify_instance()
     // Execute the function if it exists.
     $usname = preg_replace('/ /', '_', $instance['module']);
     $modfunc = $usname . '_' . $instance['type'] . 'block_modify';
-    $classpath = sys::code() . 'modules/' . $instance['module'] . '/xarblocks/' . $instance['type'] . '.php';
+    $classpath = sys::code() . 'modules/' . $instance['module'] . '/xarblocks/' . $instance['type'] . '_admin.php';
     if (function_exists($modfunc)) {
         $extra = $modfunc($instance);
 
@@ -48,21 +48,47 @@ function blocks_admin_modify_instance()
             $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
         }
     } elseif (file_exists($classpath)) {
-        sys::import('modules.' . $instance['module'] . '.xarblocks.' . $instance['type']);
-        $name = ucfirst($instance['type']) . "Block";
+        sys::import('modules.' . $instance['module'] . '.xarblocks.' . $instance['type'] . '_admin');
+        $name = ucfirst($instance['type']) . "BlockAdmin";
         if (class_exists($name)) {
             sys::import('xaraya.structures.descriptor');
             $descriptor = new ObjectDescriptor(array());
             $block = new $name($descriptor);
 
             $extra = $block->modify($instance);
-            if (is_array($extra)) {
-                // Render the extra settings if necessary.
-//                try {
-                    $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
-//                } catch (Exception $e) {
-//                    $extra = '';
-//                }
+            $instance['display_access'] = isset($extra['display_access']) ? $extra['display_access'] : array();
+            $instance['modify_access'] = isset($extra['modify_access']) ? $extra['modify_access'] : 
+            array('group' => 0, 'level' => 100, 'failure' => 0);
+            $instance['delete_access'] = isset($extra['delete_access']) ? $extra['delete_access'] : array();
+
+            $access = $instance['modify_access'];
+            $instance['allowaccess'] = false;
+            if (!empty($access)) {
+                // Decide whether this block is modifiable to the current user
+                $args = array(
+                    'module' => $instance['module'],
+                    'component' => 'Block',
+                    'instance' => $instance['type'] . ":" . $instance['name'] . ":" . "$instance[bid]",
+                    'group' => $access['group'],
+                    'level' => $access['level'],
+                );
+                $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+                $instance['allowaccess'] = $accessproperty->check($args);
+            }
+
+            if ($instance['allowaccess']) {
+                if (is_array($extra)) {
+                    // Render the extra settings if necessary.
+                    try {
+                        $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
+                    } catch (Exception $e) {
+                        $extra = '';
+                    }
+                }
+            } elseif (!empty($access['failure'])) {
+                $extra = xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
+            } else {
+                $extra = '';
             }
         } else {
             $extra = '';
