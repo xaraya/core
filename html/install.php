@@ -15,6 +15,8 @@
  */
 
 /**
+ * 0. basic requirements
+ * ---check required extensions and PHP version
  * 1. select language
  * ---set language
  * 2. read license agreement
@@ -30,6 +32,29 @@
  * 7. finished!
 */
 
+/**
+ * Early PHP checks
+ *
+ */
+ 
+define('MYSQL_REQUIRED_VERSION', '5.0.0');
+define('PHP_REQUIRED_VERSION', '5.3.0');
+$xmlextension             = extension_loaded('xml');
+$xslextension             = extension_loaded('xsl');
+
+if (function_exists('version_compare')) {
+    if (version_compare(PHP_VERSION,PHP_REQUIRED_VERSION,'>=')) $metRequiredPHPVersion = true;
+} else {
+    $metRequiredPHPVersion = false;
+}
+if (!$metRequiredPHPVersion
+    || !$xmlextension
+    || !$xslextension
+    ) {
+        header('Location: requirements.html');
+        exit;
+    }
+    
 /**
  * Defines for the phases
  *
