@@ -376,7 +376,7 @@ INNER JOIN xar_modules m ON p.module_id = m.id AND m.regid = 9
     xarServerGetProtocol              xarServer::getProtocol
     xarServerGetBaseURL               xarServer::getBaseURL
     xarServerGetCurrentURL            xarServer::getCurrentURL
-    xarRequest::getVar                  xarRequest::getVar
+    xarRequest::getVar                xarRequest::getVar
     xarRequestGetInfo                 xarRequest::getInfo
     xarRequestIsLocalReferer          xarRequest::isLocalReferer
     xarResponseRedirect               xarResponse::redirect
@@ -385,7 +385,7 @@ INNER JOIN xar_modules m ON p.module_id = m.id AND m.regid = 9
 
     xarModGetVar                      xarModVars::get
     xarModSetVar                      xarModVars::set
-    xarModDelVar                      xarModVars::delete($modName, $name);      }
+    xarModDelVar                      xarModVars::delete($modName, $name)
     xarModDelAllVars                  xarModVars::delete_all
 
     xarModGetUserVar                  xarModUserVars::get
