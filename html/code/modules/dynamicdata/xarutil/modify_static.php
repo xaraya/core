@@ -36,8 +36,8 @@
                 
                 // Good data: create the field
                 $options = xarMod::apiFunc('dynamicdata','data','getdatatypeoptions');
-                $query = 'ALTER TABLE ' .$data['table'] . ' CHANGE COLUMN ' . $data['oldname'] . ' ';;
-                $query .= $data['object']->properties['name']->value . ' ';
+                $query = 'ALTER TABLE ' .$data['table'] . ' CHANGE COLUMN `' . $data['oldname'] . '` `';
+                $query .= $data['object']->properties['name']->value . '` ';
                 $query .= $options['datatypes'][$data['object']->properties['type']->value] . ' ';
                 if ((in_array($data['object']->properties['type']->value,array(3,4,5)))) {
                     $query .= $options['attributes'][$data['object']->properties['attributes']->value] . " ";
