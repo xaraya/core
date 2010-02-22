@@ -13,6 +13,7 @@ function dynamicdata_admin_modifymoduleconfig()
 {
     if (!xarSecurityCheck('AdminDynamicData')) return;
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('tab','str:1', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'dynamicdata'));
     $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons');
