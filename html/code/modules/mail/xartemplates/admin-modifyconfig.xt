@@ -60,6 +60,18 @@
             <li class="#$tabclass#">
                 <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">Outgoing</a>
             </li>
+            
+            <xar:set name="y">$params['tab']='managehooks'</xar:set>
+            <xar:set name="tabclass">'xar-tab'</xar:set>
+            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+            <xar:if condition="$tab eq 'managehooks'">
+                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+            </xar:if>
+            <xar:set name="y">$params['tab']='managehooks'</xar:set>
+            <li class="#$tabclass#">
+                <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">Manage Hooks</a>
+            </li>
         </ul>
         <form method="post" action="#xarServer::getCurrentURL()#" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded">
 
@@ -407,6 +419,15 @@
                         <xar:var name="label">Update</xar:var>
                         <xar:button type="submit" label="$label"/>
                     </div>
+                </fieldset>
+                <xar:elseif condition="$tab eq 'managehooks'"/>
+                <!-- Hooks tab -->
+                <fieldset>
+                    <legend>
+                        Configure Mail Hooks
+                    </legend>
+                    <xar:set name="url">#xarModURL('mail','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
+                    <xar:module main="false" module="modules" type="admin" func="hooks" curhook="mail" return_url="$url"/>
                 </fieldset>
             </xar:if>
         </form>
