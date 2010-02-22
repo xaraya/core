@@ -48,7 +48,7 @@ function <xsl:value-of select="$module_prefix"/>_admin_config( $args )
 
         // This function generated no output, and so now it is complete we redirect
         // the user to an appropriate page for them to carry on their work
-        return xarResponseRedirect(
+        return xarController::redirect(
             xarModURL(
                 '<xsl:value-of select="$module_prefix"/>'
                 ,'admin'
@@ -146,7 +146,7 @@ function <xsl:value-of select="$module_prefix"/>_adminpriv_config( $args )
         /*
          * Finished. Back to the sender!
          */
-        return xarResponseRedirect(
+        return xarController::redirect(
             xarModURL(
                 '<xsl:value-of select="$module_prefix"/>'
                 ,'admin'

@@ -41,7 +41,7 @@ function themes_admin_activate()
     $minfo=xarThemeGetInfo($id);
     // set the target location (anchor) to go to within the page
     $target=$minfo['name'];
-    xarResponse::redirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
+    xarController::redirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
     return true;
 } 
 ?>

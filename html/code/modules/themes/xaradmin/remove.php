@@ -37,7 +37,7 @@ function themes_admin_remove()
     // throw back
     if (!isset($removed)) return;
 
-    xarResponse::redirect(xarModURL('themes', 'admin', 'list'));
+    xarController::redirect(xarModURL('themes', 'admin', 'list'));
 
     return true;
 } 
