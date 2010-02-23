@@ -66,7 +66,7 @@
                     $dbconn = xarDB::getConn();
                     $xartable = xarDB::getTables();
                     $query = "DELETE FROM " . $xartable['security_acl'] .
-                              " WHERE partid= ? AND permid= ?";
+                              " WHERE role_id = ? AND privilege_id = ?";
                     $bindvars = $ids;
                     $dbconn->Execute($query,$bindvars);
                 }
