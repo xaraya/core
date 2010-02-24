@@ -25,7 +25,8 @@ class ConfigurationProperty extends TextBoxProperty
     public $desc       = 'Configuration';
     public $reqmodules = array('dynamicdata');
 
-    public $proptype = null;
+    // Default to static text
+    public $proptype = 1;
     //public $initialization_prop_type = null;
 
     function __construct(ObjectDescriptor $descriptor)
