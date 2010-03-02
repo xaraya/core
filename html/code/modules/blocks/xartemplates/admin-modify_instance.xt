@@ -175,7 +175,7 @@
                                 <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
                                     <div class="xar-form-input-wrapper">
                                         <label for="group_templates_#$loop:item.id#" class="xar-form-label" title="#xarML('Group specific outer and inner templates for this block')#">
-                                            <a href="#xarModURL('blocks', 'admin', 'modify', array('bid' => $loop:item['bid']))#" title="#xarML('Modify this group')#">#xarVarPrepForDisplay($loop:item['name'])#</a> Group:
+                                            <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['bid']))#" title="#xarML('Modify this group')#">#xarVarPrepForDisplay($loop:item['name'])#</a> Group:
                                         </label>
                                         <div class="xar-form-container-after">
                                         <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
