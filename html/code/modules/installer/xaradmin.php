@@ -710,8 +710,7 @@ function installer_admin_create_administrator()
         array('modName'  => 'blocks', 'blockType'=> 'blockgroup'))) return;
 
     // Register Block types from modules installed before block apis (base)
-    // php and text block removed from this list until converted to classes
-    $blocks = array('adminmenu','waitingcontent','finclude','html','menu','content');
+    $blocks = array('adminmenu','waitingcontent','finclude','menu','content');
 
     foreach ($blocks as $block) {
         if (!xarMod::apiFunc('blocks', 'admin', 'register_block_type', array('modName'  => 'base', 'blockType'=> $block))) return;
@@ -1015,7 +1014,7 @@ function installer_admin_confirm_configuration()
                                 'name'  => 'mainmenu',
                                 'type'  => $menuBlockTypeId,
                                 'groups' => array(array('id' => $leftBlockgroupID,)),
-                                'content' => serialize($content),
+                                'content' => $content,
                                 'state' => 2))) {
                 return;
             }
@@ -1075,14 +1074,14 @@ function installer_admin_cleanup()
 
         $now = time();
 
-//        $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot.';
-        $varshtml['html_content'] = 'Please delete install.php from your webroot.';
-        $varshtml['expire'] = $now + 259200;
-        $msg = serialize($varshtml);
+        $reminder = array(
+            'content_text' => 'Please delete install.php from your webroot.',
+            'expire' => $now + 259200,
+        );
 
         $htmlBlockType = xarMod::apiFunc('blocks', 'user', 'getblocktype',
                                      array('module'  => 'base',
-                                           'type'    => 'html'));
+                                           'type'    => 'content'));
 
         $htmlBlockTypeId = $htmlBlockType['tid'];
 
@@ -1090,7 +1089,7 @@ function installer_admin_cleanup()
             if (!xarMod::apiFunc('blocks', 'admin', 'create_instance',
                                array('title'    => 'Reminder',
                                      'name'     => 'reminder',
-                                     'content'  => $msg,
+                                     'content'  => $reminder,
                                      'type'     => $htmlBlockTypeId,
                                      'groups'   => array(array('id'      => $leftBlockgroupID,)),
                                      'state'    => 2))) {

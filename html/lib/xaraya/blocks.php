@@ -57,7 +57,6 @@ Class xarBlock extends Object implements IxarBlock
             // if ((bool)xarModVars::get('blocks', 'noexceptions')) return '';
             return '';
         }
-
         // Get a cache key for this block if it's suitable for block caching
         $cacheKey = xarCache::getBlockKey($data);
 
@@ -117,6 +116,7 @@ Class xarBlock extends Object implements IxarBlock
             //throw ($e);
             return '';
         }
+
 
         // FIXME: <mrb> - <chris> See TODO: above re exceptions
         // We somehow need to be able to raise exceptions here. We can't

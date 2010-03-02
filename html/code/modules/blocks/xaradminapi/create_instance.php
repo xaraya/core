@@ -45,6 +45,8 @@ function blocks_adminapi_create_instance($args)
 
     $initresult = xarMod::apiFunc('blocks', 'user', 'read_type_init', $blocktype);
 
+
+
     // If the content is not set, attempt to get initial content from
     // the block initialization function.
     if (!isset($content)) {
@@ -53,6 +55,10 @@ function blocks_adminapi_create_instance($args)
         if (!empty($initresult)) {
             $content = $initresult;
         }
+    }
+    // if we have an array of content, merge missing params from init
+    elseif (is_array($content) && !empty($initresult)) {
+        $content += $initresult;
     }
 
     if (!empty($content) && !is_string($content)) {

@@ -95,7 +95,7 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     {
         $result = $this->getInfo();
         // @TODO: check the skiplist, prob can/need to skip more properties
-        $skiplist = array('name', 'module', 'text_type', 'text_type_long', 'func_update', 'allow_multiple', 'groupid','group','group_inst_template', 'group_template', 'template', 'tid', 'type','bid', 'position', 'refresh', 'display_access', 'modify_access', 'delete_access', 'content', 'state','show_preview');
+        $skiplist = array('name', 'module', 'text_type', 'text_type_long', 'func_update', 'allow_multiple', 'groupid','group','group_inst_template', 'group_template', 'template', 'tid', 'type','bid', 'position', 'refresh', 'display_access', 'modify_access', 'delete_access', 'content', 'state','show_preview','title');
         foreach ($skiplist as $propname) {
             unset($result[$propname]);
         }

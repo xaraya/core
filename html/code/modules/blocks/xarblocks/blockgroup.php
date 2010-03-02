@@ -28,7 +28,7 @@ class BlockgroupBlock extends BasicBlock implements iBlock
         if (empty($data)) return;
 
         // blockgroup name (if any)
-        $data['group_name'] = $this->group;
+        $data['group_name'] = $data['name'];
 
         // get block instances for this blockgroup
         $instances = xarMod::apiFunc('blocks', 'user', 'getall',

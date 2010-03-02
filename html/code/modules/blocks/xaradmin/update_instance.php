@@ -113,6 +113,8 @@ function blocks_admin_update_instance()
                     $blockinfo['content']['expire'] = $expire;
                 } elseif ($expire_reset) {
                     $blockinfo['content']['expire'] = 0;
+                } else {
+                    $blockinfo['content']['expire'] = isset($blockinfo['expire']) ? $blockinfo['expire'] : 0;
                 }
 
                 // Block group properties
