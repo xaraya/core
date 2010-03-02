@@ -22,6 +22,11 @@
  * - system-level flag to switch between reporting attribute/args errors or just ignoring
  * @author Jim McDonald, Paul Rosania
  *
+ * TODO: move this function to a method of the xarBlock class,
+ * per note below, there's no reason for this to be here, it doesn't,
+ * contrary to the notes in the xarBlock_renderBlock method, lighten
+ * core in any way, since blocks module is also part of core. We reduced
+ * the size of the core blocks.php file by moving the blockgroup handling to a block
  * Note: this function is used solely by the BL renderer, and is subject
  * to change without notice.
  */
@@ -94,11 +99,12 @@ function blocks_userapi_getinfo($args)
 
     // No block details.
     // Perhaps the instance or module/type is invalid.
+    // FIXME: Invalid module/type won't mean empty blockinfo here.
     if (empty($blockinfo)) {return;}
 
     // Do standard overrides.
-    if (!is_null($title)) {$blockinfo['title'] = $title;}
-    if (!is_null($state)) {$blockinfo['state'] = $state;}
+    if (isset($title) && !is_null($title)) {$blockinfo['title'] = $title;}
+    if (isset($state) && !is_null($state)) {$blockinfo['state'] = $state;}
 
     // Now do the custom overrides.
     // We have a hack here to unserialize the content string, update the
@@ -124,7 +130,7 @@ function blocks_userapi_getinfo($args)
     // The content at this point will be, completely empty, a string or
     // an array - only try and set array elements for an array.
     if (is_array($blockinfo['content'])) {
-        foreach($content as $pname => $pvalue) {
+        foreach($blockinfo['content'] as $pname => $pvalue) {
             // If the array element exists, then override it.
             // There is no validation here (yet) - so arrays can
             // override strings and strings can override arrays.

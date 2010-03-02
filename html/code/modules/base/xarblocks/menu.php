@@ -40,7 +40,7 @@ class MenuBlock extends BasicBlock implements iBlock
     public $displayrss          = false;
     public $displayprint        = false;
     public $marker              = '[x]';
-    public $content             = array(
+    public $user_content             = array(
                                     'url' => '[base]&page=docs',
                                     'name'=> 'Documentation',
                                     'description' => 'General Documentation',
@@ -52,9 +52,9 @@ class MenuBlock extends BasicBlock implements iBlock
     public $rssurl;
     public $printurl;
 
-    public function __construct(ObjectDescriptor $descriptor)
+    public function __construct(Array $data=array())
     {
-        parent::__construct($descriptor);
+        parent::__construct($data);
         $this->rssurl = xarServer::getCurrentURL(array('theme' => 'rss'));
         $this->printurl = xarServer::getCurrentURL(array('theme' => 'print'));
     }
@@ -66,7 +66,7 @@ class MenuBlock extends BasicBlock implements iBlock
     function display(Array $data=array())
     {
         $data = parent::display($data);
-        if (!$data['allowaccess']) return;
+        //if (!$data['allowaccess']) return;
         if (empty($data)) return;
 
         // are there any user modules, then get their names
@@ -82,7 +82,7 @@ class MenuBlock extends BasicBlock implements iBlock
 
         if (empty($data['displaymodules'])) $data['displaymodules'] = $this->displaymodules;
         if (empty($data['modulelist'])) $data['modulelist'] = $this->modulelist;
-        if (empty($data['lines'])) $data['lines'] = array($this->content);
+        if (empty($data['lines'])) $data['lines'] = array($this->user_content);
         if (!isset($data['showback'])) $data['showback'] = $this->showback;
         if (!isset($data['showlogout'])) $data['showlogout'] = $this->showlogout;
 
@@ -234,7 +234,7 @@ class MenuBlock extends BasicBlock implements iBlock
                     $mods = $list;
                     if ($list == array()) $usermods = '';
                 }
-                    
+                // FIXME: view_access here doesn't make sense to me
                 $access = isset($args['view_access']) ? $args['view_access'] : array();
                 foreach($mods as $mod){
                     if (isset($access[$mod['name']])) {
@@ -320,6 +320,12 @@ class MenuBlock extends BasicBlock implements iBlock
                 }
                 if (empty($usermods)) $usermods = '';
             } else {
+                // Means no privileges to view baseblocks
+                // FIXME: do we always want to show roles link here?
+                // shouldn't we check if login is allowed, and if user
+                // has necessary privs for roles. Also what about registration?
+                // surely user registration would be useful here? we already
+                // look for authdata, maybe consider getting regdata too :-?
                 $modid = xarMod::getRegID('roles');
                 $modinfo = xarMod::getInfo($modid);
                 if ($modinfo){

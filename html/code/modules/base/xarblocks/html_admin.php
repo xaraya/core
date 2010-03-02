@@ -16,7 +16,7 @@
  */
 sys::import('modules.base.xarblocks.html');
 
-    class HTMLBlockAdmin extends HTMLBlock implements iBlock
+    class HtmlBlockAdmin extends HTMLBlock implements iBlock
     {
 /**
  * Modify Function to the Blocks Admin

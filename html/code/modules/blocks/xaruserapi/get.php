@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * Retrieve a block instance raw data.
  *
  * @package modules
@@ -15,10 +15,10 @@
 function blocks_userapi_get($args)
 {
     extract($args);
-    
+
     if (!xarVarValidate('int:1', $bid, true)) {$bid = 0;}
     if (!xarVarValidate('str:1', $name, true)) {$name = '';}
-    
+
     if (empty($bid) && empty($name)) {
         // No identifier provided.
         throw new EmptyParameterException('name or bid');
@@ -29,7 +29,7 @@ function blocks_userapi_get($args)
       // CHECKME: & removed below
         $instances = xarMod::apiFunc('blocks', 'user', 'getall', array('bid' => $bid));
     } else {
-        // CHECKME: & removed below 
+        // CHECKME: & removed below
         $instances = xarMod::apiFunc('blocks', 'user', 'getall', array('name' => $name));
     }
 

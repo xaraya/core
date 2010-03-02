@@ -4,7 +4,7 @@
     <!--
         We know that blocks.css file is already included by admin-modify_instance.xd, so no need to do it twice
     -->
-    <xar:if condition="!empty($content)">
+    <xar:if condition="!empty($user_content)">
         <p>
             <strong>Edit Menu Items</strong>
         </p>

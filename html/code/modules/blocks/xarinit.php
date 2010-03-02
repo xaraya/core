@@ -26,11 +26,11 @@ function blocks_init()
     try {
         $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         $dbconn->begin();
-        
+
         $id_type       = array('type'=>'integer', 'unsigned'=>true, 'null'=>false, 'increment'=>true, 'primary_key'=>true);
         $idref_type    = array('type'=>'integer', 'unsigned'=>true, 'null'=>false);
         $template_type = array('type'=>'varchar', 'size'=>254, 'null'=>true, 'default'=>null, 'charset' => $charset);
-        
+
         // *_block_instances
         $query = xarDBCreateTable($prefix . '_block_instances',
                                   array('id'          => $id_type,
@@ -218,6 +218,8 @@ function blocks_init()
     $blockGroupsTable    = $prefix . '_block_groups';
     $blockTypesTable     = $prefix . '_block_types';
     $blockInstancesTable = $prefix . '_block_instances';
+
+    // @TODO: since blockgroup is now a block itself the blockgroup instance is no longer needed here
 
     //Set up the block group instances for this module - these are the same as previously defined and retained
     $query1 = "SELECT DISTINCT name FROM $blockGroupsTable";

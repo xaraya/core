@@ -32,7 +32,7 @@
                 <xar:if condition="isset($info['allow_multiple'])">
                     <div class="xar-form-input-wrapper">
                         <label class="xar-form-label">Allow Multiple:</label>
-                        <xar:if condition="!empty($info['allow_multiple'])">True 
+                        <xar:if condition="!empty($info['allow_multiple'])">True
                         <xar:else />False</xar:if>
                     </div>
                 </xar:if>
@@ -58,12 +58,12 @@
                                 <td>#xarVarPrepForDisplay($loop:item.name)#</td>
                                 <td>
                                     <xar:if condition="$loop:item.overrideable">
-                                    #xarVarPrepForDisplay($loop:item.value)# 
+                                    #xarVarPrepForDisplay($loop:item.value)#
                                     <xar:else />n/a</xar:if>
                                 </td>
                                 <td>#xarVarPrepForDisplay($loop:item.type)#</td>
                                 <td>
-                                    <xar:if condition="$loop:item.overrideable">customisable 
+                                    <xar:if condition="$loop:item.overrideable">customisable
                                     <xar:else />not_customisable</xar:if>
                                 </td>
                             </tr>
@@ -71,7 +71,7 @@
                     </table>
                 </fieldset>
             </xar:if>
-            <form action="#xarServerGetCurrentURL()#" method="post">
+            <form action="#xarServer::getCurrentURL()#" method="post">
                 <fieldset>
                     <legend>
                         Block Add Access

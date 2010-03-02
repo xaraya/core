@@ -2,21 +2,21 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-form-input-wrapper">
-        <label class="xar-form-label" for="showlogout#$blockid#" title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
+        <label class="xar-form-label" for="showlogout#$bid#" title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
             Show A Logout Link
         </label>
         <xar:data-input type="checkbox" name="showlogout" checked="$showlogout"/>
     </div>
     <!--
     <div class="xar-form-input-wrapper">
-        <label class="xar-form-label" for="showhelp#$blockid#" title="#xarML('By checking this box a help link will be shown in the panel instance.')#">
+        <label class="xar-form-label" for="showhelp#$bid#" title="#xarML('By checking this box a help link will be shown in the panel instance.')#">
             Show A Help Link
         </label>
         <xar:data-input type="checkbox" name="showhelp" checked="$showhelp"/>
     </div>
     -->
     <div class="xar-form-input-wrapper">
-        <label class="xar-form-label" for="showfront#$blockid#" title="#xarML('By checking this box a link to the front end will be shown in the panel instance.')#">
+        <label class="xar-form-label" for="showfront#$bid#" title="#xarML('By checking this box a link to the front end will be shown in the panel instance.')#">
             Show Link to Front End
         </label>
         <xar:data-input type="checkbox" name="showfront" checked="$showfront"/>

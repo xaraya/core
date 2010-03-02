@@ -30,13 +30,13 @@ function blocks_adminapi_update_instance($args)
 
     // Optional arguments
     if (!isset($content)) {
-        $content = '';
+        $content = array();
     }
 
     // The content no longer needs to be serialized before it gets here.
     // Lets keep the serialization close to where it is stored (since
     // storage is the only reason we do it).
-    if (!is_string($content)) {
+    if (is_array($content)) {
         $content = serialize($content);
     }
 
@@ -67,7 +67,6 @@ function blocks_adminapi_update_instance($args)
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
     $block_instances_table = $xartable['block_instances'];
-    $block_group_instances_table = $xartable['block_group_instances'];
 
     try {
         $dbconn->begin();
@@ -81,8 +80,8 @@ function blocks_adminapi_update_instance($args)
         // Update the group instances.
         if (isset($groups) && is_array($groups)) {
             // Pass the group updated to the API if required.
-            // TODO: error handling.
-            $result = xarMod::apiFunc('blocks', 'admin', 'update_instance_groups',array('bid' => $bid, 'groups' => $groups));
+            if (!xarMod::apiFunc('blocks', 'admin', 'update_instance_groups',
+                array('bid' => $bid, 'groups' => $groups))) return;
         }
 
         $args['module'] = 'blocks';

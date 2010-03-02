@@ -145,7 +145,7 @@ function installer_admin_phase3()
     $cacheTemplatesIsWritable = false;
     $rssTemplatesIsWritable   = false;
     $metRequiredPHPVersion    = false;
-    
+
     $systemVarDir             = sys::varpath();
     $cacheDir                 = $systemVarDir . XARCORE_CACHEDIR;
     $cacheTemplatesDir        = $systemVarDir . XARCORE_TPL_CACHEDIR;
@@ -205,7 +205,7 @@ function installer_admin_phase3()
     $data['language']    = $install_language;
     $data['phase']       = 3;
     $data['phase_label'] = xarML('Step Three');
-    
+
     // We only check this extension if MySQL is loaded
     if ($data['mysqlextension']) {
         $data['mysql_required_version']     = MYSQL_REQUIRED_VERSION;
@@ -356,7 +356,7 @@ function installer_admin_phase5()
             return xarTplModule('installer','admin','check_database',$data);
         }
     }
-    
+
     if (!$createDB && !$dbExists) {
         $data['dbName'] = $dbName;
         $data['layout'] = 'not_found';
@@ -446,6 +446,7 @@ function installer_admin_phase5()
     sys::import('xaraya.security');
     sys::import('xaraya.modules');
     sys::import('xaraya.hooks');
+    sys::import('xaraya.blocks');
 
     // 1. Load base and modules module
     $modules = array('base','modules');
@@ -708,14 +709,28 @@ function installer_admin_create_administrator()
     $itemid = $data['admin']->updateItem();
     if (!$itemid) {return;}
 
+    // Register blockgroup block type (blocks)
+    // @CHECKME: move this to blocks init?
+    if (!xarMod::apiFunc('blocks', 'admin', 'register_block_type',
+        array('modName'  => 'blocks', 'blockType'=> 'blockgroup'))) return;
+
     // Register Block types from modules installed before block apis (base)
-    $blocks = array('wrapper', 'adminmenu','waitingcontent','finclude','html','menu','php','text','content');
+    // php and text block removed from this list until converted to classes
+    $blocks = array('adminmenu','waitingcontent','finclude','html','menu','content');
 
     foreach ($blocks as $block) {
         if (!xarMod::apiFunc('blocks', 'admin', 'register_block_type', array('modName'  => 'base', 'blockType'=> $block))) return;
     }
 
     if (xarVarIsCached('Mod.BaseInfos', 'blocks')) xarVarDelCached('Mod.BaseInfos', 'blocks');
+
+    // get blockgroup block id
+    $blockgroupBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+                                    array('module'  => 'blocks',
+                                          'type'    => 'blockgroup'));
+
+    $blockgroupBlockTypeID = $blockgroupBlockType['tid'];
+    assert('is_numeric($blockgroupBlockTypeID);');
 
     // Create default block groups/instances
     //                            name        template
@@ -727,40 +742,23 @@ function installer_admin_create_administrator()
                                   'topnav' => 'topnav'
                                   );
 
-    $wrapperBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                    array('module'  => 'base',
-                                          'type'    => 'wrapper'));
-
-    $wrapperBlockTypeID = $wrapperBlockType['tid'];
-    assert('is_numeric($wrapperBlockTypeID);');
-
     foreach ($default_blockgroups as $name => $template) {
-        if(!xarMod::apiFunc('blocks','user','groupgetinfo', array('name' => $name))) {
+        if(!xarMod::apiFunc('blocks', 'user', 'get', array('name' => $name))) {
             // Not there yet
-            if(!xarMod::apiFunc('blocks','admin','create_instance', array('name' => $name, 'template' => $template,
-                'type' => $wrapperBlockTypeID, 'state' => 2
-            ))) return;
+            if (!xarMod::apiFunc('blocks', 'admin', 'create_instance',
+                 array('name' => $name, 'template' => $template,
+                       'type' => $blockgroupBlockTypeID, 'state' => 2))) return;
         }
     }
 
-    // Load up database
-    $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
-
-    $blockGroupsTable = $tables['block_instances'];
-
-    $query = "SELECT    id as id
-              FROM      $blockGroupsTable
-              WHERE     name = ?";
-    $result = $dbconn->Execute($query,array('admin'));
-
-    // Freak if we don't get one and only one result
-    if ($result->getRecordCount() != 1) {
-        $msg = xarML("Group 'left' not found.");
+    // get the admin blockgroup block id
+    $adminBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'admin'));
+    if ($adminBlockgroup == false) {
+        $msg = xarML("Blockgroup 'admin' not found.");
         throw new Exception($msg);
     }
-
-    list ($leftBlockGroup) = $result->fields;
+    $adminBlockgroupID = $adminBlockgroup['bid'];
+    assert('is_numeric($adminBlockgroupID);');
 
     $adminBlockType = xarMod::apiFunc('blocks', 'user', 'getblocktype',
                                     array('module'  => 'base',
@@ -773,7 +771,7 @@ function installer_admin_create_administrator()
                            array('title'    => 'Admin',
                                  'name'     => 'adminpanel',
                                  'type'     => $adminBlockTypeId,
-                                 'groups'   => array(array('id'      => $leftBlockGroup)),
+                                 'groups'   => array(array('id' => $adminBlockgroupID)),
                                  'state'    =>  2))) {
             return;
         }
@@ -975,7 +973,7 @@ function installer_admin_confirm_configuration()
         xarMod::apiFunc('modules','admin','regenerate');
 
         sys::import('modules.modules.class.installer');
-        $installer = Installer::getInstance();    
+        $installer = Installer::getInstance();
         // load the modules from the configuration
         foreach ($options2 as $module) {
             if(in_array($module['item'],$chosen)) {
@@ -1001,30 +999,18 @@ function installer_admin_confirm_configuration()
         $content['modulelist'] = '';
         $content['content'] = '';
 
-        // Load up database
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
-
-        $blockGroupsTable = $tables['block_instances'];
-
-        $query = "SELECT    id as id
-                  FROM      $blockGroupsTable
-                  WHERE     name = ?";
-
-        $result =& $dbconn->Execute($query,array('left'));
-
-        // Freak if we don't get one and only one result
-        if ($result->getRecordCount() != 1) {
-            $msg = xarML("Group 'left' not found.");
+        // get the left blockgroup block id
+        $leftBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'left'));
+        if ($leftBlockgroup == false) {
+            $msg = xarML("Blockgroup 'left' not found.");
             throw new Exception($msg);
         }
-
-        list ($leftBlockGroup) = $result->fields;
+        $leftBlockgroupID = $leftBlockgroup['bid'];
+        assert('is_numeric($leftBlockgroupID);');
 
         $menuBlockType = xarMod::apiFunc('blocks', 'user', 'getblocktype',
                                      array('module'  => 'base',
                                            'type'=> 'menu'));
-
 
         $menuBlockTypeId = $menuBlockType['tid'];
 
@@ -1033,7 +1019,7 @@ function installer_admin_confirm_configuration()
                           array('title' => 'Main Menu',
                                 'name'  => 'mainmenu',
                                 'type'  => $menuBlockTypeId,
-                                'groups' => array(array('id' => $leftBlockGroup,)),
+                                'groups' => array(array('id' => $leftBlockgroupID,)),
                                 'content' => serialize($content),
                                 'state' => 2))) {
                 return;
@@ -1082,25 +1068,16 @@ function installer_admin_cleanup()
 
     // Install script is still there. Create a reminder block
     if (file_exists('install.php')) {
-        // Load up database
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
 
-        $blockTable = $tables['block_instances'];
-
-        $query = "SELECT    id as id
-                  FROM      $blockTable
-                  WHERE     name = ?";
-
-        $result =& $dbconn->Execute($query,array('left'));
-
-        // Freak if we don't get one and only one result
-        if ($result->getRecordCount() != 1) {
-            $msg = xarML("Group 'left' not found.");
+        // get the left blockgroup block id
+        $leftBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'left'));
+        if ($leftBlockgroup == false) {
+            $msg = xarML("Blockgroup 'left' not found.");
             throw new Exception($msg);
         }
+        $leftBlockgroupID = $leftBlockgroup['bid'];
+        assert('is_numeric($leftBlockgroupID);');
 
-        list ($leftBlockGroup) = $result->fields;
         $now = time();
 
 //        $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot.';
@@ -1120,7 +1097,7 @@ function installer_admin_cleanup()
                                      'name'     => 'reminder',
                                      'content'  => $msg,
                                      'type'     => $htmlBlockTypeId,
-                                     'groups'   => array(array('id'      => $leftBlockGroup,)),
+                                     'groups'   => array(array('id'      => $leftBlockgroupID,)),
                                      'state'    => 2))) {
                 return;
             }
@@ -1141,32 +1118,19 @@ function installer_admin_cleanup()
 //    xarModVars::delete('roles','adminpass');
 //    xarModVars::delete('installer','modules');
 
-    // Load up database
-    $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
-
-    $blockGroupsTable = $tables['block_instances'];
-
-    // Prepare getting one blockgroup
-    $query = "SELECT    id as id
-              FROM      $blockGroupsTable
-              WHERE     name = ?";
-    $stmt = $dbconn->prepareStatement($query);
-
-    // Execute for the right blockgroup
-    $result = $stmt->executeQuery(array('right'));
-
-    // Freak if we don't get one and only one result
-    if ($result->getRecordCount() != 1) {
-        $msg = xarML("Group 'right' not found.");
+    // get the right blockgroup block id
+    $rightBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'right'));
+    if ($rightBlockgroup == false) {
+        $msg = xarML("Blockgroup 'right' not found.");
         throw new Exception($msg);
     }
-    $result->next();
-    list ($rightBlockGroup) = $result->fields;
+    $rightBlockgroupID = $rightBlockgroup['bid'];
+    assert('is_numeric($rightBlockgroupID);');
 
     $loginBlockTypeId = xarMod::apiFunc('blocks','admin','register_block_type',
                     array('modName' => 'authsystem', 'blockType' => 'login'));
     if (empty($loginBlockTypeId)) {
+        // FIXME: shouldn't we raise an exception here?
         return;
     }
 
@@ -1175,25 +1139,21 @@ function installer_admin_cleanup()
                            array('title'    => 'Login',
                                  'name'     => 'login',
                                  'type'     => $loginBlockTypeId,
-                                 'groups'    => array(array('id'     => $rightBlockGroup)),
+                                 'groups'    => array(array('id'     => $rightBlockgroupID)),
                                  'state'    => 2))) {
         } else {
             throw new Exception('Could not create login block');
         }
     }
 
-    // Same query, but for header group.
-    $result = $stmt->executeQuery(array('header'));
-
-    xarLogMessage("Selected the header block group", XARLOG_LEVEL_ERROR);
-    // Freak if we don't get one and only one result
-    if ($result->getRecordCount() != 1) {
-        $msg = xarML("Group 'header' not found.");
+    // get the header blockgroup block id
+    $headerBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'header'));
+    if ($headerBlockgroup == false) {
+        $msg = xarML("Blockgroup 'header' not found.");
         throw new Exception($msg);
     }
-
-    $result->next();
-    list ($headerBlockGroup) = $result->fields;
+    $headerBlockgroupID = $headerBlockgroup['bid'];
+    assert('is_numeric($headerBlockgroupID);');
 
     $metaBlockType = xarMod::apiFunc('blocks', 'user', 'getblocktype',
                                    array('module' => 'themes',
@@ -1206,7 +1166,7 @@ function installer_admin_cleanup()
                            array('title'    => 'Meta',
                                  'name'     => 'meta',
                                  'type'     => $metaBlockTypeId,
-                                 'groups'    => array(array('id'      => $headerBlockGroup)),
+                                 'groups'    => array(array('id'      => $headerBlockgroupID)),
                                  'state'    => 2))) {
         } else {
             throw new Exception('Could not create meta block');

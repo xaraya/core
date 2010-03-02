@@ -45,12 +45,16 @@
                     <input type="text" name="block_title" id="block_title" value="" maxlength="255" class="xar-form-textmedium"/>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="block_template" title="#xarML('Instance templates that you want to use for this block instance.')#" class="xar-form-label">
-                        Instance Template (optional):
+                    <label for="block_state"
+                    title="#xarML('This field is used to determine whether the block is shown (maximized) or hidden.')#" class="xar-form-label">
+                        Default State:
                     </label>
-                    <input type="text" name="block_template" id="block_template" value="" maxlength="255" class="xar-form-textlong"/>
-                    (Specified as <strong>outer;inner</strong>)
+                    <xar:data-input type="dropdown" name="block_state" id="block_state" value="2" options="$state_options"/>
                 </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Block Groups and Group Templates</legend>
                 <div class="xar-form-input-wrapper">
                     <label for="block_groups" title="#xarML('Initial block group to place this block into (optional)')#" class="xar-form-label">
                         Block Group (optional):
@@ -58,24 +62,25 @@
                     <select name="block_groups[][id]" id="block_groups">
                         <option value="">-- no group --</option>
                         <xar:loop name="$block_groups">
-                            <option value="#$loop:item['id']#">
+                            <option value="#$loop:item['bid']#">
                                 #xarVarPrepForDisplay($loop:item['name'])#
                             </option>
                         </xar:loop>
                     </select>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="block_state"
-                    title="#xarML('This field is used to determine whether the block is shown (maximized) or hidden.')#" class="xar-form-label">
-                        Default State:
+                    <label title="#xarML('Instance templates that you want to use for this block instance.')#" class="xar-form-label">
+                        Instance Template (optional):
                     </label>
-                    <select name="block_state" id="block_state">
-                        <option value="0">Hidden</option>
-                        <option value="1">Minimized</option>
-                        <option value="2" selected="selected">Visible</option>
-                    </select>
+                    <div class="xar-form-container-after">
+                        <label for="block_template_outer">Outer:</label>&#160;
+                        <input type="text" name="block_template_outer" id="block_template_outer" value="" maxlength="127" class="xar-form-textmedium"/>&#160;
+                        <label for="block_template_inner">Inner:</label>&#160;
+                        <input type="text" name="block_template_inner" id="block_template_inner" value="" maxlength="127" class="xar-form-textmedium"/>
+                    </div>
                 </div>
             </fieldset>
+
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
