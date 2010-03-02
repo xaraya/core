@@ -33,18 +33,6 @@ class MenuBlockAdmin extends MenuBlock implements iBlock
     {
         $data = parent::modify($data);
 
-        if (!isset($data['marker'])) $data['marker'] = $this->marker;
-        if (!isset($data['displaymodules'])) $data['displaymodules'] = $this->displaymodules;
-        if (!isset($data['modulelist'])) $data['modulelist'] = $this->modulelist;
-        if (!isset($data['displayrss'])) $data['displayrss'] = $this->displayrss;
-        if (!isset($data['displayprint'])) $data['displayprint'] = $this->displayprint;
-        if (!isset($data['content'])) $data['content'] = $this->content;
-        if (!isset($data['showlogout'])) $data['showlogout'] = $this->showlogout;
-        if (!isset($data['showback'])) $data['showback'] = $this->showback;
-
-        // @CHECKME: is this used?
-        if (empty($data['style'])) $data['style'] = 1;
-
         $data['modules'] = xarMod::apiFunc('modules', 'admin', 'getlist', array('filter' => array('UserCapable' => 1, 'State' => XARMOD_STATE_ACTIVE)));
 /*        // Prepare output array
         $c=0;
@@ -60,7 +48,7 @@ class MenuBlockAdmin extends MenuBlock implements iBlock
         $data['view_access'] = isset($data['view_access']) ? $data['view_access'] : array();
 
         // @CHECKME: is this used?
-        if (empty($data['lines'])) $data['lines'] = array($this->content);
+        if (empty($data['lines'])) $data['lines'] = array($this->user_content);
         return $data;
     }
 

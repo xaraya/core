@@ -16,17 +16,15 @@
  */
     sys::import('xaraya.structures.containers.blocks.basicblock');
 
-    class HTMLBlock extends BasicBlock implements iBlock
+    class HtmlBlock extends BasicBlock implements iBlock
     {
         public $name                = 'HTMLBlock';
         public $module              = 'base';
         public $text_type           = 'HTML';
         public $text_type_long      = 'HTML';
         public $allow_multiple      = true;
-        public $show_preview        = true;
-
         public $nocache             = 1;
-        public $expire              = 0;
+        public $html_content        = '';
 
 /**
  * Display func.
@@ -36,11 +34,6 @@
         {
             $data = parent::display($data);
             if (empty($data)) return;
-            $now = time();
-
-            if (isset($data['expire']) && $now > $data['expire']) {
-                if ($data['expire'] != 0) return;
-            }
             if (empty($data['content']['html_content'])) $data['content']['html_content'] = $this->html_content;
             return $data;
         }

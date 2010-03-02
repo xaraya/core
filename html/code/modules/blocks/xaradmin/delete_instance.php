@@ -1,6 +1,6 @@
 <?php
 /**
- * Block management - delete a block 
+ * Block management - delete a block
  * @package modules
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -25,6 +25,32 @@ function blocks_admin_delete_instance()
     // Get details on current block
     $blockinfo = xarModAPIFunc('blocks', 'user', 'get', array('bid' => $bid));
 
+    if (!xarMod::apiFunc('blocks', 'admin', 'load',
+        array('module' => $blockinfo['module'], 'type' => $blockinfo['type'], 'func' => 'delete'))) return;
+
+    // cascading block files - order is method specific, admin specific, block specific
+    $to_check = array();
+    $to_check[] = ucfirst($blockinfo['type']) . 'BlockDelete';   // from eg menu_delete.php
+    $to_check[] = ucfirst($blockinfo['type']) . 'BlockAdmin';    // from eg menu_admin.php
+    $to_check[] = ucfirst($blockinfo['type']) . 'Block';         // from eg menu.php
+    foreach ($to_check as $className) {
+        // @FIXME: class name should be unique
+        if (class_exists($className)) {
+            // instantiate the block instance using the first class we find
+            $block = new $className($blockinfo);
+            break;
+        }
+    }
+    // make sure we instantiated a block,
+    if (empty($block)) {
+        // return classname not found (this is always class {$type}Block)
+        throw new ClassNotFoundException($className);
+    }
+
+    if (!$block->checkAccess('delete')) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
+    }
+
     // Check for confirmation
     if (empty($confirm)) {
         // No confirmation yet - get one
@@ -39,21 +65,10 @@ function blocks_admin_delete_instance()
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
-
-    sys::import('modules.dynamicdata.class.properties.master');
-    $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
-    $exploded = unserialize($blockinfo['content']);
-    if (isset($exploded['delete_access'])) {
-        $args = array(
-            'component' => 'Block',
-            'instance' => "All:All:" . $bid,
-            'group' => $exploded['delete_access']['group'],
-            'level' => $exploded['delete_access']['level'],
-        );
-        if(!$accessproperty->check($args))
-            return xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
     }
+
+    // call the blocks own delete method first
+    if (!$block->delete()) return;
 
     // Pass to API
     xarMod::apiFunc(

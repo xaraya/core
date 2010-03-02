@@ -18,15 +18,18 @@ function blocks_admin_create_instance()
     // Get parameters
     if (!xarVarFetch('block_type', 'str:1:', $type)) {return;}
     if (!xarVarFetch('block_name', 'pre:lower:ftoken:passthru:str:1:', $name)) {return;}
-    if (!xarVarFetch('block_state', 'int:0:2', $state)) {return;}
     if (!xarVarFetch('block_title', 'str:1:', $title, '', XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('block_template', 'str:1:', $template, null, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_state', 'int:0:2', $state)) {return;}
+
     if (!xarVarFetch('block_groups', 'array', $groups, array(), XARVAR_NOT_REQUIRED)) {return;}
+    //if (!xarVarFetch('block_template', 'str:1:', $template, null, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('block_template_inner', 'str:1:', $template_inner, NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('block_template_outer', 'str:1:', $template_outer, NULL, XARVAR_NOT_REQUIRED)) return;
 
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
+    }
 
     // Security Check
     if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
@@ -36,6 +39,9 @@ function blocks_admin_create_instance()
     if (!empty($checkname)) {
         throw new DuplicateException(array('block',$name));
     }
+
+    $template = $template_inner;
+    if (!empty($template_outer)) $template .= ';' . $template_inner;
 
     // Pass to API
     $bid = xarMod::apiFunc(

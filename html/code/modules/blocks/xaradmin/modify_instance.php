@@ -18,149 +18,293 @@ function blocks_admin_modify_instance()
 {
     // Get parameters
     if (!xarVarFetch('bid', 'int:1:', $bid)) {return;}
+    if (!xarVarFetch('tab', 'pre:trim:lower:str:1', $tab, 'config', XARVAR_NOT_REQUIRED)) return;
 
     // Security Check
     if (!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
 
     // Get the instance details.
+    // @CHECKME: exception if the block is not found, does get do that?
     $instance = xarMod::apiFunc('blocks', 'user', 'get', array('bid' => $bid));
+    // user needs admin access to modify block instance (name, title, etc)
+    $adminaccess = xarSecurityCheck('',0,'Block',$instance['type'] . ":" . $instance['name'] . ":" . "$instance[bid]",$instance['module'],'',0,800);
 
-    // Load block
-    if (!xarMod::apiFunc(
-        'blocks', 'admin', 'load',
-        array(
-            'modName' => $instance['module'],
-            'blockName' => $instance['type'],
-            'blockFunc' => 'modify')
-        )
-    ) {return;}
+    // Load block file, checks file exists, class exists and method (func) exists
+    if (!xarMod::apiFunc('blocks', 'admin', 'load',
+        array('module' => $instance['module'], 'type' => $instance['type'], 'func' => 'modify'))) return;
 
-    // Determine the name of the update function.
-    // Execute the function if it exists.
-    $usname = preg_replace('/ /', '_', $instance['module']);
-    $modfunc = $usname . '_' . $instance['type'] . 'block_modify';
-    $classpath = sys::code() . 'modules/' . $instance['module'] . '/xarblocks/' . $instance['type'] . '_admin.php';
-    if (function_exists($modfunc)) {
-        $extra = $modfunc($instance);
-
-        if (is_array($extra)) {
-            // Render the extra settings if necessary.
-            $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
+    // cascading block files - order is method specific, admin specific, block specific
+    $to_check = array();
+    $to_check[] = ucfirst($instance['type']) . 'BlockModify';   // from eg menu_modify.php
+    $to_check[] = ucfirst($instance['type']) . 'BlockAdmin';    // from eg menu_admin.php
+    $to_check[] = ucfirst($instance['type']) . 'Block';         // from eg menu.php
+    foreach ($to_check as $className) {
+        // @FIXME: class name should be unique
+        if (class_exists($className)) {
+            // instantiate the block instance using the first class we find
+            $block = new $className($instance);
+            break;
         }
-    } elseif (file_exists($classpath)) {
-        sys::import('modules.' . $instance['module'] . '.xarblocks.' . $instance['type'] . '_admin');
-        $name = ucfirst($instance['type']) . "BlockAdmin";
-        if (class_exists($name)) {
-            sys::import('xaraya.structures.descriptor');
-            $descriptor = new ObjectDescriptor(array());
-            $block = new $name($descriptor);
+    }
+    // make sure we instantiated a block,
+    if (empty($block)) {
+        // return classname not found (this is always class {$type}Block)
+        throw new ClassNotFoundException($className);
+    }
 
-            $extra = $block->modify($instance);
-            $instance['display_access'] = isset($extra['display_access']) ? $extra['display_access'] : array();
-            $instance['modify_access'] = isset($extra['modify_access']) ? $extra['modify_access'] : 
-            array('group' => 0, 'level' => 100, 'failure' => 0);
-            $instance['delete_access'] = isset($extra['delete_access']) ? $extra['delete_access'] : array();
-
-            $access = $instance['modify_access'];
-            $instance['allowaccess'] = false;
-            if (!empty($access)) {
-                // Decide whether this block is modifiable to the current user
-                $args = array(
-                    'module' => $instance['module'],
-                    'component' => 'Block',
-                    'instance' => $instance['type'] . ":" . $instance['name'] . ":" . "$instance[bid]",
-                    'group' => $access['group'],
-                    'level' => $access['level'],
-                );
-                $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
-                $instance['allowaccess'] = $accessproperty->check($args);
-            }
-
-            if ($instance['allowaccess']) {
-                if (is_array($extra)) {
-                    // Render the extra settings if necessary.
-                    try {
-                        $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
-                    } catch (Exception $e) {
-                        $extra = '';
+    // string of template data (from modify-{$type}.xt template)
+    // or privilege error template, default is empty string
+    $block_modify = '';
+    // checkAccess for modify method
+    // user needs modify access to modify the block type properties
+    if (!$block->checkAccess('modify')) {
+        // render privilege error if we're showing modify access failure
+        if (isset($block->modify_access) && $block->modify_access['failure']) {
+            // @TODO: render to an error/exception block?
+            $block_modify = xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
+        }
+        $instance['allowaccess'] = false;
+    } else {
+        $instance['allowaccess'] = true;
+        // now we're safe to call the block modify method
+        // catching any exceptions thrown by the method or template rendering
+        try {
+            $blockinfo = $block->modify();
+            // it's ok if the method returns empty, thats not an error
+            // it just means the block has nothing to render
+            if (is_array($blockinfo)) {
+                // Set some additional details that the could be useful in the block content.
+                // @TODO: move these to basicblock class ?
+                // prefix these extra variables (_bl_) to indicate they are supplied by the core.
+                $blockinfo['content']['_bl_block_id'] = $blockinfo['bid'];
+                $blockinfo['content']['_bl_block_name'] = $blockinfo['name'];
+                $blockinfo['content']['_bl_block_type'] = $blockinfo['type'];
+                if (!empty($blockinfo['groupid'])) {
+                    // The block may not be rendered as part of a group.
+                    $blockinfo['content']['_bl_block_groupid'] = $blockinfo['groupid'];
+                    $blockinfo['content']['_bl_block_group'] = $blockinfo['group'];
+                }
+                // Legacy (deprecated)
+                // @TODO: remove these once all block templates are using the _bl_ variables
+                $blockinfo['content']['blockid'] = $blockinfo['bid'];
+                $blockinfo['content']['blockname'] = $blockinfo['name'];
+                $blockinfo['content']['blocktypename'] = $blockinfo['type'];
+                if (isset($blockinfo['groupid'])) {
+                    // The block may not be rendered as part of a group.
+                    $blockinfo['content']['blockgid'] = $blockinfo['groupid'];
+                    $blockinfo['content']['blockgroupname'] = $blockinfo['group'];
+                }
+                // Render the extra settings if necessary.
+                // Again we check for an exception, this time in the template rendering
+                try {
+                    $block_modify = xarTplBlock($blockinfo['module'], 'modify-' . $blockinfo['type'], $blockinfo);
+                } catch (Exception $e) {
+                    // @TODO: global flag to raise exceptions or not
+                    if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                        $block_modify = '';
+                    } else {
+                        //throw ($e);
+                        $block_modify = '';
                     }
                 }
-            } elseif (!empty($access['failure'])) {
-                $extra = xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
-            } else {
-                $extra = '';
             }
-        } else {
-            $extra = '';
-        }
-    } else {
-        $extra = '';
-    }
-
-    // Get the block info flags.
-    $block_info = xarMod::apiFunc(
-        'blocks', 'user', 'read_type_info',
-        array(
-            'module' => $instance['module'],
-            'type' => $instance['type']
-        )
-    );
-
-    if (empty($block_info)) {
-        // Function does not exist so throw error
-        throw new FunctionNotFoundException(array($instance['module'],$instance['type']),
-                                        'Block info function for module "#(1)" and type "#(2)" was not found or could not be loaded');
-    }
-
-    // Build refresh times array.
-    // TODO: is this still used? Is it specific to certain types of block only?
-    $refreshtimes = array(
-        array('id' => 1800, 'name' => xarML('Half Hour')),
-        array('id' => 3600, 'name' => xarML('Hour')),
-        array('id' => 7200, 'name' => xarML('Two Hours')),
-        array('id' => 14400, 'name' => xarML('Four Hours')),
-        array('id' => 43200, 'name' => xarML('Twelve Hours')),
-        array('id' => 86400, 'name' => xarML('Daily'))
-    );
-
-    // Fetch complete block group list.
-    $block_groups = xarMod::apiFunc('blocks', 'user', 'getallgroups');
-
-    // In the modify form, we want to provide an array of checkboxes: one for each group.
-    // Also a field for the overriding template name for each group instance.
-    foreach ($block_groups as $key => $block_group) {
-        $id = $block_group['id'];
-        if (isset($instance['groups'][$id])) {
-            $block_groups[$key]['selected'] = true;
-            $block_groups[$key]['template'] = $instance['groups'][$id]['group_inst_template'];
-        } else {
-            $block_groups[$key]['selected'] = false;
-            $block_groups[$key]['template'] = null;
+        } catch (Exception $e) {
+            // @TODO: global flag to raise exceptions or not
+            if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                $block_modify = '';
+            } else {
+                //throw ($e);
+                $block_modify = '';
+            }
         }
     }
 
-    $args = array();
-    $args['module'] = 'blocks';
-    $args['itemtype'] = 3; // block instance
-    $args['itemid'] = $bid;
-    $hooks = array();
-    $hooks = xarModCallHooks('item', 'modify', $bid, $args);
+    // build our form data :)
+    $data = array();
 
-    return array(
-        'authid'         => xarSecGenAuthKey(),
-        'bid'            => $bid,
-        'block_groups'   => $block_groups,
-        'instance'       => $instance,
-        'extra_fields'   => $extra,
-        'block_settings' => $block_info,
-        'hooks'          => $hooks,
-        'refresh_times'  => $refreshtimes,
-        // Set 'group_method' to 'min' for a compact group list,
-        // only showing those groups that have been selected.
-        // Set to 'max' to show all possible groups that the
-        // block could belong to.
-        'group_method'   => 'min' // 'max'
-    );
+    // only display data necessary for the current tab
+    switch ($tab) {
+
+        case 'config':
+
+            $templates = (strpos($instance['template'], ';') !== false) ?
+                explode(';',$instance['template'],3) : array($instance['template']);
+            $instance['template_outer'] = (!empty($templates[0])) ? $templates[0] : ''; // outer template
+            $instance['template_inner'] = (!empty($templates[1])) ? $templates[1] : ''; // inner template
+
+            if ($adminaccess) {
+
+                if (!empty($block)) {
+                    if (!empty($block->expire)) {
+                        $now = time();
+                        $soon = $block->expire - $now ;
+                        $instance['expirein'] = $soon;
+                        if ($now > $block->expire && $block->expire != 0) {
+                            $instance['expire'] = 0;
+                        } else {
+                            $instance['expire'] = $block->expire;
+                        }
+                    } else {
+                       $instance['expire'] = 0;
+                       $instance['expirein'] = 0;
+                    }
+                } else {
+                   $instance['expire'] = 0;
+                   $instance['expirein'] = 0;
+                }
+
+                // @CHECKME: for now, blockgroup blocks are allowed in other blockgroup blocks
+                // @TODO: check consequences of allowing blockgroups inside blockgroups
+                // if ($instance['module'] != 'blocks' && $instance['type'] != 'blockgroup') {
+                    // handle blockgroups
+                    $blockgroups = xarMod::apiFunc('blocks', 'user', 'getall',
+                        array('type' => 'blockgroup'));
+                    // In the modify form, we want to provide an array of checkboxes: one for each group.
+                    // Also a field for the overriding template name for each group instance.
+                    foreach ($blockgroups as $key => $blockgroup) {
+                        $id = $blockgroup['bid'];
+                        $blockgroups[$key]['id'] = $id;
+                        if (isset($instance['groups'][$id])) {
+                            $blockgroups[$key]['selected'] = true;
+                            $blockgroups[$key]['template'] = $instance['groups'][$id]['group_inst_template'];
+                        } else {
+                            $blockgroups[$key]['selected'] = false;
+                            $blockgroups[$key]['template'] = null;
+                        }
+                        $grouptpls = (strpos($blockgroups[$key]['template'], ';') !== false) ?
+                            explode(';',$blockgroups[$key]['template'],3) : array($blockgroups[$key]['template']);
+                        $blockgroups[$key]['template_outer'] = (!empty($grouptpls[0])) ? $grouptpls[0] : ''; // outer template
+                        $blockgroups[$key]['template_inner'] = (!empty($grouptpls[1])) ? $grouptpls[1] : ''; // inner template
+                    }
+                    $data['block_groups'] = $blockgroups;
+                    // Set 'group_method' to 'min' for a compact group list,
+                    // only showing those groups that have been selected.
+                    // Set to 'max' to show all possible groups that the
+                    // block could belong to.
+                    // FIXME: this should either be optional or removed, not sure which
+                    $data['group_method'] = 'min';
+                //}
+
+                // populate block state options
+                $data['state_options'] = array(
+                    array('id' => xarBlock::BLOCK_STATE_HIDDEN, 'name' => xarML('Hidden')),
+                    // array('id' => xarBlock::BLOCK_STATE_INACTIVE, 'name' => xarML('Inactive')),
+                    array('id' => xarBlock::BLOCK_STATE_VISIBLE, 'name' => xarML('Visible')),
+                );
+
+            }
+
+            if (!empty($block_modify)) {
+                // handle block hooks
+                $item = array();
+                $item['module'] = 'blocks';
+                $item['itemtype'] = 3; // block instance
+                $item['itemid'] = $bid;
+                $hooks = array();
+                // @TODO: distinct block hooks
+                // $hooks = xarModCallHooks('block', 'modify', $bid, $item);
+                $hooks = xarModCallHooks('item', 'modify', $bid, $item);
+                $data['hooks'] = $hooks;
+            }
+
+        break;
+
+        case 'caching':
+            // @CHECKME: gotta be an admin to access caching options?
+            if (!$adminaccess)
+                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
+
+            // get cache settings
+            $cached = xarMod::apiFunc('blocks', 'user', 'getcacheblock', array('bid' => $bid));
+            if (!empty($cached)) {
+                $instance['nocache'] = $cached['nocache'];
+                $instance['pageshared'] = $cached['pageshared'];
+                $instance['usershared'] = $cached['usershared'];
+                $instance['cacheexpire'] = $cached['cacheexpire'];
+            // no settings, try getting settings from current instance
+            } else {
+                // get block type init settings
+                // we can't just call getInit on the current block instance,
+                // since we want the initial settings for this block type
+                $initresult = xarMod::apiFunc('blocks', 'user', 'read_type_init',
+                    array('module' => $instance['module'], 'type' => $instance['type']));
+                // over-rides (for first run)
+                $instance['nocache'] = isset($blockinfo['nocache']) ? $blockinfo['nocache'] :
+                    (isset($initresult['nocache']) ? $initresult['nocache'] : 0);
+                $instance['pageshared'] = isset($blockinfo['pageshared']) ? $blockinfo['pageshared'] :
+                    (isset($initresult['pageshared']) ? $initresult['pageshared'] : 0);
+                $instance['usershared'] = isset($blockinfo['usershared']) ? $blockinfo['usershared'] :
+                    (isset($initresult['usershared']) ? $initresult['usershared'] : 0);
+                $instance['cacheexpire'] = isset($blockinfo['cacheexpire']) ? $blockinfo['cacheexpire'] :
+                    (isset($initresult['cacheexpire']) ? $initresult['cacheexpire'] : 0);
+            }
+            // convert expire time to hh:mm:ss format for display
+            if (!empty($instance['cacheexpire'])) {
+                $instance['cacheexpire'] = xarModAPIFunc('blocks', 'user', 'convertseconds', array('direction' => 'from', 'starttime' => $instance['cacheexpire']));
+            }
+            $data['usershared_options'] = array(
+                array('id' => 0, 'name' => xarML('No Sharing')),
+                array('id' => 1, 'name' => xarML('Group Members')),
+                array('id' => 2, 'name' => xarML('All Users')),
+            );
+
+        break;
+
+        case 'access':
+            // gotta be an admin to access block access settings
+            if (!$adminaccess)
+                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
+
+            $instance['display_access'] = $block->display_access;
+            $instance['modify_access'] = $block->modify_access;
+            $instance['delete_access'] = $block->delete_access;
+
+        break;
+
+        default:
+
+        break;
+    }
+
+    // variables available to all tabs
+    $data['bid'] = $bid;
+    $data['instance'] = $instance;
+    $data['authid'] = xarSecGenAuthKey();
+    $data['block_modify'] = $block_modify;
+
+    // supply block tabs for config, caching and access forms
+    // @TODO: allow blocks to add their own tabs to this array
+    // if (!empty($blockinfo['blocktabs'])) { }
+    $blocktabs = array();
+    $blocktabs['config'] = array(
+            'url' => xarServer::getCurrentURL(array('tab' => 'config')),
+            'title' => xarML('Modify block configuration'),
+            'label' => xarML('Config'),
+            'active' => $tab == 'config',
+        );
+    // caching and access only available to admins
+    if ($adminaccess) {
+        $blocktabs['caching'] = array(
+                'url' => xarServer::getCurrentURL(array('tab' => 'caching')),
+                'title' => xarML('Modify block caching configuration'),
+                'label' => xarML('Caching'),
+                'active' => $tab == 'caching',
+            );
+        if ($adminaccess) {
+            $blocktabs['access'] = array(
+                    'url' => xarServer::getCurrentURL(array('tab' => 'access')),
+                    'title' => xarML('Modify block access configuration'),
+                    'label' => xarML('Access'),
+                    'active' => $tab == 'access',
+                );
+        }
+    }
+    $data['blocktabs'] = $blocktabs;
+    $data['tab'] = $tab;
+
+    // flag block administrators
+    $data['adminaccess'] = $adminaccess;
+    return $data;
+
 }
-
 ?>

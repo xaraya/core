@@ -20,11 +20,15 @@ function blocks_admin_settings()
     if(!xarSecurityCheck('EditBlock')) return;
 
     if (!xarVarFetch('selstyle', 'str:1:', $selstyle, 'plain', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('filter', 'str', $filter, "", XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('filter', 'str:1:', $filter, null, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('return_url', 'pre:trim:str:1:', $return_url, '', XARVAR_NOT_REQUIRED)) return;
 
-    xarModVars::set('blocks', 'selstyle', $selstyle);
+    xarModUserVars::set('blocks', 'selstyle', $selstyle);
 
-    xarResponse::redirect(xarModURL('blocks', 'admin', 'view_instances',array('filter' => $filter)));
+    if (empty($return_url))
+        $return_url = xarModURL('blocks', 'admin', 'view_instances',array('filter' => $filter));
+
+    xarResponse::redirect($return_url);
 
     return true;
 }

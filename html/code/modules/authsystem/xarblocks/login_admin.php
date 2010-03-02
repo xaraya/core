@@ -28,11 +28,6 @@ class LoginBlockAdmin extends LoginBlock implements iBlock
     public function modify(Array $data=array())
     {
         $data = parent::modify($data);
-
-        if (!isset($data['showlogout'])) $data['showlogout'] = $this->showlogout;
-        if (!isset($data['logouttitle'])) $data['logouttitle'] = $this->logouttitle;
-
-        $data['blockid'] = $data['bid'];
         return $data;
 
     }

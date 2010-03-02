@@ -36,9 +36,9 @@ class LoginBlock extends BasicBlock implements iBlock
  * Display func.
  * @param $data array containing title,content
  */
-    function display(Array $data=array())
+    function display(Array $args=array())
     {
-        $data = parent::display($data);
+        $data = parent::display($args);
         if (empty($data)) return;
 
         $vars = $data;

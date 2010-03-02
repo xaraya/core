@@ -1,51 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <![CDATA[
-    <script type="">
-        function showtab (selectedindex, items)
-        {
-            for (i=1;i<=items;i++) {
-                document.getElementById('page-' + i).style.display = "none";
-                document.getElementById('tab-' + i).className = "nothing";
-            }
-            document.getElementById('page-' + selectedindex).style.display = "block";
-            document.getElementById('tab-' + selectedindex).className = "active";
-        }
-    </script>
-    ]]>
-    <xar:style scope="module" module="base" file="navtabs"/>
-    <xar:style scope="common"/>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Blocks Administration</span>
     </div>
-    <xar:set name="adminaccess">
-        xarSecurityCheck('', 
-                          0, 
-                          'Block', 
-                          $instance['type'] . ":" . $instance['name'] . ":" . "$instance[bid]",
-                          $instance['module'],
-                          '',
-                          0,
-                          800)
-    </xar:set>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
         <h2>Modify Block</h2>
         <form action="#xarModURL('blocks', 'admin', 'update_instance')#" method="post" enctype="application/x-www-form-urlencoded">
-            <dl class="xar-tabs">
-              <dd class="active" id="tab-1">
-                <a href="javascript:showtab(1,2)">
-                  Configuration        </a>
-              </dd>
-              <dd id="tab-2">
 
-                <a href="javascript:showtab(2,2)">
-                  Access        </a>
-              </dd>
-            </dl>
-            <div id="page-1">
-                <h3>Configuration</h3>
+            <!-- block tabs -->
+            <xar:if condition="!empty($blocktabs)">
+                <xar:style scope="module" module="base" file="navtabs"/>
+                <div>
+                    <ul class="xar-tabs xar-alt xar-norm-outline">
+                        <li class="xar-tabs-label help" title="#xarML('Choose an action to perform')#">Actions:</li>
+                        <xar:foreach in="$blocktabs" key="$tabname" value="$tablink">
+                            <xar:if condition="($tab eq $tabname) or (empty($tab) and $tabname eq 'config')">
+                                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                            <xar:else/>
+                                <xar:set name="tabclass">'xar-tab'</xar:set>
+                                <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                            </xar:if>
+                            <li class="#$tabclass#">
+                                <a href="#$tablink.url#" title="#$tablink.title#" class="#$linkclass#">
+                                #$tablink.label#</a>
+                            </li>
+                        </xar:foreach>
+                    </ul>
+                </div>
+            </xar:if>
+            <h3>Block Configuration</h3>
+
+            <!-- show block properties when not in the config tab -->
+            <xar:if condition="!empty($tab) and $tab ne 'config'">
+                <fieldset>
+                    <legend>
+                        Block Properties
+                    </legend>
+                    <div class="xar-form-input-wrapper">
+                        <label title="#xarML('The name of module which owns the block.')#" class="xar-form-label">
+                            Parent Module:
+                        </label>
+                        #xarVarPrepForDisplay($instance['module'])#
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label title="#xarML('This is the type of block that is being modified.')#" class="xar-form-label">
+                            Block Type:
+                        </label>
+                        #xarVarPrepForDisplay($instance['type'])#
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="block_name" title="#xarML('Each instance requires a unique name.')#" class="xar-form-label">
+                            Name:
+                        </label>
+                        #xarVarPrepForDisplay($instance['name'])#
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="block_title" title="#xarML('Enter the new title for the block instance. The title is optional.')#" class="xar-form-label">
+                            Title:
+                        </label>
+                        #xarVarPrepForDisplay($instance['title'])#
+                    </div>
+                </fieldset>
+            </xar:if>
+
+            <!-- Block Configuration -->
+            <xar:if condition="empty($tab) or $tab eq 'config'">
 
                 <xar:if condition="$adminaccess">
                     <fieldset>
@@ -68,164 +90,172 @@
                             <label for="block_name" title="#xarML('Each instance requires a unique name.')#" class="xar-form-label">
                                 Name:
                             </label>
-                            <input type="text" name="block_name" id="block_name" value="#xarVarPrepForDisplay($instance['name'])#" maxlength="255" class="xar-form-textmedium" />
+                            <input type="text" name="block_name" id="block_name" value="#xarVarPrepForDisplay($instance['name'])#" maxlength="100" class="xar-form-textlong"/>
                         </div>
                         <div class="xar-form-input-wrapper">
                             <label for="block_title" title="#xarML('Enter the new title for the block instance. The title is optional.')#" class="xar-form-label">
                                 Title:
                             </label>
-                            <input type="text" name="block_title" id="block_title" value="#xarVarPrepForDisplay($instance['title'])#" maxlength="255" class="xar-form-textmedium" />
+                            <input type="text" name="block_title" id="block_title" value="#xarVarPrepForDisplay($instance['title'])#" maxlength="255" class="xar-form-textlong"/>
                         </div>
                         <div class="xar-form-input-wrapper">
                             <label for="block_state" title="#xarML('This is the default state of the block.  Maximized is visible, hidden is not.')#" class="xar-form-label">
                                 Default State:
                             </label>
-                            <xar:set name="options">
-                                array(
-                                    array('id' => 0, 'name' => xarML('Hidden')),
-                                    array('id' => 2, 'name' => xarML('Visible')),
-                                )
-                            </xar:set>
-                            <xar:set name="value">
-                                $instance['state']
-                            </xar:set>
-                            <xar:data-input type="dropdown" name="block_state" options="$options" value="$value" />
+                            <xar:data-input type="dropdown" name="block_state" options="$state_options" value="$instance['state']"/>
                         </div>
-                    <xar:comment>It is likely this section will be removed, since blocks generally do
-                    not use it.</xar:comment>
-                        <!--
-                            It is likely this section will be removed, since blocks generally do not use it.
-                        -->
-                        <xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
-                            <div class="xar-form-input-wrapper">
-                                <label for="block_refresh" title="#xarML('If your block uses a refresh time, this field needs to be filled in.')#" class="xar-form-label">
-                                    Refresh:
+                        <div class="xar-form-input-wrapper">
+                            <xar:if condition="!empty($instance['expirein'])">
+                                <label class="xar-form-label">
+                                    Expiration date:
                                 </label>
-                                <input type="text" name="block_name" id="block_name" value="#xarVarPrepForDisplay($instance['name'])#" maxlength="255" class="xar-form-textmedium" />
-                                <select name="block_refresh" id="block_refresh">
-                                    <xar:loop name="$refresh_times">
-                                        <xar:if condition="$instance['refresh'] eq $loop:item['id']">
-                                            <option value="#$loop:item['id']#" selected="selected">
-                                                <xar:var name="$loop:item['name']" />
-                                            </option>
-                                        <xar:else />
-                                            <option value="#$loop:item['id']#">
-                                                <xar:var name="$loop:item['name']" />
-                                            </option>
-                                        </xar:if>
-                                    </xar:loop>
-                                </select>
-                            </div>
-                        </xar:if>
-                    </fieldset>
-                </xar:if>
-                <xar:if condition="!empty($instance['allowaccess'])">
-                   <fieldset>
-                        <legend>
-                            Block Type Properties
-                        </legend>
-                        <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
-                            <div class="xar-form-input-wrapper">
-                                <label for="block_content" title="#xarML('Enter the content that is shown in the block instance.')#" class="xar-form-label">
-                                    Content:
+                                <xar:if condition="$instance['expirein'] > 0">
+                                    #xarLocaleGetFormattedDate('medium', $instance['expire'])#
+                                    at #xarLocaleGetFormattedTime('short', $instance['expire'])#
+                                <xar:else />
+                                    this block has expired
+                                </xar:if>
+                                &#160;<xar:data-input type="checkbox" name="block_expire_reset" id="block_expire_reset#$bid#"/>&#160;
+                                <label for="block_expire_reset#$bid#">Reset</label>
+                            <xar:else />
+                                <label for="block_expire" title="#xarML('Select when the block will expire, if at all.')#" class="xar-form-label">
+                                    Block Expiration:
                                 </label>
-                                <textarea name="block_content" id="block_content" class="xar-form-textareaxlarge">#$instance['content']#</textarea>
-                            </div>
-                        </xar:if>
-                        <xar:if condition="!empty($extra_fields)">
-                                #$extra_fields#
-                            <xar:if condition="!empty($hooks)">
-                                <xar:foreach in="$hooks" key="$module" value="$output">
-                                    #$output#
-                                </xar:foreach>
+                                <xar:data-input type="textbox" name="block_expire" id="block_expire" value="$instance['expire']" class="xar-form-textshort"/>
+                                (format dd:hh:mm:ss) 0 = never expires
                             </xar:if>
-                        <xar:else />
-                            <p>
-                                No extra settings for this block type.
-                            </p>
-                        </xar:if>
+                        </div>
                     </fieldset>
-                <xar:else />
-                    #$extra_fields#
                 </xar:if>
+                <fieldset>
+                    <legend>
+                        Block Type Properties
+                    </legend>
+                    <xar:if condition="!empty($block_modify)">
+                        #$block_modify#
+                        <xar:if condition="!empty($hooks)">
+                            <xar:foreach in="$hooks" key="$module" value="$output">
+                                #$output#
+                            </xar:foreach>
+                        </xar:if>
+                    <xar:else/>
+                        <p>
+                            No extra settings for this block type.
+                        </p>
+                    </xar:if>
+                </fieldset>
 
                 <xar:if condition="$adminaccess">
                     <fieldset>
                         <legend>
                             Block Groups and Group Templates
                         </legend>
-                        <xar:if condition="$group_method eq 'min'">
-                        <!-- Provide a 'new group' drop-down list.-->
-                            <div class="xar-form-input-wrapper">
-                                <label for="block_new_group" title="#xarML('Add this block instance to the selected block group.')#" class="xar-form-label">
-                                    Add To Group:
-                                </label>
-                                <select name="block_new_group" id="block_new_group">
-                                    <option value="" selected="selected">                                    
-                                            -- no new group --                                    
-                                    </option>
-                                    <xar:loop name="$block_groups">
-                                        <xar:if condition="empty($loop:item['selected'])">
-                                            <option value="#$loop:item['id']#">
-                                                #xarVarPrepForDisplay($loop:item['name'])#
-                                            </option>
-                                        </xar:if>
-                                    </xar:loop>
-                                </select>
-                            </div>
-                        </xar:if>
-                        <xar:loop name="$block_groups">
-                            <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
+                        <xar:if condition="!empty($block_groups)">
+                            <xar:if condition="$group_method eq 'min'">
+                            <!-- Provide a 'new group' drop-down list.-->
                                 <div class="xar-form-input-wrapper">
-                                    <label for="group_templates_#$loop:item.id#" class="xar-form-label" title="#xarML('Format is: [outer-template][semi-colon][inner-template].')#">
-                                        #xarVarPrepForDisplay($loop:item['name'])# Group:
+                                    <label for="block_new_group" title="#xarML('Add this block instance to the selected block group.')#" class="xar-form-label">
+                                        Add To Group:
                                     </label>
-                                    <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
-                                        <input type="text" name="group_templates[#$loop:item.id#]" id="group_templates_#$loop:item.id#" value="#xarVarPrepForDisplay($loop:item.template)#" maxlength="100" class="xar-form-textlong" />
-                                        <xar:if condition="$group_method eq 'min'">
-                                            <xar:if condition="!empty($loop:item['selected'])">
-                                                <input type="checkbox" name="block_remove_groups[#$loop:item.id#]" id="block_remove_groups_#$loop:item.id#" value="on" />
-                                                <label for="block_remove_groups_#$loop:item.id#">                                                
-                                                    Remove
-                                                </label>
-                                                <input type="hidden" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" />
+                                    <select name="block_new_group" id="block_new_group">
+                                        <option value="" selected="selected">
+                                                -- no new group --
+                                        </option>
+                                        <xar:loop name="$block_groups">
+                                            <xar:if condition="empty($loop:item['selected']) and $loop:item['name'] ne $instance['name']">
+                                                <option value="#$loop:item['id']#">
+                                                    #xarVarPrepForDisplay($loop:item['name'])#
+                                                </option>
                                             </xar:if>
-                                        <xar:else />
-                                            <xar:if condition="!empty($loop:item['selected'])">
-                                                <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" checked="checked" />
-                                            <xar:else />
-                                                <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" />
-                                            </xar:if>
-                                            <label for="block_groups_#$loop:item.id#">                                            
-                                                Selected                                            
-                                            </label>
-                                        </xar:if>
-                                    </xar:if>
+                                        </xar:loop>
+                                    </select>
                                 </div>
                             </xar:if>
-                        </xar:loop>
+                            <xar:loop name="$block_groups">
+                                <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
+                                    <div class="xar-form-input-wrapper">
+                                        <label for="group_templates_#$loop:item.id#" class="xar-form-label" title="#xarML('Group specific outer and inner templates for this block')#">
+                                            <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['bid']))#" title="#xarML('Modify this group')#">#xarVarPrepForDisplay($loop:item['name'])#</a> Group:
+                                        </label>
+                                        <div class="xar-form-container-after">
+                                        <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
+                                            <label for="block_template_outer">Outer:</label>&#160;
+                                            <input type="text" name="group_templates[#$loop:item.id#][outer]" id="group_templates_#$loop:item.id#_outer" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($loop:item.template_outer)#"/>&#160;
+                                            <label for="block_template_inner">Inner:</label>&#160;
+                                            <input type="text" name="group_templates[#$loop:item.id#][inner]" id="group_templates_#$loop:item.id#_inner" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($loop:item.template_inner)#"/>&#160;
+                                            <xar:if condition="$group_method eq 'min'">
+                                                <xar:if condition="!empty($loop:item['selected'])">
+                                                    <input type="checkbox" name="block_remove_groups[#$loop:item.id#]" id="block_remove_groups_#$loop:item.id#" value="on"/>
+                                                    <label for="block_remove_groups_#$loop:item.id#">
+                                                        Remove
+                                                    </label>
+                                                    <input type="hidden" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on"/>
+                                                </xar:if>
+                                            <xar:else/>
+                                                <xar:if condition="!empty($loop:item['selected'])">
+                                                    <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on" checked="checked"/>
+                                                <xar:else/>
+                                                    <input type="checkbox" name="block_groups[#$loop:item.id#]" id="block_groups_#$loop:item.id#" value="on"/>
+                                                </xar:if>
+                                                <label for="block_groups_#$loop:item.id#">
+                                                    Selected
+                                                </label>
+                                            </xar:if>
+                                        </xar:if>
+                                        </div>
+                                    </div>
+                                </xar:if>
+                            </xar:loop>
+                            <!-- TODO: split the input here -->
+                            <div class="xar-form-input-wrapper">
+                                <label for="block_template" title="#xarML('Block specific outer and inner templates')#" class="xar-form-label">
+                                    Instance Template (optional):
+                                </label>
+                                <div class="xar-form-container-after">
+                                    <label for="block_template_outer">Outer:</label>&#160;
+                                    <input type="text" name="block_template_outer" id="block_template_outer" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($instance['template_outer'])#"/>&#160;
+                                    <label for="block_template_inner">Inner:</label>&#160;
+                                    <input type="text" name="block_template_inner" id="block_template_inner" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($instance['template_inner'])#"/>
+                                </div>
+                            </div>
+                        </xar:if>
+
+                    </fieldset>
+                </xar:if>
+
+            <!-- Block Caching Configuration -->
+            <xar:elseif condition="$tab eq 'caching'"/>
+                <xar:if condition="$adminaccess">
+                    <fieldset>
+                        <legend>Block Caching</legend>
                         <div class="xar-form-input-wrapper">
-                            <label for="block_template" title="#xarML('Format is: [outer-template][semi-colon][inner-template].')#" class="xar-form-label">
-                                Instance Template (optional):
-                            </label>
-                            <input type="text" name="block_template" id="block_template" value="#xarVarPrepForDisplay($instance['template'])#" maxlength="255" class="xar-form-textlong" />
-                            (Specified as <code>outer<strong>;</strong>inner</code>)
+                            <label for="block_nocache" class="xar-form-label">Disable Caching?</label>
+                            <xar:data-input type="checkbox" name="block_nocache" id="block_nocache" value="$instance['nocache']"/>
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <label for="block_pageshared" class="xar-form-label">Page Sharing</label>
+                            <xar:data-input type="checkbox" name="block_pageshared" id="block_pageshared" value="$instance['pageshared']"/>
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <label for="block_usershared" class="xar-form-label">User Sharing</label>
+                            <xar:data-input type="dropdown" name="block_usershared" id="block_usershared" value="$instance['usershared']" options="$usershared_options"/>
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <label for="block_cacheexpire" class="xar-form-label">Expiration Time</label>
+                            <xar:data-input type="textbox" name="block_cacheexpire" id="block_cacheexpire" value="$instance['cacheexpire']" class="xar-form-textshort"/>
+                            (format hh:mm:ss) 0 = never expires
                         </div>
                     </fieldset>
                 </xar:if>
-            </div>
 
-            <div id="page-2" style="display: none">
+            <!-- Block Access Configuration -->
+            <xar:elseif condition="$tab eq 'access'"/>
+
                 <xar:if condition="$adminaccess">
-                    <h3>Access</h3>
                     <fieldset>
                         <legend>
                             Block Display Access
                         </legend>
-                        <!-- Remove this once all blocks are using the new paradigm -->
-                        <xar:if condition="!isset($instance['display_access'])">
-                            <xar:set name="dummy">1;$instance['display_access'] = array()</xar:set>                            
-                        </xar:if>
                         <xar:set name="propname">$instance['name'] . '_display'</xar:set>
                         <xar:data-input type="access" name="$propname" value="$instance['display_access']"/>
                     </fieldset>
@@ -233,10 +263,6 @@
                         <legend>
                             Block Modify Access
                         </legend>
-                        <!-- Remove this once all blocks are using the new paradigm -->
-                        <xar:if condition="!isset($instance['modify_access'])">
-                            <xar:set name="dummy">1;$instance['modify_access'] = array()</xar:set>                            
-                        </xar:if>
                         <xar:set name="propname">$instance['name'] . '_modify'</xar:set>
                         <xar:data-input type="access" name="$propname" value="$instance['modify_access']"/>
                     </fieldset>
@@ -244,21 +270,30 @@
                         <legend>
                             Block Delete Access
                         </legend>
-                        <!-- Remove this once all blocks are using the new paradigm -->
-                        <xar:if condition="!isset($instance['delete_access'])">
-                            <xar:set name="dummy">1;$instance['delete_access'] = array()</xar:set>                            
-                        </xar:if>
                         <xar:set name="propname">$instance['name'] . '_delete'</xar:set>
                         <xar:data-input type="access" name="$propname" value="$instance['delete_access']"/>
                     </fieldset>
                 </xar:if>
-            </div>
+
+            <!-- Custom tab supplied by current block -->
+            <xar:else/>
+                <!-- TODO -->
+                <xar:if condition="!empty($extra_fields)">
+                    #$extra_fields#
+                <xar:else/>
+                    <p>
+                        No extra settings for this block type.
+                    </p>
+                </xar:if>
+            </xar:if>
+
             <xar:if condition="$adminaccess OR !empty($instance['allowaccess'])">
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                        <input type="hidden" name="bid" id="bid" value="#$bid#" />
-                        <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <input type="hidden" name="bid" id="bid" value="#$bid#"/>
+                        <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright"/>
                     </div>
                 </fieldset>
             </xar:if>

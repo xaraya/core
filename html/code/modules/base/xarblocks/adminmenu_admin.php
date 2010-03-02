@@ -19,7 +19,7 @@
  */
 sys::import('modules.base.xarblocks.adminmenu');
 
-class AdminMenuBlockAdmin extends AdminMenuBlock implements iBlock
+class AdminmenuBlockAdmin extends AdminmenuBlock implements iBlock
 {
 /**
  * Modify Function to the Blocks Admin
