@@ -93,29 +93,18 @@ Class xarBlock extends Object implements IxarBlock
             return '';
         }
 
-        // @TODO: since $data comes from block tag params we should check input
-        /*
-        $isvalid = $block->checkInput();
-        if (!$isvalid) {
-            if ((bool)xarModVars::get('blocks', 'noexceptions')) return '';
-            // render array of invalid data
-            $blockinfo = $block->getInfo();
-        }
-        */
-
         // checkAccess for display method
         if (!$block->checkAccess('display')) {
+            // Set the output of the block in cache
+            if (!empty($cacheKey)) {
+                xarBlockCache::setCached($cacheKey, '');
+            }
             if (isset($block->display_access) && $block->display_access['failure']) {
                 // @TODO: render to an error/exception block?
                 return xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
             } else {
                 return '';
             }
-            // Set the output of the block in cache
-            if (!empty($cacheKey)) {
-                xarBlockCache::setCached($cacheKey, '');
-            }
-            return '';
         }
 
         // now we're safe to call the blocks display method
@@ -171,7 +160,7 @@ Class xarBlock extends Object implements IxarBlock
             // Render this block template data.
             $blockinfo['content'] = xarTplBlock(
                 $data['module'], $data['type'], $blockinfo['content'],
-                $blockinfo['_bl_block_template'],
+                $data['_bl_block_template'],
                 !empty($blockinfo['_bl_template_base']) ? $blockinfo['_bl_template_base'] : NULL
             );
         } else {
@@ -182,11 +171,10 @@ Class xarBlock extends Object implements IxarBlock
             }
             return "";
         }
-
         // Now wrap the block up in a box.
         // TODO: pass the group name into this function (param 2?) for the template path.
         // $blockinfo itself is passed to the outer template
-        $boxOutput = xarTpl_renderBlockBox($blockinfo, $blockinfo['_bl_box_template']);
+        $boxOutput = xarTpl_renderBlockBox($blockinfo, $data['_bl_box_template']);
 
         xarLogMessage("xarBlock::render: end $data[module]:$data[type]:$data[name]");
 
