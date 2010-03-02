@@ -23,11 +23,11 @@
         public $text_type           = 'Content';
         public $text_type_long      = 'Generic Content Block';
         public $allow_multiple      = true;
-        public $show_preview        = true;
 
         public $nocache             = 1;
         public $expire              = 0;
 
+        public $html_content        = '';
         public $content_text        = '';
         public $content_type        = 'text';
         public $hide_empty          = true;
@@ -44,7 +44,7 @@
  * @param $blockinfo array
  * @returns $blockinfo array
  */
- 
+
         function display(Array $data=array())
         {
             $data = parent::display($data);
@@ -59,7 +59,7 @@
                 // Not yet started.
                 return;
             }
-    
+
             // Special preparation for each content type.
             if ($data['content_type'] == 'text') {
             // Nothing special
