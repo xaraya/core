@@ -206,7 +206,6 @@
                                     </div>
                                 </xar:if>
                             </xar:loop>
-                            <!-- TODO: split the input here -->
                             <div class="xar-form-input-wrapper">
                                 <label for="block_template" title="#xarML('Block specific outer and inner templates')#" class="xar-form-label">
                                     Instance Template (optional):
@@ -275,11 +274,22 @@
                     </fieldset>
                 </xar:if>
 
+            <!-- Block help (optional) -->
+            <xar:elseif condition="$tab eq 'help'"/>
+
+                <xar:if condition="!empty($block_modify)">
+                    #$block_modify#
+                <xar:else/>
+                    <p>
+                        No help available for this block type.
+                    </p>
+                </xar:if>
+
             <!-- Custom tab supplied by current block -->
             <xar:else/>
                 <!-- TODO -->
-                <xar:if condition="!empty($extra_fields)">
-                    #$extra_fields#
+                <xar:if condition="!empty($block_modify)">
+                    #$block_modify#
                 <xar:else/>
                     <p>
                         No extra settings for this block type.
@@ -287,7 +297,7 @@
                 </xar:if>
             </xar:if>
 
-            <xar:if condition="$adminaccess OR !empty($instance['allowaccess'])">
+            <xar:if condition="($adminaccess OR !empty($instance['allowaccess'])) and $tab ne 'help'">
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="tab" id="tab" value="#$tab#"/>

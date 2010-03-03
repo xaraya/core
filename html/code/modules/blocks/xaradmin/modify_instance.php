@@ -134,19 +134,14 @@ function blocks_admin_modify_instance()
 
             if ($adminaccess) {
 
-                if (!empty($block)) {
-                    if (!empty($block->expire)) {
-                        $now = time();
-                        $soon = $block->expire - $now ;
-                        $instance['expirein'] = $soon;
-                        if ($now > $block->expire && $block->expire != 0) {
-                            $instance['expire'] = 0;
-                        } else {
-                            $instance['expire'] = $block->expire;
-                        }
+                if (!empty($block->expire)) {
+                    $now = time();
+                    $soon = $block->expire - $now ;
+                    $instance['expirein'] = $soon;
+                    if ($now > $block->expire && $block->expire != 0) {
+                        $instance['expire'] = 0;
                     } else {
-                       $instance['expire'] = 0;
-                       $instance['expirein'] = 0;
+                        $instance['expire'] = $block->expire;
                     }
                 } else {
                    $instance['expire'] = 0;
@@ -261,6 +256,48 @@ function blocks_admin_modify_instance()
 
         break;
 
+        case 'help':
+            // handle block help method
+            if (method_exists($block, 'help')) {
+                try {
+                    $blockhelp = $block->help();
+                    if (!empty($blockhelp)) {
+                        // if the method returned an array of data attempt to render
+                        // to template blocks/help-{blockType}.xt
+                        if (is_array($blockhelp)) {
+                            // Render the extra settings if necessary.
+                            // Again we check for an exception, this time in the template rendering
+                            try {
+                                $block_modify = xarTplBlock($blockinfo['module'], 'help-' . $blockinfo['type'], $blockhelp);
+                            } catch (Exception $e) {
+                                // @TODO: global flag to raise exceptions or not
+                                if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                                    $block_modify = '';
+                                } else {
+                                    //throw ($e);
+                                    $block_modify = '';
+                                }
+                            }
+                        // Legacy: old help functions return a string
+                        } elseif (is_string($blockhelp)) {
+                            $block_modify = $blockhelp;
+                        }
+                    }
+                } catch (Exception $e) {
+                    // @TODO: global flag to raise exceptions or not
+                    if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                        $block_modify = '';
+                    } else {
+                        //throw ($e);
+                        $block_modify = '';
+                    }
+                }
+            } else {
+                $block_modify = '';
+            }
+
+        break;
+
         default:
 
         break;
@@ -299,6 +336,16 @@ function blocks_admin_modify_instance()
                 );
         }
     }
+    // show a help tab if the block has a help method
+    if (method_exists($block, 'help')) {
+        $blocktabs['help'] = array(
+            'url' => xarServer::getCurrentURL(array('tab' => 'help')),
+            'title' => xarML('Help with block configuration'),
+            'label' => xarML('Help'),
+            'active' => $tab == 'help',
+        );
+    }
+
     $data['blocktabs'] = $blocktabs;
     $data['tab'] = $tab;
 

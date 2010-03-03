@@ -154,6 +154,18 @@ class BasicBlock extends ObjectDescriptor implements iBlock
         return $this::$access_property->check($args);
     }
 
+    /*
+    // optionally display a help tab in the modify_instance UI
+    // only include this method if you intend to supply help information
+    // requires a template named help-{blockType}.xt in xartemplates/blocks
+    // containing the help information for the block type
+    public function help()
+    {
+        // this method must return an array of data
+        return $this->getInfo();
+    }
+    */
+
 }
 
 interface iBlock
