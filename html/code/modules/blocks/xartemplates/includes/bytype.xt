@@ -21,8 +21,8 @@
             <xar:if condition="$thistype ne $currenttype">
                 <tr>
                     <td colspan="6">
-                        <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
-                            <b>#$loop:item['type']#</b>
+                        <a style="font-size: 11pt" href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
+                            #$loop:item['type']#
                         </a>
                     </td>
                 </tr>

@@ -21,8 +21,8 @@
             <xar:if condition="$thisgroup ne $currentgroup">
                 <tr>
                     <td colspan="6">
-                        <a href="#$loop:item['groupurl']#" title="#xarML('View block group details')#">
-                            <b>#$loop:item['group']#</b>
+                        <a style="font-size: 11pt" href="#$loop:item['groupurl']#" title="#xarML('View block group details')#">
+                            #$loop:item['group']#
                         </a>
                     </td>
                 </tr>
