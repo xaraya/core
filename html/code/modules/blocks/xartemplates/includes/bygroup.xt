@@ -13,7 +13,7 @@
             <th>Type</th>
             <th>Template</th>
             <th>Status</th>
-            <th>Actions</th>
+            <th class="xar-align-right">Actions</th>
         </tr>
         <xar:set name="currentgroup">'__nothing'</xar:set>
         <xar:loop name="$blocks">
@@ -58,7 +58,7 @@
                 </td>
                 <td class="xar-align-center">#$state_desc[$loop:item['state']]#</td>
                 <xar:if condition="xarModVars::get('blocks','use_module_icons')">
-                    <td class="xar-item-actions">
+                    <td class="xar-item-actions xar-align-right">
                         <a href="#xarModURL('blocks','admin','modify_instance',array('bid' =&gt; $loop:item.bid))#" title="#xarML('Modify')#">
                             <img src="#$icon_modify#" alt="#xarML('Modify')#" />
                         </a>
@@ -68,7 +68,7 @@
                         </a>
                     </td>
                 <xar:else/>
-                    <td class="xar-align-center">
+                    <td class="xar-align-right">
                         <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                             Edit
                         </a>|
