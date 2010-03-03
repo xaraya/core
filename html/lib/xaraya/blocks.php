@@ -73,9 +73,17 @@ Class xarBlock extends Object implements IxarBlock
         // TODO: this looks weird
         xarCoreCache::setCached('Security.Variables', 'currentmodule', $data['module']);
 
-        // Load the block file
-        if (!xarMod::apiFunc('blocks', 'admin', 'load',
-            array('module' => $data['module'], 'type' => $data['type'], 'func' => 'display'))) return;
+        // Attempt to load the block file
+        try {
+            xarMod::apiFunc('blocks', 'admin', 'load',
+                array('module' => $data['module'], 'type' => $data['type'], 'func' => 'display'));
+        } catch (Exception $e) {
+            if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                return '';
+            } else {
+                throw($e);
+            }
+        }
 
         // @FIXME: class name should be unique
         $className = ucfirst($data['type']) . 'Block';
@@ -110,17 +118,13 @@ Class xarBlock extends Object implements IxarBlock
         try {
             $blockinfo = $block->display();
         } catch (Exception $e) {
-            // @TODO: global flag to raise exceptions or not
-            // @TODO: render to an error/exception block?
-            //if ((bool)xarModVars::get('blocks', 'noexceptions')) return '';
-            //throw ($e);
-            return '';
+            if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                return '';
+            } else {
+                throw ($e);
+            }
         }
 
-
-        // FIXME: <mrb> - <chris> See TODO: above re exceptions
-        // We somehow need to be able to raise exceptions here. We can't
-        //       just ignore things which are wrong.
         // A block is permitted to return empty, signifying it has nothing to display
         // if it's empty, we have nothing to display either
         if (empty($blockinfo) || !is_array($blockinfo)) {
@@ -157,12 +161,20 @@ Class xarBlock extends Object implements IxarBlock
                 $blockinfo['content']['blockgroupname'] = $blockinfo['group'];
             }
 
-            // Render this block template data.
-            $blockinfo['content'] = xarTplBlock(
-                $data['module'], $data['type'], $blockinfo['content'],
-                $data['_bl_block_template'],
-                !empty($blockinfo['_bl_template_base']) ? $blockinfo['_bl_template_base'] : NULL
-            );
+            // Attempt to render this block template data.
+            try {
+                $blockinfo['content'] = xarTplBlock(
+                    $data['module'], $data['type'], $blockinfo['content'],
+                    $data['_bl_block_template'],
+                    !empty($blockinfo['_bl_template_base']) ? $blockinfo['_bl_template_base'] : NULL
+                );
+            } catch (Exception $e) {
+                if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                    return '';
+                } else {
+                    throw ($e);
+                }
+            }
         } else {
             // hidden block, or no content to display
             // Set the output of the block in cache
@@ -171,10 +183,20 @@ Class xarBlock extends Object implements IxarBlock
             }
             return "";
         }
+
         // Now wrap the block up in a box.
         // TODO: pass the group name into this function (param 2?) for the template path.
         // $blockinfo itself is passed to the outer template
-        $boxOutput = xarTpl_renderBlockBox($blockinfo, $data['_bl_box_template']);
+        // Attempt to render this block template data.
+        try {
+            $boxOutput = xarTpl_renderBlockBox($blockinfo, $data['_bl_box_template']);
+        } catch (Exception $e) {
+            if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                return '';
+            } else {
+                throw ($e);
+            }
+        }
 
         xarLogMessage("xarBlock::render: end $data[module]:$data[type]:$data[name]");
 
