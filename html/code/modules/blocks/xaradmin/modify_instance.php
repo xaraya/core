@@ -48,7 +48,6 @@ function blocks_admin_modify_instance()
     }
     // make sure we instantiated a block,
     if (empty($block)) {
-        // return classname not found (this is always class {$type}Block)
         throw new ClassNotFoundException($className);
     }
 
@@ -103,8 +102,7 @@ function blocks_admin_modify_instance()
                     if ((bool)xarModVars::get('blocks', 'noexceptions')) {
                         $block_modify = '';
                     } else {
-                        //throw ($e);
-                        $block_modify = '';
+                        throw ($e);
                     }
                 }
             }
@@ -113,8 +111,7 @@ function blocks_admin_modify_instance()
             if ((bool)xarModVars::get('blocks', 'noexceptions')) {
                 $block_modify = '';
             } else {
-                //throw ($e);
-                $block_modify = '';
+                throw ($e);
             }
         }
     }
@@ -274,8 +271,7 @@ function blocks_admin_modify_instance()
                                 if ((bool)xarModVars::get('blocks', 'noexceptions')) {
                                     $block_modify = '';
                                 } else {
-                                    //throw ($e);
-                                    $block_modify = '';
+                                    throw ($e);
                                 }
                             }
                         // Legacy: old help functions return a string
@@ -288,8 +284,7 @@ function blocks_admin_modify_instance()
                     if ((bool)xarModVars::get('blocks', 'noexceptions')) {
                         $block_modify = '';
                     } else {
-                        //throw ($e);
-                        $block_modify = '';
+                        throw ($e);
                     }
                 }
             } else {
