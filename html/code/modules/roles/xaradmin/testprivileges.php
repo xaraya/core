@@ -52,7 +52,7 @@ function roles_admin_testprivileges()
     // we want to do test
     if (!empty($test)) {
         // get the mask to test against
-        $mask = xarMasks::getMask($name);
+        $mask = xarSecurity::getMask($name);
         $component = $mask->getComponent();
         // test the mask against the role
         $testresult = xarMasks::xarSecurityCheck($name, 0, $component, 'All', $mask->getModule(), $role->getName());

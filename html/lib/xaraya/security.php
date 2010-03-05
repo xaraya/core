@@ -375,7 +375,7 @@ function xarPrivExists($name)
 function xarMaskExists($name,$module="All",$component="All")
 {
     if ($mask == "All") $mask = 0;
-    $mask = xarMasks::getMask($name,$module,$component,true);
+    $mask = xarSecurity::getMask($name,$module,$component,true);
     if ($mask) return true;
     else return false;
 }
@@ -449,7 +449,7 @@ function xarUnregisterMask($name)
 function xarRemoveMasks($module)
 {
     if ($module == "All") {
-        $modid = xarMasks::PRIVILEGES_ALL;
+        $modid = xarSecurity::PRIVILEGES_ALL;
     } elseif ($module == null) {
         $modid = null;
     } else {
