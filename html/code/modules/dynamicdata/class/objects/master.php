@@ -81,6 +81,10 @@ class DataObjectMaster extends Object
 
     public $isgrouped     = 0;          // indicates that we have operations (COUNT, SUM, etc.) on properties
 
+    // Default access conditions 
+    public $display_access      = array('group' => 0, 'level' => 200, 'failure' => 0);
+    public $modify_access       = array('group' => 0, 'level' => 700, 'failure' => 0);
+    public $delete_access       = array('group' => 0, 'level' => 700, 'failure' => 0);
 // TODO: relink objects, properties and datastores in __wakeup() methods after unserialize()
 
     /**
@@ -196,6 +200,14 @@ class DataObjectMaster extends Object
         // build the list of relevant data stores where we'll get/set our data
         if(count($this->datastores) == 0 && count($this->properties) > 0)
            $this->getDataStores();
+           
+        // Explode the configuration
+        try{
+            $this->configuration = unserialize($this->config);
+            if (isset($this->configuration['display_access'])) $this->display_access = $this->configuration['display_access'];
+            if (isset($this->configuration['modify_access'])) $this->modify_access = $this->configuration['modify_access'];
+            if (isset($this->configuration['delete_access'])) $this->delete_access = $this->configuration['delete_access'];
+        } catch (Exception $e) {}
     }
 
     public function setFieldList($fieldlist=array(),$status=array())
@@ -994,10 +1006,11 @@ class DataObjectMaster extends Object
     public function getActionURL($action = '', $itemid = null, $extra = array())
     {
         // if we have a cached URL already, use that
-        if (!empty($itemid) && !empty($this->cached_urls[$action])) {
-            $url = str_replace('=<itemid>', '='.$itemid, $this->cached_urls[$action]);
-            return $url;
-        }
+        // FIXME: this can't work if we use $extra
+//        if (!empty($itemid) && !empty($this->cached_urls[$action])) {
+//            $url = str_replace('=<itemid>', '='.$itemid, $this->cached_urls[$action]);
+//            return $url;
+//        }
 
         // get URL for this object and action
         $url = xarObject::getActionURL($this, $action, $itemid, $extra);
@@ -1058,6 +1071,27 @@ class DataObjectMaster extends Object
         sys::import('modules.dynamicdata.class.objects.links');
         // we'll skip the 'info' here, unless explicitly asked for 'all'
         return DataObjectLinks::getLinkedObjects($this, $linktype, $itemid);
+    }
+
+    public function checkAccess($access)
+    {
+        if (empty($access)) throw new EmptyParameterException('Access method');
+        $access_method = $access . '_access';
+        $access = isset($this->$access_method) ? $this->$access_method :
+            array('group' => 0, 'level' => 100, 'failure' => 0);
+        // Decide whether this block is displayed to the current user
+        $args = array(
+            'module' => $this->module,
+            'component' => 'Block',
+            'instance' => $this->type . ":" . $this->name . ":" . $this->bid,
+            'group' => $access['group'],
+            'level' => $access['level'],
+        );
+        if (!isset($this::$access_property)) {
+            sys::import('modules.dynamicdata.class.properties.master');
+            $this::$access_property = DataPropertyMaster::getProperty(array('name' => 'access'));
+        }
+        return $this::$access_property->check($args);
     }
 }
 ?>

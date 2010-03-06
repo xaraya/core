@@ -36,6 +36,8 @@ function dynamicdata_admin_update($args)
     if(!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('preview',    'isset', $preview,     0, XARVAR_NOT_REQUIRED)) {return;}
 
+    if (!xarVarFetch('tab', 'pre:trim:lower:str:1', $data['tab'], 'edit', XARVAR_NOT_REQUIRED)) return;
+
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
@@ -45,70 +47,98 @@ function dynamicdata_admin_update($args)
                                          'table'    => $table,
                                          'itemid'   => $itemid));
     $itemid = $myobject->getItem();
-    // if we're editing a dynamic property, save its property type to cache
-    // for correct processing of the configuration rule (ValidationProperty)
-    if ($myobject->objectid == 2) {
-        xarVarSetCached('dynamicdata','currentproptype', $myobject->properties['type']);
-    }
 
-    $isvalid = $myobject->checkInput(array(), 0, 'dd');
+    switch ($data['tab']) {
 
-    // recover any session var information
-    $data = xarMod::apiFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
-    extract($data);
+        case 'edit':
 
-    if (!empty($preview) || !$isvalid) {
-        $data = array_merge($data, xarMod::apiFunc('dynamicdata','admin','menu'));
-        $data['object'] = & $myobject;
-
-        $data['objectid'] = $myobject->objectid;
-        $data['itemid'] = $itemid;
-        $data['authid'] = xarSecGenAuthKey();
-        $data['preview'] = $preview;
-//        $data['tplmodule'] = $tplmodule;
-        if (!empty($return_url)) {
-            $data['return_url'] = $return_url;
-        }
-
-        // Makes this hooks call explictly from DD - why ???
-        ////$modinfo = xarMod::getInfo($myobject->moduleid);
-        //$modinfo = xarMod::getInfo(182);
-        $myobject->callHooks('modify');
-        $data['hooks'] = $myobject->hookoutput;
-
-        return xarTplModule($tplmodule,'admin','modify', $data);
-    }
-
-    // Valid and not previewing, update the object
-
-    $itemid = $myobject->updateItem();
-    if (!isset($itemid)) return; // throw back
-
-     // If we are here then the update is valid: reset the session var
-    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
-
-    // special case for dynamic objects themselves
-    if ($myobject->objectid == 1) {
-        // check if we need to set a module alias (or remove it) for short URLs
-        $name = $myobject->properties['name']->value;
-        $alias = xarModGetAlias($name);
-        $isalias = $myobject->properties['isalias']->value;
-        if (!empty($isalias)) {
-            // no alias defined yet, so we create one
-            if ($alias == $name) {
-                $args = array('modName'=>'dynamicdata', 'aliasModName'=> $name);
-                xarMod::apiFunc('modules', 'admin', 'add_module_alias', $args);
+            // if we're editing a dynamic property, save its property type to cache
+            // for correct processing of the configuration rule (ValidationProperty)
+            if ($myobject->objectid == 2) {
+                xarVarSetCached('dynamicdata','currentproptype', $myobject->properties['type']);
             }
-        } else {
-            // this was a defined alias, so we remove it
-            if ($alias == 'dynamicdata') {
-                $args = array('modName'=>'dynamicdata', 'aliasModName'=> $name);
-                xarMod::apiFunc('modules', 'admin', 'delete_module_alias', $args);
+
+            $isvalid = $myobject->checkInput(array(), 0, 'dd');
+
+            // recover any session var information
+            $data = xarMod::apiFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
+            extract($data);
+
+            if (!empty($preview) || !$isvalid) {
+                $data = array_merge($data, xarMod::apiFunc('dynamicdata','admin','menu'));
+                $data['object'] = & $myobject;
+
+                $data['objectid'] = $myobject->objectid;
+                $data['itemid'] = $itemid;
+                $data['authid'] = xarSecGenAuthKey();
+                $data['preview'] = $preview;
+        //        $data['tplmodule'] = $tplmodule;
+                if (!empty($return_url)) {
+                    $data['return_url'] = $return_url;
+                }
+
+                // Makes this hooks call explictly from DD - why ???
+                ////$modinfo = xarMod::getInfo($myobject->moduleid);
+                //$modinfo = xarMod::getInfo(182);
+                $myobject->callHooks('modify');
+                $data['hooks'] = $myobject->hookoutput;
+
+                return xarTplModule($tplmodule,'admin','modify', $data);
             }
-        }
 
+            // Valid and not previewing, update the object
+
+            $itemid = $myobject->updateItem();
+            if (!isset($itemid)) return; // throw back
+
+             // If we are here then the update is valid: reset the session var
+            xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
+
+            // special case for dynamic objects themselves
+            if ($myobject->objectid == 1) {
+                // check if we need to set a module alias (or remove it) for short URLs
+                $name = $myobject->properties['name']->value;
+                $alias = xarModGetAlias($name);
+                $isalias = $myobject->properties['isalias']->value;
+                if (!empty($isalias)) {
+                    // no alias defined yet, so we create one
+                    if ($alias == $name) {
+                        $args = array('modName'=>'dynamicdata', 'aliasModName'=> $name);
+                        xarMod::apiFunc('modules', 'admin', 'add_module_alias', $args);
+                    }
+                } else {
+                    // this was a defined alias, so we remove it
+                    if ($alias == 'dynamicdata') {
+                        $args = array('modName'=>'dynamicdata', 'aliasModName'=> $name);
+                        xarMod::apiFunc('modules', 'admin', 'delete_module_alias', $args);
+                    }
+                }
+
+            }
+
+        case 'access':
+            // only admins can modify block access
+            $adminaccess = xarSecurityCheck('',0,'All',$myobject->objectid . ":" . $myobject->name . ":" . "All",0,'',0,800);
+
+            if (!$adminaccess)
+                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
+
+            // Get the object's configuration
+            $config = unserialize($myobject->config);
+            
+            // Get the access information from the template
+            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+            $isvalid = $accessproperty->checkInput($myobject->name . '_display');
+            $config['display_access'] = $accessproperty->value;
+            $isvalid = $accessproperty->checkInput($myobject->name . '_modify');
+            $config['modify_access'] = $accessproperty->value;
+            $isvalid = $accessproperty->checkInput($myobject->name . '_delete');
+            $config['delete_access'] = $accessproperty->value;
+            $configstring = serialize($config);
+            $itemid = $myobject->updateItem(array('config' => $configstring));
+        break;
     }
-
+    
     if (!empty($return_url)) {
         xarResponse::redirect($return_url);
     } elseif ($myobject->objectid == 2) { // for dynamic properties, return to modifyprop

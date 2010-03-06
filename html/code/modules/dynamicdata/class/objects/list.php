@@ -728,6 +728,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         // extra options when showing the dynamic objects themselves
         if ($allow_edit && $this->objectid == 1) {
+            $options['access'] = array('otitle' => xarML('Access'),
+                                            'oicon'  => 'privileges.png',
+                                            'olink'  => $this->getActionURL('modify', $itemid, array('tab' => 'access')),
+                                            'ojoin'  => '|');
             $options['modifyprops'] = array('otitle' => xarML('Properties'),
                                             'oicon'  => 'modify-config.png',
                                             'olink'  => $this->getActionURL('modifyprop', $itemid),

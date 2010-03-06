@@ -172,7 +172,7 @@ class xarObject extends Object implements IxarObject
         switch ($object->linktype)
         {
             case 'object':
-                $link = self::getObjectURL($object, $action, $itemid);
+                $link = self::getObjectURL($object, $action, $itemid, $extra);
                 break;
 
             case 'current':
@@ -180,13 +180,13 @@ class xarObject extends Object implements IxarObject
                 break;
 /*
             case 'other':
-                $link = self::getOtherURL($object, $action, $itemid);
+                $link = self::getOtherURL($object, $action, $itemid, $extra);
                 break;
 */
             case 'user':
             case 'admin':
             default:
-                $link = self::getModuleURL($object, $action, $itemid);
+                $link = self::getModuleURL($object, $action, $itemid, $extra);
                 break;
         }
 
@@ -197,9 +197,9 @@ class xarObject extends Object implements IxarObject
      * Generate Module URL for a specific action on an object
      * e.g. use module URLs via the dynamicdata or dyn_example module
      */
-    static function getModuleURL($object, $action = '', $itemid = null)
+    static function getModuleURL($object, $action = '', $itemid = null, $extra=array())
     {
-        $urlargs = array();
+        $urlargs = $extra;
         if (!empty($object->table)) {
             $urlargs['table'] = $object->table;
         }
@@ -253,9 +253,9 @@ class xarObject extends Object implements IxarObject
      * Generate Object URL for a specific action on an object
      * e.g. use object URLs via index.php?object=sample
      */
-    static function getObjectURL($object, $action = '', $itemid = null)
+    static function getObjectURL($object, $action = '', $itemid = null ,$extra=array())
     {
-        $urlargs = array();
+        $urlargs = $extra;
         if (!empty($object->table)) {
             $urlargs['table'] = $object->table;
         }
@@ -284,7 +284,7 @@ class xarObject extends Object implements IxarObject
                 $link = xarServer::getObjectURL($object->name, $action, $urlargs);
                 break;
         }
-
+        
         return $link;
     }
 

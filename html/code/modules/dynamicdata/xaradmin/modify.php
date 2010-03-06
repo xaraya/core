@@ -39,10 +39,10 @@ function dynamicdata_admin_modify($args)
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('preview',  'isset', $preview,     NULL, XARVAR_DONT_SET)) {return;}
 
-
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
+    if (!xarVarFetch('tab', 'pre:trim:lower:str:1', $data['tab'], 'edit', XARVAR_NOT_REQUIRED)) return;
 
-    $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
+    $object = DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,
                                          'moduleid' => $module_id,
                                          'itemtype' => $itemtype,
@@ -50,48 +50,72 @@ function dynamicdata_admin_modify($args)
                                          'table'    => $table,
                                          'itemid'   => $itemid,
                                          'tplmodule' => $tplmodule));
-    $args = $myobject->toArray();
-
-    // Security check
-    if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$args['itemid'])) return;
+    $args = $object->toArray();
 
     if ($notfresh) {
-        $isvalid = $myobject->checkInput();
+        $isvalid = $object->checkInput();
     } else {
-        $myobject->getItem();
+        $object->getItem();
     }
-    $data['object'] = & $myobject;
+    $data['object'] = $object;
 
-    // if we're editing a dynamic property, save its property type to cache
-    // for correct processing of the configuration rule (ValidationProperty)
-    if ($myobject->objectid == 2) {
-        xarVarSetCached('dynamicdata','currentproptype', $myobject->properties['type']);
+    switch ($data['tab']) {
+
+        case 'edit':
+
+            // Security check
+            if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$args['itemid'])) return;
+
+            // if we're editing a dynamic property, save its property type to cache
+            // for correct processing of the configuration rule (ValidationProperty)
+            if ($object->objectid == 2) {
+                xarVarSetCached('dynamicdata','currentproptype', $object->properties['type']);
+            }
+
+            // if we're editing a dynamic object, check its own visibility
+            if ($object->objectid == 1 && $object->itemid > 3) {
+                // CHECKME: do we always need to load the object class to get its visibility ?
+                $tmpobject = DataObjectMaster::getObject(array('objectid' => $object->itemid));
+                // override the default visibility and moduleid
+                $object->visibility = $tmpobject->visibility;
+                $object->moduleid = $tmpobject->moduleid;
+                unset($tmpobject);
+            }
+
+            $data['itemid'] = $args['itemid'];
+            $data['preview'] = $preview;
+
+            // Makes this hooks call explictly from DD - why ???
+            ////$modinfo = xarMod::getInfo($args['moduleid']);
+            //$modinfo = xarMod::getInfo(182);
+            $object->callHooks('modify');
+            $data['hooks'] = $object->hookoutput;
+
+            xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $object->label));
+
+        break;
+
+        case 'access':
+            // user needs admin access to modify block instance (name, title, etc)
+            $data['adminaccess'] = xarSecurityCheck('',0,'All',$object->objectid . ":" . $name . ":" . "$itemid",0,'',0,800);
+
+            // gotta be an admin to access dataobject access settings
+            if (!$data['adminaccess'])
+                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
+            
+            // Get the object represented by our item
+            $object = DataObjectMaster::getObject(array('name' => $object->properties['name']->value));
+            $data['display_access'] = $object->display_access;
+            $data['modify_access']  = $object->modify_access;
+            $data['delete_access']  = $object->delete_access;
+
+        break;
     }
-
-    // if we're editing a dynamic object, check its own visibility
-    if ($myobject->objectid == 1 && $myobject->itemid > 3) {
-        // CHECKME: do we always need to load the object class to get its visibility ?
-        $tmpobject = DataObjectMaster::getObject(array('objectid' => $myobject->itemid));
-        // override the default visibility and moduleid
-        $myobject->visibility = $tmpobject->visibility;
-        $myobject->moduleid = $tmpobject->moduleid;
-        unset($tmpobject);
-    }
-
-    $data['objectid'] = $args['objectid'];
-    $data['itemid'] = $args['itemid'];
-    $data['authid'] = xarSecGenAuthKey();
-    $data['preview'] = $preview;
+    
     $data['tplmodule'] = $args['tplmodule'];   //TODO: is this needed
-
-    // Makes this hooks call explictly from DD - why ???
-    ////$modinfo = xarMod::getInfo($args['moduleid']);
-    //$modinfo = xarMod::getInfo(182);
-    $myobject->callHooks('modify');
-    $data['hooks'] = $myobject->hookoutput;
-
-    xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $myobject->label));
-
+    $data['objectid'] = $args['objectid'];
+    $data['authid'] = xarSecGenAuthKey();
+            
     if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xt') ||
         file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xt')) {
         return xarTplModule($args['tplmodule'],'admin','modify',$data,$args['template']);
