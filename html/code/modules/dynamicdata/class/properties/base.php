@@ -15,7 +15,6 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
 /**
  * Base Class for Dynamic Properties
  *
- * @todo is this abstract?
  * @todo the visibility of most of the attributes can probably be protected
  */
 class DataProperty extends Object implements iDataProperty

@@ -14,3 +14,7 @@ UPDATE `xar_dynamic_configurations` SET `label` = REPLACE(label, "Add/Delete Row
 UPDATE `xar_dynamic_properties` SET `configuration` = REPLACE(configuration, 's:19:"initialization_rows";', 's:24:"initialization_addremove";');
 
 /* Removing the DenyBlocks privilege */
+
+/* Removing allmasks with component Block */
+
+/* Adding configuration info to objects 1 and 2 */
