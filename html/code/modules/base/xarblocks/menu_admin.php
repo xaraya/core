@@ -69,6 +69,14 @@ class MenuBlockAdmin extends MenuBlock implements iBlock
         if (!xarVarFetch('marker',         'str:1',    $content['marker'], $this->marker, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('showback',       'checkbox', $content['showback'], false, XARVAR_NOT_REQUIRED)) return;
 
+        // Trim the names in the modulelist
+        if (!empty($content['modulelist'])) {
+            $temp1 = explode(',',$content['modulelist']);
+            $temp2 = array();
+            foreach ($temp1 as $modulename) $temp2[] = trim($modulename);
+            $content['modulelist'] = implode(',',$temp2);
+        }
+
         // User links.
         $content['lines'] = array();
         $c = 1;
