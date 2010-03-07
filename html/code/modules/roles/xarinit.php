@@ -148,12 +148,6 @@ function roles_activate()
     xarModVars::set('roles', 'allowemail', false);
     xarModVars::set('roles', 'requirevalidation', true);
 
-    /*
-    // set the current session information to the right anonymous id
-    // TODO: make the setUserInfo a class static in xarSession.php
-    xarSession_setUserInfo($role->getID(), 0);
-    */
-
     // --------------------------------------------------------
     // Register block types
     xarMod::apiFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'online'));
