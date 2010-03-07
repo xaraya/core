@@ -44,9 +44,11 @@ function roles_admin_addmember()
         return xarTplModule('roles','user','errors',array('layout' => 'self_assignment'));
 
     // check that this assignment hasn't already been made
+    if ($member->isParent($role))
         return xarTplModule('roles','user','errors',array('layout' => 'duplicate_assignment'));
 
     // check that the parent is not already a child of the child
+    if ($role->isAncestor($member))
         return xarTplModule('roles','user','errors',array('layout' => 'circular_assignment'));
 
     // assign the child to the parent and bail if an error was thrown

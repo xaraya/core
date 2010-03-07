@@ -386,5 +386,13 @@ class MenuBlock extends BasicBlock implements iBlock
         );
         return $data;
     }
+        // Trim the names in the modulelist
+        if (!empty($content['modulelist'])) {
+            $temp1 = explode(',',$content['modulelist']);
+            $temp2 = array();
+            foreach ($temp1 as $modulename) $temp2[] = trim($modulename);
+            $content['modulelist'] = implode(',',$temp2);
+        }
+        
 }
 ?>
