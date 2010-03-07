@@ -700,14 +700,22 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // Assume normal rules for access control, i.e. Delete > Edit > Read
         if ($is_user && xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid))  {
             $allow_delete = 1;
+            $allow_add = 1;
+            $allow_edit = 1;
+            $allow_read = 1;
+        } elseif ($is_user && xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+            $allow_delete = 0;
+            $allow_add = 1;
             $allow_edit = 1;
             $allow_read = 1;
         } elseif ($is_user && xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
             $allow_delete = 0;
+            $allow_add = 0;
             $allow_edit = 1;
             $allow_read = 1;
         } elseif (xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
             $allow_delete = 0;
+            $allow_add = 0;
             $allow_edit = 0;
             $allow_read = 1;
         } else {
@@ -741,6 +749,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                                           'olink'  => $this->getActionURL('viewitems', $itemid),
                                           'ojoin'  => '|'
                                          );
+        }
+        if ($allow_add)  {
+            $options['clone'] = array('otitle' => xarML('Clone'),
+                                       'oicon'  => 'add.png',
+                                       'olink'  => $this->getActionURL('modify', $itemid, array('tab' => 'clone')),
+                                       'ojoin'  => '|');
         }
         if ($allow_delete)  {
             $options['delete'] = array('otitle' => xarML('Delete'),

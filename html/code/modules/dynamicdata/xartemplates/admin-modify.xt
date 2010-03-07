@@ -167,6 +167,67 @@
                   </fieldset>
                 </xar:if>
             </form>
+        <xar:elseif condition="$tab eq 'clone'"/>
+            <h2>
+                <xar:if condition="!empty($objectid) and $objectid eq 1">
+                    Clone the object: #$object:properties.label:value#
+                    <xar:set name="editlink">xarModURL('dynamicdata','admin','modify',array('itemid' => $objectid))</xar:set>
+                    &#160;<a href="#$editlink#" title="Modify DataObject #$object:properties.label:value#">
+                        <img src="#xarTplGetImage('icons/modify.png', 'base')#" width="16" height="16" alt="modify"/>
+                    </a>
+                    <xar:set name="proplink">xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $object->itemid))</xar:set>
+                    &#160;<a href="#$proplink#" title="Modify DataProperties for #$object:properties.label:value#">
+                        <img src="#xarTplGetImage('icons/modify-config.png', 'base')#" width="16" height="16" alt="modifyprop"/>
+                    </a>
+                    <xar:set name="itemslink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->itemid))</xar:set>
+                    &#160;<a href="#$itemslink#" title="View Items for #$object:properties.label:value#">
+                        <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="viewitems"/>
+                    </a>
+                    <xar:set name="exportlink">xarModURL('dynamicdata','util','export',array('objectid' => $object->itemid))</xar:set>
+                    &#160;<a href="#$exportlink#" title="Export Object Definition for #$object:properties.label:value#">
+                        <img src="#xarTplGetImage('icons/export-xml.png', 'base')#" width="16" height="16" alt="export"/>
+                    </a>
+                <xar:else/>
+                    Modify Item #$object:itemid# in #$object:label#&#160;
+                    <a href="#$viewlink#" title="View #$object:label#">
+                        <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                    </a>
+                </xar:if>
+            </h2>
+            <form method="post" action="&xar-modurl-dynamicdata-admin-update;">
+                <xar:if condition="$adminaccess">
+                    <fieldset>
+                        <legend>
+                            Clone this object
+                        </legend>
+                        Do you want to create a copy of the dataobject #$object:properties.name:value# (#$object:properties.label:value#)?
+                        <div>
+                            Name for the new object:&#160;<input type="textbox" name="newname" value="#$object:properties.name:value#_copy"/>
+                        </div>
+                        <div class="xar-align-center">
+                            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                            <input type="hidden" name="tab" id="tab" value="clone"/>
+                            <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
+                            <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+                            <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
+                            <xar:if condition="!empty($return_url)">
+                                <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                            </xar:if>
+                            <xar:var name="label">Clone</xar:var>
+                            <xar:button type="submit" label="$label" class="xar-margin-thickleft"/>
+                            &#160;
+                            <xar:var name="label">Cancel</xar:var>
+                            <xar:button type="cancel" label="$label" class="xar-margin-thickleft"/>
+                        </div>
+                        <xar:if condition="!empty($objectid) and $objectid eq 2">
+                            <p>
+                                <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#">
+                                    Edit configuration</a>
+                            </p>
+                        </xar:if>
+                  </fieldset>
+                </xar:if>
+            </form>
         </xar:if>
     </div>
 </xar:template>

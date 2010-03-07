@@ -117,7 +117,7 @@ function dynamicdata_admin_update($args)
             }
 
         case 'access':
-            // only admins can modify block access
+            // only admins can change access rules
             $adminaccess = xarSecurityCheck('',0,'All',$myobject->objectid . ":" . $myobject->name . ":" . "All",0,'',0,800);
 
             if (!$adminaccess)
@@ -136,6 +136,47 @@ function dynamicdata_admin_update($args)
             $config['delete_access'] = $accessproperty->value;
             $configstring = serialize($config);
             $itemid = $myobject->updateItem(array('config' => $configstring));
+        break;
+
+        case 'clone':
+            // only admins can change access rules
+            $adminaccess = xarSecurityCheck('',0,'All',$myobject->objectid . ":" . $myobject->name . ":" . "All",0,'',0,800);
+
+            if (!$adminaccess)
+                return xarTplModule('privileges','user','errors', array('layout' => 'no_privileges'));
+
+            $name = $myobject->properties['name']->getValue();
+            $myobject->properties['name']->setValue();
+            if(!xarVarFetch('newname',   'str', $newname,   "", XARVAR_NOT_REQUIRED)) {return;}
+            if (empty($newname)) $newname = $name . "_copy";
+            $newname = strtolower(str_ireplace(" ", "_", $newname));
+            
+            // Check if this object already exists
+            $testobject = DataObjectMaster::getObject(array('name' => $newname));
+            if (!empty($testobject->name)) {
+                return xarTplModule('dynamicdata','user','errors', array('layout' => 'duplicate_name', 'newname' => $newname));
+            }
+            
+            $itemtype = $myobject->getNextItemtype(array('moduleid' => $myobject->properties['module_id']->getValue()));
+            $myobject->properties['name']->setValue($newname);
+            $myobject->properties['label']->setValue(ucfirst($newname));
+            $myobject->properties['itemtype']->setValue($itemtype);
+            $newitemid = $myobject->createItem(array('itemid'=> 0));
+            
+            $oldobject = DataObjectMaster::getObject(array('objectid' => $itemid));
+            foreach ($oldobject->properties as $property) {
+                $fields['name'] = $property->name;
+                $fields['label'] = $property->label;
+                $fields['objectid'] = $newitemid;
+                $fields['type'] = $property->type;
+                $fields['defaultvalue'] = $property->defaultvalue;
+                $fields['source'] = $property->source;
+                $fields['status'] = $property->status;
+                $fields['seq'] = $property->seq;
+                $fields['configuration'] = $property->configuration;
+                xarMod::apiFunc('dynamicdata','admin','createproperty',$fields);
+            }
+            
         break;
     }
     

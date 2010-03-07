@@ -96,7 +96,7 @@ function dynamicdata_admin_modify($args)
         break;
 
         case 'access':
-            // user needs admin access to modify block instance (name, title, etc)
+            // user needs admin access to changethe access rules
             $data['adminaccess'] = xarSecurityCheck('',0,'All',$object->objectid . ":" . $name . ":" . "$itemid",0,'',0,800);
 
             // gotta be an admin to access dataobject access settings
@@ -109,6 +109,12 @@ function dynamicdata_admin_modify($args)
             $data['modify_access']  = $object->modify_access;
             $data['delete_access']  = $object->delete_access;
 
+        break;
+
+        case 'clone':
+            // user needs admin access to changethe access rules
+            $data['adminaccess'] = xarSecurityCheck('',0,'All',$object->objectid . ":" . $name . ":" . "$itemid",0,'',0,800);
+            $data['name'] = $object->properties['name']->value;
         break;
     }
     
