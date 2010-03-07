@@ -202,7 +202,13 @@ function roles_activate()
                                               'notifymsg' => '');
     xarModVars::set('roles', 'lockdata', serialize($lockdata));
 
-    // The Users group group
+    // The SiteManagers group
+    $rolefields['name'] = 'SiteManagers';
+    $rolefields['uname'] = 'sitemanagers';
+    $rolefields['parentid'] = $topid;
+    $mgrgroup = $group->createItem($rolefields);
+
+    // The Users group
     $rolefields['name'] = 'Users';
     $rolefields['uname'] = 'users';
     $rolefields['parentid'] = $topid;
@@ -226,6 +232,13 @@ function roles_activate()
     $rolefields['parentid'] = $admingroup;
     $adminid = $user->createItem($rolefields);
     xarModVars::set('roles', 'admin', $adminid);
+
+    // The SiteManager
+    $rolefields['name'] = 'SiteManager';
+    $rolefields['uname'] = 'manager';
+    $rolefields['email'] = 'none@none.com';
+    $rolefields['parentid'] = $mgrgroup;
+    $mgrid = $user->createItem($rolefields);
 
     // Installation complete; check for upgrades
     return roles_upgrade('2.0.0');

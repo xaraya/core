@@ -932,6 +932,7 @@ function installer_admin_confirm_configuration()
         *********************************************************************/
 
         xarRegisterPrivilege('Administration','All','All','All','All','ACCESS_ADMIN',xarML('Admin access to all modules'));
+        xarRegisterPrivilege('SiteManagement','All','All','All','All','ACCESS_DELETE',xarML('Site Manager access to all modules'));
         xarRegisterPrivilege('GeneralLock','All',null,'All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
         xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody','ACCESS_NONE',xarML('Deny access to Everybody role'));
         xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous','ACCESS_NONE',xarML('Deny access to Anonymous role'));
@@ -958,6 +959,7 @@ function installer_admin_confirm_configuration()
         *********************************************************************/
 
         xarAssignPrivilege('Administration','Administrators');
+        xarAssignPrivilege('SiteManagement','SiteManagers');
         xarAssignPrivilege('GeneralLock','Everybody');
         xarAssignPrivilege('GeneralLock','Administrators');
         xarAssignPrivilege('GeneralLock','Users');

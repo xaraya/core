@@ -15,6 +15,13 @@ UPDATE `xar_dynamic_properties` SET `configuration` = REPLACE(configuration, 's:
 
 /* Removing the DenyBlocks privilege */
 
-/* Removing allmasks with component Block */
+/* Removing all masks with component Block */
 
 /* Adding configuration info to objects 1 and 2 */
+
+/* Adding the Site Management privilege */
+
+/* Adding the SiteManagers group */
+
+/* Adding the SiteManager user */
+
