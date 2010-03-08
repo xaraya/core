@@ -129,7 +129,7 @@ class MenuBlockAdmin extends MenuBlock implements iBlock
             $content['view_access'][$module['name']] = $accessproperty->value;
         }
 
-        $data['content'] = serialize($content);
+        $data['content'] = $content;
         return $data;
     }
 }
