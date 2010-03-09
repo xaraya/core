@@ -40,7 +40,6 @@ class DataObjectMaster extends Object
     public $isalias     = 0;
     public $join        = '';
     public $table       = '';
-    public $extend      = true;
 
     public $class       = 'DataObject'; // the class name of this DD object
     public $filepath    = 'auto';       // the path to the class of this DD object (can be empty or 'auto' for DataObject)
@@ -785,10 +784,9 @@ class DataObjectMaster extends Object
         }
 
         // Get an object list for the object itself, so we can delete its items
-        $mylist =& self::getObjectList(
+        $mylist = self::getObjectList(
             array(
                 'objectid' => $args['objectid'],
-                'extend' => false
             )
         );
         if(empty($mylist))
