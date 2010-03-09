@@ -60,8 +60,7 @@ function dynamicdata_admin_newhook($args)
     $object = & DataObjectMaster::getObject(array(
                                        'moduleid' => $module_id,
                                        'itemtype' => $itemtype,
-                                       'itemid'   => $itemid,
-                                       'extend' => false));
+                                       'itemid'   => $itemid));
     if (!isset($object)) return;
 
     // if we are in preview mode, we need to check for any preview values

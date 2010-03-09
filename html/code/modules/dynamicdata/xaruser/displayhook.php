@@ -60,8 +60,7 @@ function dynamicdata_user_displayhook($args)
 
     $object = & DataObjectMaster::getObject(array('moduleid' => $module_id,
                                        'itemtype' => $itemtype,
-                                       'itemid'   => $itemid,
-                                       'extend' => false));
+                                       'itemid'   => $itemid));
     if (!isset($object)) return;
 
     $object->getItem();

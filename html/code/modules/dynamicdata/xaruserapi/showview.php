@@ -97,8 +97,7 @@ function dynamicdata_userapi_showview($args)
                                            'fieldlist' => $myfieldlist,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
-                                           'status' => $status,
-                                           'extend' => !empty($extend)));
+                                           'status' => $status));
     if (!isset($object)) return;
     // Count before numitems!
     $numthings = 0;

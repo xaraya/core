@@ -85,8 +85,7 @@ function dynamicdata_adminapi_updatehook($args)
 
     $myobject = & DataObjectMaster::getObject(array('moduleid' => $module_id,
                                          'itemtype' => $itemtype,
-                                         'itemid'   => $itemid,
-                                         'extend' => false));
+                                         'itemid'   => $itemid));
 
     // If no object returned, bail and pass the extrainfo to the next hook
     if (!isset($myobject)) return $extrainfo;
