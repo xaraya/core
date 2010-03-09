@@ -187,35 +187,41 @@
                     directory. If there is no specific block group template the block group will use the preinstalled 'default' block group template.
                 </li>
             </ol>
-            <!-- @TODO: update this info -->
             <h3>How to tell Xaraya which inner and outer templates to use</h3>
             <p>
                 You can tell Xaraya which inner and outer templates to use when you create a new block instance or modify an existing one. Using the Blocks module, there are two places you can set either the inner template, the outer template or both.
                 <ul>
                     <li>The field labelled
-                    <strong>Instance Template (optional):</strong>sets the default inner and outer template
+                    <strong>Instance Template (optional):</strong> sets the default inner and outer template
                     used for the block instance and any block group. You can specify inner, outer, both
-                    inner and outer or none. You use the following format:
-                    <pre>[outer-template][semi-colon][inner-template]</pre>. Both are specified without
-                    the file extension.</li>
-                    <li>If you add a block instance to a block group, another input field will appear,
-                    labelled with the name of the block group. You can also add a specific inner, outer or
-                    both inner and outer template in this field using the same syntax. Specifying an inner
-                    or outer template in this block group template field will override any other
+                    inner and outer or none (leave empty) in the Inner and Outer fields respectively. Both are specified without the file extension.</li>
+                    <li>If you add a block instance to a block group, another field will appear,
+                    labelled with the name of the block group. You can add a specific inner, outer or
+                    both inner and outer template in the Inner and Outer fields provided. Specifying an inner
+                    or outer template in the block group template fields will override any other
                     templates.</li>
                 </ul>
                 <strong>An example:</strong>if you create a roles user block (which displays the current user's profile information) and you are using the default theme:
             </p>
             <ul>
                 <li>By default, this block will use the roles module's inner template called
-
-                <pre>user.xd</pre>located in modules/roles/xartemplates/blocks</li>
-                <li>
-                If you have allocated the user block to a block group called 'right' it will use, by default, the outer template located at <pre>themes/default/blocks/right.xt</pre>. If the 'right' outer template does not exist it will use one called 'default.xt' in that same directory.
+                <pre><strong>user</strong>.xt</pre>located in <pre>modules/roles/xartemplates/blocks</pre>
                 </li>
                 <li>
-                If you wish to override both outer and inner templates for the user block then the syntax example of:<strong>left;userprofile</strong> would mean the outer template is one created and called
-                <pre> <strong>left</strong>.xt</pre> in the <pre>themes/default/blocks</pre>directory. The roles module's user block will be displayed using the <pre>themes/default/modules/roles/blocks/user-<strong>userprofile</strong>.xt</pre>template. You could just specify outer or inner template if required by adding <pre>left;</pre>or <pre>;userprofile</pre>to specify outer and inner respectively.</li>
+                If you have allocated the user block to a block group called 'right' it will use, by default,
+                the outer template located at <pre>themes/default/blocks/<strong>right</strong>.xt</pre>
+                If the 'right' outer template does not exist it will use one called 'default.xt' in that same directory.
+                </li>
+                <li>
+                If you wish to override both outer and inner templates for the user block then you would specify,
+                for example, left in the Outer field and userprofile in the Inner field.
+                This would mean the outer template is one created and called
+                <pre><strong>left</strong>.xt</pre> located in the directory <pre>themes/default/blocks</pre>
+                The roles module's user block will be displayed using the template
+                <pre>themes/default/modules/roles/blocks/user-<strong>userprofile</strong>.xt</pre>
+                You could just specify outer or inner template if required by adding <pre>left</pre>
+                to the Outer field or <pre>userprofile</pre>to the Inner field.
+                </li>
             </ul>
 
         <!-- Block Configuration -->
