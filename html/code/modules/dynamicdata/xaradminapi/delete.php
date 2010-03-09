@@ -45,10 +45,10 @@ function dynamicdata_adminapi_delete($args)
     // avoid potential security holes or just too much wasted processing
     if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',"$module_id:$itemtype:$itemid")) return;
 
-    $myobject = DataObjectMaster::getObject(array('moduleid' => $module_id,
-                                         'itemtype' => $itemtype,
-                                         'itemid'   => $itemid,
-                                         'extend' => false));
+    $args = DataObjectDescriptor::getObjectID(array('module_id'  => $module_id,
+                                       'itemtype'  => $itemtype));
+    $myobject = DataObjectMaster::getObject(array('objectid' => $args['objectid'],
+                                         'itemid'   => $itemid));
     if (empty($myobject)) return;
 
     $myobject->getItem();
