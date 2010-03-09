@@ -1065,14 +1065,14 @@ function installer_admin_cleanup()
     // Install script is still there. Create a reminder block
     if (file_exists('install.php')) {
 
-        // get the left blockgroup block id
-        $leftBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'left'));
-        if ($leftBlockgroup == false) {
-            $msg = xarML("Blockgroup 'left' not found.");
+        // get the admin blockgroup block id
+        $adminBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'admin'));
+        if ($adminBlockgroup == false) {
+            $msg = xarML("Blockgroup 'admin' not found.");
             throw new Exception($msg);
         }
-        $leftBlockgroupID = $leftBlockgroup['bid'];
-        assert('is_numeric($leftBlockgroupID);');
+        $adminBlockgroupID = $adminBlockgroup['bid'];
+        assert('is_numeric($adminBlockgroupID);');
 
         $now = time();
 
@@ -1093,11 +1093,30 @@ function installer_admin_cleanup()
                                      'name'     => 'reminder',
                                      'content'  => $reminder,
                                      'type'     => $htmlBlockTypeId,
-                                     'groups'   => array(array('id'      => $leftBlockgroupID,)),
+                                     'groups'   => array(array('id'      => $adminBlockgroupID,)),
                                      'state'    => 2))) {
                 return;
             }
         }
+
+        // get block instances for the admin blockgroup
+        $instances = xarMod::apiFunc('blocks', 'user', 'getall',
+            array('order' => 'group','gid' => $adminBlockgroupID));
+        $group_instance_order = array();
+        $reminderBlock = xarMod::apiFunc('blocks', 'user', 'get', array('name'  => 'reminder'));
+        // put the reminder at the top of the group
+        $group_instance_order[] = $reminderBlock['bid'];
+        foreach ($instances as $inst) {
+            if ($inst['bid'] == $reminderBlock['bid']) continue;
+            $group_instance_order[] = $inst['bid'];
+        }
+        if (!xarModAPIFunc('blocks', 'admin', 'update_group',
+            array(
+                'id' => $adminBlockgroupID,
+                'instance_order' => $group_instance_order)
+            )
+        ) return;
+
     }
 
     xarUserLogOut();
