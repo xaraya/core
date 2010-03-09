@@ -23,6 +23,8 @@
  */
 function dynamicdata_adminapi_create($args)
 {
+
+    $args = DataObjectDescriptor::getObjectID($args);
     extract($args);
 
     $invalid = array();
@@ -52,8 +54,7 @@ function dynamicdata_adminapi_create($args)
     }
 
     // TODO: test this
-    $myobject = & DataObjectMaster::getObject(array('moduleid' => $module_id,
-                                         'itemtype' => $itemtype,
+    $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'itemid'   => $itemid));
     if (empty($myobject)) return;
 
