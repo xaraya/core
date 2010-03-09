@@ -78,6 +78,10 @@ Class xarBlock extends Object implements IxarBlock
             xarMod::apiFunc('blocks', 'admin', 'load',
                 array('module' => $data['module'], 'type' => $data['type'], 'func' => 'display'));
         } catch (Exception $e) {
+            // Set the output of the block in cache
+            if (!empty($cacheKey)) {
+                xarBlockCache::setCached($cacheKey, '');
+            }
             if ((bool)xarModVars::get('blocks', 'noexceptions')) {
                 return '';
             } else {
@@ -118,6 +122,10 @@ Class xarBlock extends Object implements IxarBlock
         try {
             $blockinfo = $block->display();
         } catch (Exception $e) {
+            // Set the output of the block in cache
+            if (!empty($cacheKey)) {
+                xarBlockCache::setCached($cacheKey, '');
+            }
             if ((bool)xarModVars::get('blocks', 'noexceptions')) {
                 return '';
             } else {
@@ -140,7 +148,7 @@ Class xarBlock extends Object implements IxarBlock
             // Here $blockinfo['content'] is the array of template data
             // which will be passed to the inner block template
             // $blockinfo itself is passed to the outer template
-            // Set some additional details that the could be useful in the block content.
+            // Set some additional details that could be useful in the block content.
             // prefix these extra variables (_bl_) to indicate they are supplied by the core.
             $blockinfo['content']['_bl_block_id'] = $blockinfo['bid'];
             $blockinfo['content']['_bl_block_name'] = $blockinfo['name'];
@@ -169,6 +177,10 @@ Class xarBlock extends Object implements IxarBlock
                     !empty($blockinfo['_bl_template_base']) ? $blockinfo['_bl_template_base'] : NULL
                 );
             } catch (Exception $e) {
+                // Set the output of the block in cache
+                if (!empty($cacheKey)) {
+                    xarBlockCache::setCached($cacheKey, '');
+                }
                 if ((bool)xarModVars::get('blocks', 'noexceptions')) {
                     return '';
                 } else {
@@ -191,6 +203,10 @@ Class xarBlock extends Object implements IxarBlock
         try {
             $boxOutput = xarTpl_renderBlockBox($blockinfo, $data['_bl_box_template']);
         } catch (Exception $e) {
+            // Set the output of the block in cache
+            if (!empty($cacheKey)) {
+                xarBlockCache::setCached($cacheKey, '');
+            }
             if ((bool)xarModVars::get('blocks', 'noexceptions')) {
                 return '';
             } else {
@@ -224,6 +240,9 @@ Class xarBlock extends Object implements IxarBlock
         // It keeps the core code lighter when standalone blocks are not used.
         // @TODO: review getinfo and move it here
         $blockinfo = xarMod::apiFunc('blocks', 'user', 'getinfo', $args);
+        // No blockinfo means the block instance specified doesn't exist
+        // @CHECKME: optionally raise exception here?
+        if (empty($blockinfo)) return '';
         return self::render($blockinfo);
     }
 /**

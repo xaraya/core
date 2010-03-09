@@ -124,7 +124,8 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     }
 
     // this method is called by blocks_admin_delete()
-    public function delete(Array $args=array()) {
+    public function delete(Array $args=array())
+    {
         $data = $this->getInfo();
         return $data;
     }
