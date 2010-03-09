@@ -11,9 +11,9 @@
  *
  * @package dynamicdata
  */
-sys::import('xaraya.datastores.sql.flattable');
+sys::import('xaraya.datastores.sql.relational');
 
-class ModuleVariablesDataStore extends FlatTableDataStore
+class ModuleVariablesDataStore extends RelationalDataStore
 {
     public $modulename;
     public $variablename;
