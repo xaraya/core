@@ -68,6 +68,7 @@ function blocks_admin_modify_instance()
         // now we're safe to call the block modify method
         // catching any exceptions thrown by the method or template rendering
         try {
+            // Note: blockinfo here is $content
             $blockinfo = $block->modify();
             // it's ok if the method returns empty, thats not an error
             // it just means the block has nothing to render
@@ -75,28 +76,28 @@ function blocks_admin_modify_instance()
                 // Set some additional details that the could be useful in the block content.
                 // @TODO: move these to basicblock class ?
                 // prefix these extra variables (_bl_) to indicate they are supplied by the core.
-                $blockinfo['content']['_bl_block_id'] = $blockinfo['bid'];
-                $blockinfo['content']['_bl_block_name'] = $blockinfo['name'];
-                $blockinfo['content']['_bl_block_type'] = $blockinfo['type'];
-                if (!empty($blockinfo['groupid'])) {
+                $blockinfo['_bl_block_id'] = $block->bid;
+                $blockinfo['_bl_block_name'] = $block->name;
+                $blockinfo['_bl_block_type'] = $block->type;
+                if (!empty($block->groupid)) {
                     // The block may not be rendered as part of a group.
-                    $blockinfo['content']['_bl_block_groupid'] = $blockinfo['groupid'];
-                    $blockinfo['content']['_bl_block_group'] = $blockinfo['group'];
+                    $blockinfo['_bl_block_groupid'] = $block->groupid;
+                    $blockinfo['_bl_block_group'] = $block->group;
                 }
                 // Legacy (deprecated)
                 // @TODO: remove these once all block templates are using the _bl_ variables
-                $blockinfo['content']['blockid'] = $blockinfo['bid'];
-                $blockinfo['content']['blockname'] = $blockinfo['name'];
-                $blockinfo['content']['blocktypename'] = $blockinfo['type'];
-                if (isset($blockinfo['groupid'])) {
+                $blockinfo['blockid'] = $block->bid;
+                $blockinfo['blockname'] = $block->name;
+                $blockinfo['blocktypename'] = $block->type;
+                if (isset($block->groupid)) {
                     // The block may not be rendered as part of a group.
-                    $blockinfo['content']['blockgid'] = $blockinfo['groupid'];
-                    $blockinfo['content']['blockgroupname'] = $blockinfo['group'];
+                    $blockinfo['blockgid'] = $block->groupid;
+                    $blockinfo['blockgroupname'] = $block->group;
                 }
                 // Render the extra settings if necessary.
                 // Again we check for an exception, this time in the template rendering
                 try {
-                    $block_modify = xarTplBlock($blockinfo['module'], 'modify-' . $blockinfo['type'], $blockinfo);
+                    $block_modify = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $blockinfo);
                 } catch (Exception $e) {
                     // @TODO: global flag to raise exceptions or not
                     if ((bool)xarModVars::get('blocks', 'noexceptions')) {
