@@ -260,7 +260,7 @@ class BlockgroupBlock extends BasicBlock implements iBlock
             }
 
         }
-        $data['return_url'] = xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $data['bid']));
+        $data['return_url'] = xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $data['bid']), null, 'group_members');
         return $data;
     }
 }

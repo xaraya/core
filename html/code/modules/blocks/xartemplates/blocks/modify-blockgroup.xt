@@ -11,8 +11,8 @@
         <xar:set name="imgmodify">#xarTPLGetImage('icons/modify.png', 'base')#</xar:set>
         <xar:var name="imgmodifyalt">Modify</xar:var>
         <xar:var name="imgmodifytitle">Modify this block instance</xar:var>
-        <table class="xar-fullwidth">
-            <caption class="xar-align-left xar-padding-thickends">Blockgroup Members</caption>
+        <table class="xar-fullwidth xar-margin-nonetop">
+            <caption class="xar-align-left xar-padding-thickends" id="group_members">Blockgroup Members</caption>
             <thead>
                 <tr>
                     <th>Name</th>
