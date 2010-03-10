@@ -103,10 +103,6 @@ class DataObjectMaster extends Object
     {
         $properties = $this->getPublicProperties();
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
-        // object property is called module_id now instead of moduleid for whatever reason !?
-        if (empty($args['moduleid']) && !empty($args['module_id'])) {
-            $args['moduleid'] = $args['module_id'];
-        }
         //FIXME where do we need to define the modname best?
         if (!empty($args['moduleid'])) $args['modname'] = xarMod::getName($args['moduleid']);
         return $args;
