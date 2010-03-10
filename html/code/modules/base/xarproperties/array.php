@@ -60,7 +60,7 @@ class ArrayProperty extends DataProperty
         if (!isset($value)) {
             if (!xarVarFetch($name . '_key', 'array', $keys, array(), XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch($name . '_value',   'array', $values, array(), XARVAR_NOT_REQUIRED)) return;
-            
+
             //Check for an associative_array.
             if (!xarVarFetch($name . '_associative_array',   'int', $associative_array, null, XARVAR_NOT_REQUIRED)) return;
             //Set value to the initialization_associative_array  
