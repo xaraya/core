@@ -553,8 +553,8 @@ function installer_admin_bootstrap()
     $objects = array(
                    'configurations',
                    'sample',
-//                   'dynamicdata_tablefields',
-//                   'module_settings',
+                   'dynamicdata_tablefields',
+                   'module_settings',
                      );
 
     if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'dynamicdata', 'objects' => $objects))) return;
