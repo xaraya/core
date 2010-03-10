@@ -4,7 +4,7 @@ class SubItemsProperty extends DataProperty
     public $id           = 30069;
     public $name         = 'subitems';
     public $desc         = 'SubItems';
-    public $reqmodules   = array('math');
+    public $reqmodules   = array('dynamicdata');
 
     public $include_reference            = 1; // tells the object this property belongs to whether to add a reference of itself to me
     
@@ -28,11 +28,12 @@ class SubItemsProperty extends DataProperty
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $this->tplmodule = 'math';
-        $this->filepath   = 'modules/math/xarproperties';
+        $this->tplmodule = 'dynamicdata';
+        $this->filepath   = 'modules/dynamicdata/xarproperties';
 
         $this->fieldprefix    = $this->_fieldprefix . 'dd_'.$this->id;
-        $this->subitemsobject = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
+        sys::import('modules.dynamicdata.class.objects.master');
+//        $this->subitemsobject = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
     }
 
     public function checkInput($name = '', $value = null)
