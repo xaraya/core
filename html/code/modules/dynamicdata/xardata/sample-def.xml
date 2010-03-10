@@ -7,15 +7,19 @@
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>10</maxid>
+  <datastore>relational</datastore>
   <config>a:0:{}</config>
   <isalias>false</isalias>
+  <sources></sources>
+  <relations>a:0:{}</relations>
+  <objects>a:0:{}</objects>
   <properties>
     <property name="id">
       <id>29</id>
       <label>Id</label>
       <type>itemid</type>
       <defaultvalue></defaultvalue>
-      <source>dynamic_data</source>
+      <source>dynamicdata</source>
       <status>34</status>
       <seq>1</seq>
       <configuration>a:4:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:35:"A unique identifier for each person";}</configuration>
@@ -25,7 +29,7 @@
       <label>Name</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>dynamic_data</source>
+      <source>dynamicdata</source>
       <status>33</status>
       <seq>2</seq>
       <configuration>a:6:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:17:"The person's name";s:21:"validation_min_length";s:1:"1";s:21:"validation_max_length";s:2:"30";}</configuration>
@@ -35,7 +39,7 @@
       <label>Age</label>
       <type>integerbox</type>
       <defaultvalue></defaultvalue>
-      <source>dynamic_data</source>
+      <source>dynamicdata</source>
       <status>33</status>
       <seq>3</seq>
       <configuration>a:6:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:16:"The person's age";s:20:"validation_min_value";s:1:"0";s:20:"validation_max_value";s:3:"125";}</configuration>
@@ -45,7 +49,7 @@
       <label>Location</label>
       <type>image</type>
       <defaultvalue></defaultvalue>
-      <source>dynamic_data</source>
+      <source>dynamicdata</source>
       <status>34</status>
       <seq>4</seq>
       <configuration>a:7:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:27:"The person's favorite place";s:26:"validation_file_extensions";s:20:"gif,jpg,jpeg,png,bmp";s:27:"initialization_image_source";s:3:"url";s:28:"initialization_basedirectory";s:11:"var/uploads";}</configuration>
