@@ -181,8 +181,36 @@ function dynamicdata_init()
         $stmt = $dbconn->prepareStatement($sql);
 
         $objects = array(
-            array('objects'   ,'Dynamic Objects'   ,$module_id,0,'DataObject','auto', 'itemid',0,'a:0:{}' ,false),
-            array('properties','Dynamic Properties',$module_id,1,'DataObject','auto','itemid',0,'a:0:{}',serialize(array('dynamic_properties' => $prefix . '_dynamic_properties')),'a:0:{}','a:0:{}'               ,0),
+            array(
+                'objects',
+                'Dynamic Objects',
+                $module_id,
+                0,
+                'DataObject',
+                'auto', 
+                'itemid',
+                0,
+                'a:3:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}}',
+                serialize(array('dynamic_objects' => $prefix . 'dynamic_objects')),
+                'a:0:{}',
+                'a:0:{}',
+                false
+                ),
+            array(
+                'properties',
+                'Dynamic Properties',
+                $module_id,
+                1,
+                'DataObject',
+                'auto',
+                'itemid',
+                0,
+                'a:3:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}}',
+                serialize(array('dynamic_properties' => $prefix . '_dynamic_properties')),
+                'a:0:{}',
+                'a:0:{}',
+                false
+                ),
         );
 
         $objectid = array();
