@@ -176,8 +176,8 @@ function dynamicdata_init()
         $sql = "INSERT INTO $dynamic_objects (
                 name, label,
                 module_id, itemtype, class, filepath, urlparam,
-                maxid, config, sources, relations, objects,isalias)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                maxid, datastore, config, sources, relations, objects,isalias)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         $objects = array(
@@ -190,8 +190,9 @@ function dynamicdata_init()
                 'auto', 
                 'itemid',
                 0,
+                'relational',
                 'a:3:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}}',
-                serialize(array('dynamic_objects' => $prefix . 'dynamic_objects')),
+                serialize(array('dynamic_objects' => $prefix . '_dynamic_objects')),
                 'a:0:{}',
                 'a:0:{}',
                 false
@@ -205,6 +206,7 @@ function dynamicdata_init()
                 'auto',
                 'itemid',
                 0,
+                'relational',
                 'a:3:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}}',
                 serialize(array('dynamic_properties' => $prefix . '_dynamic_properties')),
                 'a:0:{}',
