@@ -840,6 +840,15 @@ class DataProperty extends Object implements iDataProperty
         return $prefix;
     }
 
+    public function addToObject($data=array())
+    {
+        return true;
+    }
+    public function removeFromObject($data=array())
+    {
+        return true;
+    }
+
     public static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();

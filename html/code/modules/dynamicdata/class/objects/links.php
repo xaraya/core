@@ -312,6 +312,7 @@ class DataObjectLinks extends Object
 
             // get an objectlist for the target
             $linkedlist = DataObjectMaster::getObjectList(array('name' => $link['target']));
+
             // skip links to unknown objects or properties
             if (empty($linkedlist->objectid) || empty($linkedlist->properties[$link['to_prop']])) continue;
 
