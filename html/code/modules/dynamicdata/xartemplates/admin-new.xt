@@ -24,6 +24,7 @@
                 </a>
             </xar:if>
         </h2>
+        <xar:template type="module" file="manage-menu"/>
         <xar:if condition="!empty($preview)">
             <h3>Preview</h3>
             <xar:data-display object="$object"/>
