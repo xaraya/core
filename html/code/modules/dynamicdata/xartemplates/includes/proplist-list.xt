@@ -61,7 +61,7 @@
                 </td>
                 <td class="#$displayclass#">
                     <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
-                        <xar:set name="title">xarML('Edit configuration for property #(1)',$field['name'])</xar:set>
+                        <xar:set name="title">xarML('Edit configuration for property \"#(1)\"',$field['name'])</xar:set>
                         <xar:set name="link">
                             xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $field['id']))
                         </xar:set>
@@ -77,7 +77,7 @@
                         </xar:set>
                         <xar:if condition="$index gt 1 and $numprops gt 1">
                             <xar:set name="link">
-                                xarModURL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemtype' => $itemtype, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid))
+                                xarModURL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid))
                             </xar:set>
                             <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
                         <xar:else />
@@ -91,7 +91,7 @@
                         </xar:set>
                         <xar:if condition="$index lt $numprops and $numprops ne 1">
                             <xar:set name="link">
-                                xarModURL('dynamicdata', 'admin', 'orderprops', array('module_id' => $module_id, 'itemtype' => $itemtype, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
+                                xarModURL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
                             </xar:set>
                             <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
                         <xar:else />
