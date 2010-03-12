@@ -578,7 +578,7 @@ class DataObjectMaster extends Object
         if (empty($info)) {
             if (isset($args['name'])) $identifier = xarML('the name is #(1)',$args['name']);
             if (isset($args['objectid'])) $identifier = xarML('the objectid is #(1)',$args['objectid']);
-            throw new Exception(xarML('Unable to create an object where #(1)', $identifier));
+            throw new Exception(xarML('Unable to get an object where #(1)', $identifier));
         }
         
         $current = current($info);

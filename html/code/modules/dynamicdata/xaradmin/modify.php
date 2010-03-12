@@ -112,6 +112,7 @@ function dynamicdata_admin_modify($args)
             $data['display_access'] = $objectitem->display_access;
             $data['modify_access']  = $objectitem->modify_access;
             $data['delete_access']  = $objectitem->delete_access;
+
         break;
 
         case 'clone':
