@@ -42,7 +42,8 @@ function dynamicdata_admin_modify($args)
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
     if (!xarVarFetch('tab', 'pre:trim:lower:str:1', $data['tab'], 'edit', XARVAR_NOT_REQUIRED)) return;
 
-    $object = DataObjectMaster::getObject(array('objectid' => $objectid,
+    if (empty($objectid) && empty($name)) $objectid = 1;
+    $object = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,
                                          'moduleid' => $module_id,
                                          'itemtype' => $itemtype,
@@ -52,12 +53,15 @@ function dynamicdata_admin_modify($args)
                                          'tplmodule' => $tplmodule));
     $args = $object->toArray();
 
+    // Security check
+    if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$args['itemid'])) return;
+
     if ($notfresh) {
         $isvalid = $object->checkInput();
     } else {
         $object->getItem();
     }
-    $data['object'] = $object;
+    $data['object'] = & $object;
 
     switch ($data['tab']) {
 
@@ -104,10 +108,10 @@ function dynamicdata_admin_modify($args)
                 return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
             
             // Get the object represented by our item
-            $object = DataObjectMaster::getObject(array('name' => $object->properties['name']->value));
-            $data['display_access'] = $object->display_access;
-            $data['modify_access']  = $object->modify_access;
-            $data['delete_access']  = $object->delete_access;
+            $objectitem = DataObjectMaster::getObject(array('name' => $object->properties['name']->value));
+            $data['display_access'] = $objectitem->display_access;
+            $data['modify_access']  = $objectitem->modify_access;
+            $data['delete_access']  = $objectitem->delete_access;
 
         break;
 

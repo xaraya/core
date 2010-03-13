@@ -33,13 +33,6 @@ function dynamicdata_user_search($args)
     if (empty($dd_check)) {
         $dd_check = array();
     }
-    // TODO: move this to the varFetch?
-    if (!isset($startnum)) {
-        $startnum = 1;
-    }
-    if (!isset($numitems)) {
-        $numitems = 20;
-    }
 
     // see if we're coming from the search hook or not
     if (isset($args['objectid'])) {
@@ -61,7 +54,13 @@ function dynamicdata_user_search($args)
         if (empty($itemtype)) {
             $itemtype = 0;
         }
-        $data['numitems'] = $numitems;
+    }
+    // TODO: move this to the varFetch?
+    if (!isset($startnum)) {
+        $startnum = 1;
+    }
+    if (!isset($numitems)) {
+        $numitems = 20;
     }
 
     $label = xarML('Dynamic Data');
@@ -77,7 +76,7 @@ function dynamicdata_user_search($args)
         }
     } else {
         // get items from the objects table
-        $objects = xarMod::apiFunc('dynamicdata','user','getobjects');
+        $objects = DataObjectMaster::getObjects();
     }
 
     if (empty($data['ishooked'])) {

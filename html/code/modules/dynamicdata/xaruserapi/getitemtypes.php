@@ -20,7 +20,7 @@ function dynamicdata_userapi_getitemtypes($args)
     $itemtypes = array();
 
     // Get objects
-    $objects = xarMod::apiFunc('dynamicdata','user','getobjects');
+    $objects = DataObjectMaster::getObjects();
 
     $module_id = xarMod::getRegID('dynamicdata');
     foreach ($objects as $id => $object) {

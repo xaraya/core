@@ -21,7 +21,7 @@ function dynamicdata_util_export($args)
 
     if(!xarVarFetch('objectid', 'isset', $objectid, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',     'isset', $name    , NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id',    'isset', $moduleid, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id','isset', $moduleid, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tofile',   'isset', $tofile,   NULL, XARVAR_DONT_SET)) {return;}
@@ -32,8 +32,6 @@ function dynamicdata_util_export($args)
 
     $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name'     => $name,
-                                         'moduleid' => $moduleid,
-                                         'itemtype' => $itemtype,
                                          'itemid'   => $itemid,
                                          'allprops' => true));
 
@@ -42,7 +40,7 @@ function dynamicdata_util_export($args)
         $data['xml'] = '';
         return $data;
     }
-    $data['objectid'] = $myobject->objectid;
+    $data['objectid'] = $objectid;
 
     $proptypes = DataPropertyMaster::getPropertyTypes();
 

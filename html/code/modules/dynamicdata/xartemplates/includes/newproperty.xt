@@ -6,11 +6,7 @@
             <label for="dd_source_0" class="xar-form-label">
                 #$propertyfields['source']['label']#:
             </label>
-            <select class="dd-norm" name="dd_source[0]" id="dd_source_0">
-                <xar:foreach in="$sources" value="$mysource">
-                    <option>#$mysource#</option>
-                </xar:foreach>
-            </select>
+        <xar:data-input type="dropdown" class="dd-norm" name="dd_source[0]" options="$sources" />
         </div>
         <div class="xar-form-input-wrapper">
             <label for="dd_label_0" class="xar-form-label">
