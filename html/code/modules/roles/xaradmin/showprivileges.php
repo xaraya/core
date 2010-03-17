@@ -190,6 +190,7 @@ function roles_admin_showprivileges()
 
 // -------------------------------------------------------------------
 // Load Template
+    $data['object'] = $role;
     $data['pname'] = $role->getName();
     $data['itemtype'] = $role->getType();
     $data['basetype'] = $data['itemtype'];

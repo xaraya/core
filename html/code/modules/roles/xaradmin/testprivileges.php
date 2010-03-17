@@ -91,6 +91,7 @@ function roles_admin_testprivileges()
     }
     // no test yet
     // Load Template
+    $data['object'] = $role;
     $data['test'] = $test;
     $data['pname'] = $role->getName();
     $data['itemtype'] = $role->getType();
@@ -100,7 +101,7 @@ function roles_admin_testprivileges()
     $data['pmodule'] = $module;
     $data['id'] = $id;
     $data['testlabel'] = xarML('Test');
-    $data['masks'] = xarSecurity::getmasks($module);
+    $data['masks'] = xarMasks::getmasks($module);
     $data['authid'] = xarSecGenAuthKey();
     return $data;
     // redirect to the next page
