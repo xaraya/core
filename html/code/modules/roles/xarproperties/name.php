@@ -51,7 +51,7 @@ class NameProperty extends TextBoxProperty
         if (empty($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
         if (empty($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
         if (empty($data['value'])) $data['value'] = $this->value;
-        $data['value'] = $this->getvaluearray($data);
+        $data['value'] = $this->getvaluearray($data['value']);
         return DataProperty::showInput($data);
     }
 
@@ -60,14 +60,22 @@ class NameProperty extends TextBoxProperty
         if (empty($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
         if (empty($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
         if (empty($data['value'])) $data['value'] = $this->value;
-        $data['value'] = $this->getvaluearray($data);
+        $data['value'] = $this->getvaluearray($data['value']);
         return DataProperty::showOutput($data);
     }
 
-    function getvaluearray($data)
+    public function getValue()
     {
-        if (!isset($data['value'])) $data['value'] = '%%%%%';
-        $value = explode('%', $data['value']);
+        $valuearray = $this->getvaluearray($this->value);
+        $value = $valuearray['salutation'] . ' ' . $valuearray['first'] . ' ' . $valuearray['middle'] . ' ' . $valuearray['last'];
+        $value = str_replace('  ',' ',$value);
+        return $value;
+    }
+
+    function getvaluearray($value)
+    {
+        if (!isset($value)) $value = '%%%%%';
+        $value = explode('%', $value);
         
         $valuearray['last'] = !empty($value[1]) ? $value[1] : '';
         $valuearray['first'] = !empty($value[2]) ? $value[2] : '';
