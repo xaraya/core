@@ -107,7 +107,7 @@
                         </a>
                         &#160;
                         <xar:set name="link">
-                            xarModURL('dynamicdata', 'admin', 'orderprops', array('module_id' => $module_id, 'itemtype' => $itemtype, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid))
+                            xarModURL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid))
                         </xar:set>
                         <xar:if condition="$index gt 1 and $numprops gt 1">
                             <a href="#$link#">
@@ -116,7 +116,7 @@
                             &#160;
                         </xar:if>
                         <xar:set name="link">
-                            xarModURL('dynamicdata', 'admin', 'orderprops', array('module_id' => $module_id, 'itemtype' => $itemtype, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
+                            xarModURL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
                         </xar:set>
                         <xar:if condition="$index lt $numprops and $numprops ne 1">
                             <a href="#$link#">
