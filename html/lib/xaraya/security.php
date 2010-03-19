@@ -477,7 +477,7 @@ function xarRemoveMasks($module)
 function xarSecGenAuthKey($modName = NULL)
 {
     if (empty($modName)) {
-        list($modName) = xarRequest::getInfo();
+        list($modName) = xarController::$request->getInfo();
     }
 
     // Date gives extra security but leave it out for now
@@ -508,8 +508,8 @@ function xarSecGenAuthKey($modName = NULL)
  */
 function xarSecConfirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=false)
 {
-    if(!isset($modName)) list($modName) = xarRequest::getInfo();
-    $authid = xarRequest::getVar($authIdVarName);
+    if(!isset($modName)) list($modName) = xarController::$request->getInfo();
+    $authid = xarController::getVar($authIdVarName);
 
     // Regenerate static part of key
     $partkey = xarSessionGetVar('rand') . strtolower($modName);

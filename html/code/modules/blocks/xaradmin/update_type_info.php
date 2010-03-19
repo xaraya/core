@@ -28,7 +28,7 @@ function blocks_admin_update_type_info()
         array('module' => $modulename, 'type' => $blocktype)
     );
 
-    xarResponse::redirect(xarModURL('blocks', 'admin', 'view_types'));
+    xarController::redirect(xarModURL('blocks', 'admin', 'view_types'));
 }
 
 ?>

@@ -25,7 +25,7 @@ function blocks_admin_settings()
 
     xarModUserVars::set('blocks', 'selstyle', $selstyle);
 
-    if (empty($return_url))
+    xarController::redirect(xarModURL('blocks', 'admin', 'view_instances',array('filter' => $filter)));
         $return_url = xarModURL('blocks', 'admin', 'view_instances',array('filter' => $filter));
 
     xarResponse::redirect($return_url);
