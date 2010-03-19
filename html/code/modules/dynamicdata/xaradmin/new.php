@@ -19,7 +19,7 @@ function dynamicdata_admin_new($args)
 {
     extract($args);
 
-    if(!xarVarFetch('objectid', 'id', $objectid,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('objectid', 'id', $objectid,     1, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('module_id',    'id', $module_id,        182,  XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'id', $itemtype,     0,    XARVAR_DONT_SET)) {return;}
