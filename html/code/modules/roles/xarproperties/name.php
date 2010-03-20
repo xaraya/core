@@ -19,8 +19,9 @@ class NameProperty extends TextBoxProperty
     public $desc       = 'Name';
     public $reqmodules = array('roles');
 
-    public $display_show_salutation = true;
-    public $display_show_middlename = true;
+    public $display_show_salutation     = true;
+    public $display_show_middlename     = true;
+    public $initialization_refobject    = 'roles_users';    // Name of the object we want to reference
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -48,6 +49,7 @@ class NameProperty extends TextBoxProperty
 
     public function showInput(Array $data = array())
     {
+        if (empty($data['refobject'])) $data['refobject'] = $this->initialization_refobject;
         if (empty($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
         if (empty($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
         if (empty($data['value'])) $data['value'] = $this->value;
@@ -57,6 +59,7 @@ class NameProperty extends TextBoxProperty
 
     public function showOutput(Array $data = array())
     {
+        if (empty($data['refobject'])) $data['refobject'] = $this->initialization_refobject;
         if (empty($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
         if (empty($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
         if (empty($data['value'])) $data['value'] = $this->value;

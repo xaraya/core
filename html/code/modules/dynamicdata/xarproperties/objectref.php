@@ -34,7 +34,7 @@ class ObjectRefProperty extends SelectProperty
     // We explicitly use names here instead of id's, so we are independent of
     // how dd assigns them at a given time. Otherwise the configuration is not
     // exportable to other sites.
-    public $initialization_refobject    = 'objects';    // ID of the object we want to reference
+    public $initialization_refobject    = 'objects';    // Name of the object we want to reference
     public $initialization_store_prop   = 'name';       // Name of the property we want to use for storage
     public $initialization_display_prop = 'name';       // Name of the property we want to use for displaying.
 
