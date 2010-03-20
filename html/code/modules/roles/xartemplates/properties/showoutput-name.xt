@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:if condition="($show_salutation eq 'true') AND ($layout ne 'single')">
-        #$value['salutation']#&#160;
-    </xar:if>
-    <xar:if condition="$layout eq 'firstlast'">
-
-        #$value['last']#&#160;
-        <xar:if condition="$show_middlename eq 'true'">
-            #$value['middle']#&#160;
+    <xar:if condition="$refobject eq 'roles_groups'">
+        <xar:data-output type="objectref" refobject="$refobject" value="$value"/>
+    <xar:else/>
+        <xar:if condition="($show_salutation eq 'true') AND ($layout ne 'single')">
+            #$value['salutation']#&#160;
         </xar:if>
-        #$value['first']#
+        <xar:if condition="$layout eq 'firstlast'">
 
-    <xar:elseif condition="$layout eq 'lastfirst' OR $layout eq 'default'"/>
+            #$value['last']#&#160;
+            <xar:if condition="$show_middlename eq 'true'">
+                #$value['middle']#&#160;
+            </xar:if>
+            #$value['first']#
 
-        #$value['last']#,&#160;
-        #$value['first']#
-        <xar:if condition="$show_middlename eq 'true'">
-            &#160;#$value['middle']#
+        <xar:elseif condition="$layout eq 'lastfirst' OR $layout eq 'default'"/>
+
+            #$value['last']#,&#160;
+            #$value['first']#
+            <xar:if condition="$show_middlename eq 'true'">
+                &#160;#$value['middle']#
+            </xar:if>
+
+        <xar:elseif condition="$layout eq 'single'"/>
+            #$value['last']#
         </xar:if>
-
-    <xar:elseif condition="$layout eq 'single'"/>
-        #$value['last']#
     </xar:if>
 </xar:template>
