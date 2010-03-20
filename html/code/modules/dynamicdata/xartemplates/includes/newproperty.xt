@@ -18,7 +18,7 @@
             <label for="dd_type_0" class="xar-form-label">
                 #$propertyfields['type']['label']#:
             </label>
-            <xar:data-input property="$fieldtypeprop" name="dd_type[0]" id="dd_type_0" value=""/>
+            <xar:data-input property="$fieldtypeprop" name="dd_type[0]" id="dd_type_0" value="1"/>
         </div>
         <div class="xar-form-input-wrapper">
             <label for="dd_default_0" class="xar-form-label">

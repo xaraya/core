@@ -9,44 +9,48 @@
         <xar:set name="style">''</xar:set>
     </xar:if>
 
-    <xar:set name="namestring">$name . '_salutation'</xar:set>
-    <xar:if condition="($show_salutation eq 'true') AND ($layout ne 'single')">
-        <xar:if condition="empty($salutationoptions)">
-            <xar:set name="salutationoptions">
-                array(
-                    array('id' => xarML('Mr.'),  'name' => xarML('Mr.')),
-                    array('id' => xarML('Mrs.'), 'name' => xarML('Mrs.')),
-                    array('id' => xarML('Ms.'),  'name' => xarML('Ms.')),
-                )
-            </xar:set>
-        </xar:if>
-        <xar:data-input type="dropdown" name="$namestring" value="$value['salutation']" options="$salutationoptions"/>&#160;
+    <xar:if condition="$refobject eq 'roles_groups'">
+        <xar:data-input type="objectref" refobject="$refobject" style="$style" onchange="$evt_change" value="$value"/>
     <xar:else/>
-        <input type="hidden" name="#$namestring#" id="#$namestring#" value="#$value['salutation']#"/>
-    </xar:if>
-
-    <xar:if condition="$layout eq 'firstlast' OR $layout eq 'default'">
-
-        <input type="text" name="#$name#_first" id="#$id#_first" value="#$value['first']#"/>&#160;
-        <xar:if condition="$show_middlename eq 'true'">
-            <input type="text" name="#$name#_middle" id="#$id#_middle" value="#$value['middle']#"/>&#160;
-        </xar:if>
-        <input type="text" name="#$name#_last" id="#$id#_last" value="#$value['last']#"/>
-
-    <xar:elseif condition="$layout eq 'lastfirst'"/>
-
-        <input type="text" name="#$name#_last" id="#$id#_last" value="#$value['last']#"/>&#160;
-        <input type="text" name="#$name#_first" id="#$id#_first" value="#$value['first']#"/>
-        <xar:if condition="$show_middlename eq 'true'">
-            &#160;<input type="text" name="#$name#_middle" id="#$id#_middle" value="#$value['middle']#"/>
+        <xar:set name="namestring">$name . '_salutation'</xar:set>
+        <xar:if condition="($show_salutation eq 'true') AND ($layout ne 'single')">
+            <xar:if condition="empty($salutationoptions)">
+                <xar:set name="salutationoptions">
+                    array(
+                        array('id' => xarML('Mr.'),  'name' => xarML('Mr.')),
+                        array('id' => xarML('Mrs.'), 'name' => xarML('Mrs.')),
+                        array('id' => xarML('Ms.'),  'name' => xarML('Ms.')),
+                    )
+                </xar:set>
+            </xar:if>
+            <xar:data-input type="dropdown" name="$namestring" value="$value['salutation']" options="$salutationoptions"/>&#160;
+        <xar:else/>
+            <input type="hidden" name="#$namestring#" id="#$namestring#" value="#$value['salutation']#"/>
         </xar:if>
 
-    <xar:elseif condition="$layout eq 'single'"/>
+        <xar:if condition="$layout eq 'firstlast' OR $layout eq 'default'">
 
-        <input type="text" name="#$name#_last" id="#$id#_last" value="#$value['last']#"/>
-        <input type="hidden" name="#$name#_first" id="#$id#_first" value=""/>
-        <input type="hidden" name="#$name#_middle" id="#$id#_middle" value=""/>
+            <input type="text" name="#$name#_first" id="#$id#_first" value="#$value['first']#"/>&#160;
+            <xar:if condition="$show_middlename eq 'true'">
+                <input type="text" name="#$name#_middle" id="#$id#_middle" value="#$value['middle']#"/>&#160;
+            </xar:if>
+            <input type="text" name="#$name#_last" id="#$id#_last" value="#$value['last']#"/>
 
+        <xar:elseif condition="$layout eq 'lastfirst'"/>
+
+            <input type="text" name="#$name#_last" id="#$id#_last" value="#$value['last']#"/>&#160;
+            <input type="text" name="#$name#_first" id="#$id#_first" value="#$value['first']#"/>
+            <xar:if condition="$show_middlename eq 'true'">
+                &#160;<input type="text" name="#$name#_middle" id="#$id#_middle" value="#$value['middle']#"/>
+            </xar:if>
+
+        <xar:elseif condition="$layout eq 'single'"/>
+
+            <input type="text" name="#$name#_last" id="#$id#_last" value="#$value['last']#"/>
+            <input type="hidden" name="#$name#_first" id="#$id#_first" value=""/>
+            <input type="hidden" name="#$name#_middle" id="#$id#_middle" value=""/>
+
+        </xar:if>
     </xar:if>
 
     <xar:template file="dataproperty_additions" module="base"/>
