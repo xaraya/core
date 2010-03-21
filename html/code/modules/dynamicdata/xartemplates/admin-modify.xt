@@ -11,7 +11,7 @@
         <xar:else/>
             <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
         </xar:if>
-        <xar:if condition="!empty($tab) and $tab eq 'edit'">
+        <xar:if condition="empty($tab) or $tab eq 'edit'">
             <h2>
                 <xar:if condition="!empty($objectid) and $objectid eq 1">
                     Modify DataObject for #$object:properties.label:value#
