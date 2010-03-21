@@ -57,6 +57,11 @@ class ObjectRefProperty extends SelectProperty
 
     public function showOutput(Array $data = array())
     {
+        // Allow overriding by specific parameters
+        if (isset($data['refobject']))    $this->initialization_refobject = $data['refobject'];
+        if (isset($data['store_prop']))   $this->initialization_store_prop = $data['store_prop'];
+        if (isset($data['display_prop'])) $this->initialization_display_prop = $data['display_prop'];
+
         if (isset($data['value'])) $this->value = $data['value'];
         if (xarRequest::isObjectURL() && !empty($this->value) && !isset($data['link'])) {
             // CHECKME: store_prop_is_itemid only gets checked once getOptions() is called later on !

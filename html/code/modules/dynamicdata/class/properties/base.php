@@ -482,7 +482,7 @@ class DataProperty extends Object implements iDataProperty
         // The value might be an array
         if (is_array($data['value'])){
             $temp = array();
-            foreach ($data['value'] as $tmp) $temp[] = arVarPrepForDisplay($tmp);
+            foreach ($data['value'] as $tmp) $temp[] = xarVarPrepForDisplay($tmp);
             $data['value'] = $temp;
         } else {
             $data['value'] = xarVarPrepForDisplay($data['value']);

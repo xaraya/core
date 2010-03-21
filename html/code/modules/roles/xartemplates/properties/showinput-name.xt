@@ -10,7 +10,7 @@
     </xar:if>
 
     <xar:if condition="$refobject eq 'roles_groups'">
-        <xar:data-input type="objectref" refobject="$refobject" style="$style" onchange="$evt_change" value="$value"/>
+        <xar:data-input type="objectref" refobject="$refobject" store_prop="id" style="$style" onchange="$evt_change" value="$value"/>
     <xar:else/>
         <xar:set name="namestring">$name . '_salutation'</xar:set>
         <xar:if condition="($show_salutation eq 'true') AND ($layout ne 'single')">
