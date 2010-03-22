@@ -149,7 +149,7 @@ class SelectProperty extends DataProperty
             return $this->options;
         }
         
-        $filepath = sys::code() . $this->initialization_file;
+        if (!empty($filepath)) $filepath = sys::code() . $this->initialization_file;
         if (!empty($this->initialization_function)) {
             @eval('$items = ' . $this->initialization_function .';');
             if (!isset($items) || !is_array($items)) $items = array();
@@ -165,7 +165,7 @@ class SelectProperty extends DataProperty
             unset($items);
         } elseif (!empty($filepath) && file_exists($filepath)) {
             $parts = pathinfo($filepath);
-            if (isset($parts['extension']) && $parts['extension'] =='xml'){
+            if ($parts['extension'] =='xml'){
                 $data = implode("", file($filepath));
                 $parser = xml_parser_create( 'UTF-8' );
                 xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
