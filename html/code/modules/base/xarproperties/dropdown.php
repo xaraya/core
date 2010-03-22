@@ -165,7 +165,7 @@ class SelectProperty extends DataProperty
             unset($items);
         } elseif (!empty($filepath) && file_exists($filepath)) {
             $parts = pathinfo($filepath);
-            if ($parts['extension'] =='xml'){
+            if (isset($parts['extension']) && $parts['extension'] =='xml'){
                 $data = implode("", file($filepath));
                 $parser = xml_parser_create( 'UTF-8' );
                 xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
