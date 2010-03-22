@@ -1,6 +1,8 @@
 /*
   Upgrade script for the table changes made in Xaraya 2.1.0
   compared to Xaraya 2.0.0
+  
+  This script works with MySQL. It should be appropriately modified for other databases
 */
 
 /* Merging the blockgroups and blocks tables */
