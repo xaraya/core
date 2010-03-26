@@ -218,126 +218,102 @@ class MenuBlock extends BasicBlock implements iBlock
 
         // Added list of modules if selected.
         if ($data['displaymodules'] != 'None') {
-            if (xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$data[title]:$data[bid]")) {
-               $useAliasName=0;
-               $module_alias_name='';
-                if ($data['displaymodules'] == 'List' && !empty($data['modulelist'])) {
-                    $modlist = explode(',',$data['modulelist']);
-                    $list = array();
-                    foreach ($modlist as $mod) {
-                        try {
-                            $temp = xarMod_getBaseInfo($mod);
-                            if(!empty($temp) && xarModIsAvailable($temp['name']))
-                                if (isset($temp)) $list[] = $temp;
-                        } catch (Exception $e) {}
-                    }
-                    $mods = $list;
-                    if ($list == array()) $usermods = '';
+           $useAliasName=0;
+           $module_alias_name='';
+            if ($data['displaymodules'] == 'List' && !empty($data['modulelist'])) {
+                $modlist = explode(',',$data['modulelist']);
+                $list = array();
+                foreach ($modlist as $mod) {
+                    try {
+                        $temp = xarMod_getBaseInfo($mod);
+                        if(!empty($temp) && xarModIsAvailable($temp['name']))
+                            if (isset($temp)) $list[] = $temp;
+                    } catch (Exception $e) {}
                 }
-                // FIXME: view_access here doesn't make sense to me
-                $access = isset($args['view_access']) ? $args['view_access'] : array();
-                foreach($mods as $mod){
-                    if (isset($access[$mod['name']])) {
-                        // Decide whether this block is modifiable to the current user
-                        $args = array(
-                            'module' => 'base',
-                            'component' => 'Block',
-                            'instance' => $data['title'] . "All:All",
-                            'group' => $access[$mod['name']]['group'],
-                            'level' => $access[$mod['name']]['level'],
-                        );
-                        $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
-                        if (!$accessproperty->check($args)) continue;
-                    }
-
-                    if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$data['name']. ":" . $mod['name'])) continue;
-                    if ((bool)xarModVars::get($mod['name'], 'user_menu_link')) continue;
-
-                    /* Check for active module alias */
-                    $useAliasName = xarModVars::get($mod['name'], 'use_module_alias');
-                    $module_alias_name = xarModVars::get($mod['name'],'module_alias_name');
-
-                    /* use the alias name if it exists for the label */
-                    if (isset($useAliasName) && $useAliasName==1 && isset($module_alias_name) && !empty($module_alias_name)) {
-                        $label = $module_alias_name;
-                    } else {
-                        $label = xarModGetDisplayableName($mod['name']);
-                    }
-
-                    $title = xarModGetDisplayableDescription($mod['name']);
-                    $link = xarModURL($mod['name'] ,'user', 'main', array());
-                    // depending on which module is currently loaded we display accordingly
-                    if($mod['name'] == $thismodname && $thismodtype == 'user'){
-                        // Get list of links for modules
-                        $labelDisplay = $label;
-                        $usermods[] = array(   'label'     => $labelDisplay,
-                                               'link'      => '',
-                                               'desc'      => $title,
-                                               'modactive' => 1);
-
-                        // Lets check to see if the function exists and just skip it if it doesn't
-                        // with the new api load, it causes some problems.  We need to load the api
-                        // in order to do it right.
-                        xarModAPILoad($mod['name'], 'user');
-                        if (function_exists($label.'_userapi_getmenulinks') ||
-                        file_exists(sys::code() . "modules/$mod[osdirectory]/xaruserapi/getmenulinks.php")){
-                            // The user API function is called.
-                            $menulinks = xarMod::apiFunc($mod['name'],  'user', 'getmenulinks');
-                        } else {
-                            $menulinks = '';
-                        }
-
-                        if (!empty($menulinks)) {
-                            $indlinks = array();
-                            foreach($menulinks as $menulink){
-
-                                // Compare with current URL
-                                if ($menulink['url'] == $currenturl) {
-                                    $funcactive = 1;
-                                } else {
-                                    $funcactive = 0;
-                                }
-
-                    // Security Check
-    //                                        if (xarSecurityCheck('ViewBaseBlocks',0,'Block',"$data[title]:$menulink[title]:All")) {
-                                    $indlinks[] = array('userlink'      => $menulink['url'],
-                                                        'userlabel'     => $menulink['label'],
-                                                        'usertitle'     => $menulink['title'],
-                                                        'funcactive'    => $funcactive);
-                                }
-    //                                    }
-                        } else {
-                            $indlinks= '';
-                        }
-
-                    }else{
-                        $labelDisplay = $label;
-                        $usermods[] = array('label' => $labelDisplay,
-                                            'link' => $link,
-                                            'desc' => $title,
-                                            'modactive' => 0);
-                    }
-                }
-                if (empty($usermods)) $usermods = '';
-            } else {
-                // Means no privileges to view baseblocks
-                // FIXME: do we always want to show roles link here?
-                // shouldn't we check if login is allowed, and if user
-                // has necessary privs for roles. Also what about registration?
-                // surely user registration would be useful here? we already
-                // look for authdata, maybe consider getting regdata too :-?
-                $modid = xarMod::getRegID('roles');
-                $modinfo = xarMod::getInfo($modid);
-                if ($modinfo){
-                    $title = $modinfo['displaydescription'];
-                } else {
-                      $title = xarML('No description');
-                }
-                $usermods[] = array('label' => xarModGetDisplayableName('roles'),
-                    'link' => xarModUrl('roles', 'user', 'main'),
-                    'desc' => xarModGetDisplayableDescription('roles'),
-                    'modactive' => 0);
+                $mods = $list;
+                if ($list == array()) $usermods = '';
             }
+            $access = isset($data['view_access']) ? $data['view_access'] : array();
+            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+            foreach($mods as $mod){//echo $mod['name']." ";
+                if (isset($access[$mod['name']])) {
+                    // Decide whether this menu item is displayable to the current user
+                    $args = array(
+                        'module' => 'base',
+                        'component' => 'Block',
+                        'instance' => $data['title'] . "All:All",
+                        'group' => $access[$mod['name']]['group'],
+                        'level' => $access[$mod['name']]['level'],
+                    );
+                    if (!$accessproperty->check($args)) continue;
+                }
+
+                if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$data['name']. ":" . $mod['name'])) continue;
+                if ((bool)xarModVars::get($mod['name'], 'user_menu_link')) continue;
+
+                /* Check for active module alias */
+                $useAliasName = xarModVars::get($mod['name'], 'use_module_alias');
+                $module_alias_name = xarModVars::get($mod['name'],'module_alias_name');
+
+                /* use the alias name if it exists for the label */
+                if (isset($useAliasName) && $useAliasName==1 && isset($module_alias_name) && !empty($module_alias_name)) {
+                    $label = $module_alias_name;
+                } else {
+                    $label = xarModGetDisplayableName($mod['name']);
+                }
+
+                $title = xarModGetDisplayableDescription($mod['name']);
+                $link = xarModURL($mod['name'] ,'user', 'main', array());
+                // depending on which module is currently loaded we display accordingly
+                if($mod['name'] == $thismodname && $thismodtype == 'user'){
+                    // Get list of links for modules
+                    $labelDisplay = $label;
+                    $usermods[] = array(   'label'     => $labelDisplay,
+                                           'link'      => '',
+                                           'desc'      => $title,
+                                           'modactive' => 1);
+
+                    // Lets check to see if the function exists and just skip it if it doesn't
+                    // with the new api load, it causes some problems.  We need to load the api
+                    // in order to do it right.
+                    xarModAPILoad($mod['name'], 'user');
+                    if (function_exists($label.'_userapi_getmenulinks') ||
+                    file_exists(sys::code() . "modules/$mod[osdirectory]/xaruserapi/getmenulinks.php")){
+                        // The user API function is called.
+                        $menulinks = xarMod::apiFunc($mod['name'],  'user', 'getmenulinks');
+                    } else {
+                        $menulinks = '';
+                    }
+
+                    if (!empty($menulinks)) {
+                        $indlinks = array();
+                        foreach($menulinks as $menulink){
+
+                            // Compare with current URL
+                            if ($menulink['url'] == $currenturl) {
+                                $funcactive = 1;
+                            } else {
+                                $funcactive = 0;
+                            }
+
+                            $indlinks[] = array('userlink'      => $menulink['url'],
+                                                'userlabel'     => $menulink['label'],
+                                                'usertitle'     => $menulink['title'],
+                                                'funcactive'    => $funcactive);
+                            }
+                    } else {
+                        $indlinks= '';
+                    }
+
+                } else {
+                    $labelDisplay = $label;
+                    $usermods[] = array('label' => $labelDisplay,
+                                        'link' => $link,
+                                        'desc' => $title,
+                                        'modactive' => 0);
+                }
+            }
+            if (empty($usermods)) $usermods = '';
         } else {
             $usermods = '';
         }
