@@ -149,7 +149,7 @@ class SelectProperty extends DataProperty
             return $this->options;
         }
         
-        $filepath = sys::code() . $this->initialization_file;
+        if (!empty($filepath)) $filepath = sys::code() . $this->initialization_file;
         if (!empty($this->initialization_function)) {
             @eval('$items = ' . $this->initialization_function .';');
             if (!isset($items) || !is_array($items)) $items = array();
