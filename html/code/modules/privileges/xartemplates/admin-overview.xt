@@ -137,6 +137,9 @@
         <h3>Available Dataproperties</h3>
         <ul>
             <li>
+                <strong>Access</strong>:&#160;accepts as input or displays the settings for an (extended) security check.
+            </li>
+            <li>
                 <strong>Privilegestree</strong>:&#160;displays a tree of privileges.
             </li>
         </ul>

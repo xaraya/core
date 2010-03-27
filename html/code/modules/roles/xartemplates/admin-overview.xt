@@ -159,6 +159,9 @@
                 <strong>ICQ</strong>:&#160;accepts as input or displays an ICQ user address.
             </li>
             <li>
+                <strong>Name</strong>:&#160;accepts as input or displays a user's display name.
+            </li>
+            <li>
                 <strong>Password</strong>:&#160;accepts a password as input.
             </li>
             <li>
