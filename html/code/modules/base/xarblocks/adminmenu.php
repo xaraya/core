@@ -214,14 +214,14 @@ class AdminmenuBlock extends BasicBlock implements iBlock
         //Leave way open for real help system
         //TODO : move any final help functions to some module or api when decided
 
-    if (file_exists(sys::code() . 'modules/'.$thismodname.'/xaradmin/overview.php')) {
+        if (file_exists(sys::code() . 'modules/'.$thismodname.'/xaradmin/overview.php')) {
             if ($thisfuncname<>'overview' && $thisfuncname<>'main') {
-            $overviewlink = xarModURL($thismodname,'admin','overview',array(),NULL,$thisfuncname);
+                $overviewlink = xarModURL($thismodname,'admin','overview',array(),NULL,$thisfuncname);
             } else {
-            $overviewlink = xarModURL($thismodname,'admin','overview');
+                $overviewlink = xarModURL($thismodname,'admin','overview');
             }
         } else { //no overview exists;
-        $overviewlink = xarModURL('base','admin','overview',array('template'=>'nooverview'));
+            $overviewlink = xarModURL('base','admin','overview',array('template'=>'nooverview'));
         }
 
         $vars['overviewlink']=$overviewlink;

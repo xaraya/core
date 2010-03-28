@@ -1004,17 +1004,16 @@ class DataObjectMaster extends Object
     public function getActionURL($action = '', $itemid = null, $extra = array())
     {
         // if we have a cached URL already, use that
-        // FIXME: this can't work if we use $extra
-//        if (!empty($itemid) && !empty($this->cached_urls[$action])) {
-//            $url = str_replace('=<itemid>', '='.$itemid, $this->cached_urls[$action]);
-//            return $url;
-//        }
+        if (!empty($itemid) && empty($extra) && !empty($this->cached_urls[$action])) {
+            $url = str_replace('=<itemid>', '='.$itemid, $this->cached_urls[$action]);
+            return $url;
+        }
 
         // get URL for this object and action
         $url = xarObject::getActionURL($this, $action, $itemid, $extra);
 
         // cache the URL if the itemid is in there
-        if (!empty($itemid) && strpos($url, $this->urlparam . '=' . $itemid) !== false) {
+        if (!empty($itemid) && empty($extra) && strpos($url, $this->urlparam . '=' . $itemid) !== false) {
             $this->cached_urls[$action] = str_replace($this->urlparam . '=' . $itemid, $this->urlparam . '=<itemid>', $url);
         }
 
