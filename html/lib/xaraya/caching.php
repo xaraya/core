@@ -55,9 +55,11 @@ class xarCache extends Object
 
         // enable template caching ? Too early in the process here, cfr. xaraya/templates.php
 
-        // enable variable caching
-        //sys::import('xaraya.caching.variable');
-        //self::$variableCacheIsEnabled = xarVariableCache::init($config);
+        // enable variable caching (requires activating autoload for serialized objects et al.)
+        if (!empty($config['Variable.CacheIsEnabled'])) {
+            sys::import('xaraya.caching.variable');
+            self::$variableCacheIsEnabled = xarVariableCache::init($config);
+        }
     }
 
     /**
