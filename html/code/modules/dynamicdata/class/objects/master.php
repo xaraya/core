@@ -610,7 +610,7 @@ class DataObjectMaster extends Object
     **/
     static function &getObject(Array $args=array())
     {
-        /* with autoload and variable caching activated
+        /* with autoload and variable caching activated */
         // Identify the variable by its arguments here
         $hash = md5(serialize($args));
         // Get a cache key for this variable if it's suitable for variable caching
@@ -621,7 +621,6 @@ class DataObjectMaster extends Object
             $object = xarVariableCache::getCached($cacheKey);
             return $object;
         }
-        */
         if(!isset($args['itemid'])) $args['itemid'] = null;
 
 // FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
@@ -655,12 +654,11 @@ class DataObjectMaster extends Object
         // serialize is better here - shallow cloning is not enough for array of properties, datastores etc. and with deep cloning internal references are lost
 //        xarCoreCache::setCached('DDObject', $args['objectid'], serialize($object));
 
-        /* with autoload and variable caching activated
+        /* with autoload and variable caching activated */
         // Set the variable in cache
         if (!empty($cacheKey)) {
             xarVariableCache::setCached($cacheKey, $object);
         }
-        */
         return $object;
     }
 
@@ -679,7 +677,7 @@ class DataObjectMaster extends Object
     **/
     static function &getObjectList(Array $args=array())
     {
-        /* with autoload and variable caching activated
+        /* with autoload and variable caching activated */
         // Identify the variable by its arguments here
         $hash = md5(serialize($args));
         // Get a cache key for this variable if it's suitable for variable caching
@@ -690,7 +688,6 @@ class DataObjectMaster extends Object
             $object = xarVariableCache::getCached($cacheKey);
             return $object;
         }
-        */
 // FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
         // Complete the info if this is a known object
         $info = self::getObjectInfo($args);
@@ -717,12 +714,11 @@ class DataObjectMaster extends Object
         // here we can use our own classes to retrieve this
         $object = new $class($descriptor);
 
-        /* with autoload and variable caching activated
+        /* with autoload and variable caching activated */
         // Set the variable in cache
         if (!empty($cacheKey)) {
             xarVariableCache::setCached($cacheKey, $object);
         }
-        */
         return $object;
     }
 
@@ -1121,11 +1117,11 @@ class DataObjectMaster extends Object
             'group' => $access['group'],
             'level' => $access['level'],
         );
-        if (!isset($this::$access_property)) {
+        if (!isset(self::$access_property)) {
             sys::import('modules.dynamicdata.class.properties.master');
-            $this::$access_property = DataPropertyMaster::getProperty(array('name' => 'access'));
+            self::$access_property = DataPropertyMaster::getProperty(array('name' => 'access'));
         }
-        return $this::$access_property->check($args);
+        return self::$access_property->check($args);
     }
 }
 ?>
