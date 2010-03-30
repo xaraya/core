@@ -25,7 +25,8 @@
  */
 function blocks_admin_update_instance()
 {
-    if (!xarVarFetch('bid', 'int:1:', $bid)) return;
+    if (!xarVarFetch('bid', 'int:1:', $bid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($bid)) return xarResponse::notFound();
     if (!xarVarFetch('tab', 'pre:trim:lower:str:1:', $tab, 'config', XARVAR_NOT_REQUIRED)) return;
 
     // Security Check
@@ -60,7 +61,7 @@ function blocks_admin_update_instance()
     }
     // make sure we instantiated a block,
     if (empty($block)) {
-        // return classname not found (this is always class {$type}Block)
+        // return classname not found (this is always class [$type]Block)
         throw new ClassNotFoundException($className);
     }
 

@@ -30,7 +30,8 @@ function modules_admin_activate()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    if (!xarVarFetch('id', 'int:1:', $id)) return; 
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($id)) return xarResponse::notFound();
 
     // Activate
     $activated = xarMod::apiFunc('modules',

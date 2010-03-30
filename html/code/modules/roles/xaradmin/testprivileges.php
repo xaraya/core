@@ -27,7 +27,8 @@
 function roles_admin_testprivileges()
 {
     // Get Parameters
-    if (!xarVarFetch('id', 'int:1:', $id)) return;
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($id)) return xarResponse::notFound();
     if (!xarVarFetch('pmodule', 'int', $module, xarSecurity::PRIVILEGES_ALL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('name', 'str:1', $name, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('test', 'str:1:35:', $test, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;

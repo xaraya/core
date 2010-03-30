@@ -23,8 +23,10 @@ function themes_admin_themesinfo()
 {
     $data = array();
     
-    if (!xarVarFetch('id', 'int:1:', $id)) return; 
-    // obtain maximum information about module
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return; 
+    if (empty($id)) return xarResponse::notFound();
+
+    // obtain maximum information about a theme
     $info = xarThemeGetInfo($id);
     // data vars for template
     $data['themeid']              = xarVarPrepForDisplay($id);
