@@ -39,7 +39,7 @@ class VariableTableDataStore extends SQLDataStore
 
         $propids = array_keys($this->fields);
 
-        $dynamicdata = $this->tables['dynamic_data'];
+        $dynamicdata = $this->getTable('dynamic_data');
 
         $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
         $query = "SELECT property_id, value
@@ -48,7 +48,7 @@ class VariableTableDataStore extends SQLDataStore
                         item_id = ?";
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
-        $stmt = $this->db->prepareStatement($query);
+        $stmt = $this->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
         if(!$result->getRecordCount()) return;
 
@@ -82,7 +82,7 @@ class VariableTableDataStore extends SQLDataStore
 
         $propids = array_keys($this->fields);
 
-        $dynamicdata = $this->tables['dynamic_data'];
+        $dynamicdata = $this->getTable('dynamic_data');
 
         foreach ($propids as $propid) {
             // get the value from the corresponding property
@@ -96,7 +96,7 @@ class VariableTableDataStore extends SQLDataStore
             $query = "INSERT INTO $dynamicdata (property_id,item_id,value)
                       VALUES (?,?,?)";
             $bindvars = array($propid,$itemid, (string) $value);
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
         }
         return $itemid;
@@ -116,7 +116,7 @@ class VariableTableDataStore extends SQLDataStore
 
         $propids = array_keys($this->fields);
 
-        $dynamicdata = $this->tables['dynamic_data'];
+        $dynamicdata = $this->getTable('dynamic_data');
 
         // get the current dynamic data fields for all properties of this item
         $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
@@ -127,7 +127,7 @@ class VariableTableDataStore extends SQLDataStore
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
 
-        $stmt = $this->db->prepareStatement($query);
+        $stmt = $this->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
 
         $datafields = array();
@@ -157,7 +157,7 @@ class VariableTableDataStore extends SQLDataStore
                           VALUES (?,?,?)";
                 $bindvars = array($propid,$itemid, (string) $value);
             }
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
         }
         return $itemid;
@@ -172,7 +172,7 @@ class VariableTableDataStore extends SQLDataStore
             return $itemid;
         }
 
-        $dynamicdata = $this->tables['dynamic_data'];
+        $dynamicdata = $this->getTable('dynamic_data');
 
         // get the current dynamic data fields for all properties of this item
         $bindmarkers = '?' . str_repeat(',?', count($propids) -1);
@@ -181,7 +181,7 @@ class VariableTableDataStore extends SQLDataStore
                         item_id = ?";
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
-        $stmt = $this->db->prepareStatement($query);
+        $stmt = $this->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
         return $itemid;
     }
@@ -225,7 +225,7 @@ class VariableTableDataStore extends SQLDataStore
             array_push($process, $propid);
         }
 
-        $dynamicdata = $this->tables['dynamic_data'];
+        $dynamicdata = $this->getTable('dynamic_data');
 
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
@@ -247,7 +247,7 @@ class VariableTableDataStore extends SQLDataStore
             }
 
             // CHECKME: there was a cache execute here, it N/A anymore now, as the method is non-existent.
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars);
 
             if (count($this->sort) > 0) {
@@ -354,7 +354,7 @@ class VariableTableDataStore extends SQLDataStore
             if ($numitems > 0) {
                 // <mrb> Why is this only here?
                 $query .= ' ORDER BY item_id, property_id';
-                $stmt = $this->db->prepareStatement($query);
+                $stmt = $this->prepareStatement($query);
 
                 // Note : this assumes that every property of the items is stored in the table
                 $numrows = $numitems * count($propids);
@@ -366,7 +366,7 @@ class VariableTableDataStore extends SQLDataStore
                 $stmt->setLimit($numrows);
                 $stmt->setOffset($startrow-1);
             } else {
-                $stmt = $this->db->prepareStatement($query);
+                $stmt = $this->prepareStatement($query);
             }
             // All prepared, lets go
             $result = $stmt->executeQuery();
@@ -398,7 +398,7 @@ class VariableTableDataStore extends SQLDataStore
         // more difficult case where we need to create a pivot table, basically
         } elseif ($numitems > 0 || count($this->sort) > 0 || count($this->where) > 0 || count($this->groupby) > 0) {
 
-            $dbtype = xarDB::getType();
+            $dbtype = $this->getType();
             if (substr($dbtype,0,4) == 'oci8') {
                 $propval = 'TO_CHAR(value)';
             } elseif (substr($dbtype,0,5) == 'mssql') {
@@ -456,7 +456,7 @@ class VariableTableDataStore extends SQLDataStore
             }
 
             // we got the query
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
 
             if ($numitems > 0) {
                 $stmt->setLimit($numitems);
@@ -648,7 +648,7 @@ class VariableTableDataStore extends SQLDataStore
                         FROM $dynamicdata
                        WHERE property_id IN ($bindmarkers)";
 
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery($propids);
 
             // we only have one "itemid" with the result of the operations
@@ -759,7 +759,7 @@ class VariableTableDataStore extends SQLDataStore
                         FROM $dynamicdata
                        WHERE property_id IN ($bindmarkers)";
 
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery($propids);
 
             $itemidlist = array();
@@ -791,14 +791,14 @@ class VariableTableDataStore extends SQLDataStore
             $this->cache = $args['cache'];
         }
 
-        $dynamicdata = $this->tables['dynamic_data'];
+        $dynamicdata = $this->getTable('dynamic_data');
 
         $propids = array_keys($this->fields);
 
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
-            if($this->db->databaseType == 'sqlite') {
+            if($this->getType() == 'sqlite') {
                 $query = "SELECT COUNT(*)
                           FROM (SELECT DISTINCT item_id
                                 WHERE property_id IN ($bindmarkers) "; // WATCH OUT, STILL UNBALANCED
@@ -821,9 +821,9 @@ class VariableTableDataStore extends SQLDataStore
             }
 
             // Balance parentheses.
-            if($this->db->databaseType == 'sqlite') $query .= ")";
+            if($this->getType() == 'sqlite') $query .= ")";
 
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars);
 
             if ($result->first()) return;
@@ -836,7 +836,7 @@ class VariableTableDataStore extends SQLDataStore
         } elseif (count($this->where) > 0) {
             // more difficult case where we need to create a pivot table, basically
             // TODO: this only works for OR conditions !!!
-            if($this->db->databaseType == 'sqlite') {
+            if($this->getType() == 'sqlite') {
                 $query = "SELECT COUNT(*)
                           FROM ( SELECT DISTINCT item_id FROM $dynamicdata WHERE "; // WATCH OUT, STILL UNBALANCED
             } else {
@@ -851,9 +851,9 @@ class VariableTableDataStore extends SQLDataStore
             }
 
             // Balance parentheses.
-            if($this->db->databaseType == 'sqlite') $query .= ")";
+            if($this->getType() == 'sqlite') $query .= ")";
 
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery();
             if (!$result->first()) return;
 
@@ -865,7 +865,7 @@ class VariableTableDataStore extends SQLDataStore
         // here we grab everyting
         } else {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
-            if($this->db->databaseType == 'sqlite' ) {
+            if($this->getType() == 'sqlite' ) {
                 $query = "SELECT COUNT(*)
                           FROM (SELECT DISTINCT item_id FROM $dynamicdata
                           WHERE property_id IN ($bindmarkers)) ";
@@ -875,7 +875,7 @@ class VariableTableDataStore extends SQLDataStore
                           WHERE property_id IN ($bindmarkers) ";
             }
 
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery($propids);
             if (!$result->first()) return;
 
@@ -907,7 +907,7 @@ class VariableTableDataStore extends SQLDataStore
             throw new BadParameterException(array($invalid, 'DataVariableTable_DataStore', 'getNextId', 'DynamicData'),$msg);
         }
 
-        $dynamicobjects = $this->tables['dynamic_objects'];
+        $dynamicobjects = $this->getTable('dynamic_objects');
 
         // increase the max id for this object
         // TODO: figure out a way to do this more reliable.
@@ -917,7 +917,7 @@ class VariableTableDataStore extends SQLDataStore
                      SET maxid = maxid + 1 ";
             $query .= "WHERE id = ? ";
             $bindvars[] = (int)$objectid;
-        $stmt = $this->db->prepareStatement($query);
+        $stmt = $this->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
 
         // get it back (WARNING : this is *not* guaranteed to be unique on heavy-usage sites !)
@@ -926,7 +926,7 @@ class VariableTableDataStore extends SQLDataStore
                     FROM $dynamicobjects ";
             $query .= "WHERE id = ? ";
             $bindvars[] = (int)$objectid;
-        $stmt = $this->db->prepareStatement($query);
+        $stmt = $this->prepareStatement($query);
         $result= $stmt->executeQuery($bindvars);
         if (!$result->first()) return; // this should not happen
 

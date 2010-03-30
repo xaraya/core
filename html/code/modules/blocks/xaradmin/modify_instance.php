@@ -17,8 +17,10 @@
 function blocks_admin_modify_instance()
 {
     // Get parameters
-    if (!xarVarFetch('bid', 'int:1:', $bid)) {return;}
+    if (!xarVarFetch('bid', 'int:1:', $bid, 0, XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('tab', 'pre:trim:lower:str:1', $tab, 'config', XARVAR_NOT_REQUIRED)) return;
+    
+    if (empty($bid)) return xarResponse::notFound();
 
     // Security Check
     if (!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}

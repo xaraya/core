@@ -30,7 +30,8 @@ function roles_user_email($args)
 
     extract($args);
 
-    if (!xarVarFetch('id',   'id', $id)) return;
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($id)) return xarResponse::notFound();
     if (!xarVarFetch('phase', 'enum:modify:confirm', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
 
     // If this validation fails, then do NOT send an e-mail, but

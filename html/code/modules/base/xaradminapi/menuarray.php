@@ -33,7 +33,7 @@ function base_adminapi_menuarray($args)
                           'label' => $menuitem['label']
                            );
             if(isset($menuitem['mask'])) {
-                if (xarSecurityCheck($menuitem['mask'])) {
+                if (xarSecurityCheck($menuitem['mask'],0)) {
                     $menulinks[] = $link;
                 }
             } else {

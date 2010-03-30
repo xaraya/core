@@ -148,11 +148,11 @@ class BasicBlock extends ObjectDescriptor implements iBlock
             'group' => $access['group'],
             'level' => $access['level'],
         );
-        if (!isset($this::$access_property)) {
+        if (!isset(self::$access_property)) {
             sys::import('modules.dynamicdata.class.properties.master');
-            $this::$access_property = DataPropertyMaster::getProperty(array('name' => 'access'));
+            self::$access_property = DataPropertyMaster::getProperty(array('name' => 'access'));
         }
-        return $this::$access_property->check($args);
+        return self::$access_property->check($args);
     }
 
     /*

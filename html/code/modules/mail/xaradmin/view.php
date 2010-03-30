@@ -16,7 +16,7 @@ function mail_admin_view($args)
         return OfferCreate();
     } else {
         $data['qdef'] = $qdefInfo;
-        if(!xarVarFetch('itemid','id',$data['itemid'],0,XARVAR_NOT_REQUIRED)) return;
+        if(!xarVarFetch('itemid','int:1:',$data['itemid'],0,XARVAR_NOT_REQUIRED)) return;
         return $data;
     }
 }

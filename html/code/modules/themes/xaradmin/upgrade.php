@@ -28,7 +28,8 @@ function themes_admin_upgrade()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    if (!xarVarFetch('id', 'int:1:', $id)) return; 
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($id)) return xarResponse::notFound();
     
     // Upgrade theme
     $upgraded = xarMod::apiFunc('themes', 'admin', 'upgrade', array('regid' => $id));

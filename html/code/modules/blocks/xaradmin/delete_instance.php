@@ -16,8 +16,10 @@
 function blocks_admin_delete_instance()
 {
     // Get parameters
-    if (!xarVarFetch('bid', 'id', $bid)) return;
+    if (!xarVarFetch('bid', 'id', $bid, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('confirm', 'str:1:', $confirm, '', XARVAR_NOT_REQUIRED)) {return;}
+
+    if (empty($bid)) return xarResponse::notFound();
 
     // Security Check
     if (!xarSecurityCheck('DeleteBlock', 0, 'Instance')) {return;}
@@ -43,7 +45,7 @@ function blocks_admin_delete_instance()
     }
     // make sure we instantiated a block,
     if (empty($block)) {
-        // return classname not found (this is always class {$type}Block)
+        // return classname not found (this is always class [$type]Block)
         throw new ClassNotFoundException($className);
     }
 

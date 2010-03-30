@@ -21,7 +21,8 @@
 function themes_admin_update()
 { 
     // Get parameters
-    if (!xarVarFetch('id', 'id', $regId)) return;
+    if (!xarVarFetch('id', 'int:1:', $regId, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($regId)) return xarResponse::notFound();
 
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));

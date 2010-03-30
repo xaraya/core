@@ -9,8 +9,9 @@ function mail_admin_delete($args = array())
     // Security check
     if (!xarSecurityCheck('AdminMail')) return; 
     // Required parameters
-    if(!xarVarFetch('itemid','id',$itemid)) return;
-    if(!xarVarFetch('objectid','id',$objectid)) return;
+    if(!xarVarFetch('itemid','int:1:',$itemid, 0, XARVAR_NOT_REQUIRED)) return;
+    if(!xarVarFetch('objectid','int:1:',$objectid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($itemid) || empty($objectid)) return xarResponse::notFound();
 
     $qdefObject = xarMod::apiFunc('dynamicdata','user','getobject',array('objectid' => $objectid));
     if(!$qdefObject) return;

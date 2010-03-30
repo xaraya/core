@@ -27,7 +27,8 @@ function modules_admin_modify($args)
     extract($args);
 
     // xarVarFetch does validation if not explicitly set to be not required
-    xarVarFetch('id','id',$id);
+    if (!xarVarFetch('id', 'int:1', $id, 0, XARVAR_NOT_REQUIRED)) return; 
+    if (empty($id)) return xarResponse::notFound();
     xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET);
 
     $modInfo = xarMod::getInfo($id);

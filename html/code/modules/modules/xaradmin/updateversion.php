@@ -20,7 +20,9 @@
 function modules_admin_updateversion()
 {
     // Get parameters from input
-    xarVarFetch('id', 'id', $regId);
+    xarVarFetch('id', 'int:1', $regId, 0, XARVAR_NOT_REQUIRED);
+    if (empty($regId)) return xarResponse::notFound();
+
 
     if (!isset($regId)) throw new EmptyParameterException('regid');
 
