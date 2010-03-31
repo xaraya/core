@@ -5,56 +5,94 @@
     <!-- Get linked objects -->
     <xar:set name="linked">#$object:getLinkedObjects()#</xar:set>
 
+    <![CDATA[
+    <script type="text/javascript">
+        function showtab_prefix(selectedindex, items, prefix)
+        {
+            for (i=0;i<items;i++) {
+                document.getElementById(prefix + 'page-' + i).style.display = "none";
+                document.getElementById(prefix + 'tab-' + i).className = "xar-tab";
+                document.getElementById(prefix + 'href-' + i).className = "xar-norm xar-norm-outline";
+            }
+            document.getElementById(prefix + 'page-' + selectedindex).style.display = "block";
+            document.getElementById(prefix + 'tab-' + selectedindex).className = "xar-tab-active";
+            document.getElementById(prefix + 'href-' + selectedindex).className = "xar-accent xar-accent-outline";
+        }
+    </script>
+    ]]>
+
     <!-- Show parents and linkedfrom - template syntax may still change -->
     <xar:if condition="!empty($object:links.parents)">
-        <fieldset>
-        <legend>Parents</legend>
-        <xar:foreach in="$object:links.parents" value="$link">
-            <xar:if condition="!empty($link.list:itemids)">
+        <xar:set name="numtabs">count($object->links['parents'])</xar:set>
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <li class="xar-tabs-label">
+                Parents
+            </li>
+            <xar:foreach in="$object:links.parents" key="$tabid" value="$link">
                 <xar:set name="fromprop">#$link.from_prop#</xar:set>
                 <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
                 <xar:set name="toprop">#$link.to_prop#</xar:set>
                 <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
-                <!-- you can specify the layout and linkfield here or in the object configuration -->
-                <xar:set name="args">array('linktype' => 'object', 'newlink' => '')</xar:set>
                 <xar:if condition="$link.source eq $link.target">
-                    [#$fromlabel#]
-                <xar:elseif condition="$fromlabel eq $tolabel"/>
-                    #$link.list:label#:
-                <xar:elseif condition="$link.list:primary eq $toprop"/>
-                    [#$fromlabel#] &lt;= #$link.list:label#
+                    <xar:set name="relation">$tolabel.' =&gt; '.$fromlabel</xar:set>
                 <xar:else/>
-                    [#$fromlabel#] &lt;= #$link.list:label# [#$tolabel#]
+                    <xar:set name="relation">$link['list']->label.'.'.$tolabel.' =&gt; '.$fromlabel</xar:set>
                 </xar:if>
-                #$link.list:showView($args)#
-            </xar:if>
+                <li class="xar-tab" id="parents-tab-#$tabid#">
+                    <a id="parents-href-#$tabid#" href="javascript:showtab_prefix(#$tabid#,#$numtabs#,'parents-')" title="#$relation#">
+                        #$link.list:label#
+                    </a>
+                </li>
+            </xar:foreach>
+        </ul>
+        <xar:foreach in="$object:links.parents" key="$tabid" value="$link">
+            <div id="parents-page-#$tabid#" style="display: none">
+                <xar:if condition="!empty($link.list:itemids)">
+                    <!-- you can specify the layout and linkfield here or in the object configuration -->
+                    <xar:set name="args">array('linktype' => 'object', 'newlink' => '')</xar:set>
+                    #$link.list:showView($args)#
+                </xar:if>
+            </div>
         </xar:foreach>
-        </fieldset>
+        <script type="text/javascript">
+            showtab_prefix(0,#$numtabs#,'parents-')
+        </script>
     </xar:if>
     <xar:if condition="!empty($object:links.linkedfrom)">
-        <fieldset>
-        <legend>Linked From</legend>
-        <xar:foreach in="$object:links.linkedfrom" value="$link">
-            <xar:if condition="!empty($link.list:itemids)">
+        <xar:set name="numtabs">count($object->links['linkedfrom'])</xar:set>
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <li class="xar-tabs-label">
+                Linked From
+            </li>
+            <xar:foreach in="$object:links.linkedfrom" key="$tabid" value="$link">
                 <xar:set name="fromprop">#$link.from_prop#</xar:set>
                 <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
                 <xar:set name="toprop">#$link.to_prop#</xar:set>
                 <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
-                <!-- you can specify the layout and linkfield here or in the object configuration -->
-                <xar:set name="args">array('linktype' => 'object', 'newlink' => '')</xar:set>
                 <xar:if condition="$link.source eq $link.target">
-                    [#$fromlabel#]
-                <xar:elseif condition="$fromlabel eq $tolabel"/>
-                    #$link.list:label#:
-                <xar:elseif condition="$link.list:primary eq $toprop"/>
-                    [#$fromlabel#] &lt;= #$link.list:label#
+                    <xar:set name="relation">$tolabel.' =&gt; '.$fromlabel</xar:set>
                 <xar:else/>
-                    [#$fromlabel#] &lt;= #$link.list:label# [#$tolabel#]
+                    <xar:set name="relation">$link['list']->label.'.'.$tolabel.' =&gt; '.$fromlabel</xar:set>
                 </xar:if>
-                #$link.list:showView($args)#
-            </xar:if>
+                <li class="xar-tab" id="linkedfrom-tab-#$tabid#">
+                    <a id="linkedfrom-href-#$tabid#" href="javascript:showtab_prefix(#$tabid#,#$numtabs#,'linkedfrom-')" title="#$relation#">
+                        #$link.list:label#
+                    </a>
+                </li>
+            </xar:foreach>
+        </ul>
+        <xar:foreach in="$object:links.linkedfrom" key="$tabid" value="$link">
+            <div id="linkedfrom-page-#$tabid#" style="display: none">
+                <xar:if condition="!empty($link.list:itemids)">
+                    <!-- you can specify the layout and linkfield here or in the object configuration -->
+                    <xar:set name="args">array('linktype' => 'object', 'newlink' => '')</xar:set>
+                    #$link.list:showView($args)#
+                </xar:if>
+            </div>
         </xar:foreach>
-        </fieldset>
+        <script type="text/javascript">
+            showtab_prefix(0,#$numtabs#,'linkedfrom-')
+        </script>
     </xar:if>
 
     <!-- Display object - you can specify the layout here or in the object configuration -->
@@ -68,61 +106,91 @@
 
     <!-- Show linkedto and children - template syntax may still change -->
     <xar:if condition="!empty($object:links.linkedto)">
-        <fieldset>
-        <legend>Linked To</legend>
-        <xar:foreach in="$object:links.linkedto" value="$link">
-            <xar:if condition="!empty($link.list:itemids)">
+        <xar:set name="numtabs">count($object->links['linkedto'])</xar:set>
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <li class="xar-tabs-label">
+                Linked To
+            </li>
+            <xar:foreach in="$object:links.linkedto" key="$tabid" value="$link">
                 <xar:set name="fromprop">#$link.from_prop#</xar:set>
                 <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
                 <xar:set name="toprop">#$link.to_prop#</xar:set>
                 <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
-                <!-- you can specify the layout and linkfield here or in the object configuration -->
-                <xar:set name="args">array('linktype' => 'object', 'newlink' => '')</xar:set>
                 <xar:if condition="$link.source eq $link.target">
-                    [#$fromlabel#] =&gt; [#$tolabel#]
-                <xar:elseif condition="$fromlabel eq $tolabel"/>
-                    #$link.list:label#:
-                <xar:elseif condition="$link.list:primary eq $toprop"/>
-                    [#$fromlabel#] =&gt; #$link.list:label#
+                    <xar:set name="relation">$fromlabel.' =&gt; '.$tolabel</xar:set>
                 <xar:else/>
-                    [#$fromlabel#] =&gt; #$link.list:label# [#$tolabel#]
+                    <xar:set name="relation">$fromlabel.' =&gt; '.$link['list']->label.'.'.$tolabel</xar:set>
                 </xar:if>
-                #$link.list:showView($args)#
-            </xar:if>
+                <li class="xar-tab" id="linkedto-tab-#$tabid#">
+                    <a id="linkedto-href-#$tabid#" href="javascript:showtab_prefix(#$tabid#,#$numtabs#,'linkedto-')" title="#$relation#">
+                        #$link.list:label#
+                    </a>
+                </li>
+            </xar:foreach>
+        </ul>
+        <xar:foreach in="$object:links.linkedto" key="$tabid" value="$link">
+            <div id="linkedto-page-#$tabid#" style="display: none">
+                <xar:if condition="!empty($link.list:itemids)">
+                    <!-- you can specify the layout and linkfield here or in the object configuration -->
+                    <xar:set name="args">array('linktype' => 'object', 'newlink' => '')</xar:set>
+                    #$link.list:showView($args)#
+                </xar:if>
+            </div>
         </xar:foreach>
-        </fieldset>
+        <script type="text/javascript">
+            showtab_prefix(0,#$numtabs#,'linkedto-')
+        </script>
     </xar:if>
     <xar:if condition="!empty($object:links.children)">
-        <fieldset>
-        <legend>Children</legend>
-        <xar:foreach in="$object:links.children" value="$link">
-            <xar:if condition="!empty($link.list:itemids)">
+        <xar:set name="numtabs">count($object->links['children'])</xar:set>
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <li class="xar-tabs-label">
+                Children
+            </li>
+            <xar:foreach in="$object:links.children" key="$tabid" value="$link">
                 <xar:set name="fromprop">#$link.from_prop#</xar:set>
                 <xar:set name="fromlabel">#$object:properties.$fromprop:label#</xar:set>
                 <xar:set name="toprop">#$link.to_prop#</xar:set>
                 <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
+                <xar:if condition="$link.source eq $link.target">
+                    <xar:set name="relation">$fromlabel.' =&gt; '.$tolabel</xar:set>
+                <xar:else/>
+                    <xar:set name="relation">$fromlabel.' =&gt; '.$link['list']->label.'.'.$tolabel</xar:set>
+                </xar:if>
+                <li class="xar-tab" id="children-tab-#$tabid#">
+                    <a id="children-href-#$tabid#" href="javascript:showtab_prefix(#$tabid#,#$numtabs#,'children-')" title="#$relation#">
+                        #$link.list:label#
+                    </a>
+                </li>
+            </xar:foreach>
+        </ul>
+        <xar:foreach in="$object:links.children" key="$tabid" value="$link">
+            <div id="children-page-#$tabid#" style="display: none">
                 <!-- you can customize the create new link for children here if you want -->
                 <xar:set name="newlink">''</xar:set>
                 <!-- e.g. if the parent is a single numeric value, pass along its value when creating a new child
+                <xar:set name="fromprop">#$link.from_prop#</xar:set>
                 <xar:set name="fromvalue">#$object:properties.$fromprop:value#</xar:set>
+                <xar:set name="toprop">#$link.to_prop#</xar:set>
                 <xar:if condition="!empty($fromvalue) and is_numeric($fromvalue)">
-                    <xar:set name="newlink">xarServer::getObjectURL($link['list']->name, 'create', array($toprop => $fromvalue))</xar:set>
+                    <xar:set name="newlink">xarServer::getObjectURL($link['list']->name, 'create', array('values['.$toprop.']' => $fromvalue))</xar:set>
                 </xar:if>
                 -->
-                <!-- you can specify the layout and linkfield here or in the object configuration -->
-                <xar:set name="args">array('linktype' => 'object', 'newlink' => $newlink)</xar:set>
-                <xar:if condition="$link.source eq $link.target">
-                    [#$fromlabel#] =&gt; [#$tolabel#]
-                <xar:elseif condition="$fromlabel eq $tolabel"/>
-                    #$link.list:label#:
-                <xar:elseif condition="$link.list:primary eq $toprop"/>
-                    [#$fromlabel#] =&gt; #$link.list:label#
-                <xar:else/>
-                    [#$fromlabel#] =&gt; #$link.list:label# [#$tolabel#]
+                <xar:if condition="!empty($link.list:itemids)">
+                    <!-- you can specify the layout and linkfield here or in the object configuration -->
+                    <xar:set name="args">array('linktype' => 'object', 'newlink' => $newlink)</xar:set>
+                    #$link.list:showView($args)#
+                <xar:elseif condition="!empty($newlink)"/>
+                    <div style="text-align: right;">
+                        <a href="#$newlink#" title="Create New #$link.list:label#">
+                            <img src="#xarTplGetImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/>
+                        </a>
+                    </div>
                 </xar:if>
-                #$link.list:showView($args)#
-            </xar:if>
+            </div>
         </xar:foreach>
-        </fieldset>
+        <script type="text/javascript">
+            showtab_prefix(0,#$numtabs#,'children-')
+        </script>
     </xar:if>
 </xar:template>
