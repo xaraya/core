@@ -154,13 +154,13 @@ class DataObjectDefaultHandler extends Object
 
         // Pre-fetch item(s) for some standard dataobject methods
         if (empty($args['itemid']) && $this->method == 'showview') {
-            if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
+            if(!xarSecurityCheck('ViewDynamicDataItems',0,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
                 return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));
 
             $this->object->getItems();
 
         } elseif (!empty($args['itemid']) && ($this->method == 'showdisplay' || $this->method == 'showform')) {
-            if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
+            if(!xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
                 return xarResponse::Forbidden(xarML('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
 
             // get the requested item

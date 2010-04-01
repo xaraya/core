@@ -67,11 +67,11 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
         $title = xarML('Display #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
-        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData'))
+        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData',0))
             return xarResponse::Forbidden(xarML('Display Table #(1) is forbidden', $this->object->table));
 
         if (!empty($this->args['itemid'])) {
-            if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
+            if(!xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
                 return xarResponse::Forbidden(xarML('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
 
             // get the requested item
