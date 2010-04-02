@@ -169,23 +169,23 @@
                         <table class="xar-fullwidth">
                             <tr>
                                 <th>
-                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=name">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'name'))#">
                                     Real name</a>
                                 </th>
                                 <th>
-                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=uname">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'uname'))#">
                                     Login</a>
                                 </th>
                                 <th>
-                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=email">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'email'))#">
                                     Email</a>
                                 </th>
                                 <th>
-                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=date_reg">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'date_reg'))#">
                                     Date Registered</a>
                                 </th>
                                 <th>
-                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=state">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'state'))#">
                                     State</a>
                                 </th>
                             </tr>
@@ -194,7 +194,7 @@
                                     <td>#$loop:item['name']#</td>
                                     <td>#$loop:item['uname']#</td>
                                     <td>
-                                        <a href="&xar-modurl-roles-admin-createmail;&amp;id=#$loop:item.id#"
+                                        <a href="#xarModURL('roles','admin','createmail',array('id'=>$loop->item['id']))#"
                                         title="#xarML('Email this user')#">
                                         #$loop:item['email']#</a>
                                     </td>

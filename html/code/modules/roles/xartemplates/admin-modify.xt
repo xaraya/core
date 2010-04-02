@@ -25,7 +25,7 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
+                                <a href="#xarModURL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
                                     #xarVarPrepForDisplay($parents[$i]['parentname'])#
                                 </a>
                             </li>
@@ -185,7 +185,7 @@
                     <tr>
                         <td>
                             <xar:if condition="$loop:item['parentid'] gt 4">
-                                <a href="&xar-modurl-roles-admin-modify;&amp;id=#$loop:item['parentid']#">
+                                <a href="#xarModURL('roles','admin','modify',array('id'=>$loop->item['parentid']))#">
                                     <xar:var name="loop:item.parentname"/>
                                 </a>
                             <xar:else />
@@ -194,7 +194,7 @@
                         </td>
                         <td class="xar-align-center">
                             <xar:if condition="count($parents) ne 1">
-                                <a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$id#&amp;parentid=#$loop:item['parentid']#&amp;authid=#xarSecGenAuthKey()#">
+                                <a href="#xarModURL('roles','admin','removemember',array('childid=>$id,'parentid'=>$loop->item['parentid'].'authid'=>xarSecGenAuthKey()))#">
                             Remove</a>
                             <xar:else />Cannot Remove</xar:if>
                         </td>
