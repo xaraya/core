@@ -30,17 +30,17 @@ class BaseActionController extends Object
         // Get the part of the URL we will tokenize and decode
         $this->actionstring = $request->getActionString();
         // Add the results of decoding to the params we already got when the request was created
-        $args = $this->decode() + $request->getURLParams();
-        // Allocate those params we can to module/type/function and store the rest as URLParams in the request
+        $args = $this->decode() + $request->getFunctionArgs();
+        // Allocate those params we can to module/type/function and store the rest as FunctionArgs in the request
         $this->chargeRequest($request, $args);
         // Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xarVarFetch
         $_GET = $_GET + $args;
         // Now get the output
         if ($request->getModule() == 'object') {
             sys::import('xaraya.objects');
-            $response->output = xarObject::guiMethod($request->getType(), $request->getFunction(), $request->getURLParams());
+            $response->output = xarObject::guiMethod($request->getType(), $request->getFunction(), $request->getFunctionArgs());
         } else {
-            $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getURLParams());
+            $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getFunctionArgs());
         }
     }
 
@@ -72,7 +72,7 @@ class BaseActionController extends Object
             $request->setFunction($params['method']);
             unset($params['method']);
         }
-        $request->setURLParams($params);
+        $request->setFunctionArgs($params);
     }
     
 }

@@ -28,7 +28,7 @@ class xarResponse extends Object
      * @param ... string template overrides, cfr. xarTplModule (optional)
      * @return string the template message-notfound.xt from the base module filled in
      */
-    function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = NULL)
+    static public function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = NULL)
     {
         xarCache::noCache();
         if (!headers_sent()) {
@@ -56,7 +56,7 @@ class xarResponse extends Object
      * @param ... string template overrides, cfr. xarTplModule (optional)
      * @return string the template message-forbidden.xt from the base module filled in
      */
-    function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = NULL)
+    static public function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = NULL)
     {
         xarCache::noCache();
         if (!headers_sent()) {

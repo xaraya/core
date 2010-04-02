@@ -13,7 +13,6 @@ class xarRequest extends Object
     protected $funcargs  = array();
     protected $object    = 'objects';
     protected $method    = 'view';
-    protected $urlparams = array();
     protected $route     = 'default';
     
     public $defaultRequestInfo = array();
@@ -44,7 +43,7 @@ class xarRequest extends Object
                 $this->setFunction($url['func']);
                 unset($url['func']);
             }
-            $this->setURLParams($url);
+            $this->setFunctionArgs($url);
         } else {
             if (null == $url) {
                 // This is a string representing a URL
@@ -54,7 +53,6 @@ class xarRequest extends Object
             } else {
                 $params = xarController::parseQuery($url);
             }
-        
             // We now have a URL. Set it.
             $this->url = $url;
             
@@ -99,7 +97,7 @@ class xarRequest extends Object
             unset($params['func']);
             unset($params['object']);
             unset($params['method']);
-            $this->setURLParams($params);
+            $this->setFunctionArgs($params);
             // At this point the request has assembled the module or object it belongs to and any query parameters.
             // What is still to be defined by routing are the type (for modules) and function/function arguments or method (for objects).            
         }
@@ -223,7 +221,6 @@ class xarRequest extends Object
     function getActionString()   { return $this->actionstring; }
     function getFunctionArgs()   { return $this->funcargs; }
     function getURL()            { return $this->url; }
-    function getURLParams()      { return $this->urlparams; }
     function getRoute()          { return $this->route; }
 
     function setModule($p)               { $this->module = $p; }
@@ -231,7 +228,6 @@ class xarRequest extends Object
     function setFunction($p)             { $this->func = $p; }
     function setObject($p)               { $this->object = $p; }
     function setMethod($p)               { $this->method = $p; }
-    function setURLParams($p=array())    { $this->urlparams = $p; }
     function setRoute($r)                { $this->route = $r; }
     function setActionString($p)         { $this->actionstring = $p; }
     function setFunctionArgs($p=array()) { $this->funcargs = $p; }

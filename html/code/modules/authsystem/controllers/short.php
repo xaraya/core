@@ -54,7 +54,7 @@ class AuthsystemShortController extends ShortActionController
     
     public function encode(xarRequest $request)
     {  
-        $params = $request->getURLParams();
+        $params = $request->getFunctionArgs();
         $path = array();
         switch($request->getFunction()) {
             case 'main':
@@ -81,7 +81,7 @@ class AuthsystemShortController extends ShortActionController
         // Send the processed args back
         $request->setFunctionArgs($path);
         // Remove the processed args (in this case all of them)
-        $request->setURLParams();
+        $request->setFunctionArgs();
         return parent::encode($request);
     }    
 }

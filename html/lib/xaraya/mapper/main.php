@@ -116,6 +116,7 @@ class xarController extends Object
         return self::$request;
     }
 
+    // Find the route for this request
     static function normalizeRequest($request=null)
     {
         if (!empty($request)) self::$request = $request;
@@ -138,7 +139,7 @@ class xarController extends Object
                 self::$dispatcher->dispatch(self::$request, self::$response);
             } while (!self::$request->isDispatched());
         } catch (Exception $e) {
-                throw $e;
+            throw $e;
         }
     }
     
@@ -222,7 +223,7 @@ class xarController extends Object
     }
 
     /**
-     * Generates an URL that reference to a module function.
+     * Generates an URL that references a module function.
      *
      * @access public
      * @param modName string registered name of module

@@ -16,6 +16,7 @@ sys::import('xaraya.mapper.controllers.interfaces');
 
 class ShortActionController extends BaseActionController implements iController
 {    
+    public static $delimiter = '?';    // This character divides the URL into entry point and parameters
     public $separator = '/';
     
     function decode(Array $data=array())
@@ -44,10 +45,10 @@ class ShortActionController extends BaseActionController implements iController
     public function encode(xarRequest $request)
     {  
         $path = $this->getInitialPath($request);
-        $functionstring = $request->getFunctionArgs();
-        if (empty($functionstring))  $path .= $this->separator . $request->getFunction();
-        $path .= $this->separator . implode($this->separator, $request->getFunctionArgs());
-        $path= trim($path,$this->separator);
+        $path .= self::$delimiter;
+        foreach ($request->getFunctionArgs() as  $key => $value)
+            $path .= $key . '=' . $value . xarController::$separator;
+        $path = substr($path,0,strlen($path)-1);
         return $this->separator . $path;
     }        
 
@@ -67,6 +68,7 @@ class ShortActionController extends BaseActionController implements iController
     {  
         $path = $request->getModule();
         if ('user' != $request->getType()) $path .= $this->separator . $request->getType();
+        $path .= $this->separator . $request->getFunction();
         return $path;
     }       
 }

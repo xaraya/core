@@ -50,7 +50,7 @@ class DefaultActionController extends BaseActionController implements iControlle
             $pathargs[$request->getTypeKey()] = $request->getType();
             $pathargs[$request->getFunctionKey()] = $request->getFunction();
         }
-        $pathargs = $pathargs + $request->getURLParams();
+        $pathargs = $pathargs + $request->getFunctionArgs();
         $path = xarURL::addParametersToPath($pathargs, '', xarController::$delimiter, $this->separator);
         return $path;
     }
