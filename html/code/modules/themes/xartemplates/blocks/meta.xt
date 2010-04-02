@@ -58,9 +58,9 @@
         <link rel="last" type="text/html" href="#$last#"/>
     </xar:if>
     <xar:if condition="xarModIsAvailable('articles')">
-        <link rel="contents" type="text/html" href="&xar-modurl-articles-user-viewmap;"/>
+        <link rel="contents" type="text/html" href="#xarModURL('articles','user','viewmap')#"/>
     </xar:if>
     <xar:if condition="xarModIsAvailable('search')">
-        <link rel="search" type="text/html" href="&xar-modurl-search-user-main;"/>
+        <link rel="search" type="text/html" href="#xarModURL('search','user','main')#"/>
     </xar:if>
 </xar:template>

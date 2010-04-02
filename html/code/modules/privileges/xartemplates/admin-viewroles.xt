@@ -95,7 +95,7 @@
                                 <xar:else />Group</xar:if>
                             </td>
                             <td>
-                                <a href="&xar-modurl-roles-admin-modify;&amp;id=#$role['roleid']#"
+                                <a href="#xarModURL('roles','admin','modify',array('id'=>$role['roleid']))#"
                                 title="#xarML('Go to this role')#">#$role['name']#</a>
                             </td>
                             <td class="xar-align-center">
