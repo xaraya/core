@@ -88,7 +88,7 @@
                     </div>
                     <xar:if condition="!empty($objectid) and $objectid eq 2">
                         <p>
-                            <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#">
+                            <a href="#xarModURL('dynamicdata'.'admin','showpropval',array('itemid'=>$itemid))#">
                                 Edit configuration</a>
                         </p>
                     </xar:if>
@@ -160,7 +160,7 @@
                         </div>
                         <xar:if condition="!empty($objectid) and $objectid eq 2">
                             <p>
-                                <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#">
+                                <a href="#xarModURL('dynamicdata'.'admin','showpropval',array('itemid'=>$itemid))#">
                                     Edit configuration</a>
                             </p>
                         </xar:if>
@@ -221,7 +221,7 @@
                         </div>
                         <xar:if condition="!empty($objectid) and $objectid eq 2">
                             <p>
-                                <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#">
+                                <a href="#xarModURL('dynamicdata'.'admin','showpropval',array('itemid'=>$itemid))#">
                                     Edit configuration</a>
                             </p>
                         </xar:if>

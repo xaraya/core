@@ -39,9 +39,9 @@
                     Object Hooks
                     <xar:if condition="xarModIsAvailable('hitcount')">
                         <xar:if condition="xarModIsHooked('hitcount','dynamicdata', 3)">
-                            e.g. <a href="#xarModURL('dynamicdata'.'util','relations')#">Hitcount</a> hooks with <a href="&xar-modurl-dynamicdata-object-main;&amp;object=sample">Sample Object</a>
+                            e.g. <a href="#xarModURL('dynamicdata'.'util','relations')#">Hitcount</a> hooks with <a href="#xarModURL('dynamicdata','object','main',array('object'=>'sample'))#">Sample Object</a>
                         <xar:else/>
-                            e.g. <a href="&xar-modurl-hitcount-admin-hooks;">Hitcount</a> hooks with Sample Object
+                            e.g. <a href="#xarModURL('hitcount','admin','hooks')#">Hitcount</a> hooks with Sample Object
                         </xar:if>
                     <xar:else/>
                         e.g. Hitcount hooks with Sample Object
