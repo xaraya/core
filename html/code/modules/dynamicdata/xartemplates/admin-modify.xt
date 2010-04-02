@@ -50,7 +50,7 @@
             <xar:else/>
                 <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
             </xar:if>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-update;" enctype="#$enc_type#">
+            <form method="post" action="#xarModURL('dynamicdata'.'admin','update')#" enctype="#$enc_type#">
                 <fieldset>
                     <legend>Modify Object Definition</legend>
                     <xar:if condition="$object:visibility ne 'public'">
@@ -121,7 +121,7 @@
                     </a>
                 </xar:if>
             </h2>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-update;">
+            <form method="post" action="#xarModURL('dynamicdata'.'admin','update')#">
                 <xar:if condition="$adminaccess">
                     <fieldset>
                         <legend>
@@ -194,7 +194,7 @@
                     </a>
                 </xar:if>
             </h2>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-update;">
+            <form method="post" action="#xarModURL('dynamicdata'.'admin','update')#">
                 <xar:if condition="$adminaccess">
                     <fieldset>
                         <legend>

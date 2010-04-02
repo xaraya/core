@@ -9,7 +9,7 @@
             for Privilege '#$extname#' 
             <xar:else />Select Items for Privilege '#$extname#'</xar:if>
         </h2>
-        <form method="post" action="&xar-modurl-dynamicdata-admin-privileges;">
+        <form method="post" action="#xarModURL('dynamicdata'.'admin','privileges')#">
             <input type="hidden" name="extpid" id="extpid" value="#$extpid#"/>
             <input type="hidden" name="extname" id="extname" value="#$extname#"/>
             <input type="hidden" name="extrealm" id="extrealm" value="#$extrealm#"/>

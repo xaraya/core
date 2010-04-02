@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="!empty($relations)">
-        <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
+        <form method="post" action="#xarModURL('dynamicdata'.'util','relations')#">
             <fieldset>
             <legend>Links for #$object:label#</legend>
 
@@ -100,7 +100,7 @@
         </form>
     </xar:if>
 
-    <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
+    <form method="post" action="#xarModURL('dynamicdata'.'util','relations')#">
         <fieldset>
         <legend>Add Link for #$object:label#</legend>
         <div class="xar-form-input-wrapper">
@@ -209,7 +209,7 @@
         </fieldset>
     </form>
 
-    <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
+    <form method="post" action="#xarModURL('dynamicdata'.'util','relations')#">
         <fieldset>
         <legend>Display Options for #$object:label#</legend>
         <xar:set name="getlinkedobjects">xarModItemVars::get('dynamicdata','getlinkedobjects',$objectid)</xar:set>
