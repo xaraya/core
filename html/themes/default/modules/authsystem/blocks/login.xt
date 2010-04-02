@@ -26,7 +26,7 @@
                 <input type="submit" value="#xarML('Log In')#"/>
             </div>
             <p>
-                <a href="&xar-modurl-roles-user-lostpassword;">Request new password</a>
+                <a href="#xarModURL('roles','user','lostpassword')#">Request new password</a>
             </p>
         </fieldset>
     </form>

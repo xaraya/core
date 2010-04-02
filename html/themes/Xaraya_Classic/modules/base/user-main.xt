@@ -30,7 +30,7 @@
             rather than the default Admin Menu. Start by logging into your site as Administrator
             and turning on the Admin Dashboard 
             <xar:if condition="xarUserIsLoggedIn() and xarSecurityCheck('AdminTheme',0)">in your 
-            <a href="&xar-modurl-themes-admin-modifyconfig;">Themes Module Modify Config</a>option.
+            <a href="#xarModURL('themes','admin','modifyconfig')#">Themes Module Modify Config</a>option.
             
             <xar:else />in your Themes Module Modify Config option.</xar:if></p>
             <h4>Explore</h4>
