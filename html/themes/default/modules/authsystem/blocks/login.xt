@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <form id="authsystemBlocksLogin" action="&xar-modurl-authsystem-user-login;" method="post">
+    <form id="authsystemBlocksLogin" action="#xarModURL('authsystem','user','login')#" method="post">
         <fieldset>
             <legend>Login</legend>
             <input type="hidden" name="redirecturl" id="returnurl#$blockid#"
