@@ -39,28 +39,28 @@
                 <xar:var name="label">Actions</xar:var>
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-admin-display;&amp;id=#$id#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('roles','admin','display',array('id'=>$id))#" class="xar-norm xar-norm-outline">
                         Display
                     </a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-admin-modify;&amp;id=#$id#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('roles','admin','modify',array('id'=>$id))#" class="xar-norm xar-norm-outline">
                         Modify
                     </a>
                 </li>
                 <li class="xar-tab-active">
-                    <a href="&xar-modurl-roles-admin-delete;&amp;id=#$id#" class="xar-accent xar-accent-outline">
+                    <a href="#xarModURL('roles','admin','delete',array('id'=>$id))#" class="xar-accent xar-accent-outline">
                         Delete
                     </a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$id#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('roles','admin','showprivileges',array('id'=>$id))#" class="xar-norm xar-norm-outline">
                         Privileges
                     </a>
                 </li>
                 <xar:if condition="$ptype eq 1">
                     <li class="xar-tab">
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$id#" class="xar-norm xar-norm-outline">
+                        <a href="#xarModURL('roles','admin','showusers',array('id'=>$id))#" class="xar-norm xar-norm-outline">
                             Users
                         </a>
                     </li>
@@ -70,7 +70,7 @@
         <xar:if condition="$frozen">
             <p>You do not have the privileges to delete #$itemtypename# #$name#</p>
         <xar:else />
-            <form method="post" action="&xar-modurl-roles-admin-delete;" enctype="application/x-www-form-urlencoded">
+            <form method="post" action="#xarModURL('roles','admin','delete')#" enctype="application/x-www-form-urlencoded">
                 <h3 class="xar-align-center">Confirm the deletion of #$itemtypename# #$name#</h3>
                 <div class="xar-align-center">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
