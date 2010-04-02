@@ -120,10 +120,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         $title = xarML('Search #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
-        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData',0))
-            return xarResponse::Forbidden(xarML('Search Table #(1) is forbidden', $this->object->table));
-
-        if(!xarSecurityCheck('ViewDynamicDataItems',0,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
+        if (!$this->object->checkAccess('view'))
             return xarResponse::Forbidden(xarML('Search #(1) is forbidden', $this->object->label));
 
         if (empty($search['field']) || count($search['field']) < 1) {
@@ -230,10 +227,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         $title = xarML('Query #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
-        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData',0))
-            return xarResponse::Forbidden(xarML('Query Table #(1) is forbidden', $this->object->table));
-
-        if(!xarSecurityCheck('ViewDynamicDataItems',0,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
+        if (!$this->object->checkAccess('view'))
             return xarResponse::Forbidden(xarML('Query #(1) is forbidden', $this->object->label));
 
         // get where clauses

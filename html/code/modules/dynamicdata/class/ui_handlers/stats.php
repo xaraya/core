@@ -145,10 +145,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             }
         }
 */
-        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData',0))
-            return xarResponse::Forbidden(xarML('View Table #(1) is forbidden', $this->object->table));
-
-        if(!xarSecurityCheck('ViewDynamicDataItems',0,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
+        if (!$this->object->checkAccess('view'))
             return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));
 
         // load previously defined report if available
@@ -266,7 +263,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             $result = 0;
 
         // save the report and redirect
-        } elseif (!empty($save) && !empty($stats['report']) && xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All')) {
+        } elseif (!empty($save) && !empty($stats['report']) && !$this->object->checkAccess('config')) {
             $this->saveReport($stats['report'], $stats, $info);
             xarResponse::Redirect(xarServer::getObjectURL($this->object->name, 'report', array('report' => $stats['report'])));
             return true;
@@ -331,10 +328,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         $title = xarML('Report for #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
-        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData',0))
-            return xarResponse::Forbidden(xarML('View Table #(1) is forbidden', $this->object->table));
-
-        if(!xarSecurityCheck('ViewDynamicDataItems',0,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
+        if (!$this->object->checkAccess('view'))
             return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));
 
         $report['reportlist'] = $this->getReportList();

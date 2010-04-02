@@ -56,10 +56,7 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
                 $this->tplmodule = $modname;
             }
         }
-        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData',0))
-            return xarResponse::Forbidden(xarML('Create Table #(1) is forbidden', $this->object->table));
-
-        if(!xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
+        if (!$this->object->checkAccess('create'))
             return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $this->object->label));
 
         // there's no item to get here yet

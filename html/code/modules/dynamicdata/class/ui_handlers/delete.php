@@ -66,10 +66,7 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
             // Return
             return true;
         }
-        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData',0))
-            return xarResponse::Forbidden(xarML('Delete Table #(1) is forbidden', $this->object->table));
-
-        if(!xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
+        if (!$this->object->checkAccess('delete'))
             return xarResponse::Forbidden(xarML('Delete Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
 
         $itemid = $this->object->getItem();

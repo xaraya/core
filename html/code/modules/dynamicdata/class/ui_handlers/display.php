@@ -67,11 +67,8 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
         $title = xarML('Display #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
-        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData',0))
-            return xarResponse::Forbidden(xarML('Display Table #(1) is forbidden', $this->object->table));
-
         if (!empty($this->args['itemid'])) {
-            if(!xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
+            if (!$this->object->checkAccess('display'))
                 return xarResponse::Forbidden(xarML('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
 
             // get the requested item
@@ -83,6 +80,9 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
             $this->object->callHooks('display');
 
         } elseif (!empty($this->args['values'])) {
+            if (!$this->object->checkAccess('display'))
+                return xarResponse::Forbidden(xarML('Display #(1) is forbidden', $this->object->label));
+
             // always set the properties based on the given values !?
             //$this->object->setFieldValues($this->args['values']);
             // check any given input values but suppress errors for now

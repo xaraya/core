@@ -57,10 +57,7 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
                 $this->tplmodule = $modname;
             }
         }
-        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData',0))
-            return xarResponse::Forbidden(xarML('Update Table #(1) is forbidden', $this->object->table));
-
-        if(!xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
+        if (!$this->object->checkAccess('update'))
             return xarResponse::Forbidden(xarML('Update Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
 
         $itemid = $this->object->getItem();
