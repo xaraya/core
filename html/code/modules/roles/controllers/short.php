@@ -79,6 +79,8 @@ class RolesShortController extends ShortActionController
     
     public function encode(xarRequest $request)
     {  
+        if ($request->getType() == 'admin') return parent::encode($request);
+
         $params = $request->getFunctionArgs();
         $path = array();
         switch($request->getFunction()) {

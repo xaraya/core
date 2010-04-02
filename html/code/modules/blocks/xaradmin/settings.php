@@ -28,7 +28,7 @@ function blocks_admin_settings()
     xarController::redirect(xarModURL('blocks', 'admin', 'view_instances',array('filter' => $filter)));
         $return_url = xarModURL('blocks', 'admin', 'view_instances',array('filter' => $filter));
 
-    xarResponse::redirect($return_url);
+    xarController::redirect($return_url);
 
     return true;
 }

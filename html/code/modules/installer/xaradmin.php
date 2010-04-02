@@ -1218,7 +1218,7 @@ function installer_admin_finish()
 
     switch ($returnurl) {
         case ('base'):
-            xarResponse::redirect(xarModURL('base','admin','modifyconfig'));
+            xarController::redirect(xarModURL('base','admin','modifyconfig'));
         case ('modules'):
             xarController::redirect(xarModURL('modules','admin','list'));
         case ('blocks'):
