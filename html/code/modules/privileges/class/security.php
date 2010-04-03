@@ -269,15 +269,22 @@ class xarSecurity extends Object
             // See if we have something cached
             if (!xarVarIsCached('Security.Variables','privilegeset')) {
 
+            // CHECKME: why not cache this as module user variable instead of session ?
+            //          That would save a lot of space for anonymous sessions...
+
                 // No go from cache. Try and get it from the session
                 sys::import('modules.privileges.class.privilege');
                 $privileges = unserialize(xarSession::getVar('privilegeset'));
                 // Check that privileges haven't been changed since we last cached the privilegeset
                 $clearcache = xarModVars::get('privileges', 'clearcache');
-                if (empty($privileges) || $clearcache >= xarSession::saveTime()) {
+                if (empty($privileges) || empty($privileges['updated']) || $clearcache > $privileges['updated']) {
 
                     // Still no go. Assemble the privleges
                     $privileges = self::irreducibleset(array('roles' => array($role)),$mask->module);
+                    // Keep track of when this was last updated
+                    if (is_array($privileges)) {
+                        $privileges['updated'] = time();
+                    }
                     // Save them to the sesssion too
                     xarSession::setVar('privilegeset',serialize($privileges));
                 }

@@ -402,7 +402,7 @@ class xarSession extends Object implements IsessionHandler
                     $vars = '';
                 }
             }
-            // Keep track of when this session was last saved, e.g. to expire cached privilegeset
+            // Keep track of when this session was last saved
             self::saveTime($lastused);
         } else {
             $_SESSION[self::PREFIX.'role_id'] = _XAR_ID_UNREGISTERED;
@@ -598,7 +598,7 @@ class xarSession extends Object implements IsessionHandler
     }
 
     /**
-     * When was this session last saved ? (e.g. to expire cached privilegeset)
+     * When was this session last saved ?
      */
     static function saveTime($lastused = 0)
     {
