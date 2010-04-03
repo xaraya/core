@@ -57,7 +57,7 @@ class xarLogger_sql extends xarLogger
     *               'table  '     => string      The name of the logger table.
     * @access public
     */
-    function setConfig(array $conf)
+    function setConfig(array &$conf)
     {
         parent::setConfig($conf);
         $this->_dbconn = xarDB::getConn();

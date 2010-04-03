@@ -78,7 +78,7 @@ class xarLogger_mail extends xarLogger
      * 
      * @access public
      */
-    function setConfig(&$conf)
+    function setConfig(array &$conf)
     {
         parent::setConfig($conf);
 

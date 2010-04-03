@@ -15,7 +15,7 @@
 sys::import('xaraya.validations.email');
 class FullEmailValidation extends EmailValidation
 {
-    function validate(&$subject, $parameters=null)
+    function validate(&$subject, Array $parameters)
     {
         if (parent::validate($subject,array()) && xarVarValidate ('mxcheck', $subject)) {
             return true;
