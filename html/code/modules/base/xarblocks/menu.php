@@ -235,7 +235,7 @@ class MenuBlock extends BasicBlock implements iBlock
             }
             $access = isset($data['view_access']) ? $data['view_access'] : array();
             $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
-            foreach($mods as $mod){//echo $mod['name']." ";
+            foreach($mods as $mod){
                 if (isset($access[$mod['name']])) {
                     // Decide whether this menu item is displayable to the current user
                     $args = array(

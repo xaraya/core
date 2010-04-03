@@ -147,16 +147,56 @@ class AccessProperty extends DataProperty
         return $value;
     }
 
-    public function check(Array $data=array())
+    public function check(Array $data=array(), $exclusive=1)
     {
-        if (isset($data['group']))     $this->group = $data['group'];
+        if ($this->checkRealm($data)) {
+            if (isset($data['group']))     $this->group = $data['group'];
+            if ($exclusive) {
+                // We check the level only if group access is disabled
+                if ($this->group != 0) {
+                    return $this->checkGroup($data);
+                } else {
+                    return $this->checkLevel($data);
+                }
+            } else {
+                // Both group access and level must be satisfied
+                return $this->checkGroup($data) && $this->checkLevel($data);
+            }
+        } else {
+            return false;
+        }
+    }
+    
+    public function checkRealm(Array $data=array())
+    {
+        // CHECKME
+        return true;
+    }
+    
+    public function checkLevel(Array $data=array())
+    {
         if (isset($data['level']))     $this->level = $data['level'];
         if (isset($data['module']))    $this->module = $data['module'];
         if (isset($data['component'])) $this->component = $data['component'];
         if (isset($data['instance']))  $this->instance = $data['instance'];
-        
+
         $access = false;
+        if (xarSecurityCheck('', 
+                          0, 
+                          $this->component, 
+                          $this->instance, 
+                          $this->module, 
+                          '',
+                          0,
+                          $this->level)) {$access = true;
+        }
+        return $access;
+    }
+    
+    public function checkGroup(Array $data=array())
+    {
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
+        $access = false;
         if (($this->group == $anonID)) {
             if (!xarUserIsLoggedIn()) $access = true;
         } elseif ($this->group == -$anonID) {
@@ -167,16 +207,6 @@ class AccessProperty extends DataProperty
             if (is_object($group)) {
                 if ($thisuser->isAncestor($group)) $access = true;
             } 
-        } else {
-            if (xarSecurityCheck('', 
-                              0, 
-                              $this->component, 
-                              $this->instance, 
-                              $this->module, 
-                              '',
-                              0,
-                              $this->level)) {$access = true;
-            }
         }
         return $access;
     }
