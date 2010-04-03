@@ -257,6 +257,7 @@ function privileges_activate()
     xarModVars::set('privileges', 'realmcomparison','exact');
     xarModVars::set('privileges', 'exceptionredirect', false);
     xarModVars::set('privileges', 'maskbasedsecurity', false);
+    xarModVars::set('privileges', 'clearcache', time());
     return true;
 }
 

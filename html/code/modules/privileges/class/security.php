@@ -272,7 +272,9 @@ class xarSecurity extends Object
                 // No go from cache. Try and get it from the session
                 sys::import('modules.privileges.class.privilege');
                 $privileges = unserialize(xarSession::getVar('privilegeset'));
-                if (empty($privileges)) {
+                // Check that privileges haven't been changed since we last cached the privilegeset
+                $clearcache = xarModVars::get('privileges', 'clearcache');
+                if (empty($privileges) || $clearcache >= xarSession::saveTime()) {
 
                     // Still no go. Assemble the privleges
                     $privileges = self::irreducibleset(array('roles' => array($role)),$mask->module);

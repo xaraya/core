@@ -402,6 +402,8 @@ class xarSession extends Object implements IsessionHandler
                     $vars = '';
                 }
             }
+            // Keep track of when this session was last saved, e.g. to expire cached privilegeset
+            self::saveTime($lastused);
         } else {
             $_SESSION[self::PREFIX.'role_id'] = _XAR_ID_UNREGISTERED;
 
@@ -595,5 +597,16 @@ class xarSession extends Object implements IsessionHandler
         return true;
     }
 
+    /**
+     * When was this session last saved ? (e.g. to expire cached privilegeset)
+     */
+    static function saveTime($lastused = 0)
+    {
+        // initialize saveTime if necessary
+        if (!isset($GLOBALS['xarSession_saveTime']) || !empty($lastused)) {
+            $GLOBALS['xarSession_saveTime'] = (int) $lastused;
+        }
+        return $GLOBALS['xarSession_saveTime'];
+    }
 }
 ?>
