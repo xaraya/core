@@ -71,7 +71,13 @@
                         <label title="#xarML('Current Version.')#" class="xar-form-label">                            
                             Xaraya Core:                            
                         </label>
-                        #$XARCORE_VERSION_ID# version #$XARCORE_VERSION_NUM# (#$XARCORE_VERSION_SUB#)
+                        #$XARCORE_VERSION_ID# version #XARCORE_VERSION# (#$XARCORE_VERSION_SUB#)
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label title="#xarML('Current Version.')#" class="xar-form-label">                            
+                            Build:                            
+                        </label>
+                        #$XARCORE_VERSION_NUM#
                     </div>
                 </fieldset>
                 <fieldset>

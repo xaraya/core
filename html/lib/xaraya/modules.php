@@ -42,6 +42,13 @@ class ModuleNotActiveException extends xarExceptions
 {
     protected $message = 'The module "#(1)" was called, but it is not active.';
 }
+/**
+ * @package modules
+**/
+class ModuleBadVersionException extends NotFoundExceptions
+{
+    protected $message = 'A module does not have the correct version';
+}
 
 
 /**
@@ -740,6 +747,7 @@ class xarMod extends Object implements IxarMod
 
         $modBaseInfo['regid'] = (int) $regid;
         $modBaseInfo['systemid'] = (int) $systemid;
+        $modBaseInfo['version'] = (int) $state;
         $modBaseInfo['state'] = (int) $state;
         $modBaseInfo['name'] = $name;
         $modBaseInfo['directory'] = $directory;
@@ -1115,7 +1123,12 @@ class xarMod extends Object implements IxarMod
         if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
             throw new ModuleNotActiveException($modName);
         }
-
+        
+        // Not the correct version - throw exception
+        if (!self::checkVersion($modName)) {
+            throw new ModuleBadVersionException($modName);
+        }
+        
         // Load the module files
         $modDir = $modBaseInfo['directory'];
         $fileName = sys::code() . 'modules/'.$modDir.'/xar'.$modType.'.php';
@@ -1147,6 +1160,22 @@ class xarMod extends Object implements IxarMod
     }
 
     /**
+     * Check the version of this moduleagainst the core version
+     *
+     * @return boolean
+     */
+    public static function checkVersion($modName)
+    {
+        $modInfo = self::getInfo(self::getRegId($modName));
+        if ((strpos($modInfo['class'], 'Core') !== false)) {
+            return $modInfo['version'] == XARCORE_VERSION;
+        } else {
+            // Add check for non core modules here
+            return true;
+        }
+    }
+    
+    /**
      * Check if a particular module function exists, or default back to 'dynamicdata'
      *
      * @return string tplmodule or 'dynamicdata'
@@ -1173,12 +1202,9 @@ class xarMod extends Object implements IxarMod
  * Wrapper functions to support Xaraya 1 API for module aliases
  *
  */
-function xarModGetAlias($alias)
-{ return xarModAlias::resolve($alias);}
-function xarModSetAlias($alias, $modName)
-{ return xarModAlias::set($alias,$modName);}
-function xarModDelAlias($alias, $modName)
-{ return xarModAlias::delete($alias,$modName);}
+function xarModGetAlias($alias) { return xarModAlias::resolve($alias);}
+function xarModSetAlias($alias, $modName) { return xarModAlias::set($alias,$modName);}
+function xarModDelAlias($alias, $modName) { return xarModAlias::delete($alias,$modName);}
 
 /**
  * Interface declaration for module aliases

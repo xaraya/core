@@ -125,7 +125,7 @@ class MenuBlockAdmin extends MenuBlock implements iBlock
         $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
         $content['view_access'] = array();
         foreach ($modules as $module) {
-            $isvalid = $accessproperty->checkInput('view_access_' . $module['name']);echo $isvalid;
+            $isvalid = $accessproperty->checkInput('view_access_' . $module['name']);
             $content['view_access'][$module['name']] = $accessproperty->value;
         }
 
