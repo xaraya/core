@@ -11,7 +11,7 @@
         <p>Remember that this upgrade process does not upgrade your theme or templates. You should
         ensure you update them inline with the UPGRADE.txt recommendations.</p>
         <p>It is recommended you go to the 
-        <a href="&xar-modurl-modules-admin-list;">Admin section of the modules module</a>to upgrade
+        <a href="#xarModURL('modules','admin','list')#">Admin section of the modules module</a>to upgrade
         the modules which have a new version.</p>
     </div>
 </xar:template>

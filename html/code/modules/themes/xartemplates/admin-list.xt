@@ -17,7 +17,7 @@
         <h2>View Themes</h2>
         <p>Total listed: 
         <xar:set name="modscount">count($listrowsitems)</xar:set>#$modscount#</p>
-        <form method="post" action="&xar-modurl-themes-admin-settings;">
+        <form method="post" action="#xarModURL('themes','admin','settings')#">
             <!--
                 Theme List Sort and Filter Controls table
             -->
