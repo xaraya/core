@@ -127,20 +127,15 @@ class Installer extends Object
                 if (!isset($dbMods[$module_id]))
                     throw new ModuleNotFoundException($module_id,'Required module missing (ID #(1))');
 
-                if (xarMod::apiFunc('base','versions','compare',array(
-                    'version1'      => $conditions['minversion'],
-                    'version2'      => $dbMods[$module_id]['version'],
-                    )) < 0) {
+                sys::import('xaraya.version');
+                if (xarVersion::compare($conditions['minversion'], $dbMods[$module_id]['version']) >= 0) {
                     //Need to add some info for the user
                     return false; // 1st version is bigger
                 }
 
                //Not to be checked, at least not for now
                /*
-                if (xarMod::apiFunc('base','versions','compare',array(
-                    'version1'       => $conditions['maxversion'],
-                    'version2'       => $dbMods[$module_id]['version'],
-                    )) > 0) {
+                if (xarVersion::compare($conditions['maxversion'], $dbMods[$module_id]['version']) < 0) {
                     //Need to add some info for the user
                     return false; // 1st version is smaller
                 }

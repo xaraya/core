@@ -98,19 +98,13 @@ function modules_adminapi_regenerate()
         } else {
             if ($dbModules[$name]['version'] != $modinfo['version']) {
                 // The version strings are different.
-                // TODO: move the versions API from 'base' to 'modules' if we need to upgrade
-                // the base module through this mechanism.
                 // Compare the versions, only going down to two levels. Only the first two
                 // levels are significant for upgrades. A module writer could use the third level
                 // from 1.0.3 to 1.0.4
-                $vercompare = xarMod::apiFunc(
-                    'base', 'versions', 'compare',
-                    array(
-                        'version1'=>$dbModules[$name]['version'],
-                        'version2'=>$modinfo['version'],
-                        'levels' => 2
-                    )
-                );
+
+                sys::import('xaraya.version');
+                $vercompare = xarVersion::compare($dbModules[$name]['version'], $modinfo['version'], 2);
+
                 // Check if database version is less than (or equal to) the file version
                 // i.e. that the module is not being downgraded.
                 if ($vercompare >= 0) {
