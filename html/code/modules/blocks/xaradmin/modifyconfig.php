@@ -51,7 +51,7 @@ function blocks_admin_modifyconfig()
                 $itemid = $data['module_settings']->updateItem();
                 if (!xarVarFetch('noexceptions', 'int:0:1', $noexceptions, 0, XARVAR_NOT_REQUIRED)) return;
                 xarModVars::set('blocks', 'noexceptions', $noexceptions);
-                xarResponse::redirect(xarModURL('blocks', 'admin', 'modifyconfig'));
+                xarController::redirect(xarModURL('blocks', 'admin', 'modifyconfig'));
                 return true;
             }
         break;

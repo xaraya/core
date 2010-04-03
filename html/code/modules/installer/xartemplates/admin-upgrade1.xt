@@ -41,10 +41,10 @@
             </ul></li>
             <li>As of Version 1.1 the core login block and function in the Roles module has been
             moved to the Authsystem Module at 
-            <a href="&xar-modurl-authsystem-user-showloginform;">
+            <a href="#xarModURL('authsystem','user','showloginform')#">
             index.php?module=authsystem&amp;function=showloginform</a>You can still login by
             browsing to 
-            <a href="&xar-modurl-roles-user-main;">index.php?module=roles</a>.</li>
+            <a href="#xarModURL('roles','user','main')#">index.php?module=roles</a>.</li>
             <li>If you allow User Registration on your site, you must ensure you have the 
             <strong>Registration module</strong>in your Xaraya module directory, install, and
             configure it to continue user registration on your site as from Version 1.1 .</li>

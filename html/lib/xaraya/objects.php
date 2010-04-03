@@ -57,7 +57,6 @@ class xarObject extends Object implements IxarObject
         sys::import('modules.dynamicdata.class.userinterface');
 
         $interface = new DataObjectUserInterface($args);
-
         return $interface->handle($args);
     }
 

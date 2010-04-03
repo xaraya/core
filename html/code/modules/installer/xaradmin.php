@@ -132,7 +132,7 @@ function installer_admin_phase3()
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
-        xarResponse::redirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
+        xarController::redirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
     }
 
     //Defaults
@@ -487,7 +487,14 @@ function installer_admin_phase5()
         throw $e;
     }
 
-    // 3. Initialize all the modules we haven't yet
+    // 3. Initialize configvars we will need
+    sys::import('xaraya.variables');
+    $a = array();
+    xarVar_init($a);
+    xarConfigVars::set(null, 'System.ModuleAliases',array());
+    xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
+
+    // 4. Initialize all the modules we haven't yet
     $modules = array('privileges','roles','blocks','authsystem','themes','dynamicdata','mail');
     foreach ($modules as $module) {
         try {
@@ -511,12 +518,6 @@ function installer_admin_phase5()
 
     // If we are here, the base system has completed
     // We can now pass control to xaraya.
-    sys::import('xaraya.variables');
-
-    $a = array();
-    xarVar_init($a);
-    xarConfigVars::set(null, 'System.ModuleAliases',array());
-    xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
 
     // Set the allowed locales to our "C" locale and the one used during installation
     // TODO: make this a bit more friendly.
@@ -635,7 +636,8 @@ function installer_admin_bootstrap()
         }
     }
 
-    xarResponse::redirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
+    xarController::redirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
+    return true;
 }
 
 /**
@@ -770,7 +772,8 @@ function installer_admin_create_administrator()
             return;
         }
     }
-    xarResponse::redirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
+    xarController::redirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
+    return true;
 }
 
 /**
@@ -830,7 +833,7 @@ function installer_admin_choose_configuration()
     if (count($fileModules) == 0){
     // No non-core modules present. Show only the minimal configuration
         $names = array();
-        include sys::code() . 'modules/installer/xarconfigurations/core.conf.php';
+        include_once sys::code() . 'modules/installer/xarconfigurations/core.conf.php';
         $names[] = array('value' => sys::code() . 'modules/installer/xarconfigurations/core.conf.php',
                          'display'  => 'Core Xaraya install (aka minimal)',
                          'selected' => true);
@@ -884,7 +887,7 @@ function installer_admin_confirm_configuration()
     $data['phase'] = 8;
     $data['phase_label'] = xarML('Choose configuration options');
 
-    include $configuration;
+    include_once $configuration;
     $fileModules = unserialize(xarModVars::get('installer','modulelist'));
     $func = "installer_" . basename(strval($configuration),'.conf.php') . "_moduleoptions";
     $modules = $func();
@@ -1024,7 +1027,7 @@ function installer_admin_confirm_configuration()
      //TODO: Check why this var is being reset to null in sqlite install - reset here for now to be sure
      //xarModVars::set('roles', 'defaultauthmodule', xarMod::getRegID('authsystem'));
 
-        xarResponse::redirect(xarModURL('installer', 'admin', 'security'));
+        xarController::redirect(xarModURL('installer', 'admin', 'security'));
         return true;
     }
 
@@ -1144,10 +1147,8 @@ function installer_admin_cleanup()
 
     $loginBlockTypeId = xarMod::apiFunc('blocks','admin','register_block_type',
                     array('modName' => 'authsystem', 'blockType' => 'login'));
-    if (empty($loginBlockTypeId)) {
+    if (empty($loginBlockTypeId)) return;
         // FIXME: shouldn't we raise an exception here?
-        return;
-    }
 
     if (!xarMod::apiFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
         if (xarMod::apiFunc('blocks', 'admin', 'create_instance',
@@ -1217,14 +1218,14 @@ function installer_admin_finish()
 
     switch ($returnurl) {
         case ('base'):
-            xarResponse::redirect(xarModURL('base','admin','modifyconfig'));
+            xarController::redirect(xarModURL('base','admin','modifyconfig'));
         case ('modules'):
-            xarResponse::redirect(xarModURL('modules','admin','list'));
+            xarController::redirect(xarModURL('modules','admin','list'));
         case ('blocks'):
-            xarResponse::redirect(xarModURL('blocks','admin','view_instances'));
+            xarController::redirect(xarModURL('blocks','admin','view_instances'));
         case ('site'):
         default:
-            xarResponse::redirect('index.php');
+            xarController::redirect('index.php');
     }
     return true;
 }

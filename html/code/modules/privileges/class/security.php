@@ -160,7 +160,7 @@ class xarSecurity extends Object
 
             // get the masks pertaining to the current module and the component requested
             // <mikespub> why do you need this in the first place ?
-            if ($module == '') list($module) = xarRequest::getInfo();
+            if ($module == '') list($module) = xarController::$request->getInfo();
 
             // I'm a bit lost on this line. Does this var ever get set?
             // <mikespub> this gets set in xarBlock_render, to replace the xarModVars::set /
@@ -314,9 +314,9 @@ class xarSecurity extends Object
                 // The current authentication module will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login
                 $requrl = xarServer::getCurrentURL(array(),false);
-                xarResponse::redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
+                xarController::redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
             } else {
-                xarResponse::redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
+                xarController::redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
             }
         }
         return $pass;
