@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <fieldset>
+        <xar:set name="instance">$object->properties['module_id']->value.':'.$object->properties['itemtype']->value.':All'</xar:set>
+        <legend title="Module: Dynamic Data - Component: Item - Instance: #$instance#">
+            Default Access Rights Using Privileges
+        </legend>
+        <xar:set name="secmasks">array('Display' => 'ReadDynamicDataItem', 'Modify' => 'EditDynamicDataItem', 'Create' => 'AddDynamicDataItem', 'Delete' => 'DeleteDynamicDataItem', 'Configure' => 'AdminDynamicDataItem')</xar:set>
+        <xar:set name="groups">xarRoles::getgroups()</xar:set>
+        <xar:set name="anonid">xarConfigVars::get(null,'Site.User.AnonymousUID')</xar:set>
+        <xar:set name="anonrole">xarRoles::get($anonid)</xar:set>
+        <xar:set name="namelist">array($anonid => $anonrole->getName())</xar:set>
+        <xar:foreach in="$groups" value="$group">
+            <xar:set name="dummy">$namelist[$group['id']] = $group['name']</xar:set>
+        </xar:foreach>
+        <table>
+            <tr>
+                <th>Group</th>
+                <xar:foreach in="$secmasks" key="$secname" value="$secmask">
+                    <th style="text-align: center">#$secname#</th>
+                </xar:foreach>
+            </tr>
+            <xar:foreach in="$namelist" key="$roleid" value="$rolename">
+            <tr>
+                <td>#$rolename#</td>
+                <xar:foreach in="$secmasks" key="$secname" value="$secmask">
+                    <xar:set name="access">xarSecurity::check($secmask,0,'Item',$instance,'',$rolename,0,0)</xar:set>
+                    <xar:if condition="!empty($access)">
+                        <td style="text-align: center"><img src="#xarTplGetImage('icons/activate.png','base')#" width="16" height="16" border="0"/></td>
+                    <xar:else/>
+                        <td style="text-align: center"><img src="#xarTplGetImage('icons/deactivate.png','base')#" width="16" height="16" border="0"/></td>
+                    </xar:if>
+                </xar:foreach>
+            </tr>
+            </xar:foreach>
+        </table>
+    </fieldset>
+</xar:template>

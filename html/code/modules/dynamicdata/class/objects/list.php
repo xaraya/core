@@ -613,22 +613,22 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 */
 
         // Assume normal rules for access control, i.e. Delete > Edit > Read
-        if ($is_user && xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid))  {
+        if ($is_user && $this->checkAccess('delete',$itemid))  {
             $allow_delete = 1;
             $allow_add = 1;
             $allow_edit = 1;
             $allow_read = 1;
-        } elseif ($is_user && xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+        } elseif ($is_user && $this->checkAccess('create',$itemid)) {
             $allow_delete = 0;
             $allow_add = 1;
             $allow_edit = 1;
             $allow_read = 1;
-        } elseif ($is_user && xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+        } elseif ($is_user && $this->checkAccess('update',$itemid)) {
             $allow_delete = 0;
             $allow_add = 0;
             $allow_edit = 1;
             $allow_read = 1;
-        } elseif (xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+        } elseif ($this->checkAccess('display',$itemid)) {
             $allow_delete = 0;
             $allow_add = 0;
             $allow_edit = 0;

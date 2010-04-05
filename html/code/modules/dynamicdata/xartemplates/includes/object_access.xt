@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+
+    <xar:template type="module" file="object_privileges"/>
+
+    <!-- TODO: show access like privileges above, but configurable ? -->
+    <fieldset>
+        <legend>
+            DataObject Display Access
+        </legend>
+        <xar:set name="propname">$object->name . '_display'</xar:set>
+        <xar:data-input type="access" name="$propname" value="$display_access"/>
+    </fieldset>
+    <fieldset>
+        <legend>
+            DataObject Modify Access
+        </legend>
+        <xar:set name="propname">$object->name . '_modify'</xar:set>
+        <xar:data-input type="access" name="$propname" value="$modify_access"/>
+    </fieldset>
+    <fieldset>
+        <legend>
+            DataObject Delete Access
+        </legend>
+        <xar:set name="propname">$object->name . '_delete'</xar:set>
+        <xar:data-input type="access" name="$propname" value="$delete_access"/>
+    </fieldset>
+    <fieldset>
+        <div class="xar-align-center">
+            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+            <input type="hidden" name="tab" id="tab" value="access"/>
+            <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
+            <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+            <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
+            <xar:if condition="!empty($return_url)">
+                <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+            </xar:if>
+            <input type="hidden" name="notfresh" id="notfresh" value="true"/>
+            <xar:var name="label">Update</xar:var>
+            <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
+        </div>
+    </fieldset>
+</xar:template>

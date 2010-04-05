@@ -1088,10 +1088,82 @@ class DataObjectMaster extends Object
         }
     }
 
-    public function checkAccess($access)
+    /**
+     * Check access for a specific action on an object // CHECKME: how about checking *before* the object is loaded ?
+     *
+     * @access public
+     * @param action string the action we want to take on this object (= method or func)
+     * @param itemid mixed the specific item id or null
+     * @param roleid mixed override the current user or null // CHECKME: do we want this ?
+     * @return bool true if access
+     */
+    public function checkAccess($action, $itemid = null, $roleid = null)
     {
-        if (empty($access)) throw new EmptyParameterException('Access method');
-        $access_method = $access . '_access';
+        if (empty($action)) throw new EmptyParameterException('Access method');
+
+        // only allow direct access to tables for administrators
+        if (!empty($this->table)) {
+            $action = 'admin';
+        }
+
+        // default actions supported by dynamic objects
+        switch($action)
+        {
+            case 'admin':
+                // require admin access to the module here
+                return xarSecurityCheck('AdminDynamicData',0);
+
+            case 'config':
+            case 'settings':
+                $mask = 'AdminDynamicDataItem';
+                $itemid = 'All';
+                break;
+
+            case 'delete':
+            case 'remove':
+                $mask = 'DeleteDynamicDataItem';
+                break;
+
+            case 'create':
+            case 'new':
+                $mask = 'AddDynamicDataItem';
+                break;
+
+            case 'update':
+            case 'modify':
+                $mask = 'EditDynamicDataItem';
+                break;
+
+            case 'display':
+            case 'show':
+                $mask = 'ReadDynamicDataItem';
+                break;
+
+            case 'view':
+            case 'list':
+            case 'search':
+            case 'query':
+            case 'stats':
+            case 'report':
+            default:
+                $mask = 'ViewDynamicDataItems';
+                break;
+        }
+
+        // check if we're dealing with a specific item here
+        if (empty($itemid)) {
+            if (!empty($this->itemid)) {
+                $itemid = $this->itemid;
+            } else {
+                $itemid = 'All';
+            }
+        }
+
+        // CHECKME: allow overriding the current user with $roleid someday ?
+        // CHECKME: use access checks similar to blocks here someday ?
+        return xarSecurityCheck($mask,0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid);
+/*
+        $access_method = $action . '_access';
         $access = isset($this->$access_method) ? $this->$access_method :
             array('group' => 0, 'level' => 100, 'failure' => 0);
         // Decide whether this block is displayed to the current user
@@ -1107,6 +1179,7 @@ class DataObjectMaster extends Object
             self::$access_property = DataPropertyMaster::getProperty(array('name' => 'access'));
         }
         return self::$access_property->check($args);
+*/
     }
 }
 ?>

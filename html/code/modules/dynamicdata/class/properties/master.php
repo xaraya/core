@@ -80,29 +80,27 @@ class DataPropertyMaster extends Object
                 $name, $label, $type, $id, $defaultvalue, $source, $status,
                 $seq, $configuration, $_objectid
                 ) = $result->fields;
-//            if (xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id")) {
-                $property = array(
-                    'name'          => $name,
-                    'label'         => $label,
-                    'type'          => $type,
-                    'id'            => $id,
-                    'defaultvalue'  => $defaultvalue,
-                    'source'        => $source,
-                    'status'        => $status,
-                    'seq'           => $seq,
-                    'configuration' => $configuration,
-                    // some internal variables
-                    '_objectid'     => $_objectid,
-                    'anonymous'     => $anonymous,
-                    'class'         => ''
-                );
-                if(isset($args['objectref'])) {
-                    self::addProperty($property,$args['objectref']);
-                }
-                else {
-                    $properties[$name] = $property;
-                }
-//            }
+            $property = array(
+                'name'          => $name,
+                'label'         => $label,
+                'type'          => $type,
+                'id'            => $id,
+                'defaultvalue'  => $defaultvalue,
+                'source'        => $source,
+                'status'        => $status,
+                'seq'           => $seq,
+                'configuration' => $configuration,
+                // some internal variables
+                '_objectid'     => $_objectid,
+                'anonymous'     => $anonymous,
+                'class'         => ''
+            );
+            if(isset($args['objectref'])) {
+                self::addProperty($property,$args['objectref']);
+            }
+            else {
+                $properties[$name] = $property;
+            }
         }
         return $properties;
     }

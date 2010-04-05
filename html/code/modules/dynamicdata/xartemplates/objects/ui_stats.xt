@@ -139,8 +139,7 @@
                     <input type="submit" value="#xarML('Show Statistics')#" class="xar-margin-thickleft"/>
                 </div>
             </fieldset>
-            <xar:set name="instance">$object->moduleid .':'. $object->itemtype .':All'</xar:set>
-            <xar:sec mask="DeleteDynamicDataItem" catch="false" component="Item" instance="$instance">
+            <xar:if condition="$object:checkAccess('config')">
                 <fieldset>
                     <div class="xar-form-input-wrapper">
                         <label class="xar-form-label" for="report" title="Specify a name for this report if you want to save it">Save Report As</label>
@@ -148,7 +147,7 @@
                         <input type="submit" name="save" value="#xarML('Save Report')#" class="xar-margin-thickleft"/>
                     </div>
                 </fieldset>
-            </xar:sec>
+            </xar:if>
         </form>
         <xar:if condition="!empty($result)">
             <!-- don't show a newlink here -->
