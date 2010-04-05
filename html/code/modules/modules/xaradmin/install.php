@@ -36,7 +36,11 @@ function modules_admin_install()
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
 
-    //First check the modules dependencies
+    // First check for a proper core version
+    if (!$installer->checkCore($id)) 
+        return xarTplModule('modules','user','errors',array('layout' => 'invalid_core', 'modname' => xarMod::getName($id)));
+
+    //Next check the modules dependencies
     // TODO: investigate try/catch clause here, it's not trivial
     try {
         $installer->verifydependency($id);
