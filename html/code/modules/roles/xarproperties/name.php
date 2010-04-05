@@ -78,7 +78,7 @@ class NameProperty extends TextBoxProperty
     function getvaluearray($value)
     {
         if (!isset($value)) $value = '%%%%%';
-        if (!is_array($value)) return $value;
+        if (is_array($value)) return $value;
         $value = explode('%', $value);
         
         $valuearray['last'] = !empty($value[1]) ? $value[1] : '';
