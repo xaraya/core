@@ -221,9 +221,14 @@ class ArrayProperty extends DataProperty
             } elseif (is_array($value[$field])) {
                 foreach($value[$field] as $k => $v){
                     $data['value'][$field][$k] = xarVarPrepForDisplay($v);
-                }                
+                }
             } else {
-                $data['value'][$field] = $value[$field];
+                // CHECKME: skip this for array of properties ?
+                if ($data['template'] == 'array_of_props') {
+                    $data['value'][$field] = $value[$field];
+                } else {
+                    $data['value'][$field] = xarVarPrepForDisplay($value[$field]);
+                }
             }
         }
 
