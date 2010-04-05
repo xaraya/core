@@ -224,7 +224,7 @@ class ArrayProperty extends DataProperty
                 }
             } else {
                 // CHECKME: skip this for array of properties ?
-                if ($data['template'] == 'array_of_props') {
+                if (!empty($data['template']) && $data['template'] == 'array_of_props') {
                     $data['value'][$field] = $value[$field];
                 } else {
                     $data['value'][$field] = xarVarPrepForDisplay($value[$field]);
