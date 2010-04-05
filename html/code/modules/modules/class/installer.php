@@ -1,6 +1,6 @@
 <?php
 /**
- * Module insatller
+ * Module installer
  *
  * @package modules
  * @copyright see the html/credits.html file in this release
@@ -527,6 +527,23 @@ class Installer extends Object
         }
 
         return true;
+    }
+
+    public function checkCore($regid=null)
+    {
+        $info = xarMod::getInfo($regid);
+        if (!empty($info['dependencyinfo']) && !empty($info['dependencyinfo'][0])) {
+            $valid = false;
+            if (!empty($info['dependencyinfo'][0]['version_ge'])) {
+                sys::import('xaraya.version');
+                $result = xarVersion::compare(XARCORE_VERSION,$info['dependencyinfo'][0]['version_ge']);
+                $valid = $result >= 0;
+            }
+            return $valid;
+        } else {
+        // Let it slide for now
+            return true;
+        }
     }
 }
 
