@@ -697,8 +697,24 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 */
 
+        // Work with specific access rules for this object (= valid for all itemids)
+        if (!empty($this->access)) {
+            // initialize the access options
+            if (empty($this->cached_allow)) {
+                $this->cached_allow = array();
+                $this->cached_allow['display'] = $this->checkAccess('display');
+                $this->cached_allow['update'] = $this->checkAccess('update');
+                $this->cached_allow['create'] = $this->checkAccess('create');
+                $this->cached_allow['delete'] = $this->checkAccess('delete');
+            }
+            // get the access options
+            $allow_delete = $this->cached_allow['delete'];
+            $allow_add = $this->cached_allow['create'];
+            $allow_edit = $this->cached_allow['update'];
+            $allow_read = $this->cached_allow['display'];
+
         // Assume normal rules for access control, i.e. Delete > Edit > Read
-        if ($is_user && $this->checkAccess('delete',$itemid))  {
+        } elseif ($is_user && $this->checkAccess('delete',$itemid))  {
             $allow_delete = 1;
             $allow_add = 1;
             $allow_edit = 1;
@@ -739,7 +755,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // TODO: define 'access' as a standard action for objects if we want it, instead of overloading 'modify' action
             $options['access'] = array('otitle' => xarML('Access'),
                                             'oicon'  => 'privileges.png',
-                                            'olink'  => $this->getActionURL('modify', $itemid, array('tab' => 'access')),
+                                            'olink'  => $this->getActionURL('access', $itemid),
                                             'ojoin'  => '|');
             $options['modifyprops'] = array('otitle' => xarML('Properties'),
                                             'oicon'  => 'modify-config.png',
@@ -752,10 +768,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                                          );
         }
         //if ($allow_add)  {
-        // CHECKME: allow cloning only for the dynamic objects themselves ?
-        //if ($allow_add && $this->objectid == 1)  {
         // CHECKME: and/or skip cloning in object interface ?
-        if ($allow_add && $this->linktype != 'object')  {
+        //if ($allow_add && $this->linktype != 'object')  {
+        // CHECKME: allow cloning only for the dynamic objects themselves ?
+        if ($allow_add && $this->objectid == 1)  {
             // TODO: define 'clone' as a standard action for objects if we want it, instead of overloading 'modify' action
             $options['clone'] = array('otitle' => xarML('Clone'),
                                        'oicon'  => 'add.png',

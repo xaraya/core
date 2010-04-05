@@ -2,9 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-    <xar:template type="module" file="object_privileges"/>
-
-    <!-- TODO: show access like privileges above, but configurable ? -->
+<!--
     <fieldset>
         <legend>
             DataObject Display Access
@@ -26,19 +24,90 @@
         <xar:set name="propname">$object->name . '_delete'</xar:set>
         <xar:data-input type="access" name="$propname" value="$delete_access"/>
     </fieldset>
+-->
+
+    <![CDATA[
+    <script type="text/javascript">
+        function dd_toggle_checkboxes(pattern)
+        {
+            var elem = document.getElementsByTagName("input");
+            var match = new RegExp(pattern);
+            for (i = 0; i < elem.length; i++) {
+                if (elem[i].type == 'checkbox' && match.test(elem[i].id)) {
+                    if (elem[i].checked) {
+                        elem[i].checked = false;
+                    } else {
+                        elem[i].checked = true;
+                    }
+                }
+            }
+        }
+
+        function dd_disable_checkboxes(pattern)
+        {
+            var elem = document.getElementsByTagName("input");
+            var match = new RegExp(pattern);
+            for (i = 0; i < elem.length; i++) {
+                if (elem[i].type == 'checkbox' && match.test(elem[i].id)) {
+                    if (elem[i].disabled) {
+                        elem[i].disabled = false;
+                    } else {
+                        elem[i].disabled = true;
+                    }
+                }
+            }
+        }
+    </script>
+    ]]>
+
+    <fieldset>
+        <legend>
+            Specify Access Rules
+        </legend>
+        <label for="do_access">
+        <xar:if condition="!empty($do_access)">
+            <input type="checkbox" id="do_access" name="do_access" value="1" checked="checked" onclick="javascript:dd_disable_checkboxes('access_')"/>
+        <xar:else/>
+            <input type="checkbox" id="do_access" name="do_access" value="1" onclick="javascript:dd_disable_checkboxes('access_')"/>
+        </xar:if>
+        &#160;Override default access rights ?</label>
+        <table>
+            <tr>
+                <th>Group</th>
+                <xar:foreach in="$levels" key="$level" value="$info">
+                    <th style="text-align: center"><a onclick="javascript:dd_toggle_checkboxes('access_#$level#_')" title="Toggle Access for #$info.label#">#$info.label#</a></th>
+                </xar:foreach>
+            </tr>
+            <xar:foreach in="$grouplist" key="$roleid" value="$rolename">
+            <tr>
+                <td><a onclick="javascript:dd_toggle_checkboxes('access_.+_#$roleid#')" title="Toggle Access for #$rolename#">#$rolename#</a></td>
+                <xar:foreach in="$levels" key="$level" value="$info">
+                    <xar:comment>check if $roleid is in the list of groups that have access at this level</xar:comment>
+                    <xar:if condition="!empty($access[$level]) and in_array($roleid, $access[$level])">
+                        <td style="text-align: center"><input type="checkbox" id="access_#$level#_#$roleid#" name="access[#$level#][#$roleid#]" value="1" checked="checked"/></td>
+                    <xar:else/>
+                        <td style="text-align: center"><input type="checkbox" id="access_#$level#_#$roleid#" name="access[#$level#][#$roleid#]" value="1"/></td>
+                    </xar:if>
+                </xar:foreach>
+            </tr>
+            </xar:foreach>
+        </table>
+        <xar:if condition="empty($do_access)">
+            <script type="text/javascript">
+                dd_disable_checkboxes('access_');
+            </script>
+        </xar:if>
+    </fieldset>
     <fieldset>
         <div class="xar-align-center">
             <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-            <input type="hidden" name="tab" id="tab" value="access"/>
-            <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
             <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
             <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
             <xar:if condition="!empty($return_url)">
                 <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
             </xar:if>
-            <input type="hidden" name="notfresh" id="notfresh" value="true"/>
             <xar:var name="label">Update</xar:var>
-            <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
+            <input type="submit" name="confirm" value="#$label#" class="xar-margin-thickleft"/>
         </div>
     </fieldset>
 </xar:template>

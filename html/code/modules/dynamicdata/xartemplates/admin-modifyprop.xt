@@ -14,7 +14,7 @@
                 &#160;<a href="#$editlink#" title="Modify DataObject #$label#">
                     <img src="#xarTplGetImage('icons/modify.png', 'base')#" width="16" height="16" alt="modify"/>
                 </a>
-                <xar:set name="accesslink">xarModURL('dynamicdata','admin','modify',array('itemid' => $objectid, 'tab' => 'access'))</xar:set>
+                <xar:set name="accesslink">xarModURL('dynamicdata','admin','access',array('itemid' => $objectid))</xar:set>
                 &#160;<a href="#$accesslink#" title="Modify Access Rules for #$label#">
                     <img src="#xarTplGetImage('icons/privileges.png', 'base')#" width="16" height="16" alt="access"/>
                 </a>
