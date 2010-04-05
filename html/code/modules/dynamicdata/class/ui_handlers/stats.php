@@ -270,6 +270,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
 
         // get the result
         } else {
+        // FIXME: support addFilters() when not grouping
             $this->object->getItems($info);
             $result = 1;
         }
@@ -343,6 +344,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         } else {
             // remove stats info
             unset($info['stats']);
+        // FIXME: support addFilters() when not grouping
             $this->object->getItems($info);
             $result = 1;
         }

@@ -105,6 +105,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $this->where .= ' and ' . $this->secondary . ' eq ' . $this->itemtype;
             }
         }
+
         // Note: they can be empty here, which means overriding any previous criteria
         foreach(array_keys($this->datastores) as $name) {
             // make sure we don't have some left-over sort criteria
@@ -118,6 +119,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $this->datastores[$name]->cache = $args['cache'];
         }
         $this->setSort($this->sort);
+        // add content filters before setWhere()
+        $this->addFilters();
         $this->setWhere($this->where);
         $this->setGroupBy($this->groupby);
 //        $this->setCategories($this->catid);
@@ -167,6 +170,71 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 if (!isset($this->startstore))
                    $this->startstore = $datastore;
             }
+        }
+    }
+
+    /**
+     * Add content filters to where clauses - do not call directly for now...
+     */
+    private function addFilters()
+    {
+        if (!empty($this->filters) && is_string($this->filters)) {
+            try {
+                $this->filters = unserialize($this->filters);
+            } catch (Exception $e) {
+                $this->filters = null;
+            }
+        }
+        if (empty($this->filters)) {
+            return;
+        }
+
+        if (xarUserIsLoggedIn()) {
+            // get the direct parents of the current user (no ancestors)
+            $grouplist = xarCache::getParents();
+        } else {
+            // check anonymous visitors by themselves
+            $grouplist = array(_XAR_ID_UNREGISTERED);
+        }
+
+        foreach ($grouplist as $groupid) {
+            if (empty($this->filters[$groupid])) {
+                continue;
+            }
+            foreach ($this->filters[$groupid] as $filter) {
+                if (!isset($this->properties[$filter[0]])) {
+                    // skip filters on unknown properties
+                    continue;
+                }
+                $whereclause = '';
+                // TODO: cfr. getwhereclause in search ui
+                if ($filter != 'in' && !is_numeric($filter[2])) {
+                    // escape single quotes
+                    $filter[2] = str_replace("'", "\\'", $filter[2]);
+                    $filter[2] = "'"  . $filter[2] . "'";
+                }
+                switch ($filter[1])
+                {
+                    case 'in':
+                        $whereclause = ' IN (' . $filter[2] . ')';
+                        break;
+                    case 'eq':
+                    case 'gt':
+                    case 'lt':
+                    case 'ne':
+                    default:
+                        $whereclause = ' ' . $filter[1] . ' ' . $filter[2];
+                        break;
+                }
+                if (!empty($this->where)) {
+                    // CHECKME: how about when $this->where is an array ?
+                    $this->where .= ' and ' . $filter[0] . $whereclause;
+                } else {
+                    $this->where = $filter[0] . $whereclause;
+                }
+            }
+            // one group having filters is enough here !?
+            return;
         }
     }
 

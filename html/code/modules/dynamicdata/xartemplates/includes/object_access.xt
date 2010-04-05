@@ -99,6 +99,81 @@
         </xar:if>
     </fieldset>
     <fieldset>
+        <legend>
+            Enable Content Filters
+        </legend>
+        &#160;Automatically filter items in views ?
+        <table>
+            <tr>
+                <th>Group</th>
+                <th>Property</th>
+                <th>Condition</th>
+                <th>Value</th>
+<!--
+                <th>Access</th>
+-->
+            </tr>
+            <xar:foreach in="$filters" key="$filterid" value="$filterinfo">
+            <tr>
+                <td>
+                    <select name="filters[#$filterid#][group]" id="filters_#$filterid#_group">
+                        <option value=""></option>
+                        <xar:foreach in="$grouplist" key="$roleid" value="$rolename">
+                            <xar:if condition="$filterinfo['group'] eq $roleid">
+                                <option value="#$roleid#" selected="selected">#$rolename#</option>
+                            <xar:else/>
+                                <option value="#$roleid#">#$rolename#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+                <td>
+                    <select name="filters[#$filterid#][prop]" id="filters_#$filterid#_prop">
+                        <option value=""></option>
+                        <xar:foreach in="$properties" key="$propname" value="$propinfo">
+                            <xar:if condition="$filterinfo['prop'] eq $propname">
+                                <option value="#$propname#" selected="selected">#$propinfo.label#</option>
+                            <xar:else/>
+                                <option value="#$propname#">#$propinfo.label#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+                <td>
+                    <select name="filters[#$filterid#][match]" id="filters_#$filterid#_match">
+                        <option value=""></option>
+                        <xar:foreach in="$conditions" key="$match" value="$label">
+                            <xar:if condition="$filterinfo['match'] eq $match">
+                                <option value="#$match#" selected="selected">#$label#</option>
+                            <xar:else/>
+                                <option value="#$match#">#$label#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" name="filters[#$filterid#][value]" id="filters_#$filterid#_value" value="#$filterinfo.value#" class="xar-form-text-medium"/>
+                </td>
+<!--
+                <td>
+                    <select name="filters[#$filterid#][level]" id="filters_#$filterid#_level">
+                        <option value="">Any</option>
+                        <xar:foreach in="$levels" key="$level" value="$info">
+                            <xar:if condition="$filterinfo['level'] eq $level">
+                                <option value="#$level#" selected="selected">#$info.label#</option>
+                            <xar:else/>
+                                <option value="#$level#">#$info.label#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+-->
+            </tr>
+            </xar:foreach>
+        </table>
+        Use this to further limit access e.g. for Anonymous visitors to items where the property 'Age' is greater than 17
+    </fieldset>
+    <fieldset>
         <div class="xar-align-center">
             <input type="hidden" name="authid" id="authid" value="#$authid#"/>
             <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>

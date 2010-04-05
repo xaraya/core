@@ -120,6 +120,27 @@ function dynamicdata_admin_access($args)
             // clear the access list first
             unset($configuration['access']);
         }
+
+        // define the new filter list
+        $filterlist = array();
+        if(!xarVarFetch('filters', 'isset', $filters, array(), XARVAR_DONT_SET)) {return;}
+        foreach ($filters as $filterid => $filterinfo) {
+            if (empty($filterinfo['group']) || empty($filterinfo['prop']) || empty($filterinfo['match'])) {
+                continue;
+            }
+            if (!isset($filterlist[$filterinfo['group']])) {
+                $filterlist[$filterinfo['group']] = array();
+            }
+            array_push($filterlist[$filterinfo['group']], array($filterinfo['prop'], $filterinfo['match'], $filterinfo['value']));
+        }
+        if (!empty($filterlist)) {
+            // serialize the filter list first
+            $configuration['filters'] = serialize($filterlist);
+        } else {
+            // clear the filter list first
+            unset($configuration['filters']);
+        }
+
         // then serialize the configuration for update
         $configstring = serialize($configuration);
         $itemid = $object->updateItem(array('config' => $configstring));
@@ -128,8 +149,9 @@ function dynamicdata_admin_access($args)
         if (!empty($return_url)) {
             xarResponse::redirect($return_url);
         } else {
-            xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'view',
-                                            array('tplmodule' => $tplmodule)));
+            xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'access',
+                                            array('itemid' => $itemid,
+                                                  'tplmodule' => $tplmodule)));
         }
         return true;
     }
@@ -163,6 +185,45 @@ function dynamicdata_admin_access($args)
     } else {
         $data['do_access'] = 1;
     }
+
+    if (!empty($configuration['filters'])) {
+        // unserialize the filter list
+        try{
+            $filterlist = unserialize($configuration['filters']);
+        } catch (Exception $e) {
+            $filterlist = array();
+        }
+    } else {
+        $filterlist = array();
+    }
+    // rearrange filterlist for template
+    $data['filters'] = array();
+    foreach ($filterlist as $group => $filters) {
+        foreach ($filters as $filter) {
+            array_push($data['filters'], array('group' => $group,
+                                               'prop'  => $filter[0],
+                                               'match' => $filter[1],
+                                               'value' => xarVarPrepForDisplay($filter[2]),
+                                               'level' => ''));
+        }
+    }
+    // add blank filter at the bottom
+    array_push($data['filters'], array('group' => '',
+                                       'prop'  => '',
+                                       'match' => '',
+                                       'value' => '',
+                                       'level' => ''));
+
+    // get the properties of the current object
+    $data['properties'] = DataPropertyMaster::getProperties(array('objectid' => $object->itemid));
+    $data['conditions'] = array('eq'    => 'equals',
+                                //'start' => 'starts with',
+                                //'end'   => 'ends with',
+                                //'like'  => 'contains',
+                                //'in'    => 'in list a,b,c',
+                                'gt'    => 'greater than',
+                                'lt'    => 'less than',
+                                'ne'    => 'not equal to');
 
     $data['authid'] = xarSecGenAuthKey();
 
