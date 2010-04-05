@@ -22,6 +22,8 @@
  *
  * @package dynamicdata
  */
+sys::import('modules.dynamicdata.class.datastores.base');
+
 class DummyDataStore extends BasicDataStore
 {
     function getItem(Array $args = array())

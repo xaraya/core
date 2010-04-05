@@ -139,7 +139,7 @@
                         <xar:set name="value">
                             array(
                                 'group' => 0,
-                                'level' => 0,
+                                'level' => 100,
                                 'failure' => 0
                             )
                         </xar:set>

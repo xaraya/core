@@ -282,7 +282,7 @@ class DataObjectLinks extends Object
     }
 
     /**
-     * Get linked objects for a DataObject or DataObjectList
+     * Get linked objects for a DataObject or DataObjectList (work in progress)
      *
      * @param $object the object we want to get the links for (object or objectlist)
      * @param $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
@@ -364,6 +364,144 @@ class DataObjectLinks extends Object
             }
 
             $link['list'] = $linkedlist;
+
+// CHECKME: review where we place the linked objects
+            $object->links[$link['link_type']][] = $link;
+            $object->properties[$link['from_prop']]->linked[] =& $link;
+
+            //$linked[] = $link;
+        }
+        //return $linked;
+        //return $object->links;
+    }
+
+    /**
+     * Count linked object items for a DataObject or DataObjectList (work in progress)
+     *
+     * @param $object the object we want to count the linked object items for (object or objectlist)
+     * @param $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
+     * @param $itemid (optional) for a particular itemid in ObjectList ?
+     */
+    static function countLinkedItems($object, $linktype = '', $itemid = null)
+    {
+        // we'll skip the 'info' here, unless explicitly asked for 'all'
+        $links = self::getLinks($object, $linktype, $itemid);
+        if (empty($links[$object->name])) {
+            return array();
+        }
+
+// CHECKME: use this only to count children here, or also for the others (= 0 or 1) ?
+
+// CHECKME: review where we place the linked objects
+        $object->links = array(
+            'parents'    => array(),
+            'children'   => array(),
+            'linkedfrom' => array(),
+            'linkedto'   => array(),
+            'info'       => array(),
+        );
+
+        //$linked = array();
+        foreach ($links[$object->name] as $link) {
+            // skip links from unknown properties
+            if (empty($object->properties[$link['from_prop']])) continue;
+
+            // get an objectlist for the target
+            $linkedlist = DataObjectMaster::getObjectList(array('name' => $link['target']));
+            // skip links to unknown objects or properties
+            if (empty($linkedlist->objectid) || empty($linkedlist->properties[$link['to_prop']])) continue;
+
+            // initialize the linked list
+            if (empty($object->properties[$link['from_prop']]->linked)) {
+                $object->properties[$link['from_prop']]->linked = array();
+            }
+
+            $linkedcount = array();
+            if (!empty($object->itemid)) {
+                // get item(s) ?
+                $where = array();
+// get original role id
+//if ($object->properties[$link['from_prop']]->type == 7) {
+//                $value = $object->properties[$link['from_prop']]->value;
+//} else {
+                $value = $object->properties[$link['from_prop']]->getValue();
+//}
+                if (isset($value)) {
+                    if (is_numeric($value)) {
+                        $where[] = $link['to_prop'] . ' = ' . $value;
+                    } elseif (is_string($value)) {
+                        $where[] = $link['to_prop'] . " = '" . $value . "'";
+                    } elseif (is_array($value)) {
+                        $where[] = $link['to_prop'] . " IN ('" . implode("', '", $value) . "')";
+                    } else {
+                        // no idea what to do with this ;-)
+                    }
+                }
+                if (!empty($link['extra'])) {
+                    $where[] = $link['extra'];
+                }
+                if (!empty($where)) {
+//echo var_dump($where);
+                    $linkedcount = $linkedlist->countItems(array('where' => implode(' and ', $where)));
+                }
+
+            } elseif (!empty($object->itemids)) {
+                $where = array();
+                if (!empty($object->where)) {
+                    $values = array();
+                    $value2items = array();
+                    foreach ($object->itemids as $itemid) {
+                        $value = $object->properties[$link['from_prop']]->getItemValue($itemid);
+                        if (isset($value)) {
+                            array_push($values, $value);
+                            if (!isset($value2items[$value])) {
+                                $value2items[$value] = array();
+                            }
+                            array_push($value2items[$value], $itemid);
+                        }
+                    }
+                    if (!empty($values)) {
+                    // filter by to_prop values
+                        $where[] = $link['to_prop'] . " IN ('" . implode("', '", $values) . "')";
+                    }
+                } else {
+                    // map from_prop values to itemids
+                    $value2items = array();
+                    foreach ($object->itemids as $itemid) {
+                        $value = $object->properties[$link['from_prop']]->getItemValue($itemid);
+                        if (isset($value)) {
+                            if (!isset($value2items[$value])) {
+                                $value2items[$value] = array();
+                            }
+                            array_push($value2items[$value], $itemid);
+                        }
+                    }
+                }
+                if (!empty($linkedlist->primary)) {
+                    // group by $link['to_prop']
+                    $itemcounts = $linkedlist->getItems(array('fieldlist' => array('COUNT(' . $linkedlist->primary . ')', $link['to_prop']),
+                                                              'groupby' => $link['to_prop'],
+                                                              'where' => implode(' and ', $where)));
+                    foreach ($itemcounts as $item) {
+                        if (isset($item[$link['to_prop']])) {
+                            $value = $item[$link['to_prop']]; 
+                            if (empty($value2items[$value])) {
+                                continue;
+                            }
+                            // map to_prop value to itemids
+                            foreach ($value2items[$value] as $itemid) {
+                                $linkedcount[$itemid] = $item[$linkedlist->primary];
+                            }
+                        }
+                    }
+                } else {
+                    // now what ?
+                }
+//echo var_dump($linkedcount);
+            }
+
+            $link['label'] = $linkedlist->label;
+            $link['count'] = $linkedcount;
 
 // CHECKME: review where we place the linked objects
             $object->links[$link['link_type']][] = $link;

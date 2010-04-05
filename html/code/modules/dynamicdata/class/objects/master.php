@@ -604,6 +604,17 @@ class DataObjectMaster extends Object
     
     static function &getfObject(Array $args=array())
     {
+        /* with autoload and variable caching activated */
+        // Identify the variable by its arguments here
+        $hash = md5(serialize($args));
+        // Get a cache key for this variable if it's suitable for variable caching
+        $cacheKey = xarCache::getVariableKey('DataObject', $hash);
+        // Check if the variable is cached
+        if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
+            // Return the cached variable
+            $object = xarVariableCache::getCached($cacheKey);
+            return $object;
+        }
         if(!isset($args['itemid'])) $args['itemid'] = null;
 
 // FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
@@ -637,6 +648,11 @@ class DataObjectMaster extends Object
         // serialize is better here - shallow cloning is not enough for array of properties, datastores etc. and with deep cloning internal references are lost
 //        xarCoreCache::setCached('DDObject', $args['objectid'], serialize($object));
 
+        /* with autoload and variable caching activated */
+        // Set the variable in cache
+        if (!empty($cacheKey)) {
+            xarVariableCache::setCached($cacheKey, $object);
+        }
         return $object;
     }
 
@@ -655,6 +671,17 @@ class DataObjectMaster extends Object
     **/
     static function &getObjectList(Array $args=array())
     {
+        /* with autoload and variable caching activated */
+        // Identify the variable by its arguments here
+        $hash = md5(serialize($args));
+        // Get a cache key for this variable if it's suitable for variable caching
+        $cacheKey = xarCache::getVariableKey('DataObjectList', $hash);
+        // Check if the variable is cached
+        if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
+            // Return the cached variable
+            $object = xarVariableCache::getCached($cacheKey);
+            return $object;
+        }
 // FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
         // Complete the info if this is a known object
         $info = self::_getObjectInfo($args);
@@ -689,6 +716,12 @@ class DataObjectMaster extends Object
 
         // here we can use our own classes to retrieve this
         $object = new $class($descriptor);
+
+        /* with autoload and variable caching activated */
+        // Set the variable in cache
+        if (!empty($cacheKey)) {
+            xarVariableCache::setCached($cacheKey, $object);
+        }
         return $object;
     }
 
@@ -896,17 +929,16 @@ class DataObjectMaster extends Object
     public function getActionURL($action = '', $itemid = null, $extra = array())
     {
         // if we have a cached URL already, use that
-        // FIXME: this can't work if we use $extra
-//        if (!empty($itemid) && !empty($this->cached_urls[$action])) {
-//            $url = str_replace('=<itemid>', '='.$itemid, $this->cached_urls[$action]);
-//            return $url;
-//        }
+        if (!empty($itemid) && empty($extra) && !empty($this->cached_urls[$action])) {
+            $url = str_replace('=<itemid>', '='.$itemid, $this->cached_urls[$action]);
+            return $url;
+        }
 
         // get URL for this object and action
         $url = xarObject::getActionURL($this, $action, $itemid, $extra);
 
         // cache the URL if the itemid is in there
-        if (!empty($itemid) && strpos($url, $this->urlparam . '=' . $itemid) !== false) {
+        if (!empty($itemid) && empty($extra) && strpos($url, $this->urlparam . '=' . $itemid) !== false) {
             $this->cached_urls[$action] = str_replace($this->urlparam . '=' . $itemid, $this->urlparam . '=<itemid>', $url);
         }
 
@@ -1070,11 +1102,11 @@ class DataObjectMaster extends Object
             'group' => $access['group'],
             'level' => $access['level'],
         );
-        if (!isset($this::$access_property)) {
+        if (!isset(self::$access_property)) {
             sys::import('modules.dynamicdata.class.properties.master');
-            $this::$access_property = DataPropertyMaster::getProperty(array('name' => 'access'));
+            self::$access_property = DataPropertyMaster::getProperty(array('name' => 'access'));
         }
-        return $this::$access_property->check($args);
+        return self::$access_property->check($args);
     }
 }
 ?>

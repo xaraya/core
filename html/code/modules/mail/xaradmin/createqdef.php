@@ -8,7 +8,7 @@ function mail_admin_createqdef($args)
     }        
 
     // First determine whether we need to look at the name entered, or the object chosen
-    if(!xarVarFetch('qdef_choose','int:1',$qdef_choose)) return;
+    if(!xarVarFetch('qdef_choose','int:1',$qdef_choose, 0, XARVAR_NOT_REQUIRED)) return;
     switch($qdef_choose) {
     case 1:  // Name entered
         $qdefNew = true;
@@ -16,14 +16,15 @@ function mail_admin_createqdef($args)
         break;
     case 2:  // Object chosen
         $qdefNew = false;
-        if(!xarVarFetch('qdef_name_choose','id',$qdefObjectId)) return;
+        if(!xarVarFetch('qdef_name_choose','int:1:',$qdefObjectId)) return;
+        if (empty($qdefObjectId)) return xarResponse::notFound();
         // Get the name of the object from dd
         $qdefObject = xarMod::apiFunc('dynamicdata','user','getobject',array('objectid' => $qdefObjectId));
         if(!isset($qdefObject)) return;
         $qdefName = $qdefObject->name;
         break;
     default:
-        // Wrong value, raise exception
+        return xarResponse::notFound();
     }
 
     if($qdefNew) {

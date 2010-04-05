@@ -23,7 +23,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
     {
         // TODO: check the object definition, it needs id, data and nextid
         assert('isset($args["name"]); /* To construct a dd sequence, an objectname must be passed in */');
-        $this->seqInfo = DataObjectMaster::getObjectInfo($args);
+        $this->seqInfo = $args;
          // This fills $seqObject and $seq with most current data.
         $this->getSequence();
     }
@@ -118,15 +118,15 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
     /* Refresh the sequence data */
     private function getSequence()
     {
-        $this->seqObject = DataObjectMaster::getObject($this->seqInfo);
-        $params = array('modid'     => $this->seqInfo['moduleid'],
-                        'itemtype'  => $this->seqInfo['itemtype'],
-                        'sort'      => 'nextid',
-                        'fieldlist' => array('id','nextid'));
-        // And get the data
-        $objectData = xarMod::apiFunc('dynamicdata','user','getitems',$params);
+        sys::import('modules.dynamicdata.class.objects.master');
+        $this->seqObject = DataObjectMaster::getObjectList($this->seqInfo);
+        $objectData = $this->seqObject->getItems(array(
+                                'sort'      => 'nextid',
+                                'fieldlist' => array('id','nextid')
+                            ));
         // Make sure we have them in the right order (logically), i.e. sort on nextid
         $this->items = array_reverse($objectData);
+        $this->seqObject = DataObjectMaster::getObject($this->seqInfo);
     }
 
     /* Update an item to have a new successor in the sequence */

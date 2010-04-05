@@ -267,12 +267,14 @@ class xarRoles extends Object
         if($result->next()) $row = $result->fields;
         if (empty($row)) return;
 
+    /* CHECKME: they're not used afterwards, so why look them up here ?
         $duvarray = array('userhome','primaryparent','passwordupdate','userlastlogin','usertimezone');
         $duvs = array();
         foreach ($duvarray as $key) {
             $duv = xarModUserVars::Get('roles',$key,$row['id']);
             if (!empty($duv)) $duvs[$key] = $duv;
         }
+    */
         // create and return the role object
         sys::import('modules.roles.class.role');
         switch ($row['itemtype']) {

@@ -22,7 +22,7 @@ function privileges_admin_updateprivilege()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    if(!xarVarFetch('id',        'isset', $id,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('id',         'isset', $id,        NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pname',      'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('prealm',     'isset', $realm,     'All', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('pmodule',    'isset', $pmodule,    'All',    XARVAR_NOT_REQUIRED)) {return;}

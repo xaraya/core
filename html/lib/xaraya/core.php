@@ -28,6 +28,7 @@ if(file_exists('../_MTN/revision'))
         $rev = str_replace(array('old_revision [',']'),'',$t[4]);
 }
 define('XARCORE_VERSION_REV', $rev);
+define('XARCORE_VERSION', '2.1.0');
 
 /*
  * System dependencies for (optional) systems

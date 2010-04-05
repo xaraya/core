@@ -651,6 +651,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         // extra options when showing the dynamic objects themselves
         if ($allow_edit && $this->objectid == 1) {
+            // TODO: define 'access' as a standard action for objects if we want it, instead of overloading 'modify' action
             $options['access'] = array('otitle' => xarML('Access'),
                                             'oicon'  => 'privileges.png',
                                             'olink'  => $this->getActionURL('modify', $itemid, array('tab' => 'access')),
@@ -665,7 +666,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                                           'ojoin'  => '|'
                                          );
         }
-        if ($allow_add)  {
+        //if ($allow_add)  {
+        // CHECKME: allow cloning only for the dynamic objects themselves ?
+        //if ($allow_add && $this->objectid == 1)  {
+        // CHECKME: and/or skip cloning in object interface ?
+        if ($allow_add && $this->linktype != 'object')  {
+            // TODO: define 'clone' as a standard action for objects if we want it, instead of overloading 'modify' action
             $options['clone'] = array('otitle' => xarML('Clone'),
                                        'oicon'  => 'add.png',
                                        'olink'  => $this->getActionURL('modify', $itemid, array('tab' => 'clone')),
