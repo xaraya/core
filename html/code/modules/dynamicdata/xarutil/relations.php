@@ -15,9 +15,6 @@
  */
 function dynamicdata_util_relations($args)
 {
-// Security Check
-    if(!xarSecurityCheck('AdminDynamicData')) return;
-
     if(!xarVarFetch('module',    'isset', $module,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('module_id', 'isset', $module_id, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype',  'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
@@ -87,8 +84,13 @@ function dynamicdata_util_relations($args)
     if (!empty($objectid)) {
         $object = xarMod::apiFunc('dynamicdata','user','getobject',
                                 array('objectid' => $objectid));
+        if (!$object->checkAccess('config')) {
+            return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $object->label));
+        }
         $data['object'] = $object;
         $data['fields'] = $object->properties;
+
+        xarTplSetPageTitle(xarML('Links for #(1)', $object->label));
 
         // get all links, including 'info' for reverse one-way information
         $links = DataObjectLinks::getLinks($object,'all');
@@ -260,7 +262,12 @@ function dynamicdata_util_relations($args)
     } elseif (!empty($table)) {
         $object = xarMod::apiFunc('dynamicdata','user','getobject',
                                 array('table' => $table));
+        if (!$object->checkAccess('config')) {
+            return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $object->label));
+        }
         $data['fields'] = $object->properties;
+
+        xarTplSetPageTitle(xarML('Links for #(1)', $object->label));
 
         sys::import('modules.dynamicdata.class.datastores.links');
 
@@ -330,6 +337,8 @@ function dynamicdata_util_relations($args)
         $data['relations'] = xarMod::apiFunc('dynamicdata','util','getrelations',
                                            array('module_id' => $module_id,
                                                  'itemtype' => $itemtype));
+    } else {
+        xarTplSetPageTitle(xarML('Links'));
     }
 
     if (!isset($data['relations']) || $data['relations'] == false) {

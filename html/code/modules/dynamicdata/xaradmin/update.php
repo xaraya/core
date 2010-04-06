@@ -83,6 +83,13 @@ function dynamicdata_admin_update($args)
                 $myobject->callHooks('modify');
                 $data['hooks'] = $myobject->hookoutput;
 
+                if ($myobject->objectid == 1) {
+                    $data['label'] = $myobject->properties['label']->value;
+                    xarTplSetPageTitle(xarML('Modify DataObject #(1)', $data['label']));
+                } else {
+                    $data['label'] = $myobject->label;
+                    xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
+                }
                 return xarTplModule($tplmodule,'admin','modify', $data);
             }
 

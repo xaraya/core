@@ -42,6 +42,9 @@ function dynamicdata_admin_access($args)
     $data['object'] = $object;
     $data['tplmodule'] = $object->tplmodule;
     $data['template'] = $object->template;
+    $data['itemid'] = $object->itemid;
+    $data['label'] = $object->properties['label']->value;
+    xarTplSetPageTitle(xarML('Manage Access Rules for #(1)', $data['label']));
 
     // check security of the parent object ... or DD Admin as fail-safe here
     $tmpobject = DataObjectMaster::getObject(array('objectid' => $object->itemid));

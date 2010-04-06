@@ -66,6 +66,10 @@ function dynamicdata_utilapi_export($args)
                     $xml .= "    <$field>" . xarVarPrepForDisplay($value) . "</$field>\n";
                 }
                 $xml .= "  </$name>\n";
+            } elseif ($name == 'config') {
+                // don't replace anything in the serialized value
+                $value = $myobject->properties[$name]->value;
+                $xml .= "  <$name>" . $value . "</$name>\n";
             } else {
                 $value = $myobject->properties[$name]->value;
                 $xml .= "  <$name>" . xarVarPrepForDisplay($value) . "</$name>\n";

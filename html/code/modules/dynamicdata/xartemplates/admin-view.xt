@@ -16,15 +16,15 @@
         </xar:if>
         <h2>
             View #$label#&#160;
+            <xar:if condition="$object:checkAccess('config')">
+                <xar:set name="proplink">xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $object->objectid))</xar:set>
+                <a href="#$proplink#" title="Configure #$label#">
+                    <img src="#xarTplGetImage('icons/modify-config.png', 'base')#" width="16" height="16" alt="modifyprop"/>
+                </a>&#160;
+            </xar:if>
             <xar:if condition="$object:checkAccess('create')">
                 <a href="#$newlink#" title="Create New Item in #$label#">
                     <img src="#xarTplGetImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/>
-                </a>
-            </xar:if>
-            <xar:if condition="$object:checkAccess('config')">
-                <xar:set name="proplink">xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $object->objectid))</xar:set>
-                &#160;<a href="#$proplink#" title="Configure #$label#">
-                    <img src="#xarTplGetImage('icons/modify-config.png', 'base')#" width="16" height="16" alt="modifyprop"/>
                 </a>
             </xar:if>
         </h2>

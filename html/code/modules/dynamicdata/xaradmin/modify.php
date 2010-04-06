@@ -104,7 +104,13 @@ function dynamicdata_admin_modify($args)
             $object->callHooks('modify');
             $data['hooks'] = $object->hookoutput;
 
-            xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $object->label));
+            if ($object->objectid == 1) {
+                $data['label'] = $object->properties['label']->value;
+                xarTplSetPageTitle(xarML('Modify DataObject #(1)', $data['label']));
+            } else {
+                $data['label'] = $object->label;
+                xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
+            }
 
         break;
 

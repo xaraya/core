@@ -87,6 +87,7 @@ function dynamicdata_admin_modifyprop()
             $data['label'] = xarML('for #(1)', $objectinfo['label']);
         }
     }
+    $data['itemid'] = $data['objectid'];
     xarTplSetPageTitle(xarML('Modify DataProperties #(1)', $data['label']));
 
     $data['fields'] = xarMod::apiFunc('dynamicdata','user','getprop',
