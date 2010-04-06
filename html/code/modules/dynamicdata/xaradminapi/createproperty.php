@@ -56,10 +56,6 @@ function dynamicdata_adminapi_createproperty($args)
 
     // TODO: security check on object level
 
-    // Security check - important to do this as early on as possible to
-    // avoid potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('AdminDynamicDataItem',1,'Item',"$moduleid:$itemtype:All")) return;
-
     // get the properties of the 'properties' object
     $fields = xarMod::apiFunc('dynamicdata','user','getprop',
                             array('objectid' => 2)); // the properties

@@ -17,9 +17,6 @@
  */
 function dynamicdata_utilapi_export($args)
 {
-    // restricted to DD Admins
-    if(!xarSecurityCheck('AdminDynamicData')) return;
-
         $myobject = & DataObjectMaster::getObject(array('name' => 'objects'));
     if (isset($args['objectref'])) {
         $myobject->getItem(array('itemid' => $args['objectref']->objectid));

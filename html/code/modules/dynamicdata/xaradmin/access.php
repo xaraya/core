@@ -43,12 +43,11 @@ function dynamicdata_admin_access($args)
     $data['tplmodule'] = $object->tplmodule;
     $data['template'] = $object->template;
 
-    // user needs admin access to changethe access rules
-    $data['adminaccess'] = xarSecurityCheck('',0,'All',$object->objectid . ":" . $name . ":" . "$itemid",0,'',0,800);
-
-    // gotta be an admin to access dataobject access settings
-    if (!$data['adminaccess'])
-        return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
+    // check security of the parent object ... or DD Admin as fail-safe here
+    $tmpobject = DataObjectMaster::getObject(array('objectid' => $object->itemid));
+    if (!$tmpobject->checkAccess('config') && !xarSecurityCheck('AdminDynamicData',0))
+        return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+    unset($tmpobject);
 
     // Get the object's configuration
     if (!empty($object->properties['config'])) {
