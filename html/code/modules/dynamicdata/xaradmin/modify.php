@@ -63,8 +63,8 @@ function dynamicdata_admin_modify($args)
 
         case 'edit':
 
-            // Security check
-            if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$args['itemid'])) return;
+            if (!$object->checkAccess('update'))
+                return xarResponse::Forbidden(xarML('Update #(1) is forbidden', $object->label));
 
             // if we're editing a dynamic property, save its property type to cache
             // for correct processing of the configuration rule (ValidationProperty)

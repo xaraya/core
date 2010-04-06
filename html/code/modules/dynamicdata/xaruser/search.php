@@ -136,6 +136,8 @@ function dynamicdata_user_search($args)
                                           //'pagerurl' => $pagerurl,
                                           'layout' => 'list',
                                           'status' => $status));
+            if (!$object->checkAccess('view'))
+                continue;
             // add the where clauses directly here to avoid quoting issues
             $join = '';
             foreach ($wherelist as $name => $clause) {

@@ -55,6 +55,9 @@ function dynamicdata_admin_view($args)
     if (!isset($object)) {
         return;
     }
+    if (!$object->checkAccess('view'))
+        return xarResponse::Forbidden(xarML('View #(1) is forbidden', $object->label));
+
     // Pass back the relevant variables to the template if necessary
     $data = $object->toArray();
 

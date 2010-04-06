@@ -39,10 +39,10 @@ function dynamicdata_admin_delete($args)
                                          'tplmodule'  => $tplmodule,
                                          'template'   => $template));
     if (empty($myobject)) return;
-    $data = $myobject->toArray();
+    if (!$myobject->checkAccess('delete'))
+        return xarResponse::Forbidden(xarML('Delete #(1) is forbidden', $myobject->label));
 
-    // Security check
-    if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',$data['moduleid'].":".$data['itemtype'].":".$data['itemid'])) return;
+    $data = $myobject->toArray();
 
     // recover any session var information and remove it from the var
     $data = array_merge($data,xarMod::apiFunc('dynamicdata','user','getcontext',array('module' => $tplmodule)));
