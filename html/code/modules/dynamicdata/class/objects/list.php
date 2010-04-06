@@ -820,14 +820,14 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         // extra options when showing the dynamic objects themselves
         if ($allow_edit && $this->objectid == 1) {
-            // TODO: define 'access' as a standard action for objects if we want it, instead of overloading 'modify' action
-            $options['access'] = array('otitle' => xarML('Access'),
-                                            'oicon'  => 'privileges.png',
-                                            'olink'  => $this->getActionURL('access', $itemid),
-                                            'ojoin'  => '|');
+            // CHECKME: access should be based on the objects themselves here (but probably too heavy) ?
             $options['modifyprops'] = array('otitle' => xarML('Properties'),
                                             'oicon'  => 'modify-config.png',
                                             'olink'  => $this->getActionURL('modifyprop', $itemid),
+                                            'ojoin'  => '|');
+            $options['access'] = array('otitle' => xarML('Access'),
+                                            'oicon'  => 'privileges.png',
+                                            'olink'  => $this->getActionURL('access', $itemid),
                                             'ojoin'  => '|');
             $options['viewitems'] = array('otitle' => xarML('Items'),
                                           'oicon'  => 'item-list.png',

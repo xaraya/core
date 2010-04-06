@@ -84,7 +84,8 @@ $this->object->callHooks('view');
 
         $output = xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_view',
-            array('object' => $this->object)
+            array('object'   => $this->object,
+                  'tpltitle' => $this->tpltitle)
         );
 
         // Set the output of the object method in cache

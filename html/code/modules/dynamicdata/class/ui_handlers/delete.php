@@ -98,6 +98,7 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
             $this->tplmodule, $this->object->template, 'ui_delete',
             array('object' => $this->object,
                   'authid' => xarSecGenAuthKey(),
+                  'tpltitle' => $this->tpltitle,
                   'return_url' => $args['return_url'])
         );
     }

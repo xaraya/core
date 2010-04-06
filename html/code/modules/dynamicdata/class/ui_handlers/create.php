@@ -108,6 +108,7 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
                   'preview' => $args['preview'],
                   'authid'  => xarSecGenAuthKey(),
                   'hooks'   => $this->object->hookoutput,
+                  'tpltitle' => $this->tpltitle,
                   'return_url' => $args['return_url'])
         );
     }

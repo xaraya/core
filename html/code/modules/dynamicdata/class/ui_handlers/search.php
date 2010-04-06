@@ -191,7 +191,8 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             $this->tplmodule, $this->object->template, 'ui_search',
             array('object' => $this->object,
                   'search' => $search,
-                  'result' => $result)
+                  'result' => $result,
+                  'tpltitle' => $this->tpltitle)
         );
     }
 
@@ -324,7 +325,8 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             $this->tplmodule, $this->object->template, 'ui_query',
             array('object' => $this->object,
                   'query'  => $query,
-                  'result' => $result)
+                  'result' => $result,
+                  'tpltitle' => $this->tpltitle)
         );
     }
 

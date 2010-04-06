@@ -288,7 +288,8 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             $this->tplmodule, $this->object->template, 'ui_stats',
             array('object' => $this->object,
                   'stats'  => $stats,
-                  'result' => $result)
+                  'result' => $result,
+                  'tpltitle' => $this->tpltitle)
         );
 
         return $output;
@@ -353,7 +354,8 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             $this->tplmodule, $this->object->template, 'ui_report',
             array('object' => $this->object,
                   'report' => $report,
-                  'result' => $result)
+                  'result' => $result,
+                  'tpltitle' => $this->tpltitle)
         );
 
         return $output;

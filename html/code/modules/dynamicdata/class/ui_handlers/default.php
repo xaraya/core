@@ -31,6 +31,8 @@ class DataObjectDefaultHandler extends Object
     public $linkfunc = 'main';
     // default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
     public $nextmethod = 'view';
+    // title shown in the main templates
+    public $tpltitle = null;
 
     // current arguments for the handler
     public $args = array();
@@ -66,6 +68,12 @@ class DataObjectDefaultHandler extends Object
         }
         if (!empty($args['nextmethod'])) {
             $this->nextmethod = $args['nextmethod'];
+        }
+        if (!empty($args['tpltitle'])) {
+            $this->tpltitle = $args['tpltitle'];
+        }
+        if (empty($this->tpltitle)) {
+            $this->tpltitle = xarML('Dynamic Data Object Interface');
         }
 
         // get some common URL parameters
@@ -179,8 +187,9 @@ class DataObjectDefaultHandler extends Object
 
         return xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_default',
-            array('object' => $this->object,
-                  'output' => $output)
+            array('object'   => $this->object,
+                  'output'   => $output,
+                  'tpltitle' => $this->tpltitle)
         );
 
     }
