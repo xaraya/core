@@ -203,6 +203,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
             // Make sure the field is added to the query 
 //            $this->dataquery->addfield($criteria);
+
+            // Add the field's order clause
+            $this->dataquery->addorder($this->properties[$criteria]->source, $sortorder);
+        }
+    }
+
+    /**
      * Add content filters to where clauses - do not call directly for now...
      */
     private function addFilters()
@@ -264,13 +271,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
             // one group having filters is enough here !?
             return;
-        }
-    }
-
-    /**
-
-            // Add the field's order clause
-            $this->dataquery->addorder($this->properties[$criteria]->source, $sortorder);
         }
     }
 
