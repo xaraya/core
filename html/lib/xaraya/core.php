@@ -551,7 +551,7 @@ class xarCore extends xarCoreCache
     const GENERATION = 2;
     // The actual version information
     const VERSION_NUM = XARCORE_VERSION_REV;
-    const VERSION_ID  = 'Jamaica';
-    const VERSION_SUB = 'post rabiem risus';
+    const VERSION_ID  = 'Bermuda';
+    const VERSION_SUB = 'altius fortius';
 }
 ?>
