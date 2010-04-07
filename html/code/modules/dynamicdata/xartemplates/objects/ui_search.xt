@@ -18,7 +18,7 @@
             </a>
         </h2>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
-        <form method="get" action="#$searchlink#">
+        <form method="post" action="#$searchlink#">
             <fieldset>
                 <legend>Search Criteria</legend>
                 <div class="xar-form-input-wrapper">

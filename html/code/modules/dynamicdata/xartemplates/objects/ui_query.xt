@@ -21,7 +21,7 @@
             </a>
         </h2>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
-        <form method="get" action="#$querylink#">
+        <form method="post" action="#$querylink#">
             <fieldset>
                 <!-- if we use the current URL, the object is already specified -->
                 <xar:if condition="$object:linktype ne 'current'">
