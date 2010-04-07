@@ -24,6 +24,11 @@ class ModuleVariablesDataStore extends RelationalDataStore
         $this->setModvarName($name);
     }
 
+    function __toString()
+    {
+        return "module_variables";
+    }
+
     private function setModvarName($name="")
     {
         if (empty($name)) throw new Exception('Bad modvar name');
