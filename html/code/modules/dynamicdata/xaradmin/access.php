@@ -53,8 +53,12 @@ function dynamicdata_admin_access($args)
     unset($tmpobject);
 
     // Get the object's configuration
-    if (!empty($object->properties['config'])) {
-        $configuration = unserialize($object->properties['config']->value);
+    if (!empty($object->properties['config']) && !empty($object->properties['config']->value)) {
+        try {
+            $configuration = unserialize($object->properties['config']->value);
+        } catch (Exception $e) {
+            $configuration = array();
+        }
     } else {
         $configuration = array();
     }

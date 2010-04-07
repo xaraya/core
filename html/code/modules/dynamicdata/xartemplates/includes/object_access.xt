@@ -92,6 +92,7 @@
             </tr>
             </xar:foreach>
         </table>
+        <em>Note: if you specify access rules here and then create a new group later on, that group will have NO access by default.</em>
         <xar:if condition="empty($do_access)">
             <script type="text/javascript">
                 dd_disable_checkboxes('access_');
@@ -100,9 +101,9 @@
     </fieldset>
     <fieldset>
         <legend>
-            Enable Content Filters
+            Additional Content Filters
         </legend>
-        &#160;Automatically filter items in views ?
+        Automatically filter items in views for specific groups ?
         <table>
             <tr>
                 <th>Group</th>
@@ -171,7 +172,9 @@
             </tr>
             </xar:foreach>
         </table>
-        Use this to further limit access e.g. for Anonymous visitors to items where the property 'Age' is greater than 17
+        If a visitor has Display access, he will be able to see all items by default. You can use the content filters to
+        further limit access e.g. for Anonymous visitors to only see those items where the property 'Age' is greater than 12.
+        <br/><em>Note: if you specify several filters for the same group, they will be combined (AND).</em>
     </fieldset>
     <fieldset>
         <div class="xar-align-center">
