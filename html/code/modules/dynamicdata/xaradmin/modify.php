@@ -99,22 +99,6 @@ function dynamicdata_admin_modify($args)
 
         break;
 
-        case 'access':
-            // user needs admin access to changethe access rules
-            $data['adminaccess'] = xarSecurityCheck('',0,'All',$object->objectid . ":" . $name . ":" . "$itemid",0,'',0,800);
-
-            // gotta be an admin to access dataobject access settings
-            if (!$data['adminaccess'])
-                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
-            
-            // Get the object represented by our item
-            $objectitem = DataObjectMaster::getObject(array('name' => $object->properties['name']->value));
-            $data['display_access'] = $objectitem->display_access;
-            $data['modify_access']  = $objectitem->modify_access;
-            $data['delete_access']  = $objectitem->delete_access;
-
-        break;
-
         case 'clone':
             // user needs admin access to changethe access rules
             $data['adminaccess'] = xarSecurityCheck('',0,'All',$object->objectid . ":" . $name . ":" . "$itemid",0,'',0,800);

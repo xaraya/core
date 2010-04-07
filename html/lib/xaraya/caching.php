@@ -253,9 +253,11 @@ class xarCache extends Object
      * @todo avoid DB lookup by passing groups via cookies ?
      * @todo Note : don't do this if admins get cached too :)
      */
-    public static function getParents()
+    public static function getParents($currentid = null)
     {
-        $currentid = xarSession::getVar('role_id');
+        if (empty($currentid)) {
+            $currentid = xarSession::getVar('role_id');
+        }
         if (xarCoreCache::isCached('User.Variables.'.$currentid, 'parentlist')) {
             return xarCoreCache::getCached('User.Variables.'.$currentid, 'parentlist');
         }

@@ -155,7 +155,12 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             if(empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) 
                 return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
             // add the where clauses directly here to avoid quoting issues
-            $join = '';
+            if (!empty($result->where)) {
+                $join = 'and';
+                // TODO: wrap OR statements in (...) below
+            } else {
+                $join = '';
+            }
             foreach ($wherelist as $name => $clause) {
                 $result->addWhere($name, $clause, $join);
                 // CHECKME: use OR by default here !
@@ -273,7 +278,11 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             if(empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) 
                 return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
             // add the where clauses directly here to avoid quoting issues
-            $join = '';
+            if (!empty($result->where)) {
+                $join = 'and';
+            } else {
+                $join = '';
+            }
             foreach ($wherelist as $name => $clause) {
                 $result->addWhere($name, $clause, $join);
                 // CHECKME: use AND by default here !

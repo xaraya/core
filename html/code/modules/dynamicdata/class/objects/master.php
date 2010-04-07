@@ -79,11 +79,8 @@ class DataObjectMaster extends Object
 
     public $isgrouped     = 0;          // indicates that we have operations (COUNT, SUM, etc.) on properties
 
-    // Default access conditions 
-    public $display_access      = array('group' => 0, 'level' => 200, 'failure' => 0);
-    public $modify_access       = array('group' => 0, 'level' => 700, 'failure' => 0);
-    public $delete_access       = array('group' => 0, 'level' => 700, 'failure' => 0);
-// TODO: relink objects, properties and datastores in __wakeup() methods after unserialize()
+    // Default access rules
+    public $access        = array();
 
     /**
      * Default constructor to set the object variables, retrieve the dynamic properties
@@ -1114,28 +1111,34 @@ class DataObjectMaster extends Object
                 return xarSecurityCheck('AdminDynamicData',0);
 
             case 'config':
+            case 'access':
             case 'settings':
+                $level = 'config';
                 $mask = 'AdminDynamicDataItem';
                 $itemid = 'All';
                 break;
 
             case 'delete':
             case 'remove':
+                $level = 'delete';
                 $mask = 'DeleteDynamicDataItem';
                 break;
 
             case 'create':
             case 'new':
+                $level = 'create';
                 $mask = 'AddDynamicDataItem';
                 break;
 
             case 'update':
             case 'modify':
+                $level = 'update';
                 $mask = 'EditDynamicDataItem';
                 break;
 
             case 'display':
             case 'show':
+                $level = 'display';
                 $mask = 'ReadDynamicDataItem';
                 break;
 
@@ -1146,9 +1149,46 @@ class DataObjectMaster extends Object
             case 'stats':
             case 'report':
             default:
+                $level = 'display'; // CHECKME: no difference in access level between view and display !?
                 $mask = 'ViewDynamicDataItems';
                 break;
         }
+
+        // CHECKME: use access checks similar to blocks here someday ?
+
+        // unserialize access levels if necessary
+        if (!empty($this->access) && is_string($this->access)) {
+            try {
+                $this->access = unserialize($this->access);
+            } catch (Exception $e) {
+                $this->access = array();
+            }
+        }
+
+        // check if we have specific access rules for this level
+        if (!empty($this->access) && is_array($this->access) && !empty($this->access[$level])) {
+            if (empty($roleid) && xarUserIsLoggedIn()) {
+                // get the direct parents of the current user (no ancestors)
+                $grouplist = xarCache::getParents();
+            } elseif (!empty($roleid) && $roleid != _XAR_ID_UNREGISTERED) {
+                // get the direct parents of the specified user (no ancestors)
+                $grouplist = xarCache::getParents($roleid);
+            } else {
+                // check anonymous visitors by themselves
+                $grouplist = array(_XAR_ID_UNREGISTERED);
+            }
+            foreach ($grouplist as $groupid) {
+                // list of groups that have access at this level
+                if (in_array($groupid, $this->access[$level])) {
+                    // one group having access is enough here !
+                    return true;
+                }
+            }
+            // none of the groups have access at this level
+            return false;
+        }
+
+        // Fall back to normal security checks
 
         // check if we're dealing with a specific item here
         if (empty($itemid)) {
@@ -1159,9 +1199,13 @@ class DataObjectMaster extends Object
             }
         }
 
-        // CHECKME: allow overriding the current user with $roleid someday ?
-        // CHECKME: use access checks similar to blocks here someday ?
-        return xarSecurityCheck($mask,0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid);
+        if (!empty($roleid)) {
+            $role = xarRoles::get($roleid);
+            $rolename = $role->getName();
+            return xarSecurity::check($mask,0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid,'',$rolename);
+        } else {
+            return xarSecurity::check($mask,0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid);
+        }
 /*
         $access_method = $action . '_access';
         $access = isset($this->$access_method) ? $this->$access_method :
@@ -1181,5 +1225,6 @@ class DataObjectMaster extends Object
         return self::$access_property->check($args);
 */
     }
+
 }
 ?>
