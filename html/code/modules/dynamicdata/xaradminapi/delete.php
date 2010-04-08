@@ -41,14 +41,12 @@ function dynamicdata_adminapi_delete($args)
         $itemtype = 0;
     }
 
-    // Security check - important to do this as early on as possible to
-    // avoid potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',"$module_id:$itemtype:$itemid")) return;
-
     $myobject = DataObjectMaster::getObject(array('moduleid' => $module_id,
                                          'itemtype' => $itemtype,
                                          'itemid'   => $itemid));
     if (empty($myobject)) return;
+    if (!$myobject->checkAccess('delete'))
+        return;
 
     $myobject->getItem();
     $itemid = $myobject->deleteItem();

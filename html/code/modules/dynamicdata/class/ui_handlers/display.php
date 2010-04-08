@@ -95,7 +95,8 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
         $output = xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_display',
             array('object' => $this->object,
-                  'hooks'  => $this->object->hookoutput)
+                  'hooks'  => $this->object->hookoutput,
+                  'tpltitle' => $this->tpltitle)
         );
 
         // Set the output of the object method in cache

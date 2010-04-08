@@ -15,8 +15,6 @@
  */
 function dynamicdata_util_export($args)
 {
-    if(!xarSecurityCheck('AdminDynamicData')) return;
-
     extract($args);
 
     if(!xarVarFetch('objectid', 'isset', $objectid, NULL, XARVAR_DONT_SET)) {return;}
@@ -42,6 +40,10 @@ function dynamicdata_util_export($args)
         $data['xml'] = '';
         return $data;
     }
+    // check security of the object
+    if (!$myobject->checkAccess('config'))
+        return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $myobject->label));
+
     $data['objectid'] = $myobject->objectid;
 
     $proptypes = DataPropertyMaster::getPropertyTypes();

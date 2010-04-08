@@ -43,10 +43,11 @@ class FormBlock extends BasicBlock implements iBlock
 
         // Populate block info and pass to theme
         if (!empty($vars['objectid'])) {
-            $objectinfo = DataObjectMaster::getObjectInfo($vars);
-            if (!empty($objectinfo)) {
-                if (!xarSecurityCheck('AddDynamicDataItem',0,'Item',"$objectinfo[moduleid]:$objectinfo[itemtype]:All")) return;
-                $data['content'] = $objectinfo;
+            $object = DataObjectMaster::getObject($vars);
+            if (!empty($object) && $object->checkAccess('create')) {
+                $data['content'] = array('moduleid' => $object->moduleid,
+                                         'itemtype' => $object->itemtype,
+                                         'object'   => $object);
                 return $data;
             }
         }

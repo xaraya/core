@@ -20,7 +20,7 @@
  * {
  *     sys::import('modules.dynamicdata.class.userinterface');
  *
- *     // Add some default arguments for the interface
+ *     // Add some extra arguments for the interface, e.g. for a non-standard method handler
  *     //$args['mapper'] = array('myname' => array('classname'  => 'MyMethodHandler',
  *     //                                          'classfunc'  => 'run',
  *     //                                          'importname' => 'modules.mymodule.class.myhandler'
@@ -32,7 +32,10 @@
  *     // Get the user interface
  *     $interface = new DataObjectUserInterface($args);
  *
- *     // Add some extra arguments to run the handler
+ *     // Specify the method if it's not given in the arguments or URL parameters
+ *     //$args['method'] = 'myname';
+ *
+ *     // Add some extra arguments to run the handler if you want
  *     //$args['catid'] = 123;
  *
  *     // Handle the request of the user and return the output
@@ -129,7 +132,11 @@ class DataObjectUserInterface extends Object
             'stats'   => array('classname'  => 'DataObjectStatsHandler',
                                'classfunc'  => 'run',
                                'importname' => 'modules.dynamicdata.class.ui_handlers.stats'),
-
+/*
+            'access'  => array('classname'  => 'DataObjectAccessHandler',
+                               'classfunc'  => 'run',
+                               'importname' => 'modules.dynamicdata.class.ui_handlers.access'),
+*/
             'default' => array('classname'  => 'DataObjectDefaultHandler',
                                'classfunc'  => 'run',
                                'importname' => 'modules.dynamicdata.class.ui_handlers.default'),
@@ -160,7 +167,7 @@ class DataObjectUserInterface extends Object
             'report'   => 'stats',
             'other'    => 'default',
 /*
-            'mystuff'=> 'myname',
+            'mystuff'  => 'myname',
 */
         );
 

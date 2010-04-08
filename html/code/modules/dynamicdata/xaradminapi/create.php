@@ -40,10 +40,6 @@ function dynamicdata_adminapi_create($args)
         throw new BadParameterException($vars,$msg);
     }
 
-    // Security check - important to do this as early on as possible to
-    // avoid potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$module_id:$itemtype:$itemid")) return;
-
     if (!isset($fields) || !is_array($fields)) {
         $fields = array();
     }
@@ -56,6 +52,8 @@ function dynamicdata_adminapi_create($args)
                                          'itemtype' => $itemtype,
                                          'itemid'   => $itemid));
     if (empty($myobject)) return;
+    if (!$myobject->checkAccess('create'))
+        return;
 
     if (count($values) == 0) {
         foreach ($fields as $field) {

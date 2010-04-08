@@ -263,7 +263,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             $result = 0;
 
         // save the report and redirect
-        } elseif (!empty($save) && !empty($stats['report']) && !$this->object->checkAccess('config')) {
+        } elseif (!empty($save) && !empty($stats['report']) && $this->object->checkAccess('config')) {
             $this->saveReport($stats['report'], $stats, $info);
             xarResponse::Redirect(xarServer::getObjectURL($this->object->name, 'report', array('report' => $stats['report'])));
             return true;
@@ -288,7 +288,8 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             $this->tplmodule, $this->object->template, 'ui_stats',
             array('object' => $this->object,
                   'stats'  => $stats,
-                  'result' => $result)
+                  'result' => $result,
+                  'tpltitle' => $this->tpltitle)
         );
 
         return $output;
@@ -353,7 +354,8 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             $this->tplmodule, $this->object->template, 'ui_report',
             array('object' => $this->object,
                   'report' => $report,
-                  'result' => $result)
+                  'result' => $result,
+                  'tpltitle' => $this->tpltitle)
         );
 
         return $output;

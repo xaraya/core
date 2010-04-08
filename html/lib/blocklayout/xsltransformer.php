@@ -79,12 +79,31 @@ class BlockLayoutXSLTProcessor extends Object
         $callBack      = array('XsltCallbacks','entities');
         $this->prepXml = preg_replace_callback($entityPattern,$callBack,$this->prepXml);
 
+        $this->fixLegacy();
+
         // Make sure ML placeholders look like expressions
         // #(1)... -> #(1)#...
         // Disable  this for now (random)
         //$mlsPattern     = '/(#\([0-9]+\))([^#])/';
         //$callBack       = array('XsltCallbacks','mlsplaceholders');
         //$this->prepXml  = preg_replace_callback($mlsPattern, $callBack, $this->prepXml);
+    }
+
+    private function fixLegacy()
+    {
+        if (class_exists('xarConfigVars')) {
+            // CHECKME: fix the two most common issues with old 1.x templates
+            if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
+                // CHECKME: quick & dirty wrapper for missing xmlns:xar in old 1.x templates
+                if (!strpos($this->prepXml, ' xmlns:xar="') && !strpos($this->prepXml, '</xar:template>')) {
+                    $this->prepXml = '<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $this->prepXml . '</xar:template>';
+                }
+
+                // CHECKME: quick & dirty hack for &nbsp; in old 1.x templates
+                $this->prepXml = str_replace('&nbsp;','&#160;',$this->prepXml);
+            }
+        }
     }
 
     public function importStyleSheet($xslDoc)

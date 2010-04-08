@@ -36,10 +36,6 @@ function dynamicdata_admin_form($args)
         $itemid = 0;
     }
 
-    // Security check - important to do this as early as possible to avoid
-    // potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$module_id:$itemtype:All")) return;
-
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
@@ -48,6 +44,8 @@ function dynamicdata_admin_form($args)
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid));
+    if (!$myobject->checkAccess('create'))
+        return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
 
     $data['object'] =& $myobject;
 

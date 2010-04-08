@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
-        <span class="xar-mod-title">Dynamic Data Object Interface</span>
+        <span class="xar-mod-title">#$tpltitle#</span>
     </div>
     <div class="xar-mod-body">
         <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
@@ -27,7 +27,7 @@
             </a>
         </h2>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
-        <form method="get" action="#$reportlink#">
+        <form method="post" action="#$reportlink#">
             <fieldset>
                 <!-- if we use the current URL, the object is already specified -->
                 <xar:if condition="$object:linktype ne 'current'">

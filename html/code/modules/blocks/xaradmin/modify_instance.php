@@ -108,6 +108,9 @@ function blocks_admin_modify_instance()
                         throw ($e);
                     }
                 }
+            } elseif (!empty($blockinfo) && is_string($blockinfo)) {
+                // The output is already templated
+                $block_modify = $blockinfo;
             }
         } catch (Exception $e) {
             // @TODO: global flag to raise exceptions or not

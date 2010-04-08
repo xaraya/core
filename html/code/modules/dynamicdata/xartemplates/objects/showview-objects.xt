@@ -42,7 +42,7 @@
             <xar:set name="issuperadmin">in_array(xarUserGetVar('uname'),$adminlist)</xar:set>
             <xar:set name="item_no">0</xar:set>
             <xar:foreach in="$items" key="$itemid" value="$fields">
-                <xar:if condition="!$issuperadmin AND ($itemid lt 3)">
+                <xar:if condition="!$issuperadmin AND ($itemid le 3)">
                     <xar:continue />
                 </xar:if>
                 <xar:set name="item_no">$item_no+1</xar:set>

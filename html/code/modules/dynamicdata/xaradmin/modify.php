@@ -50,6 +50,10 @@ function dynamicdata_admin_modify($args)
                                          'table'    => $table,
                                          'itemid'   => $itemid,
                                          'tplmodule' => $tplmodule));
+    if (empty($object)) return;
+    if (!$object->checkAccess('update'))
+        return xarResponse::Forbidden(xarML('Update #(1) is forbidden', $object->label));
+
     $args = $object->toArray();
 
     if ($notfresh) {
@@ -63,23 +67,32 @@ function dynamicdata_admin_modify($args)
 
         case 'edit':
 
-            // Security check
-            if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$args['itemid'])) return;
-
-            // if we're editing a dynamic property, save its property type to cache
-            // for correct processing of the configuration rule (ValidationProperty)
-            if ($object->objectid == 2) {
-                xarVarSetCached('dynamicdata','currentproptype', $object->properties['type']);
-            }
-
-            // if we're editing a dynamic object, check its own visibility
-            if ($object->objectid == 1 && $object->itemid > 3) {
-                // CHECKME: do we always need to load the object class to get its visibility ?
+            // handle special cases
+            if ($object->objectid == 1) {
+                // check security of the parent object
                 $tmpobject = DataObjectMaster::getObject(array('objectid' => $object->itemid));
-                // override the default visibility and moduleid
-                $object->visibility = $tmpobject->visibility;
-                $object->moduleid = $tmpobject->moduleid;
+                if (!$tmpobject->checkAccess('config'))
+                    return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+
+                // if we're editing a dynamic object, check its own visibility
+                if ($object->itemid > 3) {
+                    // CHECKME: do we always need to load the object class to get its visibility ?
+                    // override the default visibility and moduleid
+                    $object->visibility = $tmpobject->visibility;
+                    $object->moduleid = $tmpobject->moduleid;
+                }
                 unset($tmpobject);
+
+            } elseif ($object->objectid == 2) {
+                // check security of the parent object
+                $tmpobject = DataObjectMaster::getObject(array('objectid' => $object->properties['objectid']->value));
+                if (!$tmpobject->checkAccess('config'))
+                    return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+                unset($tmpobject);
+
+                // if we're editing a dynamic property, save its property type to cache
+                // for correct processing of the configuration rule (ValidationProperty)
+                xarVarSetCached('dynamicdata','currentproptype', $object->properties['type']);
             }
 
             $data['itemid'] = $args['itemid'];
@@ -91,7 +104,13 @@ function dynamicdata_admin_modify($args)
             $object->callHooks('modify');
             $data['hooks'] = $object->hookoutput;
 
-            xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $object->label));
+            if ($object->objectid == 1) {
+                $data['label'] = $object->properties['label']->value;
+                xarTplSetPageTitle(xarML('Modify DataObject #(1)', $data['label']));
+            } else {
+                $data['label'] = $object->label;
+                xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
+            }
 
         break;
 

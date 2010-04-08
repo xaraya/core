@@ -15,22 +15,8 @@
             <h2>
                 <xar:if condition="!empty($objectid) and $objectid eq 1">
                     Modify DataObject for #$object:properties.label:value#
-                    <xar:set name="proplink">xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $object->itemid))</xar:set>
-                    &#160;<a href="#$proplink#" title="Modify DataProperties for #$object:properties.label:value#">
-                        <img src="#xarTplGetImage('icons/modify-config.png', 'base')#" width="16" height="16" alt="modifyprop"/>
-                    </a>
-                    <xar:set name="accesslink">xarModURL('dynamicdata','admin','access',array('itemid' => $object->itemid))</xar:set>
-                    &#160;<a href="#$accesslink#" title="Modify Access Rules for #$object:properties.label:value#">
-                        <img src="#xarTplGetImage('icons/privileges.png', 'base')#" width="16" height="16" alt="access"/>
-                    </a>
-                    <xar:set name="itemslink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->itemid))</xar:set>
-                    &#160;<a href="#$itemslink#" title="View Items for #$object:properties.label:value#">
-                        <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="viewitems"/>
-                    </a>
-                    <xar:set name="exportlink">xarModURL('dynamicdata','util','export',array('objectid' => $object->itemid))</xar:set>
-                    &#160;<a href="#$exportlink#" title="Export Object Definition for #$object:properties.label:value#">
-                        <img src="#xarTplGetImage('icons/export-xml.png', 'base')#" width="16" height="16" alt="export"/>
-                    </a>
+                    <xar:set name="tab">'edit'</xar:set>
+                    <xar:template type="module" file="object_menu"/>
                 <xar:else/>
                     Modify Item #$object:itemid# in #$object:label#&#160;
                     <a href="#$viewlink#" title="View #$object:label#">
@@ -98,22 +84,7 @@
             <h2>
                 <xar:if condition="!empty($objectid) and $objectid eq 1">
                     Clone the object: #$object:properties.label:value#
-                    <xar:set name="editlink">xarModURL('dynamicdata','admin','modify',array('itemid' => $itemid))</xar:set>
-                    &#160;<a href="#$editlink#" title="Modify DataObject #$object:properties.label:value#">
-                        <img src="#xarTplGetImage('icons/modify.png', 'base')#" width="16" height="16" alt="modify"/>
-                    </a>
-                    <xar:set name="proplink">xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $object->itemid))</xar:set>
-                    &#160;<a href="#$proplink#" title="Modify DataProperties for #$object:properties.label:value#">
-                        <img src="#xarTplGetImage('icons/modify-config.png', 'base')#" width="16" height="16" alt="modifyprop"/>
-                    </a>
-                    <xar:set name="itemslink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->itemid))</xar:set>
-                    &#160;<a href="#$itemslink#" title="View Items for #$object:properties.label:value#">
-                        <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="viewitems"/>
-                    </a>
-                    <xar:set name="exportlink">xarModURL('dynamicdata','util','export',array('objectid' => $object->itemid))</xar:set>
-                    &#160;<a href="#$exportlink#" title="Export Object Definition for #$object:properties.label:value#">
-                        <img src="#xarTplGetImage('icons/export-xml.png', 'base')#" width="16" height="16" alt="export"/>
-                    </a>
+                    <xar:template type="module" file="object_menu"/>
                 <xar:else/>
                     Modify Item #$object:itemid# in #$object:label#&#160;
                     <a href="#$viewlink#" title="View #$object:label#">

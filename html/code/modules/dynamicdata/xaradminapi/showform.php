@@ -58,14 +58,15 @@ function dynamicdata_adminapi_showform($args)
         $args['fieldlist'] = null;
     }
 
-    // throw an exception if you can't edit this
+    $object = & DataObjectMaster::getObject($args);
     if (empty($itemid)) {
-        if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$args[moduleid]:$args[itemtype]:All")) return;
+        if (!$object->checkAccess('create'))
+            return xarML('Create #(1) is forbidden', $object->label);
     } else {
-        if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$args[moduleid]:$args[itemtype]:$itemid")) return;
+        if (!$object->checkAccess('update'))
+            return xarML('Update #(1) is forbidden', $object->label);
     }
 
-    $object = & DataObjectMaster::getObject($args);
     if (!empty($itemid)) {
         $object->getItem();
     }

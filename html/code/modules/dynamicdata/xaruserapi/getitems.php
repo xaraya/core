@@ -68,16 +68,10 @@ function &dynamicdata_userapi_getitems($args)
         throw new BadParameterException($vars,$msg);
     }
 
-    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$module_id:$itemtype:All")) return $nullreturn;
-
     if (empty($itemids)) {
         $itemids = array();
     } elseif (!is_array($itemids)) {
         $itemids = explode(',',$itemids);
-    }
-
-    foreach ($itemids as $itemid) {
-        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$module_id:$itemtype:$itemid")) return $nullreturn;
     }
 
     // check the optional field list
@@ -136,6 +130,8 @@ function &dynamicdata_userapi_getitems($args)
                                            'groupby' => $groupby,
                                            'status' => $status));
     if (!isset($object) || (empty($object->objectid) && empty($object->table))) return $nullreturn;
+    if (!$object->checkAccess('view'))
+        return $nullreturn;
 
     if (!empty($getobject)) {
         $object->getItems();

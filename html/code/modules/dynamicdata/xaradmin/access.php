@@ -42,17 +42,23 @@ function dynamicdata_admin_access($args)
     $data['object'] = $object;
     $data['tplmodule'] = $object->tplmodule;
     $data['template'] = $object->template;
+    $data['itemid'] = $object->itemid;
+    $data['label'] = $object->properties['label']->value;
+    xarTplSetPageTitle(xarML('Manage Access Rules for #(1)', $data['label']));
 
-    // user needs admin access to changethe access rules
-    $data['adminaccess'] = xarSecurityCheck('',0,'All',$object->objectid . ":" . $name . ":" . "$itemid",0,'',0,800);
-
-    // gotta be an admin to access dataobject access settings
-    if (!$data['adminaccess'])
-        return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
+    // check security of the parent object ... or DD Admin as fail-safe here
+    $tmpobject = DataObjectMaster::getObject(array('objectid' => $object->itemid));
+    if (!$tmpobject->checkAccess('config') && !xarSecurityCheck('AdminDynamicData',0))
+        return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+    unset($tmpobject);
 
     // Get the object's configuration
-    if (!empty($object->properties['config'])) {
-        $configuration = unserialize($object->properties['config']->value);
+    if (!empty($object->properties['config']) && !empty($object->properties['config']->value)) {
+        try {
+            $configuration = unserialize($object->properties['config']->value);
+        } catch (Exception $e) {
+            $configuration = array();
+        }
     } else {
         $configuration = array();
     }

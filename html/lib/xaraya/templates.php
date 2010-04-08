@@ -706,10 +706,13 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
     foreach ($modules as $module) {
         $thismodule = trim($module);
         $sourceFileName = xarTplGetThemeDir() . "/modules/$thismodule/includes/$templateName.xt";
-        if (!file_exists($sourceFileName)) {
-                $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xt";
-        }
         if (file_exists($sourceFileName)) break;
+        $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xt";
+        if (file_exists($sourceFileName)) break;
+        if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
+            $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xd";
+            if (file_exists($sourceFileName)) break;
+        }
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
@@ -844,6 +847,17 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
         file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt")) {
     } elseif($canonical &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$canTemplateName.xt")) {
+    } elseif (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
+        xarLogMessage("TPL: 7. Try legacy .xd templates in $tplBaseDir/xartemplates/");
+        if(!empty($templateName) &&
+            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd")) {
+        } elseif(
+            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")) {
+        } elseif($canonical &&
+            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$canTemplateName.xd")) {
+        } else {
+            $sourceFileName = '';
+        }
     } else {
         // let functions higher up worry about what to do, e.g. DD object of property fallback template
         $sourceFileName = '';
