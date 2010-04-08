@@ -17,9 +17,9 @@ function dynamicdata_util_export($args)
 {
     extract($args);
 
-    if(!xarVarFetch('objectid', 'isset', $objectid, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('objectid', 'isset', $objectid, 1, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',     'isset', $name    , NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id',    'isset', $moduleid, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id','isset', $moduleid, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tofile',   'isset', $tofile,   NULL, XARVAR_DONT_SET)) {return;}
@@ -30,8 +30,6 @@ function dynamicdata_util_export($args)
 
     $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name'     => $name,
-                                         'moduleid' => $moduleid,
-                                         'itemtype' => $itemtype,
                                          'itemid'   => $itemid,
                                          'allprops' => true));
 
@@ -44,7 +42,6 @@ function dynamicdata_util_export($args)
     if (!$myobject->checkAccess('config'))
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $myobject->label));
 
-    $data['objectid'] = $myobject->objectid;
 
     $proptypes = DataPropertyMaster::getPropertyTypes();
 
