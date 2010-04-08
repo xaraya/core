@@ -32,7 +32,7 @@
         </h2>
         <!-- TODO set the active tab here -->
         <!-- Show the general tab list for roles -->
-        <xar:set name="basetype">ROLES_GROUPTYPE</xar:set>
+        <xar:set name="itemtype">ROLES_GROUPTYPE</xar:set>
         <xar:template file="tablist"/>
         <xar:if condition="$selstyle eq '0'">
         <xar:elseif condition="$selstyle eq '1'"/>
