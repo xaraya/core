@@ -39,6 +39,11 @@ class ApiDeprecationException extends DeprecationExceptions
 */
 
 /**
+ * Add code directory to include_path for modules including other module files
+ */
+set_include_path(realpath(sys::code()) . PATH_SEPARATOR . get_include_path());
+
+/**
  * Returns the relative path name for the var directory
  *
  * @access public
@@ -163,5 +168,12 @@ function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $bl
     sys::import('modules.base.class.pager');
     return xarTplPager::getPager($startNum, $total, $urltemplate, $itemsPerPage, $blockOptions, $template, $tplmodule);
 }
+
+/**
+ * Map legacy Dynamic_Property base class to DataProperty
+ * Note: this does not mean the property will actually work
+ */
+sys::import('modules.dynamicdata.class.properties.base');
+class Dynamic_Property extends DataProperty {}
 
 ?>

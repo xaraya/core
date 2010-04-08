@@ -32,7 +32,15 @@ function dynamicdata_utilapi_import($args)
     if (empty($xml) && empty($file)) {
         throw new EmptyParameterException('xml or file');
     } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/',$file)) ) {
-        throw new BadParameterException($file,'Invalid importfile "#(1)"');
+        // check if we tried to load a file using an old path
+        if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true && strpos($file, 'modules/') === 0) {
+            $file = sys::code() . $file;
+            if (!file_exists($file)) {
+                throw new BadParameterException($file,'Invalid importfile "#(1)"');
+            }
+        } else {
+            throw new BadParameterException($file,'Invalid importfile "#(1)"');
+        }
     }
 
     $objectcache = array();
