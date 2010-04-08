@@ -136,15 +136,31 @@ function &xarDBNewDataDict(Connection &$dbconn, $mode = 'READONLY')
 }
 
 /**
+ * Wrapper function to support Xaraya 1 Error functions
+ *
+**/
+function xarCurrentErrorType()
+{
+    // Xaraya 2.x throws exceptions, use try { ... } catch (Exception $e) { ... }
+    if (!defined('XAR_NO_EXCEPTION')) {
+        define('XAR_NO_EXCEPTION', 0);
+    }
+    // pretend everything is OK for now
+    return XAR_NO_EXCEPTION;
+}
+
+/**
  * Support Xaraya 1 pager functions
  *
 **/
 function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions = 10)
 {
+    sys::import('modules.base.class.pager');
     return xarTplPager::getInfo($currentItem, $total, $itemsPerPage, $blockOptions);
 }
 function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $blockOptions = array(), $template = 'default', $tplmodule = 'base')
 {
+    sys::import('modules.base.class.pager');
     return xarTplPager::getPager($startNum, $total, $urltemplate, $itemsPerPage, $blockOptions, $template, $tplmodule);
 }
 
