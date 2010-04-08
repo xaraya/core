@@ -9,13 +9,50 @@
             This template <strong>modules/base/xartemplates/user-main<em>-test</em>.xt</strong> can be reached by adding <strong><a href="#xarServer::getModuleURL('base','user','main',array('page' => 'test'))#">page=<em>test</em></a></strong> to the base module URL.
             You can experiment with various blocklayout features and template tags here if you want...
         </p>
-<!--
-        <p>
-            <xar:comment>Get the sort parameter from the URL request</xar:comment>
-            <xar:set name="sort"><xar:var name="sort" scope="request"/></xar:set>
-            <xar:comment>Show a sorted list of sample items</xar:comment>
-            <xar:data-view object="sample" sort="$sort"/>
-        </p>
--->
+
+        <h3>XML to SQL Proof of Concept</h3>
+        
+        <h4>First create the roles object</h4>
+<pre>
+&lt;xar:set name="dummy">1;
+    sys::import('modules.dynamicdata.class.objects.master');
+    $roles = DataObjectMaster::getObjectList(array('name'=>'roles_users'));
+&lt;/xar:set>
+</pre>
+
+        <!-- Here we create the object -->
+        <xar:set name="dummy">1;
+            sys::import('modules.dynamicdata.class.objects.master');
+            $roles = DataObjectMaster::getObjectList(array('name'=>'roles_users'));
+        </xar:set>
+
+
+        <h4>1. A simple example</h4>
+<pre>
+&lt;xar:data-getitems properties="$properties" values="$items" object="$roles">
+</pre>
+        <xar:data-getitems properties="$properties" values="$items" object="$roles">
+        <!--
+            Add SELECT with WHERE clauses here
+        -->
+        </xar:data-getitems>
+        
+        <table>
+            <xar:foreach in="$items" key="$key" value="$value">
+                <tr><td>#$key#</td><td>#$value['uname']#</td><td>#$value['name']#</td></tr>
+            </xar:foreach>
+        </table>
+        
+        <h4>2. A more elaborate example</h4>
+<pre>
+&lt;xar:data-view object="$roles" tplmodule="dynamicdata" 
+    fieldlist="id,uname,name,email,state">
+</pre>
+        <xar:data-view object="$roles" tplmodule="dynamicdata" fieldlist="id,uname,name,email,state">
+        <!--
+            Add SELECT with WHERE clauses here
+        -->
+        </xar:data-view>
+        
     </div>
 </xar:template>
