@@ -752,9 +752,15 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
             sys::import('xaraya.templating.source');
             $srcTemplate = new XarayaSourceTemplate($sourceFileName);
 
+            try {
+                $fixlegacy = xarConfigVars::get(null, 'Site.Core.LoadLegacy');
+            } catch (Exception $e) {
+                $fixlegacy = 0;
+            }
+
             // Compile it
             // @todo return a CompiledTemplate object here?
-            $templateCode = $srcTemplate->compile();
+            $templateCode = $srcTemplate->compile($fixlegacy);
 
             // Save the entry in templatecache (if active)
             xarTemplateCache::saveEntry($sourceFileName,$templateCode);

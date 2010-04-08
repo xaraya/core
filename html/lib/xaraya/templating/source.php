@@ -23,12 +23,12 @@ class XarayaSourceTemplate extends SourceTemplate
      *
      * @return string the compiled template code.
     **/
-    public function &compile() 
+    public function &compile($fixlegacy = 0) 
     {
         assert('isset($this->fileName); /* No source to compile from */');
         sys::import('xaraya.templating.compiler');
         $compiler = XarayaCompiler::instance();
-        $templateCode = $compiler->compileFile($this->fileName);
+        $templateCode = $compiler->compileFile($this->fileName, $fixlegacy);
 
         $out = '';
         if(xarTpl_outputPHPCommentBlockInTemplates()) {
