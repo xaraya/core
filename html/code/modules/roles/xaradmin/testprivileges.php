@@ -97,7 +97,6 @@ function roles_admin_testprivileges()
     $data['test'] = $test;
     $data['pname'] = $role->getName();
     $data['itemtype'] = $role->getType();
-    $data['basetype'] = $data['itemtype'];
     $types = xarMod::apiFunc('roles','user','getitemtypes');
     $data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['pmodule'] = $modRegId;
