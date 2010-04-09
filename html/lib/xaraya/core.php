@@ -370,7 +370,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
         // Start Blocks Support Sytem
         $systemArgs = array();
-        xarBlock_init($systemArgs);
+        xarBlock::init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_BLOCKS;
     }
 

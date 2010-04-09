@@ -155,6 +155,22 @@ function xarCurrentErrorType()
 }
 
 /**
+ * Wrapper function to support Xaraya 1 Block functions
+ *
+**/
+function xarBlock_init(&$args) { return xarBlock::init($args); }
+function xarBlock_render($blockinfo) { return xarBlock::render($blockinfo); }
+function xarBlock_renderBlock($args) { return xarBlock::renderBlock($args); }
+function xarBlock_renderGroup($groupname, $template=NULL) { return xarBlock::renderGroup($groupname, $template); }
+
+/**
+ * Wrapper function to support Xaraya 1 Cache functions
+ *
+**/
+function xarCache_init($args = false) { return xarCache::init($args); }
+function xarCache_getStorage(array $args = array()) { return xarCache::getStorage($args); }
+
+/**
  * Support Xaraya 1 pager functions
  *
 **/

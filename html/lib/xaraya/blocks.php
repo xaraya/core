@@ -270,10 +270,4 @@ Interface IxarBlock
     public static function renderGroup($groupname, $template=null);
 }
 
-// Legacy functions
-function xarBlock_init(&$args) { return xarBlock::init($args); }
-function xarBlock_render($blockinfo) { return xarBlock::render($blockinfo); }
-function xarBlock_renderBlock($args) { return xarBlock::renderBlock($args); }
-function xarBlock_renderGroup($groupname, $template=NULL) { return xarBlock::renderGroup($groupname, $template); }
-
 ?>
