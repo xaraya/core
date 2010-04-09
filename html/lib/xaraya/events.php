@@ -228,8 +228,7 @@ class xarEvents extends Object implements IxarEvents
             if(!isset($loaded[$xartabfile])) {
                 // We may need the tables
                 try {
-                    // @todo we could use sys::import maybe?
-                    include $xartabfile;
+                    sys::import('modules.'.$modDir.'.xartables');
                     $loaded[$xartabfile] = true;
                     $xartabfunc = $modName.'_xartables';
                     if (function_exists($xartabfunc)) xarDB::importTables($xartabfunc());
