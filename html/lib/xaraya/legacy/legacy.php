@@ -194,7 +194,8 @@ function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $bl
  * Note: this does not mean the property will actually work
  */
 sys::import('modules.dynamicdata.class.properties.base');
-class Dynamic_Property extends DataProperty {
+class Dynamic_Property extends DataProperty 
+{
     function Dynamic_Property($args)
     {
         parent::__construct($args);
