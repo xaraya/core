@@ -70,10 +70,16 @@ class SelectProperty extends DataProperty
         // If we have options passed, take them. Otherwise generate them
         if (!isset($data['options'])) {
 
-        // Parse a configuration if one was passed
+            // Parse a configuration if one was passed
             if(isset($data['configuration'])) {
                 $this->parseConfiguration($data['configuration']);
                 unset($data['configuration']);
+            // Legacy support: if the validation field is an array, we'll assume that this is an array of id => name
+            } elseif (!empty($data['validation']) && is_array($data['validation'])) {
+                $this->options = array();
+                foreach($data['validation'] as $id => $name) {
+                    array_push($this->options, array('id' => $id, 'name' => $name));
+                }
             }
 
         // Allow overriding by specific parameters
