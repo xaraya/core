@@ -143,48 +143,24 @@
     <xsl:choose>
       <xsl:when test="not(@object) and not(@objectname)">
         <!-- No object, gotta make one -->
-        <xsl:choose>
-          <!-- Old-style tag with name instead of properties -->
-          <xsl:when test="not(@properties)">
-            <xsl:text>$object = xarMod::apiFunc('dynamicdata','user','getitem',</xsl:text>
-            <xsl:text>array_merge(array('getobject'=&gt;1),</xsl:text>
-            <xsl:call-template name="atts2args">
-              <xsl:with-param name="nodeset" select="@*[name() != 'name']"/>
-            </xsl:call-template>
-            <xsl:text>));</xsl:text>
-            <xsl:text>$object-&gt;getItem(</xsl:text>
-            <xsl:call-template name="atts2args">
-              <xsl:with-param name="nodeset" select="@*[name() != 'name']"/>
-            </xsl:call-template>
-            <xsl:text>);</xsl:text>
-            <!-- the name attribute holds a variable name, not good, but it is like that -->
-            <xsl:value-of select="@name"/><xsl:text>= $object-&gt;getProperties(</xsl:text>
-              <xsl:call-template name="atts2args">
-                <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='object']"/>
-              </xsl:call-template>
-            <xsl:text>);</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text>$object = xarMod::apiFunc('dynamicdata','user','getitem',</xsl:text>
-            <xsl:text>array_merge(array('getobject'=&gt;1),</xsl:text>
-            <xsl:call-template name="atts2args">
-              <xsl:with-param name="nodeset" select="@*[name() != 'properties']"/>
-            </xsl:call-template>
-            <xsl:text>));</xsl:text>
-            <xsl:text>$object-&gt;getItem(</xsl:text>
-            <xsl:call-template name="atts2args">
-              <xsl:with-param name="nodeset" select="@*[name() != 'properties']"/>
-            </xsl:call-template>
-            <xsl:text>);</xsl:text>
-            <!-- the name attribute holds a variable name, not good, but it is like that -->
-            <xsl:text>$</xsl:text>
-            <xsl:value-of select="@properties"/><xsl:text>= $object-&gt;getProperties(</xsl:text>
-              <xsl:call-template name="atts2args">
-                <xsl:with-param name="nodeset" select="@*[name() != 'properties' and name()!='object']"/>
-              </xsl:call-template>
-            <xsl:text>);</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:text>$object = xarMod::apiFunc('dynamicdata','user','getitem',</xsl:text>
+        <xsl:text>array_merge(array('getobject'=&gt;1),</xsl:text>
+        <xsl:call-template name="atts2args">
+          <xsl:with-param name="nodeset" select="@*[name() != 'properties']"/>
+        </xsl:call-template>
+        <xsl:text>));</xsl:text>
+        <xsl:text>$object-&gt;getItem(</xsl:text>
+        <xsl:call-template name="atts2args">
+          <xsl:with-param name="nodeset" selec="@*[name() != 'properties']"/>
+        </xsl:call-template>
+        <xsl:text>);</xsl:text>
+        <!-- the name attribute holds a variable name, not good, but it is like that -->
+        <xsl:text>$</xsl:text>
+        <xsl:value-of select="@properties"/><xsl:text>= $object-&gt;getProperties(</xsl:text>
+          <xsl:call-template name="atts2args">
+            <xsl:with-param name="nodeset" select="@*[name() != 'properties' and name()!='object']"/>
+          </xsl:call-template>
+        <xsl:text>);</xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <xsl:choose>
@@ -238,32 +214,16 @@
       <xsl:choose>
         <xsl:when test="not(@object) and not(@objectname)">
             <!-- No object gotta make one -->
-            <xsl:choose>
-              <!-- Old-style tag with name instead of properties -->
-              <xsl:when test="not(@properties)">
-                <xsl:text>list(</xsl:text>
-                <xsl:value-of select="@name"/>
-                <xsl:text>,</xsl:text>
-                <xsl:value-of select="@value"/>
-                <xsl:text>) = xarMod::apiFunc('dynamicdata','user','getitemsforview',</xsl:text>
-                <xsl:call-template name="atts2args">
-                  <xsl:with-param name="nodeset" select="@*[name() != 'name' and name()!='value']"/>
-                </xsl:call-template>
-                <xsl:text>);</xsl:text>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text>list(</xsl:text>
-                <xsl:text>$</xsl:text>
-                <xsl:value-of select="@properties"/>
-                <xsl:text>,$</xsl:text>
-                <xsl:value-of select="@values"/>
-                <xsl:text>) = xarMod::apiFunc('dynamicdata','user','getitemsforview',</xsl:text>
-                <xsl:call-template name="atts2args">
-                  <xsl:with-param name="nodeset" select="@*[name() != 'properties' and name()!='values']"/>
-                </xsl:call-template>
-                <xsl:text>);</xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:text>list(</xsl:text>
+            <xsl:text>$</xsl:text>
+            <xsl:value-of select="@properties"/>
+            <xsl:text>,$</xsl:text>
+            <xsl:value-of select="@values"/>
+            <xsl:text>) = xarMod::apiFunc('dynamicdata','user','getitemsforview',</xsl:text>
+            <xsl:call-template name="atts2args">
+              <xsl:with-param name="nodeset" select="@*[name() != 'properties' and name()!='values']"/>
+            </xsl:call-template>
+            <xsl:text>);</xsl:text>
           </xsl:when>
           <xsl:otherwise>
             <xsl:choose>
