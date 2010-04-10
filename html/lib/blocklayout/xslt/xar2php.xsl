@@ -87,6 +87,11 @@
   -->
   <xsl:includeclienttags />
   
+  <!--
+    Include any legacy tag defintions
+  -->
+  <xsl:includelegacytags />
+
 <!--
     Utility template for resolving text nodes. It recursively resolves
     #-pairs from left to right. Pre- and Post- hash content are treated
