@@ -1,23 +1,24 @@
 <?php
-    function fixLegacy()
+    function fixLegacy($templatestring)
     {
         // Quick & dirty wrapper for missing xmlns:xar in old 1.x templates
-        if (!strpos($this->prepXml, ' xmlns:xar="') && !strpos($this->prepXml, '</xar:template>')) {
-            $this->prepXml = '<?xml version="1.0" encoding="utf-8"?>
-<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $this->prepXml . '</xar:template>';
+        if (!strpos($templatestring, ' xmlns:xar="') && !strpos($templatestring, '</xar:template>')) {
+            $templatestring = '<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $templatestring . '</xar:template>';
 
             // Replace non-numeric entitites in old 1.x templates
-            $this->prepXml = str_replace(array_keys(entities()),entities(),$this->prepXml);
+            $templatestring = str_replace(array_keys(entities()),entities(),$templatestring);
 
             // Allow xar:set name="$var" in old 1.x templates
-            $this->prepXml = str_replace('<xar:set name="$','<xar:set name="',$this->prepXml);
+            $templatestring = str_replace('<xar:set name="$','<xar:set name="',$templatestring);
 
             // Stop eating </textarea> in old 1.x templates
-            $this->prepXml = str_replace('></textarea>','>&#160;</textarea>',$this->prepXml);
+            $templatestring = str_replace('></textarea>','>&#160;</textarea>',$templatestring);
 
             // Javascript include in old 1.x templates
-            $this->prepXml = str_replace('<xar:base-include-javascript','<xar:javascript',$this->prepXml);
+            $templatestring = str_replace('<xar:base-include-javascript','<xar:javascript',$templatestring);
         }
+        return $templatestring;
     }
 
     function entities()
