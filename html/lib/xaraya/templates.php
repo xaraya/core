@@ -848,16 +848,10 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     } elseif($canonical &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$canTemplateName.xt")) {
     } elseif (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
-        xarLogMessage("TPL: 7. Try legacy .xd templates in $tplBaseDir/xartemplates/");
-        if(!empty($templateName) &&
-            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd")) {
-        } elseif(
-            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")) {
-        } elseif($canonical &&
-            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$canTemplateName.xd")) {
-        } else {
-            $sourceFileName = '';
-        }
+        try {
+            sys::import('xaraya.legacy.templates');
+            $sourceFileName = loadsourcefilename($tplBaseDir,$tplSubPart,$tplBase,templateName,$canTemplateName);
+        } catch (Exception $e) {}
     } else {
         // let functions higher up worry about what to do, e.g. DD object of property fallback template
         $sourceFileName = '';

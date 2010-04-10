@@ -111,7 +111,7 @@ class BlockLayoutXSLTProcessor extends Object
         // Legacy transforms for old 1x templates
         try {
             if (xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
-                sys::import('xaraya.legacy.template_transforms');
+                sys::import('xaraya.legacy.templates');
                 $this->prepXml = fixLegacy($this->prepXml);
             }
         } catch (Exception $e) {}
