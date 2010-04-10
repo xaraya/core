@@ -1,5 +1,28 @@
 <?php
-    function fixLegacy($templatestring)
+
+    // Load templates with the .xd extension
+    
+    function loadsourcefilename($tplBaseDir,$tplSubPart,$tplBase,$templateName,$canTemplateName)
+    {
+        xarLogMessage("TPL: 7. Try legacy .xd templates in $tplBaseDir/xartemplates/");
+        if(!empty($templateName) &&
+            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd")) {
+        } elseif(
+            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")) {
+        } elseif($canonical &&
+            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$canTemplateName.xd")) {
+        } else {
+            $sourceFileName = '';
+        }
+        return $sourceFileName;
+    }
+    
+    /* Transform entities into numeric
+     * Remove $ from varnames in xar:set
+     * Add a blanksspace to empty text areas
+     * Convert old tag name into new
+     */
+     function fixLegacy($templatestring)
     {
         // Quick & dirty wrapper for missing xmlns:xar in old 1.x templates
         if (!strpos($templatestring, ' xmlns:xar="') && !strpos($templatestring, '</xar:template>')) {
