@@ -29,9 +29,10 @@
                             <xar:foreach in="$dependencies['satisfiable']" value="$modInfo">
                                 <li>
                                     <xar:if condition="$modInfo['regid'] ne $id">
-                                    #$modInfo['displayname']# 
-                                    <xar:else />#$modInfo.displayname# (id #$id#), the module you
-                                    are trying to install</xar:if>
+                                        #$modInfo['displayname']# 
+                                    <xar:else />
+                                        #$modInfo.displayname# (id #$id#), the module you are trying to install
+                                    </xar:if>
                                 </li>
                             </xar:foreach>
                         </ul>

@@ -1,15 +1,16 @@
 #!/usr/bin/php5
 <?php
 
+/* Uncomment to run
 // Save the directory where we are now
 $savedir = getcwd();
 chdir('/var/mt/xar/core/core.2.x/html');
 
-include('lib/bootstrap.php');
-sys::import('xaraya.xarCore');
+include_once('bootstrap.php');
+sys::import('xaraya.core');
 
 // TODO: don't load the whole core
-xarCoreInit(XARCORE_SYSTEM_ALL);
+//xarCoreInit(XARCORE_SYSTEM_ALL);
 
 function m($msg,$level=0) 
 { 
@@ -47,6 +48,7 @@ m('Testing array stack',$l++);
 $q = new Stack();
 $q->clear();
 _tests($q,$l--);
+*/
 
 function _tests($seq,$l=0)
 {
@@ -82,8 +84,4 @@ function _tests($seq,$l=0)
     m($seq->pop(),$l);
     $l--;
 }
-
-
-
-
 ?>

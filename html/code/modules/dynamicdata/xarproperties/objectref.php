@@ -34,7 +34,7 @@ class ObjectRefProperty extends SelectProperty
     // We explicitly use names here instead of id's, so we are independent of
     // how dd assigns them at a given time. Otherwise the configuration is not
     // exportable to other sites.
-    public $initialization_refobject    = 'objects';    // ID of the object we want to reference
+    public $initialization_refobject    = 'objects';    // Name of the object we want to reference
     public $initialization_store_prop   = 'name';       // Name of the property we want to use for storage
     public $initialization_display_prop = 'name';       // Name of the property we want to use for displaying.
 
@@ -57,6 +57,11 @@ class ObjectRefProperty extends SelectProperty
 
     public function showOutput(Array $data = array())
     {
+        // Allow overriding by specific parameters
+        if (isset($data['refobject']))    $this->initialization_refobject = $data['refobject'];
+        if (isset($data['store_prop']))   $this->initialization_store_prop = $data['store_prop'];
+        if (isset($data['display_prop'])) $this->initialization_display_prop = $data['display_prop'];
+
         if (isset($data['value'])) $this->value = $data['value'];
         if (xarRequest::isObjectURL() && !empty($this->value) && !isset($data['link'])) {
             // CHECKME: store_prop_is_itemid only gets checked once getOptions() is called later on !

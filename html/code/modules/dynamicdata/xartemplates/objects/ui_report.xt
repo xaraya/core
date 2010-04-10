@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">#$tpltitle#</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
+        <xar:set name="searchlink">xarObject::getActionURL($object, 'search')</xar:set>
+        <xar:set name="reportlink">xarObject::getActionURL($object, 'report')</xar:set>
+        <xar:set name="statslink">xarObject::getActionURL($object, 'stats')</xar:set>
+        <h2>
+            <xar:if condition="!empty($report['report'])">
+                #$report['report']# for #$object:label#&#160;
+            <xar:else/>
+                Reports for #$object:label#&#160;
+            </xar:if>
+            <a href="#$viewlink#" title="View #$object:label#">
+                <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+            </a>&#160;
+            <a href="#$reportlink#" title="Reset Report">
+                <img src="#xarTplGetImage('icons/view-refresh.png', 'base')#" width="16" height="16" alt="reset"/>
+            </a>&#160;
+            <a href="#$statslink#&amp;report=#$report['report']#" title="Edit Report">
+                <!-- img src="#xarTplGetImage('icons/accessories-calculator.png', 'base')#" width="16" height="16" alt="stats"/-->
+                <img src="#xarTplGetImage('icons/modify.png', 'base')#" width="16" height="16" alt="stats"/>
+            </a>
+        </h2>
+        <!-- TODO: distinguish between 'protected' and 'private' ? -->
+        <form method="post" action="#$reportlink#">
+            <fieldset>
+                <!-- if we use the current URL, the object is already specified -->
+                <xar:if condition="$object:linktype ne 'current'">
+                    <input type="hidden" name="object" id="object" value="#$object:name#"/>
+                </xar:if>
+                <input type="hidden" name="method" id="method" value="report"/>
+                <xar:if condition="!empty($object:join)">
+                    <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                </xar:if>
+                <xar:if condition="!empty($object:table)">
+                    <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                </xar:if>
+                <xar:if condition="!empty($return_url)">
+                    <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                </xar:if>
+                <legend>Select Report</legend>
+                <div class="xar-form-input-wrapper">
+                    <label class="xar-form-label" for="report" title="Select the report">Available Reports</label>
+                    <select name="report" id="report" onchange="javascript:submit();">
+                        <option value=""></option>
+                        <xar:foreach in="$report.reportlist" value="$label">
+                            <xar:if condition="!empty($report['report']) and $report['report'] eq $label">
+                                <option value="#$label#" selected="selected">#$label#</option>
+                            <xar:else/>
+                                <option value="#$label#">#$label#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                    <input type="submit" value="#xarML('Select')#" class="xar-margin-thickleft"/>
+                </div>
+            </fieldset>
+        </form>
+        <xar:if condition="!empty($result)">
+            <!-- don't show a newlink here -->
+            <xar:data-view object="$object" tplmodule="dynamicdata" layout="stats" newlink=""/>
+        <xar:elseif condition="!empty($object->itemcount)"/>
+            <p>There are #$object:itemcount# items in #$object:label#</p>
+        </xar:if>
+    </div>
+</xar:template>

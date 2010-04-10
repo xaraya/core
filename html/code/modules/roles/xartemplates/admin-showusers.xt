@@ -32,7 +32,7 @@
         </h2>
         <!-- TODO set the active tab here -->
         <!-- Show the general tab list for roles -->
-        <xar:set name="basetype">ROLES_GROUPTYPE</xar:set>
+        <xar:set name="itemtype">ROLES_GROUPTYPE</xar:set>
         <xar:template file="tablist"/>
         <xar:if condition="$selstyle eq '0'">
         <xar:elseif condition="$selstyle eq '1'"/>
@@ -249,11 +249,9 @@
                         Uncheck All
                     </a>
                 </div>
-                <xar:if condition="$totalselect gt $itemsperpage">
-                    <div class="xar-align-center">
-                        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
-                    </div>
-                </xar:if>
+                <div class="xar-align-center">
+                    <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
+                </div>
             </form>
         </xar:if>
         <p>

@@ -22,7 +22,6 @@ sys::import('modules.dynamicdata.class.objects.base');
 class Role extends DataObject
 {
     public $parentlevel;  //we use this just to store transient information
-    public $basetype;     //the base itemtype. we add this so it can be passed rather than calculated here
 
     public $dbconn;
     public $rolestable;
@@ -64,7 +63,6 @@ class Role extends DataObject
         $this->modulestable = $xartable['modules'];
 
         $this->parentlevel = 0;
-        $this->basetype = $this->getType();
     }
 
     /**
@@ -84,7 +82,7 @@ class Role extends DataObject
         $bindvars = array();
         $query = "SELECT name, uname
                   FROM $dynamicobjects ";
-        if ($this->basetype == ROLES_GROUPTYPE) {
+        if ($this->itemtype == ROLES_GROUPTYPE) {
             if (empty($data['name'])) $data['name'] = $this->getName();
             $query .= " WHERE name = ? ";
             $bindvars[] = $data['name'];
@@ -98,7 +96,7 @@ class Role extends DataObject
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
         if ($result->getRow() > 0) {
             $result = $query->row();
-            throw new DuplicateException(array('role',($this->basetype == ROLES_GROUPTYPE) ? $result['name'] :$result['uname'] ));
+            throw new DuplicateException(array('role',($this->itemtype == ROLES_GROUPTYPE) ? $result['name'] :$result['uname'] ));
         }
 
         $result->close();

@@ -62,11 +62,9 @@
                         </xar:loop>
                     </xar:if>
                 </table>
-                <xar:if condition="$total gt $itemsperpage">
-                    <div class="xar-align-center">
-                        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
-                    </div>
-                </xar:if>
+                <div class="xar-align-center">
+                    <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
+                </div>
             </xar:if>
         </fieldset>
     </div>

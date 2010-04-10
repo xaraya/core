@@ -53,7 +53,8 @@ function blocks_userapi_getitemlinks($args)
                                                                             array('tid' => $itemid)) : '');
             }
             break;
-
+        /*
+        @TODO: refactor this for blockgroup blocks
         case 2: // block groups
             $param = array();
             if (!empty($itemids) && count($itemids) == 1) {
@@ -72,7 +73,7 @@ function blocks_userapi_getitemlinks($args)
                                                                             array('id' => $itemid)) : '');
             }
             break;
-
+        */
         case 3: // block instances
         default:
             $param = array();

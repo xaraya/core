@@ -6,7 +6,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -81,8 +81,7 @@ function dynamicdata_admin_modifyconfighook($args)
     $data['fieldtypeprop'] = & DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
 
     $object = & DataObjectMaster::getObject(array('moduleid' => $module_id,
-                                                  'itemtype' => $itemtype,
-                                                  'extend' => false));
+                                                  'itemtype' => $itemtype));
     if (!empty($object)) {
         if (!empty($object->template)) {
             $template = $object->template;

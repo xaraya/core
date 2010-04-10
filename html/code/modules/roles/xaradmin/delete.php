@@ -38,6 +38,7 @@ function roles_admin_delete()
     }
     $data['parents'] = $parents;
 
+    $data['object'] = $role;
     $name = $role->getName();
 
     if (!xarSecurityCheck('DeleteRole',1,'Roles',$name)) return;
@@ -49,7 +50,7 @@ function roles_admin_delete()
     }
     // Prohibit removal of any groups or users the system needs
     if($id == (int)xarModVars::get('roles','admin')) {
-        return xarTplModule('roles','user','errors',array('layout' => 'remove_siteadmin', 'user' => $role->getName()));
+        return xarTplModule('roles','user','errors',array('layout' => 'remove_siteadmin', 'user' => $role->getUName()));
     }
     if($id == (int)xarModVars::get('roles','defaultgroup')) {
         return xarTplModule('roles','user','errors',array('layout' => 'default_usergroup', 'group' => $role->getName()));
@@ -60,7 +61,7 @@ function roles_admin_delete()
 
     if (empty($confirmation)) {
         // Load Template
-        $data['basetype'] = $itemtype;
+        $data['itemtype'] = $itemtype;
         $types = xarMod::apiFunc('roles','user','getitemtypes');
         $data['itemtypename'] = $types[$itemtype]['label'];
         $data['authid'] = xarSecGenAuthKey();

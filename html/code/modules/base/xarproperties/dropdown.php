@@ -70,10 +70,14 @@ class SelectProperty extends DataProperty
         // If we have options passed, take them. Otherwise generate them
         if (!isset($data['options'])) {
 
-        // Parse a configuration if one was passed
+            // Parse a configuration if one was passed
             if(isset($data['configuration'])) {
                 $this->parseConfiguration($data['configuration']);
                 unset($data['configuration']);
+            // Legacy support: if the validation field is an array, we'll assume that this is an array of id => name
+            } elseif (!empty($data['validation']) && is_array($data['validation']) && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
+                sys::import('xaraya.legacy.validations');
+                $this->options = dropdown($data['validation']);
             }
 
         // Allow overriding by specific parameters
@@ -148,6 +152,8 @@ class SelectProperty extends DataProperty
             if (!empty($firstline)) $this->options = array_merge($options,$this->options);
             return $this->options;
         }
+        
+        if (!empty($filepath)) $filepath = sys::code() . $this->initialization_file;
         if (!empty($this->initialization_function)) {
             @eval('$items = ' . $this->initialization_function .';');
             if (!isset($items) || !is_array($items)) $items = array();
@@ -161,21 +167,35 @@ class SelectProperty extends DataProperty
                 }
             }
             unset($items);
-        } elseif (!empty($this->initialization_file) && file_exists($this->initialization_file)) {
-            $fileLines = file($this->initialization_file);
-            foreach ($fileLines as $option)
-            {
-                // allow escaping \, for values that need a comma
-                if (preg_match('/(?<!\\\),/', $option)) {
-                    // if the option contains a , we'll assume it's an id,name combination
-                    list($id,$name) = preg_split('/(?<!\\\),/', $option);
-                    $id = strtr($id,array('\,' => ','));
-                    $name = strtr($name,array('\,' => ','));
-                    array_push($options, array('id' => $id, 'name' => $name));
-                } else {
-                    // otherwise we'll use the option for both id and name
-                    $option = strtr($option,array('\,' => ','));
-                    array_push($options, array('id' => $option, 'name' => $option));
+        } elseif (!empty($filepath) && file_exists($filepath)) {
+            $parts = pathinfo($filepath);
+            if ($parts['extension'] =='xml'){
+                $data = implode("", file($filepath));
+                $parser = xml_parser_create( 'UTF-8' );
+                xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+                xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
+                xml_parse_into_struct($parser, $data, $value, $index);
+                xml_parser_free($parser);
+                $limit = count($index['id']);
+                while (count($index['id'])) {
+                    $options[] = array('id' => $value[array_shift($index['id'])]['value'], 'name' => $value[array_shift($index['name'])]['value']);
+                }
+            } else {
+                $fileLines = file($filepath);
+                foreach ($fileLines as $option)
+                {
+                    // allow escaping \, for values that need a comma
+                    if (preg_match('/(?<!\\\),/', $option)) {
+                        // if the option contains a , we'll assume it's an id,name combination
+                        list($id,$name) = preg_split('/(?<!\\\),/', $option);
+                        $id = strtr($id,array('\,' => ','));
+                        $name = strtr($name,array('\,' => ','));
+                        array_push($options, array('id' => $id, 'name' => $name));
+                    } else {
+                        // otherwise we'll use the option for both id and name
+                        $option = strtr($option,array('\,' => ','));
+                        array_push($options, array('id' => $option, 'name' => $option));
+                    }
                 }
             }
         } elseif (!empty($this->initialization_options)) {

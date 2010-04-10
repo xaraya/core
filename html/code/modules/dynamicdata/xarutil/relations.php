@@ -6,7 +6,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -15,9 +15,6 @@
  */
 function dynamicdata_util_relations($args)
 {
-// Security Check
-    if(!xarSecurityCheck('AdminDynamicData')) return;
-
     if(!xarVarFetch('module',    'isset', $module,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('module_id', 'isset', $module_id, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype',  'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
@@ -87,8 +84,13 @@ function dynamicdata_util_relations($args)
     if (!empty($objectid)) {
         $object = xarMod::apiFunc('dynamicdata','user','getobject',
                                 array('objectid' => $objectid));
+        if (!$object->checkAccess('config')) {
+            return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $object->label));
+        }
         $data['object'] = $object;
         $data['fields'] = $object->properties;
+
+        xarTplSetPageTitle(xarML('Links for #(1)', $object->label));
 
         // get all links, including 'info' for reverse one-way information
         $links = DataObjectLinks::getLinks($object,'all');
@@ -99,6 +101,105 @@ function dynamicdata_util_relations($args)
         }
         // FIXME: remove initialization of modvar after next release
         xarModVars::set('dynamicdata', 'getlinkedobjects', 0);
+
+        $data['yumlspec'] = '';
+        $data['yumlpath'] = '';
+        if (!empty($data['relations'])) {
+            $yuml_spec = '[' . $object->label;
+
+        /* Add the properties to the class diagram
+            $proptypes = DataPropertyMaster::getPropertyTypes();
+            $join = '|';
+            foreach ($object->properties as $property) {
+                $yuml_spec .= $join . $property->name . ': ' . $proptypes[$property->type]['name'];
+                if ($property->defaultvalue !== '') {
+                    $yuml_spec .= ' = ' . $property->defaultvalue;
+                }
+                $join = ';';
+            }
+        */
+            $yuml_spec .= ']';
+
+            $name2label = array();
+            foreach ($data['objects'] as $info) {
+                $name2label[$info['name']] = $info['label'];
+            }
+
+            foreach ($data['relations'] as $link) {
+                // in case we have links with unknown objects
+                if (empty($name2label[$link['target']])) {
+                    $name2label[$link['target']] = $link['target'];
+                }
+                if ($link['link_type'] == 'parents') {
+                    if ($link['direction'] == 'bi') {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']' . $link['to_prop'] . '-' . $link['from_prop'] . ' *[' . $object->label . ']';
+                    } elseif ($link['direction'] == 'uni') {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']' . $link['to_prop'] . '-' . $link['from_prop'] . ' *>[' . $object->label . ']';
+                    } else {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']' . $link['to_prop'] . '-' . $link['from_prop'] . ' *>[' . $object->label . ']';
+                    }
+                } elseif ($link['link_type'] == 'linkedfrom' && $link['target'] != $object->name) {
+                    if ($link['direction'] == 'bi') {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']' . $link['from_prop'] . '-' . $link['to_prop'] . '[' . $object->label . ']';
+                    } elseif ($link['direction'] == 'uni') {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']' . $link['from_prop'] . '-' . $link['to_prop'] . '>[' . $object->label . ']';
+                    } else {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']' . $link['from_prop'] . '-' . $link['to_prop'] . '>[' . $object->label . ']';
+                    }
+                } elseif ($link['link_type'] == 'extended' && $link['target'] != $object->name) {
+                    if ($link['direction'] == 'bi') {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']^-[' . $object->label . ']';
+                    } elseif ($link['direction'] == 'uni') {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']^-.-[' . $object->label . ']';
+                    } else {
+                        $yuml_spec .= ', [' . $name2label[$link['target']] . ']^-.-[' . $object->label . ']';
+                    }
+                } elseif ($link['link_type'] == 'extensions') {
+                    if ($link['direction'] == 'bi') {
+                        $yuml_spec .= ', [' . $object->label . ']^-[' . $name2label[$link['target']] . ']';
+                    } elseif ($link['direction'] == 'uni') {
+                        $yuml_spec .= ', [' . $object->label . ']^-.-[' . $name2label[$link['target']] . ']';
+                    } else {
+                        $yuml_spec .= ', [' . $object->label . ']^-.-[' . $name2label[$link['target']] . ']';
+                    }
+                } elseif ($link['link_type'] == 'linkedto') {
+                    if ($link['direction'] == 'bi') {
+                        $yuml_spec .= ', [' . $object->label . ']' . $link['from_prop'] . '-' . $link['to_prop'] . '[' . $name2label[$link['target']] . ']';
+                    } elseif ($link['direction'] == 'uni') {
+                        $yuml_spec .= ', [' . $object->label . ']' . $link['from_prop'] . '-' . $link['to_prop'] . '>[' . $name2label[$link['target']] . ']';
+                    } else {
+                        $yuml_spec .= ', [' . $object->label . ']' . $link['from_prop'] . '-' . $link['to_prop'] . '>[' . $name2label[$link['target']] . ']';
+                    }
+                } elseif ($link['link_type'] == 'children' && $link['target'] != $object->name) {
+                    if ($link['direction'] == 'bi') {
+                        $yuml_spec .= ', [' . $object->label . ']' . $link['from_prop'] . '-' . $link['to_prop'] . ' *[' . $name2label[$link['target']] . ']';
+                    } elseif ($link['direction'] == 'uni') {
+                        $yuml_spec .= ', [' . $object->label . ']' . $link['from_prop'] . '-' . $link['to_prop'] . ' *>[' . $name2label[$link['target']] . ']';
+                    } else {
+                        $yuml_spec .= ', [' . $object->label . ']' . $link['from_prop'] . '-' . $link['to_prop'] . ' *>[' . $name2label[$link['target']] . ']';
+                    }
+                }
+            }
+
+            // CHECKME: what if var/processes is not under the web root anymore ?
+            if (is_writable(sys::varpath() . '/processes/')) {
+                $yuml_hash = md5($yuml_spec);
+                $filepath = sys::varpath() . '/processes/yuml-' . $yuml_hash . '.png';
+                if (!file_exists($filepath)) {
+                    $image = file_get_contents('http://yuml.me/diagram/class/' . rawurlencode($yuml_spec));
+                    if (!empty($image)) {
+                        file_put_contents($filepath, $image);
+                        $data['yumlpath'] = $filepath;
+                    } else {
+                        $data['yumlspec'] = $yuml_spec;
+                    }
+                } else {
+                    $data['yumlpath'] = $filepath;
+                }
+            } else {
+                $data['yumlspec'] = $yuml_spec;
+            }
+        }
 
         if (!empty($withobjectid)) {
             $withobject = xarMod::apiFunc('dynamicdata','user','getobject',
@@ -161,7 +262,12 @@ function dynamicdata_util_relations($args)
     } elseif (!empty($table)) {
         $object = xarMod::apiFunc('dynamicdata','user','getobject',
                                 array('table' => $table));
+        if (!$object->checkAccess('config')) {
+            return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $object->label));
+        }
         $data['fields'] = $object->properties;
+
+        xarTplSetPageTitle(xarML('Links for #(1)', $object->label));
 
         sys::import('modules.dynamicdata.class.datastores.links');
 
@@ -231,6 +337,8 @@ function dynamicdata_util_relations($args)
         $data['relations'] = xarMod::apiFunc('dynamicdata','util','getrelations',
                                            array('module_id' => $module_id,
                                                  'itemtype' => $itemtype));
+    } else {
+        xarTplSetPageTitle(xarML('Links'));
     }
 
     if (!isset($data['relations']) || $data['relations'] == false) {

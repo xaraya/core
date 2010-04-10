@@ -84,6 +84,13 @@ interface ISQLDataStore
     function cleanWhere();
     function cleanGroupBy();
     function cleanJoin();
+
+    // @note database functions for lazy connection
+    function getTable($name);
+    function getType();
+    function prepareStatement($sql);
+    function getLastId($table);
+    function getDatabaseInfo();
 }
 
 /*

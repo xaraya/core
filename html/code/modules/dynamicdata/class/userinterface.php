@@ -20,7 +20,7 @@
  * {
  *     sys::import('modules.dynamicdata.class.userinterface');
  *
- *     // Add some default arguments for the interface
+ *     // Add some extra arguments for the interface, e.g. for a non-standard method handler
  *     //$args['mapper'] = array('myname' => array('classname'  => 'MyMethodHandler',
  *     //                                          'classfunc'  => 'run',
  *     //                                          'importname' => 'modules.mymodule.class.myhandler'
@@ -32,7 +32,10 @@
  *     // Get the user interface
  *     $interface = new DataObjectUserInterface($args);
  *
- *     // Add some extra arguments to run the handler
+ *     // Specify the method if it's not given in the arguments or URL parameters
+ *     //$args['method'] = 'myname';
+ *
+ *     // Add some extra arguments to run the handler if you want
  *     //$args['catid'] = 123;
  *
  *     // Handle the request of the user and return the output
@@ -48,7 +51,7 @@
  *     ...
  * }
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @subpackage dynamicdata
  */
 class DataObjectUserInterface extends Object
@@ -118,6 +121,22 @@ class DataObjectUserInterface extends Object
                                'classfunc'  => 'run',
                                'importname' => 'modules.dynamicdata.class.ui_handlers.view'),
 
+            'search'  => array('classname'  => 'DataObjectSearchHandler',
+                               'classfunc'  => 'run',
+                               'importname' => 'modules.dynamicdata.class.ui_handlers.search'),
+
+            'config'  => array('classname'  => 'DataObjectConfigHandler',
+                               'classfunc'  => 'run',
+                               'importname' => 'modules.dynamicdata.class.ui_handlers.config'),
+
+            'stats'   => array('classname'  => 'DataObjectStatsHandler',
+                               'classfunc'  => 'run',
+                               'importname' => 'modules.dynamicdata.class.ui_handlers.stats'),
+/*
+            'access'  => array('classname'  => 'DataObjectAccessHandler',
+                               'classfunc'  => 'run',
+                               'importname' => 'modules.dynamicdata.class.ui_handlers.access'),
+*/
             'default' => array('classname'  => 'DataObjectDefaultHandler',
                                'classfunc'  => 'run',
                                'importname' => 'modules.dynamicdata.class.ui_handlers.default'),
@@ -138,14 +157,17 @@ class DataObjectUserInterface extends Object
 
         // specify any aliases for the methods (you can have several aliases for one method)
         $this->alias = array(
-            'new'    => 'create',
-            'modify' => 'update',
-            'remove' => 'delete', // we don't allow removing all items for an object here
-            'show'   => 'display',
-            'list'   => 'view',
-            'other'  => 'default',
+            'new'      => 'create',
+            'modify'   => 'update',
+            'remove'   => 'delete', // we don't allow removing all items for an object here
+            'show'     => 'display',
+            'list'     => 'view',
+            'query'    => 'search', // same handler, different private method called by run()
+            'settings' => 'config',
+            'report'   => 'stats',
+            'other'    => 'default',
 /*
-            'mystuff'=> 'myname',
+            'mystuff'  => 'myname',
 */
         );
 
@@ -264,7 +286,7 @@ class DataObjectUserInterface extends Object
 /**
  * Dynamic Object Interface (deprecated)
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @subpackage dynamicdata
  */
 class DataObjectInterface extends DataObjectUserInterface

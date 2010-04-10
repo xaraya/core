@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <form method="post" action="#xarModUrl('blocks', 'admin', 'settings')#">
+        <fieldset>
+            <legend>View Options</legend>
+            <div class="xar-form-input-wrapper">
+                <label for="selstyle" title="#xarML('Choose how Block instances are displayed.')#" class="xar-form-label">
+                    Preferred Layout:
+                </label>
+                <!--
+                    Module List Sort and Filter Controls
+                -->
+                <xar:set name="options">
+                    array(
+                        array('id' => 'plain',   'name' => xarML('Plain')),
+                        array('id' => 'compact', 'name' => xarML('Compact')),
+                        array('id' => 'bygroup', 'name' => xarML('By Group')),
+                        array('id' => 'bytype',  'name' => xarML('By Type')),
+                    )
+                </xar:set>
+                <xar:data-input type="dropdown" name="selstyle" options="$options" value="$selstyle"/>
+                <input type="submit" value="#xarML('Refresh')#"/>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label for="filter" title="#xarML('Filter the instances to be shown.')#" class="xar-form-label">
+                    Filter:
+                </label>
+                <input type="text" id="filter" name="filter" value="#$filter#" class="xar-form-textmedium"/>
+            </div>
+        </fieldset>
+    </form>
+</xar:template>

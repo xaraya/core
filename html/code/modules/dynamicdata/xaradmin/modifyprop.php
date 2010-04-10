@@ -25,8 +25,6 @@ function dynamicdata_admin_modifyprop()
 {
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
-    if(!xarSecurityCheck('AdminDynamicData')) return;
-
     if(!xarVarFetch('itemid',   'isset', $itemid,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('module_id',    'isset', $module_id,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype, NULL, XARVAR_DONT_SET)) {return;}
@@ -50,16 +48,20 @@ function dynamicdata_admin_modifyprop()
         $module_id = $objectinfo['moduleid'];
         $itemtype = $objectinfo['itemtype'];
         $label =  $objectinfo['label'];
+        // check security of the parent object
+        $tmpobject = DataObjectMaster::getObject($objectinfo);
+        if (!$tmpobject->checkAccess('config'))
+            return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
         if ($objectid <= 3) {
             // always mark the internal DD objects as 'private' (= items 1-3 in xar_dynamic_objects, see xarinit.php)
             $data['visibility'] = 'private';
         } else {
             // CHECKME: do we always need to load the object class to get its visibility ?
-            $tmpobject = DataObjectMaster::getObject($objectinfo);
             $data['visibility'] = $tmpobject->visibility;
-            unset($tmpobject);
         }
+        unset($tmpobject);
     } else {
+        if(!xarSecurityCheck('AdminDynamicData')) return;
         $objectid = null;
         $data['visibility'] = 'public';
     }
@@ -85,6 +87,7 @@ function dynamicdata_admin_modifyprop()
             $data['label'] = xarML('for #(1)', $objectinfo['label']);
         }
     }
+    $data['itemid'] = $data['objectid'];
     xarTplSetPageTitle(xarML('Modify DataProperties #(1)', $data['label']));
 
     $data['fields'] = xarMod::apiFunc('dynamicdata','user','getprop',
@@ -152,6 +155,8 @@ function dynamicdata_admin_modifyprop()
         }
         return $data;
     }
+
+// CHECKME: this part is no longer relevant when dealing with actual objects !?
 
     $data['details'] = $details;
 

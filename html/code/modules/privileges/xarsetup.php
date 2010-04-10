@@ -122,12 +122,6 @@ function initializeSetup()
 
 //    xarMasks::register('AdminAll','All','All','All','All',xarSecurityLevel('ACCESS_ADMIN'));
 
-    xarMasks::register('ViewBaseBlocks','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_OVERVIEW'));
-    xarMasks::register('ReadBaseBlock','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_READ'));
-    xarMasks::register('EditBaseBlock','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_EDIT'));
-    xarMasks::register('AddBaseBlock','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_ADD'));
-    xarMasks::register('DeleteBaseBlock','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_DELETE'));
-    xarMasks::register('AdminBaseBlock','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_ADMIN'));
     xarMasks::register('ViewBase','All','base','All','All',xarSecurityLevel('ACCESS_OVERVIEW'));
     xarMasks::register('ReadBase','All','base','All','All',xarSecurityLevel('ACCESS_READ'));
     xarMasks::register('EditBase','All','base','All','All',xarSecurityLevel('ACCESS_EDIT'));
@@ -142,7 +136,6 @@ function initializeSetup()
 
     xarMasks::register('AdminInstaller','All','installer','All','All',xarSecurityLevel('ACCESS_ADMIN'));
 
-    xarMasks::register('ViewRolesBlocks','All','roles','Block','All',xarSecurityLevel('ACCESS_OVERVIEW'));
     xarMasks::register('ViewRoles','All','roles','All','All',xarSecurityLevel('ACCESS_OVERVIEW'));
     xarMasks::register('ReadRole','All','roles','All','All',xarSecurityLevel('ACCESS_READ'));
     xarMasks::register('EditRole','All','roles','All','All',xarSecurityLevel('ACCESS_EDIT'));

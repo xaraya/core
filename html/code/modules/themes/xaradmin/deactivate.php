@@ -28,7 +28,8 @@ function themes_admin_deactivate()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    if (!xarVarFetch('id', 'int:1:', $id)) return;
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($id)) return xarResponse::notFound();
 
     //Checking if the user has already passed thru the GUI:
     xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
@@ -38,9 +39,9 @@ function themes_admin_deactivate()
     $target=$minfo['name'];
 
     // See if we have lost any modules since last generation
-    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {
-        return;
-    }
+    sys::import('modules.modules.class.installer');
+    $installer = Installer::getInstance('themes');  
+    if (!$installer->checkformissing()) {return;}
 
     // deactivate
     $deactivated = xarMod::apiFunc('themes','admin','setstate',array('regid' => $id,'state' => XARTHEME_STATE_INACTIVE)); 

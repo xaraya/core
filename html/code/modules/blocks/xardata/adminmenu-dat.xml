@@ -28,18 +28,7 @@
             <title>Add a new block instance</title>
             <label>New Block</label>
         </menuitem>
-        <menuitem>
-            <mask>DeleteBlock</mask>
-            <includes>
-                <includeitem>view_groups</includeitem>
-                <includeitem>modify_group</includeitem>
-                <includeitem>delete_group</includeitem>
-            </includes>
-            <target>view_groups</target>
-            <title>View the defined block groups</title>
-            <label>Block Groups</label>
-        </menuitem>
-        <menuitem>
+		<menuitem>
             <mask>AdminBlock</mask>
             <includes>
                 <includeitem>view_types</includeitem>

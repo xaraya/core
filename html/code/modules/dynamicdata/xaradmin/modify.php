@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -20,7 +20,7 @@
  * @param int itemtype the id of the itemtype of the item
  * @param join
  * @param table
- * @return
+ * @return string
  */
 function dynamicdata_admin_modify($args)
 {
@@ -39,10 +39,10 @@ function dynamicdata_admin_modify($args)
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('preview',  'isset', $preview,     NULL, XARVAR_DONT_SET)) {return;}
 
-
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
+    if (!xarVarFetch('tab', 'pre:trim:lower:str:1', $data['tab'], 'edit', XARVAR_NOT_REQUIRED)) return;
 
-    $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
+    $object = DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,
                                          'moduleid' => $module_id,
                                          'itemtype' => $itemtype,
@@ -50,48 +50,81 @@ function dynamicdata_admin_modify($args)
                                          'table'    => $table,
                                          'itemid'   => $itemid,
                                          'tplmodule' => $tplmodule));
-    $args = $myobject->toArray();
+    if (empty($object)) return;
+    if (!$object->checkAccess('update'))
+        return xarResponse::Forbidden(xarML('Update #(1) is forbidden', $object->label));
 
-    // Security check
-    if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$args['itemid'])) return;
+    $args = $object->toArray();
 
     if ($notfresh) {
-        $isvalid = $myobject->checkInput();
+        $isvalid = $object->checkInput();
     } else {
-        $myobject->getItem();
+        $object->getItem();
     }
-    $data['object'] = & $myobject;
+    $data['object'] = $object;
 
-    // if we're editing a dynamic property, save its property type to cache
-    // for correct processing of the configuration rule (ValidationProperty)
-    if ($myobject->objectid == 2) {
-        xarVarSetCached('dynamicdata','currentproptype', $myobject->properties['type']);
+    switch ($data['tab']) {
+
+        case 'edit':
+
+            // handle special cases
+            if ($object->objectid == 1) {
+                // check security of the parent object
+                $tmpobject = DataObjectMaster::getObject(array('objectid' => $object->itemid));
+                if (!$tmpobject->checkAccess('config'))
+                    return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+
+                // if we're editing a dynamic object, check its own visibility
+                if ($object->itemid > 3) {
+                    // CHECKME: do we always need to load the object class to get its visibility ?
+                    // override the default visibility and moduleid
+                    $object->visibility = $tmpobject->visibility;
+                    $object->moduleid = $tmpobject->moduleid;
+                }
+                unset($tmpobject);
+
+            } elseif ($object->objectid == 2) {
+                // check security of the parent object
+                $tmpobject = DataObjectMaster::getObject(array('objectid' => $object->properties['objectid']->value));
+                if (!$tmpobject->checkAccess('config'))
+                    return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+                unset($tmpobject);
+
+                // if we're editing a dynamic property, save its property type to cache
+                // for correct processing of the configuration rule (ValidationProperty)
+                xarVarSetCached('dynamicdata','currentproptype', $object->properties['type']);
+            }
+
+            $data['itemid'] = $args['itemid'];
+            $data['preview'] = $preview;
+
+            // Makes this hooks call explictly from DD - why ???
+            ////$modinfo = xarMod::getInfo($args['moduleid']);
+            //$modinfo = xarMod::getInfo(182);
+            $object->callHooks('modify');
+            $data['hooks'] = $object->hookoutput;
+
+            if ($object->objectid == 1) {
+                $data['label'] = $object->properties['label']->value;
+                xarTplSetPageTitle(xarML('Modify DataObject #(1)', $data['label']));
+            } else {
+                $data['label'] = $object->label;
+                xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
+            }
+
+        break;
+
+        case 'clone':
+            // user needs admin access to changethe access rules
+            $data['adminaccess'] = xarSecurityCheck('',0,'All',$object->objectid . ":" . $name . ":" . "$itemid",0,'',0,800);
+            $data['name'] = $object->properties['name']->value;
+        break;
     }
-
-    // if we're editing a dynamic object, check its own visibility
-    if ($myobject->objectid == 1 && $myobject->itemid > 3) {
-        // CHECKME: do we always need to load the object class to get its visibility ?
-        $tmpobject = DataObjectMaster::getObject(array('objectid' => $myobject->itemid));
-        // override the default visibility and moduleid
-        $myobject->visibility = $tmpobject->visibility;
-        $myobject->moduleid = $tmpobject->moduleid;
-        unset($tmpobject);
-    }
-
-    $data['objectid'] = $args['objectid'];
-    $data['itemid'] = $args['itemid'];
-    $data['authid'] = xarSecGenAuthKey();
-    $data['preview'] = $preview;
+    
     $data['tplmodule'] = $args['tplmodule'];   //TODO: is this needed
-
-    // Makes this hooks call explictly from DD - why ???
-    ////$modinfo = xarMod::getInfo($args['moduleid']);
-    //$modinfo = xarMod::getInfo(182);
-    $myobject->callHooks('modify');
-    $data['hooks'] = $myobject->hookoutput;
-
-    xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $myobject->label));
-
+    $data['objectid'] = $args['objectid'];
+    $data['authid'] = xarSecGenAuthKey();
+            
     if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xt') ||
         file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xt')) {
         return xarTplModule($args['tplmodule'],'admin','modify',$data,$args['template']);

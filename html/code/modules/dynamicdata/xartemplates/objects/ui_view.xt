@@ -2,22 +2,34 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
-        <span class="xar-mod-title">Dynamic Data Object Interface</span>
+        <span class="xar-mod-title">#$tpltitle#</span>
     </div>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object)">
-            <h2>View <xar:data-label object="$object"/></h2>
             <xar:if condition="$object:name eq 'objects' and $object:linktype eq 'object'">
-                <!-- show a list of objects -->
-                <ul>
-                    <xar:foreach in="$object:items" value="$item">
-                        <xar:if condition="$item['module_id'] eq 182 and $item['itemtype'] gt 2">
-                            <li><a href="#xarServer::getObjectURL($item['name'])#">#$item['label']#</a></li>
-                        </xar:if>
-                    </xar:foreach>
-                </ul>
+                <h2>
+                    View #$object:label#
+                </h2>
+                <!-- show the list of main objects -->
+                <xar:template type="module" file="main_objects"/>
             <xar:else/>
-                <xar:data-view object="$object"/>
+                <xar:set name="searchlink">xarObject::getActionURL($object, 'search')</xar:set>
+                <xar:if condition="!empty($object:primary) and $object:checkAccess('create')">
+                    <xar:set name="newlink">xarObject::getActionURL($object, 'new')</xar:set>
+                </xar:if>
+                <h2>
+                    View #$object:label#&#160;
+                    <a href="#$searchlink#" title="Search #$object:label#">
+                        <img src="#xarTplGetImage('icons/system-search.png', 'base')#" width="16" height="16" alt="search"/>
+                    </a>
+                    <xar:if condition="!empty($newlink)">
+                        &#160;<a href="#$newlink#" title="Create New #$object:label#">
+                            <img src="#xarTplGetImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/>
+                        </a>
+                    </xar:if>
+                </h2>
+                <!-- don't show a newlink here -->
+                <xar:data-view object="$object" newlink=""/>
             </xar:if>
         <xar:else />
             <div class="xar-align-center">

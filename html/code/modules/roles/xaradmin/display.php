@@ -15,7 +15,8 @@
 function roles_admin_display()
 {
     if (!xarVarFetch('itemtype','id',$itemtype, 1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('id','int:1:',$id)) return;
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($id)) return xarResponse::notFound();
 
 
     $data = array();
@@ -23,10 +24,9 @@ function roles_admin_display()
     $role = xarRoles::get($id);
 
     $data['itemtype'] = $role->getType();
-    $data['basetype'] = $data['itemtype'];
 
     $object = xarMod::apiFunc('dynamicdata','user','getobject',array('module'   => 'roles',
-                                                'itemtype' => $data['basetype']));
+                                                'itemtype' => $data['itemtype']));
 
     $itemid = $object->getItem(array('itemid' => $id));
 

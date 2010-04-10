@@ -2,13 +2,14 @@
 /**
  * Cache data on the filesystem (can also be a ramdisk/tmpfs/shmfs/...)
  */
-class xarCache_FileSystem_Storage extends xarCache_Storage
+
+class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_Storage
 {
     public $dir = '';
     public $blksize = 0;
     public $bsknown = false;
 
-    public function __construct(array $args = array())
+    public function __construct(Array $args = array())
     {
         parent::__construct($args);
 

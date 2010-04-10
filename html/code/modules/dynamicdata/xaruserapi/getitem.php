@@ -6,7 +6,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -64,8 +64,6 @@ function &dynamicdata_userapi_getitem($args)
         throw new BadParameterException($vars,$msg);
     }
 
-    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$module_id:$itemtype:$itemid")) return $nullreturn;
-
     // check the optional field list
     if (empty($fieldlist)) {
         $fieldlist = null;
@@ -91,6 +89,8 @@ function &dynamicdata_userapi_getitem($args)
                                        'table'     => $table,
                                        'status'    => $status));
     if (!isset($object) || (empty($object->objectid) && empty($object->table))) return $nullreturn;
+    if (!$object->checkAccess('display'))
+        return $nullreturn;
 
     // Get the item
     if (!empty($itemid)) $object->getItem();

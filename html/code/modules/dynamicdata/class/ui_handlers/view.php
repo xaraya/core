@@ -15,7 +15,7 @@ sys::import('modules.dynamicdata.class.ui_handlers.default');
 /**
  * Dynamic Object User Interface Handler
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @subpackage dynamicdata
  */
 class DataObjectViewHandler extends DataObjectDefaultHandler
@@ -43,23 +43,7 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
         if(!xarVarFetch('startnum', 'isset', $args['startnum'], NULL, XARVAR_DONT_SET)) 
             return;
 
-        // TODO: support array in objectlist->setWhere()
-        if (!empty($args['where']) && is_array($args['where'])) {
-            $whereparts = array();
-            foreach ($args['where'] as $key => $val) {
-                if (empty($key) || !isset($val) || $val === '') continue;
-                if (is_numeric($val)) {
-                    $whereparts[] = $key . " eq " . $val;
-                } else {
-                    $whereparts[] = $key . " eq '" . $val . "'";
-                }
-            }
-            if (count($whereparts) > 0) {
-                $args['where'] = implode(' and ', $whereparts);
-            } else {
-                unset($args['where']);
-            }
-        }
+        // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
@@ -89,10 +73,7 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
         $title = xarML('View #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
-        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData'))
-            return xarResponse::Forbidden(xarML('View Table #(1) is forbidden', $this->object->table));
-
-        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
+        if (!$this->object->checkAccess('view'))
             return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));
 
         $this->object->countItems();
@@ -103,7 +84,8 @@ $this->object->callHooks('view');
 
         $output = xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_view',
-            array('object' => $this->object)
+            array('object'   => $this->object,
+                  'tpltitle' => $this->tpltitle)
         );
 
         // Set the output of the object method in cache

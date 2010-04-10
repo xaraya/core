@@ -93,7 +93,7 @@ class FlatTableDataStore extends SQLDataStore
                 $query .= " AND " . join(' AND ', $where);
             }
         }
-        $stmt = $this->db->prepareStatement($query);
+        $stmt = $this->prepareStatement($query);
         $result = $stmt->executeQuery(array((int)$itemid),ResultSet::FETCHMODE_NUM);
 
         if (!$result->first()) {
@@ -179,12 +179,12 @@ class FlatTableDataStore extends SQLDataStore
             $join = ', ';
         }
         $query .= " )";
-        $stmt = $this->db->prepareStatement($query);
+        $stmt = $this->prepareStatement($query);
         $result = $stmt->executeUpdate($bindvars);
 
         // get the last inserted id
         if ($checkid) {
-            $itemid = $this->db->getLastId($table);
+            $itemid = $this->getLastId($table);
         }
 
         if (empty($itemid)) {
@@ -235,7 +235,7 @@ class FlatTableDataStore extends SQLDataStore
         }
         $query .= " WHERE $itemidfield=?";
         $bindvars[] = (int)$itemid;
-        $stmt = $this->db->prepareStatement($query);
+        $stmt = $this->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
 
         return $itemid;
@@ -256,7 +256,7 @@ class FlatTableDataStore extends SQLDataStore
         }
 
         $query = "DELETE FROM $table WHERE $itemidfield = ?";
-        $stmt = $this->db->prepareStatement($query);
+        $stmt = $this->prepareStatement($query);
         $stmt->executeUpdate(array((int)$itemid));
         return $itemid;
     }
@@ -338,7 +338,7 @@ class FlatTableDataStore extends SQLDataStore
         $newfields = array();
         foreach ($fieldlist as $field) {
             if (!empty($this->fields[$field]->operation)) {
-                $newfields[] = $this->fields[$field]->operation . '(' . $field . ') AS ' . $this->fields[$field]->operation . '_' . $this->fields[$field]->name;
+                $newfields[] = $this->formatOperation($field);
                 $isgrouped = 1;
             } else {
                 $newfields[] = $field;
@@ -394,17 +394,26 @@ class FlatTableDataStore extends SQLDataStore
         }
 
         if (count($this->groupby) > 0) {
-            $query .= " GROUP BY " . join(', ', $this->groupby);
+            $query .= " GROUP BY ";
+            $join = '';
+            foreach ($this->groupby as $field) {
+                if (empty($this->fields[$field]) || empty($this->fields[$field]->aliasname)) {
+                    $query .= $join . $field;
+                } else {
+                    $query .= $join . $this->fields[$field]->aliasname;
+                }
+                $join = ', ';
+            }
         }
 
         if (count($this->sort) > 0) {
             $query .= " ORDER BY ";
             $join = '';
             foreach ($this->sort as $sortitem) {
-                if (empty($this->fields[$sortitem['field']]->operation)) {
+                if (empty($this->fields[$sortitem['field']]) || empty($this->fields[$sortitem['field']]->aliasname)) {
                     $query .= $join . $sortitem['field'] . ' ' . $sortitem['sortorder'];
                 } else {
-                    $query .= $join . $this->fields[$sortitem['field']]->operation . '_' . $this->fields[$sortitem['field']]->name . ' ' . $sortitem['sortorder'];
+                    $query .= $join . $this->fields[$sortitem['field']]->aliasname . ' ' . $sortitem['sortorder'];
                 }
                 $join = ', ';
             }
@@ -413,7 +422,7 @@ class FlatTableDataStore extends SQLDataStore
         }
 
         // We got the query, prepare it
-        $stmt = $this->db->prepareStatement($query);
+        $stmt = $this->prepareStatement($query);
 
         if ($numitems > 0) {
             $stmt->setLimit($numitems);
@@ -474,7 +483,7 @@ class FlatTableDataStore extends SQLDataStore
             return;
         }
 
-        if($this->db->databaseType == 'sqlite') {
+        if($this->getType() == 'sqlite') {
             $query = "SELECT COUNT(*)
                       FROM (SELECT DISTINCT $itemidfield FROM $table "; // WATCH OUT, STILL UNBALANCED
         } else {
@@ -500,9 +509,9 @@ class FlatTableDataStore extends SQLDataStore
         }
 
         // TODO: GROUP BY, LEFT JOIN, ... ? -> cfr. relationships
-        if($this->db->databaseType == 'sqlite') $query.=")";
+        if($this->getType() == 'sqlite') $query.=")";
 
-        $stmt = $this->db->prepareStatement($query);
+        $stmt = $this->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
         if (!$result->first()) return;
 
@@ -524,7 +533,7 @@ class FlatTableDataStore extends SQLDataStore
             return $this->primary;
         }
 
-        $dbInfo = $this->db->getDatabaseInfo();
+        $dbInfo = $this->getDatabaseInfo();
         $tblInfo= $dbInfo->getTable($this->name);
         $keyInfo= $tblInfo->getPrimaryKey();
         if(empty($keyInfo)) {
@@ -606,7 +615,7 @@ class FlatTableDataStore extends SQLDataStore
                 $query .= " ORDER BY $itemidfield";
             }
             // We got the query, prepare it
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
 
             // Now set additional parameters if we need to
             if ($numitems > 0) {
@@ -646,6 +655,222 @@ class FlatTableDataStore extends SQLDataStore
         return $itemid;
     }
 
+    function formatOperation($field)
+    {
+        $operation = strtoupper($this->fields[$field]->operation);
+        switch($operation)
+        {
+            // default operations for all database types
+            case 'COUNT':
+            case 'SUM':
+            case 'MIN':
+            case 'MAX':
+            case 'AVG':
+                $newfield = $operation . '(' . $field . ')';
+                $this->fields[$field]->aliasname = $operation . '_' . $this->fields[$field]->name;
+                return $newfield . ' AS ' . $this->fields[$field]->aliasname;
+
+            // custom operations depending on database type
+            case 'COUNT_DISTINCT':
+                $dbtype = $this->getType();
+                if ($dbtype == 'sqlite') {
+/* FIXME:
+For sqlite, we need something like
+SELECT COUNT(*)
+FROM ( SELECT DISTINCT field FROM table )
+*/
+                    $this->fields[$field]->aliasname = $field;
+                    return $field;
+                }
+                $newfield = 'COUNT(DISTINCT ' . $field . ')';
+                $this->fields[$field]->aliasname = $operation . '_' . $this->fields[$field]->name;
+                return $newfield . ' AS ' . $this->fields[$field]->aliasname;
+
+            case 'UNIXTIME_BY_YEAR':
+                $dbtype = $this->getType();
+                switch ($dbtype) {
+                    case 'mysql':
+                        $newfield = "LEFT(FROM_UNIXTIME($field),4)";
+                        $this->fields[$field]->aliasname = 'BY_YEAR_' . $this->fields[$field]->name;
+                        break;
+                    case 'postgres':
+                        $newfield = "TO_CHAR(ABSTIME($field),'YYYY')";
+                    // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
+                        $this->fields[$field]->aliasname = 'BY_YEAR_' . $this->fields[$field]->name;
+                        break;
+                    case 'mssql':
+                        $newfield = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),4)";
+                    // CHECKME: SQL Server 200x doesn't support alias in GROUP BY !?
+                        $this->fields[$field]->aliasname = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),4)";
+                        break;
+                    default:
+                    // TODO:  Add SQL queries for Oracle, etc.
+                        $this->fields[$field]->aliasname = $field;
+                        return $field;
+                        break;
+                }
+                // add calculated field in groupby and sort if necessary ?
+                if (!in_array($field,$this->groupby)) {
+                    array_push($this->groupby, $field);
+                    array_push($this->sort, array('field' => $field, 'sortorder' => 'ASC'));
+                }
+                return $newfield . ' AS ' . $this->fields[$field]->aliasname;
+
+            case 'UNIXTIME_BY_MONTH':
+                $dbtype = $this->getType();
+                switch ($dbtype) {
+                    case 'mysql':
+                        $newfield = "LEFT(FROM_UNIXTIME($field),7)";
+                        $this->fields[$field]->aliasname = 'BY_MONTH_' . $this->fields[$field]->name;
+                        break;
+                    case 'postgres':
+                        $newfield = "TO_CHAR(ABSTIME($field),'YYYY-MM')";
+                    // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
+                        $this->fields[$field]->aliasname = 'BY_MONTH_' . $this->fields[$field]->name;
+                        break;
+                    case 'mssql':
+                        $newfield = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),7)";
+                    // CHECKME: SQL Server 200x doesn't support alias in GROUP BY !?
+                        $this->fields[$field]->aliasname = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),7)";
+                        break;
+                    default:
+                    // TODO:  Add SQL queries for Oracle, etc.
+                        $this->fields[$field]->aliasname = $field;
+                        return $field;
+                        break;
+                }
+                // add calculated field in groupby and sort if necessary ?
+                if (!in_array($field,$this->groupby)) {
+                    array_push($this->groupby, $field);
+                    array_push($this->sort, array('field' => $field, 'sortorder' => 'ASC'));
+                }
+                return $newfield . ' AS ' . $this->fields[$field]->aliasname;
+
+            case 'UNIXTIME_BY_DAY':
+                $dbtype = $this->getType();
+                switch ($dbtype) {
+                    case 'mysql':
+                        $newfield = "LEFT(FROM_UNIXTIME($field),10)";
+                        $this->fields[$field]->aliasname = 'BY_DAY_' . $this->fields[$field]->name;
+                        break;
+                    case 'postgres':
+                        $newfield = "TO_CHAR(ABSTIME($field),'YYYY-MM-DD')";
+                    // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
+                        $this->fields[$field]->aliasname = 'BY_DAY_' . $this->fields[$field]->name;
+                        break;
+                    case 'mssql':
+                        $newfield = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),10)";
+                    // CHECKME: SQL Server 200x doesn't support alias in GROUP BY !?
+                        $this->fields[$field]->aliasname = "LEFT(CONVERT(VARCHAR,DATEADD(ss,$field,'1/1/1970'),120),10)";
+                        break;
+                    default:
+                    // TODO:  Add SQL queries for Oracle, etc.
+                        $this->fields[$field]->aliasname = $field;
+                        return $field;
+                        break;
+                }
+                // add calculated field in groupby and sort if necessary ?
+                if (!in_array($field,$this->groupby)) {
+                    array_push($this->groupby, $field);
+                    array_push($this->sort, array('field' => $field, 'sortorder' => 'ASC'));
+                }
+                return $newfield . ' AS ' . $this->fields[$field]->aliasname;
+
+            case 'DATETIME_BY_YEAR':
+                $dbtype = $this->getType();
+                switch ($dbtype) {
+                    case 'mysql':
+                        $newfield = "LEFT($field,4)";
+                        $this->fields[$field]->aliasname = 'BY_YEAR_' . $this->fields[$field]->name;
+                        break;
+                    case 'postgres':
+                        $newfield = "LEFT($field,4)";
+                    // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
+                        $this->fields[$field]->aliasname = 'BY_YEAR_' . $this->fields[$field]->name;
+                        break;
+                    case 'mssql':
+                        $newfield = "LEFT($field,4)";
+                    // CHECKME: SQL Server 200x doesn't support alias in GROUP BY !?
+                        $this->fields[$field]->aliasname = "LEFT($field,4)";
+                        break;
+                    default:
+                    // TODO:  Add SQL queries for Oracle, etc.
+                        $this->fields[$field]->aliasname = $field;
+                        return $field;
+                        break;
+                }
+                // add calculated field in groupby and sort if necessary ?
+                if (!in_array($field,$this->groupby)) {
+                    array_push($this->groupby, $field);
+                    array_push($this->sort, array('field' => $field, 'sortorder' => 'ASC'));
+                }
+                return $newfield . ' AS ' . $this->fields[$field]->aliasname;
+
+            case 'DATETIME_BY_MONTH':
+                $dbtype = $this->getType();
+                switch ($dbtype) {
+                    case 'mysql':
+                        $newfield = "LEFT($field,7)";
+                        $this->fields[$field]->aliasname = 'BY_MONTH_' . $this->fields[$field]->name;
+                        break;
+                    case 'postgres':
+                        $newfield = "LEFT($field,7)";
+                    // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
+                        $this->fields[$field]->aliasname = 'BY_MONTH_' . $this->fields[$field]->name;
+                        break;
+                    case 'mssql':
+                        $newfield = "LEFT($field,7)";
+                    // CHECKME: SQL Server 200x doesn't support alias in GROUP BY !?
+                        $this->fields[$field]->aliasname = "LEFT($field,7)";
+                        break;
+                    default:
+                    // TODO:  Add SQL queries for Oracle, etc.
+                        $this->fields[$field]->aliasname = $field;
+                        return $field;
+                        break;
+                }
+                // add calculated field in groupby and sort if necessary ?
+                if (!in_array($field,$this->groupby)) {
+                    array_push($this->groupby, $field);
+                    array_push($this->sort, array('field' => $field, 'sortorder' => 'ASC'));
+                }
+                return $newfield . ' AS ' . $this->fields[$field]->aliasname;
+
+            case 'DATETIME_BY_DAY':
+                $dbtype = $this->getType();
+                switch ($dbtype) {
+                    case 'mysql':
+                        $newfield = "LEFT($field,10)";
+                        $this->fields[$field]->aliasname = 'BY_DAY_' . $this->fields[$field]->name;
+                        break;
+                    case 'postgres':
+                        $newfield = "LEFT($field,10)";
+                    // CHECKME: do we need to use TO_CHAR(...) for the group field too ?
+                        $this->fields[$field]->aliasname = 'BY_DAY_' . $this->fields[$field]->name;
+                        break;
+                    case 'mssql':
+                        $newfield = "LEFT($field,10)";
+                    // CHECKME: SQL Server 200x doesn't support alias in GROUP BY !?
+                        $this->fields[$field]->aliasname = "LEFT($field,10)";
+                        break;
+                    default:
+                    // TODO:  Add SQL queries for Oracle, etc.
+                        $this->fields[$field]->aliasname = $field;
+                        return $field;
+                        break;
+                }
+                // add calculated field in groupby and sort if necessary ?
+                if (!in_array($field,$this->groupby)) {
+                    array_push($this->groupby, $field);
+                    array_push($this->sort, array('field' => $field, 'sortorder' => 'ASC'));
+                }
+                return $newfield . ' AS ' . $this->fields[$field]->aliasname;
+
+            default:
+                $this->fields[$field]->aliasname = $field;
+                return $field;
+        }
+    }
 }
 
 ?>

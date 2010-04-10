@@ -17,9 +17,6 @@
  */
 function dynamicdata_utilapi_export($args)
 {
-    // restricted to DD Admins
-    if(!xarSecurityCheck('AdminDynamicData')) return;
-
         $myobject = & DataObjectMaster::getObject(array('name' => 'objects'));
     if (isset($args['objectref'])) {
         $myobject->getItem(array('itemid' => $args['objectref']->objectid));
@@ -69,6 +66,10 @@ function dynamicdata_utilapi_export($args)
                     $xml .= "    <$field>" . xarVarPrepForDisplay($value) . "</$field>\n";
                 }
                 $xml .= "  </$name>\n";
+            } elseif ($name == 'config') {
+                // don't replace anything in the serialized value
+                $value = $myobject->properties[$name]->value;
+                $xml .= "  <$name>" . $value . "</$name>\n";
             } else {
                 $value = $myobject->properties[$name]->value;
                 $xml .= "  <$name>" . xarVarPrepForDisplay($value) . "</$name>\n";
@@ -101,6 +102,25 @@ function dynamicdata_utilapi_export($args)
         $xml .= "    </property>\n";
     }
     $xml .= "  </properties>\n";
+
+    // get object links for this object
+    $name = $myobject->properties['name']->value;
+    sys::import('modules.dynamicdata.class.objects.links');
+    $links = DataObjectLinks::getLinks($name,'all');
+    if (!empty($links) && !empty($links[$name])) {
+        $xml .= "  <links>\n";
+        foreach ($links[$name] as $link) {
+            $xml .= '    <link id="link_'.$link['id'].'">' . "\n";
+            $xml .= '      <source>'.$link['source'].'</source>' . "\n";
+            $xml .= '      <from_prop>'.$link['from_prop'].'</from_prop>' . "\n";
+            $xml .= '      <link_type>'.$link['link_type'].'</link_type>' . "\n";
+            $xml .= '      <target>'.$link['target'].'</target>' . "\n";
+            $xml .= '      <to_prop>'.$link['to_prop'].'</to_prop>' . "\n";
+            $xml .= '      <direction>'.$link['direction'].'</direction>' . "\n";
+            $xml .= '    </link>' . "\n";
+        }
+        $xml .= "  </links>\n";
+    }
     $xml .= "</object>\n";
 
     return $xml;

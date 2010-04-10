@@ -29,7 +29,8 @@ function modules_admin_deactivate ()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    if (!xarVarFetch('id', 'int:1:', $id)) return;
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($id)) return xarResponse::notFound();
 
     //Checking if the user has already passed thru the GUI:
     xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
@@ -38,13 +39,13 @@ function modules_admin_deactivate ()
     $minfo=xarMod::getInfo($id);
     $target=$minfo['name'];
 
+    sys::import('modules.modules.class.installer');
+    $installer = Installer::getInstance();    
+
     // If we haven't been to the deps GUI, check that first
     if (!$command) {
         //First check the modules dependencies
-        // FIXME: double check this line and the line with deactivatewithdependents below,
-        // they can NOT be called in the same request due to the statics used in there, the logic
-        // needs to be reviewed, it's not solid enough.
-        $dependents = xarMod::apiFunc('modules','admin','getalldependents',array('regid'=>$id));
+        $dependents = $installer->getalldependents($id);
         if(count($dependents['active']) > 1) {
             //Let's make a nice GUI to show the user the options
             $data = array();
@@ -62,15 +63,13 @@ function modules_admin_deactivate ()
     }
 
     // See if we have lost any modules since last generation
-    if (!xarMod::apiFunc('modules', 'admin', 'checkmissing')) {
-        return;
-    }
+    if (!$installer->checkformissing()) { return; }
 
     //Bail if we've lost our module
     if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_ACTIVE) {
         //Deactivate with dependents, first dependents
         //then the module itself
-        if (!xarMod::apiFunc('modules','admin','deactivatewithdependents',array('regid'=>$id))) {
+        if (!$installer->deactivatewithdependents($id)) {
             //Call exception
             return;
         } // Else

@@ -17,7 +17,8 @@
  */
 function roles_admin_showprivileges()
 {
-    if (!xarVarFetch('id', 'int:1:', $id)) return;
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($id)) return xarResponse::notFound();
 
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;
@@ -141,11 +142,11 @@ function roles_admin_showprivileges()
             if ($todo['relation'] != $i) continue;
             foreach($privilegesdone as $done) {
                 if (!($done['relation'] < $todo['relation'])) continue;
-                if (xarMasks::includes($done['object']->normalform,$todo['object']->normalform)) {
+                if (xarSecurity::includes($done['object']->normalform,$todo['object']->normalform)) {
                     $todo['status'] = 1;
                     break;
                 }
-                elseif (xarMasks::includes($todo['object']->normalform,$done['object']->normalform)) {
+                elseif (xarSecurity::includes($todo['object']->normalform,$done['object']->normalform)) {
                     $todo['status'] = 2;
                 }
             }
@@ -172,7 +173,7 @@ function roles_admin_showprivileges()
                         $x['status'] = 1;
                         break;
                     }
-                    elseif (xarMasks::includes($x['object']->normalform,$y['object']->normalform) && !$x['object']->implies($y['object'])) {
+                    elseif (xarSecurity::includes($x['object']->normalform,$y['object']->normalform) && !$x['object']->implies($y['object'])) {
                         $x['status'] = 2;
                     }
                 }
@@ -190,9 +191,9 @@ function roles_admin_showprivileges()
 
 // -------------------------------------------------------------------
 // Load Template
+    $data['object'] = $role;
     $data['pname'] = $role->getName();
     $data['itemtype'] = $role->getType();
-    $data['basetype'] = $data['itemtype'];
     $types = xarMod::apiFunc('roles','user','getitemtypes');
     $data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['roleid'] = $id;

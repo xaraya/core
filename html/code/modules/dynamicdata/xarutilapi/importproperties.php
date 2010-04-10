@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -34,7 +34,7 @@ function dynamicdata_utilapi_importproperties($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('AddDynamicDataField')) return;
+    if(!xarSecurityCheck('AdminDynamicData')) return;
 
     if (empty($itemtype)) {
         $itemtype = 0;

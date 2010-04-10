@@ -14,7 +14,6 @@
  * Display an item in a template
  *
  * @param $args array containing the item or fields to show
- * @returns string
  * @return string containing the HTML (or other) text to output in the BL template
  */
 function dynamicdata_userapi_showdisplay($args)
@@ -24,10 +23,6 @@ function dynamicdata_userapi_showdisplay($args)
     $args['fallbackmodule'] = 'current';
     $descriptor = new DataObjectDescriptor($args);
     $args = $descriptor->getArgs();
-
-    // TODO: what kind of security checks do we want/need here ?
-    if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$itemid)) return;
-
 
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {
@@ -50,6 +45,8 @@ function dynamicdata_userapi_showdisplay($args)
     }
 
     $object = & DataObjectMaster::getObject($args);
+    if (!$object->checkAccess('display'))
+        return xarML('Display #(1) is forbidden', $object->label);
     // we're dealing with a real item, so retrieve the property values
     if (!empty($itemid)) {
         $object->getItem();

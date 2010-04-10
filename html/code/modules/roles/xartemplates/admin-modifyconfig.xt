@@ -56,6 +56,19 @@
                         </li>
                     </xar:if>
                 -->
+                <xar:if condition="$tab eq 'managehooks'">
+                    <li class="xar-tab-active">
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=managehooks" class="xar-accent xar-accent-outline">
+                            Manage Hooks
+                        </a>
+                    </li>
+                <xar:else />
+                    <li class="xar-tab">
+                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=managehooks" class="xar-norm xar-norm-outline">
+                            Manage Hooks
+                        </a>
+                    </li>
+                </xar:if>
                 <xar:if condition="$tab eq 'memberlist'">
                     <li class="xar-tab-active">
                         <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist" class="xar-accent xar-accent-outline">Member
@@ -258,6 +271,17 @@
                 <xar:else />
                 <p>No hooks are enabled for Groups.</p>
             </xar:if>
+            <!--
+                - - - - - - - - - - - - - - - - - Begin Manage Hooks Options - - - - - - - - - - - - - - - - - - -
+            -->
+            <xar:elseif condition="$tab eq 'managehooks'"/>
+                <fieldset>
+                    <legend>
+                        Configure Roles Hooks
+                    </legend>
+                    <xar:set name="url">#xarModURL('roles','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
+                    <xar:module main="false" module="modules" type="admin" func="hooks" curhook="roles" return_url="$url"/>
+                </fieldset>
             <!--
                 - - - - - - - - - - - - - - - - - Begin Member List Options - - - - - - - - - - - - - - - - - - -
             -->

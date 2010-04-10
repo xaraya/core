@@ -21,7 +21,9 @@ if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'li
 if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
 if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
 $GLOBALS['systemConfiguration'] = $systemConfiguration;
-set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
+if (!empty($systemConfiguration['rootDir'])) {
+    set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
+}
 
 /**
  * Load the Xaraya bootstrap so we can get started

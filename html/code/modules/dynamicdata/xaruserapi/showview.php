@@ -36,9 +36,6 @@ function dynamicdata_userapi_showview($args)
                             $template);
     }
 
-    // TODO: what kind of security checks do we want/need here ?
-    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$args ['moduleid']:$args ['itemtype']:All")) return;
-
 // Note: fetching input variables doesn't normally belong in APIs, but this is
 //       used by the xar:data-view tag when no object or items are specified !
 
@@ -97,9 +94,10 @@ function dynamicdata_userapi_showview($args)
                                            'fieldlist' => $myfieldlist,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
-                                           'status' => $status,
-                                           'extend' => !empty($extend)));
+                                           'status' => $status));
     if (!isset($object)) return;
+    if (!$object->checkAccess('view'))
+        return xarML('View #(1) is forbidden', $object->label);
     // Count before numitems!
     $numthings = 0;
     if($args['count']) {

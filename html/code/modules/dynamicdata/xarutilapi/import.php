@@ -32,7 +32,15 @@ function dynamicdata_utilapi_import($args)
     if (empty($xml) && empty($file)) {
         throw new EmptyParameterException('xml or file');
     } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/',$file)) ) {
-        throw new BadParameterException($file,'Invalid importfile "#(1)"');
+        // check if we tried to load a file using an old path
+        if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true && strpos($file, 'modules/') === 0) {
+            $file = sys::code() . $file;
+            if (!file_exists($file)) {
+                throw new BadParameterException($file,'Invalid importfile "#(1)"');
+            }
+        } else {
+            throw new BadParameterException($file,'Invalid importfile "#(1)"');
+        }
     }
 
     $objectcache = array();
@@ -123,7 +131,7 @@ function dynamicdata_utilapi_import($args)
             $args['itemtype'] = $info['itemtype'];
             $objectid = $object->updateItem($args);
             // remove the properties, as they will be replaced
-            $dupobject = DataObjectMaster::getObject(array('name' => $info['name'], 'extend' => false));
+            $dupobject = DataObjectMaster::getObject(array('name' => $info['name']));
             $existingproperties = $dupobject->getProperties();
             foreach ($existingproperties as $propertyitem)
                 $dataproperty->deleteItem(array('itemid' => $propertyitem->id));
@@ -189,6 +197,32 @@ function dynamicdata_utilapi_import($args)
             $dataproperty->properties[$dataproperty->primary]->setValue(0);
             // Create the property
             $id = $dataproperty->createItem($propertyargs);
+        }
+
+        if (!empty($xmlobject->links)) {
+            // make sure that object links are initialized
+            sys::import('modules.dynamicdata.class.objects.links');
+            $linklist = DataObjectLinks::initLinks();
+            if (empty($linklist)) {
+                // no object links initialized, bail out
+                return $objectid;
+            }
+            $linkshead = $xmlobject->links;
+            $linkprops = array('source','from_prop','target','to_prop','link_type','direction');
+            foreach ($linkshead->children() as $link) {
+                $info = array();
+                foreach ($linkprops as $prop) {
+                    if (!isset($link->{$prop}[0])) {
+                         unset($info);
+                         break;
+                    }
+                    $info[$prop] = (string)$link->{$prop}[0];
+                }
+                if (!empty($info)) {
+                    // add this link and its reverse if it doesn't exist yet
+                    DataObjectLinks::addLink($info['source'],$info['from_prop'],$info['target'],$info['to_prop'],$info['link_type'],$info['direction']);
+                }
+            }
         }
     } elseif ($roottag == 'items') {
 

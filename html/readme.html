@@ -1,4 +1,4 @@
-    <?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <link rel="stylesheet" type="text/css" href="themes/installer/style/style.css"/>
@@ -53,6 +53,7 @@
                                         <li class="active"><a href="#rename" style="text-decoration: none;">Renaming the Document Root</a></li>
                                         <li class="active"><a href="#multi" style="text-decoration: none;">Installing Multiple Sites</a></li>
                                         <li class="active"><a href="#trouble" style="text-decoration: none;">Troubleshooting</a></li>
+                                        <li class="active"><a href="#legacy" style="text-decoration: none;">Legacy Support</a></li>
                                     </ul>
                                   </div>
                                   <div id="status_foot">
@@ -61,17 +62,17 @@
                                 </div>
                             </div>
                             <div id="main_left">
-                              <h1>How to Configure and Install Xaraya 2.0.0</h1>
+                              <h1>How to Configure and Install Xaraya 2.1.0</h1>
                                 <p class="center">
-                                    This page is here to guide you through the steps of configuring the Xaraya web applications framework for a NEW installation. If you are upgrading an EXISTING Xaraya 2.0.0 installation, please read the page upgrade.html.
+                                    This page is here to guide you through the steps of configuring the Xaraya web applications framework for a NEW installation. If you are upgrading an EXISTING Xaraya 2.1.0 installation, please read the page upgrade.html.
                                 </p>
                                 <p class="center">
                                     For more support resources click on the first link in the header above. Once you have completed the simple steps outlined below, you should run the installer script by pointing your web browser at http://www.mydomain.com/install.php.
                                 </p>
-                              <h2>What is Xaraya 2.0.0</h2>
+                              <h2>What is Xaraya 2.1.0</h2>
                                 <p class="center">
                                     Xaraya is an Open Source web applications framework. It provides a stable and secure core, with a function rich API and powerful templating engine in place for third-party
-                                    developers. Xaraya 2.0.0 is a major rewrite that offers enhanced performance with a smaller foorprint, more versatile functionality, easier usability and strict adherence to XHTML standards.
+                                    developers. Xaraya 2.1.0 is a major rewrite that offers enhanced performance with a smaller foorprint, more versatile functionality, easier usability and strict adherence to XHTML standards.
 
                                     If you would like to help develop this software, please visit our homepage at  http://www.xaraya.com, or send email to info@xaraya.com.
                                 </p>
@@ -89,7 +90,7 @@
                                             <b>code</b> folder: contains code elements, notably the modules your Xaraya installation will run.
                                         </li>
                                     </ul>
-                                    The top level of your installation (the xaraya-2.0.0 folder) is called the <em>root directory</em>. For special situations the root directory can be redefined to as different directory on your server (see Custom Installations below).
+                                    The top level of your installation (the xaraya-2.1.0 folder) is called the <em>root directory</em>. For special situations the root directory can be redefined to as different directory on your server (see Custom Installations below).
                                 </p>
                                 <p class="center">
                                     <b>To run properly your installation requires only the three folders listed above and their contents. All other contents of your unpacked installation file are for information only, or additional functionality for special situations, and can be safely removed.</b>
@@ -102,7 +103,7 @@
                                             Unpack the distribution file you downloaded (since you are reading this you have already done that).
                                         </li>
                                         <li>
-                                            Place the folder xaraya-2.0.0 containing the distribution on your web server.
+                                            Place the folder xaraya-2.1.0 containing the distribution on your web server.
                                         </li>
                                         <li>
                                             Configure your web server (www.mydomain.com) to make the html directory in your installation its root directory.
@@ -217,7 +218,7 @@ $systemConfiguration['codeDir'] = "public_html/code/";
                                     -->
                                     To be added
                                 </p>
-                              <a name="trouble" style="text-decoration: none;"><h2>Troubleshooting and Caveats</h2></a> <a href="#top">top</a>
+                                <a name="trouble" style="text-decoration: none;"><h2>Troubleshooting and Caveats</h2></a> <a href="#top">top</a>
                                     <ul>
                                         <li>
                                             Unless you know what you're doing, never separate the contents of the lib, core or html folders
@@ -232,6 +233,25 @@ $systemConfiguration['codeDir'] = "public_html/code/";
                                             Linux installations: if you are using symbolic links, make sure they are used <b>both</b> for the code and lib directories. Otherwise you may get loading exceptions in some situations.
                                         </li>
                                     </ul>
+                                <a name="legacy" style="text-decoration: none;"><h2>Legacy Support</h2></a> <a href="#top">top</a>
+                                <p class="center">
+                                    Xaraya 2.1.0 provides limited legacy support for Xaraya 1.x modules. You can enable legacy support by checking the appropriate checkbox in the Base module Modify Config page (Other tab). Legacy support covers:
+                                    <ul>
+                                        <li>
+                                            Xaraya 1.x function calls that have been deprecated.
+                                        </li>
+                                        <li>
+                                            Non-numeric entities (e.g. &amp;nbsp;)
+                                        </li>
+                                        <li>
+                                            Missing xartemplate tags in the beginning and end of templates.
+                                        </li>
+                                        <li>
+                                            Xaraya 1.x blocks code
+                                        </li>
+                                    </ul>
+                                    Please note that enabling legacy support will result in a small performance hit. Legacy support cannot be guaranteed in future versions of Xaraya 2
+                                </p>
                             </div>
                         </div>
                         <div id="contentmain_blcorner"><div id="contentmain_brcorner">&#160;</div></div>

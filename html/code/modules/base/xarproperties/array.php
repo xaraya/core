@@ -26,7 +26,7 @@ class ArrayProperty extends DataProperty
     //default value of column dimension
     public $display_columns_count = 1;
     public $display_rows = 4;
-    public $initialization_rows = 0;
+    public $initialization_addremove = 0;
     //default value of Key label
     public $display_key_label = "Key";
     //default value of value label
@@ -60,7 +60,7 @@ class ArrayProperty extends DataProperty
         if (!isset($value)) {
             if (!xarVarFetch($name . '_key', 'array', $keys, array(), XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch($name . '_value',   'array', $values, array(), XARVAR_NOT_REQUIRED)) return;
-            
+
             //Check for an associative_array.
             if (!xarVarFetch($name . '_associative_array',   'int', $associative_array, null, XARVAR_NOT_REQUIRED)) return;
             //Set value to the initialization_associative_array  
@@ -221,9 +221,14 @@ class ArrayProperty extends DataProperty
             } elseif (is_array($value[$field])) {
                 foreach($value[$field] as $k => $v){
                     $data['value'][$field][$k] = xarVarPrepForDisplay($v);
-                }                
+                }
             } else {
-                $data['value'][$field] = $value[$field];
+                // CHECKME: skip this for array of properties ?
+                if (!empty($data['template']) && $data['template'] == 'array_of_props') {
+                    $data['value'][$field] = $value[$field];
+                } else {
+                    $data['value'][$field] = xarVarPrepForDisplay($value[$field]);
+                }
             }
         }
 
@@ -233,7 +238,7 @@ class ArrayProperty extends DataProperty
         
         if (!isset($data['keylabel'])) $data['keylabel'] = $this->display_key_label;
         if (!isset($data['valuelabel'])) $data['valuelabel'] = $this->display_value_label;
-        if (!isset($data['allowinput'])) $data['allowinput'] = $this->initialization_rows;
+        if (!isset($data['allowinput'])) $data['allowinput'] = $this->initialization_addremove;
         if (!isset($data['associative_array'])) $data['associative_array'] = $this->initialization_associative_array;
         if (!isset($data['fixedkeys'])) $data['fixedkeys'] = $this->initialization_fixed_keys;
         $data['numberofrows'] = count($data['value']);

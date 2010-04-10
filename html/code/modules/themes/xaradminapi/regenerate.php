@@ -23,7 +23,9 @@ function themes_adminapi_regenerate()
     if(!xarSecurityCheck('AdminTheme')) return;
 
     //Finds and updates missing modules
-    if (!xarMod::apiFunc('themes','admin','checkmissing')) {return;}
+    sys::import('modules.modules.class.installer');
+    $installer = Installer::getInstance('themes');  
+    if (!$installer->checkformissing()) {return;}
 
     //Get all themes in the filesystem
     $fileThemes = xarMod::apiFunc('themes','admin','getfilethemes');

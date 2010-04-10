@@ -150,6 +150,22 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         $clienttags = $this->configure();
         $xslProc->setParameter('', 'clienttags', implode(',', $clienttags));
         
+        // Pass any legacy tags if legacy support is turned on
+        try {
+            if (xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
+                $baseDir = sys::lib() . 'xaraya/legacy/tags';
+                $baseDir = realpath($baseDir);
+                if (strpos($baseDir, '\\') != false) {
+                    // On Windows, drive letters are preceeded by an extra / [file:///C:/...]
+                    $baseURI = 'file:///' . str_replace('\\','/',$baseDir);
+                } else {
+                    $baseURI = 'file://' . $baseDir;
+                }
+                $xslFiles = $this->getTagPaths($baseDir, $baseURI);
+                $xslProc->setParameter('', 'legacytags', implode(',', $xslFiles));
+            }
+        } catch (Exception $e) {}        
+        
         // Compile the compiler
         $outDoc = $xslProc->transformToXML($doc);
         return $outDoc;

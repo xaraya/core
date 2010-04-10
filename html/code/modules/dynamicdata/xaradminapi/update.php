@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -18,8 +18,7 @@
  * @param $args['itemtype'] item type of the original item
  * @param $args['values'] array of id => value, or
  * @param $args['fields'] array containing the field definitions and values
- * @returns mixed
- * @return item id on success, null on failure
+ * @return mixed item id on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_update($args)
@@ -48,10 +47,6 @@ function dynamicdata_adminapi_update($args)
         $itemtype = 0;
     }
 
-    // Security check - important to do this as early on as possible to
-    // avoid potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$module_id:$itemtype:$itemid")) return;
-
     if (!isset($fields) || !is_array($fields)) {
         $fields = array();
     }
@@ -64,6 +59,8 @@ function dynamicdata_adminapi_update($args)
                                          'itemtype' => $itemtype,
                                          'itemid'   => $itemid));
     if (empty($myobject)) return;
+    if (!$myobject->checkAccess('update'))
+        return;
 
     $myobject->getItem();
 

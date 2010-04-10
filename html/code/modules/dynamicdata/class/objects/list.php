@@ -20,7 +20,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     public $itemids  = array();           // the list of item ids used in data stores
     public $where    = '';
     public $sort     = '';
-    public $groupby  = array();
+    public $groupby  = array();     // the list of property names to group by (if any) - see also isgrouped
     public $numitems = null;
     public $startnum = null;
     public $count    = 0;           // specify if you want DD to count items before getting them (e.g. for the pager)
@@ -105,6 +105,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $this->where .= ' and ' . $this->secondary . ' eq ' . $this->itemtype;
             }
         }
+
         // Note: they can be empty here, which means overriding any previous criteria
         foreach(array_keys($this->datastores) as $name) {
             // make sure we don't have some left-over sort criteria
@@ -118,6 +119,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $this->datastores[$name]->cache = $args['cache'];
         }
         $this->setSort($this->sort);
+        // add content filters before setWhere()
+        $this->addFilters();
         $this->setWhere($this->where);
         $this->setGroupBy($this->groupby);
 //        $this->setCategories($this->catid);
@@ -171,12 +174,151 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     }
 
     /**
+     * Add content filters to where clauses - do not call directly for now...
+     */
+    private function addFilters()
+    {
+        if (!empty($this->filters) && is_string($this->filters)) {
+            try {
+                $this->filters = unserialize($this->filters);
+            } catch (Exception $e) {
+                $this->filters = null;
+            }
+        }
+        if (empty($this->filters)) {
+            return;
+        }
+
+        if (xarUserIsLoggedIn()) {
+            // get the direct parents of the current user (no ancestors)
+            $grouplist = xarCache::getParents();
+        } else {
+            // check anonymous visitors by themselves
+            $grouplist = array(_XAR_ID_UNREGISTERED);
+        }
+
+        foreach ($grouplist as $groupid) {
+            if (empty($this->filters[$groupid])) {
+                continue;
+            }
+            foreach ($this->filters[$groupid] as $filter) {
+                if (!isset($this->properties[$filter[0]])) {
+                    // skip filters on unknown properties
+                    continue;
+                }
+                $whereclause = '';
+                // TODO: cfr. getwhereclause in search ui
+                if ($filter != 'in' && !is_numeric($filter[2])) {
+                    // escape single quotes
+                    $filter[2] = str_replace("'", "\\'", $filter[2]);
+                    $filter[2] = "'"  . $filter[2] . "'";
+                }
+                switch ($filter[1])
+                {
+                    case 'in':
+                        $whereclause = ' IN (' . $filter[2] . ')';
+                        break;
+                    case 'eq':
+                    case 'gt':
+                    case 'lt':
+                    case 'ne':
+                    default:
+                        $whereclause = ' ' . $filter[1] . ' ' . $filter[2];
+                        break;
+                }
+                if (!empty($this->where)) {
+                    // CHECKME: how about when $this->where is an array ?
+                    $this->where .= ' and ' . $filter[0] . $whereclause;
+                } else {
+                    $this->where = $filter[0] . $whereclause;
+                }
+            }
+            // one group having filters is enough here !?
+            return;
+        }
+    }
+
+    /**
+     * Add where clause for a property
+     *
+     * @param string $name property name
+     * @param string $clause SQL clause, e.g. = 123, IN ('this', 'that'),  LIKE '%something%', etc.
+     * @param string $join '' for the first, 'and' or 'or' for the next
+     * @param string $pre optional pre (
+     * @param string $post optional post )
+     */
+    public function addWhere($name, $clause, $join='', $pre='', $post='')
+    {
+        if (!isset($this->properties[$name])) return;
+
+        // pass the where clause to the right data store
+        $datastore = $this->properties[$name]->datastore;
+        // assign property to datastore if necessary
+        if(empty($datastore)) {
+            list($storename, $storetype) = $this->properties[$name]->getDataStore();
+            if(!isset($this->datastores[$storename]))
+                $this->addDataStore($storename, $storetype);
+
+            $this->properties[$name]->datastore = $storename;
+            $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
+            $datastore = $storename;
+        } elseif($this->properties[$name]->type == 21)
+            $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
+
+        if ($datastore == '_dummy_') {
+            // CHECKME: could the dummy datastore actually do something here ?
+            return;
+        }
+
+        $this->datastores[$datastore]->addWhere(
+            $this->properties[$name],
+            $clause,
+            $join,
+            $pre,
+            $post
+        );
+    }
+
+    /**
      * Set where clause
      *
-     * @param string where
+     * @param mixed where string or array of name => value pairs
      */
     public function setWhere($where)
     {
+        if (empty($where)) {
+            return;
+
+        } elseif (is_array($where)) {
+            $join = '';
+            foreach ($where as $name => $val) {
+                if (empty($name) || !isset($val) || $val === '') continue;
+                if (!isset($this->properties[$name])) continue;
+                if (is_numeric($val)) {
+                    $mywhere = " = " . $val;
+                } elseif (is_string($val)) {
+                    $val = str_replace("'","\\'",$val);
+                    $mywhere = " = '" . $val . "'";
+                } elseif (is_array($val) && count($val) > 0) {
+                    if (is_numeric($val[0])) {
+                        $mywhere = " IN (" . implode(", ", $val) . ")";
+                    } elseif (is_string($val[0])) {
+                        $val = str_replace("'","\\'",$val);
+                        $mywhere = " IN ('" . implode("', '", $val) . "')";
+                    } else {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+                $this->addWhere($name, $mywhere, $join);
+
+                // default AND when using array format
+                $join = 'and';
+            }
+            return;
+        }
+
         // find all single-quoted pieces of text with and/or and replace them first, to
         // allow where clauses like : title eq 'this and that' and body eq 'here or there'
         $idx = 0;
@@ -239,20 +381,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
 
             if(isset($this->properties[$name])) {
-                // pass the where clause to the right data store
-                $datastore = $this->properties[$name]->datastore;
-                // assign property to datastore if necessary
-                if(empty($datastore)) {
-                    list($storename, $storetype) = $this->properties[$name]->getDataStore();
-                    if(!isset($this->datastores[$storename]))
-                        $this->addDataStore($storename, $storetype);
-
-                    $this->properties[$name]->datastore = $storename;
-                    $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
-                    $datastore = $storename;
-                } elseif($this->properties[$name]->type == 21)
-                    $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
-
                 if(empty($idx)) {
                     $mywhere = join(' ',$pieces);
                 } else {
@@ -266,13 +394,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                         $mywhere .= $piece . ' ';
                     }
                 }
-                $this->datastores[$datastore]->addWhere(
-                    $this->properties[$name],
-                    $mywhere,
-                    $join,
-                    $pre,
-                    $post
-                );
+                $this->addWhere($name, $mywhere, $join, $pre, $post);
             }
         }
     }
@@ -468,6 +590,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
                     ) {
                         $args['properties'][$name] =& $this->properties[$name];
+                    } elseif (!empty($this->groupby) && in_array($name, $this->groupby)) {
+                        $args['properties'][$name] =& $this->properties[$name];
+                    } elseif (!empty($this->properties[$name]->operation)) {
+                        $args['properties'][$name] =& $this->properties[$name];
                     }
                 }
             }
@@ -478,7 +604,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
                 ) {
-                        $args['properties'][$name] =& $this->properties[$name];
+                    $args['properties'][$name] =& $this->properties[$name];
+                } elseif (!empty($this->groupby) && in_array($name, $this->groupby)) {
+                    $args['properties'][$name] =& $this->properties[$name];
+                } elseif (!empty($this->properties[$name]->operation)) {
+                    $args['properties'][$name] =& $this->properties[$name];
                 }
 
             // Order the fields if this is an extended object
@@ -541,7 +671,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         sys::import('xaraya.objects');
 
         // get view options for each item
-        if(empty($this->groupby)) {
+        if(empty($this->isgrouped)) {
             // reset cached urls
             $this->cached_urls = array();
             foreach(array_keys($this->items) as $itemid) {
@@ -566,10 +696,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
         }
 
-        if(!empty($this->groupby)) {
+        if(!empty($this->isgrouped)) {
             foreach(array_keys($args['properties']) as $name) {
                 if(!empty($this->properties[$name]->operation))
-                    $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
+                    $this->properties[$name]->label = $this->properties[$name]->operation . ' ' . $this->properties[$name]->label;
             }
             $args['linkfield'] = 'N/A';
         }
@@ -635,17 +765,41 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 */
 
+        // Work with specific access rules for this object (= valid for all itemids)
+        if (!empty($this->access)) {
+            // initialize the access options
+            if (empty($this->cached_allow)) {
+                $this->cached_allow = array();
+                $this->cached_allow['display'] = $this->checkAccess('display');
+                $this->cached_allow['update'] = $this->checkAccess('update');
+                $this->cached_allow['create'] = $this->checkAccess('create');
+                $this->cached_allow['delete'] = $this->checkAccess('delete');
+            }
+            // get the access options
+            $allow_delete = $this->cached_allow['delete'];
+            $allow_add = $this->cached_allow['create'];
+            $allow_edit = $this->cached_allow['update'];
+            $allow_read = $this->cached_allow['display'];
+
         // Assume normal rules for access control, i.e. Delete > Edit > Read
-        if ($is_user && xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid))  {
+        } elseif ($is_user && $this->checkAccess('delete',$itemid))  {
             $allow_delete = 1;
+            $allow_add = 1;
             $allow_edit = 1;
             $allow_read = 1;
-        } elseif ($is_user && xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+        } elseif ($is_user && $this->checkAccess('create',$itemid)) {
             $allow_delete = 0;
+            $allow_add = 1;
             $allow_edit = 1;
             $allow_read = 1;
-        } elseif (xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+        } elseif ($is_user && $this->checkAccess('update',$itemid)) {
             $allow_delete = 0;
+            $allow_add = 0;
+            $allow_edit = 1;
+            $allow_read = 1;
+        } elseif ($this->checkAccess('display',$itemid)) {
+            $allow_delete = 0;
+            $allow_add = 0;
             $allow_edit = 0;
             $allow_read = 1;
         } else {
@@ -654,27 +808,47 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         if ($allow_read) {
             $options['display'] = array('otitle' => xarML('Display'),
+                                        'oicon'  => 'display.png',
                                         'olink'  => $this->getActionURL('display', $itemid),
                                         'ojoin'  => '');
         }
         if ($allow_edit) {
             $options['modify'] = array('otitle' => xarML('Edit'),
+                                       'oicon'  => 'modify.png',
                                        'olink'  => $this->getActionURL('modify', $itemid),
                                        'ojoin'  => '|');
-
-            // extra options when showing the dynamic objects themselves
-            if ($this->objectid == 1) {
-                $options['viewitems'] = array('otitle' => xarML('Items'),
-                                              'olink'  => $this->getActionURL('viewitems', $itemid),
-                                              'ojoin'  => '|'
-                                             );
-                $options['modifyprops'] = array('otitle' => xarML('Properties'),
-                                     'olink'  => $this->getActionURL('modifyprop', $itemid),
-                                     'ojoin'  => '|');
-            }
+        }
+        // extra options when showing the dynamic objects themselves
+        if ($allow_edit && $this->objectid == 1) {
+            // CHECKME: access should be based on the objects themselves here (but probably too heavy) ?
+            $options['modifyprops'] = array('otitle' => xarML('Properties'),
+                                            'oicon'  => 'modify-config.png',
+                                            'olink'  => $this->getActionURL('modifyprop', $itemid),
+                                            'ojoin'  => '|');
+            $options['access'] = array('otitle' => xarML('Access'),
+                                            'oicon'  => 'privileges.png',
+                                            'olink'  => $this->getActionURL('access', $itemid),
+                                            'ojoin'  => '|');
+            $options['viewitems'] = array('otitle' => xarML('Items'),
+                                          'oicon'  => 'item-list.png',
+                                          'olink'  => $this->getActionURL('viewitems', $itemid),
+                                          'ojoin'  => '|'
+                                         );
+        }
+        //if ($allow_add)  {
+        // CHECKME: and/or skip cloning in object interface ?
+        //if ($allow_add && $this->linktype != 'object')  {
+        // CHECKME: allow cloning only for the dynamic objects themselves ?
+        if ($allow_add && $this->objectid == 1)  {
+            // TODO: define 'clone' as a standard action for objects if we want it, instead of overloading 'modify' action
+            $options['clone'] = array('otitle' => xarML('Clone'),
+                                       'oicon'  => 'add.png',
+                                       'olink'  => $this->getActionURL('modify', $itemid, array('tab' => 'clone')),
+                                       'ojoin'  => '|');
         }
         if ($allow_delete)  {
             $options['delete'] = array('otitle' => xarML('Delete'),
+                                       'oicon'  => 'delete.png',
                                        'olink'  => $this->getActionURL('delete', $itemid),
                                        'ojoin'  => '|');
         }

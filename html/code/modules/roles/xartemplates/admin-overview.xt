@@ -39,6 +39,10 @@
             |   |
             |   |---Admin (user)
             |
+            |---SiteManagers (group)
+            |   |
+            |   |---SiteManager (user)
+            |
             |---Users (group)
         </pre>
         <p>
@@ -58,6 +62,12 @@
             </li>
             <li>
                 <strong>Admin:</strong>&#160;a member of Administrators. This is the Admin role you create with the Xaraya installer. It inherits the privileges of its parent group.
+            </li>
+            <li>
+                <strong>SiteManagers:</strong>&#160;a group that has DELETE privileges. The members of this group can modify, add and delete data throughout the site, but are barred from changing the configuration settings of modules.
+            </li>
+            <li>
+                <strong>SiteManager:</strong>&#160;a member of SiteManagers. This is the default SiteManager role you create with the Xaraya installer. It inherits the privileges of its parent group.
             </li>
             <li>
                 <strong>Users:</strong>&#160;a group that normally holds registered users of the site. N.B.: this role does not come preconfigured with any privileges. <em>Its members will not have access to the site until you assign some privileges.</em>
@@ -147,6 +157,9 @@
             </li>
             <li>
                 <strong>ICQ</strong>:&#160;accepts as input or displays an ICQ user address.
+            </li>
+            <li>
+                <strong>Name</strong>:&#160;accepts as input or displays a user's display name.
             </li>
             <li>
                 <strong>Password</strong>:&#160;accepts a password as input.

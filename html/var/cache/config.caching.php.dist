@@ -85,4 +85,16 @@ $cachingConfiguration['Object.SizeLimit'] = 2097152;
 // Default cache settings for object methods
 $cachingConfiguration['Object.CacheMethods'] = array('view' => 1, 'display' => 1);
 
+/*
+// Enable variable cache or not
+$cachingConfiguration['Variable.CacheIsEnabled'] = 0;
+// Maximum life time of variable cache in seconds
+$cachingConfiguration['Variable.TimeExpiration'] = 7200;
+// Store the cached variables in filesystem, database or memcache
+$cachingConfiguration['Variable.CacheStorage'] = 'xcache';
+// Keep a logfile of the cache hits and misses for variables, e.g. in var/logs/variable.log
+$cachingConfiguration['Variable.LogFile'] = '';
+// Size in bytes to limit the variable cache to
+$cachingConfiguration['Variable.SizeLimit'] = 2097152;
+*/
 ?>

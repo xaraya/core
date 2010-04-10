@@ -71,7 +71,13 @@
                         <label title="#xarML('Current Version.')#" class="xar-form-label">                            
                             Xaraya Core:                            
                         </label>
-                        #$XARCORE_VERSION_ID# version #$XARCORE_VERSION_NUM# (#$XARCORE_VERSION_SUB#)
+                        #$XARCORE_VERSION_ID# version #XARCORE_VERSION# (#$XARCORE_VERSION_SUB#)
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label title="#xarML('Current Version.')#" class="xar-form-label">                            
+                            Build:                            
+                        </label>
+                        #$XARCORE_VERSION_NUM#
                     </div>
                 </fieldset>
                 <fieldset>
@@ -339,7 +345,8 @@
             <xar:elseif condition="$tab eq 'other'"/>
             <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                 <fieldset>
-                    <legend>General Options</legend>
+                    <legend>Legacy Support</legend>
+                    <!--
                     <div class="xar-form-input-wrapper">
                         <label for="editor" title="#xarML('WYSIWYG Editors')#"
                         class="xar-form-label">WYSIWYG Editors:</label>
@@ -355,13 +362,14 @@
                             </xar:loop>
                         </select>
                     </div>
+                    -->
                     <div class="xar-form-input-wrapper-after xar-padding-topthick">
                         <xar:set name="checked">
                             <xar:var scope="config" name="Site.Core.LoadLegacy"/>
                         </xar:set>
                         <xar:data-input type="checkbox" name="loadlegacy" id="loadlegacy" checked="$checked"/>
                         <label for="loadlegacy" title="#xarML('Load Legacy Support for Xaraya1x/BlockLayout1 functions')#">
-                            Load Legacy Support
+                            Enable Legacy Support
                         </label>
                     </div>
                 </fieldset>

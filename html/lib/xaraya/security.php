@@ -375,24 +375,9 @@ function xarPrivExists($name)
 function xarMaskExists($name,$module="All",$component="All")
 {
     if ($mask == "All") $mask = 0;
-    $mask = xarMasks::getMask($name,$module,$component,true);
+    $mask = xarSecurity::getMask($name,$module,$component,true);
     if ($mask) return true;
     else return false;
-}
-
-/**
- * xarQueryMask: returns a mask suitable for inclusion in a structured query
- *
- *
- * @access  public
- * @param   string name of mask
- * @param   string module of mask
- * @return  bool
- */
-function xarQueryMask($mask, $showException=1, $component='', $instance='', $module='', $role='')
-{
-    if ($mask == "All") $mask = 0;
-    return xarMasks::querymask($mask, $component, $instance, $module, $role,$pnrealm,$pnlevel);
 }
 
 /**
@@ -417,8 +402,8 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
        return true;
     }
     else {
-        sys::import('modules.privileges.class.masks');
-       return xarMasks::xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+        sys::import('modules.privileges.class.security');
+       return xarSecurity::check($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
     }
 }
 
@@ -464,7 +449,7 @@ function xarUnregisterMask($name)
 function xarRemoveMasks($module)
 {
     if ($module == "All") {
-        $modid = xarMasks::PRIVILEGES_ALL;
+        $modid = xarSecurity::PRIVILEGES_ALL;
     } elseif ($module == null) {
         $modid = null;
     } else {

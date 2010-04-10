@@ -93,6 +93,7 @@ class xarPrivilege extends xarMask
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
         // Refresh the privileges cached for the current sessions
+        sys::import('modules.privileges.class.security');
         xarMasks::clearCache();
         return true;
     }
@@ -123,6 +124,7 @@ class xarPrivilege extends xarMask
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
         if (!$result) return;
         // Refresh the privileges cached for the current sessions
+        sys::import('modules.privileges.class.security');
         xarMasks::clearCache();
         return true;
     }
@@ -157,6 +159,7 @@ class xarPrivilege extends xarMask
         $this->dbconn->Execute($query,$bindvars);
 
         // Refresh the privileges cached for the current sessions
+        sys::import('modules.privileges.class.security');
         xarMasks::clearCache();
         return true;
     }

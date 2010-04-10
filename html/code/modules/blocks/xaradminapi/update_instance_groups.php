@@ -14,12 +14,7 @@
  *
  * @author Jim McDonald, Paul Rosania
  * @param $args['bid'] the ID of the block to update
- * @param $args['title'] the new title of the block
- * @param $args['group_id'] the new position of the block (deprecated)
- * @param $args['groups'] optional array of group memberships
- * @param $args['template'] the template of the block instance
- * @param $args['content'] the new content of the block
- * @param $args['refresh'] the new refresh rate of the block
+ * @param $args['groups'] array of group memberships
  * @returns bool
  * @return true on success, false on failure
  */
@@ -42,92 +37,84 @@ function blocks_adminapi_update_instance_groups($args)
         return;
     }
 
-    $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
-    $block_groups_table = $xartable['block_groups'];
-    $block_instances_table = $xartable['block_instances'];
-    $block_group_instances_table = $xartable['block_group_instances'];
+    $instance = xarMod::apiFunc('blocks', 'user', 'get', array('bid' => $bid));
 
-    // Get the current group membership for this block instance.
-    $query = 'SELECT id, group_id, template'
-        . ' FROM ' . $block_group_instances_table
-        . ' WHERE instance_id = ?';
-    $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuery(array($bid));
-
-    $current = array();
-    while ($result->next()) {
-        $id = $result->getInt(2);
-
-        $current[$id] = array (
-            'id'        => $result->getInt(1),
-            'group_id'  => $id,
-            'template'  => $result->getString(3)
-        );
-    }
-
-    // Get all groups for the main update loop.
-    $allgroups = xarMod::apiFunc('blocks', 'user', 'getallgroups');
+    $current = $instance['groups'];
 
     // Key the new groups on the id for convenience
     $newgroups = array();
     foreach($groups as $group) {
-        // Set default template. This comes into play when
-        // creating a new block instance, and assigning it
-        // to a group at the same time.
         if (!isset($group['template'])) {
             $group['template'] = null;
         }
-
         $newgroups[$group['id']] = $group;
     }
 
-    $query_arr = array();
-
-    // Now we need to create a set of insert/update/delete commands.
-    // If sessions were available, I would normally delete all the rows
-    // and then insert new ones. In this case we don't want to do that
-    // as an error anywhere in this code or data could result in all existing
-    // block group associations being lost.
-
-    // Prepare the queries we need in the loop
-    $delQuery = "DELETE FROM $block_group_instances_table WHERE id = ?";
-    $delStmt  = $dbconn->prepareStatement($delQuery);
-    $insQuery = "INSERT INTO $block_group_instances_table
-                (group_id, instance_id, position, template)
-                VALUES (?,?,?,?)";
-    $insStmt  = $dbconn->prepareStatement($insQuery);
-    $updQuery = "UPDATE $block_group_instances_table
-                 SET template = ?
-                 WHERE id = ?";
-    $updStmt  = $dbconn->prepareStatement($updQuery);
-
-    // Loop for each group.
-    foreach ($allgroups as $group) {
-        $id = $group['id'];
-        // If the group is not in the $groups array, and is in the
-        // current instance groups, then it should be deleted.
+    $allgroups = xarMod::apiFunc('blocks', 'user', 'getall', array('type' => 'blockgroup'));
+    $toremove = array();
+    $toupdate = array();
+    $toinsert = array();
+    foreach ($allgroups as $id => $group) {
+        // block to be removed from this group
         if (!isset($newgroups[$id]) && isset($current[$id])) {
-            $delStmt->executeUpdate(array((int) $current[$id]['id']));
+            $toremove[] = $group;
         }
-        // If the new group does not exist, then create it.
+        // block to be added to this group
         elseif (isset($newgroups[$id]) && !isset($current[$id])) {
-            $insStmt->executeUpdate(array($id, $bid, 0,$newgroups[$id]['template']));
+            $toinsert[] = $group;
         }
-
-        // If the new group already exists, then update it.
+        // block already belongs to group, update if necessary
         elseif (isset($newgroups[$id]) && isset($current[$id])
-            && $newgroups[$id]['template'] != $current[$id]['template'])
+            && $newgroups[$id]['template'] != $current[$id]['group_inst_template'])
         {
-            $updStmt->executeUpdate(array($newgroups[$id]['template'],$current[$id]['id']));
+            $toupdate[] = $group;
         }
     }
+
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
+    $group_instances = $xartable['block_group_instances'];
+
+    if (!empty($toremove)) {
+        // Prepare the queries we need in the loop
+        $delQuery = "DELETE FROM $group_instances WHERE group_id = ? AND instance_id = ?";
+        $delStmt  = $dbconn->prepareStatement($delQuery);
+        foreach ($toremove as $block) {
+            $bind = array($block['bid'], $bid);
+            $delStmt->executeUpdate($bind);
+        }
+    }
+
+    if (!empty($toinsert)) {
+        $insQuery = "INSERT INTO $group_instances
+                    (group_id, instance_id, position, template)
+                    VALUES (?,?,?,?)";
+        $insStmt  = $dbconn->prepareStatement($insQuery);
+        foreach ($toinsert as $block) {
+            $id = $block['bid'];
+            $bind = array($block['bid'], $bid, 0, $newgroups[$id]['template']);
+            $insStmt->executeUpdate($bind);
+        }
+    }
+
+    if (!empty($toupdate)) {
+        $updQuery = "UPDATE $group_instances
+                     SET template = ?
+                     WHERE id = ?";
+        $updStmt  = $dbconn->prepareStatement($updQuery);
+        foreach ($toupdate as $block) {
+            $id = $block['bid'];
+            $bind = array($newgroups[$id]['template'], $block['bid']);
+            $updStmt->executeUpdate($bind);
+        }
+    }
+
     // Resequence the position values, since we may have changed the existing values.
     // Span the resequence across all groups, since any number of groups could have
     // been affected.
     xarMod::apiFunc('blocks', 'admin', 'resequence');
 
     return true;
-}
 
+}
 ?>

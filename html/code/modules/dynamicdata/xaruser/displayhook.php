@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -60,9 +60,10 @@ function dynamicdata_user_displayhook($args)
 
     $object = & DataObjectMaster::getObject(array('moduleid' => $module_id,
                                        'itemtype' => $itemtype,
-                                       'itemid'   => $itemid,
-                                       'extend' => false));
+                                       'itemid'   => $itemid));
     if (!isset($object)) return;
+    if (!$object->checkAccess('display'))
+        return xarML('Display #(1) is forbidden', $object->label);
 
     $object->getItem();
 

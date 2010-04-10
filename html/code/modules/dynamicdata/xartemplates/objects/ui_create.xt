@@ -2,10 +2,16 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
-        <span class="xar-mod-title">Dynamic Data Object Interface</span>
+        <span class="xar-mod-title">#$tpltitle#</span>
     </div>
     <div class="xar-mod-body">
-        <h2>Create New Item in #$object:label#</h2>
+        <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
+        <h2>
+            Create New Item in #$object:label#&#160;
+            <a href="#$viewlink#" title="View #$object:label#">
+                <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+            </a>
+        </h2>
         <xar:if condition="isset($preview)">
             <fieldset>
                 <legend>Preview</legend>
@@ -58,7 +64,5 @@
                 </div>
             </fieldset>
         </form>
-        <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
-        <a href="#$viewlink#">View <xar:data-label object="$object"/></a>
     </div>
 </xar:template>

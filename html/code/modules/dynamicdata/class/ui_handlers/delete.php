@@ -15,7 +15,7 @@ sys::import('modules.dynamicdata.class.ui_handlers.default');
 /**
  * Dynamic Object User Interface Handler
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @subpackage dynamicdata
  */
 class DataObjectDeleteHandler extends DataObjectDefaultHandler
@@ -38,6 +38,8 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
             return;
         if(!xarVarFetch('confirm', 'isset', $args['confirm'], NULL, XARVAR_DONT_SET)) 
             return;
+        if(!xarVarFetch('return_url', 'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
+            return;
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
@@ -56,9 +58,6 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
         }
         if(!empty($args['cancel'])) 
         {
-            if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
-                return;
-
             if(empty($args['return_url'])) 
                 $args['return_url'] = $this->getReturnURL();
 
@@ -66,7 +65,7 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
             // Return
             return true;
         }
-        if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
+        if (!$this->object->checkAccess('delete'))
             return xarResponse::Forbidden(xarML('Delete Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
 
         $itemid = $this->object->getItem();
@@ -84,9 +83,6 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
             if(empty($itemid)) 
                 return; // throw back
 
-            if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
-                return;
-                
             if(empty($args['return_url'])) 
                 $args['return_url'] = $this->getReturnURL();
 
@@ -101,7 +97,9 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
         return xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_delete',
             array('object' => $this->object,
-                  'authid' => xarSecGenAuthKey())
+                  'authid' => xarSecGenAuthKey(),
+                  'tpltitle' => $this->tpltitle,
+                  'return_url' => $args['return_url'])
         );
     }
 }

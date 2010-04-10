@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -62,7 +62,8 @@ function dynamicdata_userapi_getfield($args)
     if (!isset($object->properties[$name])) return;
     $property = $object->properties[$name];
 
-    if(!xarSecurityCheck('ReadDynamicDataField',1,'Field',$property->name.':'.$property->type.':'.$property->id)) return;
+    // TODO: security check on object level
+
     if (!isset($property->value)) {
         $value = $property->defaultvalue;
     } else {

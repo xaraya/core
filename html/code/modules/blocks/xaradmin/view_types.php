@@ -20,18 +20,17 @@ function blocks_admin_view_types()
 
     // Parameter to indicate a block type for which to get further details.
     if (!xarVarFetch('tid', 'id', $tid, 0, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('confirm', 'int', $confirm, 0, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('tab', 'pre:trim:lower:str:1:', $tab, NULL, XARVAR_NOT_REQUIRED)) return;
 
     $params = array();
     $info = array();
     $detail = array();
     if (!empty($tid)) {
         // Get details for a specific block type.
-        $detail = xarMod::apiFunc(
-            'blocks', 'user', 'getblocktype', array('tid' => $tid)
-        );
+        $detail = xarMod::apiFunc('blocks', 'user', 'getblocktype', array('tid' => $tid));
         if (!empty($detail)) {
             // The block type exists.
-
             // Get info data.
             $info = xarMod::apiFunc(
                 'blocks', 'user', 'read_type_info',
@@ -40,6 +39,7 @@ function blocks_admin_view_types()
                     'type' => $detail['type']
                 )
             );
+            if(!isset($info['new_access'])) $info['new_access'] = array();
 
             // Get initialisation data.
             $init = xarMod::apiFunc(
@@ -78,12 +78,85 @@ function blocks_admin_view_types()
                     }
                 }
             }
+            $blocktabs = array();
+            $blocktabs['detail'] = array(
+                'url' => xarServer::getCurrentURL(array('tab' => null)),
+                'title' => xarML('View details about this block type'),
+                'label' => xarML('Details'),
+                'active' => empty($tab) || $tab == 'detail',
+            );
+            // cascading block files - order is method specific, admin specific, block specific
+            $to_check = array();
+            $to_check[] = ucfirst($detail['type']) . 'BlockAdmin';    // from eg menu_admin.php
+            $to_check[] = ucfirst($detail['type']) . 'Block';         // from eg menu.php
+            foreach ($to_check as $className) {
+                // @FIXME: class name should be unique
+                if (class_exists($className)) {
+                    // instantiate the block instance using the first class we find
+                    $block = new $className();
+                    break;
+                }
+            }
+            // make sure we instantiated a block,
+            if (empty($block)) {
+                // return classname not found (this is always class {$type}Block)
+                throw new ClassNotFoundException($className);
+            }
+            if (method_exists($block, 'help')) {
+                $blocktabs['help'] = array(
+                    'url' => xarServer::getCurrentURL(array('tab' => 'help')),
+                    'title' => xarML('View help information about this block type'),
+                    'label' => xarML('Help'),
+                    'active' => $tab == 'help',
+                );
+                if ($tab == 'help') {
+                    try {
+                        $blockhelp = $block->help();
+                        if (!empty($blockhelp)) {
+                            // if the method returned an array of data attempt to render
+                            // to template blocks/help-{blockType}.xt
+                            if (is_array($blockhelp)) {
+                                // Render the extra settings if necessary.
+                                // Again we check for an exception, this time in the template rendering
+                                try {
+                                    $block_help = xarTplBlock($blockinfo['module'], 'help-' . $blockinfo['type'], $blockhelp);
+                                } catch (Exception $e) {
+                                    // @TODO: global flag to raise exceptions or not
+                                    if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                                        $block_help = '';
+                                    } else {
+                                        //throw ($e);
+                                        $block_help = '';
+                                    }
+                                }
+                            // Legacy: old help functions return a string
+                            } elseif (is_string($blockhelp)) {
+                                $block_help = $blockhelp;
+                            }
+                        }
+                    } catch (Exception $e) {
+                        // @TODO: global flag to raise exceptions or not
+                        if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                            $block_help = '';
+                        } else {
+                            //throw ($e);
+                            $block_help = '';
+                        }
+                    }
+                }
+            }
+
+        }
+        if ($confirm) {
+            sys::import('modules.dynamicdata.class.properties.master');
+            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+            $isvalid = $accessproperty->checkInput($detail['type'] . '_new');
+            $info['new_access'] = $accessproperty->value;
+            xarMod::apiFunc('blocks', 'admin', 'update_type_info', array('tid' => $tid, 'info' => $info));
         }
     }
 
-    $block_types = xarMod::apiFunc(
-        'blocks', 'user', 'getallblocktypes', array('order' => 'modid,type')
-    );
+    $block_types = xarMod::apiFunc('blocks', 'user', 'getallblocktypes', array('order' => 'modid,type'));
 
     // Add in some extra details.
     foreach($block_types as $index => $block_type) {
@@ -104,7 +177,10 @@ function blocks_admin_view_types()
         'tid' => $tid,
         'params' => $params,
         'info' => $info,
-        'detail' => $detail
+        'detail' => $detail,
+        'blocktabs' => !empty($blocktabs) ? $blocktabs : array(),
+        'block_help' => !empty($block_help) ? $block_help : '',
+        'tab' => $tab,
     );
 }
 

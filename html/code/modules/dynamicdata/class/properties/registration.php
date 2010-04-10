@@ -93,8 +93,7 @@ class PropertyRegistration extends DataContainer
 
         // Make sure the db is the same as in the old days
         assert('count($this->reqmodules)==1; /* The reqmodules registration should only contain the name of the owning module */');
-        $modInfo = xarMod::getBaseInfo($this->reqmodules[0]);
-        $module_id = $modInfo['systemid'];
+        $module_id = xarMod::getID($this->reqmodules[0]);
 
         if($this->format == 0) $this->format = $this->id;
 

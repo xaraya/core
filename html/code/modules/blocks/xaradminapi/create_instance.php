@@ -45,6 +45,8 @@ function blocks_adminapi_create_instance($args)
 
     $initresult = xarMod::apiFunc('blocks', 'user', 'read_type_init', $blocktype);
 
+
+
     // If the content is not set, attempt to get initial content from
     // the block initialization function.
     if (!isset($content)) {
@@ -53,6 +55,10 @@ function blocks_adminapi_create_instance($args)
         if (!empty($initresult)) {
             $content = $initresult;
         }
+    }
+    // if we have an array of content, merge missing params from init
+    elseif (is_array($content) && !empty($initresult)) {
+        $content += $initresult;
     }
 
     if (!empty($content) && !is_string($content)) {
@@ -82,10 +88,8 @@ function blocks_adminapi_create_instance($args)
     // Update the group instances.
     if (isset($groups) && is_array($groups)) {
         // Pass the group updated to the API if required.
-        // TODO: error handling.
-        $result = xarMod::apiFunc('blocks', 'admin', 'update_instance_groups',
-                                array('bid' => $bid, 'groups' => $groups)
-        );
+        if (!xarMod::apiFunc('blocks', 'admin', 'update_instance_groups',
+            array('bid' => $bid, 'groups' => $groups))) return;
     }
 
     // Insert defaults for block caching (based on block init array)
@@ -111,22 +115,16 @@ function blocks_adminapi_create_instance($args)
         } else {
             $cacheexpire = NULL;
         }
-        //check and see if there is an entry already before trying to add one - bug # 5815
-        $checkbid = xarMod::apiFunc('blocks','user','getcacheblock',array('bid'=>$bid));
-        //we assume for now that it's left here due to bug # 5815 so delete it
-        if (is_array($checkbid)) {
-           $deletecacheblock = xarMod::apiFunc('blocks','admin','delete_cacheinstance', array('bid' => $bid));
-        }
-        //now create the new block
-        $cacheblocks = $xartable['cache_blocks'];
-        $query = "INSERT INTO $cacheblocks (blockinstance_id,
-                                            nocache,
-                                            page,
-                                            theuser,
-                                            expire)
-                  VALUES (?,?,?,?,?)";
-        $bindvars = array($bid, $nocache, $pageshared, $usershared, $cacheexpire);
-        $dbconn->Execute($query,$bindvars);
+
+        if (!xarModAPIFunc('blocks', 'admin', 'create_cacheinstance',
+            array(
+                'bid' => $bid,
+                'nocache' => $nocache,
+                'pageshared' => $pageshared,
+                'usershared' => $usershared,
+                'cacheexpire' => $cacheexpire,
+            ))) return;
+
     }
 
     // Resequence the blocks.

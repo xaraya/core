@@ -16,7 +16,7 @@ sys::import('xaraya.objects');
 /**
  * Dynamic Object User Interface Handler
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @subpackage dynamicdata
  */
 class DataObjectDefaultHandler extends Object
@@ -31,6 +31,8 @@ class DataObjectDefaultHandler extends Object
     public $linkfunc = 'main';
     // default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
     public $nextmethod = 'view';
+    // title shown in the main templates
+    public $tpltitle = null;
 
     // current arguments for the handler
     public $args = array();
@@ -67,6 +69,12 @@ class DataObjectDefaultHandler extends Object
         if (!empty($args['nextmethod'])) {
             $this->nextmethod = $args['nextmethod'];
         }
+        if (!empty($args['tpltitle'])) {
+            $this->tpltitle = $args['tpltitle'];
+        }
+        if (empty($this->tpltitle)) {
+            $this->tpltitle = xarML('Dynamic Data Object Interface');
+        }
 
         // get some common URL parameters
         if (!xarVarFetch('object',   'isset', $args['object'],   NULL, XARVAR_DONT_SET)) {return;}
@@ -84,6 +92,11 @@ class DataObjectDefaultHandler extends Object
         // @todo should the object class do it?
         if (!empty($fieldlist)) {
             $args['fieldlist'] = explode(',',$fieldlist);
+        }
+
+        // Default number of items per page in object view
+        if (!isset($args['numitems']) && $args['object'] != 'objects') {
+            $args['numitems'] = xarModVars::get('dynamicdata', 'items_per_page');
         }
 
         // support name=... parameter for DD if no object=... is found
@@ -149,13 +162,13 @@ class DataObjectDefaultHandler extends Object
 
         // Pre-fetch item(s) for some standard dataobject methods
         if (empty($args['itemid']) && $this->method == 'showview') {
-            if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
+            if (!$this->object->checkAccess('view'))
                 return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));
 
             $this->object->getItems();
 
         } elseif (!empty($args['itemid']) && ($this->method == 'showdisplay' || $this->method == 'showform')) {
-            if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
+            if (!$this->object->checkAccess('display'))
                 return xarResponse::Forbidden(xarML('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
 
             // get the requested item
@@ -174,8 +187,9 @@ class DataObjectDefaultHandler extends Object
 
         return xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_default',
-            array('object' => $this->object,
-                  'output' => $output)
+            array('object'   => $this->object,
+                  'output'   => $output,
+                  'tpltitle' => $this->tpltitle)
         );
 
     }

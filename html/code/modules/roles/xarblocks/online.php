@@ -30,13 +30,8 @@
         {
             $data = parent::display($data);
             if (empty($data)) return;
-
-            // Get variables from content block
-            if (!is_array($data['content'])) {
-                $args = unserialize($data['content']);
-            } else {
-                $args = $data['content'];
-            }
+            $args = $data['content'];
+            
             if (!isset($args['showusers']))     $args['showusers'] = true;
             if (!isset($args['showusertotal'])) $args['showusertotal'] = false;
             if (!isset($args['showanontotal'])) $args['showanontotal'] = false;
@@ -61,11 +56,12 @@
                     FROM $sessioninfotable
                     WHERE last_use > ? AND role_id > ?";
             }
-            $result = $dbconn->Execute($sql, array($activetime,2));
-            // CHECKME: do we catch the exception here?
-            list($args['numusers']) = $result->fields;
-            $result->Close();
-            if (empty($args['numusers'])) {
+            try {
+                $result = $dbconn->Execute($sql, array($activetime,2));
+                list($args['numusers']) = $result->fields;
+                $result->Close();
+                if (empty($args['numusers'])) $args['numusers'] = 0;
+            } catch (Exception $e) {
                 $args['numusers'] = 0;
             }
 
@@ -121,11 +117,12 @@
                        FROM $sessioninfotable
                        WHERE last_use > ? AND role_id = ?";
             }
-            $result2 = $dbconn->Execute($query2, array($activetime,2));
-            // CHECKME: do we catch the exception here?
-            list($args['numguests']) = $result2->fields;
-            $result2->Close();
-            if (empty($args['numguests'])) {
+            try {
+                $result2 = $dbconn->Execute($query2, array($activetime,2));
+                list($args['numguests']) = $result2->fields;
+                $result2->Close();
+                if (empty($args['numguests'])) $args['numguests'] = 0;
+            } catch (Exception $e) {
                 $args['numguests'] = 0;
             }
 
@@ -165,27 +162,6 @@
             }
 
             $args['blockid'] = $data['bid'];
-            $data['content'] = $args;
-            return $data;
-        }
-
-        function modify(Array $data=array())
-        {
-            $data = parent::modify($data);
-            if (!isset($data['showusers']))     $data['showusers'] = true;
-            if (!isset($data['showusertotal'])) $data['showusertotal'] = false;
-            if (!isset($data['showanontotal'])) $data['showanontotal'] = false;
-            if (!isset($data['showlastuser']))  $data['showlastuser'] = false;
-            return $data;
-        }
-
-        public function update(Array $data=array())
-        {
-            $data = parent::update($data);
-            if (!xarVarFetch('showusers',     'checkbox', $args['showusers'], false, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('showusertotal', 'checkbox', $args['showusertotal'], false, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('showanontotal', 'checkbox', $args['showanontotal'], false, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('showlastuser',  'checkbox', $args['showlastuser'], false, XARVAR_NOT_REQUIRED)) return;
             $data['content'] = $args;
             return $data;
         }

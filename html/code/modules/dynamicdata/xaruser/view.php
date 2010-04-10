@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -39,11 +39,6 @@ function dynamicdata_user_view($args)
 
     // Override if needed from argument array
     extract($args);
-
-    // Security measure for table browsing
-    if (!empty($table)) {
-        if(!xarSecurityCheck('AdminDynamicData')) return;
-    }
 
     // Support old-style arguments
     if (empty($itemid) && !empty($objectid)) {
@@ -81,10 +76,11 @@ function dynamicdata_user_view($args)
                                   'template'  => $template,
                                   ));
 
+    if (!$object->checkAccess('view'))
+        return xarResponse::Forbidden(xarML('View #(1) is forbidden', $object->label));
+
     // Pass back the relevant variables to the template if necessary
     $data = $object->toArray();
-
-    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$data[moduleid]:$data[itemtype]:All")) return;
 
     // Count the number of items matching the preset arguments - do this before getItems()
     $object->countItems();

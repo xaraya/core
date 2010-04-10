@@ -10,9 +10,16 @@
  * @link http://xaraya.com/index.php/release/13.html
  */
 /* Read and execute a block's init function.
+ *
+ * This method attempts to create an empty block class instance,
+ * from which it attempts to call the getInit method to retrieve
+ * default block type information
+ *
  * @param args['module'] the module name
  * @param args['type'] the block type name
- * @return the block 'info' details (an array) or NULL if no details present
+ * @return the block init details (an array)
+ * @throws EmptyParameterException, ClassNotFoundException, FunctionNotFoundException,
+ *         FileNotFoundException (via adminapi load function)
  *
  * @author Jim McDonald, Paul Rosania
  */
@@ -20,53 +27,41 @@
 function blocks_userapi_read_type_init($args)
 {
     extract($args);
-    
+
     if (empty($module) && empty($type)) {
         // No identifier provided.
         throw new EmptyParameterException('module or type');
     }
 
-    // Function to execute, to get the block info.
-    $initfunc = $module . '_' . $type . 'block_init';
+    if (!xarMod::apiFunc('blocks', 'admin', 'load',
+        array('module' => $module, 'type' => $type, 'func' => 'getInit'))) return;
 
-    if (function_exists($initfunc)) {
-        $result = $initfunc();
-    } else {
-        // Load and execute the info function of the block.
-        if (!xarMod::apiFunc(
-            'blocks', 'admin', 'load',
-            array(
-                'modName' => $module,
-                'blockName' => $type,
-                'blockFunc' => 'init'
-            )
-        )) {return;}
-
-        $classpath = sys::code() . 'modules/' . $module . '/xarblocks/' . $type . '.php';
-        if (function_exists($initfunc)) {
-            $result = $initfunc();
-        } elseif (file_exists($classpath)) {
-            // we are using a block class
-            sys::import('modules.' . $module . '.xarblocks.' . $type);
-            sys::import('xaraya.structures.descriptor');
-            $name = ucfirst($type) . "Block";
-            $descriptor = new ObjectDescriptor(array());
-            $block = new $name($descriptor);
-
-            $result = $block->getInit();
-        } else {
-            // No block info function found.
-            $result = NULL;
+    // cascading block files - order is admin specific, block specific
+    $to_check = array();
+    $to_check[] = ucfirst($type) . 'BlockAdmin';    // from eg menu_admin.php
+    $to_check[] = ucfirst($type) . 'Block';         // from eg menu.php
+    foreach ($to_check as $className) {
+        // @FIXME: class name should be unique
+        if (class_exists($className)) {
+            // instantiate the block instance using the first class we find
+            $block = new $className(array());
+            break;
         }
     }
 
-    // Discard any boolean value returned by the init function,
-    // as those are legacy values with no meaning now.
-    if (is_bool($result)) {
-        $result = NULL;
+    // make sure we instantiated a block,
+    if (!isset($block)) {
+        throw new ClassNotFoundException($className);
     }
 
-    return $result;
-}
+    // @TODO: cache type_init for each block type
+    // instantiate an empty block class of this module type
+    $block = new $className(array());
+    // get the defaults
+    $type_init = $block->getInit();
+    // clean up
+    unset($block);
 
+    return $type_init;
+}
 ?>

@@ -21,11 +21,13 @@ function blocks_admin_main()
     $refererinfo = xarRequest::getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarRequest::getInfo();
     $samemodule = $info[0] == $refererinfo[0];
-    
+
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTplModule('blocks','admin','overview');
+        $data = array();
+        if (!xarVarFetch('tab', 'pre:trim:lower:str:1:', $data['tab'], '', XARVAR_NOT_REQUIRED)) return;
+        return xarTplModule('blocks','admin','overview', $data);
     } else {
-        xarResponse::redirect(xarModURL('blocks', 'admin', 'view_instances'));
+        xarResponse::redirect(xarModURL('blocks', 'admin', 'view'));
         return true;
     }
 }

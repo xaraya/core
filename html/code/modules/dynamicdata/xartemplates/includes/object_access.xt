@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+
+<!--
+    <fieldset>
+        <legend>
+            DataObject Display Access
+        </legend>
+        <xar:set name="propname">$object->name . '_display'</xar:set>
+        <xar:data-input type="access" name="$propname" value="$display_access"/>
+    </fieldset>
+    <fieldset>
+        <legend>
+            DataObject Modify Access
+        </legend>
+        <xar:set name="propname">$object->name . '_modify'</xar:set>
+        <xar:data-input type="access" name="$propname" value="$modify_access"/>
+    </fieldset>
+    <fieldset>
+        <legend>
+            DataObject Delete Access
+        </legend>
+        <xar:set name="propname">$object->name . '_delete'</xar:set>
+        <xar:data-input type="access" name="$propname" value="$delete_access"/>
+    </fieldset>
+-->
+
+    <![CDATA[
+    <script type="text/javascript">
+        function dd_toggle_checkboxes(pattern)
+        {
+            var elem = document.getElementsByTagName("input");
+            var match = new RegExp(pattern);
+            for (i = 0; i < elem.length; i++) {
+                if (elem[i].type == 'checkbox' && match.test(elem[i].id)) {
+                    if (elem[i].checked) {
+                        elem[i].checked = false;
+                    } else {
+                        elem[i].checked = true;
+                    }
+                }
+            }
+        }
+
+        function dd_disable_checkboxes(pattern)
+        {
+            var elem = document.getElementsByTagName("input");
+            var match = new RegExp(pattern);
+            for (i = 0; i < elem.length; i++) {
+                if (elem[i].type == 'checkbox' && match.test(elem[i].id)) {
+                    if (elem[i].disabled) {
+                        elem[i].disabled = false;
+                    } else {
+                        elem[i].disabled = true;
+                    }
+                }
+            }
+        }
+    </script>
+    ]]>
+
+    <fieldset>
+        <legend>
+            Specify Access Rules
+        </legend>
+        <label for="do_access">
+        <xar:if condition="!empty($do_access)">
+            <input type="checkbox" id="do_access" name="do_access" value="1" checked="checked" onclick="javascript:dd_disable_checkboxes('access_')"/>
+        <xar:else/>
+            <input type="checkbox" id="do_access" name="do_access" value="1" onclick="javascript:dd_disable_checkboxes('access_')"/>
+        </xar:if>
+        &#160;Override default access rights ?</label>
+        <table>
+            <tr>
+                <th>Group</th>
+                <xar:foreach in="$levels" key="$level" value="$info">
+                    <th style="text-align: center"><a onclick="javascript:dd_toggle_checkboxes('access_#$level#_')" title="Toggle Access for #$info.label#">#$info.label#</a></th>
+                </xar:foreach>
+            </tr>
+            <xar:foreach in="$grouplist" key="$roleid" value="$rolename">
+            <tr>
+                <td><a onclick="javascript:dd_toggle_checkboxes('access_.+_#$roleid#')" title="Toggle Access for #$rolename#">#$rolename#</a></td>
+                <xar:foreach in="$levels" key="$level" value="$info">
+                    <xar:comment>check if $roleid is in the list of groups that have access at this level</xar:comment>
+                    <xar:if condition="!empty($access[$level]) and in_array($roleid, $access[$level])">
+                        <td style="text-align: center"><input type="checkbox" id="access_#$level#_#$roleid#" name="access[#$level#][#$roleid#]" value="1" checked="checked"/></td>
+                    <xar:else/>
+                        <td style="text-align: center"><input type="checkbox" id="access_#$level#_#$roleid#" name="access[#$level#][#$roleid#]" value="1"/></td>
+                    </xar:if>
+                </xar:foreach>
+            </tr>
+            </xar:foreach>
+        </table>
+        <em>Note: if you specify access rules here and then create a new group later on, that group will have NO access by default.</em>
+        <xar:if condition="empty($do_access)">
+            <script type="text/javascript">
+                dd_disable_checkboxes('access_');
+            </script>
+        </xar:if>
+    </fieldset>
+    <fieldset>
+        <legend>
+            Additional Content Filters
+        </legend>
+        Automatically filter items in views for specific groups ?
+        <table>
+            <tr>
+                <th>Group</th>
+                <th>Property</th>
+                <th>Condition</th>
+                <th>Value</th>
+<!--
+                <th>Access</th>
+-->
+            </tr>
+            <xar:foreach in="$filters" key="$filterid" value="$filterinfo">
+            <tr>
+                <td>
+                    <select name="filters[#$filterid#][group]" id="filters_#$filterid#_group">
+                        <option value=""></option>
+                        <xar:foreach in="$grouplist" key="$roleid" value="$rolename">
+                            <xar:if condition="$filterinfo['group'] eq $roleid">
+                                <option value="#$roleid#" selected="selected">#$rolename#</option>
+                            <xar:else/>
+                                <option value="#$roleid#">#$rolename#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+                <td>
+                    <select name="filters[#$filterid#][prop]" id="filters_#$filterid#_prop">
+                        <option value=""></option>
+                        <xar:foreach in="$properties" key="$propname" value="$propinfo">
+                            <xar:if condition="$filterinfo['prop'] eq $propname">
+                                <option value="#$propname#" selected="selected">#$propinfo.label#</option>
+                            <xar:else/>
+                                <option value="#$propname#">#$propinfo.label#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+                <td>
+                    <select name="filters[#$filterid#][match]" id="filters_#$filterid#_match">
+                        <option value=""></option>
+                        <xar:foreach in="$conditions" key="$match" value="$label">
+                            <xar:if condition="$filterinfo['match'] eq $match">
+                                <option value="#$match#" selected="selected">#$label#</option>
+                            <xar:else/>
+                                <option value="#$match#">#$label#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" name="filters[#$filterid#][value]" id="filters_#$filterid#_value" value="#$filterinfo.value#" class="xar-form-text-medium"/>
+                </td>
+<!--
+                <td>
+                    <select name="filters[#$filterid#][level]" id="filters_#$filterid#_level">
+                        <option value="">Any</option>
+                        <xar:foreach in="$levels" key="$level" value="$info">
+                            <xar:if condition="$filterinfo['level'] eq $level">
+                                <option value="#$level#" selected="selected">#$info.label#</option>
+                            <xar:else/>
+                                <option value="#$level#">#$info.label#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </td>
+-->
+            </tr>
+            </xar:foreach>
+        </table>
+        If a visitor has Display access, he will be able to see all items by default. You can use the content filters to
+        further limit access e.g. for Anonymous visitors to only see those items where the property 'Age' is greater than 12.
+        <br/><em>Note: if you specify several filters for the same group, they will be combined (AND).</em>
+    </fieldset>
+    <fieldset>
+        <div class="xar-align-center">
+            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+            <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+            <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
+            <xar:if condition="!empty($return_url)">
+                <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+            </xar:if>
+            <xar:var name="label">Update</xar:var>
+            <input type="submit" name="confirm" value="#$label#" class="xar-margin-thickleft"/>
+        </div>
+    </fieldset>
+</xar:template>

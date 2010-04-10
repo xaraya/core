@@ -1,12 +1,22 @@
 <?php
+/**
+ * @package modules
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata
+ * @link http://xaraya.com/index.php/release/182.html
+ */
 
 function dynamicdata_admin_modifymoduleconfig()
 {
     if (!xarSecurityCheck('AdminDynamicData')) return;
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('tab','str:1', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'dynamicdata'));
-    $data['module_settings']->setFieldList('items_per_page,user_menu_link');
+    $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons');
     $data['module_settings']->getItem();
     switch (strtolower($phase)) {
         case 'modify':

@@ -3,11 +3,9 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="icon_delete">xarTplGetImage('icons/delete.png','base')</xar:set>
     <xar:set name="icon_modify">xarTplGetImage('icons/modify.png','base')</xar:set>
-    <xar:if condition="$total gt $itemsperpage">
-        <div>
-            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
-        </div>
-    </xar:if>
+    <div>
+        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+    </div>
     <table class="xar-fullwidth">
         <tr>
             <th>Name</th>
@@ -15,7 +13,7 @@
             <th>Module</th>
             <th>Template</th>
             <th>Status</th>
-            <th>Actions</th>
+            <th class="xar-align-right">Actions</th>
         </tr>
         <xar:set name="currenttype">'__nothing'</xar:set>
         <xar:loop name="$blocks">
@@ -23,8 +21,8 @@
             <xar:if condition="$thistype ne $currenttype">
                 <tr>
                     <td colspan="6">
-                        <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
-                            <b>#$loop:item['type']#</b>
+                        <a style="font-size: 11pt" href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
+                            #$loop:item['type']#
                         </a>
                     </td>
                 </tr>
@@ -64,8 +62,8 @@
                     </xar:if>
                 </td>
                 <td class="xar-align-center">#$state_desc[$loop:item['state']]#</td>
-                <xar:if condition="xarModVars::get('blocks','use_icons')">
-                    <td class="xar-item-actions">
+                <xar:if condition="xarModVars::get('blocks','use_module_icons')">
+                    <td class="xar-item-actions xar-align-right">
                         <a href="#xarModURL('blocks','admin','modify_instance',array('bid' =&gt; $loop:item.bid))#" title="#xarML('Modify')#">
                             <img src="#$icon_modify#" alt="#xarML('Modify')#" />
                         </a>
@@ -75,7 +73,7 @@
                         </a>
                     </td>
                 <xar:else/>
-                    <td class="xar-align-center">
+                    <td class="xar-align-right">
                         <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                             Edit
                         </a>|
@@ -87,9 +85,7 @@
             </tr>
         </xar:loop>
     </table>
-    <xar:if condition="$total gt 2">
-        <div>
-            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
-        </div>
-    </xar:if>
+    <div>
+        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+    </div>
 </xar:template>

@@ -24,13 +24,30 @@
                         <xar:if condition="!empty($valuelabel)">
                             <label for="#$id#_value_#$index#">#$valuelabel#:</label>&#160;
                         </xar:if>
-                        <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#]" id="#$id#_value_#$index#" value="#$val#" size="#$size#"/>
+                        <xar:for start="$k = 0" test="$k lt $columns" iter="$k++">
+                            <xar:if condition="is_array($val)"> 
+                                <xar:if condition="isset($val[$k])">
+                                    <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#][#$k#]" id="#$id#_value_#$index#_#$k#" value="#$val[$k]#" size="#$size#" />                                                                                        
+                                <xar:else/>
+                                    <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#][#$k#]" id="#$id#_value_#$index#_#$k#" value="" size="#$size#" />
+                                </xar:if>
+                            <xar:else />
+                                <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#][#$k#]" id="#$id#_value_#$index#_#$k#" value="#$val#" size="#$size#" />
+                                <xar:set name="val">''</xar:set>
+                            </xar:if>
+                            &#160;
+                        </xar:for>                                               
                     </div>
                     <xar:set name="index">$index+1</xar:set>
                 </xar:foreach>
                 <xar:for start="$i = $index" test="$i lt $rows" iter="$i++">
                     <div class="xar-form-input-wrapper">                    
                         <xar:if condition = "$associative_array eq 0">
+                        <!--
+                    <xar:set name="name">$name . '_key[' . $index . ']'</xar:set>
+                    <xar:set name="id">$id . '_key_' . $index</xar:set>
+                    -->
+                    <xar:data-input type="$columntype" name="$name" id="$id" value="" class="$class" style="$style" />
                             <xar:set name="keyvalue">$i+1</xar:set>                         
                             <input type="hidden" name="#$name#_key[#$i#]" id="#$id#_key_#$i#" value="#$keyvalue#" size="#$size#"/>                     
                         <xar:else />
@@ -43,7 +60,9 @@
                         <xar:if condition="!empty($valuelabel)">
                             <label for="#$id#_value_#$i#">#$valuelabel#:</label>&#160;
                         </xar:if>
-                        <input class="xar-form-textlong" type="text" name="#$name#_value[#$i#]" id="#$id#_value_#$i#" value="" size="#$size#"/>
+                        <xar:for start="$k = 0" test="$k lt $columns" iter="$k++">
+                            <input class="xar-form-textlong" type="text" name="#$name#_value[#$i#][#$k#]" id="#$id#_value_#$i#_#$k#" value="" size="#$size#" />
+                        </xar:for>                        
                     </div>
                 </xar:for>
             <xar:else />
@@ -77,7 +96,20 @@
                             <xar:if condition="!empty($valuelabel)">
                                 <label for="#$id#_value_#$index#">#$valuelabel#:</label>&#160;
                             </xar:if>
-                            <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#]" id="#$id#_value_#$index#" value="#$val#" size="#$size#"/>
+                            <xar:for start="$k = 0" test="$k lt $columns" iter="$k++">
+                                <xar:if condition="is_array($val)"> 
+                                    <xar:if condition="isset($val[$k])">
+                                        <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#][#$k#]" id="#$id#_value_#$index#_#$k#" value="#$val[$k]#" size="#$size#" />                                                                                        
+                                    <xar:else/>
+                                        <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#][#$k#]" id="#$id#_value_#$index#_#$k#" value="" size="#$size#" />
+                                    </xar:if>
+                                <xar:else />
+                                    <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#][#$k#]" id="#$id#_value_#$index#_#$k#" value="#$val#" size="#$size#" />
+                                    <xar:set name="val">''</xar:set>
+                                </xar:if>
+                                &#160;
+                            </xar:for>                                               
+
                             <xar:if condition = "$rows le $index AND $allowinput eq 2">
                                 <input type="button" title="#xarML('Remove')#&#160;#$suffixlabel#" value="#xarML('Remove')#&#160;#$suffixlabel#" style="height: 23px; font-size: small;" onclick="javascript:#$id#_removeRow('#$id#','#$index#')"/>
                             </xar:if>
@@ -102,7 +134,9 @@
                             <xar:if condition="!empty($valuelabel)">
                                 <label for="#$id#_value_#$i#">#$valuelabel#:</label>&#160;
                             </xar:if>
-                            <input class="xar-form-textlong" type="text" name="#$name#_value[#$i#]" id="#$id#_value_#$i#" value="" size="#$size#"/>
+                            <xar:for start="$k = 0" test="$k lt $columns" iter="$k++">
+                                <input class="xar-form-textlong" type="text" name="#$name#_value[#$i#][#$k#]" id="#$id#_value_#$i#_#$k#" value="" size="#$size#" />
+                            </xar:for>                            
                             <xar:set name="rowsdisplayed">$rowsdisplayed . "," . $j</xar:set>                   
                         </div>     
                     </xar:for>              
@@ -137,7 +171,10 @@
                 <xar:if condition="!empty($valuelabel)">
                     <label for="dummyid_value_dummy">#$valuelabel#:</label>&#160;
                 </xar:if>
-                <input class="xar-form-textlong" type="text" name="dummyid_value[dummy]" id="dummyid_value_dummy" value="" size="#$size#"/>                        
+                <xar:for start="$k = 0" test="$k lt $columns" iter="$k++">
+                    <input class="xar-form-textlong" type="text" name="dummyid_value[dummy][#$k#]" id="dummyid_value_dummy_#$k#" value="" size="#$size#" />
+                    &#160;
+                </xar:for>                
             </div>
         </div>
         <div class ="xar-displaynone">

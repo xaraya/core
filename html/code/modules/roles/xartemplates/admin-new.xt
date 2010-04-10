@@ -21,7 +21,7 @@
                     <label for="ptype" title="#xarML('Type of Role')#" class="xar-form-label">
                         Type:
                     </label>
-                    <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() ."';this.form.submit();"</xar:set>
+                    <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"</xar:set>
                     <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1"/>
                 </div>
                 <xar:data-form object="$object"/>
@@ -32,7 +32,7 @@
                 <xar:set name="settings">
                     explode(',',xarModVars::get('roles','duvsettings'))
                 </xar:set>
-                <xar:if condition="ROLES_USERTYPE eq $basetype">
+                <xar:if condition="ROLES_USERTYPE eq $itemtype">
                     <xar:if condition="in_array('useremailformat',$settings)">
                         <div class="xar-form-input-wrapper">
                             <label for="duvs_useremailformat" title="#xarML('Email Format')#" class="xar-form-label">Email Format:</label>

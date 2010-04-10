@@ -30,7 +30,7 @@
 <xsl:template name="block_code">
   <xsl:choose>
     <xsl:when test="@instance or (@module and @type)">
-      <xsl:text> xarBlock_renderBlock(array(&nl;</xsl:text>
+      <xsl:text> xarBlock::renderBlock(array(&nl;</xsl:text>
       <xsl:text>'instance' =&gt; "</xsl:text><xsl:value-of select="@instance"/><xsl:text>",&nl;</xsl:text>
       <xsl:text>'module'   =&gt; "</xsl:text><xsl:value-of select="@module"/><xsl:text>",&nl;</xsl:text>
       <xsl:text>'type'     =&gt; "</xsl:text><xsl:value-of select="@type"/><xsl:text>",&nl;</xsl:text>

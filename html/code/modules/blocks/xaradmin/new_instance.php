@@ -21,21 +21,41 @@ function blocks_admin_new_instance()
     xarVarFetch('formodule', 'str:1', $module, NULL, XARVAR_NOT_REQUIRED);
 
     // Fetch block type list.
-    $block_types = xarMod::apiFunc(
+    $types = xarMod::apiFunc(
         'blocks', 'user', 'getallblocktypes',
         array('order' => 'module,type', 'module' => $module)
     );
 
-    // Fetch available block groups.
-    $block_groups = xarMod::apiFunc(
-        'blocks', 'user', 'getallgroups', array('order' => 'name')
+    $block_types = array();
+    foreach ($types as $type) {
+        if (!empty($type['info']['new_access'])) {
+            // Decide whether the current user can create blocks of this type
+            $args = array(
+                'component' => 'Block',
+                'instance' => $type['tid'] . ":All:All",
+                'group' => $type['info']['new_access']['group'],
+                'level' => $type['info']['new_access']['level'],
+            );
+            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+            if (!$accessproperty->check($args)) continue;
+        }
+        $block_types[$type['tid']] = $type;
+    }
+
+    $block_groups = xarMod::apiFunc('blocks', 'user', 'getall', array('type' => 'blockgroup'));
+
+    $data = array();
+    $data['block_types'] = $block_types;
+    $data['block_groups'] = $block_groups;
+    $data['create_label'] = xarML('Create Instance');
+    // populate block state options
+    $data['state_options'] = array(
+        array('id' => xarBlock::BLOCK_STATE_HIDDEN, 'name' => xarML('Hidden')),
+        // array('id' => xarBlock::BLOCK_STATE_INACTIVE, 'name' => xarML('Inactive')),
+        array('id' => xarBlock::BLOCK_STATE_VISIBLE, 'name' => xarML('Visible')),
     );
 
-    return array(
-        'block_types'  => $block_types,
-        'block_groups' => $block_groups,
-        'createlabel'  => xarML('Create Instance')
-    );
+    return $data;
+
 }
-
 ?>

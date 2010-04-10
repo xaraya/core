@@ -23,7 +23,7 @@
                 </p>
                 <div class="xar-form-input-wrapper-after">
                     <xar:data-input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3"/>&#160;
-                    <label for="remembermeform">Remember me</label>xx
+                    <label for="remembermeform">Remember me</label>
                 </div>
             </fieldset>
             <fieldset>

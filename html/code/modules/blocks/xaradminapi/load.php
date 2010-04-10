@@ -9,7 +9,11 @@
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
- * Load a block.
+ * Load a block file from file system.
+ *
+ * This function checks for the existence of a block file in a specified module
+ * The function also checks the block class exists, and if a func is
+ * specified, will check if the method named func exists in the block class
  *
  * @author Paul Rosania, Marco Canini <marco@xaraya.com>
  * @access protected
@@ -18,9 +22,11 @@
  * @param string blockType the name of the block (deprec)
  * @param string type the name of the block
  * @param string blockFunc the block function to load (deprec)
- * @param string func the block function to load ('modify', 'display', 'info', 'help')
+ * @param string func the block function to load ('modify', 'update', 'display', 'info', 'help') (deprec)
+ * @param string func the block function to load ('modify', 'update', 'display', 'getInfo', 'getInit')
  * @return boolean success or failure
- * @throws BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @throws EmptyParameterException, ClassNotFoundException, FunctionNotFoundException,
+ *         FileNotFoundException
  */
 function blocks_adminapi_load($args)
 {
@@ -29,24 +35,20 @@ function blocks_adminapi_load($args)
 
     extract($args);
 
-    // Legacy
+    // Legacy, remove these when the blocks module is no longer calling them
     if (isset($modName)) {$module = $modName;}
     if (isset($blockType)) {$type = $blockType;}
     if (isset($blockFunc)) {$func = $blockFunc;}
+    if (!empty($blockName)) {$type = $blockName;}
 
     if (empty($module)) throw new EmptyParameterException('module');
-
-    // Legacy - some modules still passing in a 'blockName'.
-    if (!empty($blockName)) {$type = $blockName;}
 
     // These really are block types, as defined in the block_types.type column.
     if (empty($type)) throw new EmptyParameterException('type');
 
-    if (
-        (isset($loaded[$module . ':' . $type]) && empty($func))
-        || (!empty($func) && isset($loaded[$func . '-' . $module . ':' . $type]))
-    ) {
-        // The relevant files have already been loaded.
+    if ((empty($func) && isset($loaded["$module:$type"])) ||
+        (!empty($func) && isset($loaded["$module:$type:$func"]))) {
+        // files already loaded, we're done
         return true;
     }
 
@@ -54,44 +56,80 @@ function blocks_adminapi_load($args)
     $modBaseInfo = xarMod_getBaseInfo($module);
     if (empty($modBaseInfo)) {return;}
 
+    // Load the block file.
+    // The base block file will always be loaded, and a more specific block
+    // function will be loaded if available and requested.
+    // @FIXME: class name should be unique
+    // include the block class file if it isn't already included
+
     // Directory holding the block scripts.
     $blockDir = sys::code() . 'modules/' . $modBaseInfo['osdirectory'] . '/xarblocks';
 
-    // Load the block.
-    // The base block file will always be loaded, and a more specific block
-    // function will be loaded if available and requested.
-
-    if (!isset($loaded[$module . ':' . $type])) {
-        // Load the block base script.
-
-        $blockFile = $type . '.php';
-        $filePath = $blockDir . '/' . xarVarPrepForOS($blockFile);
-
-        if (!file_exists($filePath)) {
-            throw new FileNotFoundException($filePath);
-        }
-        include_once($filePath);
-        $loaded[$module . ':' . $type] = 1;
-
-        // Load the block language files
-        if(!xarMLSLoadTranslations($filePath)) {
-            // What to do here? return doesnt seem right
-            return;
+    // cascading block files - order is method specific, admin specific, block specific
+    // check for a method (func) specific block file, eg menu_modify.php
+    $to_check = array();
+    if (!empty($func)) {
+        // check for method specific file, eg menu_modify.php
+        $className = ucfirst($type) . 'Block' . ucfirst($func);
+        $to_check[$className] = "{$blockDir}/{$type}_{$func}.php";
+        // check for generic admin file, eg menu_admin.php
+        if ($func != 'display') {
+            $className = ucfirst($type) . 'BlockAdmin';
+            $to_check[$className] = "{$blockDir}/{$type}_admin.php";
         }
     }
-
-    if (!empty($func) && !isset($loaded[$func . '-' . $module . ':' . $type])) {
-        // Load the block function script, if available.
-
-        $blockFile = $func . '-' . $type . '.php';
-        $filePath = $blockDir . '/' . xarVarPrepForOS($blockFile);
-
+    // default block class to load
+    $className = ucfirst($type) . 'Block';
+    $to_check[$className] = "{$blockDir}/{$type}.php";
+    foreach ($to_check as $className => $filePath) {
         if (file_exists($filePath)) {
+            // include the first file we find
             include_once($filePath);
-        }
+            if (class_exists($className)) {
+                // Load the block language files
+                if(!xarMLSLoadTranslations($filePath)) {
+                    // What to do here? return doesnt seem right
+                    return;
+                }
+                if (!empty($func)) {
+                    if (method_exists($className, $func)) {
+                        $loaded["$module:$type:$func"] = 1;
+                        break;
+                    } else {
+                        throw new FunctionNotFoundException($func);
+                    }
+                } else {
+                    $loaded["$module:$type"] = 1;
+                    break;
+                }
 
-        // Flag the script as loaded.
-        $loaded[$func . '-' . $module . ':' . $type] = 1;
+            } elseif (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
+                try {
+                    sys::import('xaraya.legacy.blocks.load');
+                    blocks_adminapi_load_legacy($module,$type,$func,$className,$blockDir);
+                    if (!empty($func)) {
+                        if (method_exists($className, $func)) {
+                            $loaded["$module:$type:$func"] = 1;
+                            break;
+                        } else {
+                            throw new FunctionNotFoundException($func);
+                        }
+                    } else {
+                        $loaded["$module:$type"] = 1;
+                        break;
+                    }
+                } catch (Exception $e) {
+                }
+            } else {
+                throw new ClassNotFoundException($className);
+            }
+        }
+    }
+    // check files were loaded
+    if ((empty($func) && !isset($loaded["$module:$type"])) ||
+        (!empty($func) && !isset($loaded["$module:$type:$func"]))) {
+        // files not loaded
+        throw new FileNotFoundException($filePath);
     }
 
     return true;

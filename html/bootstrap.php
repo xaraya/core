@@ -320,8 +320,8 @@ final class sys extends Object
     }
 
     /**
-     * Returns the absolute path of the xaraya system root, NOT the web root
-     * Note that there WILL ba a slash at the end of the return path.
+     * Returns the path of the xaraya system root, NOT the web root
+     * Note that there WILL be a slash at the end of the return path, unless it's empty ("flat install")
      *
      * @return string
     **/
@@ -334,8 +334,8 @@ final class sys extends Object
     }
 
     /**
-     * Returns the absolute path of the lib directory.
-     * Note that there WILL ba a slash at the end of the return path.
+     * Returns the path of the lib directory.
+     * Note that there WILL be a slash at the end of the return path.
      *
      * @return string
     **/
@@ -348,8 +348,8 @@ final class sys extends Object
     }
 
     /**
-     * Returns the absolute path of the code directory.
-     * Note that there WILL ba a slash at the end of the return path.
+     * Returns the path of the code directory.
+     * Note that there WILL be a slash at the end of the return path.
      *
      * @return string
     **/
@@ -363,7 +363,7 @@ final class sys extends Object
 
     /**
      * Returns the a path relative to the doc root directory if the path is below that directory
-     * Note that there WILL ba a slash at the end of the return path.
+     * Note that there WILL be a slash at the end of the return path.
      *
      * @return string
     **/

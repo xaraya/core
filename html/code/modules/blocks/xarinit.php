@@ -26,27 +26,10 @@ function blocks_init()
     try {
         $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         $dbconn->begin();
-        
-        // prototypes
+
         $id_type       = array('type'=>'integer', 'unsigned'=>true, 'null'=>false, 'increment'=>true, 'primary_key'=>true);
         $idref_type    = array('type'=>'integer', 'unsigned'=>true, 'null'=>false);
         $template_type = array('type'=>'varchar', 'size'=>254, 'null'=>true, 'default'=>null, 'charset' => $charset);
-        
-        // *_block_groups
-        $query = xarDBCreateTable($prefix . '_block_groups',
-                                  array('id'          => $id_type,
-                                        'name'        => array('type'        => 'varchar',
-                                                                   'size'        => 64,
-                                                                   'null'        => false,
-                                                                   'charset' => $charset),
-                                        'template'    => $template_type));
-        $dbconn->Execute($query);
-
-        $query = xarDBCreateIndex($prefix . '_block_groups',
-                                  array('name'   => $prefix . '_block_groups_name',
-                                        'fields' => array('name'),
-                                        'unique' => 'true'));
-        $dbconn->Execute($query);
 
         // *_block_instances
         $query = xarDBCreateTable($prefix . '_block_instances',
@@ -63,7 +46,7 @@ function blocks_init()
                                                                    'default'     => NULL,
                                                                    'charset' => $charset),
                                         'content'     => array('type'        => 'text',
-                                                                   'null'        => false,
+                                                                   'null'        => true,
                                                                    'charset' => $charset),
                                         'template'    => $template_type,
                                         'state'       => array('type'        => 'integer',
@@ -220,6 +203,7 @@ function blocks_init()
 
     // Initialisation successful
     xarModVars::set('blocks', 'selstyle', 'plain');
+    xarModVars::set('blocks', 'noexceptions', 1);
 
     /* There are old block instances defined previously in privs xarsetup.php file and used in the Block module.
        From this version we are adding management of security for blocks to Blocks module
@@ -235,6 +219,8 @@ function blocks_init()
     $blockGroupsTable    = $prefix . '_block_groups';
     $blockTypesTable     = $prefix . '_block_types';
     $blockInstancesTable = $prefix . '_block_instances';
+
+    // @TODO: since blockgroup is now a block itself the blockgroup instance is no longer needed here
 
     //Set up the block group instances for this module - these are the same as previously defined and retained
     $query1 = "SELECT DISTINCT name FROM $blockGroupsTable";
