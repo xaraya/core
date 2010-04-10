@@ -75,11 +75,9 @@ class SelectProperty extends DataProperty
                 $this->parseConfiguration($data['configuration']);
                 unset($data['configuration']);
             // Legacy support: if the validation field is an array, we'll assume that this is an array of id => name
-            } elseif (!empty($data['validation']) && is_array($data['validation'])) {
-                $this->options = array();
-                foreach($data['validation'] as $id => $name) {
-                    array_push($this->options, array('id' => $id, 'name' => $name));
-                }
+            } elseif (!empty($data['validation']) && is_array($data['validation']) && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
+                sys::import('xaraya.legacy.validations');
+                $this->options = dropdown($data['validation']);
             }
 
         // Allow overriding by specific parameters
