@@ -153,6 +153,10 @@ function xarCurrentErrorType()
     // pretend everything is OK for now
     return XAR_NO_EXCEPTION;
 }
+function xarErrorHandled()
+{
+    return true;
+}
 
 /**
  * Wrapper function to support Xaraya 1 Block functions
@@ -190,6 +194,11 @@ function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $bl
  * Note: this does not mean the property will actually work
  */
 sys::import('modules.dynamicdata.class.properties.base');
-class Dynamic_Property extends DataProperty {}
+class Dynamic_Property extends DataProperty {
+    function Dynamic_Property($args)
+    {
+        parent::__construct($args);
+    }
+}
 
 ?>
