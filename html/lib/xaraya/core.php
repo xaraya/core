@@ -294,7 +294,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
-        sys::import('xaraya.legacy');
+        sys::import('xaraya.legacy.legacy');
     }
 
     /*
@@ -370,7 +370,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
         // Start Blocks Support Sytem
         $systemArgs = array();
-        xarBlock_init($systemArgs);
+        xarBlock::init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_BLOCKS;
     }
 

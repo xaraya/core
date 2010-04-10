@@ -297,14 +297,4 @@ class xarCache extends Object
     }
 }
 
-/**
- * Legacy index.php support
- *
- * @deprecated replace with xarCache::init()
- */
-function xarCache_init($args = false)
-{
-    return xarCache::init($args);
-}
-
 ?>

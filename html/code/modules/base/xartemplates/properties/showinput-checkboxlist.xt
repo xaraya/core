@@ -42,7 +42,7 @@
                     </div>
                 </xar:foreach>
             </xar:if>
-        <xar:elseif condition="$layout eq 'columns'"/>
+        <xar:elseif condition="$layout eq 'columns' or $layout eq 'column'"/>
             <xar:set name="opt_count">count($options)</xar:set>
             <xar:if condition="$opt_count gt 0">
                 <xar:set name="col_count">(int)floor($opt_count / $rows_cols)</xar:set>
@@ -54,7 +54,7 @@
                 <xar:for start="$i = 1" test="$i le $rows_cols" iter="$i++">
                     <xar:if condition="array_push($col_options, array_slice($options, (($i - 1 ) * $col_count), $col_count, true))"></xar:if>
                 </xar:for>
-                <xar:set name="col_width">(100 / $rows_cols) - 1</xar:set>
+                <xar:set name="col_width">round(100 / $rows_cols) - 1</xar:set>
                 <xar:foreach in="$col_options" key="$c" value="$col_opts">
                     <div style="width: #$col_width#%;float: left;">
                         <xar:foreach in="$col_opts" key="$o" value="$option">
@@ -78,7 +78,7 @@
             </xar:if>
         <xar:else />
         <p>
-          Specify your own layout here...
+          Specify your own layout '#$layout#' here...
         </p>
         <p>
           You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype
