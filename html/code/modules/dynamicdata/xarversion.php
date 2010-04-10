@@ -31,7 +31,7 @@ $modversion['official']         = true;
 $modversion['author']           = 'mikespub';
 $modversion['contact']          = 'http://www.xaraya.com/';
 $modversion['admin']            = true;
-$modversion['user']             = true;
+$modversion['user']             = false;
 $modversion['class']            = 'Core Complete';
 $modversion['category']         = 'Content';
 ?>
