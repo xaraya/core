@@ -87,27 +87,6 @@ class BlockLayoutXSLTProcessor extends Object
         //$this->prepXml  = preg_replace_callback($mlsPattern, $callBack, $this->prepXml);
     }
 
-    private function fixLegacy()
-    {
-        // CHECKME: quick & dirty wrapper for missing xmlns:xar in old 1.x templates
-        if (!strpos($this->prepXml, ' xmlns:xar="') && !strpos($this->prepXml, '</xar:template>')) {
-            $this->prepXml = '<?xml version="1.0" encoding="utf-8"?>
-<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $this->prepXml . '</xar:template>';
-
-            // CHECKME: replace &nbsp; in old 1.x templates
-            $this->prepXml = str_replace('&nbsp;','&#160;',$this->prepXml);
-
-            // CHECKME: fix xar:set name="$var" in old 1.x templates
-            $this->prepXml = str_replace('<xar:set name="$','<xar:set name="',$this->prepXml);
-
-            // CHECKME: stop eating </textarea> in old 1.x templates
-            $this->prepXml = str_replace('></textarea>','>&#160;</textarea>',$this->prepXml);
-
-            // CHECKME: fix javascript include in old 1.x templates
-            $this->prepXml = str_replace('<xar:base-include-javascript','<xar:javascript',$this->prepXml);
-        }
-    }
-
     public function importStyleSheet($xslDoc)
     {
         $this->xslProc->importStyleSheet($xslDoc);
@@ -121,7 +100,7 @@ class BlockLayoutXSLTProcessor extends Object
         return $this->xslProc->transformToXML($xmlFile);
     }
 
-    public function transform(&$xml, $fixlegacy = 0)
+    public function transform(&$xml)
     {
         // Save the original XML
         $this->origXml = $xml;
@@ -129,10 +108,13 @@ class BlockLayoutXSLTProcessor extends Object
         // Preprocess it.
         $this->preProcess();
 
-        // CHECKME: fix the two most common issues with old 1.x templates
-        if (!empty($fixlegacy)) {
-            $this->fixLegacy();
-        }
+        // Legacy transforms for old 1x templates
+        try {
+            if (xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
+                sys::import('xaraya.legacy.template_transforms');
+                $this->prepXml = fixLegacy($this->prepXml);
+            }
+        } catch (Exception $e) {}
 
         // Set the source document to what we prepped
         $this->setSourceDocument($this->prepXml);

@@ -39,7 +39,7 @@ interface IxarBLCompiler
 {
     static function &instance();        // Get an instance of the compiler
     function configure();               // configure the compiler
-    function compileFile($fileName, $fixlegacy = 0);    // compile a file
+    function compileFile($fileName);    // compile a file
     function compileString(&$data);     // compile a string
 }
 
@@ -80,7 +80,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         return $this->compile($data);
     }
 
-    public function compileFile($fileName, $fixlegacy = 0)
+    public function compileFile($fileName)
     {
         $this->lastFile = $fileName;
         // The @ makes the code better to handle, leave it.
@@ -103,7 +103,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         }
         xarLogMessage("BL: compiling $fileName");
 
-        $res = $this->compile($templateSource, $fixlegacy);
+        $res = $this->compile($templateSource);
         return $res;
     }
 
@@ -155,7 +155,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         return $outDoc;
     }
 
-    private function compile(&$templateSource, $fixlegacy = 0)
+    private function compile(&$templateSource)
     {
         if (!isset($this->processor)) {
             sys::import('blocklayout.xsltransformer');
@@ -169,7 +169,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         $this->processor->xmlFile = $this->lastFile;
         
         // This generates php code, the documentree is not visible here anymore
-        $outDoc = $this->processor->transform($templateSource, $fixlegacy);
+        $outDoc = $this->processor->transform($templateSource);
         return $outDoc;
     }
 }
