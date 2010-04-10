@@ -19,46 +19,73 @@
       <xar:set name="style">''</xar:set>
     </xar:if>
 
-    <xar:if condition="!empty($single)">
-        <xar:if condition="(count($options) gt 0) OR $allowempty">
-            <select name="#$name#[]" id="#$id#" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
-                <xar:foreach in="$options" value="$option">
-                    <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
-                        <xar:if condition="in_array($option['id'],$value)">
-                            <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+    <xar:if condition="$layout eq 'default' OR empty($layout) OR $layout eq 'onebox'">
+        <xar:if condition="!empty($single)">
+            <xar:if condition="(count($options) gt 0) OR $allowempty">
+                <select name="#$name#[]" id="#$id#" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
+                    <xar:foreach in="$options" value="$option">
+                        <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
+                            <xar:if condition="in_array($option['id'],$value)">
+                                <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                            <xar:else />
+                                <option value="#$option['id']#">#$option['name']#</option>
+                            </xar:if>
+                        <xar:elseif condition="in_array($option['id'],$value)"/>
+                            <option selected="selected">#$option['name']#</option>
                         <xar:else />
-                            <option value="#$option['id']#">#$option['name']#</option>
+                            <option>#$option['name']#</option>
                         </xar:if>
-                    <xar:elseif condition="in_array($option['id'],$value)"/>
-                        <option selected="selected">#$option['name']#</option>
-                    <xar:else />
-                        <option>#$option['name']#</option>
-                    </xar:if>
-                </xar:foreach>
-            </select>
-        <xar:else />
-            Options not specified in the configuration:
+                    </xar:foreach>
+                </select>
+            <xar:else />
+                Options not specified in the configuration:
+            </xar:if>
+        <xar:else/>
+            <xar:if condition="(count($options) gt 0) OR $allowempty">
+                <select name="#$name#[]" id="#$id#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
+                    <xar:foreach in="$options" value="$option">
+                        <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
+                            <xar:if condition="in_array($option['id'],$value)">
+                                <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                            <xar:else />
+                                <option value="#$option['id']#">#$option['name']#</option>
+                            </xar:if>
+                        <xar:elseif condition="in_array($option['id'],$value)"/>
+                            <option selected="selected">#$option['name']#</option>
+                        <xar:else />
+                            <option>#$option['name']#</option>
+                        </xar:if>
+                    </xar:foreach>
+                </select>
+            <xar:else />
+                Options not specified in the configuration.
+            </xar:if>
         </xar:if>
     <xar:else/>
-        <xar:if condition="(count($options) gt 0) OR $allowempty">
-            <select name="#$name#[]" id="#$id#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
-                <xar:foreach in="$options" value="$option">
-                    <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
-                        <xar:if condition="in_array($option['id'],$value)">
-                            <option value="#$option['id']#" selected="selected">#$option['name']#</option>
-                        <xar:else />
-                            <option value="#$option['id']#">#$option['name']#</option>
-                        </xar:if>
-                    <xar:elseif condition="in_array($option['id'],$value)"/>
-                        <option selected="selected">#$option['name']#</option>
-                    <xar:else />
-                        <option>#$option['name']#</option>
-                    </xar:if>
-                </xar:foreach>
-            </select>
-        <xar:else />
-            Options not specified in the configuration.
-        </xar:if>
+        <div>
+            <ul style="list-style-type:none;">
+                <li style="float:left; margin-right: 10px">
+                    <xar:data-input type="multiselect" name="childgroups" options="$options" value="$value"/>
+                    <input type="hidden" name="childgroupsimploded" id="childgroupsimploded"/>
+                </li>
+                <li style="float:left; margin-right: 10px">
+                    <xar:var name="label">&lt; Add</xar:var>
+                    <input class="button" type="button" id="add" value="#$label#" onclick="addSelectedToList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');delSelectedFromList('childgroupsselect'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#xarML('Add group')#" style="width: 100px;"/>
+                    <br />
+                    <xar:var name="label">Remove &gt;</xar:var>
+                    <input class="button" type="button" id="remove" value="#$label#" onclick="addSelectedToList('childgroups','childgroupsselect');implodeListKeys('childgroups','childgroupsimploded',',');delSelectedFromList('childgroups'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#xarML('Remove group')#"  style="width: 100px;"/>
+                    <br />
+                    <xar:var name="label">&lt;&lt; Add All</xar:var>
+                    <input class="button" type="button" id="addall" value="&lt;&lt; #xarML('Add All')#" onclick="addAllGroup('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');removeAllGroup('childgroupsselect'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#xarML('Add all group')#" style="width: 100px;"/>
+                    <br />                                                                                                                                                                                                                                                                                                                       
+                    <xar:var name="label">Remove All &gt;&gt;</xar:var>
+                    <input class="button" type="button" id="removeall" value="#xarML('Remove All')# &gt;&gt;" onclick="addAllGroup('childgroups','childgroupsselect');implodeListKeys('childgroups','childgroupsimploded',',');removeAllGroup('childgroups'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',','); checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#xarML('Remove all group')#"  style="width: 100px;" />
+                </li>
+                <li style="float:left;">
+                    <xar:data-input type="multiselect" name="childgroupsselect" options="$unchosen"/>
+                </li>
+            </ul>
+        </div>       
     </xar:if>
 
     <xar:template file="dataproperty_additions" module="base"/>
