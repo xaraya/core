@@ -385,7 +385,6 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
             }
         }
     }
-
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -462,7 +461,6 @@ function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elem
 
         xarCoreCache::setCached('Templates.DDElement', $cachename, $sourceFileName);
     }
-
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
@@ -850,8 +848,8 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     } elseif (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
         try {
             sys::import('xaraya.legacy.templates');
-            $sourceFileName = loadsourcefilename($tplBaseDir,$tplSubPart,$tplBase,templateName,$canTemplateName);
-        } catch (Exception $e) {}
+            $sourceFileName = loadsourcefilename($tplBaseDir,$tplSubPart,$tplBase,$templateName,$canTemplateName,$canonical);
+        } catch (Exception $e) {$sourceFileName = '';}
     } else {
         // let functions higher up worry about what to do, e.g. DD object of property fallback template
         $sourceFileName = '';

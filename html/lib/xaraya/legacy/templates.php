@@ -2,7 +2,7 @@
 
     // Load templates with the .xd extension
     
-    function loadsourcefilename($tplBaseDir,$tplSubPart,$tplBase,$templateName,$canTemplateName)
+    function loadsourcefilename($tplBaseDir,$tplSubPart,$tplBase,$templateName,$canTemplateName,$canonical)
     {
         xarLogMessage("TPL: 7. Try legacy .xd templates in $tplBaseDir/xartemplates/");
         if(!empty($templateName) &&
