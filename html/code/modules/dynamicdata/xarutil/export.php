@@ -148,6 +148,7 @@ function dynamicdata_util_export($args)
         $xml = '';
     }
 
+    $data['objectid'] = $objectid;
     $data['xml'] = xarVarPrepForDisplay($xml);
 
     xarTplSetPageTemplateName('admin');
