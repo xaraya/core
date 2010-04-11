@@ -337,6 +337,21 @@ class xarObject extends Object implements IxarObject
     {
         return 'http://www.xaraya.com/to_be_defined';
     }
+
+    /**
+     * Check access for a specific action on object level (see also xarMod and xarBlock)
+     *
+     * @access public
+     * @param object object the object or object list we want to check access for
+     * @param action string the action we want to take on this object (display/update/create/delete/config)
+     * @param itemid mixed the specific item id or null
+     * @param roleid mixed override the current user or null
+     * @return bool true if access
+     */
+    static function checkAccess($object, $action, $itemid = null, $roleid = null)
+    {
+        return $object->checkAccess($action, $itemid, $roleid);
+    }
 }
 
 ?>
