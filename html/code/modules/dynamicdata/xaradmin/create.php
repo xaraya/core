@@ -86,12 +86,13 @@ function dynamicdata_admin_create($args)
     if (!empty($return_url)) {
         xarResponse::redirect($return_url);
     } elseif (!empty($table)) {
-        xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
                                       array('table' => $table)));
     } else {
-        xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
                                       array(
-                                      'itemid' => $myobject->objectid,
+                                      'name'   => 'objects',
+                                      'itemid' => $itemid,
                                       'tplmodule' => $tplmodule
                                       )));
     }
