@@ -1671,6 +1671,9 @@ class Query
         // If we don't have multiple tables, no need to optimize
         if (count($this->tables) < 2) return true;
         
+        // If we want ALL fields (i.e. *), no need to optimize
+        if (empty($this->fields)) return true;
+        
         // Put the table names in an array for processing
         $tables = array();
         foreach ($this->tables as $table) $tables[$table['alias']] = $table['name'];
