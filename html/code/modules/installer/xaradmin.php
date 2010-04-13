@@ -770,7 +770,49 @@ function installer_admin_create_administrator()
             return;
         }
     }
-    xarResponse::redirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
+
+    /*********************************************************************
+    * Enter some default privileges
+    * Format is
+    * register(Name,Realm,Module,Component,Instance,Level,Description)
+    *********************************************************************/
+
+    xarRegisterPrivilege('Administration','All','All','All','All','ACCESS_ADMIN',xarML('Admin access to all modules'));
+    xarRegisterPrivilege('SiteManagement','All','All','All','All','ACCESS_DELETE',xarML('Site Manager access to all modules'));
+    xarRegisterPrivilege('GeneralLock','All',null,'All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
+    xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody','ACCESS_NONE',xarML('Deny access to Everybody role'));
+    xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous','ACCESS_NONE',xarML('Deny access to Anonymous role'));
+    xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators','ACCESS_NONE',xarML('Deny access to Administrators role'));
+    xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration','ACCESS_NONE',xarML('Deny access to Administration privilege'));
+    xarRegisterPrivilege('LockGeneralLock','All','privileges','Privileges','GeneralLock','ACCESS_NONE',xarML('Deny access to GeneralLock privilege'));
+    xarRegisterPrivilege('ReadAccess','All','All','All','All','ACCESS_READ','Read access to all modules');
+
+    /*********************************************************************
+    * Arrange the  privileges in a hierarchy
+    * Format is
+    * xarMakePrivilegeMember(Child,Parent)
+    *********************************************************************/
+
+    xarMakePrivilegeMember('LockEverybody','GeneralLock');
+    xarMakePrivilegeMember('LockAnonymous','GeneralLock');
+    xarMakePrivilegeMember('LockAdministrators','GeneralLock');
+    xarMakePrivilegeMember('LockAdministration','GeneralLock');
+    xarMakePrivilegeMember('LockGeneralLock','GeneralLock');
+
+    /*********************************************************************
+    * Assign the default privileges to groups/users
+    * Format is
+    * assign(Privilege,Role)
+    *********************************************************************/
+
+    xarAssignPrivilege('Administration','Administrators');
+    xarAssignPrivilege('SiteManagement','SiteManagers');
+    xarAssignPrivilege('GeneralLock','Everybody');
+    xarAssignPrivilege('ReadAccess','Everybody');
+    xarAssignPrivilege('GeneralLock','Administrators');
+    xarAssignPrivilege('GeneralLock','Users');
+
+    xarResponse::redirect(xarModURL('installer', 'admin', 'security',array('install_language' => $install_language)));
 }
 
 /**
@@ -1036,7 +1078,7 @@ function installer_admin_security()
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarTplSetThemeName('installer');
     $data['language']    = $install_language;
-    $data['phase'] = 9;
+    $data['phase'] = 7;
     $data['phase_label'] = xarML('Security Considerations');
 
     return $data;
