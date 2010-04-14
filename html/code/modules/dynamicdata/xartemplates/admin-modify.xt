@@ -100,7 +100,7 @@
                         </legend>
                         Do you want to create a copy of the dataobject #$object:properties.name:value# (#$object:properties.label:value#)?
                         <div>
-                            Name for the new object:&#160;<input type="textbox" name="newname" value="#$object:properties.name:value#_copy"/>
+                            Name for the new object:&#160;<input type="textbox" name="newname" value="#$object:properties.name:value#_copy" size="50"/>
                         </div>
                         <div class="xar-align-center">
                             <input type="hidden" name="authid" id="authid" value="#$authid#"/>
