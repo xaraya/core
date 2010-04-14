@@ -401,7 +401,7 @@ class Installer extends Object
             $regid = $this->modulestack->pop();
             // Is there an install page?
             if (!$initialised && file_exists(sys::code() . 'modules/' . $extInfo['osdirectory'] . '/xartemplates/includes/installoptions.xt')) {
-                xarResponse::redirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $regid)));
+                xarController::redirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $regid)));
                 return true;
             }
         }
@@ -423,7 +423,7 @@ class Installer extends Object
 
         // if this is a theme we're done
         if ($this->extType == 'themes') {
-            xarResponse::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0)));
+            xarController::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0)));
             return true;
         }
         
@@ -442,7 +442,7 @@ class Installer extends Object
                 xarOutputFlushCached('base-block');
             }
 
-            xarResponse::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0), NULL, $target));
+            xarController::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0), NULL, $target));
         } else {
             // Do the next module
             if (!$this->installdependencies($nextmodule)) return;

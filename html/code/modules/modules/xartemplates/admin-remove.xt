@@ -23,7 +23,7 @@
             </ul>
         </xar:if>
         <!-- The form for editting the module settings and hooks -->
-        <form action="&xar-modurl-modules-admin-remove;" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarModURL('modules','admin','remove')#" method="post" enctype="application/x-www-form-urlencoded">
             <div class="xar-align-center">
                 <input type="hidden" name="id" id="id" value="#$id#"/>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
