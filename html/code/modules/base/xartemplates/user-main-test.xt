@@ -24,6 +24,7 @@
         <xar:set name="dummy">1;
             sys::import('modules.dynamicdata.class.objects.master');
             $roles = DataObjectMaster::getObjectList(array('name'=>'roles_users'));
+            $roles->dataquery->eq('name','Administrator');
         </xar:set>
 
 
@@ -53,6 +54,6 @@
             Add SELECT with WHERE clauses here
         -->
         </xar:data-view>
-        
+        <xar:set name="foo">var_dump($roles->dataquery->qecho())</xar:set>
     </div>
 </xar:template>

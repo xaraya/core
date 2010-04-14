@@ -122,8 +122,8 @@ function dynamicdata_utilapi_export($args)
         }
         $xml .= "  </links>\n";
     }
-    $xml .= "</object>\n";
 */
+    $xml .= "</object>\n";
     return $xml;
 }
 
